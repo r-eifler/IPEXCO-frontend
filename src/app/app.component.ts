@@ -7,4 +7,5 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'EXPLORE-CLI';
+  editorOptions = {theme: 'vs-dark', language: 'javascript'};
 }

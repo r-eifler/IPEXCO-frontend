@@ -1,0 +1,17 @@
+<mat-card>
+  <mat-card-actions>
+    <app-pddl-file-editor style="width: 100%"></app-pddl-file-editor>
+  </mat-card-actions>
+  <mat-card-content>
+    <mat-selection-list #selected [multiple]="false" [(ngModel)]="selectedFiles"
+                        (ngModelChange)="selectFile($event)">
+      <mat-list-option *ngFor="let file of files$ | async" [value]="file">
+        <mat-icon mat-list-icon>insert_drive_file</mat-icon>
+        <div mat-line>{{file.name}}</div>
+        <div mat-line> {{file.domain}} </div>
+        <mat-icon *ngIf="file.selected">check_circle</mat-icon>
+      </mat-list-option>
+    </mat-selection-list>
+  </mat-card-content>
+</mat-card>
+

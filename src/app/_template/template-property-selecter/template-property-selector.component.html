@@ -1,0 +1,86 @@
+<div>
+  <div class="example-container">
+    <h2>Collection</h2>
+
+    <div
+      cdkDropList
+      #collectionList="cdkDropList"
+      [cdkDropListData]="collection"
+      [cdkDropListConnectedTo]="[hardPropertiesList, softPropertiesList]"
+      class="example-list"
+      (cdkDropListDropped)="drop($event)">
+      <mat-expansion-panel *ngFor="let item of collection" cdkDrag>{{item}}>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            {{item.name}}
+          </mat-panel-title>
+          <mat-panel-description>
+            TODO
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <div>
+          <p>{{item.formula}}</p>
+        </div>
+      </mat-expansion-panel>
+    </div>
+  </div>
+
+  <div class="example-container">
+    <h2>Soft Properties</h2>
+
+    <div
+      cdkDropList
+      #softPropertiesList="cdkDropList"
+      [cdkDropListData]="softProperties"
+      [cdkDropListConnectedTo]="[collectionList, hardPropertiesList]"
+      class="example-list"
+      (cdkDropListDropped)="drop($event)">
+      <mat-expansion-panel *ngFor="let item of softProperties" cdkDrag>{{item}}>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            {{item.name}}
+          </mat-panel-title>
+          <mat-panel-description>
+            TODO
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <div>
+          <p>{{item.formula}}</p>
+        </div>
+      </mat-expansion-panel>
+    </div>
+  </div>
+
+  <div class="example-container">
+    <h2>Hard Properties</h2>
+
+    <div
+      cdkDropList
+      #hardPropertiesList="cdkDropList"
+      [cdkDropListData]="hardProperties"
+      [cdkDropListConnectedTo]="[collectionList, softPropertiesList]"
+      class="example-list"
+      (cdkDropListDropped)="drop($event)">
+      <mat-expansion-panel *ngFor="let item of hardProperties" cdkDrag>{{item}}>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            {{item.name}}
+          </mat-panel-title>
+          <mat-panel-description>
+            TODO
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <div>
+          <p>{{item.formula}}</p>
+        </div>
+      </mat-expansion-panel>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
