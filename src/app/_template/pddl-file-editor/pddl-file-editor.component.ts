@@ -16,7 +16,7 @@ export class PddlFileEditorComponent implements OnInit {
     domain: new FormControl(),
     type: new FormControl(),
     file: new FormControl(),
-})
+});
 
   uploadInProgress = false;
   uploadProgress = 0;
