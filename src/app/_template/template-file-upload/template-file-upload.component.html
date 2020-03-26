@@ -23,9 +23,16 @@
     <mat-selection-list #selected [multiple]="false" [(ngModel)]="selectedFiles"
                         (ngModelChange)="selectFile($event)">
       <mat-list-option *ngFor="let file of files$ | async" [value]="file">
-        <mat-icon mat-list-icon>insert_drive_file</mat-icon>
-        <div mat-line>{{file.name}}</div>
-        <div mat-line> {{file.domain}} </div>
+        <div class="flex-container">
+          <mat-icon mat-list-icon style="flex-grow: 1">insert_drive_file</mat-icon>
+          <div style="flex-grow: 5">
+            <div mat-line>{{file.name}}</div>
+            <div mat-line> {{file.domain}} </div>
+          </div>
+          <button mat-icon-button style="flex-grow: 1" (click)="deleteFile(file)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
       </mat-list-option>
     </mat-selection-list>
   </mat-card-content>

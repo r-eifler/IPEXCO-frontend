@@ -1,7 +1,8 @@
 export interface PDDLFile {
-  id: string;
+  _id: string;
   name: string;
   path: string;
   type: string;
   domain: string;
+  data: string;
 }

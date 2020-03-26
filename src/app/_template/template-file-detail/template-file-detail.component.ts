@@ -1,38 +1,28 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
 
 import {PDDLFile} from '../../_interface/pddlfile';
-import {GetDomainFile} from '../../store/actions/domain-file.actions';
-import {select, Store} from '@ngrx/store';
-import {AppState} from '../../store/state/app.state';
-import {selectDomainFileList, selectSelectedDomainFile} from '../../store/selectors/domain-file.selectors';
-import {Router} from '@angular/router';
+import {Observable} from 'rxjs';
+import {SelectedDomainFileService} from '../../_service/selected-domain-file.service';
+
 
 @Component({
   selector: 'app-template-file-detail',
   templateUrl: './template-file-detail.component.html',
   styleUrls: ['./template-file-detail.component.css']
 })
-export class TemplateFileDetailComponent implements OnInit, OnDestroy {
+export class TemplateFileDetailComponent implements OnInit {
 
   editorOptions = {theme: 'vs-light', language: 'javascript'};
   code = 'test';
 
   // files observable
-  file$ = this.store.pipe(select(selectSelectedDomainFile));
-  fileSubscribtion;
+  selectedFile$: Observable<PDDLFile>;
 
-  constructor(private store: Store<AppState>, private router: Router) { }
+  constructor(private selectedFileService: SelectedDomainFileService) { }
 
   ngOnInit(): void {
-    this.fileSubscribtion = this.file$.subscribe();
+    this.selectedFile$ = this.selectedFileService.selectedDomainFile$;
+    this.selectedFile$.subscribe( (file) => { this.code = file ? file.name : ''; });
   }
 
-  ngOnDestroy(): void {
-    this.fileSubscribtion.unsubscribe();
-  }
-
-  // @Input() set file(newFile: any) {
-  //   this._file = newFile;
-  //   this.code = newFile.name;
-  // }
 }

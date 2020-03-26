@@ -39,16 +39,10 @@ import { TemplateFileDetailComponent } from './_template/template-file-detail/te
 import { MonacoEditorModule} from 'ngx-monaco-editor';
 
 // Store
-import { appReducers} from './store/reducers/app.reducers';
-import {environment} from '../environments/environment';
-import { AppRoutingModule} from '../app-routing/app-routing.module';
-import {DomainFileEffects} from './store/effects/domain-file.effects';
-import {StoreModule} from '@ngrx/store';
-import {EffectsModule} from '@ngrx/effects';
-import {StoreRouterConnectingModule} from '@ngrx/router-store';
-import {StoreDevtoolsModule} from '@ngrx/store-devtools';
-import {DomainFileService} from './_service/domain-file.service';
+import {DomainFilesService} from './_service/domain-files.service';
+import {SelectedDomainFileService} from './_service/selected-domain-file.service';
 import { PddlFileEditorComponent } from './_template/pddl-file-editor/pddl-file-editor.component';
+import {DomainFilesStore, SelectedDomainFileStore} from './store/stores.store';
 
 
 @NgModule({
@@ -85,13 +79,13 @@ import { PddlFileEditorComponent } from './_template/pddl-file-editor/pddl-file-
         MonacoEditorModule.forRoot(),
         MatListModule,
         ReactiveFormsModule,
-        StoreModule.forRoot(appReducers),
-        EffectsModule.forRoot([DomainFileEffects]),
-        StoreRouterConnectingModule.forRoot({stateKey: 'router'}),
-        !environment.production ? StoreDevtoolsModule.instrument() : [],
-        AppRoutingModule
     ],
-  providers: [DomainFileService],
+  providers: [
+    DomainFilesStore,
+    DomainFilesService,
+    SelectedDomainFileStore,
+    SelectedDomainFileService,
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
