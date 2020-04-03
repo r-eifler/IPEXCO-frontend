@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import {Component, OnInit, ViewChild, ElementRef, Input} from '@angular/core';
 
 
 @Component({
@@ -8,20 +8,8 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 })
 export class TemplatePddlFileComponent implements OnInit {
 
-  selectedFile;
-  files$: any;
-
-  constructor() { }
+  @Input() type;
 
   ngOnInit(): void {
-  }
-
-  setFileChanged(file) {
-    this.selectedFile = file;
-    console.log('File changed');
-  }
-
-  navigateToFile($event: any) {
-    console.log('Naviagte to file');
   }
 }

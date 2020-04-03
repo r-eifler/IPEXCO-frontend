@@ -4,5 +4,5 @@ export interface PDDLFile {
   path: string;
   type: string;
   domain: string;
-  data: string;
+  content: string;
 }

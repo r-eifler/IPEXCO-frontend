@@ -1,2 +1,7 @@
-<div>{{(selectedFile$ | async)?.name}}</div>
-<ngx-monaco-editor [options]="editorOptions" [(ngModel)]="code"></ngx-monaco-editor>
+<div style="width: 100%">
+  <h1>{{(selectedFile$ | async)?.name}}</h1>
+</div>
+<div style="height: 100%">
+  <ngx-monaco-editor style="height: 500px" [options]="editorOptions" [(ngModel)]="code"></ngx-monaco-editor>
+</div>
+

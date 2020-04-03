@@ -1,0 +1,13 @@
+.mat-card{
+  width: 400px;
+  max-width: 100%;
+}
+
+.mat-grid-tile .mat-figure {
+  align-items: start !important;
+  animation: 5s;
+}
+
+.mat-grid-list {
+  animation: 5s;
+}

@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PddlFileEditorComponent } from './pddl-file-editor.component';
+import { ExplanationProcessComponent } from './explanation-process.component';
 
-describe('PddlFileEditorComponent', () => {
-  let component: PddlFileEditorComponent;
-  let fixture: ComponentFixture<PddlFileEditorComponent>;
+describe('ExplanationProcessComponent', () => {
+  let component: ExplanationProcessComponent;
+  let fixture: ComponentFixture<ExplanationProcessComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PddlFileEditorComponent ]
+      declarations: [ ExplanationProcessComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PddlFileEditorComponent);
+    fixture = TestBed.createComponent(ExplanationProcessComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

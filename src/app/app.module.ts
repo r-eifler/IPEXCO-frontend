@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
 
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -22,6 +23,11 @@ import {MatDividerModule} from '@angular/material/divider';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import {MatListModule} from '@angular/material/list';
 import {MatInputModule} from '@angular/material/input';
+import {MatRadioModule} from '@angular/material/radio';
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
+import {MatSidenavModule} from '@angular/material/sidenav';
+import {MatToolbarModule} from '@angular/material/toolbar';
+import {MatSelectModule} from '@angular/material/select';
 
 // forms
 import { ReactiveFormsModule } from '@angular/forms';
@@ -34,15 +40,34 @@ import { TemplatePropertySelectorComponent } from './_template/template-property
 import { TemplatePddlFileComponent } from './_template/template-pddl-file/template-pddl-file.component';
 import { TemplateFileUploadComponent } from './_template/template-file-upload/template-file-upload.component';
 import { TemplateFileDetailComponent } from './_template/template-file-detail/template-file-detail.component';
+import { DomainSelectorComponent } from './_template/domain-selector/domain-selector.component';
+import { ProblemSelectorComponent } from './_template/problem-selector/problem-selector.component';
+import { PropertyCreatorComponent } from './_template/property-creator/property-creator.component';
+import { ExplanationProcessComponent } from './_template/explanation-process/explanation-process.component';
+import { NavigationComponent } from './navigation/navigation.component';
+import { ProjectSelectionComponent } from './_template/project-selection/project-selection.component';
+import { ProjectCreatorComponent } from './_template/project-creator/project-creator.component';
+
 
 // editor
 import { MonacoEditorModule} from 'ngx-monaco-editor';
 
 // Store
-import {DomainFilesService} from './_service/domain-files.service';
-import {SelectedDomainFileService} from './_service/selected-domain-file.service';
-import { PddlFileEditorComponent } from './_template/pddl-file-editor/pddl-file-editor.component';
-import {DomainFilesStore, SelectedDomainFileStore} from './store/stores.store';
+import {FileContentService} from './_service/file-content.service';
+import {DomainFilesStore, ProblemFilesStore, ProjectStore, SelectedDomainFileStore, SelectedProblemFileStore} from './store/stores.store';
+import {
+  DomainFilesService,
+  ProblemFilesService,
+  SelectedDomainFileService,
+  SelectedProblemFileService
+} from './_service/pddl-file-services';
+import {ProjectService} from './_service/general-services';
+
+
+const appRoutes: Routes = [
+  { path: 'projects', component: ProjectSelectionComponent },
+  { path: 'explanation-process', component: ExplanationProcessComponent },
+];
 
 
 @NgModule({
@@ -55,7 +80,13 @@ import {DomainFilesStore, SelectedDomainFileStore} from './store/stores.store';
     TemplatePddlFileComponent,
     TemplateFileUploadComponent,
     TemplateFileDetailComponent,
-    PddlFileEditorComponent
+    DomainSelectorComponent,
+    ProblemSelectorComponent,
+    PropertyCreatorComponent,
+    ExplanationProcessComponent,
+    NavigationComponent,
+    ProjectSelectionComponent,
+    ProjectCreatorComponent,
   ],
     imports: [
         BrowserModule,
@@ -75,16 +106,32 @@ import {DomainFilesStore, SelectedDomainFileStore} from './store/stores.store';
         MatStepperModule,
         MatDividerModule,
         MatInputModule,
+        MatRadioModule,
+        MatButtonToggleModule,
+        MatSidenavModule,
+        MatToolbarModule,
+        MatSelectModule,
         FormsModule,
         MonacoEditorModule.forRoot(),
         MatListModule,
         ReactiveFormsModule,
+        RouterModule.forRoot(
+          appRoutes,
+          { enableTracing: false } // <-- debugging purposes only
+        )
     ],
   providers: [
     DomainFilesStore,
-    DomainFilesService,
     SelectedDomainFileStore,
+    ProblemFilesStore,
+    SelectedProblemFileStore,
+    FileContentService,
+    DomainFilesService,
     SelectedDomainFileService,
+    ProblemFilesService,
+    SelectedProblemFileService,
+    ProjectStore,
+    ProjectService,
   ],
   bootstrap: [AppComponent]
 })

@@ -1,7 +1,7 @@
 import {Component, ElementRef, OnInit, ViewChild, EventEmitter, Output, Input} from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import {DomainFilesService} from '../../_service/domain-files.service';
-import {SelectedDomainFileService} from '../../_service/selected-domain-file.service';
+import {PddlFilesService} from '../../_service/pddl-files.service';
+import {SelectedObjectService} from '../../_service/selected-object.service';
 
 import {PDDLFile} from '../../_interface/pddlfile';
 import {Observable} from 'rxjs';
@@ -12,6 +12,9 @@ import {Observable} from 'rxjs';
   styleUrls: ['./template-file-upload.component.css']
 })
 export class TemplateFileUploadComponent implements OnInit {
+
+  @Input() type;
+
   // form fields
   fileForm = new FormGroup({
     name: new FormControl(),
@@ -29,20 +32,18 @@ export class TemplateFileUploadComponent implements OnInit {
   selectedFiles: PDDLFile[];
 
 
-  @ViewChild('fileUpload', {static: false}) fileUpload: ElementRef;
-
-  constructor(private selectedFileService: SelectedDomainFileService,
-              private fileService: DomainFilesService) {
+  constructor(private selectedFileService: SelectedObjectService,
+              private fileService: PddlFilesService) {
   }
 
   ngOnInit(): void {
-    this.files$ = this.fileService.domainFiles$;
-    this.fileService.findDomainFiles().subscribe();
+    this.files$ = this.fileService.files$;
+    this.fileService.findFiles().subscribe();
   }
 
   selectFile(event) {
    const selectedFile = this.selectedFiles[0];
-   this.selectedFileService.saveDomainFile(selectedFile);
+   this.selectedFileService.saveObject(selectedFile);
   }
 
   onSubmit() {
@@ -50,16 +51,16 @@ export class TemplateFileUploadComponent implements OnInit {
       _id: null,
       path: '',
       name: this.fileForm.controls.name.value,
-      type: 'domain',
+      type: this.type,
       domain: this.fileForm.controls.domain.value,
-      data: this.fileObject
+      content: this.fileObject
     };
 
     this.fileService.saveDomainFile(uploadFile);
   }
 
   onUploadFileSelected() {
-    const inputNode: any = document.querySelector('#file');
+    const inputNode: any = document.querySelector('#file' + this.type);
     this.fileObject = inputNode.files[0];
 
     if (typeof (FileReader) !== 'undefined') {

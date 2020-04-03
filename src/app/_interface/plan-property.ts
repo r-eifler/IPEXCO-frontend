@@ -1,8 +1,15 @@
 import { LtlFormula} from './ltl-formula';
 
-export interface PlanProperty {
-  id: number;
+export interface ActionSet {
+  _id: string;
   name: string;
-  selected: boolean;
+  actions: string[];
+}
+
+export interface PlanProperty {
+  _id: string;
+  name: string;
+  type: string;
   formula: LtlFormula;
+  actionSets: ActionSet[];
 }

@@ -2,7 +2,7 @@
   <mat-card-actions>
     <form class="example-form" [formGroup]="fileForm" (ngSubmit)="onSubmit()">
       <button type="button" mat-raised-button (click)="fileInput.click()">Choose File</button>
-      <input hidden (change)="onUploadFileSelected()" #fileInput type="file" id="file">
+      <input hidden (change)="onUploadFileSelected()" #fileInput type="file" id="file{{type}}">
 
       <mat-form-field class="example-full-width">
         <mat-label>name</mat-label>
