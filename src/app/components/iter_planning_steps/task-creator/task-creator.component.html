@@ -1,0 +1,38 @@
+<div style="width: 100%; display: flex; flex-direction: row">
+<div class="properties-container">
+  <h2>Collection</h2>
+  <div style="min-height: 100%;"
+    cdkDropList
+    #collectionList="cdkDropList"
+    [cdkDropListData]="properties$ | async"
+    [cdkDropListConnectedTo]="[hardPropertiesList]"
+    class="drag-drop-list"
+    (cdkDropListDropped)="drop($event)">
+    <mat-chip-list class="mat-chip-list-stacked">
+      <mat-chip *ngFor="let item of properties$ | async" cdkDrag>
+        {{item.name}}
+      </mat-chip>
+    </mat-chip-list>
+  </div>
+</div>
+
+<div class="properties-container">
+  <h2>Soft Properties</h2>
+  <div style="min-height: 100%;"
+    cdkDropList
+    #hardPropertiesList="cdkDropList"
+    [cdkDropListData]="hardProperties"
+    [cdkDropListConnectedTo]="[collectionList]"
+    class="drag-drop-list"
+    (cdkDropListDropped)="drop($event)">
+    <mat-chip-list class="mat-chip-list-stacked">
+      <mat-chip *ngFor="let item of hardProperties" cdkDrag>
+        {{item.name}}
+      </mat-chip>
+    </mat-chip-list>
+  </div>
+</div>
+</div>
+<button mat-fab color="warn" class="add-button" (click)="compute_dependencies()">
+  <mat-icon>send</mat-icon>
+</button>

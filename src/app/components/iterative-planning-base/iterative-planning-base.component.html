@@ -1,0 +1,32 @@
+<div class="step-container">
+  <mat-card class="step-card" [routerLink]="['./original-task']">
+    <mat-card-header>
+      <div mat-card-avatar><span class="material-icons">games</span></div>
+      <mat-card-title>Original Task</mat-card-title>
+      <mat-card-subtitle>Task</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <span class="material-icons" style="position: absolute; right: 10px; bottom: 10px">done</span>
+    </mat-card-content>
+  </mat-card>
+  <mat-card class="step-card">
+    <mat-card-header>
+      <div mat-card-avatar><span class="material-icons">games</span></div>
+      <mat-card-title>Test</mat-card-title>
+      <mat-card-subtitle>Question</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <span class="material-icons" style="position: absolute; right: 10px; bottom: 10px">create</span>
+    </mat-card-content>
+  </mat-card>
+  <mat-card *ngFor="let step of iterPlanningSteps$ | async" [routerLink]="['./step', step.type, step._id]">
+      <mat-card-header>
+        <div mat-card-avatar><span class="material-icons">games</span></div>
+        <mat-card-title>{{step.name}}</mat-card-title>
+        <mat-card-subtitle>{{step.type}}</mat-card-subtitle>
+      </mat-card-header>
+  </mat-card>
+</div>
+<div>
+  <router-outlet></router-outlet>
+</div>

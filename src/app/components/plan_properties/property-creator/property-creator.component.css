@@ -1,0 +1,17 @@
+.example-form {
+  width: 100%;
+  display: inline-flex;
+  flex-direction: column;
+}
+.example-form > * {
+  margin-bottom: 20px;
+}
+
+.example-full-width {
+  width: 100%;
+}
+
+.flex-container {
+  display: inline-flex;
+}
+

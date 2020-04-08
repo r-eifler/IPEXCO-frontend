@@ -3,7 +3,7 @@ import {HttpClient, HttpParams} from '@angular/common/http';
 import {ADD, EDIT, ListStore, LOAD, REMOVE} from '../store/generic-list.store';
 import {IHTTPData} from '../_interface/http-data.interface';
 import {environment} from '../../environments/environment';
-import {Observable} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 
 
 
@@ -20,7 +20,7 @@ interface Identifiable {
 export class ObjectCollectionService<T extends Identifiable> {
 
   BASE_URL = environment.apiURL;
-  readonly collection$: Observable<T[]>;
+  readonly collection$: BehaviorSubject<T[]>;
 
   http: HttpClient;
   listStore: ListStore<T>;
@@ -48,6 +48,9 @@ export class ObjectCollectionService<T extends Identifiable> {
 
   saveObject(object: T) {
 
+    console.log('Service save object:');
+    console.log(object);
+
     if (object._id) {
       return this.http.put<IHTTPData<T>>(this.BASE_URL + object._id, object)
         .subscribe(httpData => {
@@ -58,6 +61,7 @@ export class ObjectCollectionService<T extends Identifiable> {
 
     return this.http.post<IHTTPData<T>>(this.BASE_URL, object)
       .subscribe(httpData => {
+        console.log('Result Post:');
         console.log(httpData.data);
         const action = {type: ADD, data: httpData.data};
         this.listStore.dispatch(action);

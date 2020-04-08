@@ -1,0 +1,16 @@
+.runs-container {
+  width: 20%;
+  height: 100%;
+  display: flex;
+  flex-direction:  column;
+}
+.runs-detail-container {
+  width: 80%;
+  height: 100%;
+}
+
+.flex-container {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+}

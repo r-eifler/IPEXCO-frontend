@@ -1,0 +1,13 @@
+.add-button {
+  position: absolute;
+  right: 50%;
+  bottom: 50%;
+}
+
+mat-chip {
+  max-width: 300px;
+}
+
+.properties-container{
+  width: 50%;
+}

@@ -28,25 +28,29 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatSelectModule} from '@angular/material/select';
+import {MatDialogModule} from '@angular/material/dialog';
+import {MatChipsModule} from '@angular/material/chips';
+
+
 
 // forms
 import { ReactiveFormsModule } from '@angular/forms';
 import {FormsModule} from '@angular/forms';
 
 // my components
-import { TemplatePlanPropertyComponent } from './_template/template-plan-property/template-plan-property.component';
-import { TemplatePropertyDependencyComponent } from './_template/template-property-dependency/template-property-dependency.component';
-import { TemplatePropertySelectorComponent } from './_template/template-property-selecter/template-property-selector.component';
-import { TemplatePddlFileComponent } from './_template/template-pddl-file/template-pddl-file.component';
-import { TemplateFileUploadComponent } from './_template/template-file-upload/template-file-upload.component';
-import { TemplateFileDetailComponent } from './_template/template-file-detail/template-file-detail.component';
-import { DomainSelectorComponent } from './_template/domain-selector/domain-selector.component';
-import { ProblemSelectorComponent } from './_template/problem-selector/problem-selector.component';
-import { PropertyCreatorComponent } from './_template/property-creator/property-creator.component';
-import { ExplanationProcessComponent } from './_template/explanation-process/explanation-process.component';
+import { TemplatePlanPropertyComponent } from './components/template-plan-property/template-plan-property.component';
+import { TemplatePropertyDependencyComponent } from './components/template-property-dependency/template-property-dependency.component';
+import { PropertySelectorComponent} from './components/iter_planning_steps/property-selector/property-selector.component';
+import { TemplatePddlFileComponent } from './components/files/template-pddl-file/template-pddl-file.component';
+import { TemplateFileUploadComponent } from './components/files/template-file-upload/template-file-upload.component';
+import { TemplateFileDetailComponent } from './components/files/template-file-detail/template-file-detail.component';
+import { DomainSelectorComponent } from './components/files/domain-selector/domain-selector.component';
+import { ProblemSelectorComponent } from './components/files/problem-selector/problem-selector.component';
+import { PropertyCreatorComponent } from './components/plan_properties/property-creator/property-creator.component';
+import { ExplanationProcessComponent } from './components/explanation-process/explanation-process.component';
 import { NavigationComponent } from './navigation/navigation.component';
-import { ProjectSelectionComponent } from './_template/project-selection/project-selection.component';
-import { ProjectCreatorComponent } from './_template/project-creator/project-creator.component';
+import { ProjectSelectionComponent } from './components/project/project-selection/project-selection.component';
+import { ProjectCreatorComponent } from './components/project/project-creator/project-creator.component';
 
 
 // editor
@@ -54,19 +58,53 @@ import { MonacoEditorModule} from 'ngx-monaco-editor';
 
 // Store
 import {FileContentService} from './_service/file-content.service';
-import {DomainFilesStore, ProblemFilesStore, ProjectStore, SelectedDomainFileStore, SelectedProblemFileStore} from './store/stores.store';
+import {
+  CurrentProjectStore,
+  DomainFilesStore, IterPlanningStepStore, PlanPropertyCollectionStore,
+  ProblemFilesStore,
+  ProjectsStore, RunsStore,
+  SelectedDomainFileStore,
+  SelectedProblemFileStore
+} from './store/stores.store';
 import {
   DomainFilesService,
   ProblemFilesService,
   SelectedDomainFileService,
   SelectedProblemFileService
 } from './_service/pddl-file-services';
-import {ProjectService} from './_service/general-services';
+import {CurrentProjectService, IterPlanningStepService, PlanPropertyCollectionService, ProjectsService} from './_service/general-services';
+import { RunSelectionComponent } from './components/run-selection/run-selection.component';
+import {PlannerService} from './_service/planner.service';
+import { ProjectBaseComponent } from './components/project/project-base/project-base.component';
+import { PropertyCollectionComponent } from './components/plan_properties/property-collection/property-collection.component';
+import { IterativePlanningBaseComponent } from './components/iterative-planning-base/iterative-planning-base.component';
+import { TaskViewComponent } from './components/iter_planning_steps/task-view/task-view.component';
+import { PlanViewComponent } from './components/iter_planning_steps/plan-view/plan-view.component';
+import { QuestionStepComponent } from './components/iter_planning_steps/question-step/question-step.component';
+import { PlanningStepComponent } from './components/iter_planning_steps/planning-step/planning-step.component';
+import { FinishedPlanningStepComponent } from './components/iter_planning_steps/finished-planning-step/finished-planning-step.component';
+import { FinishedQuestionStepComponent } from './components/iter_planning_steps/finished-question-step/finished-question-step.component';
+import { TaskCreatorComponent } from './components/iter_planning_steps/task-creator/task-creator.component';
+import { FirstPlanningStepComponent } from './components/iter_planning_steps/first-planning-step/first-planning-step.component';
+
 
 
 const appRoutes: Routes = [
-  { path: 'projects', component: ProjectSelectionComponent },
-  { path: 'explanation-process', component: ExplanationProcessComponent },
+  { path: 'projects', component: ProjectSelectionComponent},
+  { path: 'project/:projectid', component: ProjectBaseComponent,
+    children: [
+      { path: 'properties', component: PropertyCollectionComponent},
+      { path: 'iterative-planning', component: IterativePlanningBaseComponent,
+        children: [
+          { path: 'original-task', component: FirstPlanningStepComponent},
+          { path: 'planning-step/:stepid', component: PlanningStepComponent},
+          { path: 'question-step/:stepid', component: QuestionStepComponent},
+        ]
+      },
+    ]
+  },
+  { path: 'domain-files', component: DomainSelectorComponent},
+  { path: 'problem-files', component: ProblemSelectorComponent},
 ];
 
 
@@ -76,7 +114,7 @@ const appRoutes: Routes = [
     FooterComponent,
     TemplatePlanPropertyComponent,
     TemplatePropertyDependencyComponent,
-    TemplatePropertySelectorComponent,
+    PropertySelectorComponent,
     TemplatePddlFileComponent,
     TemplateFileUploadComponent,
     TemplateFileDetailComponent,
@@ -87,39 +125,53 @@ const appRoutes: Routes = [
     NavigationComponent,
     ProjectSelectionComponent,
     ProjectCreatorComponent,
+    RunSelectionComponent,
+    ProjectBaseComponent,
+    PropertyCollectionComponent,
+    IterativePlanningBaseComponent,
+    TaskViewComponent,
+    PlanViewComponent,
+    QuestionStepComponent,
+    PlanningStepComponent,
+    FinishedPlanningStepComponent,
+    FinishedQuestionStepComponent,
+    TaskCreatorComponent,
+    FirstPlanningStepComponent,
   ],
-    imports: [
-        BrowserModule,
-        BrowserAnimationsModule,
-        HttpClientModule,
-        CdkTableModule,
-        MatGridListModule,
-        MatCardModule,
-        MatMenuModule,
-        MatIconModule,
-        MatButtonModule,
-        MatProgressBarModule,
-        LayoutModule,
-        MatTabsModule,
-        MatExpansionModule,
-        DragDropModule,
-        MatStepperModule,
-        MatDividerModule,
-        MatInputModule,
-        MatRadioModule,
-        MatButtonToggleModule,
-        MatSidenavModule,
-        MatToolbarModule,
-        MatSelectModule,
-        FormsModule,
-        MonacoEditorModule.forRoot(),
-        MatListModule,
-        ReactiveFormsModule,
-        RouterModule.forRoot(
-          appRoutes,
-          { enableTracing: false } // <-- debugging purposes only
-        )
-    ],
+  imports: [
+    BrowserModule,
+    BrowserAnimationsModule,
+    HttpClientModule,
+    CdkTableModule,
+    MatGridListModule,
+    MatCardModule,
+    MatMenuModule,
+    MatIconModule,
+    MatButtonModule,
+    MatProgressBarModule,
+    LayoutModule,
+    MatTabsModule,
+    MatExpansionModule,
+    DragDropModule,
+    MatStepperModule,
+    MatDividerModule,
+    MatInputModule,
+    MatRadioModule,
+    MatButtonToggleModule,
+    MatSidenavModule,
+    MatToolbarModule,
+    MatSelectModule,
+    MatDialogModule,
+    MatChipsModule,
+    FormsModule,
+    MonacoEditorModule.forRoot(),
+    MatListModule,
+    ReactiveFormsModule,
+    RouterModule.forRoot(
+      appRoutes,
+      {enableTracing: false} // <-- debugging purposes only
+    ),
+  ],
   providers: [
     DomainFilesStore,
     SelectedDomainFileStore,
@@ -130,8 +182,23 @@ const appRoutes: Routes = [
     SelectedDomainFileService,
     ProblemFilesService,
     SelectedProblemFileService,
-    ProjectStore,
-    ProjectService,
+    ProjectsStore,
+    ProjectsService,
+    CurrentProjectStore,
+    CurrentProjectService,
+    PlanPropertyCollectionStore,
+    PlanPropertyCollectionService,
+    RunsStore,
+    PlannerService,
+    IterPlanningStepStore,
+    IterPlanningStepService,
+  ],
+  entryComponents: [
+    PropertySelectorComponent,
+    PropertyCreatorComponent,
+    ProjectSelectionComponent,
+    ProjectCreatorComponent,
+    PropertyCollectionComponent,
   ],
   bootstrap: [AppComponent]
 })

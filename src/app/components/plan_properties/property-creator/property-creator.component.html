@@ -1,0 +1,75 @@
+ <h2>New Properties</h2>
+  <form class="example-form" [formGroup]="propertyForm" (ngSubmit)="onSave()">
+
+    <mat-form-field class="example-full-width">
+      <mat-label>name</mat-label>
+      <input matInput type="text" formControlName="name">
+    </mat-form-field>
+
+    <mat-radio-group name="propertyType" formControlName="type">
+      <mat-radio-button style="margin: 0px 5px" value="AS">AS</mat-radio-button>
+      <mat-radio-button style="margin: 0px 5px" value="LTL">LTL</mat-radio-button>
+    </mat-radio-group>
+
+
+    <mat-form-field class="example-full-width">
+      <mat-label>formula</mat-label>
+      <input matInput type="text" formControlName="formula">
+    </mat-form-field>
+
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Action Sets
+        </mat-panel-title>
+        <mat-panel-description>
+          possibility to define action sets
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+          <div style="display: flex;">
+            <mat-form-field class="example-full-width">
+              <mat-label>action set name</mat-label>
+              <input matInput type="text" formControlName="actionSetName">
+            </mat-form-field>
+            <button mat-icon-button color="accent" type="button" (click)="addActionSet()">
+              <mat-icon>add_box</mat-icon>
+            </button>
+          </div>
+
+      <mat-accordion *ngFor="let action_set of planProperty.actionSets">
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                {{action_set.name}}
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div style="display: flex; flex-direction: column; justify-content: center; width: 100%;">
+              <mat-list *ngFor="let action of action_set.actions">
+                <mat-list-item>
+                  {{action}}
+                  <mat-divider [inset]="true"></mat-divider>
+                </mat-list-item>
+              </mat-list>
+              <div style="display: flex; width: 100%;">
+                <mat-form-field class="example-full-width">
+                  <mat-label>action</mat-label>
+                  <input matInput type="text" formControlName="{{action_set.name}}control">
+                </mat-form-field>
+                <button mat-icon-button color="accent" type=button (click)="createAction(action_set)">
+                  <mat-icon>add_box</mat-icon>
+                </button>
+              </div>
+            </div>
+          </mat-expansion-panel>
+          </mat-accordion>
+    </mat-expansion-panel>
+    <div style="display: flex">
+      <button mat-flat-button color="secondray" type=button (click)="onBack()" style="flex-grow: 1">
+        <mat-icon>
+          keyboard_backspace
+        </mat-icon>
+      </button>
+      <button mat-flat-button color="primary" style="flex-grow: 4; margin-left: 10px">Save</button>
+    </div>
+  </form>
+

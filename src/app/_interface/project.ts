@@ -7,6 +7,4 @@ export interface Project {
   problem_file: PDDLFile;
   description: string;
   properties: string[];
-  hard_properties: string[];
-  soft_properties: string[];
 }

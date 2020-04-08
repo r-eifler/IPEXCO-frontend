@@ -1,0 +1,16 @@
+.add-button {
+  position: fixed;
+  right: 50px;
+  bottom: 50px;
+}
+
+.flex-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.property-card {
+  width: 15%;
+  min-width: 150px;
+  margin: 10px;
+}

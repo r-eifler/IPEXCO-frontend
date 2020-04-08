@@ -1,9 +1,10 @@
 import { TestBed } from '@angular/core/testing';
 
 import { ObjectCollectionService } from './object-collection.service';
+import {PlanProperty} from '../_interface/plan-property';
 
 describe('PlanPropertyService', () => {
-  let service: ObjectCollectionService;
+  let service: ObjectCollectionService<PlanProperty>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});

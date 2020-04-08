@@ -1,4 +1,4 @@
 export interface IHTTPData<T> {
-  data: T[];
+  data: T;
 }
 

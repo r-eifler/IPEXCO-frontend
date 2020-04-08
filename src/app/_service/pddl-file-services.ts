@@ -3,6 +3,7 @@ import {PddlFilesService} from './pddl-files.service';
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {DomainFilesStore, ProblemFilesStore, SelectedDomainFileStore, SelectedProblemFileStore} from '../store/stores.store';
+import {PDDLFile} from '../_interface/pddlfile';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +21,7 @@ export class DomainFilesService extends PddlFilesService {
 @Injectable({
   providedIn: 'root'
 })
-export class SelectedDomainFileService extends SelectedObjectService {
+export class SelectedDomainFileService extends SelectedObjectService<PDDLFile> {
 
   type = 'domain';
 
@@ -44,7 +45,7 @@ export class ProblemFilesService extends PddlFilesService {
 @Injectable({
   providedIn: 'root'
 })
-export class SelectedProblemFileService extends SelectedObjectService {
+export class SelectedProblemFileService extends SelectedObjectService<PDDLFile> {
 
   type = 'problem';
 
