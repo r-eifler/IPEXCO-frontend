@@ -1,10 +1,9 @@
-import { Component, OnInit, Input } from '@angular/core';
-import {IterPlanningStepService, ProjectsService} from '../../_service/general-services';
-import {IterPlanningStep} from '../../_interface/iter-planning-step';
+import { Component, OnInit } from '@angular/core';
+import {CurrentRunService, RunService} from '../../_service/general-services';
 import {Observable} from 'rxjs';
-import {Project} from '../../_interface/project';
-import {ActivatedRoute, ParamMap, Router} from '@angular/router';
-import {switchMap} from 'rxjs/operators';
+import {ActivatedRoute, Router} from '@angular/router';
+import {CurrentProjectStore, CurrentRunStore, RunsStore} from '../../store/stores.store';
+import {PlanRun} from '../../_interface/run';
 
 @Component({
   selector: 'app-iterative-planning-base',
@@ -13,25 +12,49 @@ import {switchMap} from 'rxjs/operators';
 })
 export class IterativePlanningBaseComponent implements OnInit {
 
-  project: Project;
-  iterPlanningSteps$: Observable<IterPlanningStep[]>;
+  // project: Project;
+  runs$: Observable<PlanRun[]>;
+  private project;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private service: ProjectsService,
-    private iterPlanningStepService: IterPlanningStepService
+    private currentProjectStore: CurrentProjectStore,
+    private iterPlanningStepService: RunService,
+    private runStore: RunsStore,
+    private currentRunStore: CurrentRunStore,
   ) {
-    this.iterPlanningSteps$ = this.iterPlanningStepService.collection$;
-    this.route.paramMap.pipe(
-      switchMap((params: ParamMap) =>
-        this.service.getObject(params.get('projectid')))
-    ).subscribe(
-      value => { this.project = value.data; }
-    );
+    this.runs$ = this.runStore.items$;
+
+    this.currentProjectStore.item$.subscribe(value => {
+      if (value !== null) {
+        this.project = value;
+        this.iterPlanningStepService.findCollection([{param: 'projectId', value: this.project._id}]);
+      }
+    });
   }
 
   ngOnInit(): void {
+    // this.runs$.subscribe(value => {
+    //   if (value.length === 0) {
+    //     this.router.navigate(['original-task']).then(r => console.log('Go to original task.'));
+    //   }
+    // });
+  }
+
+  new_planning_step() {
+
+  }
+
+  new_question() {
+    this.router.navigate(['./new_question'], { relativeTo: this.route });
+  }
+
+  delete(run: PlanRun) {
+    this.iterPlanningStepService.deleteObject(run);
+    if (run._id === this.currentRunStore.item$.getValue()._id) {
+      this.router.navigate(['../'], { relativeTo: this.route });
+    }
   }
 
 }

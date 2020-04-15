@@ -1,13 +1,13 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
-import { PlanProperty} from '../../../_interface/plan-property';
+import {PlanProperty} from '../../../_interface/plan-property';
 import {CurrentProjectService, PlanPropertyCollectionService} from '../../../_service/general-services';
 import {PlannerService} from '../../../_service/planner.service';
 import {Observable} from 'rxjs';
 import {MatDialog} from '@angular/material/dialog';
 import {PropertyCreatorComponent} from '../../plan_properties/property-creator/property-creator.component';
 import {Project} from '../../../_interface/project';
-import {Run} from '../../../_interface/run';
+import {ExplanationRun, RunType} from '../../../_interface/run';
 
 @Component({
   selector: 'app-property-selector',
@@ -29,6 +29,7 @@ export class PropertySelectorComponent implements OnInit {
 
   collection$: Observable<PlanProperty[]>;
   private currentProject$: Observable<Project>;
+  @Input() previousRun;
 
   constructor(private propertiesService: PlanPropertyCollectionService,
               private currentProjectService: CurrentProjectService,
@@ -72,13 +73,14 @@ export class PropertySelectorComponent implements OnInit {
     let cProject = null;
     const sub = this.currentProject$.subscribe((obj) => {cProject = obj; });
     sub.unsubscribe();
-    const run: Run = {
+    const run: ExplanationRun = {
       _id: null,
-      name: 'TODO',
+      name: 'MUGS',
       status: null,
-      project: cProject,
-      soft_properties: this.softProperties,
-      hard_properties: this.hardProperties,
+      type: RunType.mugs,
+      planProperties: this.softProperties.concat(this.hardProperties),
+      softGoals: this.softProperties, // TODO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      hardGoals: this.hardProperties,
       result: null,
       log: null,
     };
@@ -86,7 +88,7 @@ export class PropertySelectorComponent implements OnInit {
     console.log('Compute dependencies');
     console.log(run);
 
-    this.plannerService.compute_mugs(run);
+    // this.plannerService.execute_plan_run(run);
   }
 
 }

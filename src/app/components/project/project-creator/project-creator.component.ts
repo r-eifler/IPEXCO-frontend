@@ -50,8 +50,8 @@ export class ProjectCreatorComponent implements OnInit {
       _id: null,
       name: this.projectForm.controls.name.value,
       description: this.projectForm.controls.description.value,
-      domain_file: this.selectedDomain,
-      problem_file: this.selectedProblem,
+      domainFile: this.selectedDomain,
+      problemFile: this.selectedProblem,
       properties: [],
     };
 

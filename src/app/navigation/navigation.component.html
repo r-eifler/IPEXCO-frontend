@@ -7,13 +7,12 @@
     <mat-toolbar>Menu</mat-toolbar>
     <mat-nav-list>
       <a mat-list-item routerLink="/projects" routerLinkActive="active">Projects</a>
-      <!-- <a mat-list-item routerLink="/explanation-process" routerLinkActive="active">Explanations</a> -->
       <a mat-list-item routerLink="/domain-files" routerLinkActive="active">Domain Files</a>
       <a mat-list-item routerLink="/problem-files" routerLinkActive="active">Problem Files</a>
     </mat-nav-list>
   </mat-sidenav>
-  <mat-sidenav-content>
-    <mat-toolbar color="accent">
+  <mat-sidenav-content style="height: 100vh">
+    <mat-toolbar color="primary" style="height: 70px">
       <button
         type="button"
         aria-label="Toggle sidenav"
@@ -24,11 +23,9 @@
       </button>
       <span>EXPLORE</span>
     </mat-toolbar>
-    <!-- Add Content Here -->
-    <router-outlet></router-outlet>
-    <!--<app-explanation-process></app-explanation-process> -->
+    <div style="height: calc(100vh - 70px)">
+      <router-outlet></router-outlet>
+    </div>
   </mat-sidenav-content>
 </mat-sidenav-container>
-<mat-toolbar color="primary">
-  <span>TODO</span>
-</mat-toolbar>
+

@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
 import {ActionSet, PlanProperty} from '../../../_interface/plan-property';
 import {PlanPropertyCollectionService} from '../../../_service/general-services';
 import {MatDialogRef} from '@angular/material/dialog';
+import {GoalType} from '../../../_interface/goal';
 
 @Component({
   selector: 'app-property-creator',
@@ -14,7 +15,7 @@ export class PropertyCreatorComponent implements OnInit {
   constructor(private propertiesService: PlanPropertyCollectionService, public dialogRef: MatDialogRef<PropertyCreatorComponent>) { }
 
   propertyTypes = ['AS', 'LTL'];
-  planProperty: PlanProperty = {_id: null, name: null, type: null, formula: null, actionSets: []};
+  planProperty: PlanProperty = {_id: null, name: null, goalType: GoalType.planProperty, type: null, formula: null, actionSets: []};
 
   // form fields
   propertyForm = new FormGroup({

@@ -1,0 +1,30 @@
+.chip {
+  display: inline-block;
+  padding: 0 12px;
+  margin: 5px 5px;
+  border-radius: 32px;
+  min-width: 20%;
+  height: 40px;
+  font-size: large;
+  font-weight: bold;
+  text-align: center;
+  line-height: 40px;
+  background-color: #bdbdbd;
+  cursor: pointer;
+}
+
+.chip:hover {
+  background: #ccc;
+}
+
+.chip-icon {
+  display: block;
+  float: left;
+  background: #009587;
+  width: 40px;
+  border-radius: 50%;
+  text-align: center;
+  color: white;
+  margin: 0 8px 0 -12px;
+  line-height: 40px;
+}

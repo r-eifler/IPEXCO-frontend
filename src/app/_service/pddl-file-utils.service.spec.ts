@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { FileContentService } from './file-content.service';
+import { PddlFileUtilsService } from './pddl-file-utils.service';
 
 describe('FileContentService', () => {
-  let service: FileContentService;
+  let service: PddlFileUtilsService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(FileContentService);
+    service = TestBed.inject(PddlFileUtilsService);
   });
 
   it('should be created', () => {

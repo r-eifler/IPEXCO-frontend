@@ -1,0 +1,7 @@
+<div style="width: 100%;">
+    <h2>Goal</h2>
+      <div class="chip" *ngFor="let item of hardGoals" cdkDrag>
+        <div class="chip-icon">{{item.goalType}}</div>
+        {{item.name}}
+      </div>
+</div>

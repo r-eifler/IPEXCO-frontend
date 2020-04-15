@@ -13,7 +13,7 @@ import {Project} from '../../_interface/project';
   styleUrls: ['./explanation-process.component.css']
 })
 export class ExplanationProcessComponent implements OnInit, AfterViewInit {
-  private project$: Observable<IHTTPData<Project>>;
+  private project$: Observable<Project>;
 
   constructor(
     private route: ActivatedRoute,
@@ -30,9 +30,9 @@ export class ExplanationProcessComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.project$ = this.route.paramMap.pipe(
       switchMap((params: ParamMap) =>
-        this.projectsService.getObject(params.get('id')))
+        this.projectsService.getObject(params.get('projectid')))
     );
-    this.project$.subscribe(value => this.currentProjectService.saveObject(value.data));
+    this.project$.subscribe(value => this.currentProjectService.saveObject(value));
 
   }
 

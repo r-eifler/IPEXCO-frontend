@@ -3,8 +3,7 @@ import {PDDLFile} from '../_interface/pddlfile';
 import {ItemStore} from './generic-item.store';
 import {PlanProperty} from '../_interface/plan-property';
 import {Project} from '../_interface/project';
-import {Run} from '../_interface/run';
-import {IterPlanningStep} from '../_interface/iter-planning-step';
+import {PlanRun} from '../_interface/run';
 
 
 export class DomainFilesStore extends  ListStore<PDDLFile> {
@@ -35,10 +34,10 @@ export class CurrentProjectStore extends  ItemStore<Project> {
 
 }
 
-export class RunsStore extends  ListStore<Run> {
+export class RunsStore extends  ListStore<PlanRun> {
 
 }
 
-export class IterPlanningStepStore extends  ListStore<IterPlanningStep> {
+export class CurrentRunStore extends  ItemStore<PlanRun> {
 
 }

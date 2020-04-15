@@ -30,7 +30,7 @@ export class ListStore<T extends Identifiable> {
       case EDIT:
         return items.map(task => {
           const editedItem = action.data;
-          if (task._id !== editedItem.id) {
+          if (task._id !== editedItem._id) {
             return task;
           }
           return editedItem;

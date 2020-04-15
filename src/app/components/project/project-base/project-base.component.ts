@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {Project} from '../../../_interface/project';
 import {ActivatedRoute, ParamMap, Router} from '@angular/router';
-import {ProjectsService} from '../../../_service/general-services';
+import {CurrentProjectService, ProjectsService} from '../../../_service/general-services';
 import {switchMap} from 'rxjs/operators';
 
 @Component({
@@ -16,13 +16,18 @@ export class ProjectBaseComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private service: ProjectsService
+    private service: ProjectsService,
+    private currentProjectService: CurrentProjectService
   ) {
     this.route.paramMap.pipe(
       switchMap((params: ParamMap) =>
         this.service.getObject(params.get('projectid')))
     ).subscribe(
-      value => { this.project = value.data; }
+      value => {
+        this.project = value;
+        this.currentProjectService.saveObject(this.project);
+        // console.log(this.project);
+      }
     );
   }
 

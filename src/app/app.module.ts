@@ -30,7 +30,7 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatSelectModule} from '@angular/material/select';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatChipsModule} from '@angular/material/chips';
-
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 
 // forms
@@ -57,10 +57,10 @@ import { ProjectCreatorComponent } from './components/project/project-creator/pr
 import { MonacoEditorModule} from 'ngx-monaco-editor';
 
 // Store
-import {FileContentService} from './_service/file-content.service';
+import {PddlFileUtilsService} from './_service/pddl-file-utils.service';
 import {
-  CurrentProjectStore,
-  DomainFilesStore, IterPlanningStepStore, PlanPropertyCollectionStore,
+  CurrentProjectStore, CurrentRunStore,
+  DomainFilesStore, PlanPropertyCollectionStore,
   ProblemFilesStore,
   ProjectsStore, RunsStore,
   SelectedDomainFileStore,
@@ -72,8 +72,13 @@ import {
   SelectedDomainFileService,
   SelectedProblemFileService
 } from './_service/pddl-file-services';
-import {CurrentProjectService, IterPlanningStepService, PlanPropertyCollectionService, ProjectsService} from './_service/general-services';
-import { RunSelectionComponent } from './components/run-selection/run-selection.component';
+import {
+  CurrentProjectService,
+  RunService,
+  PlanPropertyCollectionService,
+  ProjectsService,
+  CurrentRunService
+} from './_service/general-services';
 import {PlannerService} from './_service/planner.service';
 import { ProjectBaseComponent } from './components/project/project-base/project-base.component';
 import { PropertyCollectionComponent } from './components/plan_properties/property-collection/property-collection.component';
@@ -97,8 +102,9 @@ const appRoutes: Routes = [
       { path: 'iterative-planning', component: IterativePlanningBaseComponent,
         children: [
           { path: 'original-task', component: FirstPlanningStepComponent},
-          { path: 'planning-step/:stepid', component: PlanningStepComponent},
-          { path: 'question-step/:stepid', component: QuestionStepComponent},
+          { path: 'planning-step/:runid', component: FinishedPlanningStepComponent},
+          { path: 'question-step/:runid', component: FinishedQuestionStepComponent},
+          { path: 'new_question', component: QuestionStepComponent},
         ]
       },
     ]
@@ -125,7 +131,6 @@ const appRoutes: Routes = [
     NavigationComponent,
     ProjectSelectionComponent,
     ProjectCreatorComponent,
-    RunSelectionComponent,
     ProjectBaseComponent,
     PropertyCollectionComponent,
     IterativePlanningBaseComponent,
@@ -163,13 +168,15 @@ const appRoutes: Routes = [
     MatSelectModule,
     MatDialogModule,
     MatChipsModule,
+    MatProgressSpinnerModule,
     FormsModule,
     MonacoEditorModule.forRoot(),
     MatListModule,
     ReactiveFormsModule,
     RouterModule.forRoot(
       appRoutes,
-      {enableTracing: false} // <-- debugging purposes only
+      {enableTracing: false, // <-- debugging purposes only
+        paramsInheritanceStrategy: 'always'}
     ),
   ],
   providers: [
@@ -177,7 +184,7 @@ const appRoutes: Routes = [
     SelectedDomainFileStore,
     ProblemFilesStore,
     SelectedProblemFileStore,
-    FileContentService,
+    PddlFileUtilsService,
     DomainFilesService,
     SelectedDomainFileService,
     ProblemFilesService,
@@ -188,10 +195,12 @@ const appRoutes: Routes = [
     CurrentProjectService,
     PlanPropertyCollectionStore,
     PlanPropertyCollectionService,
-    RunsStore,
     PlannerService,
-    IterPlanningStepStore,
-    IterPlanningStepService,
+    RunService,
+    RunsStore,
+    CurrentRunService,
+    CurrentRunStore,
+
   ],
   entryComponents: [
     PropertySelectorComponent,

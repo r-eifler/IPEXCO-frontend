@@ -3,8 +3,8 @@ import {PDDLFile} from './pddlfile';
 export interface Project {
   _id: string;
   name: string;
-  domain_file: PDDLFile;
-  problem_file: PDDLFile;
+  domainFile: PDDLFile;
+  problemFile: PDDLFile;
   description: string;
   properties: string[];
 }

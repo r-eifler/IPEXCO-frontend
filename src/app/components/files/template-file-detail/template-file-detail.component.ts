@@ -3,7 +3,7 @@ import {Component, OnInit, OnDestroy} from '@angular/core';
 import {PDDLFile} from '../../../_interface/pddlfile';
 import {Observable} from 'rxjs';
 import {SelectedObjectService} from '../../../_service/selected-object.service';
-import {FileContentService} from '../../../_service/file-content.service';
+import {PddlFileUtilsService} from '../../../_service/pddl-file-utils.service';
 
 
 @Component({
@@ -19,14 +19,14 @@ export class TemplateFileDetailComponent implements OnInit {
   // files observable
   selectedFile$: Observable<PDDLFile>;
 
-  constructor(private selectedFileService: SelectedObjectService<PDDLFile>, private fileContentService: FileContentService) { }
+  constructor(private selectedFileService: SelectedObjectService<PDDLFile>, private fileContentService: PddlFileUtilsService) { }
 
   ngOnInit(): void {
     this.selectedFile$ = this.selectedFileService.selectedObject$;
     this.selectedFile$.subscribe(
       (file) => {
         if (file) {
-          this.fileContentService.getFileContent(file).subscribe(
+          this.fileContentService.getFileContent(file.path).subscribe(
             (content) => {
               this.code = content;
             }

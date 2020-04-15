@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {ObjectCollectionService} from './object-collection.service';
-import {Run} from '../_interface/run';
+import {PlanRun} from '../_interface/run';
 import {HttpClient} from '@angular/common/http';
 import {RunsStore} from '../store/stores.store';
 import {environment} from '../../environments/environment';
@@ -8,7 +8,7 @@ import {environment} from '../../environments/environment';
 @Injectable({
   providedIn: 'root'
 })
-export class PlannerService extends ObjectCollectionService<Run> {
+export class PlannerService extends ObjectCollectionService<PlanRun> {
 
   myBaseURL = environment.apiURL + 'planner/';
 
@@ -17,15 +17,10 @@ export class PlannerService extends ObjectCollectionService<Run> {
     this.BASE_URL = environment.apiURL + 'planner/';
   }
 
-  compute_mugs(run: Run): void {
-    this.BASE_URL = this.myBaseURL + 'mugs';
+  execute_plan_run(run: PlanRun): void {
+    this.BASE_URL = this.myBaseURL + 'run';
     this.saveObject(run);
     this.BASE_URL = this.myBaseURL;
   }
 
-  compute_plan(run: Run): void {
-    this.BASE_URL = this.myBaseURL + 'plan';
-    this.saveObject(run);
-    this.BASE_URL = this.myBaseURL;
-  }
 }

@@ -1,11 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import {Project} from '../../../_interface/project';
 import {Observable} from 'rxjs';
-import {IterPlanningStep} from '../../../_interface/iter-planning-step';
-import {ActivatedRoute, ParamMap, Router} from '@angular/router';
-import {IterPlanningStepService, ProjectsService} from '../../../_service/general-services';
-import {switchMap} from 'rxjs/operators';
+import {ActivatedRoute, Router} from '@angular/router';
+import {RunService, ProjectsService} from '../../../_service/general-services';
 import {PlanProperty} from '../../../_interface/plan-property';
+import { PlanRun } from '../../../_interface/run';
 
 @Component({
   selector: 'app-first-planning-step',
@@ -14,24 +12,17 @@ import {PlanProperty} from '../../../_interface/plan-property';
 })
 export class FirstPlanningStepComponent implements OnInit {
 
-  project: Project;
   hardProperties: PlanProperty[] =  [];
   softProperties: PlanProperty[] =  [];
-  iterPlanningSteps$: Observable<IterPlanningStep[]>;
+  run$: Observable<PlanRun[]>;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private service: ProjectsService,
-    private iterPlanningStepService: IterPlanningStepService
+    private runService: RunService
   ) {
-    this.iterPlanningSteps$ = this.iterPlanningStepService.collection$;
-    this.route.paramMap.pipe(
-      switchMap((params: ParamMap) =>
-        this.service.getObject(params.get('id')))
-    ).subscribe(
-      value => { this.project = value.data; }
-    );
+    this.run$ = this.runService.collection$;
   }
 
   ngOnInit(): void {

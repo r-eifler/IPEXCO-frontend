@@ -1,7 +1,9 @@
 .step-container {
   width: 100%;
   height: 150px;
-  scroll-behavior: auto;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  white-space: nowrap;
   background-color: #bdbdbd;
   display: flex;
   flex-direction: row;

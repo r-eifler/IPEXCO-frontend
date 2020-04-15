@@ -4,12 +4,19 @@ import {ADD, EDIT, ListStore, LOAD, REMOVE} from '../store/generic-list.store';
 import {IHTTPData} from '../_interface/http-data.interface';
 import {environment} from '../../environments/environment';
 import {BehaviorSubject, Observable} from 'rxjs';
+import {map} from 'rxjs/operators';
+import {Goal, GoalType} from '../_interface/goal';
+import * as assert from 'assert';
 
 
 
 type Id = string | number;
 interface Identifiable {
   _id?: Id;
+}
+interface QueryParam {
+  param: string;
+  value: string;
 }
 
 
@@ -31,19 +38,30 @@ export class ObjectCollectionService<T extends Identifiable> {
     this.collection$ = listStore.items$;
   }
 
-  findCollection() {
-    const httpParams = new HttpParams();
 
-    this.http.get<IHTTPData<T>>(this.BASE_URL)
+  pipeFindData = map((value: IHTTPData<T[]>): T[] =>  value.data);
+  pipeGetData = map((value: IHTTPData<T>): T => value.data);
+
+  pipeFind = map((value: T[]): T[] =>  value);
+  pipeGet = map((value: T): T => value);
+
+  findCollection(queryParams: QueryParam[] = []) {
+    let httpParams = new HttpParams();
+    for ( const  qp of queryParams) {
+      httpParams = httpParams.set(qp.param, qp.value);
+    }
+
+    this.http.get<IHTTPData<T[]>>(this.BASE_URL, {params: httpParams}).pipe(this.pipeFindData, this.pipeFind)
       .subscribe((res) => {
-        this.listStore.dispatch({type: LOAD, data: res.data});
+        this.listStore.dispatch({type: LOAD, data: res});
       });
 
     return this.collection$;
   }
 
-  getObject(id: number | string): Observable<IHTTPData<T>> {
-    return this.http.get<IHTTPData<T>>(this.BASE_URL + id);
+  getObject(id: number | string): Observable<T> {
+    console.assert(id != null);
+    return this.http.get<IHTTPData<T>>(this.BASE_URL + id).pipe(this.pipeGetData, this.pipeGet);
   }
 
   saveObject(object: T) {
@@ -65,6 +83,20 @@ export class ObjectCollectionService<T extends Identifiable> {
         console.log(httpData.data);
         const action = {type: ADD, data: httpData.data};
         this.listStore.dispatch(action);
+      });
+  }
+
+  saveAndUpdateObject(object: T) {
+    assert(! object._id);
+
+    const action1 = {type: ADD, data: object};
+    this.listStore.dispatch(action1);
+    return this.http.post<IHTTPData<T>>(this.BASE_URL, object)
+      .subscribe(httpData => {
+        console.log('Result Post:');
+        console.log(httpData.data);
+        const action2 = {type: EDIT, data: httpData.data};
+        this.listStore.dispatch(action2);
       });
   }
 
