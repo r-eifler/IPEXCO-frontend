@@ -1,15 +1,17 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {PlanProperty} from '../../../_interface/plan-property';
-import {Project} from '../../../_interface/project';
-import {PlanRun, RunType} from '../../../_interface/run';
-import {PlannerService} from '../../../_service/planner.service';
-import {PlanPropertyCollectionService} from '../../../_service/general-services';
+import {PlanProperty} from '../../../interface/plan-property';
+import {Project} from '../../../interface/project';
+import {PlanRun, RunType} from '../../../interface/run';
+import {PlannerService} from '../../../service/planner.service';
 import {BehaviorSubject} from 'rxjs';
 import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
-import {PddlFileUtilsService} from '../../../_service/pddl-file-utils.service';
-import {Goal, GoalType} from '../../../_interface/goal';
+import {PddlFileUtilsService} from '../../../service/pddl-file-utils.service';
+import {Goal, GoalType} from '../../../interface/goal';
 import {CurrentProjectStore} from '../../../store/stores.store';
 import {ActivatedRoute, Router} from '@angular/router';
+import { prepareEventListenerParameters } from '@angular/compiler/src/render3/view/template';
+import { PlanPropertyCollectionService } from 'src/app/service/plan-property-services';
+import { RunService } from 'src/app/service/run-services';
 
 @Component({
   selector: 'app-task-creator',
@@ -18,7 +20,6 @@ import {ActivatedRoute, Router} from '@angular/router';
 })
 export class TaskCreatorComponent implements OnInit {
 
-  @Input() previousRun: PlanRun;
   hardGoals: Goal[] = [];
   properties$: BehaviorSubject<PlanProperty[]>;
   private project: Project;
@@ -31,6 +32,7 @@ export class TaskCreatorComponent implements OnInit {
     private propertiesService: PlanPropertyCollectionService,
     private pddlFileUtilsService: PddlFileUtilsService,
     private currentProjectStore: CurrentProjectStore,
+    private runService: RunService,
     private router: Router,
     private route: ActivatedRoute,
   ) {
@@ -41,15 +43,12 @@ export class TaskCreatorComponent implements OnInit {
           // console.log(value);
           // console.log(value.problemFile);
           this.pddlFileUtilsService.getGoalFacts(value.problemFile).subscribe(value1 => this.goalFacts = value1);
+          this.propertiesService.findCollection([{param: 'projectId', value: this.project._id}]);
       }
     });
-    if ( this.previousRun ) {
-      this.hardGoals = this.previousRun.hardGoals;
-    }
   }
 
   ngOnInit(): void {
-    this.propertiesService.findCollection();
   }
 
   drop(event: CdkDragDrop<Goal[]>) {
@@ -64,10 +63,14 @@ export class TaskCreatorComponent implements OnInit {
   }
 
   compute_dependencies(): void {
+    const previousRun = this.runService.getLastRun();
+    console.log('Previous Run: ');
+    console.log(previousRun);
+
     this.computing = true;
     const run: PlanRun = {
       _id: null,
-      name: this.previousRun ? 'Plan' : 'Original Task',
+      name: 'Planning Task',
       type: RunType.plan,
       status: null,
       project: this.project,
@@ -76,11 +79,11 @@ export class TaskCreatorComponent implements OnInit {
       log: null,
       plan: null,
       explanationRuns: [],
-      previousRun: this.previousRun ? this.previousRun._id : null,
+      previousRun: previousRun ? previousRun._id : null,
     };
     //
     // console.log('Compute dependencies');
-    console.log(run);
+    // console.log(run);
 
     this.plannerService.execute_plan_run(run);
     this.router.navigate(['../'], { relativeTo: this.route });

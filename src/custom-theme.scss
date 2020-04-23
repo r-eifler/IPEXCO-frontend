@@ -12,8 +12,8 @@
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
-$EXPLORE-CLI-primary: mat-palette($mat-teal);
-$EXPLORE-CLI-accent: mat-palette($mat-deep-orange, 700, 800, 900);
+$EXPLORE-CLI-primary: mat-palette($mat-green, 400);
+$EXPLORE-CLI-accent: mat-palette($mat-orange, 400);
 
 // The warn palette is optional (defaults to red).
 $EXPLORE-CLI-warn: mat-palette($mat-red);
@@ -25,4 +25,5 @@ $EXPLORE-CLI-theme: mat-light-theme($EXPLORE-CLI-primary, $EXPLORE-CLI-accent, $
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
 @include angular-material-theme($EXPLORE-CLI-theme);
+
 

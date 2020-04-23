@@ -13,14 +13,14 @@
 
   <mat-form-field appearance="fill">
     <mat-label>Domain File</mat-label>
-    <mat-select [(value)]="selectedDomain">
+    <mat-select [(value)]="selectedDomain" [disabled]="disableSelect">
       <mat-option *ngFor="let domain of domainFiles$ | async" [value]="domain">{{domain.name}}</mat-option>
     </mat-select>
   </mat-form-field>
 
   <mat-form-field appearance="fill">
     <mat-label>Problem File</mat-label>
-    <mat-select [(value)]="selectedProblem">
+    <mat-select [(value)]="selectedProblem" [disabled]="disableSelect">
       <mat-option *ngFor="let problem of problemFiles | async" [value]="problem">{{problem.name}}</mat-option>
     </mat-select>
   </mat-form-field>

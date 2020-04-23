@@ -1,0 +1,56 @@
+<div>
+  <div class="properties-container">
+    <h2>Collection</h2>
+    <div
+      cdkDropList
+      #collectionList="cdkDropList"
+      [cdkDropListData]="collection"
+      [cdkDropListConnectedTo]="[hardPropertiesList]"
+      class="drag-drop-list"
+      (cdkDropListDropped)="drop($event)">
+      <mat-expansion-panel class="drag-drop-box" *ngFor="let item of collection" cdkDrag>{{item}}>
+        <mat-expansion-panel-header style="width: 100%">
+          <mat-panel-title>
+            {{item.name}}
+          </mat-panel-title>
+          <mat-panel-description>
+            TODO
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <div>
+          <p>{{item.formula}}</p>
+        </div>
+      </mat-expansion-panel>
+    </div>
+  </div>
+
+  <div class="properties-container" style="margin-top: 20px;">
+    <h1>Why not ...</h1>
+
+    <div
+      cdkDropList
+      #hardPropertiesList="cdkDropList"
+      [cdkDropListData]="question"
+      [cdkDropListConnectedTo]="[collectionList]"
+      class="drag-drop-list"
+      (cdkDropListDropped)="drop($event)">
+      <mat-expansion-panel *ngFor="let item of question" cdkDrag>{{item}}>
+        <mat-expansion-panel-header style="width: 100%">
+          <mat-panel-title>
+            {{item.name}}
+          </mat-panel-title>
+          <mat-panel-description>
+            TODO
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <div>
+          <p>{{item.formula}}</p>
+        </div>
+      </mat-expansion-panel>
+    </div>
+  </div>
+</div>
+
+<button mat-fab color="warn" class="add-button" (click)="compute_dependencies()">
+  <mat-icon>send</mat-icon>
+</button>

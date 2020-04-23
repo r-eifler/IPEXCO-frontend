@@ -1,9 +1,10 @@
 import {ListStore} from './generic-list.store';
-import {PDDLFile} from '../_interface/pddlfile';
+import {PDDLFile} from '../interface/pddlfile';
 import {ItemStore} from './generic-item.store';
-import {PlanProperty} from '../_interface/plan-property';
-import {Project} from '../_interface/project';
-import {PlanRun} from '../_interface/run';
+import {PlanProperty} from '../interface/plan-property';
+import {Project} from '../interface/project';
+import {PlanRun, ExplanationRun} from '../interface/run';
+import { TaskSchema} from '../interface/schema';
 
 
 export class DomainFilesStore extends  ListStore<PDDLFile> {
@@ -41,3 +42,13 @@ export class RunsStore extends  ListStore<PlanRun> {
 export class CurrentRunStore extends  ItemStore<PlanRun> {
 
 }
+
+export class CurrentQuestionStore extends  ItemStore<ExplanationRun> {
+
+}
+
+export class CurrentSchemaStore extends  ItemStore<TaskSchema> {
+
+}
+
+

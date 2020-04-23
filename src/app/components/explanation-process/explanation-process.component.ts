@@ -1,11 +1,11 @@
 import {Component, OnInit, ViewChild, AfterViewInit} from '@angular/core';
 import {MatStepper} from '@angular/material/stepper';
 import {ActivatedRoute, ParamMap, Router} from '@angular/router';
-import {CurrentProjectService, ProjectsService} from '../../_service/general-services';
+import {CurrentProjectService, ProjectsService} from '../../service/project-services';
 import {switchMap} from 'rxjs/operators';
 import {Observable} from 'rxjs';
-import {IHTTPData} from '../../_interface/http-data.interface';
-import {Project} from '../../_interface/project';
+import {IHTTPData} from '../../interface/http-data.interface';
+import {Project} from '../../interface/project';
 
 @Component({
   selector: 'app-explanation-process',

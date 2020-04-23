@@ -6,5 +6,6 @@ export interface Project {
   domainFile: PDDLFile;
   problemFile: PDDLFile;
   description: string;
-  properties: string[];
+  taskSchema?: string;
+  properties?: string[];
 }

@@ -22,7 +22,11 @@
             "assets": [
               "src/favicon.ico",
               "src/assets",
-              { "glob": "**/*", "input": "node_modules/ngx-monaco-editor/assets/monaco", "output": "./assets/monaco/" }
+              {
+                "glob": "**/*",
+                "input": "node_modules/ngx-monaco-editor/assets/monaco",
+                "output": "./assets/monaco/"
+              }
             ],
             "styles": [
               "src/custom-theme.scss",
@@ -124,5 +128,10 @@
       }
     }
   },
-  "defaultProject": "EXPLORE-CLI"
+  "defaultProject": "EXPLORE-CLI",
+  "schematics": {
+    "@schematics/angular:component": {
+      "styleext": "scss"
+    }
+  }
 }

@@ -1,9 +1,12 @@
+@import '../../../variables.scss';
+
 .sidenav-container {
   height: 100%;
 }
 
 .sidenav {
   width: 200px;
+  background-color: rgba($color: $primary, $alpha: 0.2);
 }
 
 .sidenav .mat-toolbar {

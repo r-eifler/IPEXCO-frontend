@@ -27,6 +27,7 @@
     "@ngrx/store": "^9.0.0",
     "@ngrx/store-devtools": "^9.0.0",
     "angular-monaco-editor": "^1.10.0",
+    "angular-resizable-element": "^3.3.0",
     "monaco-editor": "^0.20.0",
     "ngx-monaco-editor": "^8.1.1",
     "rxjs": "~6.5.4",

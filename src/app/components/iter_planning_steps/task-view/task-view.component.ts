@@ -1,9 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
-import {Project} from '../../../_interface/project';
-import {Goal} from '../../../_interface/goal';
-import {CurrentRunService} from '../../../_service/general-services';
+import {Project} from '../../../interface/project';
+import {Goal} from '../../../interface/goal';
+import {CurrentRunService} from '../../../service/run-services';
 import {CurrentRunStore} from '../../../store/stores.store';
-import {PlanRun} from '../../../_interface/run';
+import {PlanRun} from '../../../interface/run';
 import {BehaviorSubject} from 'rxjs';
 
 @Component({

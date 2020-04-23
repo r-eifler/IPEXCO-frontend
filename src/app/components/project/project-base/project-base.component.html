@@ -1,13 +1,13 @@
-<mat-toolbar color="#000000">
+<mat-toolbar color="#FFFFFF" style="height: 70px; background-color: #dfdfdf;">
   <mat-toolbar-row>
     <span class="menu-spacer"></span>
-    <div>
-      <a mat-button [routerLink]="'./properties'"> Properties </a>
-      <a mat-button [routerLink]="'./iterative-planning'"> Iterative Planning </a>
+    <div style="display: flex; flex-direction: row;">
+      <a mat-button [routerLink]="'./properties'" class="toolbar-button"> Properties </a>
+      <a mat-button [routerLink]="'./iterative-planning'" class="toolbar-button"> Iterative Planning </a>
     </div>
   </mat-toolbar-row>
 </mat-toolbar>
-<div>
+<div style="height: calc(100vh - 140px);">
   <router-outlet></router-outlet>
 </div>
 

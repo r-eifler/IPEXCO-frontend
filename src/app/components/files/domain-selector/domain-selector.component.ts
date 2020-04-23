@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import {DomainFilesService, ProblemFilesService, SelectedDomainFileService} from '../../../_service/pddl-file-services';
-import {PddlFilesService} from '../../../_service/pddl-files.service';
-import {SelectedObjectService} from '../../../_service/selected-object.service';
+import {DomainFilesService, ProblemFilesService, SelectedDomainFileService} from '../../../service/pddl-file-services';
+import {PddlFilesService} from '../../../service/pddl-files.service';
+import {SelectedObjectService} from '../../../service/selected-object.service';
 
 @Component({
   selector: 'app-domain-selector',

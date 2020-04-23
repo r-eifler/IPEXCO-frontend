@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {ADD, EDIT, ListStore, LOAD, REMOVE} from '../store/generic-list.store';
-import {IHTTPData} from '../_interface/http-data.interface';
+import {IHTTPData} from '../interface/http-data.interface';
 import {environment} from '../../environments/environment';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
-import {Goal, GoalType} from '../_interface/goal';
+import {Goal, GoalType} from '../interface/goal';
 import * as assert from 'assert';
 
 
@@ -64,6 +64,17 @@ export class ObjectCollectionService<T extends Identifiable> {
     return this.http.get<IHTTPData<T>>(this.BASE_URL + id).pipe(this.pipeGetData, this.pipeGet);
   }
 
+  copyObject(object: T) {
+    assert(object._id);
+    return this.http.post<IHTTPData<T>>(this.BASE_URL + object._id, object)
+      .subscribe(httpData => {
+        console.log('Result Post:');
+        console.log(httpData.data);
+        const action = {type: ADD, data: httpData.data};
+        this.listStore.dispatch(action);
+      });
+  }
+
   saveObject(object: T) {
 
     console.log('Service save object:');
@@ -72,6 +83,7 @@ export class ObjectCollectionService<T extends Identifiable> {
     if (object._id) {
       return this.http.put<IHTTPData<T>>(this.BASE_URL + object._id, object)
         .subscribe(httpData => {
+          assert(httpData !== undefined);
           const action = {type: EDIT, data: httpData.data};
           this.listStore.dispatch(action);
         });
@@ -79,8 +91,9 @@ export class ObjectCollectionService<T extends Identifiable> {
 
     return this.http.post<IHTTPData<T>>(this.BASE_URL, object)
       .subscribe(httpData => {
+        assert(httpData !== undefined);
         console.log('Result Post:');
-        console.log(httpData.data);
+        console.log(httpData);
         const action = {type: ADD, data: httpData.data};
         this.listStore.dispatch(action);
       });

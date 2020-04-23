@@ -1,13 +1,14 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
-import {PlanProperty} from '../../../_interface/plan-property';
-import {CurrentProjectService, PlanPropertyCollectionService} from '../../../_service/general-services';
-import {PlannerService} from '../../../_service/planner.service';
+import {PlanProperty} from '../../../interface/plan-property';
+import {CurrentProjectService} from '../../../service/project-services';
+import {PlannerService} from '../../../service/planner.service';
 import {Observable} from 'rxjs';
 import {MatDialog} from '@angular/material/dialog';
 import {PropertyCreatorComponent} from '../../plan_properties/property-creator/property-creator.component';
-import {Project} from '../../../_interface/project';
-import {ExplanationRun, RunType} from '../../../_interface/run';
+import {Project} from '../../../interface/project';
+import {ExplanationRun, RunType} from '../../../interface/run';
+import { PlanPropertyCollectionService } from 'src/app/service/plan-property-services';
 
 @Component({
   selector: 'app-property-selector',

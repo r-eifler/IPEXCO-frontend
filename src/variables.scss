@@ -1,0 +1,9 @@
+@import '~@angular/material/theming';
+
+$EXPLORE-CLI-primary: mat-palette($mat-green, 400);
+$EXPLORE-CLI-accent: mat-palette($mat-orange, 400);
+$EXPLORE-CLI-warn: mat-palette($mat-red);
+
+$primary: mat-color($EXPLORE-CLI-primary);
+$accent: mat-color($EXPLORE-CLI-accent);
+$warn: mat-color($EXPLORE-CLI-warn);

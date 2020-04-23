@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import {Observable} from 'rxjs';
 import {ActivatedRoute, Router} from '@angular/router';
-import {RunService, ProjectsService} from '../../../_service/general-services';
-import {PlanProperty} from '../../../_interface/plan-property';
-import { PlanRun } from '../../../_interface/run';
+import {RunService} from '../../../service/run-services';
+import {ProjectsService} from '../../../service/project-services';
+import {PlanProperty} from '../../../interface/plan-property';
+import { PlanRun } from '../../../interface/run';
 
 @Component({
   selector: 'app-first-planning-step',

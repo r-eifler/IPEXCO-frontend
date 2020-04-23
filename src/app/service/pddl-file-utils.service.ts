@@ -1,11 +1,11 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 
-import {PDDLFile} from '../_interface/pddlfile';
+import {PDDLFile} from '../interface/pddlfile';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {environment} from '../../environments/environment';
-import {IHTTPData} from '../_interface/http-data.interface';
-import {Goal, GoalType} from '../_interface/goal';
+import {IHTTPData} from '../interface/http-data.interface';
+import {Goal, GoalType} from '../interface/goal';
 import {map} from 'rxjs/operators';
 
 interface FileContent {
@@ -22,8 +22,12 @@ export class PddlFileUtilsService {
   constructor(private http: HttpClient) { }
 
   getFileContent(path: string): Observable<string> {
-    console.log(path);
-    return this.http.get(path, {responseType: 'text'});
+    if (path != undefined) {
+      console.log('Get file Content: ' + path);
+      return this.http.get(path, {responseType: 'text'});
+    } else {
+      throw Error('path for file content in undefined');
+    }
   }
 
   getGoalFacts(file: PDDLFile): Observable<Goal[]> {

@@ -1,9 +1,9 @@
 import {Component, ElementRef, OnInit, ViewChild, EventEmitter, Output, Input} from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import {PddlFilesService} from '../../../_service/pddl-files.service';
-import {SelectedObjectService} from '../../../_service/selected-object.service';
+import {PddlFilesService} from '../../../service/pddl-files.service';
+import {SelectedObjectService} from '../../../service/selected-object.service';
 
-import {PDDLFile} from '../../../_interface/pddlfile';
+import {PDDLFile} from '../../../interface/pddlfile';
 import {Observable} from 'rxjs';
 
 @Component({

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {BehaviorSubject, Observable} from 'rxjs';
-import {PDDLFile} from '../_interface/pddlfile';
+import {PDDLFile} from '../interface/pddlfile';
 import {LOAD, REMOVE} from '../store/generic-list.store';
 import {ItemStore} from '../store/generic-item.store';
 
@@ -26,11 +26,11 @@ export class SelectedObjectService<T> {
     return this.selectedObject$;
   }
 
-  saveObject(domainFile: T) {
-    this.selectedObjectStore.dispatch({type: LOAD, data: domainFile});
+  saveObject(obj: T) {
+    this.selectedObjectStore.dispatch({type: LOAD, data: obj});
   }
 
-  deleteDomainFile(domainFile: T) {
-    this.selectedObjectStore.dispatch({type: REMOVE, data: domainFile});
+  deleteObject(obj: T) {
+    this.selectedObjectStore.dispatch({type: REMOVE, data: obj});
   }
 }

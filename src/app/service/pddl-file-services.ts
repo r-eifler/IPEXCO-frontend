@@ -3,7 +3,7 @@ import {PddlFilesService} from './pddl-files.service';
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {DomainFilesStore, ProblemFilesStore, SelectedDomainFileStore, SelectedProblemFileStore} from '../store/stores.store';
-import {PDDLFile} from '../_interface/pddlfile';
+import {PDDLFile} from '../interface/pddlfile';
 
 @Injectable({
   providedIn: 'root'

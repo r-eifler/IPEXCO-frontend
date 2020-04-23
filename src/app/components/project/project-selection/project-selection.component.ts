@@ -1,10 +1,10 @@
+import { Project } from './../../../interface/project';
 import { Component, OnInit } from '@angular/core';
-import {Project} from '../../../_interface/project';
-import { ProjectsService} from '../../../_service/general-services';
 import {Observable} from 'rxjs';
 import { Router} from '@angular/router';
-import {MatDialog} from '@angular/material/dialog';
+import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {ProjectCreatorComponent} from '../project-creator/project-creator.component';
+import { ProjectsService, CurrentProjectService } from 'src/app/service/project-services';
 
 @Component({
   selector: 'app-project-selection',
@@ -15,7 +15,12 @@ export class ProjectSelectionComponent implements OnInit {
 
   projects$: Observable<Project[]>;
 
-  constructor(private projectService: ProjectsService, private router: Router, public dialog: MatDialog) {
+  constructor(
+    private projectService: ProjectsService,
+    private currentProjectService: CurrentProjectService,
+    private router: Router,
+    public dialog: MatDialog) {
+
     this.projects$ = projectService.collection$;
   }
 
@@ -28,9 +33,31 @@ export class ProjectSelectionComponent implements OnInit {
   }
 
   new_project_form(): void {
-    const dialogRef = this.dialog.open(ProjectCreatorComponent, {
-      width: '500px'
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = '500px';
+    dialogConfig.data  = {
+      project: null,
+    }
+
+    const dialogRef = this.dialog.open(ProjectCreatorComponent, dialogConfig);
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
     });
+  }
+
+  copy_project(project: Project): void {
+    this.projectService.copyObject(project);
+  }
+
+  modify_project(project: Project): void {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = '500px';
+    dialogConfig.data  = {
+      project,
+    }
+
+    const dialogRef = this.dialog.open(ProjectCreatorComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');

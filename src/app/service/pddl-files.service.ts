@@ -1,10 +1,10 @@
 import {Injectable} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import {IHTTPData} from '../_interface/http-data.interface';
+import {IHTTPData} from '../interface/http-data.interface';
 import {HttpParams} from '@angular/common/http';
 
 import {environment} from '../../environments/environment';
-import {PDDLFile} from '../_interface/pddlfile';
+import {PDDLFile} from '../interface/pddlfile';
 import {LOAD, ADD, EDIT, REMOVE, ListStore} from '../store/generic-list.store';
 import {DomainFilesStore} from '../store/stores.store';
 

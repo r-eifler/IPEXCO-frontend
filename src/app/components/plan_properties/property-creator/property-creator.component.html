@@ -2,7 +2,7 @@
   <form class="example-form" [formGroup]="propertyForm" (ngSubmit)="onSave()">
 
     <mat-form-field class="example-full-width">
-      <mat-label>name</mat-label>
+      <mat-label>Name</mat-label>
       <input matInput type="text" formControlName="name">
     </mat-form-field>
 
@@ -13,7 +13,7 @@
 
 
     <mat-form-field class="example-full-width">
-      <mat-label>formula</mat-label>
+      <mat-label>Formula</mat-label>
       <input matInput type="text" formControlName="formula">
     </mat-form-field>
 
@@ -46,19 +46,26 @@
             <div style="display: flex; flex-direction: column; justify-content: center; width: 100%;">
               <mat-list *ngFor="let action of action_set.actions">
                 <mat-list-item>
-                  {{action}}
+                  {{action.name}}
                   <mat-divider [inset]="true"></mat-divider>
                 </mat-list-item>
               </mat-list>
+
               <div style="display: flex; width: 100%;">
                 <mat-form-field class="example-full-width">
-                  <mat-label>action</mat-label>
-                  <input matInput type="text" formControlName="{{action_set.name}}control">
+                  <mat-label>Action Name</mat-label>
+                  <input matInput type="text" [formControl]="actionSetFromControls.get(action_set.name)[0]" [matAutocomplete]="auto">
+                  <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onActionNameSelect($event, action_set)">
+                    <mat-option *ngFor="let option of actionOptions" [value]="option">
+                      {{option}}
+                    </mat-option>
+                  </mat-autocomplete>
                 </mat-form-field>
                 <button mat-icon-button color="accent" type=button (click)="createAction(action_set)">
                   <mat-icon>add_box</mat-icon>
                 </button>
               </div>
+
             </div>
           </mat-expansion-panel>
           </mat-accordion>
@@ -69,7 +76,7 @@
           keyboard_backspace
         </mat-icon>
       </button>
-      <button mat-flat-button color="primary" style="flex-grow: 4; margin-left: 10px">Save</button>
+      <button mat-flat-button color="primary" style="flex-grow: 4; margin-left: 10px" [disabled]="! propertyForm.valid">Save</button>
     </div>
   </form>
 

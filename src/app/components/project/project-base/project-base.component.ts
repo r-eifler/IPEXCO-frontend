@@ -1,8 +1,9 @@
+import { SchemaService } from './../../../service/schema.service';
 import { Component, OnInit } from '@angular/core';
-import {Project} from '../../../_interface/project';
+import {Project} from '../../../interface/project';
 import {ActivatedRoute, ParamMap, Router} from '@angular/router';
-import {CurrentProjectService, ProjectsService} from '../../../_service/general-services';
 import {switchMap} from 'rxjs/operators';
+import { ProjectsService, CurrentProjectService } from 'src/app/service/project-services';
 
 @Component({
   selector: 'app-project-base',
@@ -17,16 +18,22 @@ export class ProjectBaseComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private service: ProjectsService,
-    private currentProjectService: CurrentProjectService
+    private currentProjectService: CurrentProjectService,
+    private curretnSchemaService: SchemaService,
   ) {
     this.route.paramMap.pipe(
       switchMap((params: ParamMap) =>
         this.service.getObject(params.get('projectid')))
     ).subscribe(
       value => {
-        this.project = value;
-        this.currentProjectService.saveObject(this.project);
-        // console.log(this.project);
+        if (value != null) {
+          this.project = value;
+          this.currentProjectService.saveObject(this.project);
+          console.log('Project base: ');
+          console.log(this.project);
+          this.curretnSchemaService.findSchema(this.project);
+          // console.log(this.project);
+        }
       }
     );
   }
