@@ -1,0 +1,34 @@
+.container-mobile {
+  width: 95%;
+  height:95%;
+  margin: 2.5% auto;
+  overflow-y: scroll;
+}
+
+.overview-card-mobile {
+  margin: 10px auto;
+}
+
+.action-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.action-card > button {
+  margin: 5px auto;
+  width: 100%;
+}
+
+.container-web {
+  width: 99%;
+  height:99%;
+  margin: 0.5% auto;
+  overflow-y: scroll;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.overview-card-web {
+  width: 100%;
+  margin: 10px 10px;
+}

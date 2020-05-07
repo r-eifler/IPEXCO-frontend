@@ -1,6 +1,6 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
 
-import {PDDLFile} from '../../../interface/pddlfile';
+import {PDDLFile} from '../../../interface/files';
 import {Observable} from 'rxjs';
 import {SelectedObjectService} from '../../../service/selected-object.service';
 import {PddlFileUtilsService} from '../../../service/pddl-file-utils.service';

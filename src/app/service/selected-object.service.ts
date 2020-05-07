@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {BehaviorSubject, Observable} from 'rxjs';
-import {PDDLFile} from '../interface/pddlfile';
+import {PDDLFile} from '../interface/files';
 import {LOAD, REMOVE} from '../store/generic-list.store';
 import {ItemStore} from '../store/generic-item.store';
 

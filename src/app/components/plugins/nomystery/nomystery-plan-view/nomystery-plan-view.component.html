@@ -1,0 +1,17 @@
+<div class="header-container">
+  <h2>NoMystery</h2>
+</div>
+<div class="button-container">
+  <button mat-icon-button>
+    <mat-icon>skip_previous</mat-icon>
+  </button>
+  <button mat-icon-button (click)="playAnimation()">
+    <mat-icon>play_arrow</mat-icon>
+  </button>
+  <button mat-icon-button>
+    <mat-icon>skip_next</mat-icon>
+  </button>
+</div>
+<div class="plan-container" #mapContainer>
+  <svg width="400" height="600" class="svg-container" #planSVG id="planSVG"></svg>
+</div>

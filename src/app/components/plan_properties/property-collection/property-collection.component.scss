@@ -2,19 +2,31 @@
 
 .add-button {
   position: fixed;
-  right: 50px;
-  bottom: 50px;
+  right: 20px;
+  bottom: 20px;
 }
 
-.flex-container {
+.flex-container-web {
   display: flex;
+  flex-direction: row;
   flex-wrap: wrap;
 }
 
-.property-card {
+.property-card-web {
   width: 15%;
   min-width: 150px;
   margin: 10px;
+}
+
+.flex-container-mobile {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+
+.property-card-mobile {
+  width: 95%;
+  margin: 5px auto;
 }
 
 .property-icon {
@@ -28,4 +40,8 @@
   margin: 0 8px 0 -12px;
   line-height: 40px;
   font-weight: bold;
+}
+
+h2 {
+  margin: 5px;
 }

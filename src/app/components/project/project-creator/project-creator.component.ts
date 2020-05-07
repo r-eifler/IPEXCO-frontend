@@ -1,10 +1,10 @@
 import { Project } from './../../../interface/project';
 import { Component, OnInit, Inject } from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
-import {PddlFilesService} from '../../../service/pddl-files.service';
+import {FilesService} from '../../../service/pddl-files.service';
 import {Observable} from 'rxjs';
-import {PDDLFile} from '../../../interface/pddlfile';
-import {DomainFilesService, ProblemFilesService} from '../../../service/pddl-file-services';
+import {PDDLFile, DomainSpecificationFile} from '../../../interface/files';
+import {DomainFilesService, ProblemFilesService, DomainSpecificationFilesService} from '../../../service/pddl-file-services';
 import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { ProjectsService } from 'src/app/service/project-services';
 
@@ -23,9 +23,11 @@ export class ProjectCreatorComponent implements OnInit {
 
   domainFiles$: Observable<PDDLFile[]>;
   problemFiles: Observable<PDDLFile[]>;
+  domainSpecFiles: Observable<PDDLFile[]>;
 
   selectedDomain: PDDLFile;
   selectedProblem: PDDLFile;
+  selectedDomainSpec: DomainSpecificationFile;
 
   projects$: Observable<Project[]>;
 
@@ -35,11 +37,14 @@ export class ProjectCreatorComponent implements OnInit {
 
   constructor(private domainFilesService: DomainFilesService,
               private problemFilesService: ProblemFilesService,
+              private domainSpecFilesService: DomainSpecificationFilesService,
               private projectService: ProjectsService,
               public dialogRef: MatDialogRef<ProjectCreatorComponent>,
               @Inject(MAT_DIALOG_DATA) data) {
+
     this.domainFiles$ = this.domainFilesService.files$;
     this.problemFiles = this.problemFilesService.files$;
+    this.domainSpecFiles = this.domainSpecFilesService.files$;
     this.projects$ = this.projectService.collection$;
 
     this.editedProject = data.project;
@@ -55,6 +60,7 @@ export class ProjectCreatorComponent implements OnInit {
   ngOnInit(): void {
     this.domainFilesService.findFiles().subscribe();
     this.problemFilesService.findFiles().subscribe();
+    this.domainSpecFilesService.findFiles().subscribe();
   }
 
   onSave(): void {
@@ -65,6 +71,7 @@ export class ProjectCreatorComponent implements OnInit {
       description: this.projectForm.controls.description.value,
       domainFile: this.selectedDomain,
       problemFile: this.selectedProblem,
+      domainSpecification: this.selectedDomainSpec,
       // properties: [],
     };
 

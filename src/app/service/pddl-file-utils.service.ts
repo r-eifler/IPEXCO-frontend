@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 
-import {PDDLFile} from '../interface/pddlfile';
+import {PDDLFile} from '../interface/files';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {environment} from '../../environments/environment';
 import {IHTTPData} from '../interface/http-data.interface';

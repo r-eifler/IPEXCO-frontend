@@ -7,6 +7,11 @@ export interface Action {
   params: string[];
 }
 
+export function toAction(as: string): Action{
+  const [name, ...params] = as.split(' ');
+  return {name, params};
+}
+
 export interface ActionSet {
   _id?: string;
   name: string;
@@ -16,7 +21,9 @@ export interface ActionSet {
 export interface PlanProperty extends Goal {
   _id?: string;
   type: string;
-  formula: LtlFormula;
+  formula: string;
   actionSets: ActionSet[];
+  naturalLanguageDescription?: string;
   project: string;
+  isUsed: boolean;
 }

@@ -3,29 +3,29 @@ import { HttpClient } from '@angular/common/http';
 import {IHTTPData} from '../interface/http-data.interface';
 import {HttpParams} from '@angular/common/http';
 
+import { File } from '../interface/files';
 import {environment} from '../../environments/environment';
-import {PDDLFile} from '../interface/pddlfile';
 import {LOAD, ADD, EDIT, REMOVE, ListStore} from '../store/generic-list.store';
-import {DomainFilesStore} from '../store/stores.store';
 
 import {Observable} from 'rxjs';
+
 
 const BASE_URL = environment.apiURL + 'pddl-file/';
 
 @Injectable()
-export class PddlFilesService {
+export class FilesService {
 
   type = '';
   private http: HttpClient;
-  private filesStore: ListStore<PDDLFile>;
+  private filesStore: ListStore<File>;
 
-  constructor(http: HttpClient, filesStore: ListStore<PDDLFile>) {
+  constructor(http: HttpClient, filesStore: ListStore<File>) {
     this.http = http;
     this.filesStore = filesStore;
     this.files$ = filesStore.items$;
   }
 
-  files$: Observable<PDDLFile[]>;
+  files$: Observable<File[]>;
 
   findFiles(query = '', sort = 'id', order = 'ASC') {
     const httpParams = new HttpParams();
@@ -33,7 +33,7 @@ export class PddlFilesService {
     httpParams.append('_sort', sort);
     httpParams.append('_order', order);
 
-    this.http.get<IHTTPData<PDDLFile>>(BASE_URL + 'type/' + this.type + '/', {params: httpParams})
+    this.http.get<IHTTPData<File>>(BASE_URL + 'type/' + this.type + '/', {params: httpParams})
       .subscribe((res) => {
         this.filesStore.dispatch({type: LOAD, data: res.data});
       });
@@ -41,27 +41,27 @@ export class PddlFilesService {
     return this.files$;
   }
 
-  getDomainFile(id: number | string): Observable<IHTTPData<PDDLFile>> {
-    return this.http.get<IHTTPData<PDDLFile>>(BASE_URL + id);
+  getFile(id: number | string): Observable<IHTTPData<File>> {
+    return this.http.get<IHTTPData<File>>(BASE_URL + id);
   }
 
-  saveDomainFile(domainFile: PDDLFile) {
+  saveFile(file: File) {
 
     const formData = new FormData();
-    formData.append('pddlfile', domainFile.content);
-    formData.append('name', domainFile.name);
-    formData.append('domain', domainFile.domain);
-    formData.append('type', domainFile.type);
+    formData.append('content', file.content);
+    formData.append('name', file.name);
+    formData.append('domain', file.domain);
+    formData.append('type', file.type);
 
-    if (domainFile._id) {
-      return this.http.put<IHTTPData<PDDLFile>>(BASE_URL + domainFile._id, formData)
+    if (file._id) {
+      return this.http.put<IHTTPData<File>>(BASE_URL + file._id, formData)
         .subscribe(httpData => {
           const action = {type: EDIT, data: httpData.data};
           this.filesStore.dispatch(action);
         });
     }
 
-    return this.http.post<IHTTPData<PDDLFile>>(BASE_URL, formData)
+    return this.http.post<IHTTPData<File>>(BASE_URL, formData)
       .subscribe(httpData => {
         console.log(httpData.data);
         const action = {type: ADD, data: httpData.data};
@@ -69,7 +69,7 @@ export class PddlFilesService {
       });
   }
 
-  deleteDomainFile(domainFile: PDDLFile) {
+  deleteFile(domainFile: File) {
     console.log('Delete File: ' + domainFile._id);
     return this.http.delete(BASE_URL + domainFile._id)
       .subscribe(response => {

@@ -1,3 +1,6 @@
+import { PlanProperty } from './../../../interface/plan-property';
+import { ViewSettingsService } from 'src/app/service/setting.service';
+import { ViewSettingsStore } from './../../../store/stores.store';
 import { Project } from './../../../interface/project';
 import { Component, OnInit } from '@angular/core';
 import {ProjectCreatorComponent} from '../../project/project-creator/project-creator.component';
@@ -5,9 +8,11 @@ import {Router} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
 import {PropertyCreatorComponent} from '../property-creator/property-creator.component';
 import {Observable} from 'rxjs';
-import {PlanProperty} from '../../../interface/plan-property';
 import { PlanPropertyCollectionService } from 'src/app/service/plan-property-services';
 import { CurrentProjectService } from 'src/app/service/project-services';
+import { ResponsiveService } from 'src/app/service/responsive.service';
+import { ViewSettings } from 'src/app/interface/view-settings';
+import { MatCheckboxChange } from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-property-collection',
@@ -15,27 +20,55 @@ import { CurrentProjectService } from 'src/app/service/project-services';
   styleUrls: ['./property-collection.component.scss']
 })
 export class PropertyCollectionComponent implements OnInit {
-  properties$: Observable<PlanProperty[]>;
-  private currentProject: Project;
+
+  isMobile: boolean;
+  viewSettings: Observable<ViewSettings>;
+
+  usedPlanProperties: PlanProperty[];
+  unusedPlanProperties: PlanProperty[];
 
   constructor(
+    private responsiveService: ResponsiveService,
     private propertiesService: PlanPropertyCollectionService,
     private currentProjectService: CurrentProjectService,
+    private viewSettingsStore: ViewSettingsStore,
+    private viewSettingsService: ViewSettingsService,
     public dialog: MatDialog) {
-    this.properties$ = this.propertiesService.collection$;
+
+    this.viewSettings = this.viewSettingsStore.item$;
+    this.viewSettings.subscribe(v => {
+      console.log(v);
+    });
+    this.propertiesService.collection$.subscribe(props => {
+      this.usedPlanProperties = props.filter(p => p.isUsed);
+      this.unusedPlanProperties = props.filter(p => ! p.isUsed);
+    });
+
     this.currentProjectService.selectedObject$.subscribe(project => {
       if (project !== null) {
-        this.currentProject = project;
         this.propertiesService.findCollection([{param: 'projectId', value: project._id}]);
       }
     });
   }
 
   ngOnInit(): void {
+    this.responsiveService.getMobileStatus().subscribe( isMobile => {
+      if (isMobile) {
+        this.isMobile = true;
+      } else {
+        this.isMobile = false;
+      }
+    });
+    this.responsiveService.checkWidth();
   }
 
   delete(property: PlanProperty): void {
     this.propertiesService.deleteObject(property);
+  }
+
+  usePlanProperty(event: MatCheckboxChange, property: PlanProperty): void {
+    property.isUsed = event.checked;
+    this.propertiesService.saveObject(property);
   }
 
   new_property_form(): void {

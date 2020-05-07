@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {DomainFilesService, ProblemFilesService, SelectedDomainFileService} from '../../../service/pddl-file-services';
-import {PddlFilesService} from '../../../service/pddl-files.service';
+import {FilesService} from '../../../service/pddl-files.service';
 import {SelectedObjectService} from '../../../service/selected-object.service';
 
 @Component({
@@ -8,7 +8,7 @@ import {SelectedObjectService} from '../../../service/selected-object.service';
   templateUrl: './domain-selector.component.html',
   styleUrls: ['./domain-selector.component.css'],
   providers: [
-    {provide: PddlFilesService, useClass: DomainFilesService},
+    {provide: FilesService, useClass: DomainFilesService},
     {provide: SelectedObjectService, useClass: SelectedDomainFileService},
     ]
 })

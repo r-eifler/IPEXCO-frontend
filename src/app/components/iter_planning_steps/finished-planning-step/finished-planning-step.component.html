@@ -1,8 +1,19 @@
-<div style="display: flex; flex-direction: row; height: 100%;">
-  <div style="width: 50%; height: 100%;">
-    <app-task-view></app-task-view>
-  </div>
-  <div style="width: 50%; height: 100%;">
-    <app-plan-view></app-plan-view>
-  </div>
+<div style="width: 100%; height: 100%;">
+  <mat-tab-group>
+    <mat-tab label="Plan">
+      <app-nomystery-plan-view></app-nomystery-plan-view>
+    </mat-tab>
+    <!-- <mat-tab label="Goals">
+      <app-nomystery-task-view></app-nomystery-task-view>
+    </mat-tab> -->
+    <mat-tab label="Goals">
+      <app-task-view></app-task-view>
+    </mat-tab>
+    <mat-tab label="Plan">
+      <app-plan-view></app-plan-view>
+    </mat-tab>
+  </mat-tab-group>
+  <button mat-fab color="accent" class="add-button">
+    <mat-icon svgIcon="questionmark"></mat-icon>
+  </button>
 </div>

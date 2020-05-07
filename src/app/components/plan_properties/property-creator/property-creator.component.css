@@ -15,3 +15,25 @@
   display: inline-flex;
 }
 
+.template-card {
+  width: 100%;
+  margin: 10px 0px;
+}
+
+.variable-icon {
+  margin: auto 30px;
+}
+
+.variable-icon:hover {
+  cursor: pointer;
+}
+
+.variable-value {
+  margin: auto 30px;
+  font-weight: bold;
+  font-size: x-large;
+}
+
+.variable-value:hover {
+  cursor: pointer;
+}

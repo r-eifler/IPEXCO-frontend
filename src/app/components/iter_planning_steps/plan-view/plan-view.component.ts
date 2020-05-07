@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {PddlFilesService} from '../../../service/pddl-files.service';
+import {FilesService} from '../../../service/pddl-files.service';
 import {PddlFileUtilsService} from '../../../service/pddl-file-utils.service';
 import {CurrentRunStore} from '../../../store/stores.store';
 import {BehaviorSubject} from 'rxjs';

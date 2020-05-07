@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {PddlFilesService} from '../../../service/pddl-files.service';
+import {FilesService} from '../../../service/pddl-files.service';
 import {ProblemFilesService, SelectedProblemFileService} from '../../../service/pddl-file-services';
 import {SelectedObjectService} from '../../../service/selected-object.service';
 
@@ -8,7 +8,7 @@ import {SelectedObjectService} from '../../../service/selected-object.service';
   templateUrl: './problem-selector.component.html',
   styleUrls: ['./problem-selector.component.css'],
   providers: [
-    {provide: PddlFilesService, useClass: ProblemFilesService},
+    {provide: FilesService, useClass: ProblemFilesService},
     {provide: SelectedObjectService, useClass: SelectedProblemFileService},
     ]
 })

@@ -1,10 +1,12 @@
+import { ViewSettings } from './../interface/view-settings';
 import {ListStore} from './generic-list.store';
-import {PDDLFile} from '../interface/pddlfile';
+import {PDDLFile, DomainSpecificationFile} from '../interface/files';
 import {ItemStore} from './generic-item.store';
 import {PlanProperty} from '../interface/plan-property';
 import {Project} from '../interface/project';
 import {PlanRun, ExplanationRun} from '../interface/run';
 import { TaskSchema} from '../interface/schema';
+import { DomainSpecification} from '../interface/domain-specification';
 
 
 export class DomainFilesStore extends  ListStore<PDDLFile> {
@@ -20,6 +22,10 @@ export class ProblemFilesStore extends  ListStore<PDDLFile> {
 }
 
 export class SelectedProblemFileStore extends  ItemStore<PDDLFile> {
+
+}
+
+export class DomainSpecificationFilesStore extends  ListStore<DomainSpecificationFile> {
 
 }
 
@@ -47,7 +53,15 @@ export class CurrentQuestionStore extends  ItemStore<ExplanationRun> {
 
 }
 
-export class CurrentSchemaStore extends  ItemStore<TaskSchema> {
+export class TasktSchemaStore extends  ItemStore<TaskSchema> {
+
+}
+
+export class DomainSpecStore extends  ItemStore<DomainSpecification> {
+
+}
+
+export class ViewSettingsStore extends ItemStore<ViewSettings> {
 
 }
 

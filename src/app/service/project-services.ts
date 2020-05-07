@@ -16,6 +16,7 @@ export class ProjectsService extends ObjectCollectionService<Project> {
     this.BASE_URL = environment.apiURL + 'project/';
   }
 }
+
 @Injectable({
   providedIn: 'root'
 })

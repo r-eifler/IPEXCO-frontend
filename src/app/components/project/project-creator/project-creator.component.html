@@ -2,12 +2,12 @@
 <form class="example-form" [formGroup]="projectForm" (ngSubmit)="onSave()" style="display: flex; flex-direction: column">
 
   <mat-form-field class="example-full-width">
-    <mat-label>name</mat-label>
+    <mat-label>Name</mat-label>
     <input matInput type="text" formControlName="name">
   </mat-form-field>
 
   <mat-form-field>
-    <mat-label>description</mat-label>
+    <mat-label>Description</mat-label>
     <textarea matInput formControlName="description"></textarea>
   </mat-form-field>
 
@@ -22,6 +22,13 @@
     <mat-label>Problem File</mat-label>
     <mat-select [(value)]="selectedProblem" [disabled]="disableSelect">
       <mat-option *ngFor="let problem of problemFiles | async" [value]="problem">{{problem.name}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Domain Specification</mat-label>
+    <mat-select [(value)]="selectedDomainSpec" [disabled]="disableSelect">
+      <mat-option *ngFor="let file of domainSpecFiles | async" [value]="file">{{file.name}}</mat-option>
     </mat-select>
   </mat-form-field>
 

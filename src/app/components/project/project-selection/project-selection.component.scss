@@ -1,0 +1,46 @@
+@import '../../../../variables.scss';
+
+.mat-card {
+  width: 400px;
+  max-width: 100%;
+}
+
+.mat-grid-tile .mat-figure {
+  align-items: start !important;
+  animation: 5s;
+}
+
+.mat-grid-list {
+  animation: 5s;
+}
+
+mat-grid-tile {
+  width: 20%;
+}
+
+.project-card-web {
+  width: 20%;
+  min-width: 300px;
+  margin: 1%;
+}
+
+.project-card-mobile {
+  width: 95%;
+  margin: 5px auto;
+}
+
+.project-container-web {
+  display: flex;
+  flex-direction: row;
+}
+
+.project-container-mobile {
+  display: flex;
+  flex-direction: column;
+}
+
+.add-button {
+  position: fixed;
+  right: 25px;
+  bottom: 25px;
+}

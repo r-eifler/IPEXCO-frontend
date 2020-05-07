@@ -1,0 +1,49 @@
+@import '../../../../variables.scss';
+
+
+.main-container {
+  height: 100%;
+  width: 100%;
+  background-color: rgba($color: $primary, $alpha: 0.3);
+  display: inline-block;
+}
+
+.control-container-web{
+  width: 20%;
+  margin: 0;
+  position: absolute;
+  top: 20%;
+  left: 10%;
+  display: flex;
+  flex-direction: column;
+}
+
+.control-container-web > button {
+  width: 100%;
+  height: 50px;
+  margin: 5px 0px;
+}
+
+.control-container-mobile {
+  width: 80%;
+  margin: 0;
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+}
+
+.control-container-mobile > button {
+  width: 100%;
+  margin: 5px 0px;
+}
+
+.logo-text {
+  width: 80%;
+  height: auto;
+  position: absolute;
+  left: 10%;
+  bottom: 10%;
+}

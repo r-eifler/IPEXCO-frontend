@@ -1,5 +1,5 @@
-<div style="display: flex; flex-direction: row;">
-  <mat-card *ngFor="let project of projects$ | async" class="project-card">
+<div [class.project-container-mobile]="isMobile" [class.project-container-web]="! isMobile">
+  <mat-card *ngFor="let project of projects$ | async" [class.project-card-mobile]="isMobile" [class.project-card-web]="! isMobile">
     <mat-card-header>
       <div mat-card-avatar>
       <span class="material-icons">
@@ -8,6 +8,26 @@
       </div>
       <mat-card-title>{{project.name}}</mat-card-title>
       <mat-card-subtitle>Project</mat-card-subtitle>
+
+      <button mat-icon-button [matMenuTriggerFor]="menu" style="position: absolute; right: 5px">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="delete(project)">
+          <mat-icon>delete</mat-icon>
+          <span>delete</span>
+        </button>
+        <button mat-menu-item (click)="copy_project(project)">
+          <mat-icon>file_copy</mat-icon>
+          <span>copy</span>
+        </button>
+        <button mat-menu-item (click)="modify_project(project)">
+          <mat-icon>create</mat-icon>
+          <span>modify</span>
+        </button>
+      </mat-menu>
+
+
     </mat-card-header>
     <mat-card-content>
       <p>
@@ -15,19 +35,19 @@
       </p>
       <mat-list>
         <mat-list-item>{{project.domainFile.name}}</mat-list-item>
+        <mat-divider [inset]="true"></mat-divider>
         <mat-list-item>{{project.problemFile.name}}</mat-list-item>
+        <mat-divider [inset]="true"></mat-divider>
+        <mat-list-item>{{project.domainSpecification.name}}</mat-list-item>
       </mat-list>
     </mat-card-content>
     <mat-card-actions style="display: flex; flex-direction: row">
-      <button mat-icon-button (click)="delete(project)"><mat-icon>delete</mat-icon></button>
-      <button mat-icon-button (click)="copy_project(project)"><mat-icon>file_copy</mat-icon></button>
-      <button mat-icon-button (click)="modify_project(project)"><mat-icon>create</mat-icon></button>
-      <button mat-flat-button color="accent" style="margin-left: auto;" [routerLink]="['/project', project._id]">
-        <mat-icon>repeat</mat-icon>
+      <button mat-flat-button color="accent" style="margin-left: auto;" [routerLink]="['/project', project._id, 'overview']">
+        <mat-icon>play_arrow</mat-icon>
       </button>
     </mat-card-actions>
   </mat-card>
-  <button mat-fab color="warn" class="add-button" (click)="new_project_form()">
+  <button mat-fab color="accent" class="add-button" (click)="new_project_form()">
     <mat-icon>add</mat-icon>
   </button>
 </div>

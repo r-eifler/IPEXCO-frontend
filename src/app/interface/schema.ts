@@ -19,4 +19,6 @@ export interface TaskSchema {
   types: string[];
   objects: SchemaObject[];
   actions: SchemaAction[];
+  init: string[];
+  goal: string[];
 }

@@ -1,0 +1,13 @@
+.settings-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+
+.settings-form > * {
+  margin: 10px 0px;
+}
+
+.size-group > * {
+  margin-left: 15px;
+}

@@ -1,0 +1,44 @@
+<div [class.main-container-web]="! isMobile" [class.main-container-mobile]="isMobile">
+  <mat-card [class.demo-card-web]="! isMobile" [class.demo-card-mobile]="isMobile">
+      <mat-card-header>
+          <mat-card-title>NoMystery</mat-card-title>
+          <mat-card-subtitle>Explanation Demo</mat-card-subtitle>
+      </mat-card-header>
+      <img matCardImage src="/images/nomystery.jpg">
+      <mat-card-content>
+          A demo of an iterative planning run with explanations based on plan property dependencies.
+          A demo of an iterative planning run with explanations based on plan property dependencies.
+          A demo of an iterative planning run with explanations based on plan property dependencies.
+      </mat-card-content>
+      <mat-card-actions align="end">
+        <button mat-icon-button (click)="openMenu()">
+          <mat-icon>settings</mat-icon>
+        </button>
+        <button mat-icon-button >
+          <mat-icon>play_arrow</mat-icon>
+        </button>
+      </mat-card-actions>
+  </mat-card>
+
+  <mat-card [class.demo-card-web]="! isMobile" [class.demo-card-mobile]="isMobile">
+    <mat-card-header>
+        <mat-card-title>DriveHome</mat-card-title>
+        <mat-card-subtitle>Explanation Demo</mat-card-subtitle>
+    </mat-card-header>
+    <img matCardImage src="/images/nomystery.jpg">
+    <mat-card-content>
+        A demo of an iterative planning run with explanations based on plan property dependencies.
+        A demo of an iterative planning run with explanations based on plan property dependencies.
+        A demo of an iterative planning run with explanations based on plan property dependencies.
+    </mat-card-content>
+    <mat-card-actions align="end">
+      <button mat-icon-button (click)="openMenu()">
+        <mat-icon>settings</mat-icon>
+      </button>
+      <button mat-icon-button >
+        <mat-icon>play_arrow</mat-icon>
+      </button>
+    </mat-card-actions>
+</mat-card>
+</div>
+

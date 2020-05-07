@@ -1,9 +1,9 @@
 import {Component, ElementRef, OnInit, ViewChild, EventEmitter, Output, Input} from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import {PddlFilesService} from '../../../service/pddl-files.service';
+import {FilesService} from '../../../service/pddl-files.service';
 import {SelectedObjectService} from '../../../service/selected-object.service';
 
-import {PDDLFile} from '../../../interface/pddlfile';
+import {PDDLFile} from '../../../interface/files';
 import {Observable} from 'rxjs';
 
 @Component({
@@ -33,7 +33,7 @@ export class TemplateFileUploadComponent implements OnInit {
 
 
   constructor(private selectedFileService: SelectedObjectService<PDDLFile>,
-              private fileService: PddlFilesService) {
+              private fileService: FilesService) {
   }
 
   ngOnInit(): void {
@@ -56,7 +56,7 @@ export class TemplateFileUploadComponent implements OnInit {
       content: this.fileObject
     };
 
-    this.fileService.saveDomainFile(uploadFile);
+    this.fileService.saveFile(uploadFile);
   }
 
   onUploadFileSelected() {
@@ -77,6 +77,6 @@ export class TemplateFileUploadComponent implements OnInit {
 
   deleteFile(file: PDDLFile) {
     console.log(file);
-    this.fileService.deleteDomainFile(file);
+    this.fileService.deleteFile(file);
   }
 }

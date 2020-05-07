@@ -1,3 +1,4 @@
+import { ViewSettingsService } from './service/setting.service';
 import { SchemaService } from './service/schema.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
@@ -34,6 +35,11 @@ import {MatChipsModule} from '@angular/material/chips';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatTreeModule} from '@angular/material/tree';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import {MatSliderModule} from '@angular/material/slider';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import {MatBadgeModule} from '@angular/material/badge';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MAT_BOTTOM_SHEET_DEFAULT_OPTIONS, MatBottomSheetModule} from '@angular/material/bottom-sheet';
 
 import {ResizableModule} from 'angular-resizable-element';
 
@@ -86,13 +92,17 @@ import {
   SelectedDomainFileStore,
   SelectedProblemFileStore,
   CurrentQuestionStore,
-  CurrentSchemaStore
+  TasktSchemaStore,
+  DomainSpecificationFilesStore,
+  DomainSpecStore,
+  ViewSettingsStore
 } from './store/stores.store';
 import {
   DomainFilesService,
   ProblemFilesService,
   SelectedDomainFileService,
-  SelectedProblemFileService
+  SelectedProblemFileService,
+  DomainSpecificationFilesService
 } from './service/pddl-file-services';
 import {
   RunService,
@@ -101,17 +111,31 @@ import {
 } from './service/run-services';
 import { ProjectsService, CurrentProjectService} from './service/project-services';
 import { PlanPropertyCollectionService} from './service/plan-property-services';
-
+import { LoginComponent } from './components/login/login/login.component';
+import { DemoSellectionComponent } from './components/demo/demo-sellection/demo-sellection.component';
+import { DemoBaseComponent } from './components/demo/demo-base/demo-base.component';
+import { MobilMenuComponent } from './components/settings/mobil-menu/mobil-menu.component';
+import { DemoSettingsComponent } from './components/demo/demo-settings/demo-settings.component';
+import { ProjectOverviewComponent } from './components/project/project-overview/project-overview.component';
+import { DomainSpecificationComponent } from './components/files/domain-specification/domain-specification.component';
+import { ViewSettingsMenuComponent } from './components/settings/view-settings-menu/view-settings-menu.component';
+import { RunTreeComponent } from './components/iter_planning_steps/run-tree/run-tree.component';
+import { IterativePlanningBaseMobileComponent } from './components/iter_planning_steps/mobile/iterative-planning-base-mobile/iterative-planning-base-mobile.component';
+import { NomysteryPlanViewComponent } from './components/plugins/nomystery/nomystery-plan-view/nomystery-plan-view.component';
+import { NomysteryTaskViewComponent } from './components/plugins/nomystery/nomystery-task-view/nomystery-task-view.component';
 
 
 
 const appRoutes: Routes = [
+  { path: 'login', component: LoginComponent},
   { path: 'projects', component: ProjectSelectionComponent},
   { path: 'project/:projectid', component: ProjectBaseComponent,
     children: [
+      { path: 'overview', component: ProjectOverviewComponent},
       { path: 'properties', component: PropertyCollectionComponent},
       { path: 'iterative-planning', component: IterativePlanningBaseComponent,
         children: [
+          { path: 'run-overview-mobile', component: IterativePlanningBaseMobileComponent},
           { path: 'original-task', component: FirstPlanningStepComponent},
           { path: 'planning-step/:runid', component: FinishedPlanningStepComponent},
           { path: 'planning-step/:runid/question-step/:expid', component: FinishedQuestionStepComponent},
@@ -123,6 +147,8 @@ const appRoutes: Routes = [
   },
   { path: 'domain-files', component: DomainSelectorComponent},
   { path: 'problem-files', component: ProblemSelectorComponent},
+  { path: 'domain-specification', component: DomainSpecificationComponent},
+  { path: 'demos', component: DemoSellectionComponent},
 ];
 
 
@@ -157,6 +183,18 @@ const appRoutes: Routes = [
     QuestionCreatorComponent,
     QuestionViewComponent,
     ExplanationViewComponent,
+    LoginComponent,
+    DemoSellectionComponent,
+    DemoBaseComponent,
+    MobilMenuComponent,
+    DemoSettingsComponent,
+    ProjectOverviewComponent,
+    DomainSpecificationComponent,
+    ViewSettingsMenuComponent,
+    RunTreeComponent,
+    IterativePlanningBaseMobileComponent,
+    NomysteryPlanViewComponent,
+    NomysteryTaskViewComponent,
   ],
   imports: [
     BrowserModule,
@@ -184,12 +222,17 @@ const appRoutes: Routes = [
     MatDialogModule,
     MatChipsModule,
     MatTreeModule,
+    MatBadgeModule,
     MatProgressSpinnerModule,
     FormsModule,
     MonacoEditorModule.forRoot(),
     MatListModule,
     MatAutocompleteModule,
+    MatSliderModule,
+    MatCheckboxModule,
     ReactiveFormsModule,
+    MatBottomSheetModule,
+    MatSlideToggleModule,
     RouterModule.forRoot(
       appRoutes,
       {enableTracing: false, // <-- debugging purposes only
@@ -207,11 +250,13 @@ const appRoutes: Routes = [
     SelectedDomainFileService,
     ProblemFilesService,
     SelectedProblemFileService,
+    DomainSpecificationFilesStore,
+    DomainSpecificationFilesService,
     ProjectsStore,
     ProjectsService,
     CurrentProjectStore,
     CurrentProjectService,
-    CurrentSchemaStore,
+    TasktSchemaStore,
     SchemaService,
     PlanPropertyCollectionStore,
     PlanPropertyCollectionService,
@@ -222,6 +267,10 @@ const appRoutes: Routes = [
     CurrentRunStore,
     CurrentQuestionStore,
     CurrentQuestionService,
+    DomainSpecStore,
+    ViewSettingsStore,
+    ViewSettingsService,
+    {provide: MAT_BOTTOM_SHEET_DEFAULT_OPTIONS, useValue: {hasBackdrop: true}},
 
   ],
   entryComponents: [
@@ -230,7 +279,10 @@ const appRoutes: Routes = [
     ProjectSelectionComponent,
     ProjectCreatorComponent,
     PropertyCollectionComponent,
+    DemoSettingsComponent,
+    ViewSettingsMenuComponent,
   ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+
