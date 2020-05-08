@@ -5,16 +5,38 @@ import { TaskSchema } from './../../interface/schema';
 import * as d3 from 'd3';
 import { SimulationNodeDatum, SimulationLinkDatum } from 'd3';
 
+const maxPositionLocation = 6;
+const radius = 20;
+const maxPositionsTruck = 6;
+const packageSize = 20;
+
 
 export class Node implements SimulationNodeDatum {
-  public x: number;
-  public y: number;
+  public x = 0;
+  public y = 0;
   public fx: number;
   public fy: number;
   public strength = -10;
   public fixed = false;
+  public objects = 0;
 
   constructor(public id: string) {}
+
+  getFreePosition(): {x: number, y: number} {
+    const alpha = this.objects / maxPositionLocation * 2 * Math.PI;
+    const dx = Math.cos(alpha) * radius;
+    const dy = Math.sin(alpha) * radius;
+    console.log('free position');
+    return {x: this.x + dx, y: this.y + dy};
+  }
+
+  addObject() {
+    this.objects++;
+  }
+
+  removeObject() {
+    this.objects--;
+  }
 }
 
 export class Link<T> implements SimulationLinkDatum<T> {
@@ -37,9 +59,8 @@ export class Location extends Node {
 
 
 export class Road extends Link<Location> {
-  public fuelCost: number;
 
-  constructor(source: Location, target: Location) {
+  constructor(source: Location, target: Location, public fuelCost: number) {
     super(source, target);
   }
 }
@@ -47,18 +68,34 @@ export class Road extends Link<Location> {
 
 export class Truck extends Node {
   public startLocation?: Location;
-  public fuel?: number;
+  public currentLocation?: Location;
+  public startFuel?: number;
+  public currentFuel?: number;
   public loadedPackages: Package[] = [];
 
   constructor(id: string, public name: string) {
     super(id);
     this.strength = -50;
   }
+
+  getFreePosition(): {x: number, y: number} {
+    return this.getPositionByIndex(this.loadedPackages.length);
+  }
+
+  getPositionByIndex(index: number): {x: number, y: number} {
+    const dx = index % (maxPositionsTruck / 2) * (packageSize + 5) + 28;
+    let dy = 5;
+    if (index > maxPositionsTruck / 2) {
+      dy = packageSize + 5;
+    }
+    return {x: this.x + dx, y: this.y + dy};
+  }
 }
 
 export class Package extends Node {
   startLocation?: Location;
   goalLocation?: Location;
+  currentLocation?: Node;
 
   constructor(id: string, public name: string) {
     super(id);
@@ -109,6 +146,7 @@ export class Task {
     const regexRoad = RegExp('fuelcost\\(level(\\d+),l(\\d+),l(\\d+)\\)');
     const regexInitTruck = RegExp('at\\(t(\\d),l(\\d+)\\)');
     const regexInitPackage = RegExp('at\\(p(\\d),l(\\d+)\\)');
+    const regexInitFuel = RegExp('fuel\\(t(\\d),level(\\d+)\\)');
 
     for (const pred of this.taskSchema.init) {
       let match = regexRoad.exec(pred);
@@ -116,7 +154,7 @@ export class Task {
         const souceName = 'l' + match[2];
         const targetName = 'l' + match[3];
         const fuelCost = Number(match[1]);
-        this.roads.push(new Road(this.locations.get(souceName), this.locations.get(targetName)));
+        this.roads.push(new Road(this.locations.get(souceName), this.locations.get(targetName), fuelCost));
         continue;
       }
 
@@ -139,6 +177,15 @@ export class Task {
         const p = this.packages.get(packageName);
         p.startLocation = this.locations.get(loc);
         this.startPackageLinks.push(new Link(p, p.startLocation));
+      }
+
+      match = regexInitFuel.exec(pred);
+      if (match) {
+        const truckName = 't' + match[1];
+        const fuellevel = Number(match[2]);
+
+        const truck = this.trucks.get(truckName);
+        truck.startFuel = fuellevel;
       }
     }
   }

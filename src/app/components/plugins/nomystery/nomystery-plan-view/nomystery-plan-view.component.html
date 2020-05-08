@@ -1,17 +1,37 @@
-<div class="header-container">
-  <h2>NoMystery</h2>
-</div>
-<div class="button-container">
-  <button mat-icon-button>
-    <mat-icon>skip_previous</mat-icon>
-  </button>
-  <button mat-icon-button (click)="playAnimation()">
-    <mat-icon>play_arrow</mat-icon>
-  </button>
-  <button mat-icon-button>
-    <mat-icon>skip_next</mat-icon>
-  </button>
-</div>
-<div class="plan-container" #mapContainer>
-  <svg width="400" height="600" class="svg-container" #planSVG id="planSVG"></svg>
+<div class="main-container">
+  <div class="info-container">
+      <h2>Fuel:</h2>
+      <ng-container *ngIf="task">
+        <h2 *ngFor="let truckItem of (task.trucks | keyvalue)" style="margin: 5px;">
+          <span style="font-weight: bold;">{{truckItem.value.name}}</span>: {{truckItem.value.currentFuel}}/{{truckItem.value.startFuel}}
+        </h2>
+      </ng-container>
+  </div>
+  <div class="plan-container" #mapContainer>
+    <svg class="svg-container" #planSVG id="planSVG">
+
+    </svg>
+  </div>
+  <div class="button-container" *ngIf="this.planActions">
+    <button mat-icon-button (click)="animationHandler.stepBack()"
+    [disabled]="! (animationHandler.currentAnimationHasPreviousEvent | async) || ! (animationHandler.currentAnimationPausedEvent | async)">
+      <mat-icon>chevron_left</mat-icon>
+    </button>
+    <button mat-icon-button *ngIf="animationHandler.currentAnimationPausedEvent | async"
+      (click)="animationHandler.play()" [disabled]="! (animationHandler.currentAnimationHasNextEvent | async)">
+      <mat-icon>play_arrow</mat-icon>
+    </button>
+    <button mat-icon-button *ngIf="! (animationHandler.currentAnimationPausedEvent | async)"
+      (click)="animationHandler.pause()" [disabled]="! (animationHandler.currentAnimationHasNextEvent | async)">
+      <mat-icon>pause</mat-icon>
+    </button>
+    <button mat-icon-button (click)="animationHandler.stepForward()"
+    [disabled]="! (animationHandler.currentAnimationHasNextEvent | async) || ! (animationHandler.currentAnimationPausedEvent | async)">
+      <mat-icon>chevron_right</mat-icon>
+    </button>
+    <button mat-icon-button (click)="animationHandler.restart()"
+    [disabled]="! (animationHandler.currentAnimationPausedEvent | async)">
+      <mat-icon>refresh</mat-icon>
+    </button>
+  </div>
 </div>
