@@ -22,7 +22,7 @@ export class PddlFileUtilsService {
   constructor(private http: HttpClient) { }
 
   getFileContent(path: string): Observable<string> {
-    if (path != undefined) {
+    if (path !== undefined) {
       console.log('Get file Content: ' + path);
       return this.http.get(path, {responseType: 'text'});
     } else {

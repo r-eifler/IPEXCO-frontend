@@ -1,3 +1,23 @@
+<div style="width: 100%; display: flex; flex-direction: column">
+  <h1>Select hard goals: </h1>
+  <h2>Goal facts:</h2>
+  <mat-selection-list>
+    <mat-list-option *ngFor="let item of goalFacts" [value]=item checkboxPosition="before">
+      {{item.name}}
+    </mat-list-option>
+  </mat-selection-list>
+  <mat-divider></mat-divider>
+
+  <h2>Plan Properties:</h2>
+  <mat-selection-list>
+    <mat-list-option *ngFor="let item of properties$ | async" [value]=item checkboxPosition="before">
+      {{item.naturalLanguageDescription}}
+    </mat-list-option>
+  </mat-selection-list>
+</div>
+
+
+
 <div *ngIf="computing" class="spinner-container">
   <div  class="computing-spinner">
     <p style="font-size: larger;">Planning ...</p>
@@ -57,6 +77,6 @@
 </div>
 
 
-<button mat-fab color="warn" class="add-button" (click)="compute_dependencies()">
+<button mat-fab color="accent" class="add-button" (click)="compute_dependencies()">
   <mat-icon>send</mat-icon>
 </button>

@@ -1,4 +1,4 @@
-import { Task, Road, Link, Node, Location } from './task';
+import { AnimationInfoNoMystery, AnimationNode, AnimationRoad, AnimationLocation } from './animation-info-nomystery';
 import * as d3 from 'd3';
 import { AnimationInitializer } from 'src/app/animation/animation-initializer';
 
@@ -16,9 +16,9 @@ export class AnimationInitializerNoMystery extends AnimationInitializer {
   trucksSVG;
   packagesSVG;
 
-  constructor(svgContainerId: string, task: Task) {
-    super(svgContainerId, task);
 
+  constructor(svgContainerId: string, private animationInfo: AnimationInfoNoMystery) {
+    super(svgContainerId);
     this.simulateMap();
   }
 
@@ -29,43 +29,44 @@ export class AnimationInitializerNoMystery extends AnimationInitializer {
   private simulateMap() {
 
     const svg: any = d3.select(this.svgContainerId)
-    .call(d3.zoom().on('zoom', () =>
-        svg.attr('transform', d3.event.transform)
+    .call(d3.zoom().on('zoom', () => {
+        svg.attr('transform', d3.event.transform);
+        // console.log(d3.event.transform);
+      }
     ))
     .append('g');
 
-    const nodes: Node[] = Array.from(this.task.locations.values());
+    const nodes: AnimationNode[] = Array.from(this.animationInfo.locations.values());
 
     const simulation: any = d3.forceSimulation().nodes(nodes);
     simulation.stop();
 
     simulation
-    .force('charge', d3.forceManyBody<Node>().strength( d => 3 * d.strength))
+    .force('charge', d3.forceManyBody<AnimationNode>().strength( 300))
     .force('collide', d3.forceCollide().radius(10).strength(5))
     .force('center', d3.forceCenter(this.width / 2, this.height / 2));
 
     simulation.force('linkRoad',
-    d3.forceLink<Location, Road>()
+    d3.forceLink<AnimationLocation, AnimationRoad>()
     .id(d => d.id)
-    .links(this.task.roads)
+    .links(this.animationInfo.roads)
     .distance(200)
-    .strength(l => 1 * this.strength(l)));
+    .strength(l => 1));
 
     const node = svg.append('g')
         .attr('class', 'nodes')
         .selectAll('circle')
-        .data(Array.from(this.task.locations.values()))
+        .data(Array.from(this.animationInfo.locations.values()))
         .enter()
         .append('circle')
         .attr('class', 'nodes')
         .attr('r', 10)
-        .attr('fill', 'black')
-        .on('click', d => { d.fixed = true; });
+        .attr('fill', 'black');
 
     const links = svg.append('g')
       .attr('class', 'links')
       .selectAll('line')
-      .data(this.task.roads)
+      .data(this.animationInfo.roads)
       .enter()
       .append('line')
       .attr('class', 'links')
@@ -75,7 +76,7 @@ export class AnimationInitializerNoMystery extends AnimationInitializer {
     this.trucksSVG = svg.append('g')
       .attr('class', 'trucks')
       .selectAll('image')
-      .data(Array.from(this.task.trucks.values()))
+      .data(Array.from(this.animationInfo.trucks.values()))
       .enter()
       .append('image')
       .attr('class', 'trucks')
@@ -87,7 +88,7 @@ export class AnimationInitializerNoMystery extends AnimationInitializer {
     this.packagesSVG = svg.append('g')
       .attr('class', 'packages')
       .selectAll('image')
-      .data(Array.from(this.task.packages.values()))
+      .data(Array.from(this.animationInfo.packages.values()))
       .enter()
       .append('image')
       .attr('class', 'packages')
@@ -107,7 +108,7 @@ export class AnimationInitializerNoMystery extends AnimationInitializer {
   }
 
 
-  private strength(road: Road) {
+  private strength(road: AnimationRoad) {
   const res = (1 / Math.min(road.source.degree, road.target.degree));
   // console.log(res);
   return res;
@@ -129,12 +130,12 @@ export class AnimationInitializerNoMystery extends AnimationInitializer {
 
 
   public resetObjectLocation() {
-    for (const loc of this.task.locations.values()) {
+    for (const loc of this.animationInfo.locations.values()) {
       loc.objects = 0;
     }
-    for (const truck of this.task.trucks.values()) {
+    for (const truck of this.animationInfo.trucks.values()) {
       truck.loadedPackages.splice(0, truck.loadedPackages.length);
-      truck.currentFuel = truck.startFuel;
+      truck.currentFuel = truck.getInitFuel();
       const pos = truck.startLocation.getFreePosition();
       truck.x = pos.x;
       truck.y = pos.y;
@@ -145,7 +146,7 @@ export class AnimationInitializerNoMystery extends AnimationInitializer {
     .attr('x', d => d.x)
     .attr('y', d => d.y);
 
-    for (const p of this.task.packages.values()) {
+    for (const p of this.animationInfo.packages.values()) {
       const pos = p.startLocation.getFreePosition();
       p.x = pos.x;
       p.y = pos.y;

@@ -1,6 +1,7 @@
 import {PlanProperty} from './plan-property';
 import {Project} from './project';
 import {Goal} from './goal';
+import { Plan } from './plan';
 
 export enum Status {
   pending,
@@ -50,7 +51,9 @@ export interface  PlanRun {
   planProperties: PlanProperty[];
   hardGoals: Goal[];
   log: string;
-  plan: string;
+  planPath: string;
+  plan?: Plan;
+  satPlanProperties?: string[];
   explanationRuns: ExplanationRun[];
   previousRun: string;
 }

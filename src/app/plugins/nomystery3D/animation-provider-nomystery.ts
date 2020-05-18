@@ -1,6 +1,6 @@
 import { AnimationInfoNoMystery, AnimationTruck, AnimationLocation, AnimationPackage } from './animation-info-nomystery';
 import { EventEmitter } from '@angular/core';
-import { NoMysteryTask, Location, Truck, Package } from './nomystery-task';
+import { NoMysteryTask, Location, Truck, Package } from '../nomystery/nomystery-task';
 import * as d3 from 'd3';
 import { rejects } from 'assert';
 import { AnimationProvider } from 'src/app/animation/animation-provider';

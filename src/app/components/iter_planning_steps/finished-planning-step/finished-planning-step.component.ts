@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { RunService, CurrentRunService} from '../../../service/run-services';
 import { PlanPropertyCollectionService} from '../../../service/plan-property-services';
-import {ActivatedRoute, ParamMap} from '@angular/router';
+import {ActivatedRoute, ParamMap, Router} from '@angular/router';
 import {switchMap} from 'rxjs/operators';
 
 
@@ -12,10 +12,12 @@ import {switchMap} from 'rxjs/operators';
 })
 export class FinishedPlanningStepComponent implements OnInit {
 
-  constructor(private propertiesService: PlanPropertyCollectionService,
-              private runService: RunService,
-              private route: ActivatedRoute,
-              currentRunService: CurrentRunService) {
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private propertiesService: PlanPropertyCollectionService,
+    private runService: RunService,
+    currentRunService: CurrentRunService) {
 
     this.route.paramMap.pipe(
       switchMap((params: ParamMap) =>
@@ -29,4 +31,7 @@ export class FinishedPlanningStepComponent implements OnInit {
     this.propertiesService.findCollection();
   }
 
+  newQuestion() {
+    this.router.navigate(['./new-question'], { relativeTo: this.route });
+  }
 }

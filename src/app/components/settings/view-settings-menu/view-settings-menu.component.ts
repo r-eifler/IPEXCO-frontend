@@ -25,10 +25,8 @@ export class ViewSettingsMenuComponent implements OnInit {
   }
 
   updateExpertView(event: MatSlideToggleChange) {
-    console.log(this.settings);
     this.settings.expertView = event.checked;
     this.viewSettingService.saveObject(this.settings);
-    console.log(this.settings);
   }
 
 }

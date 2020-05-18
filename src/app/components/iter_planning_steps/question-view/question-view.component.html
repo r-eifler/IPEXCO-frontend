@@ -1,2 +1,10 @@
-<h1>Why not ...</h1>
-<p *ngFor="let q of questionElems">{{q.name}}</p>
+
+<h1>Question: </h1>
+<h2>Why not ...</h2>
+<mat-list *ngFor="let q of questionElemsDescription;last as last">
+  <mat-list-item>
+      {{q}}
+      <mat-divider *ngIf="! last"></mat-divider>
+  </mat-list-item>
+</mat-list>
+

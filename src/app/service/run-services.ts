@@ -1,4 +1,5 @@
-import { EDIT } from '../store/generic-list.store';
+import { Plan } from './../interface/plan';
+import { EDIT, LOAD } from '../store/generic-list.store';
 import {SelectedObjectService} from './selected-object.service';
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
@@ -8,7 +9,13 @@ import {environment} from '../../environments/environment';
 import {map} from 'rxjs/operators';
 import {IHTTPData} from '../interface/http-data.interface';
 import {PlanRun, ExplanationRun} from '../interface/run';
+import { PddlFileUtilsService } from './pddl-file-utils.service';
 
+
+interface QueryParam {
+  param: string;
+  value: string;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +24,7 @@ export class RunService extends ObjectCollectionService<PlanRun> {
 
   constructor(http: HttpClient, store: RunsStore) {
     super(http, store);
-    this.BASE_URL = environment.apiURL + 'run/plan/';
+    this.BASE_URL = environment.apiURL + 'run/plan-run/';
     this.pipeFind = map(sortRuns);
 
     }
@@ -67,7 +74,7 @@ function sortRuns(runs: PlanRun[]): PlanRun[] {
 
 function findStart(runs: PlanRun[]): PlanRun {
   for (const run of runs) {
-    if (run.previousRun == null){
+    if (run.previousRun == null) {
       return run;
     }
   }
@@ -79,9 +86,42 @@ function findStart(runs: PlanRun[]): PlanRun {
 })
 export class CurrentRunService extends SelectedObjectService<PlanRun> {
 
-  constructor(store: CurrentRunStore) {
+  constructor(store: CurrentRunStore, private fileUtilsService: PddlFileUtilsService) {
     super(store);
   }
+
+  saveObject(planRun: PlanRun) {
+    if (! planRun.plan) {
+      const planContent$ = this.fileUtilsService.getFileContent(planRun.planPath);
+      // console.log('Loade Plan');
+      planContent$.subscribe((content) => {
+        // console.log(content);
+        if (content) {
+
+          const lines = content.split('\n');
+          lines.splice(-1, 1); // remove empty line at the end
+          const costString = lines.splice(-1, 1)[0];
+          const plan = parsePlan(lines);
+          plan.cost = Number(costString.split(' ')[3]);
+          planRun.plan = plan;
+          this.selectedObjectStore.dispatch({type: LOAD, data: planRun});
+        }
+      });
+    } else {
+      this.selectedObjectStore.dispatch({type: LOAD, data: planRun});
+    }
+  }
+}
+
+function parsePlan(actionStrings: string[]): Plan {
+  const res: Plan = {actions: [], cost: null};
+  for (const a of actionStrings) {
+    const action = a.replace('(', '').replace(')', '');
+    const [name, ...args] = action.split(' ');
+    res.actions.push({name, args});
+  }
+
+  return res;
 }
 
 @Injectable({

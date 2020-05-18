@@ -4,6 +4,10 @@ import { PddlFileUtilsService } from 'src/app/service/pddl-file-utils.service';
 import { CurrentRunStore, CurrentQuestionStore } from 'src/app/store/stores.store';
 import { PlanRun, ExplanationRun } from 'src/app/interface/run';
 
+interface Answer {
+  MUGS: string[];
+}
+
 @Component({
   selector: 'app-explanation-view',
   templateUrl: './explanation-view.component.html',
@@ -13,7 +17,7 @@ export class ExplanationViewComponent implements OnInit {
   currentRun$: Observable<PlanRun>;
   currentQuestion$: Observable<ExplanationRun>;
 
-  mugs: string;
+ answer: Answer;
 
   constructor(
     private fileUtilsService: PddlFileUtilsService,
@@ -27,7 +31,7 @@ ngOnInit(): void {
     this.currentQuestion$.subscribe(run => {
       if (run !== null) {
         this.fileUtilsService.getFileContent(run.result).subscribe(content => {
-          this.mugs = content;
+          this.answer = JSON.parse(content);
         });
       }
     });

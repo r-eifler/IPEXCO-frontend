@@ -1,4 +1,4 @@
-import { PlanProperty } from './../../../interface/plan-property';
+import { PlanProperty } from 'src/app/interface/plan-property';
 import { ViewSettingsService } from 'src/app/service/setting.service';
 import { ViewSettingsStore } from './../../../store/stores.store';
 import { Project } from './../../../interface/project';
@@ -13,6 +13,7 @@ import { CurrentProjectService } from 'src/app/service/project-services';
 import { ResponsiveService } from 'src/app/service/responsive.service';
 import { ViewSettings } from 'src/app/interface/view-settings';
 import { MatCheckboxChange } from '@angular/material/checkbox';
+import { MatSelectionListChange } from '@angular/material/list/selection-list';
 
 @Component({
   selector: 'app-property-collection',
@@ -24,8 +25,7 @@ export class PropertyCollectionComponent implements OnInit {
   isMobile: boolean;
   viewSettings: Observable<ViewSettings>;
 
-  usedPlanProperties: PlanProperty[];
-  unusedPlanProperties: PlanProperty[];
+  planProperties: PlanProperty[];
 
   constructor(
     private responsiveService: ResponsiveService,
@@ -40,15 +40,14 @@ export class PropertyCollectionComponent implements OnInit {
       console.log(v);
     });
     this.propertiesService.collection$.subscribe(props => {
-      this.usedPlanProperties = props.filter(p => p.isUsed);
-      this.unusedPlanProperties = props.filter(p => ! p.isUsed);
+      this.planProperties = props;
     });
 
-    this.currentProjectService.selectedObject$.subscribe(project => {
-      if (project !== null) {
-        this.propertiesService.findCollection([{param: 'projectId', value: project._id}]);
-      }
-    });
+    // this.currentProjectService.selectedObject$.subscribe(project => {
+    //   if (project !== null) {
+    //     this.propertiesService.findCollection([{param: 'projectId', value: project._id}]);
+    //   }
+    // });
   }
 
   ngOnInit(): void {
@@ -69,6 +68,12 @@ export class PropertyCollectionComponent implements OnInit {
   usePlanProperty(event: MatCheckboxChange, property: PlanProperty): void {
     property.isUsed = event.checked;
     this.propertiesService.saveObject(property);
+  }
+
+  onSelectionChanged(event: MatSelectionListChange) {
+    const selectedProp: PlanProperty = event.option.value;
+    selectedProp.isUsed = ! selectedProp.isUsed;
+    this.propertiesService.saveObject(selectedProp);
   }
 
   new_property_form(): void {

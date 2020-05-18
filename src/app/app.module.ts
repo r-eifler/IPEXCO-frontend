@@ -120,7 +120,8 @@ import { ProjectOverviewComponent } from './components/project/project-overview/
 import { DomainSpecificationComponent } from './components/files/domain-specification/domain-specification.component';
 import { ViewSettingsMenuComponent } from './components/settings/view-settings-menu/view-settings-menu.component';
 import { RunTreeComponent } from './components/iter_planning_steps/run-tree/run-tree.component';
-import { IterativePlanningBaseMobileComponent } from './components/iter_planning_steps/mobile/iterative-planning-base-mobile/iterative-planning-base-mobile.component';
+import { IterativePlanningBaseMobileComponent }
+from './components/iter_planning_steps/mobile/iterative-planning-base-mobile/iterative-planning-base-mobile.component';
 import { NomysteryPlanViewComponent } from './components/plugins/nomystery/nomystery-plan-view/nomystery-plan-view.component';
 import { NomysteryTaskViewComponent } from './components/plugins/nomystery/nomystery-task-view/nomystery-task-view.component';
 
@@ -136,11 +137,11 @@ const appRoutes: Routes = [
       { path: 'iterative-planning', component: IterativePlanningBaseComponent,
         children: [
           { path: 'run-overview-mobile', component: IterativePlanningBaseMobileComponent},
+          { path: 'new-planning-step', component: PlanningStepComponent},
           { path: 'original-task', component: FirstPlanningStepComponent},
           { path: 'planning-step/:runid', component: FinishedPlanningStepComponent},
+          { path: 'planning-step/:runid/new-question', component: QuestionStepComponent},
           { path: 'planning-step/:runid/question-step/:expid', component: FinishedQuestionStepComponent},
-          { path: 'new_question', component: QuestionStepComponent},
-          { path: 'new-planning-step', component: PlanningStepComponent},
         ]
       },
     ]

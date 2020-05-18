@@ -12,7 +12,8 @@ import { matchRegexValidator } from '../../../validators/match-regex-validator';
 import { TaskSchema } from 'src/app/interface/schema';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
-import { DomainSpecification, PlanPropertyTemplate } from 'src/app/interface/domain-specification';
+import { DomainSpecification } from 'src/app/interface/domain-specification';
+import { PlanPropertyTemplate } from "src/app/interface/plan-property-template";
 import { MatSelectionListChange } from '@angular/material/list';
 import { MatAccordion } from '@angular/material/expansion';
 

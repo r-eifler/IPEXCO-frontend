@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CurrentProjectStore } from 'src/app/store/stores.store';
 import { RunService } from 'src/app/service/run-services';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-iterative-planning-base-mobile',
@@ -12,6 +13,8 @@ export class IterativePlanningBaseMobileComponent implements OnInit {
   private project;
 
   constructor(
+    private route: ActivatedRoute,
+    private router: Router,
     private currentProjectStore: CurrentProjectStore,
     private runService: RunService,
   ) {
@@ -26,6 +29,10 @@ export class IterativePlanningBaseMobileComponent implements OnInit {
   }
 
   ngOnInit(): void {
+  }
+
+  newPlanRun() {
+    this.router.navigate(['../new-planning-step'], { relativeTo: this.route });
   }
 
 }

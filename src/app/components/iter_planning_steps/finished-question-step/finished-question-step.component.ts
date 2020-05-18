@@ -4,6 +4,7 @@ import { PlanPropertyCollectionService} from 'src/app/service/plan-property-serv
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { switchMap, map } from 'rxjs/operators';
 import { ExplanationRun } from 'src/app/interface/run';
+import { ResponsiveService } from 'src/app/service/responsive.service';
 
 @Component({
   selector: 'app-finished-question-step',
@@ -12,7 +13,10 @@ import { ExplanationRun } from 'src/app/interface/run';
 })
 export class FinishedQuestionStepComponent implements OnInit {
 
+  isMobile: boolean;
+
   constructor(
+    private responsiveService: ResponsiveService,
     private propertiesService: PlanPropertyCollectionService,
     private runService: RunService,
     private route: ActivatedRoute,
@@ -39,6 +43,14 @@ export class FinishedQuestionStepComponent implements OnInit {
 
 ngOnInit(): void {
   this.propertiesService.findCollection();
+  this.responsiveService.getMobileStatus().subscribe( isMobile => {
+    if (isMobile) {
+      this.isMobile = true;
+    } else {
+      this.isMobile = false;
+    }
+  });
+  this.responsiveService.checkWidth();
 }
 
 }

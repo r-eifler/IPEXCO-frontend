@@ -1,3 +1,4 @@
+import { Plan } from './../../../interface/plan';
 import {Component, Input, OnInit} from '@angular/core';
 import {FilesService} from '../../../service/pddl-files.service';
 import {PddlFileUtilsService} from '../../../service/pddl-file-utils.service';
@@ -17,8 +18,7 @@ interface Action {
 })
 export class PlanViewComponent implements OnInit {
 
-  planActions: Action[];
-  planCost: string;
+  plan: Plan;
   private currentRun$: BehaviorSubject<PlanRun>;
 
     constructor(
@@ -29,16 +29,8 @@ export class PlanViewComponent implements OnInit {
 
   ngOnInit(): void {
       this.currentRun$.subscribe(run => {
-        console.log(run);
-        if (run !== null && run.plan !== undefined) {
-          this.fileUtilsService.getFileContent(run.plan).subscribe(content => {
-            const lines = content.split('\n');
-            lines.splice(-1, 1); // remove empty line at the end
-            const costString = lines.splice(-1, 1)[0];
-            this.planCost = costString.split(' ')[3];
-            console.log(lines);
-            this.planActions = this.formatActions(lines);
-          });
+        if (run) {
+          this.plan = run.plan;
         }
       });
 

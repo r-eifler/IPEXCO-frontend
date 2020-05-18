@@ -1,18 +1,18 @@
 <div class="main-container">
-  <div class="info-container">
+  <!-- <div class="info-container">
       <h2>Fuel:</h2>
       <ng-container *ngIf="task">
         <h2 *ngFor="let truckItem of (task.trucks | keyvalue)" style="margin: 5px;">
           <span style="font-weight: bold;">{{truckItem.value.name}}</span>: {{truckItem.value.currentFuel}}/{{truckItem.value.startFuel}}
         </h2>
       </ng-container>
-  </div>
-  <div class="plan-container" #mapContainer>
-    <svg class="svg-container" #planSVG id="planSVG">
+  </div> -->
+  <div class="plan-container" id="mapContainer">
+    <!-- <svg class="svg-container" #planSVG id="planSVG">
 
-    </svg>
+    </svg> -->
   </div>
-  <div class="button-container" *ngIf="this.planActions">
+  <div class="button-container" *ngIf="animationHandler">
     <button mat-icon-button (click)="animationHandler.stepBack()"
     [disabled]="! (animationHandler.currentAnimationHasPreviousEvent | async) || ! (animationHandler.currentAnimationPausedEvent | async)">
       <mat-icon>chevron_left</mat-icon>
@@ -34,4 +34,11 @@
       <mat-icon>refresh</mat-icon>
     </button>
   </div>
+  <!-- <button mat-fab color="accent" class="add-button" (click)="newQuestion()" *ngIf="animationHandler"
+  [class.add-button-hidden]="! (animationHandler.currentAnimationPausedEvent | async) || ! (animationHandler.currentAnimationHasPreviousEvent | async)">
+    <mat-icon svgIcon="questionmark"></mat-icon>
+  </button> -->
+  <button mat-fab color="accent" class="add-button" (click)="newQuestion()">
+    <mat-icon svgIcon="questionmark"></mat-icon>
+  </button>
 </div>

@@ -9,14 +9,13 @@ import {PddlFileUtilsService} from '../../../service/pddl-file-utils.service';
 import {Goal, GoalType} from '../../../interface/goal';
 import {CurrentProjectStore} from '../../../store/stores.store';
 import {ActivatedRoute, Router} from '@angular/router';
-import { prepareEventListenerParameters } from '@angular/compiler/src/render3/view/template';
 import { PlanPropertyCollectionService } from 'src/app/service/plan-property-services';
 import { RunService } from 'src/app/service/run-services';
 
 @Component({
   selector: 'app-task-creator',
   templateUrl: './task-creator.component.html',
-  styleUrls: ['./task-creator.component.css']
+  styleUrls: ['./task-creator.component.scss']
 })
 export class TaskCreatorComponent implements OnInit {
 
@@ -77,13 +76,10 @@ export class TaskCreatorComponent implements OnInit {
       planProperties: this.hardGoals.filter(value => value.goalType === GoalType.planProperty) as PlanProperty[],
       hardGoals: this.hardGoals.map(value => ({name: value.name, goalType: value.goalType }) ),
       log: null,
-      plan: null,
+      planPath: null,
       explanationRuns: [],
       previousRun: previousRun ? previousRun._id : null,
     };
-    //
-    // console.log('Compute dependencies');
-    // console.log(run);
 
     this.plannerService.execute_plan_run(run);
     this.router.navigate(['../'], { relativeTo: this.route });

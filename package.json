@@ -27,6 +27,7 @@
     "@ngrx/store": "^9.0.0",
     "@ngrx/store-devtools": "^9.0.0",
     "@types/gsap": "^1.20.2",
+    "@types/three": "^0.103.2",
     "angular-monaco-editor": "^1.10.0",
     "angular-resizable-element": "^3.3.0",
     "d3": "^5.16.0",
@@ -35,6 +36,7 @@
     "monaco-editor": "^0.20.0",
     "ngx-monaco-editor": "^8.1.1",
     "rxjs": "~6.5.4",
+    "three-orbitcontrols": "^2.110.3",
     "tslib": "^1.10.0",
     "zone.js": "~0.10.2"
   },
@@ -56,6 +58,7 @@
     "karma-jasmine": "~2.0.1",
     "karma-jasmine-html-reporter": "^1.4.2",
     "protractor": "~5.4.3",
+    "three": "^0.116.1",
     "ts-node": "~8.3.0",
     "tslint": "~5.18.0",
     "typescript": "~3.7.5"

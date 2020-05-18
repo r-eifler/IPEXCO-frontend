@@ -1,2 +1,14 @@
-<h1>MUGS</h1>
-{{mugs}}
+<h1>Answer:</h1>
+<ng-container *ngIf="answer && answer.MUGS.length > 0">
+  <h2>... because then you cannot satisfy</h2>
+  <mat-list>
+    <mat-list-item *ngFor="let elem of answer.MUGS">
+      {{elem}}
+    </mat-list-item>
+  </mat-list>
+</ng-container>
+
+<p *ngIf="answer && answer.MUGS.length == 0">
+  There exists a plan which satisfies the property.
+</p>
+

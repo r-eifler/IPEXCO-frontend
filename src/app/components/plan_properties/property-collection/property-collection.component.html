@@ -1,8 +1,8 @@
 <div [class.flex-container-web]=" ! isMobile" [class.flex-container-mobile]="isMobile">
+  <h2>Properties collection</h2>
   <ng-container *ngIf="(viewSettings | async).expertView">
 
-    <h2>Used Plan Properties</h2>
-    <mat-card *ngFor="let property of usedPlanProperties" [class.property-card-web]=" ! isMobile" [class.property-card-mobile]="isMobile">
+    <mat-card *ngFor="let property of planProperties" [class.property-card-web]=" ! isMobile" [class.property-card-mobile]="isMobile" [class.property-card-not-selected]="! property.isUsed">
       <mat-card-header>
         <div mat-card-avatar>
           <div class="property-icon">
@@ -12,11 +12,14 @@
         <mat-card-title>{{property.name}}</mat-card-title>
         <mat-card-subtitle>Property</mat-card-subtitle>
 
-        <mat-checkbox style="position: absolute; right: 50px" [checked]="property.isUsed" (change)="usePlanProperty($event, property)"></mat-checkbox>
+        <!-- <mat-checkbox style="position: absolute; right: 50px" [checked]="property.isUsed" (change)="usePlanProperty($event, property)"></mat-checkbox> -->
+        <mat-slide-toggle style="position: absolute; right: 10px" [checked]="property.isUsed" (change)="usePlanProperty($event, property)">
+        </mat-slide-toggle>
 
-        <button mat-icon-button [matMenuTriggerFor]="menu" style="position: absolute; right: 5px">
+
+        <!-- <button mat-icon-button [matMenuTriggerFor]="menu" style="position: absolute; right: 5px">
           <mat-icon>more_vert</mat-icon>
-        </button>
+        </button> -->
         <mat-menu #menu="matMenu">
           <button mat-menu-item (click)="delete(property)">
             <mat-icon>delete</mat-icon>
@@ -34,61 +37,7 @@
 
       </mat-card-header>
       <mat-card-content>
-        <h2>{{property.formula}}</h2>
-        <mat-accordion>
-          <mat-expansion-panel *ngFor="let actionSet of property.actionSets">
-            <mat-expansion-panel-header>
-              <mat-panel-title>
-                {{actionSet.name}}
-              </mat-panel-title>
-            </mat-expansion-panel-header>
-            <div style="display: flex; flex-direction: column; justify-content: center; width: 100%;">
-              <mat-list *ngFor="let action of actionSet.actions">
-                <mat-list-item>
-                  {{action.name}} {{action.params}}<!-- TODO display params-->
-                  <mat-divider [inset]="true"></mat-divider>
-                </mat-list-item>
-              </mat-list>
-            </div>
-          </mat-expansion-panel>
-        </mat-accordion>
-      </mat-card-content>
-    </mat-card>
-
-
-    <h2>Not used Plan Properties</h2>
-    <mat-card *ngFor="let property of unusedPlanProperties" [class.property-card-web]=" ! isMobile" [class.property-card-mobile]="isMobile">
-      <mat-card-header>
-        <div mat-card-avatar>
-          <div class="property-icon">
-            {{property.type}}
-          </div>
-        </div>
-        <mat-card-title>{{property.name}}</mat-card-title>
-        <mat-card-subtitle>Property</mat-card-subtitle>
-
-        <mat-checkbox style="position: absolute; right: 50px" [checked]="property.isUsed" (change)="usePlanProperty($event, property)"></mat-checkbox>
-
-        <button mat-icon-button [matMenuTriggerFor]="menu" style="position: absolute; right: 5px">
-          <mat-icon>more_vert</mat-icon>
-        </button>
-        <mat-menu #menu="matMenu">
-          <button mat-menu-item (click)="delete(property)">
-            <mat-icon>delete</mat-icon>
-            <span>delete</span>
-          </button>
-          <button mat-menu-item>
-            <mat-icon>file_copy</mat-icon>
-            <span>copy</span>
-          </button>
-          <button mat-menu-item>
-            <mat-icon>create</mat-icon>
-            <span>modify</span>
-          </button>
-        </mat-menu>
-
-      </mat-card-header>
-      <mat-card-content>
+        <h3>{{property.naturalLanguageDescription}}</h3>
         <h2>{{property.formula}}</h2>
         <mat-accordion>
           <mat-expansion-panel *ngFor="let actionSet of property.actionSets">
@@ -112,68 +61,29 @@
   </ng-container>
 
   <ng-container *ngIf="! (viewSettings | async).expertView">
+    <mat-selection-list #planPorpertiesList (selectionChange)="onSelectionChanged($event)">
+      <mat-list-option *ngFor="let property of planProperties; last as last"
+      checkboxPosition="before" [value]="property" [selected]="property.isUsed">
+        {{property.naturalLanguageDescription}}
+        <mat-icon matListIcon [matMenuTriggerFor]="menu">more_vert</mat-icon>
+        <mat-divider [inset]="true" *ngIf="!last"></mat-divider>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item (click)="delete(property)">
+            <mat-icon>delete</mat-icon>
+            <span>delete</span>
+          </button>
+          <button mat-menu-item>
+            <mat-icon>file_copy</mat-icon>
+            <span>copy</span>
+          </button>
+          <button mat-menu-item>
+            <mat-icon>create</mat-icon>
+            <span>modify</span>
+          </button>
+        </mat-menu>
+      </mat-list-option>
 
-    <h2>Used Plan Properties</h2>
-    <mat-card *ngFor="let property of usedPlanProperties" [class.property-card-web]=" ! isMobile" [class.property-card-mobile]="isMobile">
-
-
-      <mat-checkbox style="position: absolute; right: 50px" [checked]="property.isUsed" (change)="usePlanProperty($event, property)"></mat-checkbox>
-
-      <button mat-icon-button [matMenuTriggerFor]="menu" style="position: absolute; right: 5px; top: 5px">
-        <mat-icon>more_vert</mat-icon>
-      </button>
-
-      <mat-menu #menu="matMenu">
-        <button mat-menu-item (click)="delete(property)">
-          <mat-icon>delete</mat-icon>
-          <span>delete</span>
-        </button>
-        <button mat-menu-item>
-          <mat-icon>file_copy</mat-icon>
-          <span>copy</span>
-        </button>
-        <button mat-menu-item>
-          <mat-icon>create</mat-icon>
-          <span>modify</span>
-        </button>
-      </mat-menu>
-
-      <mat-card-content>
-        <h3>{{property.naturalLanguageDescription}}</h3>
-      </mat-card-content>
-    </mat-card>
-
-
-    <h2>Not used Plan Properties</h2>
-    <mat-card *ngFor="let property of unusedPlanProperties" [class.property-card-web]=" ! isMobile" [class.property-card-mobile]="isMobile">
-
-      <mat-checkbox style="position: absolute; right: 50px" [checked]="property.isUsed" (change)="usePlanProperty($event, property)"></mat-checkbox>
-
-      <button mat-icon-button [matMenuTriggerFor]="menu" style="position: absolute; right: 5px; top: 5px">
-        <mat-icon>more_vert</mat-icon>
-      </button>
-
-      <mat-menu #menu="matMenu">
-        <button mat-menu-item (click)="delete(property)">
-          <mat-icon>delete</mat-icon>
-          <span>delete</span>
-        </button>
-        <button mat-menu-item>
-          <mat-icon>file_copy</mat-icon>
-          <span>copy</span>
-        </button>
-        <button mat-menu-item>
-          <mat-icon>create</mat-icon>
-          <span>modify</span>
-        </button>
-      </mat-menu>
-
-      <mat-card-content>
-        <h3>{{property.naturalLanguageDescription}}</h3>
-
-      </mat-card-content>
-    </mat-card>
-
+    </mat-selection-list>
   </ng-container>
 
   <button mat-fab color="accent" class="add-button" (click)="new_property_form()">

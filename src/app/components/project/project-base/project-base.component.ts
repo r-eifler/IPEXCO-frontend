@@ -9,6 +9,7 @@ import { ProjectsService, CurrentProjectService } from 'src/app/service/project-
 import { DomainSpecificationService } from 'src/app/service/domain-specification.service';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { ViewSettingsService } from 'src/app/service/setting.service';
+import { PlanPropertyCollectionService } from 'src/app/service/plan-property-services';
 
 @Component({
   selector: 'app-project-base',
@@ -26,6 +27,7 @@ export class ProjectBaseComponent implements OnInit {
     private currentProjectService: CurrentProjectService,
     private curretnSchemaService: SchemaService,
     private domainSpecService: DomainSpecificationService,
+    private propertiesService: PlanPropertyCollectionService,
     private bottomSheet: MatBottomSheet
   ) {
     this.route.paramMap.pipe(
@@ -40,6 +42,7 @@ export class ProjectBaseComponent implements OnInit {
           console.log(this.project);
           this.curretnSchemaService.findSchema(this.project);
           this.domainSpecService.findSpec(this.project);
+          this.propertiesService.findCollection([{param: 'projectId', value: this.project._id}]);
           // console.log(this.project);
         }
       }

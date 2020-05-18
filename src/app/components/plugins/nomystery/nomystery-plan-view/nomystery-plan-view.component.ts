@@ -4,12 +4,13 @@ import { AnimationProvider } from 'src/app/animation/animation-provider';
 import { AnimationInitializer } from 'src/app/animation/animation-initializer';
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit} from '@angular/core';
 import { TaskSchema } from 'src/app/interface/schema';
-import { Task } from 'src/app/plugins/nomystery/task';
+import { NoMysteryTask } from 'src/app/plugins/nomystery/nomystery-task';
 import { TasktSchemaStore, CurrentRunStore } from 'src/app/store/stores.store';
 
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { PlanRun } from 'src/app/interface/run';
 import { PddlFileUtilsService } from 'src/app/service/pddl-file-utils.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 
 interface Action {
@@ -26,19 +27,17 @@ export class NomysteryPlanViewComponent implements OnInit, AfterViewInit {
 
   @ViewChild('planSVG') mapSVG: ElementRef;
   taskSchema: TaskSchema;
-  task: Task;
+  task: NoMysteryTask;
 
-  planActions: Action[];
-
-  animationInitializer: AnimationInitializer;
   animationHandler: AnimationHandler;
 
   planCost: string;
   private currentRun$: BehaviorSubject<PlanRun>;
 
   constructor(
+    private route: ActivatedRoute,
+    private router: Router,
     private taskSchemaStore: TasktSchemaStore,
-    private fileUtilsService: PddlFileUtilsService,
     private  currentRunStore: CurrentRunStore) {
 
     this.currentRun$ = this.currentRunStore.item$;
@@ -49,31 +48,15 @@ export class NomysteryPlanViewComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.currentRun$.subscribe(run => {
-      if (run !== null && run.plan !== undefined) {
-        const planContent$ = this.fileUtilsService.getFileContent(run.plan);
-
-        combineLatest([this.taskSchemaStore.item$, planContent$]).subscribe(([ts, content]) => {
-
-          if (ts && content) {
+    combineLatest([this.taskSchemaStore.item$, this.currentRun$]).subscribe(([ts, run]) => {
+          if (ts && run) {
             this.taskSchema = ts;
-            this.task = new Task(this.taskSchema);
-            console.log(this.task);
+            this.task = new NoMysteryTask(this.taskSchema);
 
-            const lines = content.split('\n');
-            lines.splice(-1, 1); // remove empty line at the end
-            const costString = lines.splice(-1, 1)[0];
-            this.planCost = costString.split(' ')[3];
-            this.planActions = this.formatActions(lines);
-
-            const width = this.mapSVG.nativeElement.clientWidth;
-            const height = this.mapSVG.nativeElement.clientHeight;
-            this.animationHandler = new AnimationHandler(this.task, this.planActions, '#planSVG');
-            this.animationHandler.nextEvents();
+            this.animationHandler = new AnimationHandler(this.task, run.plan);
           }
         });
-      }
-    });
+
   }
 
   formatActions(actionStrings: string[]): Action[] {
@@ -85,6 +68,10 @@ export class NomysteryPlanViewComponent implements OnInit, AfterViewInit {
     }
 
     return res;
+  }
+
+  newQuestion() {
+    this.router.navigate(['./new-question'], { relativeTo: this.route });
   }
 
 }

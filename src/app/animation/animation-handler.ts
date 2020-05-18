@@ -1,10 +1,9 @@
-import { AnimationProvider } from 'src/app/animation/animation-provider';
-import { AnimationInitializerNoMystery } from './../plugins/nomystery/animation-initializer-nomystery';
+import { Plan } from './../interface/plan';
+import { AnimationNoMystery } from './../plugins/nomystery3D/animation-nomystery';
 import { BehaviorSubject } from 'rxjs';
-import { Task } from '../plugins/nomystery/task';
-import { AnimationProviderNoMystery } from '../plugins/nomystery/animation-provider-nomystery';
-import { EventEmitter } from '@angular/core';
-import { AnimationInitializer } from './animation-initializer';
+import { NoMysteryTask } from '../plugins/nomystery/nomystery-task';
+import { Animation } from './animation';
+
 
 interface Action {
   name: string;
@@ -15,8 +14,7 @@ interface Action {
 
 export class AnimationHandler {
 
-private animationProvider: AnimationProvider;
-private animationInitializer: AnimationInitializer;
+private animation: Animation;
 
 private index = 0;
 private paused = true;
@@ -26,19 +24,19 @@ public currentAnimationHasPreviousEvent: BehaviorSubject<boolean> = new Behavior
 public currentAnimationPausedEvent: BehaviorSubject<boolean> = new BehaviorSubject(true);
 
 
-constructor(private task: Task, private actions: Action[], protected svgContainerId: string) {
-  this.animationProvider = new AnimationProviderNoMystery(task);
-  this.animationInitializer = new AnimationInitializerNoMystery(svgContainerId, task);
+constructor(private task: NoMysteryTask, private plan: Plan) {
+
+  this.animation = new AnimationNoMystery(this.task);
 }
 
 
 
 async play() {
   this.paused = false;
-  while (this.index < this.actions.length && ! this.paused) {
+  while (this.index < this.plan.actions.length && ! this.paused) {
     console.log('play');
     this.nextPlayingEvent();
-    await this.animationProvider.animateAction(this.actions[this.index++]);
+    await this.animation.animateAction(this.plan.actions[this.index++]);
     this.nextEvents();
   }
   this.nextPausedEvent();
@@ -50,20 +48,20 @@ pause() {
 
 stepBack() {
   if (this.index > 0) {
-    this.animationProvider.reverseAnimateAction(this.actions[--this.index]);
+    this.animation.reverseAnimateAction(this.plan.actions[--this.index]);
     this.nextEvents();
   }
 }
 
 stepForward() {
-  if (this.index < this.actions.length) {
-    this.animationProvider.animateAction(this.actions[this.index++]);
+  if (this.index < this.plan.actions.length) {
+    this.animation.animateAction(this.plan.actions[this.index++]);
     this.nextEvents();
   }
 }
 
 public nextEvents() {
-  this.currentAnimationHasNextEvent.next(this.index < this.actions.length);
+  this.currentAnimationHasNextEvent.next(this.index < this.plan.actions.length);
   this.currentAnimationHasPreviousEvent.next(this.index > 0);
 }
 
@@ -78,7 +76,7 @@ private nextPlayingEvent() {
 
 restart() {
   this.index = 0;
-  this.animationInitializer.restart();
+  this.animation.restart();
 }
 
 

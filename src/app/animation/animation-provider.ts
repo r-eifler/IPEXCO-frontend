@@ -1,13 +1,12 @@
-import { Task } from '../plugins/nomystery/task';
+import { NoMysteryTask } from '../plugins/nomystery/nomystery-task';
+import { Action } from '../interface/plan';
+import { AnimationInfo } from './animation-info';
 
-interface Action {
-  name: string;
-  args: string[];
-}
+
 
 export abstract class AnimationProvider {
 
-  constructor(protected task: Task) {}
+  // constructor(protected animationInfo: AnimationInfo) {}
 
   abstract animateAction(action: Action): Promise<void>;
   abstract reverseAnimateAction(action: Action): Promise<void>;

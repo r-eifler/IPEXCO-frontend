@@ -43,13 +43,13 @@ export class RunTreeComponent implements OnInit {
 
     this.runs$.subscribe(value => {
       this.dataSource.data = value;
-      console.log(value);
-      if (value.length === 0) {
-        this.router.navigate(['./original-task'], { relativeTo: this.route });
-      } else {
-        const lastRun: PlanRun = value[value.length - 1];
-        this.router.navigate(['./planning-step', lastRun._id], { relativeTo: this.route });
-      }
+      // mayby used in the desktop version
+      // if (value.length === 0) {
+      //   this.router.navigate(['./original-task'], { relativeTo: this.route });
+      // } else {
+      //   const lastRun: PlanRun = value[value.length - 1];
+      //   this.router.navigate(['./planning-step', lastRun._id], { relativeTo: this.route });
+      // }
     });
 
   }

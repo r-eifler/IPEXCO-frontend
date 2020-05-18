@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {PlanProperty} from '../../../interface/plan-property';
 import {Observable} from 'rxjs';
 import {Project} from '../../../interface/project';
@@ -11,6 +11,7 @@ import {CurrentRunStore} from '../../../store/stores.store';
 import {Goal} from '../../../interface/goal';
 import { PlanPropertyCollectionService } from 'src/app/service/plan-property-services';
 import { CurrentProjectService } from 'src/app/service/project-services';
+import { MatSelectionList } from '@angular/material/list/selection-list';
 
 @Component({
   selector: 'app-question-creator',
@@ -19,6 +20,7 @@ import { CurrentProjectService } from 'src/app/service/project-services';
 })
 export class QuestionCreatorComponent implements OnInit {
 
+  @ViewChild('planPorpertiesList') questionSelectionList: MatSelectionList;
   question: PlanProperty[] = [];
 
   collection: PlanProperty[];
@@ -32,9 +34,7 @@ export class QuestionCreatorComponent implements OnInit {
               private currentProjectService: CurrentProjectService,
               private plannerService: PlannerService,
               private currentRunStore: CurrentRunStore) {
-    this.propertiesService.collection$.subscribe(value => {
-      this.collection = value;
-    });
+
     this.currentProjectService.selectedObject$.subscribe(project => {
       this.currentProject = project;
       if (project) {
@@ -42,10 +42,13 @@ export class QuestionCreatorComponent implements OnInit {
       }
     });
 
-    this.currentRunStore.item$.subscribe(value => {
-      this.currentRun = value;
-      if (value != null) {
-        this.hardGoals = value.hardGoals;
+    this.currentRunStore.item$.subscribe(run => {
+      if (run != null) {
+        this.currentRun = run;
+        this.hardGoals = run.hardGoals;
+        this.propertiesService.collection$.subscribe(properties => {
+          this.collection = properties.filter(p => ! this.currentRun.satPlanProperties.includes(p.name));
+        });
       }
     });
   }
@@ -53,27 +56,20 @@ export class QuestionCreatorComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  drop(event: CdkDragDrop<PlanProperty[]>) {
-    if (event.previousContainer === event.container) {
-      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-    } else {
-      transferArrayItem(event.previousContainer.data,
-        event.container.data,
-        event.previousIndex,
-        event.currentIndex);
-    }
+  onSelectionChange(event) {
+    this.question = this.questionSelectionList.selectedOptions.selected.map(v => v.value);
   }
 
 
-  // create a new run with the currently selected properties
+  // create a new mugs run with the currently selected properties
   compute_dependencies(): void {
     const expRun: ExplanationRun = {
       _id: null,
-      name: 'MUGS',
+      name: 'Question ' + (this.currentRun.explanationRuns.length + 1),
       status: null,
       type: RunType.mugs,
-      planProperties: this.question.concat(this.collection),
-      softGoals: this.collection,
+      planProperties: this.collection,
+      softGoals: this.collection.filter(p => ! this.question.includes(p)),
       hardGoals: this.currentRun.hardGoals.concat(this.question),
       result: null,
       log: null,
