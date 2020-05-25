@@ -1,5 +1,5 @@
 import { NoMysteryTask } from '../plugins/nomystery/nomystery-task';
-import { Action } from '../interface/plan';
+import { Action } from '../../interface/plan';
 import { AnimationInfo } from './animation-info';
 
 

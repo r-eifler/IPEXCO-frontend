@@ -3,7 +3,7 @@ import { EventEmitter } from '@angular/core';
 import { NoMysteryTask, Location, Truck, Package } from './nomystery-task';
 import * as d3 from 'd3';
 import { rejects } from 'assert';
-import { AnimationProvider } from 'src/app/animation/animation-provider';
+import { AnimationProvider } from 'src/app/plan-visualization/integration/animation-provider';
 
 interface Action {
   name: string;

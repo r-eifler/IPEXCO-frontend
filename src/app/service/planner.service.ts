@@ -22,8 +22,20 @@ export class PlannerService extends ObjectCollectionService<PlanRun> {
 
   execute_plan_run(run: PlanRun): void {
     this.BASE_URL = this.myBaseURL + 'plan';
-    this.saveObject(run);
-    this.BASE_URL = this.myBaseURL;
+    this.http.post<IHTTPData<PlanRun>>(this.BASE_URL, run)
+      .subscribe(httpData => {
+        console.log('Result Post:');
+        console.log(httpData);
+        const runLoaded = this.existsObjectInStore(httpData.data._id);
+        let action = null;
+        if (runLoaded) {
+          console.log('Run already exists')
+          action = {type: EDIT, data: httpData.data};
+        } else {
+          action = {type: ADD, data: httpData.data};
+        }
+        this.listStore.dispatch(action);
+      });
   }
 
   execute_mugs_run(planRun: PlanRun, expRun: ExplanationRun): void {

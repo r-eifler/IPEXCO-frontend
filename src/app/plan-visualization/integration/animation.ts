@@ -1,7 +1,8 @@
 import { Task } from '../plugins/task';
-import { Action } from '../interface/plan';
+import { Action } from 'src/app/interface/plan';
 
-export abstract class Animation {
+
+export abstract class PlanVisualization {
 
   constructor(protected task: Task) {}
 

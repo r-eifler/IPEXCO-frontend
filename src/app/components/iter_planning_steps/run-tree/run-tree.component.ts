@@ -1,3 +1,4 @@
+import { RunStatus } from './../../../interface/run';
 import { Component, OnInit } from '@angular/core';
 import { RunType, PlanRun, ExplanationRun } from 'src/app/interface/run';
 import { Observable } from 'rxjs';
@@ -6,6 +7,7 @@ import { MatTreeNestedDataSource } from '@angular/material/tree';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CurrentProjectStore, RunsStore, CurrentRunStore } from 'src/app/store/stores.store';
 import { RunService } from 'src/app/service/run-services';
+
 
 /**
  * Food data with nested structure.
@@ -17,14 +19,17 @@ interface RunNode {
   explanationRuns?: RunNode[];
   type: RunType;
   planRun?: string;
+  status: RunStatus;
 }
 
 @Component({
   selector: 'app-run-tree',
   templateUrl: './run-tree.component.html',
-  styleUrls: ['./run-tree.component.css']
+  styleUrls: ['./run-tree.component.scss']
 })
 export class RunTreeComponent implements OnInit {
+
+  runStatus = RunStatus;
 
   runs$: Observable<PlanRun[]>;
 
@@ -71,7 +76,7 @@ export class RunTreeComponent implements OnInit {
 
   delete(run: PlanRun) {
     this.runService.deleteObject(run);
-    if (run._id === this.currentRunStore.item$.getValue()._id) {
+    if (this.currentRunStore.item$.getValue() && run._id === this.currentRunStore.item$.getValue()._id) {
       this.router.navigate(['../'], { relativeTo: this.route });
     }
   }

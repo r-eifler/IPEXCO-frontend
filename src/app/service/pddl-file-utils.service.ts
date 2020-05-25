@@ -7,6 +7,8 @@ import {environment} from '../../environments/environment';
 import {IHTTPData} from '../interface/http-data.interface';
 import {Goal, GoalType} from '../interface/goal';
 import {map} from 'rxjs/operators';
+import { DomainSpecification } from '../interface/domain-specification';
+import { DomainSpecificationService } from './domain-specification.service';
 
 interface FileContent {
   data: string;
@@ -19,7 +21,13 @@ const BASE_URL = environment.apiURL + 'pddl-file/';
 })
 export class PddlFileUtilsService {
 
-  constructor(private http: HttpClient) { }
+  domainSpec: DomainSpecification;
+
+  constructor(
+    private http: HttpClient,
+    private domainSpecService: DomainSpecificationService) {
+      domainSpecService.getSpec().subscribe(spec => this.domainSpec = spec);
+    }
 
   getFileContent(path: string): Observable<string> {
     if (path !== undefined) {
@@ -32,12 +40,13 @@ export class PddlFileUtilsService {
 
   getGoalFacts(file: PDDLFile): Observable<Goal[]> {
     console.log('get goal facts');
-    // items$ = new BehaviorSubject<T[]>([]);
     return this.http.get<IHTTPData<string[]>>(`${BASE_URL}/${file._id}/goal-facts`).pipe(map(
       (value) => {
         const goalFacts: Goal[] = [];
         for (const g of value.data) {
-          goalFacts.push({name: g, goalType: GoalType.goalFact});
+          const goal: Goal = {name: g, goalType: GoalType.goalFact};
+          this.domainSpec?.getGoalDescription(goal);
+          goalFacts.push(goal);
         }
         return goalFacts;
       }

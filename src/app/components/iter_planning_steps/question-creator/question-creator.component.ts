@@ -12,6 +12,7 @@ import {Goal} from '../../../interface/goal';
 import { PlanPropertyCollectionService } from 'src/app/service/plan-property-services';
 import { CurrentProjectService } from 'src/app/service/project-services';
 import { MatSelectionList } from '@angular/material/list/selection-list';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-question-creator',
@@ -30,10 +31,14 @@ export class QuestionCreatorComponent implements OnInit {
 
   private currentProject: Project;
 
-  constructor(private propertiesService: PlanPropertyCollectionService,
-              private currentProjectService: CurrentProjectService,
-              private plannerService: PlannerService,
-              private currentRunStore: CurrentRunStore) {
+  constructor(
+    private propertiesService: PlanPropertyCollectionService,
+    private currentProjectService: CurrentProjectService,
+    private plannerService: PlannerService,
+    private currentRunStore: CurrentRunStore,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {
 
     this.currentProjectService.selectedObject$.subscribe(project => {
       this.currentProject = project;
@@ -75,10 +80,11 @@ export class QuestionCreatorComponent implements OnInit {
       log: null,
     };
 
-    console.log('Compute dependencies');
-    console.log(expRun);
+    // console.log('Compute dependencies');
+    // console.log(expRun);
 
     this.plannerService.execute_mugs_run(this.currentRun, expRun);
+    this.router.navigate(['../../../run-overview-mobile'], { relativeTo: this.route });
   }
 
 }

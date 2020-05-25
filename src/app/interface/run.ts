@@ -3,7 +3,7 @@ import {Project} from './project';
 import {Goal} from './goal';
 import { Plan } from './plan';
 
-export enum Status {
+export enum RunStatus {
   pending,
   running,
   failed,
@@ -15,26 +15,11 @@ export enum RunType {
   mugs = 'MUGS',
 }
 
-// export interface  Run {
-//   _id: string;
-//   name: string;
-//   type: RunType;
-//   project: Project;
-//   planProperties: PlanProperty[];
-//   hardGoals: Goal[];
-//   softGoals: Goal[];
-//   log: string;
-//   result: string;
-//   plan: string;
-//   status: Status;
-//   previousRun: string;
-// }
-
 export interface  ExplanationRun {
   _id: string;
   name: string;
   type: RunType;
-  status: Status;
+  status: RunStatus;
   planProperties: PlanProperty[];
   hardGoals: Goal[];
   softGoals: Goal[];
@@ -46,7 +31,7 @@ export interface  PlanRun {
   _id: string;
   name: string;
   type: RunType;
-  status: Status;
+  status: RunStatus;
   project: Project;
   planProperties: PlanProperty[];
   hardGoals: Goal[];

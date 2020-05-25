@@ -1,11 +1,8 @@
-import { DomainSpecStore } from './../../../store/stores.store';
-import { Component, OnInit, Input } from '@angular/core';
-import {Project} from '../../../interface/project';
-import {Goal} from '../../../interface/goal';
-import {CurrentRunService} from '../../../service/run-services';
-import {CurrentRunStore, TasktSchemaStore} from '../../../store/stores.store';
-import {PlanRun} from '../../../interface/run';
-import { BehaviorSubject, combineLatest } from 'rxjs';
+import { DisplayTaskService } from './../../../service/display-task.service';
+import { Component, OnInit } from '@angular/core';
+import {CurrentRunStore } from '../../../store/stores.store';
+import { combineLatest } from 'rxjs';
+
 
 @Component({
   selector: 'app-task-view',
@@ -18,14 +15,14 @@ export class TaskViewComponent implements OnInit {
 
   constructor(
     private  currentRunStore: CurrentRunStore,
-    private domainSepStore: DomainSpecStore
+    private dislplayTaskService: DisplayTaskService
   ) {
 
-    combineLatest([this.currentRunStore.item$, this.domainSepStore.item$]).subscribe(([run, domainSpec]) => {
-      if (run && domainSpec) {
+    combineLatest([this.currentRunStore.item$, this.dislplayTaskService.getSelectedObject()]).subscribe(([run, displayTask]) => {
+      if (run && displayTask) {
         this.satFacts = [];
         for (const fact of run.hardGoals) {
-          this.satFacts.push(domainSpec.getGoalDescription(fact));
+          this.satFacts.push(displayTask.getGoalDescription(fact));
         }
       }
     });

@@ -1,10 +1,12 @@
 <div class="main-container">
-  <div [class.control-container-web]="! isMobile" [class.control-container-mobile]="isMobile">
+  <div [class.control-container-desktop]="! isMobile" [class.control-container-mobile]="isMobile">
     <button mat-flat-button color="primary">Register</button>
     <button mat-flat-button color="primary" routerLink="/projects" routerLinkActive="active">Guest</button>
     <button mat-flat-button color="accent" routerLink="/demos" routerLinkActive="active">Demo</button>
     <button mat-flat-button >Info</button>
   </div>
 
-  <img src="assets/logo_text.svg" class="logo-text">
+  <!-- <img id='login-logo' src="assets/complete_logo.svg" [class.logo-desktop]="! isMobile" [class.logo-mobile]="isMobile"> -->
+  <div id='login-logo' [inlineSVG]="'/assets/complete_logo.svg'" [class.logo-desktop]="! isMobile" [class.logo-mobile]="isMobile">
+  </div>
 </div>

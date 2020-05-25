@@ -1,6 +1,6 @@
 import { Road, Location, Package, Truck } from './nomystery-task';
 import { NoMysteryTask } from './nomystery-task';
-import { AnimationInfo } from './../../animation/animation-info';
+import { AnimationInfo } from '../../integration/animation-info';
 import { SimulationNodeDatum, SimulationLinkDatum } from 'd3';
 
 
@@ -47,6 +47,10 @@ export class AnimationLocation extends AnimationNode {
   constructor(private loc: Location) {
     super(loc.name);
     this.strength = -300;
+  }
+
+  getName(): string {
+    return this.loc.name;
   }
 }
 

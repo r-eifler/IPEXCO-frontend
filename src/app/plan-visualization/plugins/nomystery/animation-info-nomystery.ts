@@ -1,5 +1,5 @@
-import { Road, Location, Package, Truck } from '../nomystery/nomystery-task';
-import { NoMysteryTask } from '../nomystery/nomystery-task';
+import { Road, Location, Package, Truck } from './nomystery-task';
+import { NoMysteryTask } from './nomystery-task';
 import { AnimationInfo } from '../../integration/animation-info';
 import { SimulationNodeDatum, SimulationLinkDatum } from 'd3';
 

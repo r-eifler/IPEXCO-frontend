@@ -1,4 +1,4 @@
-import { TaskSchema } from './../interface/schema';
+import { TaskSchema } from '../../interface/task-schema';
 
 
 export class Task {

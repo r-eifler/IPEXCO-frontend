@@ -3,7 +3,7 @@ import { Project } from './../interface/project';
 
 import { Injectable } from '@angular/core';
 import { ItemStore, LOAD, REMOVE } from '../store/generic-item.store';
-import { TaskSchema } from '../interface/schema';
+import { TaskSchema } from '../interface/task-schema';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { TasktSchemaStore } from '../store/stores.store';
@@ -11,7 +11,7 @@ import { TasktSchemaStore } from '../store/stores.store';
 @Injectable({
   providedIn: 'root'
 })
-export class SchemaService {
+export class TaskSchemaService {
 
   private selectedObjectStore: ItemStore<TaskSchema>;
 
@@ -23,8 +23,10 @@ export class SchemaService {
   private currentSchema$: BehaviorSubject<TaskSchema>;
 
   findSchema(project: Project): Observable<TaskSchema> {
-    this.http.get<TaskSchema>(project.taskSchema).subscribe((res: TaskSchema) => {
-        this.selectedObjectStore.dispatch({type: LOAD, data: res});
+    this.http.get<TaskSchema>(project.taskSchema).subscribe((json) => {
+        const taskSchema: TaskSchema = new TaskSchema(json);
+        // console.log(taskSchema);
+        this.selectedObjectStore.dispatch({type: LOAD, data: taskSchema});
       });
     return this.currentSchema$;
   }

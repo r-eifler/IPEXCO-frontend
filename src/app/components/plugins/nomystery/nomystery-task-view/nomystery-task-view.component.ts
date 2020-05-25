@@ -1,5 +1,5 @@
 import { TasktSchemaStore } from './../../../../store/stores.store';
-import { TaskSchema } from './../../../../interface/schema';
+import { TaskSchema } from '../../../../interface/task-schema';
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 
 

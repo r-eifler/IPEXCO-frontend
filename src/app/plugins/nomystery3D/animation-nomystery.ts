@@ -1,5 +1,5 @@
 import { NoMysteryTask } from '../nomystery/nomystery-task';
-import { Animation } from '../../animation/animation';
+import { Animation } from '../../plan-visualization/animation';
 import { Action } from 'src/app/interface/plan';
 import { AnimationInfoNoMystery } from './animation-info-nomystery';
 import { AnimationInitializerNoMystery } from './animation-initializer-nomystery';

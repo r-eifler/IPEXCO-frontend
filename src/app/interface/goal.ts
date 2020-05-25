@@ -6,4 +6,5 @@ export enum GoalType {
 export class Goal {
   name: string;
   goalType: GoalType;
+  naturalLanguage?: string;
 }

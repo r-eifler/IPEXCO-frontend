@@ -1,5 +1,8 @@
+import { DisplayTaskService } from './../../../service/display-task.service';
+import { CurrentProjectService } from './../../../service/project-services';
+import { TasktSchemaStore } from './../../../store/stores.store';
+import { PlanProperty } from './../../../interface/plan-property';
 import {Component, Input, OnInit} from '@angular/core';
-import {PlanProperty} from '../../../interface/plan-property';
 import {Project} from '../../../interface/project';
 import {PlanRun, RunType} from '../../../interface/run';
 import {PlannerService} from '../../../service/planner.service';
@@ -11,6 +14,10 @@ import {CurrentProjectStore} from '../../../store/stores.store';
 import {ActivatedRoute, Router} from '@angular/router';
 import { PlanPropertyCollectionService } from 'src/app/service/plan-property-services';
 import { RunService } from 'src/app/service/run-services';
+import { filter } from 'rxjs/operators';
+import { TaskSchemaService } from 'src/app/service/schema.service';
+import { DisplayTask } from 'src/app/interface/display-task';
+import { MatSelectionListChange } from '@angular/material/list/selection-list';
 
 @Component({
   selector: 'app-task-creator',
@@ -19,62 +26,59 @@ import { RunService } from 'src/app/service/run-services';
 })
 export class TaskCreatorComponent implements OnInit {
 
-  hardGoals: Goal[] = [];
-  properties$: BehaviorSubject<PlanProperty[]>;
   private project: Project;
-  goalFacts: Goal[];
+  displayTask: DisplayTask;
 
-  computing  = false;
+  goalFacts: Goal[];
+  planPproperties: PlanProperty[];
+
+  selectedGoalFacts: Goal[] = [];
+  selectedPlanProperties: PlanProperty[] = [];
+
+  completed = false;
 
   constructor(
+    private currentProjectService: CurrentProjectService,
+    private tasktSchemaService: TaskSchemaService,
+    private displayTaskService: DisplayTaskService,
     private plannerService: PlannerService,
     private propertiesService: PlanPropertyCollectionService,
-    private pddlFileUtilsService: PddlFileUtilsService,
-    private currentProjectStore: CurrentProjectStore,
     private runService: RunService,
     private router: Router,
     private route: ActivatedRoute,
   ) {
-    this.properties$ = this.propertiesService.collection$;
-    this.currentProjectStore.item$.subscribe(value => {
-      if (value !== null) {
-          this.project = value;
-          // console.log(value);
-          // console.log(value.problemFile);
-          this.pddlFileUtilsService.getGoalFacts(value.problemFile).subscribe(value1 => this.goalFacts = value1);
-          this.propertiesService.findCollection([{param: 'projectId', value: this.project._id}]);
+    this.propertiesService.collection$.subscribe(props => this.planPproperties = props.filter((p: PlanProperty) => p.isUsed));
+    this.currentProjectService.getSelectedObject().subscribe(project => {
+      if (project !== null) {
+          this.project = project;
+          // this.propertiesService.findCollection([{param: 'projectId', value: this.project._id}]);
       }
     });
+    this.tasktSchemaService.getSchema().subscribe(schema => this.goalFacts = schema?.goals);
+    this.displayTaskService.getSelectedObject().subscribe(dt => this.displayTask = dt);
   }
 
   ngOnInit(): void {
   }
 
-  drop(event: CdkDragDrop<Goal[]>) {
-    if (event.previousContainer === event.container) {
-      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-    } else {
-      transferArrayItem(event.previousContainer.data,
-        event.container.data,
-        event.previousIndex,
-        event.currentIndex);
-    }
+  checkComplete(event: MatSelectionListChange) {
+    this.completed = this.selectedGoalFacts.length + this.selectedPlanProperties.length > 0;
   }
 
-  compute_dependencies(): void {
+
+  computePlan(): void {
     const previousRun = this.runService.getLastRun();
     console.log('Previous Run: ');
     console.log(previousRun);
 
-    this.computing = true;
     const run: PlanRun = {
       _id: null,
-      name: 'Planning Task',
+      name: 'Plan run ' + (this.runService.getNumRuns() + 1),
       type: RunType.plan,
       status: null,
       project: this.project,
-      planProperties: this.hardGoals.filter(value => value.goalType === GoalType.planProperty) as PlanProperty[],
-      hardGoals: this.hardGoals.map(value => ({name: value.name, goalType: value.goalType }) ),
+      planProperties: this.selectedPlanProperties,
+      hardGoals: this.selectedGoalFacts.concat(this.selectedPlanProperties).map(value => ({name: value.name, goalType: value.goalType }) ),
       log: null,
       planPath: null,
       explanationRuns: [],
@@ -82,6 +86,6 @@ export class TaskCreatorComponent implements OnInit {
     };
 
     this.plannerService.execute_plan_run(run);
-    this.router.navigate(['../'], { relativeTo: this.route });
+    this.router.navigate(['../run-overview-mobile'], { relativeTo: this.route });
   }
 }

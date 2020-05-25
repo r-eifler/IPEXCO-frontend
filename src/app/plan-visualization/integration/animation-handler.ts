@@ -1,20 +1,13 @@
-import { Plan } from './../interface/plan';
-import { AnimationNoMystery } from './../plugins/nomystery3D/animation-nomystery';
+import { Plan } from '../../interface/plan';
+import { AnimationNoMystery } from '../plugins/nomystery3D/animation-nomystery';
 import { BehaviorSubject } from 'rxjs';
 import { NoMysteryTask } from '../plugins/nomystery/nomystery-task';
-import { Animation } from './animation';
-
-
-interface Action {
-  name: string;
-  args: string[];
-}
-
-
+import { PlanVisualization } from './animation';
+import {NoMystery3DVisualization} from '../plugins/nomystery3D/initializer';
 
 export class AnimationHandler {
 
-private animation: Animation;
+private animation: PlanVisualization;
 
 private index = 0;
 private paused = true;
@@ -26,7 +19,7 @@ public currentAnimationPausedEvent: BehaviorSubject<boolean> = new BehaviorSubje
 
 constructor(private task: NoMysteryTask, private plan: Plan) {
 
-  this.animation = new AnimationNoMystery(this.task);
+  this.animation = new NoMystery3DVisualization(this.task);
 }
 
 

@@ -2,25 +2,30 @@
   <mat-tree [dataSource]="dataSource" [treeControl]="treeControl" class="example-tree">
 
     <!-- This is the tree node template plan run without children -->
-    <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
+    <mat-tree-node *matTreeNodeDef="let planRun" matTreeNodeToggle>
       <li class="mat-tree-node">
         <!-- use a disabled button to provide padding for tree leaf -->
         <button mat-icon-button disabled></button>
         <div style="display: flex; flex-direction: row; align-items: center; width: 100%">
           <mat-icon style="margin-right: 5px">bookmark_border</mat-icon>
-          <h2 style="margin: 0px; flex-grow: 5">{{node.name}}</h2>
-          <button mat-icon-button style="align-self: flex-end" [routerLink]="['../planning-step', node._id]">
+          <h2 style="margin: 0px;">{{planRun.name}}</h2>
+          <div style="flex-grow: 2; margin-left: 10px;">
+            <mat-spinner [diameter]="15" *ngIf="planRun.status == runStatus.pending"></mat-spinner>
+            <mat-icon class="fail-icon" *ngIf="planRun.status == runStatus.failed">priority_high</mat-icon>
+            <mat-icon class="finished-icon" *ngIf="planRun.status == runStatus.finished">check</mat-icon>
+          </div>
+          <button mat-icon-button style="align-self: flex-end" [routerLink]="['../planning-step', planRun._id]">
             <mat-icon>open_in_new</mat-icon>
           </button>
           <button mat-icon-button [matMenuTriggerFor]="menu" style="align-self: flex-end">
             <mat-icon>more_vert</mat-icon>
           </button>
           <mat-menu #menu="matMenu">
-            <button mat-menu-item (click)="new_question(node)">
+            <!-- <button mat-menu-item (click)="new_question(planRun)">
               <mat-icon>question_answer</mat-icon>
               <span>Question</span>
-            </button>
-            <button mat-menu-item (click)="delete(node)">
+            </button> -->
+            <button mat-menu-item (click)="delete(planRun)">
               <mat-icon>delete</mat-icon>
               <span>Delete</span>
             </button>
@@ -43,7 +48,12 @@
 
           <div style="display: flex; flex-direction: row; align-items: center; width: 100%">
             <mat-icon style="margin-right: 5px">bookmark_border</mat-icon>
-            <h2 style="margin: 0px; flex-grow: 5">{{node.name}}</h2>
+            <h2 style="margin: 0px;">{{node.name}}</h2>
+            <div style="flex-grow: 2; margin-left: 10px;">
+              <mat-spinner [diameter]="15" *ngIf="node.status == runStatus.pending"></mat-spinner>
+              <mat-icon class="fail-icon" *ngIf="node.status == runStatus.failed">priority_high</mat-icon>
+              <mat-icon class="finished-icon" *ngIf="node.status == runStatus.finished">check</mat-icon>
+            </div>
             <button mat-icon-button style="align-self: flex-end" [routerLink]="['../planning-step', node._id]">
               <mat-icon>open_in_new</mat-icon>
             </button>
@@ -51,10 +61,10 @@
               <mat-icon>more_vert</mat-icon>
             </button>
             <mat-menu #menu="matMenu">
-              <button mat-menu-item (click)="new_question(node)">
+              <!-- <button mat-menu-item (click)="new_question(node)">
                 <mat-icon>question_answer</mat-icon>
                 <span>Question</span>
-              </button>
+              </button> -->
               <button mat-menu-item (click)="delete(node)">
                 <mat-icon>delete</mat-icon>
                 <span>Delete</span>
@@ -75,7 +85,12 @@
         <button mat-icon-button disabled></button>
         <div style="display: flex; flex-direction: row; align-items: center; width: 100%">
           <mat-icon style="margin-right: 5px" svgIcon="questionmark"></mat-icon>
-          <h2 style="margin: 0px; flex-grow: 5">{{node.name}}</h2>
+          <h2 style="margin: 0px;">{{node.name}}</h2>
+          <div style="flex-grow: 2; margin-left: 10px;">
+            <mat-spinner [diameter]="15" *ngIf="node.status == runStatus.pending"></mat-spinner>
+            <mat-icon class="fail-icon" *ngIf="node.status == runStatus.failed">priority_high</mat-icon>
+            <mat-icon class="finished-icon" *ngIf="node.status == runStatus.finished">check</mat-icon>
+          </div>
           <button mat-icon-button style="align-self: flex-end" [routerLink]="['../planning-step', node.planRun, 'question-step', node._id]">
             <mat-icon>open_in_new</mat-icon>
           </button>

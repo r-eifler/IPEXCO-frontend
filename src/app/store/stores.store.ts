@@ -1,3 +1,4 @@
+import { DisplayTask } from './../interface/display-task';
 import { ViewSettings } from './../interface/view-settings';
 import {ListStore} from './generic-list.store';
 import {PDDLFile, DomainSpecificationFile} from '../interface/files';
@@ -5,7 +6,7 @@ import {ItemStore} from './generic-item.store';
 import {PlanProperty} from '../interface/plan-property';
 import {Project} from '../interface/project';
 import {PlanRun, ExplanationRun} from '../interface/run';
-import { TaskSchema} from '../interface/schema';
+import { TaskSchema} from '../interface/task-schema';
 import { DomainSpecification} from '../interface/domain-specification';
 import { Plan } from '../interface/plan';
 
@@ -67,6 +68,10 @@ export class ViewSettingsStore extends ItemStore<ViewSettings> {
 }
 
 export class CurrentPlanStore extends  ItemStore<Plan> {
+
+}
+
+export class DisplayTaskStore extends  ItemStore<DisplayTask> {
 
 }
 

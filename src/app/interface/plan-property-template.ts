@@ -1,6 +1,6 @@
 import { ActionSet, Action, toAction } from './plan-property';
 import { PlanProperty } from 'src/app/interface/plan-property';
-import { TaskSchema } from 'src/app/interface/schema';
+import { TaskSchema } from 'src/app/interface/task-schema';
 import { GoalType } from './goal';
 import { Project } from './project';
 
@@ -113,8 +113,8 @@ export class PlanPropertyTemplate {
           constraintInstance = constraintInstance.replace(pair[0], pair[1]);
         }
         const regex = RegExp(constraintInstance);
-        for (const goal of taskSchema.goal) {
-          const match = regex.exec(goal);
+        for (const goal of taskSchema.goals) {
+          const match = regex.exec(goal.name);
           if (match) {
             return match[1];
           }

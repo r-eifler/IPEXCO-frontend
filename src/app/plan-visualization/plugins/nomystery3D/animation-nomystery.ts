@@ -1,12 +1,12 @@
-import { AnimationProviderNoMystery } from './animation-provider-nomystery';
-import { AnimationInitializerNoMystery } from './animation-initializer-nomystery';
-import { AnimationInfoNoMystery } from './animation-info-nomystery';
-import { NoMysteryTask } from './nomystery-task';
-import { Animation } from '../../plan-visualization/animation';
+import { NoMysteryTask } from '../nomystery/nomystery-task';
 import { Action } from 'src/app/interface/plan';
+import { AnimationInfoNoMystery } from './animation-info-nomystery';
+import { AnimationInitializerNoMystery } from './animation-initializer-nomystery';
+import { AnimationProviderNoMystery } from './animation-provider-nomystery';
+import { PlanVisualization } from '../../integration/animation';
 
 
-export class AnimationNoMystery extends Animation {
+export class AnimationNoMystery extends PlanVisualization {
 
   animationInfo: AnimationInfoNoMystery;
   animationInitializer: AnimationInitializerNoMystery;

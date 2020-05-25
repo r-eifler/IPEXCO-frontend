@@ -1,5 +1,5 @@
 import { AnimationInfoNoMystery, AnimationNode, AnimationRoad, AnimationLocation } from './animation-info-nomystery';
-import { AnimationInitializer } from 'src/app/animation/animation-initializer';
+import { AnimationInitializer } from 'src/app/plan-visualization/integration/animation-initializer';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';

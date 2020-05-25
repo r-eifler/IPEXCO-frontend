@@ -48,6 +48,10 @@ export class AnimationLocation extends AnimationNode {
     super(loc.name);
     this.strength = -300;
   }
+
+  getName() {
+    return this.loc.name;
+  }
 }
 
 export class AnimationRoad extends AnimationLink<AnimationLocation> {

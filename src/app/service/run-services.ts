@@ -1,5 +1,5 @@
 import { Plan } from './../interface/plan';
-import { EDIT, LOAD } from '../store/generic-list.store';
+import { EDIT, LOAD, REMOVE } from '../store/generic-list.store';
 import {SelectedObjectService} from './selected-object.service';
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
@@ -32,7 +32,7 @@ export class RunService extends ObjectCollectionService<PlanRun> {
   deleteExpRun(expRun: ExplanationRun) {
     return this.http.delete<IHTTPData<PlanRun>>( environment.apiURL + 'run/explanation/' + expRun._id)
       .subscribe(response => {
-        this.listStore.dispatch({type: EDIT, data: response.data});
+        this.listStore.dispatch({type: REMOVE, data: response.data});
       });
   }
 
@@ -45,14 +45,18 @@ export class RunService extends ObjectCollectionService<PlanRun> {
     }
   }
 
+  getNumRuns(): number {
+    return this.collection$.value.length;
+  }
+
 }
 
 function sortRuns(runs: PlanRun[]): PlanRun[] {
   if (runs.length <= 1) {
     return runs;
   }
-  console.log('RUNS: ');
-  console.log(runs);
+  // console.log('RUNS: ');
+  // console.log(runs);
   let currentLast: PlanRun = findStart(runs);
   runs.splice(runs.indexOf(currentLast), 1);
   const sorted: PlanRun[] = [currentLast];
@@ -67,8 +71,8 @@ function sortRuns(runs: PlanRun[]): PlanRun[] {
     runs.splice(runs.indexOf(currentLast), 1);
     sorted.push(currentLast);
   }
-  console.log('SORTED: ');
-  console.log(sorted);
+  // console.log('SORTED: ');
+  // console.log(sorted);
   return sorted;
 }
 

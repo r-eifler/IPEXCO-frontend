@@ -1,6 +1,6 @@
 import { AnimationInfoNoMystery, AnimationNode, AnimationRoad, AnimationLocation } from './animation-info-nomystery';
 import * as d3 from 'd3';
-import { AnimationInitializer } from 'src/app/animation/animation-initializer';
+import { AnimationInitializer } from 'src/app/plan-visualization/integration/animation-initializer';
 
 interface Action {
   name: string;

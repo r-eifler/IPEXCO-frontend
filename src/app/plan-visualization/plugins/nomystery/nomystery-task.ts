@@ -1,7 +1,7 @@
-import { Graph, D3Link, D3Node} from '../../interface/d3types';
+import { Graph, D3Link, D3Node} from '../../../interface/d3types';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DomainSpecification } from '../../interface/domain-specification';
-import { TaskSchema } from '../../interface/schema';
+import { DomainSpecification } from '../../../interface/domain-specification';
+import { TaskSchema } from '../../../interface/task-schema';
 import * as d3 from 'd3';
 import { SimulationNodeDatum, SimulationLinkDatum } from 'd3';
 import { Task } from '../task';
@@ -117,9 +117,9 @@ export class NoMysteryTask extends Task {
   parseGoals() {
     const regexGoalPackage = RegExp('at\\(p(\\d),l(\\d+)\\)');
 
-    for (const pred of this.taskSchema.goal) {
+    for (const pred of this.taskSchema.goals) {
 
-      const match = regexGoalPackage.exec(pred);
+      const match = regexGoalPackage.exec(pred.name);
       if (match) {
         const packageName = 'p' + match[1];
         const loc = 'l' + match[2];

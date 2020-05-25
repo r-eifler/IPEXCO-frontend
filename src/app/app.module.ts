@@ -1,8 +1,11 @@
+import { DisplayTaskService } from './service/display-task.service';
 import { ViewSettingsService } from './service/setting.service';
-import { SchemaService } from './service/schema.service';
+import { TaskSchemaService } from './service/schema.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+
+import { InlineSVGModule } from 'ng-inline-svg';
 
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -95,7 +98,8 @@ import {
   TasktSchemaStore,
   DomainSpecificationFilesStore,
   DomainSpecStore,
-  ViewSettingsStore
+  ViewSettingsStore,
+  DisplayTaskStore
 } from './store/stores.store';
 import {
   DomainFilesService,
@@ -240,6 +244,7 @@ const appRoutes: Routes = [
         paramsInheritanceStrategy: 'always'}
     ),
     ResizableModule,
+    InlineSVGModule.forRoot(),
   ],
   providers: [
     DomainFilesStore,
@@ -258,7 +263,7 @@ const appRoutes: Routes = [
     CurrentProjectStore,
     CurrentProjectService,
     TasktSchemaStore,
-    SchemaService,
+    TaskSchemaService,
     PlanPropertyCollectionStore,
     PlanPropertyCollectionService,
     PlannerService,
@@ -271,6 +276,8 @@ const appRoutes: Routes = [
     DomainSpecStore,
     ViewSettingsStore,
     ViewSettingsService,
+    DisplayTaskStore,
+    DisplayTaskService,
     {provide: MAT_BOTTOM_SHEET_DEFAULT_OPTIONS, useValue: {hasBackdrop: true}},
 
   ],

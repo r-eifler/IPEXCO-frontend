@@ -3,7 +3,7 @@ import {HttpClient, HttpParams} from '@angular/common/http';
 import {ADD, EDIT, ListStore, LOAD, REMOVE} from '../store/generic-list.store';
 import {IHTTPData} from '../interface/http-data.interface';
 import {environment} from '../../environments/environment';
-import {BehaviorSubject, Observable} from 'rxjs';
+import {BehaviorSubject, Observable, of} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {Goal, GoalType} from '../interface/goal';
 import * as assert from 'assert';
@@ -61,7 +61,20 @@ export class ObjectCollectionService<T extends Identifiable> {
 
   getObject(id: number | string): Observable<T> {
     console.assert(id != null);
+    const o = this.existsObjectInStore(id);
+    if (o) {
+      const obs$ = new Observable();
+      return of(o);
+    }
     return this.http.get<IHTTPData<T>>(this.BASE_URL + id).pipe(this.pipeGetData, this.pipeGet);
+  }
+
+  existsObjectInStore(id: number | string): T {
+    for (const o of this.collection$.value) {
+      if (o._id === id) {
+        return o;
+      }
+    }
   }
 
   copyObject(object: T) {
@@ -81,6 +94,7 @@ export class ObjectCollectionService<T extends Identifiable> {
     console.log(object);
 
     if (object._id) {
+      console.log('edit');
       return this.http.put<IHTTPData<T>>(this.BASE_URL + object._id, object)
         .subscribe(httpData => {
           assert(httpData !== undefined);
@@ -89,6 +103,7 @@ export class ObjectCollectionService<T extends Identifiable> {
         });
     }
 
+    console.log('add');
     return this.http.post<IHTTPData<T>>(this.BASE_URL, object)
       .subscribe(httpData => {
         assert(httpData !== undefined);

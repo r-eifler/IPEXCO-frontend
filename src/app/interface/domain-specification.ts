@@ -42,6 +42,7 @@ export class DomainSpecification {
   }
 
   getGoalDescription(goalFact: Goal): string {
+    console.log('Set Goal description');
     if (goalFact.goalType === GoalType.planProperty) {
       const planProperty: PlanProperty = goalFact as PlanProperty;
       return planProperty.naturalLanguageDescription;
@@ -54,9 +55,11 @@ export class DomainSpecification {
             for (let i = 0; i < args.length; i++) {
               description = description.replace(mapping.args[i], args[i]);
             }
+            goalFact.naturalLanguage = description;
             return description;
           }
       }
+      return goalFact.name;
     }
   }
 }

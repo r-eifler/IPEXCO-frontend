@@ -11,6 +11,9 @@
     <!-- <svg class="svg-container" #planSVG id="planSVG">
 
     </svg> -->
+    <canvas id="plan-visualization-canvas" style="width: 100%; height: 100%">
+
+    </canvas>
   </div>
   <div class="button-container" *ngIf="animationHandler">
     <button mat-icon-button (click)="animationHandler.stepBack()"
@@ -34,11 +37,7 @@
       <mat-icon>refresh</mat-icon>
     </button>
   </div>
-  <!-- <button mat-fab color="accent" class="add-button" (click)="newQuestion()" *ngIf="animationHandler"
-  [class.add-button-hidden]="! (animationHandler.currentAnimationPausedEvent | async) || ! (animationHandler.currentAnimationHasPreviousEvent | async)">
+  <!-- <button mat-fab color="accent" class="add-button" (click)="newQuestion()">
     <mat-icon svgIcon="questionmark"></mat-icon>
   </button> -->
-  <button mat-fab color="accent" class="add-button" (click)="newQuestion()">
-    <mat-icon svgIcon="questionmark"></mat-icon>
-  </button>
 </div>

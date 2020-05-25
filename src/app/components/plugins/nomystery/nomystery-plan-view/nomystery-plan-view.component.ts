@@ -1,15 +1,11 @@
-import { AnimationHandler } from './../../../../animation/animation-handler';
-import { AnimationInitializerNoMystery } from './../../../../plugins/nomystery/animation-initializer-nomystery';
-import { AnimationProvider } from 'src/app/animation/animation-provider';
-import { AnimationInitializer } from 'src/app/animation/animation-initializer';
+import { AnimationHandler } from '../../../../plan-visualization/integration/animation-handler';
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit} from '@angular/core';
-import { TaskSchema } from 'src/app/interface/schema';
-import { NoMysteryTask } from 'src/app/plugins/nomystery/nomystery-task';
+import { TaskSchema } from 'src/app/interface/task-schema';
+import { NoMysteryTask } from 'src/app/plan-visualization/plugins/nomystery/nomystery-task';
 import { TasktSchemaStore, CurrentRunStore } from 'src/app/store/stores.store';
 
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { PlanRun } from 'src/app/interface/run';
-import { PddlFileUtilsService } from 'src/app/service/pddl-file-utils.service';
 import { ActivatedRoute, Router } from '@angular/router';
 
 

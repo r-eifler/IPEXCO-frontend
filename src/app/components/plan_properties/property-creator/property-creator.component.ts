@@ -9,7 +9,7 @@ import { CurrentProjectService } from 'src/app/service/project-services';
 import { Project } from 'src/app/interface/project';
 import { TasktSchemaStore, DomainSpecStore } from 'src/app/store/stores.store';
 import { matchRegexValidator } from '../../../validators/match-regex-validator';
-import { TaskSchema } from 'src/app/interface/schema';
+import { TaskSchema } from 'src/app/interface/task-schema';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { DomainSpecification } from 'src/app/interface/domain-specification';
@@ -113,7 +113,7 @@ export class PropertyCreatorComponent implements OnInit {
     this.selectedPropertyTemplate.initializeVariableConstraints(this.taskSchema);
     this.sentenceTemplateParts = this.selectedPropertyTemplate.getSentenceTemplateParts();
     this.possibleVariableValues = this.selectedPropertyTemplate.getPossibleVariableValues(this.taskSchema, this.selectedVariableValue);
-    console.log(this.possibleVariableValues);
+    // console.log(this.possibleVariableValues);
     this.propertyTemplateStepper.selected.completed = true;
     this.propertyTemplateStepper.next();
   }

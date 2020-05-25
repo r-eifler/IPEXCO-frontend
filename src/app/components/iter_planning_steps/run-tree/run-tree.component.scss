@@ -1,3 +1,5 @@
+@import '../../../../variables.scss';
+
 .example-tree-invisible {
   display: none;
 }
@@ -7,4 +9,12 @@
   margin-top: 0;
   margin-bottom: 0;
   list-style-type: none;
+}
+
+.fail-icon {
+  color: $warn;
+}
+
+.finished-icon {
+  color: $primary
 }
