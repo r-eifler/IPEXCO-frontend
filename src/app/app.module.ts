@@ -57,8 +57,7 @@ import {FormsModule} from '@angular/forms';
 // my components
 import { PropertySelectorComponent} from './components/iter-planning/property-selector/property-selector.component';
 import { TemplatePddlFileComponent } from './components/files/template-pddl-file/template-pddl-file.component';
-import { TemplateFileUploadComponent } from './components/files/template-file-upload/template-file-upload.component';
-import { TemplateFileDetailComponent } from './components/files/template-file-detail/template-file-detail.component';
+import { TemplateFileUploadComponent } from './components/files/template-file-upload/template-file-upload.component';;
 import { DomainSelectorComponent } from './components/files/domain-selector/domain-selector.component';
 import { ProblemSelectorComponent } from './components/files/problem-selector/problem-selector.component';
 import { PropertyCreatorComponent } from './components/plan_properties/property-creator/property-creator.component';
@@ -168,7 +167,6 @@ const appRoutes: Routes = [
     PropertySelectorComponent,
     TemplatePddlFileComponent,
     TemplateFileUploadComponent,
-    TemplateFileDetailComponent,
     DomainSelectorComponent,
     ProblemSelectorComponent,
     PropertyCreatorComponent,
