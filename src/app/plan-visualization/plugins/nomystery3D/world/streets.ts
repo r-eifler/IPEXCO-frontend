@@ -1,23 +1,23 @@
 import * as BABYLON from 'babylonjs';
 import { Vector3 } from 'babylonjs';
-import { AnimationInfoNoMystery, AnimationRoad } from '../animation-info-nomystery';
+import { NoMystery3DAnimationTask, AnimationRoad } from '../nomystery-animation-task';
 
 export class Streets {
 
-  constructor(private scene: BABYLON.Scene, task: AnimationInfoNoMystery) {
+  constructor(private scene: BABYLON.Scene, task: NoMystery3DAnimationTask) {
 
     console.log('create street');
     const bc = new BABYLON.Color4(0.5, 0.5, 0.5, 1);
     const boxColor: BABYLON.Color4[] = [bc, bc, bc, bc, bc, bc];
 
     for (const loc of task.locations.values()) {
-      const cylinder1 = BABYLON.MeshBuilder.CreateCylinder('location-marker', {diameter: 5, height: 1, faceColors: boxColor}, scene);
+      const cylinder1 = BABYLON.MeshBuilder.CreateCylinder('location-marker', {diameter: 5, height: 0.5, faceColors: boxColor}, scene);
       cylinder1.position.set(loc.x, 0, loc.y);
     }
 
     for (const s of task.roads) {
       const l = getStreetLength(s);
-      const street = BABYLON.MeshBuilder.CreateBox('street', {width: 5, depth: l, height: 1, faceColors: boxColor}, this.scene);
+      const street = BABYLON.MeshBuilder.CreateBox('street', {width: 5, depth: l, height: 0.5, faceColors: boxColor}, this.scene);
       setPositionRotation(s, street);
     }
   }

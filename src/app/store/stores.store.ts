@@ -9,6 +9,7 @@ import {PlanRun, ExplanationRun} from '../interface/run';
 import { TaskSchema} from '../interface/task-schema';
 import { DomainSpecification} from '../interface/domain-specification';
 import { Plan } from '../interface/plan';
+import { Demo } from '../interface/demo';
 
 
 export class DomainFilesStore extends  ListStore<PDDLFile> {
@@ -72,6 +73,10 @@ export class CurrentPlanStore extends  ItemStore<Plan> {
 }
 
 export class DisplayTaskStore extends  ItemStore<DisplayTask> {
+
+}
+
+export class DemosStore extends  ListStore<Demo> {
 
 }
 

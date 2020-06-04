@@ -27,8 +27,20 @@
       <mat-list>
         <mat-list-item>
           #properties: {{(properties$ | async).length}}
+          <mat-divider [inset]="true"></mat-divider>
         </mat-list-item>
-        <mat-divider [inset]="true"></mat-divider>
+        <mat-list-item>
+          #planning runs: {{runsService.getNumRuns()}}
+          <mat-divider [inset]="true"></mat-divider>
+        </mat-list-item>
+        <mat-list-item>
+          #questions: {{runsService.getNumQuestions()}}
+          <mat-divider [inset]="true"></mat-divider>
+        </mat-list-item>
+        <mat-list-item>
+          #demos: {{demosService.getNum()}}
+        </mat-list-item>
+
       </mat-list>
     </mat-card-content>
   </mat-card>
@@ -36,7 +48,7 @@
     <mat-card-header>
       <mat-card-title>Create from Project:</mat-card-title>
     </mat-card-header>
-    <button mat-stroked-button color="accent">Demo</button>
+    <button mat-stroked-button color="accent" (click)="createDemo()">Demo</button>
     <button mat-stroked-button color="accent">Survey</button>
   </mat-card>
 </div>
@@ -70,8 +82,19 @@
       <mat-list>
         <mat-list-item>
           #properties: {{(properties$ | async).length}}
+          <mat-divider [inset]="true"></mat-divider>
         </mat-list-item>
-        <mat-divider [inset]="true"></mat-divider>
+        <mat-list-item>
+          #planning runs: {{runsService.getNumRuns()}}
+          <mat-divider [inset]="true"></mat-divider>
+        </mat-list-item>
+        <mat-list-item>
+          #questions: {{runsService.getNumQuestions()}}
+          <mat-divider [inset]="true"></mat-divider>
+        </mat-list-item>
+        <mat-list-item>
+          #demos: {{demosService.getNum()}}
+        </mat-list-item>
       </mat-list>
     </mat-card-content>
   </mat-card>
@@ -79,7 +102,7 @@
     <mat-card-header>
       <mat-card-title>Create from Project:</mat-card-title>
     </mat-card-header>
-    <button mat-stroked-button color="accent">Demo</button>
+    <button mat-stroked-button color="accent" (click)="createDemo()">Demo</button>
     <button mat-stroked-button color="accent">Survey</button>
   </mat-card>
 </div>

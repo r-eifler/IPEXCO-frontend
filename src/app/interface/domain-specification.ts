@@ -42,7 +42,6 @@ export class DomainSpecification {
   }
 
   getGoalDescription(goalFact: Goal): string {
-    console.log('Set Goal description');
     if (goalFact.goalType === GoalType.planProperty) {
       const planProperty: PlanProperty = goalFact as PlanProperty;
       return planProperty.naturalLanguageDescription;

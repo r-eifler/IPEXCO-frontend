@@ -1,3 +1,5 @@
+import { DemosService } from './../../../service/demo-services';
+import { RunService } from 'src/app/service/run-services';
 import { DisplayTaskService } from './../../../service/display-task.service';
 import { DisplayTaskStore } from './../../../store/stores.store';
 import { defaultViewSettings } from './../../../interface/view-settings';
@@ -14,11 +16,13 @@ import { ViewSettingsService } from 'src/app/service/setting.service';
 import { PlanPropertyCollectionService } from 'src/app/service/plan-property-services';
 import { combineLatest } from 'rxjs/internal/observable/combineLatest';
 import { DisplayTask } from 'src/app/interface/display-task';
+import { PlanVisualizationProvider } from 'src/app/provider/plan-visualisation.provider';
 
 @Component({
   selector: 'app-project-base',
   templateUrl: './project-base.component.html',
-  styleUrls: ['./project-base.component.css']
+  styleUrls: ['./project-base.component.css'],
+  providers: [ PlanVisualizationProvider ],
 })
 export class ProjectBaseComponent implements OnInit {
 
@@ -32,7 +36,9 @@ export class ProjectBaseComponent implements OnInit {
     private curretnSchemaService: TaskSchemaService,
     private domainSpecService: DomainSpecificationService,
     private propertiesService: PlanPropertyCollectionService,
+    private runsService: RunService,
     private displayTaskService: DisplayTaskService,
+    private demosService: DemosService,
     private bottomSheet: MatBottomSheet
   ) {
     this.route.paramMap.pipe(
@@ -43,9 +49,10 @@ export class ProjectBaseComponent implements OnInit {
         if (value != null) {
           this.project = value;
           this.currentProjectService.saveObject(this.project);
-          // console.log('Project base: ');
-          // console.log(this.project);
+          this.runsService.findCollection([{param: 'projectId', value: this.project._id}]);
           this.propertiesService.findCollection([{param: 'projectId', value: this.project._id}]);
+          this.demosService.findCollection([{param: 'projectId', value: this.project._id}]);
+
           combineLatest([this.curretnSchemaService.findSchema(this.project), this.domainSpecService.findSpec(this.project)]).
             subscribe(([taskSchema, domainSpec]) => {
               if(taskSchema && domainSpec) {

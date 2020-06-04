@@ -7,6 +7,7 @@ import {BehaviorSubject, Observable, of} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {Goal, GoalType} from '../interface/goal';
 import * as assert from 'assert';
+import { thresholdFreedmanDiaconis } from 'd3';
 
 
 
@@ -46,6 +47,7 @@ export class ObjectCollectionService<T extends Identifiable> {
   pipeGet = map((value: T): T => value);
 
   findCollection(queryParams: QueryParam[] = []) {
+    // console.log('find: ' + this.BASE_URL);
     let httpParams = new HttpParams();
     for ( const  qp of queryParams) {
       httpParams = httpParams.set(qp.param, qp.value);
@@ -53,9 +55,14 @@ export class ObjectCollectionService<T extends Identifiable> {
 
     this.http.get<IHTTPData<T[]>>(this.BASE_URL, {params: httpParams}).pipe(this.pipeFindData, this.pipeFind)
       .subscribe((res) => {
+        // console.log(res);
         this.listStore.dispatch({type: LOAD, data: res});
       });
 
+    return this.collection$;
+  }
+
+  getList(): BehaviorSubject<T[]> {
     return this.collection$;
   }
 
@@ -81,8 +88,8 @@ export class ObjectCollectionService<T extends Identifiable> {
     assert(object._id);
     return this.http.post<IHTTPData<T>>(this.BASE_URL + object._id, object)
       .subscribe(httpData => {
-        console.log('Result Post:');
-        console.log(httpData.data);
+        // console.log('Result Post:');
+        // console.log(httpData.data);
         const action = {type: ADD, data: httpData.data};
         this.listStore.dispatch(action);
       });
@@ -90,11 +97,11 @@ export class ObjectCollectionService<T extends Identifiable> {
 
   saveObject(object: T) {
 
-    console.log('Service save object:');
-    console.log(object);
+    // console.log('Service save object:');
+    // console.log(object);
 
     if (object._id) {
-      console.log('edit');
+      // console.log('edit');
       return this.http.put<IHTTPData<T>>(this.BASE_URL + object._id, object)
         .subscribe(httpData => {
           assert(httpData !== undefined);
@@ -103,12 +110,12 @@ export class ObjectCollectionService<T extends Identifiable> {
         });
     }
 
-    console.log('add');
+    // console.log('add');
     return this.http.post<IHTTPData<T>>(this.BASE_URL, object)
       .subscribe(httpData => {
         assert(httpData !== undefined);
-        console.log('Result Post:');
-        console.log(httpData);
+        // console.log('Result Post:');
+        // console.log(httpData);
         const action = {type: ADD, data: httpData.data};
         this.listStore.dispatch(action);
       });
@@ -121,18 +128,18 @@ export class ObjectCollectionService<T extends Identifiable> {
     this.listStore.dispatch(action1);
     return this.http.post<IHTTPData<T>>(this.BASE_URL, object)
       .subscribe(httpData => {
-        console.log('Result Post:');
-        console.log(httpData.data);
+        // console.log('Result Post:');
+        // console.log(httpData.data);
         const action2 = {type: EDIT, data: httpData.data};
         this.listStore.dispatch(action2);
       });
   }
 
   deleteObject(object: T) {
-    console.log('Delete : ' + object._id);
+    // console.log('Delete : ' + object._id);
     return this.http.delete(this.BASE_URL + object._id)
       .subscribe(response => {
-        console.log('Delete File response');
+        // console.log('Delete File response');
         this.listStore.dispatch({type: REMOVE, data: object});
       });
   }

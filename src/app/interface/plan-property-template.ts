@@ -1,8 +1,8 @@
 import { ActionSet, Action, toAction } from './plan-property';
 import { PlanProperty } from 'src/app/interface/plan-property';
-import { TaskSchema } from 'src/app/interface/task-schema';
 import { GoalType } from './goal';
 import { Project } from './project';
+import { TaskSchema } from './task-schema';
 
 
 export class PlanPropertyTemplate {

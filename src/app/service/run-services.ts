@@ -49,6 +49,14 @@ export class RunService extends ObjectCollectionService<PlanRun> {
     return this.collection$.value.length;
   }
 
+  getNumQuestions(): number {
+    let res = 0;
+    for (const r of this.collection$.value) {
+      res += r.explanationRuns.length;
+    }
+    return res;
+  }
+
 }
 
 function sortRuns(runs: PlanRun[]): PlanRun[] {

@@ -8,7 +8,7 @@
 
 .flex-container-web {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   flex-wrap: wrap;
 }
 
@@ -48,4 +48,8 @@
 
 h2 {
   margin: 5px;
+}
+
+.property-table {
+  width: 100%;
 }

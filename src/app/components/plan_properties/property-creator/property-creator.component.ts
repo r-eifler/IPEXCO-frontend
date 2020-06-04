@@ -4,8 +4,6 @@ import {FormControl, FormGroup, Validators, FormGroupName, FormArray} from '@ang
 import {Action, ActionSet, PlanProperty} from '../../../interface/plan-property';
 import {MatDialogRef} from '@angular/material/dialog';
 import {GoalType} from '../../../interface/goal';
-import { PlanPropertyCollectionService } from 'src/app/service/plan-property-services';
-import { CurrentProjectService } from 'src/app/service/project-services';
 import { Project } from 'src/app/interface/project';
 import { TasktSchemaStore, DomainSpecStore } from 'src/app/store/stores.store';
 import { matchRegexValidator } from '../../../validators/match-regex-validator';
@@ -16,6 +14,8 @@ import { DomainSpecification } from 'src/app/interface/domain-specification';
 import { PlanPropertyTemplate } from "src/app/interface/plan-property-template";
 import { MatSelectionListChange } from '@angular/material/list';
 import { MatAccordion } from '@angular/material/expansion';
+import { PlanPropertyCollectionService } from 'src/app/service/plan-property-services';
+import { CurrentProjectService } from 'src/app/service/project-services';
 
 @Component({
   selector: 'app-property-creator',

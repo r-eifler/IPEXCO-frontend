@@ -1,3 +1,5 @@
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { DemosService } from './service/demo-services';
 import { DisplayTaskService } from './service/display-task.service';
 import { ViewSettingsService } from './service/setting.service';
 import { TaskSchemaService } from './service/schema.service';
@@ -42,6 +44,7 @@ import {MatSliderModule} from '@angular/material/slider';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatBadgeModule} from '@angular/material/badge';
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatTableModule} from '@angular/material/table';
 import {MAT_BOTTOM_SHEET_DEFAULT_OPTIONS, MatBottomSheetModule} from '@angular/material/bottom-sheet';
 
 import {ResizableModule} from 'angular-resizable-element';
@@ -52,34 +55,31 @@ import { ReactiveFormsModule } from '@angular/forms';
 import {FormsModule} from '@angular/forms';
 
 // my components
-import { TemplatePlanPropertyComponent } from './components/template-plan-property/template-plan-property.component';
-import { TemplatePropertyDependencyComponent } from './components/template-property-dependency/template-property-dependency.component';
-import { PropertySelectorComponent} from './components/iter_planning_steps/property-selector/property-selector.component';
+import { PropertySelectorComponent} from './components/iter-planning/property-selector/property-selector.component';
 import { TemplatePddlFileComponent } from './components/files/template-pddl-file/template-pddl-file.component';
 import { TemplateFileUploadComponent } from './components/files/template-file-upload/template-file-upload.component';
 import { TemplateFileDetailComponent } from './components/files/template-file-detail/template-file-detail.component';
 import { DomainSelectorComponent } from './components/files/domain-selector/domain-selector.component';
 import { ProblemSelectorComponent } from './components/files/problem-selector/problem-selector.component';
 import { PropertyCreatorComponent } from './components/plan_properties/property-creator/property-creator.component';
-import { ExplanationProcessComponent } from './components/explanation-process/explanation-process.component';
 import { NavigationComponent } from './components/navigation/navigation.component';
 import { ProjectSelectionComponent } from './components/project/project-selection/project-selection.component';
 import { ProjectCreatorComponent } from './components/project/project-creator/project-creator.component';
 import { PlannerService } from './service/planner.service';
 import { ProjectBaseComponent } from './components/project/project-base/project-base.component';
 import { PropertyCollectionComponent } from './components/plan_properties/property-collection/property-collection.component';
-import { IterativePlanningBaseComponent } from './components/iter_planning_steps/iterative-planning-base/iterative-planning-base.component';
-import { TaskViewComponent } from './components/iter_planning_steps/task-view/task-view.component';
-import { PlanViewComponent } from './components/iter_planning_steps/plan-view/plan-view.component';
-import { QuestionStepComponent } from './components/iter_planning_steps/question-step/question-step.component';
-import { PlanningStepComponent } from './components/iter_planning_steps/planning-step/planning-step.component';
-import { FinishedPlanningStepComponent } from './components/iter_planning_steps/finished-planning-step/finished-planning-step.component';
-import { FinishedQuestionStepComponent } from './components/iter_planning_steps/finished-question-step/finished-question-step.component';
-import { TaskCreatorComponent } from './components/iter_planning_steps/task-creator/task-creator.component';
-import { FirstPlanningStepComponent } from './components/iter_planning_steps/first-planning-step/first-planning-step.component';
-import { QuestionCreatorComponent } from './components/iter_planning_steps/question-creator/question-creator.component';
-import { QuestionViewComponent } from './components/iter_planning_steps/question-view/question-view.component';
-import { ExplanationViewComponent } from './components/iter_planning_steps/explanation-view/explanation-view.component';
+import { IterativePlanningBaseComponent } from './components/iter-planning/iterative-planning-base/iterative-planning-base.component';
+import { TaskViewComponent } from './components/iter-planning/planning-step/task-view/task-view.component';
+import { PlanViewComponent } from './components/iter-planning/planning-step/plan-view/plan-view.component';
+import { QuestionStepComponent } from './components/iter-planning/question-step/question-step/question-step.component';
+import { PlanningStepComponent } from './components/iter-planning/planning-step/planning-step/planning-step.component';
+import { FinishedPlanningStepComponent } from './components/iter-planning/planning-step/finished-planning-step/finished-planning-step.component';
+import { FinishedQuestionStepComponent } from './components/iter-planning/question-step/finished-question-step/finished-question-step.component';
+import { TaskCreatorComponent } from './components/iter-planning/planning-step/task-creator/task-creator.component';
+import { FirstPlanningStepComponent } from './components/iter-planning/planning-step/first-planning-step/first-planning-step.component';
+import { QuestionCreatorComponent } from './components/iter-planning/question-step/question-creator/question-creator.component';
+import { QuestionViewComponent } from './components/iter-planning/question-step/question-view/question-view.component';
+import { ExplanationViewComponent } from './components/iter-planning/question-step/explanation-view/explanation-view.component';
 
 
 // editor
@@ -99,7 +99,8 @@ import {
   DomainSpecificationFilesStore,
   DomainSpecStore,
   ViewSettingsStore,
-  DisplayTaskStore
+  DisplayTaskStore,
+  DemosStore
 } from './store/stores.store';
 import {
   DomainFilesService,
@@ -123,11 +124,14 @@ import { DemoSettingsComponent } from './components/demo/demo-settings/demo-sett
 import { ProjectOverviewComponent } from './components/project/project-overview/project-overview.component';
 import { DomainSpecificationComponent } from './components/files/domain-specification/domain-specification.component';
 import { ViewSettingsMenuComponent } from './components/settings/view-settings-menu/view-settings-menu.component';
-import { RunTreeComponent } from './components/iter_planning_steps/run-tree/run-tree.component';
+import { RunTreeComponent } from './components/iter-planning/run-tree/run-tree.component';
 import { IterativePlanningBaseMobileComponent }
-from './components/iter_planning_steps/mobile/iterative-planning-base-mobile/iterative-planning-base-mobile.component';
-import { NomysteryPlanViewComponent } from './components/plugins/nomystery/nomystery-plan-view/nomystery-plan-view.component';
+from './components/iter-planning/mobile/iterative-planning-base-mobile/iterative-planning-base-mobile.component';
+import { PlanAnimationViewComponent } from './components/iter-planning/planning-step/plan-animation-view/plan-animation-view.component';
 import { NomysteryTaskViewComponent } from './components/plugins/nomystery/nomystery-task-view/nomystery-task-view.component';
+import { AnimationHandler } from './plan-visualization/integration/animation-handler';
+import { PlanVisualizationProvider } from './provider/plan-visualisation.provider';
+import { DemoCreatorComponent } from './components/demo/demo-creator/demo-creator.component';
 
 
 
@@ -161,8 +165,6 @@ const appRoutes: Routes = [
   declarations: [
     AppComponent,
     FooterComponent,
-    TemplatePlanPropertyComponent,
-    TemplatePropertyDependencyComponent,
     PropertySelectorComponent,
     TemplatePddlFileComponent,
     TemplateFileUploadComponent,
@@ -170,7 +172,6 @@ const appRoutes: Routes = [
     DomainSelectorComponent,
     ProblemSelectorComponent,
     PropertyCreatorComponent,
-    ExplanationProcessComponent,
     NavigationComponent,
     ProjectSelectionComponent,
     ProjectCreatorComponent,
@@ -198,8 +199,10 @@ const appRoutes: Routes = [
     ViewSettingsMenuComponent,
     RunTreeComponent,
     IterativePlanningBaseMobileComponent,
-    NomysteryPlanViewComponent,
+    PlanViewComponent,
     NomysteryTaskViewComponent,
+    PlanAnimationViewComponent,
+    DemoCreatorComponent,
   ],
   imports: [
     BrowserModule,
@@ -238,6 +241,7 @@ const appRoutes: Routes = [
     ReactiveFormsModule,
     MatBottomSheetModule,
     MatSlideToggleModule,
+    MatTableModule,
     RouterModule.forRoot(
       appRoutes,
       {enableTracing: false, // <-- debugging purposes only
@@ -276,9 +280,14 @@ const appRoutes: Routes = [
     DomainSpecStore,
     ViewSettingsStore,
     ViewSettingsService,
+    DemosStore,
+    DemosService,
     DisplayTaskStore,
     DisplayTaskService,
+    AnimationHandler,
     {provide: MAT_BOTTOM_SHEET_DEFAULT_OPTIONS, useValue: {hasBackdrop: true}},
+    PlanVisualizationProvider,
+    MatSnackBar
 
   ],
   entryComponents: [
@@ -286,6 +295,7 @@ const appRoutes: Routes = [
     PropertyCreatorComponent,
     ProjectSelectionComponent,
     ProjectCreatorComponent,
+    DemoCreatorComponent,
     PropertyCollectionComponent,
     DemoSettingsComponent,
     ViewSettingsMenuComponent,

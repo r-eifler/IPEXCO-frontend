@@ -22,8 +22,8 @@ export class DomainSpecificationService {
 
   findSpec(project: Project): Observable<DomainSpecification> {
     this.http.get<string>(project.domainSpecification.path).subscribe((res: string) => {
-        console.log('Domain Specification:');
-        console.log(res);
+        // console.log('Domain Specification:');
+        // console.log(res);
         const spec = new DomainSpecification(res);
         this.selectedObjectStore.dispatch({type: LOAD, data: spec});
       });

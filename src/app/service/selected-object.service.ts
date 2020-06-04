@@ -22,7 +22,7 @@ export class SelectedObjectService<T> {
     return this.selectedObject$;
   }
 
-  getSelectedObject(): Observable<T> {
+  getSelectedObject(): BehaviorSubject<T> {
     return this.selectedObject$;
   }
 

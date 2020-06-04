@@ -1,13 +1,15 @@
+import { CurrentRunService } from 'src/app/service/run-services';
 import { Plan } from '../../interface/plan';
-import { AnimationNoMystery } from '../plugins/nomystery3D/animation-nomystery';
 import { BehaviorSubject } from 'rxjs';
-import { NoMysteryTask } from '../plugins/nomystery/nomystery-task';
-import { PlanVisualization } from './animation';
-import {NoMystery3DVisualization} from '../plugins/nomystery3D/initializer';
+import { PlanVisualization } from './plan-visualization';
+import { Injectable, Inject, ElementRef } from '@angular/core';
 
+@Injectable({
+  providedIn: 'root'
+})
 export class AnimationHandler {
 
-private animation: PlanVisualization;
+private plan: Plan;
 
 private index = 0;
 private paused = true;
@@ -17,9 +19,19 @@ public currentAnimationHasPreviousEvent: BehaviorSubject<boolean> = new Behavior
 public currentAnimationPausedEvent: BehaviorSubject<boolean> = new BehaviorSubject(true);
 
 
-constructor(private task: NoMysteryTask, private plan: Plan) {
+constructor(
+  private  currentRunService: CurrentRunService,
+  @Inject(PlanVisualization) public animation: PlanVisualization) {
+    console.log('New animation handler');
+    this.currentRunService.getSelectedObject().subscribe((run) => {
+      if (run) {
+        this.plan = run.plan;
+      }
+    });
+}
 
-  this.animation = new NoMystery3DVisualization(this.task);
+displayAnimationIn(canvas: ElementRef) {
+  this.animation.displayIn(canvas);
 }
 
 
@@ -39,16 +51,20 @@ pause() {
   this.paused = true;
 }
 
-stepBack() {
+async stepBack() {
   if (this.index > 0) {
-    this.animation.reverseAnimateAction(this.plan.actions[--this.index]);
+    this.nextPlayingEvent();
+    await this.animation.reverseAnimateAction(this.plan.actions[--this.index]);
+    this.nextPausedEvent();
     this.nextEvents();
   }
 }
 
-stepForward() {
+async stepForward() {
   if (this.index < this.plan.actions.length) {
-    this.animation.animateAction(this.plan.actions[this.index++]);
+    this.nextPlayingEvent();
+    await this.animation.animateAction(this.plan.actions[this.index++]);
+    this.nextPausedEvent();
     this.nextEvents();
   }
 }
@@ -63,13 +79,14 @@ private nextPausedEvent() {
 }
 
 private nextPlayingEvent() {
-  console.log('playing');
+  // console.log('playing');
   this.currentAnimationPausedEvent.next(false);
 }
 
 restart() {
   this.index = 0;
   this.animation.restart();
+  this.nextEvents();
 }
 
 
