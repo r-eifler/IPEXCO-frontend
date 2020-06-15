@@ -63,7 +63,7 @@ export class DemoSellectionComponent implements OnInit {
   }
 
   openDemo(demo: Demo): void {
-    this.router.navigate(['../demo/' + demo._id + '/help'], {relativeTo: this.activatedRoute});
+    this.router.navigate(['../demos/' + demo._id + '/help'], {relativeTo: this.activatedRoute});
   }
 
   openMenu() {

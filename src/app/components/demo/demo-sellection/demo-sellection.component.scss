@@ -27,7 +27,8 @@
 }
 
 .demo-card-web {
-  width: 15%;
+  box-sizing: border-box;
+  width: 25%;
   height: auto;
   margin: 10px;
 }

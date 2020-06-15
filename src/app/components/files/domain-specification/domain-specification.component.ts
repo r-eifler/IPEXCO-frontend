@@ -4,11 +4,16 @@ import { FormGroup, FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { DomainSpecificationFile } from 'src/app/interface/files';
 import { DomainSpecificationFilesService } from 'src/app/service/pddl-file-services';
+import { FilesService } from 'src/app/service/pddl-files.service';
+import { SelectedObjectService } from 'src/app/service/selected-object.service';
 
 @Component({
   selector: 'app-domain-specification',
   templateUrl: './domain-specification.component.html',
-  styleUrls: ['./domain-specification.component.css']
+  styleUrls: ['./domain-specification.component.css'],
+  providers: [
+    {provide: FilesService, useClass: DomainSpecificationFilesService}
+    ]
 })
 export class DomainSpecificationComponent implements OnInit {
 

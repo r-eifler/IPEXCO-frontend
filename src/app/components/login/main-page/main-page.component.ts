@@ -1,8 +1,10 @@
+import { UserService } from './../../../service/user.service';
 import { Component, OnInit, AfterViewChecked } from '@angular/core';
 import { ResponsiveService } from 'src/app/service/responsive.service';
 import { gsap } from 'gsap';
 import { MatDialogConfig, MatDialog } from '@angular/material/dialog';
 import { RegisterComponent } from '../register/register.component';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-main-page',
@@ -15,6 +17,9 @@ export class MainPageComponent implements OnInit, AfterViewChecked {
 
   constructor(
     private responsiveService: ResponsiveService,
+    private userService: UserService,
+    private router: Router,
+    private route: ActivatedRoute,
     public dialog: MatDialog) { }
 
   ngOnInit(): void {
@@ -26,6 +31,10 @@ export class MainPageComponent implements OnInit, AfterViewChecked {
       }
     });
     this.responsiveService.checkWidth();
+
+    if (this.userService.logedIn()) {
+      this.router.navigate(['/overview'], { relativeTo: this.route });
+    }
   }
 
   ngAfterViewChecked(): void {

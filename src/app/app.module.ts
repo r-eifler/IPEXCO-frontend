@@ -57,8 +57,7 @@ import {FormsModule} from '@angular/forms';
 
 // my components
 import { PropertySelectorComponent} from './components/iter-planning/property-selector/property-selector.component';
-import { TemplatePddlFileComponent } from './components/files/template-pddl-file/template-pddl-file.component';
-import { TemplateFileUploadComponent } from './components/files/template-file-upload/template-file-upload.component';;
+import { TemplateFileUploadComponent } from './components/files/file-upload/file-upload.component';
 import { DomainSelectorComponent } from './components/files/domain-selector/domain-selector.component';
 import { ProblemSelectorComponent } from './components/files/problem-selector/problem-selector.component';
 import { PropertyCreatorComponent } from './components/plan_properties/property-creator/property-creator.component';
@@ -139,13 +138,16 @@ import { DemoNavigatorComponent } from './components/demo/demo-navigator/demo-na
 import { MainPageComponent } from './components/login/main-page/main-page.component';
 import { RegisterComponent } from './components/login/register/register.component';
 import { AutheticationInterceptor } from './interceptor/authentication.interceptor';
+import { UserMainPageComponent } from './components/user/user-main-page/user-main-page.component';
+import { FilesCollectionComponent } from './components/files/files-collection/files-collection.component';
 
 
 
 const appRoutes: Routes = [
     { path: '', component: MainPageComponent},
+    {path: 'overview', component: UserMainPageComponent},
     { path: 'projects', component: ProjectSelectionComponent},
-    { path: 'project/:projectid', component: ProjectBaseComponent,
+    { path: 'projects/:projectid', component: ProjectBaseComponent,
       children: [
         { path: 'overview', component: ProjectOverviewComponent},
         { path: 'properties', component: PropertyCollectionComponent},
@@ -162,7 +164,7 @@ const appRoutes: Routes = [
       ]
     },
     { path: 'demos', component: DemoSellectionComponent},
-    { path: 'demo/:demoid', component: DemoBaseComponent,
+    { path: 'demos/:demoid', component: DemoBaseComponent,
       children: [
         { path: 'help', component: DemoHelpComponent},
         { path: 'nav', component: DemoNavigatorComponent,
@@ -176,6 +178,7 @@ const appRoutes: Routes = [
         }
       ]
     },
+    { path: 'uploaded-files', component: FilesCollectionComponent},
     { path: 'domain-files', component: DomainSelectorComponent},
     { path: 'problem-files', component: ProblemSelectorComponent},
     { path: 'domain-specification', component: DomainSpecificationComponent},
@@ -187,7 +190,6 @@ const appRoutes: Routes = [
     AppComponent,
     FooterComponent,
     PropertySelectorComponent,
-    TemplatePddlFileComponent,
     TemplateFileUploadComponent,
     DomainSelectorComponent,
     ProblemSelectorComponent,
@@ -227,6 +229,8 @@ const appRoutes: Routes = [
     DemoNavigatorComponent,
     MainPageComponent,
     RegisterComponent,
+    UserMainPageComponent,
+    FilesCollectionComponent,
   ],
   imports: [
     BrowserModule,

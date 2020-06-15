@@ -50,7 +50,7 @@ export class LoginComponent implements OnInit {
     this.userService.login(newUser).then(
       () => {
         console.log('Login successful.');
-        this.router.navigate(['/projects'], { relativeTo: this.route });
+        this.router.navigate(['/overview'], { relativeTo: this.route });
       },
       () => {
         console.log('Login failed.');

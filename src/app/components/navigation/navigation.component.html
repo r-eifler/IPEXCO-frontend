@@ -16,16 +16,15 @@
   <mat-sidenav-container class="sidenav-container">
     <mat-sidenav #snav [mode]="isMobile ? 'over' : 'side'" [fixedInViewport]="isMobile" fixedTopGap="56" style="width: 200px;">
       <mat-nav-list>
-        <a mat-list-item routerLink="/projects" routerLinkActive="active" (click)="snav.toggle()">Projects</a>
-        <a mat-list-item routerLink="/demos" routerLinkActive="active" (click)="snav.toggle()">Demos</a>
-        <a mat-list-item routerLink="./domain-files" routerLinkActive="active" (click)="snav.toggle()">Domain Files</a>
-        <a mat-list-item routerLink="./problem-files" routerLinkActive="active" (click)="snav.toggle()">Problem Files</a>
-        <a mat-list-item routerLink="./domain-specification" routerLinkActive="active" (click)="snav.toggle()">Domain Specifications</a>
+        <a mat-list-item routerLink="/projects" routerLinkActive="mat-list-single-selected-option"  (click)="snav.toggle()">Projects</a>
+        <a mat-list-item routerLink="/demos" routerLinkActive="mat-list-single-selected-option" (click)="snav.toggle()">Demos</a>
+        <a mat-list-item routerLink="/surveys" routerLinkActive="mat-list-single-selected-option" (click)="snav.toggle()">Surveys</a>
+        <a mat-list-item routerLink="/uploaded-files" routerLinkActive="mat-list-single-selected-option" (click)="snav.toggle()">Uploaded Files</a>
       </mat-nav-list>
     </mat-sidenav>
 
     <mat-sidenav-content >
-      <div style="height: calc(100vh - 64px); overflow: hidden;">
+      <div style="height: calc(100vh - 64px); width: 100%;">
         <router-outlet></router-outlet>
       </div>
     </mat-sidenav-content>

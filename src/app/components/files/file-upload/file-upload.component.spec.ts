@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TemplatePddlFileComponent } from './template-pddl-file.component';
+import { TemplateFileUploadComponent } from './file-upload.component';
 
-describe('TemplatePddlFileComponent', () => {
-  let component: TemplatePddlFileComponent;
-  let fixture: ComponentFixture<TemplatePddlFileComponent>;
+describe('TemplateFileUploadComponent', () => {
+  let component: TemplateFileUploadComponent;
+  let fixture: ComponentFixture<TemplateFileUploadComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TemplatePddlFileComponent ]
+      declarations: [ TemplateFileUploadComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TemplatePddlFileComponent);
+    fixture = TestBed.createComponent(TemplateFileUploadComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
