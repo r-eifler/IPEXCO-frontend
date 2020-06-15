@@ -1,5 +1,6 @@
+import { UserService } from './service/user.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { DemosService } from './service/demo-services';
+import { DemosService, RunningDemoService } from './service/demo-services';
 import { DisplayTaskService } from './service/display-task.service';
 import { ViewSettingsService } from './service/setting.service';
 import { TaskSchemaService } from './service/schema.service';
@@ -11,7 +12,7 @@ import { InlineSVGModule } from 'ng-inline-svg';
 
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import {CdkTableModule} from '@angular/cdk/table';
 import { FooterComponent } from './components/footer/footer.component';
 
@@ -99,7 +100,9 @@ import {
   DomainSpecStore,
   ViewSettingsStore,
   DisplayTaskStore,
-  DemosStore
+  DemosStore,
+  RunningDemoStore,
+  UserStore
 } from './store/stores.store';
 import {
   DomainFilesService,
@@ -131,32 +134,51 @@ import { NomysteryTaskViewComponent } from './components/plugins/nomystery/nomys
 import { AnimationHandler } from './plan-visualization/integration/animation-handler';
 import { PlanVisualizationProvider } from './provider/plan-visualisation.provider';
 import { DemoCreatorComponent } from './components/demo/demo-creator/demo-creator.component';
+import { DemoHelpComponent } from './components/demo/demo-help/demo-help.component';
+import { DemoNavigatorComponent } from './components/demo/demo-navigator/demo-navigator.component';
+import { MainPageComponent } from './components/login/main-page/main-page.component';
+import { RegisterComponent } from './components/login/register/register.component';
+import { AutheticationInterceptor } from './interceptor/authentication.interceptor';
 
 
 
 const appRoutes: Routes = [
-  { path: 'login', component: LoginComponent},
-  { path: 'projects', component: ProjectSelectionComponent},
-  { path: 'project/:projectid', component: ProjectBaseComponent,
-    children: [
-      { path: 'overview', component: ProjectOverviewComponent},
-      { path: 'properties', component: PropertyCollectionComponent},
-      { path: 'iterative-planning', component: IterativePlanningBaseComponent,
-        children: [
-          { path: 'run-overview-mobile', component: IterativePlanningBaseMobileComponent},
-          { path: 'new-planning-step', component: PlanningStepComponent},
-          { path: 'original-task', component: FirstPlanningStepComponent},
-          { path: 'planning-step/:runid', component: FinishedPlanningStepComponent},
-          { path: 'planning-step/:runid/new-question', component: QuestionStepComponent},
-          { path: 'planning-step/:runid/question-step/:expid', component: FinishedQuestionStepComponent},
-        ]
-      },
-    ]
-  },
-  { path: 'domain-files', component: DomainSelectorComponent},
-  { path: 'problem-files', component: ProblemSelectorComponent},
-  { path: 'domain-specification', component: DomainSpecificationComponent},
-  { path: 'demos', component: DemoSellectionComponent},
+    { path: '', component: MainPageComponent},
+    { path: 'projects', component: ProjectSelectionComponent},
+    { path: 'project/:projectid', component: ProjectBaseComponent,
+      children: [
+        { path: 'overview', component: ProjectOverviewComponent},
+        { path: 'properties', component: PropertyCollectionComponent},
+        { path: 'iterative-planning', component: IterativePlanningBaseComponent,
+          children: [
+            { path: 'run-overview-mobile', component: IterativePlanningBaseMobileComponent},
+            { path: 'new-planning-step', component: PlanningStepComponent},
+            { path: 'original-task', component: FirstPlanningStepComponent},
+            { path: 'planning-step/:runid', component: FinishedPlanningStepComponent},
+            { path: 'planning-step/:runid/new-question', component: QuestionStepComponent},
+            { path: 'planning-step/:runid/question-step/:expid', component: FinishedQuestionStepComponent},
+          ]
+        }
+      ]
+    },
+    { path: 'demos', component: DemoSellectionComponent},
+    { path: 'demo/:demoid', component: DemoBaseComponent,
+      children: [
+        { path: 'help', component: DemoHelpComponent},
+        { path: 'nav', component: DemoNavigatorComponent,
+          children: [
+            { path: 'new-planning-step', component: PlanningStepComponent},
+            { path: 'original-task', component: FirstPlanningStepComponent},
+            { path: 'planning-step/:runid', component: FinishedPlanningStepComponent},
+            { path: 'planning-step/:runid/new-question', component: QuestionStepComponent},
+            { path: 'planning-step/:runid/question-step/:expid', component: FinishedQuestionStepComponent}
+          ]
+        }
+      ]
+    },
+    { path: 'domain-files', component: DomainSelectorComponent},
+    { path: 'problem-files', component: ProblemSelectorComponent},
+    { path: 'domain-specification', component: DomainSpecificationComponent},
 ];
 
 
@@ -201,6 +223,10 @@ const appRoutes: Routes = [
     NomysteryTaskViewComponent,
     PlanAnimationViewComponent,
     DemoCreatorComponent,
+    DemoHelpComponent,
+    DemoNavigatorComponent,
+    MainPageComponent,
+    RegisterComponent,
   ],
   imports: [
     BrowserModule,
@@ -249,6 +275,10 @@ const appRoutes: Routes = [
     InlineSVGModule.forRoot(),
   ],
   providers: [
+    UserStore,
+    UserService,
+    { provide: HTTP_INTERCEPTORS, useClass: AutheticationInterceptor, multi: true },
+    AutheticationInterceptor,
     DomainFilesStore,
     SelectedDomainFileStore,
     ProblemFilesStore,
@@ -269,7 +299,6 @@ const appRoutes: Routes = [
     PlanPropertyCollectionStore,
     PlanPropertyCollectionService,
     PlannerService,
-    RunService,
     RunsStore,
     CurrentRunService,
     CurrentRunStore,
@@ -280,6 +309,8 @@ const appRoutes: Routes = [
     ViewSettingsService,
     DemosStore,
     DemosService,
+    RunningDemoStore,
+    RunningDemoService,
     DisplayTaskStore,
     DisplayTaskService,
     AnimationHandler,
@@ -297,6 +328,8 @@ const appRoutes: Routes = [
     PropertyCollectionComponent,
     DemoSettingsComponent,
     ViewSettingsMenuComponent,
+    RegisterComponent,
+    LoginComponent,
   ],
   bootstrap: [AppComponent]
 })

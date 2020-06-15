@@ -4,7 +4,7 @@ import {ADD, EDIT, ListStore, LOAD, REMOVE} from '../store/generic-list.store';
 import {IHTTPData} from '../interface/http-data.interface';
 import {environment} from '../../environments/environment';
 import {BehaviorSubject, Observable, of} from 'rxjs';
-import {map} from 'rxjs/operators';
+import {map, tap} from 'rxjs/operators';
 import {Goal, GoalType} from '../interface/goal';
 import * as assert from 'assert';
 import { thresholdFreedmanDiaconis } from 'd3';
@@ -28,7 +28,7 @@ interface QueryParam {
 export class ObjectCollectionService<T extends Identifiable> {
 
   BASE_URL = environment.apiURL;
-  readonly collection$: BehaviorSubject<T[]>;
+  protected readonly collection$: BehaviorSubject<T[]>;
 
   http: HttpClient;
   listStore: ListStore<T>;
@@ -53,8 +53,10 @@ export class ObjectCollectionService<T extends Identifiable> {
       httpParams = httpParams.set(qp.param, qp.value);
     }
 
-    this.http.get<IHTTPData<T[]>>(this.BASE_URL, {params: httpParams}).pipe(this.pipeFindData, this.pipeFind)
+    this.http.get<IHTTPData<T[]>>(this.BASE_URL, {params: httpParams})
+      .pipe(this.pipeFindData, this.pipeFind)
       .subscribe((res) => {
+        // console.log('find: ' + this.BASE_URL);
         // console.log(res);
         this.listStore.dispatch({type: LOAD, data: res});
       });
@@ -67,6 +69,7 @@ export class ObjectCollectionService<T extends Identifiable> {
   }
 
   getObject(id: number | string): Observable<T> {
+    // console.log(this.BASE_URL);
     console.assert(id != null);
     const o = this.existsObjectInStore(id);
     if (o) {
@@ -97,8 +100,8 @@ export class ObjectCollectionService<T extends Identifiable> {
 
   saveObject(object: T) {
 
-    // console.log('Service save object:');
-    // console.log(object);
+    console.log(object);
+    console.log('Service save object:');
 
     if (object._id) {
       // console.log('edit');

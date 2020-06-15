@@ -41,7 +41,7 @@ export class PropertyCollectionComponent implements OnInit, AfterViewInit {
     this.viewSettings.subscribe(v => {
       console.log(v);
     });
-    this.propertiesService.collection$.subscribe(props => {
+    this.propertiesService.getList().subscribe(props => {
       this.planProperties = props;
       this.dataSource.data = props;
       this.selection.select(... props.filter(v => v.isUsed));

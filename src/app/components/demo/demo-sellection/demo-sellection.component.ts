@@ -1,5 +1,6 @@
+import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { DemosService } from './../../../service/demo-services';
+import { DemosService, RunningDemoService } from './../../../service/demo-services';
 import { Component, OnInit } from '@angular/core';
 import { ResponsiveService } from 'src/app/service/responsive.service';
 import {MatBottomSheet} from '@angular/material/bottom-sheet';
@@ -24,9 +25,12 @@ export class DemoSellectionComponent implements OnInit {
   constructor(
     private responsiveService: ResponsiveService,
     private demosService: DemosService,
+    private runningDemoService: RunningDemoService,
     private bottomSheet: MatBottomSheet,
-    private snackBar: MatSnackBar
-    ) {
+    private snackBar: MatSnackBar,
+    private router: Router,
+    private activatedRoute: ActivatedRoute) {
+
       this.demos$ = demosService.getList();
     }
 
@@ -59,7 +63,7 @@ export class DemoSellectionComponent implements OnInit {
   }
 
   openDemo(demo: Demo): void {
-    console.log(demo);
+    this.router.navigate(['../demo/' + demo._id + '/help'], {relativeTo: this.activatedRoute});
   }
 
   openMenu() {

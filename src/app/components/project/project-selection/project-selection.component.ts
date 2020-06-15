@@ -24,7 +24,7 @@ export class ProjectSelectionComponent implements OnInit {
     private router: Router,
     public dialog: MatDialog) {
 
-    this.projects$ = projectService.collection$;
+    this.projects$ = projectService.getList();
   }
 
   ngOnInit(): void {

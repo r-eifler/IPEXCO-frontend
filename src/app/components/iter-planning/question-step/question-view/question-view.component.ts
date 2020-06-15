@@ -34,9 +34,7 @@ export class QuestionViewComponent implements OnInit {
 
   ngOnInit(): void {
       combineLatest([this.currentRun$, this.currentQuestion$, this.planProperties$]).subscribe(([run, question, planProperties]) => {
-          console.log('#Properties: ' + planProperties.length);
           if (run && question && planProperties.length > 0) {
-            console.log(planProperties);
             this.currentHardGoals = run.hardGoals;
             const questionElems = this.arrayMinus(question.hardGoals, this.currentHardGoals);
             for (const elem of questionElems) {
@@ -44,8 +42,7 @@ export class QuestionViewComponent implements OnInit {
                 this.questionElemsDescription.push(elem.name);
               }
               if (elem.goalType === GoalType.planProperty) {
-                console.log(elem.name);
-                const pp = planProperties.find(p => p.name = elem.name);
+                const pp = planProperties.find(p => p.name === elem.name);
                 this.questionElemsDescription.push(pp.naturalLanguageDescription);
               }
             }

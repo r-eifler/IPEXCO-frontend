@@ -1,7 +1,9 @@
+import { PlanProperty } from './../../../../interface/plan-property';
 import { DisplayTaskService } from '../../../../service/display-task.service';
 import { Component, OnInit } from '@angular/core';
 import {CurrentRunStore } from '../../../../store/stores.store';
 import { combineLatest } from 'rxjs';
+import { GoalType } from 'src/app/interface/goal';
 
 
 @Component({
@@ -11,7 +13,9 @@ import { combineLatest } from 'rxjs';
 })
 export class TaskViewComponent implements OnInit {
 
-  satFacts: string[] = [];
+  satGoalFacts: string[] = [];
+
+  satPlanProperties: PlanProperty[] = [];
 
   constructor(
     private  currentRunStore: CurrentRunStore,
@@ -20,9 +24,18 @@ export class TaskViewComponent implements OnInit {
 
     combineLatest([this.currentRunStore.item$, this.dislplayTaskService.getSelectedObject()]).subscribe(([run, displayTask]) => {
       if (run && displayTask) {
-        this.satFacts = [];
+        this.satGoalFacts = [];
         for (const fact of run.hardGoals) {
-          this.satFacts.push(displayTask.getGoalDescription(fact));
+          if (fact.goalType === GoalType.goalFact){
+            this.satGoalFacts.push(displayTask.getGoalDescription(fact));
+          }
+          if (fact.goalType === GoalType.planProperty) {
+            for (const pp of run.planProperties) {
+              if (fact.name === pp.name) {
+                this.satPlanProperties.push(pp);
+              }
+            }
+          }
         }
       }
     });

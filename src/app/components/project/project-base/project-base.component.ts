@@ -1,3 +1,5 @@
+import { QUESTION_REDIRECT } from './../../../app.tokens';
+import { PlannerService } from './../../../service/planner.service';
 import { DemosService } from './../../../service/demo-services';
 import { RunService } from 'src/app/service/run-services';
 import { DisplayTaskService } from './../../../service/display-task.service';
@@ -17,12 +19,19 @@ import { PlanPropertyCollectionService } from 'src/app/service/plan-property-ser
 import { combineLatest } from 'rxjs/internal/observable/combineLatest';
 import { DisplayTask } from 'src/app/interface/display-task';
 import { PlanVisualizationProvider } from 'src/app/provider/plan-visualisation.provider';
+import { PLANNER_REDIRECT } from 'src/app/app.tokens';
 
 @Component({
   selector: 'app-project-base',
   templateUrl: './project-base.component.html',
   styleUrls: ['./project-base.component.css'],
-  providers: [ PlanVisualizationProvider ],
+  providers: [
+     PlanVisualizationProvider,
+    {provide: RunService, useClass: RunService},
+    {provide: PlannerService, useClass: PlannerService},
+    { provide: PLANNER_REDIRECT, useValue: '../run-overview-mobile' },
+    { provide: QUESTION_REDIRECT, useValue: '../run-overview-mobile' }
+   ],
 })
 export class ProjectBaseComponent implements OnInit {
 

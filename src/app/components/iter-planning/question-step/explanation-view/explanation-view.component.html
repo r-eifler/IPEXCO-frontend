@@ -8,16 +8,22 @@
     </mat-card-title>
   </mat-card-header>
   <mat-card-content>
-    <ng-container *ngIf="answer && answer.MUGS.length > 0">
+    <ng-container *ngIf="(currentQuestion$ | async) && (currentQuestion$ | async).mugs && (currentQuestion$ | async).mugs.length > 0">
       <h2>... because then you cannot satisfy</h2>
-      <mat-list>
-        <mat-list-item *ngFor="let elem of answer.MUGS">
-          {{elem}}
-        </mat-list-item>
-      </mat-list>
+      <div *ngFor="let mugs of (currentQuestion$ | async).mugs;last as last">
+        <p *ngIf="last" style="font-size: large; font-weight: bold;">or</p>
+        <mat-list>
+          <mat-list-item *ngFor="let elem of mugs;last as last">
+            <p *ngIf="! last">{{elem}} and</p>
+            <p *ngIf="last">{{elem}}</p>
+            <mat-divider *ngIf="! last"></mat-divider>
+          </mat-list-item>
+        </mat-list>
+      </div>
+
     </ng-container>
 
-    <p *ngIf="answer && answer.MUGS.length == 0">
+    <p *ngIf="(currentQuestion$ | async) && (currentQuestion$ | async).mugs && (currentQuestion$ | async).mugs.length == 0">
       There exists a plan which satisfies the property/ies.
     </p>
 

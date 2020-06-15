@@ -32,11 +32,11 @@ export class ProjectOverviewComponent implements OnInit {
     public runsService: RunService,
     public demosService: DemosService,
     public dialog: MatDialog) {
-      this.properties$ = this.propertiesService.collection$;
+      this.properties$ = this.propertiesService.getList();
       this.currentProjectService.selectedObject$.subscribe(project => {
         if (project !== null) {
           this.currentProject = project;
-          this.propertiesService.findCollection([{param: 'projectId', value: project._id}]);
+          // this.propertiesService.findCollection([{param: 'projectId', value: project._id}]);
         }
       });
     }

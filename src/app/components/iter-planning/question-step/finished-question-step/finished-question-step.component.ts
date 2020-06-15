@@ -17,7 +17,6 @@ export class FinishedQuestionStepComponent implements OnInit {
 
   constructor(
     private responsiveService: ResponsiveService,
-    private propertiesService: PlanPropertyCollectionService,
     private runService: RunService,
     private route: ActivatedRoute,
     private currentRunService: CurrentRunService,
@@ -29,11 +28,14 @@ export class FinishedQuestionStepComponent implements OnInit {
           this.runService.getObject(params.get('runid')))
           ).subscribe(planRun => {
             this.currentRunService.saveObject(planRun);
+            console.log('Current plan run id: ' + planRun._id);
             this.route.paramMap.subscribe(
               (params2: ParamMap) => {
+                console.log('Question Runs: ');
                 console.log(planRun.explanationRuns);
                 const expRun = planRun.explanationRuns.find((value => value._id === params2.get('expid')));
                 if (expRun) {
+                  console.log('Current question run id: ' + expRun._id);
                   this.currentQuestionService.saveObject(expRun);
                 }
               });
@@ -42,7 +44,6 @@ export class FinishedQuestionStepComponent implements OnInit {
 
 
 ngOnInit(): void {
-  this.propertiesService.findCollection();
   this.responsiveService.getMobileStatus().subscribe( isMobile => {
     if (isMobile) {
       this.isMobile = true;

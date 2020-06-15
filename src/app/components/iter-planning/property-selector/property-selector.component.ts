@@ -36,12 +36,12 @@ export class PropertySelectorComponent implements OnInit {
               private currentProjectService: CurrentProjectService,
               private plannerService: PlannerService,
               public dialog: MatDialog) {
-    this.collection$ = this.propertiesService.collection$;
+    this.collection$ = this.propertiesService.getList();
     this.currentProject$ = this.currentProjectService.selectedObject$;
   }
 
   ngOnInit(): void {
-    this.propertiesService.findCollection();
+    // this.propertiesService.findCollection();
   }
 
   drop(event: CdkDragDrop<string[]>) {

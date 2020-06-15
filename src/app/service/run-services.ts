@@ -10,6 +10,8 @@ import {map} from 'rxjs/operators';
 import {IHTTPData} from '../interface/http-data.interface';
 import {PlanRun, ExplanationRun} from '../interface/run';
 import { PddlFileUtilsService } from './pddl-file-utils.service';
+import { PlanPropertyCollectionService } from './plan-property-services';
+import { combineLatest } from 'rxjs/internal/observable/combineLatest';
 
 
 interface QueryParam {
@@ -92,6 +94,21 @@ function findStart(runs: PlanRun[]): PlanRun {
   }
 }
 
+@Injectable({
+  providedIn: 'root'
+})
+export class DemoRunService extends RunService {
+
+  constructor(http: HttpClient, store: RunsStore) {
+    super(http, store);
+    console.log('DemoRunService');
+  }
+
+  findCollection(queryParams: QueryParam[] = []) {
+    return this.collection$;
+  }
+}
+
 
 @Injectable({
   providedIn: 'root'
@@ -103,6 +120,7 @@ export class CurrentRunService extends SelectedObjectService<PlanRun> {
   }
 
   saveObject(planRun: PlanRun) {
+    console.log('PlanRun plan path: ' + planRun.planPath);
     if (! planRun.plan) {
       const planContent$ = this.fileUtilsService.getFileContent(planRun.planPath);
       // console.log('Loade Plan');
@@ -141,8 +159,34 @@ function parsePlan(actionStrings: string[]): Plan {
 })
 export class CurrentQuestionService extends SelectedObjectService<ExplanationRun> {
 
-  constructor(store: CurrentQuestionStore) {
+  constructor(
+    store: CurrentQuestionStore,
+    protected fileUtilsService: PddlFileUtilsService,
+    protected planPropertiesService: PlanPropertyCollectionService
+  ) {
     super(store);
   }
+
+  saveObject(questionRun: ExplanationRun) {
+    if (! questionRun.mugs) {
+      combineLatest([this.fileUtilsService.getFileContent(questionRun.result), this.planPropertiesService.getList()]).subscribe(
+        ([content, planProperties]) => {
+        questionRun.mugs = [];
+        const answer = JSON.parse(content);
+        for (const mugs of answer.MUGS) {
+          const list = [];
+          for (const elem of mugs) {
+              const pp = planProperties.find(p => p.name === elem.replace('sat_', ''));
+              list.push(pp.naturalLanguageDescription);
+          }
+          questionRun.mugs.push(list);
+        }
+        this.selectedObjectStore.dispatch({type: LOAD, data: questionRun});
+      });
+    } else {
+      this.selectedObjectStore.dispatch({type: LOAD, data: questionRun});
+    }
+  }
 }
+
 

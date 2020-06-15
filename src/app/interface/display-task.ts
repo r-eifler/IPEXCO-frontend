@@ -1,4 +1,4 @@
-import { Goal } from './goal';
+import { Goal, GoalType } from './goal';
 import { DomainSpecification } from 'src/app/interface/domain-specification';
 import { TaskSchema } from './task-schema';
 
@@ -8,7 +8,11 @@ export class DisplayTask {
 
   constructor(taskSchema: TaskSchema, domainSpec: DomainSpecification) {
     for (const goalFact of taskSchema.goals) {
-      this.goalDescription.set(goalFact.name, domainSpec.getGoalDescription(goalFact));
+      if (goalFact.goalType === GoalType.goalFact){
+        this.goalDescription.set(goalFact.name, domainSpec.getGoalDescription(goalFact));
+      } else {
+        this.goalDescription.set(goalFact.name, goalFact.name) // TODO use natural language
+      }
     }
   }
 

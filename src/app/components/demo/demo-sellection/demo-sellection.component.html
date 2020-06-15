@@ -1,4 +1,4 @@
-<div [class.main-container-web]="! isMobile" [class.main-container-mobile]="isMobile">
+<div [class.main-container-web]="! isMobile" [class.main-container-mobile]="isMobile" *ngIf="(demos$ | async).length > 0">
   <mat-card [class.demo-card-web]="! isMobile" [class.demo-card-mobile]="isMobile" *ngFor="let demo of (demos$ | async)">
     <mat-card-header>
       <div mat-card-avatar>
@@ -10,9 +10,8 @@
     </mat-card-header>
     <img *ngIf="demo.summaryImage !== 'none'" matCardImage src=demo.summaryImage>
     <mat-card-content>
-      <!-- Status: {{demo.status}} -->
       {{demo.introduction}}
-      {{demo.definition}}
+      <!-- {{demo.project}} -->
     </mat-card-content>
     <mat-card-actions align="end">
       <button mat-icon-button [disabled]="demo.status == runStatus.running || demo.status == runStatus.pending" (click)="deleteDemo(demo)">
@@ -33,3 +32,6 @@
   </mat-card>
 </div>
 
+<div [class.main-container-web]="! isMobile" [class.main-container-mobile]="isMobile" *ngIf="(demos$ | async).length == 0">
+  <h1 style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%)">There are no demos available!</h1>
+</div>

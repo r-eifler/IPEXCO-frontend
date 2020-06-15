@@ -1,24 +1,31 @@
 <base href="/">
 
-<div class="example-container" [class.example-is-mobile]="isMobile">
-  <mat-toolbar color="primary" class="example-toolbar">
-    <button mat-icon-button (click)="snav.toggle()"><mat-icon>menu</mat-icon></button>
+<div class="main-container" [class.example-is-mobile]="isMobile">
+  <mat-toolbar color="primary" class="main-toolbar">
+    <button mat-icon-button (click)="snav.toggle()" [disabled]="! userService.logedIn()"><mat-icon>menu</mat-icon></button>
     <h1 class="example-app-name">EXPLORE</h1>
+    <span style="flex: 1 1 auto;"></span>
+    <button mat-icon-button [matMenuTriggerFor]="userMenu"><mat-icon style="font-size: 36px">account_circle</mat-icon></button>
   </mat-toolbar>
 
-  <mat-sidenav-container class="example-sidenav-container" [style.marginTop.px]="isMobile ? 56 : 0">
+  <mat-menu #userMenu="matMenu">
+    <button mat-menu-item *ngIf="! userService.logedIn()" (click)="newLoginForm()">Login</button>
+    <button mat-menu-item *ngIf="userService.logedIn()" (click)="logout()">Logout</button>
+  </mat-menu>
+
+  <mat-sidenav-container class="sidenav-container">
     <mat-sidenav #snav [mode]="isMobile ? 'over' : 'side'" [fixedInViewport]="isMobile" fixedTopGap="56" style="width: 200px;">
       <mat-nav-list>
         <a mat-list-item routerLink="/projects" routerLinkActive="active" (click)="snav.toggle()">Projects</a>
         <a mat-list-item routerLink="/demos" routerLinkActive="active" (click)="snav.toggle()">Demos</a>
-        <a mat-list-item routerLink="/domain-files" routerLinkActive="active" (click)="snav.toggle()">Domain Files</a>
-        <a mat-list-item routerLink="/problem-files" routerLinkActive="active" (click)="snav.toggle()">Problem Files</a>
-        <a mat-list-item routerLink="/domain-specification" routerLinkActive="active" (click)="snav.toggle()">Domain Specifications</a>
+        <a mat-list-item routerLink="./domain-files" routerLinkActive="active" (click)="snav.toggle()">Domain Files</a>
+        <a mat-list-item routerLink="./problem-files" routerLinkActive="active" (click)="snav.toggle()">Problem Files</a>
+        <a mat-list-item routerLink="./domain-specification" routerLinkActive="active" (click)="snav.toggle()">Domain Specifications</a>
       </mat-nav-list>
     </mat-sidenav>
 
-    <mat-sidenav-content>
-      <div style="height: calc(100vh - 56px); overflow: hidden;">
+    <mat-sidenav-content >
+      <div style="height: calc(100vh - 64px); overflow: hidden;">
         <router-outlet></router-outlet>
       </div>
     </mat-sidenav-content>

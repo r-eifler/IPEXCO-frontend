@@ -1,0 +1,45 @@
+<div class="plan-question-container">
+  <ng-container *ngFor="let planRun of  runs$ | async">
+    <div class="run-container">
+      <mat-card class="run-card">
+        <mat-card-header>
+          <mat-card-title>{{planRun.name}}</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          {{planRun.status}}
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-flat-button color="primary" [routerLink]="['./planning-step', planRun._id]">Details</button>
+        </mat-card-actions>
+      </mat-card>
+
+      <ng-container *ngFor="let expRun of planRun.explanationRuns">
+        <mat-card class="question-card">
+          <mat-card-header>
+            <mat-card-title>{{expRun.name}}</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+          </mat-card-content>
+          <mat-card-actions>
+            <button mat-flat-button color="primary" [routerLink]="['./planning-step', planRun._id, 'question-step', expRun._id]">Details</button>
+          </mat-card-actions>
+        </mat-card>
+      </ng-container>
+
+    </div>
+  </ng-container>
+
+  <button mat-fab color="accent" class="add-plan-button" (click)="newPlanRun()">
+    <mat-icon>add</mat-icon>
+  </button>
+  <!-- <mat-card class="next-action-card">
+    {{(runs$ | async)}}
+    <button mat-flat-button color="accent" (click)="newPlanRun()">New Plan</button>
+    <button mat-flat-button color="accent" [disabled]="! (runs$ | async) || (runs$ | async).length == 0">New Question</button>
+  </mat-card> -->
+
+</div>
+<div class="router-outlet-container">
+  <router-outlet></router-outlet>
+</div>
+

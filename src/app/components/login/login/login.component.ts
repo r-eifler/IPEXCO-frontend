@@ -1,17 +1,32 @@
 import { Component, OnInit, AfterViewChecked } from '@angular/core';
 import { ResponsiveService } from 'src/app/service/responsive.service';
-import { gsap } from 'gsap';
+import { FormGroup, FormControl } from '@angular/forms';
+import { UserService } from 'src/app/service/user.service';
+import { User } from 'src/app/interface/user';
+import { MatDialogRef } from '@angular/material/dialog';
+import { Router, ActivatedRoute } from '@angular/router';
+
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit, AfterViewChecked {
+export class LoginComponent implements OnInit {
 
   isMobile: boolean;
 
-  constructor(private responsiveService: ResponsiveService) { }
+  registerForm = new FormGroup({
+    name: new FormControl(),
+    password: new FormControl()
+  });
+
+  constructor(
+    private responsiveService: ResponsiveService,
+    private userService: UserService,
+    public dialogRef: MatDialogRef<LoginComponent>,
+    private router: Router,
+    private route: ActivatedRoute) { }
 
   ngOnInit(): void {
     this.responsiveService.getMobileStatus().subscribe( isMobile => {
@@ -24,16 +39,29 @@ export class LoginComponent implements OnInit, AfterViewChecked {
     this.responsiveService.checkWidth();
   }
 
-  ngAfterViewChecked(): void {
-    this.animateLogo();
+
+  onLogin(): void {
+    const newUser: User = {
+      name: this.registerForm.controls.name.value,
+      password: this.registerForm.controls.password.value
+    };
+    console.log(newUser);
+
+    this.userService.login(newUser).then(
+      () => {
+        console.log('Login successful.');
+        this.router.navigate(['/projects'], { relativeTo: this.route });
+      },
+      () => {
+        console.log('Login failed.');
+      }
+    );
+
+
+    this.dialogRef.close();
   }
 
-  animateLogo() {
-    const tl = gsap.timeline();
-    tl.from('#wts-logo', {duration: 0.5, x: 300,  ease: 'power4. out'});
-    tl.from('#gts-logo', {duration: 0.5, x: 300,  ease: 'power4. out'});
-    tl.from('#ots-logo', {duration: 0.5, x: 300,  ease: 'power4. out'});
-    tl.from(['#xai-logo', '#explore-logo'], {duration: 1, x: -500,  ease: 'power4. out'});
+  onBack(): void {
+    this.dialogRef.close();
   }
-
 }

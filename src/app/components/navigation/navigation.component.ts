@@ -1,5 +1,10 @@
+import { UserService } from 'src/app/service/user.service';
+import { LoginComponent } from './../login/login/login.component';
+import { RegisterComponent } from './../login/register/register.component';
 import { Component, OnInit} from '@angular/core';
 import { ResponsiveService} from '../../service/responsive.service';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { Router, ActivatedRoute } from '@angular/router';
 
 
 @Component({
@@ -11,7 +16,12 @@ export class NavigationComponent implements OnInit {
 
   isMobile: boolean;
 
-  constructor(private responsiveService: ResponsiveService) {
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    public userService: UserService,
+    private responsiveService: ResponsiveService,
+    public dialog: MatDialog) {
 
   }
 
@@ -30,5 +40,21 @@ export class NavigationComponent implements OnInit {
     this.responsiveService.checkWidth();
   }
 
+  newLoginForm(): void {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = '200px';
+
+    const dialogRef = this.dialog.open(LoginComponent, dialogConfig);
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    });
+  }
+
+  logout() {
+    this.userService.logout();
+    this.router.navigate(['/'], { relativeTo: this.route });
+
+  }
 
 }

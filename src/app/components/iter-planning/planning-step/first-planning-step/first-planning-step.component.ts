@@ -23,7 +23,7 @@ export class FirstPlanningStepComponent implements OnInit {
     private service: ProjectsService,
     private runService: RunService
   ) {
-    this.run$ = this.runService.collection$;
+    this.run$ = this.runService.getList();
   }
 
   ngOnInit(): void {

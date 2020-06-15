@@ -10,6 +10,7 @@ import { TaskSchema} from '../interface/task-schema';
 import { DomainSpecification} from '../interface/domain-specification';
 import { Plan } from '../interface/plan';
 import { Demo } from '../interface/demo';
+import { User } from '../interface/user';
 
 
 export class DomainFilesStore extends  ListStore<PDDLFile> {
@@ -77,6 +78,14 @@ export class DisplayTaskStore extends  ItemStore<DisplayTask> {
 }
 
 export class DemosStore extends  ListStore<Demo> {
+
+}
+
+export class RunningDemoStore extends  ItemStore<Demo> {
+
+}
+
+export class UserStore extends  ItemStore<User> {
 
 }
 

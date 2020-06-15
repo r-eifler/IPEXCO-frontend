@@ -1,0 +1,69 @@
+@import '../../../../variables.scss';
+
+.router-outlet-container {
+  width: 100%;
+  height: 80%;
+}
+
+
+.plan-question-container {
+  width: 100%;
+  height: 20%;
+  background-color: rgb(240, 240, 240);
+  display: flex;
+  overflow-x: scroll;
+}
+
+.run-container {
+  height: auto;
+  margin: 10px 5px;
+  display: flex;
+  flex-direction: row;
+  background-color: rgb(191, 191, 191);;
+}
+
+.run-card {
+  box-sizing: border-box;
+  width: 150px;
+  height: auto;
+  margin: 10px 10px;
+}
+
+.run-card:hover {
+  background-color: $accent;
+}
+
+.run-card:active {
+  background-color: $accent;
+}
+
+.question-card {
+  width: 150px;
+  height: auto;
+  margin: 10px 10px;
+}
+
+.mat-card{
+  display:flex;
+  flex-direction: column;
+}
+
+.mat-card-header {
+  flex-shrink: 0;
+}
+
+.mat-card-content{
+  flex-grow: 1;
+  overflow: auto;
+}
+
+.mat-card-actions{
+  display:flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+.add-plan-button {
+  margin: auto 10px;
+  align-self: end;
+}

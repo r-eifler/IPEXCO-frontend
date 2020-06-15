@@ -23,12 +23,13 @@ export class FinishedPlanningStepComponent implements OnInit {
       switchMap((params: ParamMap) =>
         this.runService.getObject(params.get('runid')))
     ).subscribe(value => {
+      console.log('Current plan run id: ' + value._id);
       currentRunService.saveObject(value);
     });
   }
 
   ngOnInit(): void {
-    this.propertiesService.findCollection();
+    // this.propertiesService.findCollection();
   }
 
   newQuestion() {

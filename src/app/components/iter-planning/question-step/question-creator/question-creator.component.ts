@@ -1,11 +1,10 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {PlanProperty} from '../../../../interface/plan-property';
+import { QUESTION_REDIRECT } from './../../../../app.tokens';
+import { GoalType } from './../../../../interface/goal';
+import { PlanProperty } from './../../../../interface/plan-property';
+import {Component, OnInit, ViewChild, Inject} from '@angular/core';
 import {Observable} from 'rxjs';
 import {Project} from '../../../../interface/project';
 import {PlannerService} from '../../../../service/planner.service';
-import {MatDialog} from '@angular/material/dialog';
-import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
-import {PropertyCreatorComponent} from '../../../plan_properties/property-creator/property-creator.component';
 import {ExplanationRun, PlanRun, RunType} from '../../../../interface/run';
 import {CurrentRunStore} from '../../../../store/stores.store';
 import {Goal} from '../../../../interface/goal';
@@ -24,7 +23,8 @@ export class QuestionCreatorComponent implements OnInit {
   @ViewChild('planPorpertiesList') questionSelectionList: MatSelectionList;
   question: PlanProperty[] = [];
 
-  collection: PlanProperty[];
+  allPlanProperties: PlanProperty[];
+  notSatPlanProperties: PlanProperty[];
   private currentProject$: Observable<Project>;
   private currentRun: PlanRun;
   private hardGoals: Goal[];
@@ -37,22 +37,25 @@ export class QuestionCreatorComponent implements OnInit {
     private plannerService: PlannerService,
     private currentRunStore: CurrentRunStore,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    @Inject(QUESTION_REDIRECT) private redirectURL: string
   ) {
 
     this.currentProjectService.selectedObject$.subscribe(project => {
       this.currentProject = project;
-      if (project) {
-        this.propertiesService.findCollection([{param: 'projectId', value: this.currentProject._id}]);
-      }
+      // if (project) {
+      //   this.propertiesService.findCollection([{param: 'projectId', value: this.currentProject._id}]);
+      // }
     });
 
     this.currentRunStore.item$.subscribe(run => {
       if (run != null) {
         this.currentRun = run;
         this.hardGoals = run.hardGoals;
-        this.propertiesService.collection$.subscribe(properties => {
-          this.collection = properties.filter(p => ! this.currentRun.satPlanProperties.includes(p.name));
+        this.propertiesService.getList().subscribe(properties => {
+          // console.log(this.currentRun.satPlanProperties);
+          this.allPlanProperties = properties.filter(p => p.isUsed);
+          this.notSatPlanProperties = this.allPlanProperties.filter(p => ! this.currentRun.satPlanProperties.includes(p.name));
         });
       }
     });
@@ -69,13 +72,13 @@ export class QuestionCreatorComponent implements OnInit {
   // create a new mugs run with the currently selected properties
   compute_dependencies(): void {
     const expRun: ExplanationRun = {
-      _id: null,
+      _id: this.currentRun.explanationRuns.length.toString(),
       name: 'Question ' + (this.currentRun.explanationRuns.length + 1),
       status: null,
       type: RunType.mugs,
-      planProperties: this.collection,
-      softGoals: this.collection.filter(p => ! this.question.includes(p)),
-      hardGoals: this.currentRun.hardGoals.concat(this.question),
+      planProperties: this.allPlanProperties,
+      softGoals: this.allPlanProperties.filter(p => ! this.question.includes(p)),
+      hardGoals: this.currentRun.hardGoals.filter(g => g.goalType === GoalType.goalFact).concat(this.question),
       result: null,
       log: null,
     };
@@ -84,7 +87,8 @@ export class QuestionCreatorComponent implements OnInit {
     // console.log(expRun);
 
     this.plannerService.execute_mugs_run(this.currentRun, expRun);
-    this.router.navigate(['../../../run-overview-mobile'], { relativeTo: this.route });
+    console.log('Redirect to: ' + this.redirectURL);
+    this.router.navigate([this.redirectURL], { relativeTo: this.route });
   }
 
 }

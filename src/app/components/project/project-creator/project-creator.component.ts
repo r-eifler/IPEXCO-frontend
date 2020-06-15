@@ -45,7 +45,7 @@ export class ProjectCreatorComponent implements OnInit {
     this.domainFiles$ = this.domainFilesService.files$;
     this.problemFiles = this.problemFilesService.files$;
     this.domainSpecFiles = this.domainSpecFilesService.files$;
-    this.projects$ = this.projectService.collection$;
+    this.projects$ = this.projectService.getList();
 
     this.editedProject = data.project;
     if (this.editedProject) {

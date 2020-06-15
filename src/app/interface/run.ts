@@ -25,6 +25,7 @@ export interface  ExplanationRun {
   softGoals: Goal[];
   log: string;
   result: string;
+  mugs?: string[][];
 }
 
 export interface  PlanRun {

@@ -2,7 +2,7 @@ import { DisplayTaskService } from '../../../../service/display-task.service';
 import { CurrentProjectService } from '../../../../service/project-services';
 import { TasktSchemaStore } from '../../../../store/stores.store';
 import { PlanProperty } from '../../../../interface/plan-property';
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, Inject} from '@angular/core';
 import {Project} from '../../../../interface/project';
 import {PlanRun, RunType} from '../../../../interface/run';
 import {PlannerService} from '../../../../service/planner.service';
@@ -18,6 +18,7 @@ import { filter } from 'rxjs/operators';
 import { TaskSchemaService } from 'src/app/service/schema.service';
 import { DisplayTask } from 'src/app/interface/display-task';
 import { MatSelectionListChange } from '@angular/material/list/selection-list';
+import { PLANNER_REDIRECT } from 'src/app/app.tokens';
 
 @Component({
   selector: 'app-task-creator',
@@ -46,12 +47,12 @@ export class TaskCreatorComponent implements OnInit {
     private runService: RunService,
     private router: Router,
     private route: ActivatedRoute,
+    @Inject(PLANNER_REDIRECT) private redirectURL: string
   ) {
-    this.propertiesService.collection$.subscribe(props => this.planPproperties = props.filter((p: PlanProperty) => p.isUsed));
+    this.propertiesService.getList().subscribe(props => this.planPproperties = props.filter((p: PlanProperty) => p.isUsed));
     this.currentProjectService.getSelectedObject().subscribe(project => {
       if (project !== null) {
           this.project = project;
-          // this.propertiesService.findCollection([{param: 'projectId', value: this.project._id}]);
       }
     });
     this.tasktSchemaService.getSchema().subscribe(schema => this.goalFacts = schema?.goals);
@@ -72,8 +73,8 @@ export class TaskCreatorComponent implements OnInit {
     console.log(previousRun);
 
     const run: PlanRun = {
-      _id: null,
-      name: 'Plan run ' + (this.runService.getNumRuns() + 1),
+      _id: this.runService.getNumRuns().toString(),
+      name: 'Plan ' + (this.runService.getNumRuns() + 1),
       type: RunType.plan,
       status: null,
       project: this.project,
@@ -86,6 +87,7 @@ export class TaskCreatorComponent implements OnInit {
     };
 
     this.plannerService.execute_plan_run(run);
-    this.router.navigate(['../run-overview-mobile'], { relativeTo: this.route });
+    // this.router.navigate(['../run-overview-mobile'], { relativeTo: this.route });
+    this.router.navigate([this.redirectURL], { relativeTo: this.route });
   }
 }

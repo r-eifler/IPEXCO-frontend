@@ -1,12 +1,24 @@
-<div class="main-container">
-  <div [class.control-container-desktop]="! isMobile" [class.control-container-mobile]="isMobile">
-    <button mat-flat-button color="primary">Register</button>
-    <button mat-flat-button color="primary" routerLink="/projects" routerLinkActive="active">Guest</button>
-    <button mat-flat-button color="accent" routerLink="/demos" routerLinkActive="active">Demo</button>
-    <button mat-flat-button >Info</button>
-  </div>
+<form class="example-form" [formGroup]="registerForm" (ngSubmit)="onLogin()" style="display: flex; flex-direction: column">
 
-  <!-- <img id='login-logo' src="assets/complete_logo.svg" [class.logo-desktop]="! isMobile" [class.logo-mobile]="isMobile"> -->
-  <div id='login-logo' [inlineSVG]="'/assets/complete_logo.svg'" [class.logo-desktop]="! isMobile" [class.logo-mobile]="isMobile">
+  <mat-form-field class="example-full-width">
+    <mat-label>User name</mat-label>
+    <input matInput type="text" formControlName="name">
+  </mat-form-field>
+
+  <mat-form-field class="example-full-width">
+    <mat-label>Password</mat-label>
+    <input matInput type="password" formControlName="password">
+  </mat-form-field>
+
+
+  <div style="display: flex">
+    <button mat-flat-button color="secondray" type=button (click)="onBack()" style="flex-grow: 1">
+      <mat-icon>
+        keyboard_backspace
+      </mat-icon>
+    </button>
+    <button mat-flat-button color="primary" style="flex-grow: 4; margin-left: 10px">Login</button>
   </div>
-</div>
+</form>
+
+

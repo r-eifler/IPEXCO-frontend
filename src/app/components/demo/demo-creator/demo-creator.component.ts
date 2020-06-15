@@ -39,7 +39,7 @@ export class DemoCreatorComponent implements OnInit {
       name: this.demoForm.controls.name.value,
       summaryImage: 'none',
       introduction: this.demoForm.controls.description.value,
-      project: this.currentProject,
+      project: this.currentProject._id,
       maxRuns: this.demoForm.controls.maxRuns.value,
       maxQuestionSize: Number.parseInt(this.demoForm.controls.maxQuestionSize.value, 10),
       public: this.demoForm.controls.public.value,
