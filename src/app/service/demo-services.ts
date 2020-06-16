@@ -1,3 +1,4 @@
+import { Project } from 'src/app/interface/project';
 import { DemoRunService } from './run-services';
 import { rejects } from 'assert';
 import { DemosStore, RunningDemoStore } from './../store/stores.store';
@@ -53,6 +54,10 @@ export class DemosService extends ObjectCollectionService<Demo> {
 
   getNum(): number {
     return this.collection$.value.length;
+  }
+
+  getNumOfProject(project: Project) {
+    return this.collection$.value.filter(d => d.project === project._id).length;
   }
 
 }

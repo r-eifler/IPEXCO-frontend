@@ -10,10 +10,10 @@ import { Observable } from 'rxjs';
 export class AutheticationInterceptor implements HttpInterceptor {
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    console.log('auth iterceptor');
+    // console.log('auth iterceptor');
     const token = localStorage.getItem('jwt-token');
     if (token) {
-      console.log('authenticated');
+      // console.log('authenticated');
       const cloned = req.clone({
           headers: req.headers.set('Authorization',
               'Bearer ' + token)
@@ -21,7 +21,7 @@ export class AutheticationInterceptor implements HttpInterceptor {
 
       return next.handle(cloned);
   } else {
-      console.log('not authenticated');
+      // console.log('not authenticated');
       return next.handle(req);
   }
   }
