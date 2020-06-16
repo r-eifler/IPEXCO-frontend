@@ -47,6 +47,8 @@ export class FilesService {
 
   saveFile(file: File) {
 
+    console.log('Save File: ');
+    console.log(file);
     const formData = new FormData();
     formData.append('content', file.content);
     formData.append('name', file.name);

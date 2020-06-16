@@ -17,10 +17,10 @@ export class DemoCreatorComponent implements OnInit {
   demoForm = new FormGroup({
     name: new FormControl(),
     description: new FormControl(),
-    maxRuns: new FormControl(10),
-    maxQuestionSize: new FormControl('1'),
-    public: new FormControl(false),
   });
+
+  imageFileName = '';
+  imageFile;
 
   constructor(
     private demosService: DemosService,
@@ -35,20 +35,27 @@ export class DemoCreatorComponent implements OnInit {
 
 
   createDemo(): void {
+    console.log(this.imageFile);
+
     const newDemo: Demo = {
       name: this.demoForm.controls.name.value,
-      summaryImage: 'none',
+      summaryImage: this.imageFile,
       introduction: this.demoForm.controls.description.value,
       project: this.currentProject._id
     };
     console.log('Create new Demo: ' + newDemo.name);
-    this.demosService.saveObject(newDemo);
+    this.demosService.generateDemo(newDemo);
 
-    this.dialogRef.close();
+    // this.dialogRef.close();
   }
 
   onBack(): void {
     this.dialogRef.close();
+  }
+
+  onFileChanged(event) {
+    this.imageFile = event.target.files[0];
+    this.imageFileName = this.imageFile.name;
   }
 
 }

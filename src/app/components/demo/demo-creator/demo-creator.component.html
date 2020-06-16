@@ -11,19 +11,16 @@
     <textarea matInput formControlName="description"></textarea>
   </mat-form-field>
 
-  <mat-form-field>
-    <mat-label>maximal #runs</mat-label>
-    <input matInput type="number" formControlName="maxRuns">
-  </mat-form-field>
-
-  <mat-radio-group class="size-group" formControlName="maxQuestionSize">
-    <mat-label>Max size of questions: </mat-label>
-    <mat-radio-button value="1">1</mat-radio-button>
-    <mat-radio-button value="2">2</mat-radio-button>
-    <mat-radio-button value="3">3</mat-radio-button>
-  </mat-radio-group>
-
-  <mat-checkbox formControlName="public" style="margin: 10px">Public demo</mat-checkbox>
+  <div style="display: flex;">
+    <input
+    style="display: none"
+    type="file" (change)="onFileChanged($event)"
+    #fileInput>
+    <button mat-icon-button (click)="fileInput.click()" type=button>
+      <mat-icon>add_photo_alternate</mat-icon>
+    </button>
+    <p style="margin: 0; align-self: center;">{{imageFileName}}</p>
+  </div>
 
   <div style="display: flex">
     <button mat-flat-button color="secondray" type=button (click)="onBack()" style="flex-grow: 1">

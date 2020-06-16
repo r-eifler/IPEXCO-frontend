@@ -24,7 +24,16 @@ export class DemosService extends ObjectCollectionService<Demo> {
   }
 
   generateDemo(demo: Demo): void {
-    this.http.post<IHTTPData<Demo>>(this.BASE_URL, demo)
+
+    const formData = new FormData();
+    formData.append('name', demo.name);
+    formData.append('summaryImage', demo.summaryImage);
+    formData.append('introduction', demo.introduction);
+    formData.append('project', demo.project);
+
+    console.log('summaryImage: '  + demo.summaryImage);
+
+    this.http.post<IHTTPData<Demo>>(this.BASE_URL, formData)
       .subscribe(httpData => {
         const runLoaded = this.existsObjectInStore(httpData.data._id);
         let action = null;

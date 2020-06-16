@@ -8,7 +8,7 @@
       <mat-card-title>{{demo.name}}</mat-card-title>
       <mat-card-subtitle>Explanation Demo</mat-card-subtitle>
     </mat-card-header>
-    <img *ngIf="demo.summaryImage !== 'none'" matCardImage src=demo.summaryImage>
+    <img *ngIf="demo.summaryImage !== 'none'" matCardImage src={{demo.summaryImage}}>
     <mat-card-content>
       {{demo.introduction}}
       <!-- {{demo.project}} -->
