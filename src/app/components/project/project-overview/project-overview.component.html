@@ -1,6 +1,7 @@
 <ng-container *ngIf="currentProject">
-<div *ngIf="isMobile" class="container-mobile">
-  <mat-card class="overview-card-mobile">
+
+<div [class.container-web]="! isMobile" [class.container-mobile]="isMobile">
+  <mat-card>
     <mat-card-header>
       <mat-card-title>{{currentProject.name}}</mat-card-title>
       <mat-card-subtitle>Overview</mat-card-subtitle>
@@ -10,73 +11,25 @@
     </mat-card-content>
   </mat-card>
 
-  <mat-card class="overview-card-mobile">
-    <h2>Domain</h2>
-    <p>{{currentProject.domainFile.name}}</p>
-    <h2>Problem</h2>
-    <p>{{currentProject.problemFile.name}}</p>
-    <h2>Specification</h2>
-    <p>{{currentProject.domainSpecification.name}}</p>
-  </mat-card>
-
-  <mat-card class="overview-card-mobile">
+  <mat-card>
     <mat-card-header>
-      <mat-card-title>Statistics:</mat-card-title>
+      <mat-card-title>
+        Files
+      </mat-card-title>
     </mat-card-header>
     <mat-card-content>
-      <mat-list>
-        <mat-list-item>
-          #properties: {{(properties$ | async).length}}
-          <mat-divider [inset]="true"></mat-divider>
-        </mat-list-item>
-        <mat-list-item>
-          #planning runs: {{runsService.getNumRuns()}}
-          <mat-divider [inset]="true"></mat-divider>
-        </mat-list-item>
-        <mat-list-item>
-          #questions: {{runsService.getNumQuestions()}}
-          <mat-divider [inset]="true"></mat-divider>
-        </mat-list-item>
-        <mat-list-item>
-          #demos: {{demosService.getNum()}}
-        </mat-list-item>
-
-      </mat-list>
-    </mat-card-content>
-  </mat-card>
-  <mat-card class="overview-card-mobile, action-card">
-    <mat-card-header>
-      <mat-card-title>Create from Project:</mat-card-title>
-    </mat-card-header>
-    <button mat-stroked-button color="accent" (click)="createDemo()">Demo</button>
-    <button mat-stroked-button color="accent">Survey</button>
-  </mat-card>
-</div>
-
-
-<div *ngIf="! isMobile" class="container-web">
-  <mat-card class="overview-card-web">
-    <mat-card-header>
-      <mat-card-title>{{currentProject.name}}</mat-card-title>
-      <mat-card-subtitle>Overview</mat-card-subtitle>
-    </mat-card-header>
-    <mat-card-content>
-        {{currentProject.description}}
+      <h2>Domain</h2>
+      <p>{{currentProject.domainFile.name}}</p>
+      <h2>Problem</h2>
+      <p>{{currentProject.problemFile.name}}</p>
+      <h2>Specification</h2>
+      <p>{{currentProject.domainSpecification.name}}</p>
     </mat-card-content>
   </mat-card>
 
-  <mat-card class="overview-card-web">
-    <h2>Domain</h2>
-    <p>{{currentProject.domainFile.name}}</p>
-    <h2>Problem</h2>
-    <p>{{currentProject.problemFile.name}}</p>
-    <h2>Specification</h2>
-    <p>{{currentProject.domainSpecification.name}}</p>
-  </mat-card>
-
-  <mat-card class="overview-card-web">
+  <mat-card>
     <mat-card-header>
-      <mat-card-title>Statistics:</mat-card-title>
+      <mat-card-title>Statistics</mat-card-title>
     </mat-card-header>
     <mat-card-content>
       <mat-list>
@@ -98,12 +51,14 @@
       </mat-list>
     </mat-card-content>
   </mat-card>
-  <mat-card class="overview-card-web, action-card">
+
+  <mat-card class="action-card">
     <mat-card-header>
-      <mat-card-title>Create from Project:</mat-card-title>
+      <mat-card-title>Create from Project</mat-card-title>
     </mat-card-header>
     <button mat-stroked-button color="accent" (click)="createDemo()">Demo</button>
     <button mat-stroked-button color="accent">Survey</button>
   </mat-card>
 </div>
+
 </ng-container>
