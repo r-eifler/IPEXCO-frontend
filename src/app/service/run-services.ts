@@ -59,6 +59,10 @@ export class RunService extends ObjectCollectionService<PlanRun> {
     return res;
   }
 
+  reset() {
+    this.listStore.reset();
+  }
+
 }
 
 function sortRuns(runs: PlanRun[]): PlanRun[] {

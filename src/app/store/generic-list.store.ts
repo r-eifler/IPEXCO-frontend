@@ -21,6 +21,11 @@ export class ListStore<T extends Identifiable> {
     this.items$.next(this.items);
   }
 
+  reset() {
+    this.items = [];
+    this.items$.next(this.items);
+  }
+
   _reduce(items: T[], action) {
     switch (action.type) {
       case LOAD:

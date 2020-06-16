@@ -50,7 +50,7 @@ export class DemoNavigatorComponent implements OnInit {
           this.demo = demo;
           console.log(demo);
           this.runningDemoService.saveObject(demo);
-          this.runsService.findCollection();
+          this.runsService.reset();
 
           // console.log('Demo: project ID: ' + this.demo.project);
           this.projectsService.getObject(this.demo.project).subscribe(project => {
