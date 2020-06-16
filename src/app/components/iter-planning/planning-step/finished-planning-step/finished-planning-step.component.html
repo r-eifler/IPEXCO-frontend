@@ -10,7 +10,7 @@
       <app-task-view></app-task-view>
     </mat-tab>
   </mat-tab-group>
-  <button mat-fab color="accent" class="add-button" (click)="newQuestion()">
+  <button mat-fab color="accent" class="add-button" (click)="newQuestion()" *ngIf="(settingsService.getSelectedObject()| async).allowQuestions">
     <mat-icon svgIcon="questionmark"></mat-icon>
   </button>
 </div>

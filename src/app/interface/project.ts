@@ -9,4 +9,5 @@ export interface Project {
   description: string;
   taskSchema?: string;
   properties?: string[];
+  settings?: string;
 }

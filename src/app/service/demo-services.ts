@@ -10,6 +10,7 @@ import { IHTTPData } from '../interface/http-data.interface';
 import { EDIT, ADD, REMOVE, LOAD } from '../store/generic-list.store';
 import { SelectedObjectService } from './selected-object.service';
 import { PddlFileUtilsService } from './pddl-file-utils.service';
+import { ExecutionSettingsService } from './execution-settings.service';
 
 @Injectable({
   providedIn: 'root'
@@ -64,6 +65,7 @@ export class RunningDemoService extends SelectedObjectService<Demo> {
 
   constructor(
     store: RunningDemoStore,
+    private settingsService: ExecutionSettingsService,
     private fileUtilsService: PddlFileUtilsService,
   ) {
     super(store);
@@ -74,7 +76,6 @@ export class RunningDemoService extends SelectedObjectService<Demo> {
     if (demo.definition) {
       console.log('Save running demo: ' + `${demo.definition}/demo.json`);
       const definitionContent$ = this.fileUtilsService.getFileContent(`${demo.definition}/demo.json`);
-      console.log('Load Demo definition');
       definitionContent$.subscribe((content) => {
         // console.log(content);
         if (content) {
@@ -83,6 +84,8 @@ export class RunningDemoService extends SelectedObjectService<Demo> {
           this.selectedObjectStore.dispatch({type: LOAD, data: demo});
         }
       });
+
+      this.settingsService.load(demo.settings);
     }
   }
 }

@@ -29,14 +29,10 @@
     </div>
   </ng-container>
 
-  <button mat-fab color="accent" class="add-plan-button" (click)="newPlanRun()">
+  <button mat-fab color="accent" class="add-plan-button" (click)="newPlanRun()"
+    [disabled]="runsService.getNumRuns() >= (settingsService.getSelectedObject()| async)?.maxRuns">
     <mat-icon>add</mat-icon>
   </button>
-  <!-- <mat-card class="next-action-card">
-    {{(runs$ | async)}}
-    <button mat-flat-button color="accent" (click)="newPlanRun()">New Plan</button>
-    <button mat-flat-button color="accent" [disabled]="! (runs$ | async) || (runs$ | async).length == 0">New Question</button>
-  </mat-card> -->
 
 </div>
 <div class="router-outlet-container">

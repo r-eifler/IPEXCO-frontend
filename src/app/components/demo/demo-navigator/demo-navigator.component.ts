@@ -12,6 +12,7 @@ import { DisplayTaskService } from 'src/app/service/display-task.service';
 import { TaskSchemaService } from 'src/app/service/schema.service';
 import { switchMap } from 'rxjs/operators';
 import { DisplayTask } from 'src/app/interface/display-task';
+import { ExecutionSettingsService } from 'src/app/service/execution-settings.service';
 
 @Component({
   selector: 'app-demo-navigator',
@@ -26,12 +27,13 @@ export class DemoNavigatorComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
+    public settingsService: ExecutionSettingsService,
     private demosService: DemosService,
     private runningDemoService: RunningDemoService,
     private projectsService: ProjectsService,
     private currentProjectService: CurrentProjectService,
     private propertiesService: PlanPropertyCollectionService,
-    private runsService: RunService,
+    public runsService: RunService,
     private domainSpecService: DomainSpecificationService,
     private displayTaskService: DisplayTaskService,
     private curretnSchemaService: TaskSchemaService,
@@ -69,6 +71,8 @@ export class DemoNavigatorComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    // this.settingsService.getSelectedObject().subscribe(s => console.log(s));
+    // console.log(this.runsService.getNumRuns());
   }
 
   newPlanRun() {

@@ -1,6 +1,6 @@
 import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { DemosService, RunningDemoService } from './../../../service/demo-services';
+import { DemosService, RunningDemoService } from '../../../service/demo-services';
 import { Component, OnInit } from '@angular/core';
 import { ResponsiveService } from 'src/app/service/responsive.service';
 import {MatBottomSheet} from '@angular/material/bottom-sheet';
@@ -9,13 +9,15 @@ import { DemoSettingsComponent } from '../demo-settings/demo-settings.component'
 import { Demo } from 'src/app/interface/demo';
 import { RunStatus } from 'src/app/interface/run';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import { MatDialogConfig, MatDialog } from '@angular/material/dialog';
+import { ExecutionSettingsService } from 'src/app/service/execution-settings.service';
 
 @Component({
-  selector: 'app-demo-sellection',
-  templateUrl: './demo-sellection.component.html',
-  styleUrls: ['./demo-sellection.component.scss']
+  selector: 'app-demo-selection',
+  templateUrl: './demo-selection.component.html',
+  styleUrls: ['./demo-selection.component.scss']
 })
-export class DemoSellectionComponent implements OnInit {
+export class DemoSelectionComponent implements OnInit {
 
   isMobile: boolean;
 
@@ -66,8 +68,10 @@ export class DemoSellectionComponent implements OnInit {
     this.router.navigate(['../demos/' + demo._id + '/help'], {relativeTo: this.activatedRoute});
   }
 
-  openMenu() {
-    this.bottomSheet.open(DemoSettingsComponent);
+  openSettings(demo: Demo) {
+    console.log('Open Settings: ');
+    console.log(demo);
+    this.bottomSheet.open(DemoSettingsComponent, {data: demo});
   }
 
 }

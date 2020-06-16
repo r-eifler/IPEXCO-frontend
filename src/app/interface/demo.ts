@@ -1,5 +1,6 @@
 import { Project } from './project';
 import { RunStatus } from './run';
+import { ExecutionSettings } from './execution-settings';
 
 export interface Demo {
   _id?: string;
@@ -10,9 +11,7 @@ export interface Demo {
   status?: RunStatus;
   definition?: string;
   data?: DemoDefinition;
-  maxRuns: number;
-  maxQuestionSize: number;
-  public: boolean;
+  settings?: string;
 }
 
 export interface DemoDefinition {

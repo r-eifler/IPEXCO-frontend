@@ -2,6 +2,7 @@
   <h2>Why not ... ?</h2>
   <mat-selection-list #planPorpertiesList (selectionChange)="onSelectionChange($event)">
     <mat-list-option *ngFor="let property of notSatPlanProperties; last as last"
+    [disabled]="maxSizeQuestionReached && ! this.question.includes(property)"
     checkboxPosition="before" [value]="property">
       {{property.naturalLanguageDescription}}
       <mat-divider [inset]="true" *ngIf="!last"></mat-divider>

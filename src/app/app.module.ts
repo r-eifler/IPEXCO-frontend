@@ -101,7 +101,8 @@ import {
   DisplayTaskStore,
   DemosStore,
   RunningDemoStore,
-  UserStore
+  UserStore,
+  ExecutionSettingsStore
 } from './store/stores.store';
 import {
   DomainFilesService,
@@ -118,7 +119,7 @@ import {
 import { ProjectsService, CurrentProjectService} from './service/project-services';
 import { PlanPropertyCollectionService} from './service/plan-property-services';
 import { LoginComponent } from './components/login/login/login.component';
-import { DemoSellectionComponent } from './components/demo/demo-sellection/demo-sellection.component';
+import { DemoSelectionComponent } from './components/demo/demo-selection/demo-selection.component';
 import { DemoBaseComponent } from './components/demo/demo-base/demo-base.component';
 import { MobilMenuComponent } from './components/settings/mobil-menu/mobil-menu.component';
 import { DemoSettingsComponent } from './components/demo/demo-settings/demo-settings.component';
@@ -140,6 +141,7 @@ import { RegisterComponent } from './components/login/register/register.componen
 import { AutheticationInterceptor } from './interceptor/authentication.interceptor';
 import { UserMainPageComponent } from './components/user/user-main-page/user-main-page.component';
 import { FilesCollectionComponent } from './components/files/files-collection/files-collection.component';
+import { ExecutionSettingsService } from './service/execution-settings.service';
 
 
 
@@ -163,7 +165,7 @@ const appRoutes: Routes = [
         }
       ]
     },
-    { path: 'demos', component: DemoSellectionComponent},
+    { path: 'demos', component: DemoSelectionComponent},
     { path: 'demos/:demoid', component: DemoBaseComponent,
       children: [
         { path: 'help', component: DemoHelpComponent},
@@ -212,7 +214,7 @@ const appRoutes: Routes = [
     QuestionViewComponent,
     ExplanationViewComponent,
     LoginComponent,
-    DemoSellectionComponent,
+    DemoSelectionComponent,
     DemoBaseComponent,
     MobilMenuComponent,
     DemoSettingsComponent,
@@ -283,6 +285,8 @@ const appRoutes: Routes = [
     UserService,
     { provide: HTTP_INTERCEPTORS, useClass: AutheticationInterceptor, multi: true },
     AutheticationInterceptor,
+    ExecutionSettingsStore,
+    ExecutionSettingsService,
     DomainFilesStore,
     SelectedDomainFileStore,
     ProblemFilesStore,

@@ -1,3 +1,4 @@
+import { ExecutionSettings } from './../interface/execution-settings';
 import { DisplayTask } from './../interface/display-task';
 import { ViewSettings } from './../interface/view-settings';
 import {ListStore} from './generic-list.store';
@@ -86,6 +87,10 @@ export class RunningDemoStore extends  ItemStore<Demo> {
 }
 
 export class UserStore extends  ItemStore<User> {
+
+}
+
+export class ExecutionSettingsStore extends  ItemStore<ExecutionSettings> {
 
 }
 

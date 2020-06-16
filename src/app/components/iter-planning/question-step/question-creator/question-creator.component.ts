@@ -12,6 +12,7 @@ import { PlanPropertyCollectionService } from 'src/app/service/plan-property-ser
 import { CurrentProjectService } from 'src/app/service/project-services';
 import { MatSelectionList } from '@angular/material/list/selection-list';
 import { Router, ActivatedRoute } from '@angular/router';
+import { ExecutionSettingsService } from 'src/app/service/execution-settings.service';
 
 @Component({
   selector: 'app-question-creator',
@@ -31,7 +32,10 @@ export class QuestionCreatorComponent implements OnInit {
 
   private currentProject: Project;
 
+  public maxSizeQuestionReached = false;
+
   constructor(
+    private settingsService: ExecutionSettingsService,
     private propertiesService: PlanPropertyCollectionService,
     private currentProjectService: CurrentProjectService,
     private plannerService: PlannerService,
@@ -66,6 +70,11 @@ export class QuestionCreatorComponent implements OnInit {
 
   onSelectionChange(event) {
     this.question = this.questionSelectionList.selectedOptions.selected.map(v => v.value);
+    if (this.questionSelectionList.selectedOptions.selected.length >= this.settingsService.getSelectedObject().getValue().maxQuestionSize) {
+      this.maxSizeQuestionReached = true;
+    } else {
+      this.maxSizeQuestionReached = false;
+    }
   }
 
 
