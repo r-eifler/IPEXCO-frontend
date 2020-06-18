@@ -2,6 +2,7 @@ import { NoMysteryTask, Location, Road } from './../../nomystery/nomystery-task'
 import { ElementRef } from '@angular/core';
 import { gsap } from 'gsap';
 import { Draggable } from 'gsap/Draggable';
+import { logDepthVertex } from 'babylonjs/Shaders/ShadersInclude/logDepthVertex';
 
 interface Position {
   x: number;
@@ -11,15 +12,21 @@ interface Position {
 const maxHeight = 700;
 const maxWidth = 700;
 
-const nodeWidth = 75;
+const nodeWidth = 30;
 const nodeHeight = 30;
 
 
 interface MoveLocation {
-  x: number;
-  y: number;
   location: Location;
   svg: Element;
+  draggable: any;
+  dropLocations: MoveDropLocation[];
+}
+
+interface MoveDropLocation {
+  location: Location;
+  svg: Element;
+  draggable: any;
 }
 
 interface MoveEdge {
@@ -36,7 +43,14 @@ export class LocationPositioningSettings {
   moveLocations: Map<string, MoveLocation> = new Map();
   moveEdges: MoveEdge[] = [];
 
-  constructor(private task: NoMysteryTask, private locationPositions: Map<string, Position>) {
+  dropLocations: MoveDropLocation[] = [];
+
+  constructor(
+    private task: NoMysteryTask,
+    private locationPositions: Map<string, Position>,
+    private locationDropPositions: Map<string, Position[]>) {
+
+    gsap.registerPlugin(Draggable);
 
     this.svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     this.svg.setAttribute('width', maxWidth.toString());
@@ -45,15 +59,15 @@ export class LocationPositioningSettings {
     this.createLocations();
     this.createEdges();
     this.addNodeSVG();
+    this.createPackageDropLocations();
 
-    this.updateLocationPositions();
     this.updateEdgePositions();
 
-    gsap.registerPlugin(Draggable);
-    initDraggable(this);
+    this.disableDraggableDropLocations();
+    // initDraggable(this);
 
-    this.svg.addEventListener('load', () => initDraggable(this));
-    this.svg.addEventListener('click', () => initDraggable(this));
+    // this.svg.addEventListener('load', () => initDraggable(this));
+    // this.svg.addEventListener('click', () => initDraggable(this));
 
   }
 
@@ -87,7 +101,7 @@ export class LocationPositioningSettings {
 
     const text = document.createElementNS(this.svg.namespaceURI, 'text');
     text.textContent = loc.name;
-    text.setAttribute('x', (nodeWidth / 2).toString());
+    text.setAttribute('x', (nodeWidth / 2 - 5).toString());
     text.setAttribute('y', (nodeHeight / 2 + 5).toString());
 
     group.appendChild(text);
@@ -105,11 +119,12 @@ export class LocationPositioningSettings {
       y = Math.min(Math.max(nodeHeight + 20, y), maxHeight - nodeHeight - 20);
     }
 
+    group.setAttribute('transform', `translate(${x}, ${y})`);
     const moveLoc: MoveLocation = {
-      x,
-      y,
       location: loc,
       svg: group,
+      draggable: Draggable.create(group, {bound: this.svg, onDrag: () => this.updateEdgePositions()})[0],
+      dropLocations: [],
     };
 
     return moveLoc;
@@ -121,9 +136,56 @@ export class LocationPositioningSettings {
     }
   }
 
-  updateLocationPositions() {
-    for ( const mv of this.moveLocations.values()) {
-      mv.svg.setAttribute('transform', `translate(${mv.x}, ${mv.y})`);
+  createPackageDropLocations() {
+    const numPackages = this.task.packages.size;
+    for (const loc of this.moveLocations.values()) {
+      for (let i = 0; i < numPackages; i++) {
+        const group = document.createElementNS(this.svg.namespaceURI, 'g');
+
+        const rect = document.createElementNS(this.svg.namespaceURI, 'rect');
+        rect.setAttribute('width', '20');
+        rect.setAttribute('height', '20');
+        rect.setAttribute('stroke', '#000000');
+        rect.setAttribute('fill', '#000000');
+
+        group.appendChild(rect);
+
+        const text = document.createElementNS(this.svg.namespaceURI, 'text');
+        text.textContent = i.toString();
+        text.setAttribute('x', '6');
+        text.setAttribute('y', '15');
+        text.setAttribute('stroke', '#FFFFFF');
+
+        group.appendChild(text);
+
+        loc.svg.appendChild(group);
+
+        let x = 0;
+        let y = 0;
+        if (this.locationDropPositions){
+          const pos = this.locationDropPositions.get(loc.location.name)[i];
+          x = pos.x;
+          y = pos.y;
+        } else {
+          const alpha = i / numPackages * 2 * Math.PI;
+          const dx = Math.cos(alpha) * 60;
+          const dz = Math.sin(alpha) * 60;
+          x = dx + nodeWidth / 2 - 10;
+          y = dz + nodeHeight / 2 - 10;
+        }
+
+
+        group.setAttribute('transform', `translate(${x}, ${y})`);
+        const moveLoc: MoveDropLocation = {
+          location: loc.location,
+          svg: group,
+          draggable: Draggable.create(group, {bound: this.svg})[0]
+        };
+
+        loc.dropLocations.push(moveLoc);
+
+        this.dropLocations.push(moveLoc);
+      }
     }
   }
 
@@ -167,7 +229,7 @@ export class LocationPositioningSettings {
     }
   }
 
-  getCurrentLocations(): Map<string, Position> {
+  getCurrentLocationsPositions(): Map<string, Position> {
     const rMap = new Map();
     for (const n of this.moveLocations.values()) {
       const pos: Position = getPosfromTransform(n.svg.getAttribute('transform'));
@@ -176,15 +238,54 @@ export class LocationPositioningSettings {
     return rMap;
   }
 
+  getCurrentLocationsDropPositions(): Map<string, Position[]> {
+    const rMap = new Map();
+    for (const n of this.moveLocations.values()) {
+      const positions = []
+      for (const dropPos of n.dropLocations){
+        positions.push(getPosfromTransform(dropPos.svg.getAttribute('transform')));
+      }
+      rMap.set(n.location.name, positions);
+    }
+    return rMap;
+  }
+
+  enableDraggableLocations() {
+    for (const loc of this.moveLocations.values()) {
+      loc.draggable.enable();
+    }
+  }
+
+  disableDraggableLocations() {
+    for (const loc of this.moveLocations.values()) {
+      loc.draggable.disable();
+    }
+  }
+
+  enableDraggableDropLocations() {
+    for (const loc of this.dropLocations) {
+      loc.draggable.enable();
+    }
+  }
+
+  disableDraggableDropLocations() {
+    for (const loc of this.dropLocations) {
+      loc.draggable.disable();
+    }
+  }
+
 }
 
-function initDraggable(settings: LocationPositioningSettings) {
-  console.log('svg load');
-  Draggable.create('.node', {
-    bounds: 'svg',
-    onDrag: () => settings.updateEdgePositions()
-  });
-}
+// function initDraggable(settings: LocationPositioningSettings) {
+//   console.log('svg load');
+//   settings.draggableNodes = Draggable.create('.node', {
+//     bounds: 'svg',
+//     onDrag: () => settings.updateEdgePositions()
+//   });
+//   settings.draggableDropLocations = Draggable.create('.dropLoc', {
+//     bounds: 'svg',
+//   });
+// }
 
 function getPosfromTransform(transform: string): Position {
   const parts = transform.replace(')', '').replace('translate(', '').split(',');

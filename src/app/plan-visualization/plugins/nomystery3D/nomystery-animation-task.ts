@@ -1,14 +1,22 @@
+import { AnimationSettingsNoMysteryVisu } from './settings/animation-settings-nomystery-visu';
 import { Road, Location, Package, Truck } from '../nomystery/nomystery-task';
 import { NoMysteryTask } from '../nomystery/nomystery-task';
 import { AnimationInfo } from '../../integration/animation-info';
 import * as BABYLON from 'babylonjs';
 import { angleBetweenLocations } from './utils';
+import { AnimationSettingsNoMystery } from './settings/animation-settings-nomystery';
 
 
 const maxPositionLocation = 6;
 const radius = 5;
 const maxPositionsTruck = 4;
 const packageSize = 20;
+
+interface Position {
+  x: number;
+  y: number;
+}
+
 
 
 export class AnimationNode {
@@ -20,14 +28,31 @@ export class AnimationNode {
   public mesh: BABYLON.AbstractMesh;
   public transformNode: BABYLON.TransformNode;
 
+  private freePositions = null;
+
   constructor(public id: string) {
     // this.mesh = new BABYLON.TransformNode(id);
   }
 
+  setFreePsoition(pos: Position[]) {
+    console.log(pos);
+    this.freePositions = pos;
+  }
+
   getFreePosition(): BABYLON.Vector3 {
-    const alpha = this.objects / maxPositionLocation * 2 * Math.PI;
-    const dx = Math.cos(alpha) * radius;
-    const dz = Math.sin(alpha) * radius;
+
+    console.log('Get free position');
+    let dx = 0;
+    let dz = 0;
+    if (! this.freePositions) {
+      const alpha = this.objects / maxPositionLocation * 2 * Math.PI;
+      dx = Math.cos(alpha) * radius;
+      dz = Math.sin(alpha) * radius;
+    } else {
+      dx = this.freePositions[this.objects].x;
+      dz = this.freePositions[this.objects].y;
+    }
+
 
     return new BABYLON.Vector3(this.x + dx, 0, this.y + dz);
   }
@@ -267,14 +292,16 @@ export class NoMystery3DAnimationTask extends AnimationInfo {
   public roads: AnimationRoad[] = [];
   public packages: Map<string, AnimationPackage> = new Map();
 
-  constructor(protected task: NoMysteryTask) {
+  constructor(protected task: NoMysteryTask, private dropPositions: Map<string, Position[]>) {
     super(task);
     this.buildFromTask();
   }
 
   buildFromTask(): void {
     for (const loc of this.task.locations.values()) {
-      this.locations.set(loc.name, new AnimationLocation(loc));
+      const animationLoc =  new AnimationLocation(loc);
+      animationLoc.setFreePsoition(this.dropPositions.get(loc.name));
+      this.locations.set(loc.name, animationLoc);
     }
     for (const road of this.task.roads) {
       this.roads.push(new AnimationRoad(this.locations.get(road.source.name), this.locations.get(road.target.name), road));

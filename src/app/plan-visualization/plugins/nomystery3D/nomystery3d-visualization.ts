@@ -13,6 +13,12 @@ import { CurrentRunService } from 'src/app/service/run-services';
 import { Injectable, ElementRef } from '@angular/core';
 import { AnimationSettingsNoMystery } from './settings/animation-settings-nomystery';
 
+
+interface Position {
+  x: number;
+  y: number;
+}
+
 const refXMax = 700;
 const refYMax = 700;
 
@@ -29,6 +35,7 @@ export class NoMystery3DVisualization extends PlanVisualization {
   private animation: NoMystery3DAnimation = null;
 
   private animationSettings: AnimationSettingsNoMystery;
+  private scaledDropPositions: Map<string, Position[]> = new Map();
 
   private canvas: HTMLCanvasElement = null;
   private engine: BABYLON.Engine;
@@ -48,8 +55,19 @@ export class NoMystery3DVisualization extends PlanVisualization {
       project => {
         if (project) {
           this.animationSettings = new AnimationSettingsNoMystery(project.animationSettings);
+          this.scaleDropPositions();
         }
     });
+  }
+
+  scaleDropPositions() {
+    for (const elem of this.animationSettings.locationDropPositions) {
+      const scaledPositions: Position[] = [];
+      for (const pos of elem[1]) {
+        scaledPositions.push({x: pos.x / refXMax * worldWidth , y: -(pos.y / refYMax * worldHeight)});
+      }
+      this.scaledDropPositions.set(elem[0], scaledPositions);
+    }
   }
 
   displayIn(canvas: ElementRef) {
@@ -103,7 +121,7 @@ export class NoMystery3DVisualization extends PlanVisualization {
       const sceneLoadedPromise = new Promise<void>((resolve, reject) => {
         this.taskSchemaService.getSchema().subscribe(async (ts) => {
           if (ts) {
-            this.animationTask = new NoMystery3DAnimationTask(new NoMysteryTask(ts));
+            this.animationTask = new NoMystery3DAnimationTask(new NoMysteryTask(ts), this.scaledDropPositions);
             this.animation = new NoMystery3DAnimation(this.animationTask);
 
             const worldPlane = new WorldPlane(this.scene);

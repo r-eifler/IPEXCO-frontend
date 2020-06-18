@@ -11,6 +11,10 @@
     </mat-card-content>
 
     <mat-card-actions style="display: flex; justify-content: flex-end">
+      <mat-button-toggle-group style="margin-right: 20px;">
+        <mat-button-toggle [checked]="true" (click)="animationSettings.moveLocations()">Locations</mat-button-toggle>
+        <mat-button-toggle (click)="animationSettings.moveDropLocations()">Drop Positions</mat-button-toggle>
+      </mat-button-toggle-group>
       <button mat-flat-button color="accent" (click)="saveSettings()">Save</button>
     </mat-card-actions>
   </mat-card>

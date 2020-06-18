@@ -16,7 +16,7 @@ export class AnimationSettingsNomysteryComponent implements OnInit, AfterViewIni
 
   @ViewChild('animationsettingscontainer') locationSettingsContainer: ElementRef;
 
-  private animationSettings: AnimationSettingsNoMysteryVisu;
+  public animationSettings: AnimationSettingsNoMysteryVisu;
 
   constructor(
     private responsiveService: ResponsiveService,

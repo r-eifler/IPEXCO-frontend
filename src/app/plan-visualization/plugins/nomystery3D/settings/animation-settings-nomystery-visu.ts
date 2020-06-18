@@ -39,7 +39,8 @@ export class AnimationSettingsNoMysteryVisu {
             schema => {
               if (schema) {
                 const task = new NoMysteryTask(schema);
-                this.locationPosSettings = new LocationPositioningSettings(task, this.animationSettings.locationPositions);
+                this.locationPosSettings = new LocationPositioningSettings(task,
+                  this.animationSettings.locationPositions, this.animationSettings.locationDropPositions);
                 this.displayObservable.next([this.locationPosSettings.display()]);
               }
             }
@@ -58,9 +59,23 @@ export class AnimationSettingsNoMysteryVisu {
 
 
   save() {
-    this.animationSettings.locationPositions = this.locationPosSettings.getCurrentLocations();
+    this.animationSettings.locationPositions = this.locationPosSettings.getCurrentLocationsPositions();
+    this.animationSettings.locationDropPositions = this.locationPosSettings.getCurrentLocationsDropPositions();
     this.currentProject.animationSettings = this.animationSettings.toJSON();
 
+    console.log(this.currentProject.animationSettings);
+
     this.projectsService.saveObject(this.currentProject);
+    this.projectService.saveObject(this.currentProject);
+  }
+
+  moveLocations() {
+    this.locationPosSettings.enableDraggableLocations();
+    this.locationPosSettings.disableDraggableDropLocations();
+  }
+
+  moveDropLocations() {
+    this.locationPosSettings.disableDraggableLocations();
+    this.locationPosSettings.enableDraggableDropLocations();
   }
 }
