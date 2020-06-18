@@ -50,7 +50,6 @@ export class AnimationSettingsNomysteryComponent implements OnInit, AfterViewIni
   }
 
   saveSettings() {
-    console.log('save settings');
     this.animationSettings.save();
   }
 

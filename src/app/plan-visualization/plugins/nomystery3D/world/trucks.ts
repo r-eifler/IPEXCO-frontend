@@ -4,7 +4,7 @@ import { Scene, AbstractMesh } from 'babylonjs';
 import { NoMystery3DAnimationTask, AnimationTruck } from '../nomystery-animation-task';
 
 
-export async function loadTruckMeshes(taskInfo: NoMystery3DAnimationTask, scene: Scene){
+export async function loadTruckMeshes(taskInfo: NoMystery3DAnimationTask, scene: Scene) {
   for (const truck of taskInfo.trucks.values()) {
     const size = 5;
     const mesh = await loadTruckMesh(scene, truck);

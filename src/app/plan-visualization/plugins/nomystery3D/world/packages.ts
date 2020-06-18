@@ -22,10 +22,15 @@ function loadPackageMesh(scene: Scene, pack: AnimationPackage): Promise<BABYLON.
     const p = BABYLON.MeshBuilder.CreateBox('package', {width: 2, depth: 2, height: 2, faceColors: boxColor}, scene);
     p.position.set(0, 0, 0);
 
-    const sign = BABYLON.MeshBuilder.CreatePlane('sign', {size: 4}, scene);
+    const sign = BABYLON.MeshBuilder.CreatePlane('sign', {size: 5}, scene);
     sign.position.set(0, 4, 0);
-    sign.addRotation(Math.PI / 2, 0, 0);
-    // sign.rotate(new BABYLON.Vector3(1, 0, 0), Math.PI / 2);
+    sign.rotate(BABYLON.Axis.X, 0, BABYLON.Space.LOCAL);
+
+    const dynamicTexture = new BABYLON.DynamicTexture('DynamicTexture', {width: 128, height: 128}, scene, false);
+    const mat = new BABYLON.StandardMaterial('mat', scene);
+    mat.diffuseTexture = dynamicTexture;
+    dynamicTexture.drawText(pack.id, null, null, 'bold 80px arial', '#000000', '#ffffff', true);
+    sign.material = mat;
 
     const parent = new TransformNode('package-parent');
 

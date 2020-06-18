@@ -25,7 +25,6 @@ export class PlanAnimationViewComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    console.log('Animation-Container: ' + this.animationContainer);
     this.animationHandler.displayAnimationIn(this.animationContainer);
   }
 

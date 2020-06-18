@@ -22,7 +22,6 @@ public currentAnimationPausedEvent: BehaviorSubject<boolean> = new BehaviorSubje
 constructor(
   private  currentRunService: CurrentRunService,
   @Inject(PlanVisualization) public animation: PlanVisualization) {
-    console.log('New animation handler');
     this.currentRunService.getSelectedObject().subscribe((run) => {
       if (run) {
         this.plan = run.plan;
@@ -39,7 +38,6 @@ displayAnimationIn(canvas: ElementRef) {
 async play() {
   this.paused = false;
   while (this.index < this.plan.actions.length && ! this.paused) {
-    console.log('play');
     this.nextPlayingEvent();
     await this.animation.animateAction(this.plan.actions[this.index++]);
     this.nextEvents();
@@ -79,7 +77,6 @@ private nextPausedEvent() {
 }
 
 private nextPlayingEvent() {
-  // console.log('playing');
   this.currentAnimationPausedEvent.next(false);
 }
 
