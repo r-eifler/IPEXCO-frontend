@@ -13,6 +13,19 @@ export class Streets {
     for (const loc of task.locations.values()) {
       const cylinder1 = BABYLON.MeshBuilder.CreateCylinder('location-marker', {diameter: 5, height: 0.5, faceColors: boxColor}, scene);
       cylinder1.position.set(loc.x, 0, loc.y);
+
+      const sign = BABYLON.MeshBuilder.CreateDisc('sign', {radius: 2.5}, scene);
+      sign.position.set(loc.x, 0.5, loc.y);
+      // sign.rotation.set(0, Math.PI / 2, 0);
+      // sign.rotate(BABYLON.Axis.Y, Math.PI / 2, BABYLON.Space.LOCAL);
+      // sign.rotate(BABYLON.Axis.Z, Math.PI / 3, BABYLON.Space.LOCAL);
+      sign.rotate(BABYLON.Axis.X, Math.PI / 2, BABYLON.Space.LOCAL);
+
+      const dynamicTexture = new BABYLON.DynamicTexture('DynamicTexture', {width: 128, height: 128}, scene, false);
+      const mat = new BABYLON.StandardMaterial('mat', scene);
+      mat.diffuseTexture = dynamicTexture;
+      dynamicTexture.drawText(loc.id, null, null, 'bold 80px arial', '#000000', '#808080', true);
+      sign.material = mat;
     }
 
     for (const s of task.roads) {
