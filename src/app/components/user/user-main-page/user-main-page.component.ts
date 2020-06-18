@@ -47,7 +47,8 @@ export class UserMainPageComponent implements OnInit {
   }
 
   openProject(project: Project) {
-    this.router.navigate(['/project', project._id, '/overview'], { relativeTo: this.route });
+    console.log(''.concat(...['/projects/', project._id, '/overview']));
+    this.router.navigate([''.concat(...['/projects/', project._id, '/overview'])], { relativeTo: this.route });
   }
 
   toProjectCollection() {
@@ -55,7 +56,7 @@ export class UserMainPageComponent implements OnInit {
   }
 
   openDemo(demo: Demo) {
-    this.router.navigate(['/demo', demo._id], { relativeTo: this.route });
+    this.router.navigate([''.concat(...['/demos/', demo._id, '/help'])], { relativeTo: this.route });
   }
 
   toDemoCollection() {
