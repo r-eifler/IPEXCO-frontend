@@ -1,3 +1,4 @@
+import { AnimationSettingsProvider } from './../../../provider/plan-visualisation.provider';
 import { QUESTION_REDIRECT } from './../../../app.tokens';
 import { PlannerService } from './../../../service/planner.service';
 import { DemosService } from './../../../service/demo-services';
@@ -27,6 +28,7 @@ import { PLANNER_REDIRECT } from 'src/app/app.tokens';
   styleUrls: ['./project-base.component.css'],
   providers: [
      PlanVisualizationProvider,
+     AnimationSettingsProvider,
     {provide: RunService, useClass: RunService},
     {provide: PlannerService, useClass: PlannerService},
     { provide: PLANNER_REDIRECT, useValue: '../run-overview-mobile' },
@@ -64,7 +66,7 @@ export class ProjectBaseComponent implements OnInit {
 
           combineLatest([this.curretnSchemaService.findSchema(this.project), this.domainSpecService.findSpec(this.project)]).
             subscribe(([taskSchema, domainSpec]) => {
-              if(taskSchema && domainSpec) {
+              if (taskSchema && domainSpec) {
                 this.displayTaskService.saveObject(new DisplayTask(taskSchema, domainSpec));
               }
             });

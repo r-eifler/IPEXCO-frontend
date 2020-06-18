@@ -1,3 +1,4 @@
+import { AnimationSettingsDirective } from './components/animation/animation-settings.directive';
 import { UserService } from './service/user.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DemosService, RunningDemoService } from './service/demo-services';
@@ -142,6 +143,8 @@ import { AutheticationInterceptor } from './interceptor/authentication.intercept
 import { UserMainPageComponent } from './components/user/user-main-page/user-main-page.component';
 import { FilesCollectionComponent } from './components/files/files-collection/files-collection.component';
 import { ExecutionSettingsService } from './service/execution-settings.service';
+import { AnimationSettingsComponent } from './components/animation/animation-settings/animation-settings.component';
+import { AnimationSettingsNomysteryComponent } from './components/plugins/nomystery/animation-settings-nomystery/animation-settings-nomystery.component';
 
 
 
@@ -162,7 +165,8 @@ const appRoutes: Routes = [
             { path: 'planning-step/:runid/new-question', component: QuestionStepComponent},
             { path: 'planning-step/:runid/question-step/:expid', component: FinishedQuestionStepComponent},
           ]
-        }
+        },
+        { path: 'animation-settings', component: AnimationSettingsComponent},
       ]
     },
     { path: 'demos', component: DemoSelectionComponent},
@@ -233,6 +237,9 @@ const appRoutes: Routes = [
     RegisterComponent,
     UserMainPageComponent,
     FilesCollectionComponent,
+    AnimationSettingsComponent,
+    AnimationSettingsNomysteryComponent,
+    AnimationSettingsDirective,
   ],
   imports: [
     BrowserModule,
@@ -338,6 +345,7 @@ const appRoutes: Routes = [
     ViewSettingsMenuComponent,
     RegisterComponent,
     LoginComponent,
+    AnimationSettingsNomysteryComponent
   ],
   bootstrap: [AppComponent]
 })

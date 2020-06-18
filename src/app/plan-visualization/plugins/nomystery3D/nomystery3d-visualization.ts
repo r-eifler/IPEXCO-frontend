@@ -1,4 +1,4 @@
-import { rejects } from 'assert';
+import { CurrentProjectService, ProjectsService } from 'src/app/service/project-services';
 import { Streets } from './world/streets';
 import * as BABYLON from 'babylonjs';
 import { PlanVisualization } from '../../integration/plan-visualization';
@@ -10,8 +10,9 @@ import { loadPackagekMeshes } from './world/packages';
 import { NoMystery3DAnimation } from './animations/nomystery3D-animation';
 import { TaskSchemaService } from 'src/app/service/schema.service';
 import { CurrentRunService } from 'src/app/service/run-services';
-import { combineLatest } from 'rxjs';
 import { Injectable, ElementRef } from '@angular/core';
+import { AnimationSettingsNoMystery } from './settings/animation-settings-nomystery';
+import { logDepthVertex } from 'babylonjs/Shaders/ShadersInclude/logDepthVertex';
 
 const testLoc = new Map();
 testLoc.set('l0', {x: -30, y: -30});
@@ -22,18 +23,12 @@ testLoc.set('l4', {x: -10, y: 10});
 testLoc.set('l5', {x: -30, y: 30});
 // testLoc.set('l6', {x: 20, z: 0});
 
+const refXMax = 700;
+const refYMax = 700;
 
-function getRandomStreetsPositions(task: NoMystery3DAnimationTask) {
-  for (const loc of task.locations.values()) {
-    // const pos: Pos2D = {x: randomInt(-30, 30), z: randomInt(-30, 30)};
-    if (testLoc.has(loc.getName())) {
-      // console.log(loc.getName());
-      const pos = testLoc.get(loc.getName());
-      loc.x = pos.x;
-      loc.y = pos.y;
-    }
-  }
-}
+const worldWidth = 100;
+const worldHeight = 100;
+
 
 @Injectable({
   providedIn: 'root'
@@ -42,6 +37,8 @@ export class NoMystery3DVisualization extends PlanVisualization {
 
   private animationTask: NoMystery3DAnimationTask;
   private animation: NoMystery3DAnimation = null;
+
+  private animationSettings: AnimationSettingsNoMystery;
 
   private canvas: HTMLCanvasElement = null;
   private engine: BABYLON.Engine;
@@ -52,11 +49,18 @@ export class NoMystery3DVisualization extends PlanVisualization {
   private view: BABYLON.EngineView = null;
 
   constructor(
+    protected currentProjectService: CurrentProjectService,
     protected taskSchemaService: TaskSchemaService,
     protected  currentRunService: CurrentRunService) {
-    super(taskSchemaService, currentRunService);
+    super(currentProjectService, taskSchemaService, currentRunService);
     console.log('PlanVisualtion: NoMystery3DVisualization');
 
+    this.currentProjectService.getSelectedObject().subscribe(
+      project => {
+        if (project) {
+          this.animationSettings = new AnimationSettingsNoMystery(project.animationSettings);
+        }
+    });
   }
 
   displayIn(canvas: ElementRef) {
@@ -83,6 +87,22 @@ export class NoMystery3DVisualization extends PlanVisualization {
     this.doRender();
   }
 
+  getLocationPositions() {
+    const xMax = worldWidth - 15;
+    const yMax = worldHeight - 15;
+    for (const loc of this.animationTask.locations.values()) {
+      if (testLoc.has(loc.getName())) {
+        const pos = this.animationSettings.locationPositions.get(loc.getName());
+        const xScaled = (pos.x / refXMax) * xMax;
+        const yScaled = ( pos.y / refYMax) * yMax;
+        loc.x = xScaled < xMax / 2 ? -((xMax / 2) - xScaled) : xScaled - (xMax / 2);
+        loc.y = - (yScaled < yMax / 2 ?  -((yMax / 2) - yScaled) : yScaled - (yMax / 2));
+        loc.x += 10;
+        loc.y += -10;
+      }
+    }
+  }
+
   createScene(): void {
       this.scene = new BABYLON.Scene(this.engine);
 
@@ -101,7 +121,7 @@ export class NoMystery3DVisualization extends PlanVisualization {
           this.animation = new NoMystery3DAnimation(this.animationTask);
 
           const worldPlane = new WorldPlane(this.scene);
-          getRandomStreetsPositions(this.animationTask);
+          this.getLocationPositions();
           const streets = new Streets(this.scene, this.animationTask);
           await loadTruckMeshes(this.animationTask, this.scene);
           await loadPackagekMeshes(this.animationTask, this.scene);

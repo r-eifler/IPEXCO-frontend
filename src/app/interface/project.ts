@@ -10,4 +10,5 @@ export interface Project {
   taskSchema?: string;
   properties?: string[];
   settings?: string;
+  animationSettings?: string;
 }
