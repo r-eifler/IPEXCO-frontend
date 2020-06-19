@@ -57,7 +57,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 import {FormsModule} from '@angular/forms';
 
 // my components
-import { PropertySelectorComponent} from './components/iter-planning/property-selector/property-selector.component';
 import { TemplateFileUploadComponent } from './components/files/file-upload/file-upload.component';
 import { DomainSelectorComponent } from './components/files/domain-selector/domain-selector.component';
 import { ProblemSelectorComponent } from './components/files/problem-selector/problem-selector.component';
@@ -195,7 +194,6 @@ const appRoutes: Routes = [
   declarations: [
     AppComponent,
     FooterComponent,
-    PropertySelectorComponent,
     TemplateFileUploadComponent,
     DomainSelectorComponent,
     ProblemSelectorComponent,
@@ -335,7 +333,6 @@ const appRoutes: Routes = [
 
   ],
   entryComponents: [
-    PropertySelectorComponent,
     PropertyCreatorComponent,
     ProjectSelectionComponent,
     ProjectCreatorComponent,
