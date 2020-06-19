@@ -100,8 +100,8 @@ export class ObjectCollectionService<T extends Identifiable> {
 
   saveObject(object: T) {
 
-    console.log(object);
-    console.log('Service save object:');
+    // console.log(object);
+    // console.log('Service save object:');
 
     if (object._id) {
       // console.log('edit');

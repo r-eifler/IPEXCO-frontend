@@ -1,7 +1,8 @@
+import { takeUntil } from 'rxjs/operators';
 import { RunStatus } from '../../../interface/run';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { RunType, PlanRun, ExplanationRun } from 'src/app/interface/run';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { NestedTreeControl } from '@angular/cdk/tree';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -23,7 +24,9 @@ interface RunNode {
   templateUrl: './run-tree.component.html',
   styleUrls: ['./run-tree.component.scss']
 })
-export class RunTreeComponent implements OnInit {
+export class RunTreeComponent implements OnInit, OnDestroy {
+
+  private ngUnsubscribe: Subject<any> = new Subject();
 
   runStatus = RunStatus;
 
@@ -41,7 +44,9 @@ export class RunTreeComponent implements OnInit {
   ) {
     this.runs$ = this.runService.getList();
 
-    this.runs$.subscribe(value => {
+    this.runs$
+    .pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe(value => {
       this.dataSource.data = value;
       // mayby used in the desktop version
       // if (value.length === 0) {
@@ -55,6 +60,11 @@ export class RunTreeComponent implements OnInit {
   }
 
   ngOnInit(): void {
+  }
+
+  ngOnDestroy(): void {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 
   hasChild = (_: number, node: RunNode) => !!node.explanationRuns && node.explanationRuns.length > 0;

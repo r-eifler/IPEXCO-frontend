@@ -1,9 +1,10 @@
+import { takeUntil } from 'rxjs/operators';
 import { PlanPropertyCollectionService } from 'src/app/service/plan-property-services';
 import { PlanPropertyCollectionStore } from '../../../../store/stores.store';
 import { PlanProperty } from 'src/app/interface/plan-property';
 import { Goal, GoalType } from '../../../../interface/goal';
-import { Component, OnInit } from '@angular/core';
-import { Observable, combineLatest } from 'rxjs';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Observable, combineLatest, Subject } from 'rxjs';
 import { PlanRun, ExplanationRun } from 'src/app/interface/run';
 import { PddlFileUtilsService } from 'src/app/service/pddl-file-utils.service';
 import { CurrentRunStore, CurrentQuestionStore } from 'src/app/store/stores.store';
@@ -13,7 +14,9 @@ import { CurrentRunStore, CurrentQuestionStore } from 'src/app/store/stores.stor
   templateUrl: './question-view.component.html',
   styleUrls: ['./question-view.component.css']
 })
-export class QuestionViewComponent implements OnInit {
+export class QuestionViewComponent implements OnInit, OnDestroy {
+
+  private ngUnsubscribe: Subject<any> = new Subject();
 
   currentRun$: Observable<PlanRun>;
   currentQuestion$: Observable<ExplanationRun>;
@@ -33,7 +36,9 @@ export class QuestionViewComponent implements OnInit {
   }
 
   ngOnInit(): void {
-      combineLatest([this.currentRun$, this.currentQuestion$, this.planProperties$]).subscribe(([run, question, planProperties]) => {
+      combineLatest([this.currentRun$, this.currentQuestion$, this.planProperties$])
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(([run, question, planProperties]) => {
           if (run && question && planProperties.length > 0) {
             this.currentHardGoals = run.hardGoals;
             const questionElems = this.arrayMinus(question.hardGoals, this.currentHardGoals);
@@ -52,6 +57,11 @@ export class QuestionViewComponent implements OnInit {
 
   private arrayMinus(a1: Goal[], a2: Goal[]): Goal[] {
     return a1.filter(r => !a2.some(g => r.name === g.name));
+  }
+
+  ngOnDestroy(): void {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 
 }

@@ -1,10 +1,12 @@
+import { takeUntil } from 'rxjs/operators';
 import { UserService } from 'src/app/service/user.service';
 import { LoginComponent } from './../login/login/login.component';
 import { RegisterComponent } from './../login/register/register.component';
-import { Component, OnInit} from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ResponsiveService} from '../../service/responsive.service';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { Router, ActivatedRoute } from '@angular/router';
+import { Subject } from 'rxjs';
 
 
 @Component({
@@ -12,7 +14,9 @@ import { Router, ActivatedRoute } from '@angular/router';
   templateUrl: './navigation.component.html',
   styleUrls: ['./navigation.component.scss']
 })
-export class NavigationComponent implements OnInit {
+export class NavigationComponent implements OnInit, OnDestroy {
+
+  private ngUnsubscribe: Subject<any> = new Subject();
 
   isMobile: boolean;
 
@@ -26,7 +30,9 @@ export class NavigationComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.responsiveService.getMobileStatus().subscribe( isMobile => {
+    this.responsiveService.getMobileStatus()
+    .pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe( isMobile => {
       if (isMobile) {
         this.isMobile = true;
       } else {
@@ -34,6 +40,11 @@ export class NavigationComponent implements OnInit {
       }
     });
     this.onResize();
+  }
+
+  ngOnDestroy(): void {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 
   onResize() {
@@ -46,7 +57,9 @@ export class NavigationComponent implements OnInit {
 
     const dialogRef = this.dialog.open(LoginComponent, dialogConfig);
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed()
+    .pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe(result => {
       console.log('The dialog was closed');
     });
   }

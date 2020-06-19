@@ -1,6 +1,7 @@
+import { takeUntil } from 'rxjs/operators';
 import { Project } from 'src/app/interface/project';
-import { Component, OnInit } from '@angular/core';
-import {Observable} from 'rxjs';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import {Observable, Subject} from 'rxjs';
 import { Router} from '@angular/router';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {ProjectCreatorComponent} from '../project-creator/project-creator.component';
@@ -12,7 +13,9 @@ import { ResponsiveService } from 'src/app/service/responsive.service';
   templateUrl: './project-selection.component.html',
   styleUrls: ['./project-selection.component.scss']
 })
-export class ProjectSelectionComponent implements OnInit {
+export class ProjectSelectionComponent implements OnInit, OnDestroy {
+
+  private ngUnsubscribe: Subject<any> = new Subject();
 
   projects$: Observable<Project[]>;
   isMobile: boolean;
@@ -29,7 +32,9 @@ export class ProjectSelectionComponent implements OnInit {
 
   ngOnInit(): void {
     this.projectService.findCollection();
-    this.responsiveService.getMobileStatus().subscribe( isMobile => {
+    this.responsiveService.getMobileStatus()
+    .pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe( isMobile => {
       if (isMobile) {
         this.isMobile = true;
       } else {
@@ -37,6 +42,11 @@ export class ProjectSelectionComponent implements OnInit {
       }
     });
     this.responsiveService.checkWidth();
+  }
+
+  ngOnDestroy(): void {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 
   delete(project: Project): void {
@@ -52,7 +62,9 @@ export class ProjectSelectionComponent implements OnInit {
 
     const dialogRef = this.dialog.open(ProjectCreatorComponent, dialogConfig);
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed()
+    .pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe(result => {
       console.log('The dialog was closed');
     });
   }
@@ -70,7 +82,9 @@ export class ProjectSelectionComponent implements OnInit {
 
     const dialogRef = this.dialog.open(ProjectCreatorComponent, dialogConfig);
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed()
+    .pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe(result => {
       console.log('The dialog was closed');
     });
   }

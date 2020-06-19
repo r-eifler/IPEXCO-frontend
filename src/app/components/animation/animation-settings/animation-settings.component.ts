@@ -2,7 +2,9 @@
 import { AnimationSettingsNomysteryComponent } from './../../plugins/nomystery/animation-settings-nomystery/animation-settings-nomystery.component';
 import { CurrentProjectService } from 'src/app/service/project-services';
 import { AnimationSettingsDirective } from './../animation-settings.directive';
-import { Component, OnInit, ViewChild, AfterViewInit, ComponentFactoryResolver, ViewChildren } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, ComponentFactoryResolver, ViewChildren, OnDestroy } from '@angular/core';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 
 @Component({
@@ -10,12 +12,14 @@ import { Component, OnInit, ViewChild, AfterViewInit, ComponentFactoryResolver, 
   templateUrl: './animation-settings.component.html',
   styleUrls: ['./animation-settings.component.css']
 })
-export class AnimationSettingsComponent implements OnInit, AfterViewInit {
+export class AnimationSettingsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @ViewChild(AnimationSettingsDirective) animationSettingsHost!: AnimationSettingsDirective;
 
+  private ngUnsubscribe: Subject<any> = new Subject();
+
   constructor(
-    private projectService: CurrentProjectService,
+    private currentProjectService: CurrentProjectService,
     private componentFactoryResolver: ComponentFactoryResolver
   ) { }
 
@@ -24,7 +28,9 @@ export class AnimationSettingsComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.projectService.getSelectedObject().subscribe(
+    this.currentProjectService.getSelectedObject()
+    .pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe(
       project => {
         if (project) {
           if (project.domainFile.domain === 'nomystery') {
@@ -33,10 +39,15 @@ export class AnimationSettingsComponent implements OnInit, AfterViewInit {
             const viewContainerRef = this.animationSettingsHost.viewContainerRef;
             viewContainerRef.clear();
 
-            const componentRef = viewContainerRef.createComponent(componentFactory);
+            viewContainerRef.createComponent(componentFactory);
           }
         }
       }
     );
+  }
+
+  ngOnDestroy(): void {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 }

@@ -2,19 +2,22 @@ import { Project } from './../../../interface/project';
 import { DomainFilesService, ProblemFilesService, DomainSpecificationFilesService } from './../../../service/pddl-file-services';
 import { DemosService } from './../../../service/demo-services';
 import { ProjectsService } from './../../../service/project-services';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ResponsiveService } from 'src/app/service/responsive.service';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { map } from 'rxjs/operators';
+import { map, takeUntil } from 'rxjs/operators';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Demo } from 'src/app/interface/demo';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-user-main-page',
   templateUrl: './user-main-page.component.html',
   styleUrls: ['./user-main-page.component.css']
 })
-export class UserMainPageComponent implements OnInit {
+export class UserMainPageComponent implements OnInit, OnDestroy {
+
+  private ngUnsubscribe: Subject<any> = new Subject();
 
   isMobile: boolean;
 
@@ -30,7 +33,9 @@ export class UserMainPageComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.responsiveService.getMobileStatus().subscribe( isMobile => {
+    this.responsiveService.getMobileStatus()
+    .pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe( isMobile => {
       if (isMobile) {
         this.isMobile = true;
       } else {
@@ -44,6 +49,11 @@ export class UserMainPageComponent implements OnInit {
     this.domainFilesService.findFiles();
     this.problemFilesService.findFiles();
     this.domainSpecificationFilesService.findFiles();
+  }
+
+  ngOnDestroy(): void {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 
   openProject(project: Project) {

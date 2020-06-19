@@ -1,9 +1,8 @@
+import { CurrentRunService } from './../../../../service/run-services';
+import { takeUntil } from 'rxjs/operators';
 import { Plan } from '../../../../interface/plan';
-import {Component, Input, OnInit} from '@angular/core';
-import {FilesService} from '../../../../service/pddl-files.service';
-import {PddlFileUtilsService} from '../../../../service/pddl-file-utils.service';
-import {CurrentRunStore} from '../../../../store/stores.store';
-import {BehaviorSubject} from 'rxjs';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import {BehaviorSubject, Subject} from 'rxjs';
 import {PlanRun} from '../../../../interface/run';
 
 interface Action {
@@ -16,24 +15,32 @@ interface Action {
   templateUrl: './plan-view.component.html',
   styleUrls: ['./plan-view.component.css']
 })
-export class PlanViewComponent implements OnInit {
+export class PlanViewComponent implements OnInit, OnDestroy {
+
+  private ngUnsubscribe: Subject<any> = new Subject();
 
   plan: Plan;
   private currentRun$: BehaviorSubject<PlanRun>;
 
     constructor(
-      private fileUtilsService: PddlFileUtilsService,
-      private  currentRunStore: CurrentRunStore) {
-      this.currentRun$ = this.currentRunStore.item$;
+      private  currentRunService: CurrentRunService) {
+      this.currentRun$ = this.currentRunService.getSelectedObject();
     }
 
   ngOnInit(): void {
-      this.currentRun$.subscribe(run => {
-        if (run) {
-          this.plan = run.plan;
-        }
-      });
+    this.currentRun$
+    .pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe(run => {
+      if (run) {
+        this.plan = run.plan;
+      }
+    });
 
+  }
+
+  ngOnDestroy(): void {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 
   formatActions(actionStrings: string[]): Action[] {

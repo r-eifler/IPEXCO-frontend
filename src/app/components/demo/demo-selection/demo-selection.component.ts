@@ -1,7 +1,8 @@
+import { takeUntil } from 'rxjs/operators';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { DemosService, RunningDemoService } from '../../../service/demo-services';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ResponsiveService } from 'src/app/service/responsive.service';
 import {MatBottomSheet} from '@angular/material/bottom-sheet';
 import { MobilMenuComponent } from 'src/app/components/settings/mobil-menu/mobil-menu.component';
@@ -17,9 +18,10 @@ import { ExecutionSettingsService } from 'src/app/service/execution-settings.ser
   templateUrl: './demo-selection.component.html',
   styleUrls: ['./demo-selection.component.scss']
 })
-export class DemoSelectionComponent implements OnInit {
+export class DemoSelectionComponent implements OnInit, OnDestroy {
 
   isMobile: boolean;
+  private ngUnsubscribe: Subject<any> = new Subject();
 
   runStatus = RunStatus;
   public demos$: Observable<Demo[]>;
@@ -37,7 +39,9 @@ export class DemoSelectionComponent implements OnInit {
     }
 
   ngOnInit(): void {
-    this.responsiveService.getMobileStatus().subscribe( isMobile => {
+    this.responsiveService.getMobileStatus()
+    .pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe( isMobile => {
       if (isMobile) {
         this.isMobile = true;
       } else {
@@ -47,6 +51,11 @@ export class DemoSelectionComponent implements OnInit {
     this.responsiveService.checkWidth();
 
     this.demosService.findCollection();
+  }
+
+  ngOnDestroy(): void {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 
   deleteDemo(demo: Demo): void {

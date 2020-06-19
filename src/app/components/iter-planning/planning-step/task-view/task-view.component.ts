@@ -1,8 +1,9 @@
+import { takeUntil } from 'rxjs/operators';
 import { PlanProperty } from './../../../../interface/plan-property';
 import { DisplayTaskService } from '../../../../service/display-task.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import {CurrentRunStore } from '../../../../store/stores.store';
-import { combineLatest } from 'rxjs';
+import { combineLatest, Subject } from 'rxjs';
 import { GoalType } from 'src/app/interface/goal';
 
 
@@ -11,7 +12,9 @@ import { GoalType } from 'src/app/interface/goal';
   templateUrl: './task-view.component.html',
   styleUrls: ['./task-view.component.css']
 })
-export class TaskViewComponent implements OnInit {
+export class TaskViewComponent implements OnInit, OnDestroy {
+
+  private ngUnsubscribe: Subject<any> = new Subject();
 
   satGoalFacts: string[] = [];
 
@@ -22,7 +25,9 @@ export class TaskViewComponent implements OnInit {
     private dislplayTaskService: DisplayTaskService
   ) {
 
-    combineLatest([this.currentRunStore.item$, this.dislplayTaskService.getSelectedObject()]).subscribe(([run, displayTask]) => {
+    combineLatest([this.currentRunStore.item$, this.dislplayTaskService.getSelectedObject()])
+    .pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe(([run, displayTask]) => {
       if (run && displayTask) {
         this.satGoalFacts = [];
         for (const fact of run.hardGoals) {
@@ -45,5 +50,9 @@ export class TaskViewComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  ngOnDestroy(): void {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
+  }
 
 }

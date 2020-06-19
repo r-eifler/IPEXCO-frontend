@@ -1,10 +1,12 @@
-import { Component, OnInit, AfterViewChecked } from '@angular/core';
+import { takeUntil } from 'rxjs/operators';
+import { Component, OnInit, AfterViewChecked, OnDestroy } from '@angular/core';
 import { ResponsiveService } from 'src/app/service/responsive.service';
 import { FormGroup, FormControl } from '@angular/forms';
 import { UserService } from 'src/app/service/user.service';
 import { User } from 'src/app/interface/user';
 import { MatDialogRef } from '@angular/material/dialog';
 import { Router, ActivatedRoute } from '@angular/router';
+import { Subject } from 'rxjs';
 
 
 @Component({
@@ -12,7 +14,9 @@ import { Router, ActivatedRoute } from '@angular/router';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
+
+  private ngUnsubscribe: Subject<any> = new Subject();
 
   isMobile: boolean;
 
@@ -29,7 +33,9 @@ export class LoginComponent implements OnInit {
     private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-    this.responsiveService.getMobileStatus().subscribe( isMobile => {
+    this.responsiveService.getMobileStatus()
+    .pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe( isMobile => {
       if (isMobile) {
         this.isMobile = true;
       } else {
@@ -37,6 +43,11 @@ export class LoginComponent implements OnInit {
       }
     });
     this.responsiveService.checkWidth();
+  }
+
+  ngOnDestroy(): void {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 
 

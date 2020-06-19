@@ -1,8 +1,8 @@
 import { Project } from './../../../interface/project';
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
 import {FilesService} from '../../../service/pddl-files.service';
-import {Observable} from 'rxjs';
+import {Observable, Subject} from 'rxjs';
 import {PDDLFile, DomainSpecificationFile} from '../../../interface/files';
 import {DomainFilesService, ProblemFilesService, DomainSpecificationFilesService} from '../../../service/pddl-file-services';
 import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
@@ -13,7 +13,9 @@ import { ProjectsService } from 'src/app/service/project-services';
   templateUrl: './project-creator.component.html',
   styleUrls: ['./project-creator.component.css']
 })
-export class ProjectCreatorComponent implements OnInit {
+export class ProjectCreatorComponent implements OnInit, OnDestroy {
+
+  private ngUnsubscribe: Subject<any> = new Subject();
 
   // form fields
   projectForm = new FormGroup({
@@ -35,12 +37,13 @@ export class ProjectCreatorComponent implements OnInit {
   disableSelect = false;
 
 
-  constructor(private domainFilesService: DomainFilesService,
-              private problemFilesService: ProblemFilesService,
-              private domainSpecFilesService: DomainSpecificationFilesService,
-              private projectService: ProjectsService,
-              public dialogRef: MatDialogRef<ProjectCreatorComponent>,
-              @Inject(MAT_DIALOG_DATA) data) {
+  constructor(
+    private domainFilesService: DomainFilesService,
+    private problemFilesService: ProblemFilesService,
+    private domainSpecFilesService: DomainSpecificationFilesService,
+    private projectService: ProjectsService,
+    public dialogRef: MatDialogRef<ProjectCreatorComponent>,
+    @Inject(MAT_DIALOG_DATA) data) {
 
     this.domainFiles$ = this.domainFilesService.files$;
     this.problemFiles = this.problemFilesService.files$;
@@ -58,9 +61,11 @@ export class ProjectCreatorComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.domainFilesService.findFiles().subscribe();
-    this.problemFilesService.findFiles().subscribe();
-    this.domainSpecFilesService.findFiles().subscribe();
+  }
+
+  ngOnDestroy(): void {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 
   onSave(): void {
@@ -74,9 +79,6 @@ export class ProjectCreatorComponent implements OnInit {
       domainSpecification: this.selectedDomainSpec,
       // properties: [],
     };
-
-    console.log('Save new Project: ');
-    console.log(newProject);
 
     this.projectService.saveObject(newProject);
 

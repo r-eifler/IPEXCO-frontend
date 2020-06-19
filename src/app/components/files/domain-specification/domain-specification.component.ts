@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { takeUntil } from 'rxjs/operators';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ResponsiveService } from 'src/app/service/responsive.service';
 import { FormGroup, FormControl } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { DomainSpecificationFile } from 'src/app/interface/files';
 import { DomainSpecificationFilesService } from 'src/app/service/pddl-file-services';
 import { FilesService } from 'src/app/service/pddl-files.service';
@@ -15,8 +16,9 @@ import { SelectedObjectService } from 'src/app/service/selected-object.service';
     {provide: FilesService, useClass: DomainSpecificationFilesService}
     ]
 })
-export class DomainSpecificationComponent implements OnInit {
+export class DomainSpecificationComponent implements OnInit, OnDestroy {
 
+  private ngUnsubscribe: Subject<any> = new Subject();
   isMobile: boolean;
 
   type = 'DomainSpecification';
@@ -44,19 +46,23 @@ export class DomainSpecificationComponent implements OnInit {
 
   ngOnInit() {
     this.filesService.findFiles();
-    this.responsiveService.getMobileStatus().subscribe( isMobile => {
+    this.responsiveService.getMobileStatus()
+    .pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe( isMobile => {
       if (isMobile) {
         this.isMobile = true;
       } else {
         this.isMobile = false;
       }
     });
-    this.onResize();
-  }
-
-  onResize() {
     this.responsiveService.checkWidth();
   }
+
+  ngOnDestroy(): void {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
+  }
+
 
    onSubmit() {
      const uploadFile: DomainSpecificationFile = {

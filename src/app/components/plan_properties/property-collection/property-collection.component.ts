@@ -1,9 +1,10 @@
+import { takeUntil } from 'rxjs/operators';
 import { PlanProperty } from 'src/app/interface/plan-property';
 import { ViewSettingsService } from 'src/app/service/setting.service';
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {PropertyCreatorComponent} from '../property-creator/property-creator.component';
-import {Observable} from 'rxjs';
+import {Observable, Subject} from 'rxjs';
 import { PlanPropertyCollectionService } from 'src/app/service/plan-property-services';
 import { ResponsiveService } from 'src/app/service/responsive.service';
 import { ViewSettings } from 'src/app/interface/view-settings';
@@ -18,7 +19,9 @@ import { ɵangular_packages_router_router_n } from '@angular/router';
   templateUrl: './property-collection.component.html',
   styleUrls: ['./property-collection.component.scss']
 })
-export class PropertyCollectionComponent implements OnInit, AfterViewInit {
+export class PropertyCollectionComponent implements OnInit, AfterViewInit, OnDestroy {
+
+  private ngUnsubscribe: Subject<any> = new Subject();
 
   isMobile: boolean;
   viewSettings: Observable<ViewSettings>;
@@ -38,10 +41,10 @@ export class PropertyCollectionComponent implements OnInit, AfterViewInit {
     public dialog: MatDialog) {
 
     this.viewSettings = this.viewSettingsService.getSelectedObject();
-    this.viewSettings.subscribe(v => {
-      console.log(v);
-    });
-    this.propertiesService.getList().subscribe(props => {
+
+    this.propertiesService.getList()
+    .pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe(props => {
       this.planProperties = props;
       this.dataSource.data = props;
       this.selection.select(... props.filter(v => v.isUsed));
@@ -50,7 +53,9 @@ export class PropertyCollectionComponent implements OnInit, AfterViewInit {
       }
     });
 
-    this.selection.changed.subscribe((change: SelectionChange<PlanProperty>) => {
+    this.selection.changed
+    .pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe((change: SelectionChange<PlanProperty>) => {
       // console.log('Selection changed: added: ' + change.added.length + ' removed: ' + change.removed.length);
       for (const p of  change.added) {
         if (! p.isUsed){
@@ -68,7 +73,9 @@ export class PropertyCollectionComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.responsiveService.getMobileStatus().subscribe( isMobile => {
+    this.responsiveService.getMobileStatus()
+    .pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe( isMobile => {
       if (isMobile) {
         this.isMobile = true;
       } else {
@@ -82,6 +89,11 @@ export class PropertyCollectionComponent implements OnInit, AfterViewInit {
     if (this.propertyTable) {
       this.propertyTable.renderRows();
     }
+  }
+
+  ngOnDestroy(): void {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 
   delete(property: PlanProperty): void {
@@ -104,7 +116,9 @@ export class PropertyCollectionComponent implements OnInit, AfterViewInit {
       width: '1000px'
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed()
+    .pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe(result => {
       console.log('The dialog was closed');
     });
   }

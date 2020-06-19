@@ -1,17 +1,21 @@
+import { takeUntil } from 'rxjs/operators';
 import { UserService } from './../../../service/user.service';
-import { Component, OnInit, AfterViewChecked } from '@angular/core';
+import { Component, OnInit, AfterViewChecked, OnDestroy } from '@angular/core';
 import { ResponsiveService } from 'src/app/service/responsive.service';
 import { gsap } from 'gsap';
 import { MatDialogConfig, MatDialog } from '@angular/material/dialog';
 import { RegisterComponent } from '../register/register.component';
 import { Router, ActivatedRoute } from '@angular/router';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-main-page',
   templateUrl: './main-page.component.html',
   styleUrls: ['./main-page.component.scss']
 })
-export class MainPageComponent implements OnInit, AfterViewChecked {
+export class MainPageComponent implements OnInit, AfterViewChecked, OnDestroy {
+
+  private ngUnsubscribe: Subject<any> = new Subject();
 
   isMobile: boolean;
 
@@ -23,7 +27,9 @@ export class MainPageComponent implements OnInit, AfterViewChecked {
     public dialog: MatDialog) { }
 
   ngOnInit(): void {
-    this.responsiveService.getMobileStatus().subscribe( isMobile => {
+    this.responsiveService.getMobileStatus()
+    .pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe( isMobile => {
       if (isMobile) {
         this.isMobile = true;
       } else {
@@ -39,6 +45,11 @@ export class MainPageComponent implements OnInit, AfterViewChecked {
 
   ngAfterViewChecked(): void {
     this.animateLogo();
+  }
+
+  ngOnDestroy(): void {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 
   animateLogo() {
@@ -58,7 +69,9 @@ export class MainPageComponent implements OnInit, AfterViewChecked {
 
     const dialogRef = this.dialog.open(RegisterComponent, dialogConfig);
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed()
+    .pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe(result => {
       console.log('The dialog was closed');
     });
   }

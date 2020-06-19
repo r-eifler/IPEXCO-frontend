@@ -1,5 +1,7 @@
+import { DomainSpecificationService } from './../../../service/domain-specification.service';
+import { takeUntil } from 'rxjs/operators';
 import { MatStepper } from '@angular/material/stepper';
-import {Component, OnInit, ViewChild} from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import {FormControl, FormGroup, Validators, FormGroupName, FormArray} from '@angular/forms';
 import {Action, ActionSet, PlanProperty} from '../../../interface/plan-property';
 import {MatDialogRef} from '@angular/material/dialog';
@@ -11,33 +13,27 @@ import { TaskSchema } from 'src/app/interface/task-schema';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { DomainSpecification } from 'src/app/interface/domain-specification';
-import { PlanPropertyTemplate } from "src/app/interface/plan-property-template";
+import { PlanPropertyTemplate } from 'src/app/interface/plan-property-template';
 import { MatSelectionListChange } from '@angular/material/list';
 import { MatAccordion } from '@angular/material/expansion';
 import { PlanPropertyCollectionService } from 'src/app/service/plan-property-services';
 import { CurrentProjectService } from 'src/app/service/project-services';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-property-creator',
   templateUrl: './property-creator.component.html',
   styleUrls: ['./property-creator.component.css']
 })
-export class PropertyCreatorComponent implements OnInit {
+export class PropertyCreatorComponent implements OnInit, OnDestroy {
+
+  private ngUnsubscribe: Subject<any> = new Subject();
 
   expertMode = false;
   @ViewChild('accordion') propertyTemplateAccordion: MatAccordion;
   @ViewChild('stepper') propertyTemplateStepper: MatStepper;
 
   actionSets: ActionSet[];
-
-  // planProperty: PlanProperty = {
-  //   name: null,
-  //   goalType: GoalType.planProperty,
-  //   type: null,
-  //   formula: null,
-  //   actionSets: [],
-  //   project: null
-  // };
 
   // form fields
   propertyForm = new FormGroup({
@@ -78,20 +74,28 @@ export class PropertyCreatorComponent implements OnInit {
   constructor(
     private propertiesService: PlanPropertyCollectionService,
     private currentProjectService: CurrentProjectService,
-    private  taskSchemaStore: TasktSchemaStore,
-    private domainSpecStore: DomainSpecStore,
+    private taskSchemaStore: TasktSchemaStore,
+    private domainSpecService: DomainSpecificationService,
     public dialogRef: MatDialogRef<PropertyCreatorComponent>) {
 
-      this.currentProjectService.selectedObject$.subscribe(project => {
+      this.currentProjectService.getSelectedObject()
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(project => {
         this.currentProject = project;
       });
-      this.taskSchemaStore.item$.subscribe(ts => {
+
+      this.taskSchemaStore.item$
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(ts => {
         if (ts) {
           this.taskSchema = ts;
           this.actionOptions = this.taskSchema.actions.map(elem => elem.name);
         }
       });
-      this.domainSpecStore.item$.subscribe(ds => {
+
+      this.domainSpecService.getSpec()
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(ds => {
         if (ds) {
           this.domainSpec = ds;
           this.propertyClassMap = this.domainSpec.getPropertyTemplateClassMap();
@@ -101,6 +105,11 @@ export class PropertyCreatorComponent implements OnInit {
 
 
   ngOnInit(): void {
+  }
+
+  ngOnDestroy(): void {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 
   modeChange(event: MatSlideToggleChange) {
@@ -147,7 +156,6 @@ export class PropertyCreatorComponent implements OnInit {
     const newFromControl = new FormControl();
     const newFormArray = new FormArray([newFromControl]);
     this.actionSetFromControls.set(newName, newFormArray);
-    console.log('New FromControl for action set: ' + newName);
 
     this.actionSets.push(newActionSet);
 
@@ -158,19 +166,15 @@ export class PropertyCreatorComponent implements OnInit {
   }
 
   createAction(actionSet: ActionSet): void {
-    console.log('create action');
     const controlName = actionSet.name + 'control';
     const control = this.propertyForm.controls[controlName];
     const [name, ...params] = control.value.split(' ');
     const action: Action = {_id: null, name, params};
     control.setValue('');
     actionSet.actions.push(action);
-    console.log('New Action');
-    console.log(actionSet);
   }
 
   onSave(): void {
-    console.log('Save property');
     let planProperty: PlanProperty;
     if (this.expertMode) {
       planProperty = {
@@ -186,8 +190,6 @@ export class PropertyCreatorComponent implements OnInit {
     } else {
       planProperty = this.selectedPropertyTemplate.generatePlanProperty(this.selectedVariableValue, this.taskSchema, this.currentProject);
     }
-
-    console.log(planProperty);
 
     this.propertiesService.saveObject(planProperty);
     this.dialogRef.close();

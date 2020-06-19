@@ -1,5 +1,6 @@
+import { CurrentProjectService } from 'src/app/service/project-services';
 import { RunType, ExplanationRun } from '../../../../interface/run';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import {CurrentRunService, RunService} from '../../../../service/run-services';
 import {Observable} from 'rxjs';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -7,6 +8,7 @@ import {CurrentProjectStore, CurrentRunStore, RunsStore} from '../../../../store
 import {PlanRun} from '../../../../interface/run';
 import {NestedTreeControl} from '@angular/cdk/tree';
 import {MatTreeNestedDataSource} from '@angular/material/tree';
+import { take, takeUntil } from 'rxjs/operators';
 
 
 /**
@@ -27,7 +29,9 @@ interface RunNode {
   templateUrl: './iterative-planning-base.component.html',
   styleUrls: ['./iterative-planning-base.component.css']
 })
-export class IterativePlanningBaseComponent implements OnInit {
+export class IterativePlanningBaseComponent implements OnInit, OnDestroy {
+
+  private ngUnsubscribe: Subject<any> = new Subject();
 
   runs$: Observable<PlanRun[]>;
   private project;
@@ -38,14 +42,15 @@ export class IterativePlanningBaseComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private currentProjectStore: CurrentProjectStore,
+    private currentProjectService: CurrentProjectService,
     private runService: RunService,
-    private runStore: RunsStore,
-    private currentRunStore: CurrentRunStore,
+    private currentRunService: CurrentRunService,
   ) {
-    this.runs$ = this.runStore.items$;
+    this.runs$ = this.runService.getList();
 
-    this.runs$.subscribe(value => {
+    this.runs$
+    .pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe(value => {
       this.dataSource.data = value;
       console.log(value);
       if (value.length === 0) {
@@ -56,7 +61,9 @@ export class IterativePlanningBaseComponent implements OnInit {
       }
     });
 
-    this.currentProjectStore.item$.subscribe(value => {
+    this.currentProjectService.getSelectedObject()
+    .pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe(value => {
       if (value !== null) {
         this.project = value;
         this.runService.findCollection([{param: 'projectId', value: this.project._id}]);
@@ -65,11 +72,11 @@ export class IterativePlanningBaseComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // this.runs$.subscribe(value => {
-    //   if (value.length === 0) {
-    //     this.router.navigate(['original-task']).then(r => console.log('Go to original task.'));
-    //   }
-    // });
+  }
+
+  ngOnDestroy(): void {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 
   hasChild = (_: number, node: RunNode) => !!node.explanationRuns && node.explanationRuns.length > 0;
@@ -86,7 +93,7 @@ export class IterativePlanningBaseComponent implements OnInit {
 
   delete(run: PlanRun) {
     this.runService.deleteObject(run);
-    if (run._id === this.currentRunStore.item$.getValue()._id) {
+    if (run._id === this.currentRunService.getSelectedObject().getValue()._id) {
       this.router.navigate(['../'], { relativeTo: this.route });
     }
   }

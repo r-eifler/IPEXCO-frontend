@@ -1,16 +1,20 @@
+import { takeUntil } from 'rxjs/operators';
 import { AnimationSettingsNoMysteryVisu } from '../../../../plan-visualization/plugins/nomystery3D/settings/animation-settings-nomystery-visu';
-import { Component, OnInit, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ElementRef, ViewChild, OnDestroy } from '@angular/core';
 import { AnimationSettings } from 'src/app/interface/animation-settings';
 import { ResponsiveService } from 'src/app/service/responsive.service';
 import { TaskSchemaService } from 'src/app/service/schema.service';
 import { CurrentProjectService, ProjectsService } from 'src/app/service/project-services';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-animation-settings-nomystery',
   templateUrl: './animation-settings-nomystery.component.html',
   styleUrls: ['./animation-settings-nomystery.component.css']
 })
-export class AnimationSettingsNomysteryComponent implements OnInit, AfterViewInit {
+export class AnimationSettingsNomysteryComponent implements OnInit, AfterViewInit, OnDestroy {
+
+  private ngUnsubscribe: Subject<any> = new Subject();
 
   isMobile: boolean;
 
@@ -28,7 +32,9 @@ export class AnimationSettingsNomysteryComponent implements OnInit, AfterViewIni
   }
 
   ngOnInit(): void {
-    this.responsiveService.getMobileStatus().subscribe( isMobile => {
+    this.responsiveService.getMobileStatus()
+    .pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe( isMobile => {
       if (isMobile) {
         this.isMobile = true;
       } else {
@@ -40,13 +46,20 @@ export class AnimationSettingsNomysteryComponent implements OnInit, AfterViewIni
 
   ngAfterViewInit(): void {
     const obs$ = this.animationSettings.displayElemObservable();
-    obs$.subscribe(
+    obs$
+    .pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe(
       elems => {
         for ( const e of elems) {
           this.locationSettingsContainer.nativeElement.appendChild(e);
         }
       }
     );
+  }
+
+  ngOnDestroy(): void {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 
   saveSettings() {

@@ -1,9 +1,10 @@
-import {Component, Input, OnInit} from '@angular/core';
+import { takeUntil } from 'rxjs/operators';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 import {PlanProperty} from '../../../interface/plan-property';
 import {CurrentProjectService} from '../../../service/project-services';
 import {PlannerService} from '../../../service/planner.service';
-import {Observable} from 'rxjs';
+import {Observable, Subject} from 'rxjs';
 import {MatDialog} from '@angular/material/dialog';
 import {PropertyCreatorComponent} from '../../plan_properties/property-creator/property-creator.component';
 import {Project} from '../../../interface/project';
@@ -15,12 +16,9 @@ import { PlanPropertyCollectionService } from 'src/app/service/plan-property-ser
   templateUrl: './property-selector.component.html',
   styleUrls: ['./property-selector.component.css']
 })
-export class PropertySelectorComponent implements OnInit {
+export class PropertySelectorComponent implements OnInit, OnDestroy {
 
-  // collection = [
-  //   {id: 1, name: 'use connection', formula: 'F drive t1 l1 l2'},
-  //   {id: 1, name: 'delivery order', formula: '! unload p1 t1 l1 U unload p2 t1 l1'}
-  // ];
+  private ngUnsubscribe: Subject<any> = new Subject();
 
   softProperties: PlanProperty[] = [
   ];
@@ -32,16 +30,21 @@ export class PropertySelectorComponent implements OnInit {
   private currentProject$: Observable<Project>;
   @Input() previousRun;
 
-  constructor(private propertiesService: PlanPropertyCollectionService,
-              private currentProjectService: CurrentProjectService,
-              private plannerService: PlannerService,
-              public dialog: MatDialog) {
-    this.collection$ = this.propertiesService.getList();
-    this.currentProject$ = this.currentProjectService.selectedObject$;
+  constructor(
+    private propertiesService: PlanPropertyCollectionService,
+    private currentProjectService: CurrentProjectService,
+    private plannerService: PlannerService,
+    public dialog: MatDialog) {
+      this.collection$ = this.propertiesService.getList();
+      this.currentProject$ = this.currentProjectService.getSelectedObject();
   }
 
   ngOnInit(): void {
-    // this.propertiesService.findCollection();
+  }
+
+  ngOnDestroy(): void {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 
   drop(event: CdkDragDrop<string[]>) {
@@ -60,7 +63,9 @@ export class PropertySelectorComponent implements OnInit {
       width: '500px'
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed()
+    .pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe(result => {
       console.log('The dialog was closed');
     });
   }
@@ -74,7 +79,7 @@ export class PropertySelectorComponent implements OnInit {
     let cProject = null;
     const sub = this.currentProject$.subscribe((obj) => {cProject = obj; });
     sub.unsubscribe();
-    const run: ExplanationRun = {
+    const expRun: ExplanationRun = {
       _id: null,
       name: 'MUGS',
       status: null,
@@ -87,9 +92,9 @@ export class PropertySelectorComponent implements OnInit {
     };
 
     console.log('Compute dependencies');
-    console.log(run);
+    console.log(expRun);
 
-    // this.plannerService.execute_plan_run(run);
+    // this.plannerService.execute_mugs_run(expRun);
   }
 
 }

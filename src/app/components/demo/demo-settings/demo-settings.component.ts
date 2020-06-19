@@ -1,17 +1,21 @@
+import { takeUntil, filter } from 'rxjs/operators';
 import { DemosService } from './../../../service/demo-services';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
 import { MatBottomSheetRef, MAT_BOTTOM_SHEET_DATA } from '@angular/material/bottom-sheet';
 import { Demo } from 'src/app/interface/demo';
 import { ExecutionSettings } from 'src/app/interface/execution-settings';
 import { ExecutionSettingsService } from 'src/app/service/execution-settings.service';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-demo-settings',
   templateUrl: './demo-settings.component.html',
   styleUrls: ['./demo-settings.component.css']
 })
-export class DemoSettingsComponent implements OnInit {
+export class DemoSettingsComponent implements OnInit, OnDestroy {
+
+  private ngUnsubscribe: Subject<any> = new Subject();
 
   demoSettingsForm = new FormGroup({
     maxRuns: new FormControl('', [Validators.required, Validators.min(1), Validators.max(100)]),
@@ -28,18 +32,18 @@ export class DemoSettingsComponent implements OnInit {
     private settingsService: ExecutionSettingsService) {
 
       const demo: Demo = data;
+
       this.settingsService.load(demo.settings);
-      this.settingsService.getSelectedObject().subscribe(s => {
-
-        if (s) {
-          this.settings = s;
-          this.demoSettingsForm.controls.maxRuns.setValue(this.settings.maxRuns);
-          this.demoSettingsForm.controls.allowQuestions.setValue(this.settings.allowQuestions);
-          this.demoSettingsForm.controls.maxQuestionSize.setValue(this.settings.maxQuestionSize.toString());
-          this.demoSettingsForm.controls.public.setValue(this.settings.public);
-        }
+      this.settingsService.getSelectedObject()
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .pipe(filter(s => s != null))
+      .subscribe(s => {
+        this.settings = s;
+        this.demoSettingsForm.controls.maxRuns.setValue(this.settings.maxRuns);
+        this.demoSettingsForm.controls.allowQuestions.setValue(this.settings.allowQuestions);
+        this.demoSettingsForm.controls.maxQuestionSize.setValue(this.settings.maxQuestionSize.toString());
+        this.demoSettingsForm.controls.public.setValue(this.settings.public);
       });
-
     }
 
   openLink(event: MouseEvent): void {
@@ -49,6 +53,11 @@ export class DemoSettingsComponent implements OnInit {
 
   ngOnInit(): void {
 
+  }
+
+  ngOnDestroy(): void {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 
   onSave() {

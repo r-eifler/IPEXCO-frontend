@@ -1,8 +1,9 @@
+import { takeUntil } from 'rxjs/operators';
 import { QUESTION_REDIRECT } from './../../../../app.tokens';
 import { GoalType } from './../../../../interface/goal';
 import { PlanProperty } from './../../../../interface/plan-property';
-import {Component, OnInit, ViewChild, Inject} from '@angular/core';
-import {Observable} from 'rxjs';
+import { Component, OnInit, ViewChild, Inject, OnDestroy } from '@angular/core';
+import {Observable, Subject} from 'rxjs';
 import {Project} from '../../../../interface/project';
 import {PlannerService} from '../../../../service/planner.service';
 import {ExplanationRun, PlanRun, RunType} from '../../../../interface/run';
@@ -13,13 +14,16 @@ import { CurrentProjectService } from 'src/app/service/project-services';
 import { MatSelectionList } from '@angular/material/list/selection-list';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ExecutionSettingsService } from 'src/app/service/execution-settings.service';
+import { CurrentRunService } from 'src/app/service/run-services';
 
 @Component({
   selector: 'app-question-creator',
   templateUrl: './question-creator.component.html',
   styleUrls: ['./question-creator.component.css']
 })
-export class QuestionCreatorComponent implements OnInit {
+export class QuestionCreatorComponent implements OnInit, OnDestroy {
+
+  private ngUnsubscribe: Subject<any> = new Subject();
 
   @ViewChild('planPorpertiesList') questionSelectionList: MatSelectionList;
   question: PlanProperty[] = [];
@@ -39,25 +43,27 @@ export class QuestionCreatorComponent implements OnInit {
     private propertiesService: PlanPropertyCollectionService,
     private currentProjectService: CurrentProjectService,
     private plannerService: PlannerService,
-    private currentRunStore: CurrentRunStore,
+    private currentRunService: CurrentRunService,
     private router: Router,
     private route: ActivatedRoute,
     @Inject(QUESTION_REDIRECT) private redirectURL: string
   ) {
 
-    this.currentProjectService.selectedObject$.subscribe(project => {
+    this.currentProjectService.getSelectedObject()
+    .pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe(project => {
       this.currentProject = project;
-      // if (project) {
-      //   this.propertiesService.findCollection([{param: 'projectId', value: this.currentProject._id}]);
-      // }
     });
 
-    this.currentRunStore.item$.subscribe(run => {
+    this.currentRunService.getSelectedObject()
+    .pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe(run => {
       if (run != null) {
         this.currentRun = run;
         this.hardGoals = run.hardGoals;
-        this.propertiesService.getList().subscribe(properties => {
-          // console.log(this.currentRun.satPlanProperties);
+        this.propertiesService.getList()
+        .pipe(takeUntil(this.ngUnsubscribe))
+        .subscribe(properties => {
           this.allPlanProperties = properties.filter(p => p.isUsed);
           this.notSatPlanProperties = this.allPlanProperties.filter(p => ! this.currentRun.satPlanProperties.includes(p.name));
         });
@@ -66,6 +72,11 @@ export class QuestionCreatorComponent implements OnInit {
   }
 
   ngOnInit(): void {
+  }
+
+  ngOnDestroy(): void {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 
   onSelectionChange(event) {

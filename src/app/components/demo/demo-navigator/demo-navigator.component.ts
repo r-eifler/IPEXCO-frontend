@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Demo } from 'src/app/interface/demo';
-import { BehaviorSubject, combineLatest } from 'rxjs';
+import { BehaviorSubject, combineLatest, Subject, Observable } from 'rxjs';
 import { PlanRun } from 'src/app/interface/run';
 import { ActivatedRoute, Router, ParamMap } from '@angular/router';
 import { DemosService, RunningDemoService } from 'src/app/service/demo-services';
@@ -10,7 +10,7 @@ import { RunService, CurrentRunService } from 'src/app/service/run-services';
 import { DomainSpecificationService } from 'src/app/service/domain-specification.service';
 import { DisplayTaskService } from 'src/app/service/display-task.service';
 import { TaskSchemaService } from 'src/app/service/schema.service';
-import { switchMap } from 'rxjs/operators';
+import { switchMap, takeUntil, map, filter, flatMap } from 'rxjs/operators';
 import { DisplayTask } from 'src/app/interface/display-task';
 import { ExecutionSettingsService } from 'src/app/service/execution-settings.service';
 
@@ -19,7 +19,9 @@ import { ExecutionSettingsService } from 'src/app/service/execution-settings.ser
   templateUrl: './demo-navigator.component.html',
   styleUrls: ['./demo-navigator.component.scss']
 })
-export class DemoNavigatorComponent implements OnInit {
+export class DemoNavigatorComponent implements OnInit, OnDestroy {
+
+  private ngUnsubscribe: Subject<any> = new Subject();
 
   demo: Demo;
   runs$: BehaviorSubject<PlanRun[]>;
@@ -41,18 +43,19 @@ export class DemoNavigatorComponent implements OnInit {
   ) {
     this.route.paramMap.pipe(
       switchMap((params: ParamMap) => {
-        // console.log('Get demo with id: ' + params.get('demoid'));
         return this.demosService.getObject(params.get('demoid'));
-    })
-    ).subscribe(
+    }))
+    .pipe(takeUntil(this.ngUnsubscribe))
+    .pipe(filter((demo: Demo) => demo !== null))
+    .pipe(map((demo: Demo) => {
+        this.demo = demo;
+        this.runningDemoService.saveObject(demo);
+        this.runsService.reset();
+        return this.demo;
+      })
+    )
+    .subscribe(
       demo => {
-        if (demo != null) {
-          this.demo = demo;
-          console.log(demo);
-          this.runningDemoService.saveObject(demo);
-          this.runsService.reset();
-
-          // console.log('Demo: project ID: ' + this.demo.project);
           this.projectsService.getObject(this.demo.project).subscribe(project => {
             this.currentProjectService.saveObject(project);
             this.propertiesService.findCollection([{param: 'projectId', value: project._id}]);
@@ -64,15 +67,17 @@ export class DemoNavigatorComponent implements OnInit {
                 }
               });
           });
-        }
       }
     );
+
     this.runs$ = this.runsService.getList();
   }
 
-  ngOnInit(): void {
-    // this.settingsService.getSelectedObject().subscribe(s => console.log(s));
-    // console.log(this.runsService.getNumRuns());
+  ngOnInit(): void {}
+
+  ngOnDestroy(): void {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 
   newPlanRun() {

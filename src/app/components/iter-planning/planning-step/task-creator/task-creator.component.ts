@@ -2,11 +2,11 @@ import { DisplayTaskService } from '../../../../service/display-task.service';
 import { CurrentProjectService } from '../../../../service/project-services';
 import { TasktSchemaStore } from '../../../../store/stores.store';
 import { PlanProperty } from '../../../../interface/plan-property';
-import {Component, Input, OnInit, Inject} from '@angular/core';
+import { Component, Input, OnInit, Inject, OnDestroy } from '@angular/core';
 import {Project} from '../../../../interface/project';
 import {PlanRun, RunType} from '../../../../interface/run';
 import {PlannerService} from '../../../../service/planner.service';
-import {BehaviorSubject} from 'rxjs';
+import {BehaviorSubject, Subject} from 'rxjs';
 import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 import {PddlFileUtilsService} from '../../../../service/pddl-file-utils.service';
 import {Goal, GoalType} from '../../../../interface/goal';
@@ -14,7 +14,7 @@ import {CurrentProjectStore} from '../../../../store/stores.store';
 import {ActivatedRoute, Router} from '@angular/router';
 import { PlanPropertyCollectionService } from 'src/app/service/plan-property-services';
 import { RunService } from 'src/app/service/run-services';
-import { filter } from 'rxjs/operators';
+import { filter, takeUntil } from 'rxjs/operators';
 import { TaskSchemaService } from 'src/app/service/schema.service';
 import { DisplayTask } from 'src/app/interface/display-task';
 import { MatSelectionListChange } from '@angular/material/list/selection-list';
@@ -25,7 +25,9 @@ import { PLANNER_REDIRECT } from 'src/app/app.tokens';
   templateUrl: './task-creator.component.html',
   styleUrls: ['./task-creator.component.scss']
 })
-export class TaskCreatorComponent implements OnInit {
+export class TaskCreatorComponent implements OnInit, OnDestroy {
+
+  private ngUnsubscribe: Subject<any> = new Subject();
 
   private project: Project;
   displayTask: DisplayTask;
@@ -47,19 +49,35 @@ export class TaskCreatorComponent implements OnInit {
     private runService: RunService,
     private router: Router,
     private route: ActivatedRoute,
-    @Inject(PLANNER_REDIRECT) private redirectURL: string
-  ) {
-    this.propertiesService.getList().subscribe(props => this.planPproperties = props.filter((p: PlanProperty) => p.isUsed));
-    this.currentProjectService.getSelectedObject().subscribe(project => {
+    @Inject(PLANNER_REDIRECT) private redirectURL: string) {
+
+    this.propertiesService.getList()
+    .pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe(props => this.planPproperties = props.filter((p: PlanProperty) => p.isUsed));
+
+    this.currentProjectService.getSelectedObject()
+    .pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe(project => {
       if (project !== null) {
           this.project = project;
       }
     });
-    this.tasktSchemaService.getSchema().subscribe(schema => this.goalFacts = schema?.goals);
-    this.displayTaskService.getSelectedObject().subscribe(dt => this.displayTask = dt);
+
+    this.tasktSchemaService.getSchema()
+    .pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe(schema => this.goalFacts = schema?.goals);
+
+    this.displayTaskService.getSelectedObject()
+    .pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe(dt => this.displayTask = dt);
   }
 
   ngOnInit(): void {
+  }
+
+  ngOnDestroy(): void {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 
   checkComplete(event: MatSelectionListChange) {
@@ -69,8 +87,6 @@ export class TaskCreatorComponent implements OnInit {
 
   computePlan(): void {
     const previousRun = this.runService.getLastRun();
-    console.log('Previous Run: ');
-    console.log(previousRun);
 
     const run: PlanRun = {
       _id: this.runService.getNumRuns().toString(),
@@ -87,7 +103,6 @@ export class TaskCreatorComponent implements OnInit {
     };
 
     this.plannerService.execute_plan_run(run);
-    // this.router.navigate(['../run-overview-mobile'], { relativeTo: this.route });
     this.router.navigate([this.redirectURL], { relativeTo: this.route });
   }
 }

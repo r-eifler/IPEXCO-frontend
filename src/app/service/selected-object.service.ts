@@ -1,3 +1,4 @@
+import { filter } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {PDDLFile} from '../interface/files';

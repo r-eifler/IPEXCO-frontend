@@ -1,10 +1,11 @@
-import {Component, ElementRef, OnInit, ViewChild, EventEmitter, Output, Input} from '@angular/core';
+import { takeUntil } from 'rxjs/operators';
+import { Component, ElementRef, OnInit, ViewChild, EventEmitter, Output, Input, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import {FilesService} from '../../../service/pddl-files.service';
 import {SelectedObjectService} from '../../../service/selected-object.service';
 
 import {PDDLFile} from '../../../interface/files';
-import {Observable} from 'rxjs';
+import {Observable, Subject} from 'rxjs';
 import { ResponsiveService } from 'src/app/service/responsive.service';
 
 @Component({
@@ -12,8 +13,9 @@ import { ResponsiveService } from 'src/app/service/responsive.service';
   templateUrl: './file-upload.component.html',
   styleUrls: ['./file-upload.component.css']
 })
-export class TemplateFileUploadComponent implements OnInit {
+export class TemplateFileUploadComponent implements OnInit, OnDestroy {
 
+  private ngUnsubscribe: Subject<any> = new Subject();
   isMobile: boolean;
 
   @Input() type;
@@ -43,7 +45,9 @@ export class TemplateFileUploadComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.responsiveService.getMobileStatus().subscribe( isMobile => {
+    this.responsiveService.getMobileStatus()
+    .pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe( isMobile => {
       if (isMobile) {
         this.isMobile = true;
       } else {
@@ -53,7 +57,14 @@ export class TemplateFileUploadComponent implements OnInit {
     this.responsiveService.checkWidth();
 
     this.files$ = this.fileService.files$;
-    this.fileService.findFiles().subscribe();
+    this.fileService.findFiles()
+    .pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe();
+  }
+
+  ngOnDestroy(): void {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 
 
