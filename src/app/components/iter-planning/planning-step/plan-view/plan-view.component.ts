@@ -28,7 +28,6 @@ export class PlanViewComponent implements OnInit, OnDestroy {
     }
 
   ngOnInit(): void {
-    console.log('plan view');
     this.currentRun$
     .pipe(takeUntil(this.ngUnsubscribe))
     .subscribe(run => {

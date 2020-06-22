@@ -1,3 +1,5 @@
+import { PlanPropertyCollectionService } from './../../../../service/plan-property-services';
+import { CurrentProjectService } from 'src/app/service/project-services';
 import { takeUntil } from 'rxjs/operators';
 import { PlanProperty } from './../../../../interface/plan-property';
 import { DisplayTaskService } from '../../../../service/display-task.service';
@@ -18,18 +20,22 @@ export class TaskViewComponent implements OnInit, OnDestroy {
 
   satGoalFacts: string[] = [];
 
-  satPlanProperties: PlanProperty[] = [];
+  enforcedSatPlanProperties: PlanProperty[] = [];
+
+  addSatPlanProperties: PlanProperty[] = [];
 
   constructor(
     private  currentRunStore: CurrentRunStore,
-    private dislplayTaskService: DisplayTaskService
+    private dislplayTaskService: DisplayTaskService,
+    private planPropertyCollectionService: PlanPropertyCollectionService,
   ) {
 
-    combineLatest([this.currentRunStore.item$, this.dislplayTaskService.getSelectedObject()])
+    combineLatest([this.currentRunStore.item$, this.dislplayTaskService.getSelectedObject(), planPropertyCollectionService.getList()])
     .pipe(takeUntil(this.ngUnsubscribe))
-    .subscribe(([run, displayTask]) => {
-      if (run && displayTask) {
+    .subscribe(([run, displayTask, planProperties]) => {
+      if (run && displayTask && planProperties) {
         this.satGoalFacts = [];
+        this.enforcedSatPlanProperties = [];
         for (const fact of run.hardGoals) {
           if (fact.goalType === GoalType.goalFact){
             this.satGoalFacts.push(displayTask.getGoalDescription(fact));
@@ -37,10 +43,14 @@ export class TaskViewComponent implements OnInit, OnDestroy {
           if (fact.goalType === GoalType.planProperty) {
             for (const pp of run.planProperties) {
               if (fact.name === pp.name) {
-                this.satPlanProperties.push(pp);
+                this.enforcedSatPlanProperties.push(pp);
               }
             }
           }
+        }
+        this.addSatPlanProperties = [];
+        for (const addSatProp of run.satPlanProperties) {
+          this.addSatPlanProperties.push(planProperties.find(p => p.name === addSatProp));
         }
       }
     });

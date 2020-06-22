@@ -33,7 +33,7 @@ import { Subject } from 'rxjs';
     {provide: RunService, useClass: RunService},
     {provide: PlannerService, useClass: PlannerService},
     { provide: PLANNER_REDIRECT, useValue: '../run-overview-mobile' },
-    { provide: QUESTION_REDIRECT, useValue: '../run-overview-mobile' }
+    { provide: QUESTION_REDIRECT, useValue: '../../../run-overview-mobile' }
    ],
 })
 export class ProjectBaseComponent implements OnInit, OnDestroy {
