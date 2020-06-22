@@ -1,3 +1,4 @@
+import { CurrentProjectService, ProjectsService } from 'src/app/service/project-services';
 import { takeUntil } from 'rxjs/operators';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
@@ -12,6 +13,9 @@ import { RunStatus } from 'src/app/interface/run';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import { MatDialogConfig, MatDialog } from '@angular/material/dialog';
 import { ExecutionSettingsService } from 'src/app/service/execution-settings.service';
+import { AnimationSettingsComponent } from '../../animation/animation-settings/animation-settings.component';
+import { AnimationsSettingsDemoComponent } from '../../animation/animations-settings-demo/animations-settings-demo.component';
+import { Project } from 'src/app/interface/project';
 
 @Component({
   selector: 'app-demo-selection',
@@ -30,6 +34,8 @@ export class DemoSelectionComponent implements OnInit, OnDestroy {
     private responsiveService: ResponsiveService,
     private demosService: DemosService,
     private runningDemoService: RunningDemoService,
+    private currentProjectService: CurrentProjectService,
+    private projectsService: ProjectsService,
     private bottomSheet: MatBottomSheet,
     private snackBar: MatSnackBar,
     private router: Router,
@@ -78,9 +84,17 @@ export class DemoSelectionComponent implements OnInit, OnDestroy {
   }
 
   openSettings(demo: Demo) {
-    console.log('Open Settings: ');
-    console.log(demo);
     this.bottomSheet.open(DemoSettingsComponent, {data: demo});
+  }
+
+  openAnimationSettings(demo: Demo) {
+    this.runningDemoService.saveObject(demo);
+    this.projectsService.getObject(demo.project)
+    .pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe((project: Project) => {
+      this.currentProjectService.saveObject(project);
+    });
+    this.bottomSheet.open(AnimationsSettingsDemoComponent, {data: demo});
   }
 
 }

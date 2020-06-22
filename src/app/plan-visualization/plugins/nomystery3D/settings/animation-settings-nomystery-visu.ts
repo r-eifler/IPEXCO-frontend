@@ -27,6 +27,7 @@ export class AnimationSettingsNoMysteryVisu {
     private projectsService: ProjectsService,
   ) {
 
+    console.log('New Animation Settings Visu');
     projectService.getSelectedObject().subscribe(
       project => {
         if (project) {

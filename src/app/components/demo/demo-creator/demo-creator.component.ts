@@ -46,7 +46,7 @@ export class DemoCreatorComponent implements OnInit {
     console.log('Create new Demo: ' + newDemo.name);
     this.demosService.generateDemo(newDemo);
 
-    // this.dialogRef.close();
+    this.dialogRef.close();
   }
 
   onBack(): void {

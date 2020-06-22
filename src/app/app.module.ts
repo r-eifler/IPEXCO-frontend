@@ -144,6 +144,8 @@ import { FilesCollectionComponent } from './components/files/files-collection/fi
 import { ExecutionSettingsService } from './service/execution-settings.service';
 import { AnimationSettingsComponent } from './components/animation/animation-settings/animation-settings.component';
 import { AnimationSettingsNomysteryComponent } from './components/plugins/nomystery/animation-settings-nomystery/animation-settings-nomystery.component';
+import { AnimationsSettingsDemoComponent } from './components/animation/animations-settings-demo/animations-settings-demo.component';
+import { MainInfoComponent } from './components/login/main-info/main-info.component';
 
 
 
@@ -238,6 +240,8 @@ const appRoutes: Routes = [
     AnimationSettingsComponent,
     AnimationSettingsNomysteryComponent,
     AnimationSettingsDirective,
+    AnimationsSettingsDemoComponent,
+    MainInfoComponent,
   ],
   imports: [
     BrowserModule,
@@ -342,7 +346,8 @@ const appRoutes: Routes = [
     ViewSettingsMenuComponent,
     RegisterComponent,
     LoginComponent,
-    AnimationSettingsNomysteryComponent
+    AnimationSettingsNomysteryComponent,
+    AnimationsSettingsDemoComponent,
   ],
   bootstrap: [AppComponent]
 })
