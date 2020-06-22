@@ -10,9 +10,15 @@ export class AnimationSettingsNoMystery {
   public locationDropPositions: Map<string, Position[]> = null;
 
   constructor(jsonString: string) {
-    const jsonObject = JSON.parse(jsonString);
-    this.locationPositions = new Map(jsonObject.locationPositions);
-    this.locationDropPositions = new Map(jsonObject.locationDropPositions);
+    if (jsonString){
+      const jsonObject = JSON.parse(jsonString);
+      this.locationPositions = new Map(jsonObject.locationPositions);
+      this.locationDropPositions = new Map(jsonObject.locationDropPositions);
+    } else {
+      this.locationPositions = new Map();
+      this.locationDropPositions = new Map();
+    }
+
   }
 
   toJSON(): string {

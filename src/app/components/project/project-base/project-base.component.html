@@ -9,8 +9,10 @@
       <a mat-button [routerLink]="'./properties'" class="toolbar-button" routerLinkActive="mat-list-single-selected-option"> Properties </a>
       <a mat-button [routerLink]="'./iterative-planning/run-overview-mobile'" class="toolbar-button"routerLinkActive="mat-list-single-selected-option">     Iterative Planning
       </a>
-      <a mat-button [routerLink]="'./animation-settings'" class="toolbar-button" routerLinkActive="mat-list-single-selected-option">Animation Settings</a>
     </div>
+    <button mat-icon-button style="position: absolute; right: 50px;" [routerLink]="'./animation-settings'" routerLinkActive="mat-list-single-selected-option">
+      <mat-icon>movie_creation</mat-icon>
+    </button>
     <button mat-icon-button style="position: absolute; right: 10px;" (click)="openSettings()">
       <mat-icon>settings</mat-icon>
     </button>

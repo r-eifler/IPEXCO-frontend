@@ -3,6 +3,7 @@ import { ElementRef } from '@angular/core';
 import { gsap } from 'gsap';
 import { Draggable } from 'gsap/Draggable';
 import { logDepthVertex } from 'babylonjs/Shaders/ShadersInclude/logDepthVertex';
+import { AnimationSettingsNoMystery } from './animation-settings-nomystery';
 
 interface Position {
   x: number;
@@ -19,14 +20,14 @@ const nodeHeight = 30;
 interface MoveLocation {
   location: Location;
   svg: Element;
-  draggable: any;
+  draggable: Draggable;
   dropLocations: MoveDropLocation[];
 }
 
 interface MoveDropLocation {
   location: Location;
   svg: Element;
-  draggable: any;
+  draggable: Draggable;
 }
 
 interface MoveEdge {
@@ -39,6 +40,7 @@ interface MoveEdge {
 export class LocationPositioningSettings {
 
   private svg: SVGSVGElement;
+  private borderBox: Element;
 
   moveLocations: Map<string, MoveLocation> = new Map();
   moveEdges: MoveEdge[] = [];
@@ -47,14 +49,15 @@ export class LocationPositioningSettings {
 
   constructor(
     private task: NoMysteryTask,
-    private locationPositions: Map<string, Position>,
-    private locationDropPositions: Map<string, Position[]>) {
+    private animationSettings: AnimationSettingsNoMystery) {
 
     gsap.registerPlugin(Draggable);
 
     this.svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     this.svg.setAttribute('width', maxWidth.toString());
     this.svg.setAttribute('height', maxHeight.toString());
+
+    this.creatBorderBox();
 
     this.createLocations();
     this.createEdges();
@@ -64,17 +67,22 @@ export class LocationPositioningSettings {
     this.updateEdgePositions();
 
     this.disableDraggableDropLocations();
-    // initDraggable(this);
-
-    // this.svg.addEventListener('load', () => initDraggable(this));
-    // this.svg.addEventListener('click', () => initDraggable(this));
 
   }
 
-
-
   display(): Element {
     return this.svg;
+  }
+
+  creatBorderBox() {
+    this.borderBox = document.createElementNS(this.svg.namespaceURI, 'rect');
+    this.borderBox.setAttribute('width', maxWidth.toString());
+    this.borderBox.setAttribute('height', maxHeight.toString());
+    this.borderBox.setAttribute('stroke', '#000000');
+    this.borderBox.setAttribute('fill', '#FFFFFF');
+    this.borderBox.setAttribute('stroke-width', '4');
+
+    this.svg.appendChild(this.borderBox);
   }
 
   createLocations() {
@@ -108,22 +116,22 @@ export class LocationPositioningSettings {
 
     let x = 0;
     let y = 0;
-    if (this.locationPositions) {
-      const pos = this.locationPositions.get(loc.name);
+    if (this.animationSettings.locationPositions.has(loc.name)) {
+      const pos = this.animationSettings.locationPositions.get(loc.name);
       x = pos.x;
       y = pos.y;
     } else {
       x = randomNumber(maxWidth);
-      x = Math.min(Math.max(nodeWidth + 20, x), maxWidth - nodeWidth - 20);
+      x = Math.min(Math.max(nodeWidth + 60, x), maxWidth - nodeWidth - 60);
       y = randomNumber(maxWidth);
-      y = Math.min(Math.max(nodeHeight + 20, y), maxHeight - nodeHeight - 20);
+      y = Math.min(Math.max(nodeHeight + 60, y), maxHeight - nodeHeight - 60);
     }
 
     group.setAttribute('transform', `translate(${x}, ${y})`);
     const moveLoc: MoveLocation = {
       location: loc,
       svg: group,
-      draggable: Draggable.create(group, {bound: this.svg, onDrag: () => this.updateEdgePositions()})[0],
+      draggable: new Draggable(group, {bound: this.borderBox, onDrag: () => this.updateEdgePositions()}),
       dropLocations: [],
     };
 
@@ -162,8 +170,8 @@ export class LocationPositioningSettings {
 
         let x = 0;
         let y = 0;
-        if (this.locationDropPositions){
-          const pos = this.locationDropPositions.get(loc.location.name)[i];
+        if (this.animationSettings.locationDropPositions.has(loc.location.name)){
+          const pos = this.animationSettings.locationDropPositions.get(loc.location.name)[i];
           x = pos.x;
           y = pos.y;
         } else {
@@ -179,7 +187,7 @@ export class LocationPositioningSettings {
         const moveLoc: MoveDropLocation = {
           location: loc.location,
           svg: group,
-          draggable: Draggable.create(group, {bound: this.svg})[0]
+          draggable: new Draggable(group, {bound: this.borderBox})
         };
 
         loc.dropLocations.push(moveLoc);
@@ -219,8 +227,8 @@ export class LocationPositioningSettings {
 
   updateEdgePositions() {
     for ( const e of this.moveEdges) {
-      const sPos: Position = getPosfromTransform(e.source.getAttribute('transform'));
-      const tPos: Position = getPosfromTransform(e.target.getAttribute('transform'));
+      const sPos: Position = getPosFromTransform(e.source.getAttribute('transform'));
+      const tPos: Position = getPosFromTransform(e.target.getAttribute('transform'));
 
       e.svg.setAttribute('x1', (+sPos.x + nodeWidth / 2).toString());
       e.svg.setAttribute('y1', (+sPos.y + nodeHeight / 2).toString());
@@ -232,7 +240,7 @@ export class LocationPositioningSettings {
   getCurrentLocationsPositions(): Map<string, Position> {
     const rMap = new Map();
     for (const n of this.moveLocations.values()) {
-      const pos: Position = getPosfromTransform(n.svg.getAttribute('transform'));
+      const pos: Position = getPosFromTransform(n.svg.getAttribute('transform'));
       rMap.set(n.location.name, pos);
     }
     return rMap;
@@ -243,7 +251,7 @@ export class LocationPositioningSettings {
     for (const n of this.moveLocations.values()) {
       const positions = []
       for (const dropPos of n.dropLocations){
-        positions.push(getPosfromTransform(dropPos.svg.getAttribute('transform')));
+        positions.push(getPosFromTransform(dropPos.svg.getAttribute('transform')));
       }
       rMap.set(n.location.name, positions);
     }
@@ -252,6 +260,7 @@ export class LocationPositioningSettings {
 
   enableDraggableLocations() {
     for (const loc of this.moveLocations.values()) {
+      loc.draggable.applyBounds(this.svg);
       loc.draggable.enable();
     }
   }
@@ -264,6 +273,7 @@ export class LocationPositioningSettings {
 
   enableDraggableDropLocations() {
     for (const loc of this.dropLocations) {
+      loc.draggable.applyBounds(this.svg);
       loc.draggable.enable();
     }
   }
@@ -276,18 +286,7 @@ export class LocationPositioningSettings {
 
 }
 
-// function initDraggable(settings: LocationPositioningSettings) {
-//   console.log('svg load');
-//   settings.draggableNodes = Draggable.create('.node', {
-//     bounds: 'svg',
-//     onDrag: () => settings.updateEdgePositions()
-//   });
-//   settings.draggableDropLocations = Draggable.create('.dropLoc', {
-//     bounds: 'svg',
-//   });
-// }
-
-function getPosfromTransform(transform: string): Position {
+function getPosFromTransform(transform: string): Position {
   const parts = transform.replace(')', '').replace('translate(', '').split(',');
   const x = parts[parts.length - 2];
   const y = parts[parts.length - 1];

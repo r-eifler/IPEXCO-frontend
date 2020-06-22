@@ -32,16 +32,13 @@ export class AnimationSettingsNoMysteryVisu {
       project => {
         if (project) {
           this.currentProject = project;
-          if (project.animationSettings) {
-            this.animationSettings = new AnimationSettingsNoMystery(project.animationSettings);
-          }
+          this.animationSettings = new AnimationSettingsNoMystery(project.animationSettings);
 
           taskSchemaService.getSchema().subscribe(
             schema => {
               if (schema) {
                 const task = new NoMysteryTask(schema);
-                this.locationPosSettings = new LocationPositioningSettings(task,
-                  this.animationSettings.locationPositions, this.animationSettings.locationDropPositions);
+                this.locationPosSettings = new LocationPositioningSettings(task, this.animationSettings);
                 this.displayObservable.next([this.locationPosSettings.display()]);
               }
             }
