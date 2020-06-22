@@ -93,16 +93,16 @@ export class NoMystery3DVisualization extends PlanVisualization {
   }
 
   getLocationPositions() {
-    const xMax = worldWidth - 15;
-    const yMax = worldHeight - 15;
+    const xMax = worldWidth - 20; // 20 is the border width
+    const yMax = worldHeight - 20;
     for (const loc of this.animationTask.locations.values()) {
       const pos = this.animationSettings.locationPositions.get(loc.getName());
       const xScaled = (pos.x / refXMax) * xMax;
       const yScaled = ( pos.y / refYMax) * yMax;
       loc.x = xScaled < xMax / 2 ? -((xMax / 2) - xScaled) : xScaled - (xMax / 2);
       loc.y = - (yScaled < yMax / 2 ?  -((yMax / 2) - yScaled) : yScaled - (yMax / 2));
-      loc.x += 10;
-      loc.y += -10;
+      loc.x += 2;
+      loc.y += -2;
     }
   }
 
