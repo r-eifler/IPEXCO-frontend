@@ -35,13 +35,11 @@ export class AnimationNode {
   }
 
   setFreePsoition(pos: Position[]) {
-    console.log(pos);
     this.freePositions = pos;
   }
 
   getFreePosition(): BABYLON.Vector3 {
 
-    console.log('Get free position');
     let dx = 0;
     let dz = 0;
     if (! this.freePositions) {

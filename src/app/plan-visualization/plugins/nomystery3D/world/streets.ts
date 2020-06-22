@@ -6,7 +6,6 @@ export class Streets {
 
   constructor(private scene: BABYLON.Scene, task: NoMystery3DAnimationTask) {
 
-    console.log('create street');
     const bc = new BABYLON.Color4(0.5, 0.5, 0.5, 1);
     const boxColor: BABYLON.Color4[] = [bc, bc, bc, bc, bc, bc];
 
@@ -37,7 +36,6 @@ export class Streets {
 }
 
 function setPositionRotation(roadInfo: AnimationRoad, roadObejct: BABYLON.Mesh) {
-  console.log('compute position');
   const x1 = roadInfo.source.x;
   const z1 = roadInfo.source.y;
   const x2 = roadInfo.target.x;
