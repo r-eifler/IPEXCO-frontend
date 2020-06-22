@@ -46,8 +46,11 @@ export class ProjectCreatorComponent implements OnInit, OnDestroy {
     @Inject(MAT_DIALOG_DATA) data) {
 
     this.domainFiles$ = this.domainFilesService.files$;
+    this.domainFilesService.findFiles();
     this.problemFiles = this.problemFilesService.files$;
+    this.problemFilesService.findFiles();
     this.domainSpecFiles = this.domainSpecFilesService.files$;
+    this.domainSpecFilesService.findFiles();
     this.projects$ = this.projectService.getList();
 
     this.editedProject = data.project;

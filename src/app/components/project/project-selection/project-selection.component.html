@@ -1,52 +1,65 @@
 <div [class.project-container-mobile]="isMobile" [class.project-container-web]="! isMobile">
-  <mat-card *ngFor="let project of projects$ | async" [class.project-card-mobile]="isMobile" [class.project-card-web]="! isMobile">
-    <mat-card-header>
-      <div mat-card-avatar>
-      <span class="material-icons">
-        games
-      </span>
-      </div>
-      <mat-card-title>{{project.name}}</mat-card-title>
-      <mat-card-subtitle>Project</mat-card-subtitle>
 
-      <button mat-icon-button [matMenuTriggerFor]="menu" style="position: absolute; right: 5px">
-        <mat-icon>more_vert</mat-icon>
-      </button>
-      <mat-menu #menu="matMenu">
-        <button mat-menu-item (click)="delete(project)">
-          <mat-icon>delete</mat-icon>
-          <span>delete</span>
-        </button>
-        <button mat-menu-item (click)="copy_project(project)">
-          <mat-icon>file_copy</mat-icon>
-          <span>copy</span>
-        </button>
-        <button mat-menu-item (click)="modify_project(project)">
-          <mat-icon>create</mat-icon>
-          <span>modify</span>
-        </button>
-      </mat-menu>
+  <ng-container *ngIf="(projects$ | async).length == 0">
+    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
+      <h1 >There are no projects available!</h1>
+      <h2>You can create a new project with the button in the bottom right corner.</h2>
+    </div>
+
+  </ng-container>
 
 
-    </mat-card-header>
-    <mat-card-content>
-      <p>
-        {{project.description}}
-      </p>
-      <mat-list>
-        <mat-list-item>{{project.domainFile.name}}</mat-list-item>
-        <mat-divider [inset]="true"></mat-divider>
-        <mat-list-item>{{project.problemFile.name}}</mat-list-item>
-        <mat-divider [inset]="true"></mat-divider>
-        <mat-list-item>{{project.domainSpecification.name}}</mat-list-item>
-      </mat-list>
-    </mat-card-content>
-    <mat-card-actions style="display: flex; flex-direction: row">
-      <button mat-flat-button color="accent" style="margin-left: auto;" [routerLink]="['/projects', project._id, 'overview']">
-        <mat-icon>play_arrow</mat-icon>
-      </button>
-    </mat-card-actions>
-  </mat-card>
+  <ng-container *ngIf="(projects$ | async).length > 0">
+    <mat-card *ngFor="let project of projects$ | async" [class.project-card-mobile]="isMobile" [class.project-card-web]="! isMobile">
+      <mat-card-header>
+        <div mat-card-avatar>
+        <span class="material-icons">
+          games
+        </span>
+        </div>
+        <mat-card-title>{{project.name}}</mat-card-title>
+        <mat-card-subtitle>Project</mat-card-subtitle>
+
+        <button mat-icon-button [matMenuTriggerFor]="menu" style="position: absolute; right: 5px">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item (click)="delete(project)">
+            <mat-icon>delete</mat-icon>
+            <span>delete</span>
+          </button>
+          <button mat-menu-item (click)="copy_project(project)">
+            <mat-icon>file_copy</mat-icon>
+            <span>copy</span>
+          </button>
+          <button mat-menu-item (click)="modify_project(project)">
+            <mat-icon>create</mat-icon>
+            <span>modify</span>
+          </button>
+        </mat-menu>
+
+
+      </mat-card-header>
+      <mat-card-content>
+        <p>
+          {{project.description}}
+        </p>
+        <mat-list>
+          <mat-list-item>{{project.domainFile.name}}</mat-list-item>
+          <mat-divider [inset]="true"></mat-divider>
+          <mat-list-item>{{project.problemFile.name}}</mat-list-item>
+          <mat-divider [inset]="true"></mat-divider>
+          <mat-list-item>{{project.domainSpecification.name}}</mat-list-item>
+        </mat-list>
+      </mat-card-content>
+      <mat-card-actions style="display: flex; flex-direction: row">
+        <button mat-flat-button color="accent" style="margin-left: auto;" [routerLink]="['/projects', project._id, 'overview']">
+          <mat-icon>play_arrow</mat-icon>
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </ng-container>
+
   <button mat-fab color="accent" class="add-button" (click)="new_project_form()">
     <mat-icon>add</mat-icon>
   </button>
