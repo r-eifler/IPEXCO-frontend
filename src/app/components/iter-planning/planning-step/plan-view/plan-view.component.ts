@@ -28,6 +28,7 @@ export class PlanViewComponent implements OnInit, OnDestroy {
     }
 
   ngOnInit(): void {
+    console.log('plan view');
     this.currentRun$
     .pipe(takeUntil(this.ngUnsubscribe))
     .subscribe(run => {
@@ -41,17 +42,6 @@ export class PlanViewComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
-  }
-
-  formatActions(actionStrings: string[]): Action[] {
-    const res: Action[] = [];
-    for (const a of actionStrings) {
-      const action = a.replace('(', '').replace(')', '');
-      const [name, ...args] = action.split(' ');
-      res.push({name, args});
-    }
-
-    return res;
   }
 
 }

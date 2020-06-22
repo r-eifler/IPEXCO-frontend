@@ -8,4 +8,7 @@
     <!-- <div style="width: 50%; height: 2px; background-color: black; margin: 20px 0px;"></div>
     <p style="font-size: large;"><span style="font-weight: bold;">Plan cost: </span>{{plan.cost}}</p> -->
   </div>
+  <div style="width: 100%; height: calc(100% - 50px); overflow-y: scroll;" *ngIf="! plan">
+    <p style="margin-left: 30px;">The planning task is unsolvable.</p>
+  </div>
 </div>

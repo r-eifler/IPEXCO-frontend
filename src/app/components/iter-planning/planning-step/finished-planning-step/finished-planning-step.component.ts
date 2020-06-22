@@ -14,6 +14,8 @@ import { Subject } from 'rxjs';
 })
 export class FinishedPlanningStepComponent implements OnInit, OnDestroy {
 
+  showAnimationTab = false;
+
   private ngUnsubscribe: Subject<any> = new Subject();
 
   constructor(
@@ -21,16 +23,27 @@ export class FinishedPlanningStepComponent implements OnInit, OnDestroy {
     private router: Router,
     public settingsService: ExecutionSettingsService,
     private runService: RunService,
-    currentRunService: CurrentRunService) {
+    public currentRunService: CurrentRunService) {
 
+    console.log('Finished planning step');
     this.route.paramMap.pipe(
       switchMap((params: ParamMap) =>
         this.runService.getObject(params.get('runid')))
     )
     .pipe(takeUntil(this.ngUnsubscribe))
-    .subscribe(value => {
-      currentRunService.saveObject(value);
+    .subscribe(run => {
+      currentRunService.saveObject(run);
     });
+
+    this.currentRunService.getSelectedObject()
+    .pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe(
+      run => {
+        if (run && run.plan) {
+          this.showAnimationTab = true;
+        }
+      }
+    );
   }
 
   ngOnInit(): void {

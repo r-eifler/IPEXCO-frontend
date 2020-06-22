@@ -125,7 +125,7 @@ export class CurrentRunService extends SelectedObjectService<PlanRun> {
 
   saveObject(planRun: PlanRun) {
     console.log('PlanRun plan path: ' + planRun.planPath);
-    if (! planRun.plan) {
+    if (planRun.planPath && ! planRun.plan) {
       const planContent$ = this.fileUtilsService.getFileContent(planRun.planPath);
       // console.log('Loade Plan');
       planContent$.subscribe((content) => {
