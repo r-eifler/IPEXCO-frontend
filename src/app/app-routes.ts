@@ -1,3 +1,5 @@
+import { HelpPageComponent } from './components/login/help-page/help-page.component';
+import { MainInfoComponent } from './components/login/main-info/main-info.component';
 import { Routes } from '@angular/router';
 import { MainPageComponent } from './components/login/main-page/main-page.component';
 import { UserMainPageComponent } from './components/user/user-main-page/user-main-page.component';
@@ -24,7 +26,9 @@ import { DomainSpecificationComponent } from './components/files/domain-specific
 
 export const appRoutes: Routes = [
   { path: '', component: MainPageComponent},
-  {path: 'overview', component: UserMainPageComponent},
+  { path: 'info', component: MainInfoComponent},
+  { path: 'help', component: HelpPageComponent},
+  { path: 'overview', component: UserMainPageComponent},
   { path: 'projects', component: ProjectSelectionComponent},
   { path: 'projects/:projectid', component: ProjectBaseComponent,
     children: [

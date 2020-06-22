@@ -146,50 +146,8 @@ import { AnimationSettingsComponent } from './components/animation/animation-set
 import { AnimationSettingsNomysteryComponent } from './components/plugins/nomystery/animation-settings-nomystery/animation-settings-nomystery.component';
 import { AnimationsSettingsDemoComponent } from './components/animation/animations-settings-demo/animations-settings-demo.component';
 import { MainInfoComponent } from './components/login/main-info/main-info.component';
-
-
-
-const appRoutes: Routes = [
-    { path: '', component: MainPageComponent},
-    {path: 'overview', component: UserMainPageComponent},
-    { path: 'projects', component: ProjectSelectionComponent},
-    { path: 'projects/:projectid', component: ProjectBaseComponent,
-      children: [
-        { path: 'overview', component: ProjectOverviewComponent},
-        { path: 'properties', component: PropertyCollectionComponent},
-        { path: 'iterative-planning', component: IterativePlanningBaseComponent,
-          children: [
-            { path: 'run-overview-mobile', component: IterativePlanningBaseMobileComponent},
-            { path: 'new-planning-step', component: PlanningStepComponent},
-            { path: 'original-task', component: FirstPlanningStepComponent},
-            { path: 'planning-step/:runid', component: FinishedPlanningStepComponent},
-            { path: 'planning-step/:runid/new-question', component: QuestionStepComponent},
-            { path: 'planning-step/:runid/question-step/:expid', component: FinishedQuestionStepComponent},
-          ]
-        },
-        { path: 'animation-settings', component: AnimationSettingsComponent},
-      ]
-    },
-    { path: 'demos', component: DemoSelectionComponent},
-    { path: 'demos/:demoid', component: DemoBaseComponent,
-      children: [
-        { path: 'help', component: DemoHelpComponent},
-        { path: 'nav', component: DemoNavigatorComponent,
-          children: [
-            { path: 'new-planning-step', component: PlanningStepComponent},
-            { path: 'original-task', component: FirstPlanningStepComponent},
-            { path: 'planning-step/:runid', component: FinishedPlanningStepComponent},
-            { path: 'planning-step/:runid/new-question', component: QuestionStepComponent},
-            { path: 'planning-step/:runid/question-step/:expid', component: FinishedQuestionStepComponent}
-          ]
-        }
-      ]
-    },
-    { path: 'uploaded-files', component: FilesCollectionComponent},
-    { path: 'domain-files', component: DomainSelectorComponent},
-    { path: 'problem-files', component: ProblemSelectorComponent},
-    { path: 'domain-specification', component: DomainSpecificationComponent},
-];
+import { appRoutes } from './app-routes';
+import { HelpPageComponent } from './components/login/help-page/help-page.component';
 
 
 @NgModule({
@@ -242,8 +200,12 @@ const appRoutes: Routes = [
     AnimationSettingsDirective,
     AnimationsSettingsDemoComponent,
     MainInfoComponent,
+    HelpPageComponent,
   ],
   imports: [
+    RouterModule.forRoot(appRoutes,
+      {enableTracing: false, paramsInheritanceStrategy: 'always'}
+    ),
     BrowserModule,
     BrowserAnimationsModule,
     HttpClientModule,
@@ -281,11 +243,6 @@ const appRoutes: Routes = [
     MatBottomSheetModule,
     MatSlideToggleModule,
     MatTableModule,
-    RouterModule.forRoot(
-      appRoutes,
-      {enableTracing: false, // <-- debugging purposes only
-        paramsInheritanceStrategy: 'always'}
-    ),
     ResizableModule,
     InlineSVGModule.forRoot(),
   ],
