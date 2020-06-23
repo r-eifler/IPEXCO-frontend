@@ -1,130 +1,145 @@
-<div [class.grid-container-desktop]="! isMobile" [class.container-mobile]="isMobile">
+<mat-tab-group style="width: 100%; height: 100%;">
+  <mat-tab label="Main">
+    <div [class.grid-container-desktop]="! isMobile" [class.container-mobile]="isMobile">
 
-  <mat-card>
-    <mat-card-header>
-      <div mat-card-avatar>
-        <span class="material-icons">
-          games
-        </span>
-      </div>
-      <mat-card-title>Projects</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <mat-action-list>
-        <button mat-list-item *ngFor="let project of (projectsService.getList() | async); last as last" (click)="openProject(project)">
-          {{project.name}}
-          <mat-divider [inset]="true" *ngIf="!last"></mat-divider>
-        </button>
-      </mat-action-list>
-    </mat-card-content>
-    <mat-card-actions>
-      <button mat-icon-button (click)="toProjectCollection()">
-        <mat-icon>open_in_new</mat-icon>
-      </button>
-    </mat-card-actions>
-  </mat-card>
+      <mat-card [class.card-style-desktop]="! isMobile">
+        <mat-card-header>
+          <div mat-card-avatar>
+            <span class="material-icons">
+              games
+            </span>
+          </div>
+          <mat-card-title>Projects</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-action-list>
+            <button mat-list-item *ngFor="let project of (projectsService.getList() | async); last as last" (click)="openProject(project)">
+              {{project.name}}
+              <mat-divider [inset]="true" *ngIf="!last"></mat-divider>
+            </button>
+          </mat-action-list>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-icon-button (click)="toProjectCollection()">
+            <mat-icon>open_in_new</mat-icon>
+          </button>
+        </mat-card-actions>
+      </mat-card>
 
-  <mat-card>
-    <mat-card-header>
-      <div mat-card-avatar>
-        <span class="material-icons">
-          send
-        </span>
-      </div>
-      <mat-card-title>Demos</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <mat-action-list>
-        <button mat-list-item *ngFor="let demo of (demosService.getList() | async); last as last" (click)="openDemo(demo)">
-          {{demo.name}}
-          <mat-divider [inset]="true" *ngIf="!last"></mat-divider>
-        </button>
-      </mat-action-list>
-    </mat-card-content>
-    <mat-card-actions>
-      <button mat-icon-button (click)="toDemoCollection()">
-        <mat-icon>open_in_new</mat-icon>
-      </button>
-    </mat-card-actions>
-  </mat-card>
+      <mat-card>
+        <mat-card-header>
+          <div mat-card-avatar>
+            <span class="material-icons">
+              send
+            </span>
+          </div>
+          <mat-card-title>Demos</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-action-list *ngIf="(demosService.getList() | async).length > 0">
+            <button mat-list-item *ngFor="let demo of (demosService.getList() | async); last as last" (click)="openDemo(demo)">
+              {{demo.name}}
+              <mat-divider [inset]="true" *ngIf="!last"></mat-divider>
+            </button>
+          </mat-action-list>
+          <p *ngIf="(demosService.getList() | async).length == 0">No demos available.</p>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-icon-button (click)="toDemoCollection()">
+            <mat-icon>open_in_new</mat-icon>
+          </button>
+        </mat-card-actions>
+      </mat-card>
 
-  <mat-card>
-    <mat-card-header>
-      <div mat-card-avatar>
-        <span class="material-icons">
-          question_answer
-        </span>
-      </div>
-      <mat-card-title>Surveys</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <h1>TODO</h1>
-    </mat-card-content>
-    <mat-card-actions>
-      <button mat-icon-button>
-        <mat-icon>open_in_new</mat-icon>
-      </button>
-    </mat-card-actions>
-  </mat-card>
+      <mat-card>
+        <mat-card-header>
+          <div mat-card-avatar>
+            <span class="material-icons">
+              question_answer
+            </span>
+          </div>
+          <mat-card-title>Surveys</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <p>No surveys available.</p>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-icon-button>
+            <mat-icon>open_in_new</mat-icon>
+          </button>
+        </mat-card-actions>
+      </mat-card>
 
-  <mat-card>
-    <mat-card-header>
-      <div mat-card-avatar>
-        <span class="material-icons">
-          text_snippet
-        </span>
-      </div>
-      <mat-card-title>Domain Files</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <mat-action-list>
-        <button mat-list-item *ngFor="let file of (domainFilesService.files$ | async); last as last">
-          <p mat-line>{{file.name}}</p>
-          <p mat-line>{{file.domain}}</p>
-          <mat-divider [inset]="true" *ngIf="!last"></mat-divider>
-        </button>
-      </mat-action-list>
-    </mat-card-content>
-  </mat-card>
+    </div>
+  </mat-tab>
 
-  <mat-card>
-    <mat-card-header>
-      <div mat-card-avatar>
-        <span class="material-icons">
-          text_snippet
-        </span>
-      </div>
-      <mat-card-title>Problem Files</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <mat-action-list>
-        <button mat-list-item *ngFor="let file of (problemFilesService.files$ | async); last as last">
-          <p mat-line>{{file.name}}</p>
-          <p mat-line>{{file.domain}}</p>
-          <mat-divider [inset]="true" *ngIf="!last"></mat-divider>
-        </button>
-      </mat-action-list>
-    </mat-card-content>
-  </mat-card>
+  <mat-tab label="Files">
+    <div [class.grid-container-desktop]="! isMobile" [class.container-mobile]="isMobile">
 
-  <mat-card>
-    <mat-card-header>
-      <div mat-card-avatar>
-        <span class="material-icons">
-          text_snippet
-        </span>
-      </div>
-      <mat-card-title>Domain Specification Files</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <mat-action-list>
-        <button mat-list-item *ngFor="let file of (domainSpecificationFilesService.files$ | async); last as last">
-          <p mat-line>{{file.name}}</p>
-          <p mat-line>{{file.domain}}</p>
-          <mat-divider [inset]="true" *ngIf="!last"></mat-divider>
-        </button>
-      </mat-action-list>
-    </mat-card-content>
-  </mat-card>
+      <mat-card>
+        <mat-card-header>
+          <div mat-card-avatar>
+            <span class="material-icons">
+              text_snippet
+            </span>
+          </div>
+          <mat-card-title>Domain Files</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-action-list>
+            <button mat-list-item *ngFor="let file of (domainFilesService.files$ | async); last as last">
+              <p mat-line>{{file.name}}</p>
+              <p mat-line>{{file.domain}}</p>
+              <mat-divider [inset]="true" *ngIf="!last"></mat-divider>
+            </button>
+          </mat-action-list>
+        </mat-card-content>
+      </mat-card>
 
-</div>
+      <mat-card>
+        <mat-card-header>
+          <div mat-card-avatar>
+            <span class="material-icons">
+              text_snippet
+            </span>
+          </div>
+          <mat-card-title>Problem Files</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-action-list>
+            <button mat-list-item *ngFor="let file of (problemFilesService.files$ | async); last as last">
+              <p mat-line>{{file.name}}</p>
+              <p mat-line>{{file.domain}}</p>
+              <mat-divider [inset]="true" *ngIf="!last"></mat-divider>
+            </button>
+          </mat-action-list>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card>
+        <mat-card-header>
+          <div mat-card-avatar>
+            <span class="material-icons">
+              text_snippet
+            </span>
+          </div>
+          <mat-card-title>Domain Specification Files</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-action-list>
+            <button mat-list-item *ngFor="let file of (domainSpecificationFilesService.files$ | async); last as last">
+              <p mat-line>{{file.name}}</p>
+              <p mat-line>{{file.domain}}</p>
+              <mat-divider [inset]="true" *ngIf="!last"></mat-divider>
+            </button>
+          </mat-action-list>
+        </mat-card-content>
+      </mat-card>
+
+    </div>
+  </mat-tab>
+
+
+</mat-tab-group>
+
+

@@ -25,10 +25,15 @@
   height: 100%;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  grid-template-rows: 2fr 1fr 1fr;
   column-gap: 10px;
   row-gap: 10px;
 }
+
+.card-style-desktop {
+  box-sizing: border-box;
+  height: 100%;
+}
+
 
 .container-mobile{
   box-sizing: border-box;
