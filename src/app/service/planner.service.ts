@@ -48,8 +48,8 @@ export class PlannerService extends ObjectCollectionService<PlanRun> {
 
     this.http.post<IHTTPData<PlanRun>>(url, expRun)
       .subscribe(httpData => {
-        console.log('Result Post:');
-        console.log(httpData.data);
+        // console.log('Result Post:');
+        // console.log(httpData.data);
         const action = {type: EDIT, data: httpData.data};
         this.listStore.dispatch(action);
       });

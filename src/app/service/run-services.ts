@@ -1,3 +1,5 @@
+import { TaskSchema } from 'src/app/interface/task-schema';
+import { TaskSchemaService } from './schema.service';
 import { Plan } from './../interface/plan';
 import { EDIT, LOAD, REMOVE } from '../store/generic-list.store';
 import {SelectedObjectService} from './selected-object.service';
@@ -119,23 +121,33 @@ export class DemoRunService extends RunService {
 })
 export class CurrentRunService extends SelectedObjectService<PlanRun> {
 
-  constructor(store: CurrentRunStore, private fileUtilsService: PddlFileUtilsService) {
+  constructor(
+    store: CurrentRunStore,
+    private fileUtilsService: PddlFileUtilsService,
+    private taskSchemaService: TaskSchemaService) {
     super(store);
   }
 
   saveObject(planRun: PlanRun) {
     console.log('Current run stored');
     if (planRun.planString && ! planRun.plan) {
-      handlePlanString(planRun.planString, planRun);
-      this.selectedObjectStore.dispatch({type: LOAD, data: planRun});
+      this.taskSchemaService.getSchema().subscribe(
+        schema => {
+          if (schema) {
+            handlePlanString(planRun.planString, planRun, schema);
+            this.selectedObjectStore.dispatch({type: LOAD, data: planRun});
+          }
+        });
+
 
     } else if (planRun.planPath && ! planRun.plan) {
       const planContent$ = this.fileUtilsService.getFileContent(planRun.planPath);
       // console.log('Loade Plan');
-      planContent$.subscribe((content) => {
+      combineLatest([this.taskSchemaService.getSchema(), planContent$]).subscribe(
+        ([schema, content]) => {
         // console.log(content);
         if (content) {
-          handlePlanString(content, planRun);
+          handlePlanString(content, planRun, schema);
           this.selectedObjectStore.dispatch({type: LOAD, data: planRun});
         }
       });
@@ -145,21 +157,23 @@ export class CurrentRunService extends SelectedObjectService<PlanRun> {
   }
 }
 
-function handlePlanString(planString: string, planRun: PlanRun) {
+function handlePlanString(planString: string, planRun: PlanRun, schema: TaskSchema) {
   const lines = planString.split('\n');
   lines.splice(-1, 1); // remove empty line at the end
   const costString = lines.splice(-1, 1)[0];
-  const plan = parsePlan(lines);
+  const plan = parsePlan(lines, schema);
   plan.cost = Number(costString.split(' ')[3]);
   planRun.plan = plan;
 }
 
-function parsePlan(actionStrings: string[]): Plan {
+function parsePlan(actionStrings: string[], schema: TaskSchema): Plan {
   const res: Plan = {actions: [], cost: null};
   for (const a of actionStrings) {
     const action = a.replace('(', '').replace(')', '');
     const [name, ...args] = action.split(' ');
-    res.actions.push({name, args});
+    if (schema.actions.some(ac => ac.name === name)) {
+      res.actions.push({name, args});
+    }
   }
 
   return res;
