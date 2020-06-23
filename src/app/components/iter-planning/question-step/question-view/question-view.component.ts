@@ -39,19 +39,20 @@ export class QuestionViewComponent implements OnInit, OnDestroy {
       combineLatest([this.currentRun$, this.currentQuestion$, this.planProperties$])
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(([run, question, planProperties]) => {
-          if (run && question && planProperties.length > 0) {
-            this.currentHardGoals = run.hardGoals;
-            const questionElems = this.arrayMinus(question.hardGoals, this.currentHardGoals);
-            for (const elem of questionElems) {
-              if (elem.goalType === GoalType.goalFact) {
-                this.questionElemsDescription.push(elem.name);
-              }
-              if (elem.goalType === GoalType.planProperty) {
-                const pp = planProperties.find(p => p.name === elem.name);
-                this.questionElemsDescription.push(pp.naturalLanguageDescription);
-              }
+        this.questionElemsDescription = [];
+        if (run && question && planProperties.length > 0) {
+          this.currentHardGoals = run.hardGoals;
+          const questionElems = this.arrayMinus(question.hardGoals, this.currentHardGoals);
+          for (const elem of questionElems) {
+            if (elem.goalType === GoalType.goalFact) {
+              this.questionElemsDescription.push(elem.name);
+            }
+            if (elem.goalType === GoalType.planProperty) {
+              const pp = planProperties.find(p => p.name === elem.name);
+              this.questionElemsDescription.push(pp.naturalLanguageDescription);
             }
           }
+        }
       });
   }
 
