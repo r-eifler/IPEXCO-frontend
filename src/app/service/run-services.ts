@@ -124,20 +124,18 @@ export class CurrentRunService extends SelectedObjectService<PlanRun> {
   }
 
   saveObject(planRun: PlanRun) {
-    console.log('PlanRun plan path: ' + planRun.planPath);
-    if (planRun.planPath && ! planRun.plan) {
+    console.log('Current run stored');
+    if (planRun.planString && ! planRun.plan) {
+      handlePlanString(planRun.planString, planRun);
+      this.selectedObjectStore.dispatch({type: LOAD, data: planRun});
+
+    } else if (planRun.planPath && ! planRun.plan) {
       const planContent$ = this.fileUtilsService.getFileContent(planRun.planPath);
       // console.log('Loade Plan');
       planContent$.subscribe((content) => {
         // console.log(content);
         if (content) {
-
-          const lines = content.split('\n');
-          lines.splice(-1, 1); // remove empty line at the end
-          const costString = lines.splice(-1, 1)[0];
-          const plan = parsePlan(lines);
-          plan.cost = Number(costString.split(' ')[3]);
-          planRun.plan = plan;
+          handlePlanString(content, planRun);
           this.selectedObjectStore.dispatch({type: LOAD, data: planRun});
         }
       });
@@ -145,6 +143,15 @@ export class CurrentRunService extends SelectedObjectService<PlanRun> {
       this.selectedObjectStore.dispatch({type: LOAD, data: planRun});
     }
   }
+}
+
+function handlePlanString(planString: string, planRun: PlanRun) {
+  const lines = planString.split('\n');
+  lines.splice(-1, 1); // remove empty line at the end
+  const costString = lines.splice(-1, 1)[0];
+  const plan = parsePlan(lines);
+  plan.cost = Number(costString.split(' ')[3]);
+  planRun.plan = plan;
 }
 
 function parsePlan(actionStrings: string[]): Plan {
@@ -173,20 +180,31 @@ export class CurrentQuestionService extends SelectedObjectService<ExplanationRun
 
   saveObject(questionRun: ExplanationRun) {
     if (! questionRun.mugs) {
-      combineLatest([this.fileUtilsService.getFileContent(questionRun.result), this.planPropertiesService.getList()]).subscribe(
-        ([content, planProperties]) => {
-        questionRun.mugs = [];
-        const answer = JSON.parse(content);
-        for (const mugs of answer.MUGS) {
-          const list = [];
-          for (const elem of mugs) {
-              const pp = planProperties.find(p => p.name === elem.replace('sat_', ''));
-              list.push(pp.naturalLanguageDescription);
-          }
-          questionRun.mugs.push(list);
+      console.log('Question service get MUGS');
+      questionRun.mugs = [];
+      const answer = JSON.parse(questionRun.result);
+      for (const mugs of answer.MUGS) {
+        const list = [];
+        for (const elem of mugs) {
+            list.push(elem.replace('sat_', '').replace('soft_accepting(', '').replace(')', ''));
         }
-        this.selectedObjectStore.dispatch({type: LOAD, data: questionRun});
-      });
+        questionRun.mugs.push(list);
+      }
+      this.selectedObjectStore.dispatch({type: LOAD, data: questionRun});
+      // combineLatest([this.fileUtilsService.getFileContent(questionRun.result), this.planPropertiesService.getList()]).subscribe(
+      //   ([content, planProperties]) => {
+      //   questionRun.mugs = [];
+      //   const answer = JSON.parse(content);
+      //   for (const mugs of answer.MUGS) {
+      //     const list = [];
+      //     for (const elem of mugs) {
+      //         const pp = planProperties.find(p => p.name === elem.replace('sat_', ''));
+      //         list.push(pp.naturalLanguageDescription);
+      //     }
+      //     questionRun.mugs.push(list);
+      //   }
+      //   this.selectedObjectStore.dispatch({type: LOAD, data: questionRun});
+      // });
     } else {
       this.selectedObjectStore.dispatch({type: LOAD, data: questionRun});
     }

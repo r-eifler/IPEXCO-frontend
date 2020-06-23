@@ -97,7 +97,6 @@ export class TaskCreatorComponent implements OnInit, OnDestroy {
       planProperties: this.selectedPlanProperties,
       hardGoals: this.selectedGoalFacts.concat(this.selectedPlanProperties).map(value => ({name: value.name, goalType: value.goalType }) ),
       log: null,
-      planPath: null,
       explanationRuns: [],
       previousRun: previousRun ? previousRun._id : null,
     };

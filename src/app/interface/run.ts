@@ -38,7 +38,8 @@ export interface  PlanRun {
   planProperties: PlanProperty[];
   hardGoals: Goal[];
   log: string;
-  planPath: string;
+  planPath?: string;
+  planString?: string;
   plan?: Plan;
   satPlanProperties?: string[];
   explanationRuns: ExplanationRun[];

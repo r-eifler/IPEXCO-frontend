@@ -31,7 +31,7 @@ export class DemosService extends ObjectCollectionService<Demo> {
     formData.append('introduction', demo.introduction);
     formData.append('project', demo.project);
 
-    console.log('summaryImage: '  + demo.summaryImage);
+    // console.log('summaryImage: '  + demo.summaryImage);
 
     this.http.post<IHTTPData<Demo>>(this.BASE_URL, formData)
       .subscribe(httpData => {

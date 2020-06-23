@@ -97,14 +97,15 @@ export class QuestionCreatorComponent implements OnInit, OnDestroy {
       status: null,
       type: RunType.mugs,
       planProperties: this.allPlanProperties,
+      // only plan properties soft goals
       softGoals: this.allPlanProperties.filter(p => ! this.question.includes(p)),
       hardGoals: this.currentRun.hardGoals.filter(g => g.goalType === GoalType.goalFact).concat(this.question),
       result: null,
       log: null,
     };
 
-    // console.log('Compute dependencies');
-    // console.log(expRun);
+    console.log('Compute dependencies');
+    console.log(expRun);
 
     this.plannerService.execute_mugs_run(this.currentRun, expRun);
     console.log('Redirect to: ' + this.redirectURL);
