@@ -13,6 +13,7 @@
             <mat-spinner [diameter]="15" *ngIf="planRun.status == runStatus.pending"></mat-spinner>
             <mat-icon class="fail-icon" *ngIf="planRun.status == runStatus.failed">priority_high</mat-icon>
             <mat-icon class="finished-icon" *ngIf="planRun.status == runStatus.finished">check</mat-icon>
+            <mat-icon class="noSolution-icon" *ngIf="planRun.status == runStatus.noSolution">close</mat-icon>
           </div>
           <button mat-icon-button style="align-self: flex-end" [routerLink]="['../planning-step', planRun._id]">
             <mat-icon>open_in_new</mat-icon>

@@ -1,3 +1,4 @@
+import { RunStatus } from 'src/app/interface/run';
 import { CurrentRunService } from './../../../../service/run-services';
 import { takeUntil } from 'rxjs/operators';
 import { Plan } from '../../../../interface/plan';
@@ -19,7 +20,9 @@ export class PlanViewComponent implements OnInit, OnDestroy {
 
   private ngUnsubscribe: Subject<any> = new Subject();
 
-  plan: Plan;
+  runStatus = RunStatus;
+
+  planRun: PlanRun;
   private currentRun$: BehaviorSubject<PlanRun>;
 
     constructor(
@@ -32,7 +35,7 @@ export class PlanViewComponent implements OnInit, OnDestroy {
     .pipe(takeUntil(this.ngUnsubscribe))
     .subscribe(run => {
       if (run) {
-        this.plan = run.plan;
+        this.planRun = run;
       }
     });
 
