@@ -50,6 +50,9 @@ export class TaskViewComponent implements OnInit, OnDestroy {
         }
         this.addSatPlanProperties = [];
         for (const addSatProp of run.satPlanProperties) {
+          if (this.enforcedSatPlanProperties.find(p => p.name === addSatProp)){
+            continue;
+          }
           this.addSatPlanProperties.push(planProperties.find(p => p.name === addSatProp));
         }
       }
