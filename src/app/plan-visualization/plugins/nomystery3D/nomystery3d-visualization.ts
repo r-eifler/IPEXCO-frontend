@@ -1,3 +1,4 @@
+import { Observable, BehaviorSubject } from 'rxjs';
 import { CurrentProjectService, ProjectsService } from 'src/app/service/project-services';
 import { Streets } from './world/streets';
 import * as BABYLON from 'babylonjs';
@@ -12,6 +13,7 @@ import { TaskSchemaService } from 'src/app/service/schema.service';
 import { CurrentRunService } from 'src/app/service/run-services';
 import { Injectable, ElementRef } from '@angular/core';
 import { AnimationSettingsNoMystery } from './settings/animation-settings-nomystery';
+import { ThrowStmt } from '@angular/compiler';
 
 
 interface Position {
@@ -31,6 +33,7 @@ const worldHeight = 100;
 })
 export class NoMystery3DVisualization extends PlanVisualization {
 
+
   private animationTask: NoMystery3DAnimationTask;
   private animation: NoMystery3DAnimation = null;
 
@@ -45,6 +48,8 @@ export class NoMystery3DVisualization extends PlanVisualization {
 
   private view: BABYLON.EngineView = null;
 
+  private mainDomElement$: BehaviorSubject<Element> = new BehaviorSubject<Element>(null);
+
   constructor(
     protected currentProjectService: CurrentProjectService,
     protected taskSchemaService: TaskSchemaService,
@@ -58,6 +63,8 @@ export class NoMystery3DVisualization extends PlanVisualization {
           this.scaleDropPositions();
         }
     });
+
+    this.init();
   }
 
   scaleDropPositions() {
@@ -70,27 +77,52 @@ export class NoMystery3DVisualization extends PlanVisualization {
     }
   }
 
-  displayIn(canvas: ElementRef) {
+  getDisplayDOMElem(): Observable<Element> {
 
-    if (! this.canvas) {
-      this.canvas = canvas.nativeElement as HTMLCanvasElement;
-      this.engine = new BABYLON.Engine(this.canvas, true);
-      this.init();
-    } else {
-      if (this.view) {
-        this.engine.unRegisterView(this.canvas);
-      }
-      this.canvas = canvas.nativeElement as HTMLCanvasElement;
-      this.view = this.engine.registerView(this.canvas);
-    }
+    return this.mainDomElement$;
+  }
+
+  upadte() {
+    this.engine.resize();
   }
 
   async init() {
 
+    // const loadSpinner = document.createElement('div');
+    // loadSpinner.style.height = '100%';
+    // loadSpinner.style.width = '100%';
+    // loadSpinner.style.backgroundColor = 'red';
+    // this.mainDomElement$.next(loadSpinner);
+
+    console.log('init nomystery visualization');
+    this.canvas = document.createElement('canvas');
+    this.canvas.width = 500;
+    this.canvas.height = 500;
+    this.canvas.style.height = '100%';
+    this.canvas.style.width = '100%';
+
+    this.engine = new BABYLON.Engine(this.canvas, true);
+
     await this.createScene();
     this.animation.initPositions();
+
+    this.mainDomElement$.next(this.canvas);
     this.doRender();
+    this.engine.resize();
   }
+
+  doRender(): void {
+    // Run the render loop.
+    this.scene.render();
+    this.engine.runRenderLoop(() => {
+      this.scene.render();
+    });
+
+    // The canvas/window resize event handler.
+    window.addEventListener('resize', () => {
+        this.engine.resize();
+    });
+}
 
   getLocationPositions() {
     const xMax = worldWidth - 20; // 20 is the border width
@@ -137,19 +169,6 @@ export class NoMystery3DVisualization extends PlanVisualization {
       });
 
       return sceneLoadedPromise;
-  }
-
-  doRender(): void {
-      // Run the render loop.
-      this.scene.render();
-      this.engine.runRenderLoop(() => {
-          this.scene.render();
-      });
-
-      // The canvas/window resize event handler.
-      window.addEventListener('resize', () => {
-          this.engine.resize();
-      });
   }
 
 

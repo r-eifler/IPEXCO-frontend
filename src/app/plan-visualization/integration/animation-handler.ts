@@ -1,6 +1,6 @@
 import { CurrentRunService } from 'src/app/service/run-services';
 import { Plan } from '../../interface/plan';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { PlanVisualization } from './plan-visualization';
 import { Injectable, Inject, ElementRef } from '@angular/core';
 
@@ -29,10 +29,13 @@ constructor(
     });
 }
 
-displayAnimationIn(canvas: ElementRef) {
-  this.animation.displayIn(canvas);
+getAnimationDOMElement(): Observable<Element> {
+  return this.animation.getDisplayDOMElem();
 }
 
+updateAnimationView() {
+  this.animation.upadte();
+}
 
 
 async play() {

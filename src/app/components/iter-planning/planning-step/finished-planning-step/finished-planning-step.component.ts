@@ -57,4 +57,5 @@ export class FinishedPlanningStepComponent implements OnInit, OnDestroy {
   newQuestion() {
     this.router.navigate(['./new-question'], { relativeTo: this.route });
   }
+
 }

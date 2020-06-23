@@ -1,3 +1,4 @@
+import { Observable } from 'rxjs';
 import { CurrentRunService } from 'src/app/service/run-services';
 import { TaskSchemaService } from 'src/app/service/schema.service';
 import { Action } from 'src/app/interface/plan';
@@ -14,7 +15,8 @@ export abstract class PlanVisualization {
     }
 
   abstract async init(): Promise<void> ;
-  abstract displayIn(canvas: ElementRef);
+  abstract getDisplayDOMElem(): Observable<Element>;
+  abstract upadte();
   abstract animateAction(action: Action): Promise<void>;
   abstract reverseAnimateAction(action: Action): Promise<void>;
   abstract restart(): void;

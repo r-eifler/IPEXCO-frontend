@@ -1,5 +1,5 @@
 import { AnimationHandler } from '../../../../plan-visualization/integration/animation-handler';
-import { Component, OnInit, ViewChild, ElementRef, AfterViewInit} from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, Input} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 
@@ -15,7 +15,14 @@ interface Action {
 })
 export class PlanAnimationViewComponent implements OnInit, AfterViewInit {
 
-  @ViewChild('planvisualizationcanvas') animationContainer: ElementRef;
+  @ViewChild('animationcontainer') animationContainer: ElementRef;
+
+  @Input()
+  set visible(val: boolean) {
+    if (val) {
+      this.animationHandler.updateAnimationView();
+    }
+  }
 
   constructor(
     private route: ActivatedRoute,
@@ -25,7 +32,14 @@ export class PlanAnimationViewComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.animationHandler.displayAnimationIn(this.animationContainer);
+    this.animationHandler.getAnimationDOMElement()
+    .subscribe(
+      elem => {
+        if (elem) {
+          this.animationContainer.nativeElement.appendChild(elem);
+        }
+      }
+    );
   }
 
   ngOnInit(): void {
