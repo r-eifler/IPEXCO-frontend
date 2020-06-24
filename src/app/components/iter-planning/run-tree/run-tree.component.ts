@@ -48,6 +48,8 @@ export class RunTreeComponent implements OnInit, OnDestroy {
     .pipe(takeUntil(this.ngUnsubscribe))
     .subscribe(value => {
       this.dataSource.data = value;
+      console.log('Run Tree data:');
+      console.log(value);
       // mayby used in the desktop version
       // if (value.length === 0) {
       //   this.router.navigate(['./original-task'], { relativeTo: this.route });

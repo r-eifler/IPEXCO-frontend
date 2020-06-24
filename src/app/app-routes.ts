@@ -62,8 +62,5 @@ export const appRoutes: Routes = [
       }
     ]
   },
-  { path: 'uploaded-files', component: FilesCollectionComponent},
-  { path: 'domain-files', component: DomainSelectorComponent},
-  { path: 'problem-files', component: ProblemSelectorComponent},
-  { path: 'domain-specification', component: DomainSpecificationComponent},
+  { path: 'pddl-database', component: FilesCollectionComponent},
 ];

@@ -65,6 +65,7 @@ export class ProjectBaseComponent implements OnInit, OnDestroy {
         if (value != null) {
           this.project = value;
           this.currentProjectService.saveObject(this.project);
+          this.runsService.reset(); // delete possible stored runs which do not belong to the project
           this.runsService.findCollection([{param: 'projectId', value: this.project._id}]);
           this.propertiesService.findCollection([{param: 'projectId', value: this.project._id}]);
           this.demosService.findCollection([{param: 'projectId', value: this.project._id}]);

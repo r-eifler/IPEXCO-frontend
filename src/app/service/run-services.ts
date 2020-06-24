@@ -71,8 +71,8 @@ function sortRuns(runs: PlanRun[]): PlanRun[] {
   if (runs.length <= 1) {
     return runs;
   }
-  // console.log('RUNS: ');
-  // console.log(runs);
+  console.log('RUNS: ');
+  console.log(runs);
   let currentLast: PlanRun = findStart(runs);
   runs.splice(runs.indexOf(currentLast), 1);
   const sorted: PlanRun[] = [currentLast];
@@ -87,8 +87,8 @@ function sortRuns(runs: PlanRun[]): PlanRun[] {
     runs.splice(runs.indexOf(currentLast), 1);
     sorted.push(currentLast);
   }
-  // console.log('SORTED: ');
-  // console.log(sorted);
+  console.log('SORTED: ');
+  console.log(sorted);
   return sorted;
 }
 

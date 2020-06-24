@@ -95,6 +95,7 @@ export class DemoPlannerService extends PlannerService {
     if (! foundPlanObj) {
       // run.status = RunStatus.failed;
       // this.listStore.dispatch({type: ADD, data: run});
+      console.log('Compute plan on server demo');
       super.execute_plan_run(run, false);
       return;
     }
