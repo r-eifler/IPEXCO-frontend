@@ -21,7 +21,8 @@
 }
 
 .variable-icon {
-  margin: 20px 30px 10px 30px;
+  margin: auto 30px;
+  /* margin: 20px 30px 10px 30px; */
 }
 
 .variable-icon:hover {
@@ -29,7 +30,8 @@
 }
 
 .variable-value {
-  margin: 20px 30px 10px 30px;
+  margin: auto 30px;
+  /* margin: 20px 30px 10px 30px; */
   font-weight: bold;
   font-size: x-large;
 }

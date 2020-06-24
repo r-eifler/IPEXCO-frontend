@@ -102,16 +102,18 @@
                   <mat-card-subtitle>{{selectedPropertyTemplate.class}}</mat-card-subtitle>
               </mat-card-header> -->
               <mat-card-content>
-                <ng-container *ngFor="let part of this.sentenceTemplateParts">
-                  <span style="font-size: large;" *ngIf="! part.startsWith('$')" >{{part}}</span>
-                  <mat-icon class="variable-icon" *ngIf="part.startsWith('$') && ! selectedVariableValue.has(part)" [matBadge]="possibleVariableValues.get(part).size" matBadgeColor="primary" [matMenuTriggerFor]="varMenu" (click)="onVariableIconClick(part)">
-                    not_listed_location
-                  </mat-icon>
-                  <span class="variable-value" *ngIf="part.startsWith('$') && selectedVariableValue.has(part)" [matBadge]="possibleVariableValues.get(part).size" matBadgeColor="primary" matBadgeOverlap="false" [matMenuTriggerFor]="varMenu" (click)="onVariableIconClick(part)">
-                    {{selectedVariableValue.get(part)}}
-                  </span>
-                  <!-- <span *ngIf="part.startsWith('$')">{{part}} {{possibleVariableValues.get(part).length}}</span> -->
-                </ng-container>
+                <div style="padding: 20px 0px 20px 0px;">
+                  <ng-container *ngFor="let part of this.sentenceTemplateParts">
+                    <span style="font-size: large;" *ngIf="! part.startsWith('$')" >{{part}}</span>
+                    <mat-icon class="variable-icon" *ngIf="part.startsWith('$') && ! selectedVariableValue.has(part)" [matBadge]="possibleVariableValues.get(part).size" matBadgeColor="primary" [matMenuTriggerFor]="varMenu" (click)="onVariableIconClick(part)">
+                      not_listed_location
+                    </mat-icon>
+                    <span class="variable-value" *ngIf="part.startsWith('$') && selectedVariableValue.has(part)" [matBadge]="possibleVariableValues.get(part).size" matBadgeColor="primary" matBadgeOverlap="false" [matMenuTriggerFor]="varMenu" (click)="onVariableIconClick(part)">
+                      {{selectedVariableValue.get(part)}}
+                    </span>
+                    <!-- <span *ngIf="part.startsWith('$')">{{part}} {{possibleVariableValues.get(part).length}}</span> -->
+                  </ng-container>
+                </div>
                 <mat-menu  #varMenu="matMenu" yPosition="above" >
                   <button mat-menu-item *ngIf="this.selectedVariableValue.has(selectedVariablePlaceholder)"
                   (click)="resetVariableValue(selectedVariablePlaceholder)">reset</button>
