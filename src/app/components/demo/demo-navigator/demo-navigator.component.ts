@@ -1,3 +1,4 @@
+import { DemoFinishedComponent } from './../demo-finished/demo-finished.component';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Demo } from 'src/app/interface/demo';
 import { BehaviorSubject, combineLatest, Subject, Observable } from 'rxjs';
@@ -13,6 +14,8 @@ import { TaskSchemaService } from 'src/app/service/schema.service';
 import { switchMap, takeUntil, map, filter, flatMap } from 'rxjs/operators';
 import { DisplayTask } from 'src/app/interface/display-task';
 import { ExecutionSettingsService } from 'src/app/service/execution-settings.service';
+import { Time } from '@angular/common';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-demo-navigator',
@@ -22,6 +25,16 @@ import { ExecutionSettingsService } from 'src/app/service/execution-settings.ser
 export class DemoNavigatorComponent implements OnInit, OnDestroy {
 
   private ngUnsubscribe: Subject<any> = new Subject();
+
+  timerIntervall;
+
+  startTime: number;
+  currentTime = 0;
+
+  maxTime = 3000;
+  timer: number;
+
+  finished = false;
 
   demo: Demo;
   runs$: BehaviorSubject<PlanRun[]>;
@@ -40,6 +53,7 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
     private displayTaskService: DisplayTaskService,
     private curretnSchemaService: TaskSchemaService,
     private currentRunService: CurrentRunService,
+    public dialog: MatDialog,
   ) {
     this.route.paramMap.pipe(
       switchMap((params: ParamMap) => {
@@ -73,11 +87,36 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
     this.runs$ = this.runsService.getList();
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.startTime = new Date().getTime();
+    this.timerIntervall = setInterval(() => {
+      const c = new Date().getTime();
+      this.currentTime = c - this.startTime;
+      this.timer = this.maxTime - this.currentTime;
+      this.timer = this.timer < 0 ? 0 : this.timer;
+      if (this.timer <= 0 && ! this.finished) {
+        this.finished = true;
+        this.showDemoFinished(true);
+        clearInterval(this.timerIntervall);
+      }
+    }, 1000);
+  }
+
+  showDemoFinished(timesUp: boolean) {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = '500px';
+    dialogConfig.data  = {
+      demo: this.demo,
+      timesUp
+    };
+
+    const dialogRef = this.dialog.open(DemoFinishedComponent, dialogConfig);
+  }
 
   ngOnDestroy(): void {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
+    clearInterval();
   }
 
   newPlanRun() {

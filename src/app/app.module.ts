@@ -148,6 +148,7 @@ import { AnimationsSettingsDemoComponent } from './components/animation/animatio
 import { MainInfoComponent } from './components/login/main-info/main-info.component';
 import { appRoutes } from './app-routes';
 import { HelpPageComponent } from './components/login/help-page/help-page.component';
+import { DemoFinishedComponent } from './components/demo/demo-finished/demo-finished.component';
 
 
 @NgModule({
@@ -201,6 +202,7 @@ import { HelpPageComponent } from './components/login/help-page/help-page.compon
     AnimationsSettingsDemoComponent,
     MainInfoComponent,
     HelpPageComponent,
+    DemoFinishedComponent,
   ],
   imports: [
     RouterModule.forRoot(appRoutes,
@@ -305,6 +307,7 @@ import { HelpPageComponent } from './components/login/help-page/help-page.compon
     LoginComponent,
     AnimationSettingsNomysteryComponent,
     AnimationsSettingsDemoComponent,
+    DemoFinishedComponent,
   ],
   bootstrap: [AppComponent]
 })

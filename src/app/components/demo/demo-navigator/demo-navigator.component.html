@@ -1,3 +1,11 @@
+<div class="info-container">
+  <div style="color: white; font-size: xx-large; margin: auto 10px;">
+    <span>Time:</span>  {{currentTime | date:'mm:ss'}}
+  </div>
+  <div style="color: white; font-size: xx-large; margin: auto 10px;">
+    <span>Timer:</span>  {{timer | date:'mm:ss'}}
+  </div>
+</div>
 <div class="plan-question-container">
   <ng-container *ngFor="let planRun of  runs$ | async">
     <div class="run-container">
