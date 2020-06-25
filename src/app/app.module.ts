@@ -77,7 +77,7 @@ import { FinishedQuestionStepComponent } from './components/iter-planning/questi
 import { TaskCreatorComponent } from './components/iter-planning/planning-step/task-creator/task-creator.component';
 import { QuestionCreatorComponent } from './components/iter-planning/question-step/question-creator/question-creator.component';
 import { QuestionViewComponent } from './components/iter-planning/question-step/question-view/question-view.component';
-import { ExplanationViewComponent } from './components/iter-planning/question-step/explanation-view/explanation-view.component';
+import { AnswerViewComponent } from './components/iter-planning/question-step/answer-view/answer-view.component';
 
 
 // editor
@@ -173,7 +173,7 @@ import { DemoFinishedComponent } from './components/demo/demo-finished/demo-fini
     TaskCreatorComponent,
     QuestionCreatorComponent,
     QuestionViewComponent,
-    ExplanationViewComponent,
+    AnswerViewComponent,
     LoginComponent,
     DemoSelectionComponent,
     DemoBaseComponent,

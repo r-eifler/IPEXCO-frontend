@@ -14,10 +14,10 @@ interface Answer {
 
 @Component({
   selector: 'app-explanation-view',
-  templateUrl: './explanation-view.component.html',
-  styleUrls: ['./explanation-view.component.css']
+  templateUrl: './answer-view.component.html',
+  styleUrls: ['./answer-view.component.css']
 })
-export class ExplanationViewComponent implements OnInit, OnDestroy {
+export class AnswerViewComponent implements OnInit, OnDestroy {
 
   private ngUnsubscribe: Subject<any> = new Subject();
 

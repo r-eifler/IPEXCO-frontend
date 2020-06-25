@@ -9,9 +9,10 @@
   </mat-card-header>
   <mat-card-content>
     <ng-container *ngIf="filteredMUGS && filteredMUGS.length > 0">
-      <h2>... because then you cannot satisfy</h2>
+      <h2>... because then you have to live without:</h2>
       <div *ngFor="let mugs of filteredMUGS;last as last">
-        <p *ngIf="last" style="font-size: large; font-weight: bold;">or</p>
+<!--        <p *ngIf="last" style="font-size: large; font-weight: bold;">and</p>-->
+        <p>You have to give up at least one of ...</p>
         <mat-list>
           <mat-list-item *ngFor="let elem of mugs;last as last">
             <p *ngIf="! last">{{elem.naturalLanguageDescription}} and</p>
