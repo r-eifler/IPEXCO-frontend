@@ -5,7 +5,7 @@ import { PlanRun } from 'src/app/interface/run';
 import { RunService } from './../../../service/run-services';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ResponsiveService } from 'src/app/service/responsive.service';
-import { PlanPropertyCollectionService } from 'src/app/service/plan-property-services';
+import { PlanPropertyMapService } from 'src/app/service/plan-property-services';
 import { CurrentProjectService } from 'src/app/service/project-services';
 import { Observable, Subject } from 'rxjs';
 import { PlanProperty } from 'src/app/interface/plan-property';
@@ -25,17 +25,17 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
   isMobile: boolean;
 
   currentProject: Project;
-  properties$: Observable<PlanProperty[]>;
+  properties$: Observable<Map<string, PlanProperty>>;
   runs$: Observable<PlanRun[]>;
 
   constructor(
     private responsiveService: ResponsiveService,
-    private propertiesService: PlanPropertyCollectionService,
+    private propertiesService: PlanPropertyMapService,
     private currentProjectService: CurrentProjectService,
     public runsService: RunService,
     public demosService: DemosService,
     public dialog: MatDialog) {
-      this.properties$ = this.propertiesService.getList();
+      this.properties$ = this.propertiesService.getMap();
       this.currentProjectService.selectedObject$
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(project => {

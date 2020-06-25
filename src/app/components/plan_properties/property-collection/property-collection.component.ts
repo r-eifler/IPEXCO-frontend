@@ -5,7 +5,7 @@ import { Component, OnInit, ViewChild, AfterViewInit, OnDestroy } from '@angular
 import {MatDialog} from '@angular/material/dialog';
 import {PropertyCreatorComponent} from '../property-creator/property-creator.component';
 import {Observable, Subject} from 'rxjs';
-import { PlanPropertyCollectionService } from 'src/app/service/plan-property-services';
+import { PlanPropertyMapService } from 'src/app/service/plan-property-services';
 import { ResponsiveService } from 'src/app/service/responsive.service';
 import { ViewSettings } from 'src/app/interface/view-settings';
 import { MatCheckboxChange } from '@angular/material/checkbox';
@@ -36,18 +36,19 @@ export class PropertyCollectionComponent implements OnInit, AfterViewInit, OnDes
 
   constructor(
     private responsiveService: ResponsiveService,
-    private propertiesService: PlanPropertyCollectionService,
+    private propertiesService: PlanPropertyMapService,
     private viewSettingsService: ViewSettingsService,
     public dialog: MatDialog) {
 
     this.viewSettings = this.viewSettingsService.getSelectedObject();
 
-    this.propertiesService.getList()
+    this.propertiesService.getMap()
     .pipe(takeUntil(this.ngUnsubscribe))
     .subscribe(props => {
-      this.planProperties = props;
-      this.dataSource.data = props;
-      this.selection.select(... props.filter(v => v.isUsed));
+      const propsList = [...props.values()];
+      this.planProperties = propsList;
+      this.dataSource.data = propsList;
+      this.selection.select(... propsList.filter(v => v.isUsed));
       if (this.propertyTable) {
         this.propertyTable.renderRows();
       }
@@ -58,13 +59,13 @@ export class PropertyCollectionComponent implements OnInit, AfterViewInit, OnDes
     .subscribe((change: SelectionChange<PlanProperty>) => {
       // console.log('Selection changed: added: ' + change.added.length + ' removed: ' + change.removed.length);
       for (const p of  change.added) {
-        if (! p.isUsed){
+        if (! p.isUsed) {
           p.isUsed = true;
           this.propertiesService.saveObject(p);
         }
       }
       for (const p of  change.removed) {
-        if (p.isUsed){
+        if (p.isUsed) {
           p.isUsed = false;
           this.propertiesService.saveObject(p);
         }

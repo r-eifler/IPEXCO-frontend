@@ -1,5 +1,4 @@
 import { LtlFormula} from './ltl-formula';
-import {Goal} from './goal';
 
 export interface Action {
   _id?: string;
@@ -7,7 +6,7 @@ export interface Action {
   params: string[];
 }
 
-export function toAction(as: string): Action{
+export function toAction(as: string): Action {
   const [name, ...params] = as.split(' ');
   return {name, params};
 }
@@ -18,11 +17,19 @@ export interface ActionSet {
   actions: Action[];
 }
 
-export interface PlanProperty extends Goal {
+export enum GoalType {
+  goalFact= 'G',
+  LTL = 'LTL',
+  AS = 'AS'
+}
+
+export interface PlanProperty {
   _id?: string;
-  type: string;
+  name: string;
+  type: GoalType;
+  naturalLanguage?: string;
   formula: string;
-  actionSets: ActionSet[];
+  actionSets?: ActionSet[];
   naturalLanguageDescription?: string;
   project: string;
   isUsed: boolean;

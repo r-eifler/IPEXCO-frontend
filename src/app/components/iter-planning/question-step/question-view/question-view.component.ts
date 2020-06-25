@@ -1,12 +1,9 @@
 import { takeUntil } from 'rxjs/operators';
-import { PlanPropertyCollectionService } from 'src/app/service/plan-property-services';
-import { PlanPropertyCollectionStore } from '../../../../store/stores.store';
+import { PlanPropertyMapStore } from '../../../../store/stores.store';
 import { PlanProperty } from 'src/app/interface/plan-property';
-import { Goal, GoalType } from '../../../../interface/goal';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Observable, combineLatest, Subject } from 'rxjs';
 import { PlanRun, ExplanationRun } from 'src/app/interface/run';
-import { PddlFileUtilsService } from 'src/app/service/pddl-file-utils.service';
 import { CurrentRunStore, CurrentQuestionStore } from 'src/app/store/stores.store';
 
 @Component({
@@ -20,16 +17,16 @@ export class QuestionViewComponent implements OnInit, OnDestroy {
 
   currentRun$: Observable<PlanRun>;
   currentQuestion$: Observable<ExplanationRun>;
-  planProperties$: Observable<PlanProperty[]>;
+  planProperties$: Observable<Map<string, PlanProperty>>;
 
-  currentHardGoals: Goal[] = [];
-  questionElemsDescription: string[] = [];
+  currentHardGoals: string[] = [];
+  question: PlanProperty[] = [];
 
 
   constructor(
     private  currentRunStore: CurrentRunStore,
     private currentQuestionStore: CurrentQuestionStore,
-    private planPropertiesStore: PlanPropertyCollectionStore) {
+    private planPropertiesStore: PlanPropertyMapStore) {
     this.currentRun$ = this.currentRunStore.item$;
     this.currentQuestion$ = this.currentQuestionStore.item$;
     this.planProperties$ = this.planPropertiesStore.items$;
@@ -39,25 +36,20 @@ export class QuestionViewComponent implements OnInit, OnDestroy {
       combineLatest([this.currentRun$, this.currentQuestion$, this.planProperties$])
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(([run, question, planProperties]) => {
-        this.questionElemsDescription = [];
-        if (run && question && planProperties.length > 0) {
+        this.question = [];
+        if (run && question && planProperties.size > 0) {
           this.currentHardGoals = run.hardGoals;
-          const questionElems = this.arrayMinus(question.hardGoals, this.currentHardGoals);
+          const questionElems = this.arrayMinus(question.hardGoals, this.currentHardGoals.map(value => (value)));
           for (const elem of questionElems) {
-            if (elem.goalType === GoalType.goalFact) {
-              this.questionElemsDescription.push(elem.name);
-            }
-            if (elem.goalType === GoalType.planProperty) {
-              const pp = planProperties.find(p => p.name === elem.name);
-              this.questionElemsDescription.push(pp.naturalLanguageDescription);
-            }
+              const pp = planProperties.get(elem);
+              this.question.push(pp);
           }
         }
       });
   }
 
-  private arrayMinus(a1: Goal[], a2: Goal[]): Goal[] {
-    return a1.filter(r => !a2.some(g => r.name === g.name));
+  private arrayMinus(a1: string[], a2: string[]): string[] {
+    return a1.filter(r => !a2.some(g => r === g));
   }
 
   ngOnDestroy(): void {

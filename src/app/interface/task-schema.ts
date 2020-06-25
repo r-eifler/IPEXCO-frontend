@@ -1,5 +1,4 @@
-import { Goal, GoalType } from './goal';
-
+import { PlanProperty, GoalType } from 'src/app/interface/plan-property';
 export interface SchemaObject {
   name: string;
   type: string;
@@ -21,7 +20,7 @@ export class TaskSchema {
   objects: SchemaObject[];
   actions: SchemaAction[];
   init: string[];
-  goals: Goal[];
+  goals: PlanProperty[];
 
   constructor(json) {
     this.types = json.types;

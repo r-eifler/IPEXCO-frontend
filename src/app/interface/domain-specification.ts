@@ -1,6 +1,5 @@
 import { variable } from '@angular/compiler/src/output/output_ast';
 import { PlanPropertyTemplate } from './plan-property-template';
-import { Goal, GoalType } from './goal';
 import { PlanProperty } from './plan-property';
 
 interface NaturalLanguageDescriptionMapping {
@@ -41,24 +40,25 @@ export class DomainSpecification {
     return propMap;
   }
 
-  getGoalDescription(goalFact: Goal): string {
-    if (goalFact.goalType === GoalType.planProperty) {
-      const planProperty: PlanProperty = goalFact as PlanProperty;
-      return planProperty.naturalLanguageDescription;
-    }
-    if (goalFact.goalType === GoalType.goalFact) {
-      for (const mapping of this.naturalLanguageDescription.goal) {
-          if (goalFact.name.startsWith(mapping.predicatName)) {
-            const args: string[] = goalFact.name.split('(')[1].replace(')', '').split(',');
-            let description = mapping.description;
-            for (let i = 0; i < args.length; i++) {
-              description = description.replace(mapping.args[i], args[i]);
-            }
-            goalFact.naturalLanguage = description;
-            return description;
-          }
-      }
-      return goalFact.name;
-    }
+  getGoalDescription(goalFact: PlanProperty): string {
+    return goalFact.naturalLanguageDescription;
+    // if (goalFact.goalType === GoalType.planProperty) {
+    //   const planProperty: PlanProperty = goalFact as PlanProperty;
+    //   return planProperty.naturalLanguageDescription;
+    // }
+    // if (goalFact.goalType === GoalType.goalFact) {
+    //   for (const mapping of this.naturalLanguageDescription.goal) {
+    //       if (goalFact.name.startsWith(mapping.predicatName)) {
+    //         const args: string[] = goalFact.name.split('(')[1].replace(')', '').split(',');
+    //         let description = mapping.description;
+    //         for (let i = 0; i < args.length; i++) {
+    //           description = description.replace(mapping.args[i], args[i]);
+    //         }
+    //         goalFact.naturalLanguage = description;
+    //         return description;
+    //       }
+    //   }
+    //   return goalFact.name;
+    // }
   }
 }

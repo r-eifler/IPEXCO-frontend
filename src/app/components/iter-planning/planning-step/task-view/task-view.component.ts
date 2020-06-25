@@ -1,12 +1,10 @@
-import { PlanPropertyCollectionService } from './../../../../service/plan-property-services';
-import { CurrentProjectService } from 'src/app/service/project-services';
+import { PlanPropertyMapService } from './../../../../service/plan-property-services';
 import { takeUntil } from 'rxjs/operators';
-import { PlanProperty } from './../../../../interface/plan-property';
+import { PlanProperty, GoalType } from './../../../../interface/plan-property';
 import { DisplayTaskService } from '../../../../service/display-task.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import {CurrentRunStore } from '../../../../store/stores.store';
 import { combineLatest, Subject } from 'rxjs';
-import { GoalType } from 'src/app/interface/goal';
 
 
 @Component({
@@ -18,43 +16,39 @@ export class TaskViewComponent implements OnInit, OnDestroy {
 
   private ngUnsubscribe: Subject<any> = new Subject();
 
-  satGoalFacts: string[] = [];
-
   enforcedSatPlanProperties: PlanProperty[] = [];
 
   addSatPlanProperties: PlanProperty[] = [];
+  notSatPlanProperties: PlanProperty[] = [];
 
   constructor(
     private  currentRunStore: CurrentRunStore,
-    private dislplayTaskService: DisplayTaskService,
-    private planPropertyCollectionService: PlanPropertyCollectionService,
+    private planPropertyCollectionService: PlanPropertyMapService,
   ) {
 
-    combineLatest([this.currentRunStore.item$, this.dislplayTaskService.getSelectedObject(), planPropertyCollectionService.getList()])
+    combineLatest([this.currentRunStore.item$, planPropertyCollectionService.getMap()])
     .pipe(takeUntil(this.ngUnsubscribe))
-    .subscribe(([run, displayTask, planProperties]) => {
-      if (run && displayTask && planProperties) {
-        this.satGoalFacts = [];
+    .subscribe(([run, planProperties]) => {
+      if (run && planProperties) {
         this.enforcedSatPlanProperties = [];
-        for (const fact of run.hardGoals) {
-          if (fact.goalType === GoalType.goalFact){
-            this.satGoalFacts.push(displayTask.getGoalDescription(fact));
-          }
-          if (fact.goalType === GoalType.planProperty) {
-            for (const pp of run.planProperties) {
-              if (fact.name === pp.name) {
-                this.enforcedSatPlanProperties.push(pp);
-              }
-            }
-          }
-        }
         this.addSatPlanProperties = [];
-        for (const addSatProp of run.satPlanProperties) {
-          if (this.enforcedSatPlanProperties.find(p => p.name === addSatProp)){
-            continue;
-          }
-          this.addSatPlanProperties.push(planProperties.find(p => p.name === addSatProp));
+        this.notSatPlanProperties = [];
+
+        for (const propName of run.hardGoals) {
+          this.enforcedSatPlanProperties.push(planProperties.get(propName));
         }
+        for (const propName of run.satPlanProperties) {
+          if (! this.enforcedSatPlanProperties.find(p => p.name === propName)){
+            this.addSatPlanProperties.push(planProperties.get(propName));
+          }
+        }
+        for (const prop of planProperties.values()) {
+          if (! this.enforcedSatPlanProperties.find(p => p.name === prop.name) &&
+            ! this.addSatPlanProperties.find(p => p.name === prop.name)) {
+            this.notSatPlanProperties.push(prop);
+          }
+        }
+
       }
     });
 

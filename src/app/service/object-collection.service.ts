@@ -4,10 +4,9 @@ import {ADD, EDIT, ListStore, LOAD, REMOVE} from '../store/generic-list.store';
 import {IHTTPData} from '../interface/http-data.interface';
 import {environment} from '../../environments/environment';
 import {BehaviorSubject, Observable, of} from 'rxjs';
-import {map, tap} from 'rxjs/operators';
-import {Goal, GoalType} from '../interface/goal';
+import {map} from 'rxjs/operators';
 import * as assert from 'assert';
-import { thresholdFreedmanDiaconis } from 'd3';
+
 
 
 

@@ -6,7 +6,7 @@ import { PlanRun } from 'src/app/interface/run';
 import { ActivatedRoute, Router, ParamMap } from '@angular/router';
 import { DemosService, RunningDemoService } from 'src/app/service/demo-services';
 import { ProjectsService, CurrentProjectService } from 'src/app/service/project-services';
-import { PlanPropertyCollectionService } from 'src/app/service/plan-property-services';
+import { PlanPropertyMapService } from 'src/app/service/plan-property-services';
 import { RunService, CurrentRunService } from 'src/app/service/run-services';
 import { DomainSpecificationService } from 'src/app/service/domain-specification.service';
 import { DisplayTaskService } from 'src/app/service/display-task.service';
@@ -47,7 +47,7 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
     private runningDemoService: RunningDemoService,
     private projectsService: ProjectsService,
     private currentProjectService: CurrentProjectService,
-    private propertiesService: PlanPropertyCollectionService,
+    private propertiesService: PlanPropertyMapService,
     public runsService: RunService,
     private domainSpecService: DomainSpecificationService,
     private displayTaskService: DisplayTaskService,

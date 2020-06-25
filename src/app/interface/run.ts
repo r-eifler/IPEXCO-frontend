@@ -1,6 +1,5 @@
 import {PlanProperty} from './plan-property';
 import {Project} from './project';
-import {Goal} from './goal';
 import { Plan } from './plan';
 
 export enum RunStatus {
@@ -22,8 +21,8 @@ export interface  ExplanationRun {
   type: RunType;
   status: RunStatus;
   planProperties: PlanProperty[];
-  hardGoals: Goal[];
-  softGoals: Goal[];
+  hardGoals: string[];
+  softGoals: string[];
   log: string;
   result: string;
   mugs?: string[][];
@@ -36,7 +35,7 @@ export interface  PlanRun {
   status: RunStatus;
   project: Project;
   planProperties: PlanProperty[];
-  hardGoals: Goal[];
+  hardGoals: string[];
   log: string;
   planPath?: string;
   planString?: string;

@@ -8,14 +8,14 @@
     </mat-card-title>
   </mat-card-header>
   <mat-card-content>
-    <ng-container *ngIf="displayMUGS && displayMUGS.length > 0">
+    <ng-container *ngIf="filteredMUGS && filteredMUGS.length > 0">
       <h2>... because then you cannot satisfy</h2>
-      <div *ngFor="let mugs of displayMUGS;last as last">
+      <div *ngFor="let mugs of filteredMUGS;last as last">
         <p *ngIf="last" style="font-size: large; font-weight: bold;">or</p>
         <mat-list>
           <mat-list-item *ngFor="let elem of mugs;last as last">
-            <p *ngIf="! last">{{elem}} and</p>
-            <p *ngIf="last">{{elem}}</p>
+            <p *ngIf="! last">{{elem.naturalLanguageDescription}} and</p>
+            <p *ngIf="last">{{elem.naturalLanguageDescription}}</p>
             <mat-divider *ngIf="! last"></mat-divider>
           </mat-list-item>
         </mat-list>
@@ -23,11 +23,11 @@
 
     </ng-container>
 
-    <p *ngIf="displayMUGS && displayMUGS.length == 0">
+    <p *ngIf="filteredMUGS && filteredMUGS.length == 0">
       There exists a plan which satisfies the property/ies.
     </p>
 
-    <p *ngIf="! displayMUGS">
+    <p *ngIf="! filteredMUGS">
       There is no plan which satisfies this property/ies.
     </p>
 

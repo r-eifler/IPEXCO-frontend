@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CurrentRunService, RunService, CurrentQuestionService } from 'src/app/service/run-services';
-import { PlanPropertyCollectionService} from 'src/app/service/plan-property-services';
+import { PlanPropertyMapService} from 'src/app/service/plan-property-services';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { switchMap, map, takeUntil } from 'rxjs/operators';
 import { ExplanationRun } from 'src/app/interface/run';

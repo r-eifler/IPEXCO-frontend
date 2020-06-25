@@ -10,7 +10,6 @@ import { PropertyCollectionComponent } from './components/plan_properties/proper
 import { IterativePlanningBaseComponent } from './components/iter-planning/iterative-planning-base/iterative-planning-base.component';
 import { IterativePlanningBaseMobileComponent } from './components/iter-planning/mobile/iterative-planning-base-mobile/iterative-planning-base-mobile.component';
 import { PlanningStepComponent } from './components/iter-planning/planning-step/planning-step/planning-step.component';
-import { FirstPlanningStepComponent } from './components/iter-planning/planning-step/first-planning-step/first-planning-step.component';
 import { FinishedPlanningStepComponent } from './components/iter-planning/planning-step/finished-planning-step/finished-planning-step.component';
 import { QuestionStepComponent } from './components/iter-planning/question-step/question-step/question-step.component';
 import { FinishedQuestionStepComponent } from './components/iter-planning/question-step/finished-question-step/finished-question-step.component';
@@ -38,7 +37,6 @@ export const appRoutes: Routes = [
         children: [
           { path: 'run-overview-mobile', component: IterativePlanningBaseMobileComponent},
           { path: 'new-planning-step', component: PlanningStepComponent},
-          { path: 'original-task', component: FirstPlanningStepComponent},
           { path: 'planning-step/:runid', component: FinishedPlanningStepComponent},
           { path: 'planning-step/:runid/new-question', component: QuestionStepComponent},
           { path: 'planning-step/:runid/question-step/:expid', component: FinishedQuestionStepComponent},
@@ -54,7 +52,6 @@ export const appRoutes: Routes = [
       { path: 'nav', component: DemoNavigatorComponent,
         children: [
           { path: 'new-planning-step', component: PlanningStepComponent},
-          { path: 'original-task', component: FirstPlanningStepComponent},
           { path: 'planning-step/:runid', component: FinishedPlanningStepComponent},
           { path: 'planning-step/:runid/new-question', component: QuestionStepComponent},
           { path: 'planning-step/:runid/question-step/:expid', component: FinishedQuestionStepComponent}

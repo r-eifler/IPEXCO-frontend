@@ -12,7 +12,7 @@ import {map} from 'rxjs/operators';
 import {IHTTPData} from '../interface/http-data.interface';
 import {PlanRun, ExplanationRun} from '../interface/run';
 import { PddlFileUtilsService } from './pddl-file-utils.service';
-import { PlanPropertyCollectionService } from './plan-property-services';
+import { PlanPropertyMapService } from './plan-property-services';
 import { combineLatest } from 'rxjs/internal/observable/combineLatest';
 
 
@@ -77,7 +77,7 @@ function sortRuns(runs: PlanRun[]): PlanRun[] {
   runs.splice(runs.indexOf(currentLast), 1);
   const sorted: PlanRun[] = [currentLast];
 
-  while (runs.length > 0){
+  while (runs.length > 0) {
     for (const run of runs) {
       if (run.previousRun === currentLast._id) {
         currentLast = run;
@@ -187,7 +187,7 @@ export class CurrentQuestionService extends SelectedObjectService<ExplanationRun
   constructor(
     store: CurrentQuestionStore,
     protected fileUtilsService: PddlFileUtilsService,
-    protected planPropertiesService: PlanPropertyCollectionService
+    protected planPropertiesService: PlanPropertyMapService
   ) {
     super(store);
   }

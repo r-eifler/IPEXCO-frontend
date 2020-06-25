@@ -1,3 +1,4 @@
+import { MapStore } from './generic-map.store';
 import { ExecutionSettings } from './../interface/execution-settings';
 import { DisplayTask } from './../interface/display-task';
 import { ViewSettings } from './../interface/view-settings';
@@ -34,7 +35,7 @@ export class DomainSpecificationFilesStore extends  ListStore<DomainSpecificatio
 
 }
 
-export class PlanPropertyCollectionStore extends  ListStore<PlanProperty> {
+export class PlanPropertyMapStore extends  MapStore<string, PlanProperty> {
 
 }
 

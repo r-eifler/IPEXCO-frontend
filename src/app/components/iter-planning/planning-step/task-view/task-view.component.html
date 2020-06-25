@@ -1,12 +1,12 @@
 <div style="width: 100%;">
   <mat-card class="card-style">
       <mat-card-header>
-          <mat-card-title>Goal Facts</mat-card-title>
+          <mat-card-title>Hard Goals</mat-card-title>
       </mat-card-header>
       <mat-card-content>
         <mat-list>
-          <mat-list-item *ngFor="let item of satGoalFacts;last as last">
-            {{item}}
+          <mat-list-item *ngFor="let item of enforcedSatPlanProperties;last as last">
+            {{item.naturalLanguageDescription}}
             <mat-divider [inset]="true" *ngIf="! last"></mat-divider>
           </mat-list-item>
         </mat-list>
@@ -15,33 +15,31 @@
 
   <mat-card class="card-style">
     <mat-card-header>
-        <mat-card-title>Plan-Properties</mat-card-title>
-        <mat-card-subtitle>enforced</mat-card-subtitle>
+        <mat-card-title>Additionally satisfied Plan-Properties</mat-card-title>
     </mat-card-header>
     <mat-card-content>
-      <mat-list *ngIf="enforcedSatPlanProperties.length > 0">
-        <mat-list-item *ngFor="let item of enforcedSatPlanProperties">
+      <mat-list *ngIf="addSatPlanProperties.length > 0">
+        <mat-list-item *ngFor="let item of addSatPlanProperties">
           {{item.naturalLanguageDescription}}
           <mat-divider [inset]="true"></mat-divider>
         </mat-list-item>
       </mat-list>
-      <p *ngIf="enforcedSatPlanProperties.length == 0">There are no enforced plan-properties.</p>
+      <p *ngIf="addSatPlanProperties.length == 0">There are no additionally satisfied plan-properties.</p>
     </mat-card-content>
   </mat-card>
 
   <mat-card class="card-style">
     <mat-card-header>
-        <mat-card-title>Plan-Properties</mat-card-title>
-        <mat-card-subtitle>additional</mat-card-subtitle>
+        <mat-card-title>Not satisfied Plan-Properties</mat-card-title>
     </mat-card-header>
     <mat-card-content>
-      <mat-list *ngIf="addSatPlanProperties.length > 0">
-        <mat-list-item *ngFor="let item of addSatPlanProperties;last as last">
+      <mat-list *ngIf="notSatPlanProperties.length > 0">
+        <mat-list-item *ngFor="let item of notSatPlanProperties;last as last">
           {{item.naturalLanguageDescription}}
           <mat-divider [inset]="true" *ngIf="! last"></mat-divider>
         </mat-list-item>
       </mat-list>
-      <p *ngIf="addSatPlanProperties.length == 0">There are no additionally satisfied plan-properties.</p>
+      <p *ngIf="notSatPlanProperties.length == 0">All plan-properties are satisfied.</p>
     </mat-card-content>
   </mat-card>
 

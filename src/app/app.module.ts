@@ -75,7 +75,6 @@ import { PlanningStepComponent } from './components/iter-planning/planning-step/
 import { FinishedPlanningStepComponent } from './components/iter-planning/planning-step/finished-planning-step/finished-planning-step.component';
 import { FinishedQuestionStepComponent } from './components/iter-planning/question-step/finished-question-step/finished-question-step.component';
 import { TaskCreatorComponent } from './components/iter-planning/planning-step/task-creator/task-creator.component';
-import { FirstPlanningStepComponent } from './components/iter-planning/planning-step/first-planning-step/first-planning-step.component';
 import { QuestionCreatorComponent } from './components/iter-planning/question-step/question-creator/question-creator.component';
 import { QuestionViewComponent } from './components/iter-planning/question-step/question-view/question-view.component';
 import { ExplanationViewComponent } from './components/iter-planning/question-step/explanation-view/explanation-view.component';
@@ -88,7 +87,7 @@ import { MonacoEditorModule} from 'ngx-monaco-editor';
 import {PddlFileUtilsService} from './service/pddl-file-utils.service';
 import {
   CurrentProjectStore, CurrentRunStore,
-  DomainFilesStore, PlanPropertyCollectionStore,
+  DomainFilesStore, PlanPropertyMapStore,
   ProblemFilesStore,
   ProjectsStore, RunsStore,
   SelectedDomainFileStore,
@@ -117,7 +116,7 @@ import {
   CurrentQuestionService
 } from './service/run-services';
 import { ProjectsService, CurrentProjectService} from './service/project-services';
-import { PlanPropertyCollectionService} from './service/plan-property-services';
+import { PlanPropertyMapService} from './service/plan-property-services';
 import { LoginComponent } from './components/login/login/login.component';
 import { DemoSelectionComponent } from './components/demo/demo-selection/demo-selection.component';
 import { DemoBaseComponent } from './components/demo/demo-base/demo-base.component';
@@ -172,7 +171,6 @@ import { DemoFinishedComponent } from './components/demo/demo-finished/demo-fini
     FinishedPlanningStepComponent,
     FinishedQuestionStepComponent,
     TaskCreatorComponent,
-    FirstPlanningStepComponent,
     QuestionCreatorComponent,
     QuestionViewComponent,
     ExplanationViewComponent,
@@ -272,8 +270,8 @@ import { DemoFinishedComponent } from './components/demo/demo-finished/demo-fini
     CurrentProjectService,
     TasktSchemaStore,
     TaskSchemaService,
-    PlanPropertyCollectionStore,
-    PlanPropertyCollectionService,
+    PlanPropertyMapStore,
+    PlanPropertyMapService,
     PlannerService,
     RunsStore,
     CurrentRunService,

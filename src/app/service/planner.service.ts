@@ -1,5 +1,4 @@
 import { PlanProperty } from './../interface/plan-property';
-import { GoalType } from './../interface/goal';
 import { RunningDemoService } from './demo-services';
 import { EDIT } from '../store/generic-list.store';
 import { Injectable } from '@angular/core';
@@ -11,7 +10,7 @@ import {environment} from '../../environments/environment';
 import {IHTTPData} from '../interface/http-data.interface';
 import {ADD} from '../store/generic-list.store';
 import { Demo } from '../interface/demo';
-import { PlanPropertyCollectionService } from './plan-property-services';
+import { PlanPropertyMapService } from './plan-property-services';
 
 @Injectable({
   providedIn: 'root'
@@ -68,7 +67,7 @@ export class DemoPlannerService extends PlannerService {
     http: HttpClient,
     store: RunsStore,
     private runningDemoService: RunningDemoService,
-    private planPropertiesService: PlanPropertyCollectionService) {
+    private planPropertiesService: PlanPropertyMapService) {
     super(http, store);
     this.BASE_URL = environment.apiURL + 'planner/';
   }
@@ -76,13 +75,13 @@ export class DemoPlannerService extends PlannerService {
   execute_plan_run(run: PlanRun): void {
     const demo: Demo = this.runningDemoService.getSelectedObject().getValue();
 
-    const planPropertiesGoalFacts = run.hardGoals.filter(g => g.goalType === GoalType.planProperty);
+    const planPropertiesGoalFacts = run.hardGoals;
 
     let foundPlanObj = null;
     for (const planObj of demo.data.plans) {
       if (planObj.planProperties.length === planPropertiesGoalFacts.length) {
         for (const goalFact of planPropertiesGoalFacts) {
-          if (planObj.planProperties.indexOf(goalFact.name) === -1) {
+          if (planObj.planProperties.indexOf(goalFact) === -1) {
             break;
           }
           foundPlanObj = planObj;
@@ -117,21 +116,21 @@ export class DemoPlannerService extends PlannerService {
     }
 
     // plan property hard goals which were no hard goals in the plan run
-    const questionPlanProperties = expRun.hardGoals.filter(hg => ! planRun.hardGoals.some(c => hg.name === c.name));
+    const questionPlanProperties = expRun.hardGoals.filter(hg => ! planRun.hardGoals.some(c => hg === c));
 
     expRun.mugs = [];
     console.log('compute mugs demo');
     console.log(demo.data.MUGS);
     for (const mugs of demo.data.MUGS) {
       for (const propertyGoalFact of questionPlanProperties) {
-        if (mugs.indexOf(propertyGoalFact.name) > -1) {
+        if (mugs.indexOf(propertyGoalFact) > -1) {
           const mugsRest = [];
           for (const fact of mugs) {
-            if (fact !== propertyGoalFact.name) {
+            if (fact !== propertyGoalFact) {
               mugsRest.push(fact.replace('Atom ', ''));
             }
           }
-          if (mugsRest.length !== 0){
+          if (mugsRest.length !== 0) {
             expRun.mugs.push(mugsRest);
           }
 

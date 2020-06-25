@@ -5,7 +5,6 @@ import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import {FormControl, FormGroup, Validators, FormGroupName, FormArray} from '@angular/forms';
 import {Action, ActionSet, PlanProperty} from '../../../interface/plan-property';
 import {MatDialogRef} from '@angular/material/dialog';
-import {GoalType} from '../../../interface/goal';
 import { Project } from 'src/app/interface/project';
 import { TasktSchemaStore, DomainSpecStore } from 'src/app/store/stores.store';
 import { matchRegexValidator } from '../../../validators/match-regex-validator';
@@ -16,7 +15,7 @@ import { DomainSpecification } from 'src/app/interface/domain-specification';
 import { PlanPropertyTemplate } from 'src/app/interface/plan-property-template';
 import { MatSelectionListChange } from '@angular/material/list';
 import { MatAccordion } from '@angular/material/expansion';
-import { PlanPropertyCollectionService } from 'src/app/service/plan-property-services';
+import { PlanPropertyMapService } from 'src/app/service/plan-property-services';
 import { CurrentProjectService } from 'src/app/service/project-services';
 import { Subject } from 'rxjs';
 
@@ -72,7 +71,7 @@ export class PropertyCreatorComponent implements OnInit, OnDestroy {
 
 
   constructor(
-    private propertiesService: PlanPropertyCollectionService,
+    private propertiesService: PlanPropertyMapService,
     private currentProjectService: CurrentProjectService,
     private taskSchemaStore: TasktSchemaStore,
     private domainSpecService: DomainSpecificationService,
@@ -179,7 +178,6 @@ export class PropertyCreatorComponent implements OnInit, OnDestroy {
     if (this.expertMode) {
       planProperty = {
         name: this.propertyForm.controls.name.value,
-        goalType: GoalType.planProperty,
         type: this.propertyForm.controls.type.value,
         formula: this.propertyForm.controls.formula.value,
         actionSets: this.actionSets,

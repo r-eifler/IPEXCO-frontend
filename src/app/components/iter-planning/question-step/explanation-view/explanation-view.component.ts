@@ -3,7 +3,7 @@ import { DisplayTaskService } from './../../../../service/display-task.service';
 import { takeUntil } from 'rxjs/operators';
 import { CurrentQuestionService } from 'src/app/service/run-services';
 import { CurrentRunService } from './../../../../service/run-services';
-import { PlanPropertyCollectionService } from 'src/app/service/plan-property-services';
+import { PlanPropertyMapService } from 'src/app/service/plan-property-services';
 import { Observable, combineLatest, Subject } from 'rxjs';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { PlanRun, ExplanationRun } from 'src/app/interface/run';
@@ -24,12 +24,12 @@ export class ExplanationViewComponent implements OnInit, OnDestroy {
   currentRun$: Observable<PlanRun>;
   currentQuestion$: Observable<ExplanationRun>;
 
-  displayMUGS: string[][] = [];
+  filteredMUGS: PlanProperty[][] = [];
 
   constructor(
     private  currentRunService: CurrentRunService,
     private currentQuestionService: CurrentQuestionService,
-    private planPropertiesService: PlanPropertyCollectionService,
+    private planPropertiesService: PlanPropertyMapService,
     private displayTaskService: DisplayTaskService) {
 
     this.currentRun$ = this.currentRunService.getSelectedObject();
@@ -37,31 +37,26 @@ export class ExplanationViewComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    combineLatest([this.currentQuestion$, this.planPropertiesService.getList(), this.displayTaskService.getSelectedObject()])
+    combineLatest([ this.currentRun$, this.currentQuestion$, this.planPropertiesService.getMap(), this.displayTaskService.getSelectedObject()])
     .pipe(takeUntil(this.ngUnsubscribe))
     .subscribe(
-      ([expRun, planProperties, displayTask]) => {
-        if (expRun && planProperties && displayTask) {
-          this.displayMUGS = [];
-          console.log(expRun.mugs);
+      ([planRun, expRun, planProperties]) => {
+        if (planRun && expRun && planProperties) {
+          this.filteredMUGS = [];
           for (const entry of expRun.mugs) {
-            const displayEntry: string[] = [];
+            const planPropertiesEntry: PlanProperty[] = [];
             for (const fact of entry) {
-              const pp: PlanProperty = planProperties.find(p => p.name === fact);
-              if (pp) {
-                displayEntry.push(pp.naturalLanguageDescription);
-              } else {
-                // for now ignore goal facts in question
-                displayEntry.push('goal fact');
+              // only show property if it is satisfied by the corresponding plan run
+              if (planRun.satPlanProperties.find(v => v === fact) || planRun.hardGoals.find(v => v === fact)) {
+                planPropertiesEntry.push(planProperties.get(fact));
               }
             }
-            if (displayEntry.length === 0){
-              this.displayMUGS = null;
+            if (planPropertiesEntry.length === 0) {
+              this.filteredMUGS = null;
               return;
             }
-            this.displayMUGS.push(displayEntry);
+            this.filteredMUGS.push(planPropertiesEntry);
           }
-          console.log(this.displayMUGS);
         }
       }
     );

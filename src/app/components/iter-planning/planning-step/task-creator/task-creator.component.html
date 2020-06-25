@@ -1,23 +1,12 @@
 <div class="main-container">
   <div class="header-container">
-    <h3 style="margin: 0px;">Select hard goals: </h3>
+    <h1 style="margin: 20px 20px;">Select at least one hard goal: </h1>
   </div>
-  <mat-horizontal-stepper>
-    <mat-step label="Goal Facts">
-      <mat-selection-list [(ngModel)]="selectedGoalFacts" (selectionChange)="checkComplete($event)">
-        <mat-list-option *ngFor="let item of goalFacts" [value]=item checkboxPosition="before">
-          {{displayTask.getGoalDescription(item)}}
-        </mat-list-option>
-      </mat-selection-list>
-    </mat-step>
-    <mat-step label="Plan-Properties">
-      <mat-selection-list [(ngModel)]="selectedPlanProperties" (selectionChange)="checkComplete($event)">
-        <mat-list-option *ngFor="let item of planPproperties" [value]=item checkboxPosition="before">
-          {{item.naturalLanguageDescription}}
-        </mat-list-option>
-      </mat-selection-list>
-    </mat-step>
-  </mat-horizontal-stepper>
+    <mat-selection-list [(ngModel)]="selectedGoalFacts" (selectionChange)="checkComplete($event)">
+      <mat-list-option *ngFor="let item of planProperties" [value]=item checkboxPosition="before">
+        {{item.naturalLanguageDescription}}
+      </mat-list-option>
+    </mat-selection-list>
 </div>
 
 <button mat-fab color="accent" class="add-button" (click)="computePlan()" [disabled]="! completed">

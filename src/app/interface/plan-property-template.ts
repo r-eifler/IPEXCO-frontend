@@ -1,13 +1,12 @@
-import { ActionSet, Action, toAction } from './plan-property';
+import { ActionSet, Action, toAction, GoalType } from './plan-property';
 import { PlanProperty } from 'src/app/interface/plan-property';
-import { GoalType } from './goal';
 import { Project } from './project';
 import { TaskSchema } from './task-schema';
 
 
 export class PlanPropertyTemplate {
   public class: string;
-  public type: string;
+  public type: GoalType;
   public variables: {
     name: string;
     type: string;
@@ -90,7 +89,7 @@ export class PlanPropertyTemplate {
     }
 
     return {
-      name, goalType: GoalType.planProperty, type: this.type, formula,
+      name, type: this.type, formula,
       actionSets, naturalLanguageDescription, project: project._id, isUsed: false
     };
   }

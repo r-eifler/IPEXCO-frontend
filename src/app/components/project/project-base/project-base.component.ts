@@ -16,7 +16,7 @@ import { ProjectsService, CurrentProjectService } from 'src/app/service/project-
 import { DomainSpecificationService } from 'src/app/service/domain-specification.service';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { ViewSettingsService } from 'src/app/service/setting.service';
-import { PlanPropertyCollectionService } from 'src/app/service/plan-property-services';
+import { PlanPropertyMapService } from 'src/app/service/plan-property-services';
 import { combineLatest } from 'rxjs/internal/observable/combineLatest';
 import { DisplayTask } from 'src/app/interface/display-task';
 import { PlanVisualizationProvider } from 'src/app/provider/plan-visualisation.provider';
@@ -49,7 +49,7 @@ export class ProjectBaseComponent implements OnInit, OnDestroy {
     private currentProjectService: CurrentProjectService,
     private curretnSchemaService: TaskSchemaService,
     private domainSpecService: DomainSpecificationService,
-    private propertiesService: PlanPropertyCollectionService,
+    private propertiesService: PlanPropertyMapService,
     private runsService: RunService,
     private displayTaskService: DisplayTaskService,
     private demosService: DemosService,

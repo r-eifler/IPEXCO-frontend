@@ -1,15 +1,12 @@
+import { PlanProperty, GoalType } from 'src/app/interface/plan-property';
 import { takeUntil } from 'rxjs/operators';
-import { QUESTION_REDIRECT } from './../../../../app.tokens';
-import { GoalType } from './../../../../interface/goal';
-import { PlanProperty } from './../../../../interface/plan-property';
+import { QUESTION_REDIRECT } from '../../../../app.tokens';
 import { Component, OnInit, ViewChild, Inject, OnDestroy } from '@angular/core';
 import {Observable, Subject} from 'rxjs';
 import {Project} from '../../../../interface/project';
 import {PlannerService} from '../../../../service/planner.service';
 import {ExplanationRun, PlanRun, RunType} from '../../../../interface/run';
-import {CurrentRunStore} from '../../../../store/stores.store';
-import {Goal} from '../../../../interface/goal';
-import { PlanPropertyCollectionService } from 'src/app/service/plan-property-services';
+import { PlanPropertyMapService } from 'src/app/service/plan-property-services';
 import { CurrentProjectService } from 'src/app/service/project-services';
 import { MatSelectionList } from '@angular/material/list/selection-list';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -32,7 +29,7 @@ export class QuestionCreatorComponent implements OnInit, OnDestroy {
   notSatPlanProperties: PlanProperty[];
   private currentProject$: Observable<Project>;
   private currentRun: PlanRun;
-  private hardGoals: Goal[];
+  private hardGoals: string[];
 
   private currentProject: Project;
 
@@ -40,7 +37,7 @@ export class QuestionCreatorComponent implements OnInit, OnDestroy {
 
   constructor(
     private settingsService: ExecutionSettingsService,
-    private propertiesService: PlanPropertyCollectionService,
+    private propertiesService: PlanPropertyMapService,
     private currentProjectService: CurrentProjectService,
     private plannerService: PlannerService,
     private currentRunService: CurrentRunService,
@@ -61,10 +58,10 @@ export class QuestionCreatorComponent implements OnInit, OnDestroy {
       if (run != null) {
         this.currentRun = run;
         this.hardGoals = run.hardGoals;
-        this.propertiesService.getList()
+        this.propertiesService.getMap()
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe(properties => {
-          this.allPlanProperties = properties.filter(p => p.isUsed);
+          this.allPlanProperties = [...properties.values()].filter(p => p.isUsed);
           this.notSatPlanProperties = this.allPlanProperties.filter(p => ! this.currentRun.satPlanProperties.includes(p.name));
         });
       }
@@ -97,15 +94,15 @@ export class QuestionCreatorComponent implements OnInit, OnDestroy {
       status: null,
       type: RunType.mugs,
       planProperties: this.allPlanProperties,
-      // only plan properties soft goals
-      softGoals: this.allPlanProperties.filter(p => ! this.question.includes(p)),
-      hardGoals: this.currentRun.hardGoals.filter(g => g.goalType === GoalType.goalFact).concat(this.question),
+      softGoals: this.allPlanProperties.filter(p => ! this.question.includes(p) && ! this.currentRun.hardGoals.find(hg => hg === p.name))
+          .map(value => (value.name)),
+      hardGoals: this.currentRun.hardGoals.concat(this.question.map(value => (value.name))),
       result: null,
       log: null,
     };
 
-    console.log('Compute dependencies');
-    console.log(expRun);
+    // console.log('Compute dependencies');
+    // console.log(expRun);
 
     this.plannerService.execute_mugs_run(this.currentRun, expRun);
     console.log('Redirect to: ' + this.redirectURL);
