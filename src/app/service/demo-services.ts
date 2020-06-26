@@ -46,6 +46,20 @@ export class DemosService extends ObjectCollectionService<Demo> {
       });
   }
 
+  updateDemo(demo: Demo): void {
+
+    // const formData = new FormData();
+    // formData.append('name', demo.name);
+    // // formData.append('summaryImage', demo.summaryImage);
+    // formData.append('introduction', demo.introduction);
+
+    this.http.put<IHTTPData<Demo>>(this.BASE_URL, demo)
+      .subscribe(httpData => {
+        const action = {type: EDIT, data: httpData.data};
+        this.listStore.dispatch(action);
+      });
+  }
+
   cancelDemo(demo: Demo): Promise<boolean> {
     console.log('Cancel Demo!');
     const p = new Promise<boolean>((resolve, reject) => {

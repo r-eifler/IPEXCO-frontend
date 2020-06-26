@@ -68,7 +68,8 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.width = '500px';
     dialogConfig.data  = {
-      project: this.currentProject,
+      update: false,
+      project: this.currentProject._id,
     };
 
     const dialogRef = this.dialog.open(DemoCreatorComponent, dialogConfig);

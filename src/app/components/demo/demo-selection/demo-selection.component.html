@@ -13,27 +13,53 @@
       {{demo.introduction}}
       <!-- {{demo.project}} -->
     </mat-card-content>
-    <mat-card-actions align="end">
-      <button mat-icon-button [disabled]="demo.status == runStatus.running || demo.status == runStatus.pending" (click)="deleteDemo(demo)">
-        <mat-icon>delete</mat-icon>
+    <mat-card-actions align="end" style="margin-bottom: 0; padding-bottom: 0">
+      <button mat-icon-button [matMenuTriggerFor]="demoMenu" *ngIf="userService.logedIn() && myDemo(demo)">
+        <mat-icon>more_vert</mat-icon>
       </button>
-      <button mat-icon-button [disabled]="demo.status == runStatus.failed || demo.status == runStatus.running || demo.status == runStatus.pending"
-        (click)="openAnimationSettings(demo)">
-        <mat-icon>movie_creation</mat-icon>
-      </button>
-      <button mat-icon-button [disabled]="demo.status == runStatus.failed || demo.status == runStatus.running || demo.status == runStatus.pending"
-        (click)="openSettings(demo)">
-        <mat-icon>settings</mat-icon>
-      </button>
-      <button mat-icon-button [disabled]="demo.status == runStatus.failed || demo.status == runStatus.running || demo.status == runStatus.pending"
+
+      <button mat-icon-button
+        [disabled]="demo.status == runStatus.failed || demo.status == runStatus.running || demo.status == runStatus.pending"
         (click)="openDemo(demo)">
         <mat-icon>play_arrow</mat-icon>
       </button>
-      <button mat-icon-button *ngIf="demo.status == runStatus.running || demo.status == runStatus.pending" (click)="cancelDemo(demo)" color=accent>
+      <button mat-icon-button
+        *ngIf="userService.logedIn() && myDemo(demo) && demo.status == runStatus.running || demo.status == runStatus.pending"
+        (click)="cancelDemo(demo)" color=accent>
         <mat-icon>cancel</mat-icon>
       </button>
+
     </mat-card-actions>
+
+    <mat-menu #demoMenu="matMenu">
+      <button mat-menu-item
+              [disabled]="demo.status == runStatus.failed || demo.status == runStatus.running || demo.status == runStatus.pending"
+              (click)="openAnimationSettings(demo)">
+        <mat-icon>movie_creation</mat-icon>
+        <span>Animation Settings</span>
+      </button>
+      <button mat-menu-item
+              [disabled]="demo.status == runStatus.failed || demo.status == runStatus.running || demo.status == runStatus.pending"
+              (click)="openSettings(demo)">
+        <mat-icon>settings</mat-icon>
+        <span>Execution Settings</span>
+      </button>
+      <button mat-menu-item
+              [disabled]="demo.status == runStatus.failed || demo.status == runStatus.running || demo.status == runStatus.pending"
+              (click)="update(demo)">
+        <mat-icon>create</mat-icon>
+        <span>Modify</span>
+      </button>
+      <button mat-menu-item
+              [disabled]="demo.status == runStatus.running || demo.status == runStatus.pending"
+              (click)="deleteDemo(demo)">
+        <mat-icon>delete</mat-icon>
+        <span>Delete</span>
+      </button>
+    </mat-menu>
+
   </mat-card>
+
 </div>
 
 <div [class.main-container-web]="! isMobile" [class.main-container-mobile]="isMobile" *ngIf="(demos$ | async).length == 0">

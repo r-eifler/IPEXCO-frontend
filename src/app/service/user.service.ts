@@ -5,6 +5,7 @@ import { User } from '../interface/user';
 import { environment } from 'src/environments/environment';
 import { IHTTPData } from '../interface/http-data.interface';
 import { HttpClient } from '@angular/common/http';
+import {Observable} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +19,15 @@ export class UserService extends SelectedObjectService<User> {
     store: UserStore,
   ) {
     super(store);
+  }
+
+
+  loadUser(): Observable<User> {
+    this.http.get<IHTTPData<User>>(this.BASE_URL)
+      .subscribe(httpData => {
+        this.saveObject(httpData.data);
+      });
+    return this.selectedObject$;
   }
 
   register(user: User): Promise<void> {
@@ -63,6 +73,10 @@ export class UserService extends SelectedObjectService<User> {
     });
 
     return returnPromis;
+  }
+
+  getUser(): User {
+    return this.selectedObject$.getValue();
   }
 
   logedIn(): boolean {

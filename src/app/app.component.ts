@@ -2,6 +2,7 @@ import {Component, OnInit, ViewChild, AfterViewInit} from '@angular/core';
 import {MatStepper} from '@angular/material/stepper';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
+import {UserService} from './service/user.service';
 
 
 @Component({
@@ -14,6 +15,7 @@ export class AppComponent implements OnInit {
   editorOptions = {theme: 'vs-dark', language: 'javascript'};
 
   constructor(
+    private userService: UserService,
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer) {
     this.matIconRegistry.addSvgIcon(
@@ -23,6 +25,7 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.userService.loadUser();
   }
 
 

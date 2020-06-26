@@ -7,6 +7,7 @@ import {PDDLFile, DomainSpecificationFile} from '../../../interface/files';
 import {DomainFilesService, ProblemFilesService, DomainSpecificationFilesService} from '../../../service/pddl-file-services';
 import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { ProjectsService } from 'src/app/service/project-services';
+import {UserService} from '../../../service/user.service';
 
 @Component({
   selector: 'app-project-creator',
@@ -42,6 +43,7 @@ export class ProjectCreatorComponent implements OnInit, OnDestroy {
     private problemFilesService: ProblemFilesService,
     private domainSpecFilesService: DomainSpecificationFilesService,
     private projectService: ProjectsService,
+    private userService: UserService,
     public dialogRef: MatDialogRef<ProjectCreatorComponent>,
     @Inject(MAT_DIALOG_DATA) data) {
 
@@ -76,6 +78,7 @@ export class ProjectCreatorComponent implements OnInit, OnDestroy {
     const newProject: Project = {
       _id: this.editedProject ? this.editedProject._id : null,
       name: this.projectForm.controls.name.value,
+      user: this.userService.getUser()._id,
       description: this.projectForm.controls.description.value,
       domainFile: this.selectedDomain,
       problemFile: this.selectedProblem,

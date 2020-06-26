@@ -5,6 +5,7 @@ import { ExecutionSettings } from './execution-settings';
 export interface Demo {
   _id?: string;
   name: string;
+  user: string;
   summaryImage?: string;
   project: string;
   introduction: string;

@@ -1,5 +1,5 @@
 <h2>New Demo</h2>
-<form class="example-form" [formGroup]="demoForm" (ngSubmit)="createDemo()" style="display: flex; flex-direction: column">
+<form class="example-form" [formGroup]="demoForm" (ngSubmit)="createOrUpdateDemo()" style="display: flex; flex-direction: column">
 
   <mat-form-field class="example-full-width">
     <mat-label>Name</mat-label>
@@ -11,7 +11,7 @@
     <textarea matInput formControlName="description"></textarea>
   </mat-form-field>
 
-  <div style="display: flex;">
+  <div style="display: flex;" *ngIf="! update">
     <input
     style="display: none"
     type="file" (change)="onFileChanged($event)"

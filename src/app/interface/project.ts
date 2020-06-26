@@ -3,6 +3,7 @@ import {PDDLFile, DomainSpecificationFile} from './files';
 export interface Project {
   _id: string;
   name: string;
+  user: string;
   domainFile: PDDLFile;
   problemFile: PDDLFile;
   domainSpecification: DomainSpecificationFile;

@@ -4,6 +4,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Project } from 'src/app/interface/project';
 import { Demo } from 'src/app/interface/demo';
 import { FormGroup, FormControl } from '@angular/forms';
+import {UserService} from '../../../service/user.service';
 
 @Component({
   selector: 'app-demo-creator',
@@ -12,39 +13,52 @@ import { FormGroup, FormControl } from '@angular/forms';
 })
 export class DemoCreatorComponent implements OnInit {
 
-  public currentProject: Project;
+  public currentProjectId: string;
+  private readonly demo: Demo;
+  public readonly update: boolean;
 
-  demoForm = new FormGroup({
-    name: new FormControl(),
-    description: new FormControl(),
-  });
+  demoForm: FormGroup;
 
   imageFileName = '';
   imageFile;
 
   constructor(
     private demosService: DemosService,
+    private userService: UserService,
     public dialogRef: MatDialogRef<DemoCreatorComponent>,
     @Inject(MAT_DIALOG_DATA) data
   ) {
-    this.currentProject = data.project;
+    this.currentProjectId = data.projectId;
+    this.demo = data.demo;
+    this.update = data.update;
+
+    this.demoForm = new FormGroup({
+      name: new FormControl(this.demo ? this.demo.name : ''),
+      description: new FormControl(this.demo ? this.demo.introduction : ''),
+    });
   }
 
   ngOnInit(): void {
   }
 
 
-  createDemo(): void {
-    console.log(this.imageFile);
+  createOrUpdateDemo(): void {
 
     const newDemo: Demo = {
+      _id: this.demo ? this.demo._id : null,
       name: this.demoForm.controls.name.value,
+      user: this.userService.getUser()._id,
       summaryImage: this.imageFile,
       introduction: this.demoForm.controls.description.value,
-      project: this.currentProject._id
+      project: this.currentProjectId
     };
-    console.log('Create new Demo: ' + newDemo.name);
-    this.demosService.generateDemo(newDemo);
+
+    if (this.update) {
+      this.demosService.updateDemo(newDemo);
+    } else {
+      this.demosService.generateDemo(newDemo);
+    }
+
 
     this.dialogRef.close();
   }

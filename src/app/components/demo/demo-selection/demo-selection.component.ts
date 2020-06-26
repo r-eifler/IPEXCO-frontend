@@ -16,6 +16,8 @@ import { ExecutionSettingsService } from 'src/app/service/execution-settings.ser
 import { AnimationSettingsComponent } from '../../animation/animation-settings/animation-settings.component';
 import { AnimationsSettingsDemoComponent } from '../../animation/animations-settings-demo/animations-settings-demo.component';
 import { Project } from 'src/app/interface/project';
+import {UserService} from '../../../service/user.service';
+import {DemoCreatorComponent} from '../demo-creator/demo-creator.component';
 
 @Component({
   selector: 'app-demo-selection',
@@ -36,6 +38,8 @@ export class DemoSelectionComponent implements OnInit, OnDestroy {
     private runningDemoService: RunningDemoService,
     private currentProjectService: CurrentProjectService,
     private projectsService: ProjectsService,
+    public userService: UserService,
+    public dialog: MatDialog,
     private bottomSheet: MatBottomSheet,
     private snackBar: MatSnackBar,
     private router: Router,
@@ -79,6 +83,19 @@ export class DemoSelectionComponent implements OnInit, OnDestroy {
 
   }
 
+  update(demo: Demo): void {
+    console.log('update Demo');
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = '500px';
+    dialogConfig.data  = {
+      update: true,
+      projectId: demo.project,
+      demo,
+    };
+
+    const dialogRef = this.dialog.open(DemoCreatorComponent, dialogConfig);
+  }
+
   openDemo(demo: Demo): void {
     this.router.navigate(['../demos/' + demo._id + '/help'], {relativeTo: this.activatedRoute});
   }
@@ -95,6 +112,13 @@ export class DemoSelectionComponent implements OnInit, OnDestroy {
       this.currentProjectService.saveObject(project);
     });
     this.bottomSheet.open(AnimationsSettingsDemoComponent, {data: demo});
+  }
+
+  myDemo(demo: Demo): boolean {
+    if (this.userService.getUser()) {
+      return this.userService.getUser()._id === demo.user;
+    }
+    return false;
   }
 
 }
