@@ -25,6 +25,7 @@ export class TaskCreatorComponent implements OnInit, OnDestroy {
   private ngUnsubscribe: Subject<any> = new Subject();
 
   private project: Project;
+  public hasGlobalHardGoals = true;
 
   planProperties: PlanProperty[];
 
@@ -48,6 +49,8 @@ export class TaskCreatorComponent implements OnInit, OnDestroy {
       props => {
         const propsList = [...props.values()];
         this.planProperties = propsList.filter((p: PlanProperty) => p.isUsed);
+        this.hasGlobalHardGoals = this.planProperties.filter(v => v.globalHardGoal).length > 0;
+        this.completed = this.hasGlobalHardGoals;
      });
 
     this.currentProjectService.getSelectedObject()
@@ -69,7 +72,7 @@ export class TaskCreatorComponent implements OnInit, OnDestroy {
   }
 
   checkComplete(event: MatSelectionListChange) {
-    this.completed = this.selectedGoalFacts.length > 0;
+    this.completed = this.hasGlobalHardGoals || this.selectedGoalFacts.length > 0;
   }
 
 
@@ -82,8 +85,8 @@ export class TaskCreatorComponent implements OnInit, OnDestroy {
       type: RunType.plan,
       status: null,
       project: this.project,
-      planProperties: this.selectedGoalFacts,
-      hardGoals: this.selectedGoalFacts.map(value => (value.name) ),
+      planProperties: this.selectedGoalFacts.concat(this.planProperties.filter(v => v.globalHardGoal)),
+      hardGoals: this.selectedGoalFacts.concat(this.planProperties.filter(v => v.globalHardGoal)).map(value => (value.name) ),
       log: null,
       explanationRuns: [],
       previousRun: previousRun ? previousRun._id : null,

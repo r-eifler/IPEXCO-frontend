@@ -184,6 +184,7 @@ export class PropertyCreatorComponent implements OnInit, OnDestroy {
         naturalLanguageDescription: 'TODO',
         project: this.currentProject._id,
         isUsed: false,
+        globalHardGoal: false,
       };
     } else {
       planProperty = this.selectedPropertyTemplate.generatePlanProperty(this.selectedVariableValue, this.taskSchema, this.currentProject);

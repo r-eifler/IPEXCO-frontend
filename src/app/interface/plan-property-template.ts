@@ -90,7 +90,7 @@ export class PlanPropertyTemplate {
 
     return {
       name, type: this.type, formula,
-      actionSets, naturalLanguageDescription, project: project._id, isUsed: false
+      actionSets, naturalLanguageDescription, project: project._id, isUsed: false, globalHardGoal: false,
     };
   }
 

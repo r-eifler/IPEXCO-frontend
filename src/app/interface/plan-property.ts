@@ -33,4 +33,5 @@ export interface PlanProperty {
   naturalLanguageDescription?: string;
   project: string;
   isUsed: boolean;
+  globalHardGoal: boolean;
 }

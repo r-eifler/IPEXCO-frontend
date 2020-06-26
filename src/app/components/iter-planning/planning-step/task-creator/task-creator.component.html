@@ -1,12 +1,36 @@
 <div class="main-container">
-  <div class="header-container">
-    <h1 style="margin: 20px 20px;">Select at least one hard goal: </h1>
-  </div>
-    <mat-selection-list [(ngModel)]="selectedGoalFacts" (selectionChange)="checkComplete($event)">
-      <mat-list-option *ngFor="let item of planProperties" [value]=item checkboxPosition="before">
-        {{item.naturalLanguageDescription}}
-      </mat-list-option>
-    </mat-selection-list>
+
+  <mat-card style="margin: 10px">
+    <mat-card-header>
+      <mat-card-title>New Planning Task</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div class="header-container">
+        <h1 style="margin: 20px 20px;">Global hard-goals: </h1>
+      </div>
+      <mat-list *ngIf="hasGlobalHardGoals">
+        <ng-container *ngFor="let item of planProperties">
+          <mat-list-item *ngIf="item.globalHardGoal">
+            {{item.naturalLanguageDescription}}
+          </mat-list-item>
+        </ng-container>
+      </mat-list>
+      <h2 *ngIf="! hasGlobalHardGoals" style="margin-left: 30px;">There are no global hard-goals.</h2>
+
+      <div class="header-container">
+        <h1 style="margin: 20px 20px;">Select additional hard goals: </h1>
+      </div>
+      <mat-selection-list [(ngModel)]="selectedGoalFacts" (selectionChange)="checkComplete($event)">
+        <ng-container *ngFor="let item of planProperties">
+          <mat-list-option *ngIf="! item.globalHardGoal" [value]=item checkboxPosition="before">
+            {{item.naturalLanguageDescription}}
+          </mat-list-option>
+        </ng-container>
+      </mat-selection-list>
+    </mat-card-content>
+  </mat-card>
+
 </div>
 
 <button mat-fab color="accent" class="add-button" (click)="computePlan()" [disabled]="! completed">

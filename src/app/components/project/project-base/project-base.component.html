@@ -5,9 +5,13 @@
       <!-- <h2>Project</h2> -->
       <a mat-button [routerLink]="'./overview'" class="toolbar-button" routerLinkActive="mat-list-single-selected-option">
         <mat-icon>info</mat-icon>
+        <span>Overview</span>
       </a>
-      <a mat-button [routerLink]="'./properties'" class="toolbar-button" routerLinkActive="mat-list-single-selected-option"> Properties </a>
-      <a mat-button [routerLink]="'./iterative-planning/run-overview-mobile'" class="toolbar-button"routerLinkActive="mat-list-single-selected-option">     Iterative Planning
+      <a mat-button [routerLink]="'./properties'" class="toolbar-button" routerLinkActive="mat-list-single-selected-option">
+        Plan-Properties
+      </a>
+      <a mat-button [routerLink]="'./iterative-planning/run-overview-mobile'" class="toolbar-button"routerLinkActive="mat-list-single-selected-option">
+        Iterative Planning
       </a>
     </div>
     <button mat-icon-button style="position: absolute; right: 50px;" [routerLink]="'./animation-settings'" routerLinkActive="mat-list-single-selected-option">
