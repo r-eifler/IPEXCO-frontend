@@ -45,7 +45,7 @@ export class PddlFileUtilsService {
       (value) => {
         const goalFacts: PlanProperty[] = [];
         for (const g of value.data) {
-          const goal: PlanProperty = {name: g, type: GoalType.goalFact, formula: g, project: project._id, isUsed: false, globalHardGoal: false};
+          const goal: PlanProperty = {name: g, type: GoalType.goalFact, formula: g, project: project._id, isUsed: false, globalHardGoal: false, value: 1};
           this.domainSpec?.getGoalDescription(goal);
           goalFacts.push(goal);
         }

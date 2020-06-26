@@ -34,4 +34,5 @@ export interface PlanProperty {
   project: string;
   isUsed: boolean;
   globalHardGoal: boolean;
+  value: number;
 }

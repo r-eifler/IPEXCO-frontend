@@ -185,6 +185,7 @@ export class PropertyCreatorComponent implements OnInit, OnDestroy {
         project: this.currentProject._id,
         isUsed: false,
         globalHardGoal: false,
+        value: 1,
       };
     } else {
       planProperty = this.selectedPropertyTemplate.generatePlanProperty(this.selectedVariableValue, this.taskSchema, this.currentProject);

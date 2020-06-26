@@ -27,7 +27,7 @@ export class PropertyCollectionComponent implements OnInit, AfterViewInit, OnDes
 
   planProperties: PlanProperty[];
 
-  displayedColumns: string[] = ['select', 'description', 'globalHardGoal', 'options'];
+  displayedColumns: string[] = ['select', 'description', 'globalHardGoal', 'value', 'options'];
   dataSource = new MatTableDataSource<PlanProperty>(this.planProperties);
 
   @ViewChild('#plan-property-collection-table') propertyTable: MatTable<PlanProperty>;
@@ -57,6 +57,11 @@ export class PropertyCollectionComponent implements OnInit, AfterViewInit, OnDes
 
   propertyGlobalHardGoalChanged(prop: PlanProperty): void {
     prop.globalHardGoal = ! prop.globalHardGoal;
+    this.propertiesService.saveObject(prop);
+  }
+
+  propertyValueChanged(event,  prop: PlanProperty): void {
+    prop.value = event.target.value;
     this.propertiesService.saveObject(prop);
   }
 
