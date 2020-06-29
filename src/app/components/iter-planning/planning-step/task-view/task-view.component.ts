@@ -5,6 +5,7 @@ import { DisplayTaskService } from '../../../../service/display-task.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import {CurrentRunStore } from '../../../../store/stores.store';
 import { combineLatest, Subject } from 'rxjs';
+import {ExecutionSettingsService} from '../../../../service/execution-settings.service';
 
 
 @Component({
@@ -21,24 +22,29 @@ export class TaskViewComponent implements OnInit, OnDestroy {
   addSatPlanProperties: PlanProperty[] = [];
   notSatPlanProperties: PlanProperty[] = [];
 
+  planValue = 0;
+
   constructor(
     private  currentRunStore: CurrentRunStore,
+    public settingsService: ExecutionSettingsService,
     private planPropertyCollectionService: PlanPropertyMapService,
   ) {
 
     combineLatest([this.currentRunStore.item$, planPropertyCollectionService.getMap()])
     .pipe(takeUntil(this.ngUnsubscribe))
     .subscribe(([run, planProperties]) => {
+      this.enforcedSatPlanProperties = [];
+      this.addSatPlanProperties = [];
+      this.notSatPlanProperties = [];
+
       if (run && planProperties) {
-        this.enforcedSatPlanProperties = [];
-        this.addSatPlanProperties = [];
-        this.notSatPlanProperties = [];
+        this.planValue = run.planValue;
 
         for (const propName of run.hardGoals) {
           this.enforcedSatPlanProperties.push(planProperties.get(propName));
         }
         for (const propName of run.satPlanProperties) {
-          if (! this.enforcedSatPlanProperties.find(p => p.name === propName)){
+          if (! this.enforcedSatPlanProperties.find(p => p.name === propName)) {
             this.addSatPlanProperties.push(planProperties.get(propName));
           }
         }

@@ -31,7 +31,7 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
   startTime: number;
   currentTime = 0;
 
-  maxTime = 3000;
+  maxTime = 15000;
   timer: number;
 
   finished = false;
@@ -69,10 +69,11 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
       })
     )
     .subscribe(
-      demo => {
+      (demo: Demo) => {
           this.projectsService.getObject(this.demo.project).subscribe(project => {
             this.currentProjectService.saveObject(project);
             this.propertiesService.findCollection([{param: 'projectId', value: project._id}]);
+            this.settingsService.load(demo.settings);
 
             combineLatest([this.curretnSchemaService.findSchema(project), this.domainSpecService.findSpec(project)]).
               subscribe(([taskSchema, domainSpec]) => {

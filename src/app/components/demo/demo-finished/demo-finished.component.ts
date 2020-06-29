@@ -1,19 +1,27 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import {Component, OnInit, Inject, OnDestroy} from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Demo } from 'src/app/interface/demo';
 import { ActivatedRoute, Router } from '@angular/router';
+import {ExecutionSettingsService} from '../../../service/execution-settings.service';
+import {RunService} from '../../../service/run-services';
+import {Subject} from 'rxjs';
 
 @Component({
   selector: 'app-demo-finished',
   templateUrl: './demo-finished.component.html',
   styleUrls: ['./demo-finished.component.css']
 })
-export class DemoFinishedComponent implements OnInit {
+export class DemoFinishedComponent implements OnInit, OnDestroy {
+
+  private ngUnsubscribe: Subject<any> = new Subject();
 
   demo: Demo;
   timesUp = false;
+  bestPlanValue = 0;
 
   constructor(
+    public settingsService: ExecutionSettingsService,
+    public runsService: RunService,
     private route: ActivatedRoute,
     private router: Router,
     public dialogRef: MatDialogRef<DemoFinishedComponent>,
@@ -23,12 +31,26 @@ export class DemoFinishedComponent implements OnInit {
     this.demo = data.demo;
   }
 
-  ngOnInit(): void {
+  async ngOnInit() {
+    const bestRun = await this.runsService.getBestRun();
+    if (bestRun) {
+      this.bestPlanValue = bestRun.planValue;
+    } else {
+      this.bestPlanValue = 0;
+    }
+    this.settingsService.getSelectedObject().subscribe(
+      s => console.log(s)
+    );
   }
 
   backToDemoOverview() {
     this.router.navigate(['/demos'], { relativeTo: this.route });
     this.dialogRef.close();
+  }
+
+  ngOnDestroy(): void {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 
 }

@@ -4,4 +4,5 @@ export interface ExecutionSettings {
   maxQuestionSize: number;
   public: boolean;
   allowQuestions: boolean;
+  usePlanPropertyValues: boolean;
 }

@@ -1,10 +1,10 @@
 import { TaskSchema } from 'src/app/interface/task-schema';
 import { TaskSchemaService } from './schema.service';
 import { Plan } from './../interface/plan';
-import { EDIT, LOAD, REMOVE } from '../store/generic-list.store';
+import { LOAD, REMOVE } from '../store/generic-list.store';
 import {SelectedObjectService} from './selected-object.service';
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpParams} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {RunsStore, CurrentRunStore, CurrentQuestionStore} from '../store/stores.store';
 import {ObjectCollectionService} from './object-collection.service';
 import {environment} from '../../environments/environment';
@@ -14,6 +14,7 @@ import {PlanRun, ExplanationRun} from '../interface/run';
 import { PddlFileUtilsService } from './pddl-file-utils.service';
 import { PlanPropertyMapService } from './plan-property-services';
 import { combineLatest } from 'rxjs/internal/observable/combineLatest';
+import {PlanProperty} from '../interface/plan-property';
 
 
 interface QueryParam {
@@ -26,7 +27,10 @@ interface QueryParam {
 })
 export class RunService extends ObjectCollectionService<PlanRun> {
 
-  constructor(http: HttpClient, store: RunsStore) {
+  constructor(
+    http: HttpClient,
+    store: RunsStore,
+    private planPropertyMapService: PlanPropertyMapService) {
     super(http, store);
     this.BASE_URL = environment.apiURL + 'run/plan-run/';
     this.pipeFind = map(sortRuns);
@@ -47,6 +51,29 @@ export class RunService extends ObjectCollectionService<PlanRun> {
     } else {
       return null;
     }
+  }
+
+  getBestRun(): Promise<PlanRun> {
+    return new Promise<PlanRun>((resolve, reject) => {
+      this.planPropertyMapService.getMap().subscribe(
+        planProperties => {
+          if (this.collection$.value.length === 0) {
+            return resolve(null);
+          }
+          let bestRun = this.collection$.value[0];
+          bestRun.planValue = computePlanValue(bestRun, planProperties);
+          for (const run of this.collection$.value) {
+            run.planValue = computePlanValue(run, planProperties);
+            if (run.planValue >= bestRun.planValue) {
+              bestRun = run;
+            }
+          }
+          console.log('Best Run');
+          console.log(bestRun);
+          resolve(bestRun);
+        }
+      );
+    });
   }
 
   getNumRuns(): number {
@@ -71,8 +98,8 @@ function sortRuns(runs: PlanRun[]): PlanRun[] {
   if (runs.length <= 1) {
     return runs;
   }
-  console.log('RUNS: ');
-  console.log(runs);
+  // console.log('RUNS: ');
+  // console.log(runs);
   let currentLast: PlanRun = findStart(runs);
   runs.splice(runs.indexOf(currentLast), 1);
   const sorted: PlanRun[] = [currentLast];
@@ -87,8 +114,8 @@ function sortRuns(runs: PlanRun[]): PlanRun[] {
     runs.splice(runs.indexOf(currentLast), 1);
     sorted.push(currentLast);
   }
-  console.log('SORTED: ');
-  console.log(sorted);
+  // console.log('SORTED: ');
+  // console.log(sorted);
   return sorted;
 }
 
@@ -105,8 +132,11 @@ function findStart(runs: PlanRun[]): PlanRun {
 })
 export class DemoRunService extends RunService {
 
-  constructor(http: HttpClient, store: RunsStore) {
-    super(http, store);
+  constructor(
+    http: HttpClient,
+    store: RunsStore,
+    planPropertyMapService: PlanPropertyMapService) {
+    super(http, store, planPropertyMapService);
     console.log('DemoRunService');
   }
 
@@ -124,16 +154,19 @@ export class CurrentRunService extends SelectedObjectService<PlanRun> {
   constructor(
     store: CurrentRunStore,
     private fileUtilsService: PddlFileUtilsService,
-    private taskSchemaService: TaskSchemaService) {
+    private taskSchemaService: TaskSchemaService,
+    private planPropertyMapService: PlanPropertyMapService) {
     super(store);
   }
 
   saveObject(planRun: PlanRun) {
     console.log('Current run stored');
     if (planRun.planString && ! planRun.plan) {
-      this.taskSchemaService.getSchema().subscribe(
-        schema => {
+      combineLatest([this.taskSchemaService.getSchema(), this.planPropertyMapService.getMap()]).subscribe(
+        ([schema, planProperties]) => {
           if (schema) {
+            planRun.planValue = computePlanValue(planRun, planProperties);
+            console.log('PlanValue: ' + planRun.planValue);
             handlePlanString(planRun.planString, planRun, schema);
             this.selectedObjectStore.dispatch({type: LOAD, data: planRun});
           }
@@ -143,10 +176,11 @@ export class CurrentRunService extends SelectedObjectService<PlanRun> {
     } else if (planRun.planPath && ! planRun.plan) {
       const planContent$ = this.fileUtilsService.getFileContent(planRun.planPath);
       // console.log('Loade Plan');
-      combineLatest([this.taskSchemaService.getSchema(), planContent$]).subscribe(
-        ([schema, content]) => {
+      combineLatest([this.taskSchemaService.getSchema(), planContent$, this.planPropertyMapService.getMap()]).subscribe(
+        ([schema, content, planProperties]) => {
         // console.log(content);
         if (content) {
+          planRun.planValue = computePlanValue(planRun, planProperties);
           handlePlanString(content, planRun, schema);
           this.selectedObjectStore.dispatch({type: LOAD, data: planRun});
         }
@@ -155,6 +189,19 @@ export class CurrentRunService extends SelectedObjectService<PlanRun> {
       this.selectedObjectStore.dispatch({type: LOAD, data: planRun});
     }
   }
+}
+
+function computePlanValue(planRun: PlanRun, planProperties: Map<string, PlanProperty>): number {
+  let planValue = 0;
+  for (const propName of planRun.hardGoals) {
+    planValue += planProperties.get(propName).value;
+  }
+  for (const propName of planRun.satPlanProperties) {
+    if (! planRun.hardGoals.find(p => p === propName)) {
+      planValue += planProperties.get(propName).value;
+    }
+  }
+  return planValue;
 }
 
 function handlePlanString(planString: string, planRun: PlanRun, schema: TaskSchema) {

@@ -22,12 +22,12 @@ export class ExecutionSettingsService extends SelectedObjectService<ExecutionSet
   }
 
   load(settingsId: string): Promise<void> {
-    console.log('Load settings: ' + settingsId);
+    // console.log('Load settings: ' + settingsId);
     const returnPromis = new Promise<void>((resolve, reject) => {
       try {
         this.http.get<IHTTPData<ExecutionSettings>>(this.BASE_URL + '/' + settingsId )
         .subscribe(httpData => {
-          console.log(httpData);
+          // console.log(httpData);
           this.saveObject(httpData.data);
           resolve();
           return;
@@ -42,5 +42,14 @@ export class ExecutionSettingsService extends SelectedObjectService<ExecutionSet
     });
 
     return returnPromis;
+  }
+
+  updateSettings(settings: ExecutionSettings) {
+    console.log('SAVE settings: ' + settings._id);
+    this.http.put<IHTTPData<ExecutionSettings>>(this.BASE_URL + '/' + settings._id, settings )
+      .subscribe(httpData => {
+          // console.log(httpData);
+          super.saveObject(httpData.data);
+        });
   }
 }

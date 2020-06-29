@@ -36,7 +36,7 @@ export class QuestionCreatorComponent implements OnInit, OnDestroy {
   public maxSizeQuestionReached = false;
 
   constructor(
-    private settingsService: ExecutionSettingsService,
+    public settingsService: ExecutionSettingsService,
     private propertiesService: PlanPropertyMapService,
     private currentProjectService: CurrentProjectService,
     private plannerService: PlannerService,

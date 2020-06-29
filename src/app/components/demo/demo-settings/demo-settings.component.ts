@@ -21,7 +21,8 @@ export class DemoSettingsComponent implements OnInit, OnDestroy {
     maxRuns: new FormControl('', [Validators.required, Validators.min(1), Validators.max(100)]),
     allowQuestions: new FormControl(),
     maxQuestionSize: new FormControl('', [Validators.required, Validators.min(1), Validators.max(3)]),
-    public: new FormControl()
+    public: new FormControl(),
+    usePlanPropertyValues: new FormControl(),
   });
 
   settings: ExecutionSettings;
@@ -43,6 +44,7 @@ export class DemoSettingsComponent implements OnInit, OnDestroy {
         this.demoSettingsForm.controls.allowQuestions.setValue(this.settings.allowQuestions);
         this.demoSettingsForm.controls.maxQuestionSize.setValue(this.settings.maxQuestionSize.toString());
         this.demoSettingsForm.controls.public.setValue(this.settings.public);
+        this.demoSettingsForm.controls.usePlanPropertyValues.setValue(this.settings.usePlanPropertyValues);
       });
     }
 
@@ -66,8 +68,12 @@ export class DemoSettingsComponent implements OnInit, OnDestroy {
     this.settings.allowQuestions = this.demoSettingsForm.controls.allowQuestions.value;
     this.settings.maxQuestionSize = +this.demoSettingsForm.controls.maxQuestionSize.value;
     this.settings.public = this.demoSettingsForm.controls.public.value;
+    this.settings.usePlanPropertyValues = this.demoSettingsForm.controls.usePlanPropertyValues.value;
 
-    this.settingsService.saveObject(this.settings);
+    // console.log('Settings save: ');
+    // console.log((this.settings));
+
+    this.settingsService.updateSettings(this.settings);
 
     this.bottomSheetRef.dismiss();
   }

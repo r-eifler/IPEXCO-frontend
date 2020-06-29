@@ -6,7 +6,9 @@
       <mat-card-content>
         <mat-list>
           <mat-list-item *ngFor="let item of enforcedSatPlanProperties;last as last">
-            {{item.naturalLanguageDescription}}
+            <mat-icon matListIcon>bookmark</mat-icon>
+            <p matLine> {{item.naturalLanguageDescription}} </p>
+            <p matLine *ngIf="(settingsService.getSelectedObject() | async).usePlanPropertyValues"> Value: {{item.value}} </p>
             <mat-divider [inset]="true" *ngIf="! last"></mat-divider>
           </mat-list-item>
         </mat-list>
@@ -20,12 +22,20 @@
     <mat-card-content>
       <mat-list *ngIf="addSatPlanProperties.length > 0">
         <mat-list-item *ngFor="let item of addSatPlanProperties">
-          {{item.naturalLanguageDescription}}
+          <mat-icon matListIcon>bookmark</mat-icon>
+          <p matLine> {{item.naturalLanguageDescription}} </p>
+          <p matLine *ngIf="(settingsService.getSelectedObject() | async).usePlanPropertyValues"> Value: {{item.value}} </p>
           <mat-divider [inset]="true"></mat-divider>
         </mat-list-item>
       </mat-list>
       <p *ngIf="addSatPlanProperties.length == 0">There are no additionally satisfied plan-properties.</p>
     </mat-card-content>
+  </mat-card>
+
+  <mat-card class="card-style" *ngIf="(settingsService.getSelectedObject() | async).usePlanPropertyValues">
+    <mat-card-header>
+      <mat-card-title>Overall Plan Value: {{planValue}}</mat-card-title>
+    </mat-card-header>
   </mat-card>
 
   <mat-card class="card-style">
@@ -35,7 +45,9 @@
     <mat-card-content>
       <mat-list *ngIf="notSatPlanProperties.length > 0">
         <mat-list-item *ngFor="let item of notSatPlanProperties;last as last">
-          {{item.naturalLanguageDescription}}
+          <mat-icon matListIcon>bookmark_border</mat-icon>
+          <p matLine> {{item.naturalLanguageDescription}} </p>
+          <p matLine *ngIf="(settingsService.getSelectedObject() | async).usePlanPropertyValues"> Value: {{item.value}} </p>
           <mat-divider [inset]="true" *ngIf="! last"></mat-divider>
         </mat-list-item>
       </mat-list>

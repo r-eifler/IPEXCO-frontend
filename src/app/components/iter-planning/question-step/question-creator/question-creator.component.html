@@ -8,7 +8,8 @@
           <mat-list-option *ngFor="let property of notSatPlanProperties; last as last"
           [disabled]="maxSizeQuestionReached && ! this.question.includes(property)"
           checkboxPosition="before" [value]="property">
-            {{property.naturalLanguageDescription}}
+            <p matLine> {{property.naturalLanguageDescription}} </p>
+            <p matLine *ngIf="(settingsService.getSelectedObject() | async).usePlanPropertyValues"> Value: {{property.value}} </p>
             <mat-divider [inset]="true" *ngIf="!last"></mat-divider>
           </mat-list-option>
 

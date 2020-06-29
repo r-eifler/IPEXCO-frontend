@@ -43,4 +43,5 @@ export interface  PlanRun {
   satPlanProperties?: string[];
   explanationRuns: ExplanationRun[];
   previousRun: string;
+  planValue?: number;
 }

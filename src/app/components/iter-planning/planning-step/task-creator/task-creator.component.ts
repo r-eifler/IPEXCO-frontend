@@ -14,6 +14,7 @@ import { DisplayTask } from 'src/app/interface/display-task';
 import { MatSelectionListChange } from '@angular/material/list/selection-list';
 import { PLANNER_REDIRECT } from 'src/app/app.tokens';
 import { Subject } from 'rxjs';
+import {ExecutionSettingsService} from '../../../../service/execution-settings.service';
 
 @Component({
   selector: 'app-task-creator',
@@ -39,6 +40,7 @@ export class TaskCreatorComponent implements OnInit, OnDestroy {
     private plannerService: PlannerService,
     private propertiesService: PlanPropertyMapService,
     private runService: RunService,
+    public settingsService: ExecutionSettingsService,
     private router: Router,
     private route: ActivatedRoute,
     @Inject(PLANNER_REDIRECT) private redirectURL: string) {

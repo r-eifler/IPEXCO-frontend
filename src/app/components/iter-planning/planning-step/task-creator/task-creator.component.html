@@ -12,7 +12,8 @@
       <mat-list *ngIf="hasGlobalHardGoals">
         <ng-container *ngFor="let item of planProperties">
           <mat-list-item *ngIf="item.globalHardGoal">
-            {{item.naturalLanguageDescription}}
+            <p matLine> {{item.naturalLanguageDescription}} </p>
+            <p matLine *ngIf="(settingsService.getSelectedObject() | async).usePlanPropertyValues"> Value: {{item.value}} </p>
           </mat-list-item>
         </ng-container>
       </mat-list>
@@ -24,7 +25,8 @@
       <mat-selection-list [(ngModel)]="selectedGoalFacts" (selectionChange)="checkComplete($event)">
         <ng-container *ngFor="let item of planProperties">
           <mat-list-option *ngIf="! item.globalHardGoal" [value]=item checkboxPosition="before">
-            {{item.naturalLanguageDescription}}
+            <p matLine> {{item.naturalLanguageDescription}} </p>
+            <p matLine *ngIf="(settingsService.getSelectedObject() | async).usePlanPropertyValues"> Value: {{item.value}} </p>
           </mat-list-option>
         </ng-container>
       </mat-selection-list>
