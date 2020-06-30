@@ -24,10 +24,6 @@
           <mat-icon>more_vert</mat-icon>
         </button>
         <mat-menu #menu="matMenu">
-          <button mat-menu-item (click)="delete(project)">
-            <mat-icon>delete</mat-icon>
-            <span>delete</span>
-          </button>
           <button mat-menu-item (click)="copy_project(project)">
             <mat-icon>file_copy</mat-icon>
             <span>copy</span>
@@ -35,6 +31,10 @@
           <button mat-menu-item (click)="modify_project(project)">
             <mat-icon>create</mat-icon>
             <span>modify</span>
+          </button>
+          <button mat-menu-item (click)="delete(project)">
+            <mat-icon>delete</mat-icon>
+            <span>delete</span>
           </button>
         </mat-menu>
 
@@ -44,16 +44,16 @@
         <p>
           {{project.description}}
         </p>
-        <mat-list>
-          <mat-list-item>{{project.domainFile.name}}</mat-list-item>
-          <mat-divider [inset]="true"></mat-divider>
-          <mat-list-item>{{project.problemFile.name}}</mat-list-item>
-          <mat-divider [inset]="true"></mat-divider>
-          <mat-list-item>{{project.domainSpecification.name}}</mat-list-item>
-        </mat-list>
+<!--        <mat-list>-->
+<!--          <mat-list-item>{{project.domainFile.name}}</mat-list-item>-->
+<!--          <mat-divider [inset]="true"></mat-divider>-->
+<!--          <mat-list-item>{{project.problemFile.name}}</mat-list-item>-->
+<!--          <mat-divider [inset]="true"></mat-divider>-->
+<!--          <mat-list-item>{{project.domainSpecification.name}}</mat-list-item>-->
+<!--        </mat-list>-->
       </mat-card-content>
       <mat-card-actions style="display: flex; flex-direction: row">
-        <button mat-flat-button color="accent" style="margin-left: auto;" [routerLink]="['/projects', project._id, 'overview']">
+        <button mat-icon-button style="margin-left: auto;" [routerLink]="['/projects', project._id, 'overview']">
           <mat-icon>play_arrow</mat-icon>
         </button>
       </mat-card-actions>
