@@ -1,8 +1,8 @@
 <div class="info-container">
-  <div style="color: white; font-size: xx-large; margin: auto 10px;">
+  <div style="color: white; font-size: xx-large; margin: auto 10px;" *ngIf="(settings$ | async)?.measureTime">
     <span>Time:</span>  {{currentTime | date:'mm:ss'}}
   </div>
-  <div style="color: white; font-size: xx-large; margin: auto 10px;">
+  <div style="color: white; font-size: xx-large; margin: auto 10px;" *ngIf="(settings$ | async)?.useTimer">
     <span>Timer:</span>  {{timer | date:'mm:ss'}}
   </div>
 </div>
@@ -41,6 +41,10 @@
     [disabled]="runsService.getNumRuns() >= (settingsService.getSelectedObject()| async)?.maxRuns">
     <mat-icon>add</mat-icon>
   </button>
+  <button mat-fab color="primary" class="finish-demo-button" (click)="finishDemo()">
+    <mat-icon>done</mat-icon>
+  </button>
+
 
 </div>
 <div class="router-outlet-container">

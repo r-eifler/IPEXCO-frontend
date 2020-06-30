@@ -16,6 +16,7 @@ import { DisplayTask } from 'src/app/interface/display-task';
 import { ExecutionSettingsService } from 'src/app/service/execution-settings.service';
 import { Time } from '@angular/common';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import {ExecutionSettings} from '../../../interface/execution-settings';
 
 @Component({
   selector: 'app-demo-navigator',
@@ -38,6 +39,7 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
 
   demo: Demo;
   runs$: BehaviorSubject<PlanRun[]>;
+  settings$: BehaviorSubject<ExecutionSettings>;
 
   constructor(
     private route: ActivatedRoute,
@@ -86,21 +88,39 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
     );
 
     this.runs$ = this.runsService.getList();
+    this.settings$ = settingsService.getSelectedObject();
   }
 
   ngOnInit(): void {
-    this.startTime = new Date().getTime();
-    this.timerIntervall = setInterval(() => {
-      const c = new Date().getTime();
-      this.currentTime = c - this.startTime;
-      this.timer = this.maxTime - this.currentTime;
-      this.timer = this.timer < 0 ? 0 : this.timer;
-      if (this.timer <= 0 && ! this.finished) {
-        this.finished = true;
-        this.showDemoFinished(true);
-        clearInterval(this.timerIntervall);
-      }
-    }, 1000);
+    this.settings$
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(
+        (settings: ExecutionSettings) => {
+          if (settings && (settings.measureTime || settings.useTimer)) {
+            this.maxTime = settings.maxTime;
+            this.startTime = new Date().getTime();
+            this.timerIntervall = setInterval(() => {
+              if (this.finished) {
+                clearInterval(this.timerIntervall);
+              }
+              const c = new Date().getTime();
+              this.currentTime = c - this.startTime;
+              this.timer = this.maxTime - this.currentTime;
+              this.timer = this.timer < 0 ? 0 : this.timer;
+              if (this.timer <= 0 && ! this.finished) {
+                this.finished = true;
+                this.showDemoFinished(true);
+                clearInterval(this.timerIntervall);
+              }
+            }, 1000);
+          }
+        }
+      );
+  }
+
+  finishDemo() {
+    this.finished = true;
+    this.showDemoFinished(false);
   }
 
   showDemoFinished(timesUp: boolean) {

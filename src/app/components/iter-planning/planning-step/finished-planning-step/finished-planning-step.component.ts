@@ -1,10 +1,11 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import {Component, OnInit, OnDestroy, ViewChild} from '@angular/core';
 import { RunService, CurrentRunService} from '../../../../service/run-services';
 import { PlanPropertyMapService} from '../../../../service/plan-property-services';
 import {ActivatedRoute, ParamMap, Router} from '@angular/router';
 import { switchMap, takeUntil } from 'rxjs/operators';
 import { ExecutionSettingsService } from 'src/app/service/execution-settings.service';
 import { Subject } from 'rxjs';
+import {PlanAnimationViewComponent} from '../plan-animation-view/plan-animation-view.component';
 
 
 @Component({
@@ -14,7 +15,9 @@ import { Subject } from 'rxjs';
 })
 export class FinishedPlanningStepComponent implements OnInit, OnDestroy {
 
-  showAnimationTab = false;
+  hasPlan = false;
+
+  @ViewChild('planAnimationView') planAnimationComponent: PlanAnimationViewComponent;
 
   private ngUnsubscribe: Subject<any> = new Subject();
 
@@ -40,7 +43,7 @@ export class FinishedPlanningStepComponent implements OnInit, OnDestroy {
     .subscribe(
       run => {
         if (run && run.plan) {
-          this.showAnimationTab = true;
+          this.hasPlan = true;
         }
       }
     );
@@ -58,4 +61,9 @@ export class FinishedPlanningStepComponent implements OnInit, OnDestroy {
     this.router.navigate(['./new-question'], { relativeTo: this.route });
   }
 
+  onAnimationFinished() {
+    if (this.planAnimationComponent) {
+      this.planAnimationComponent.visible = true;
+    }
+  }
 }

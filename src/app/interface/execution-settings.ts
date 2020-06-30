@@ -5,4 +5,8 @@ export interface ExecutionSettings {
   public: boolean;
   allowQuestions: boolean;
   usePlanPropertyValues: boolean;
+  useTimer: boolean;
+  measureTime: boolean;
+  maxTime: number;
+  showAnimation: boolean;
 }

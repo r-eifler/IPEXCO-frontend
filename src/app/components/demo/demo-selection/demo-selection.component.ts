@@ -1,5 +1,5 @@
 import { CurrentProjectService, ProjectsService } from 'src/app/service/project-services';
-import { takeUntil } from 'rxjs/operators';
+import {filter, takeUntil} from 'rxjs/operators';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
 import { DemosService, RunningDemoService } from '../../../service/demo-services';
@@ -38,6 +38,7 @@ export class DemoSelectionComponent implements OnInit, OnDestroy {
     private runningDemoService: RunningDemoService,
     private currentProjectService: CurrentProjectService,
     private projectsService: ProjectsService,
+    private settingsService: ExecutionSettingsService,
     public userService: UserService,
     public dialog: MatDialog,
     private bottomSheet: MatBottomSheet,
@@ -100,8 +101,9 @@ export class DemoSelectionComponent implements OnInit, OnDestroy {
     this.router.navigate(['../demos/' + demo._id + '/help'], {relativeTo: this.activatedRoute});
   }
 
-  openSettings(demo: Demo) {
-    this.bottomSheet.open(DemoSettingsComponent, {data: demo});
+  async openSettings(demo: Demo) {
+    await this.settingsService.load(demo.settings);
+    this.bottomSheet.open(DemoSettingsComponent, {data: {settings: this.settingsService.getSelectedObject().value, name: demo.name}});
   }
 
   openAnimationSettings(demo: Demo) {

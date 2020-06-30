@@ -1,7 +1,9 @@
-<h2>Settings:</h2>
+<h2>Settings {{name}}</h2>
 <form class="settings-form" [formGroup]="demoSettingsForm" (ngSubmit)="onSave()">
 
   <mat-slide-toggle formControlName='public'>public</mat-slide-toggle>
+
+  <mat-slide-toggle formControlName='showAnimation'>Show Plan Animation</mat-slide-toggle>
 
   <mat-form-field style="width: 200px;">
     <mat-label>Maximal number of runs</mat-label>
@@ -18,6 +20,16 @@
     <mat-radio-button value="2">2</mat-radio-button>
     <mat-radio-button value="3">3</mat-radio-button>
   </mat-radio-group>
+
+  <mat-slide-toggle formControlName='useTimer'>Use Timer</mat-slide-toggle>
+
+  <mat-slide-toggle formControlName='measureTime'>Measure Time</mat-slide-toggle>
+
+  <mat-form-field style="width: 200px;">
+    <mat-label>Max processing time (in min)</mat-label>
+    <input matInput type="number" formControlName='maxTime'>
+  </mat-form-field>
+
 
   <button mat-flat-button color="accent">Save</button>
 </form>
