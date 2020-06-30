@@ -26,6 +26,8 @@ export class TaskCreatorComponent implements OnInit, OnDestroy {
   private ngUnsubscribe: Subject<any> = new Subject();
 
   private project: Project;
+  private previousRun: PlanRun;
+
   public hasGlobalHardGoals = true;
 
   planProperties: PlanProperty[];
@@ -45,6 +47,8 @@ export class TaskCreatorComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     @Inject(PLANNER_REDIRECT) private redirectURL: string) {
 
+    this.previousRun = this.runService.getLastRun();
+
     this.propertiesService.getMap()
     .pipe(takeUntil(this.ngUnsubscribe))
     .subscribe(
@@ -53,6 +57,12 @@ export class TaskCreatorComponent implements OnInit, OnDestroy {
         this.planProperties = propsList.filter((p: PlanProperty) => p.isUsed);
         this.hasGlobalHardGoals = this.planProperties.filter(v => v.globalHardGoal).length > 0;
         this.completed = this.hasGlobalHardGoals;
+        if (this.previousRun) {
+          this.selectedGoalFacts = propsList.filter(
+            (p: PlanProperty) => {
+              return p.isUsed && ! p.globalHardGoal && this.previousRun.hardGoals.find(v => v === p.name);
+            });
+        }
      });
 
     this.currentProjectService.getSelectedObject()
@@ -79,7 +89,6 @@ export class TaskCreatorComponent implements OnInit, OnDestroy {
 
 
   async computePlan() {
-    const previousRun = this.runService.getLastRun();
 
     const run: PlanRun = {
       _id: this.runService.getNumRuns().toString(),
@@ -91,7 +100,7 @@ export class TaskCreatorComponent implements OnInit, OnDestroy {
       hardGoals: this.selectedGoalFacts.concat(this.planProperties.filter(v => v.globalHardGoal)).map(value => (value.name) ),
       log: null,
       explanationRuns: [],
-      previousRun: previousRun ? previousRun._id : null,
+      previousRun: this.previousRun ? this.previousRun._id : null,
     };
 
     this.plannerService.execute_plan_run(run);
