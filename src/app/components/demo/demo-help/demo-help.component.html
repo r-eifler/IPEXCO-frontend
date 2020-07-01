@@ -3,7 +3,7 @@
     <mat-card-title>Demo Introduction</mat-card-title>
   </mat-card-header>
   <mat-card-content>
-    <mat-horizontal-stepper [contentEditable]="true">
+    <mat-horizontal-stepper [contentEditable]="true" (selectionChange)="stepChanged($event)">
       <ng-template matStepperIcon="edit">
         <span class="material-icons">
           done
@@ -40,10 +40,10 @@
         <p>To find the best plan we use <span style="font-weight: bold;">Iterative Planning</span> with human guidance. This approach is explained in the next step.</p>
 
         <div style="display: flex; justify-content: flex-end;">
-          <button mat-icon-button matStepperNext>
+          <button mat-icon-button matStepperNext [disabled]="true">
             <mat-icon>keyboard_arrow_left</mat-icon>
           </button>
-          <button mat-icon-button matStepperNext>
+          <button mat-icon-button matStepperNext >
             <mat-icon>keyboard_arrow_right</mat-icon>
           </button>
         </div>
@@ -105,14 +105,14 @@
           <button mat-icon-button matStepperNext>
             <mat-icon>keyboard_arrow_left</mat-icon>
           </button>
-          <button mat-icon-button matStepperNext>
+          <button mat-icon-button matStepperNext [disabled]="true">
             <mat-icon>keyboard_arrow_right</mat-icon>
           </button>
         </div>
       </mat-step>
     </mat-horizontal-stepper>
   </mat-card-content>
-  <mat-card-actions>
+  <mat-card-actions align="end">
     <button mat-flat-button color="accent" class='skip-button' routerLink="../task-intro" routerLinkActive="active">Skip</button>
   </mat-card-actions>
 </mat-card>
