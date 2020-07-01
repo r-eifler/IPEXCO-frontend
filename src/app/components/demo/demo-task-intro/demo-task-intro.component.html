@@ -1,0 +1,43 @@
+<mat-card class="main-card">
+  <mat-card-header>
+    <mat-card-title>Task Introduction</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <p>In the following task you have to deliver packages from a start to destination location.
+      To do so, you have 2 trucks which can perform the following actions:</p>
+
+    <mat-list dense>
+      <mat-list-item>
+        drive: Drive between to locations which are connected with a road.
+      </mat-list-item>
+      <mat-list-item>
+        load: Load one package if truck and package are at the same locations.
+      </mat-list-item>
+      <mat-list-item>
+        unload: Unload a package at the current location of teh truck.
+      </mat-list-item>
+    </mat-list>
+
+    <p>Both trucks have only a limited amount of fuel.</p>
+
+    <p>TODO: add specific instructions for this task</p>
+
+    <p>In this image you can see the locations of the trucks and packages in the beginning.</p>
+
+    <div style="width: 500px; height: 300px; background-color: #5e5e5e; margin: 30px">
+    </div>
+
+    <p>The following properties are available:</p>
+
+    <mat-list>
+      <mat-list-item *ngFor="let entry of (planPropertiesMap$ | async) | keyvalue">
+        {{entry.value.naturalLanguageDescription}}
+      </mat-list-item>
+    </mat-list>
+
+
+  </mat-card-content>
+  <mat-card-actions align="end">
+    <button mat-flat-button color="accent" routerLink="../nav" routerLinkActive="active">Start</button>
+  </mat-card-actions>
+</mat-card>

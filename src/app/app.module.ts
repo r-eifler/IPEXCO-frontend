@@ -148,6 +148,7 @@ import { MainInfoComponent } from './components/login/main-info/main-info.compon
 import { appRoutes } from './app-routes';
 import { HelpPageComponent } from './components/login/help-page/help-page.component';
 import { DemoFinishedComponent } from './components/demo/demo-finished/demo-finished.component';
+import { DemoTaskIntroComponent } from './components/demo/demo-task-intro/demo-task-intro.component';
 
 
 @NgModule({
@@ -201,6 +202,7 @@ import { DemoFinishedComponent } from './components/demo/demo-finished/demo-fini
     MainInfoComponent,
     HelpPageComponent,
     DemoFinishedComponent,
+    DemoTaskIntroComponent,
   ],
   imports: [
     RouterModule.forRoot(appRoutes,

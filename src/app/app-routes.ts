@@ -22,6 +22,7 @@ import { FilesCollectionComponent } from './components/files/files-collection/fi
 import { DomainSelectorComponent } from './components/files/domain-selector/domain-selector.component';
 import { ProblemSelectorComponent } from './components/files/problem-selector/problem-selector.component';
 import { DomainSpecificationComponent } from './components/files/domain-specification/domain-specification.component';
+import {DemoTaskIntroComponent} from './components/demo/demo-task-intro/demo-task-intro.component';
 
 export const appRoutes: Routes = [
   { path: '', component: MainPageComponent},
@@ -49,6 +50,7 @@ export const appRoutes: Routes = [
   { path: 'demos/:demoid', component: DemoBaseComponent,
     children: [
       { path: 'help', component: DemoHelpComponent},
+      { path: 'task-intro', component: DemoTaskIntroComponent},
       { path: 'nav', component: DemoNavigatorComponent,
         children: [
           { path: 'new-planning-step', component: PlanningStepComponent},
