@@ -72,18 +72,16 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
     )
     .subscribe(
       (demo: Demo) => {
-          this.projectsService.getObject(this.demo.project).subscribe(project => {
-            this.currentProjectService.saveObject(project);
-            this.propertiesService.findCollection([{param: 'projectId', value: project._id}]);
-            this.settingsService.load(demo.settings);
+          this.currentProjectService.saveObject(demo);
+          this.propertiesService.findCollection([{param: 'projectId', value: demo._id}]);
+          this.settingsService.load(demo.settings);
 
-            combineLatest([this.curretnSchemaService.findSchema(project), this.domainSpecService.findSpec(project)]).
-              subscribe(([taskSchema, domainSpec]) => {
-                if (taskSchema && domainSpec) {
-                  this.displayTaskService.saveObject(new DisplayTask(taskSchema, domainSpec));
-                }
-              });
-          });
+          combineLatest([this.curretnSchemaService.findSchema(demo), this.domainSpecService.findSpec(demo)]).
+            subscribe(([taskSchema, domainSpec]) => {
+              if (taskSchema && domainSpec) {
+                this.displayTaskService.saveObject(new DisplayTask(taskSchema, domainSpec));
+              }
+            });
       }
     );
 

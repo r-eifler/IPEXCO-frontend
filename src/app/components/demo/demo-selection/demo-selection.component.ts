@@ -90,7 +90,7 @@ export class DemoSelectionComponent implements OnInit, OnDestroy {
     dialogConfig.width = '500px';
     dialogConfig.data  = {
       update: true,
-      projectId: demo.project,
+      projectId: demo._id,
       demo,
     };
 
@@ -108,7 +108,7 @@ export class DemoSelectionComponent implements OnInit, OnDestroy {
 
   openAnimationSettings(demo: Demo) {
     this.runningDemoService.saveObject(demo);
-    this.projectsService.getObject(demo.project)
+    this.projectsService.getObject(demo._id)
     .pipe(takeUntil(this.ngUnsubscribe))
     .subscribe((project: Project) => {
       this.currentProjectService.saveObject(project);

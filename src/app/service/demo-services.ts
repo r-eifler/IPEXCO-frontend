@@ -23,18 +23,21 @@ export class DemosService extends ObjectCollectionService<Demo> {
     this.BASE_URL = environment.apiURL + 'demo/';
   }
 
-  generateDemo(demo: Demo): void {
+  generateDemo(projectId: string, demo: Demo): void {
 
     const formData = new FormData();
     formData.append('name', demo.name);
     formData.append('summaryImage', demo.summaryImage);
     formData.append('introduction', demo.introduction);
-    formData.append('project', demo.project);
+    formData.append('description', demo.description);
+    formData.append('projectId', projectId);
 
     // console.log('summaryImage: '  + demo.summaryImage);
 
+    console.log('Generate Demo Service');
     this.http.post<IHTTPData<Demo>>(this.BASE_URL, formData)
       .subscribe(httpData => {
+        console.log(httpData);
         const runLoaded = this.existsObjectInStore(httpData.data._id);
         let action = null;
         if (runLoaded) {
@@ -79,9 +82,9 @@ export class DemosService extends ObjectCollectionService<Demo> {
     return this.collection$.value.length;
   }
 
-  getNumOfProject(project: Project) {
-    return this.collection$.value.filter(d => d.project === project._id).length;
-  }
+  // getNumOfProject(project: Project) {
+  //   return this.collection$.value.filter(d => d.project === project._id).length;
+  // }
 
 }
 

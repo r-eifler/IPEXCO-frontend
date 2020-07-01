@@ -28,6 +28,7 @@ export class DemoCreatorComponent implements OnInit {
     public dialogRef: MatDialogRef<DemoCreatorComponent>,
     @Inject(MAT_DIALOG_DATA) data
   ) {
+    console.log(data);
     this.currentProjectId = data.projectId;
     this.demo = data.demo;
     this.update = data.update;
@@ -47,16 +48,14 @@ export class DemoCreatorComponent implements OnInit {
     const newDemo: Demo = {
       _id: this.demo ? this.demo._id : null,
       name: this.demoForm.controls.name.value,
-      user: this.userService.getUser()._id,
       summaryImage: this.imageFile,
-      introduction: this.demoForm.controls.description.value,
-      project: this.currentProjectId
+      description: this.demoForm.controls.description.value,
     };
 
     if (this.update) {
       this.demosService.updateDemo(newDemo);
     } else {
-      this.demosService.generateDemo(newDemo);
+      this.demosService.generateDemo(this.currentProjectId, newDemo);
     }
 
 

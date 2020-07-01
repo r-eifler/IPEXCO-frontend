@@ -73,6 +73,7 @@ export class DemoPlannerService extends PlannerService {
   }
 
   execute_plan_run(run: PlanRun): void {
+    console.log('Compute plan demo');
     const demo: Demo = this.runningDemoService.getSelectedObject().getValue();
 
     const planPropertiesGoalFacts = run.hardGoals;

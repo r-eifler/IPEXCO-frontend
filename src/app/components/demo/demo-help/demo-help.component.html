@@ -1,6 +1,118 @@
-<div class='main-container'>
-  <h1>Demo Introduction</h1>
-  <!-- <img src="assets/complete_logo.svg"  style="position: absolute; left: 30%; top: 10%; width: 40%; height: auto; opacity: 0.3;" > -->
-  <p style="position: absolute; left: 50%; top: 50%; font-size: xx-large;">TODO</p>
-  <button mat-flat-button color="accent" class='skip-button' routerLink="../nav" routerLinkActive="active">Continue</button>
-</div>
+<mat-card class="main-card">
+  <mat-card-header>
+    <mat-card-title>Demo Introduction</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <mat-horizontal-stepper [contentEditable]="true">
+      <ng-template matStepperIcon="edit">
+        <span class="material-icons">
+          done
+        </span>
+      </ng-template>
+      <ng-template matStepperIcon="done">
+        <span class="material-icons">
+          done
+        </span>
+      </ng-template>
+      <mat-step label="Overall Goal" >
+        <div>
+          <p>Given a planning task like <span>delivering packages</span> or <span>scheduling a Mars-Rover mission</span> the goal is to find a plan.
+          A plan is a sequence of actions which describes what you have to do to solve the planning task.
+            If you habe to deliver packages the plan tells you for example where you have to drive and where you have to load and unload the packages.</p>
+        </div>
+        <div style="display: flex; justify-content: space-evenly; padding: 30px 0px;">
+          <div style="width: 200px; height: 100px; background-color: #5e5e5e;">
+            TODO: add example image
+          </div>
+          <div style="width: 200px; height: 100px; background-color: #5e5e5e;">
+            TODO: add example image
+          </div>
+        </div>
+        <div>
+          <p>The number of actions you can perform are limited, for example your truck has a limited amount of fuel and the Mars-Rover has a battery.</p>
+
+          <p>Additionally not every plan is equally good in your eyes.
+            Maybe you prefer plans where: "The route over downtown is not used, because there is always to much traffic." or "Important tasks are scheduled for the rover before not so important once as the battery may die early."</p>
+
+          <p>The goal is to find the <span style="font-weight: bold;">best</span> plan possible given the resource constraints and your preferences.</p>
+        </div>
+
+        <p>To find the best plan we use <span style="font-weight: bold;">Iterative Planning</span> with human guidance. This approach is explained in the next step.</p>
+
+        <div style="display: flex; justify-content: flex-end;">
+          <button mat-icon-button matStepperNext>
+            <mat-icon>keyboard_arrow_left</mat-icon>
+          </button>
+          <button mat-icon-button matStepperNext>
+            <mat-icon>keyboard_arrow_right</mat-icon>
+          </button>
+        </div>
+      </mat-step>
+
+      <mat-step label="Iterative Planning" >
+        <div>
+          <p><span style="font-weight: bold;">Iterative Planning</span> with human guidance works the following way. You define a set of properties you want to be satisfied by the plan (in the following called hard-goals). The planner then computed a plan which satisfies these hard-goals if possible.
+          If there is no plan you have to remove properties from the hard goals until there exists a plan.</p>
+
+          <p>If the planner finds a plan two cases are possible:</p>
+
+          <mat-list dense>
+            <mat-list-item>
+              1. The plan satisfies all the properties you want and does not satisfy any properties you do not want. In this case you are ready.
+            </mat-list-item>
+            <mat-list-item>
+              2. The plan does not satisfy all the properties you would like to.
+            </mat-list-item>
+          </mat-list>
+
+          <p>In case 2. you may simply want to enforce the missing properties.
+          But what happens if this is not possible? It might be the case that there exists no such plan,
+            because you have for example not enough fuel or the properties you would like to be satisfied somehow contradict each other.</p>
+
+          <p>Instead of randomly trying to find out, for which property selection there exists a plan, you can ask questions about properties not satisfied in the current plan.
+            Such a question could for example be: "Why don't you use the less busy route around down town?".</p>
+
+          <p>The system while then provide an answer describing which currently satisfied properties can no longer be satisfied if you would satisfy the property/ies in your question. "If you use the route around down town, then you can not longer deliver package 1", could for example be the answer of the sample question.</p>
+
+          <p>
+            The following steps explain how you compute a plan and ask a question.
+          </p>
+
+        </div>
+        <div style="display: flex; justify-content: flex-end;">
+          <button mat-icon-button matStepperPrevious>
+            <mat-icon>keyboard_arrow_left</mat-icon>
+          </button>
+          <button mat-icon-button matStepperNext>
+            <mat-icon>keyboard_arrow_right</mat-icon>
+          </button>
+        </div>
+      </mat-step>
+      <mat-step label="HOW TO: Compute Plans">
+
+        <div style="display: flex; justify-content: flex-end;">
+          <button mat-icon-button matStepperNext>
+            <mat-icon>keyboard_arrow_left</mat-icon>
+          </button>
+          <button mat-icon-button matStepperNext>
+            <mat-icon>keyboard_arrow_right</mat-icon>
+          </button>
+        </div>
+      </mat-step>
+      <mat-step label="HOW TO: Ask Questions">
+
+        <div style="display: flex; justify-content: flex-end;">
+          <button mat-icon-button matStepperNext>
+            <mat-icon>keyboard_arrow_left</mat-icon>
+          </button>
+          <button mat-icon-button matStepperNext>
+            <mat-icon>keyboard_arrow_right</mat-icon>
+          </button>
+        </div>
+      </mat-step>
+    </mat-horizontal-stepper>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-flat-button color="accent" class='skip-button' routerLink="../nav" routerLinkActive="active">Skip</button>
+  </mat-card-actions>
+</mat-card>
