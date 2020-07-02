@@ -13,6 +13,7 @@ import { DomainSpecification} from '../interface/domain-specification';
 import { Plan } from '../interface/plan';
 import { Demo } from '../interface/demo';
 import { User } from '../interface/user';
+import {UserStudy} from '../interface/user-study/user-study';
 
 
 export class DomainFilesStore extends  ListStore<PDDLFile> {
@@ -95,4 +96,11 @@ export class ExecutionSettingsStore extends  ItemStore<ExecutionSettings> {
 
 }
 
+export class UserStudiesStore extends  ListStore<UserStudy> {
+
+}
+
+export class RunningUserStudyStore extends  ItemStore<UserStudy> {
+
+}
 

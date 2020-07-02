@@ -1,0 +1,37 @@
+<div [class.project-container-mobile]="isMobile" [class.project-container-web]="! isMobile">
+
+  <mat-card *ngFor="let study of userStudies$ | async" style="margin: 10px">
+    <mat-card-header>
+      <div mat-card-avatar>
+        <mat-icon>question_answer</mat-icon>
+      </div>
+      <mat-card-title>
+        {{study.name}}
+      </mat-card-title>
+      <mat-card-subtitle>User Study</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+        <div style="border-left-style: solid; border-left: #5e5e5e; border-width: 5px;">
+          <p>{{study.description}}</p>
+        </div>
+        <div>
+          <span class="material-icons">date_range</span>
+          {{study.startDate | date}}
+           -
+          {{study.endDate | date}}
+        </div>
+    </mat-card-content>
+    <mat-card-actions align="end">
+      <button mat-icon-button (click)="delete(study)">
+        <mat-icon>delete</mat-icon>
+      </button>
+      <button mat-icon-button (click)="openInfo(study)">
+        <mat-icon>info</mat-icon>
+      </button>
+    </mat-card-actions>
+  </mat-card>
+
+  <button mat-fab color="accent" class="add-button" routerLink="../new-user-study">
+    <mat-icon>add</mat-icon>
+  </button>
+</div>

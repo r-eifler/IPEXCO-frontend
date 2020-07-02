@@ -23,6 +23,8 @@ import { DomainSelectorComponent } from './components/files/domain-selector/doma
 import { ProblemSelectorComponent } from './components/files/problem-selector/problem-selector.component';
 import { DomainSpecificationComponent } from './components/files/domain-specification/domain-specification.component';
 import {DemoTaskIntroComponent} from './components/demo/demo-task-intro/demo-task-intro.component';
+import {UserStudySelectionComponent} from './components/user-study/user-study-selection/user-study-selection.component';
+import {UserStudyCreatorComponent} from './components/user-study/user-study-creator/user-study-creator.component';
 
 export const appRoutes: Routes = [
   { path: '', component: MainPageComponent},
@@ -61,5 +63,8 @@ export const appRoutes: Routes = [
       }
     ]
   },
+  { path: 'user-studies', component: UserStudySelectionComponent},
+  { path: 'user-studies/:userStudyId/info', component: UserStudyCreatorComponent},
+  { path: 'new-user-study', component: UserStudyCreatorComponent},
   { path: 'pddl-database', component: FilesCollectionComponent},
 ];

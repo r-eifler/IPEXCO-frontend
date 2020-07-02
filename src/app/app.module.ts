@@ -101,7 +101,7 @@ import {
   DemosStore,
   RunningDemoStore,
   UserStore,
-  ExecutionSettingsStore
+  ExecutionSettingsStore, UserStudiesStore, RunningUserStudyStore
 } from './store/stores.store';
 import {
   DomainFilesService,
@@ -149,6 +149,9 @@ import { appRoutes } from './app-routes';
 import { HelpPageComponent } from './components/login/help-page/help-page.component';
 import { DemoFinishedComponent } from './components/demo/demo-finished/demo-finished.component';
 import { DemoTaskIntroComponent } from './components/demo/demo-task-intro/demo-task-intro.component';
+import { UserStudySelectionComponent } from './components/user-study/user-study-selection/user-study-selection.component';
+import { UserStudyCreatorComponent } from './components/user-study/user-study-creator/user-study-creator.component';
+import {RunningUserStudyService, UserStudiesService} from './service/user-study-services';
 
 
 @NgModule({
@@ -203,6 +206,8 @@ import { DemoTaskIntroComponent } from './components/demo/demo-task-intro/demo-t
     HelpPageComponent,
     DemoFinishedComponent,
     DemoTaskIntroComponent,
+    UserStudySelectionComponent,
+    UserStudyCreatorComponent,
   ],
   imports: [
     RouterModule.forRoot(appRoutes,
@@ -287,13 +292,16 @@ import { DemoTaskIntroComponent } from './components/demo/demo-task-intro/demo-t
     DemosService,
     RunningDemoStore,
     RunningDemoService,
+    UserStudiesStore,
+    UserStudiesService,
+    RunningUserStudyStore,
+    RunningUserStudyService,
     DisplayTaskStore,
     DisplayTaskService,
     AnimationHandler,
     {provide: MAT_BOTTOM_SHEET_DEFAULT_OPTIONS, useValue: {hasBackdrop: true}},
     PlanVisualizationProvider,
-    MatSnackBar
-
+    MatSnackBar,
   ],
   entryComponents: [
     PropertyCreatorComponent,
