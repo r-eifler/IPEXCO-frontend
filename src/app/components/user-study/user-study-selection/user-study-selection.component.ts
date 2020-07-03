@@ -5,6 +5,7 @@ import {takeUntil} from 'rxjs/operators';
 import {RunningUserStudyService, UserStudiesService} from '../../../service/user-study-services';
 import {UserStudy} from '../../../interface/user-study/user-study';
 import {ActivatedRoute, Router} from '@angular/router';
+import {environment} from '../../../../environments/environment';
 
 @Component({
   selector: 'app-user-study-selection',
@@ -13,6 +14,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 })
 export class UserStudySelectionComponent implements OnInit, OnDestroy {
 
+  urlBase = environment.localURL + "/user-studies"
   private ngUnsubscribe: Subject<any> = new Subject();
 
   isMobile: boolean;

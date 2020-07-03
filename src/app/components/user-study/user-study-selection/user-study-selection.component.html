@@ -11,15 +11,16 @@
       <mat-card-subtitle>User Study</mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
-        <div style="border-left-style: solid; border-left: #5e5e5e; border-width: 5px;">
-          <p>{{study.description}}</p>
-        </div>
-        <div>
-          <span class="material-icons">date_range</span>
-          {{study.startDate | date}}
-           -
-          {{study.endDate | date}}
-        </div>
+      <div style="border-left-style: solid; border-left: #5e5e5e; border-width: 5px;">
+        <p>{{study.description}}</p>
+      </div>
+      <div style="padding: 20px 0; font-size: large; font-weight: bold;">
+        <span class="material-icons" style="margin-right: 20px;">date_range</span>
+        {{study.startDate | date}}
+         -
+        {{study.endDate | date}}
+      </div>
+      <h2>Link:</h2><a [href]='urlBase + "/" + study._id'>{{urlBase + "/" + study._id}}</a>
     </mat-card-content>
     <mat-card-actions align="end">
       <button mat-icon-button (click)="delete(study)">
