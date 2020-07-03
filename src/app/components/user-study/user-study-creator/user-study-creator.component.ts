@@ -63,55 +63,46 @@ export class UserStudyCreatorComponent implements OnInit, OnDestroy {
       endDate: new FormControl()
     });
 
-    this.route.paramMap
+    this.selectedUserStudyService.getSelectedObject()
       .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe((params: ParamMap) => {
-        const userStudyId = params.get('userStudyId');
-        if (userStudyId) {
-          this.userStudiesService.getObject(userStudyId)
-            .pipe(takeUntil(this.ngUnsubscribe))
-            .subscribe(
-              study => {
-                if (study) {
-                  this.selectedUserStudyService.saveObject(study);
-                  this.userStudy = study;
-                  let index = 0;
-                  for (const step of this.userStudy.steps) {
-                    const nextStep: Part = {type: step.type, index: index++, active: false};
-                    switch (step.type) {
-                      case UserStudyStepType.description:
-                        nextStep.content = step.content;
-                        break;
-                      case UserStudyStepType.form:
-                        nextStep.url = step.content;
-                        break;
-                      case UserStudyStepType.demo:
-                        demosService.getObject(step.content)
-                          .subscribe(d => nextStep.demo = d);
-                        break;
-                    }
-                    this.parts.push(nextStep);
-                    this.userStudyForm.disable();
-
-                    this.userStudyForm.controls.name.setValue(this.userStudy.name);
-                    this.userStudyForm.controls.description.setValue(this.userStudy.description);
-                    this.userStudyForm.controls.startDate.setValue(this.userStudy.startDate);
-                    this.userStudyForm.controls.endDate.setValue(this.userStudy.endDate);
-                  }
-                }
-              });
-        } else {
-          this.userStudy = new UserStudy('', '', null, null);
-          const firstPart: Part = {
-            index: 0,
-            active: true,
-            type: UserStudyStepType.description,
-          };
-          this.parts.push(firstPart);
-          this.edit = true;
-          this.userStudyForm.enable();
-        }
-      });
+      .subscribe(
+        study => {
+          if (study) {
+            this.userStudy = study;
+            let index = 0;
+            for (const step of this.userStudy.steps) {
+              const nextStep: Part = {type: step.type, index: index++, active: false};
+              switch (step.type) {
+                case UserStudyStepType.description:
+                  nextStep.content = step.content;
+                  break;
+                case UserStudyStepType.form:
+                  nextStep.url = step.content;
+                  break;
+                case UserStudyStepType.demo:
+                  demosService.getObject(step.content)
+                    .subscribe(d => nextStep.demo = d);
+                  break;
+              }
+              this.parts.push(nextStep);
+              this.userStudyForm.disable();
+            }
+            this.userStudyForm.controls.name.setValue(this.userStudy.name);
+            this.userStudyForm.controls.description.setValue(this.userStudy.description);
+            this.userStudyForm.controls.startDate.setValue(this.userStudy.startDate);
+            this.userStudyForm.controls.endDate.setValue(this.userStudy.endDate);
+          } else {
+            this.userStudy = new UserStudy('', '', null, null);
+            const firstPart: Part = {
+              index: 0,
+              active: true,
+              type: UserStudyStepType.description,
+            };
+            this.parts.push(firstPart);
+            this.edit = true;
+            this.userStudyForm.enable();
+          }
+        });
   }
 
   ngOnInit(): void {

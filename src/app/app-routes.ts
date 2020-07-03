@@ -25,6 +25,9 @@ import { DomainSpecificationComponent } from './components/files/domain-specific
 import {DemoTaskIntroComponent} from './components/demo/demo-task-intro/demo-task-intro.component';
 import {UserStudySelectionComponent} from './components/user-study/user-study-selection/user-study-selection.component';
 import {UserStudyCreatorComponent} from './components/user-study/user-study-creator/user-study-creator.component';
+import {UserStudyBaseComponent} from './components/user-study/user-study-base/user-study-base.component';
+import {UserStudyStartComponent} from './components/user-study/user-study-start/user-study-start.component';
+import {UserStudyExecuterComponent} from './components/user-study/user-study-executer/user-study-executer.component';
 
 export const appRoutes: Routes = [
   { path: '', component: MainPageComponent},
@@ -64,7 +67,13 @@ export const appRoutes: Routes = [
     ]
   },
   { path: 'user-studies', component: UserStudySelectionComponent},
-  { path: 'user-studies/:userStudyId/info', component: UserStudyCreatorComponent},
-  { path: 'new-user-study', component: UserStudyCreatorComponent},
+  { path: 'user-studies/new-user-study', component: UserStudyCreatorComponent},
+  { path: 'user-studies/:userStudyId', component: UserStudyBaseComponent,
+      children: [
+        { path: 'info', component: UserStudyCreatorComponent},
+        { path: 'start', component: UserStudyStartComponent},
+        { path: 'exec', component: UserStudyExecuterComponent},
+      ]
+  },
   { path: 'pddl-database', component: FilesCollectionComponent},
 ];

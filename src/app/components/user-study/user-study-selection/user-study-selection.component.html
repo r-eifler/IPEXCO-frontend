@@ -29,10 +29,13 @@
       <button mat-icon-button (click)="openInfo(study)">
         <mat-icon>info</mat-icon>
       </button>
+      <button mat-icon-button [routerLink]='"./" + study._id + "/start"'>
+        <mat-icon>play_arrow</mat-icon>
+      </button>
     </mat-card-actions>
   </mat-card>
 
-  <button mat-fab color="accent" class="add-button" routerLink="../new-user-study">
+  <button mat-fab color="accent" class="add-button" routerLink="./new-user-study">
     <mat-icon>add</mat-icon>
   </button>
 </div>

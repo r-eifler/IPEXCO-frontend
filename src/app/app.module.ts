@@ -152,6 +152,12 @@ import { DemoTaskIntroComponent } from './components/demo/demo-task-intro/demo-t
 import { UserStudySelectionComponent } from './components/user-study/user-study-selection/user-study-selection.component';
 import { UserStudyCreatorComponent } from './components/user-study/user-study-creator/user-study-creator.component';
 import {RunningUserStudyService, UserStudiesService} from './service/user-study-services';
+import { UserStudyBaseComponent } from './components/user-study/user-study-base/user-study-base.component';
+import { UserStudyDescriptionViewComponent } from './components/user-study/user-study-description-view/user-study-description-view.component';
+import { UserStudyFormViewComponent } from './components/user-study/user-study-form-view/user-study-form-view.component';
+import { UserStudyDemoViewComponent } from './components/user-study/user-study-demo-view/user-study-demo-view.component';
+import { UserStudyStartComponent } from './components/user-study/user-study-start/user-study-start.component';
+import { UserStudyExecuterComponent } from './components/user-study/user-study-executer/user-study-executer.component';
 
 
 @NgModule({
@@ -208,6 +214,12 @@ import {RunningUserStudyService, UserStudiesService} from './service/user-study-
     DemoTaskIntroComponent,
     UserStudySelectionComponent,
     UserStudyCreatorComponent,
+    UserStudyBaseComponent,
+    UserStudyDescriptionViewComponent,
+    UserStudyFormViewComponent,
+    UserStudyDemoViewComponent,
+    UserStudyStartComponent,
+    UserStudyExecuterComponent,
   ],
   imports: [
     RouterModule.forRoot(appRoutes,
