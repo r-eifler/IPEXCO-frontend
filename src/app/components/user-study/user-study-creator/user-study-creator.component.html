@@ -67,9 +67,9 @@
 
           <ng-container *ngIf='part.type === userStudyStepType.demo'>
             <mat-form-field appearance="fill">
-              <mat-label>Type</mat-label>
+              <mat-label>Demo</mat-label>
               <mat-select [(value)]="part.demo">
-                <mat-option *ngFor="let d of (demos$ | async)" value=d>{{d.name}}</mat-option>
+                <mat-option *ngFor="let d of (demos$ | async)" [value]=d>{{d.name}}</mat-option>
               </mat-select>
             </mat-form-field>
           </ng-container>
@@ -111,7 +111,7 @@
     </mat-card-actions>
   </mat-card>
 
-  <div [class.button-container-desktop]="! isMobile" [class.button-container-mobile]="isMobile">
+  <mat-card [class.button-container-desktop]="! isMobile" [class.button-container-mobile]="isMobile">
     <button mat-icon-button (click)="editUserStudy()" *ngIf="! edit">
       <mat-icon>create</mat-icon>
     </button>
@@ -121,7 +121,7 @@
     <button mat-icon-button (click)="saveUserStudy()" *ngIf="edit">
       <mat-icon>save</mat-icon>
     </button>
-  </div>
+  </mat-card>
 
 
 </div>

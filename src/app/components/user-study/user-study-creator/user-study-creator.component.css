@@ -25,14 +25,13 @@
 
 .button-container-desktop {
   position: absolute;
-  right: 20%;
+  left: 75%;
   top: 40%;
   box-sizing: border-box;
-  padding: 20px;
+  padding: 15px;
+  margin-left: 10px;
   display: flex;
   flex-direction: column;
-  background-color: #c9c9c9;
-  border-radius: 4px;
 }
 
 .button-container-desktop > * {
@@ -48,8 +47,6 @@
   padding: 20px;
   display: flex;
   flex-direction: row;
-  background-color: #c9c9c9;
-  border-radius: 4px;
 }
 
 .button-container-mobile > * {
