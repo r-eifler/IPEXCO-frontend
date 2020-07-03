@@ -9,6 +9,8 @@ import { map, takeUntil } from 'rxjs/operators';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Demo } from 'src/app/interface/demo';
 import { Subject } from 'rxjs';
+import {UserStudiesService} from '../../../service/user-study-services';
+import {UserStudy} from '../../../interface/user-study/user-study';
 
 @Component({
   selector: 'app-user-main-page',
@@ -25,6 +27,7 @@ export class UserMainPageComponent implements OnInit, OnDestroy {
     private responsiveService: ResponsiveService,
     public projectsService: ProjectsService,
     public demosService: DemosService,
+    public userStudiesService: UserStudiesService,
     public domainFilesService: DomainFilesService,
     public problemFilesService: ProblemFilesService,
     public domainSpecificationFilesService: DomainSpecificationFilesService,
@@ -36,16 +39,13 @@ export class UserMainPageComponent implements OnInit, OnDestroy {
     this.responsiveService.getMobileStatus()
     .pipe(takeUntil(this.ngUnsubscribe))
     .subscribe( isMobile => {
-      if (isMobile) {
-        this.isMobile = true;
-      } else {
-        this.isMobile = false;
-      }
+      this.isMobile = isMobile;
     });
     this.responsiveService.checkWidth();
 
     this.projectsService.findCollection();
     this.demosService.findCollection();
+    this.userStudiesService.findCollection();
     this.domainFilesService.findFiles();
     this.problemFilesService.findFiles();
     this.domainSpecificationFilesService.findFiles();
@@ -71,6 +71,14 @@ export class UserMainPageComponent implements OnInit, OnDestroy {
 
   toDemoCollection() {
     this.router.navigate(['/demos'], { relativeTo: this.route });
+  }
+
+  openUserStudy(study: UserStudy) {
+    this.router.navigate([''.concat(...['/user-studies/', study._id])], { relativeTo: this.route });
+  }
+
+  toUserStudyCollection() {
+    this.router.navigate(['/user-studies'], { relativeTo: this.route });
   }
 
 }
