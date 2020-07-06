@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {TaskSchemaService} from '../../../service/schema.service';
 import {PlanPropertyMapService} from '../../../service/plan-property-services';
 import {TaskSchema} from '../../../interface/task-schema';
@@ -12,7 +12,9 @@ import {Observable} from 'rxjs';
 })
 export class DemoTaskIntroComponent implements OnInit {
 
-  taskSchema$ : Observable<TaskSchema>;
+  @Output() next = new EventEmitter<void>();
+
+  taskSchema$: Observable<TaskSchema>;
   planPropertiesMap$: Observable<Map<string, PlanProperty>>;
 
   constructor(
@@ -26,4 +28,7 @@ export class DemoTaskIntroComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  nextStep() {
+    this.next.emit();
+  }
 }

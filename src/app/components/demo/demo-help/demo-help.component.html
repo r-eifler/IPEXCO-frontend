@@ -113,6 +113,6 @@
     </mat-horizontal-stepper>
   </mat-card-content>
   <mat-card-actions align="end">
-    <button mat-flat-button color="accent" class='skip-button' routerLink="../task-intro" routerLinkActive="active">Skip</button>
+    <button mat-flat-button color="accent" class='skip-button' (click)="nextStep()">Skip</button>
   </mat-card-actions>
 </mat-card>

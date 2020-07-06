@@ -4,6 +4,7 @@ import {takeUntil} from 'rxjs/operators';
 import {RunningUserStudyService} from '../../../service/user-study-services';
 import {ResponsiveService} from '../../../service/responsive.service';
 import {UserStudy, UserStudyStep, UserStudyStepType} from '../../../interface/user-study/user-study';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'app-user-study-executer',
@@ -23,7 +24,9 @@ export class UserStudyExecuterComponent implements OnInit, OnDestroy {
 
   constructor(
     private selectedUserStudyService: RunningUserStudyService,
-    private responsiveService: ResponsiveService) {
+    private responsiveService: ResponsiveService,
+    private router: Router,
+    private route: ActivatedRoute) {
 
     this.selectedUserStudyService.getSelectedObject()
       .pipe(takeUntil(this.ngUnsubscribe))
@@ -31,7 +34,7 @@ export class UserStudyExecuterComponent implements OnInit, OnDestroy {
         study => {
           this.userStudy = study;
           this.currentStep = study?.steps[0];
-          console.log(this.currentStep);
+          console.log('This Step:' + (this.currentStepIndex + 1) + '/' + this.userStudy.steps.length);
         }
       );
   }
@@ -50,7 +53,16 @@ export class UserStudyExecuterComponent implements OnInit, OnDestroy {
   }
 
   nextStep() {
-    this.currentStep = this.userStudy.steps[++this.currentStepIndex];
+    if (this.hasNextStep()) {
+      this.currentStep = this.userStudy.steps[++this.currentStepIndex];
+      console.log('This Step:' + (this.currentStepIndex + 1) + '/' + this.userStudy.steps.length);
+    } else {
+      this.router.navigate([''.concat(...['/user-studies/' + this.userStudy._id + '/end'])], { relativeTo: this.route });
+    }
+  }
+
+  hasNextStep() {
+    return this.currentStepIndex < this.userStudy.steps.length - 1;
   }
 
 }

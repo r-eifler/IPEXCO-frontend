@@ -60,7 +60,8 @@ export class UserStudyCreatorComponent implements OnInit, OnDestroy {
       name: new FormControl(),
       description: new FormControl(),
       startDate: new FormControl(),
-      endDate: new FormControl()
+      endDate: new FormControl(),
+      redirectUrl: new FormControl(),
     });
 
     this.selectedUserStudyService.getSelectedObject()
@@ -91,6 +92,7 @@ export class UserStudyCreatorComponent implements OnInit, OnDestroy {
             this.userStudyForm.controls.description.setValue(this.userStudy.description);
             this.userStudyForm.controls.startDate.setValue(this.userStudy.startDate);
             this.userStudyForm.controls.endDate.setValue(this.userStudy.endDate);
+            this.userStudyForm.controls.redirectUrl.setValue(this.userStudy.redirectUrl);
           } else {
             this.userStudy = new UserStudy('', '', null, null);
             const firstPart: Part = {
@@ -177,6 +179,7 @@ export class UserStudyCreatorComponent implements OnInit, OnDestroy {
     this.userStudy.description = this.userStudyForm.controls.description.value;
     this.userStudy.startDate = this.userStudyForm.controls.startDate.value;
     this.userStudy.endDate = this.userStudyForm.controls.endDate.value;
+    this.userStudy.redirectUrl = this.userStudyForm.controls.redirectUrl.value;
 
     this.userStudy.steps = [];
     for (const part of this.parts) {

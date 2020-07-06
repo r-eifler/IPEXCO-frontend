@@ -51,6 +51,11 @@ export class UserStudySelectionComponent implements OnInit, OnDestroy {
     this.router.navigate(['../user-studies/' + study._id + '/info'], { relativeTo: this.route });
   }
 
+  newUserStudy() {
+    this.selectedUserStudyService.saveObject(null);
+    this.router.navigate(['./new-user-study'], { relativeTo: this.route });
+  }
+
   delete(study: UserStudy) {
     this.userStudiesService.deleteObject(study);
   }

@@ -17,17 +17,14 @@ import { AnimationSettingsComponent } from './components/animation/animation-set
 import { DemoSelectionComponent } from './components/demo/demo-selection/demo-selection.component';
 import { DemoBaseComponent } from './components/demo/demo-base/demo-base.component';
 import { DemoHelpComponent } from './components/demo/demo-help/demo-help.component';
-import { DemoNavigatorComponent } from './components/demo/demo-navigator/demo-navigator.component';
 import { FilesCollectionComponent } from './components/files/files-collection/files-collection.component';
-import { DomainSelectorComponent } from './components/files/domain-selector/domain-selector.component';
-import { ProblemSelectorComponent } from './components/files/problem-selector/problem-selector.component';
-import { DomainSpecificationComponent } from './components/files/domain-specification/domain-specification.component';
 import {DemoTaskIntroComponent} from './components/demo/demo-task-intro/demo-task-intro.component';
 import {UserStudySelectionComponent} from './components/user-study/user-study-selection/user-study-selection.component';
 import {UserStudyCreatorComponent} from './components/user-study/user-study-creator/user-study-creator.component';
 import {UserStudyBaseComponent} from './components/user-study/user-study-base/user-study-base.component';
 import {UserStudyStartComponent} from './components/user-study/user-study-start/user-study-start.component';
 import {UserStudyExecuterComponent} from './components/user-study/user-study-executer/user-study-executer.component';
+import {UserStudyEndComponent} from './components/user-study/user-study-end/user-study-end.component';
 
 export const appRoutes: Routes = [
   { path: '', component: MainPageComponent},
@@ -54,9 +51,7 @@ export const appRoutes: Routes = [
   { path: 'demos', component: DemoSelectionComponent},
   { path: 'demos/:demoid', component: DemoBaseComponent,
     children: [
-      { path: 'help', component: DemoHelpComponent},
-      { path: 'task-intro', component: DemoTaskIntroComponent},
-      { path: 'nav', component: DemoNavigatorComponent,
+      { path: 'nav',
         children: [
           { path: 'new-planning-step', component: PlanningStepComponent},
           { path: 'planning-step/:runid', component: FinishedPlanningStepComponent},
@@ -72,7 +67,19 @@ export const appRoutes: Routes = [
       children: [
         { path: 'info', component: UserStudyCreatorComponent},
         { path: 'start', component: UserStudyStartComponent},
-        { path: 'exec', component: UserStudyExecuterComponent},
+        { path: 'exec', component: UserStudyExecuterComponent,
+          children: [
+            { path: 'nav',
+              children: [
+                { path: 'new-planning-step', component: PlanningStepComponent},
+                { path: 'planning-step/:runid', component: FinishedPlanningStepComponent},
+                { path: 'planning-step/:runid/new-question', component: QuestionStepComponent},
+                { path: 'planning-step/:runid/question-step/:expid', component: FinishedQuestionStepComponent}
+              ]
+            }
+          ]
+        },
+        { path: 'end', component: UserStudyEndComponent},
       ]
   },
   { path: 'pddl-database', component: FilesCollectionComponent},

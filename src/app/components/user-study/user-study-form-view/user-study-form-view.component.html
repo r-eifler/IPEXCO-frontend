@@ -1,1 +1,21 @@
-<p>user-study-form-view works!</p>
+<div class="main-container">
+  <mat-card class="card-style">
+    <mat-card-header>
+      <mat-card-title>Next Steps</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <iframe [src]="makeTrustedURL(this.url)"
+        width="640"
+        height="1025"
+        frameborder="0"
+        marginheight="0"
+        marginwidth="0">
+          Wird geladen…
+      </iframe>
+    </mat-card-content>
+    <mat-card-actions align="end">
+      <button mat-flat-button color="primary" (click)="nextStep()">Next</button>
+    </mat-card-actions>
+  </mat-card>
+
+</div>

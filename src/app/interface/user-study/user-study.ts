@@ -16,6 +16,8 @@ export class UserStudy {
   _id: string;
   user: string;
   available = false;
+  redirectUrl: string;
+
   steps: UserStudyStep[] = [];
 
   constructor(

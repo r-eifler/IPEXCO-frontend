@@ -158,6 +158,7 @@ import { UserStudyFormViewComponent } from './components/user-study/user-study-f
 import { UserStudyDemoViewComponent } from './components/user-study/user-study-demo-view/user-study-demo-view.component';
 import { UserStudyStartComponent } from './components/user-study/user-study-start/user-study-start.component';
 import { UserStudyExecuterComponent } from './components/user-study/user-study-executer/user-study-executer.component';
+import { UserStudyEndComponent } from './components/user-study/user-study-end/user-study-end.component';
 
 
 @NgModule({
@@ -220,6 +221,7 @@ import { UserStudyExecuterComponent } from './components/user-study/user-study-e
     UserStudyDemoViewComponent,
     UserStudyStartComponent,
     UserStudyExecuterComponent,
+    UserStudyEndComponent,
   ],
   imports: [
     RouterModule.forRoot(appRoutes,

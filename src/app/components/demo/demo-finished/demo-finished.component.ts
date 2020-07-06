@@ -44,7 +44,7 @@ export class DemoFinishedComponent implements OnInit, OnDestroy {
   }
 
   backToDemoOverview() {
-    this.router.navigate(['/demos'], { relativeTo: this.route });
+    // this.router.navigate(['/demos'], { relativeTo: this.route });
     this.dialogRef.close();
   }
 

@@ -1,4 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {DomSanitizer} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-user-study-form-view',
@@ -10,13 +11,20 @@ export class UserStudyFormViewComponent implements OnInit {
   @Input() url;
   @Output() next = new EventEmitter<void>();
 
-  constructor() { }
+  constructor(
+    private domSanitizer: DomSanitizer,
+  ) { }
 
   ngOnInit(): void {
   }
 
   nextStep() {
     this.next.emit();
+  }
+
+  makeTrustedURL(url: string) {
+    const tUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(url + '?embedded=true');
+    return tUrl;
   }
 
 }

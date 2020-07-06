@@ -66,7 +66,7 @@ export class UserMainPageComponent implements OnInit, OnDestroy {
   }
 
   openDemo(demo: Demo) {
-    this.router.navigate([''.concat(...['/demos/', demo._id, '/help'])], { relativeTo: this.route });
+    this.router.navigate([''.concat(...['/demos/', demo._id])], { relativeTo: this.route });
   }
 
   toDemoCollection() {

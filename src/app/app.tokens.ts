@@ -8,3 +8,5 @@ export const PLANNER_REDIRECT = new InjectionToken<string>('plannerRedirectToken
 
 export const QUESTION_REDIRECT = new InjectionToken<string>('questionRedirectToken');
 
+export const DEMO_FINISHED_REDIRECT = new InjectionToken<string>('demoFinishedRedirectToken');
+

@@ -1,5 +1,5 @@
 import { DemoFinishedComponent } from './../demo-finished/demo-finished.component';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import {Component, OnInit, OnDestroy, Inject, Output, EventEmitter} from '@angular/core';
 import { Demo } from 'src/app/interface/demo';
 import { BehaviorSubject, combineLatest, Subject, Observable } from 'rxjs';
 import { PlanRun } from 'src/app/interface/run';
@@ -17,6 +17,7 @@ import { ExecutionSettingsService } from 'src/app/service/execution-settings.ser
 import { Time } from '@angular/common';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import {ExecutionSettings} from '../../../interface/execution-settings';
+import {DEMO_FINISHED_REDIRECT, PLANNER_REDIRECT} from '../../../app.tokens';
 
 @Component({
   selector: 'app-demo-navigator',
@@ -26,6 +27,8 @@ import {ExecutionSettings} from '../../../interface/execution-settings';
 export class DemoNavigatorComponent implements OnInit, OnDestroy {
 
   private ngUnsubscribe: Subject<any> = new Subject();
+
+  @Output() finishedDemo = new EventEmitter<void>();
 
   timerIntervall;
 
@@ -56,6 +59,7 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
     private curretnSchemaService: TaskSchemaService,
     private currentRunService: CurrentRunService,
     public dialog: MatDialog,
+    @Inject(DEMO_FINISHED_REDIRECT) private redirectURL: string
   ) {
     this.route.paramMap.pipe(
       switchMap((params: ParamMap) => {
@@ -130,6 +134,14 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
     };
 
     const dialogRef = this.dialog.open(DemoFinishedComponent, dialogConfig);
+
+    dialogRef.afterClosed()
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(
+        () => {
+          this.finishedDemo.emit();
+        }
+      );
   }
 
   ngOnDestroy(): void {

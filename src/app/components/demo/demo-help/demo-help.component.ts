@@ -1,5 +1,5 @@
 import { takeUntil } from 'rxjs/operators';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import {Component, OnInit, OnDestroy, Output, EventEmitter} from '@angular/core';
 import { ResponsiveService } from 'src/app/service/responsive.service';
 import { Subject } from 'rxjs';
 
@@ -14,6 +14,8 @@ export class DemoHelpComponent implements OnInit, OnDestroy {
 
   private ngUnsubscribe: Subject<any> = new Subject();
 
+  @Output() next = new EventEmitter<void>();
+
   constructor(
     private responsiveService: ResponsiveService,
   ) { }
@@ -22,11 +24,7 @@ export class DemoHelpComponent implements OnInit, OnDestroy {
     this.responsiveService.getMobileStatus()
     .pipe(takeUntil(this.ngUnsubscribe))
     .subscribe( isMobile => {
-      if (isMobile) {
-        this.isMobile = true;
-      } else {
-        this.isMobile = false;
-      }
+      this.isMobile = isMobile;
     });
     this.responsiveService.checkWidth();
   }
@@ -36,4 +34,7 @@ export class DemoHelpComponent implements OnInit, OnDestroy {
     this.ngUnsubscribe.complete();
   }
 
+  nextStep() {
+    this.next.emit();
+  }
 }

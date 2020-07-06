@@ -14,5 +14,6 @@
 <app-user-study-form-view
   *ngIf="currentStep?.type === stepType.form"
   [url]="currentStep.content"
+
   (next)="nextStep()">
 </app-user-study-form-view>

@@ -98,7 +98,7 @@ export class DemoSelectionComponent implements OnInit, OnDestroy {
   }
 
   openDemo(demo: Demo): void {
-    this.router.navigate(['../demos/' + demo._id + '/help'], {relativeTo: this.activatedRoute});
+    this.router.navigate(['../demos/' + demo._id], {relativeTo: this.activatedRoute});
   }
 
   async openSettings(demo: Demo) {
