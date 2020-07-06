@@ -51,14 +51,10 @@ export const appRoutes: Routes = [
   { path: 'demos', component: DemoSelectionComponent},
   { path: 'demos/:demoid', component: DemoBaseComponent,
     children: [
-      { path: 'nav',
-        children: [
-          { path: 'new-planning-step', component: PlanningStepComponent},
-          { path: 'planning-step/:runid', component: FinishedPlanningStepComponent},
-          { path: 'planning-step/:runid/new-question', component: QuestionStepComponent},
-          { path: 'planning-step/:runid/question-step/:expid', component: FinishedQuestionStepComponent}
-        ]
-      }
+      { path: 'new-planning-step', component: PlanningStepComponent},
+      { path: 'planning-step/:runid', component: FinishedPlanningStepComponent},
+      { path: 'planning-step/:runid/new-question', component: QuestionStepComponent},
+      { path: 'planning-step/:runid/question-step/:expid', component: FinishedQuestionStepComponent}
     ]
   },
   { path: 'user-studies', component: UserStudySelectionComponent},

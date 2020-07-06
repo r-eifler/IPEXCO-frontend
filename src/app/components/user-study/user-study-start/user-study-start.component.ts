@@ -44,7 +44,7 @@ export class UserStudyStartComponent implements OnInit, OnDestroy {
     const date = new Date();
     const start = new Date(this.userStudy.startDate);
     const end = new Date(this.userStudy.endDate);
-    return date < start && date < end;
+    return date > start && date < end;
   }
 
 }
