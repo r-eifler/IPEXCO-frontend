@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {DomSanitizer} from '@angular/platform-browser';
 
 @Component({
@@ -6,10 +6,12 @@ import {DomSanitizer} from '@angular/platform-browser';
   templateUrl: './user-study-form-view.component.html',
   styleUrls: ['./user-study-form-view.component.css']
 })
-export class UserStudyFormViewComponent implements OnInit {
+export class UserStudyFormViewComponent implements OnInit, AfterViewInit {
 
   @Input() url;
   @Output() next = new EventEmitter<void>();
+
+  @ViewChild('googleForm') iframe: ElementRef;
 
   constructor(
     private domSanitizer: DomSanitizer,
