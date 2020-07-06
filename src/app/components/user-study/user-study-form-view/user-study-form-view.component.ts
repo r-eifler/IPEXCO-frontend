@@ -6,12 +6,10 @@ import {DomSanitizer} from '@angular/platform-browser';
   templateUrl: './user-study-form-view.component.html',
   styleUrls: ['./user-study-form-view.component.css']
 })
-export class UserStudyFormViewComponent implements OnInit, AfterViewInit {
+export class UserStudyFormViewComponent implements OnInit {
 
   @Input() url;
   @Output() next = new EventEmitter<void>();
-
-  @ViewChild('googleForm') iframe: ElementRef;
 
   constructor(
     private domSanitizer: DomSanitizer,

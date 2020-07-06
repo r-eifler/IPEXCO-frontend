@@ -5,14 +5,19 @@ import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ExecutionSettingsService} from '../../../service/execution-settings.service';
-import {DEMO_FINISHED_REDIRECT} from '../../../app.tokens';
+import {DEMO_FINISHED_REDIRECT, PLANNER_REDIRECT, QUESTION_REDIRECT} from '../../../app.tokens';
+import {DemoRunService, RunService} from '../../../service/run-services';
+import {DemoPlannerService, PlannerService} from '../../../service/planner.service';
 
 @Component({
   selector: 'app-user-study-demo-view',
   templateUrl: './user-study-demo-view.component.html',
   styleUrls: ['./user-study-demo-view.component.css'],
   providers: [
-    { provide: DEMO_FINISHED_REDIRECT, useValue: '../' }
+    {provide: RunService, useClass: DemoRunService},
+    {provide: PlannerService, useClass: DemoPlannerService},
+    { provide: PLANNER_REDIRECT, useValue: '../' },
+    { provide: QUESTION_REDIRECT, useValue: '../../../' },
   ]
 })
 export class UserStudyDemoViewComponent implements OnInit, OnDestroy {
@@ -45,7 +50,6 @@ export class UserStudyDemoViewComponent implements OnInit, OnDestroy {
             this.selectedDemoService.saveObject(d);
             this.settingsService.load(d.settings);
             this.demo = d;
-            this.router.navigate(['./nav'], { relativeTo: this.route });
           }
         }
       );
@@ -57,7 +61,6 @@ export class UserStudyDemoViewComponent implements OnInit, OnDestroy {
 
   nextStep() {
     this.next.emit();
-    // this.router.navigate(['..'], { relativeTo: this.route });
   }
 
   ngOnDestroy(): void {

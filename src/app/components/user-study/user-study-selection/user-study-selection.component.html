@@ -20,7 +20,7 @@
          -
         {{study.endDate | date}}
       </div>
-      <h2>Link:</h2><a [href]='urlBase + "/" + study._id'>{{urlBase + "/" + study._id}}</a>
+      <h2>Link:</h2><a [href]="getStudyLink(study)">{{getStudyLink(study)}}</a>
     </mat-card-content>
     <mat-card-actions align="end">
       <button mat-icon-button (click)="delete(study)">

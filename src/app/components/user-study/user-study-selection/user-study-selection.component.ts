@@ -60,4 +60,8 @@ export class UserStudySelectionComponent implements OnInit, OnDestroy {
     this.userStudiesService.deleteObject(study);
   }
 
+  getStudyLink(study: UserStudy) {
+    return this.urlBase + '/' + study._id + '/start';
+  }
+
 }

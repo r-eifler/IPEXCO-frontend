@@ -15,3 +15,10 @@
 .card-style > mat-card-actions {
   align-self: flex-end;
 }
+
+.center-style {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}

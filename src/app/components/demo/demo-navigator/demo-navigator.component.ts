@@ -14,10 +14,8 @@ import { TaskSchemaService } from 'src/app/service/schema.service';
 import { switchMap, takeUntil, map, filter, flatMap } from 'rxjs/operators';
 import { DisplayTask } from 'src/app/interface/display-task';
 import { ExecutionSettingsService } from 'src/app/service/execution-settings.service';
-import { Time } from '@angular/common';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import {ExecutionSettings} from '../../../interface/execution-settings';
-import {DEMO_FINISHED_REDIRECT, PLANNER_REDIRECT} from '../../../app.tokens';
 
 @Component({
   selector: 'app-demo-navigator',
@@ -58,8 +56,7 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
     private displayTaskService: DisplayTaskService,
     private curretnSchemaService: TaskSchemaService,
     private currentRunService: CurrentRunService,
-    public dialog: MatDialog,
-    @Inject(DEMO_FINISHED_REDIRECT) private redirectURL: string
+    public dialog: MatDialog
   ) {
     this.route.paramMap.pipe(
       switchMap((params: ParamMap) => {

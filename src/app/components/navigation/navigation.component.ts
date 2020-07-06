@@ -70,4 +70,10 @@ export class NavigationComponent implements OnInit, OnDestroy {
 
   }
 
+  userStudyPath() {
+    console.log(this.router.url);
+    const regExp = new RegExp('/user-studies/[a-zA-Z0-9]*/');
+    return regExp.exec(this.router.url);
+  }
+
 }

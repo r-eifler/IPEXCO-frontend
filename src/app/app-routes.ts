@@ -68,16 +68,12 @@ export const appRoutes: Routes = [
         { path: 'info', component: UserStudyCreatorComponent},
         { path: 'start', component: UserStudyStartComponent},
         { path: 'exec', component: UserStudyExecuterComponent,
-          children: [
-            { path: 'nav',
-              children: [
-                { path: 'new-planning-step', component: PlanningStepComponent},
-                { path: 'planning-step/:runid', component: FinishedPlanningStepComponent},
-                { path: 'planning-step/:runid/new-question', component: QuestionStepComponent},
-                { path: 'planning-step/:runid/question-step/:expid', component: FinishedQuestionStepComponent}
-              ]
-            }
-          ]
+            children: [
+              { path: 'new-planning-step', component: PlanningStepComponent},
+              { path: 'planning-step/:runid', component: FinishedPlanningStepComponent},
+              { path: 'planning-step/:runid/new-question', component: QuestionStepComponent},
+              { path: 'planning-step/:runid/question-step/:expid', component: FinishedQuestionStepComponent}
+            ]
         },
         { path: 'end', component: UserStudyEndComponent},
       ]

@@ -1,19 +1,31 @@
 <div class="main-container">
-  <mat-card class="card-style">
-    <mat-card-header>
-      <mat-card-title>Welcome to the Explainable AI User Study</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <p>TODO introduction text</p>
+  <ng-container *ngIf="dateValid()">
+    <mat-card class="card-style">
+      <mat-card-header>
+        <mat-card-title>Welcome to the Explainable AI User Study</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <p>TODO introduction text</p>
 
-      <p>Describe what we will store.</p>
-      <mat-radio-group [(ngModel)]="continue">
-        <mat-radio-button [value]="true">I agree with this statements</mat-radio-button>
-      </mat-radio-group>
-    </mat-card-content>
-    <mat-card-actions align="end">
-      <button mat-flat-button color="primary" [disabled]='! continue' routerLink="../exec">Next</button>
-    </mat-card-actions>
-  </mat-card>
+        <p>Describe what we will store.</p>
+        <mat-radio-group [(ngModel)]="continue">
+          <mat-radio-button [value]="true">I agree with this statements</mat-radio-button>
+        </mat-radio-group>
+      </mat-card-content>
+      <mat-card-actions align="end">
+        <button mat-flat-button color="primary" [disabled]='! continue' routerLink="../exec">Next</button>
+      </mat-card-actions>
+    </mat-card>
+  </ng-container>
 
+  <ng-container *ngIf="! dateValid()">
+    <mat-card class="card-style">
+      <mat-card-header>
+        <mat-card-title>Welcome to the Explainable AI User Study</mat-card-title>
+      </mat-card-header>
+      <mat-card-content class="center-style">
+        <h1>You can no longer participate in this user study.</h1>
+      </mat-card-content>
+    </mat-card>
+  </ng-container>
 </div>
