@@ -48,7 +48,6 @@ export class UserStudyDemoViewComponent implements OnInit, OnDestroy {
           console.log(d);
           if (d) {
             this.selectedDemoService.saveObject(d);
-            this.settingsService.load(d.settings);
             this.demo = d;
           }
         }

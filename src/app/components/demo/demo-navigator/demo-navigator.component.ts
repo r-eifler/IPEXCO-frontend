@@ -54,37 +54,25 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
     public runsService: RunService,
     private domainSpecService: DomainSpecificationService,
     private displayTaskService: DisplayTaskService,
-    private curretnSchemaService: TaskSchemaService,
+    private currentSchemaService: TaskSchemaService,
     private currentRunService: CurrentRunService,
     public dialog: MatDialog
   ) {
-    this.route.paramMap.pipe(
-      switchMap((params: ParamMap) => {
-        return this.demosService.getObject(params.get('demoid'));
-    }))
-    .pipe(takeUntil(this.ngUnsubscribe))
-    .pipe(filter((demo: Demo) => demo !== null))
-    .pipe(map((demo: Demo) => {
-        this.demo = demo;
-        this.runningDemoService.saveObject(demo);
-        this.runsService.reset();
-        return this.demo;
-      })
-    )
-    .subscribe(
-      (demo: Demo) => {
-          this.currentProjectService.saveObject(demo);
-          this.propertiesService.findCollection([{param: 'projectId', value: demo._id}]);
-          this.settingsService.load(demo.settings);
 
-          combineLatest([this.curretnSchemaService.findSchema(demo), this.domainSpecService.findSpec(demo)]).
-            subscribe(([taskSchema, domainSpec]) => {
-              if (taskSchema && domainSpec) {
-                this.displayTaskService.saveObject(new DisplayTask(taskSchema, domainSpec));
-              }
-            });
-      }
-    );
+    this.runningDemoService.getSelectedObject()
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(
+        demo => {
+          if (demo) {
+            this.demo = demo;
+            this.runsService.reset();
+
+            this.currentProjectService.saveObject(demo);
+            this.propertiesService.findCollection([{param: 'projectId', value: demo._id}]);
+          }
+
+        }
+      );
 
     this.runs$ = this.runsService.getList();
     this.settings$ = settingsService.getSelectedObject();
