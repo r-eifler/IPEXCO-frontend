@@ -64,10 +64,9 @@ export class NavigationComponent implements OnInit, OnDestroy {
     });
   }
 
-  logout() {
-    this.userService.logout();
-    this.router.navigate(['/'], { relativeTo: this.route });
-
+  async logout() {
+    await this.userService.logout();
+    await this.router.navigate(['/'], {relativeTo: this.route});
   }
 
   userStudyPath() {
