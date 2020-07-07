@@ -40,11 +40,14 @@ export class DemoBaseComponent implements OnInit, OnDestroy {
     this.route.params.subscribe(
       params => {
         this.demosService.getObject(params.demoid)
+          .pipe(takeUntil(this.ngUnsubscribe))
           .subscribe(
-            (demo: Demo) => {
+            async (demo: Demo) => {
               if (demo) {
+                console.log('DemoBase: Demo loaded: ' + demo._id);
                 this.runningDemoService.saveObject(demo);
-                this.settingsService.load(demo.settings);
+                // await this.settingsService.load(demo.settings);
+                // console.log('Demo settings loaded');
               }
             }
           );

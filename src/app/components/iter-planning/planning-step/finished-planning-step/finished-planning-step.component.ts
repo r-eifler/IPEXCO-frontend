@@ -35,18 +35,13 @@ export class FinishedPlanningStepComponent implements OnInit, OnDestroy {
     )
     .pipe(takeUntil(this.ngUnsubscribe))
     .subscribe(run => {
-      currentRunService.saveObject(run);
-    });
-
-    this.currentRunService.getSelectedObject()
-    .pipe(takeUntil(this.ngUnsubscribe))
-    .subscribe(
-      run => {
-        if (run && run.plan) {
+      if (run) {
+        currentRunService.saveObject(run);
+        if (run.plan) {
           this.hasPlan = true;
         }
       }
-    );
+    });
   }
 
   ngOnInit(): void {

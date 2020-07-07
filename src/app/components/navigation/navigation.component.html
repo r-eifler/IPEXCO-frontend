@@ -2,15 +2,15 @@
 
 <div class="main-container" [class.example-is-mobile]="isMobile">
   <mat-toolbar color="primary" class="main-toolbar">
-    <button mat-icon-button *ngIf="! userStudyPath() || userService.logedIn()" (click)="snav.toggle()" [disabled]="! userService.logedIn()"><mat-icon>menu</mat-icon></button>
+    <button mat-icon-button *ngIf="! userStudyPath() || userService.loggedIn()" (click)="snav.toggle()" [disabled]="! userService.loggedIn()"><mat-icon>menu</mat-icon></button>
     <h1 class="example-app-name">EXPLORE</h1>
     <span style="flex: 1 1 auto;"></span>
     <button mat-icon-button *ngIf="! userStudyPath()" [matMenuTriggerFor]="userMenu"><mat-icon style="font-size: 36px">account_circle</mat-icon></button>
   </mat-toolbar>
 
   <mat-menu #userMenu="matMenu">
-    <button mat-menu-item *ngIf="! userService.logedIn()" (click)="newLoginForm()">Login</button>
-    <button mat-menu-item *ngIf="userService.logedIn()" (click)="logout()">Logout</button>
+    <button mat-menu-item *ngIf="! userService.loggedIn()" (click)="newLoginForm()">Login</button>
+    <button mat-menu-item *ngIf="userService.loggedIn()" (click)="logout()">Logout</button>
   </mat-menu>
 
   <mat-sidenav-container class="sidenav-container">

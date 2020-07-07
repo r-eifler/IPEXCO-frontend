@@ -22,8 +22,8 @@ export class ExecutionSettingsService extends SelectedObjectService<ExecutionSet
   }
 
   load(settingsId: string): Promise<void> {
-    // console.log('Load settings: ' + settingsId);
-    const returnPromis = new Promise<void>((resolve, reject) => {
+    console.log('Load settings: ' + settingsId);
+    return new Promise<void>((resolve, reject) => {
       try {
         this.http.get<IHTTPData<ExecutionSettings>>(this.BASE_URL + '/' + settingsId )
         .subscribe(httpData => {
@@ -40,8 +40,6 @@ export class ExecutionSettingsService extends SelectedObjectService<ExecutionSet
         reject();
       }
     });
-
-    return returnPromis;
   }
 
   updateSettings(settings: ExecutionSettings) {

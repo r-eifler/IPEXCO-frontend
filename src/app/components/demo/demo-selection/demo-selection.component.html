@@ -9,7 +9,7 @@
       <mat-card-title>{{demo.name}}</mat-card-title>
       <mat-card-subtitle>Explanation Demo</mat-card-subtitle>
 
-      <button mat-icon-button [matMenuTriggerFor]="demoMenu" *ngIf="userService.logedIn() && myDemo(demo)"
+      <button mat-icon-button [matMenuTriggerFor]="demoMenu" *ngIf="userService.loggedIn() && myDemo(demo)"
               style="position: absolute; right: 2px">
         <mat-icon>more_vert</mat-icon>
       </button>
@@ -27,7 +27,7 @@
         <mat-icon>play_arrow</mat-icon>
       </button>
       <button mat-icon-button
-        *ngIf="userService.logedIn() && myDemo(demo) && demo.status == runStatus.running || demo.status == runStatus.pending"
+        *ngIf="userService.loggedIn() && myDemo(demo) && demo.status == runStatus.running || demo.status == runStatus.pending"
         (click)="cancelDemo(demo)" color=accent>
         <mat-icon>cancel</mat-icon>
       </button>

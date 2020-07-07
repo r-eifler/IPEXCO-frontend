@@ -5,9 +5,9 @@ import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ExecutionSettingsService} from '../../../service/execution-settings.service';
-import {DEMO_FINISHED_REDIRECT, PLANNER_REDIRECT, QUESTION_REDIRECT} from '../../../app.tokens';
+import {PLANNER_REDIRECT, QUESTION_REDIRECT} from '../../../app.tokens';
 import {DemoRunService, RunService} from '../../../service/run-services';
-import {DemoPlannerService, PlannerService} from '../../../service/planner.service';
+import {UserStudyPlannerService, PlannerService} from '../../../service/planner.service';
 
 @Component({
   selector: 'app-user-study-demo-view',
@@ -15,7 +15,7 @@ import {DemoPlannerService, PlannerService} from '../../../service/planner.servi
   styleUrls: ['./user-study-demo-view.component.css'],
   providers: [
     {provide: RunService, useClass: DemoRunService},
-    {provide: PlannerService, useClass: DemoPlannerService},
+    {provide: PlannerService, useClass: UserStudyPlannerService},
     { provide: PLANNER_REDIRECT, useValue: '../' },
     { provide: QUESTION_REDIRECT, useValue: '../../../' },
   ]

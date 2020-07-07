@@ -137,7 +137,7 @@ import { DemoHelpComponent } from './components/demo/demo-help/demo-help.compone
 import { DemoNavigatorComponent } from './components/demo/demo-navigator/demo-navigator.component';
 import { MainPageComponent } from './components/login/main-page/main-page.component';
 import { RegisterComponent } from './components/login/register/register.component';
-import { AutheticationInterceptor } from './interceptor/authentication.interceptor';
+import { AuthenticationInterceptor } from './interceptor/authentication.interceptor';
 import { UserMainPageComponent } from './components/user/user-main-page/user-main-page.component';
 import { FilesCollectionComponent } from './components/files/files-collection/files-collection.component';
 import { ExecutionSettingsService } from './service/execution-settings.service';
@@ -270,8 +270,8 @@ import { UserStudyEndComponent } from './components/user-study/user-study-end/us
   providers: [
     UserStore,
     UserService,
-    { provide: HTTP_INTERCEPTORS, useClass: AutheticationInterceptor, multi: true },
-    AutheticationInterceptor,
+    { provide: HTTP_INTERCEPTORS, useClass: AuthenticationInterceptor, multi: true },
+    AuthenticationInterceptor,
     ExecutionSettingsStore,
     ExecutionSettingsService,
     DomainFilesStore,

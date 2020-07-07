@@ -72,9 +72,15 @@ export class DemoPlannerService extends PlannerService {
     this.BASE_URL = environment.apiURL + 'planner/';
   }
 
-  execute_plan_run(run: PlanRun): void {
+  execute_plan_run(run: PlanRun, save= false): void {
     console.log('Compute plan demo');
     const demo: Demo = this.runningDemoService.getSelectedObject().getValue();
+
+    if (! demo.data.plans || demo.data.plans.length === 0) {
+      console.log('Compute plan on server demo');
+      super.execute_plan_run(run, save);
+      return;
+    }
 
     const planPropertiesGoalFacts = run.hardGoals;
 
@@ -92,29 +98,22 @@ export class DemoPlannerService extends PlannerService {
         break;
       }
     }
-    if (! foundPlanObj) {
-      // run.status = RunStatus.failed;
-      // this.listStore.dispatch({type: ADD, data: run});
-      console.log('Compute plan on server demo');
-      super.execute_plan_run(run, false);
-      return;
-    }
-
     run.planPath = demo.definition + '/' + foundPlanObj.plan;
 
     // get all properties which are satisfied by this plan
     run.satPlanProperties = demo.data.satPropertiesPerPlan.filter(p => p.plan === foundPlanObj.plan)[0].planProperties;
     this.listStore.dispatch({type: ADD, data: run});
+
   }
 
 
-  execute_mugs_run(planRun: PlanRun, expRun: ExplanationRun): void {
+  execute_mugs_run(planRun: PlanRun, expRun: ExplanationRun, save= false): void {
 
     const demo: Demo = this.runningDemoService.getSelectedObject().getValue();
 
-    if (! demo.data.MUGS || demo.data.MUGS.length === 0) {
-      super.execute_mugs_run(planRun, expRun);
-    }
+    // if (! demo.data.MUGS || demo.data.MUGS.length === 0) {
+    //   super.execute_mugs_run(planRun, expRun);
+    // }
 
     // plan property hard goals which were no hard goals in the plan run
     const questionPlanProperties = expRun.hardGoals.filter(hg => ! planRun.hardGoals.some(c => hg === c));
@@ -140,10 +139,51 @@ export class DemoPlannerService extends PlannerService {
       }
     }
 
-    // console.log('MUGS:');
-    // console.log(expRun.mugs);
     planRun.explanationRuns.push(expRun);
-    this.listStore.dispatch({type: EDIT, data: planRun});
+    this.listStore.dispatch({type: ADD, data: planRun});
+
+    if (save) {
+      this.save_mugs_run(planRun, expRun);
+    }
+
+  }
+
+  private save_mugs_run(planRun: PlanRun, expRun: ExplanationRun): void {
+    const url = this.myBaseURL + 'mugs-save/' + planRun._id;
+
+    this.http.post<IHTTPData<PlanRun>>(url, expRun)
+      .subscribe(httpData => {
+        console.log('Question saved on server.');
+        // const action = {type: EDIT, data: httpData.data};
+        // this.listStore.dispatch(action);
+      });
+  }
+
+}
+
+@Injectable({
+  providedIn: 'root'
+})
+export class UserStudyPlannerService extends DemoPlannerService {
+
+  myBaseURL = environment.apiURL + 'planner/';
+
+  constructor(
+    http: HttpClient,
+    store: RunsStore,
+    runningDemoService: RunningDemoService,
+    planPropertiesService: PlanPropertyMapService) {
+    super(http, store, runningDemoService, planPropertiesService);
+    this.BASE_URL = environment.apiURL + 'planner/';
+  }
+
+  execute_plan_run(run: PlanRun): void {
+    super.execute_plan_run(run, true);
+  }
+
+
+  execute_mugs_run(planRun: PlanRun, expRun: ExplanationRun): void {
+    super.execute_mugs_run(planRun, expRun, true);
   }
 
 }

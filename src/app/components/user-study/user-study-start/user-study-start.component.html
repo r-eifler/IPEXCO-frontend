@@ -1,5 +1,5 @@
 <div class="main-container">
-  <ng-container *ngIf="dateValid()">
+  <ng-container *ngIf="! userRegistered">
     <mat-card class="card-style">
       <mat-card-header>
         <mat-card-title>Welcome to the Explainable AI User Study</mat-card-title>
@@ -13,18 +13,32 @@
         </mat-radio-group>
       </mat-card-content>
       <mat-card-actions align="end">
-        <button mat-flat-button color="primary" [disabled]='! continue' routerLink="../exec">Next</button>
+        <button mat-flat-button color="primary" [disabled]='! continue' (click)="onAgree()">Next</button>
       </mat-card-actions>
     </mat-card>
   </ng-container>
 
-  <ng-container *ngIf="! dateValid()">
+  <ng-container *ngIf="userRegistered && !(error || ! userStudyValid() || ! dateValid())">
     <mat-card class="card-style">
       <mat-card-header>
         <mat-card-title>Welcome to the Explainable AI User Study</mat-card-title>
       </mat-card-header>
       <mat-card-content class="center-style">
-        <h1>You can no longer participate in this user study.</h1>
+        <h1>Everything is ready, let's start.</h1>
+        <button mat-flat-button color="primary" routerLink="../exec">START</button>
+      </mat-card-content>
+    </mat-card>
+  </ng-container>
+
+  <ng-container *ngIf="userRegistered && (error || ! userStudyValid() || ! dateValid())">
+    <mat-card class="card-style">
+      <mat-card-header>
+        <mat-card-title>Welcome to the Explainable AI User Study</mat-card-title>
+      </mat-card-header>
+      <mat-card-content class="center-style">
+        <h1 *ngIf="error">{{error}}</h1>
+        <h1 *ngIf="! error && ! userStudyValid()">You can not access this user study.</h1>
+        <h1 *ngIf="! error && (userStudyValid() && ! dateValid())">You can no longer participate in this user study.</h1>
       </mat-card-content>
     </mat-card>
   </ng-container>

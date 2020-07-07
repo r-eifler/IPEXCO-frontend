@@ -1,18 +1,17 @@
 import { DemoFinishedComponent } from './../demo-finished/demo-finished.component';
-import {Component, OnInit, OnDestroy, Inject, Output, EventEmitter} from '@angular/core';
+import {Component, OnInit, OnDestroy, Output, EventEmitter} from '@angular/core';
 import { Demo } from 'src/app/interface/demo';
-import { BehaviorSubject, combineLatest, Subject, Observable } from 'rxjs';
+import { BehaviorSubject, Subject} from 'rxjs';
 import { PlanRun } from 'src/app/interface/run';
-import { ActivatedRoute, Router, ParamMap } from '@angular/router';
+import { ActivatedRoute, Router} from '@angular/router';
 import { DemosService, RunningDemoService } from 'src/app/service/demo-services';
-import { ProjectsService, CurrentProjectService } from 'src/app/service/project-services';
+import { CurrentProjectService } from 'src/app/service/project-services';
 import { PlanPropertyMapService } from 'src/app/service/plan-property-services';
 import { RunService, CurrentRunService } from 'src/app/service/run-services';
 import { DomainSpecificationService } from 'src/app/service/domain-specification.service';
 import { DisplayTaskService } from 'src/app/service/display-task.service';
 import { TaskSchemaService } from 'src/app/service/schema.service';
-import { switchMap, takeUntil, map, filter, flatMap } from 'rxjs/operators';
-import { DisplayTask } from 'src/app/interface/display-task';
+import { takeUntil} from 'rxjs/operators';
 import { ExecutionSettingsService } from 'src/app/service/execution-settings.service';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import {ExecutionSettings} from '../../../interface/execution-settings';
@@ -48,12 +47,10 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
     public settingsService: ExecutionSettingsService,
     private demosService: DemosService,
     private runningDemoService: RunningDemoService,
-    private projectsService: ProjectsService,
     private currentProjectService: CurrentProjectService,
     private propertiesService: PlanPropertyMapService,
     public runsService: RunService,
     private domainSpecService: DomainSpecificationService,
-    private displayTaskService: DisplayTaskService,
     private currentSchemaService: TaskSchemaService,
     private currentRunService: CurrentRunService,
     public dialog: MatDialog
@@ -69,6 +66,8 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
 
             this.currentProjectService.saveObject(demo);
             this.propertiesService.findCollection([{param: 'projectId', value: demo._id}]);
+
+            this.currentSchemaService.findSchema(demo);
           }
 
         }
@@ -108,6 +107,7 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
   finishDemo() {
     this.finished = true;
     this.showDemoFinished(false);
+    clearInterval(this.timerIntervall);
   }
 
   showDemoFinished(timesUp: boolean) {
@@ -132,7 +132,7 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
-    clearInterval();
+    clearInterval(this.timerIntervall);
   }
 
   newPlanRun() {

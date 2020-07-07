@@ -23,16 +23,18 @@ export class UserService extends SelectedObjectService<User> {
 
 
   loadUser(): Observable<User> {
-    this.http.get<IHTTPData<User>>(this.BASE_URL)
-      .subscribe(httpData => {
-        this.saveObject(httpData.data);
-      });
+    if (this.loggedIn()) {
+      this.http.get<IHTTPData<User>>(this.BASE_URL)
+        .subscribe(httpData => {
+          this.saveObject(httpData.data);
+        });
+    }
     return this.selectedObject$;
   }
 
   register(user: User): Promise<void> {
 
-    const returnPromis = new Promise<void>((resolve, reject) => {
+    return new Promise<void>((resolve, reject) => {
       try {
         this.http.post<IHTTPData<User>>(this.BASE_URL, user)
         .subscribe(httpData => {
@@ -53,12 +55,10 @@ export class UserService extends SelectedObjectService<User> {
         reject();
       }
     });
-
-    return returnPromis;
   }
 
   login(user: User): Promise<void> {
-    const returnPromis = new Promise<void>((resolve, reject) => {
+    return new Promise<void>((resolve, reject) => {
       try {
         console.log('Login...');
         this.http.post<{user: User, token: string}>(this.BASE_URL + '/login', user)
@@ -71,20 +71,18 @@ export class UserService extends SelectedObjectService<User> {
         reject();
       }
     });
-
-    return returnPromis;
   }
 
   getUser(): User {
     return this.selectedObject$.getValue();
   }
 
-  logedIn(): boolean {
+  loggedIn(): boolean {
     return (localStorage.getItem('jwt-token') != null);
   }
 
   logout(): Promise<void> {
-    const returnPromis = new Promise<void>((resolve, reject) => {
+    return new Promise<void>((resolve, reject) => {
       try {
         this.http.post<{user: User, token: string}>(this.BASE_URL + '/logout', null)
         .subscribe(httpData => {
@@ -95,7 +93,7 @@ export class UserService extends SelectedObjectService<User> {
         reject();
       }
     });
-
-    return returnPromis;
   }
 }
+
+

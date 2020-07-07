@@ -22,19 +22,7 @@ export class UserStudyBaseComponent implements OnInit, OnDestroy {
     private responsiveService: ResponsiveService,
     private route: ActivatedRoute,
   ) {
-    this.route.paramMap
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe((params: ParamMap) => {
-        const userStudyId = params.get('userStudyId');
-        this.userStudiesService.getObject(userStudyId)
-          .pipe(takeUntil(this.ngUnsubscribe))
-          .subscribe(
-            study => {
-              if (study) {
-                this.selectedUserStudyService.saveObject(study);
-              }
-            });
-      });
+
   }
 
   ngOnInit(): void {
