@@ -2,7 +2,7 @@ import { DemoFinishedComponent } from './../demo-finished/demo-finished.componen
 import {Component, OnInit, OnDestroy, Output, EventEmitter} from '@angular/core';
 import { Demo } from 'src/app/interface/demo';
 import { BehaviorSubject, Subject} from 'rxjs';
-import { PlanRun } from 'src/app/interface/run';
+import {PlanRun, RunStatus} from 'src/app/interface/run';
 import { ActivatedRoute, Router} from '@angular/router';
 import { DemosService, RunningDemoService } from 'src/app/service/demo-services';
 import { CurrentProjectService } from 'src/app/service/project-services';
@@ -15,6 +15,7 @@ import { takeUntil} from 'rxjs/operators';
 import { ExecutionSettingsService } from 'src/app/service/execution-settings.service';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import {ExecutionSettings} from '../../../interface/execution-settings';
+import {PlannerService} from '../../../service/planner.service';
 
 @Component({
   selector: 'app-demo-navigator',
@@ -26,6 +27,8 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
   private ngUnsubscribe: Subject<any> = new Subject();
 
   @Output() finishedDemo = new EventEmitter<void>();
+
+  runStatus = RunStatus;
 
   timerIntervall;
 
@@ -53,6 +56,7 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
     private domainSpecService: DomainSpecificationService,
     private currentSchemaService: TaskSchemaService,
     private currentRunService: CurrentRunService,
+    public plannerService: PlannerService,
     public dialog: MatDialog
   ) {
 

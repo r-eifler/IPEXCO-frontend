@@ -1,8 +1,11 @@
 @import '../../../../variables.scss';
 
+.main-container {
+  display: grid;
+  grid-template-rows: auto 180px 1fr;
+}
+
 .info-container {
-  height: 5%;
-  width: 100%;
   background-color: #5e5e5e;
   display: flex;
   align-items: center;
@@ -11,7 +14,7 @@
 .router-outlet-container {
   box-sizing: border-box;
   width: 100%;
-  height: 80%;
+  height: 100%;
   padding: 10px;
   overflow: auto;
 }
@@ -19,7 +22,7 @@
 
 .plan-question-container {
   width: 100%;
-  height: 15%;
+  height: 100%;
   background-color: rgb(240, 240, 240);
   display: flex;
   overflow-x: scroll;
@@ -38,14 +41,6 @@
   width: 150px;
   height: auto;
   margin: 10px 10px;
-}
-
-.run-card:hover {
-  background-color: $accent;
-}
-
-.run-card:active {
-  background-color: $accent;
 }
 
 .question-card {

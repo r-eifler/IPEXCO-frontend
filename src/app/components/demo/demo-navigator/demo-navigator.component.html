@@ -1,53 +1,60 @@
-<div class="info-container">
-  <div style="color: white; font-size: xx-large; margin: auto 10px;" *ngIf="(settings$ | async)?.measureTime">
-    <span>Time:</span>  {{currentTime | date:'mm:ss'}}
+<div class="main-container">
+  <div class="info-container">
+    <div style="color: white; font-size: xx-large; margin: 10px 10px;" *ngIf="(settings$ | async)?.measureTime">
+      <span>Time:</span>  {{currentTime | date:'mm:ss'}}
+    </div>
+    <div style="color: white; font-size: xx-large; margin: 10px 10px;" *ngIf="(settings$ | async)?.useTimer">
+      <span>Timer:</span>  {{timer | date:'mm:ss'}}
+    </div>
   </div>
-  <div style="color: white; font-size: xx-large; margin: auto 10px;" *ngIf="(settings$ | async)?.useTimer">
-    <span>Timer:</span>  {{timer | date:'mm:ss'}}
-  </div>
-</div>
-<div class="plan-question-container">
-  <ng-container *ngFor="let planRun of  runs$ | async">
-    <div class="run-container">
-      <mat-card class="run-card">
-        <mat-card-header>
-          <mat-card-title>{{planRun.name}}</mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-          <!-- {{planRun.status}} -->
-        </mat-card-content>
-        <mat-card-actions>
-          <button mat-flat-button color="primary" [routerLink]="['./planning-step', planRun._id]">Details</button>
-        </mat-card-actions>
-      </mat-card>
-
-      <ng-container *ngFor="let expRun of planRun.explanationRuns">
-        <mat-card class="question-card">
+  <div class="plan-question-container">
+    <ng-container *ngFor="let planRun of  runs$ | async">
+      <div class="run-container">
+        <mat-card class="run-card">
           <mat-card-header>
-            <mat-card-title>{{expRun.name}}</mat-card-title>
+            <mat-card-title>{{planRun.name}}</mat-card-title>
           </mat-card-header>
           <mat-card-content>
           </mat-card-content>
           <mat-card-actions>
-            <button mat-flat-button color="primary" [routerLink]="['./planning-step', planRun._id, 'question-step', expRun._id]">Details</button>
+            <button mat-flat-button color="primary"
+                    [disabled]="!(planRun.status === runStatus.finished || planRun.status === runStatus.noSolution)"
+                    [routerLink]="['./planning-step', planRun._id]">Details
+            </button>
           </mat-card-actions>
         </mat-card>
-      </ng-container>
 
-    </div>
-  </ng-container>
+        <ng-container *ngFor="let expRun of planRun.explanationRuns">
+          <mat-card class="question-card">
+            <mat-card-header>
+              <mat-card-title>{{expRun.name}}</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+            </mat-card-content>
+            <mat-card-actions>
+              <button mat-flat-button color="primary" [routerLink]="['./planning-step', planRun._id, 'question-step', expRun._id]">Details</button>
+            </mat-card-actions>
+          </mat-card>
+        </ng-container>
 
-  <button mat-fab color="accent" class="add-plan-button" (click)="newPlanRun()"
-    [disabled]="runsService.getNumRuns() >= (settingsService.getSelectedObject()| async)?.maxRuns">
-    <mat-icon>add</mat-icon>
-  </button>
-  <button mat-fab color="primary" class="finish-demo-button" (click)="finishDemo()">
-    <mat-icon>done</mat-icon>
-  </button>
+      </div>
+    </ng-container>
+
+    <mat-spinner class="add-plan-button" [diameter]="40" color="accent"
+                 *ngIf="(plannerService.isPlannerBusy() | async)">
+    </mat-spinner>
+    <button mat-fab color="accent" class="add-plan-button" (click)="newPlanRun()"
+       *ngIf="!(plannerService.isPlannerBusy() | async)"
+      [disabled]="runsService.getNumRuns() >= (settingsService.getSelectedObject()| async)?.maxRuns">
+      <mat-icon>add</mat-icon>
+    </button>
+    <button mat-fab color="primary" class="finish-demo-button" (click)="finishDemo()">
+      <mat-icon>done</mat-icon>
+    </button>
 
 
+  </div>
+  <div class="router-outlet-container">
+    <router-outlet></router-outlet>
+  </div>
 </div>
-<div class="router-outlet-container">
-  <router-outlet></router-outlet>
-</div>
-
