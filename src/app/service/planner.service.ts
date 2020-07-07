@@ -153,7 +153,7 @@ export class DemoPlannerService extends PlannerService {
     }
 
     planRun.explanationRuns.push(expRun);
-    this.listStore.dispatch({type: ADD, data: planRun});
+    this.listStore.dispatch({type: EDIT, data: planRun});
 
     if (save) {
       this.save_mugs_run(planRun, expRun);

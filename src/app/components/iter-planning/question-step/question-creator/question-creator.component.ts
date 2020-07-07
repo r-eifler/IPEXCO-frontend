@@ -22,7 +22,7 @@ export class QuestionCreatorComponent implements OnInit, OnDestroy {
 
   private ngUnsubscribe: Subject<any> = new Subject();
 
-  @ViewChild('planPorpertiesList') questionSelectionList: MatSelectionList;
+  @ViewChild('planPropertiesList') questionSelectionList: MatSelectionList;
   question: PlanProperty[] = [];
 
   allPlanProperties: PlanProperty[];
@@ -62,7 +62,10 @@ export class QuestionCreatorComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe(properties => {
           this.allPlanProperties = [...properties.values()].filter(p => p.isUsed);
-          this.notSatPlanProperties = this.allPlanProperties.filter(p => ! this.currentRun.satPlanProperties.includes(p.name));
+          console.log(this.currentRun.satPlanProperties);
+          console.log(this.hardGoals);
+          this.notSatPlanProperties = this.allPlanProperties.filter(
+            p => ! this.currentRun.satPlanProperties.includes(p.name) && ! this.currentRun.hardGoals.includes(p.name));
         });
       }
     });

@@ -35,7 +35,7 @@ export class DemoCreatorComponent implements OnInit {
 
     this.demoForm = new FormGroup({
       name: new FormControl(this.demo ? this.demo.name : ''),
-      description: new FormControl(this.demo ? this.demo.introduction : ''),
+      description: new FormControl(this.demo ? this.demo.description : ''),
     });
   }
 
@@ -49,7 +49,7 @@ export class DemoCreatorComponent implements OnInit {
       _id: this.demo ? this.demo._id : null,
       name: this.demoForm.controls.name.value,
       summaryImage: this.imageFile,
-      description: this.demoForm.controls.description.value,
+      description: this.demoForm.controls.description.value ? this.demoForm.controls.description.value : '',
     };
 
     if (this.update) {

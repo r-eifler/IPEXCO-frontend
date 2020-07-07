@@ -4,7 +4,7 @@
           <mat-card-title>Why not ... ?</mat-card-title>
       </mat-card-header>
       <mat-card-content>
-        <mat-selection-list #planPorpertiesList (selectionChange)="onSelectionChange($event)">
+        <mat-selection-list #planPropertiesList (selectionChange)="onSelectionChange($event)">
           <mat-list-option *ngFor="let property of notSatPlanProperties; last as last"
           [disabled]="maxSizeQuestionReached && ! this.question.includes(property)"
           checkboxPosition="before" [value]="property">

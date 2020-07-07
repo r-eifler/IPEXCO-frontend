@@ -21,11 +21,11 @@
     </mat-card-header>
     <mat-card-content>
       <mat-list *ngIf="addSatPlanProperties.length > 0">
-        <mat-list-item *ngFor="let item of addSatPlanProperties">
+        <mat-list-item *ngFor="let item of addSatPlanProperties;last as last">
           <mat-icon matListIcon>bookmark</mat-icon>
           <p matLine> {{item.naturalLanguageDescription}} </p>
           <p matLine *ngIf="(settingsService.getSelectedObject() | async).usePlanPropertyValues"> Value: {{item.value}} </p>
-          <mat-divider [inset]="true"></mat-divider>
+          <mat-divider [inset]="true" *ngIf="! last"></mat-divider>
         </mat-list-item>
       </mat-list>
       <p *ngIf="addSatPlanProperties.length == 0">There are no additionally satisfied plan-properties.</p>
