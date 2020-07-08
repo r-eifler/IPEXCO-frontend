@@ -18,7 +18,8 @@ export class UserStudyStartComponent implements OnInit, OnDestroy {
 
   continue = false;
   userRegistered = false;
-  error: string = null;
+  error = false;
+  errorMessage: string = null;
 
   userStudy: UserStudy;
 
@@ -104,7 +105,9 @@ export class UserStudyStartComponent implements OnInit, OnDestroy {
         }
       },
       reason => {
-        this.error = 'No valid user study link.';
+        this.error = true;
+        this.errorMessage = 'No valid user study link.';
+        console.log(reason);
       }
     );
   }

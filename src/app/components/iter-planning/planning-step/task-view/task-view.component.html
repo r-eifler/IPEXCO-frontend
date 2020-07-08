@@ -8,7 +8,7 @@
           <mat-list-item *ngFor="let item of enforcedSatPlanProperties;last as last">
             <mat-icon matListIcon>bookmark</mat-icon>
             <p matLine> {{item.naturalLanguageDescription}} </p>
-            <p matLine *ngIf="(settingsService.getSelectedObject() | async).usePlanPropertyValues"> Value: {{item.value}} </p>
+            <p matLine *ngIf="(settingsService.getSelectedObject() | async).usePlanPropertyValues"> Utility: {{item.value}} </p>
             <mat-divider [inset]="true" *ngIf="! last"></mat-divider>
           </mat-list-item>
         </mat-list>
@@ -24,7 +24,7 @@
         <mat-list-item *ngFor="let item of addSatPlanProperties;last as last">
           <mat-icon matListIcon>bookmark</mat-icon>
           <p matLine> {{item.naturalLanguageDescription}} </p>
-          <p matLine *ngIf="(settingsService.getSelectedObject() | async).usePlanPropertyValues"> Value: {{item.value}} </p>
+          <p matLine *ngIf="(settingsService.getSelectedObject() | async).usePlanPropertyValues"> Utility: {{item.value}} </p>
           <mat-divider [inset]="true" *ngIf="! last"></mat-divider>
         </mat-list-item>
       </mat-list>
@@ -34,7 +34,7 @@
 
   <mat-card class="card-style" *ngIf="(settingsService.getSelectedObject() | async).usePlanPropertyValues">
     <mat-card-header>
-      <mat-card-title>Overall Plan Value: {{planValue}}</mat-card-title>
+      <mat-card-title>Overall Plan Utility: {{planValue}}</mat-card-title>
     </mat-card-header>
   </mat-card>
 
@@ -47,7 +47,7 @@
         <mat-list-item *ngFor="let item of notSatPlanProperties;last as last">
           <mat-icon matListIcon>bookmark_border</mat-icon>
           <p matLine> {{item.naturalLanguageDescription}} </p>
-          <p matLine *ngIf="(settingsService.getSelectedObject() | async).usePlanPropertyValues"> Value: {{item.value}} </p>
+          <p matLine *ngIf="(settingsService.getSelectedObject() | async).usePlanPropertyValues"> Utility: {{item.value}} </p>
           <mat-divider [inset]="true" *ngIf="! last"></mat-divider>
         </mat-list-item>
       </mat-list>

@@ -9,7 +9,7 @@
           [disabled]="maxSizeQuestionReached && ! this.question.includes(property)"
           checkboxPosition="before" [value]="property">
             <p matLine> {{property.naturalLanguageDescription}} </p>
-            <p matLine *ngIf="(settingsService.getSelectedObject() | async).usePlanPropertyValues"> Value: {{property.value}} </p>
+            <p matLine *ngIf="(settingsService.getSelectedObject() | async).usePlanPropertys"> Utility: {{property.value}} </p>
             <mat-divider [inset]="true" *ngIf="!last"></mat-divider>
           </mat-list-option>
 

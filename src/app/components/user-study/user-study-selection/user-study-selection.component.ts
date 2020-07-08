@@ -47,7 +47,7 @@ export class UserStudySelectionComponent implements OnInit, OnDestroy {
   }
 
   openInfo(study: UserStudy) {
-    // this.selectedUserStudyService.saveObject(study);
+    this.selectedUserStudyService.saveObject(study);
     this.router.navigate(['../user-studies/' + study._id + '/info'], { relativeTo: this.route });
   }
 
