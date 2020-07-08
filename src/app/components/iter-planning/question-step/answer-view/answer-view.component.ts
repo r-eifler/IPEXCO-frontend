@@ -24,6 +24,8 @@ export class AnswerViewComponent implements OnInit, OnDestroy {
   currentRun$: Observable<PlanRun>;
   currentQuestion$: Observable<ExplanationRun>;
 
+  planExists = true;
+
   filteredMUGS: PlanProperty[][] = [];
 
   constructor(
@@ -37,23 +39,35 @@ export class AnswerViewComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    combineLatest([ this.currentRun$, this.currentQuestion$, this.planPropertiesService.getMap(), this.displayTaskService.getSelectedObject()])
+    combineLatest(
+      [
+        this.currentRun$,
+        this.currentQuestion$,
+        this.planPropertiesService.getMap()])
     .pipe(takeUntil(this.ngUnsubscribe))
     .subscribe(
       ([planRun, expRun, planProperties]) => {
         if (planRun && expRun && planProperties) {
           this.filteredMUGS = [];
+          console.log('MUGS:');
+          console.log(expRun.mugs);
           for (const entry of expRun.mugs) {
             const planPropertiesEntry: PlanProperty[] = [];
+            let containsOnlyGlobalHardGoals = true;
             for (const fact of entry) {
+              const p = planProperties.get(fact);
+              containsOnlyGlobalHardGoals = containsOnlyGlobalHardGoals && p.globalHardGoal;
               // only show property if it is satisfied by the corresponding plan run
               if (planRun.satPlanProperties.find(v => v === fact) || planRun.hardGoals.find(v => v === fact)) {
-                planPropertiesEntry.push(planProperties.get(fact));
+                planPropertiesEntry.push(p);
               }
             }
-            if (planPropertiesEntry.length === 0) {
-              this.filteredMUGS = null;
+            if (containsOnlyGlobalHardGoals) {
+              this.planExists = false;
               return;
+            }
+            if (planPropertiesEntry.length === 0) {
+              continue;
             }
             this.filteredMUGS.push(planPropertiesEntry);
           }

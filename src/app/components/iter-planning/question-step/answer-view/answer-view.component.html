@@ -8,7 +8,7 @@
     </mat-card-title>
   </mat-card-header>
   <mat-card-content>
-    <ng-container *ngIf="filteredMUGS && filteredMUGS.length > 0">
+    <ng-container *ngIf="planExists && filteredMUGS.length > 0">
       <h2>... because then you have to live without:</h2>
       <div *ngFor="let mugs of filteredMUGS;last as last">
 <!--        <p *ngIf="last" style="font-size: large; font-weight: bold;">and</p>-->
@@ -24,12 +24,13 @@
 
     </ng-container>
 
-    <p *ngIf="filteredMUGS && filteredMUGS.length == 0">
-      There exists a plan which satisfies the property/ies.
+    <p *ngIf="planExists && filteredMUGS.length == 0">
+      There exists a plan which satisfies all the properties.
     </p>
 
-    <p *ngIf="! filteredMUGS">
-      There is no plan which satisfies this property/ies.
+    <p *ngIf="! planExists">
+      There is no plan which satisfies this properties.
+      All global hard goals and the properties in the question can not be satisfied together.
     </p>
 
   </mat-card-content>

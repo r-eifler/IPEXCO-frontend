@@ -11,7 +11,7 @@ import {UserService} from './service/user.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  title = 'EXPLORE';
+  title = 'XPP IPL';
   editorOptions = {theme: 'vs-dark', language: 'javascript'};
 
   constructor(

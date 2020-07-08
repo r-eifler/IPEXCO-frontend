@@ -145,7 +145,7 @@ import { AnimationSettingsComponent } from './components/animation/animation-set
 import { AnimationSettingsNomysteryComponent } from './components/plugins/nomystery/animation-settings-nomystery/animation-settings-nomystery.component';
 import { AnimationsSettingsDemoComponent } from './components/animation/animations-settings-demo/animations-settings-demo.component';
 import { MainInfoComponent } from './components/login/main-info/main-info.component';
-import { appRoutes } from './app-routes';
+import { appRoutes } from './app.routes';
 import { HelpPageComponent } from './components/login/help-page/help-page.component';
 import { DemoFinishedComponent } from './components/demo/demo-finished/demo-finished.component';
 import { DemoTaskIntroComponent } from './components/demo/demo-task-intro/demo-task-intro.component';

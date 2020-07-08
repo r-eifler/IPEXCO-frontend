@@ -16,23 +16,22 @@ import { FinishedQuestionStepComponent } from './components/iter-planning/questi
 import { AnimationSettingsComponent } from './components/animation/animation-settings/animation-settings.component';
 import { DemoSelectionComponent } from './components/demo/demo-selection/demo-selection.component';
 import { DemoBaseComponent } from './components/demo/demo-base/demo-base.component';
-import { DemoHelpComponent } from './components/demo/demo-help/demo-help.component';
 import { FilesCollectionComponent } from './components/files/files-collection/files-collection.component';
-import {DemoTaskIntroComponent} from './components/demo/demo-task-intro/demo-task-intro.component';
 import {UserStudySelectionComponent} from './components/user-study/user-study-selection/user-study-selection.component';
 import {UserStudyCreatorComponent} from './components/user-study/user-study-creator/user-study-creator.component';
 import {UserStudyBaseComponent} from './components/user-study/user-study-base/user-study-base.component';
 import {UserStudyStartComponent} from './components/user-study/user-study-start/user-study-start.component';
 import {UserStudyExecuterComponent} from './components/user-study/user-study-executer/user-study-executer.component';
 import {UserStudyEndComponent} from './components/user-study/user-study-end/user-study-end.component';
+import {AuthGuard} from './route-guards/auth-guard.guard';
 
 export const appRoutes: Routes = [
   { path: '', component: MainPageComponent},
   { path: 'info', component: MainInfoComponent},
   { path: 'help', component: HelpPageComponent},
-  { path: 'overview', component: UserMainPageComponent},
-  { path: 'projects', component: ProjectSelectionComponent},
-  { path: 'projects/:projectid', component: ProjectBaseComponent,
+  { path: 'overview', component: UserMainPageComponent, canActivate: [AuthGuard]},
+  { path: 'projects', component: ProjectSelectionComponent , canActivate: [AuthGuard]},
+  { path: 'projects/:projectid', component: ProjectBaseComponent, canActivate: [AuthGuard],
     children: [
       { path: 'overview', component: ProjectOverviewComponent},
       { path: 'properties', component: PropertyCollectionComponent},
@@ -74,5 +73,5 @@ export const appRoutes: Routes = [
         { path: 'end', component: UserStudyEndComponent},
       ]
   },
-  { path: 'pddl-database', component: FilesCollectionComponent},
+  { path: 'pddl-database', component: FilesCollectionComponent, canActivate: [AuthGuard]},
 ];
