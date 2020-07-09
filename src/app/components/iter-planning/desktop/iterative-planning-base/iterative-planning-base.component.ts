@@ -1,7 +1,7 @@
-import {CurrentProjectService} from 'src/app/service/project-services';
+import {CurrentProjectService} from 'src/app/service/project/project-services';
 import {ExplanationRun, PlanRun, RunType} from '../../../../interface/run';
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {CurrentRunService, RunService} from '../../../../service/run-services';
+import {CurrentRunService, RunService} from '../../../../service/planner-runs/run-services';
 import {Observable} from 'rxjs';
 import {ActivatedRoute, Router} from '@angular/router';
 import {NestedTreeControl} from '@angular/cdk/tree';

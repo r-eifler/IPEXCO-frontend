@@ -1,13 +1,13 @@
 import {takeUntil} from 'rxjs/operators';
-import {PlanProperty} from 'src/app/interface/plan-property';
-import {ViewSettingsService} from 'src/app/service/setting.service';
+import {PlanProperty} from 'src/app/interface/plan-property/plan-property';
+import {ViewSettingsService} from 'src/app/service/settings/setting.service';
 import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {PropertyCreatorComponent} from '../property-creator/property-creator.component';
 import {Observable, Subject} from 'rxjs';
-import {PlanPropertyMapService} from 'src/app/service/plan-property-services';
-import {ResponsiveService} from 'src/app/service/responsive.service';
-import {ViewSettings} from 'src/app/interface/view-settings';
+import {PlanPropertyMapService} from 'src/app/service/plan-properties/plan-property-services';
+import {ResponsiveService} from 'src/app/service/responsive/responsive.service';
+import {ViewSettings} from 'src/app/interface/settings/view-settings';
 import {MatCheckboxChange} from '@angular/material/checkbox';
 import {MatSelectionListChange} from '@angular/material/list/selection-list';
 import {MatTable, MatTableDataSource} from '@angular/material/table';

@@ -4,17 +4,17 @@ import {Demo} from 'src/app/interface/demo';
 import {BehaviorSubject, Subject} from 'rxjs';
 import {PlanRun, RunStatus} from 'src/app/interface/run';
 import {ActivatedRoute, Router} from '@angular/router';
-import {DemosService, RunningDemoService} from 'src/app/service/demo-services';
-import {CurrentProjectService} from 'src/app/service/project-services';
-import {PlanPropertyMapService} from 'src/app/service/plan-property-services';
-import {CurrentRunService, RunService} from 'src/app/service/run-services';
-import {DomainSpecificationService} from 'src/app/service/domain-specification.service';
-import {TaskSchemaService} from 'src/app/service/schema.service';
+import {DemosService, RunningDemoService} from 'src/app/service/demo/demo-services';
+import {CurrentProjectService} from 'src/app/service/project/project-services';
+import {PlanPropertyMapService} from 'src/app/service/plan-properties/plan-property-services';
+import {CurrentRunService, RunService} from 'src/app/service/planner-runs/run-services';
+import {DomainSpecificationService} from 'src/app/service/files/domain-specification.service';
+import {TaskSchemaService} from 'src/app/service/task-info/schema.service';
 import {takeUntil} from 'rxjs/operators';
-import {ExecutionSettingsService} from 'src/app/service/execution-settings.service';
+import {ExecutionSettingsService} from 'src/app/service/settings/execution-settings.service';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
-import {ExecutionSettings} from '../../../interface/execution-settings';
-import {PlannerService} from '../../../service/planner.service';
+import {ExecutionSettings} from '../../../interface/settings/execution-settings';
+import {PlannerService} from '../../../service/planner-runs/planner.service';
 
 @Component({
   selector: 'app-demo-navigator',

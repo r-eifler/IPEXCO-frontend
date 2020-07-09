@@ -1,4 +1,4 @@
-import {UserService} from './../../../service/user.service';
+import {AuthenticationService} from '../../../service/authentication/authentication.service';
 import {Component, OnInit} from '@angular/core';
 import {MatDialogRef} from '@angular/material/dialog';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
@@ -22,7 +22,7 @@ export class RegisterComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<RegisterComponent>,
-    private userService: UserService,
+    private userService: AuthenticationService,
     private router: Router,
     private route: ActivatedRoute
   ) { }

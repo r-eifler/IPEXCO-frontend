@@ -1,8 +1,8 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {CurrentRunService, RunService} from '../../../../service/run-services';
+import {CurrentRunService, RunService} from '../../../../service/planner-runs/run-services';
 import {ActivatedRoute, ParamMap, Router} from '@angular/router';
 import {switchMap, takeUntil} from 'rxjs/operators';
-import {ExecutionSettingsService} from 'src/app/service/execution-settings.service';
+import {ExecutionSettingsService} from 'src/app/service/settings/execution-settings.service';
 import {Subject} from 'rxjs';
 import {PlanAnimationViewComponent} from '../plan-animation-view/plan-animation-view.component';
 

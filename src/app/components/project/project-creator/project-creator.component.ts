@@ -2,11 +2,11 @@ import {Project} from './../../../interface/project';
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
 import {Observable, Subject} from 'rxjs';
-import {DomainSpecificationFile, PDDLFile} from '../../../interface/files';
-import {DomainFilesService, DomainSpecificationFilesService, ProblemFilesService} from '../../../service/pddl-file-services';
+import {DomainSpecificationFile, PDDLFile} from '../../../interface/files/files';
+import {DomainFilesService, DomainSpecificationFilesService, ProblemFilesService} from '../../../service/files/pddl-file-services';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {ProjectsService} from 'src/app/service/project-services';
-import {UserService} from '../../../service/user.service';
+import {ProjectsService} from 'src/app/service/project/project-services';
+import {AuthenticationService} from '../../../service/authentication/authentication.service';
 
 @Component({
   selector: 'app-project-creator',
@@ -42,7 +42,7 @@ export class ProjectCreatorComponent implements OnInit, OnDestroy {
     private problemFilesService: ProblemFilesService,
     private domainSpecFilesService: DomainSpecificationFilesService,
     private projectService: ProjectsService,
-    private userService: UserService,
+    private userService: AuthenticationService,
     public dialogRef: MatDialogRef<ProjectCreatorComponent>,
     @Inject(MAT_DIALOG_DATA) data) {
 

@@ -1,106 +1,55 @@
 import {MapStore} from './generic-map.store';
-import {ExecutionSettings} from './../interface/execution-settings';
-import {DisplayTask} from './../interface/display-task';
-import {ViewSettings} from './../interface/view-settings';
+import {ExecutionSettings} from '../interface/settings/execution-settings';
+import {ViewSettings} from '../interface/settings/view-settings';
 import {ListStore} from './generic-list.store';
-import {DomainSpecificationFile, PDDLFile} from '../interface/files';
+import {DomainSpecificationFile, PDDLFile} from '../interface/files/files';
 import {ItemStore} from './generic-item.store';
-import {PlanProperty} from '../interface/plan-property';
+import {PlanProperty} from '../interface/plan-property/plan-property';
 import {Project} from '../interface/project';
 import {ExplanationRun, PlanRun} from '../interface/run';
 import {TaskSchema} from '../interface/task-schema';
-import {DomainSpecification} from '../interface/domain-specification';
-import {Plan} from '../interface/plan';
+import {DomainSpecification} from '../interface/files/domain-specification';
 import {Demo} from '../interface/demo';
 import {User} from '../interface/user';
 import {UserStudy} from '../interface/user-study/user-study';
 
 
-export class DomainFilesStore extends  ListStore<PDDLFile> {
+// User/Authentication
+export class UserStore extends  ItemStore<User> {}
 
-}
 
-export class SelectedDomainFileStore extends  ItemStore<PDDLFile> {
+// Files
+export class DomainFilesStore extends  ListStore<PDDLFile> {}
+export class ProblemFilesStore extends  ListStore<PDDLFile> {}
+export class DomainSpecificationFilesStore extends  ListStore<DomainSpecificationFile> {}
 
-}
 
-export class ProblemFilesStore extends  ListStore<PDDLFile> {
+// Project
+export class ProjectsStore extends  ListStore<Project> {}
+export class CurrentProjectStore extends  ItemStore<Project> {}
 
-}
+// Plan-Properties
+export class PlanPropertyMapStore extends  MapStore<string, PlanProperty> {}
 
-export class SelectedProblemFileStore extends  ItemStore<PDDLFile> {
 
-}
+// PlanRun and ExpRun
+export class RunsStore extends  ListStore<PlanRun> {}
+export class CurrentRunStore extends  ItemStore<PlanRun> {}
+export class CurrentQuestionStore extends  ItemStore<ExplanationRun> {}
 
-export class DomainSpecificationFilesStore extends  ListStore<DomainSpecificationFile> {
+// Additional Task Info
+export class TaskSchemaStore extends  ItemStore<TaskSchema> {}
+export class DomainSpecStore extends  ItemStore<DomainSpecification> {}
 
-}
+// Settings
+export class ViewSettingsStore extends ItemStore<ViewSettings> {}
+export class ExecutionSettingsStore extends  ItemStore<ExecutionSettings> {}
 
-export class PlanPropertyMapStore extends  MapStore<string, PlanProperty> {
+// Demo
+export class DemosStore extends  ListStore<Demo> {}
+export class RunningDemoStore extends  ItemStore<Demo> {}
 
-}
-
-export class ProjectsStore extends  ListStore<Project> {
-
-}
-
-export class CurrentProjectStore extends  ItemStore<Project> {
-
-}
-
-export class RunsStore extends  ListStore<PlanRun> {
-
-}
-
-export class CurrentRunStore extends  ItemStore<PlanRun> {
-
-}
-
-export class CurrentQuestionStore extends  ItemStore<ExplanationRun> {
-
-}
-
-export class TasktSchemaStore extends  ItemStore<TaskSchema> {
-
-}
-
-export class DomainSpecStore extends  ItemStore<DomainSpecification> {
-
-}
-
-export class ViewSettingsStore extends ItemStore<ViewSettings> {
-
-}
-
-export class CurrentPlanStore extends  ItemStore<Plan> {
-
-}
-
-export class DisplayTaskStore extends  ItemStore<DisplayTask> {
-
-}
-
-export class DemosStore extends  ListStore<Demo> {
-
-}
-
-export class RunningDemoStore extends  ItemStore<Demo> {
-
-}
-
-export class UserStore extends  ItemStore<User> {
-
-}
-
-export class ExecutionSettingsStore extends  ItemStore<ExecutionSettings> {
-
-}
-
-export class UserStudiesStore extends  ListStore<UserStudy> {
-
-}
-
-export class RunningUserStudyStore extends  ItemStore<UserStudy> {
-
-}
+// User Study
+export class UserStudiesStore extends  ListStore<UserStudy> {}
+export class RunningUserStudyStore extends  ItemStore<UserStudy> {}
 

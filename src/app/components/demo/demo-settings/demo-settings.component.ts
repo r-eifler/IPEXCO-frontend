@@ -1,8 +1,8 @@
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef} from '@angular/material/bottom-sheet';
-import {ExecutionSettings} from 'src/app/interface/execution-settings';
-import {ExecutionSettingsService} from 'src/app/service/execution-settings.service';
+import {ExecutionSettings} from 'src/app/interface/settings/execution-settings';
+import {ExecutionSettingsService} from 'src/app/service/settings/execution-settings.service';
 import {Subject} from 'rxjs';
 
 @Component({

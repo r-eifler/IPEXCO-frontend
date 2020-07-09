@@ -1,11 +1,11 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {RunningUserStudyService, UserStudiesService} from '../../../service/user-study-services';
+import {RunningUserStudyService, UserStudiesService} from '../../../service/user-study/user-study-services';
 import {Subject} from 'rxjs';
 import {UserStudy} from '../../../interface/user-study/user-study';
 import {takeUntil} from 'rxjs/operators';
 import {ActivatedRoute, ParamMap, Router} from '@angular/router';
 import {USUser} from '../../../interface/user-study/user-study-user';
-import {UserStudyUserService} from '../../../service/user-study-user.service';
+import {UserStudyUserService} from '../../../service/user-study/user-study-user.service';
 
 @Component({
   selector: 'app-user-study-start',

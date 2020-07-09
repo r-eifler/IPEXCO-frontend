@@ -1,8 +1,8 @@
 import {Observable} from 'rxjs';
-import {CurrentRunService} from 'src/app/service/run-services';
-import {TaskSchemaService} from 'src/app/service/schema.service';
+import {CurrentRunService} from 'src/app/service/planner-runs/run-services';
+import {TaskSchemaService} from 'src/app/service/task-info/schema.service';
 import {Action} from 'src/app/interface/plan';
-import {CurrentProjectService} from 'src/app/service/project-services';
+import {CurrentProjectService} from 'src/app/service/project/project-services';
 
 
 export abstract class PlanVisualization {

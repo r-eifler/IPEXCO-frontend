@@ -1,4 +1,4 @@
-import {GoalType, PlanProperty} from 'src/app/interface/plan-property';
+import {GoalType, PlanProperty} from 'src/app/interface/plan-property/plan-property';
 
 export interface SchemaObject {
   name: string;

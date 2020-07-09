@@ -1,4 +1,4 @@
-import {DomainSpecificationFile, PDDLFile} from './files';
+import {DomainSpecificationFile, PDDLFile} from './files/files';
 
 export interface Project {
   _id: string;

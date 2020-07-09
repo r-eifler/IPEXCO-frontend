@@ -1,18 +1,18 @@
-import {CurrentProjectService} from '../../../../service/project-services';
-import {PlanProperty} from '../../../../interface/plan-property';
+import {CurrentProjectService} from '../../../../service/project/project-services';
+import {PlanProperty} from '../../../../interface/plan-property/plan-property';
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {Project} from '../../../../interface/project';
 import {PlanRun, RunType} from '../../../../interface/run';
-import {PlannerService} from '../../../../service/planner.service';
+import {PlannerService} from '../../../../service/planner-runs/planner.service';
 import {ActivatedRoute, Router} from '@angular/router';
-import {PlanPropertyMapService} from 'src/app/service/plan-property-services';
-import {RunService} from 'src/app/service/run-services';
+import {PlanPropertyMapService} from 'src/app/service/plan-properties/plan-property-services';
+import {RunService} from 'src/app/service/planner-runs/run-services';
 import {takeUntil} from 'rxjs/operators';
-import {TaskSchemaService} from 'src/app/service/schema.service';
+import {TaskSchemaService} from 'src/app/service/task-info/schema.service';
 import {MatSelectionListChange} from '@angular/material/list/selection-list';
 import {PLANNER_REDIRECT} from 'src/app/app.tokens';
 import {Subject} from 'rxjs';
-import {ExecutionSettingsService} from '../../../../service/execution-settings.service';
+import {ExecutionSettingsService} from '../../../../service/settings/execution-settings.service';
 
 @Component({
   selector: 'app-task-creator',

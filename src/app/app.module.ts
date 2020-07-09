@@ -1,10 +1,9 @@
 import {AnimationSettingsDirective} from './components/animation/animation-settings.directive';
-import {UserService} from './service/user.service';
+import {AuthenticationService} from './service/authentication/authentication.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {DemosService, RunningDemoService} from './service/demo-services';
-import {DisplayTaskService} from './service/display-task.service';
-import {ViewSettingsService} from './service/setting.service';
-import {TaskSchemaService} from './service/schema.service';
+import {DemosService, RunningDemoService} from './service/demo/demo-services';
+import {ViewSettingsService} from './service/settings/setting.service';
+import {TaskSchemaService} from './service/task-info/schema.service';
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 import {RouterModule} from '@angular/router';
@@ -57,9 +56,9 @@ import {DomainSelectorComponent} from './components/files/domain-selector/domain
 import {ProblemSelectorComponent} from './components/files/problem-selector/problem-selector.component';
 import {PropertyCreatorComponent} from './components/plan_properties/property-creator/property-creator.component';
 import {NavigationComponent} from './components/navigation/navigation.component';
-import {ProjectSelectionComponent} from './components/project/project-selection/project-selection.component';
+import {ProjectCollectionComponent} from './components/project/project-collection/project-collection.component';
 import {ProjectCreatorComponent} from './components/project/project-creator/project-creator.component';
-import {PlannerService} from './service/planner.service';
+import {PlannerService} from './service/planner-runs/planner.service';
 import {ProjectBaseComponent} from './components/project/project-base/project-base.component';
 import {PropertyCollectionComponent} from './components/plan_properties/property-collection/property-collection.component';
 import {IterativePlanningBaseComponent} from './components/iter-planning/iterative-planning-base/iterative-planning-base.component';
@@ -67,8 +66,12 @@ import {TaskViewComponent} from './components/iter-planning/planning-step/task-v
 import {PlanViewComponent} from './components/iter-planning/planning-step/plan-view/plan-view.component';
 import {QuestionStepComponent} from './components/iter-planning/question-step/question-step/question-step.component';
 import {PlanningStepComponent} from './components/iter-planning/planning-step/planning-step/planning-step.component';
-import {FinishedPlanningStepComponent} from './components/iter-planning/planning-step/finished-planning-step/finished-planning-step.component';
-import {FinishedQuestionStepComponent} from './components/iter-planning/question-step/finished-question-step/finished-question-step.component';
+import {
+  FinishedPlanningStepComponent
+} from './components/iter-planning/planning-step/finished-planning-step/finished-planning-step.component';
+import {
+  FinishedQuestionStepComponent
+} from './components/iter-planning/question-step/finished-question-step/finished-question-step.component';
 import {TaskCreatorComponent} from './components/iter-planning/planning-step/task-creator/task-creator.component';
 import {QuestionCreatorComponent} from './components/iter-planning/question-step/question-creator/question-creator.component';
 import {QuestionViewComponent} from './components/iter-planning/question-step/question-view/question-view.component';
@@ -76,13 +79,12 @@ import {AnswerViewComponent} from './components/iter-planning/question-step/answ
 // editor
 import {MonacoEditorModule} from 'ngx-monaco-editor';
 // Store
-import {PddlFileUtilsService} from './service/pddl-file-utils.service';
+import {PddlFileUtilsService} from './service/files/pddl-file-utils.service';
 import {
   CurrentProjectStore,
   CurrentQuestionStore,
   CurrentRunStore,
   DemosStore,
-  DisplayTaskStore,
   DomainFilesStore,
   DomainSpecificationFilesStore,
   DomainSpecStore,
@@ -93,9 +95,7 @@ import {
   RunningDemoStore,
   RunningUserStudyStore,
   RunsStore,
-  SelectedDomainFileStore,
-  SelectedProblemFileStore,
-  TasktSchemaStore,
+  TaskSchemaStore,
   UserStore,
   UserStudiesStore,
   ViewSettingsStore
@@ -106,20 +106,21 @@ import {
   ProblemFilesService,
   SelectedDomainFileService,
   SelectedProblemFileService
-} from './service/pddl-file-services';
-import {CurrentQuestionService, CurrentRunService} from './service/run-services';
-import {CurrentProjectService, ProjectsService} from './service/project-services';
-import {PlanPropertyMapService} from './service/plan-property-services';
+} from './service/files/pddl-file-services';
+import {CurrentQuestionService, CurrentRunService} from './service/planner-runs/run-services';
+import {CurrentProjectService, ProjectsService} from './service/project/project-services';
+import {PlanPropertyMapService} from './service/plan-properties/plan-property-services';
 import {LoginComponent} from './components/login/login/login.component';
-import {DemoSelectionComponent} from './components/demo/demo-selection/demo-selection.component';
+import {DemoCollectionComponent} from './components/demo/demo-collection/demo-collection.component';
 import {DemoBaseComponent} from './components/demo/demo-base/demo-base.component';
-import {MobilMenuComponent} from './components/settings/mobil-menu/mobil-menu.component';
 import {DemoSettingsComponent} from './components/demo/demo-settings/demo-settings.component';
 import {ProjectOverviewComponent} from './components/project/project-overview/project-overview.component';
 import {DomainSpecificationComponent} from './components/files/domain-specification/domain-specification.component';
 import {ViewSettingsMenuComponent} from './components/settings/view-settings-menu/view-settings-menu.component';
 import {RunTreeComponent} from './components/iter-planning/run-tree/run-tree.component';
-import {IterativePlanningBaseMobileComponent} from './components/iter-planning/mobile/iterative-planning-base-mobile/iterative-planning-base-mobile.component';
+import {
+  IterativePlanningBaseMobileComponent
+} from './components/iter-planning/mobile/iterative-planning-base-mobile/iterative-planning-base-mobile.component';
 import {PlanAnimationViewComponent} from './components/iter-planning/planning-step/plan-animation-view/plan-animation-view.component';
 import {NomysteryTaskViewComponent} from './components/plugins/nomystery/nomystery-task-view/nomystery-task-view.component';
 import {AnimationHandler} from './plan-visualization/integration/animation-handler';
@@ -132,18 +133,20 @@ import {RegisterComponent} from './components/login/register/register.component'
 import {AuthenticationInterceptor} from './interceptor/authentication.interceptor';
 import {UserMainPageComponent} from './components/user/user-main-page/user-main-page.component';
 import {FilesCollectionComponent} from './components/files/files-collection/files-collection.component';
-import {ExecutionSettingsService} from './service/execution-settings.service';
+import {ExecutionSettingsService} from './service/settings/execution-settings.service';
 import {AnimationSettingsComponent} from './components/animation/animation-settings/animation-settings.component';
-import {AnimationSettingsNomysteryComponent} from './components/plugins/nomystery/animation-settings-nomystery/animation-settings-nomystery.component';
+import {
+  AnimationSettingsNomysteryComponent
+} from './components/plugins/nomystery/animation-settings-nomystery/animation-settings-nomystery.component';
 import {AnimationsSettingsDemoComponent} from './components/animation/animations-settings-demo/animations-settings-demo.component';
 import {MainInfoComponent} from './components/login/main-info/main-info.component';
 import {appRoutes} from './app.routes';
 import {HelpPageComponent} from './components/login/help-page/help-page.component';
 import {DemoFinishedComponent} from './components/demo/demo-finished/demo-finished.component';
 import {DemoTaskIntroComponent} from './components/demo/demo-task-intro/demo-task-intro.component';
-import {UserStudySelectionComponent} from './components/user-study/user-study-selection/user-study-selection.component';
+import {UserStudyCollectionComponent} from './components/user-study/user-study-collection/user-study-collection.component';
 import {UserStudyCreatorComponent} from './components/user-study/user-study-creator/user-study-creator.component';
-import {RunningUserStudyService, UserStudiesService} from './service/user-study-services';
+import {RunningUserStudyService, UserStudiesService} from './service/user-study/user-study-services';
 import {UserStudyBaseComponent} from './components/user-study/user-study-base/user-study-base.component';
 import {UserStudyDescriptionViewComponent} from './components/user-study/user-study-description-view/user-study-description-view.component';
 import {UserStudyFormViewComponent} from './components/user-study/user-study-form-view/user-study-form-view.component';
@@ -162,7 +165,7 @@ import {UserStudyEndComponent} from './components/user-study/user-study-end/user
     ProblemSelectorComponent,
     PropertyCreatorComponent,
     NavigationComponent,
-    ProjectSelectionComponent,
+    ProjectCollectionComponent,
     ProjectCreatorComponent,
     ProjectBaseComponent,
     PropertyCollectionComponent,
@@ -178,9 +181,8 @@ import {UserStudyEndComponent} from './components/user-study/user-study-end/user
     QuestionViewComponent,
     AnswerViewComponent,
     LoginComponent,
-    DemoSelectionComponent,
+    DemoCollectionComponent,
     DemoBaseComponent,
-    MobilMenuComponent,
     DemoSettingsComponent,
     ProjectOverviewComponent,
     DomainSpecificationComponent,
@@ -205,7 +207,7 @@ import {UserStudyEndComponent} from './components/user-study/user-study-end/user
     HelpPageComponent,
     DemoFinishedComponent,
     DemoTaskIntroComponent,
-    UserStudySelectionComponent,
+    UserStudyCollectionComponent,
     UserStudyCreatorComponent,
     UserStudyBaseComponent,
     UserStudyDescriptionViewComponent,
@@ -261,15 +263,13 @@ import {UserStudyEndComponent} from './components/user-study/user-study-end/user
   ],
   providers: [
     UserStore,
-    UserService,
+    AuthenticationService,
     { provide: HTTP_INTERCEPTORS, useClass: AuthenticationInterceptor, multi: true },
     AuthenticationInterceptor,
     ExecutionSettingsStore,
     ExecutionSettingsService,
     DomainFilesStore,
-    SelectedDomainFileStore,
     ProblemFilesStore,
-    SelectedProblemFileStore,
     PddlFileUtilsService,
     DomainFilesService,
     SelectedDomainFileService,
@@ -281,7 +281,7 @@ import {UserStudyEndComponent} from './components/user-study/user-study-end/user
     ProjectsService,
     CurrentProjectStore,
     CurrentProjectService,
-    TasktSchemaStore,
+    TaskSchemaStore,
     TaskSchemaService,
     PlanPropertyMapStore,
     PlanPropertyMapService,
@@ -302,8 +302,6 @@ import {UserStudyEndComponent} from './components/user-study/user-study-end/user
     UserStudiesService,
     RunningUserStudyStore,
     RunningUserStudyService,
-    DisplayTaskStore,
-    DisplayTaskService,
     AnimationHandler,
     {provide: MAT_BOTTOM_SHEET_DEFAULT_OPTIONS, useValue: {hasBackdrop: true}},
     PlanVisualizationProvider,
@@ -311,7 +309,7 @@ import {UserStudyEndComponent} from './components/user-study/user-study-end/user
   ],
   entryComponents: [
     PropertyCreatorComponent,
-    ProjectSelectionComponent,
+    ProjectCollectionComponent,
     ProjectCreatorComponent,
     DemoCreatorComponent,
     PropertyCollectionComponent,

@@ -1,8 +1,8 @@
 import {takeUntil} from 'rxjs/operators';
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ResponsiveService} from 'src/app/service/responsive.service';
+import {ResponsiveService} from 'src/app/service/responsive/responsive.service';
 import {FormControl, FormGroup} from '@angular/forms';
-import {UserService} from 'src/app/service/user.service';
+import {AuthenticationService} from 'src/app/service/authentication/authentication.service';
 import {User} from 'src/app/interface/user';
 import {MatDialogRef} from '@angular/material/dialog';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -27,7 +27,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   constructor(
     private responsiveService: ResponsiveService,
-    private userService: UserService,
+    private userService: AuthenticationService,
     public dialogRef: MatDialogRef<LoginComponent>,
     private router: Router,
     private route: ActivatedRoute) { }

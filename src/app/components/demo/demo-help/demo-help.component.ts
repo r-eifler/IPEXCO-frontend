@@ -1,6 +1,6 @@
 import {takeUntil} from 'rxjs/operators';
 import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
-import {ResponsiveService} from 'src/app/service/responsive.service';
+import {ResponsiveService} from 'src/app/service/responsive/responsive.service';
 import {Subject} from 'rxjs';
 
 @Component({

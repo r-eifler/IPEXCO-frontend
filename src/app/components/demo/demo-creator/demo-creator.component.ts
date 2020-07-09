@@ -1,9 +1,9 @@
-import {DemosService} from './../../../service/demo-services';
+import {DemosService} from '../../../service/demo/demo-services';
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {Demo} from 'src/app/interface/demo';
 import {FormControl, FormGroup} from '@angular/forms';
-import {UserService} from '../../../service/user.service';
+import {AuthenticationService} from '../../../service/authentication/authentication.service';
 
 @Component({
   selector: 'app-demo-creator',
@@ -23,7 +23,7 @@ export class DemoCreatorComponent implements OnInit {
 
   constructor(
     private demosService: DemosService,
-    private userService: UserService,
+    private userService: AuthenticationService,
     public dialogRef: MatDialogRef<DemoCreatorComponent>,
     @Inject(MAT_DIALOG_DATA) data
   ) {

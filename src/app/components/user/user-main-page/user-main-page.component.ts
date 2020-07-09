@@ -1,14 +1,14 @@
 import {Project} from './../../../interface/project';
-import {DomainFilesService, DomainSpecificationFilesService, ProblemFilesService} from './../../../service/pddl-file-services';
-import {DemosService} from './../../../service/demo-services';
-import {ProjectsService} from './../../../service/project-services';
+import {DomainFilesService, DomainSpecificationFilesService, ProblemFilesService} from '../../../service/files/pddl-file-services';
+import {DemosService} from '../../../service/demo/demo-services';
+import {ProjectsService} from '../../../service/project/project-services';
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ResponsiveService} from 'src/app/service/responsive.service';
+import {ResponsiveService} from 'src/app/service/responsive/responsive.service';
 import {takeUntil} from 'rxjs/operators';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Demo} from 'src/app/interface/demo';
 import {Subject} from 'rxjs';
-import {UserStudiesService} from '../../../service/user-study-services';
+import {UserStudiesService} from '../../../service/user-study/user-study-services';
 import {UserStudy} from '../../../interface/user-study/user-study';
 
 @Component({

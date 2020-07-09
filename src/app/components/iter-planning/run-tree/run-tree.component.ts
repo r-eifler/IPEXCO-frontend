@@ -7,7 +7,7 @@ import {NestedTreeControl} from '@angular/cdk/tree';
 import {MatTreeNestedDataSource} from '@angular/material/tree';
 import {ActivatedRoute, Router} from '@angular/router';
 import {CurrentProjectStore, CurrentRunStore} from 'src/app/store/stores.store';
-import {RunService} from 'src/app/service/run-services';
+import {RunService} from 'src/app/service/planner-runs/run-services';
 
 
 interface RunNode {

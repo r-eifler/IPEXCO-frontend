@@ -1,8 +1,8 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
-import {TaskSchemaService} from '../../../service/schema.service';
-import {PlanPropertyMapService} from '../../../service/plan-property-services';
+import {TaskSchemaService} from '../../../service/task-info/schema.service';
+import {PlanPropertyMapService} from '../../../service/plan-properties/plan-property-services';
 import {TaskSchema} from '../../../interface/task-schema';
-import {PlanProperty} from '../../../interface/plan-property';
+import {PlanProperty} from '../../../interface/plan-property/plan-property';
 import {Observable} from 'rxjs';
 
 @Component({

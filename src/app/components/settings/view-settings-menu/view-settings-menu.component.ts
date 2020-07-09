@@ -2,8 +2,8 @@ import {takeUntil} from 'rxjs/operators';
 import {Subject} from 'rxjs';
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {MatBottomSheetRef} from '@angular/material/bottom-sheet';
-import {ViewSettingsService} from 'src/app/service/setting.service';
-import {ViewSettings} from 'src/app/interface/view-settings';
+import {ViewSettingsService} from 'src/app/service/settings/setting.service';
+import {ViewSettings} from 'src/app/interface/settings/view-settings';
 import {MatSlideToggleChange} from '@angular/material/slide-toggle';
 
 @Component({

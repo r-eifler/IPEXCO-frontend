@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {FilesService} from '../../../service/pddl-files.service';
-import {ProblemFilesService, SelectedProblemFileService} from '../../../service/pddl-file-services';
-import {SelectedObjectService} from '../../../service/selected-object.service';
+import {FilesService} from '../../../service/files/pddl-files.service';
+import {ProblemFilesService, SelectedProblemFileService} from '../../../service/files/pddl-file-services';
+import {SelectedObjectService} from '../../../service/base/selected-object.service';
 
 @Component({
   selector: 'app-problem-selector',

@@ -1,8 +1,8 @@
 import {takeUntil} from 'rxjs/operators';
-import {UserService} from 'src/app/service/user.service';
+import {AuthenticationService} from 'src/app/service/authentication/authentication.service';
 import {LoginComponent} from './../login/login/login.component';
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ResponsiveService} from '../../service/responsive.service';
+import {ResponsiveService} from '../../service/responsive/responsive.service';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Subject} from 'rxjs';
@@ -22,7 +22,7 @@ export class NavigationComponent implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    public userService: UserService,
+    public userService: AuthenticationService,
     private responsiveService: ResponsiveService,
     public dialog: MatDialog) {
 

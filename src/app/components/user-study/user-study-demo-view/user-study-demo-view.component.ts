@@ -1,13 +1,13 @@
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {Demo} from '../../../interface/demo';
-import {DemosService, RunningDemoService} from '../../../service/demo-services';
+import {DemosService, RunningDemoService} from '../../../service/demo/demo-services';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {ActivatedRoute, Router} from '@angular/router';
-import {ExecutionSettingsService} from '../../../service/execution-settings.service';
+import {ExecutionSettingsService} from '../../../service/settings/execution-settings.service';
 import {PLANNER_REDIRECT, QUESTION_REDIRECT} from '../../../app.tokens';
-import {DemoRunService, RunService} from '../../../service/run-services';
-import {PlannerService, UserStudyPlannerService} from '../../../service/planner.service';
+import {DemoRunService, RunService} from '../../../service/planner-runs/run-services';
+import {PlannerService, UserStudyPlannerService} from '../../../service/planner-runs/planner.service';
 
 @Component({
   selector: 'app-user-study-demo-view',

@@ -1,10 +1,10 @@
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
-import {RunningUserStudyService} from '../../../service/user-study-services';
+import {RunningUserStudyService} from '../../../service/user-study/user-study-services';
 import {UserStudy} from '../../../interface/user-study/user-study';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {DOCUMENT} from '@angular/common';
-import {UserStudyUserService} from '../../../service/user-study-user.service';
+import {UserStudyUserService} from '../../../service/user-study/user-study-user.service';
 
 @Component({
   selector: 'app-user-study-end',

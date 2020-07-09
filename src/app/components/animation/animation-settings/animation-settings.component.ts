@@ -1,6 +1,6 @@
 // tslint:disable-next-line: max-line-length
 import {AnimationSettingsNomysteryComponent} from './../../plugins/nomystery/animation-settings-nomystery/animation-settings-nomystery.component';
-import {CurrentProjectService} from 'src/app/service/project-services';
+import {CurrentProjectService} from 'src/app/service/project/project-services';
 import {AnimationSettingsDirective} from './../animation-settings.directive';
 import {AfterViewInit, Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {Subject} from 'rxjs';

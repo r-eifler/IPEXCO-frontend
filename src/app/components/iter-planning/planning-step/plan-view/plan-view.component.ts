@@ -1,5 +1,5 @@
 import {RunStatus} from 'src/app/interface/run';
-import {CurrentRunService} from './../../../../service/run-services';
+import {CurrentRunService} from '../../../../service/planner-runs/run-services';
 import {takeUntil} from 'rxjs/operators';
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {BehaviorSubject, Subject} from 'rxjs';

@@ -1,4 +1,4 @@
-import {PlanProperty} from './plan-property';
+import {PlanProperty} from './plan-property/plan-property';
 import {Project} from './project';
 import {Plan} from './plan';
 

@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {MatIconRegistry} from '@angular/material/icon';
 import {DomSanitizer} from '@angular/platform-browser';
-import {UserService} from './service/user.service';
+import {AuthenticationService} from './service/authentication/authentication.service';
 
 
 @Component({
@@ -14,7 +14,7 @@ export class AppComponent implements OnInit {
   editorOptions = {theme: 'vs-dark', language: 'javascript'};
 
   constructor(
-    private userService: UserService,
+    private userService: AuthenticationService,
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer) {
     this.matIconRegistry.addSvgIcon(

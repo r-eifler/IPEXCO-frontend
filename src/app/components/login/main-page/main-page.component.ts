@@ -1,7 +1,7 @@
 import {takeUntil} from 'rxjs/operators';
-import {UserService} from './../../../service/user.service';
+import {AuthenticationService} from '../../../service/authentication/authentication.service';
 import {AfterViewChecked, Component, OnDestroy, OnInit} from '@angular/core';
-import {ResponsiveService} from 'src/app/service/responsive.service';
+import {ResponsiveService} from 'src/app/service/responsive/responsive.service';
 import {gsap} from 'gsap';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {RegisterComponent} from '../register/register.component';
@@ -21,7 +21,7 @@ export class MainPageComponent implements OnInit, AfterViewChecked, OnDestroy {
 
   constructor(
     private responsiveService: ResponsiveService,
-    private userService: UserService,
+    private userService: AuthenticationService,
     private router: Router,
     private route: ActivatedRoute,
     public dialog: MatDialog) { }

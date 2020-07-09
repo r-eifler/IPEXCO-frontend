@@ -1,4 +1,4 @@
-import {TasktSchemaStore} from './../../../../store/stores.store';
+import {TaskSchemaStore} from './../../../../store/stores.store';
 import {TaskSchema} from '../../../../interface/task-schema';
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 
@@ -14,7 +14,7 @@ export class NomysteryTaskViewComponent implements OnInit {
 taskSchema: TaskSchema;
 
 
-  constructor(private taskSchemaStore: TasktSchemaStore) {}
+  constructor(private taskSchemaStore: TaskSchemaStore) {}
 
   ngOnInit(): void {
   }

@@ -1,22 +1,22 @@
-import {DomainSpecificationService} from './../../../service/domain-specification.service';
+import {DomainSpecificationService} from '../../../service/files/domain-specification.service';
 import {takeUntil} from 'rxjs/operators';
 import {MatStepper} from '@angular/material/stepper';
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {FormArray, FormControl, FormGroup, Validators} from '@angular/forms';
-import {Action, ActionSet, PlanProperty} from '../../../interface/plan-property';
+import {Action, ActionSet, PlanProperty} from '../../../interface/plan-property/plan-property';
 import {MatDialogRef} from '@angular/material/dialog';
 import {Project} from 'src/app/interface/project';
-import {TasktSchemaStore} from 'src/app/store/stores.store';
+import {TaskSchemaStore} from 'src/app/store/stores.store';
 import {matchRegexValidator} from '../../../validators/match-regex-validator';
 import {TaskSchema} from 'src/app/interface/task-schema';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import {MatSlideToggleChange} from '@angular/material/slide-toggle';
-import {DomainSpecification} from 'src/app/interface/domain-specification';
-import {PlanPropertyTemplate} from 'src/app/interface/plan-property-template';
+import {DomainSpecification} from 'src/app/interface/files/domain-specification';
+import {PlanPropertyTemplate} from 'src/app/interface/plan-property/plan-property-template';
 import {MatSelectionListChange} from '@angular/material/list';
 import {MatAccordion} from '@angular/material/expansion';
-import {PlanPropertyMapService} from 'src/app/service/plan-property-services';
-import {CurrentProjectService} from 'src/app/service/project-services';
+import {PlanPropertyMapService} from 'src/app/service/plan-properties/plan-property-services';
+import {CurrentProjectService} from 'src/app/service/project/project-services';
 import {Subject} from 'rxjs';
 
 @Component({
@@ -73,7 +73,7 @@ export class PropertyCreatorComponent implements OnInit, OnDestroy {
   constructor(
     private propertiesService: PlanPropertyMapService,
     private currentProjectService: CurrentProjectService,
-    private taskSchemaStore: TasktSchemaStore,
+    private taskSchemaStore: TaskSchemaStore,
     private domainSpecService: DomainSpecificationService,
     public dialogRef: MatDialogRef<PropertyCreatorComponent>) {
 

@@ -1,8 +1,8 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {CurrentQuestionService, CurrentRunService, RunService} from 'src/app/service/run-services';
+import {CurrentQuestionService, CurrentRunService, RunService} from 'src/app/service/planner-runs/run-services';
 import {ActivatedRoute, ParamMap} from '@angular/router';
 import {switchMap, takeUntil} from 'rxjs/operators';
-import {ResponsiveService} from 'src/app/service/responsive.service';
+import {ResponsiveService} from 'src/app/service/responsive/responsive.service';
 import {Subject} from 'rxjs';
 
 @Component({

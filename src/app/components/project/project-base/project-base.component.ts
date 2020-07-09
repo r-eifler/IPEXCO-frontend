@@ -1,19 +1,18 @@
 import {AnimationSettingsProvider} from './../../../provider/plan-visualisation.provider';
 import {QUESTION_REDIRECT} from './../../../app.tokens';
-import {PlannerService} from './../../../service/planner.service';
-import {DemosService} from './../../../service/demo-services';
-import {RunService} from 'src/app/service/run-services';
-import {DisplayTaskService} from './../../../service/display-task.service';
+import {PlannerService} from '../../../service/planner-runs/planner.service';
+import {DemosService} from '../../../service/demo/demo-services';
+import {RunService} from 'src/app/service/planner-runs/run-services';
 import {ViewSettingsMenuComponent} from '../../settings/view-settings-menu/view-settings-menu.component';
-import {TaskSchemaService} from './../../../service/schema.service';
+import {TaskSchemaService} from '../../../service/task-info/schema.service';
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Project} from '../../../interface/project';
 import {ActivatedRoute, ParamMap, Router} from '@angular/router';
 import {switchMap, takeUntil} from 'rxjs/operators';
-import {CurrentProjectService, ProjectsService} from 'src/app/service/project-services';
-import {DomainSpecificationService} from 'src/app/service/domain-specification.service';
+import {CurrentProjectService, ProjectsService} from 'src/app/service/project/project-services';
+import {DomainSpecificationService} from 'src/app/service/files/domain-specification.service';
 import {MatBottomSheet} from '@angular/material/bottom-sheet';
-import {PlanPropertyMapService} from 'src/app/service/plan-property-services';
+import {PlanPropertyMapService} from 'src/app/service/plan-properties/plan-property-services';
 import {combineLatest} from 'rxjs/internal/observable/combineLatest';
 import {DisplayTask} from 'src/app/interface/display-task';
 import {PlanVisualizationProvider} from 'src/app/provider/plan-visualisation.provider';
@@ -48,7 +47,6 @@ export class ProjectBaseComponent implements OnInit, OnDestroy {
     private domainSpecService: DomainSpecificationService,
     private propertiesService: PlanPropertyMapService,
     private runsService: RunService,
-    private displayTaskService: DisplayTaskService,
     private demosService: DemosService,
     private bottomSheet: MatBottomSheet
   ) {
@@ -66,14 +64,6 @@ export class ProjectBaseComponent implements OnInit, OnDestroy {
           this.runsService.findCollection([{param: 'projectId', value: this.project._id}]);
           this.propertiesService.findCollection([{param: 'projectId', value: this.project._id}]);
           this.demosService.findCollection([{param: 'projectId', value: this.project._id}]);
-
-          combineLatest([this.taskSchemaService.findSchema(this.project), this.domainSpecService.findSpec(this.project)])
-          .pipe(takeUntil(this.ngUnsubscribe))
-          .subscribe(([taskSchema, domainSpec]) => {
-              if (taskSchema && domainSpec) {
-                this.displayTaskService.saveObject(new DisplayTask(taskSchema, domainSpec));
-              }
-            });
         }
       }
     );

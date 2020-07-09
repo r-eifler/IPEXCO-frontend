@@ -1,6 +1,6 @@
 import {takeUntil} from 'rxjs/operators';
 import {PlanPropertyMapStore} from '../../../../store/stores.store';
-import {PlanProperty} from 'src/app/interface/plan-property';
+import {PlanProperty} from 'src/app/interface/plan-property/plan-property';
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {combineLatest, Observable, Subject} from 'rxjs';
 import {ExplanationRun, PlanRun} from 'src/app/interface/run';

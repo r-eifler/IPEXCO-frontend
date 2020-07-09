@@ -1,4 +1,4 @@
-import {RunningDemoService} from 'src/app/service/demo-services';
+import {RunningDemoService} from 'src/app/service/demo/demo-services';
 import {AfterViewInit, Component, ComponentFactoryResolver, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {AnimationSettingsDirective} from '../animation-settings.directive';
 import {Subject} from 'rxjs';

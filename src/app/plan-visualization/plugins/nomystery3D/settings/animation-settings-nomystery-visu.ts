@@ -2,8 +2,8 @@ import {BehaviorSubject} from 'rxjs';
 import {NoMysteryTask} from '../../nomystery/nomystery-task';
 import {LocationPositioningSettings} from 'src/app/plan-visualization/plugins/nomystery3D/settings/location-positioning';
 import {Project} from 'src/app/interface/project';
-import {CurrentProjectService, ProjectsService} from 'src/app/service/project-services';
-import {TaskSchemaService} from '../../../../service/schema.service';
+import {CurrentProjectService, ProjectsService} from 'src/app/service/project/project-services';
+import {TaskSchemaService} from '../../../../service/task-info/schema.service';
 import {AnimationSettingsNoMystery} from './animation-settings-nomystery';
 
 

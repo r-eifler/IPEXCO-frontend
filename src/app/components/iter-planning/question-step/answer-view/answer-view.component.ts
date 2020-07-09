@@ -1,9 +1,8 @@
-import {PlanProperty} from './../../../../interface/plan-property';
-import {DisplayTaskService} from './../../../../service/display-task.service';
+import {PlanProperty} from '../../../../interface/plan-property/plan-property';
 import {takeUntil} from 'rxjs/operators';
-import {CurrentQuestionService} from 'src/app/service/run-services';
-import {CurrentRunService} from './../../../../service/run-services';
-import {PlanPropertyMapService} from 'src/app/service/plan-property-services';
+import {CurrentQuestionService} from 'src/app/service/planner-runs/run-services';
+import {CurrentRunService} from '../../../../service/planner-runs/run-services';
+import {PlanPropertyMapService} from 'src/app/service/plan-properties/plan-property-services';
 import {combineLatest, Observable, Subject} from 'rxjs';
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ExplanationRun, PlanRun} from 'src/app/interface/run';
@@ -31,8 +30,7 @@ export class AnswerViewComponent implements OnInit, OnDestroy {
   constructor(
     private  currentRunService: CurrentRunService,
     private currentQuestionService: CurrentQuestionService,
-    private planPropertiesService: PlanPropertyMapService,
-    private displayTaskService: DisplayTaskService) {
+    private planPropertiesService: PlanPropertyMapService) {
 
     this.currentRun$ = this.currentRunService.getSelectedObject();
     this.currentQuestion$ = this.currentQuestionService.getSelectedObject();

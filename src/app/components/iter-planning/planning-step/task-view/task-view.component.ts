@@ -1,10 +1,10 @@
-import {PlanPropertyMapService} from './../../../../service/plan-property-services';
+import {PlanPropertyMapService} from '../../../../service/plan-properties/plan-property-services';
 import {takeUntil} from 'rxjs/operators';
-import {PlanProperty} from './../../../../interface/plan-property';
+import {PlanProperty} from '../../../../interface/plan-property/plan-property';
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {CurrentRunStore} from '../../../../store/stores.store';
 import {combineLatest, Subject} from 'rxjs';
-import {ExecutionSettingsService} from '../../../../service/execution-settings.service';
+import {ExecutionSettingsService} from '../../../../service/settings/execution-settings.service';
 
 
 @Component({

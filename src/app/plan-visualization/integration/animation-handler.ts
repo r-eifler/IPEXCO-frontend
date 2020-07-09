@@ -1,4 +1,4 @@
-import {CurrentRunService} from 'src/app/service/run-services';
+import {CurrentRunService} from 'src/app/service/planner-runs/run-services';
 import {Plan} from '../../interface/plan';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {PlanVisualization} from './plan-visualization';

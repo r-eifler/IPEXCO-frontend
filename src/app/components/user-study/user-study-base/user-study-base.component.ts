@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Subject} from 'rxjs';
-import {RunningUserStudyService, UserStudiesService} from '../../../service/user-study-services';
-import {ResponsiveService} from '../../../service/responsive.service';
+import {RunningUserStudyService, UserStudiesService} from '../../../service/user-study/user-study-services';
+import {ResponsiveService} from '../../../service/responsive/responsive.service';
 import {ActivatedRoute} from '@angular/router';
 import {takeUntil} from 'rxjs/operators';
 

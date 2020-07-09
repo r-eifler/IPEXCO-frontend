@@ -1,11 +1,11 @@
 import {takeUntil} from 'rxjs/operators';
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
-import {FilesService} from '../../../service/pddl-files.service';
+import {FilesService} from '../../../service/files/pddl-files.service';
 
-import {PDDLFile} from '../../../interface/files';
+import {PDDLFile} from '../../../interface/files/files';
 import {Observable, Subject} from 'rxjs';
-import {ResponsiveService} from 'src/app/service/responsive.service';
+import {ResponsiveService} from 'src/app/service/responsive/responsive.service';
 
 @Component({
   selector: 'app-template-file-upload',
