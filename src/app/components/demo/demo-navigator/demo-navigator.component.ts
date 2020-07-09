@@ -7,7 +7,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {DemosService, RunningDemoService} from 'src/app/service/demo/demo-services';
 import {CurrentProjectService} from 'src/app/service/project/project-services';
 import {PlanPropertyMapService} from 'src/app/service/plan-properties/plan-property-services';
-import {CurrentRunService, RunService} from 'src/app/service/planner-runs/run-services';
+import {PlanRunsService} from 'src/app/service/planner-runs/planruns.service';
 import {DomainSpecificationService} from 'src/app/service/files/domain-specification.service';
 import {TaskSchemaService} from 'src/app/service/task-info/schema.service';
 import {takeUntil} from 'rxjs/operators';
@@ -15,6 +15,7 @@ import {ExecutionSettingsService} from 'src/app/service/settings/execution-setti
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {ExecutionSettings} from '../../../interface/settings/execution-settings';
 import {PlannerService} from '../../../service/planner-runs/planner.service';
+import {SelectedPlanRunService} from '../../../service/planner-runs/selected-planrun.service';
 
 @Component({
   selector: 'app-demo-navigator',
@@ -51,10 +52,10 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
     private runningDemoService: RunningDemoService,
     private currentProjectService: CurrentProjectService,
     private propertiesService: PlanPropertyMapService,
-    public runsService: RunService,
+    public runsService: PlanRunsService,
     private domainSpecService: DomainSpecificationService,
     private currentSchemaService: TaskSchemaService,
-    private currentRunService: CurrentRunService,
+    private currentRunService: SelectedPlanRunService,
     public plannerService: PlannerService,
     public dialog: MatDialog
   ) {

@@ -1,12 +1,13 @@
 import {CurrentProjectService} from 'src/app/service/project/project-services';
 import {ExplanationRun, PlanRun, RunType} from '../../../../interface/run';
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {CurrentRunService, RunService} from '../../../../service/planner-runs/run-services';
+import {PlanRunsService} from '../../../../service/planner-runs/planruns.service';
 import {Observable} from 'rxjs';
 import {ActivatedRoute, Router} from '@angular/router';
 import {NestedTreeControl} from '@angular/cdk/tree';
 import {MatTreeNestedDataSource} from '@angular/material/tree';
 import {takeUntil} from 'rxjs/operators';
+import {SelectedPlanRunService} from '../../../../service/planner-runs/selected-planrun.service';
 
 
 /**
@@ -41,8 +42,8 @@ export class IterativePlanningBaseComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private currentProjectService: CurrentProjectService,
-    private runService: RunService,
-    private currentRunService: CurrentRunService,
+    private runService: PlanRunsService,
+    private currentRunService: SelectedPlanRunService,
   ) {
     this.runs$ = this.runService.getList();
 

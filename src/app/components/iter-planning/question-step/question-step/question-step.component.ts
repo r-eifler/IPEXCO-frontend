@@ -1,9 +1,10 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ResponsiveService} from 'src/app/service/responsive/responsive.service';
 import {ActivatedRoute, ParamMap, Router} from '@angular/router';
-import {CurrentRunService, RunService} from 'src/app/service/planner-runs/run-services';
+import {PlanRunsService} from 'src/app/service/planner-runs/planruns.service';
 import {switchMap, takeUntil} from 'rxjs/operators';
 import {Subject} from 'rxjs';
+import {SelectedPlanRunService} from '../../../../service/planner-runs/selected-planrun.service';
 
 @Component({
   selector: 'app-question-step',
@@ -20,8 +21,8 @@ export class QuestionStepComponent implements OnInit, OnDestroy {
     private responsiveService: ResponsiveService,
     private route: ActivatedRoute,
     private router: Router,
-    private runService: RunService,
-    currentRunService: CurrentRunService
+    private runService: PlanRunsService,
+    currentRunService: SelectedPlanRunService
     ) {
     this.route.paramMap.pipe(
       switchMap((params: ParamMap) =>

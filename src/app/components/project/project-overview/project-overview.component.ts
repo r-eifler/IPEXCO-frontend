@@ -2,7 +2,7 @@ import {takeUntil} from 'rxjs/operators';
 import {DemoCreatorComponent} from './../../demo/demo-creator/demo-creator.component';
 import {DemosService} from '../../../service/demo/demo-services';
 import {PlanRun} from 'src/app/interface/run';
-import {RunService} from '../../../service/planner-runs/run-services';
+import {PlanRunsService} from '../../../service/planner-runs/planruns.service';
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ResponsiveService} from 'src/app/service/responsive/responsive.service';
 import {PlanPropertyMapService} from 'src/app/service/plan-properties/plan-property-services';
@@ -31,7 +31,7 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
     private responsiveService: ResponsiveService,
     private propertiesService: PlanPropertyMapService,
     private currentProjectService: CurrentProjectService,
-    public runsService: RunService,
+    public runsService: PlanRunsService,
     public demosService: DemosService,
     public dialog: MatDialog) {
       this.properties$ = this.propertiesService.getMap();

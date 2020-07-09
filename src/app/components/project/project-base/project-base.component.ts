@@ -2,7 +2,7 @@ import {AnimationSettingsProvider} from './../../../provider/plan-visualisation.
 import {QUESTION_REDIRECT} from './../../../app.tokens';
 import {PlannerService} from '../../../service/planner-runs/planner.service';
 import {DemosService} from '../../../service/demo/demo-services';
-import {RunService} from 'src/app/service/planner-runs/run-services';
+import {PlanRunsService} from 'src/app/service/planner-runs/planruns.service';
 import {ViewSettingsMenuComponent} from '../../settings/view-settings-menu/view-settings-menu.component';
 import {TaskSchemaService} from '../../../service/task-info/schema.service';
 import {Component, OnDestroy, OnInit} from '@angular/core';
@@ -26,7 +26,7 @@ import {Subject} from 'rxjs';
   providers: [
      PlanVisualizationProvider,
      AnimationSettingsProvider,
-    {provide: RunService, useClass: RunService},
+    {provide: PlanRunsService, useClass: PlanRunsService},
     {provide: PlannerService, useClass: PlannerService},
     { provide: PLANNER_REDIRECT, useValue: '../run-overview-mobile' },
     { provide: QUESTION_REDIRECT, useValue: '../../../run-overview-mobile' }
@@ -46,7 +46,7 @@ export class ProjectBaseComponent implements OnInit, OnDestroy {
     private taskSchemaService: TaskSchemaService,
     private domainSpecService: DomainSpecificationService,
     private propertiesService: PlanPropertyMapService,
-    private runsService: RunService,
+    private runsService: PlanRunsService,
     private demosService: DemosService,
     private bottomSheet: MatBottomSheet
   ) {

@@ -1,7 +1,7 @@
 import {takeUntil} from 'rxjs/operators';
 import {CurrentProjectService} from 'src/app/service/project/project-services';
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {RunService} from 'src/app/service/planner-runs/run-services';
+import {PlanRunsService} from 'src/app/service/planner-runs/planruns.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Project} from 'src/app/interface/project';
 import {Subject} from 'rxjs';
@@ -21,7 +21,7 @@ export class IterativePlanningBaseMobileComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private currentProjectService: CurrentProjectService,
-    private runService: RunService,
+    private runService: PlanRunsService,
   ) {
 
 

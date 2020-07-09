@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {DemoPlannerService} from './demoPlanner.service';
+import {DemoPlannerService} from './demo-planner.service';
 import {environment} from '../../../environments/environment';
 import {HttpClient} from '@angular/common/http';
 import {RunsStore} from '../../store/stores.store';

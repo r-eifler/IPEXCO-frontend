@@ -6,16 +6,17 @@ import {takeUntil} from 'rxjs/operators';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ExecutionSettingsService} from '../../../service/settings/execution-settings.service';
 import {PLANNER_REDIRECT, QUESTION_REDIRECT} from '../../../app.tokens';
-import {DemoRunService, RunService} from '../../../service/planner-runs/run-services';
+import {PlanRunsService} from '../../../service/planner-runs/planruns.service';
 import {PlannerService} from '../../../service/planner-runs/planner.service';
-import {UserStudyPlannerService} from '../../../service/planner-runs/userStudyPlanner.service';
+import {UserStudyPlannerService} from '../../../service/planner-runs/user-study-planner.service';
+import {DemoRunService} from '../../../service/planner-runs/demo-planruns.service';
 
 @Component({
   selector: 'app-user-study-demo-view',
   templateUrl: './user-study-demo-view.component.html',
   styleUrls: ['./user-study-demo-view.component.css'],
   providers: [
-    {provide: RunService, useClass: DemoRunService},
+    {provide: PlanRunsService, useClass: DemoRunService},
     {provide: PlannerService, useClass: UserStudyPlannerService},
     { provide: PLANNER_REDIRECT, useValue: '../' },
     { provide: QUESTION_REDIRECT, useValue: '../../../' },

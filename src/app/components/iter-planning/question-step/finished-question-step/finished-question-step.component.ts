@@ -1,9 +1,11 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {CurrentQuestionService, CurrentRunService, RunService} from 'src/app/service/planner-runs/run-services';
+import {PlanRunsService} from 'src/app/service/planner-runs/planruns.service';
 import {ActivatedRoute, ParamMap} from '@angular/router';
 import {switchMap, takeUntil} from 'rxjs/operators';
 import {ResponsiveService} from 'src/app/service/responsive/responsive.service';
 import {Subject} from 'rxjs';
+import {SelectedPlanRunService} from '../../../../service/planner-runs/selected-planrun.service';
+import {CurrentQuestionService} from '../../../../service/planner-runs/selected-question.service';
 
 @Component({
   selector: 'app-finished-question-step',
@@ -18,9 +20,9 @@ export class FinishedQuestionStepComponent implements OnInit, OnDestroy {
 
   constructor(
     private responsiveService: ResponsiveService,
-    private runService: RunService,
+    private runService: PlanRunsService,
     private route: ActivatedRoute,
-    private currentRunService: CurrentRunService,
+    private currentRunService: SelectedPlanRunService,
     private currentQuestionService: CurrentQuestionService) {
 
       // TODO simplify code !!!

@@ -107,7 +107,6 @@ import {
   SelectedDomainFileService,
   SelectedProblemFileService
 } from './service/files/pddl-file-services';
-import {CurrentQuestionService, CurrentRunService} from './service/planner-runs/run-services';
 import {CurrentProjectService, ProjectsService} from './service/project/project-services';
 import {PlanPropertyMapService} from './service/plan-properties/plan-property-services';
 import {LoginComponent} from './components/login/login/login.component';
@@ -154,6 +153,8 @@ import {UserStudyDemoViewComponent} from './components/user-study/user-study-dem
 import {UserStudyStartComponent} from './components/user-study/user-study-start/user-study-start.component';
 import {UserStudyExecuterComponent} from './components/user-study/user-study-executer/user-study-executer.component';
 import {UserStudyEndComponent} from './components/user-study/user-study-end/user-study-end.component';
+import {SelectedPlanRunService} from './service/planner-runs/selected-planrun.service';
+import {CurrentQuestionService} from './service/planner-runs/selected-question.service';
 
 
 @NgModule({
@@ -287,7 +288,7 @@ import {UserStudyEndComponent} from './components/user-study/user-study-end/user
     PlanPropertyMapService,
     PlannerService,
     RunsStore,
-    CurrentRunService,
+    SelectedPlanRunService,
     CurrentRunStore,
     CurrentQuestionStore,
     CurrentQuestionService,

@@ -1,8 +1,7 @@
 import {DEMO_FINISHED_REDIRECT, QUESTION_REDIRECT} from './../../../app.tokens';
 import {PlannerService} from '../../../service/planner-runs/planner.service';
-import {DemoRunService} from '../../../service/planner-runs/run-services';
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {RunService} from 'src/app/service/planner-runs/run-services';
+import {PlanRunsService} from 'src/app/service/planner-runs/planruns.service';
 import {PLANNER_REDIRECT} from 'src/app/app.tokens';
 import {ActivatedRoute, Router} from '@angular/router';
 import {takeUntil} from 'rxjs/operators';
@@ -10,7 +9,8 @@ import {Demo} from '../../../interface/demo';
 import {DemosService, RunningDemoService} from '../../../service/demo/demo-services';
 import {Subject} from 'rxjs';
 import {ExecutionSettingsService} from '../../../service/settings/execution-settings.service';
-import {DemoPlannerService} from '../../../service/planner-runs/demoPlanner.service';
+import {DemoPlannerService} from '../../../service/planner-runs/demo-planner.service';
+import {DemoRunService} from '../../../service/planner-runs/demo-planruns.service';
 
 
 @Component({
@@ -18,7 +18,7 @@ import {DemoPlannerService} from '../../../service/planner-runs/demoPlanner.serv
   templateUrl: './demo-base.component.html',
   styleUrls: ['./demo-base.component.scss'],
   providers: [
-    {provide: RunService, useClass: DemoRunService},
+    {provide: PlanRunsService, useClass: DemoRunService},
     {provide: PlannerService, useClass: DemoPlannerService},
     { provide: PLANNER_REDIRECT, useValue: '../' },
     { provide: QUESTION_REDIRECT, useValue: '../../../' },

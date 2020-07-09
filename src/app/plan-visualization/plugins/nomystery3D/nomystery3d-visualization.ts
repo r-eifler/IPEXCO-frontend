@@ -10,9 +10,9 @@ import {loadTruckMeshes} from './world/trucks';
 import {loadPackagekMeshes} from './world/packages';
 import {NoMystery3DAnimation} from './animations/nomystery3D-animation';
 import {TaskSchemaService} from 'src/app/service/task-info/schema.service';
-import {CurrentRunService} from 'src/app/service/planner-runs/run-services';
 import {Injectable} from '@angular/core';
 import {AnimationSettingsNoMystery} from './settings/animation-settings-nomystery';
+import {SelectedPlanRunService} from '../../../service/planner-runs/selected-planrun.service';
 
 
 interface Position {
@@ -52,7 +52,7 @@ export class NoMystery3DVisualization extends PlanVisualization {
   constructor(
     protected currentProjectService: CurrentProjectService,
     protected taskSchemaService: TaskSchemaService,
-    protected  currentRunService: CurrentRunService) {
+    protected  currentRunService: SelectedPlanRunService) {
     super(currentProjectService, taskSchemaService, currentRunService);
 
     this.currentProjectService.getSelectedObject().subscribe(

@@ -6,7 +6,7 @@ import {PlanRun, RunType} from '../../../../interface/run';
 import {PlannerService} from '../../../../service/planner-runs/planner.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {PlanPropertyMapService} from 'src/app/service/plan-properties/plan-property-services';
-import {RunService} from 'src/app/service/planner-runs/run-services';
+import {PlanRunsService} from 'src/app/service/planner-runs/planruns.service';
 import {takeUntil} from 'rxjs/operators';
 import {TaskSchemaService} from 'src/app/service/task-info/schema.service';
 import {MatSelectionListChange} from '@angular/material/list/selection-list';
@@ -39,7 +39,7 @@ export class TaskCreatorComponent implements OnInit, OnDestroy {
     private taskSchemaService: TaskSchemaService,
     private plannerService: PlannerService,
     private propertiesService: PlanPropertyMapService,
-    private runService: RunService,
+    private runService: PlanRunsService,
     public settingsService: ExecutionSettingsService,
     private router: Router,
     private route: ActivatedRoute,

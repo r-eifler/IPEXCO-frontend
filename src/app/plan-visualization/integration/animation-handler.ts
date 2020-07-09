@@ -1,8 +1,8 @@
-import {CurrentRunService} from 'src/app/service/planner-runs/run-services';
 import {Plan} from '../../interface/plan';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {PlanVisualization} from './plan-visualization';
 import {Inject, Injectable} from '@angular/core';
+import {SelectedPlanRunService} from '../../service/planner-runs/selected-planrun.service';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +20,7 @@ public currentAnimationPausedEvent: BehaviorSubject<boolean> = new BehaviorSubje
 
 
 constructor(
-  private  currentRunService: CurrentRunService,
+  private  currentRunService: SelectedPlanRunService,
   @Inject(PlanVisualization) public animation: PlanVisualization) {
     this.currentRunService.getSelectedObject().subscribe((run) => {
       if (run) {

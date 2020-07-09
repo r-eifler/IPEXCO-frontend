@@ -1,10 +1,11 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {CurrentRunService, RunService} from '../../../../service/planner-runs/run-services';
+import {PlanRunsService} from '../../../../service/planner-runs/planruns.service';
 import {ActivatedRoute, ParamMap, Router} from '@angular/router';
 import {switchMap, takeUntil} from 'rxjs/operators';
 import {ExecutionSettingsService} from 'src/app/service/settings/execution-settings.service';
 import {Subject} from 'rxjs';
 import {PlanAnimationViewComponent} from '../plan-animation-view/plan-animation-view.component';
+import {SelectedPlanRunService} from '../../../../service/planner-runs/selected-planrun.service';
 
 
 @Component({
@@ -24,8 +25,8 @@ export class FinishedPlanningStepComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     public settingsService: ExecutionSettingsService,
-    private runService: RunService,
-    public currentRunService: CurrentRunService) {
+    private runService: PlanRunsService,
+    public currentRunService: SelectedPlanRunService) {
 
     console.log('Finished planning step');
     this.route.paramMap.pipe(

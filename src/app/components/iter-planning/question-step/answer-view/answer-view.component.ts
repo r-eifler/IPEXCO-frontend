@@ -1,11 +1,11 @@
 import {PlanProperty} from '../../../../interface/plan-property/plan-property';
 import {takeUntil} from 'rxjs/operators';
-import {CurrentQuestionService} from 'src/app/service/planner-runs/run-services';
-import {CurrentRunService} from '../../../../service/planner-runs/run-services';
 import {PlanPropertyMapService} from 'src/app/service/plan-properties/plan-property-services';
 import {combineLatest, Observable, Subject} from 'rxjs';
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ExplanationRun, PlanRun} from 'src/app/interface/run';
+import {SelectedPlanRunService} from '../../../../service/planner-runs/selected-planrun.service';
+import {CurrentQuestionService} from '../../../../service/planner-runs/selected-question.service';
 
 interface Answer {
   MUGS: string[];
@@ -28,7 +28,7 @@ export class AnswerViewComponent implements OnInit, OnDestroy {
   filteredMUGS: PlanProperty[][] = [];
 
   constructor(
-    private  currentRunService: CurrentRunService,
+    private  currentRunService: SelectedPlanRunService,
     private currentQuestionService: CurrentQuestionService,
     private planPropertiesService: PlanPropertyMapService) {
 

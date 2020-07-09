@@ -1,9 +1,9 @@
 import {RunStatus} from 'src/app/interface/run';
-import {CurrentRunService} from '../../../../service/planner-runs/run-services';
 import {takeUntil} from 'rxjs/operators';
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {BehaviorSubject, Subject} from 'rxjs';
 import {PlanRun} from '../../../../interface/run';
+import {SelectedPlanRunService} from '../../../../service/planner-runs/selected-planrun.service';
 
 interface Action {
   name: string;
@@ -25,7 +25,7 @@ export class PlanViewComponent implements OnInit, OnDestroy {
   private currentRun$: BehaviorSubject<PlanRun>;
 
     constructor(
-      private  currentRunService: CurrentRunService) {
+      private  currentRunService: SelectedPlanRunService) {
       this.currentRun$ = this.currentRunService.getSelectedObject();
     }
 

@@ -11,7 +11,7 @@ import {CurrentProjectService} from 'src/app/service/project/project-services';
 import {MatSelectionList} from '@angular/material/list/selection-list';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ExecutionSettingsService} from 'src/app/service/settings/execution-settings.service';
-import {CurrentRunService} from 'src/app/service/planner-runs/run-services';
+import {SelectedPlanRunService} from '../../../../service/planner-runs/selected-planrun.service';
 
 @Component({
   selector: 'app-question-creator',
@@ -40,7 +40,7 @@ export class QuestionCreatorComponent implements OnInit, OnDestroy {
     private propertiesService: PlanPropertyMapService,
     private currentProjectService: CurrentProjectService,
     private plannerService: PlannerService,
-    private currentRunService: CurrentRunService,
+    private currentRunService: SelectedPlanRunService,
     private router: Router,
     private route: ActivatedRoute,
     @Inject(QUESTION_REDIRECT) private redirectURL: string

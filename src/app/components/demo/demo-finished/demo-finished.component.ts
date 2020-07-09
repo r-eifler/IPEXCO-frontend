@@ -3,7 +3,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {Demo} from 'src/app/interface/demo';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ExecutionSettingsService} from '../../../service/settings/execution-settings.service';
-import {RunService} from '../../../service/planner-runs/run-services';
+import {PlanRunsService} from '../../../service/planner-runs/planruns.service';
 import {Subject} from 'rxjs';
 
 @Component({
@@ -21,7 +21,7 @@ export class DemoFinishedComponent implements OnInit, OnDestroy {
 
   constructor(
     public settingsService: ExecutionSettingsService,
-    public runsService: RunService,
+    public runsService: PlanRunsService,
     private route: ActivatedRoute,
     private router: Router,
     public dialogRef: MatDialogRef<DemoFinishedComponent>,

@@ -4,12 +4,12 @@ import {CurrentProjectService} from '../service/project/project-services';
 import {NoMystery3DVisualization} from '../plan-visualization/plugins/nomystery3D/nomystery3d-visualization';
 import {PlanVisualization} from '../plan-visualization/integration/plan-visualization';
 import {TaskSchemaService} from '../service/task-info/schema.service';
-import {CurrentRunService} from '../service/planner-runs/run-services';
 import {AnimationSettingsNoMysteryVisu} from '../plan-visualization/plugins/nomystery3D/settings/animation-settings-nomystery-visu';
+import {SelectedPlanRunService} from '../service/planner-runs/selected-planrun.service';
 
 const planVisualizationFactory = (
     taskSchemaService: TaskSchemaService,
-    currentRunService: CurrentRunService,
+    currentRunService: SelectedPlanRunService,
     projectService: CurrentProjectService) => {
       console.log('Provide plan Visualization');
       if (projectService.getSelectedObject().value.domainFile.domain === 'nomystery') {
@@ -23,7 +23,7 @@ const planVisualizationFactory = (
 export let PlanVisualizationProvider =
   { provide: PlanVisualization,
     useFactory: planVisualizationFactory,
-    deps: [TaskSchemaService, CurrentRunService, CurrentProjectService]
+    deps: [TaskSchemaService, SelectedPlanRunService, CurrentProjectService]
   };
 
 
