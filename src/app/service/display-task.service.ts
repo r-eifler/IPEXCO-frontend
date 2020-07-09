@@ -1,7 +1,7 @@
-import { DisplayTaskStore } from './../store/stores.store';
-import { SelectedObjectService } from './selected-object.service';
-import { Injectable } from '@angular/core';
-import { DisplayTask } from '../interface/display-task';
+import {DisplayTaskStore} from './../store/stores.store';
+import {SelectedObjectService} from './selected-object.service';
+import {Injectable} from '@angular/core';
+import {DisplayTask} from '../interface/display-task';
 
 @Injectable({
   providedIn: 'root'

@@ -1,12 +1,9 @@
-import { takeUntil, filter } from 'rxjs/operators';
-import { DemosService } from './../../../service/demo-services';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
-import { MatBottomSheetRef, MAT_BOTTOM_SHEET_DATA } from '@angular/material/bottom-sheet';
-import { Demo } from 'src/app/interface/demo';
-import { ExecutionSettings } from 'src/app/interface/execution-settings';
-import { ExecutionSettingsService } from 'src/app/service/execution-settings.service';
-import { Subject } from 'rxjs';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
+import {MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef} from '@angular/material/bottom-sheet';
+import {ExecutionSettings} from 'src/app/interface/execution-settings';
+import {ExecutionSettingsService} from 'src/app/service/execution-settings.service';
+import {Subject} from 'rxjs';
 
 @Component({
   selector: 'app-demo-settings',

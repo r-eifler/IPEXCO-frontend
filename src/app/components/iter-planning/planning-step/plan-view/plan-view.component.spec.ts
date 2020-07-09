@@ -1,6 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { PlanViewComponent } from './plan-view.component';
+import {PlanViewComponent} from './plan-view.component';
 
 describe('PlanViewComponent', () => {
   let component: PlanViewComponent;

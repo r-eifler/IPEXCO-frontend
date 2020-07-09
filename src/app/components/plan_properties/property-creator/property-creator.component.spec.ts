@@ -1,6 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { PropertyCreatorComponent } from './property-creator.component';
+import {PropertyCreatorComponent} from './property-creator.component';
 
 describe('PropertyCreatorComponent', () => {
   let component: PropertyCreatorComponent;

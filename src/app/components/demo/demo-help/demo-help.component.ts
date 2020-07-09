@@ -1,7 +1,7 @@
-import { takeUntil } from 'rxjs/operators';
-import {Component, OnInit, OnDestroy, Output, EventEmitter} from '@angular/core';
-import { ResponsiveService } from 'src/app/service/responsive.service';
-import { Subject } from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
+import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
+import {ResponsiveService} from 'src/app/service/responsive.service';
+import {Subject} from 'rxjs';
 
 @Component({
   selector: 'app-demo-help',

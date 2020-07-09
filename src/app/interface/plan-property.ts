@@ -1,5 +1,3 @@
-import { LtlFormula} from './ltl-formula';
-
 export interface Action {
   _id?: string;
   name: string;

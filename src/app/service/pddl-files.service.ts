@@ -1,11 +1,10 @@
 import {Injectable} from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {IHTTPData} from '../interface/http-data.interface';
-import {HttpParams} from '@angular/common/http';
 
-import { File } from '../interface/files';
+import {File} from '../interface/files';
 import {environment} from '../../environments/environment';
-import {LOAD, ADD, EDIT, REMOVE, ListStore} from '../store/generic-list.store';
+import {ADD, EDIT, ListStore, LOAD, REMOVE} from '../store/generic-list.store';
 
 import {Observable} from 'rxjs';
 

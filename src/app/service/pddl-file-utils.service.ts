@@ -1,15 +1,15 @@
-import { PlanProperty, GoalType } from 'src/app/interface/plan-property';
+import {GoalType, PlanProperty} from 'src/app/interface/plan-property';
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 
 import {PDDLFile} from '../interface/files';
-import {BehaviorSubject, Observable} from 'rxjs';
+import {Observable} from 'rxjs';
 import {environment} from '../../environments/environment';
 import {IHTTPData} from '../interface/http-data.interface';
 import {map} from 'rxjs/operators';
-import { DomainSpecification } from '../interface/domain-specification';
-import { DomainSpecificationService } from './domain-specification.service';
-import { Project } from '../interface/project';
+import {DomainSpecification} from '../interface/domain-specification';
+import {DomainSpecificationService} from './domain-specification.service';
+import {Project} from '../interface/project';
 
 interface FileContent {
   data: string;

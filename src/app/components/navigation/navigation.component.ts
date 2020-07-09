@@ -1,12 +1,11 @@
-import { takeUntil } from 'rxjs/operators';
-import { UserService } from 'src/app/service/user.service';
-import { LoginComponent } from './../login/login/login.component';
-import { RegisterComponent } from './../login/register/register.component';
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ResponsiveService} from '../../service/responsive.service';
-import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { Router, ActivatedRoute } from '@angular/router';
-import { Subject } from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
+import {UserService} from 'src/app/service/user.service';
+import {LoginComponent} from './../login/login/login.component';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {ResponsiveService} from '../../service/responsive.service';
+import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
+import {ActivatedRoute, Router} from '@angular/router';
+import {Subject} from 'rxjs';
 
 
 @Component({

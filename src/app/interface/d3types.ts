@@ -1,4 +1,4 @@
-import { SimulationNodeDatum, SimulationLinkDatum } from 'd3';
+import {SimulationLinkDatum, SimulationNodeDatum} from 'd3';
 
 export class D3Node implements SimulationNodeDatum {
 

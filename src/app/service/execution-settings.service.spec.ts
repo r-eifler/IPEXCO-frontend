@@ -1,6 +1,6 @@
-import { TestBed } from '@angular/core/testing';
+import {TestBed} from '@angular/core/testing';
 
-import { ExecutionSettingsService } from './execution-settings.service';
+import {ExecutionSettingsService} from './execution-settings.service';
 
 describe('ExecutionSettingsService', () => {
   let service: ExecutionSettingsService;

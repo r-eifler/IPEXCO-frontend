@@ -1,6 +1,6 @@
-import { TestBed } from '@angular/core/testing';
+import {TestBed} from '@angular/core/testing';
 
-import { ObjectCollectionService } from './object-collection.service';
+import {ObjectCollectionService} from './object-collection.service';
 import {PlanProperty} from '../interface/plan-property';
 
 describe('PlanPropertyService', () => {

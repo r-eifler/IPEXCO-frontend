@@ -1,9 +1,7 @@
-import { NoMysteryTask, Location, Road } from './../../nomystery/nomystery-task';
-import { ElementRef } from '@angular/core';
-import { gsap } from 'gsap';
-import { Draggable } from 'gsap/Draggable';
-import { logDepthVertex } from 'babylonjs/Shaders/ShadersInclude/logDepthVertex';
-import { AnimationSettingsNoMystery } from './animation-settings-nomystery';
+import {Location, NoMysteryTask, Road} from './../../nomystery/nomystery-task';
+import {gsap} from 'gsap';
+import {Draggable} from 'gsap/Draggable';
+import {AnimationSettingsNoMystery} from './animation-settings-nomystery';
 
 interface Position {
   x: number;

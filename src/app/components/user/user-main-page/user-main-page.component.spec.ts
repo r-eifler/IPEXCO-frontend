@@ -1,6 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { UserMainPageComponent } from './user-main-page.component';
+import {UserMainPageComponent} from './user-main-page.component';
 
 describe('UserMainPageComponent', () => {
   let component: UserMainPageComponent;

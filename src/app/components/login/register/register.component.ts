@@ -1,10 +1,10 @@
-import { UserService } from './../../../service/user.service';
-import { Component, OnInit } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { User } from 'src/app/interface/user';
-import { passwordValidator } from 'src/app/validators/user.validators';
-import { Router, ActivatedRoute } from '@angular/router';
+import {UserService} from './../../../service/user.service';
+import {Component, OnInit} from '@angular/core';
+import {MatDialogRef} from '@angular/material/dialog';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {User} from 'src/app/interface/user';
+import {passwordValidator} from 'src/app/validators/user.validators';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'app-register',

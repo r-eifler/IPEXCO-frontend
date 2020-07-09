@@ -1,8 +1,8 @@
-import { CurrentRunService } from 'src/app/service/run-services';
-import { Plan } from '../../interface/plan';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { PlanVisualization } from './plan-visualization';
-import { Injectable, Inject, ElementRef } from '@angular/core';
+import {CurrentRunService} from 'src/app/service/run-services';
+import {Plan} from '../../interface/plan';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {PlanVisualization} from './plan-visualization';
+import {Inject, Injectable} from '@angular/core';
 
 @Injectable({
   providedIn: 'root'

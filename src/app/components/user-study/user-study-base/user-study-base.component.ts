@@ -1,9 +1,8 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Observable, Subject} from 'rxjs';
-import {FormControl, FormGroup} from '@angular/forms';
+import {Subject} from 'rxjs';
 import {RunningUserStudyService, UserStudiesService} from '../../../service/user-study-services';
 import {ResponsiveService} from '../../../service/responsive.service';
-import {ActivatedRoute, ParamMap, Router} from '@angular/router';
+import {ActivatedRoute} from '@angular/router';
 import {takeUntil} from 'rxjs/operators';
 
 @Component({

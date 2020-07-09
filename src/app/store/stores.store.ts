@@ -1,18 +1,18 @@
-import { MapStore } from './generic-map.store';
-import { ExecutionSettings } from './../interface/execution-settings';
-import { DisplayTask } from './../interface/display-task';
-import { ViewSettings } from './../interface/view-settings';
+import {MapStore} from './generic-map.store';
+import {ExecutionSettings} from './../interface/execution-settings';
+import {DisplayTask} from './../interface/display-task';
+import {ViewSettings} from './../interface/view-settings';
 import {ListStore} from './generic-list.store';
-import {PDDLFile, DomainSpecificationFile} from '../interface/files';
+import {DomainSpecificationFile, PDDLFile} from '../interface/files';
 import {ItemStore} from './generic-item.store';
 import {PlanProperty} from '../interface/plan-property';
 import {Project} from '../interface/project';
-import {PlanRun, ExplanationRun} from '../interface/run';
-import { TaskSchema} from '../interface/task-schema';
-import { DomainSpecification} from '../interface/domain-specification';
-import { Plan } from '../interface/plan';
-import { Demo } from '../interface/demo';
-import { User } from '../interface/user';
+import {ExplanationRun, PlanRun} from '../interface/run';
+import {TaskSchema} from '../interface/task-schema';
+import {DomainSpecification} from '../interface/domain-specification';
+import {Plan} from '../interface/plan';
+import {Demo} from '../interface/demo';
+import {User} from '../interface/user';
 import {UserStudy} from '../interface/user-study/user-study';
 
 

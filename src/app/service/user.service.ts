@@ -1,10 +1,10 @@
-import { UserStore } from './../store/stores.store';
-import { SelectedObjectService } from './selected-object.service';
-import { Injectable } from '@angular/core';
-import { User } from '../interface/user';
-import { environment } from 'src/environments/environment';
-import { IHTTPData } from '../interface/http-data.interface';
-import { HttpClient } from '@angular/common/http';
+import {UserStore} from './../store/stores.store';
+import {SelectedObjectService} from './selected-object.service';
+import {Injectable} from '@angular/core';
+import {User} from '../interface/user';
+import {environment} from 'src/environments/environment';
+import {IHTTPData} from '../interface/http-data.interface';
+import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 
 @Injectable({

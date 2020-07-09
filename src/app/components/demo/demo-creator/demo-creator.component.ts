@@ -1,9 +1,8 @@
-import { DemosService } from './../../../service/demo-services';
-import { Component, OnInit, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Project } from 'src/app/interface/project';
-import { Demo } from 'src/app/interface/demo';
-import { FormGroup, FormControl } from '@angular/forms';
+import {DemosService} from './../../../service/demo-services';
+import {Component, Inject, OnInit} from '@angular/core';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {Demo} from 'src/app/interface/demo';
+import {FormControl, FormGroup} from '@angular/forms';
 import {UserService} from '../../../service/user.service';
 
 @Component({

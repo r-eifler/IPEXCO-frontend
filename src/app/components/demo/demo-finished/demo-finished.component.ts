@@ -1,7 +1,7 @@
-import {Component, OnInit, Inject, OnDestroy} from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { Demo } from 'src/app/interface/demo';
-import { ActivatedRoute, Router } from '@angular/router';
+import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {Demo} from 'src/app/interface/demo';
+import {ActivatedRoute, Router} from '@angular/router';
 import {ExecutionSettingsService} from '../../../service/execution-settings.service';
 import {RunService} from '../../../service/run-services';
 import {Subject} from 'rxjs';

@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import {DomainFilesService, ProblemFilesService, SelectedDomainFileService} from '../../../service/pddl-file-services';
+import {Component, OnInit} from '@angular/core';
+import {DomainFilesService, SelectedDomainFileService} from '../../../service/pddl-file-services';
 import {FilesService} from '../../../service/pddl-files.service';
 import {SelectedObjectService} from '../../../service/selected-object.service';
 

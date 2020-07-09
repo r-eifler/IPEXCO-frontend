@@ -1,14 +1,13 @@
-import { Project } from './../../../interface/project';
-import { DomainFilesService, ProblemFilesService, DomainSpecificationFilesService } from './../../../service/pddl-file-services';
-import { DemosService } from './../../../service/demo-services';
-import { ProjectsService } from './../../../service/project-services';
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ResponsiveService } from 'src/app/service/responsive.service';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { map, takeUntil } from 'rxjs/operators';
-import { Router, ActivatedRoute } from '@angular/router';
-import { Demo } from 'src/app/interface/demo';
-import { Subject } from 'rxjs';
+import {Project} from './../../../interface/project';
+import {DomainFilesService, DomainSpecificationFilesService, ProblemFilesService} from './../../../service/pddl-file-services';
+import {DemosService} from './../../../service/demo-services';
+import {ProjectsService} from './../../../service/project-services';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {ResponsiveService} from 'src/app/service/responsive.service';
+import {takeUntil} from 'rxjs/operators';
+import {ActivatedRoute, Router} from '@angular/router';
+import {Demo} from 'src/app/interface/demo';
+import {Subject} from 'rxjs';
 import {UserStudiesService} from '../../../service/user-study-services';
 import {UserStudy} from '../../../interface/user-study/user-study';
 

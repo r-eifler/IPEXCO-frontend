@@ -1,19 +1,18 @@
-import { Observable, BehaviorSubject } from 'rxjs';
-import { CurrentProjectService, ProjectsService } from 'src/app/service/project-services';
-import { Streets } from './world/streets';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {CurrentProjectService} from 'src/app/service/project-services';
+import {Streets} from './world/streets';
 import * as BABYLON from 'babylonjs';
-import { PlanVisualization } from '../../integration/plan-visualization';
-import { WorldPlane } from './world/world-plane';
-import { NoMysteryTask } from '../nomystery/nomystery-task';
-import { NoMystery3DAnimationTask } from './nomystery-animation-task';
-import { loadTruckMeshes } from './world/trucks';
-import { loadPackagekMeshes } from './world/packages';
-import { NoMystery3DAnimation } from './animations/nomystery3D-animation';
-import { TaskSchemaService } from 'src/app/service/schema.service';
-import { CurrentRunService } from 'src/app/service/run-services';
-import { Injectable, ElementRef } from '@angular/core';
-import { AnimationSettingsNoMystery } from './settings/animation-settings-nomystery';
-import { ThrowStmt } from '@angular/compiler';
+import {PlanVisualization} from '../../integration/plan-visualization';
+import {WorldPlane} from './world/world-plane';
+import {NoMysteryTask} from '../nomystery/nomystery-task';
+import {NoMystery3DAnimationTask} from './nomystery-animation-task';
+import {loadTruckMeshes} from './world/trucks';
+import {loadPackagekMeshes} from './world/packages';
+import {NoMystery3DAnimation} from './animations/nomystery3D-animation';
+import {TaskSchemaService} from 'src/app/service/schema.service';
+import {CurrentRunService} from 'src/app/service/run-services';
+import {Injectable} from '@angular/core';
+import {AnimationSettingsNoMystery} from './settings/animation-settings-nomystery';
 
 
 interface Position {

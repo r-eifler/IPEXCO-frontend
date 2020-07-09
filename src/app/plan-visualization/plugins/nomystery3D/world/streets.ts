@@ -1,6 +1,5 @@
 import * as BABYLON from 'babylonjs';
-import { Vector3 } from 'babylonjs';
-import { NoMystery3DAnimationTask, AnimationRoad } from '../nomystery-animation-task';
+import {AnimationRoad, NoMystery3DAnimationTask} from '../nomystery-animation-task';
 
 export class Streets {
 

@@ -1,6 +1,5 @@
-import { variable } from '@angular/compiler/src/output/output_ast';
-import { PlanPropertyTemplate } from './plan-property-template';
-import { PlanProperty } from './plan-property';
+import {PlanPropertyTemplate} from './plan-property-template';
+import {PlanProperty} from './plan-property';
 
 interface NaturalLanguageDescriptionMapping {
   predicatName: string;

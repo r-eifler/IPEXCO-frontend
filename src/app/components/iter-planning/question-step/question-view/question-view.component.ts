@@ -1,10 +1,10 @@
-import { takeUntil } from 'rxjs/operators';
-import { PlanPropertyMapStore } from '../../../../store/stores.store';
-import { PlanProperty } from 'src/app/interface/plan-property';
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Observable, combineLatest, Subject } from 'rxjs';
-import { PlanRun, ExplanationRun } from 'src/app/interface/run';
-import { CurrentRunStore, CurrentQuestionStore } from 'src/app/store/stores.store';
+import {takeUntil} from 'rxjs/operators';
+import {PlanPropertyMapStore} from '../../../../store/stores.store';
+import {PlanProperty} from 'src/app/interface/plan-property';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {combineLatest, Observable, Subject} from 'rxjs';
+import {ExplanationRun, PlanRun} from 'src/app/interface/run';
+import {CurrentQuestionStore, CurrentRunStore} from 'src/app/store/stores.store';
 
 @Component({
   selector: 'app-question-view',

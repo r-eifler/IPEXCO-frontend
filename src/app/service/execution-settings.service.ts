@@ -1,11 +1,10 @@
-import { ExecutionSettings } from './../interface/execution-settings';
-import { Injectable } from '@angular/core';
-import { SelectedObjectService } from './selected-object.service';
-import { HttpClient } from '@angular/common/http';
-import { UserStore, ExecutionSettingsStore } from '../store/stores.store';
-import { User } from '../interface/user';
-import { IHTTPData } from '../interface/http-data.interface';
-import { environment } from 'src/environments/environment';
+import {ExecutionSettings} from './../interface/execution-settings';
+import {Injectable} from '@angular/core';
+import {SelectedObjectService} from './selected-object.service';
+import {HttpClient} from '@angular/common/http';
+import {ExecutionSettingsStore} from '../store/stores.store';
+import {IHTTPData} from '../interface/http-data.interface';
+import {environment} from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'

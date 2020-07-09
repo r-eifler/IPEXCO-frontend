@@ -1,6 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { AnimationSettingsNomysteryComponent } from './animation-settings-nomystery.component';
+import {AnimationSettingsNomysteryComponent} from './animation-settings-nomystery.component';
 
 describe('AnimationSettingsNomysteryComponent', () => {
   let component: AnimationSettingsNomysteryComponent;

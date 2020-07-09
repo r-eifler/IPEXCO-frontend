@@ -1,24 +1,24 @@
-import { AnimationSettingsProvider } from './../../../provider/plan-visualisation.provider';
-import { QUESTION_REDIRECT } from './../../../app.tokens';
-import { PlannerService } from './../../../service/planner.service';
-import { DemosService } from './../../../service/demo-services';
-import { RunService } from 'src/app/service/run-services';
-import { DisplayTaskService } from './../../../service/display-task.service';
-import { ViewSettingsMenuComponent } from '../../settings/view-settings-menu/view-settings-menu.component';
-import { TaskSchemaService } from './../../../service/schema.service';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import {AnimationSettingsProvider} from './../../../provider/plan-visualisation.provider';
+import {QUESTION_REDIRECT} from './../../../app.tokens';
+import {PlannerService} from './../../../service/planner.service';
+import {DemosService} from './../../../service/demo-services';
+import {RunService} from 'src/app/service/run-services';
+import {DisplayTaskService} from './../../../service/display-task.service';
+import {ViewSettingsMenuComponent} from '../../settings/view-settings-menu/view-settings-menu.component';
+import {TaskSchemaService} from './../../../service/schema.service';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Project} from '../../../interface/project';
 import {ActivatedRoute, ParamMap, Router} from '@angular/router';
-import { switchMap, takeUntil } from 'rxjs/operators';
-import { ProjectsService, CurrentProjectService } from 'src/app/service/project-services';
-import { DomainSpecificationService } from 'src/app/service/domain-specification.service';
-import { MatBottomSheet } from '@angular/material/bottom-sheet';
-import { PlanPropertyMapService } from 'src/app/service/plan-property-services';
-import { combineLatest } from 'rxjs/internal/observable/combineLatest';
-import { DisplayTask } from 'src/app/interface/display-task';
-import { PlanVisualizationProvider } from 'src/app/provider/plan-visualisation.provider';
-import { PLANNER_REDIRECT } from 'src/app/app.tokens';
-import { Subject } from 'rxjs';
+import {switchMap, takeUntil} from 'rxjs/operators';
+import {CurrentProjectService, ProjectsService} from 'src/app/service/project-services';
+import {DomainSpecificationService} from 'src/app/service/domain-specification.service';
+import {MatBottomSheet} from '@angular/material/bottom-sheet';
+import {PlanPropertyMapService} from 'src/app/service/plan-property-services';
+import {combineLatest} from 'rxjs/internal/observable/combineLatest';
+import {DisplayTask} from 'src/app/interface/display-task';
+import {PlanVisualizationProvider} from 'src/app/provider/plan-visualisation.provider';
+import {PLANNER_REDIRECT} from 'src/app/app.tokens';
+import {Subject} from 'rxjs';
 
 @Component({
   selector: 'app-project-base',

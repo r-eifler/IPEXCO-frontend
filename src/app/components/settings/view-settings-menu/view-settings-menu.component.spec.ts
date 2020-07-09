@@ -1,6 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { ViewSettingsMenuComponent } from './view-settings-menu.component';
+import {ViewSettingsMenuComponent} from './view-settings-menu.component';
 
 describe('ViewSettingsComponent', () => {
   let component: ViewSettingsMenuComponent;

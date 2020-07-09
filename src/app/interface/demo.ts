@@ -1,6 +1,5 @@
-import { Project } from './project';
-import { RunStatus } from './run';
-import { ExecutionSettings } from './execution-settings';
+import {Project} from './project';
+import {RunStatus} from './run';
 
 export interface Demo extends Project {
   summaryImage?: string;

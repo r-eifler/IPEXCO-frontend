@@ -1,18 +1,14 @@
-import {Component, OnDestroy, OnInit, SecurityContext} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Observable, Subject} from 'rxjs';
-import {switchMap, takeUntil} from 'rxjs/operators';
+import {takeUntil} from 'rxjs/operators';
 import {ResponsiveService} from '../../../service/responsive.service';
 import {DemosService} from '../../../service/demo-services';
 import {Demo} from '../../../interface/demo';
 import {DomSanitizer} from '@angular/platform-browser';
-import {
-  UserStudy,
-  UserStudyStep,
-  UserStudyStepType
-} from '../../../interface/user-study/user-study';
+import {UserStudy, UserStudyStep, UserStudyStepType} from '../../../interface/user-study/user-study';
 import {FormControl, FormGroup} from '@angular/forms';
 import {RunningUserStudyService, UserStudiesService} from '../../../service/user-study-services';
-import {ActivatedRoute, ParamMap, Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 
 interface Part {
   index: number;

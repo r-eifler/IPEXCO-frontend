@@ -1,6 +1,6 @@
-import { PlanProperty } from 'src/app/interface/plan-property';
-import { DomainSpecification } from 'src/app/interface/domain-specification';
-import { TaskSchema } from './task-schema';
+import {PlanProperty} from 'src/app/interface/plan-property';
+import {DomainSpecification} from 'src/app/interface/domain-specification';
+import {TaskSchema} from './task-schema';
 
 export class DisplayTask {
 

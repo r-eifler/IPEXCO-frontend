@@ -1,6 +1,6 @@
-import { TasktSchemaStore } from './../../../../store/stores.store';
-import { TaskSchema } from '../../../../interface/task-schema';
-import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+import {TasktSchemaStore} from './../../../../store/stores.store';
+import {TaskSchema} from '../../../../interface/task-schema';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 
 
 @Component({

@@ -1,9 +1,6 @@
-import { AnimationInfoNoMystery, AnimationTruck, AnimationLocation, AnimationPackage } from './animation-info-nomystery';
-import { EventEmitter } from '@angular/core';
-import { NoMysteryTask, Location, Truck, Package } from './nomystery-task';
+import {AnimationInfoNoMystery, AnimationLocation, AnimationPackage, AnimationTruck} from './animation-info-nomystery';
 import * as d3 from 'd3';
-import { rejects } from 'assert';
-import { AnimationProvider } from 'src/app/plan-visualization/integration/animation-provider';
+import {AnimationProvider} from 'src/app/plan-visualization/integration/animation-provider';
 
 interface Action {
   name: string;

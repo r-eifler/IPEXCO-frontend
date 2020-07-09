@@ -1,8 +1,8 @@
-import { AnimationPackage } from './../nomystery-animation-task';
+import {AnimationPackage} from './../nomystery-animation-task';
 import * as BABYLON from 'babylonjs';
+import {Scene, TransformNode} from 'babylonjs';
 import * as BABYLONLOADER from 'babylonjs-loaders';
-import { Scene, TransformNode } from 'babylonjs';
-import { NoMystery3DAnimationTask } from '../nomystery-animation-task';
+import {NoMystery3DAnimationTask} from '../nomystery-animation-task';
 
 export async function loadPackagekMeshes(taskInfo: NoMystery3DAnimationTask, scene: Scene){
   for (const p of taskInfo.packages.values()) {

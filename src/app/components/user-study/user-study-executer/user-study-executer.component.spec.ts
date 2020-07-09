@@ -1,6 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { UserStudyExecuterComponent } from './user-study-executer.component';
+import {UserStudyExecuterComponent} from './user-study-executer.component';
 
 describe('UserStudyExecuterComponent', () => {
   let component: UserStudyExecuterComponent;

@@ -1,19 +1,19 @@
-import { TaskSchema } from 'src/app/interface/task-schema';
-import { TaskSchemaService } from './schema.service';
-import { Plan } from './../interface/plan';
-import { LOAD, REMOVE } from '../store/generic-list.store';
+import {TaskSchema} from 'src/app/interface/task-schema';
+import {TaskSchemaService} from './schema.service';
+import {Plan} from './../interface/plan';
+import {LOAD, REMOVE} from '../store/generic-list.store';
 import {SelectedObjectService} from './selected-object.service';
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {RunsStore, CurrentRunStore, CurrentQuestionStore} from '../store/stores.store';
+import {CurrentQuestionStore, CurrentRunStore, RunsStore} from '../store/stores.store';
 import {ObjectCollectionService} from './object-collection.service';
 import {environment} from '../../environments/environment';
 import {map} from 'rxjs/operators';
 import {IHTTPData} from '../interface/http-data.interface';
-import {PlanRun, ExplanationRun} from '../interface/run';
-import { PddlFileUtilsService } from './pddl-file-utils.service';
-import { PlanPropertyMapService } from './plan-property-services';
-import { combineLatest } from 'rxjs/internal/observable/combineLatest';
+import {ExplanationRun, PlanRun} from '../interface/run';
+import {PddlFileUtilsService} from './pddl-file-utils.service';
+import {PlanPropertyMapService} from './plan-property-services';
+import {combineLatest} from 'rxjs/internal/observable/combineLatest';
 import {PlanProperty} from '../interface/plan-property';
 
 

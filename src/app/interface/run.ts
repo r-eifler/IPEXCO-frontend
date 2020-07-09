@@ -1,6 +1,6 @@
 import {PlanProperty} from './plan-property';
 import {Project} from './project';
-import { Plan } from './plan';
+import {Plan} from './plan';
 
 export enum RunStatus {
   pending,

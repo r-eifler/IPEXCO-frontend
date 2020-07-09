@@ -1,12 +1,12 @@
-import { takeUntil } from 'rxjs/operators';
-import { UserService } from './../../../service/user.service';
-import { Component, OnInit, AfterViewChecked, OnDestroy } from '@angular/core';
-import { ResponsiveService } from 'src/app/service/responsive.service';
-import { gsap } from 'gsap';
-import { MatDialogConfig, MatDialog } from '@angular/material/dialog';
-import { RegisterComponent } from '../register/register.component';
-import { Router, ActivatedRoute } from '@angular/router';
-import { Subject } from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
+import {UserService} from './../../../service/user.service';
+import {AfterViewChecked, Component, OnDestroy, OnInit} from '@angular/core';
+import {ResponsiveService} from 'src/app/service/responsive.service';
+import {gsap} from 'gsap';
+import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
+import {RegisterComponent} from '../register/register.component';
+import {ActivatedRoute, Router} from '@angular/router';
+import {Subject} from 'rxjs';
 
 @Component({
   selector: 'app-main-page',

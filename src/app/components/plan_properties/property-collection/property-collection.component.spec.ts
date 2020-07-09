@@ -1,6 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { PropertyCollectionComponent } from './property-collection.component';
+import {PropertyCollectionComponent} from './property-collection.component';
 
 describe('PropertyCollectionComponent', () => {
   let component: PropertyCollectionComponent;

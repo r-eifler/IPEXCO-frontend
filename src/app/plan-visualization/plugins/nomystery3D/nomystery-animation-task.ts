@@ -1,10 +1,7 @@
-import { AnimationSettingsNoMysteryVisu } from './settings/animation-settings-nomystery-visu';
-import { Road, Location, Package, Truck } from '../nomystery/nomystery-task';
-import { NoMysteryTask } from '../nomystery/nomystery-task';
-import { AnimationInfo } from '../../integration/animation-info';
+import {Location, NoMysteryTask, Package, Road, Truck} from '../nomystery/nomystery-task';
+import {AnimationInfo} from '../../integration/animation-info';
 import * as BABYLON from 'babylonjs';
-import { angleBetweenLocations } from './utils';
-import { AnimationSettingsNoMystery } from './settings/animation-settings-nomystery';
+import {angleBetweenLocations} from './utils';
 
 
 const maxPositionLocation = 6;

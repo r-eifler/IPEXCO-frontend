@@ -1,11 +1,11 @@
-import { MapStore } from './../store/generic-map.store';
-import { Injectable } from '@angular/core';
-import { environment } from 'src/environments/environment';
-import { BehaviorSubject, of } from 'rxjs';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { LOAD, ADD, EDIT, REMOVE } from '../store/generic-list.store';
-import { map } from 'rxjs/operators';
-import { IHTTPData } from '../interface/http-data.interface';
+import {MapStore} from './../store/generic-map.store';
+import {Injectable} from '@angular/core';
+import {environment} from 'src/environments/environment';
+import {BehaviorSubject} from 'rxjs';
+import {HttpClient, HttpParams} from '@angular/common/http';
+import {ADD, EDIT, LOAD, REMOVE} from '../store/generic-list.store';
+import {map} from 'rxjs/operators';
+import {IHTTPData} from '../interface/http-data.interface';
 
 type Id = string | number;
 interface Identifiable {

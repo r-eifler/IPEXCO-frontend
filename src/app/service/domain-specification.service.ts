@@ -1,10 +1,10 @@
-import { Injectable } from '@angular/core';
-import { DomainSpecification } from '../interface/domain-specification';
-import { ItemStore, LOAD, REMOVE } from '../store/generic-item.store';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { Project } from './../interface/project';
-import { HttpClient } from '@angular/common/http';
-import { DomainSpecStore } from '../store/stores.store';
+import {Injectable} from '@angular/core';
+import {DomainSpecification} from '../interface/domain-specification';
+import {ItemStore, LOAD} from '../store/generic-item.store';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {Project} from './../interface/project';
+import {HttpClient} from '@angular/common/http';
+import {DomainSpecStore} from '../store/stores.store';
 
 @Injectable({
   providedIn: 'root'

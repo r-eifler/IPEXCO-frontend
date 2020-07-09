@@ -1,11 +1,9 @@
-import { PlanPropertyMapStore } from './../store/stores.store';
-import { ObjectCollectionService } from './object-collection.service';
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { PlanProperty, GoalType } from '../interface/plan-property';
-import { environment } from '../../environments/environment';
-import { map } from 'rxjs/operators';
-import { ObjectMapService } from './object-map.service';
+import {PlanPropertyMapStore} from './../store/stores.store';
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {PlanProperty} from '../interface/plan-property';
+import {environment} from '../../environments/environment';
+import {ObjectMapService} from './object-map.service';
 
 
 @Injectable({

@@ -1,8 +1,7 @@
-import { RunStatus } from 'src/app/interface/run';
-import { CurrentRunService } from './../../../../service/run-services';
-import { takeUntil } from 'rxjs/operators';
-import { Plan } from '../../../../interface/plan';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import {RunStatus} from 'src/app/interface/run';
+import {CurrentRunService} from './../../../../service/run-services';
+import {takeUntil} from 'rxjs/operators';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {BehaviorSubject, Subject} from 'rxjs';
 import {PlanRun} from '../../../../interface/run';
 

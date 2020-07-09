@@ -1,11 +1,11 @@
 import {DEMO_FINISHED_REDIRECT, QUESTION_REDIRECT} from './../../../app.tokens';
-import { PlannerService, DemoPlannerService } from './../../../service/planner.service';
-import { DemoRunService } from './../../../service/run-services';
+import {DemoPlannerService, PlannerService} from './../../../service/planner.service';
+import {DemoRunService} from './../../../service/run-services';
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import { RunService } from 'src/app/service/run-services';
-import { PLANNER_REDIRECT } from 'src/app/app.tokens';
-import {ActivatedRoute, ParamMap, Router} from '@angular/router';
-import {filter, map, switchMap, takeUntil} from 'rxjs/operators';
+import {RunService} from 'src/app/service/run-services';
+import {PLANNER_REDIRECT} from 'src/app/app.tokens';
+import {ActivatedRoute, Router} from '@angular/router';
+import {takeUntil} from 'rxjs/operators';
 import {Demo} from '../../../interface/demo';
 import {DemosService, RunningDemoService} from '../../../service/demo-services';
 import {Subject} from 'rxjs';

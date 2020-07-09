@@ -1,12 +1,12 @@
-import { takeUntil } from 'rxjs/operators';
-import { Component, OnInit, AfterViewChecked, OnDestroy } from '@angular/core';
-import { ResponsiveService } from 'src/app/service/responsive.service';
-import { FormGroup, FormControl } from '@angular/forms';
-import { UserService } from 'src/app/service/user.service';
-import { User } from 'src/app/interface/user';
-import { MatDialogRef } from '@angular/material/dialog';
-import { Router, ActivatedRoute } from '@angular/router';
-import { Subject } from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {ResponsiveService} from 'src/app/service/responsive.service';
+import {FormControl, FormGroup} from '@angular/forms';
+import {UserService} from 'src/app/service/user.service';
+import {User} from 'src/app/interface/user';
+import {MatDialogRef} from '@angular/material/dialog';
+import {ActivatedRoute, Router} from '@angular/router';
+import {Subject} from 'rxjs';
 
 
 @Component({

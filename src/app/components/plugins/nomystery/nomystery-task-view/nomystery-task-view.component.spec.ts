@@ -1,6 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { NomysteryTaskViewComponent } from './nomystery-task-view.component';
+import {NomysteryTaskViewComponent} from './nomystery-task-view.component';
 
 describe('NomysteryTaskViewComponent', () => {
   let component: NomysteryTaskViewComponent;

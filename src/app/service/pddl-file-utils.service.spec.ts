@@ -1,6 +1,6 @@
-import { TestBed } from '@angular/core/testing';
+import {TestBed} from '@angular/core/testing';
 
-import { PddlFileUtilsService } from './pddl-file-utils.service';
+import {PddlFileUtilsService} from './pddl-file-utils.service';
 
 describe('FileContentService', () => {
   let service: PddlFileUtilsService;

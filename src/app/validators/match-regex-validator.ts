@@ -1,4 +1,4 @@
-import {ValidatorFn, AbstractControl} from '@angular/forms';
+import {AbstractControl, ValidatorFn} from '@angular/forms';
 
 
 export function matchRegexValidator(nameRe: RegExp): ValidatorFn {

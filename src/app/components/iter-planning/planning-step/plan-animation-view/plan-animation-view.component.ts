@@ -1,6 +1,6 @@
-import { AnimationHandler } from '../../../../plan-visualization/integration/animation-handler';
-import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, Input} from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import {AnimationHandler} from '../../../../plan-visualization/integration/animation-handler';
+import {AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
 
 
 interface Action {

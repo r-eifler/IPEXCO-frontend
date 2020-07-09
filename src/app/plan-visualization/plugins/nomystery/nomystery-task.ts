@@ -1,10 +1,5 @@
-import { Graph, D3Link, D3Node} from '../../../interface/d3types';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DomainSpecification } from '../../../interface/domain-specification';
-import { TaskSchema } from '../../../interface/task-schema';
-import * as d3 from 'd3';
-import { SimulationNodeDatum, SimulationLinkDatum } from 'd3';
-import { Task } from '../task';
+import {TaskSchema} from '../../../interface/task-schema';
+import {Task} from '../task';
 
 
 export class Location {

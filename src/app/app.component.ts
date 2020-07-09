@@ -1,7 +1,6 @@
-import {Component, OnInit, ViewChild, AfterViewInit} from '@angular/core';
-import {MatStepper} from '@angular/material/stepper';
-import { MatIconRegistry } from '@angular/material/icon';
-import { DomSanitizer } from '@angular/platform-browser';
+import {Component, OnInit} from '@angular/core';
+import {MatIconRegistry} from '@angular/material/icon';
+import {DomSanitizer} from '@angular/platform-browser';
 import {UserService} from './service/user.service';
 
 

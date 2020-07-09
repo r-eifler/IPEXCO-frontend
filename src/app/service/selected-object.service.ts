@@ -1,7 +1,5 @@
-import { filter } from 'rxjs/operators';
-import { Injectable } from '@angular/core';
-import {BehaviorSubject, Observable} from 'rxjs';
-import {PDDLFile} from '../interface/files';
+import {Injectable} from '@angular/core';
+import {BehaviorSubject} from 'rxjs';
 import {LOAD, REMOVE} from '../store/generic-list.store';
 import {ItemStore} from '../store/generic-item.store';
 

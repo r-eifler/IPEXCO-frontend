@@ -1,17 +1,17 @@
-import { PlanProperty, GoalType } from 'src/app/interface/plan-property';
-import { takeUntil } from 'rxjs/operators';
-import { QUESTION_REDIRECT } from '../../../../app.tokens';
-import { Component, OnInit, ViewChild, Inject, OnDestroy } from '@angular/core';
+import {PlanProperty} from 'src/app/interface/plan-property';
+import {takeUntil} from 'rxjs/operators';
+import {QUESTION_REDIRECT} from '../../../../app.tokens';
+import {Component, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {Observable, Subject} from 'rxjs';
 import {Project} from '../../../../interface/project';
 import {PlannerService} from '../../../../service/planner.service';
 import {ExplanationRun, PlanRun, RunType} from '../../../../interface/run';
-import { PlanPropertyMapService } from 'src/app/service/plan-property-services';
-import { CurrentProjectService } from 'src/app/service/project-services';
-import { MatSelectionList } from '@angular/material/list/selection-list';
-import { Router, ActivatedRoute } from '@angular/router';
-import { ExecutionSettingsService } from 'src/app/service/execution-settings.service';
-import { CurrentRunService } from 'src/app/service/run-services';
+import {PlanPropertyMapService} from 'src/app/service/plan-property-services';
+import {CurrentProjectService} from 'src/app/service/project-services';
+import {MatSelectionList} from '@angular/material/list/selection-list';
+import {ActivatedRoute, Router} from '@angular/router';
+import {ExecutionSettingsService} from 'src/app/service/execution-settings.service';
+import {CurrentRunService} from 'src/app/service/run-services';
 
 @Component({
   selector: 'app-question-creator',

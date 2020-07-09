@@ -1,12 +1,11 @@
-import { IHTTPData } from './../interface/http-data.interface';
-import { Project } from './../interface/project';
+import {Project} from './../interface/project';
 
-import { Injectable } from '@angular/core';
-import { ItemStore, LOAD, REMOVE } from '../store/generic-item.store';
-import { TaskSchema } from '../interface/task-schema';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
-import { TasktSchemaStore } from '../store/stores.store';
+import {Injectable} from '@angular/core';
+import {ItemStore, LOAD} from '../store/generic-item.store';
+import {TaskSchema} from '../interface/task-schema';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {HttpClient} from '@angular/common/http';
+import {TasktSchemaStore} from '../store/stores.store';
 
 @Injectable({
   providedIn: 'root'

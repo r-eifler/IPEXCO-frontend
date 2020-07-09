@@ -1,6 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { UserStudyFormViewComponent } from './user-study-form-view.component';
+import {UserStudyFormViewComponent} from './user-study-form-view.component';
 
 describe('UserStudyFormViewComponent', () => {
   let component: UserStudyFormViewComponent;

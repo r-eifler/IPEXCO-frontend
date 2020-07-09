@@ -1,10 +1,10 @@
-import { takeUntil } from 'rxjs/operators';
-import { Observable, Subject } from 'rxjs';
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { MatBottomSheetRef } from '@angular/material/bottom-sheet';
-import { ViewSettingsService } from 'src/app/service/setting.service';
-import { defaultViewSettings, ViewSettings } from 'src/app/interface/view-settings';
-import { MatSlideToggleChange } from '@angular/material/slide-toggle';
+import {takeUntil} from 'rxjs/operators';
+import {Subject} from 'rxjs';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {MatBottomSheetRef} from '@angular/material/bottom-sheet';
+import {ViewSettingsService} from 'src/app/service/setting.service';
+import {ViewSettings} from 'src/app/interface/view-settings';
+import {MatSlideToggleChange} from '@angular/material/slide-toggle';
 
 @Component({
   selector: 'app-view-settings',

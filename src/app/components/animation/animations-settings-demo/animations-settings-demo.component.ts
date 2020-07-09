@@ -1,10 +1,10 @@
-import { RunningDemoService } from 'src/app/service/demo-services';
-import { Component, OnInit, AfterViewInit, OnDestroy, ViewChild, ComponentFactoryResolver, Inject } from '@angular/core';
-import { AnimationSettingsDirective } from '../animation-settings.directive';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
-import { AnimationSettingsNomysteryComponent } from '../../plugins/nomystery/animation-settings-nomystery/animation-settings-nomystery.component';
-import { MatBottomSheetRef, MAT_BOTTOM_SHEET_DATA } from '@angular/material/bottom-sheet';
+import {RunningDemoService} from 'src/app/service/demo-services';
+import {AfterViewInit, Component, ComponentFactoryResolver, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {AnimationSettingsDirective} from '../animation-settings.directive';
+import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
+import {AnimationSettingsNomysteryComponent} from '../../plugins/nomystery/animation-settings-nomystery/animation-settings-nomystery.component';
+import {MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef} from '@angular/material/bottom-sheet';
 
 @Component({
   selector: 'app-animations-settings-demo',

@@ -1,9 +1,9 @@
-import { NoMysteryTask } from '../nomystery/nomystery-task';
-import { Animation } from '../../plan-visualization/animation';
-import { Action } from 'src/app/interface/plan';
-import { AnimationInfoNoMystery } from './animation-info-nomystery';
-import { AnimationInitializerNoMystery } from './animation-initializer-nomystery';
-import { AnimationProviderNoMystery } from './animation-provider-nomystery';
+import {NoMysteryTask} from '../nomystery/nomystery-task';
+import {Animation} from '../../plan-visualization/animation';
+import {Action} from 'src/app/interface/plan';
+import {AnimationInfoNoMystery} from './animation-info-nomystery';
+import {AnimationInitializerNoMystery} from './animation-initializer-nomystery';
+import {AnimationProviderNoMystery} from './animation-provider-nomystery';
 
 
 export class AnimationNoMystery extends Animation {

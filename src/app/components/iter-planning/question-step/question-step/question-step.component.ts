@@ -1,9 +1,9 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ResponsiveService } from 'src/app/service/responsive.service';
-import { ActivatedRoute, Router, ParamMap } from '@angular/router';
-import { RunService, CurrentRunService } from 'src/app/service/run-services';
-import { switchMap, takeUntil } from 'rxjs/operators';
-import { Subject } from 'rxjs';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {ResponsiveService} from 'src/app/service/responsive.service';
+import {ActivatedRoute, ParamMap, Router} from '@angular/router';
+import {CurrentRunService, RunService} from 'src/app/service/run-services';
+import {switchMap, takeUntil} from 'rxjs/operators';
+import {Subject} from 'rxjs';
 
 @Component({
   selector: 'app-question-step',

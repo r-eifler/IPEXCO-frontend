@@ -1,6 +1,4 @@
-import * as BABYLON from 'babylonjs';
-import { AnimationLocation } from './nomystery-animation-task';
-
+import {AnimationLocation} from './nomystery-animation-task';
 
 
 export function angleBetweenLocations(loc1: AnimationLocation, loc2: AnimationLocation) {

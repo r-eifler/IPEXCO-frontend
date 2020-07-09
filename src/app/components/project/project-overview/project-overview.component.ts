@@ -1,17 +1,16 @@
-import { takeUntil } from 'rxjs/operators';
-import { DemoCreatorComponent } from './../../demo/demo-creator/demo-creator.component';
-import { DemosService } from './../../../service/demo-services';
-import { PlanRun } from 'src/app/interface/run';
-import { RunService } from './../../../service/run-services';
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ResponsiveService } from 'src/app/service/responsive.service';
-import { PlanPropertyMapService } from 'src/app/service/plan-property-services';
-import { CurrentProjectService } from 'src/app/service/project-services';
-import { Observable, Subject } from 'rxjs';
-import { PlanProperty } from 'src/app/interface/plan-property';
-import { Project } from 'src/app/interface/project';
-import { Demo } from 'src/app/interface/demo';
-import { MatDialogConfig, MatDialog } from '@angular/material/dialog';
+import {takeUntil} from 'rxjs/operators';
+import {DemoCreatorComponent} from './../../demo/demo-creator/demo-creator.component';
+import {DemosService} from './../../../service/demo-services';
+import {PlanRun} from 'src/app/interface/run';
+import {RunService} from './../../../service/run-services';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {ResponsiveService} from 'src/app/service/responsive.service';
+import {PlanPropertyMapService} from 'src/app/service/plan-property-services';
+import {CurrentProjectService} from 'src/app/service/project-services';
+import {Observable, Subject} from 'rxjs';
+import {PlanProperty} from 'src/app/interface/plan-property';
+import {Project} from 'src/app/interface/project';
+import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-project-overview',

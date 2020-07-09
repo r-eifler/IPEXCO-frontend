@@ -1,6 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { RunTreeComponent } from './run-tree.component';
+import {RunTreeComponent} from './run-tree.component';
 
 describe('RunTreeComponent', () => {
   let component: RunTreeComponent;

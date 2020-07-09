@@ -1,5 +1,4 @@
-import {Component, Input, OnInit, Output} from '@angular/core';
-import { EventEmitter } from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 
 @Component({
   selector: 'app-user-study-description-view',

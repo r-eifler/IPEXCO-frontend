@@ -1,6 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { FilesCollectionComponent } from './files-collection.component';
+import {FilesCollectionComponent} from './files-collection.component';
 
 describe('FilesCollectionComponent', () => {
   let component: FilesCollectionComponent;

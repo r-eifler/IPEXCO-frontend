@@ -1,23 +1,23 @@
-import { DomainSpecificationService } from './../../../service/domain-specification.service';
-import { takeUntil } from 'rxjs/operators';
-import { MatStepper } from '@angular/material/stepper';
-import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
-import {FormControl, FormGroup, Validators, FormGroupName, FormArray} from '@angular/forms';
+import {DomainSpecificationService} from './../../../service/domain-specification.service';
+import {takeUntil} from 'rxjs/operators';
+import {MatStepper} from '@angular/material/stepper';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {FormArray, FormControl, FormGroup, Validators} from '@angular/forms';
 import {Action, ActionSet, PlanProperty} from '../../../interface/plan-property';
 import {MatDialogRef} from '@angular/material/dialog';
-import { Project } from 'src/app/interface/project';
-import { TasktSchemaStore, DomainSpecStore } from 'src/app/store/stores.store';
-import { matchRegexValidator } from '../../../validators/match-regex-validator';
-import { TaskSchema } from 'src/app/interface/task-schema';
-import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
-import { MatSlideToggleChange } from '@angular/material/slide-toggle';
-import { DomainSpecification } from 'src/app/interface/domain-specification';
-import { PlanPropertyTemplate } from 'src/app/interface/plan-property-template';
-import { MatSelectionListChange } from '@angular/material/list';
-import { MatAccordion } from '@angular/material/expansion';
-import { PlanPropertyMapService } from 'src/app/service/plan-property-services';
-import { CurrentProjectService } from 'src/app/service/project-services';
-import { Subject } from 'rxjs';
+import {Project} from 'src/app/interface/project';
+import {TasktSchemaStore} from 'src/app/store/stores.store';
+import {matchRegexValidator} from '../../../validators/match-regex-validator';
+import {TaskSchema} from 'src/app/interface/task-schema';
+import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
+import {MatSlideToggleChange} from '@angular/material/slide-toggle';
+import {DomainSpecification} from 'src/app/interface/domain-specification';
+import {PlanPropertyTemplate} from 'src/app/interface/plan-property-template';
+import {MatSelectionListChange} from '@angular/material/list';
+import {MatAccordion} from '@angular/material/expansion';
+import {PlanPropertyMapService} from 'src/app/service/plan-property-services';
+import {CurrentProjectService} from 'src/app/service/project-services';
+import {Subject} from 'rxjs';
 
 @Component({
   selector: 'app-property-creator',

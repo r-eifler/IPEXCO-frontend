@@ -1,12 +1,11 @@
-import { Project } from './../../../interface/project';
-import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
+import {Project} from './../../../interface/project';
+import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
-import {FilesService} from '../../../service/pddl-files.service';
 import {Observable, Subject} from 'rxjs';
-import {PDDLFile, DomainSpecificationFile} from '../../../interface/files';
-import {DomainFilesService, ProblemFilesService, DomainSpecificationFilesService} from '../../../service/pddl-file-services';
-import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
-import { ProjectsService } from 'src/app/service/project-services';
+import {DomainSpecificationFile, PDDLFile} from '../../../interface/files';
+import {DomainFilesService, DomainSpecificationFilesService, ProblemFilesService} from '../../../service/pddl-file-services';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {ProjectsService} from 'src/app/service/project-services';
 import {UserService} from '../../../service/user.service';
 
 @Component({

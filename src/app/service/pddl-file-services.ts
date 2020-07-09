@@ -2,7 +2,13 @@ import {SelectedObjectService} from './selected-object.service';
 import {FilesService} from './pddl-files.service';
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {DomainFilesStore, ProblemFilesStore, SelectedDomainFileStore, SelectedProblemFileStore, DomainSpecificationFilesStore} from '../store/stores.store';
+import {
+  DomainFilesStore,
+  DomainSpecificationFilesStore,
+  ProblemFilesStore,
+  SelectedDomainFileStore,
+  SelectedProblemFileStore
+} from '../store/stores.store';
 import {PDDLFile} from '../interface/files';
 
 @Injectable({

@@ -1,12 +1,12 @@
-import { PlanProperty } from './../../../../interface/plan-property';
-import { DisplayTaskService } from './../../../../service/display-task.service';
-import { takeUntil } from 'rxjs/operators';
-import { CurrentQuestionService } from 'src/app/service/run-services';
-import { CurrentRunService } from './../../../../service/run-services';
-import { PlanPropertyMapService } from 'src/app/service/plan-property-services';
-import { Observable, combineLatest, Subject } from 'rxjs';
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { PlanRun, ExplanationRun } from 'src/app/interface/run';
+import {PlanProperty} from './../../../../interface/plan-property';
+import {DisplayTaskService} from './../../../../service/display-task.service';
+import {takeUntil} from 'rxjs/operators';
+import {CurrentQuestionService} from 'src/app/service/run-services';
+import {CurrentRunService} from './../../../../service/run-services';
+import {PlanPropertyMapService} from 'src/app/service/plan-property-services';
+import {combineLatest, Observable, Subject} from 'rxjs';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {ExplanationRun, PlanRun} from 'src/app/interface/run';
 
 interface Answer {
   MUGS: string[];

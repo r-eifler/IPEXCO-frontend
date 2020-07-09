@@ -1,5 +1,3 @@
-import {Demo} from '../demo';
-
 export enum UserStudyStepType {
   description = 'description',
   form = 'form',

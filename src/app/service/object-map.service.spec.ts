@@ -1,6 +1,6 @@
-import { TestBed } from '@angular/core/testing';
+import {TestBed} from '@angular/core/testing';
 
-import { ObjectMapService } from './object-map.service';
+import {ObjectMapService} from './object-map.service';
 
 describe('ObjectMapService', () => {
   let service: ObjectMapService;

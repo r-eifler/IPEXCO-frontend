@@ -1,16 +1,14 @@
-import { PlanProperty } from './../interface/plan-property';
-import { RunningDemoService } from './demo-services';
-import { EDIT } from '../store/generic-list.store';
-import { Injectable } from '@angular/core';
+import {RunningDemoService} from './demo-services';
+import {ADD, EDIT} from '../store/generic-list.store';
+import {Injectable} from '@angular/core';
 import {ObjectCollectionService} from './object-collection.service';
-import {ExplanationRun, PlanRun, RunStatus} from '../interface/run';
+import {ExplanationRun, PlanRun} from '../interface/run';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {RunsStore} from '../store/stores.store';
 import {environment} from '../../environments/environment';
 import {IHTTPData} from '../interface/http-data.interface';
-import {ADD} from '../store/generic-list.store';
-import { Demo } from '../interface/demo';
-import { PlanPropertyMapService } from './plan-property-services';
+import {Demo} from '../interface/demo';
+import {PlanPropertyMapService} from './plan-property-services';
 import {BehaviorSubject} from 'rxjs';
 
 @Injectable({

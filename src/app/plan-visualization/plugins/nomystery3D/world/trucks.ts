@@ -1,7 +1,7 @@
 import * as BABYLON from 'babylonjs';
+import {Scene} from 'babylonjs';
 import * as BABYLONLOADER from 'babylonjs-loaders';
-import { Scene, AbstractMesh } from 'babylonjs';
-import { NoMystery3DAnimationTask, AnimationTruck } from '../nomystery-animation-task';
+import {AnimationTruck, NoMystery3DAnimationTask} from '../nomystery-animation-task';
 
 
 export async function loadTruckMeshes(taskInfo: NoMystery3DAnimationTask, scene: Scene) {

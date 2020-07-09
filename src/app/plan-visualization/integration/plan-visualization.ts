@@ -1,9 +1,8 @@
-import { Observable } from 'rxjs';
-import { CurrentRunService } from 'src/app/service/run-services';
-import { TaskSchemaService } from 'src/app/service/schema.service';
-import { Action } from 'src/app/interface/plan';
-import { Injectable, ElementRef } from '@angular/core';
-import { CurrentProjectService } from 'src/app/service/project-services';
+import {Observable} from 'rxjs';
+import {CurrentRunService} from 'src/app/service/run-services';
+import {TaskSchemaService} from 'src/app/service/schema.service';
+import {Action} from 'src/app/interface/plan';
+import {CurrentProjectService} from 'src/app/service/project-services';
 
 
 export abstract class PlanVisualization {

@@ -1,12 +1,12 @@
-import { SelectedObjectService } from './selected-object.service';
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { CurrentProjectStore, ProjectsStore } from '../store/stores.store';
-import { ObjectCollectionService } from './object-collection.service';
-import { Project } from '../interface/project';
-import { environment } from '../../environments/environment';
-import { LOAD } from '../store/generic-list.store';
-import { ExecutionSettingsService } from './execution-settings.service';
+import {SelectedObjectService} from './selected-object.service';
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {CurrentProjectStore, ProjectsStore} from '../store/stores.store';
+import {ObjectCollectionService} from './object-collection.service';
+import {Project} from '../interface/project';
+import {environment} from '../../environments/environment';
+import {LOAD} from '../store/generic-list.store';
+import {ExecutionSettingsService} from './execution-settings.service';
 
 
 @Injectable({

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {ADD, EDIT, ListStore, LOAD, REMOVE} from '../store/generic-list.store';
 import {IHTTPData} from '../interface/http-data.interface';
@@ -6,8 +6,6 @@ import {environment} from '../../environments/environment';
 import {BehaviorSubject, Observable, of} from 'rxjs';
 import {map} from 'rxjs/operators';
 import * as assert from 'assert';
-
-
 
 
 type Id = string | number;

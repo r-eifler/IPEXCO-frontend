@@ -1,6 +1,6 @@
-import { TestBed } from '@angular/core/testing';
+import {TestBed} from '@angular/core/testing';
 
-import { DomainSpecificationService } from './domain-specification.service';
+import {DomainSpecificationService} from './domain-specification.service';
 
 describe('DomainSpecificationService', () => {
   let service: DomainSpecificationService;

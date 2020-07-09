@@ -1,7 +1,7 @@
-import { ViewSettingsStore } from './../store/stores.store';
-import { ViewSettings, defaultViewSettings } from './../interface/view-settings';
-import { Injectable } from '@angular/core';
-import { SelectedObjectService } from './selected-object.service';
+import {ViewSettingsStore} from './../store/stores.store';
+import {defaultViewSettings, ViewSettings} from './../interface/view-settings';
+import {Injectable} from '@angular/core';
+import {SelectedObjectService} from './selected-object.service';
 
 @Injectable({
   providedIn: 'root'

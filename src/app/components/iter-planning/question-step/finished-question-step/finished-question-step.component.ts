@@ -1,11 +1,9 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { CurrentRunService, RunService, CurrentQuestionService } from 'src/app/service/run-services';
-import { PlanPropertyMapService} from 'src/app/service/plan-property-services';
-import { ActivatedRoute, ParamMap } from '@angular/router';
-import { switchMap, map, takeUntil } from 'rxjs/operators';
-import { ExplanationRun } from 'src/app/interface/run';
-import { ResponsiveService } from 'src/app/service/responsive.service';
-import { Subject } from 'rxjs';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {CurrentQuestionService, CurrentRunService, RunService} from 'src/app/service/run-services';
+import {ActivatedRoute, ParamMap} from '@angular/router';
+import {switchMap, takeUntil} from 'rxjs/operators';
+import {ResponsiveService} from 'src/app/service/responsive.service';
+import {Subject} from 'rxjs';
 
 @Component({
   selector: 'app-finished-question-step',

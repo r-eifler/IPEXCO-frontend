@@ -1,6 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { ProblemSelectorComponent } from './problem-selector.component';
+import {ProblemSelectorComponent} from './problem-selector.component';
 
 describe('ProblemSelectorComponent', () => {
   let component: ProblemSelectorComponent;

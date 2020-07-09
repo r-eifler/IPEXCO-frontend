@@ -1,5 +1,4 @@
-import { TestBed } from '@angular/core/testing';
-
+import {TestBed} from '@angular/core/testing';
 import { Domainfile.ServiceService } from './domainfile.service.service';
 
 describe('Domainfile.ServiceService', () => {

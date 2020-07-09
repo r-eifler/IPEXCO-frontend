@@ -1,12 +1,11 @@
-import { takeUntil } from 'rxjs/operators';
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ResponsiveService } from 'src/app/service/responsive.service';
-import { FormGroup, FormControl } from '@angular/forms';
-import { Observable, Subject } from 'rxjs';
-import { DomainSpecificationFile } from 'src/app/interface/files';
-import { DomainSpecificationFilesService } from 'src/app/service/pddl-file-services';
-import { FilesService } from 'src/app/service/pddl-files.service';
-import { SelectedObjectService } from 'src/app/service/selected-object.service';
+import {takeUntil} from 'rxjs/operators';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {ResponsiveService} from 'src/app/service/responsive.service';
+import {FormControl, FormGroup} from '@angular/forms';
+import {Observable, Subject} from 'rxjs';
+import {DomainSpecificationFile} from 'src/app/interface/files';
+import {DomainSpecificationFilesService} from 'src/app/service/pddl-file-services';
+import {FilesService} from 'src/app/service/pddl-files.service';
 
 @Component({
   selector: 'app-domain-specification',

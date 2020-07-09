@@ -1,8 +1,4 @@
-import { NoMystery3DAnimationTask, AnimationTruck, AnimationLocation, AnimationPackage } from '../nomystery-animation-task';
-import { EventEmitter } from '@angular/core';
-import { NoMysteryTask, Location, Truck, Package } from '../../nomystery/nomystery-task';
-import * as d3 from 'd3';
-import { rejects } from 'assert';
+import {AnimationLocation, AnimationPackage, AnimationTruck, NoMystery3DAnimationTask} from '../nomystery-animation-task';
 
 interface Action {
   name: string;

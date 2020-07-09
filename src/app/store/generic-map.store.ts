@@ -1,4 +1,4 @@
-import { BehaviorSubject } from 'rxjs';
+import {BehaviorSubject} from 'rxjs';
 
 export const LOAD = 'LOAD';
 export const ADD = 'ADD';

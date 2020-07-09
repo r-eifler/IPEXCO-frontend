@@ -1,14 +1,12 @@
-import { CurrentProjectService } from 'src/app/service/project-services';
-import { RunType, ExplanationRun } from '../../../../interface/run';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import {CurrentProjectService} from 'src/app/service/project-services';
+import {ExplanationRun, PlanRun, RunType} from '../../../../interface/run';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {CurrentRunService, RunService} from '../../../../service/run-services';
 import {Observable} from 'rxjs';
 import {ActivatedRoute, Router} from '@angular/router';
-import {CurrentProjectStore, CurrentRunStore, RunsStore} from '../../../../store/stores.store';
-import {PlanRun} from '../../../../interface/run';
 import {NestedTreeControl} from '@angular/cdk/tree';
 import {MatTreeNestedDataSource} from '@angular/material/tree';
-import { take, takeUntil } from 'rxjs/operators';
+import {takeUntil} from 'rxjs/operators';
 
 
 /**

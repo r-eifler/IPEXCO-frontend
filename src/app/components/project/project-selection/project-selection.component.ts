@@ -1,12 +1,12 @@
-import { takeUntil } from 'rxjs/operators';
-import { Project } from 'src/app/interface/project';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import {takeUntil} from 'rxjs/operators';
+import {Project} from 'src/app/interface/project';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Observable, Subject} from 'rxjs';
-import { Router} from '@angular/router';
+import {Router} from '@angular/router';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {ProjectCreatorComponent} from '../project-creator/project-creator.component';
-import { ProjectsService, CurrentProjectService } from 'src/app/service/project-services';
-import { ResponsiveService } from 'src/app/service/responsive.service';
+import {CurrentProjectService, ProjectsService} from 'src/app/service/project-services';
+import {ResponsiveService} from 'src/app/service/responsive.service';
 
 @Component({
   selector: 'app-project-selection',

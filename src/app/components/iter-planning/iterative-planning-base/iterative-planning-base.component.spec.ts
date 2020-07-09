@@ -1,6 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { IterativePlanningBaseComponent } from './iterative-planning-base.component';
+import {IterativePlanningBaseComponent} from './iterative-planning-base.component';
 
 describe('IterativePlanningBaseComponent', () => {
   let component: IterativePlanningBaseComponent;

@@ -1,11 +1,11 @@
-import { ProjectsService } from 'src/app/service/project-services';
-import { AnimationSettings } from './../interface/animation-settings';
-import { CurrentProjectService } from '../service/project-services';
-import { NoMystery3DVisualization } from '../plan-visualization/plugins/nomystery3D/nomystery3d-visualization';
-import { PlanVisualization } from '../plan-visualization/integration/plan-visualization';
-import { TaskSchemaService } from '../service/schema.service';
-import { CurrentRunService } from '../service/run-services';
-import { AnimationSettingsNoMysteryVisu } from '../plan-visualization/plugins/nomystery3D/settings/animation-settings-nomystery-visu';
+import {ProjectsService} from 'src/app/service/project-services';
+import {AnimationSettings} from './../interface/animation-settings';
+import {CurrentProjectService} from '../service/project-services';
+import {NoMystery3DVisualization} from '../plan-visualization/plugins/nomystery3D/nomystery3d-visualization';
+import {PlanVisualization} from '../plan-visualization/integration/plan-visualization';
+import {TaskSchemaService} from '../service/schema.service';
+import {CurrentRunService} from '../service/run-services';
+import {AnimationSettingsNoMysteryVisu} from '../plan-visualization/plugins/nomystery3D/settings/animation-settings-nomystery-visu';
 
 const planVisualizationFactory = (
     taskSchemaService: TaskSchemaService,

@@ -1,11 +1,10 @@
-import { takeUntil } from 'rxjs/operators';
-import { AnimationSettingsNoMysteryVisu } from '../../../../plan-visualization/plugins/nomystery3D/settings/animation-settings-nomystery-visu';
-import { Component, OnInit, AfterViewInit, ElementRef, ViewChild, OnDestroy } from '@angular/core';
-import { AnimationSettings } from 'src/app/interface/animation-settings';
-import { ResponsiveService } from 'src/app/service/responsive.service';
-import { TaskSchemaService } from 'src/app/service/schema.service';
-import { CurrentProjectService, ProjectsService } from 'src/app/service/project-services';
-import { Subject } from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
+import {AnimationSettingsNoMysteryVisu} from '../../../../plan-visualization/plugins/nomystery3D/settings/animation-settings-nomystery-visu';
+import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {ResponsiveService} from 'src/app/service/responsive.service';
+import {TaskSchemaService} from 'src/app/service/schema.service';
+import {CurrentProjectService, ProjectsService} from 'src/app/service/project-services';
+import {Subject} from 'rxjs';
 
 @Component({
   selector: 'app-animation-settings-nomystery',

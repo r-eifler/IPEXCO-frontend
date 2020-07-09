@@ -1,6 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { QuestionViewComponent } from './question-view.component';
+import {QuestionViewComponent} from './question-view.component';
 
 describe('QuestionViewComponent', () => {
   let component: QuestionViewComponent;

@@ -1,11 +1,10 @@
-import { takeUntil } from 'rxjs/operators';
-import { CurrentProjectService } from 'src/app/service/project-services';
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { CurrentProjectStore } from 'src/app/store/stores.store';
-import { RunService } from 'src/app/service/run-services';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Project } from 'src/app/interface/project';
-import { Subject } from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
+import {CurrentProjectService} from 'src/app/service/project-services';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {RunService} from 'src/app/service/run-services';
+import {ActivatedRoute, Router} from '@angular/router';
+import {Project} from 'src/app/interface/project';
+import {Subject} from 'rxjs';
 
 @Component({
   selector: 'app-iterative-planning-base-mobile',
