@@ -12,7 +12,7 @@ export class MainInfoComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  goToLink(url: string){
+  goToLink(url: string) {
     window.open(url, '_blank');
 }
 

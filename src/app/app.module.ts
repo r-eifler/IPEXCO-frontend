@@ -151,7 +151,7 @@ import {UserStudyDescriptionViewComponent} from './components/user-study/user-st
 import {UserStudyFormViewComponent} from './components/user-study/user-study-form-view/user-study-form-view.component';
 import {UserStudyDemoViewComponent} from './components/user-study/user-study-demo-view/user-study-demo-view.component';
 import {UserStudyStartComponent} from './components/user-study/user-study-start/user-study-start.component';
-import {UserStudyExecuterComponent} from './components/user-study/user-study-executer/user-study-executer.component';
+import {UserStudyExecuteComponent} from './components/user-study/user-study-execute/user-study-execute.component';
 import {UserStudyEndComponent} from './components/user-study/user-study-end/user-study-end.component';
 import {SelectedPlanRunService} from './service/planner-runs/selected-planrun.service';
 import {CurrentQuestionService} from './service/planner-runs/selected-question.service';
@@ -215,7 +215,7 @@ import {CurrentQuestionService} from './service/planner-runs/selected-question.s
     UserStudyFormViewComponent,
     UserStudyDemoViewComponent,
     UserStudyStartComponent,
-    UserStudyExecuterComponent,
+    UserStudyExecuteComponent,
     UserStudyEndComponent,
   ],
   imports: [

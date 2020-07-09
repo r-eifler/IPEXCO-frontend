@@ -25,15 +25,14 @@ export class UserStudyEndComponent implements OnInit, OnDestroy {
     userStudyService.getSelectedObject()
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(
-        s => {
-          this.userStudy = s;
+        study => {
+          this.userStudy = study;
         }
       );
   }
 
   async ngOnInit(): Promise<void> {
     await this.userStudyUserService.logout();
-    console.log('Checl logged in: ' + this.userStudyUserService.loggedIn());
   }
 
   ngOnDestroy(): void {
@@ -42,7 +41,6 @@ export class UserStudyEndComponent implements OnInit, OnDestroy {
   }
 
   redirectTo() {
-    console.log('Redirect to: ' + this.userStudy?.redirectUrl);
     this.document.location.href = this.userStudy?.redirectUrl;
   }
 }

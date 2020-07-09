@@ -25,7 +25,6 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
 
   currentProject: Project;
   properties$: Observable<Map<string, PlanProperty>>;
-  runs$: Observable<PlanRun[]>;
 
   constructor(
     private responsiveService: ResponsiveService,
@@ -40,7 +39,6 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
       .subscribe(project => {
         if (project !== null) {
           this.currentProject = project;
-          // this.propertiesService.findCollection([{param: 'projectId', value: project._id}]);
         }
       });
     }
@@ -49,11 +47,7 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
     this.responsiveService.getMobileStatus()
     .pipe(takeUntil(this.ngUnsubscribe))
     .subscribe( isMobile => {
-      if (isMobile) {
-        this.isMobile = true;
-      } else {
-        this.isMobile = false;
-      }
+      this.isMobile = isMobile;
     });
     this.responsiveService.checkWidth();
   }
@@ -71,11 +65,7 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
       projectId: this.currentProject._id,
     };
 
-    const dialogRef = this.dialog.open(DemoCreatorComponent, dialogConfig);
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-    });
+    this.dialog.open(DemoCreatorComponent, dialogConfig);
   }
 
 }

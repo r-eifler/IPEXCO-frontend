@@ -35,11 +35,7 @@ export class ProjectCollectionComponent implements OnInit, OnDestroy {
     this.responsiveService.getMobileStatus()
     .pipe(takeUntil(this.ngUnsubscribe))
     .subscribe( isMobile => {
-      if (isMobile) {
-        this.isMobile = true;
-      } else {
-        this.isMobile = false;
-      }
+      this.isMobile = isMobile;
     });
     this.responsiveService.checkWidth();
   }
@@ -60,13 +56,7 @@ export class ProjectCollectionComponent implements OnInit, OnDestroy {
       project: null,
     };
 
-    const dialogRef = this.dialog.open(ProjectCreatorComponent, dialogConfig);
-
-    dialogRef.afterClosed()
-    .pipe(takeUntil(this.ngUnsubscribe))
-    .subscribe(result => {
-      console.log('The dialog was closed');
-    });
+    this.dialog.open(ProjectCreatorComponent, dialogConfig);
   }
 
   copy_project(project: Project): void {
@@ -80,13 +70,7 @@ export class ProjectCollectionComponent implements OnInit, OnDestroy {
       project,
     };
 
-    const dialogRef = this.dialog.open(ProjectCreatorComponent, dialogConfig);
-
-    dialogRef.afterClosed()
-    .pipe(takeUntil(this.ngUnsubscribe))
-    .subscribe(result => {
-      console.log('The dialog was closed');
-    });
+    this.dialog.open(ProjectCreatorComponent, dialogConfig);
   }
 
 }

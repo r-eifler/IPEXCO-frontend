@@ -14,9 +14,15 @@ import {ActivatedRoute, Router} from '@angular/router';
 export class RegisterComponent implements OnInit {
 
   registerForm = new FormGroup({
-    name: new FormControl('', [Validators.required, Validators.minLength(5), Validators.maxLength(32)]),
-    password: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(32)]),
-    passwordRepeat: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(32)])},
+    name: new FormControl(
+      '',
+      [Validators.required, Validators.minLength(5), Validators.maxLength(32)]),
+    password: new FormControl(
+      '',
+      [Validators.required, Validators.minLength(8), Validators.maxLength(32)]),
+    passwordRepeat: new FormControl(
+      '',
+      [Validators.required, Validators.minLength(8), Validators.maxLength(32)])},
     [passwordValidator]
   );
 
@@ -38,15 +44,13 @@ export class RegisterComponent implements OnInit {
     console.log(newUser);
 
     this.userService.register(newUser).then(
-      () => {
-        console.log('Register successdul.');
-        this.router.navigate(['/projects'], { relativeTo: this.route });
+      async () => {
+        await this.router.navigate(['/overview'], { relativeTo: this.route });
       },
       () => {
         console.log('Register failed.');
       }
     );
-
 
     this.dialogRef.close();
   }

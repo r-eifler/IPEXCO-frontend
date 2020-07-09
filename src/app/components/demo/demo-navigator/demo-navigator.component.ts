@@ -86,22 +86,26 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(
         (settings: ExecutionSettings) => {
+
           if (settings && (settings.measureTime || settings.useTimer)) {
-            this.maxTime = settings.maxTime;
+            this.maxTime = settings.maxTime ? settings.maxTime : 50000;
             this.startTime = new Date().getTime();
             this.timerIntervall = setInterval(() => {
               if (this.finished) {
                 clearInterval(this.timerIntervall);
               }
+
               const c = new Date().getTime();
               this.currentTime = c - this.startTime;
               this.timer = this.maxTime - this.currentTime;
               this.timer = this.timer < 0 ? 0 : this.timer;
+
               if (this.timer <= 0 && ! this.finished) {
                 this.finished = true;
                 this.showDemoFinished(true);
                 clearInterval(this.timerIntervall);
               }
+
             }, 1000);
           }
         }
@@ -139,13 +143,8 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
     clearInterval(this.timerIntervall);
   }
 
-  newPlanRun() {
-    this.router.navigate(['./new-planning-step'], { relativeTo: this.route });
-  }
-
-  new_question() {
-    this.currentRunService.saveObject(this.runsService.getLastRun());
-    this.router.navigate(['./new_question'], { relativeTo: this.route });
+  async newPlanRun() {
+    await this.router.navigate(['./new-planning-step'], {relativeTo: this.route});
   }
 
 }

@@ -1,20 +1,20 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import {UserStudyExecuterComponent} from './user-study-executer.component';
+import {UserStudyExecuteComponent} from './user-study-execute.component';
 
 describe('UserStudyExecuterComponent', () => {
-  let component: UserStudyExecuterComponent;
-  let fixture: ComponentFixture<UserStudyExecuterComponent>;
+  let component: UserStudyExecuteComponent;
+  let fixture: ComponentFixture<UserStudyExecuteComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ UserStudyExecuterComponent ]
+      declarations: [ UserStudyExecuteComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(UserStudyExecuterComponent);
+    fixture = TestBed.createComponent(UserStudyExecuteComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

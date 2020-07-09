@@ -36,21 +36,16 @@ export class UserStudyDemoViewComponent implements OnInit, OnDestroy {
   constructor(
     private demosService: DemosService,
     private selectedDemoService: RunningDemoService,
-    private settingsService: ExecutionSettingsService,
-    private router: Router,
-    private route: ActivatedRoute,
   ) { }
 
   ngOnInit(): void {
-    console.log(this.demoId);
     this.demosService.getObject(this.demoId)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(
-        d => {
-          console.log(d);
-          if (d) {
-            this.selectedDemoService.saveObject(d);
-            this.demo = d;
+        demo => {
+          if (demo) {
+            this.selectedDemoService.saveObject(demo);
+            this.demo = demo;
           }
         }
       );

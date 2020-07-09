@@ -33,19 +33,18 @@ export class QuestionViewComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-      combineLatest([this.currentRun$, this.currentQuestion$, this.planProperties$])
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe(([run, question, planProperties]) => {
-        this.question = [];
-        if (run && question && planProperties.size > 0) {
-          this.currentHardGoals = run.hardGoals;
-          const questionElems = this.arrayMinus(question.hardGoals, this.currentHardGoals.map(value => (value)));
-          for (const elem of questionElems) {
-              const pp = planProperties.get(elem);
-              this.question.push(pp);
-          }
-        }
-      });
+    // Get the  properties which are in the question
+    // This are the properties which are in the hard-goals of the question run but not in the hard goals of the corresponding plan run
+    combineLatest([this.currentRun$, this.currentQuestion$, this.planProperties$])
+    .pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe(([run, question, planProperties]) => {
+      this.question = [];
+      if (run && question && planProperties.size > 0) {
+        this.currentHardGoals = run.hardGoals;
+        const questionElements = this.arrayMinus(question.hardGoals, this.currentHardGoals.map(value => (value)));
+        this.question = questionElements.map(elem => planProperties.get(elem));
+      }
+    });
   }
 
   private arrayMinus(a1: string[], a2: string[]): string[] {

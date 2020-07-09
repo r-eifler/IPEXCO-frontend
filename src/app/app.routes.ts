@@ -21,7 +21,7 @@ import {UserStudyCollectionComponent} from './components/user-study/user-study-c
 import {UserStudyCreatorComponent} from './components/user-study/user-study-creator/user-study-creator.component';
 import {UserStudyBaseComponent} from './components/user-study/user-study-base/user-study-base.component';
 import {UserStudyStartComponent} from './components/user-study/user-study-start/user-study-start.component';
-import {UserStudyExecuterComponent} from './components/user-study/user-study-executer/user-study-executer.component';
+import {UserStudyExecuteComponent} from './components/user-study/user-study-execute/user-study-execute.component';
 import {UserStudyEndComponent} from './components/user-study/user-study-end/user-study-end.component';
 import {AuthGuard} from './route-guards/auth-guard.guard';
 
@@ -62,7 +62,7 @@ export const appRoutes: Routes = [
       children: [
         { path: 'info', component: UserStudyCreatorComponent},
         { path: 'start', component: UserStudyStartComponent},
-        { path: 'exec', component: UserStudyExecuterComponent,
+        { path: 'exec', component: UserStudyExecuteComponent,
             children: [
               { path: 'new-planning-step', component: PlanningStepComponent},
               { path: 'planning-step/:runid', component: FinishedPlanningStepComponent},

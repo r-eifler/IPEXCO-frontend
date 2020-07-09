@@ -121,7 +121,7 @@ export class PropertyCreatorComponent implements OnInit, OnDestroy {
     this.selectedPropertyTemplate.initializeVariableConstraints(this.taskSchema);
     this.sentenceTemplateParts = this.selectedPropertyTemplate.getSentenceTemplateParts();
     this.possibleVariableValues = this.selectedPropertyTemplate.getPossibleVariableValues(this.taskSchema, this.selectedVariableValue);
-    // console.log(this.possibleVariableValues);
+
     this.propertyTemplateStepper.selected.completed = true;
     this.propertyTemplateStepper.next();
   }

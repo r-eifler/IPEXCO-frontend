@@ -51,11 +51,7 @@ export class DemoCollectionComponent implements OnInit, OnDestroy {
     this.responsiveService.getMobileStatus()
     .pipe(takeUntil(this.ngUnsubscribe))
     .subscribe( isMobile => {
-      if (isMobile) {
-        this.isMobile = true;
-      } else {
-        this.isMobile = false;
-      }
+      this.isMobile = isMobile;
     });
     this.responsiveService.checkWidth();
 
@@ -72,10 +68,9 @@ export class DemoCollectionComponent implements OnInit, OnDestroy {
   }
 
   async cancelDemo(demo: Demo): Promise<void> {
-    const canceld = await this.demosService.cancelDemo(demo);
-    console.log(canceld);
-    if (canceld) {
-      this.snackBar.open('Demo canceld successfully!', 'close', {duration: 2000});
+    const canceled = await this.demosService.cancelDemo(demo);
+    if (canceled) {
+      this.snackBar.open('Demo canceled successfully!', 'close', {duration: 2000});
     } else {
       this.snackBar.open('Cancel demo failed!', 'close', {duration: 2000});
     }

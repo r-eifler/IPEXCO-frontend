@@ -8,10 +8,10 @@ import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'app-user-study-executer',
-  templateUrl: './user-study-executer.component.html',
-  styleUrls: ['./user-study-executer.component.css']
+  templateUrl: './user-study-execute.component.html',
+  styleUrls: ['./user-study-execute.component.css']
 })
-export class UserStudyExecuterComponent implements OnInit, OnDestroy {
+export class UserStudyExecuteComponent implements OnInit, OnDestroy {
 
   private ngUnsubscribe: Subject<any> = new Subject();
   isMobile: boolean;
@@ -34,7 +34,6 @@ export class UserStudyExecuterComponent implements OnInit, OnDestroy {
         study => {
           this.userStudy = study;
           this.currentStep = study?.steps[0];
-          console.log('This Step:' + (this.currentStepIndex + 1) + '/' + this.userStudy.steps.length);
         }
       );
   }
@@ -52,12 +51,11 @@ export class UserStudyExecuterComponent implements OnInit, OnDestroy {
     this.ngUnsubscribe.complete();
   }
 
-  nextStep() {
+  async nextStep() {
     if (this.hasNextStep()) {
       this.currentStep = this.userStudy.steps[++this.currentStepIndex];
-      console.log('This Step:' + (this.currentStepIndex + 1) + '/' + this.userStudy.steps.length);
     } else {
-      this.router.navigate([''.concat(...['/user-studies/' + this.userStudy._id + '/end'])], { relativeTo: this.route });
+      await this.router.navigate([''.concat(...['/user-studies/' + this.userStudy._id + '/end'])], { relativeTo: this.route });
     }
   }
 

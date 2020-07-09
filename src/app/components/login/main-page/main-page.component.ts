@@ -26,20 +26,16 @@ export class MainPageComponent implements OnInit, AfterViewChecked, OnDestroy {
     private route: ActivatedRoute,
     public dialog: MatDialog) { }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.responsiveService.getMobileStatus()
     .pipe(takeUntil(this.ngUnsubscribe))
     .subscribe( isMobile => {
-      if (isMobile) {
-        this.isMobile = true;
-      } else {
-        this.isMobile = false;
-      }
+      this.isMobile = isMobile;
     });
     this.responsiveService.checkWidth();
 
     if (this.userService.loggedIn()) {
-      this.router.navigate(['/overview'], { relativeTo: this.route });
+      await this.router.navigate(['/overview'], { relativeTo: this.route });
     }
   }
 
@@ -63,17 +59,8 @@ export class MainPageComponent implements OnInit, AfterViewChecked, OnDestroy {
   newRegisterForm(): void {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.width = '500px';
-    dialogConfig.data  = {
-      project: null,
-    };
 
-    const dialogRef = this.dialog.open(RegisterComponent, dialogConfig);
-
-    dialogRef.afterClosed()
-    .pipe(takeUntil(this.ngUnsubscribe))
-    .subscribe(result => {
-      console.log('The dialog was closed');
-    });
+    this.dialog.open(RegisterComponent, dialogConfig);
   }
 
 

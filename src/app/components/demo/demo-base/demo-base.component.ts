@@ -29,6 +29,7 @@ export class DemoBaseComponent implements OnInit, OnDestroy {
 
   private ngUnsubscribe: Subject<any> = new Subject();
 
+  // Steps are help, task info and then the demo itself.
   step = 0;
 
   constructor(
@@ -43,12 +44,9 @@ export class DemoBaseComponent implements OnInit, OnDestroy {
         this.demosService.getObject(params.demoid)
           .pipe(takeUntil(this.ngUnsubscribe))
           .subscribe(
-            async (demo: Demo) => {
+             (demo: Demo) => {
               if (demo) {
-                console.log('DemoBase: Demo loaded: ' + demo._id);
                 this.runningDemoService.saveObject(demo);
-                // await this.settingsService.load(demo.settings);
-                // console.log('Demo settings loaded');
               }
             }
           );
@@ -62,11 +60,10 @@ export class DemoBaseComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
-    clearInterval();
   }
 
-  toDemoCollection() {
-    this.router.navigate(['/demos'], { relativeTo: this.route });
+  async toDemoCollection() {
+    await this.router.navigate(['/demos'], {relativeTo: this.route});
   }
 
   nextStep() {

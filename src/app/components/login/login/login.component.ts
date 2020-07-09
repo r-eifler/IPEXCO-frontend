@@ -36,11 +36,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.responsiveService.getMobileStatus()
     .pipe(takeUntil(this.ngUnsubscribe))
     .subscribe( isMobile => {
-      if (isMobile) {
-        this.isMobile = true;
-      } else {
-        this.isMobile = false;
-      }
+      this.isMobile = isMobile;
     });
     this.responsiveService.checkWidth();
   }
@@ -59,15 +55,15 @@ export class LoginComponent implements OnInit, OnDestroy {
     console.log(newUser);
 
     this.userService.login(newUser).then(
-      () => {
+      async () => {
         console.log('Login successful.');
-        this.router.navigate(['/overview'], { relativeTo: this.route });
+        await this.router.navigate(['/overview'], { relativeTo: this.route });
       },
-      () => {
+      async () => {
         console.log('Login failed.');
+        await this.router.navigate(['/'], { relativeTo: this.route });
       }
     );
-
 
     this.dialogRef.close();
   }

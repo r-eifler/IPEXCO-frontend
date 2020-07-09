@@ -165,11 +165,10 @@ export class UserStudyCreatorComponent implements OnInit, OnDestroy {
   }
 
   makeTrustedURL(url: string) {
-    const tUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(url + '?embedded=true');
-    return tUrl;
+    return this.domSanitizer.bypassSecurityTrustResourceUrl(url + '?embedded=true');
   }
 
-  saveUserStudy() {
+  async saveUserStudy() {
     console.log('Save User Study');
     this.userStudy.name = this.userStudyForm.controls.name.value;
     this.userStudy.description = this.userStudyForm.controls.description.value;
@@ -196,6 +195,6 @@ export class UserStudyCreatorComponent implements OnInit, OnDestroy {
 
     this.userStudiesService.saveObject(this.userStudy);
 
-    this.router.navigate(['/user-studies'], { relativeTo: this.route });
+    await this.router.navigate(['/user-studies'], { relativeTo: this.route });
   }
 }

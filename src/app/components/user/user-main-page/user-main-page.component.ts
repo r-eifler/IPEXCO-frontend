@@ -55,29 +55,29 @@ export class UserMainPageComponent implements OnInit, OnDestroy {
     this.ngUnsubscribe.complete();
   }
 
-  openProject(project: Project) {
+  async openProject(project: Project) {
     console.log(''.concat(...['/projects/', project._id, '/overview']));
-    this.router.navigate([''.concat(...['/projects/', project._id, '/overview'])], { relativeTo: this.route });
+    await this.router.navigate([''.concat(...['/projects/', project._id, '/overview'])], { relativeTo: this.route });
   }
 
-  toProjectCollection() {
-    this.router.navigate(['/projects'], { relativeTo: this.route });
+  async toProjectCollection() {
+    await this.router.navigate(['/projects'], { relativeTo: this.route });
   }
 
-  openDemo(demo: Demo) {
-    this.router.navigate([''.concat(...['/demos/', demo._id])], { relativeTo: this.route });
+  async openDemo(demo: Demo) {
+    await this.router.navigate([''.concat(...['/demos/', demo._id])], { relativeTo: this.route });
   }
 
-  toDemoCollection() {
-    this.router.navigate(['/demos'], { relativeTo: this.route });
+  async toDemoCollection() {
+    await this.router.navigate(['/demos'], { relativeTo: this.route });
   }
 
-  openUserStudy(study: UserStudy) {
-    this.router.navigate([''.concat(...['/user-studies/', study._id, '/start'])], { relativeTo: this.route });
+  async  openUserStudy(study: UserStudy) {
+    await this.router.navigate([''.concat(...['/user-studies/', study._id, '/start'])], { relativeTo: this.route });
   }
 
-  toUserStudyCollection() {
-    this.router.navigate(['/user-studies'], { relativeTo: this.route });
+  async  toUserStudyCollection() {
+    await this.router.navigate(['/user-studies'], { relativeTo: this.route });
   }
 
 }

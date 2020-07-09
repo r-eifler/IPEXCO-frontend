@@ -14,7 +14,7 @@ import {environment} from '../../../../environments/environment';
 })
 export class UserStudyCollectionComponent implements OnInit, OnDestroy {
 
-  urlBase = environment.localURL + "/user-studies"
+  urlBase = environment.localURL + '/user-studies';
   private ngUnsubscribe: Subject<any> = new Subject();
 
   isMobile: boolean;
@@ -46,14 +46,14 @@ export class UserStudyCollectionComponent implements OnInit, OnDestroy {
     this.ngUnsubscribe.complete();
   }
 
-  openInfo(study: UserStudy) {
+  async openInfo(study: UserStudy) {
     this.selectedUserStudyService.saveObject(study);
-    this.router.navigate(['../user-studies/' + study._id + '/info'], { relativeTo: this.route });
+    await this.router.navigate(['../user-studies/' + study._id + '/info'], { relativeTo: this.route });
   }
 
-  newUserStudy() {
+  async newUserStudy() {
     this.selectedUserStudyService.saveObject(null);
-    this.router.navigate(['./new-user-study'], { relativeTo: this.route });
+    await this.router.navigate(['./new-user-study'], { relativeTo: this.route });
   }
 
   delete(study: UserStudy) {

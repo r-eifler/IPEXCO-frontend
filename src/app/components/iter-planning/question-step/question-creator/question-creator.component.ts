@@ -27,7 +27,6 @@ export class QuestionCreatorComponent implements OnInit, OnDestroy {
 
   allPlanProperties: PlanProperty[];
   notSatPlanProperties: PlanProperty[];
-  private currentProject$: Observable<Project>;
   private currentRun: PlanRun;
   private hardGoals: string[];
 
@@ -58,12 +57,11 @@ export class QuestionCreatorComponent implements OnInit, OnDestroy {
       if (run != null) {
         this.currentRun = run;
         this.hardGoals = run.hardGoals;
+
         this.propertiesService.getMap()
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe(properties => {
           this.allPlanProperties = [...properties.values()].filter(p => p.isUsed);
-          console.log(this.currentRun.satPlanProperties);
-          console.log(this.hardGoals);
           this.notSatPlanProperties = this.allPlanProperties.filter(
             p => ! this.currentRun.satPlanProperties.includes(p.name) && ! this.currentRun.hardGoals.includes(p.name));
         });
@@ -81,35 +79,30 @@ export class QuestionCreatorComponent implements OnInit, OnDestroy {
 
   onSelectionChange(event) {
     this.question = this.questionSelectionList.selectedOptions.selected.map(v => v.value);
-    if (this.questionSelectionList.selectedOptions.selected.length >= this.settingsService.getSelectedObject().getValue().maxQuestionSize) {
-      this.maxSizeQuestionReached = true;
-    } else {
-      this.maxSizeQuestionReached = false;
-    }
+    this.maxSizeQuestionReached =
+      this.questionSelectionList.selectedOptions.selected.length >=
+      this.settingsService.getSelectedObject().getValue().maxQuestionSize;
   }
 
 
-  // create a new mugs run with the currently selected properties
-  compute_dependencies(): void {
+  // create a new explanation run with the currently selected properties
+  async compute_dependencies() {
     const expRun: ExplanationRun = {
       _id: this.currentRun.explanationRuns.length.toString(),
       name: 'Question ' + (this.currentRun.explanationRuns.length + 1),
       status: null,
       type: RunType.mugs,
       planProperties: this.allPlanProperties,
-      softGoals: this.allPlanProperties.filter(p => ! this.question.includes(p) && ! this.currentRun.hardGoals.find(hg => hg === p.name))
-          .map(value => (value.name)),
+      softGoals: this.allPlanProperties
+        .filter(p => ! this.question.includes(p) && ! this.currentRun.hardGoals.find(hg => hg === p.name))
+        .map(value => (value.name)),
       hardGoals: this.currentRun.hardGoals.concat(this.question.map(value => (value.name))),
       result: null,
       log: null,
     };
 
-    // console.log('Compute dependencies');
-    // console.log(expRun);
-
     this.plannerService.execute_mugs_run(this.currentRun, expRun);
-    console.log('Redirect to: ' + this.redirectURL);
-    this.router.navigate([this.redirectURL], { relativeTo: this.route });
+    await this.router.navigate([this.redirectURL], { relativeTo: this.route });
   }
 
 }

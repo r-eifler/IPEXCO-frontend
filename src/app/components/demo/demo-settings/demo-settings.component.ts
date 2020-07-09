@@ -27,7 +27,8 @@ export class DemoSettingsComponent implements OnInit, OnDestroy {
       this.name = data.name;
       this.settings = data.settings;
       this.demoSettingsForm = new FormGroup({
-        maxRuns: new FormControl(this.settings.maxRuns, [Validators.required, Validators.min(1), Validators.max(100)]),
+        maxRuns: new FormControl(this.settings.maxRuns,
+          [Validators.required, Validators.min(1), Validators.max(100)]),
         allowQuestions: new FormControl(this.settings.allowQuestions),
         maxQuestionSize: new FormControl(
            this.settings.maxQuestionSize.toString(),
@@ -36,21 +37,15 @@ export class DemoSettingsComponent implements OnInit, OnDestroy {
         usePlanPropertyValues: new FormControl(this.settings.usePlanPropertyValues),
         useTimer: new FormControl(this.settings.useTimer),
         measureTime: new FormControl(this.settings.measureTime),
-        maxTime: new FormControl(this.settings.maxTime / 60000,[ Validators.required, Validators.min(0.05), Validators.max(60) ]),
+        maxTime: new FormControl(this.settings.maxTime / 60000,
+          [ Validators.required, Validators.min(0.05), Validators.max(60) ]),
         showAnimation: new FormControl(this.settings.showAnimation),
       });
 
-    this.demoSettingsForm.controls.maxQuestionSize.enable()
+      this.demoSettingsForm.controls.maxQuestionSize.enable();
     }
 
-  openLink(event: MouseEvent): void {
-    this.bottomSheetRef.dismiss();
-    event.preventDefault();
-  }
-
-  ngOnInit(): void {
-
-  }
+  ngOnInit(): void {}
 
   ngOnDestroy(): void {
     this.ngUnsubscribe.next();
@@ -58,7 +53,6 @@ export class DemoSettingsComponent implements OnInit, OnDestroy {
   }
 
   onSave() {
-    console.log('save demo settings');
     this.settings.maxRuns = this.demoSettingsForm.controls.maxRuns.value;
     this.settings.allowQuestions = this.demoSettingsForm.controls.allowQuestions.value;
     this.settings.maxQuestionSize = +this.demoSettingsForm.controls.maxQuestionSize.value;
@@ -68,9 +62,6 @@ export class DemoSettingsComponent implements OnInit, OnDestroy {
     this.settings.measureTime = this.demoSettingsForm.controls.measureTime.value;
     this.settings.maxTime = this.demoSettingsForm.controls.maxTime.value * 60000;
     this.settings.showAnimation = this.demoSettingsForm.controls.showAnimation.value;
-
-    // console.log('Settings save: ');
-    // console.log((this.settings));
 
     this.settingsService.updateSettings(this.settings);
 

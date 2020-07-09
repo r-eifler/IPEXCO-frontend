@@ -93,21 +93,9 @@ export class PropertyCollectionComponent implements OnInit, AfterViewInit, OnDes
     this.propertiesService.saveObject(property);
   }
 
-  onSelectionChanged(event: MatSelectionListChange) {
-    const selectedProp: PlanProperty = event.option.value;
-    selectedProp.isUsed = ! selectedProp.isUsed;
-    this.propertiesService.saveObject(selectedProp);
-  }
-
   new_property_form(): void {
-    const dialogRef = this.dialog.open(PropertyCreatorComponent, {
+    this.dialog.open(PropertyCreatorComponent, {
       width: '1000px'
-    });
-
-    dialogRef.afterClosed()
-    .pipe(takeUntil(this.ngUnsubscribe))
-    .subscribe(result => {
-      console.log('The dialog was closed');
     });
   }
 

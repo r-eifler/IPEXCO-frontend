@@ -94,20 +94,16 @@ export class UserStudyStartComponent implements OnInit, OnDestroy {
   onAgree() {
     this.getProlificIDs().then(
       async ids => {
-        console.log(ids);
         const prolificUser: USUser = {prolificId: ids[0], userStudyId: ids[1]};
 
         this.userRegistered = await this.userStudyUserService.register(prolificUser);
-        console.log('Registered: ' + this.userRegistered);
-
         if (this.userRegistered) {
           this.initUserStudy();
         }
       },
-      reason => {
+      () => {
         this.error = true;
         this.errorMessage = 'No valid user study link.';
-        console.log(reason);
       }
     );
   }

@@ -48,9 +48,7 @@ export class RunTreeComponent implements OnInit, OnDestroy {
     .pipe(takeUntil(this.ngUnsubscribe))
     .subscribe(value => {
       this.dataSource.data = value;
-      console.log('Run Tree data:');
-      console.log(value);
-      // mayby used in the desktop version
+      // maybe used in the desktop version
       // if (value.length === 0) {
       //   this.router.navigate(['./original-task'], { relativeTo: this.route });
       // } else {
@@ -73,18 +71,11 @@ export class RunTreeComponent implements OnInit, OnDestroy {
   isPlanRun = (_: number, node: RunNode) => node.type === RunType.plan;
   isExpRun = (_: number, node: RunNode) => node.type === RunType.mugs;
 
-  new_planning_step() {
 
-  }
-
-  new_question(planRun: RunNode) {
-    this.router.navigate(['./new_question'], { relativeTo: this.route });
-  }
-
-  delete(run: PlanRun) {
+  async delete(run: PlanRun) {
     this.runService.deleteObject(run);
     if (this.currentRunStore.item$.getValue() && run._id === this.currentRunStore.item$.getValue()._id) {
-      this.router.navigate(['../'], { relativeTo: this.route });
+      await this.router.navigate(['../'], { relativeTo: this.route });
     }
   }
 

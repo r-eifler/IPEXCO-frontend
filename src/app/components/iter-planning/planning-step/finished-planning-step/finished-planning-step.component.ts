@@ -28,7 +28,6 @@ export class FinishedPlanningStepComponent implements OnInit, OnDestroy {
     private runService: PlanRunsService,
     public currentRunService: SelectedPlanRunService) {
 
-    console.log('Finished planning step');
     this.route.paramMap.pipe(
       switchMap((params: ParamMap) =>
         this.runService.getObject(params.get('runid')))
@@ -52,8 +51,8 @@ export class FinishedPlanningStepComponent implements OnInit, OnDestroy {
     this.ngUnsubscribe.complete();
   }
 
-  newQuestion() {
-    this.router.navigate(['./new-question'], { relativeTo: this.route });
+  async newQuestion() {
+    await this.router.navigate(['./new-question'], { relativeTo: this.route });
   }
 
   onAnimationFinished() {

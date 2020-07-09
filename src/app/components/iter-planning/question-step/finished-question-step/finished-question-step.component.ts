@@ -25,24 +25,26 @@ export class FinishedQuestionStepComponent implements OnInit, OnDestroy {
     private currentRunService: SelectedPlanRunService,
     private currentQuestionService: CurrentQuestionService) {
 
-      // TODO simplify code !!!
-      this.route.paramMap.pipe(
-        switchMap((params: ParamMap) =>
-          this.runService.getObject(params.get('runid')))
-          )
-          .pipe(takeUntil(this.ngUnsubscribe))
-          .subscribe(planRun => {
-            this.currentRunService.saveObject(planRun);
-            this.route.paramMap
-            .pipe(takeUntil(this.ngUnsubscribe))
-            .subscribe(
-              (params2: ParamMap) => {
-                const expRun = planRun.explanationRuns.find((value => value._id === params2.get('expid')));
-                if (expRun) {
-                  this.currentQuestionService.saveObject(expRun);
+      this.route.params
+        .pipe(takeUntil(this.ngUnsubscribe))
+        .subscribe(
+          params => {
+            const planRunId = params.runid;
+            const expRunId = params.expid;
+
+            this.runService.getObject(planRunId)
+              .pipe(takeUntil(this.ngUnsubscribe))
+              .subscribe(
+                planRun => {
+                  this.currentRunService.saveObject(planRun);
+                  const expRun = planRun.explanationRuns.find((value => value._id === expRunId));
+                  if (expRun) {
+                    this.currentQuestionService.saveObject(expRun);
+                  }
                 }
-              });
-        });
+              );
+          }
+        );
   }
 
 
@@ -50,11 +52,7 @@ export class FinishedQuestionStepComponent implements OnInit, OnDestroy {
     this.responsiveService.getMobileStatus()
     .pipe(takeUntil(this.ngUnsubscribe))
     .subscribe( isMobile => {
-      if (isMobile) {
-        this.isMobile = true;
-      } else {
-        this.isMobile = false;
-      }
+      this.isMobile = isMobile;
     });
     this.responsiveService.checkWidth();
   }

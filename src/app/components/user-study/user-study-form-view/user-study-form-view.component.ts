@@ -23,8 +23,7 @@ export class UserStudyFormViewComponent implements OnInit {
   }
 
   makeTrustedURL(url: string) {
-    const tUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(url + '?embedded=true');
-    return tUrl;
+    return this.domSanitizer.bypassSecurityTrustResourceUrl(url + '?embedded=true');
   }
 
 }

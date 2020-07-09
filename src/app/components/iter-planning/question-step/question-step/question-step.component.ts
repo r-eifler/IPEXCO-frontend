@@ -22,8 +22,8 @@ export class QuestionStepComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private runService: PlanRunsService,
-    currentRunService: SelectedPlanRunService
-    ) {
+    currentRunService: SelectedPlanRunService) {
+
     this.route.paramMap.pipe(
       switchMap((params: ParamMap) =>
         this.runService.getObject(params.get('runid'))
@@ -39,11 +39,7 @@ export class QuestionStepComponent implements OnInit, OnDestroy {
     this.responsiveService.getMobileStatus()
     .pipe(takeUntil(this.ngUnsubscribe))
     .subscribe( isMobile => {
-      if (isMobile) {
-        this.isMobile = true;
-      } else {
-        this.isMobile = false;
-      }
+      this.isMobile = isMobile;
     });
     this.responsiveService.checkWidth();
   }

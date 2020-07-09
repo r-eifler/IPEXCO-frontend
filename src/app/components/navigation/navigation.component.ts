@@ -32,13 +32,9 @@ export class NavigationComponent implements OnInit, OnDestroy {
     this.responsiveService.getMobileStatus()
     .pipe(takeUntil(this.ngUnsubscribe))
     .subscribe( isMobile => {
-      if (isMobile) {
-        this.isMobile = true;
-      } else {
-        this.isMobile = false;
-      }
+      this.isMobile = isMobile;
     });
-    this.onResize();
+    this.responsiveService.checkWidth();
   }
 
   ngOnDestroy(): void {
@@ -46,21 +42,11 @@ export class NavigationComponent implements OnInit, OnDestroy {
     this.ngUnsubscribe.complete();
   }
 
-  onResize() {
-    this.responsiveService.checkWidth();
-  }
-
   newLoginForm(): void {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.width = '200px';
 
-    const dialogRef = this.dialog.open(LoginComponent, dialogConfig);
-
-    dialogRef.afterClosed()
-    .pipe(takeUntil(this.ngUnsubscribe))
-    .subscribe(result => {
-      console.log('The dialog was closed');
-    });
+    this.dialog.open(LoginComponent, dialogConfig);
   }
 
   async logout() {

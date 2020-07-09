@@ -57,7 +57,6 @@ export class DemoCreatorComponent implements OnInit {
       this.demosService.generateDemo(this.currentProjectId, newDemo);
     }
 
-
     this.dialogRef.close();
   }
 

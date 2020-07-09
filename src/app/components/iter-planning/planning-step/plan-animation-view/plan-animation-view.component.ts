@@ -25,11 +25,7 @@ export class PlanAnimationViewComponent implements OnInit, AfterViewInit {
   }
 
   constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    public animationHandler: AnimationHandler) {
-
-  }
+    public animationHandler: AnimationHandler) {}
 
   ngAfterViewInit(): void {
     this.animationHandler.getAnimationDOMElement()
@@ -43,11 +39,6 @@ export class PlanAnimationViewComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-  }
-
-
-  newQuestion() {
-    this.router.navigate(['./new-question'], { relativeTo: this.route });
   }
 
 }
