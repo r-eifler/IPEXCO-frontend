@@ -153,6 +153,7 @@ import {UserStudyExecuteComponent} from './components/user-study/user-study-exec
 import {UserStudyEndComponent} from './components/user-study/user-study-end/user-study-end.component';
 import {SelectedPlanRunService} from './service/planner-runs/selected-planrun.service';
 import {SelectedQuestionService} from './service/planner-runs/selected-question.service';
+import { MarkedPipe } from './pipes/marked.pipe';
 
 
 @NgModule({
@@ -215,6 +216,7 @@ import {SelectedQuestionService} from './service/planner-runs/selected-question.
     UserStudyStartComponent,
     UserStudyExecuteComponent,
     UserStudyEndComponent,
+    MarkedPipe,
   ],
   imports: [
     RouterModule.forRoot(appRoutes,

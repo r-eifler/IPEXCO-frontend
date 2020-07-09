@@ -55,11 +55,19 @@
 
         <ng-container *ngIf="part.active">
           <ng-container *ngIf='part.type === userStudyStepType.description'>
-            <mat-form-field class="full-line-input">
-              <mat-label>Description</mat-label>
-              <textarea matInput [value]="part.content" [(ngModel)]="part.content">
-              </textarea>
-            </mat-form-field>
+            <mat-tab-group>
+              <mat-tab label="Markdown">
+                <mat-form-field class="full-line-input">
+                  <textarea matInput [value]="part.content" [(ngModel)]="part.content">
+                  </textarea>
+                </mat-form-field>
+              </mat-tab>
+              <mat-tab label="Preview">
+                <div [innerHTML]="part.content | marked"></div>
+              </mat-tab>
+            </mat-tab-group>
+
+
           </ng-container>
 
           <ng-container *ngIf='part.type === userStudyStepType.form'>
@@ -81,7 +89,7 @@
 
       <ng-container *ngIf="! part.active">
         <ng-container *ngIf='part.type === userStudyStepType.description'>
-            <p>{{part.content}}</p>
+          <div [innerHTML]="part.content | marked"></div>
         </ng-container>
 
         <ng-container *ngIf='part.type === userStudyStepType.form'>

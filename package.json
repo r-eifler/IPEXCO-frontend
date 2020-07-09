@@ -33,6 +33,7 @@
     "d3": "^5.16.0",
     "d3-zoom": "^1.8.3",
     "gsap": "^3.2.6",
+    "marked": "^1.1.0",
     "monaco-editor": "^0.20.0",
     "ng-inline-svg": "^10.0.0",
     "ngx-monaco-editor": "^8.1.1",

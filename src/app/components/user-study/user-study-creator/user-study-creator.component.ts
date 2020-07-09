@@ -156,6 +156,9 @@ export class UserStudyCreatorComponent implements OnInit, OnDestroy {
   }
 
   activate(event, index: number) {
+    if (! this.edit) {
+      return;
+    }
     this.parts = this.parts.map(p => {p.active = p.index === index; return p; } );
     event?.stopPropagation();
   }
