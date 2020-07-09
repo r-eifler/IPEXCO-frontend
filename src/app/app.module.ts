@@ -104,8 +104,6 @@ import {
   DomainFilesService,
   DomainSpecificationFilesService,
   ProblemFilesService,
-  SelectedDomainFileService,
-  SelectedProblemFileService
 } from './service/files/pddl-file-services';
 import {CurrentProjectService, ProjectsService} from './service/project/project-services';
 import {PlanPropertyMapService} from './service/plan-properties/plan-property-services';
@@ -154,7 +152,7 @@ import {UserStudyStartComponent} from './components/user-study/user-study-start/
 import {UserStudyExecuteComponent} from './components/user-study/user-study-execute/user-study-execute.component';
 import {UserStudyEndComponent} from './components/user-study/user-study-end/user-study-end.component';
 import {SelectedPlanRunService} from './service/planner-runs/selected-planrun.service';
-import {CurrentQuestionService} from './service/planner-runs/selected-question.service';
+import {SelectedQuestionService} from './service/planner-runs/selected-question.service';
 
 
 @NgModule({
@@ -273,9 +271,7 @@ import {CurrentQuestionService} from './service/planner-runs/selected-question.s
     ProblemFilesStore,
     PddlFileUtilsService,
     DomainFilesService,
-    SelectedDomainFileService,
     ProblemFilesService,
-    SelectedProblemFileService,
     DomainSpecificationFilesStore,
     DomainSpecificationFilesService,
     ProjectsStore,
@@ -291,7 +287,7 @@ import {CurrentQuestionService} from './service/planner-runs/selected-question.s
     SelectedPlanRunService,
     CurrentRunStore,
     CurrentQuestionStore,
-    CurrentQuestionService,
+    SelectedQuestionService,
     DomainSpecStore,
     ViewSettingsStore,
     ViewSettingsService,

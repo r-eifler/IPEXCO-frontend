@@ -6,6 +6,8 @@ import {RunsStore} from '../../store/stores.store';
 import {RunningDemoService} from '../demo/demo-services';
 import {PlanPropertyMapService} from '../plan-properties/plan-property-services';
 import {ExplanationRun, PlanRun} from '../../interface/run';
+import {SelectedPlanRunService} from './selected-planrun.service';
+import {SelectedQuestionService} from './selected-question.service';
 
 @Injectable({
     providedIn: 'root'
@@ -18,8 +20,9 @@ export class UserStudyPlannerService extends DemoPlannerService {
         http: HttpClient,
         store: RunsStore,
         runningDemoService: RunningDemoService,
-        planPropertiesService: PlanPropertyMapService) {
-        super(http, store, runningDemoService, planPropertiesService);
+        selectedPlanRunService: SelectedPlanRunService,
+        selectedQuestionService: SelectedQuestionService) {
+        super(http, store, runningDemoService, selectedPlanRunService, selectedQuestionService);
         this.BASE_URL = environment.apiURL + 'planner/';
     }
 

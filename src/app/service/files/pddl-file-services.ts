@@ -6,8 +6,6 @@ import {
   DomainFilesStore,
   DomainSpecificationFilesStore,
   ProblemFilesStore,
-  SelectedDomainFileStore,
-  SelectedProblemFileStore
 } from '../../store/stores.store';
 import {PDDLFile} from '../../interface/files/files';
 
@@ -23,19 +21,6 @@ export class DomainFilesService extends FilesService {
   }
 }
 
-
-@Injectable({
-  providedIn: 'root'
-})
-export class SelectedDomainFileService extends SelectedObjectService<PDDLFile> {
-
-  type = 'domain';
-
-  constructor(selectedFilesStore: SelectedDomainFileStore) {
-    super(selectedFilesStore);
-  }
-}
-
 @Injectable({
   providedIn: 'root'
 })
@@ -47,19 +32,6 @@ export class ProblemFilesService extends FilesService {
     super(http, filesStore);
   }
 }
-
-@Injectable({
-  providedIn: 'root'
-})
-export class SelectedProblemFileService extends SelectedObjectService<PDDLFile> {
-
-  type = 'problem';
-
-  constructor(selectedFilesStore: SelectedProblemFileStore) {
-    super(selectedFilesStore);
-  }
-}
-
 
 @Injectable({
   providedIn: 'root'

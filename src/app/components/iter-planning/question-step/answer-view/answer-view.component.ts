@@ -5,7 +5,7 @@ import {combineLatest, Observable, Subject} from 'rxjs';
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ExplanationRun, PlanRun} from 'src/app/interface/run';
 import {SelectedPlanRunService} from '../../../../service/planner-runs/selected-planrun.service';
-import {CurrentQuestionService} from '../../../../service/planner-runs/selected-question.service';
+import {SelectedQuestionService} from '../../../../service/planner-runs/selected-question.service';
 
 interface Answer {
   MUGS: string[];
@@ -29,7 +29,7 @@ export class AnswerViewComponent implements OnInit, OnDestroy {
 
   constructor(
     private  currentRunService: SelectedPlanRunService,
-    private currentQuestionService: CurrentQuestionService,
+    private currentQuestionService: SelectedQuestionService,
     private planPropertiesService: PlanPropertyMapService) {
 
     this.currentRun$ = this.currentRunService.getSelectedObject();

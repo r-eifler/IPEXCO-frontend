@@ -24,6 +24,7 @@ import {UserStudyStartComponent} from './components/user-study/user-study-start/
 import {UserStudyExecuteComponent} from './components/user-study/user-study-execute/user-study-execute.component';
 import {UserStudyEndComponent} from './components/user-study/user-study-end/user-study-end.component';
 import {AuthGuard} from './route-guards/auth-guard.guard';
+import {QuestionCreatorGuard} from './route-guards/question-creator.guard';
 
 export const appRoutes: Routes = [
   { path: '', component: MainPageComponent},
@@ -52,7 +53,7 @@ export const appRoutes: Routes = [
     children: [
       { path: 'new-planning-step', component: PlanningStepComponent},
       { path: 'planning-step/:runid', component: FinishedPlanningStepComponent},
-      { path: 'planning-step/:runid/new-question', component: QuestionStepComponent},
+      { path: 'planning-step/:runid/new-question', component: QuestionStepComponent, canDeactivate: [QuestionCreatorGuard]},
       { path: 'planning-step/:runid/question-step/:expid', component: FinishedQuestionStepComponent}
     ]
   },
@@ -66,7 +67,7 @@ export const appRoutes: Routes = [
             children: [
               { path: 'new-planning-step', component: PlanningStepComponent},
               { path: 'planning-step/:runid', component: FinishedPlanningStepComponent},
-              { path: 'planning-step/:runid/new-question', component: QuestionStepComponent},
+              { path: 'planning-step/:runid/new-question', component: QuestionStepComponent, canDeactivate: [QuestionCreatorGuard]},
               { path: 'planning-step/:runid/question-step/:expid', component: FinishedQuestionStepComponent}
             ]
         },

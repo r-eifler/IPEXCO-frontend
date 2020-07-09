@@ -9,7 +9,7 @@ import {LOAD} from '../../store/generic-list.store';
 @Injectable({
     providedIn: 'root'
 })
-export class CurrentQuestionService extends SelectedObjectService<ExplanationRun> {
+export class SelectedQuestionService extends SelectedObjectService<ExplanationRun> {
 
     constructor(
         store: CurrentQuestionStore,

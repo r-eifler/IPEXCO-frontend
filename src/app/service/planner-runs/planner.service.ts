@@ -1,5 +1,5 @@
 import {ADD, EDIT} from '../../store/generic-list.store';
-import {Injectable} from '@angular/core';
+import {EventEmitter, Injectable} from '@angular/core';
 import {ObjectCollectionService} from '../base/object-collection.service';
 import {ExplanationRun, PlanRun} from '../../interface/run';
 import {HttpClient, HttpParams} from '@angular/common/http';
@@ -16,7 +16,7 @@ export class PlannerService extends ObjectCollectionService<PlanRun> {
   myBaseURL = environment.apiURL + 'planner/';
 
   // Indicates if the Planner is currently busy and it is possible to request an other plan.
-  private plannerBusy = new BehaviorSubject(false);
+  plannerBusy = new BehaviorSubject(false);
 
   constructor(http: HttpClient, store: RunsStore) {
     super(http, store);

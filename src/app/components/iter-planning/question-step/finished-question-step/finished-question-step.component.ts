@@ -5,7 +5,7 @@ import {switchMap, takeUntil} from 'rxjs/operators';
 import {ResponsiveService} from 'src/app/service/responsive/responsive.service';
 import {Subject} from 'rxjs';
 import {SelectedPlanRunService} from '../../../../service/planner-runs/selected-planrun.service';
-import {CurrentQuestionService} from '../../../../service/planner-runs/selected-question.service';
+import {SelectedQuestionService} from '../../../../service/planner-runs/selected-question.service';
 
 @Component({
   selector: 'app-finished-question-step',
@@ -23,7 +23,7 @@ export class FinishedQuestionStepComponent implements OnInit, OnDestroy {
     private runService: PlanRunsService,
     private route: ActivatedRoute,
     private currentRunService: SelectedPlanRunService,
-    private currentQuestionService: CurrentQuestionService) {
+    private currentQuestionService: SelectedQuestionService) {
 
       this.route.params
         .pipe(takeUntil(this.ngUnsubscribe))
