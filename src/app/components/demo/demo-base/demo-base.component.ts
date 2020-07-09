@@ -1,5 +1,5 @@
 import {DEMO_FINISHED_REDIRECT, QUESTION_REDIRECT} from './../../../app.tokens';
-import {DemoPlannerService, PlannerService} from '../../../service/planner-runs/planner.service';
+import {PlannerService} from '../../../service/planner-runs/planner.service';
 import {DemoRunService} from '../../../service/planner-runs/run-services';
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {RunService} from 'src/app/service/planner-runs/run-services';
@@ -10,6 +10,7 @@ import {Demo} from '../../../interface/demo';
 import {DemosService, RunningDemoService} from '../../../service/demo/demo-services';
 import {Subject} from 'rxjs';
 import {ExecutionSettingsService} from '../../../service/settings/execution-settings.service';
+import {DemoPlannerService} from '../../../service/planner-runs/demoPlanner.service';
 
 
 @Component({

@@ -7,7 +7,8 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {ExecutionSettingsService} from '../../../service/settings/execution-settings.service';
 import {PLANNER_REDIRECT, QUESTION_REDIRECT} from '../../../app.tokens';
 import {DemoRunService, RunService} from '../../../service/planner-runs/run-services';
-import {PlannerService, UserStudyPlannerService} from '../../../service/planner-runs/planner.service';
+import {PlannerService} from '../../../service/planner-runs/planner.service';
+import {UserStudyPlannerService} from '../../../service/planner-runs/userStudyPlanner.service';
 
 @Component({
   selector: 'app-user-study-demo-view',
