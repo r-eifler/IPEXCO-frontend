@@ -67,10 +67,7 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
           if (demo) {
             this.demo = demo;
             this.runsService.reset();
-
             this.currentProjectService.saveObject(demo);
-            this.propertiesService.findCollection([{param: 'projectId', value: demo._id}]);
-
             this.currentSchemaService.findSchema(demo);
           }
 

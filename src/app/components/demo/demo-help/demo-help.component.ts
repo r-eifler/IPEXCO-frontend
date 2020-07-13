@@ -2,6 +2,7 @@ import {takeUntil} from 'rxjs/operators';
 import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
 import {ResponsiveService} from 'src/app/service/responsive/responsive.service';
 import {Subject} from 'rxjs';
+import { MatStepper } from '@angular/material/stepper';
 
 @Component({
   selector: 'app-demo-help',
@@ -37,4 +38,13 @@ export class DemoHelpComponent implements OnInit, OnDestroy {
   nextStep() {
     this.next.emit();
   }
+
+  goBack(stepper: MatStepper) {
+    stepper.previous();
+  }
+
+  goForward(stepper: MatStepper) {
+    stepper.next();
+  }
+
 }

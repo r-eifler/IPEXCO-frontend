@@ -16,6 +16,8 @@ export class DemoCreatorComponent implements OnInit {
   private readonly demo: Demo;
   public readonly update: boolean;
 
+  taskInfo: string;
+
   demoForm: FormGroup;
 
   imageFileName = '';
@@ -32,9 +34,12 @@ export class DemoCreatorComponent implements OnInit {
     this.demo = data.demo;
     this.update = data.update;
 
+    this.taskInfo = this.demo.taskInfo;
+
     this.demoForm = new FormGroup({
       name: new FormControl(this.demo ? this.demo.name : ''),
       description: new FormControl(this.demo ? this.demo.description : ''),
+      taskInfo: new FormControl(this.demo ? this.demo.taskInfo : ''),
     });
   }
 
@@ -49,6 +54,7 @@ export class DemoCreatorComponent implements OnInit {
       name: this.demoForm.controls.name.value,
       summaryImage: this.imageFile,
       description: this.demoForm.controls.description.value ? this.demoForm.controls.description.value : '',
+      taskInfo: this.demoForm.controls.taskInfo.value ? this.demoForm.controls.taskInfo.value : '',
     };
 
     if (this.update) {

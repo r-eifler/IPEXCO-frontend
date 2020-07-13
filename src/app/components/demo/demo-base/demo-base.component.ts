@@ -11,6 +11,7 @@ import {Subject} from 'rxjs';
 import {ExecutionSettingsService} from '../../../service/settings/execution-settings.service';
 import {DemoPlannerService} from '../../../service/planner-runs/demo-planner.service';
 import {DemoRunService} from '../../../service/planner-runs/demo-planruns.service';
+import {PlanPropertyMapService} from '../../../service/plan-properties/plan-property-services';
 
 
 @Component({
@@ -36,6 +37,7 @@ export class DemoBaseComponent implements OnInit, OnDestroy {
     private demosService: DemosService,
     private runningDemoService: RunningDemoService,
     private settingsService: ExecutionSettingsService,
+    private propertiesService: PlanPropertyMapService,
     private route: ActivatedRoute,
     private router: Router,
   ) {
@@ -47,6 +49,7 @@ export class DemoBaseComponent implements OnInit, OnDestroy {
              (demo: Demo) => {
               if (demo) {
                 this.runningDemoService.saveObject(demo);
+                this.propertiesService.findCollection([{param: 'projectId', value: demo._id}]);
               }
             }
           );

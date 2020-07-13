@@ -7,6 +7,7 @@ export interface Demo extends Project {
   status?: RunStatus;
   definition?: string;
   data?: DemoDefinition;
+  taskInfo?: string;
 }
 
 export interface DemoDefinition {

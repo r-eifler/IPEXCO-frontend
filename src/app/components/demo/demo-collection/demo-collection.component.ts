@@ -78,7 +78,6 @@ export class DemoCollectionComponent implements OnInit, OnDestroy {
   }
 
   update(demo: Demo): void {
-    console.log('update Demo');
     const dialogConfig = new MatDialogConfig();
     dialogConfig.width = '500px';
     dialogConfig.data  = {

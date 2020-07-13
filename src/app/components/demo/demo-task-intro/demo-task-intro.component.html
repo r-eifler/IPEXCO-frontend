@@ -3,41 +3,54 @@
     <mat-card-title>Task Introduction</mat-card-title>
   </mat-card-header>
   <mat-card-content>
-    <p>In the following task you have to deliver packages from a start to destination location.
-      To do so, you have 2 trucks which can perform the following actions:</p>
+    <mat-horizontal-stepper #stepper [contentEditable]="true">
+      <ng-template matStepperIcon="edit">
+        <span class="material-icons">
+          done
+        </span>
+      </ng-template>
+      <ng-template matStepperIcon="done">
+        <span class="material-icons">
+          done
+        </span>
+      </ng-template>
 
-    <mat-list dense>
-      <mat-list-item>
-        drive: Drive between to locations which are connected with a road.
-      </mat-list-item>
-      <mat-list-item>
-        load: Load one package if truck and package are at the same locations.
-      </mat-list-item>
-      <mat-list-item>
-        unload: Unload a package at the current location of teh truck.
-      </mat-list-item>
-    </mat-list>
+      <mat-step label="Domain Info" >
+        <div [innerHTML]="(demo$ | async).taskInfo | marked"></div>
+      </mat-step>
 
-    <p>Both trucks have only a limited amount of fuel.</p>
 
-    <p>TODO: add specific instructions for this task</p>
+      <mat-step label="Picture" >
+      </mat-step>
 
-    <p>In this image you can see the locations of the trucks and packages in the beginning.</p>
+      <mat-step label="Plan-Properties" >
 
-    <div style="width: 500px; height: 300px; background-color: #5e5e5e; margin: 30px">
-    </div>
+        <p *ngIf="(settings$ | async).usePlanPropertyValues">
+          Every plan-property has an utility, which indicates how much worth the plan-property is.
+        </p>
 
-    <p>The following properties are available:</p>
+        <p>The following properties are available:</p>
 
-    <mat-list>
-      <mat-list-item *ngFor="let entry of (planPropertiesMap$ | async) | keyvalue">
-        {{entry.value.naturalLanguageDescription}}
-      </mat-list-item>
-    </mat-list>
+        <mat-list>
+          <mat-list-item *ngFor="let entry of (planPropertiesMap$ | async) | keyvalue;last as last">
+            <mat-icon matListIcon>bookmark</mat-icon>
+            <p matLine>{{entry.value.naturalLanguageDescription}}</p>
+            <p matLine *ngIf="(settings$ | async).usePlanPropertyValues">Utility: {{entry.value.value}}</p>
+            <mat-divider [inset]="true" *ngIf="! last"></mat-divider>
+          </mat-list-item>
+        </mat-list>
+      </mat-step>
 
+    </mat-horizontal-stepper>
 
   </mat-card-content>
   <mat-card-actions align="end">
+    <button mat-icon-button (click)="goBack(stepper)">
+      <mat-icon>keyboard_arrow_left</mat-icon>
+    </button>
+    <button mat-icon-button (click)="goForward(stepper)">
+      <mat-icon>keyboard_arrow_right</mat-icon>
+    </button>
     <button mat-flat-button color="accent" (click)="nextStep()">Start</button>
   </mat-card-actions>
 </mat-card>
