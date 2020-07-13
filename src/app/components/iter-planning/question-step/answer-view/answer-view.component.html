@@ -25,12 +25,12 @@
     </ng-container>
 
     <p *ngIf="planExists && filteredMUGS.length == 0">
-      There exists a plan which satisfies all the properties.
+      There exists a plan which satisfies all the plan-properties.
     </p>
 
     <p *ngIf="! planExists">
       There is no plan which satisfies this properties.
-      All global hard goals and the properties in the question can not be satisfied together.
+      All global hard goals and the plan-properties in the question can not be satisfied together.
     </p>
 
   </mat-card-content>

@@ -77,8 +77,93 @@
         </mat-step>
         <mat-step label="HOW TO: Compute Plans">
 
+          <p>To compute a new plan, you have to click the add-button in the navigation bar:</p>
+
+          <img src="assets/screenshots/navigation.png" style="height: 400px; width: auto; padding: 20px 0">
+
+          <p>This opens a new view.
+          In the top left you can see the global hard-goals. These goals have to be satisfied by all plans and are
+          automatically included.
+          Below the global hard-goals there are the properties which you can select as additional hard-goals.
+            There has to be at least one hard-goal.</p>
+
+          <div style="display: flex; flex-direction: row; justify-content: space-evenly">
+            <img src="assets/screenshots/global-hardgoals.png" style="height: 400px; width: auto; padding: 20px 0">
+            <img src="assets/screenshots/selected-hardgoal.png" style="height: 400px; width: auto;  padding: 20px 0">
+          </div>
+
+          <p>
+            You start the plan computation with the button in the bottom right corner.
+            To compute the plan can take some time.
+          </p>
+
+          <p>
+            If the computation finished a new plan card will appear in the navigation bar.
+            By clicking the 'details'-button you get the following information:</p>
+
+            <p>The tab Goals includes:</p>
+
+            <mat-list>
+              <mat-list-item>
+                The plan-properties which are enforced as hard-goals. This includes the global hard-goals and the once you
+                selected.
+              </mat-list-item>
+              <mat-list-item>
+                The plan-properties which are satisfied by the plan although they are not enforced.
+              </mat-list-item>
+              <mat-list-item>
+                The overall utility of the plan.
+              </mat-list-item>
+              <mat-list-item>
+                The plan-properties which are not satisfied by the plan.
+              </mat-list-item>
+            </mat-list>
+
+          <p>The tab Plan shows the computed plan.</p>
+
+          <p>How you ask question with respect to a plan is explained in the following step.</p>
+
         </mat-step>
         <mat-step label="HOW TO: Ask Questions">
+
+          <p>To ask a question about a specific plan you can click the button in the bottom right corner in the detail-view
+            of a plan. This open the question view. On the left you can see the same information as in the details-view
+          of a plan. But on the right you have now the possibility to specify your question.</p>
+
+          <img src="assets/screenshots/question-selected.png" style="height: 400px; width: auto; padding: 20px 0">
+
+          <p>
+            A question always has the structure of: <span style="font-weight: bold;">Why not A and B and ... ?</span>,
+            where A and B are plan-properties which are currently not satisfied by the plan.
+            You have to select at least one and at most X plan-properties you would like to include in your question.
+          </p>
+
+          <p>
+            By pressing the button in the bottom right corner you start the computation of the answer.
+          </p>
+
+          <p>
+            The answer to your question question is shown right below your question.
+          </p>
+
+          <div style="display: flex; flex-direction: row; justify-content: space-evenly">
+            <img src="assets/screenshots/answer-mugs.png" style="height: 400px; width: auto; padding: 20px 0">
+            <img src="assets/screenshots/answer.png" style="height: 300px; width: auto; padding: 20px 0">
+          </div>
+
+          <p>
+            It can also happen, that enforcing the plan-properties in you question is possible without giving up any of
+            the other currently satisfied plan-properties.
+            Then the answer is: "There exists a plan, which satisfied all the plan-properties."
+          </p>
+
+          <p>
+            On the other side it is also possible, that there does not exists a plan at all, which satisfies the current
+            hard-goals and the plan-properties in the question. Then the answer is: "There is no plan which satisfies this properties.
+            All global hard goals and the plan-properties in the question can not be satisfied together."
+          </p>
+
+
 
         </mat-step>
       </mat-horizontal-stepper>
