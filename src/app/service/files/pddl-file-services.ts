@@ -7,7 +7,6 @@ import {
   DomainSpecificationFilesStore,
   ProblemFilesStore,
 } from '../../store/stores.store';
-import {PDDLFile} from '../../interface/files/files';
 
 @Injectable({
   providedIn: 'root'

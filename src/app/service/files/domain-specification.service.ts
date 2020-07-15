@@ -5,6 +5,7 @@ import {BehaviorSubject, Observable} from 'rxjs';
 import {Project} from '../../interface/project';
 import {HttpClient} from '@angular/common/http';
 import {DomainSpecStore} from '../../store/stores.store';
+import {environment} from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -18,10 +19,11 @@ export class DomainSpecificationService {
     this.currentSpec$ = selectedObjectStore.item$;
   }
 
-  private currentSpec$: BehaviorSubject<DomainSpecification>;
+  private readonly currentSpec$: BehaviorSubject<DomainSpecification>;
 
   findSpec(project: Project): Observable<DomainSpecification> {
-    this.http.get<string>(project.domainSpecification.path).subscribe((res: string) => {
+    const url = environment.srcURL + project.domainSpecification.path;
+    this.http.get<string>(url).subscribe((res: string) => {
         // console.log('Domain Specification:');
         // console.log(res);
         const spec = new DomainSpecification(res);

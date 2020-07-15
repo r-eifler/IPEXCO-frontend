@@ -6,6 +6,7 @@ import {TaskSchema} from '../../interface/task-schema';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import {TaskSchemaStore} from '../../store/stores.store';
+import {environment} from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -19,10 +20,11 @@ export class TaskSchemaService {
     this.currentSchema$ = selectedObjectStore.item$;
   }
 
-  private currentSchema$: BehaviorSubject<TaskSchema>;
+  private readonly currentSchema$: BehaviorSubject<TaskSchema>;
 
   findSchema(project: Project): Observable<TaskSchema> {
-    this.http.get<TaskSchema>(project.taskSchema).subscribe((json) => {
+    const url = environment.srcURL + project.taskSchema;
+    this.http.get<TaskSchema>(url).subscribe((json) => {
         const taskSchema: TaskSchema = new TaskSchema(json);
         // console.log(taskSchema);
         this.selectedObjectStore.dispatch({type: LOAD, data: taskSchema});

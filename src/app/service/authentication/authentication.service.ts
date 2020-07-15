@@ -39,12 +39,7 @@ export class AuthenticationService extends SelectedObjectService<User> {
         this.http.post<IHTTPData<User>>(this.BASE_URL, user)
         .subscribe(httpData => {
           console.log(httpData);
-          if (httpData.status === 201) {
-            this.saveObject(httpData.data);
-            resolve();
-            return;
-          }
-          reject();
+          resolve();
         },
         (err) => {
           console.log('ERROR register: ');

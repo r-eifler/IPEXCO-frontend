@@ -32,20 +32,20 @@ export class PddlFileUtilsService {
 
   getFileContent(path: string): Observable<string> {
     if (path !== undefined) {
-      console.log('Get file Content: ' + path);
-      return this.http.get(path, {responseType: 'text'});
+      const url = environment.srcURL + path;
+      return this.http.get(url, {responseType: 'text'});
     } else {
       throw Error('path for file content in undefined');
     }
   }
 
   getGoalFacts(project: Project, file: PDDLFile): Observable<PlanProperty[]> {
-    console.log('get goal facts');
     return this.http.get<IHTTPData<string[]>>(`${BASE_URL}/${file._id}/goal-facts`).pipe(map(
       (value) => {
         const goalFacts: PlanProperty[] = [];
         for (const g of value.data) {
-          const goal: PlanProperty = {name: g, type: GoalType.goalFact, formula: g, project: project._id, isUsed: false, globalHardGoal: false, value: 1};
+          const goal: PlanProperty = {name: g, type: GoalType.goalFact, formula: g,
+            project: project._id, isUsed: false, globalHardGoal: false, value: 1};
           this.domainSpec?.getGoalDescription(goal);
           goalFacts.push(goal);
         }

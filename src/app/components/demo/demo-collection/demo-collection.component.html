@@ -15,10 +15,9 @@
       </button>
 
     </mat-card-header>
-    <img *ngIf="demo.summaryImage !== 'none'" matCardImage src={{demo.summaryImage}}>
+    <img *ngIf="demo.summaryImage && demo.summaryImage != ''" matCardImage [src]="srcUrl + demo.summaryImage">
     <mat-card-content>
       {{demo.description}}
-      <!-- {{demo.project}} -->
     </mat-card-content>
     <mat-card-actions align="end" style="margin-bottom: 0; padding-bottom: 0">
       <button mat-icon-button

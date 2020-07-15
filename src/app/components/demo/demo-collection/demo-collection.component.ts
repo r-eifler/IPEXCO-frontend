@@ -16,6 +16,7 @@ import {AnimationsSettingsDemoComponent} from '../../animation/animations-settin
 import {Project} from 'src/app/interface/project';
 import {AuthenticationService} from '../../../service/authentication/authentication.service';
 import {DemoCreatorComponent} from '../demo-creator/demo-creator.component';
+import {environment} from '../../../../environments/environment';
 
 @Component({
   selector: 'app-demo-selection',
@@ -26,6 +27,7 @@ export class DemoCollectionComponent implements OnInit, OnDestroy {
 
   isMobile: boolean;
   private ngUnsubscribe: Subject<any> = new Subject();
+  srcUrl = environment.srcURL;
 
   runStatus = RunStatus;
   public demos$: Observable<Demo[]>;
