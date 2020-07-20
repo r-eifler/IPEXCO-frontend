@@ -2,7 +2,6 @@ import {AnimationProviderNoMystery} from './animation-provider-nomystery';
 import {AnimationInitializerNoMystery} from './animation-initializer-nomystery';
 import {AnimationInfoNoMystery} from './animation-info-nomystery';
 import {NoMysteryTask} from './nomystery-task';
-import {Animation} from '../../animation/animation';
 import {Action} from 'src/app/interface/plan';
 
 

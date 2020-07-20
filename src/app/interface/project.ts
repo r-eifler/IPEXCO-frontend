@@ -12,4 +12,5 @@ export interface Project {
   properties?: string[];
   settings?: string;
   animationSettings?: string;
+  animationImage?: string;
 }

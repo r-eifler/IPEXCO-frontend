@@ -57,6 +57,12 @@ export class LocationPositioningSettings {
 
     this.creatBorderBox();
 
+    const backgroundImage: SVGImageElement = document.createElementNS('http://www.w3.org/2000/svg', 'image');
+    backgroundImage.style.height = '700px';
+    backgroundImage.style.width = '700px';
+    backgroundImage.setAttribute('href', 'assets/task1.svg');
+    this.svg.appendChild(backgroundImage);
+
     this.createLocations();
     this.createEdges();
     this.addNodeSVG();

@@ -18,6 +18,8 @@ import {DisplayTask} from 'src/app/interface/display-task';
 import {PlanVisualizationProvider} from 'src/app/provider/plan-visualisation.provider';
 import {PLANNER_REDIRECT} from 'src/app/app.tokens';
 import {Subject} from 'rxjs';
+import {DemoSettingsComponent} from '../../demo/demo-settings/demo-settings.component';
+import {ExecutionSettingsService} from '../../../service/settings/execution-settings.service';
 
 @Component({
   selector: 'app-project-base',
@@ -48,6 +50,7 @@ export class ProjectBaseComponent implements OnInit, OnDestroy {
     private propertiesService: PlanPropertyMapService,
     private runsService: PlanRunsService,
     private demosService: DemosService,
+    private settingsService: ExecutionSettingsService,
     private bottomSheet: MatBottomSheet
   ) {
     this.route.paramMap.pipe(
@@ -77,8 +80,11 @@ export class ProjectBaseComponent implements OnInit, OnDestroy {
     this.ngUnsubscribe.complete();
   }
 
-  openSettings() {
-    this.bottomSheet.open(ViewSettingsMenuComponent);
+  async openSettings() {
+    // this.bottomSheet.open(ViewSettingsMenuComponent);
+    await this.settingsService.load(this.project.settings);
+    this.bottomSheet.open(DemoSettingsComponent,
+      {data: {settings: this.settingsService.getSelectedObject().value, name: this.project.name}});
   }
 
 }
