@@ -99,4 +99,25 @@ export class PropertyCollectionComponent implements OnInit, AfterViewInit, OnDes
     });
   }
 
+  modifyNaturalLanguageDescription(planProperty: PlanProperty, description: Element, cellElement: Element) {
+    cellElement.removeChild(description);
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.setAttribute('style', 'width: 80%;');
+    input.value = planProperty.naturalLanguageDescription;
+
+    input.addEventListener('keypress', e => {
+      if (e.key === 'Enter') {
+        planProperty.naturalLanguageDescription = input.value;
+        this.propertiesService.saveObject(planProperty);
+        cellElement.removeChild(input);
+        const newDescription = document.createElement('h3');
+        newDescription.innerText = planProperty.naturalLanguageDescription;
+        cellElement.appendChild(newDescription);
+      }
+    });
+
+    cellElement.appendChild(input);
+  }
+
 }
