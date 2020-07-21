@@ -39,6 +39,8 @@ export class NoMysteryVisualization extends PlanVisualization {
 
   private backgroundImagePath: string;
 
+  private newRunLoaded = false;
+
   private mainDomElement$: BehaviorSubject<Element> = new BehaviorSubject<Element>(null);
   private mainSVG: SVGElement;
 
@@ -56,6 +58,12 @@ export class NoMysteryVisualization extends PlanVisualization {
           this.scaleDropPositions();
         }
       });
+
+    this.currentRunService.getSelectedObject().subscribe(
+      run => {
+        this.newRunLoaded = true;
+      }
+    );
 
     this.init();
   }
@@ -138,7 +146,11 @@ export class NoMysteryVisualization extends PlanVisualization {
     return this.animation.initPositions();
   }
 
-  upadte() {
+  update() {
+    if (this.newRunLoaded) {
+      this.animation.initPositions();
+      this.newRunLoaded = false;
+    }
   }
 }
 

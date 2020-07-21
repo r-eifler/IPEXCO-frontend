@@ -34,7 +34,7 @@ getAnimationDOMElement(): Observable<Element> {
 }
 
 updateAnimationView() {
-  this.animation.upadte();
+  this.animation.update();
 }
 
 

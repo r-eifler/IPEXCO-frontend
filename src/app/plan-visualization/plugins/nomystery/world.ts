@@ -15,6 +15,7 @@ export async function loadTrucks(task: NoMysteryAnimationTask, parentSVG: SVGEle
     truck.svg = image;
     truck.group = svgGroup;
     truck.parentSVG = parentSVG;
+    truck.initParentSVG = parentSVG;
     svgGroup.appendChild(image);
     parentSVG.appendChild(svgGroup);
   }
@@ -26,8 +27,18 @@ export  function loadPackages(task: NoMysteryAnimationTask, parentSVG: SVGElemen
     image.setAttribute('href', 'assets/package.svg');
     image.style.height = '20';
     image.style.width = 'auto';
-    pack.svg = image;
+    const svgGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    text.innerHTML = pack.id.replace('p', '');
+    text.setAttribute('x', '20');
+    text.setAttribute('y', '15');
+
+    svgGroup.appendChild(image);
+    svgGroup.appendChild(text);
+
+    pack.svg = svgGroup;
     pack.parentSVG = parentSVG;
-    parentSVG.appendChild(image);
+    pack.initParentSVG = parentSVG;
+    parentSVG.appendChild(svgGroup);
   }
 }

@@ -18,11 +18,11 @@ interface Position {
 export class AnimationNode {
   public x = 0;
   public y = 0;
-  public rotation = 0;
   public objects = 0;
 
   public svg: SVGElement;
   public group: SVGElement;
+  public initParentSVG: SVGElement;
   public parentSVG: SVGElement;
 
   private freePositions = null;
@@ -86,7 +86,6 @@ export class AnimationTruck extends AnimationNode {
 
   setInitPosition() {
     this.loadedPackages = [];
-    this.rotation = 0;
     this.x = this.startLocation.x;
     this.y = this.startLocation.y;
     gsap.to(this.group, {duration: 0, x: this.x, y: this.y, ease: 'power4. out'});
@@ -133,9 +132,11 @@ export class AnimationPackage extends AnimationNode {
 
   setInitPosition() {
     this.currentLocation = this.startLocation;
+    this.parentSVG.removeChild(this.svg);
+    this.parentSVG = this.initParentSVG;
+    this.parentSVG.appendChild(this.svg);
     const pos = this.currentLocation.getFreePosition();
     gsap.to(this.svg, {duration: 0, x: pos.x, y: pos.y, ease: 'power4. out'});
-    // this.svg.setAttribute('transform', `translate(${pos.x} ${pos.y})`);
     this.currentLocation.addObject();
   }
 
@@ -159,6 +160,7 @@ export class AnimationPackage extends AnimationNode {
         this.y = relTargetPosition.y;
         // this.svg.setAttribute('transform', `translate(${relTargetPosition.x} ${relTargetPosition.y})`);
         truck.group.appendChild(this.svg);
+        this.parentSVG = truck.group;
         gsap.to(this.svg, {duration: 0, x: relTargetPosition.x, y: relTargetPosition.y, ease: 'power4. out'});
         resolve();
       });

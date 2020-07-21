@@ -81,7 +81,7 @@ export class NoMystery3DVisualization extends PlanVisualization {
     return this.mainDomElement$;
   }
 
-  upadte() {
+  update() {
     this.engine.resize();
   }
 

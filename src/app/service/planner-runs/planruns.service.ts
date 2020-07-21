@@ -27,7 +27,7 @@ export class PlanRunsService extends ObjectCollectionService<PlanRun> {
     private planPropertyMapService: PlanPropertyMapService) {
     super(http, store);
     this.BASE_URL = environment.apiURL + 'run/plan-run/';
-    this.pipeFind = map(sortRuns);
+    // this.pipeFind = map(sortRuns);
 
     }
 
@@ -89,6 +89,9 @@ export class PlanRunsService extends ObjectCollectionService<PlanRun> {
 }
 
 function sortRuns(runs: PlanRun[]): PlanRun[] {
+  for (const r of runs){
+    console.log(r.name);
+  }
   if (runs.length <= 1) {
     return runs;
   }
