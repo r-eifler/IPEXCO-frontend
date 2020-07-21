@@ -55,7 +55,7 @@ export class NoMysteryVisualization extends PlanVisualization {
           this.animationSettings = new AnimationSettingsNoMystery(project.animationSettings);
           this.scaleDropPositions();
         }
-    });
+      });
 
     this.init();
   }
@@ -77,10 +77,10 @@ export class NoMysteryVisualization extends PlanVisualization {
 
   async init() {
 
-    console.log('init nomystery visualization');
+    console.log('init NoMystery visualization');
     this.mainSVG = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    this.mainSVG.style.height = '100%';
-    this.mainSVG.style.width = '100%';
+    this.mainSVG.style.height = '1000px';
+    this.mainSVG.style.width = '1000px';
 
     gsap.registerPlugin(Draggable);
     // tslint:disable-next-line:no-unused-expression
@@ -92,20 +92,11 @@ export class NoMysteryVisualization extends PlanVisualization {
     this.mainDomElement$.next(this.mainSVG);
   }
 
-  getLocationPositions() {
-    const xMax = worldWidth - 20; // 20 is the border width
-    const yMax = worldHeight - 20;
+  updateLocationPositions() {
     for (const loc of this.animationTask.locations.values()) {
       const pos = this.animationSettings.locationPositions.get(loc.getName());
       loc.x = pos.x;
       loc.y = pos.y;
-      console.log(loc);
-      // const xScaled = (pos.x / refXMax) * xMax;
-      // const yScaled = ( pos.y / refYMax) * yMax;
-      // loc.x = xScaled < xMax / 2 ? -((xMax / 2) - xScaled) : xScaled - (xMax / 2);
-      // loc.y = - (yScaled < yMax / 2 ?  -((yMax / 2) - yScaled) : yScaled - (yMax / 2));
-      // loc.x += 2;
-      // loc.y += -2;
     }
   }
 
@@ -125,7 +116,7 @@ export class NoMysteryVisualization extends PlanVisualization {
             // svgBackground.appendChild(backgroundImage);
             this.mainSVG.appendChild(backgroundImage);
 
-            this.getLocationPositions();
+            this.updateLocationPositions();
             await loadTrucks(this.animationTask, this.mainSVG);
             await loadPackages(this.animationTask, this.mainSVG);
             resolve();

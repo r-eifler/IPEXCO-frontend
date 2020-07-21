@@ -3,7 +3,6 @@ import {AnimationInfo} from '../../integration/animation-info';
 import {gsap} from 'gsap';
 
 
-
 const maxPositionLocation = 6;
 const radius = 5;
 const maxPositionsTruck = 4;
@@ -24,6 +23,7 @@ export class AnimationNode {
 
   public svg: SVGElement;
   public group: SVGElement;
+  public parentSVG: SVGElement;
 
   private freePositions = null;
 
@@ -89,7 +89,8 @@ export class AnimationTruck extends AnimationNode {
     this.rotation = 0;
     this.x = this.startLocation.x;
     this.y = this.startLocation.y;
-    this.group.setAttribute('transform', `translate(${this.x + 10} ${this.y - 30})`);
+    gsap.to(this.group, {duration: 0, x: this.x, y: this.y, ease: 'power4. out'});
+    this.currentLocation = this.startLocation;
   }
 
   getInitFuel(): number {
@@ -101,39 +102,24 @@ export class AnimationTruck extends AnimationNode {
   }
 
   getPositionByIndex(index: number): Position {
-    return {x: 0, y: 0};
+    return {x: 60, y: 10 - index * 20};
   }
 
   animateDriveTo(targetLocation: AnimationLocation): Promise<any> {
 
-    // const startRotation = new BABYLON.Vector3(0, this.rotation, 0);
-    // const targetRotation = new BABYLON.Vector3(0, rt, 0);
-    //
-    //
-    // const startPosition = new BABYLON.Vector3(this.currentLocation.x, 0, this.currentLocation.y);
-    // const targetPosition = new BABYLON.Vector3(targetLocation.x, 0, targetLocation.y);
-    //
-    const finishedAnimationPromise = new Promise((resolve, reject) => {
-    //
-    //   BABYLON.Animation.CreateAndStartAnimation('rotate', this.transformNode,
-    //   'rotation', 30, 30, startRotation, targetRotation, 0, undefined, () => {
-    //     this.rotation = rt;
-    //   });
-    //
-    //   const easingFunction = new BABYLON.QuadraticEase();
-    //   easingFunction.setEasingMode(BABYLON.EasingFunction.EASINGMODE_EASEINOUT);
-    //
-    //   BABYLON.Animation.CreateAndStartAnimation('drive', this.transformNode, 'position', 30, 120,
-    //     startPosition, targetPosition, 0, easingFunction,
-    //     () => {
-    //       targetLocation.addObject();
-    //       this.currentLocation.removeObject();
-    //       this.currentLocation = targetLocation;
-    //       resolve();
-    //     });
-    });
+    const startPosition = {x: this.currentLocation.x, y: this.currentLocation.y};
+    const targetPosition = {x: targetLocation.x, y: targetLocation.y};
 
-    return finishedAnimationPromise;
+    return new Promise((resolve, reject) => {
+
+      this.currentLocation = targetLocation;
+      this.x = targetPosition.x;
+      this.y = targetPosition.y;
+      const tween = gsap.to(this.group, {duration: 0.5, x: this.x, y: this.y, ease: 'power4. out'});
+      tween.then(() => {
+        resolve();
+      });
+    });
   }
 
 }
@@ -148,98 +134,61 @@ export class AnimationPackage extends AnimationNode {
   setInitPosition() {
     this.currentLocation = this.startLocation;
     const pos = this.currentLocation.getFreePosition();
-    this.svg.setAttribute('transform', `translate(${pos.x} ${pos.y})`);
+    gsap.to(this.svg, {duration: 0, x: pos.x, y: pos.y, ease: 'power4. out'});
+    // this.svg.setAttribute('transform', `translate(${pos.x} ${pos.y})`);
     this.currentLocation.addObject();
   }
 
   animateLoad(truck: AnimationTruck): Promise<any> {
 
-    // truck.currentLocation.removeObject();
-    // truck.loadedPackages.push(this);
-    //
-    // // console.log('position to global origin: ' + this.mesh.position);
-    // // this.mesh.position = this.mesh.position.subtract(truck.transformNode.position);
-    // this.transformNode.parent = truck.transformNode;
-    // truck.transformNode.computeWorldMatrix();
-    // const wMatrix = truck.transformNode.getWorldMatrix().clone();
-    // wMatrix.invert();
-    // this.transformNode.position = BABYLON.Vector3.TransformCoordinates(this.transformNode.position, wMatrix);
-    // // console.log('position relative to truck: ' + this.mesh.position);
-    //
-    // const startPosition = this.transformNode.position;
-    // const target1Position = startPosition.clone();
-    // target1Position.y = 10;
-    // const target3Position = truck.getFreePosition();
-    // const target2Position = target3Position.clone();
-    // target2Position.y = 10;
-    //
-    const finishedAnimationPromise = new Promise((resolve, reject) => {
-    //
-    //   BABYLON.Animation.CreateAndStartAnimation('load', this.transformNode, 'position', 30, 20,
-    //     startPosition, target1Position, 0, undefined,
-    //     () => {
-    //       BABYLON.Animation.CreateAndStartAnimation('load', this.transformNode, 'position', 30, 20,
-    //         target1Position, target2Position, 0, undefined,
-    //         () => {
-    //           BABYLON.Animation.CreateAndStartAnimation('load', this.transformNode, 'position', 30, 20,
-    //             target2Position, target3Position, 0, undefined,
-    //             () => {
-    //               resolve();
-    //             });
-    //         });
-    //     });
-    });
+    truck.currentLocation.removeObject();
+    truck.loadedPackages.push(this);
 
-    return finishedAnimationPromise;
+    const startPosition = {x: this.x, y: this.y};
+    const relTargetPosition = truck.getFreePosition();
+    const targetPosition = {x: truck.x + relTargetPosition.x, y: truck.y + relTargetPosition.y};
+    this.x = targetPosition.x;
+    this.y = targetPosition.y;
+
+    return new Promise((resolve, reject) => {
+
+      const tween = gsap.to(this.svg, {duration: 1, x: this.x, y: this.y, ease: 'power4. out'});
+      tween.then(() => {
+        this.parentSVG.removeChild(this.svg);
+        this.x = relTargetPosition.x;
+        this.y = relTargetPosition.y;
+        // this.svg.setAttribute('transform', `translate(${relTargetPosition.x} ${relTargetPosition.y})`);
+        truck.group.appendChild(this.svg);
+        gsap.to(this.svg, {duration: 0, x: relTargetPosition.x, y: relTargetPosition.y, ease: 'power4. out'});
+        resolve();
+      });
+
+    });
   }
 
 
   animateUnLoad(truck: AnimationTruck, loc: AnimationLocation): Promise<any> {
 
-    // // console.log('Loaded packages: ' + truck.loadedPackages.length);
-    // // console.log('pack index: ' + truck.loadedPackages.indexOf(this));
-    // truck.loadedPackages.splice(truck.loadedPackages.indexOf(this), 1);
-    // // console.log('Loaded packages: ' + truck.loadedPackages.length);
-    //
-    // // console.log('position: ' + this.mesh.position);
-    // this.transformNode.parent = null;
-    // truck.transformNode.computeWorldMatrix();
-    // const wMatrix = truck.transformNode.getWorldMatrix().clone();
-    // this.transformNode.position = BABYLON.Vector3.TransformCoordinates(this.transformNode.position, wMatrix);
-    // // console.log('position: ' + this.mesh.position);
-    //
-    // const startPosition = this.transformNode.position;
-    // const target1Position = startPosition.clone();
-    // target1Position.y = 10;
-    // const target3Position = loc.getFreePosition();
-    // target3Position.y = 1.25;
-    // const target2Position = target3Position.clone();
-    // target2Position.y = 10;
-    //
-    // loc.addObject();
-    //
-    const finishedAnimationPromise = new Promise((resolve, reject) => {
-    //
-    //   BABYLON.Animation.CreateAndStartAnimation('load', this.transformNode, 'position', 30, 20,
-    //     startPosition, target1Position, 0, undefined,
-    //     () => {
-    //       BABYLON.Animation.CreateAndStartAnimation('load', this.transformNode, 'position', 30, 20,
-    //         target1Position, target2Position, 0, undefined,
-    //         () => {
-    //           BABYLON.Animation.CreateAndStartAnimation('load', this.transformNode, 'position', 30, 20,
-    //             target2Position, target3Position, 0, undefined,
-    //             () => {
-    //               for (let i = 0; i < truck.loadedPackages.length; i++) {
-    //                   const p = truck.loadedPackages[i];
-    //                   p.transformNode.position = truck.getPositionByIndex(i);
-    //               }
-    //               resolve();
-    //             });
-    //         });
-    //     });
-    });
+    console.log('Animate unload');
+    const targetPosition = loc.getFreePosition();
 
-    return finishedAnimationPromise;
+    truck.loadedPackages.splice(truck.loadedPackages.indexOf(this), 1);
+    loc.addObject();
+
+    truck.group.removeChild(this.svg);
+    // this.svg.setAttribute('transform', `translate(${truck.x - this.x} ${truck.y - this.y})`);
+    this.parentSVG = truck.parentSVG;
+    this.parentSVG.appendChild(this.svg);
+    gsap.to(this.svg, {duration: 0, x: truck.x + this.x, y: truck.y + this.y, ease: 'power4. out'});
+    this.x = targetPosition.x;
+    this.y = targetPosition.y;
+
+    return new Promise((resolve, reject) => {
+      const tween = gsap.to(this.svg, {duration: 1, x: this.x, y: this.y, ease: 'power4. out'});
+      tween.then(() => {
+        resolve();
+      });
+    });
   }
 }
 

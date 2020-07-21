@@ -14,6 +14,7 @@ export async function loadTrucks(task: NoMysteryAnimationTask, parentSVG: SVGEle
     image.style.width = 'auto';
     truck.svg = image;
     truck.group = svgGroup;
+    truck.parentSVG = parentSVG;
     svgGroup.appendChild(image);
     parentSVG.appendChild(svgGroup);
   }
@@ -26,6 +27,7 @@ export  function loadPackages(task: NoMysteryAnimationTask, parentSVG: SVGElemen
     image.style.height = '20';
     image.style.width = 'auto';
     pack.svg = image;
+    pack.parentSVG = parentSVG;
     parentSVG.appendChild(image);
   }
 }
