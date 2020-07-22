@@ -86,20 +86,24 @@
         </mat-step>
         <mat-step label="HOW TO: Compute Plans">
 
-          <p>To compute a new plan, you have to click the add-button in the navigation bar:</p>
+          <p>To compute a new plan, you have to click the <mat-icon [inline]="true">add</mat-icon>-button in the navigation bar:</p>
 
           <img src="assets/screenshots/navigation.png" style="height: 400px; width: auto; padding: 20px 0">
 
-          <p>This opens a new view.
-          In the top left you can see the global hard-goals. These goals have to be satisfied by all plans and are
-          automatically included.
-          Below the global hard-goals there are the properties which you can select as additional hard-goals.
-            There has to be at least one hard-goal.</p>
+          <p>
+            This opens a new view.
+            In the top left you can see the global hard-goals. These goals have to be satisfied by all plans and are
+            automatically included.
+          </p>
 
-          <div style="display: flex; flex-direction: row; justify-content: space-evenly">
-            <img src="assets/screenshots/global-hardgoals.png" style="height: 400px; width: auto; padding: 20px 0">
-            <img src="assets/screenshots/selected-hardgoal.png" style="height: 400px; width: auto;  padding: 20px 0">
-          </div>
+          <img src="assets/screenshots/global-hardgoals.png" style="height: 400px; width: auto; padding: 20px 0">
+
+          <p>
+            Below the global hard-goals there are the properties which you can select as additional hard-goals.
+          </p>
+
+          <img src="assets/screenshots/selected-hardgoal.png" style="height: 400px; width: auto;  padding: 20px 0">
+
 
           <p>
             You start the plan computation with the button in the bottom right corner.
@@ -107,8 +111,16 @@
           </p>
 
           <p>
-            If the computation finished a new plan card will appear in the navigation bar.
-            By clicking the 'details'-button you get the following information:</p>
+            When the computation finished a new plan will appear in the navigation bar.
+            By clicking the 'Details'-button you get access to the following information:
+          </p>
+
+          <p>
+            The goals, the computed plan, and an animation of the plan.
+            Those are accessible via the corresponding tabs.
+          </p>
+
+          <img src="assets/screenshots/plan-tabs.png" style="height: 400px; width: auto;  padding: 20px 0">
 
             <p>The tab Goals includes:</p>
 
@@ -135,16 +147,18 @@
         </mat-step>
         <mat-step label="HOW TO: Ask Questions">
 
-          <p>To ask a question about a specific plan you can click the button in the bottom right corner in the detail-view
-            of a plan. This open the question view. On the left you can see the same information as in the details-view
-          of a plan. But on the right you have now the possibility to specify your question.</p>
+          <p>
+            To ask a question about a specific plan you can click the button in the bottom right corner in the detail-view
+            of a plan. This opens the question view. On the left you can see the same information as in the details-view
+            of a plan. On the right you have the possibility to specify your question.
+          </p>
 
           <img src="assets/screenshots/question-selected.png" style="height: 400px; width: auto; padding: 20px 0">
 
           <p>
             A question always has the structure of: <span style="font-weight: bold;">Why not A and B and ... ?</span>,
             where A and B are plan-properties which are currently not satisfied by the plan.
-            You have to select at least one and at most X plan-properties you would like to include in your question.
+            You have to select at least one plan-property you would like to include in your question.
           </p>
 
           <p>
@@ -152,7 +166,7 @@
           </p>
 
           <p>
-            The answer to your question question is shown right below your question.
+            The answer to your question is shown below your question.
           </p>
 
           <div style="display: flex; flex-direction: row; justify-content: space-evenly">
