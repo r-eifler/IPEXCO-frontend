@@ -97,7 +97,6 @@ export class TemplateFileUploadComponent implements OnInit, OnDestroy {
   }
 
   deleteFile(file: PDDLFile) {
-    console.log(file);
     this.fileService.deleteFile(file);
   }
 }

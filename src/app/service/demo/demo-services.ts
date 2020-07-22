@@ -34,10 +34,8 @@ export class DemosService extends ObjectCollectionService<Demo> {
 
     // console.log('summaryImage: '  + demo.summaryImage);
 
-    console.log('Generate Demo Service');
     this.http.post<IHTTPData<Demo>>(this.BASE_URL, formData)
       .subscribe(httpData => {
-        console.log(httpData);
         const runLoaded = this.existsObjectInStore(httpData.data._id);
         let action = null;
         if (runLoaded) {
@@ -64,12 +62,9 @@ export class DemosService extends ObjectCollectionService<Demo> {
   }
 
   cancelDemo(demo: Demo): Promise<boolean> {
-    console.log('Cancel Demo!');
     const p = new Promise<boolean>((resolve, reject) => {
       this.http.post<{data: Demo, successful: boolean}>(`${this.BASE_URL}cancel/${demo._id}`, demo)
       .subscribe(httpData => {
-        console.log('Cancel Demo: ');
-        console.log(httpData);
         this.listStore.dispatch({type: REMOVE, data: demo});
         resolve(httpData.successful);
       });
@@ -127,7 +122,6 @@ export class RunningDemoService extends SelectedObjectService<Demo> {
 
   saveObject(demo: Demo) {
     if (demo.definition) {
-      console.log('Save running demo: ' + `${demo.definition}/demo.json`);
       const definitionContent$ = this.fileUtilsService.getFileContent(`${demo.definition}/demo.json`);
       combineLatest([definitionContent$, this.planPropertiesService.getMap()]).subscribe(
         ([content, planPropertiesMap]) => {

@@ -107,7 +107,6 @@ export class DemoPlannerService extends PlannerService {
       this.selectedPlanRunService.saveObject(planRun);
       this.selectedQuestionService.saveObject(expRun);
       this.plannerBusy.next(false);
-      console.log('Question computation finished');
 
       if (save) {
           this.save_mugs_run(planRun, expRun);
@@ -120,7 +119,7 @@ export class DemoPlannerService extends PlannerService {
 
         this.http.post<IHTTPData<PlanRun>>(url, expRun)
             .subscribe(httpData => {
-                console.log('Question saved on server.');
+                // console.log('Question saved on server.');
                 // const action = {type: EDIT, data: httpData.data};
                 // this.listStore.dispatch(action);
             });

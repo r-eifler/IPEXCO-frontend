@@ -38,12 +38,9 @@ export class AuthenticationService extends SelectedObjectService<User> {
       try {
         this.http.post<IHTTPData<User>>(this.BASE_URL, user)
         .subscribe(httpData => {
-          console.log(httpData);
           resolve();
         },
         (err) => {
-          console.log('ERROR register: ');
-          console.log(err);
           reject();
         });
       } catch {
@@ -55,7 +52,6 @@ export class AuthenticationService extends SelectedObjectService<User> {
   login(user: User): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       try {
-        console.log('Login...');
         this.http.post<{user: User, token: string}>(this.BASE_URL + '/login', user)
         .subscribe(httpData => {
           localStorage.setItem('jwt-token', httpData.token);

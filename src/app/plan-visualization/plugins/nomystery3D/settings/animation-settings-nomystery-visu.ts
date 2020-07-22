@@ -27,7 +27,7 @@ export class AnimationSettingsNoMysteryVisu {
     private projectsService: ProjectsService,
   ) {
 
-    console.log('New Animation Settings Visu');
+    // console.log('New Animation Settings Visu');
     projectService.getSelectedObject().subscribe(
       project => {
         if (project) {
@@ -61,7 +61,7 @@ export class AnimationSettingsNoMysteryVisu {
     this.animationSettings.locationDropPositions = this.locationPosSettings.getCurrentLocationsDropPositions();
     this.currentProject.animationSettings = this.animationSettings.toJSON();
 
-    console.log(this.currentProject.animationSettings);
+    // console.log(this.currentProject.animationSettings);
 
     this.projectsService.saveObject(this.currentProject);
     this.projectService.saveObject(this.currentProject);

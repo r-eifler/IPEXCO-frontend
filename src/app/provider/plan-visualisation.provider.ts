@@ -11,7 +11,6 @@ const planVisualizationFactory = (
     taskSchemaService: TaskSchemaService,
     currentRunService: SelectedPlanRunService,
     projectService: CurrentProjectService) => {
-      console.log('Provide plan Visualization');
       if (projectService.getSelectedObject().value.domainFile.domain === 'nomystery') {
         const visu = new NoMysteryVisualization(projectService, taskSchemaService, currentRunService);
         return visu;
@@ -30,7 +29,6 @@ const animationSettingsFactory = (
   taskSchemaService: TaskSchemaService,
   projectService: CurrentProjectService,
   projectsService: ProjectsService) => {
-    console.log('Provide animation Settings');
     if (projectService.getSelectedObject().value.domainFile.domain === 'nomystery') {
       return new AnimationSettingsNoMysteryVisu(taskSchemaService, projectService, projectsService);
     }

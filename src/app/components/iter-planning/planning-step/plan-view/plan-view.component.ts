@@ -33,7 +33,7 @@ export class PlanViewComponent implements OnInit, OnDestroy {
     this.currentRun$
     .pipe(takeUntil(this.ngUnsubscribe))
     .subscribe(run => {
-      console.log('PlanView: current Run: ' + run);
+      // console.log('PlanView: current Run: ' + run);
       if (run) {
         this.planRun = run;
       }

@@ -85,7 +85,6 @@ export class NoMysteryVisualization extends PlanVisualization {
 
   async init() {
 
-    console.log('init NoMystery visualization');
     this.mainSVG = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     this.mainSVG.style.height = '1000px';
     this.mainSVG.style.width = '1000px';

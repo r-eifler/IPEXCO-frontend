@@ -171,7 +171,6 @@ export class AnimationPackage extends AnimationNode {
 
   animateUnLoad(truck: AnimationTruck, loc: AnimationLocation): Promise<any> {
 
-    console.log('Animate unload');
     const targetPosition = loc.getFreePosition();
 
     truck.loadedPackages.splice(truck.loadedPackages.indexOf(this), 1);

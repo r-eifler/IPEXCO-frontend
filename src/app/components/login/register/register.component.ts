@@ -41,14 +41,14 @@ export class RegisterComponent implements OnInit {
       name: this.registerForm.controls.name.value,
       password: this.registerForm.controls.password.value
     };
-    console.log(newUser);
+    // console.log(newUser);
 
     this.userService.register(newUser).then(
       async () => {
         await this.router.navigate(['/overview'], { relativeTo: this.route });
       },
       () => {
-        console.log('Register failed.');
+        // console.log('Register failed.');
       }
     );
 

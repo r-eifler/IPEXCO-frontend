@@ -21,7 +21,6 @@ export class SelectedQuestionService extends SelectedObjectService<ExplanationRu
     }
 
     saveObject(questionRun: ExplanationRun) {
-      console.log('Question service get MUGS');
       if (!questionRun.mugs) {
           this.planPropertiesService.findCollection().subscribe(planProperties => {
             questionRun.mugs = [];

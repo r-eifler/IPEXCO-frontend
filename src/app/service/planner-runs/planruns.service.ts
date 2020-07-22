@@ -62,8 +62,6 @@ export class PlanRunsService extends ObjectCollectionService<PlanRun> {
               bestRun = run;
             }
           }
-          console.log('Best Run');
-          console.log(bestRun);
           resolve(bestRun);
         }
       );
@@ -89,9 +87,6 @@ export class PlanRunsService extends ObjectCollectionService<PlanRun> {
 }
 
 function sortRuns(runs: PlanRun[]): PlanRun[] {
-  for (const r of runs){
-    console.log(r.name);
-  }
   if (runs.length <= 1) {
     return runs;
   }

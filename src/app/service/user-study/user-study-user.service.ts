@@ -22,12 +22,10 @@ export class UserStudyUserService {
       try {
         this.http.post<{token: string, user: USUser}>(this.BASE_URL, user)
           .subscribe(httpData => {
-              console.log(httpData);
               localStorage.setItem(this.tokenName, httpData.token);
               resolve(true);
             },
             (err) => {
-              console.log(err);
               reject(null);
             });
       } catch {

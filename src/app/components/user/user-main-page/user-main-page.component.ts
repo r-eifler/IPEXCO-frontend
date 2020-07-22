@@ -56,7 +56,7 @@ export class UserMainPageComponent implements OnInit, OnDestroy {
   }
 
   async openProject(project: Project) {
-    console.log(''.concat(...['/projects/', project._id, '/overview']));
+    // console.log(''.concat(...['/projects/', project._id, '/overview']));
     await this.router.navigate([''.concat(...['/projects/', project._id, '/overview'])], { relativeTo: this.route });
   }
 

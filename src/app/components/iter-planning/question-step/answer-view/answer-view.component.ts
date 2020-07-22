@@ -47,8 +47,8 @@ export class AnswerViewComponent implements OnInit, OnDestroy {
       ([planRun, expRun, planProperties]) => {
         if (planRun && expRun && planProperties) {
           this.filteredMUGS = [];
-          console.log('MUGS:');
-          console.log(expRun.mugs);
+          // console.log('MUGS:');
+          // console.log(expRun.mugs);
           for (const entry of expRun.mugs) {
             const planPropertiesEntry: PlanProperty[] = [];
             let containsOnlyGlobalHardGoals = true;

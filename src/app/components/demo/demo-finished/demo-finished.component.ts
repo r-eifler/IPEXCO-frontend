@@ -5,6 +5,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {ExecutionSettingsService} from '../../../service/settings/execution-settings.service';
 import {PlanRunsService} from '../../../service/planner-runs/planruns.service';
 import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
 
 @Component({
   selector: 'app-demo-finished',
@@ -38,9 +39,9 @@ export class DemoFinishedComponent implements OnInit, OnDestroy {
     } else {
       this.bestPlanValue = 0;
     }
-    this.settingsService.getSelectedObject().subscribe(
-      s => console.log(s)
-    );
+    this.settingsService.getSelectedObject()
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe();
   }
 
   backToDemoOverview() {

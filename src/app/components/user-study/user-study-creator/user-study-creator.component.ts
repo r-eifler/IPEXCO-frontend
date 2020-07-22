@@ -172,7 +172,6 @@ export class UserStudyCreatorComponent implements OnInit, OnDestroy {
   }
 
   async saveUserStudy() {
-    console.log('Save User Study');
     this.userStudy.name = this.userStudyForm.controls.name.value;
     this.userStudy.description = this.userStudyForm.controls.description.value;
     this.userStudy.startDate = this.userStudyForm.controls.startDate.value;

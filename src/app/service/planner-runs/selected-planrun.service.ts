@@ -23,13 +23,11 @@ export class SelectedPlanRunService extends SelectedObjectService<PlanRun> {
     }
 
     saveObject(planRun: PlanRun) {
-        console.log('Current run stored');
         if (planRun.planString && !planRun.plan) {
             combineLatest([this.taskSchemaService.getSchema(), this.planPropertyMapService.getMap()]).subscribe(
                 ([schema, planProperties]) => {
                     if (schema) {
                         planRun.planValue = computePlanValue(planRun, planProperties);
-                        console.log('PlanValue: ' + planRun.planValue);
                         handlePlanString(planRun.planString, planRun, schema);
                         this.selectedObjectStore.dispatch({type: LOAD, data: planRun});
                     }

@@ -54,7 +54,6 @@ export abstract class ObjectMapService<K, T extends Identifiable> {
     this.http.get<IHTTPData<T[]>>(this.BASE_URL, {params: httpParams})
       .pipe(this.pipeFindData, this.pipeFind)
       .subscribe((res) => {
-        console.log('MapService load objects');
         const tuples = res.map(
           v => {
             return [this.getKey(v), v];

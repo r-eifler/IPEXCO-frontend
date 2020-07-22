@@ -42,7 +42,7 @@ export class NoMysteryTask extends Task {
 
   constructor(taskSchema: TaskSchema) {
     super(taskSchema);
-    console.log('Create NoMystery Task');
+    // console.log('Create NoMystery Task');
     this.parseObjects();
     this.parseInit();
     this.parseGoals();

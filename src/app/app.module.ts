@@ -155,7 +155,6 @@ import {SelectedPlanRunService} from './service/planner-runs/selected-planrun.se
 import {SelectedQuestionService} from './service/planner-runs/selected-question.service';
 import { MarkedPipe } from './pipes/marked.pipe';
 
-
 @NgModule({
   declarations: [
     AppComponent,

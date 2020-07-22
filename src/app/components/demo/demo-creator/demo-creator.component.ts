@@ -29,7 +29,7 @@ export class DemoCreatorComponent implements OnInit {
     public dialogRef: MatDialogRef<DemoCreatorComponent>,
     @Inject(MAT_DIALOG_DATA) data
   ) {
-    console.log(data);
+    // console.log(data);
     this.currentProjectId = data.projectId;
     this.demo = data.demo;
     this.update = data.update;

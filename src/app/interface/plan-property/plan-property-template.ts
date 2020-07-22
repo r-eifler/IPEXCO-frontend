@@ -38,7 +38,7 @@ export class PlanPropertyTemplate {
   }
 
   initializeVariableConstraints(taskSchema: TaskSchema) {
-    console.log('initializeVariableConstraints');
+    // console.log('initializeVariableConstraints');
     const varValues = this.getPossibleTypeVariableDomains(taskSchema);
     for (const entry1 of varValues.entries()) {
       this.constraintDomains.addNewVar(entry1[0], entry1[1]);
@@ -139,7 +139,7 @@ export class PlanPropertyTemplate {
   }
 
   getPossibleVariableValues(taskSchema: TaskSchema, varValueMapping: Map<string, string>): Map<string, Set<string>> {
-    console.log('getPossibleVariableValues');
+    // console.log('getPossibleVariableValues');
     let resMap: Map<string, Set<string>> = this.getPossibleTypeVariableDomains(taskSchema);
     for (const variable of varValueMapping.keys()) {
       resMap = domainIntersection(resMap, this.constraintDomains.getVarValuePosibleValues(variable, varValueMapping.get(variable)));

@@ -93,7 +93,6 @@ export class DomainSpecificationComponent implements OnInit, OnDestroy {
    }
 
    deleteFile(file: DomainSpecificationFile) {
-     console.log(file);
      this.filesService.deleteFile(file);
    }
 

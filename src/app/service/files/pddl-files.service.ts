@@ -46,8 +46,6 @@ export class FilesService {
 
   saveFile(file: File) {
 
-    console.log('Save File: ');
-    console.log(file);
     const formData = new FormData();
     formData.append('content', file.content);
     formData.append('name', file.name);
@@ -64,17 +62,14 @@ export class FilesService {
 
     return this.http.post<IHTTPData<File>>(BASE_URL, formData)
       .subscribe(httpData => {
-        console.log(httpData.data);
         const action = {type: ADD, data: httpData.data};
         this.filesStore.dispatch(action);
       });
   }
 
   deleteFile(domainFile: File) {
-    console.log('Delete File: ' + domainFile._id);
     return this.http.delete(BASE_URL + domainFile._id)
       .subscribe(response => {
-        console.log('Delete File response');
         this.filesStore.dispatch({type: REMOVE, data: domainFile});
       });
   }

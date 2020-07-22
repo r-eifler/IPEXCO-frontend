@@ -10,6 +10,5 @@ export class ViewSettingsService extends SelectedObjectService<ViewSettings> {
   constructor(store: ViewSettingsStore) {
     super(store);
     this.saveObject(defaultViewSettings);
-    console.log('View setting default init');
   }
 }

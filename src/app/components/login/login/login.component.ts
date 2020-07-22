@@ -52,15 +52,15 @@ export class LoginComponent implements OnInit, OnDestroy {
       name: this.registerForm.controls.name.value,
       password: this.registerForm.controls.password.value
     };
-    console.log(newUser);
+    // console.log(newUser);
 
     this.userService.login(newUser).then(
       async () => {
-        console.log('Login successful.');
+        // console.log('Login successful.');
         await this.router.navigate(['/overview'], { relativeTo: this.route });
       },
       async () => {
-        console.log('Login failed.');
+        // console.log('Login failed.');
         await this.router.navigate(['/'], { relativeTo: this.route });
       }
     );

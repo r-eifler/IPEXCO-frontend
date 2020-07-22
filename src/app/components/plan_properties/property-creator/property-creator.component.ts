@@ -133,7 +133,7 @@ export class PropertyCreatorComponent implements OnInit, OnDestroy {
   selectVariableValue(value: string) {
     this.selectedVariableValue.set(this.selectedVariablePlaceholder, value);
     this.possibleVariableValues = this.selectedPropertyTemplate.getPossibleVariableValues(this.taskSchema, this.selectedVariableValue);
-    console.log(this.possibleVariableValues);
+    // console.log(this.possibleVariableValues);
   }
 
   resetVariableValue(variable: string) {
@@ -161,7 +161,7 @@ export class PropertyCreatorComponent implements OnInit, OnDestroy {
   }
 
   onActionNameSelect(event: MatAutocompleteSelectedEvent, actionSet: ActionSet): void {
-    console.log('Action name selected: ' + event.option.value);
+    // console.log('Action name selected: ' + event.option.value);
   }
 
   createAction(actionSet: ActionSet): void {

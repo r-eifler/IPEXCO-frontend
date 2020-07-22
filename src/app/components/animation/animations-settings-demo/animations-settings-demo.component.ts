@@ -28,7 +28,7 @@ export class AnimationsSettingsDemoComponent implements OnInit, AfterViewInit, O
   }
 
   ngAfterViewInit(): void {
-    console.log('Animation Settings Demo');
+    // console.log('Animation Settings Demo');
     this.runningDemoService.getSelectedObject()
     .pipe(takeUntil(this.ngUnsubscribe))
     .subscribe(

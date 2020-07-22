@@ -2,7 +2,7 @@ import {CurrentProjectService} from 'src/app/service/project/project-services';
 import {ExplanationRun, PlanRun, RunType} from '../../../../interface/run';
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {PlanRunsService} from '../../../../service/planner-runs/planruns.service';
-import {Observable} from 'rxjs';
+import {Observable, Subject} from 'rxjs';
 import {ActivatedRoute, Router} from '@angular/router';
 import {NestedTreeControl} from '@angular/cdk/tree';
 import {MatTreeNestedDataSource} from '@angular/material/tree';
@@ -51,7 +51,6 @@ export class IterativePlanningBaseComponent implements OnInit, OnDestroy {
     .pipe(takeUntil(this.ngUnsubscribe))
     .subscribe(value => {
       this.dataSource.data = value;
-      console.log(value);
       if (value.length === 0) {
         this.router.navigate(['./original-task'], { relativeTo: this.route });
       } else {

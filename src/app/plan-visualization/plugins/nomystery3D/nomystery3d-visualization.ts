@@ -93,7 +93,7 @@ export class NoMystery3DVisualization extends PlanVisualization {
     // loadSpinner.style.backgroundColor = 'red';
     // this.mainDomElement$.next(loadSpinner);
 
-    console.log('init nomystery visualization');
+    // console.log('init nomystery visualization');
     this.canvas = document.createElement('canvas');
     this.canvas.width = 500;
     this.canvas.height = 500;
