@@ -6,6 +6,7 @@ import {Project} from '../../interface/project';
 import {HttpClient} from '@angular/common/http';
 import {DomainSpecStore} from '../../store/stores.store';
 import {environment} from '../../../environments/environment';
+import {GoalType, PlanProperty} from '../../interface/plan-property/plan-property';
 
 @Injectable({
   providedIn: 'root'

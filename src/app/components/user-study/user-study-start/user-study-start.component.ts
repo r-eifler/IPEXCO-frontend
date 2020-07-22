@@ -70,6 +70,7 @@ export class UserStudyStartComponent implements OnInit, OnDestroy {
             if (prolificPID && studyID) {
               resolve([prolificPID, studyID]);
             } else {
+              // resolve(['000000000', '000000000']);
               reject(null);
             }
           }

@@ -1,8 +1,5 @@
-import {NoMysteryTask} from './nomystery-task';
 import {NoMysteryAnimationTask} from './nomystery-animation-task';
-import {loadSVGFile} from './utils';
-import {DomSanitizer} from '@angular/platform-browser';
-import {HttpClient} from '@angular/common/http';
+
 
 export async function loadTrucks(task: NoMysteryAnimationTask, parentSVG: SVGElement) {
   for (const truck of task.trucks.values()) {

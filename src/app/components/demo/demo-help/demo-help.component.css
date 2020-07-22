@@ -30,4 +30,22 @@ mat-step {
   overflow-y: auto;
 }
 
+.skip-button {
+  align-self: flex-start;
+}
 
+.step-button {
+  align-self: flex-end;
+}
+
+.button-box {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: flex-end;
+}
+
+
+.button-box > * {
+  margin: 0 10px;
+}

@@ -9,6 +9,9 @@ import {ADD, EDIT, LOAD, REMOVE} from '../../store/generic-list.store';
 import {SelectedObjectService} from '../base/selected-object.service';
 import {PddlFileUtilsService} from '../files/pddl-file-utils.service';
 import {ExecutionSettingsService} from '../settings/execution-settings.service';
+import {GoalType, PlanProperty} from '../../interface/plan-property/plan-property';
+import {combineLatest} from 'rxjs';
+import {PlanPropertyMapService} from '../plan-properties/plan-property-services';
 
 @Injectable({
   providedIn: 'root'
@@ -95,20 +98,44 @@ export class RunningDemoService extends SelectedObjectService<Demo> {
     store: RunningDemoStore,
     private settingsService: ExecutionSettingsService,
     private fileUtilsService: PddlFileUtilsService,
+    private planPropertiesService: PlanPropertyMapService,
   ) {
     super(store);
   }
 
+  private static updateMUGSPropsNames(demo: Demo, planProperties: Map<string, PlanProperty>) {
+    const newMUGS = [];
+    for (const mugs of demo.data.MUGS) {
+      const list = [];
+      for (const elem of mugs) {
+        if (elem.startsWith('Atom')) {
+          const fact = elem.replace('Atom ', '').replace(' ', '');
+          for (const p of planProperties.values()) {
+            if (p.type === GoalType.goalFact && fact === p.formula) {
+              list.push(p.name);
+              break;
+            }
+          }
+        } else {
+          list.push(elem.replace('sat_', '').replace('soft_accepting(', '').replace(')', ''));
+        }
+      }
+      newMUGS.push(list);
+    }
+    demo.data.MUGS = newMUGS;
+  }
 
   saveObject(demo: Demo) {
     if (demo.definition) {
       console.log('Save running demo: ' + `${demo.definition}/demo.json`);
       const definitionContent$ = this.fileUtilsService.getFileContent(`${demo.definition}/demo.json`);
-      definitionContent$.subscribe((content) => {
+      combineLatest([definitionContent$, this.planPropertiesService.getMap()]).subscribe(
+        ([content, planPropertiesMap]) => {
         // console.log(content);
         if (content) {
           const demoDef = JSON.parse(content) as DemoDefinition;
           demo.data = demoDef;
+          RunningDemoService.updateMUGSPropsNames(demo, planPropertiesMap);
           this.selectedObjectStore.dispatch({type: LOAD, data: demo});
         }
       });
@@ -116,4 +143,5 @@ export class RunningDemoService extends SelectedObjectService<Demo> {
       this.settingsService.load(demo.settings);
     }
   }
+
 }

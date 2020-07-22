@@ -10,6 +10,7 @@ import {ExecutionSettings} from '../../../interface/settings/execution-settings'
 import {ExecutionSettingsService} from '../../../service/settings/execution-settings.service';
 import {MatStepper} from '@angular/material/stepper';
 import {environment} from '../../../../environments/environment';
+import {MatButton} from '@angular/material/button';
 
 @Component({
   selector: 'app-demo-task-intro',
@@ -50,7 +51,10 @@ export class DemoTaskIntroComponent implements OnInit {
     stepper.previous();
   }
 
-  goForward(stepper: MatStepper) {
+  goForward(stepper: MatStepper, startButton: MatButton) {
     stepper.next();
+    if (stepper.selectedIndex) {
+      startButton.disabled = false;
+    }
   }
 }

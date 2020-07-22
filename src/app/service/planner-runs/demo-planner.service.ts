@@ -10,6 +10,8 @@ import {IHTTPData} from '../../interface/http-data.interface';
 import {PlannerService} from './planner.service';
 import {SelectedPlanRunService} from './selected-planrun.service';
 import {SelectedQuestionService} from './selected-question.service';
+import {DomainSpecification} from '../../interface/files/domain-specification';
+import {GoalType, PlanProperty} from '../../interface/plan-property/plan-property';
 
 @Injectable({
     providedIn: 'root'
@@ -47,7 +49,7 @@ export class DemoPlannerService extends PlannerService {
     }
 
 
-    private static filterMUGS(questionPlanProperties: string[], demo: Demo): string [][] {
+    private static filterMUGS(questionPlanProperties: string[], demo: Demo, planProperty: PlanProperty[]): string [][] {
       const filteredMugs = [];
       for (const mugs of demo.data.MUGS) {
         for (const propertyGoalFact of questionPlanProperties) {
@@ -97,7 +99,7 @@ export class DemoPlannerService extends PlannerService {
       // plan property hard goals which were no hard goals in the plan run
       const questionPlanProperties = expRun.hardGoals.filter(hg => !planRun.hardGoals.some(c => hg === c));
 
-      expRun.mugs = DemoPlannerService.filterMUGS(questionPlanProperties, demo);
+      expRun.mugs = DemoPlannerService.filterMUGS(questionPlanProperties, demo, expRun.planProperties);
 
       planRun.explanationRuns.push(expRun);
       this.listStore.dispatch({type: EDIT, data: planRun});

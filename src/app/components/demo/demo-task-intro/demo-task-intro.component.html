@@ -21,42 +21,43 @@
       </mat-step>
 
 
-      <mat-step label="Picture" >
-        <div style="height: 100%; width: 100%; display: flex; flex-direction: row; justify-content: center;">
-          <img [src]="srcUrl + (demo$ | async).summaryImage" style="max-height: 100%; max-width: 100%">
+      <mat-step label="Picture & Plan-Properties" >
+        <div  style="height: 100%; width: 100%; display: flex; flex-direction: row;">
+          <div style="height: 100%; width: 50%; display: flex; flex-direction: row; justify-content: center;">
+            <img [src]="srcUrl + (demo$ | async).summaryImage" style="max-height: 100%; max-width: 100%">
+          </div>
+          <div style="height: 100%; width: 50%; display: flex; flex-direction: column;">
+          <p *ngIf="(settings$ | async).usePlanPropertyValues">
+            Every plan-property has an utility, which indicates how much worth the plan-property is.
+          </p>
+
+          <p>The following properties are available:</p>
+
+          <mat-list>
+            <mat-list-item *ngFor="let entry of (planPropertiesMap$ | async) | keyvalue;last as last">
+              <mat-icon matListIcon>bookmark</mat-icon>
+              <p matLine>{{entry.value.naturalLanguageDescription}}</p>
+              <p matLine *ngIf="(settings$ | async).usePlanPropertyValues">Utility: {{entry.value.value}}</p>
+              <mat-divider [inset]="true" *ngIf="! last"></mat-divider>
+            </mat-list-item>
+          </mat-list>
+          </div>
         </div>
-
-      </mat-step>
-
-      <mat-step label="Plan-Properties" >
-
-        <p *ngIf="(settings$ | async).usePlanPropertyValues">
-          Every plan-property has an utility, which indicates how much worth the plan-property is.
-        </p>
-
-        <p>The following properties are available:</p>
-
-        <mat-list>
-          <mat-list-item *ngFor="let entry of (planPropertiesMap$ | async) | keyvalue;last as last">
-            <mat-icon matListIcon>bookmark</mat-icon>
-            <p matLine>{{entry.value.naturalLanguageDescription}}</p>
-            <p matLine *ngIf="(settings$ | async).usePlanPropertyValues">Utility: {{entry.value.value}}</p>
-            <mat-divider [inset]="true" *ngIf="! last"></mat-divider>
-          </mat-list-item>
-        </mat-list>
       </mat-step>
 
     </mat-horizontal-stepper>
 
   </mat-card-content>
   <mat-card-actions align="end">
-    <button mat-icon-button (click)="goBack(stepper)">
-      <mat-icon>keyboard_arrow_left</mat-icon>
-    </button>
-    <button mat-icon-button (click)="goForward(stepper)">
-      <mat-icon>keyboard_arrow_right</mat-icon>
-    </button>
-    <button mat-flat-button color="accent" (click)="nextStep()">Start</button>
+    <div class="button-box">
+      <button mat-icon-button (click)="goBack(stepper)">
+        <mat-icon>keyboard_arrow_left</mat-icon>
+      </button>
+      <button mat-icon-button (click)="goForward(stepper, startButton)">
+        <mat-icon>keyboard_arrow_right</mat-icon>
+      </button>
+      <button #startButton mat-flat-button color="accent" (click)="nextStep()" [disabled]="true">Start</button>
+    </div>
   </mat-card-actions>
 </mat-card>
 </div>

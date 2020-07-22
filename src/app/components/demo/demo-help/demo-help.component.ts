@@ -3,6 +3,7 @@ import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core'
 import {ResponsiveService} from 'src/app/service/responsive/responsive.service';
 import {Subject} from 'rxjs';
 import { MatStepper } from '@angular/material/stepper';
+import {MatButton} from '@angular/material/button';
 
 @Component({
   selector: 'app-demo-help',
@@ -43,8 +44,11 @@ export class DemoHelpComponent implements OnInit, OnDestroy {
     stepper.previous();
   }
 
-  goForward(stepper: MatStepper) {
+  goForward(stepper: MatStepper, startButton: MatButton) {
     stepper.next();
+    if (stepper.selectedIndex === 3) {
+      startButton.disabled = false;
+    }
   }
 
 }

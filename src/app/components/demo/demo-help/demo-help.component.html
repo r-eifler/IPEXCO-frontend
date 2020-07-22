@@ -170,14 +170,17 @@
 
     </mat-card-content>
 
-    <mat-card-actions align="end">
-      <button mat-icon-button (click)="goBack(stepper)">
-        <mat-icon>keyboard_arrow_left</mat-icon>
-      </button>
-      <button mat-icon-button (click)="goForward(stepper)">
-        <mat-icon>keyboard_arrow_right</mat-icon>
-      </button>
-      <button mat-flat-button color="accent" class='skip-button' (click)="nextStep()">Skip</button>
+    <mat-card-actions style="width: 100%">
+      <div class="button-box">
+        <button #nextButton mat-flat-button class='skip-button' (click)="nextStep()">Skip</button>
+        <button mat-flat-button (click)="goBack(stepper)" class="step-button">
+          <mat-icon>keyboard_arrow_left</mat-icon>
+        </button>
+        <button  mat-flat-button color="accent" (click)="goForward(stepper, startButton)" class="step-button">
+          <mat-icon>keyboard_arrow_right</mat-icon>
+        </button>
+        <button #startButton mat-flat-button color="primary" (click)="nextStep()" [disabled]="true">Next</button>
+      </div>
     </mat-card-actions>
 
   </mat-card>

@@ -4,9 +4,9 @@
 
 export const environment = {
   production: false,
-  apiURL: 'http://localhost:3000/api/',
-  localURL: 'http://localhost:4200',
-  srcURL: 'http://localhost:4200',
+  apiURL: 'http://192.168.178.42:4200/api/',
+  localURL: 'http://192.168.178.42:4200',
+  srcURL: 'http://192.168.178.42:4200',
 };
 
 /*
