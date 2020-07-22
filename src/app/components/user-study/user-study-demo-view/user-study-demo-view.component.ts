@@ -10,6 +10,7 @@ import {PlanRunsService} from '../../../service/planner-runs/planruns.service';
 import {PlannerService} from '../../../service/planner-runs/planner.service';
 import {UserStudyPlannerService} from '../../../service/planner-runs/user-study-planner.service';
 import {DemoRunService} from '../../../service/planner-runs/demo-planruns.service';
+import {PlanPropertyMapService} from '../../../service/plan-properties/plan-property-services';
 
 @Component({
   selector: 'app-user-study-demo-view',
@@ -35,6 +36,7 @@ export class UserStudyDemoViewComponent implements OnInit, OnDestroy {
 
   constructor(
     private demosService: DemosService,
+    private propertiesService: PlanPropertyMapService,
     private selectedDemoService: RunningDemoService,
   ) { }
 
@@ -45,6 +47,7 @@ export class UserStudyDemoViewComponent implements OnInit, OnDestroy {
         demo => {
           if (demo) {
             this.selectedDemoService.saveObject(demo);
+            this.propertiesService.findCollection([{param: 'projectId', value: demo._id}]);
             this.demo = demo;
           }
         }

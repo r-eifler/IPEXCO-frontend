@@ -22,6 +22,7 @@ export class TaskViewComponent implements OnInit, OnDestroy {
   notSatPlanProperties: PlanProperty[] = [];
 
   planValue = 0;
+  hasPlan = false;
 
   constructor(
     private  currentRunStore: CurrentRunStore,
@@ -38,22 +39,27 @@ export class TaskViewComponent implements OnInit, OnDestroy {
 
       if (run && planProperties) {
         this.planValue = run.planValue;
+        if (run.plan) {
+          this.hasPlan = true;
+        }
 
         for (const propName of run.hardGoals) {
           this.enforcedSatPlanProperties.push(planProperties.get(propName));
         }
-        for (const propName of run.satPlanProperties) {
-          if (! this.enforcedSatPlanProperties.find(p => p.name === propName)) {
-            this.addSatPlanProperties.push(planProperties.get(propName));
-          }
-        }
-        for (const prop of planProperties.values()) {
-          if (! this.enforcedSatPlanProperties.find(p => p.name === prop.name) &&
-            ! this.addSatPlanProperties.find(p => p.name === prop.name)) {
-            this.notSatPlanProperties.push(prop);
-          }
-        }
 
+        if (this.hasPlan) {
+          for (const propName of run.satPlanProperties) {
+            if (!this.enforcedSatPlanProperties.find(p => p.name === propName)) {
+              this.addSatPlanProperties.push(planProperties.get(propName));
+            }
+          }
+          for (const prop of planProperties.values()) {
+            if (!this.enforcedSatPlanProperties.find(p => p.name === prop.name) &&
+              !this.addSatPlanProperties.find(p => p.name === prop.name)) {
+              this.notSatPlanProperties.push(prop);
+            }
+          }
+        }
       }
     });
 

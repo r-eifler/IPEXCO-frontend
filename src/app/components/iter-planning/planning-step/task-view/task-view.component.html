@@ -1,4 +1,7 @@
 <div style="width: 100%;">
+  <mat-card class="card-style" *ngIf="! hasPlan">
+    <h1>This selection of hard goals is unsolvable!</h1>
+  </mat-card>
   <mat-card class="card-style">
       <mat-card-header>
           <mat-card-title>Hard Goals</mat-card-title>
@@ -15,7 +18,7 @@
       </mat-card-content>
   </mat-card>
 
-  <mat-card class="card-style">
+  <mat-card class="card-style" *ngIf="hasPlan">
     <mat-card-header>
         <mat-card-title>Additionally satisfied Plan-Properties</mat-card-title>
     </mat-card-header>
@@ -32,13 +35,13 @@
     </mat-card-content>
   </mat-card>
 
-  <mat-card class="card-style" *ngIf="(settingsService.getSelectedObject() | async).usePlanPropertyValues">
+  <mat-card class="card-style" *ngIf="hasPlan && (settingsService.getSelectedObject() | async).usePlanPropertyValues">
     <mat-card-header>
       <mat-card-title>Overall Plan Utility: {{planValue}}</mat-card-title>
     </mat-card-header>
   </mat-card>
 
-  <mat-card class="card-style">
+  <mat-card class="card-style" *ngIf="hasPlan">
     <mat-card-header>
         <mat-card-title>Not satisfied Plan-Properties</mat-card-title>
     </mat-card-header>
