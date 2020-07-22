@@ -9,6 +9,7 @@ import {Demo} from '../../../interface/demo';
 import {ExecutionSettings} from '../../../interface/settings/execution-settings';
 import {ExecutionSettingsService} from '../../../service/settings/execution-settings.service';
 import {MatStepper} from '@angular/material/stepper';
+import {environment} from '../../../../environments/environment';
 
 @Component({
   selector: 'app-demo-task-intro',
@@ -18,6 +19,8 @@ import {MatStepper} from '@angular/material/stepper';
 export class DemoTaskIntroComponent implements OnInit {
 
   @Output() next = new EventEmitter<void>();
+
+  srcUrl = environment.srcURL;
 
   demo$: Observable<Demo>;
   taskSchema$: Observable<TaskSchema>;

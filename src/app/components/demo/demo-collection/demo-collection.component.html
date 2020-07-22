@@ -15,7 +15,10 @@
       </button>
 
     </mat-card-header>
-    <img *ngIf="demo.summaryImage && demo.summaryImage != ''" matCardImage [src]="srcUrl + demo.summaryImage">
+    <div style="display: flex; flex-direction: row; justify-content: center">
+      <img *ngIf="demo.summaryImage && demo.summaryImage != ''" matCardImage [src]="srcUrl + demo.summaryImage"
+         style="max-width: 300px; height: auto; align-self: center">
+    </div>
     <mat-card-content>
       {{demo.description}}
     </mat-card-content>

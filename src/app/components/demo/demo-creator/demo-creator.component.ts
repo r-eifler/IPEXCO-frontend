@@ -34,7 +34,7 @@ export class DemoCreatorComponent implements OnInit {
     this.demo = data.demo;
     this.update = data.update;
 
-    this.taskInfo = this.demo.taskInfo;
+    this.taskInfo = this.demo ? this.demo.taskInfo : '';
 
     this.demoForm = new FormGroup({
       name: new FormControl(this.demo ? this.demo.name : ''),
