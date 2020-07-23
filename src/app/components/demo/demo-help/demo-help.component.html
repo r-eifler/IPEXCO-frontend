@@ -67,19 +67,21 @@
               Additionally, properties you would like to be satisfied might somehow contradict each other.
             </p>
 
-            <p>Instead of randomly trying to find out, for which property selection there exists a plan,
-              you might want to ask questions about properties not satisfied in the current plan.
-              Such a question could for example be: "Why don't you use the less busy route around down town?".
-            </p>
+            <ng-container *ngIf="canUseQuestions">
+              <p>Instead of randomly trying to find out, for which property selection there exists a plan,
+                you might want to ask questions about properties not satisfied in the current plan.
+                Such a question could for example be: "Why don't you use the less busy route around down town?".
+              </p>
+
+              <p>
+                The system will then provide an answer describing which currently satisfied properties can no longer be
+                satisfied if you would satisfy the property/ies in your question.
+                "If you used the route avoiding down town, you could no longer deliver package 1", could for example be the answer of the sample question.
+              </p>
+            </ng-container>
 
             <p>
-              The system will then provide an answer describing which currently satisfied properties can no longer be
-              satisfied if you would satisfy the property/ies in your question.
-              "If you used the route avoiding down town, you could no longer deliver package 1", could for example be the answer of the sample question.
-            </p>
-
-            <p>
-              The following steps explain how to compute a plan and ask questions.
+              The following steps explain how to compute a plan.
             </p>
 
           </div>
@@ -145,7 +147,7 @@
           <p>How you ask question with respect to a plan is explained in the following step.</p>
 
         </mat-step>
-        <mat-step label="HOW TO: Ask Questions">
+        <mat-step label="HOW TO: Ask Questions" *ngIf="canUseQuestions">
 
           <p>
             To ask a question about a specific plan you can click the button in the bottom right corner in the detail-view

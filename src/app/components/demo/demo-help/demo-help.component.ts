@@ -4,6 +4,7 @@ import {ResponsiveService} from 'src/app/service/responsive/responsive.service';
 import {Subject} from 'rxjs';
 import { MatStepper } from '@angular/material/stepper';
 import {MatButton} from '@angular/material/button';
+import {ExecutionSettingsService} from '../../../service/settings/execution-settings.service';
 
 @Component({
   selector: 'app-demo-help',
@@ -13,12 +14,14 @@ import {MatButton} from '@angular/material/button';
 export class DemoHelpComponent implements OnInit, OnDestroy {
 
   isMobile: boolean;
+  canUseQuestions = false;
 
   private ngUnsubscribe: Subject<any> = new Subject();
 
   @Output() next = new EventEmitter<void>();
 
   constructor(
+    private settingsService: ExecutionSettingsService,
     private responsiveService: ResponsiveService,
   ) { }
 
@@ -29,6 +32,16 @@ export class DemoHelpComponent implements OnInit, OnDestroy {
       this.isMobile = isMobile;
     });
     this.responsiveService.checkWidth();
+
+    this.settingsService.getSelectedObject()
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(
+        settings => {
+          if (settings) {
+            this.canUseQuestions = settings.allowQuestions;
+          }
+        }
+      );
   }
 
   ngOnDestroy(): void {
