@@ -4,7 +4,7 @@ import {CurrentProjectService} from '../service/project/project-services';
 import {NoMysteryVisualization} from '../plan-visualization/plugins/nomystery/nomystery-visualization';
 import {PlanVisualization} from '../plan-visualization/integration/plan-visualization';
 import {TaskSchemaService} from '../service/task-info/schema.service';
-import {AnimationSettingsNoMysteryVisu} from '../plan-visualization/plugins/nomystery3D/settings/animation-settings-nomystery-visu';
+import {AnimationSettingsNoMysteryVisu} from '../plan-visualization/plugins/nomystery/settings/animation-settings-nomystery-visu';
 import {SelectedPlanRunService} from '../service/planner-runs/selected-planrun.service';
 
 const planVisualizationFactory = (

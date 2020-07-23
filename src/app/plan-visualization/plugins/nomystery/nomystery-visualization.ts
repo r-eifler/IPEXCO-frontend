@@ -4,7 +4,7 @@ import {PlanVisualization} from '../../integration/plan-visualization';
 import {TaskSchemaService} from 'src/app/service/task-info/schema.service';
 import {Injectable} from '@angular/core';
 import {SelectedPlanRunService} from '../../../service/planner-runs/selected-planrun.service';
-import {AnimationSettingsNoMystery} from '../nomystery3D/settings/animation-settings-nomystery';
+import {AnimationSettingsNoMystery} from './settings/animation-settings-nomystery';
 import {loadPackages, loadTrucks} from './world';
 import {NoMysteryAnimationTask} from './nomystery-animation-task';
 import {NoMysteryAnimation} from './animation/nomystery-animation';

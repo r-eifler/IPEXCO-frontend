@@ -1,5 +1,5 @@
 import {takeUntil} from 'rxjs/operators';
-import {AnimationSettingsNoMysteryVisu} from '../../../../plan-visualization/plugins/nomystery3D/settings/animation-settings-nomystery-visu';
+import {AnimationSettingsNoMysteryVisu} from '../../../../plan-visualization/plugins/nomystery/settings/animation-settings-nomystery-visu';
 import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ResponsiveService} from 'src/app/service/responsive/responsive.service';
 import {TaskSchemaService} from 'src/app/service/task-info/schema.service';

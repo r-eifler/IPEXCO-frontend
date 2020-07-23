@@ -1,4 +1,4 @@
-import {Location, NoMysteryTask, Road} from './../../nomystery/nomystery-task';
+import {Location, NoMysteryTask, Road} from '../nomystery-task';
 import {gsap} from 'gsap';
 import {Draggable} from 'gsap/Draggable';
 import {AnimationSettingsNoMystery} from './animation-settings-nomystery';
