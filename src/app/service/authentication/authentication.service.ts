@@ -52,12 +52,22 @@ export class AuthenticationService extends SelectedObjectService<User> {
   login(user: User): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       try {
-        this.http.post<{user: User, token: string}>(this.BASE_URL + '/login', user)
-        .subscribe(httpData => {
-          localStorage.setItem('jwt-token', httpData.token);
-          this.saveObject(httpData.user);
-          resolve();
-        });
+        this.http.post<{successful: boolean, user: User, token: string}>(this.BASE_URL + '/login', user)
+        .subscribe(
+          httpData => {
+            if (httpData.successful) {
+              localStorage.setItem('jwt-token', httpData.token);
+              this.saveObject(httpData.user);
+              resolve();
+             } else {
+               reject();
+             }
+        },
+          (error) => {
+            console.warn(error);
+            reject();
+          }
+        );
       } catch {
         reject();
       }

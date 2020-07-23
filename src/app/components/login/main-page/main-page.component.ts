@@ -3,7 +3,7 @@ import {AuthenticationService} from '../../../service/authentication/authenticat
 import {AfterViewChecked, Component, OnDestroy, OnInit} from '@angular/core';
 import {ResponsiveService} from 'src/app/service/responsive/responsive.service';
 import {gsap} from 'gsap';
-import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
+import {MatDialog, MatDialogConfig, MatDialogRef} from '@angular/material/dialog';
 import {RegisterComponent} from '../register/register.component';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Subject} from 'rxjs';

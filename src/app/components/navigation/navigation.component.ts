@@ -3,9 +3,10 @@ import {AuthenticationService} from 'src/app/service/authentication/authenticati
 import {LoginComponent} from './../login/login/login.component';
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ResponsiveService} from '../../service/responsive/responsive.service';
-import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
+import {MatDialog, MatDialogConfig, MatDialogRef} from '@angular/material/dialog';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Subject} from 'rxjs';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 
 @Component({
@@ -24,7 +25,8 @@ export class NavigationComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     public userService: AuthenticationService,
     private responsiveService: ResponsiveService,
-    public dialog: MatDialog) {
+    public dialog: MatDialog,
+    private snackBar: MatSnackBar) {
 
   }
 
@@ -46,7 +48,19 @@ export class NavigationComponent implements OnInit, OnDestroy {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.width = '200px';
 
-    this.dialog.open(LoginComponent, dialogConfig);
+    const dialog: MatDialogRef<LoginComponent> = this.dialog.open(LoginComponent, dialogConfig);
+
+    dialog.afterClosed()
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(
+        res => {
+          if (! res) {
+            this.snackBar.open('Login failed.', 'OK', {
+              duration: 5000,
+            });
+          }
+        }
+      );
   }
 
   async logout() {

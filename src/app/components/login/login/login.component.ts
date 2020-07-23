@@ -57,18 +57,17 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.userService.login(newUser).then(
       async () => {
         // console.log('Login successful.');
+        this.dialogRef.close(true);
         await this.router.navigate(['/overview'], { relativeTo: this.route });
       },
       async () => {
         // console.log('Login failed.');
-        await this.router.navigate(['/'], { relativeTo: this.route });
+        this.dialogRef.close(false);
       }
     );
-
-    this.dialogRef.close();
   }
 
   onBack(): void {
-    this.dialogRef.close();
+    this.dialogRef.close(false);
   }
 }
