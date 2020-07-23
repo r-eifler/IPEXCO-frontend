@@ -4,7 +4,7 @@
       <mat-card-title>Next Steps</mat-card-title>
     </mat-card-header>
     <mat-card-content>
-      {{this.content}}
+      <div [innerHTML]="this.content | marked"></div>
     </mat-card-content>
     <mat-card-actions align="end">
       <button mat-flat-button color="primary" (click)="nextStep()">Next</button>

@@ -37,7 +37,9 @@ export class PlanViewComponent implements OnInit, OnDestroy {
       // console.log('PlanView: current Run: ' + run);
       if (run) {
         this.planRun = run;
-        this.niceText();
+        if (this.planRun.plan) {
+          this.niceText();
+        }
       }
     });
   }
