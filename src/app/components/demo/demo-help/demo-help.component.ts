@@ -59,7 +59,10 @@ export class DemoHelpComponent implements OnInit, OnDestroy {
 
   goForward(stepper: MatStepper, startButton: MatButton) {
     stepper.next();
-    if (stepper.selectedIndex === 3) {
+    if (this.canUseQuestions && stepper.selectedIndex === 3) {
+      startButton.disabled = false;
+    }
+    if (!this.canUseQuestions && stepper.selectedIndex === 2) {
       startButton.disabled = false;
     }
   }
