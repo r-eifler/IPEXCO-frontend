@@ -4,6 +4,9 @@ import {TaskSchema} from '../../interface/task-schema';
 import {Plan} from '../../interface/plan';
 
 export function computePlanValue(planRun: PlanRun, planProperties: Map<string, PlanProperty>): number {
+  if (! planRun.planString && ! planRun.planPath) {
+    return 0;
+  }
   let planValue = 0;
   for (const propName of planRun.hardGoals) {
     planValue += planProperties.get(propName).value;
