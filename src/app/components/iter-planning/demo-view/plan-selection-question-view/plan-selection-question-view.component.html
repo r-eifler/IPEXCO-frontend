@@ -1,0 +1,64 @@
+<div style="width: 100%;">
+  <mat-card class="card-style">
+    <mat-card-header>
+      <mat-card-title>Hard Goals</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <mat-selection-list [(ngModel)]="selectedGoalFacts">
+        <mat-list-option *ngFor="let item of enforcedSatPlanProperties;last as last" checkboxPosition="before"
+                         [disabled]="item.globalHardGoal" [selected]="true" [value]="item">
+          <p matLine> {{item.naturalLanguageDescription}} </p>
+          <p matLine *ngIf="(settingsService.getSelectedObject() | async).usePlanPropertyValues"> Utility: {{item.value}} </p>
+          <mat-divider [inset]="true" *ngIf="! last"></mat-divider>
+        </mat-list-option>
+      </mat-selection-list>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="card-style">
+    <mat-card-header>
+      <mat-card-title>Additionally satisfied Plan-Properties</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <mat-selection-list *ngIf="addSatPlanProperties.length > 0" [(ngModel)]="selectedGoalFacts">
+        <mat-list-option *ngFor="let item of addSatPlanProperties;last as last" checkboxPosition="before" [value]="item">
+          <p matLine> {{item.naturalLanguageDescription}} </p>
+          <p matLine *ngIf="(settingsService.getSelectedObject() | async).usePlanPropertyValues"> Utility: {{item.value}} </p>
+          <mat-divider [inset]="true" *ngIf="! last"></mat-divider>
+        </mat-list-option>
+      </mat-selection-list>
+      <p *ngIf="addSatPlanProperties.length == 0">There are no additionally satisfied plan-properties.</p>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="card-style" *ngIf="(settingsService.getSelectedObject() | async).usePlanPropertyValues">
+    <mat-card-header>
+      <mat-card-title>Overall Plan Utility: {{planValue}}</mat-card-title>
+    </mat-card-header>
+  </mat-card>
+
+  <mat-card class="card-style">
+    <mat-card-header>
+      <mat-card-title>Not satisfied Plan-Properties</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <mat-selection-list *ngIf="notSatPlanProperties.length > 0" [(ngModel)]="selectedGoalFacts">
+        <mat-list-option *ngFor="let item of notSatPlanProperties;last as last" checkboxPosition="before" [value]="item">
+          <p matLine> {{item.naturalLanguageDescription}} </p>
+          <p matLine *ngIf="(settingsService.getSelectedObject() | async).usePlanPropertyValues"> Utility: {{item.value}} </p>
+          <button mat-mini-fab color="primary" style="position: absolute; right: 20px" (click)="showAnswer(item)">
+            ?
+          </button>
+          <mat-divider [inset]="true" *ngIf="! last"></mat-divider>
+        </mat-list-option>
+      </mat-selection-list>
+      <p *ngIf="notSatPlanProperties.length == 0">All plan-properties are satisfied.</p>
+    </mat-card-content>
+  </mat-card>
+
+</div>
+
+<button mat-fab color="accent" class="add-button" (click)="computePlan()">
+  <mat-icon>send</mat-icon>
+</button>
+
