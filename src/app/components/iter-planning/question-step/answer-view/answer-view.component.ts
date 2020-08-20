@@ -6,6 +6,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ExplanationRun, PlanRun} from 'src/app/interface/run';
 import {SelectedPlanRunService} from '../../../../service/planner-runs/selected-planrun.service';
 import {SelectedQuestionService} from '../../../../service/planner-runs/selected-question.service';
+import {TimeLoggerService} from '../../../../service/logger/time-logger.service';
 
 interface Answer {
   MUGS: string[];
@@ -18,6 +19,7 @@ interface Answer {
 })
 export class AnswerViewComponent implements OnInit, OnDestroy {
 
+  private loggerId: number;
   private ngUnsubscribe: Subject<any> = new Subject();
 
   currentRun$: Observable<PlanRun>;
@@ -28,6 +30,7 @@ export class AnswerViewComponent implements OnInit, OnDestroy {
   filteredMUGS: PlanProperty[][] = [];
 
   constructor(
+    private timeLogger: TimeLoggerService,
     private  currentRunService: SelectedPlanRunService,
     private currentQuestionService: SelectedQuestionService,
     private planPropertiesService: PlanPropertyMapService) {
@@ -37,6 +40,8 @@ export class AnswerViewComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.loggerId = this.timeLogger.register('answer');
+
     combineLatest(
       [
         this.currentRun$,
@@ -46,6 +51,8 @@ export class AnswerViewComponent implements OnInit, OnDestroy {
     .subscribe(
       ([planRun, expRun, planProperties]) => {
         if (planRun && expRun && planProperties) {
+          this.timeLogger.addInfo(this.loggerId, 'runId: ' + planRun._id);
+          this.timeLogger.addInfo(this.loggerId, 'exprunId: ' + expRun._id);
           this.filteredMUGS = [];
           // console.log('MUGS:');
           // console.log(expRun.mugs);
@@ -77,5 +84,6 @@ export class AnswerViewComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
+    this.timeLogger.deregister(this.loggerId);
   }
 }

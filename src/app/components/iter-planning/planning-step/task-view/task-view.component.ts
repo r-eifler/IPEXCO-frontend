@@ -5,6 +5,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {CurrentRunStore} from '../../../../store/stores.store';
 import {combineLatest, Subject} from 'rxjs';
 import {ExecutionSettingsService} from '../../../../service/settings/execution-settings.service';
+import {TimeLoggerService} from '../../../../service/logger/time-logger.service';
 
 
 @Component({
@@ -14,6 +15,7 @@ import {ExecutionSettingsService} from '../../../../service/settings/execution-s
 })
 export class TaskViewComponent implements OnInit, OnDestroy {
 
+  private loggerId: number;
   private ngUnsubscribe: Subject<any> = new Subject();
 
   enforcedSatPlanProperties: PlanProperty[] = [];
@@ -25,6 +27,7 @@ export class TaskViewComponent implements OnInit, OnDestroy {
   hasPlan = false;
 
   constructor(
+    private timeLogger: TimeLoggerService,
     private  currentRunStore: CurrentRunStore,
     public settingsService: ExecutionSettingsService,
     private planPropertyCollectionService: PlanPropertyMapService,
@@ -38,6 +41,11 @@ export class TaskViewComponent implements OnInit, OnDestroy {
       this.notSatPlanProperties = [];
 
       if (run && planProperties) {
+        if (! this.loggerId) {
+          this.loggerId = this.timeLogger.register('goal-view');
+        }
+        this.timeLogger.addInfo(this.loggerId, 'runId: ' + run._id);
+
         this.planValue = run.planValue;
         this.hasPlan = !!run.plan;
 
@@ -64,6 +72,9 @@ export class TaskViewComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    if (! this.loggerId) {
+      this.loggerId = this.timeLogger.register('goal-view');
+    }
   }
 
   ngOnDestroy(): void {

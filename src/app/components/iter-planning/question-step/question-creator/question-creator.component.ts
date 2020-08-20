@@ -12,6 +12,7 @@ import {MatSelectionList} from '@angular/material/list/selection-list';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ExecutionSettingsService} from 'src/app/service/settings/execution-settings.service';
 import {SelectedPlanRunService} from '../../../../service/planner-runs/selected-planrun.service';
+import {TimeLoggerService} from '../../../../service/logger/time-logger.service';
 
 @Component({
   selector: 'app-question-creator',
@@ -20,6 +21,7 @@ import {SelectedPlanRunService} from '../../../../service/planner-runs/selected-
 })
 export class QuestionCreatorComponent implements OnInit, OnDestroy {
 
+  private loggerId: number;
   private ngUnsubscribe: Subject<any> = new Subject();
 
   @ViewChild('planPropertiesList') questionSelectionList: MatSelectionList;
@@ -35,6 +37,7 @@ export class QuestionCreatorComponent implements OnInit, OnDestroy {
   public maxSizeQuestionReached = false;
 
   constructor(
+    private timeLogger: TimeLoggerService,
     public settingsService: ExecutionSettingsService,
     private propertiesService: PlanPropertyMapService,
     private currentProjectService: CurrentProjectService,
@@ -55,6 +58,11 @@ export class QuestionCreatorComponent implements OnInit, OnDestroy {
     .pipe(takeUntil(this.ngUnsubscribe))
     .subscribe(run => {
       if (run != null) {
+        if (! this.loggerId) {
+          this.loggerId = this.timeLogger.register('question-creator');
+        }
+        this.timeLogger.addInfo(this.loggerId, 'runId: ' + run._id);
+
         this.currentRun = run;
         this.hardGoals = run.hardGoals;
 
@@ -70,11 +78,15 @@ export class QuestionCreatorComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    if (! this.loggerId) {
+      this.loggerId = this.timeLogger.register('question-creator');
+    }
   }
 
   ngOnDestroy(): void {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
+    this.timeLogger.deregister(this.loggerId);
   }
 
   onSelectionChange(event) {
@@ -103,6 +115,7 @@ export class QuestionCreatorComponent implements OnInit, OnDestroy {
 
     this.plannerService.execute_mugs_run(this.currentRun, expRun);
     await this.router.navigate([this.redirectURL], { relativeTo: this.route });
+    this.timeLogger.addInfo(this.loggerId, 'question asked');
   }
 
 }

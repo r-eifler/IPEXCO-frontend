@@ -5,6 +5,7 @@ import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {DOCUMENT} from '@angular/common';
 import {UserStudyUserService} from '../../../service/user-study/user-study-user.service';
+import {TimeLoggerService} from '../../../service/logger/time-logger.service';
 
 @Component({
   selector: 'app-user-study-end',
@@ -18,6 +19,7 @@ export class UserStudyEndComponent implements OnInit, OnDestroy {
   userStudy: UserStudy;
 
   constructor(
+    private timeLogger: TimeLoggerService,
     private userStudyUserService: UserStudyUserService,
     userStudyService: RunningUserStudyService,
     @Inject(DOCUMENT) private document: Document
@@ -32,6 +34,7 @@ export class UserStudyEndComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit(): Promise<void> {
+    await this.timeLogger.store();
     await this.userStudyUserService.logout();
   }
 

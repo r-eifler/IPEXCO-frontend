@@ -39,6 +39,9 @@ export class FinishedPlanningStepComponent implements OnInit, OnDestroy {
     .subscribe(run => {
       if (run) {
         if (this.loggerId) {
+          if (! this.loggerId) {
+            this.loggerId = this.timeLogger.register('task-overview');
+          }
           this.timeLogger.addInfo(this.loggerId, 'runId: ' + run._id);
         }
         currentRunService.saveObject(run);
@@ -50,7 +53,9 @@ export class FinishedPlanningStepComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.loggerId = this.timeLogger.register('task-overview');
+    if (! this.loggerId) {
+      this.loggerId = this.timeLogger.register('task-overview');
+    }
   }
 
   ngOnDestroy(): void {

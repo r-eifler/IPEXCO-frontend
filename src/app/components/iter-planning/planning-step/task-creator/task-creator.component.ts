@@ -13,6 +13,7 @@ import {MatSelectionListChange} from '@angular/material/list/selection-list';
 import {PLANNER_REDIRECT} from 'src/app/app.tokens';
 import {Subject} from 'rxjs';
 import {ExecutionSettingsService} from '../../../../service/settings/execution-settings.service';
+import {TimeLoggerService} from '../../../../service/logger/time-logger.service';
 
 @Component({
   selector: 'app-task-creator',
@@ -21,6 +22,7 @@ import {ExecutionSettingsService} from '../../../../service/settings/execution-s
 })
 export class TaskCreatorComponent implements OnInit, OnDestroy {
 
+  private loggerId: number;
   private ngUnsubscribe: Subject<any> = new Subject();
 
   @Output() finished = new EventEmitter<boolean>();
@@ -37,6 +39,7 @@ export class TaskCreatorComponent implements OnInit, OnDestroy {
   completed = false;
 
   constructor(
+    private timeLogger: TimeLoggerService,
     private currentProjectService: CurrentProjectService,
     private taskSchemaService: TaskSchemaService,
     private plannerService: PlannerService,
@@ -78,11 +81,13 @@ export class TaskCreatorComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.loggerId = this.timeLogger.register('task-creator');
   }
 
   ngOnDestroy(): void {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
+    this.timeLogger.deregister(this.loggerId);
   }
 
   checkComplete() {
@@ -107,10 +112,12 @@ export class TaskCreatorComponent implements OnInit, OnDestroy {
 
     this.plannerService.execute_plan_run(run);
     this.finished.emit(true);
+    this.timeLogger.addInfo(this.loggerId, 'hard goals selected');
     // await this.router.navigate([this.redirectURL], { relativeTo: this.route });
   }
 
   abortWithoutPlan() {
     this.finished.emit(false);
+    this.timeLogger.addInfo(this.loggerId, 'abort');
   }
 }

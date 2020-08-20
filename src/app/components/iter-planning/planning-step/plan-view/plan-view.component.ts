@@ -4,6 +4,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {BehaviorSubject, Subject} from 'rxjs';
 import {PlanRun} from '../../../../interface/run';
 import {SelectedPlanRunService} from '../../../../service/planner-runs/selected-planrun.service';
+import {TimeLoggerService} from '../../../../service/logger/time-logger.service';
 
 interface Action {
   name: string;
@@ -17,6 +18,7 @@ interface Action {
 })
 export class PlanViewComponent implements OnInit, OnDestroy {
 
+  private loggerId: number;
   private ngUnsubscribe: Subject<any> = new Subject();
 
   runStatus = RunStatus;
@@ -26,16 +28,19 @@ export class PlanViewComponent implements OnInit, OnDestroy {
   private currentRun$: BehaviorSubject<PlanRun>;
 
     constructor(
+      private timeLogger: TimeLoggerService,
       private  currentRunService: SelectedPlanRunService) {
       this.currentRun$ = this.currentRunService.getSelectedObject();
     }
 
   ngOnInit(): void {
+    this.loggerId = this.timeLogger.register('plan-view');
+
     this.currentRun$
     .pipe(takeUntil(this.ngUnsubscribe))
     .subscribe(run => {
-      // console.log('PlanView: current Run: ' + run);
       if (run) {
+        this.timeLogger.addInfo(this.loggerId, 'runId: ' + run._id);
         this.planRun = run;
         this.actions = [];
         if (this.planRun.plan) {
@@ -77,6 +82,7 @@ export class PlanViewComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
+    this.timeLogger.deregister(this.loggerId);
   }
 
 }

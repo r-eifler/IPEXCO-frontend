@@ -11,7 +11,7 @@ interface LogEntry {
   componentName: string;
   start: Date;
   end?: Date;
-  info: string[];
+  info: {timeStamp: Date, message: string}[];
 }
 
 @Injectable({
@@ -31,15 +31,17 @@ export class TimeLoggerService {
     const nextID = this.id++;
     const newEntry = {id: nextID, componentName: name, start: new Date(), info: []};
     this.log.set(nextID, newEntry);
-    console.log(newEntry);
+    // console.log(newEntry);
     return nextID;
   }
 
-  addInfo(id, message): void {
+  addInfo(id, message: string): void {
     const entry = this.log.get(id);
     if (entry) {
-      entry.info.push(message);
-      console.log('INFO: ' + message);
+      entry.info.push({timeStamp: new Date(), message});
+      // console.log('INFO: ' + message);
+    }  else {
+      throw new Error('Undefined logger id');
     }
   }
 
@@ -48,14 +50,23 @@ export class TimeLoggerService {
     if (entry) {
       entry.end = new Date();
     }
-    console.log('Deregister: ' + id);
+    // console.log('Deregister: ' + id);
   }
 
-  store(): void {
+  store(): Promise<void> {
     console.log(this.log);
-    this.http.put<IHTTPData<Demo>>(this.BASE_URL, this.log)
-      .subscribe(httpData => {
-        console.log('time log stored');
-      });
+    return new Promise<void>((resolve, reject) => {
+      this.http.put<IHTTPData<Demo>>(this.BASE_URL, this.log)
+        .subscribe(httpData => {
+          console.log('time log stored');
+          return resolve();
+        });
+    });
+  }
+
+  reset(): void {
+    console.log(this.log);
+    this.id = 0;
+    this.log = new Map<number, LogEntry>();
   }
 }

@@ -13,7 +13,6 @@ export class NoMysteryAnimation {
   }
 
   initPositions() {
-    console.log('Init Positions');
     for (const loc of this.animationTask.locations.values()) {
       loc.objects = 0;
     }

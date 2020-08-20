@@ -43,7 +43,9 @@ export class PlanAnimationViewComponent implements OnInit, AfterViewInit, OnDest
   }
 
   ngOnInit(): void {
-    this.loggerId = this.timeLogger.register('plan-animation');
+    if (! this.loggerId) {
+      this.loggerId = this.timeLogger.register('plan-animation');
+    }
   }
 
   ngOnDestroy(): void {

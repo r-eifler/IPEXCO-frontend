@@ -12,6 +12,7 @@ import {ExecutionSettingsService} from '../../../service/settings/execution-sett
 import {DemoPlannerService} from '../../../service/planner-runs/demo-planner.service';
 import {DemoRunService} from '../../../service/planner-runs/demo-planruns.service';
 import {PlanPropertyMapService} from '../../../service/plan-properties/plan-property-services';
+import {TimeLoggerService} from '../../../service/logger/time-logger.service';
 
 
 @Component({
@@ -34,6 +35,7 @@ export class DemoBaseComponent implements OnInit, OnDestroy {
   step = 0;
 
   constructor(
+    private timeLogger: TimeLoggerService,
     private demosService: DemosService,
     private runningDemoService: RunningDemoService,
     private settingsService: ExecutionSettingsService,
@@ -66,6 +68,7 @@ export class DemoBaseComponent implements OnInit, OnDestroy {
   }
 
   async toDemoCollection() {
+    this.timeLogger.reset();
     await this.router.navigate(['/demos'], {relativeTo: this.route});
   }
 

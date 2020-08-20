@@ -11,6 +11,7 @@ import {PlannerService} from '../../../service/planner-runs/planner.service';
 import {UserStudyPlannerService} from '../../../service/planner-runs/user-study-planner.service';
 import {DemoRunService} from '../../../service/planner-runs/demo-planruns.service';
 import {PlanPropertyMapService} from '../../../service/plan-properties/plan-property-services';
+import {TimeLoggerService} from '../../../service/logger/time-logger.service';
 
 @Component({
   selector: 'app-user-study-demo-view',
@@ -35,6 +36,7 @@ export class UserStudyDemoViewComponent implements OnInit, OnDestroy {
   demo: Demo;
 
   constructor(
+    private timeLogger: TimeLoggerService,
     private demosService: DemosService,
     private propertiesService: PlanPropertyMapService,
     private selectedDemoService: RunningDemoService,
@@ -65,5 +67,6 @@ export class UserStudyDemoViewComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
+    this.timeLogger.store();
   }
 }

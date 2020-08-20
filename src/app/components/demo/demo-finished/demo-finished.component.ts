@@ -6,6 +6,7 @@ import {ExecutionSettingsService} from '../../../service/settings/execution-sett
 import {PlanRunsService} from '../../../service/planner-runs/planruns.service';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
+import {TimeLoggerService} from '../../../service/logger/time-logger.service';
 
 @Component({
   selector: 'app-demo-finished',
@@ -14,6 +15,7 @@ import {takeUntil} from 'rxjs/operators';
 })
 export class DemoFinishedComponent implements OnInit, OnDestroy {
 
+  private loggerId: number;
   private ngUnsubscribe: Subject<any> = new Subject();
 
   demo: Demo;
@@ -21,6 +23,7 @@ export class DemoFinishedComponent implements OnInit, OnDestroy {
   bestPlanValue = 0;
 
   constructor(
+    private timeLogger: TimeLoggerService,
     public settingsService: ExecutionSettingsService,
     public runsService: PlanRunsService,
     private route: ActivatedRoute,
@@ -33,12 +36,15 @@ export class DemoFinishedComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
+    this.loggerId = this.timeLogger.register('finished-demo');
+    this.timeLogger.addInfo(this.loggerId, 'demoId: ' + this.demo._id);
     const bestRun = await this.runsService.getBestRun();
     if (bestRun) {
       this.bestPlanValue = bestRun.planValue;
     } else {
       this.bestPlanValue = 0;
     }
+    this.timeLogger.addInfo(this.loggerId, 'max utility: ' + this.bestPlanValue);
     this.settingsService.getSelectedObject()
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe();
@@ -52,6 +58,7 @@ export class DemoFinishedComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
+    this.timeLogger.deregister(this.loggerId);
   }
 
 }
