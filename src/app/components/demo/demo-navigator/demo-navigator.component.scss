@@ -2,13 +2,56 @@
 
 .main-container {
   display: grid;
-  grid-template-rows: auto 180px 1fr;
+  grid-template-rows: auto auto auto 1fr;
 }
 
 .info-container {
   background-color: #5e5e5e;
   display: flex;
   align-items: center;
+}
+
+
+.action-container {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.action-container > button {
+  margin: 5px;
+}
+
+.iter-planning-buttons {
+  display: flex;
+  flex-direction: row;
+}
+
+.iter-planning-buttons > button {
+  margin: 5px;
+}
+
+.bottom-container {
+  height: 100%;
+  display: grid;
+  overflow: hidden;
+}
+
+.three-columns {
+  grid-template-columns: 2fr 5px 3fr;
+}
+
+.four-columns {
+  grid-template-columns: 1fr 5px 2fr 5px 1fr;
+}
+
+.divider {
+  box-sizing: border-box;
+  margin: auto;
+  width: 100%;
+  height: 95%;
+  background-color: lightgray;
 }
 
 .router-outlet-container {
@@ -19,62 +62,17 @@
   overflow: auto;
 }
 
-
-.plan-question-container {
+.task-creator-container {
+  box-sizing: border-box;
   width: 100%;
   height: 100%;
-  background-color: rgb(240, 240, 240);
+  padding: 20px;
+}
+
+.spinner-container {
+  height: 100%;
   display: flex;
-  overflow-x: scroll;
-}
-
-.run-container {
-  height: auto;
-  margin: 10px 5px;
-  display: flex;
-  flex-direction: row;
-  background-color: rgb(191, 191, 191);
-}
-
-.run-card {
-  box-sizing: border-box;
-  width: 150px;
-  height: auto;
-  margin: 10px 10px;
-}
-
-.question-card {
-  width: 150px;
-  height: auto;
-  margin: 10px 10px;
-}
-
-.mat-card{
-  display:flex;
   flex-direction: column;
-}
-
-.mat-card-header {
-  flex-shrink: 0;
-}
-
-.mat-card-content{
-  flex-grow: 1;
-  overflow: auto;
-}
-
-.mat-card-actions{
-  display:flex;
-  flex-direction: row;
-  justify-content: flex-end;
-}
-
-.add-plan-button {
-  margin: auto 10px;
-  align-self: end;
-}
-
-.finish-demo-button {
-  margin: auto 10px;
-  align-self: end;
+  justify-content: space-around;
+  align-items: center;
 }

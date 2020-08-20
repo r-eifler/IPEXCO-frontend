@@ -7,7 +7,7 @@ import {SelectedPlanRunService} from '../../service/planner-runs/selected-planru
 
 export abstract class PlanVisualization {
 
-  constructor(
+  protected constructor(
     protected currentProjectService: CurrentProjectService,
     protected taskSchemaService: TaskSchemaService,
     protected  currentRunService: SelectedPlanRunService) {

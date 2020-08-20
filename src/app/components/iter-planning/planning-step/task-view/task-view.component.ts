@@ -39,9 +39,7 @@ export class TaskViewComponent implements OnInit, OnDestroy {
 
       if (run && planProperties) {
         this.planValue = run.planValue;
-        if (run.plan) {
-          this.hasPlan = true;
-        }
+        this.hasPlan = !!run.plan;
 
         for (const propName of run.hardGoals) {
           this.enforcedSatPlanProperties.push(planProperties.get(propName));

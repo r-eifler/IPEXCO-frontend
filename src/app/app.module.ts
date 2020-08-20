@@ -154,6 +154,7 @@ import {UserStudyEndComponent} from './components/user-study/user-study-end/user
 import {SelectedPlanRunService} from './service/planner-runs/selected-planrun.service';
 import {SelectedQuestionService} from './service/planner-runs/selected-question.service';
 import { MarkedPipe } from './pipes/marked.pipe';
+import { DemoHelpDialogComponent } from './components/demo/demo-help-dialog/demo-help-dialog.component';
 
 @NgModule({
   declarations: [
@@ -216,6 +217,7 @@ import { MarkedPipe } from './pipes/marked.pipe';
     UserStudyExecuteComponent,
     UserStudyEndComponent,
     MarkedPipe,
+    DemoHelpDialogComponent,
   ],
   imports: [
     RouterModule.forRoot(appRoutes,

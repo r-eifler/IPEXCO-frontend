@@ -10,7 +10,7 @@
   <div class="plan-container" #animationcontainer>
 
   </div>
-  <div class="button-container" *ngIf="animationHandler">
+  <div class="button-container" *ngIf="animationHandler && (animationHandler.hasAnimation | async)">
     <button mat-icon-button (click)="animationHandler.stepBack()"
     [disabled]="! (animationHandler.currentAnimationHasPreviousEvent | async) || ! (animationHandler.currentAnimationPausedEvent | async)">
       <mat-icon>chevron_left</mat-icon>
@@ -32,7 +32,4 @@
       <mat-icon>refresh</mat-icon>
     </button>
   </div>
-  <!-- <button mat-fab color="accent" class="add-button" (click)="newQuestion()">
-    <mat-icon svgIcon="questionmark"></mat-icon>
-  </button> -->
 </div>

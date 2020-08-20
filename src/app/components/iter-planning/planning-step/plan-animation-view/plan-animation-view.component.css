@@ -1,17 +1,18 @@
 .main-container {
   width: 100%;
   height: 100%;
+  display: grid;
+  grid-template-rows: 1fr auto;
 }
 
 .plan-container {
   width: 100%;
-  height: 90%;
+  height: 100%;
   overflow: hidden;
 }
 
 .button-container {
   width: 100%;
-  height: 10%;
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;

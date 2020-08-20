@@ -2,6 +2,7 @@ import {NoMysteryAnimationTask} from './nomystery-animation-task';
 
 
 export async function loadTrucks(task: NoMysteryAnimationTask, parentSVG: SVGElement) {
+  console.log('Load Trucks');
   for (const truck of task.trucks.values()) {
     const fileName = truck.id === 't0' ? 'truck_red.svg' : 'truck_blue.svg';
     const svgGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
@@ -14,6 +15,7 @@ export async function loadTrucks(task: NoMysteryAnimationTask, parentSVG: SVGEle
     truck.parentSVG = parentSVG;
     truck.initParentSVG = parentSVG;
     svgGroup.appendChild(image);
+    svgGroup.style.zIndex = '20';
     parentSVG.appendChild(svgGroup);
   }
 }
@@ -32,6 +34,7 @@ export  function loadPackages(task: NoMysteryAnimationTask, parentSVG: SVGElemen
 
     svgGroup.appendChild(image);
     svgGroup.appendChild(text);
+    svgGroup.style.zIndex = '100';
 
     pack.svg = svgGroup;
     pack.parentSVG = parentSVG;

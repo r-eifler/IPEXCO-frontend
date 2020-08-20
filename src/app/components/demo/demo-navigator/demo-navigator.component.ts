@@ -2,7 +2,7 @@ import {DemoFinishedComponent} from './../demo-finished/demo-finished.component'
 import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
 import {Demo} from 'src/app/interface/demo';
 import {BehaviorSubject, Subject} from 'rxjs';
-import {PlanRun, RunStatus} from 'src/app/interface/run';
+import {PlanRun, RunStatus, RunType} from 'src/app/interface/run';
 import {ActivatedRoute, Router} from '@angular/router';
 import {DemosService, RunningDemoService} from 'src/app/service/demo/demo-services';
 import {CurrentProjectService} from 'src/app/service/project/project-services';
@@ -16,6 +16,8 @@ import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {ExecutionSettings} from '../../../interface/settings/execution-settings';
 import {PlannerService} from '../../../service/planner-runs/planner.service';
 import {SelectedPlanRunService} from '../../../service/planner-runs/selected-planrun.service';
+import {PlanProperty} from '../../../interface/plan-property/plan-property';
+import {DemoHelpDialogComponent} from '../demo-help-dialog/demo-help-dialog.component';
 
 @Component({
   selector: 'app-demo-navigator',
@@ -28,6 +30,8 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
 
   @Output() finishedDemo = new EventEmitter<void>();
 
+  computeNewPlan = false;
+  selectedPlan: PlanRun = null;
   runStatus = RunStatus;
 
   timerIntervall;
@@ -43,6 +47,7 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
   demo: Demo;
   runs$: BehaviorSubject<PlanRun[]>;
   settings$: BehaviorSubject<ExecutionSettings>;
+  globalHardGoals: PlanProperty[];
 
   constructor(
     private route: ActivatedRoute,
@@ -76,37 +81,20 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
 
     this.runs$ = this.runsService.getList();
     this.settings$ = settingsService.getSelectedObject();
+
+    this.propertiesService.getMap()
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(
+        props => {
+          const propsList = [...props.values()];
+          const planProperties = propsList.filter((p: PlanProperty) => p.isUsed);
+          this.globalHardGoals = planProperties.filter(v => v.globalHardGoal);
+        });
   }
 
   ngOnInit(): void {
-    this.settings$
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe(
-        (settings: ExecutionSettings) => {
-
-          if (settings && (settings.measureTime || settings.useTimer)) {
-            this.maxTime = settings.maxTime ? settings.maxTime : 50000;
-            this.startTime = new Date().getTime();
-            this.timerIntervall = setInterval(() => {
-              if (this.finished) {
-                clearInterval(this.timerIntervall);
-              }
-
-              const c = new Date().getTime();
-              this.currentTime = c - this.startTime;
-              this.timer = this.maxTime - this.currentTime;
-              this.timer = this.timer < 0 ? 0 : this.timer;
-
-              if (this.timer <= 0 && ! this.finished) {
-                this.finished = true;
-                this.showDemoFinished(true);
-                clearInterval(this.timerIntervall);
-              }
-
-            }, 1000);
-          }
-        }
-      );
+    this.initPlanRuns();
+    this.initTimer();
   }
 
   finishDemo() {
@@ -140,8 +128,90 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
     clearInterval(this.timerIntervall);
   }
 
+  initTimer() {
+    this.settings$
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(
+        (settings: ExecutionSettings) => {
+
+          if (settings && (settings.measureTime || settings.useTimer)) {
+            this.maxTime = settings.maxTime ? settings.maxTime : 50000;
+            this.startTime = new Date().getTime();
+            this.timerIntervall = setInterval(() => {
+              if (this.finished) {
+                clearInterval(this.timerIntervall);
+              }
+
+              const c = new Date().getTime();
+              this.currentTime = c - this.startTime;
+              this.timer = this.maxTime - this.currentTime;
+              this.timer = this.timer < 0 ? 0 : this.timer;
+
+              if (this.timer <= 0 && ! this.finished) {
+                this.finished = true;
+                this.showDemoFinished(true);
+                clearInterval(this.timerIntervall);
+              }
+
+            }, 1000);
+          }
+        }
+      );
+  }
+
+  async initPlanRuns() {
+    const run: PlanRun = {
+      _id: this.runsService.getNumRuns().toString(),
+      name: 'Plan ' + (this.runsService.getNumRuns() + 1),
+      type: RunType.plan,
+      status: null,
+      project: this.demo,
+      planProperties: this.globalHardGoals,
+      hardGoals: this.globalHardGoals.map(value => (value.name)),
+      log: null,
+      explanationRuns: [],
+      previousRun: null,
+    };
+
+    console.log(run);
+
+    this.plannerService.execute_plan_run(run);
+    this.taskCreatorClose(true);
+  }
+
   async newPlanRun() {
-    await this.router.navigate(['./new-planning-step'], {relativeTo: this.route});
+    this.computeNewPlan = true;
+  }
+
+  taskCreatorClose(hardGoalsSelected) {
+    this.computeNewPlan = false;
+    if (hardGoalsSelected) {
+      this.selectedPlan = null;
+      this.router.navigate(['.'], {relativeTo: this.route});
+      const subscription = this.plannerService.isPlannerBusy()
+        .subscribe(
+          v => {
+            if (!v) {
+              this.selectedPlan = this.runsService.getLastRun();
+              if (this.selectedPlan) {
+                this.router.navigate(['./planning-step/' + this.selectedPlan._id], {relativeTo: this.route});
+                subscription.unsubscribe();
+              }
+            }
+          }
+        );
+    }
+  }
+
+  showDemoHelp() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = '80%';
+    dialogConfig.height = '80%';
+    dialogConfig.data  = {
+      demo: this.demo
+    };
+
+    const dialogRef = this.dialog.open(DemoHelpDialogComponent, dialogConfig);
   }
 
 }

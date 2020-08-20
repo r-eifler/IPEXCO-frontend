@@ -1,6 +1,6 @@
 import {CurrentProjectService} from '../../../../service/project/project-services';
 import {PlanProperty} from '../../../../interface/plan-property/plan-property';
-import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
+import {Component, EventEmitter, Inject, OnDestroy, OnInit, Output} from '@angular/core';
 import {Project} from '../../../../interface/project';
 import {PlanRun, RunType} from '../../../../interface/run';
 import {PlannerService} from '../../../../service/planner-runs/planner.service';
@@ -22,6 +22,8 @@ import {ExecutionSettingsService} from '../../../../service/settings/execution-s
 export class TaskCreatorComponent implements OnInit, OnDestroy {
 
   private ngUnsubscribe: Subject<any> = new Subject();
+
+  @Output() finished = new EventEmitter<boolean>();
 
   private project: Project;
   private readonly previousRun: PlanRun;
@@ -104,6 +106,11 @@ export class TaskCreatorComponent implements OnInit, OnDestroy {
     };
 
     this.plannerService.execute_plan_run(run);
-    await this.router.navigate([this.redirectURL], { relativeTo: this.route });
+    this.finished.emit(true);
+    // await this.router.navigate([this.redirectURL], { relativeTo: this.route });
+  }
+
+  abortWithoutPlan() {
+    this.finished.emit(false);
   }
 }
