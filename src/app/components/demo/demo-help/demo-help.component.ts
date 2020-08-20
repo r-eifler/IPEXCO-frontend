@@ -5,6 +5,7 @@ import {Subject} from 'rxjs';
 import { MatStepper } from '@angular/material/stepper';
 import {MatButton} from '@angular/material/button';
 import {ExecutionSettingsService} from '../../../service/settings/execution-settings.service';
+import {TimeLoggerService} from '../../../service/logger/time-logger.service';
 
 @Component({
   selector: 'app-demo-help',
@@ -12,6 +13,8 @@ import {ExecutionSettingsService} from '../../../service/settings/execution-sett
   styleUrls: ['./demo-help.component.css']
 })
 export class DemoHelpComponent implements OnInit, OnDestroy {
+
+  private loggerId: number;
 
   isMobile: boolean;
   canUseQuestions = false;
@@ -21,11 +24,14 @@ export class DemoHelpComponent implements OnInit, OnDestroy {
   @Output() next = new EventEmitter<void>();
 
   constructor(
+    private timeLogger: TimeLoggerService,
     private settingsService: ExecutionSettingsService,
     private responsiveService: ResponsiveService,
   ) { }
 
   ngOnInit(): void {
+    this.loggerId = this.timeLogger.register('demo-help');
+
     this.responsiveService.getMobileStatus()
     .pipe(takeUntil(this.ngUnsubscribe))
     .subscribe( isMobile => {
@@ -47,6 +53,7 @@ export class DemoHelpComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
+    this.timeLogger.deregister(this.loggerId);
   }
 
   nextStep() {

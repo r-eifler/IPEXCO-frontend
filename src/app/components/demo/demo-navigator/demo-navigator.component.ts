@@ -16,6 +16,7 @@ import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {ExecutionSettings} from '../../../interface/settings/execution-settings';
 import {PlannerService} from '../../../service/planner-runs/planner.service';
 import {SelectedPlanRunService} from '../../../service/planner-runs/selected-planrun.service';
+import {TimeLoggerService} from '../../../service/logger/time-logger.service';
 
 @Component({
   selector: 'app-demo-navigator',
@@ -24,6 +25,7 @@ import {SelectedPlanRunService} from '../../../service/planner-runs/selected-pla
 })
 export class DemoNavigatorComponent implements OnInit, OnDestroy {
 
+  private loggerId: number;
   private ngUnsubscribe: Subject<any> = new Subject();
 
   @Output() finishedDemo = new EventEmitter<void>();
@@ -45,6 +47,7 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
   settings$: BehaviorSubject<ExecutionSettings>;
 
   constructor(
+    private timeLogger: TimeLoggerService,
     private route: ActivatedRoute,
     private router: Router,
     public settingsService: ExecutionSettingsService,
@@ -79,6 +82,8 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.loggerId = this.timeLogger.register('demo-navigator');
+
     this.settings$
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(
@@ -138,6 +143,7 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
     clearInterval(this.timerIntervall);
+    this.timeLogger.deregister(this.loggerId);
   }
 
   async newPlanRun() {

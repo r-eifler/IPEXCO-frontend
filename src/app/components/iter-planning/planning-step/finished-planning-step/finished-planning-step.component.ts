@@ -6,6 +6,7 @@ import {ExecutionSettingsService} from 'src/app/service/settings/execution-setti
 import {Subject} from 'rxjs';
 import {PlanAnimationViewComponent} from '../plan-animation-view/plan-animation-view.component';
 import {SelectedPlanRunService} from '../../../../service/planner-runs/selected-planrun.service';
+import {TimeLoggerService} from '../../../../service/logger/time-logger.service';
 
 
 @Component({
@@ -15,6 +16,7 @@ import {SelectedPlanRunService} from '../../../../service/planner-runs/selected-
 })
 export class FinishedPlanningStepComponent implements OnInit, OnDestroy {
 
+  private loggerId: number;
   hasPlan = false;
 
   @ViewChild('planAnimationView') planAnimationComponent: PlanAnimationViewComponent;
@@ -22,6 +24,7 @@ export class FinishedPlanningStepComponent implements OnInit, OnDestroy {
   private ngUnsubscribe: Subject<any> = new Subject();
 
   constructor(
+    private timeLogger: TimeLoggerService,
     private route: ActivatedRoute,
     private router: Router,
     public settingsService: ExecutionSettingsService,
@@ -35,6 +38,9 @@ export class FinishedPlanningStepComponent implements OnInit, OnDestroy {
     .pipe(takeUntil(this.ngUnsubscribe))
     .subscribe(run => {
       if (run) {
+        if (this.loggerId) {
+          this.timeLogger.addInfo(this.loggerId, 'runId: ' + run._id);
+        }
         currentRunService.saveObject(run);
         if (run.plan) {
           this.hasPlan = true;
@@ -44,11 +50,13 @@ export class FinishedPlanningStepComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.loggerId = this.timeLogger.register('task-overview');
   }
 
   ngOnDestroy(): void {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
+    this.timeLogger.deregister(this.loggerId);
   }
 
   async newQuestion() {
