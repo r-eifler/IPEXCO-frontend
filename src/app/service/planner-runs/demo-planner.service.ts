@@ -49,7 +49,7 @@ export class DemoPlannerService extends PlannerService {
     }
 
 
-    private static filterMUGS(questionPlanProperties: string[], demo: Demo, planProperty: PlanProperty[]): string [][] {
+    private static filterMUGS(questionPlanProperties: string[], demo: Demo): string [][] {
       const filteredMugs = [];
       for (const mugs of demo.data.MUGS) {
         for (const propertyGoalFact of questionPlanProperties) {
@@ -96,10 +96,15 @@ export class DemoPlannerService extends PlannerService {
       this.plannerBusy.next(true);
       const demo: Demo = this.runningDemoService.getSelectedObject().getValue();
 
-      // plan property hard goals which were no hard goals in the plan run
-      const questionPlanProperties = expRun.hardGoals.filter(hg => !planRun.hardGoals.some(c => hg === c));
+      // question: goals which were no hard goals in the plan run
+      // if question is empty then the question is: Why unsolvable
+      const question = expRun.hardGoals.filter(hg => !planRun.hardGoals.some(c => hg === c));
 
-      expRun.mugs = DemoPlannerService.filterMUGS(questionPlanProperties, demo, expRun.planProperties);
+      if (question.length > 0) {
+        expRun.mugs = DemoPlannerService.filterMUGS(question, demo);
+      } else {
+        expRun.mugs = demo.data.MUGS;
+      }
 
       planRun.explanationRuns.push(expRun);
       this.listStore.dispatch({type: EDIT, data: planRun});

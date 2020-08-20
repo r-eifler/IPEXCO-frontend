@@ -15,6 +15,7 @@ export class QuestionViewComponent implements OnInit, OnDestroy {
 
   private ngUnsubscribe: Subject<any> = new Subject();
 
+  public solvable: boolean;
   currentRun$: Observable<PlanRun>;
   currentQuestion$: Observable<ExplanationRun>;
   planProperties$: Observable<Map<string, PlanProperty>>;
@@ -40,9 +41,12 @@ export class QuestionViewComponent implements OnInit, OnDestroy {
     .subscribe(([run, question, planProperties]) => {
       this.question = [];
       if (run && question && planProperties.size > 0) {
-        this.currentHardGoals = run.hardGoals;
-        const questionElements = this.arrayMinus(question.hardGoals, this.currentHardGoals.map(value => (value)));
-        this.question = questionElements.map(elem => planProperties.get(elem));
+        this.solvable = !! run.plan;
+        if (this.solvable){
+          this.currentHardGoals = run.hardGoals;
+          const questionElements = this.arrayMinus(question.hardGoals, this.currentHardGoals.map(value => (value)));
+          this.question = questionElements.map(elem => planProperties.get(elem));
+        }
       }
     });
   }

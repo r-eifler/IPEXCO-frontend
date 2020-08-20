@@ -1,9 +1,10 @@
 <div style="width: 100%; height: 100%;">
-  <mat-card style="margin: 10px">
+  <mat-card *ngIf="solved" style="margin: 10px">
       <mat-card-header>
-          <mat-card-title>Why not ... ?</mat-card-title>
+          <mat-card-title>Question</mat-card-title>
       </mat-card-header>
       <mat-card-content>
+        <h2>Why not ... ?</h2>
         <mat-selection-list #planPropertiesList (selectionChange)="onSelectionChange($event)">
           <mat-list-option *ngFor="let property of notSatPlanProperties; last as last"
           [disabled]="maxSizeQuestionReached && ! this.question.includes(property)"
@@ -20,6 +21,20 @@
           Get Answer
         </button>
       </mat-card-actions>
+  </mat-card>
+
+  <mat-card *ngIf="! solved" style="margin: 10px">
+    <mat-card-header>
+      <mat-card-title>Question</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <h2>Why is the selection of hard goals unsolvable?</h2>
+    </mat-card-content>
+    <mat-card-actions align="end">
+      <button mat-flat-button color="accent" (click)="compute_dependencies_unsolvable()">
+        Get Answer
+      </button>
+    </mat-card-actions>
   </mat-card>
 
 </div>

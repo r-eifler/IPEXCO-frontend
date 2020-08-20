@@ -15,7 +15,7 @@
       </button>
       <button mat-stroked-button [routerLink]="('./planning-step/' + selectedPlan?._id + '/new-question')"
               *ngIf="(settingsService.getSelectedObject()| async)?.allowQuestions"
-              [disabled]="! selectedPlan?.plan">
+              [disabled]="! (selectedPlan?.status == runStatus.finished || selectedPlan?.status == runStatus.noSolution)">
         Ask Question
       </button>
     </div>

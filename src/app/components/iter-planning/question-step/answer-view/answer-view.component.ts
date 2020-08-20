@@ -25,7 +25,8 @@ export class AnswerViewComponent implements OnInit, OnDestroy {
   currentRun$: Observable<PlanRun>;
   currentQuestion$: Observable<ExplanationRun>;
 
-  planExists = true;
+  public solvable: boolean;
+  planForQuestionExists = true;
 
   filteredMUGS: PlanProperty[][] = [];
 
@@ -52,33 +53,59 @@ export class AnswerViewComponent implements OnInit, OnDestroy {
       ([planRun, expRun, planProperties]) => {
         if (planRun && expRun && planProperties) {
           this.timeLogger.addInfo(this.loggerId, 'runId: ' + planRun._id);
-          this.timeLogger.addInfo(this.loggerId, 'exprunId: ' + expRun._id);
-          this.filteredMUGS = [];
-          // console.log('MUGS:');
-          // console.log(expRun.mugs);
-          for (const entry of expRun.mugs) {
-            const planPropertiesEntry: PlanProperty[] = [];
-            let containsOnlyGlobalHardGoals = true;
-            for (const fact of entry) {
-              const p = planProperties.get(fact);
-              containsOnlyGlobalHardGoals = containsOnlyGlobalHardGoals && p.globalHardGoal;
-              // only show property if it is satisfied by the corresponding plan run
-              if (planRun.satPlanProperties.find(v => v === fact) || planRun.hardGoals.find(v => v === fact)) {
-                planPropertiesEntry.push(p);
-              }
-            }
-            if (containsOnlyGlobalHardGoals) {
-              this.planExists = false;
-              return;
-            }
-            if (planPropertiesEntry.length === 0) {
-              continue;
-            }
-            this.filteredMUGS.push(planPropertiesEntry);
+          this.timeLogger.addInfo(this.loggerId, 'expRunId: ' + expRun._id);
+
+          this.solvable = !!planRun.plan;
+
+          if (this.solvable) {
+            this.filterMUGSolvable(planRun, expRun, planProperties);
+          } else {
+            this.filterMUGSUnsolvable(planRun, expRun, planProperties);
           }
         }
       }
     );
+  }
+
+  private filterMUGSolvable(planRun: PlanRun, expRun: ExplanationRun, planProperties: Map<string, PlanProperty>){
+    this.filteredMUGS = [];
+    // console.log('MUGS:');
+    // console.log(expRun.mugs);
+    for (const entry of expRun.mugs) {
+      const planPropertiesEntry: PlanProperty[] = [];
+      let containsOnlyGlobalHardGoals = true;
+      for (const fact of entry) {
+        const p = planProperties.get(fact);
+        containsOnlyGlobalHardGoals = containsOnlyGlobalHardGoals && p.globalHardGoal;
+        // only show property if it is satisfied by the corresponding plan run
+        if (planRun.satPlanProperties.find(v => v === fact) || planRun.hardGoals.find(v => v === fact)) {
+          planPropertiesEntry.push(p);
+        }
+      }
+      if (containsOnlyGlobalHardGoals) {
+        this.planForQuestionExists = false;
+        return;
+      }
+      if (planPropertiesEntry.length === 0) {
+        continue;
+      }
+      this.filteredMUGS.push(planPropertiesEntry);
+    }
+  }
+
+  private filterMUGSUnsolvable(planRun: PlanRun, expRun: ExplanationRun, planProperties: Map<string, PlanProperty>) {
+    this.filteredMUGS = [];
+    console.log('MUGS:');
+    console.log(expRun.mugs);
+    for (const entry of expRun.mugs) {
+      if (this.isSubsetEq(entry, planRun.hardGoals)) {
+        this.filteredMUGS.push(entry.map(e => planProperties.get(e)));
+      }
+    }
+  }
+
+  private isSubsetEq(a1: string[], a2: string[]): boolean {
+    return a1.every(p => a2.includes(p));
   }
 
   ngOnDestroy(): void {

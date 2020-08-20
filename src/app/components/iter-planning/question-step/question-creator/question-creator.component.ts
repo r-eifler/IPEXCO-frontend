@@ -24,6 +24,8 @@ export class QuestionCreatorComponent implements OnInit, OnDestroy {
   private loggerId: number;
   private ngUnsubscribe: Subject<any> = new Subject();
 
+  public solved: boolean;
+
   @ViewChild('planPropertiesList') questionSelectionList: MatSelectionList;
   question: PlanProperty[] = [];
 
@@ -31,6 +33,7 @@ export class QuestionCreatorComponent implements OnInit, OnDestroy {
   notSatPlanProperties: PlanProperty[];
   private currentRun: PlanRun;
   private hardGoals: string[];
+  private globalHardGoals: PlanProperty[];
 
   private currentProject: Project;
 
@@ -57,7 +60,8 @@ export class QuestionCreatorComponent implements OnInit, OnDestroy {
     this.currentRunService.getSelectedObject()
     .pipe(takeUntil(this.ngUnsubscribe))
     .subscribe(run => {
-      if (run != null) {
+      if (run) {
+        this.solved = !!run.plan;
         if (! this.loggerId) {
           this.loggerId = this.timeLogger.register('question-creator');
         }
@@ -70,8 +74,12 @@ export class QuestionCreatorComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe(properties => {
           this.allPlanProperties = [...properties.values()].filter(p => p.isUsed);
-          this.notSatPlanProperties = this.allPlanProperties.filter(
-            p => ! this.currentRun.satPlanProperties.includes(p.name) && ! this.currentRun.hardGoals.includes(p.name));
+          if (this.solved) {
+            this.notSatPlanProperties = this.allPlanProperties.filter(
+              p => !this.currentRun.satPlanProperties.includes(p.name) && !this.currentRun.hardGoals.includes(p.name));
+          } else {
+            this.globalHardGoals = this.allPlanProperties.filter(p => p.isUsed && p.globalHardGoal);
+          }
         });
       }
     });
@@ -115,6 +123,27 @@ export class QuestionCreatorComponent implements OnInit, OnDestroy {
 
     this.plannerService.execute_mugs_run(this.currentRun, expRun);
     await this.router.navigate([this.redirectURL], { relativeTo: this.route });
+    this.timeLogger.addInfo(this.loggerId, 'question asked');
+  }
+
+  async compute_dependencies_unsolvable() {
+    const globalHardGoalNames = this.globalHardGoals.map(p => p.name);
+    const expRun: ExplanationRun = {
+      _id: this.currentRun.explanationRuns.length.toString(),
+      name: 'Question ' + (this.currentRun.explanationRuns.length + 1),
+      status: null,
+      type: RunType.mugs,
+      planProperties: this.allPlanProperties.filter(p => this.hardGoals.find( hg => hg === p.name)),
+      softGoals: this.hardGoals.filter(hg => ! globalHardGoalNames.find( ghg => hg === ghg)),
+      hardGoals: globalHardGoalNames,
+      result: null,
+      log: null,
+    };
+
+    this.plannerService.execute_mugs_run(this.currentRun, expRun);
+
+    await this.router.navigate([this.redirectURL], { relativeTo: this.route });
+
     this.timeLogger.addInfo(this.loggerId, 'question asked');
   }
 

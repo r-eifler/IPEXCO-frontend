@@ -1,4 +1,4 @@
-<mat-card style="margin: 10px;">
+<mat-card *ngIf="solvable" style="margin: 10px;">
   <mat-card-header>
     <div mat-card-avatar>
       <mat-icon>question_answer</mat-icon>
@@ -8,7 +8,7 @@
     </mat-card-title>
   </mat-card-header>
   <mat-card-content>
-    <ng-container *ngIf="planExists && filteredMUGS.length > 0">
+    <ng-container *ngIf="planForQuestionExists && filteredMUGS.length > 0">
       <h2>... because then you have to live without:</h2>
       <div *ngFor="let mugs of filteredMUGS;last as last">
 <!--        <p *ngIf="last" style="font-size: large; font-weight: bold;">and</p>-->
@@ -24,15 +24,40 @@
 
     </ng-container>
 
-    <p *ngIf="planExists && filteredMUGS.length == 0">
+    <p *ngIf="planForQuestionExists && filteredMUGS.length == 0">
       There exists a plan which satisfies all the plan-properties.
     </p>
 
-    <p *ngIf="! planExists">
+    <p *ngIf="! planForQuestionExists">
       There is no plan which satisfies this properties.
       All global hard goals and the plan-properties in the question can not be satisfied together.
     </p>
 
+  </mat-card-content>
+</mat-card>
+
+
+<mat-card *ngIf="! solvable" style="margin: 10px;">
+  <mat-card-header>
+    <div mat-card-avatar>
+      <mat-icon>question_answer</mat-icon>
+    </div>
+    <mat-card-title>
+      Answer
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+      <h2>... because you can not satisfy all properties in:</h2>
+      <div *ngFor="let mugs of filteredMUGS;last as last">
+        <mat-list>
+          <mat-list-item *ngFor="let elem of mugs;last as last">
+            <p *ngIf="! last">{{elem.naturalLanguageDescription}}</p>
+            <p *ngIf="last">{{elem.naturalLanguageDescription}}</p>
+            <mat-divider *ngIf="! last"></mat-divider>
+          </mat-list-item>
+        </mat-list>
+        <p *ngIf="! last">or all in:</p>
+      </div>
   </mat-card-content>
 </mat-card>
 
