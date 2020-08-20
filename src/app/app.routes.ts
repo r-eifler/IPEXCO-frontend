@@ -25,7 +25,6 @@ import {UserStudyExecuteComponent} from './components/user-study/user-study-exec
 import {UserStudyEndComponent} from './components/user-study/user-study-end/user-study-end.component';
 import {AuthGuard} from './route-guards/auth-guard.guard';
 import {QuestionCreatorGuard} from './route-guards/question-creator.guard';
-import {SelectedPlanViewComponent} from './components/iter-planning/demo-view/selected-plan-view/selected-plan-view.component';
 
 export const appRoutes: Routes = [
   { path: '', component: MainPageComponent},
@@ -53,7 +52,7 @@ export const appRoutes: Routes = [
   { path: 'demos/:demoid', component: DemoBaseComponent,
     children: [
       { path: 'new-planning-step', component: PlanningStepComponent},
-      { path: 'planning-step/:runid', component: SelectedPlanViewComponent},
+      { path: 'planning-step/:runid', component: FinishedPlanningStepComponent},
       { path: 'planning-step/:runid/new-question', component: QuestionStepComponent, canDeactivate: [QuestionCreatorGuard]},
       { path: 'planning-step/:runid/question-step/:expid', component: FinishedQuestionStepComponent}
     ]
