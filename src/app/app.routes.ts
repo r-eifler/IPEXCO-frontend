@@ -49,14 +49,7 @@ export const appRoutes: Routes = [
     ]
   },
   { path: 'demos', component: DemoCollectionComponent},
-  { path: 'demos/:demoid', component: DemoBaseComponent,
-    children: [
-      { path: 'new-planning-step', component: PlanningStepComponent},
-      { path: 'planning-step/:runid', component: FinishedPlanningStepComponent},
-      { path: 'planning-step/:runid/new-question', component: QuestionStepComponent, canDeactivate: [QuestionCreatorGuard]},
-      { path: 'planning-step/:runid/question-step/:expid', component: FinishedQuestionStepComponent}
-    ]
-  },
+  { path: 'demos/:demoid', component: DemoBaseComponent},
   { path: 'user-studies', component: UserStudyCollectionComponent},
   { path: 'user-studies/new-user-study', component: UserStudyCreatorComponent},
   { path: 'user-studies/:userStudyId', component: UserStudyBaseComponent,

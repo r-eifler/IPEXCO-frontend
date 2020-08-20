@@ -1,19 +1,24 @@
 <div style="width: 100%; height: 100%;">
-  <mat-card *ngIf="solved" style="margin: 10px">
+  <mat-card *ngIf="solved" style="margin: 10px; position: relative">
       <mat-card-header>
-          <mat-card-title>Question</mat-card-title>
+        <mat-card-title>Question</mat-card-title>
+        <button mat-icon-button (click)="abortWithoutQuestion()" style="position: absolute; top: 5px; right: 5px">
+          <mat-icon>close</mat-icon>
+        </button>
       </mat-card-header>
       <mat-card-content>
         <h2>Why not ... ?</h2>
         <mat-selection-list #planPropertiesList (selectionChange)="onSelectionChange($event)">
-          <mat-list-option *ngFor="let property of notSatPlanProperties; last as last"
-          [disabled]="maxSizeQuestionReached && ! this.question.includes(property)"
-          checkboxPosition="before" [value]="property">
-            <p matLine> {{property.naturalLanguageDescription}} </p>
-            <p matLine *ngIf="(settingsService.getSelectedObject() | async).usePlanPropertyValues"> Utility: {{property.value}} </p>
+          <ng-container *ngFor="let property of notSatPlanProperties; last as last">
+            <mat-list-option
+            [disabled]="maxSizeQuestionReached && ! this.question.includes(property)"
+            checkboxPosition="before" [value]="property"
+            style="box-sizing: border-box; height:auto; padding: 10px;">
+              <p> {{property.naturalLanguageDescription}} </p>
+              <p *ngIf="(settingsService.getSelectedObject() | async).usePlanPropertyValues"> Utility: {{property.value}} </p>
+            </mat-list-option>
             <mat-divider [inset]="true" *ngIf="!last"></mat-divider>
-          </mat-list-option>
-
+          </ng-container>
         </mat-selection-list>
       </mat-card-content>
       <mat-card-actions align="end">

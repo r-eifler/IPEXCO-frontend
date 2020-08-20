@@ -1,7 +1,7 @@
 import {PlanProperty} from 'src/app/interface/plan-property/plan-property';
 import {takeUntil} from 'rxjs/operators';
 import {QUESTION_REDIRECT} from '../../../../app.tokens';
-import {Component, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Inject, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
 import {Observable, Subject} from 'rxjs';
 import {Project} from '../../../../interface/project';
 import {PlannerService} from '../../../../service/planner-runs/planner.service';
@@ -25,6 +25,8 @@ export class QuestionCreatorComponent implements OnInit, OnDestroy {
   private ngUnsubscribe: Subject<any> = new Subject();
 
   public solved: boolean;
+
+  @Output() finished = new EventEmitter<boolean>();
 
   @ViewChild('planPropertiesList') questionSelectionList: MatSelectionList;
   question: PlanProperty[] = [];
@@ -122,7 +124,8 @@ export class QuestionCreatorComponent implements OnInit, OnDestroy {
     };
 
     this.plannerService.execute_mugs_run(this.currentRun, expRun);
-    await this.router.navigate([this.redirectURL], { relativeTo: this.route });
+    //await this.router.navigate([this.redirectURL], { relativeTo: this.route });
+    this.finished.emit(true);
     this.timeLogger.addInfo(this.loggerId, 'question asked');
   }
 
@@ -142,9 +145,14 @@ export class QuestionCreatorComponent implements OnInit, OnDestroy {
 
     this.plannerService.execute_mugs_run(this.currentRun, expRun);
 
-    await this.router.navigate([this.redirectURL], { relativeTo: this.route });
-
+    //await this.router.navigate([this.redirectURL], { relativeTo: this.route });
+    this.finished.emit(true);
     this.timeLogger.addInfo(this.loggerId, 'question asked');
+  }
+
+  abortWithoutQuestion() {
+    this.finished.emit(false);
+    this.timeLogger.addInfo(this.loggerId, 'abort');
   }
 
 }

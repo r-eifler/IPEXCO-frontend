@@ -1,8 +1,8 @@
 
   <mat-card class="card-style">
-    <mat-card-header style="display: flex; justify-content: space-between;">
+    <mat-card-header>
       <mat-card-title>New Plan</mat-card-title>
-      <button mat-icon-button (click)="abortWithoutPlan()">
+      <button mat-icon-button (click)="abortWithoutPlan()" style="position: absolute; top: 5px; right: 5px">
         <mat-icon>close</mat-icon>
       </button>
     </mat-card-header>
@@ -11,14 +11,14 @@
       <div class="header-container">
         <h1 style="margin: 20px 20px;">Global hard-goals: </h1>
       </div>
-      <mat-list *ngIf="hasGlobalHardGoals">
+      <ng-container *ngIf="hasGlobalHardGoals">
         <ng-container *ngFor="let item of planProperties">
-          <mat-list-item *ngIf="item.globalHardGoal">
-            <p matLine> {{item.naturalLanguageDescription}} </p>
-            <p matLine *ngIf="(settingsService.getSelectedObject() | async).usePlanPropertyValues"> Utility: {{item.value}} </p>
-          </mat-list-item>
+          <app-scalable-list *ngIf="item.globalHardGoal">
+            <span> {{item.naturalLanguageDescription}} </span>
+            <span *ngIf="(settingsService.getSelectedObject() | async).usePlanPropertyValues"> Utility: {{item.value}} </span>
+          </app-scalable-list>
         </ng-container>
-      </mat-list>
+      </ng-container>
       <h2 *ngIf="! hasGlobalHardGoals" style="margin-left: 30px;">There are no global hard-goals.</h2>
 
       <div class="header-container">
@@ -26,9 +26,10 @@
       </div>
       <mat-selection-list [(ngModel)]="selectedGoalFacts" (selectionChange)="checkComplete()">
         <ng-container *ngFor="let item of planProperties">
-          <mat-list-option *ngIf="! item.globalHardGoal" [value]=item checkboxPosition="before">
-            <p matLine> {{item.naturalLanguageDescription}} </p>
-            <p matLine *ngIf="(settingsService.getSelectedObject() | async).usePlanPropertyValues"> Utility: {{item.value}} </p>
+          <mat-list-option *ngIf="! item.globalHardGoal" [value]=item checkboxPosition="before"
+                           style="box-sizing: border-box; height:auto; padding: 10px;">
+            <p> {{item.naturalLanguageDescription}} </p>
+            <p *ngIf="(settingsService.getSelectedObject() | async).usePlanPropertyValues"> Utility: {{item.value}} </p>
           </mat-list-option>
         </ng-container>
       </mat-selection-list>

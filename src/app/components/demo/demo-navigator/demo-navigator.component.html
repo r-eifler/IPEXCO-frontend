@@ -13,7 +13,7 @@
               [disabled]="(plannerService.isPlannerBusy() | async) || runsService.getNumRuns() >= (settingsService.getSelectedObject()| async)?.maxRuns">
         New Plan
       </button>
-      <button mat-stroked-button [routerLink]="('./planning-step/' + selectedPlan?._id + '/new-question')"
+      <button mat-stroked-button (click)="newQuestion();"
               *ngIf="(settingsService.getSelectedObject()| async)?.allowQuestions"
               [disabled]="! (selectedPlan?.status == runStatus.finished || selectedPlan?.status == runStatus.noSolution)">
         Ask Question
@@ -30,9 +30,8 @@
   <div>
     <nav mat-tab-nav-bar>
       <a mat-tab-link *ngFor="let planRun of  runs$ | async"
-         (click)="selectedPlan = planRun"
+         (click)="selectPlan(planRun)"
          [active]="selectedPlan && selectedPlan._id == planRun._id"
-         [routerLink]="['./planning-step', planRun._id]"
          [disabled]="(plannerService.isPlannerBusy() | async) || !(planRun.status === runStatus.finished || planRun.status === runStatus.noSolution)">
         <span [matBadge]="planRun.planValue?.toString(10)" matBadgeColor="warn" matBadgeOverlap="false">{{planRun.name}}</span>
       </a>
@@ -42,13 +41,16 @@
     </nav>
   </div>
 
-  <div class="bottom-container" [class.three-columns]="!computeNewPlan" [class.four-columns]="computeNewPlan">
+  <div class="bottom-container" [class.two-columns]="!computeNewPlan" [class.three-columns]="computeNewPlan">
     <div style="height: 100%; width: 100%">
       <app-plan-animation-view></app-plan-animation-view>
     </div>
+
     <div class="divider"></div>
-    <div class="router-outlet-container">
-      <router-outlet></router-outlet>
+
+    <div class="center-container" [class.center-one-column]="! askQuestion" [class.center-two-columns]="askQuestion || showAnswer">
+      <app-finished-planning-step *ngIf="selectedPlan"></app-finished-planning-step>
+
       <div *ngIf="! selectedPlan" class="spinner-container">
         <div>
           <h1>Computing plan ...</h1>
@@ -56,7 +58,22 @@
         </div>
       </div>
 
+      <ng-container *ngIf="askQuestion">
+        <div class="divider"></div>
+        <div class="task-creator-container">
+          <app-question-creator (finished)="questionCreatorClose($event)"></app-question-creator>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="showAnswer">
+        <div class="divider"></div>
+        <div class="task-creator-container">
+          <app-question-view></app-question-view>
+          <app-explanation-view (finished)="showAnswer = false"></app-explanation-view>
+        </div>
+      </ng-container>
     </div>
+
     <ng-container *ngIf="computeNewPlan">
       <div class="divider"></div>
       <div class="task-creator-container">

@@ -31,10 +31,7 @@ export class FinishedPlanningStepComponent implements OnInit, OnDestroy {
     private runService: PlanRunsService,
     public currentRunService: SelectedPlanRunService) {
 
-    this.route.paramMap.pipe(
-      switchMap((params: ParamMap) =>
-        this.runService.getObject(params.get('runid')))
-    )
+    this.currentRunService.getSelectedObject()
     .pipe(takeUntil(this.ngUnsubscribe))
     .subscribe(run => {
       if (run) {
@@ -44,7 +41,6 @@ export class FinishedPlanningStepComponent implements OnInit, OnDestroy {
           }
           this.timeLogger.addInfo(this.loggerId, 'runId: ' + run._id);
         }
-        currentRunService.saveObject(run);
         if (run.plan) {
           this.hasPlan = true;
         }

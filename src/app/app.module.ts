@@ -156,6 +156,7 @@ import {SelectedQuestionService} from './service/planner-runs/selected-question.
 import { MarkedPipe } from './pipes/marked.pipe';
 
 import { DemoHelpDialogComponent } from './components/demo/demo-help-dialog/demo-help-dialog.component';
+import { ScalableListComponent } from './components/utils/scalable-list/scalable-list.component';
 
 @NgModule({
   declarations: [
@@ -219,6 +220,7 @@ import { DemoHelpDialogComponent } from './components/demo/demo-help-dialog/demo
     UserStudyEndComponent,
     MarkedPipe,
     DemoHelpDialogComponent,
+    ScalableListComponent,
   ],
   imports: [
     RouterModule.forRoot(appRoutes,

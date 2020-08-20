@@ -2,7 +2,7 @@ import {PlanProperty} from '../../../../interface/plan-property/plan-property';
 import {takeUntil} from 'rxjs/operators';
 import {PlanPropertyMapService} from 'src/app/service/plan-properties/plan-property-services';
 import {combineLatest, Observable, Subject} from 'rxjs';
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
 import {ExplanationRun, PlanRun} from 'src/app/interface/run';
 import {SelectedPlanRunService} from '../../../../service/planner-runs/selected-planrun.service';
 import {SelectedQuestionService} from '../../../../service/planner-runs/selected-question.service';
@@ -21,6 +21,8 @@ export class AnswerViewComponent implements OnInit, OnDestroy {
 
   private loggerId: number;
   private ngUnsubscribe: Subject<any> = new Subject();
+
+  @Output() finished = new EventEmitter();
 
   currentRun$: Observable<PlanRun>;
   currentQuestion$: Observable<ExplanationRun>;
@@ -67,7 +69,7 @@ export class AnswerViewComponent implements OnInit, OnDestroy {
     );
   }
 
-  private filterMUGSolvable(planRun: PlanRun, expRun: ExplanationRun, planProperties: Map<string, PlanProperty>){
+  private filterMUGSolvable(planRun: PlanRun, expRun: ExplanationRun, planProperties: Map<string, PlanProperty>) {
     this.filteredMUGS = [];
     // console.log('MUGS:');
     // console.log(expRun.mugs);
@@ -112,5 +114,9 @@ export class AnswerViewComponent implements OnInit, OnDestroy {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
     this.timeLogger.deregister(this.loggerId);
+  }
+
+  close() {
+    this.finished.emit();
   }
 }

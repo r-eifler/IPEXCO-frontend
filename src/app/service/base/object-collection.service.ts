@@ -67,7 +67,9 @@ export class ObjectCollectionService<T extends Identifiable> {
 
   getObject(id: number | string): Observable<T> {
     // console.log(this.BASE_URL);
-    console.assert(id != null);
+    if (! id ) {
+      throw  new Error('Undefined ID');
+    }
     const o = this.existsObjectInStore(id);
     if (o) {
       const obs$ = new Observable();

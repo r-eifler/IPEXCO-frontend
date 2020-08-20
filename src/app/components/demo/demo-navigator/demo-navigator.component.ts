@@ -1,7 +1,7 @@
 import {DemoFinishedComponent} from './../demo-finished/demo-finished.component';
 import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
 import {Demo} from 'src/app/interface/demo';
-import {BehaviorSubject, Subject} from 'rxjs';
+import {BehaviorSubject, combineLatest, Subject} from 'rxjs';
 import {PlanRun, RunStatus, RunType} from 'src/app/interface/run';
 import {ActivatedRoute, Router} from '@angular/router';
 import {DemosService, RunningDemoService} from 'src/app/service/demo/demo-services';
@@ -19,6 +19,7 @@ import {SelectedPlanRunService} from '../../../service/planner-runs/selected-pla
 import {TimeLoggerService} from '../../../service/logger/time-logger.service';
 import {PlanProperty} from '../../../interface/plan-property/plan-property';
 import {DemoHelpDialogComponent} from '../demo-help-dialog/demo-help-dialog.component';
+import {SelectedQuestionService} from '../../../service/planner-runs/selected-question.service';
 
 @Component({
   selector: 'app-demo-navigator',
@@ -33,6 +34,9 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
   @Output() finishedDemo = new EventEmitter<void>();
 
   computeNewPlan = false;
+  askQuestion = false;
+  showAnswer = false;
+
   selectedPlan: PlanRun = null;
   runStatus = RunStatus;
 
@@ -63,8 +67,9 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
     public runsService: PlanRunsService,
     private domainSpecService: DomainSpecificationService,
     private currentSchemaService: TaskSchemaService,
-    private currentRunService: SelectedPlanRunService,
+    private selectedPlanRunService: SelectedPlanRunService,
     public plannerService: PlannerService,
+    private selectedQuestionService: SelectedQuestionService,
     public dialog: MatDialog
   ) {
 
@@ -99,6 +104,13 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
     this.loggerId = this.timeLogger.register('demo-navigator');
     this.initPlanRuns();
     this.initTimer();
+  }
+
+  ngOnDestroy(): void {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
+    clearInterval(this.timerIntervall);
+    this.timeLogger.deregister(this.loggerId);
   }
 
   finishDemo() {
@@ -177,34 +189,58 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
     this.taskCreatorClose(true);
   }
 
-  ngOnDestroy(): void {
-    this.ngUnsubscribe.next();
-    this.ngUnsubscribe.complete();
-    clearInterval(this.timerIntervall);
-    this.timeLogger.deregister(this.loggerId);
+
+  selectPlan(planRun: PlanRun) {
+    this.selectedPlan = planRun;
+    this.selectedPlanRunService.saveObject(planRun);
+    this.askQuestion = false;
+    this.showAnswer = false;
   }
 
-  async newPlanRun() {
+  newPlanRun() {
     this.computeNewPlan = true;
+  }
+
+  newQuestion() {
+    this.askQuestion = true;
   }
 
   taskCreatorClose(hardGoalsSelected) {
     this.computeNewPlan = false;
     if (hardGoalsSelected) {
       this.selectedPlan = null;
-      this.router.navigate(['.'], {relativeTo: this.route});
       const subscription = this.plannerService.isPlannerBusy()
         .subscribe(
           v => {
             if (!v) {
-              this.selectedPlan = this.runsService.getLastRun();
+              this.selectPlan(this.runsService.getLastRun());
               if (this.selectedPlan) {
-                this.router.navigate(['./planning-step/' + this.selectedPlan._id], {relativeTo: this.route});
                 subscription.unsubscribe();
               }
             }
           }
         );
+    }
+  }
+
+  questionCreatorClose(questionAsked) {
+    this.askQuestion = false;
+    if (questionAsked) {
+      const subscription =  this.plannerService.isPlannerBusy().subscribe(
+        (busy) => {
+          if (! busy) {
+            combineLatest([this.selectedPlanRunService.getSelectedObject(), this.selectedQuestionService.getSelectedObject()])
+              .subscribe(
+                ([planRun, expRun]) => {
+                  if (planRun && expRun) {
+                    this.selectedPlan = planRun;
+                    this.showAnswer = true;
+                    subscription.unsubscribe();
+                  }
+                });
+          }
+        }
+      );
     }
   }
 
