@@ -15,10 +15,11 @@
 
         </mat-selection-list>
       </mat-card-content>
+      <mat-card-actions align="end">
+        <button mat-flat-button color="accent" (click)="compute_dependencies()" [disabled]="question.length  == 0">
+          Get Answer
+        </button>
+      </mat-card-actions>
   </mat-card>
-
-<button mat-fab color="accent" class="add-button" (click)="compute_dependencies()" [disabled]="question.length  == 0">
-  <mat-icon>send</mat-icon>
-</button>
 
 </div>

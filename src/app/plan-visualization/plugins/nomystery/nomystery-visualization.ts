@@ -11,6 +11,7 @@ import {NoMysteryAnimation} from './animation/nomystery-animation';
 import {NoMysteryTask} from './nomystery-task';
 import {gsap} from 'gsap';
 import {Draggable} from 'gsap/Draggable';
+import {Action} from '../../../interface/plan';
 
 
 interface Position {
@@ -111,7 +112,7 @@ export class NoMysteryVisualization extends PlanVisualization {
 
       return new Promise<void>((resolve, reject) => {
         this.taskSchemaService.getSchema().subscribe(async (ts) => {
-          if (ts) {
+          if (ts && ! this.animationTask) {
             this.animationTask = new NoMysteryAnimationTask(new NoMysteryTask(ts), this.animationSettings.locationDropPositions);
             this.animation = new NoMysteryAnimation(this.animationTask);
 
@@ -133,21 +134,21 @@ export class NoMysteryVisualization extends PlanVisualization {
   }
 
 
-  animateAction(action: import('../../../interface/plan').Action): Promise<void> {
+  animateAction(action: Action): Promise<void> {
     return this.animation.animateAction(action);
   }
 
-  reverseAnimateAction(action: import('../../../interface/plan').Action): Promise<void> {
+  reverseAnimateAction(action: Action): Promise<void> {
     return this.animation.reverseAnimateAction(action);
   }
 
   restart(): void {
-    return this.animation.initPositions();
+    this.animation?.initPositions();
   }
 
   update() {
     if (this.newRunLoaded) {
-      this.animation.initPositions();
+      this.animation?.initPositions();
       this.newRunLoaded = false;
     }
   }

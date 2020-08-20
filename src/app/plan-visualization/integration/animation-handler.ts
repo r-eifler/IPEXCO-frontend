@@ -17,6 +17,7 @@ private paused = true;
 public currentAnimationHasNextEvent: BehaviorSubject<boolean> = new BehaviorSubject(true);
 public currentAnimationHasPreviousEvent: BehaviorSubject<boolean> = new BehaviorSubject(false);
 public currentAnimationPausedEvent: BehaviorSubject<boolean> = new BehaviorSubject(true);
+public hasAnimation: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
 
 constructor(
@@ -25,6 +26,12 @@ constructor(
     this.currentRunService.getSelectedObject().subscribe((run) => {
       if (run) {
         this.plan = run.plan;
+        this.animation.update();
+        if (this.plan) {
+          this.hasAnimation.next(true);
+        } else {
+          this.hasAnimation.next(false);
+        }
       }
     });
 }

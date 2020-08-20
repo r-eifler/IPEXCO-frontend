@@ -154,9 +154,12 @@ import {UserStudyEndComponent} from './components/user-study/user-study-end/user
 import {SelectedPlanRunService} from './service/planner-runs/selected-planrun.service';
 import {SelectedQuestionService} from './service/planner-runs/selected-question.service';
 import { MarkedPipe } from './pipes/marked.pipe';
+
 import { PlanSelectionQuestionViewComponent } from './components/iter-planning/demo-view/plan-selection-question-view/plan-selection-question-view.component';
 import { SelectedPlanViewComponent } from './components/iter-planning/demo-view/selected-plan-view/selected-plan-view.component';
 import { QuestionDialogComponent } from './components/iter-planning/demo-view/question-dialog/question-dialog.component';
+import { DemoHelpDialogComponent } from './components/demo/demo-help-dialog/demo-help-dialog.component';
+
 
 @NgModule({
   declarations: [
@@ -222,6 +225,7 @@ import { QuestionDialogComponent } from './components/iter-planning/demo-view/qu
     PlanSelectionQuestionViewComponent,
     SelectedPlanViewComponent,
     QuestionDialogComponent,
+    DemoHelpDialogComponent,
   ],
   imports: [
     RouterModule.forRoot(appRoutes,

@@ -7,54 +7,65 @@
       <span>Timer:</span>  {{timer | date:'mm:ss'}}
     </div>
   </div>
-  <div class="plan-question-container">
-    <ng-container *ngFor="let planRun of  runs$ | async">
-      <div class="run-container">
-        <mat-card class="run-card">
-          <mat-card-header>
-            <mat-card-title>{{planRun.name}}</mat-card-title>
-          </mat-card-header>
-          <mat-card-content>
-          </mat-card-content>
-          <mat-card-actions>
-            <button mat-flat-button color="primary"
-                    [disabled]="!(planRun.status === runStatus.finished || planRun.status === runStatus.noSolution)"
-                    [routerLink]="['./planning-step', planRun._id]">Details
-            </button>
-          </mat-card-actions>
-        </mat-card>
+  <div class="action-container">
+    <div class="iter-planning-buttons">
+      <button mat-stroked-button (click)="newPlanRun()"
+              [disabled]="(plannerService.isPlannerBusy() | async) || runsService.getNumRuns() >= (settingsService.getSelectedObject()| async)?.maxRuns">
+        New Plan
+      </button>
+      <button mat-stroked-button [routerLink]="('./planning-step/' + selectedPlan?._id + '/new-question')"
+              *ngIf="(settingsService.getSelectedObject()| async)?.allowQuestions"
+              [disabled]="! selectedPlan?.plan">
+        Ask Question
+      </button>
+    </div>
+    <button mat-stroked-button (click)="finishDemo()">
+      Finish Demo
+    </button>
+    <button mat-stroked-button (click)="showDemoHelp()">
+      Help
+    </button>
+  </div>
 
-<!--        <ng-container *ngFor="let expRun of planRun.explanationRuns">-->
-<!--          <mat-card class="question-card">-->
-<!--            <mat-card-header>-->
-<!--              <mat-card-title>{{expRun.name}}</mat-card-title>-->
-<!--            </mat-card-header>-->
-<!--            <mat-card-content>-->
-<!--            </mat-card-content>-->
-<!--            <mat-card-actions>-->
-<!--              <button mat-flat-button color="primary" [routerLink]="['./planning-step', planRun._id, 'question-step', expRun._id]">Details</button>-->
-<!--            </mat-card-actions>-->
-<!--          </mat-card>-->
-<!--        </ng-container>-->
+  <div>
+    <nav mat-tab-nav-bar>
+      <a mat-tab-link *ngFor="let planRun of  runs$ | async"
+         (click)="selectedPlan = planRun"
+         [active]="selectedPlan && selectedPlan._id == planRun._id"
+         [routerLink]="['./planning-step', planRun._id]"
+         [disabled]="(plannerService.isPlannerBusy() | async) || !(planRun.status === runStatus.finished || planRun.status === runStatus.noSolution)">
+        <span [matBadge]="planRun.planValue?.toString(10)" matBadgeColor="warn" matBadgeOverlap="false">{{planRun.name}}</span>
+      </a>
+      <a mat-tab-link *ngIf="(plannerService.isPlannerBusy() | async)" style="padding: 5px">
+        <mat-spinner [diameter]="30"></mat-spinner>
+      </a>
+    </nav>
+  </div>
 
+  <div class="bottom-container" [class.three-columns]="!computeNewPlan" [class.four-columns]="computeNewPlan">
+    <div style="height: 100%; width: 100%">
+      <app-plan-animation-view></app-plan-animation-view>
+    </div>
+    <div class="divider"></div>
+    <div class="router-outlet-container">
+      <router-outlet></router-outlet>
+      <div *ngIf="! selectedPlan" class="spinner-container">
+        <div>
+          <h1>Computing plan ...</h1>
+          <mat-spinner  diameter="200"></mat-spinner>
+        </div>
+      </div>
+
+    </div>
+    <ng-container *ngIf="computeNewPlan">
+      <div class="divider"></div>
+      <div class="task-creator-container">
+        <app-task-creator (finished)="taskCreatorClose($event)"></app-task-creator>
       </div>
     </ng-container>
 
-    <mat-spinner class="add-plan-button" [diameter]="40" color="accent"
-                 *ngIf="(plannerService.isPlannerBusy() | async)">
-    </mat-spinner>
-    <button mat-fab color="accent" class="add-plan-button" (click)="newPlanRun()"
-       *ngIf="!(plannerService.isPlannerBusy() | async)"
-      [disabled]="runsService.getNumRuns() >= (settingsService.getSelectedObject()| async)?.maxRuns">
-      <mat-icon>add</mat-icon>
-    </button>
-    <button mat-fab color="primary" class="finish-demo-button" (click)="finishDemo()">
-      <mat-icon>done</mat-icon>
-    </button>
-
-
   </div>
-  <div class="router-outlet-container">
-    <router-outlet></router-outlet>
-  </div>
+
 </div>
+
+<!--              <button mat-flat-button color="primary" [routerLink]="['./planning-step', planRun._id, 'question-step', expRun._id]">Details</button>-->

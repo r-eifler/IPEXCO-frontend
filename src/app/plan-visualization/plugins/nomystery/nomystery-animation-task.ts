@@ -85,6 +85,7 @@ export class AnimationTruck extends AnimationNode {
   }
 
   setInitPosition() {
+    console.log('init Truck location');
     this.loadedPackages = [];
     this.x = this.startLocation.x;
     this.y = this.startLocation.y;
