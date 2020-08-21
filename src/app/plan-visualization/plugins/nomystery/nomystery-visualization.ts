@@ -87,8 +87,8 @@ export class NoMysteryVisualization extends PlanVisualization {
   async init() {
 
     this.mainSVG = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    this.mainSVG.style.height = '1000px';
-    this.mainSVG.style.width = '1000px';
+    this.mainSVG.style.height = '100%';
+    this.mainSVG.style.width = '100%';
 
     gsap.registerPlugin(Draggable);
     // tslint:disable-next-line:no-unused-expression

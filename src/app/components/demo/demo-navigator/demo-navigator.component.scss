@@ -5,6 +5,7 @@
   height: 100%;
   display: grid;
   grid-template-rows: auto auto auto 1fr;
+  //overflow: hidden;
 }
 
 .info-container {
@@ -38,7 +39,6 @@
   height: 100%;
   width: 100%;
   display: grid;
-  overflow: scroll;
 }
 
 .two-columns {

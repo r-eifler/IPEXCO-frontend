@@ -10,7 +10,7 @@ import {PlanPropertyMapService} from 'src/app/service/plan-properties/plan-prope
 import {PlanRunsService} from 'src/app/service/planner-runs/planruns.service';
 import {DomainSpecificationService} from 'src/app/service/files/domain-specification.service';
 import {TaskSchemaService} from 'src/app/service/task-info/schema.service';
-import {takeUntil} from 'rxjs/operators';
+import {take, takeUntil, takeWhile} from 'rxjs/operators';
 import {ExecutionSettingsService} from 'src/app/service/settings/execution-settings.service';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {ExecutionSettings} from '../../../interface/settings/execution-settings';
@@ -36,6 +36,7 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
   computeNewPlan = false;
   askQuestion = false;
   showAnswer = false;
+  plannerBusy = false;
 
   selectedPlan: PlanRun = null;
   runStatus = RunStatus;
@@ -205,18 +206,17 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
     this.askQuestion = true;
   }
 
+
   taskCreatorClose(hardGoalsSelected) {
     this.computeNewPlan = false;
     if (hardGoalsSelected) {
       this.selectedPlan = null;
-      const subscription = this.plannerService.isPlannerBusy()
+      this.plannerService.isPlannerBusy()
+        .pipe(takeWhile(v => v, true))
         .subscribe(
-          v => {
-            if (!v) {
+          busy => {
+            if (!busy) {
               this.selectPlan(this.runsService.getLastRun());
-              if (this.selectedPlan) {
-                subscription.unsubscribe();
-              }
             }
           }
         );
@@ -226,18 +226,17 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
   questionCreatorClose(questionAsked) {
     this.askQuestion = false;
     if (questionAsked) {
-      const subscription =  this.plannerService.isPlannerBusy().subscribe(
+      this.plannerService.isPlannerBusy()
+        .pipe(takeWhile(v => v, true))
+        .subscribe(
         (busy) => {
           if (! busy) {
-            combineLatest([this.selectedPlanRunService.getSelectedObject(), this.selectedQuestionService.getSelectedObject()])
-              .subscribe(
-                ([planRun, expRun]) => {
-                  if (planRun && expRun) {
-                    this.selectedPlan = planRun;
-                    this.showAnswer = true;
-                    subscription.unsubscribe();
-                  }
-                });
+            const planRun = this.selectedPlanRunService.getSelectedObject().getValue();
+            const expRun = this.selectedQuestionService.getSelectedObject().getValue();
+            if (planRun && expRun) {
+              this.selectedPlan = planRun;
+              this.showAnswer = true;
+            }
           }
         }
       );
