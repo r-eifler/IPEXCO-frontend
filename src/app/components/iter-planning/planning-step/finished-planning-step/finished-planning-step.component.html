@@ -7,6 +7,10 @@
       Plan
     </a>
   </nav>
-  <app-task-view *ngIf="showTab == 1"></app-task-view>
-  <app-plan-view *ngIf="showTab == 2"></app-plan-view>
+  <div class="content-container" *ngIf="showTab == 1">
+    <app-task-view ></app-task-view>
+  </div>
+  <div class="content-container" *ngIf="showTab == 2">
+    <app-plan-view></app-plan-view>
+  </div>
 </div>
