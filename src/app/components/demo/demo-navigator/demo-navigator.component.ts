@@ -209,6 +209,8 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
 
   taskCreatorClose(hardGoalsSelected) {
     this.computeNewPlan = false;
+    this.askQuestion = false;
+    this.showAnswer = false;
     if (hardGoalsSelected) {
       this.selectedPlan = null;
       this.plannerService.isPlannerBusy()

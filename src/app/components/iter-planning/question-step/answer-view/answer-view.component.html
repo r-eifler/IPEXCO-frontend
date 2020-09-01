@@ -48,20 +48,19 @@
     <mat-card-title>
       Answer
     </mat-card-title>
-    <button mat-icon-button (click)="close()">
+    <button mat-icon-button (click)="close()" style="position: absolute; top: 5px; right: 5px">
       <mat-icon>close</mat-icon>
     </button>
   </mat-card-header>
   <mat-card-content>
       <h2>... because you can not satisfy all properties in:</h2>
       <div *ngFor="let mugs of filteredMUGS;last as last">
-        <mat-list>
-          <mat-list-item *ngFor="let elem of mugs;last as last">
-            <p *ngIf="! last">{{elem.naturalLanguageDescription}}</p>
-            <p *ngIf="last">{{elem.naturalLanguageDescription}}</p>
-            <mat-divider *ngIf="! last"></mat-divider>
-          </mat-list-item>
-        </mat-list>
+        <ng-container *ngFor="let elem of mugs;last as last2">
+          <app-scalable-list>
+            <p>{{elem.naturalLanguageDescription}}</p>
+          </app-scalable-list>
+          <mat-divider [inset]="true" *ngIf="! last2"></mat-divider>
+        </ng-container>
         <p *ngIf="! last">or all in:</p>
       </div>
   </mat-card-content>

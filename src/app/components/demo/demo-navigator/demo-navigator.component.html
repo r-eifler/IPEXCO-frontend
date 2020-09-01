@@ -60,14 +60,14 @@
         </div>
       </div>
 
-      <ng-container *ngIf="askQuestion">
+      <ng-container *ngIf="askQuestion && selectedPlan">
         <div class="divider"></div>
         <div class="task-creator-container">
           <app-question-creator style="height: 100%;overflow: auto;" (finished)="questionCreatorClose($event)"></app-question-creator>
         </div>
       </ng-container>
 
-      <ng-container *ngIf="showAnswer">
+      <ng-container *ngIf="showAnswer && selectedPlan">
         <div class="divider"></div>
         <div class="task-creator-container">
           <app-question-view></app-question-view>
