@@ -45,9 +45,17 @@ export class PlanViewComponent implements OnInit, OnDestroy {
         this.actions = [];
         if (this.planRun.plan) {
           this.niceText();
+          // this.simpleAction();
         }
       }
     });
+  }
+
+  simpleAction() {
+    for (const action of this.planRun.plan.actions) {
+      const s = action.name + ' ' + action.args.join(' ');
+      this.actions.push(s);
+    }
   }
 
   niceText() {

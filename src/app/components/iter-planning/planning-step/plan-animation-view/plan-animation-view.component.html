@@ -7,7 +7,15 @@
         </h2>      <app-plan
       </ng-container>
   </div> -->
-  <div class="plan-container" #animationcontainer>
+  <div class="button-container-top">
+    <button mat-icon-button (click)="animationHandler.zoomIn()" [disabled]="!(animationHandler && (animationHandler.hasAnimation | async))">
+      <mat-icon>zoom_in</mat-icon>
+    </button>
+    <button mat-icon-button (click)="animationHandler.zoomOut()" [disabled]="!(animationHandler && (animationHandler.hasAnimation | async))">
+      <mat-icon>zoom_out</mat-icon>
+    </button>
+  </div>
+  <div class="animation-container" #animationcontainer>
 
   </div>
   <div class="button-container" *ngIf="animationHandler && (animationHandler.hasAnimation | async)">

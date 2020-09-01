@@ -4,7 +4,7 @@
   width: 100%;
   height: 100%;
   display: grid;
-  grid-template-rows: auto auto auto 1fr;
+  grid-template-rows: auto auto 1fr;
   //overflow: hidden;
 }
 
@@ -39,6 +39,7 @@
   height: 100%;
   width: 100%;
   display: grid;
+  overflow: auto;
 }
 
 .two-columns {
@@ -63,6 +64,7 @@
   width: 100%;
   height: 100%;
   padding: 10px;
+  overflow: auto;
 }
 
 .spinner-container {
@@ -77,6 +79,7 @@
   display: grid;
   width: 100%;
   height: 100%;
+  overflow: auto;
 }
 
 .center-one-column{

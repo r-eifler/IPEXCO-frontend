@@ -1,12 +1,12 @@
 <div class="main-container">
-  <div class="info-container">
-    <div style="color: white; font-size: xx-large; margin: 10px 10px;" *ngIf="(settings$ | async)?.measureTime">
-      <span>Time:</span>  {{currentTime | date:'mm:ss'}}
-    </div>
-    <div style="color: white; font-size: xx-large; margin: 10px 10px;" *ngIf="(settings$ | async)?.useTimer">
-      <span>Timer:</span>  {{timer | date:'mm:ss'}}
-    </div>
-  </div>
+<!--  <div class="info-container">-->
+<!--    <div style="color: white; font-size: xx-large; margin: 10px 10px;" *ngIf="(settings$ | async)?.measureTime">-->
+<!--      <span>Time:</span>  {{currentTime | date:'mm:ss'}}-->
+<!--    </div>-->
+<!--    <div style="color: white; font-size: xx-large; margin: 10px 10px;" *ngIf="(settings$ | async)?.useTimer">-->
+<!--      <span>Timer:</span>  {{timer | date:'mm:ss'}}-->
+<!--    </div>-->
+<!--  </div>-->
   <div class="action-container">
     <div class="iter-planning-buttons">
       <button mat-stroked-button (click)="newPlanRun()"
@@ -33,7 +33,9 @@
          (click)="selectPlan(planRun)"
          [active]="selectedPlan && selectedPlan._id == planRun._id"
          [disabled]="(plannerService.isPlannerBusy() | async) || !(planRun.status === runStatus.finished || planRun.status === runStatus.noSolution)">
-        <span [matBadge]="planRun.planValue?.toString(10)" matBadgeColor="warn" matBadgeOverlap="false">{{planRun.name}}</span>
+        <span *ngIf="! (settingsService.getSelectedObject() | async).usePlanPropertyValues">{{planRun.name}}</span>
+        <span *ngIf="(settingsService.getSelectedObject() | async).usePlanPropertyValues"
+              [matBadge]="planRun.planValue?.toString(10)" matBadgeColor="accent" matBadgeOverlap="false">{{planRun.name}}</span>
       </a>
       <a mat-tab-link *ngIf="(plannerService.isPlannerBusy() | async)" style="padding: 5px">
         <mat-spinner [diameter]="30"></mat-spinner>
@@ -42,14 +44,14 @@
   </div>
 
   <div class="bottom-container" [class.two-columns]="!computeNewPlan" [class.three-columns]="computeNewPlan">
-    <div style="height: 100%; width: 100%">
-      <app-plan-animation-view></app-plan-animation-view>
+    <div class="center-container">
+      <app-plan-animation-view style="height: 100%;overflow: auto;"></app-plan-animation-view>
     </div>
 
     <div class="divider"></div>
 
     <div class="center-container" [class.center-one-column]="! askQuestion" [class.center-two-columns]="askQuestion || showAnswer">
-      <app-finished-planning-step *ngIf="selectedPlan"></app-finished-planning-step>
+      <app-finished-planning-step *ngIf="selectedPlan" style="height: 100%;overflow: auto;"></app-finished-planning-step>
 
       <div *ngIf="! selectedPlan" class="spinner-container">
         <div>
@@ -61,7 +63,7 @@
       <ng-container *ngIf="askQuestion">
         <div class="divider"></div>
         <div class="task-creator-container">
-          <app-question-creator (finished)="questionCreatorClose($event)"></app-question-creator>
+          <app-question-creator style="height: 100%;overflow: auto;" (finished)="questionCreatorClose($event)"></app-question-creator>
         </div>
       </ng-container>
 
@@ -69,7 +71,7 @@
         <div class="divider"></div>
         <div class="task-creator-container">
           <app-question-view></app-question-view>
-          <app-explanation-view (finished)="showAnswer = false"></app-explanation-view>
+          <app-explanation-view style="height: 100%;overflow: auto;" (finished)="showAnswer = false"></app-explanation-view>
         </div>
       </ng-container>
     </div>
@@ -77,7 +79,7 @@
     <ng-container *ngIf="computeNewPlan">
       <div class="divider"></div>
       <div class="task-creator-container">
-        <app-task-creator (finished)="taskCreatorClose($event)"></app-task-creator>
+        <app-task-creator style="height: 100%;overflow: auto;" (finished)="taskCreatorClose($event)"></app-task-creator>
       </div>
     </ng-container>
 

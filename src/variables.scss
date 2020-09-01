@@ -1,9 +1,42 @@
 @import '~@angular/material/theming';
 
-$EXPLORE-CLI-primary: mat-palette($mat-green, 400);
-$EXPLORE-CLI-accent: mat-palette($mat-orange, 400);
+//$EXPLORE-CLI-primary: mat-palette($mat-green, 400);
+//$EXPLORE-CLI-accent: mat-palette($mat-orange, 400);
+//$EXPLORE-CLI-warn: mat-palette($mat-red);
+//
+//$primary: mat-color($EXPLORE-CLI-primary);
+//$accent: mat-color($EXPLORE-CLI-accent);
+//$warn: mat-color($EXPLORE-CLI-warn);
+
+$mat-primary: (
+  main: #03658c,
+  lighter: #b3d1dd,
+  darker: #02496f,
+  200: #03658c, // For slide toggle,
+  contrast : (
+    main: $light-primary-text,
+    lighter: $dark-primary-text,
+    darker: $light-primary-text,
+  )
+);
+
+$mat-accent: (
+  main: #f29422,
+  lighter: #fbdfbd,
+  darker: #ec7714,
+  200: #f29422, // For slide toggle,
+  contrast : (
+    main: $dark-primary-text,
+    lighter: $dark-primary-text,
+    darker: $dark-primary-text,
+  )
+);
+
+$EXPLORE-CLI-primary: mat-palette($mat-primary, main, lighter, darker);
+$EXPLORE-CLI-accent: mat-palette($mat-accent, main, lighter, darker);
 $EXPLORE-CLI-warn: mat-palette($mat-red);
 
 $primary: mat-color($EXPLORE-CLI-primary);
 $accent: mat-color($EXPLORE-CLI-accent);
 $warn: mat-color($EXPLORE-CLI-warn);
+

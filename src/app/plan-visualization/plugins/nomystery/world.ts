@@ -1,4 +1,4 @@
-import {NoMysteryAnimationTask} from './nomystery-animation-task';
+import {NoMysteryAnimationTask} from './animation/nomystery-animation-task';
 
 
 export async function loadTrucks(task: NoMysteryAnimationTask, parentSVG: SVGElement) {

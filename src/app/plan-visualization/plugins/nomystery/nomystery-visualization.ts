@@ -6,7 +6,7 @@ import {Injectable} from '@angular/core';
 import {SelectedPlanRunService} from '../../../service/planner-runs/selected-planrun.service';
 import {AnimationSettingsNoMystery} from './settings/animation-settings-nomystery';
 import {loadPackages, loadTrucks} from './world';
-import {NoMysteryAnimationTask} from './nomystery-animation-task';
+import {NoMysteryAnimationTask} from './animation/nomystery-animation-task';
 import {NoMysteryAnimation} from './animation/nomystery-animation';
 import {NoMysteryTask} from './nomystery-task';
 import {gsap} from 'gsap';
@@ -87,8 +87,9 @@ export class NoMysteryVisualization extends PlanVisualization {
   async init() {
 
     this.mainSVG = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    this.mainSVG.style.height = '100%';
-    this.mainSVG.style.width = '100%';
+    this.mainSVG.style.height = '700px';
+    this.mainSVG.style.width = '700px';
+    this.mainSVG.setAttribute('transform', 'matrix(1,0,0,1,0,0)');
 
     gsap.registerPlugin(Draggable);
     // tslint:disable-next-line:no-unused-expression
@@ -151,6 +152,14 @@ export class NoMysteryVisualization extends PlanVisualization {
       this.animation?.initPositions();
       this.newRunLoaded = false;
     }
+  }
+
+  scale(factor: number): void {
+    if (factor >= this.mainScale) {
+      return;
+    }
+    this.mainScale += factor;
+    gsap.to(this.mainSVG, {duration: 0.5, scale: this.mainScale});
   }
 }
 

@@ -2,10 +2,10 @@
   width: 100%;
   height: 100%;
   display: grid;
-  grid-template-rows: 1fr auto;
+  grid-template-rows: auto 1fr auto;
 }
 
-.plan-container {
+.animation-container {
   width: 100%;
   height: 100%;
   overflow: hidden;
@@ -16,6 +16,12 @@
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
+}
+
+.button-container-top {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
 }
 
 .info-container {

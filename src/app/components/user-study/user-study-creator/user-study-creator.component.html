@@ -95,11 +95,8 @@
         <ng-container *ngIf='part.type === userStudyStepType.form'>
           <div style="display: flex; flex-direction: column; justify-content: center;">
             <a mat-flat-button color="primary" href="{{part.url}}">
-              <mat-icon>visibility</mat-icon>
               Google Form Link
             </a>
-            <iframe *ngIf="part.url" [src]='makeTrustedURL(part.url)'
-                    width="640" height="890" frameborder="0" marginheight="0" marginwidth="0">Wird geladen…</iframe>
           </div>
         </ng-container>
 

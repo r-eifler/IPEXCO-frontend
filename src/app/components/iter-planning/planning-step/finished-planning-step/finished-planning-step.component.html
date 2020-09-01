@@ -8,9 +8,9 @@
     </a>
   </nav>
   <div class="content-container" *ngIf="showTab == 1">
-    <app-task-view ></app-task-view>
+    <app-task-view style="height: 100%;overflow: auto;"></app-task-view>
   </div>
   <div class="content-container" *ngIf="showTab == 2">
-    <app-plan-view></app-plan-view>
+    <app-plan-view style="height: 100%;overflow: auto;"></app-plan-view>
   </div>
 </div>

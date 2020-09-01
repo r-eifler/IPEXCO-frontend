@@ -96,5 +96,12 @@ restart() {
   this.nextEvents();
 }
 
+zoomIn() {
+  this.animation.scale(0.2);
+}
+
+  zoomOut() {
+    this.animation.scale(-0.2);
+  }
 
 }

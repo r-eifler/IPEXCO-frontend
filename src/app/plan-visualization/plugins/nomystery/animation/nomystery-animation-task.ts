@@ -1,5 +1,5 @@
-import {Location, NoMysteryTask, Package, Truck} from '../nomystery/nomystery-task';
-import {AnimationInfo} from '../../integration/animation-info';
+import {Location, NoMysteryTask, Package, Truck} from '../nomystery-task';
+import {AnimationInfo} from '../../../integration/animation-info';
 import {gsap} from 'gsap';
 
 

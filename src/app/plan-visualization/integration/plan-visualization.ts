@@ -7,6 +7,8 @@ import {SelectedPlanRunService} from '../../service/planner-runs/selected-planru
 
 export abstract class PlanVisualization {
 
+  protected mainScale = 1.0;
+
   protected constructor(
     protected currentProjectService: CurrentProjectService,
     protected taskSchemaService: TaskSchemaService,
@@ -19,4 +21,5 @@ export abstract class PlanVisualization {
   abstract animateAction(action: Action): Promise<void>;
   abstract reverseAnimateAction(action: Action): Promise<void>;
   abstract restart(): void;
+  abstract scale(factor: number): void;
 }

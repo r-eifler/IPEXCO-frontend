@@ -9,11 +9,35 @@
 // Be sure that you only ever include this mixin once!
 @include mat-core();
 
+$mat-primary: (
+  main: #03658c,
+  lighter: #b3d1dd,
+  darker: #02496f,
+  200: #03658c, // For slide toggle,
+  contrast : (
+    main: $light-primary-text,
+    lighter: $dark-primary-text,
+    darker: $light-primary-text,
+  )
+);
+
+$mat-accent: (
+  main: #f29422,
+  lighter: #fbdfbd,
+  darker: #ec7714,
+  200: #f29422, // For slide toggle,
+  contrast : (
+    main: $dark-primary-text,
+    lighter: $dark-primary-text,
+    darker: $dark-primary-text,
+  )
+);
+
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
-$EXPLORE-CLI-primary: mat-palette($mat-green, 400);
-$EXPLORE-CLI-accent: mat-palette($mat-orange, 400);
+$EXPLORE-CLI-primary: mat-palette($mat-primary, main, lighter, darker);
+$EXPLORE-CLI-accent: mat-palette($mat-accent, main, lighter, darker);
 
 // The warn palette is optional (defaults to red).
 $EXPLORE-CLI-warn: mat-palette($mat-red);

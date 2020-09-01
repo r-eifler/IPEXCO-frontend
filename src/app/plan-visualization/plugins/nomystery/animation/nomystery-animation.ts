@@ -1,4 +1,4 @@
-import {AnimationLocation, AnimationPackage, AnimationTruck, NoMysteryAnimationTask} from '../nomystery-animation-task';
+import {AnimationLocation, AnimationPackage, AnimationTruck, NoMysteryAnimationTask} from './nomystery-animation-task';
 
 interface Action {
   name: string;
