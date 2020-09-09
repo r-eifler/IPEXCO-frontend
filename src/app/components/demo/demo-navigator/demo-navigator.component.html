@@ -15,7 +15,7 @@
       </button>
       <button mat-stroked-button (click)="newQuestion();"
               *ngIf="(settingsService.getSelectedObject()| async)?.allowQuestions"
-              [disabled]="! (selectedPlan?.status == runStatus.finished || selectedPlan?.status == runStatus.noSolution)">
+              [disabled]="! (selectedPlan?.status == runStatus.finished  || selectedPlan.status === runStatus.noSolution)">
         Ask Question
       </button>
     </div>

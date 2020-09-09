@@ -23,6 +23,7 @@ export class DomainSpecificationService {
   private readonly currentSpec$: BehaviorSubject<DomainSpecification>;
 
   findSpec(project: Project): Observable<DomainSpecification> {
+    console.log(project.domainSpecification);
     const url = environment.srcURL + project.domainSpecification.path;
     this.http.get<string>(url).subscribe((res: string) => {
         // console.log('Domain Specification:');
