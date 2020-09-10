@@ -62,7 +62,7 @@ import {ProjectCreatorComponent} from './components/project/project-creator/proj
 import {PlannerService} from './service/planner-runs/planner.service';
 import {ProjectBaseComponent} from './components/project/project-base/project-base.component';
 import {PropertyCollectionComponent} from './components/plan_properties/property-collection/property-collection.component';
-import {IterativePlanningBaseComponent} from './components/iter-planning/iterative-planning-base/iterative-planning-base.component';
+import {ProjectIterativePlanningBaseComponent} from './components/project/project-iterative-planning-base/project-iterative-planning-base.component';
 import {TaskViewComponent} from './components/iter-planning/planning-step/task-view/task-view.component';
 import {PlanViewComponent} from './components/iter-planning/planning-step/plan-view/plan-view.component';
 import {QuestionStepComponent} from './components/iter-planning/question-step/question-step/question-step.component';
@@ -170,7 +170,7 @@ import { ScalableListComponent } from './components/utils/scalable-list/scalable
     ProjectCreatorComponent,
     ProjectBaseComponent,
     PropertyCollectionComponent,
-    IterativePlanningBaseComponent,
+    ProjectIterativePlanningBaseComponent,
     TaskViewComponent,
     PlanViewComponent,
     QuestionStepComponent,

@@ -8,6 +8,9 @@ import {MatTreeNestedDataSource} from '@angular/material/tree';
 import {ActivatedRoute, Router} from '@angular/router';
 import {CurrentProjectStore, CurrentRunStore} from 'src/app/store/stores.store';
 import {PlanRunsService} from 'src/app/service/planner-runs/planruns.service';
+import {SelectedPlanRunService} from '../../../service/planner-runs/selected-planrun.service';
+import {SelectedQuestionService} from '../../../service/planner-runs/selected-question.service';
+import {PlannerService} from '../../../service/planner-runs/planner.service';
 
 
 interface RunNode {
@@ -32,6 +35,9 @@ export class RunTreeComponent implements OnInit, OnDestroy {
 
   runs$: Observable<PlanRun[]>;
 
+  selectedPlan: PlanRun;
+  selectedQuestion: ExplanationRun;
+
   treeControl = new NestedTreeControl<RunNode>(node => node.explanationRuns);
   dataSource = new MatTreeNestedDataSource<RunNode>();
 
@@ -40,26 +46,37 @@ export class RunTreeComponent implements OnInit, OnDestroy {
     private router: Router,
     private currentProjectStore: CurrentProjectStore,
     private runService: PlanRunsService,
-    private currentRunStore: CurrentRunStore,
+    private selectedPlanRunService: SelectedPlanRunService,
+    private selectedQuestionService: SelectedQuestionService,
+    public plannerService: PlannerService,
   ) {
     this.runs$ = this.runService.getList();
 
     this.runs$
-    .pipe(takeUntil(this.ngUnsubscribe))
-    .subscribe(value => {
-      this.dataSource.data = value;
-      // maybe used in the desktop version
-      // if (value.length === 0) {
-      //   this.router.navigate(['./original-task'], { relativeTo: this.route });
-      // } else {
-      //   const lastRun: PlanRun = value[value.length - 1];
-      //   this.router.navigate(['./planning-step', lastRun._id], { relativeTo: this.route });
-      // }
-    });
-
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(
+        runs => {
+          this.dataSource.data = runs;
+        });
   }
 
   ngOnInit(): void {
+    this.selectedPlanRunService.getSelectedObject()
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(
+        run => {
+          this.selectedPlan = run;
+          if (run) {
+            this.treeControl.expand(run);
+          }
+        });
+
+    this.selectedQuestionService.getSelectedObject()
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(
+        run => {
+          this.selectedQuestion = run;
+        });
   }
 
   ngOnDestroy(): void {
@@ -74,13 +91,25 @@ export class RunTreeComponent implements OnInit, OnDestroy {
 
   async delete(run: PlanRun) {
     this.runService.deleteObject(run);
-    if (this.currentRunStore.item$.getValue() && run._id === this.currentRunStore.item$.getValue()._id) {
-      await this.router.navigate(['../'], { relativeTo: this.route });
-    }
   }
 
   deleteExpRun(run: ExplanationRun) {
     this.runService.deleteExpRun(run);
+  }
+
+  selectPlanRun(planRun: PlanRun): void {
+    this.selectedPlanRunService.saveObject(planRun);
+    this.selectedQuestionService.saveObject(null);
+  }
+
+  selectQuestion(planRunId: string, question: ExplanationRun): void {
+    this.runService.getObject(planRunId)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(
+        run => {
+          this.selectedPlanRunService.saveObject(run);
+        });
+    this.selectedQuestionService.saveObject(question);
   }
 
 }

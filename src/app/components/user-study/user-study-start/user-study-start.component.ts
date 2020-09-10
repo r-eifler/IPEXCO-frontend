@@ -6,6 +6,7 @@ import {takeUntil} from 'rxjs/operators';
 import {ActivatedRoute, ParamMap, Router} from '@angular/router';
 import {USUser} from '../../../interface/user-study/user-study-user';
 import {UserStudyUserService} from '../../../service/user-study/user-study-user.service';
+import {AuthenticationService} from '../../../service/authentication/authentication.service';
 
 @Component({
   selector: 'app-user-study-start',
@@ -26,6 +27,7 @@ export class UserStudyStartComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
+    private authenticationService: AuthenticationService,
     private userStudyUserService: UserStudyUserService,
     private userStudiesService: UserStudiesService,
     private selectedUserStudyService: RunningUserStudyService
@@ -93,6 +95,11 @@ export class UserStudyStartComponent implements OnInit, OnDestroy {
   }
 
   onAgree() {
+    if (this.authenticationService.loggedIn()) {
+      this.userRegistered = true;
+      this.initUserStudy();
+      return;
+    }
     this.getProlificIDs().then(
       async ids => {
         const prolificUser: USUser = {prolificId: ids[0], userStudyId: ids[1]};

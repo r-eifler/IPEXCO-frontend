@@ -1,20 +1,20 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import {IterativePlanningBaseComponent} from './iterative-planning-base.component';
+import {ProjectIterativePlanningBaseComponent} from './iterative-planning-base.component';
 
 describe('IterativePlanningBaseComponent', () => {
-  let component: IterativePlanningBaseComponent;
-  let fixture: ComponentFixture<IterativePlanningBaseComponent>;
+  let component: ProjectIterativePlanningBaseComponent;
+  let fixture: ComponentFixture<ProjectIterativePlanningBaseComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ IterativePlanningBaseComponent ]
+      declarations: [ ProjectIterativePlanningBaseComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(IterativePlanningBaseComponent);
+    fixture = TestBed.createComponent(ProjectIterativePlanningBaseComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -7,7 +7,7 @@ import {ProjectCollectionComponent} from './components/project/project-collectio
 import {ProjectBaseComponent} from './components/project/project-base/project-base.component';
 import {ProjectOverviewComponent} from './components/project/project-overview/project-overview.component';
 import {PropertyCollectionComponent} from './components/plan_properties/property-collection/property-collection.component';
-import {IterativePlanningBaseComponent} from './components/iter-planning/iterative-planning-base/iterative-planning-base.component';
+import {ProjectIterativePlanningBaseComponent} from './components/project/project-iterative-planning-base/project-iterative-planning-base.component';
 import {IterativePlanningBaseMobileComponent} from './components/iter-planning/mobile/iterative-planning-base-mobile/iterative-planning-base-mobile.component';
 import {PlanningStepComponent} from './components/iter-planning/planning-step/planning-step/planning-step.component';
 import {FinishedPlanningStepComponent} from './components/iter-planning/planning-step/finished-planning-step/finished-planning-step.component';
@@ -31,39 +31,27 @@ export const appRoutes: Routes = [
   { path: 'info', component: MainInfoComponent},
   { path: 'help', component: HelpPageComponent},
   { path: 'overview', component: UserMainPageComponent, canActivate: [AuthGuard]},
+
   { path: 'projects', component: ProjectCollectionComponent , canActivate: [AuthGuard]},
   { path: 'projects/:projectid', component: ProjectBaseComponent, canActivate: [AuthGuard],
     children: [
       { path: 'overview', component: ProjectOverviewComponent},
       { path: 'properties', component: PropertyCollectionComponent},
-      { path: 'iterative-planning', component: IterativePlanningBaseComponent,
-        children: [
-          { path: 'run-overview-mobile', component: IterativePlanningBaseMobileComponent},
-          { path: 'new-planning-step', component: PlanningStepComponent},
-          { path: 'planning-step/:runid', component: FinishedPlanningStepComponent},
-          { path: 'planning-step/:runid/new-question', component: QuestionStepComponent},
-          { path: 'planning-step/:runid/question-step/:expid', component: FinishedQuestionStepComponent},
-        ]
-      },
+      { path: 'iterative-planning', component: ProjectIterativePlanningBaseComponent},
       { path: 'animation-settings', component: AnimationSettingsComponent},
     ]
   },
+
   { path: 'demos', component: DemoCollectionComponent},
   { path: 'demos/:demoid', component: DemoBaseComponent},
+
   { path: 'user-studies', component: UserStudyCollectionComponent},
   { path: 'user-studies/new-user-study', component: UserStudyCreatorComponent},
   { path: 'user-studies/:userStudyId', component: UserStudyBaseComponent,
       children: [
         { path: 'info', component: UserStudyCreatorComponent},
         { path: 'start', component: UserStudyStartComponent},
-        { path: 'exec', component: UserStudyExecuteComponent,
-            children: [
-              { path: 'new-planning-step', component: PlanningStepComponent},
-              { path: 'planning-step/:runid', component: FinishedPlanningStepComponent},
-              { path: 'planning-step/:runid/new-question', component: QuestionStepComponent, canDeactivate: [QuestionCreatorGuard]},
-              { path: 'planning-step/:runid/question-step/:expid', component: FinishedQuestionStepComponent}
-            ]
-        },
+        { path: 'exec', component: UserStudyExecuteComponent},
         { path: 'end', component: UserStudyEndComponent},
       ]
   },

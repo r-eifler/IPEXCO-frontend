@@ -59,7 +59,7 @@ export class ProjectBaseComponent implements OnInit, OnDestroy {
     )
     .pipe(takeUntil(this.ngUnsubscribe))
     .subscribe(
-      value => {
+      async value => {
         if (value != null) {
           this.project = value;
           this.currentProjectService.saveObject(this.project);

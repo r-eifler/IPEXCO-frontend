@@ -1,6 +1,7 @@
-<div [class.flex-container-web]=" ! isMobile" [class.flex-container-mobile]="isMobile">
-  <h2>Properties collection</h2>
+<div class="main-container">
+
   <ng-container *ngIf="(viewSettings | async).expertView">
+    <h2>Plan Properties Collection</h2>
 
     <mat-card *ngFor="let property of planProperties" [class.property-card-web]=" ! isMobile" [class.property-card-mobile]="isMobile" [class.property-card-not-selected]="! property.isUsed">
       <mat-card-header>
@@ -60,8 +61,11 @@
     </mat-card>
   </ng-container>
 
-  <ng-container *ngIf="! (viewSettings | async).expertView">
-
+  <mat-card *ngIf="! (viewSettings | async).expertView">
+    <mat-card-header>
+      <mat-card-title>Plan Properties Collection</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
     <table mat-table id="plan-property-collection-table" [dataSource]="dataSource" class="property-table">
 
       <!-- Checkbox Column -->
@@ -142,11 +146,12 @@
       </tr>
 
     </table>
-
-  </ng-container>
-
-  <button mat-fab color="accent" class="add-button" (click)="new_property_form()">
-    <mat-icon>add</mat-icon>
-  </button>
+    </mat-card-content>
+  </mat-card>
 
 </div>
+
+<button mat-fab color="accent" class="add-button" (click)="new_property_form()">
+  <mat-icon>add</mat-icon>
+</button>
+
