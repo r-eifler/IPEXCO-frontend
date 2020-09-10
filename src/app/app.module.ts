@@ -46,6 +46,7 @@ import {MatBadgeModule} from '@angular/material/badge';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatTableModule} from '@angular/material/table';
 import {MAT_BOTTOM_SHEET_DEFAULT_OPTIONS, MatBottomSheetModule} from '@angular/material/bottom-sheet';
+import { MatCarouselModule } from '@ngmodule/material-carousel';
 
 import {ResizableModule} from 'angular-resizable-element';
 // forms
@@ -76,8 +77,6 @@ import {TaskCreatorComponent} from './components/iter-planning/planning-step/tas
 import {QuestionCreatorComponent} from './components/iter-planning/question-step/question-creator/question-creator.component';
 import {QuestionViewComponent} from './components/iter-planning/question-step/question-view/question-view.component';
 import {AnswerViewComponent} from './components/iter-planning/question-step/answer-view/answer-view.component';
-// editor
-import {MonacoEditorModule} from 'ngx-monaco-editor';
 // Store
 import {PddlFileUtilsService} from './service/files/pddl-file-utils.service';
 import {
@@ -254,7 +253,6 @@ import { ScalableListComponent } from './components/utils/scalable-list/scalable
     MatBadgeModule,
     MatProgressSpinnerModule,
     FormsModule,
-    MonacoEditorModule.forRoot(),
     MatListModule,
     MatAutocompleteModule,
     MatSliderModule,
@@ -265,6 +263,7 @@ import { ScalableListComponent } from './components/utils/scalable-list/scalable
     MatTableModule,
     ResizableModule,
     InlineSVGModule.forRoot(),
+    MatCarouselModule.forRoot(),
   ],
   providers: [
     UserStore,

@@ -34,13 +34,13 @@ export class MainPageComponent implements OnInit, AfterViewChecked, OnDestroy {
     });
     this.responsiveService.checkWidth();
 
-    if (this.userService.loggedIn()) {
-      await this.router.navigate(['/overview'], { relativeTo: this.route });
-    }
+    // if (this.userService.loggedIn()) {
+    //   await this.router.navigate(['/overview'], { relativeTo: this.route });
+    // }
   }
 
   ngAfterViewChecked(): void {
-    this.animateLogo();
+    // this.animateLogo();
   }
 
   ngOnDestroy(): void {

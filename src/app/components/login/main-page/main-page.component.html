@@ -1,13 +1,57 @@
-<div class="main-container">
-  <div [class.control-container-desktop]="! isMobile" [class.control-container-mobile]="isMobile">
-    <button mat-flat-button color="primary" (click)="newRegisterForm()">Register</button>
-    <!-- <button mat-flat-button color="primary" routerLink="/projects" routerLinkActive="active">Guest</button> -->
-    <button mat-flat-button color="accent" routerLink="/demos" routerLinkActive="active">Demo</button>
-    <button mat-flat-button routerLink="/info">Info</button>
-    <button mat-flat-button routerLink="/help">Help</button>
+<div class="page-container">
+  <mat-carousel [maintainAspectRatio]="true" [hideArrows]="false" [hideIndicators]="false">
+    <mat-carousel-slide >
+      <div style="height: 100%; display: flex; align-items: center; justify-content: center">
+        <img style="height: 80%; margin-right: 30px;"  src="assets/iter_logo.svg">
+        <div style="height: fit-content; font-family: 'Julius Sans One'; text-align: left;">
+          <p style="font-size: 50px; padding-bottom: 20px;">A Web-Based Platform</p>
+          <p style="font-size: 50px; padding-bottom: 20px;">for Iterative Planning</p>
+          <p style="font-size: 50px; ">with Plan Explanations</p>
+        </div>
+      </div>
+    </mat-carousel-slide>
+    <mat-carousel-slide>
+      <div style="height: 100%; display: flex; align-items: center; justify-content: center">
+        <img style="height: 100%; margin-right: 30px;"  src="assets/user_study_full.png">
+        <div style="height: fit-content; font-family: 'Julius Sans One'; text-align: left;">
+          <p style="font-size: 50px; padding-bottom: 5px;">User Study Support</p>
+        </div>
+      </div>
+    </mat-carousel-slide>
+    <mat-carousel-slide>
+      <div style="height: 100%; display: flex; align-items: center; justify-content: center">
+        <img style="height: 80%; margin-right: 30px;"  src="assets/task1.svg">
+        <div style="height: fit-content; font-family: 'Julius Sans One'; text-align: left;">
+          <p style="font-size: 50px; padding-bottom: 20px;">Visualization</p>
+          <p style="font-size: 50px; padding-bottom: 5px;">for different domains</p>
+        </div>
+      </div>
+    </mat-carousel-slide>
+  </mat-carousel>
+
+  <div style="background-color: #03658c; height: 100%;">
+
   </div>
 
+
+
+<!--  <div [class.control-container-desktop]="! isMobile" [class.control-container-mobile]="isMobile">-->
+<!--    <button mat-flat-button color="primary" (click)="newRegisterForm()">Register</button>-->
+<!--    &lt;!&ndash; <button mat-flat-button color="primary" routerLink="/projects" routerLinkActive="active">Guest</button> &ndash;&gt;-->
+<!--    <button mat-flat-button color="accent" routerLink="/demos" routerLinkActive="active">Demo</button>-->
+<!--    <button mat-flat-button routerLink="/info">Info</button>-->
+<!--    <button mat-flat-button routerLink="/help">Help</button>-->
+<!--  </div>-->
+
   <!-- <img id='login-logo' src="assets/complete_logo.svg" [class.logo-desktop]="! isMobile" [class.logo-mobile]="isMobile"> -->
-  <div id='login-logo' [inlineSVG]="'/assets/complete_logo.svg'" [class.logo-desktop]="! isMobile" [class.logo-mobile]="isMobile">
-  </div>
+<!--  <div id='login-logo' [inlineSVG]="'/assets/iter_logo.svg'" [class.logo-desktop]="! isMobile" [class.logo-mobile]="isMobile">-->
+<!--  </div>-->
+</div>
+
+<div style="background-color: #03658c; height: 100%; position: relative;">
+  <p style="font-size: 100px; font-family: 'Julius Sans One'; padding: 100px; color: white;">
+    Try a demo!
+  </p>
+  <button class="demo-button" mat-flat-button color="accent" routerLink="/demos" routerLinkActive="active">Start Demo</button>
+  <img class="iter-overview-image" src="assets/iter_planning_overview.png">
 </div>

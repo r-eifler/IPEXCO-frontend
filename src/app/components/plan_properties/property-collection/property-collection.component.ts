@@ -24,7 +24,7 @@ export class PropertyCollectionComponent implements OnInit, AfterViewInit, OnDes
   isMobile: boolean;
   viewSettings: Observable<ViewSettings>;
 
-  planProperties: PlanProperty[];
+  planProperties: PlanProperty[] = [];
 
   displayedColumns: string[] = ['select', 'description', 'globalHardGoal', 'value', 'options'];
   dataSource = new MatTableDataSource<PlanProperty>(this.planProperties);

@@ -1,10 +1,11 @@
 @import '../../../../variables.scss';
 
 
-.main-container {
+.page-container {
   height: 100%;
   width: 100%;
-  background-color: rgba($color: $primary, $alpha: 0.3);
+  display: grid;
+  grid-template-rows: auto 1fr;
 }
 
 .control-container-desktop{
@@ -67,4 +68,21 @@
 svg:not(:root) {
   width:100%;
   height: auto;
+}
+
+.demo-button {
+  font-size: 60px;
+  font-family: 'Julius Sans One';
+  width: 450px;
+  height: 90px;
+  position: relative;
+  left: 10%;
+  top: 10%;
+}
+
+.iter-overview-image {
+  height: 60%;
+  position: relative;
+  left: 20%;
+  top: 40%;
 }
