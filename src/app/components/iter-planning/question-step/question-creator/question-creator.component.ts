@@ -118,7 +118,7 @@ export class QuestionCreatorComponent implements OnInit, OnDestroy {
       softGoals: this.allPlanProperties
         .filter(p => ! this.question.includes(p) && ! this.currentRun.hardGoals.find(hg => hg === p.name))
         .map(value => (value.name)),
-      hardGoals: this.currentRun.hardGoals.concat(this.question.map(value => (value.name))),
+      hardGoals: this.question.map(value => (value.name)),
       result: null,
       log: null,
     };

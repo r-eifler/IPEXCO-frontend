@@ -30,6 +30,7 @@ interface RunNode {
 export class RunTreeComponent implements OnInit, OnDestroy {
 
   private ngUnsubscribe: Subject<any> = new Subject();
+  expanded = true;
 
   runStatus = RunStatus;
 
@@ -110,6 +111,10 @@ export class RunTreeComponent implements OnInit, OnDestroy {
           this.selectedPlanRunService.saveObject(run);
         });
     this.selectedQuestionService.saveObject(question);
+  }
+
+  toggleExpand() {
+    this.expanded = ! this.expanded;
   }
 
 }

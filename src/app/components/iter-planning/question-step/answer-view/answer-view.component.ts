@@ -71,8 +71,9 @@ export class AnswerViewComponent implements OnInit, OnDestroy {
 
   private filterMUGSolvable(planRun: PlanRun, expRun: ExplanationRun, planProperties: Map<string, PlanProperty>) {
     this.filteredMUGS = [];
-    // console.log('MUGS:');
-    // console.log(expRun.mugs);
+    console.log('MUGS:');
+    console.log(expRun.mugs);
+
     for (const entry of expRun.mugs) {
       const planPropertiesEntry: PlanProperty[] = [];
       let containsOnlyGlobalHardGoals = true;
@@ -93,6 +94,7 @@ export class AnswerViewComponent implements OnInit, OnDestroy {
       }
       this.filteredMUGS.push(planPropertiesEntry);
     }
+    console.log(this.filteredMUGS);
   }
 
   private filterMUGSUnsolvable(planRun: PlanRun, expRun: ExplanationRun, planProperties: Map<string, PlanProperty>) {

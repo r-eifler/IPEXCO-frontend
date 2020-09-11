@@ -43,11 +43,11 @@
 }
 
 .two-columns {
-  grid-template-columns: 1fr 5px 4fr;
+  grid-template-columns: auto 5px 4fr;
 }
 
 .three-columns {
-  grid-template-columns: 1fr 5px 2fr 5px 1fr;
+  grid-template-columns: auto 5px 2fr 5px 1fr;
 }
 
 .divider {

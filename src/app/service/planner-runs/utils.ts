@@ -1,7 +1,8 @@
 import {PlanRun} from '../../interface/run';
-import {PlanProperty} from '../../interface/plan-property/plan-property';
+import {GoalType, PlanProperty} from '../../interface/plan-property/plan-property';
 import {TaskSchema} from '../../interface/task-schema';
 import {Plan} from '../../interface/plan';
+import {Demo} from '../../interface/demo';
 
 export function computePlanValue(planRun: PlanRun, planProperties: Map<string, PlanProperty>): number {
   if (! planRun.planString && ! planRun.planPath) {
@@ -39,4 +40,26 @@ function parsePlan(actionStrings: string[], schema: TaskSchema): Plan {
   }
 
   return res;
+}
+
+export function updateMUGSPropsNames(oldMugs: string[][], planProperties: Map<string, PlanProperty>): string[][] {
+  const newMUGS = [];
+  for (const mugs of oldMugs) {
+    const list = [];
+    for (const elem of mugs) {
+      if (elem.startsWith('Atom')) {
+        const fact = elem.replace('Atom ', '').replace(' ', '');
+        for (const p of planProperties.values()) {
+          if (p.type === GoalType.goalFact && fact === p.formula) {
+            list.push(p.name);
+            break;
+          }
+        }
+      } else {
+        list.push(elem.replace('sat_', '').replace('soft_accepting(', '').replace(')', ''));
+      }
+    }
+    newMUGS.push(list);
+  }
+  return newMUGS;
 }

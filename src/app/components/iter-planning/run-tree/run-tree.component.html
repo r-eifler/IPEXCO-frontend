@@ -1,12 +1,16 @@
-<mat-card class="tree-card">
+<mat-card class="tree-card" [class.full-width]="expanded" [class.small-width]="! expanded">
   <mat-card-header>
-    <mat-card-title>
+    <mat-card-title *ngIf="expanded">
       Plans
     </mat-card-title>
+    <button mat-icon-button (click)="toggleExpand()" style="position: absolute; top: 5px; right: 5px">
+      <mat-icon *ngIf="expanded">chevron_left</mat-icon>
+      <mat-icon *ngIf="! expanded">chevron_right</mat-icon>
+    </button>
   </mat-card-header>
   <mat-card-content>
 
-    <mat-tree [dataSource]="dataSource" [treeControl]="treeControl" class="example-tree">
+    <mat-tree [dataSource]="dataSource" [treeControl]="treeControl" class="example-tree" *ngIf="expanded">
 
       <!-- This is the tree node template plan run without children -->
       <mat-tree-node *matTreeNodeDef="let planRun" matTreeNodeToggle [disabled]="(plannerService.isPlannerBusy() | async)">
