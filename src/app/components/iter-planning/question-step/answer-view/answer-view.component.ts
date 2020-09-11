@@ -30,7 +30,7 @@ export class AnswerViewComponent implements OnInit, OnDestroy {
   public solvable: boolean;
   planForQuestionExists = true;
 
-  filteredMUGS: PlanProperty[][] = [];
+  filteredMUGSs: PlanProperty[][] = [];
 
   constructor(
     private timeLogger: TimeLoggerService,
@@ -70,40 +70,42 @@ export class AnswerViewComponent implements OnInit, OnDestroy {
   }
 
   private filterMUGSolvable(planRun: PlanRun, expRun: ExplanationRun, planProperties: Map<string, PlanProperty>) {
-    this.filteredMUGS = [];
-    console.log('MUGS:');
-    console.log(expRun.mugs);
+    this.filteredMUGSs = [];
+    // console.log(expRun.result);
+    // console.log('MUGS:');
+    // console.log(expRun.mugs);
 
     for (const entry of expRun.mugs) {
-      const planPropertiesEntry: PlanProperty[] = [];
+      const filteredMUGS: PlanProperty[] = [];
       let containsOnlyGlobalHardGoals = true;
       for (const fact of entry) {
         const p = planProperties.get(fact);
         containsOnlyGlobalHardGoals = containsOnlyGlobalHardGoals && p.globalHardGoal;
         // only show property if it is satisfied by the corresponding plan run
         if (planRun.satPlanProperties.find(v => v === fact) || planRun.hardGoals.find(v => v === fact)) {
-          planPropertiesEntry.push(p);
+          filteredMUGS.push(p);
         }
       }
       if (containsOnlyGlobalHardGoals) {
         this.planForQuestionExists = false;
         return;
       }
-      if (planPropertiesEntry.length === 0) {
+      if (filteredMUGS.length < entry.length) {
         continue;
       }
-      this.filteredMUGS.push(planPropertiesEntry);
+      filteredMUGS.sort((a, b) => a.globalHardGoal ? -1 : 0);
+      this.filteredMUGSs.push(filteredMUGS);
     }
-    console.log(this.filteredMUGS);
+    console.log(this.filteredMUGSs);
   }
 
   private filterMUGSUnsolvable(planRun: PlanRun, expRun: ExplanationRun, planProperties: Map<string, PlanProperty>) {
-    this.filteredMUGS = [];
+    this.filteredMUGSs = [];
     console.log('MUGS:');
     console.log(expRun.mugs);
     for (const entry of expRun.mugs) {
       if (this.isSubsetEq(entry, planRun.hardGoals)) {
-        this.filteredMUGS.push(entry.map(e => planProperties.get(e)));
+        this.filteredMUGSs.push(entry.map(e => planProperties.get(e)));
       }
     }
   }

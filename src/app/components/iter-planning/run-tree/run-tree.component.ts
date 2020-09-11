@@ -92,10 +92,13 @@ export class RunTreeComponent implements OnInit, OnDestroy {
 
   async delete(run: PlanRun) {
     this.runService.deleteObject(run);
+    this.selectedPlanRunService.saveObject(null);
+    this.selectedQuestionService.saveObject(null);
   }
 
   deleteExpRun(run: ExplanationRun) {
     this.runService.deleteExpRun(run);
+    this.selectedQuestionService.saveObject(null);
   }
 
   selectPlanRun(planRun: PlanRun): void {

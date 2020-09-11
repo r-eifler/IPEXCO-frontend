@@ -52,6 +52,7 @@ export class TaskViewComponent implements OnInit, OnDestroy {
         for (const propName of run.hardGoals) {
           this.enforcedSatPlanProperties.push(planProperties.get(propName));
         }
+        this.enforcedSatPlanProperties.sort((a, b) => a.globalHardGoal ? -1 : 0);
 
         if (this.hasPlan) {
           for (const propName of run.satPlanProperties) {

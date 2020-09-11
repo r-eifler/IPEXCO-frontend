@@ -52,12 +52,12 @@ export class DemoPlannerService extends PlannerService {
     private static filterMUGS(questionPlanProperties: string[], demo: Demo): string [][] {
       const filteredMugs = [];
       for (const mugs of demo.data.MUGS) {
-        for (const propertyGoalFact of questionPlanProperties) {
-          if (mugs.indexOf(propertyGoalFact) > -1) {
+        for (const questionFact of questionPlanProperties) {
+          if (mugs.indexOf(questionFact) > -1) {
             const mugsRest = [];
             for (const fact of mugs) {
-              if (fact !== propertyGoalFact) {
-                mugsRest.push(fact.replace('Atom ', ''));
+              if (fact !== questionFact) {
+                mugsRest.push(fact);
               }
             }
             if (mugsRest.length !== 0) {

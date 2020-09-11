@@ -1,4 +1,4 @@
-import {REMOVE} from '../../store/generic-list.store';
+import {EDIT, REMOVE} from '../../store/generic-list.store';
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {RunsStore} from '../../store/stores.store';
@@ -34,7 +34,7 @@ export class PlanRunsService extends ObjectCollectionService<PlanRun> {
   deleteExpRun(expRun: ExplanationRun) {
     return this.http.delete<IHTTPData<PlanRun>>( environment.apiURL + 'run/explanation/' + expRun._id)
       .subscribe(response => {
-        this.listStore.dispatch({type: REMOVE, data: response.data});
+        this.listStore.dispatch({type: EDIT, data: response.data});
       });
   }
 

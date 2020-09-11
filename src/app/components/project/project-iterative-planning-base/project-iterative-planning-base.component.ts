@@ -105,9 +105,7 @@ export class ProjectIterativePlanningBaseComponent implements OnInit, OnDestroy 
       .subscribe(
         run => {
           this.selectedQuestion = run;
-          if (run) {
-            this.showAnswer = true;
-          }
+          this.showAnswer = !! run;
         });
 
     this.settings$ = settingsService.getSelectedObject();
@@ -142,6 +140,7 @@ export class ProjectIterativePlanningBaseComponent implements OnInit, OnDestroy 
 
   newQuestion() {
     this.askQuestion = true;
+    this.showAnswer = false;
   }
 
 

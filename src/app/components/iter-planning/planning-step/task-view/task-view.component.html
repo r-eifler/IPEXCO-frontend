@@ -8,7 +8,11 @@
       </mat-card-header>
       <mat-card-content>
         <ng-container *ngFor="let item of enforcedSatPlanProperties;last as last">
-          <app-scalable-list icon="bookmark">
+          <app-scalable-list icon="priority_high" *ngIf="item.globalHardGoal">
+            <span> {{item.naturalLanguageDescription}} </span>
+            <span *ngIf="(settingsService.getSelectedObject() | async).usePlanPropertyValues"> Utility: {{item.value}} </span>
+          </app-scalable-list>
+          <app-scalable-list icon="bookmark" *ngIf="! item.globalHardGoal">
             <span> {{item.naturalLanguageDescription}} </span>
             <span *ngIf="(settingsService.getSelectedObject() | async).usePlanPropertyValues"> Utility: {{item.value}} </span>
           </app-scalable-list>
