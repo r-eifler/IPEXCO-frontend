@@ -48,7 +48,7 @@ export class UserStudyCollectionComponent implements OnInit, OnDestroy {
 
   async openInfo(study: UserStudy) {
     this.selectedUserStudyService.saveObject(study);
-    await this.router.navigate(['../user-studies/' + study._id + '/info'], { relativeTo: this.route });
+    await this.router.navigate(['../user-studies/' + study._id], { relativeTo: this.route });
   }
 
   async newUserStudy() {
@@ -61,7 +61,7 @@ export class UserStudyCollectionComponent implements OnInit, OnDestroy {
   }
 
   getStudyLink(study: UserStudy) {
-    return this.urlBase + '/' + study._id + '/start';
+    return this.urlBase + '/' + study._id + '/run/start';
   }
 
 }

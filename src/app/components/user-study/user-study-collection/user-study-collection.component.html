@@ -1,6 +1,6 @@
-<div [class.project-container-mobile]="isMobile" [class.project-container-web]="! isMobile">
+<div [class.container-mobile]="isMobile" [class.container-web]="! isMobile">
 
-  <mat-card *ngFor="let study of userStudies$ | async" style="margin: 10px">
+  <mat-card *ngFor="let study of userStudies$ | async" [class.card-mobile]="isMobile" [class.card-web]="! isMobile">
     <mat-card-header>
       <div mat-card-avatar>
         <mat-icon>question_answer</mat-icon>
@@ -32,7 +32,7 @@
       <button mat-icon-button (click)="openInfo(study)">
         <mat-icon>info</mat-icon>
       </button>
-      <button mat-icon-button [routerLink]='"./" + study._id + "/start"'>
+      <button mat-icon-button [routerLink]='"./" + study._id + "/run/start"'>
         <mat-icon>play_arrow</mat-icon>
       </button>
     </mat-card-actions>

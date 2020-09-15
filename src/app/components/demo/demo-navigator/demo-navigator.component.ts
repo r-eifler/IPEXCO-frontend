@@ -204,6 +204,7 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
 
   newQuestion() {
     this.askQuestion = true;
+    this.showAnswer = false;
   }
 
 

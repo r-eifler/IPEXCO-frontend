@@ -28,7 +28,7 @@
   </mat-carousel>
 
   <div style="height: 100%; display: flex; align-items: center; justify-content: center">
-    <img style="height: 80%; margin-right: 30px;"  src="assets/iter_logo.svg">
+    <img style="height: 40%; margin-right: 30px;"  src="assets/iter_logo.svg">
     <div style="height: fit-content; font-family: 'Julius Sans One'; text-align: left;">
       <p style="font-size: 50px; padding-bottom: 20px;">A Web-Based Platform</p>
       <p style="font-size: 50px; padding-bottom: 20px;">for Iterative Planning</p>
@@ -49,12 +49,38 @@
   <!-- <img id='login-logo' src="assets/complete_logo.svg" [class.logo-desktop]="! isMobile" [class.logo-mobile]="isMobile"> -->
 <!--  <div id='login-logo' [inlineSVG]="'/assets/iter_logo.svg'" [class.logo-desktop]="! isMobile" [class.logo-mobile]="isMobile">-->
 <!--  </div>-->
+
+  <div class="video-container">
+    <iframe
+      height="80%"
+      width="80%"
+      src="https://www.youtube-nocookie.com/embed/4EF8CxVIoyE"
+      frameborder="0"
+      allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen>
+    </iframe>
+  </div>
+
+  <div class="demo-container">
+    <div style="display: flex; flex-direction: column; align-items: center;">
+      <p style="font-size: 100px; font-family: 'Julius Sans One'; padding: 100px; color: white;">
+        Try a demo!
+      </p>
+      <button class="demo-button" mat-flat-button color="accent" routerLink="/demos" routerLinkActive="active">Start Demo</button>
+    </div>
+    <img class="iter-overview-image" src="assets/iter_planning_overview.png">
+  </div>
+
+  <div class="info-container">
+    <p style="font-size: 50px;  font-family: 'Julius Sans One'; padding-bottom: 30px;">
+      Do you want to know more?
+    </p>
+    <p style="font-size: 50px;  font-family: 'Julius Sans One';  padding-bottom: 30px;">
+     Take a look at our publications
+    </p>
+    <button id="info-button" color="primary" mat-flat-button routerLink="/info">To Publications</button>
+  </div>
+
 </div>
 
-<div style="background-color: #03658c; height: 100%; position: relative;">
-  <p style="font-size: 100px; font-family: 'Julius Sans One'; padding: 100px; color: white;">
-    Try a demo!
-  </p>
-  <button class="demo-button" mat-flat-button color="accent" routerLink="/demos" routerLinkActive="active">Start Demo</button>
-  <img class="iter-overview-image" src="assets/iter_planning_overview.png">
-</div>
+

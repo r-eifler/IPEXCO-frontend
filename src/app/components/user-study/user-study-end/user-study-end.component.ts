@@ -35,7 +35,9 @@ export class UserStudyEndComponent implements OnInit, OnDestroy {
 
   async ngOnInit(): Promise<void> {
     await this.timeLogger.store();
+    console.log('Time Logger stored.');
     await this.userStudyUserService.logout();
+    console.log('Logout completed.');
   }
 
   ngOnDestroy(): void {

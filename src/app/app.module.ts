@@ -156,6 +156,8 @@ import { MarkedPipe } from './pipes/marked.pipe';
 
 import { DemoHelpDialogComponent } from './components/demo/demo-help-dialog/demo-help-dialog.component';
 import { ScalableListComponent } from './components/utils/scalable-list/scalable-list.component';
+import { UserStudyNavigationComponent } from './components/user-study/user-study-navigation/user-study-navigation.component';
+import { UserStudyDataBaseComponent } from './components/user-study/user-study-data-base/user-study-data-base.component';
 
 @NgModule({
   declarations: [
@@ -220,6 +222,8 @@ import { ScalableListComponent } from './components/utils/scalable-list/scalable
     MarkedPipe,
     DemoHelpDialogComponent,
     ScalableListComponent,
+    UserStudyNavigationComponent,
+    UserStudyDataBaseComponent,
   ],
   imports: [
     RouterModule.forRoot(appRoutes,

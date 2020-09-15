@@ -37,6 +37,7 @@ $EXPLORE-CLI-accent: mat-palette($mat-accent, main, lighter, darker);
 $EXPLORE-CLI-warn: mat-palette($mat-red);
 
 $primary: mat-color($EXPLORE-CLI-primary);
+$primary-darker: mat-color($EXPLORE-CLI-primary, darker);
 $accent: mat-color($EXPLORE-CLI-accent);
 $warn: mat-color($EXPLORE-CLI-warn);
 

@@ -55,7 +55,7 @@ export class UserStudyExecuteComponent implements OnInit, OnDestroy {
     if (this.hasNextStep()) {
       this.currentStep = this.userStudy.steps[++this.currentStepIndex];
     } else {
-      await this.router.navigate([''.concat(...['/user-studies/' + this.userStudy._id + '/end'])], { relativeTo: this.route });
+      await this.router.navigate([''.concat(...['/user-studies/' + this.userStudy._id + '/run/end'])], { relativeTo: this.route });
     }
   }
 

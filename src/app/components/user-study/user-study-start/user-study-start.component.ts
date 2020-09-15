@@ -22,6 +22,7 @@ export class UserStudyStartComponent implements OnInit, OnDestroy {
   error = false;
   errorMessage: string = null;
 
+  userStudyId: string;
   userStudy: UserStudy;
 
   constructor(
@@ -36,11 +37,20 @@ export class UserStudyStartComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.userStudyUserService.removeToken(); // TODO only for testing
+    this.getUserStudyId();
   }
 
   ngOnDestroy(): void {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
+  }
+
+  getUserStudyId() {
+    this.route.paramMap
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe((params: ParamMap) => {
+        this.userStudyId = params.get('userStudyId');
+      });
   }
 
   initUserStudy() {
@@ -94,15 +104,19 @@ export class UserStudyStartComponent implements OnInit, OnDestroy {
     return date > start && date < end;
   }
 
-  onAgree() {
+  async onAgree() {
     if (this.authenticationService.loggedIn()) {
-      this.userRegistered = true;
-      this.initUserStudy();
+      const prolificUser: USUser = {prolificId: '000000', userStudyExtId: '000000', userStudy: this.userStudyId};
+
+      this.userRegistered = await this.userStudyUserService.register(prolificUser);
+      if (this.userRegistered) {
+        this.initUserStudy();
+      }
       return;
     }
     this.getProlificIDs().then(
       async ids => {
-        const prolificUser: USUser = {prolificId: ids[0], userStudyId: ids[1]};
+        const prolificUser: USUser = {prolificId: ids[0], userStudyExtId: ids[1], userStudy: this.userStudyId};
 
         this.userRegistered = await this.userStudyUserService.register(prolificUser);
         if (this.userRegistered) {

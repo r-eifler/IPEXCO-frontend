@@ -1,6 +1,7 @@
 export interface USUser {
   prolificId: string;
-  userStudyId: string;
+  userStudyExtId: string;
+  userStudy: string;
   token?: string;
   finished?: string;
 }

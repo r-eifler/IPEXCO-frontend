@@ -15,7 +15,7 @@
       </button>
       <button mat-stroked-button (click)="newQuestion();"
               *ngIf="(settingsService.getSelectedObject()| async)?.allowQuestions"
-              [disabled]="! (selectedPlan?.status == runStatus.finished  || selectedPlan.status === runStatus.noSolution)">
+              [disabled]="! (selectedPlan?.status == runStatus.finished  || selectedPlan?.status === runStatus.noSolution)">
         Ask Question
       </button>
     </div>
@@ -32,7 +32,7 @@
       <a mat-tab-link *ngFor="let planRun of  runs$ | async"
          (click)="selectPlan(planRun)"
          [active]="selectedPlan && selectedPlan._id == planRun._id"
-         [disabled]="(plannerService.isPlannerBusy() | async) || !(planRun.status === runStatus.finished || planRun.status === runStatus.noSolution)">
+         [disabled]="(plannerService.isPlannerBusy() | async) || !(planRun?.status === runStatus.finished || planRun?.status === runStatus.noSolution)">
         <span *ngIf="! (settingsService.getSelectedObject() | async).usePlanPropertyValues">{{planRun.name}}</span>
         <span *ngIf="(settingsService.getSelectedObject() | async).usePlanPropertyValues"
               [matBadge]="planRun.planValue?.toString(10)" matBadgeColor="accent" matBadgeOverlap="false">{{planRun.name}}</span>

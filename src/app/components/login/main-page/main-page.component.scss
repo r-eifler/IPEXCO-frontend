@@ -5,7 +5,7 @@
   height: 100%;
   width: 100%;
   display: grid;
-  grid-template-rows: auto 1fr;
+  grid-template-rows: auto 1fr auto;
 }
 
 .control-container-desktop{
@@ -70,19 +70,45 @@ svg:not(:root) {
   height: auto;
 }
 
+.video-container {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.demo-container {
+  background-color: $primary-darker;
+  height: 100vh;
+  display: grid;
+  align-items: center;
+  grid-template-columns: 1fr 1fr;
+}
+
 .demo-button {
   font-size: 60px;
   font-family: 'Julius Sans One';
   width: 450px;
   height: 90px;
-  position: relative;
-  left: 10%;
-  top: 10%;
 }
 
 .iter-overview-image {
-  height: 60%;
-  position: relative;
-  left: 20%;
-  top: 40%;
+  box-sizing: border-box;
+  padding-right: 50px;
+  width: 100%;
+}
+
+.info-container {
+  height: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#info-button {
+  width: 400px;
+  height: 70px;
+  font-size: 40px;
+  font-family: 'Julius Sans One';
 }

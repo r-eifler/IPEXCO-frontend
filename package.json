@@ -27,6 +27,7 @@
     "@ngrx/router-store": "^10.0.0",
     "@ngrx/store": "^10.0.0",
     "@ngrx/store-devtools": "^10.0.0",
+    "@swimlane/ngx-charts": "^16.0.0",
     "@types/gsap": "^1.20.2",
     "angular-resizable-element": "^3.3.0",
     "gsap": "^3.2.6",

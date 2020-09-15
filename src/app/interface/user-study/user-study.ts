@@ -1,3 +1,6 @@
+import {USUser} from './user-study-user';
+import {ExplanationRun, PlanRun} from '../run';
+
 export enum UserStudyStepType {
   description = 'description',
   form = 'form',
@@ -31,3 +34,8 @@ export class UserStudy {
   }
 }
 
+export interface UserStudyData {
+  user: USUser;
+  planRuns: {timeStamp: Date, run: PlanRun}[];
+  expRuns: {timeStamp: Date, run: ExplanationRun}[];
+}

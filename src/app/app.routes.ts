@@ -25,6 +25,7 @@ import {UserStudyExecuteComponent} from './components/user-study/user-study-exec
 import {UserStudyEndComponent} from './components/user-study/user-study-end/user-study-end.component';
 import {AuthGuard} from './route-guards/auth-guard.guard';
 import {QuestionCreatorGuard} from './route-guards/question-creator.guard';
+import {UserStudyNavigationComponent} from './components/user-study/user-study-navigation/user-study-navigation.component';
 
 export const appRoutes: Routes = [
   { path: '', component: MainPageComponent},
@@ -47,13 +48,18 @@ export const appRoutes: Routes = [
 
   { path: 'user-studies', component: UserStudyCollectionComponent},
   { path: 'user-studies/new-user-study', component: UserStudyCreatorComponent},
-  { path: 'user-studies/:userStudyId', component: UserStudyBaseComponent,
+  { path: 'user-studies/:userStudyId', component: UserStudyNavigationComponent,
       children: [
-        { path: 'info', component: UserStudyCreatorComponent},
-        { path: 'start', component: UserStudyStartComponent},
-        { path: 'exec', component: UserStudyExecuteComponent},
-        { path: 'end', component: UserStudyEndComponent},
+        { path: 'setup', component: UserStudyCreatorComponent},
+        { path: 'data', component: UserStudyCreatorComponent},
       ]
+  },
+  { path: 'user-studies/:userStudyId/run', component: UserStudyBaseComponent,
+    children: [
+      { path: 'start', component: UserStudyStartComponent},
+      { path: 'exec', component: UserStudyExecuteComponent},
+      { path: 'end', component: UserStudyEndComponent},
+    ]
   },
   { path: 'pddl-database', component: FilesCollectionComponent, canActivate: [AuthGuard]},
 ];

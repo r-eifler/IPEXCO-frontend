@@ -9,9 +9,9 @@ export class AuthenticationInterceptor implements HttpInterceptor {
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
-    let token = localStorage.getItem('jwt-token');
+    let token = localStorage.getItem('xai-user-study-jwt-token');
     if (! token) {
-      token = localStorage.getItem('xai-user-study-jwt-token');
+      token = localStorage.getItem('jwt-token');
       // console.log('ADD User Study Token to request ...');
     }
     if (token) {
