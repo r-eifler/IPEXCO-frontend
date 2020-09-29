@@ -1,0 +1,45 @@
+<mat-card class="basic-card" style="grid-column: 1; grid-row: 1 / span 1;"
+          *ngIf="dataEntries?.length >= 0">
+  <mat-card-header>
+    <mat-card-title>
+      Plans
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <ngx-charts-bar-vertical
+      [view]="view"
+      [scheme]="colorScheme"
+      [results]="plansData"
+      [xAxis]="showXAxis"
+      [yAxis]="showYAxis"
+      [legend]="false"
+      [showXAxisLabel]="showXAxisLabel"
+      [showYAxisLabel]="showYAxisLabel"
+      xAxisLabel="Users"
+      yAxisLabel="#Plans">
+    </ngx-charts-bar-vertical>
+  </mat-card-content>
+</mat-card>
+
+<mat-card class="basic-card" style="grid-column: 1; grid-row: 2 / span 1;"
+          *ngIf="dataEntries?.length >= 0">
+  <mat-card-header>
+    <mat-card-title>
+      Questions
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <ngx-charts-bar-vertical
+      [view]="view"
+      [scheme]="colorScheme"
+      [results]="questionData"
+      [xAxis]="showXAxis"
+      [yAxis]="showYAxis"
+      [legend]="false"
+      [showXAxisLabel]="showXAxisLabel"
+      [showYAxisLabel]="showYAxisLabel"
+      xAxisLabel="Users"
+      yAxisLabel="#Questions">
+    </ngx-charts-bar-vertical>
+  </mat-card-content>
+</mat-card>

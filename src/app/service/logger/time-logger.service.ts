@@ -6,7 +6,7 @@ import {HttpClient} from '@angular/common/http';
 import {environment} from '../../../environments/environment';
 
 
-interface LogEntry {
+export interface LogEntry {
   id: number;
   componentName: string;
   start: Date;

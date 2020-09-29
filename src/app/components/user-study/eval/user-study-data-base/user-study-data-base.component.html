@@ -1,0 +1,37 @@
+<div class="main-container">
+  <mat-card class="basic-card" style="grid-column: 1 / span 1; grid-row: 1 / span 3;">
+    <mat-card-header>
+      <mat-card-title>
+        Test Persons
+      </mat-card-title>
+    </mat-card-header>
+      <mat-card-content>
+        <mat-selection-list #users [(ngModel)]="selectedDataEntries">
+          <mat-list-option *ngFor="let entry of data" [value]="entry">
+            <p mat-line>{{entry.user.prolificId}}</p>
+            <p mat-line>{{entry.user.createdAt | date}}</p>
+          </mat-list-option>
+        </mat-selection-list>
+      </mat-card-content>
+  </mat-card>
+
+  <div class="grid-container">
+    <nav mat-tab-nav-bar>
+      <a mat-tab-link *ngFor="let demo of demoIds" (click)="selectDemo(demo)" [active]="selectedDemoId == demo">{{demo}}</a>
+    </nav>
+      <div style="height: 100%; width: 100%;" *ngFor="let demo of demoIds">
+        <nav mat-tab-nav-bar>
+          <a mat-tab-link (click)="tabId = 1" [active]="tabId == 1">Overview</a>
+          <a mat-tab-link (click)="tabId = 2" [active]="tabId == 2">Time Logger</a>
+          <a mat-tab-link (click)="tabId = 3" [active]="tabId == 2">Test Person</a>
+        </nav>
+        <div style="height: 100%; width: 100%; overflow: auto">
+          <app-overview-data *ngIf="tabId == 1" style="height: 100%; overflow: auto;" [data]="data"></app-overview-data>
+          <app-time-logger-data *ngIf="tabId == 2" style="height: 100%; overflow: auto;" [data]="selectedDataEntries"></app-time-logger-data>
+          <app-individual-run-user-data *ngIf="tabId == 3" style="height: 100%; overflow: auto;" [data]="selectedDataEntries"></app-individual-run-user-data>
+        </div>
+      </div>
+  </div>
+
+</div>
+

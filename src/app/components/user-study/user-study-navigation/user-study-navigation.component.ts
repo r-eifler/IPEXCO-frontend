@@ -14,6 +14,8 @@ export class UserStudyNavigationComponent implements OnInit, OnDestroy {
 
   private ngUnsubscribe: Subject<any> = new Subject();
 
+  step = 2;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,

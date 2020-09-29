@@ -1,9 +1,10 @@
-<mat-tab-group>
-  <mat-tab label="Setup">
-    <app-user-study-creator></app-user-study-creator>
-  </mat-tab>
-  <mat-tab label="Data">
-    <app-user-study-data-base></app-user-study-data-base>
-  </mat-tab>
-</mat-tab-group>
-
+<div class="main-container">
+  <nav mat-tab-nav-bar>
+    <a mat-tab-link (click)="step = 1" [active]="step == 1">Setup</a>
+    <a mat-tab-link (click)="step = 2" [active]="step == 2">Data</a>
+  </nav>
+  <div style="height: 100%; width: 100%; overflow: auto">
+    <app-user-study-creator *ngIf="step == 1" style="height: 100%; overflow: auto;"></app-user-study-creator>
+    <app-user-study-data-base *ngIf="step == 2" style="height: 100%; overflow: auto;"></app-user-study-data-base>
+  </div>
+</div>

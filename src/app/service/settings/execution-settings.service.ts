@@ -21,12 +21,10 @@ export class ExecutionSettingsService extends SelectedObjectService<ExecutionSet
   }
 
   load(settingsId: string): Promise<void> {
-    console.log('Executing settings: ' + settingsId);
     return new Promise<void>((resolve, reject) => {
       try {
         this.http.get<IHTTPData<ExecutionSettings>>(this.BASE_URL + '/' + settingsId )
         .subscribe(httpData => {
-          console.log(httpData);
           this.saveObject(httpData.data);
           resolve();
           return;

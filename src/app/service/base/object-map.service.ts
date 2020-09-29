@@ -58,7 +58,7 @@ export abstract class ObjectMapService<K, T extends Identifiable> {
           v => {
             return [this.getKey(v), v];
         });
-
+        // console.log(tuples);
         this.mapStore.dispatch({type: LOAD, data: tuples});
       });
 

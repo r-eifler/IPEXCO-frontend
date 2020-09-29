@@ -1,0 +1,11 @@
+.grid-container {
+  width: 100%;
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  column-gap: 10px;
+  row-gap: 10px;
+}
+
+.basic-card {
+
+}

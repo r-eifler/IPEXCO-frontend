@@ -1,0 +1,55 @@
+<mat-card class="basic-card">
+  <mat-card-header>
+    <mat-card-title>
+      Plan Runs
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <p *ngIf="dataEntries?.length == 0">
+      No test person selected.
+    </p>
+    <p *ngIf="dataEntries?.length > 1">
+      To many test persons selected.
+    </p>
+    <ngx-charts-bar-vertical *ngIf="dataEntries?.length == 1"
+                             [view]="view"
+                             [scheme]="colorScheme"
+                             [results]="planRunData"
+                             [xAxis]="showXAxis"
+                             [yAxis]="showYAxis"
+                             [legend]="false"
+                             [showXAxisLabel]="showXAxisLabel"
+                             [showYAxisLabel]="showYAxisLabel"
+                             xAxisLabel="Plan"
+                             yAxisLabel="Utility">
+    </ngx-charts-bar-vertical>
+  </mat-card-content>
+</mat-card>
+
+<mat-card class="basic-card">
+  <mat-card-header>
+    <mat-card-title>
+      Questions
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <p *ngIf="dataEntries?.length == 0">
+      No test person selected.
+    </p>
+    <p *ngIf="dataEntries?.length > 1">
+      To many test persons selected.
+    </p>
+    <ngx-charts-bar-vertical *ngIf="dataEntries?.length == 1"
+                             [view]="view"
+                             [scheme]="colorScheme"
+                             [results]="explanationRunData"
+                             [xAxis]="showXAxis"
+                             [yAxis]="showYAxis"
+                             [legend]="false"
+                             [showXAxisLabel]="showXAxisLabel"
+                             [showYAxisLabel]="showYAxisLabel"
+                             xAxisLabel="Plan"
+                             yAxisLabel="#Questions">
+    </ngx-charts-bar-vertical>
+  </mat-card-content>
+</mat-card>
