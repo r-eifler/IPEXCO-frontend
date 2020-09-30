@@ -17,7 +17,7 @@
 
   <div class="grid-container">
     <nav mat-tab-nav-bar>
-      <a mat-tab-link *ngFor="let demo of demoIds" (click)="selectDemo(demo)" [active]="selectedDemoId == demo">{{demo}}</a>
+      <a mat-tab-link *ngFor="let demo of demoIds" (click)="selectDemo(demo)" [active]="selectedDemoId == demo">{{selectedDemo?.name}}</a>
     </nav>
       <div style="height: 100%; width: 100%;" *ngFor="let demo of demoIds">
         <nav mat-tab-nav-bar>

@@ -3,8 +3,6 @@ import {RunningUserStudyService, UserStudiesService} from '../../../../service/u
 import {UserStudy, UserStudyData, UserStudyStepType} from '../../../../interface/user-study/user-study';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
-import {LogEntry} from '../../../../service/logger/time-logger.service';
-import {USUser} from '../../../../interface/user-study/user-study-user';
 import {Demo} from '../../../../interface/demo';
 import {DemosService, RunningDemoService} from '../../../../service/demo/demo-services';
 import {ExecutionSettingsService} from '../../../../service/settings/execution-settings.service';
@@ -20,13 +18,14 @@ export class UserStudyDataBaseComponent implements OnInit, OnDestroy {
   private ngUnsubscribe: Subject<any> = new Subject();
 
   selectedDemoId: string;
-  tabId = 3;
+  tabId = 1;
   selectedDataEntries: UserStudyData[] = [];
 
   userStudy: UserStudy;
   data: UserStudyData[] = [];
 
   demoIds: string[];
+  selectedDemo: Demo;
 
   constructor(
     private selectedUserStudy: RunningUserStudyService,
@@ -72,6 +71,7 @@ export class UserStudyDataBaseComponent implements OnInit, OnDestroy {
       .subscribe(
         (demo: Demo) => {
           if (demo) {
+            this.selectedDemo = demo;
             this.runningDemoService.saveObject(demo);
             this.propertiesService.findCollection([{param: 'projectId', value: demo._id}]);
           }

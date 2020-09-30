@@ -9,7 +9,7 @@ import {PlanRunsService} from '../../../../service/planner-runs/planruns.service
 })
 export class IndividualRunUserDataComponent implements OnInit {
 
-  view: any[] = [700, 400];
+  view: any[] = [1000, 400];
 
   // options
   showXAxis = true;
