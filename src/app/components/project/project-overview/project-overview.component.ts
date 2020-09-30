@@ -39,7 +39,6 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
       .subscribe(project => {
         if (project !== null) {
           this.currentProject = project;
-          console.log(this.currentProject);
         }
       });
     }

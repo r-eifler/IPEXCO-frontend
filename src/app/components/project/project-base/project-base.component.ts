@@ -35,7 +35,7 @@ export class ProjectBaseComponent implements OnInit, OnDestroy {
 
   private ngUnsubscribe: Subject<any> = new Subject();
 
-  activeLink = './overview';
+  activeLink = '';
   links = [
     {ref: './overview', name: 'Overview'},
     {ref: './properties', name: 'Plan Properties'},
@@ -77,6 +77,12 @@ export class ProjectBaseComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    for ( const l of this.links) {
+      if (this.router.url.includes(l.ref.replace('./', ''))) {
+        this.activeLink = l.ref;
+        break;
+      }
+    }
   }
 
   ngOnDestroy(): void {

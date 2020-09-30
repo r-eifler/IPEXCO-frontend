@@ -24,7 +24,7 @@ export class TaskSchemaService {
 
   findSchema(project: Project): Observable<TaskSchema> {
     const url = environment.srcURL + project.taskSchema;
-    console.log(url);
+    // console.log(url);
     this.http.get<TaskSchema>(url).subscribe((json) => {
         const taskSchema: TaskSchema = new TaskSchema(json);
         // console.log(taskSchema);
