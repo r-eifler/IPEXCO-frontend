@@ -11,6 +11,9 @@ import {ViewSettings} from 'src/app/interface/settings/view-settings';
 import {MatCheckboxChange} from '@angular/material/checkbox';
 import {MatSelectionListChange} from '@angular/material/list/selection-list';
 import {MatTable, MatTableDataSource} from '@angular/material/table';
+import {DemoSettingsComponent} from '../../demo/demo-settings/demo-settings.component';
+import {ViewSettingsMenuComponent} from '../../settings/view-settings-menu/view-settings-menu.component';
+import {MatBottomSheet} from '@angular/material/bottom-sheet';
 
 @Component({
   selector: 'app-property-collection',
@@ -35,7 +38,9 @@ export class PropertyCollectionComponent implements OnInit, AfterViewInit, OnDes
     private responsiveService: ResponsiveService,
     private propertiesService: PlanPropertyMapService,
     private viewSettingsService: ViewSettingsService,
-    public dialog: MatDialog) {
+    public dialog: MatDialog,
+    private bottomSheet: MatBottomSheet
+  ) {
 
     this.viewSettings = this.viewSettingsService.getSelectedObject();
 
@@ -120,4 +125,7 @@ export class PropertyCollectionComponent implements OnInit, AfterViewInit, OnDes
     cellElement.appendChild(input);
   }
 
+  async openSettings() {
+    this.bottomSheet.open(ViewSettingsMenuComponent);
+  }
 }

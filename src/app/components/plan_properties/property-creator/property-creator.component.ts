@@ -54,6 +54,7 @@ export class PropertyCreatorComponent implements OnInit, OnDestroy {
     actionSetName: new FormControl(),
   });
 
+  propertyType: string;
   actionSetFromControls =  new Map<string, FormArray>();
 
   currentProject: Project;

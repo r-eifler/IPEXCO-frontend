@@ -3,7 +3,6 @@ import {QUESTION_REDIRECT} from './../../../app.tokens';
 import {PlannerService} from '../../../service/planner-runs/planner.service';
 import {DemosService} from '../../../service/demo/demo-services';
 import {PlanRunsService} from 'src/app/service/planner-runs/planruns.service';
-import {ViewSettingsMenuComponent} from '../../settings/view-settings-menu/view-settings-menu.component';
 import {TaskSchemaService} from '../../../service/task-info/schema.service';
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Project} from '../../../interface/project';
@@ -13,8 +12,6 @@ import {CurrentProjectService, ProjectsService} from 'src/app/service/project/pr
 import {DomainSpecificationService} from 'src/app/service/files/domain-specification.service';
 import {MatBottomSheet} from '@angular/material/bottom-sheet';
 import {PlanPropertyMapService} from 'src/app/service/plan-properties/plan-property-services';
-import {combineLatest} from 'rxjs/internal/observable/combineLatest';
-import {DisplayTask} from 'src/app/interface/display-task';
 import {PlanVisualizationProvider} from 'src/app/provider/plan-visualisation.provider';
 import {PLANNER_REDIRECT} from 'src/app/app.tokens';
 import {Subject} from 'rxjs';
@@ -37,6 +34,13 @@ import {ExecutionSettingsService} from '../../../service/settings/execution-sett
 export class ProjectBaseComponent implements OnInit, OnDestroy {
 
   private ngUnsubscribe: Subject<any> = new Subject();
+
+  activeLink = './overview';
+  links = [
+    {ref: './overview', name: 'Overview'},
+    {ref: './properties', name: 'Plan Properties'},
+    {ref: './iterative-planning', name: 'Iterative Planning'}
+    ];
 
   project: Project;
 

@@ -1,4 +1,13 @@
-<mat-toolbar color="#FFFFFF" style="height: 50px; min-height: 50px; background-color: #dfdfdf;">
+<div class="main-grid">
+  <nav mat-tab-nav-bar>
+    <a mat-tab-link *ngFor="let link of links"
+       (click)="activeLink = link.ref"
+       [active]="activeLink == link.ref"
+       [routerLink]="link.ref" >
+        {{link.name}}
+    </a>
+  </nav>
+<!--<mat-toolbar color="#FFFFFF" style="height: 50px; min-height: 50px; background-color: #dfdfdf;">
   <mat-toolbar-row>
     <span class="menu-spacer"></span>
     <div style="display: flex; flex-direction: row;">
@@ -20,9 +29,9 @@
       <mat-icon>settings</mat-icon>
     </button>
   </mat-toolbar-row>
-</mat-toolbar>
-<div style="height: calc(100vh - 100px); width: 100%; overflow: auto">
-  <router-outlet></router-outlet>
+</mat-toolbar>-->
+  <div style="height: 100%; width: 100%; overflow: auto">
+    <router-outlet></router-outlet>
+  </div>
 </div>
-
 

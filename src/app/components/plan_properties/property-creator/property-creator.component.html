@@ -10,9 +10,10 @@
         <input matInput type="text" formControlName="name">
       </mat-form-field>
 
-      <mat-radio-group name="propertyType" formControlName="type">
+      <mat-radio-group name="propertyType" formControlName="type" [(ngModel)]="propertyType">
         <mat-radio-button style="margin: 0px 5px" value="AS">AS</mat-radio-button>
         <mat-radio-button style="margin: 0px 5px" value="LTL">LTL</mat-radio-button>
+        <mat-radio-button style="margin: 0px 5px" value="G">Goal</mat-radio-button>
       </mat-radio-group>
 
 
@@ -21,7 +22,7 @@
         <input matInput type="text" formControlName="formula">
       </mat-form-field>
 
-      <mat-expansion-panel>
+      <mat-expansion-panel *ngIf="propertyType != 'G'">
         <mat-expansion-panel-header>
           <mat-panel-title>
             Action Sets

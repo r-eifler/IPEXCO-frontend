@@ -5,12 +5,29 @@
   width: 100%;
   height: 100%;
   padding: 10px;
+  display: grid;
+  grid-template-columns: 1fr 100px;
+  column-gap: 10px
 }
 
-.add-button {
-  position: fixed;
-  right: 20px;
-  bottom: 20px;
+.basic-card {
+  box-sizing: border-box;
+  height: 100%;
+  display: flex;
+  width: 100%;
+}
+
+.card-content {
+  box-sizing: border-box;
+}
+
+.expert-view-container {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  column-gap: 10px;
+  row-gap: 10px;
 }
 
 .flex-container{
@@ -20,9 +37,6 @@
 }
 
 .property-card-web {
-  width: 15%;
-  min-width: 150px;
-  margin: 10px;
 }
 
 .property-card-mobile {
@@ -33,12 +47,11 @@
 .property-icon {
   display: block;
   float: left;
-  background: $accent;
+  background: $primary;
   width: 40px;
   border-radius: 50%;
   text-align: center;
   color: #ffffff;
-  margin: 0 8px 0 -12px;
   line-height: 40px;
   font-weight: bold;
 }
@@ -52,6 +65,7 @@ h2 {
 }
 
 .property-table {
+  overflow: auto;
   width: 100%;
 }
 
@@ -59,4 +73,13 @@ h2 {
   width: 50px;
 }
 
+.action-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.action-card > button {
+  width: 100%;
+  margin-bottom: 10px;
+}
 
