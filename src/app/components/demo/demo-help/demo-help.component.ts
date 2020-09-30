@@ -69,9 +69,9 @@ export class DemoHelpComponent implements OnInit, OnDestroy {
     if (this.canUseQuestions && stepper.selectedIndex === 3) {
       startButton.disabled = false;
     }
-    if (!this.canUseQuestions && stepper.selectedIndex === 2) {
+    /* if (!this.canUseQuestions && stepper.selectedIndex === 2) {
       startButton.disabled = false;
-    }
+    }*/
   }
 
 }

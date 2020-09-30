@@ -147,7 +147,7 @@
           <p>How you ask question with respect to a plan is explained in the following step.</p>
 
         </mat-step>
-        <mat-step label="HOW TO: Ask Questions" *ngIf="canUseQuestions">
+        <mat-step label="HOW TO: Ask Questions"> <!--*ngIf="canUseQuestions">-->
 
           <p>
             To ask a question about a specific plan you can click the button in the bottom right corner in the detail-view
@@ -197,14 +197,14 @@
 
     <mat-card-actions style="width: 100%">
       <div class="button-box">
-        <button #nextButton mat-flat-button class='skip-button' (click)="nextStep()">Skip</button>
-        <button mat-flat-button (click)="goBack(stepper)" class="step-button">
+        <button #nextButton mat-flat-button class='skip-button' (click)="nextStep()" >Skip</button>
+        <button mat-icon-button (click)="goBack(stepper)" [disabled]="stepper.selectedIndex === 0" class="step-button">
           <mat-icon>keyboard_arrow_left</mat-icon>
         </button>
-        <button  mat-flat-button color="accent" (click)="goForward(stepper, startButton)" class="step-button">
+        <button  mat-icon-button (click)="goForward(stepper, startButton)" [disabled]="stepper.selectedIndex === 3" class="step-button">
           <mat-icon>keyboard_arrow_right</mat-icon>
         </button>
-        <button #startButton mat-flat-button color="primary" (click)="nextStep()" [disabled]="true">Next</button>
+        <button #startButton mat-flat-button color="primary" (click)="nextStep()" [disabled]="true">Start</button>
       </div>
     </mat-card-actions>
 

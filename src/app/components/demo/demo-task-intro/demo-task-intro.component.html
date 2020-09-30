@@ -50,10 +50,10 @@
   </mat-card-content>
   <mat-card-actions align="end">
     <div class="button-box">
-      <button mat-icon-button (click)="goBack(stepper)">
+      <button mat-icon-button (click)="goBack(stepper)" [disabled]="stepper.selectedIndex === 0">
         <mat-icon>keyboard_arrow_left</mat-icon>
       </button>
-      <button mat-icon-button (click)="goForward(stepper, startButton)">
+      <button mat-icon-button (click)="goForward(stepper, startButton)" [disabled]="stepper.selectedIndex === 1">
         <mat-icon>keyboard_arrow_right</mat-icon>
       </button>
       <button #startButton mat-flat-button color="accent" (click)="nextStep()" [disabled]="true">Start</button>
