@@ -49,7 +49,7 @@ export class UserStudyDataBaseComponent implements OnInit, OnDestroy {
             }
             this.selectDemo(this.demoIds[0]);
             this.data = await userStudiesService.loadData(this.userStudy._id);
-            console.log(this.data);
+            // console.log(this.data);
           }
         }
       );

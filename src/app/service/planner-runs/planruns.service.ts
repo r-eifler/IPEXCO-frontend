@@ -71,7 +71,7 @@ export class PlanRunsService extends ObjectCollectionService<PlanRun> {
   getPlanUtility(planRun: PlanRun): number {
       const planProperties = this.planPropertyMapService.getMap().value;
       if (planProperties.size === 0) {
-        console.log('No plan properties');
+        // console.log('No plan properties');
         return 0;
       }
       const utility = computePlanValue(planRun, planProperties);

@@ -96,13 +96,13 @@ export class AnswerViewComponent implements OnInit, OnDestroy {
       filteredMUGS.sort((a, b) => a.globalHardGoal ? -1 : 0);
       this.filteredMUGSs.push(filteredMUGS);
     }
-    console.log(this.filteredMUGSs);
+    // console.log(this.filteredMUGSs);
   }
 
   private filterMUGSUnsolvable(planRun: PlanRun, expRun: ExplanationRun, planProperties: Map<string, PlanProperty>) {
     this.filteredMUGSs = [];
-    console.log('MUGS:');
-    console.log(expRun.mugs);
+    // console.log('MUGS:');
+    // console.log(expRun.mugs);
     for (const entry of expRun.mugs) {
       if (this.isSubsetEq(entry, planRun.hardGoals)) {
         this.filteredMUGSs.push(entry.map(e => planProperties.get(e)));
