@@ -2,6 +2,8 @@ import {AnimationHandler} from '../../../../plan-visualization/integration/anima
 import {AfterViewInit, Component, ElementRef, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {TimeLoggerService} from '../../../../service/logger/time-logger.service';
+import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
 
 
 interface Action {
@@ -16,9 +18,11 @@ interface Action {
 })
 export class PlanAnimationViewComponent implements OnInit, AfterViewInit, OnDestroy {
 
+  private ngUnsubscribe: Subject<any> = new Subject();
   private loggerId: number;
 
   @ViewChild('animationcontainer') animationContainer: ElementRef;
+  @ViewChild('valuescontainer') valuesContainer: ElementRef;
 
   @Input()
   set visible(val: boolean) {
@@ -33,13 +37,23 @@ export class PlanAnimationViewComponent implements OnInit, AfterViewInit, OnDest
 
   ngAfterViewInit(): void {
     this.animationHandler.getAnimationDOMElement()
-    .subscribe(
-      elem => {
-        if (elem) {
-          this.animationContainer.nativeElement.appendChild(elem);
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(
+        elem => {
+          if (elem) {
+            this.animationContainer.nativeElement.appendChild(elem);
+          }
         }
-      }
-    );
+      );
+    this.animationHandler.getAnimationValuesDOMElement()
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(
+        elem => {
+          if (elem) {
+            this.valuesContainer.nativeElement.appendChild(elem);
+          }
+        }
+      );
   }
 
   ngOnInit(): void {
@@ -50,6 +64,8 @@ export class PlanAnimationViewComponent implements OnInit, AfterViewInit, OnDest
 
   ngOnDestroy(): void {
     this.timeLogger.deregister(this.loggerId);
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 
 }

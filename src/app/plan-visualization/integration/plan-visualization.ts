@@ -17,6 +17,7 @@ export abstract class PlanVisualization {
 
   abstract async init(): Promise<void> ;
   abstract getDisplayDOMElem(): Observable<Element>;
+  abstract getValueAttributesDisplayDOMElem(): Observable<Element>;
   abstract update();
   abstract animateAction(action: Action): Promise<void>;
   abstract reverseAnimateAction(action: Action): Promise<void>;

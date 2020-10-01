@@ -18,6 +18,9 @@
   <div class="animation-container" #animationcontainer>
 
   </div>
+  <div class="animation-container" #valuescontainer>
+
+  </div>
   <div class="button-container" *ngIf="animationHandler && (animationHandler.hasAnimation | async)">
     <button mat-icon-button (click)="animationHandler.stepBack()"
     [disabled]="! (animationHandler.currentAnimationHasPreviousEvent | async) || ! (animationHandler.currentAnimationPausedEvent | async)">

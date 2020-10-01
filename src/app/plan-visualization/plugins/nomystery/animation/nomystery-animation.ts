@@ -43,7 +43,7 @@ export class NoMysteryAnimation {
   switch (action.name) {
     case 'drive':
       const fuelCost: number = - Number(action.args[4].replace('level', ''));
-      return this.driveAnimation(action.args[0], action.args[2], action.args[1], -5);
+      return this.driveAnimation(action.args[0], action.args[2], action.args[1], fuelCost);
     case 'load':
       return this.unloadAnimation(action.args[0], action.args[1], action.args[2]);
     case 'unload':
@@ -56,7 +56,7 @@ export class NoMysteryAnimation {
     const truck: AnimationTruck = this.animationTask.trucks.get(truckId);
     const targetLocation: AnimationLocation = this.animationTask.locations.get(targetLocId);
 
-    return truck.animateDriveTo(targetLocation);
+    return truck.animateDriveTo(targetLocation, fuelDelta);
 
   }
 

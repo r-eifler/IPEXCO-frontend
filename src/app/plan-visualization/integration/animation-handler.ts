@@ -40,6 +40,10 @@ getAnimationDOMElement(): Observable<Element> {
   return this.animation.getDisplayDOMElem();
 }
 
+getAnimationValuesDOMElement(): Observable<Element> {
+  return this.animation.getValueAttributesDisplayDOMElem();
+}
+
 updateAnimationView() {
   this.animation.update();
 }

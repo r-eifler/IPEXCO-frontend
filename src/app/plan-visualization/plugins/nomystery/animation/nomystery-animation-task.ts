@@ -80,6 +80,9 @@ export class AnimationTruck extends AnimationNode {
   public currentFuel?: number;
   public loadedPackages: AnimationPackage[] = [];
 
+  public displayName: string;
+  public fuelDisplay: HTMLParagraphElement;
+
   constructor(private truck: Truck, public startLocation: AnimationLocation) {
     super(truck.name);
   }
@@ -90,10 +93,12 @@ export class AnimationTruck extends AnimationNode {
     this.y = this.startLocation.y;
     gsap.to(this.group, {duration: 0, x: this.x, y: this.y, ease: 'power4. out'});
     this.currentLocation = this.startLocation;
+    this.currentFuel = this.truck.startFuel;
+    this.updateFuelDisplay();
   }
 
-  getInitFuel(): number {
-    return this.truck.startFuel;
+  updateFuelDisplay() {
+    this.fuelDisplay.innerText = this.displayName + ' fuel: ' + this.currentFuel;
   }
 
   getFreePosition(): Position {
@@ -104,7 +109,7 @@ export class AnimationTruck extends AnimationNode {
     return {x: 60, y: 10 - index * 20};
   }
 
-  animateDriveTo(targetLocation: AnimationLocation): Promise<any> {
+  animateDriveTo(targetLocation: AnimationLocation, fuelConsumption: number): Promise<any> {
 
     const startPosition = {x: this.currentLocation.x, y: this.currentLocation.y};
     const targetPosition = {x: targetLocation.x, y: targetLocation.y};
@@ -114,8 +119,10 @@ export class AnimationTruck extends AnimationNode {
       this.currentLocation = targetLocation;
       this.x = targetPosition.x;
       this.y = targetPosition.y;
+      this.currentFuel -= fuelConsumption;
       const tween = gsap.to(this.group, {duration: 0.5, x: this.x, y: this.y, ease: 'power4. out'});
       tween.then(() => {
+        this.updateFuelDisplay();
         resolve();
       });
     });

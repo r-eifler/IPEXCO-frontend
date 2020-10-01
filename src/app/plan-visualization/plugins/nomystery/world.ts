@@ -1,8 +1,9 @@
 import {NoMysteryAnimationTask} from './animation/nomystery-animation-task';
 
 
-export async function loadTrucks(task: NoMysteryAnimationTask, parentSVG: SVGElement) {
+export async function loadTrucks(task: NoMysteryAnimationTask, parentSVG: SVGElement, valuesContainer: HTMLDivElement) {
   for (const truck of task.trucks.values()) {
+    truck.displayName = truck.id === 't0' ? 'red truck' : 'blue truck';
     const fileName = truck.id === 't0' ? 'truck_red.svg' : 'truck_blue.svg';
     const svgGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
     const image = document.createElementNS('http://www.w3.org/2000/svg', 'image');
@@ -16,6 +17,12 @@ export async function loadTrucks(task: NoMysteryAnimationTask, parentSVG: SVGEle
     svgGroup.appendChild(image);
     svgGroup.style.zIndex = '20';
     parentSVG.appendChild(svgGroup);
+
+    // fuel display
+    const p = document.createElement('p');
+    p.style.fontSize = '24px';
+    valuesContainer.appendChild(p);
+    truck.fuelDisplay = p;
   }
 }
 

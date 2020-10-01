@@ -44,6 +44,8 @@ export class NoMysteryVisualization extends PlanVisualization {
 
   private mainDomElement$: BehaviorSubject<Element> = new BehaviorSubject<Element>(null);
   private mainSVG: SVGElement;
+  private valuesDomElement$: BehaviorSubject<Element> = new BehaviorSubject<Element>(null);
+  private valuesContainer: HTMLDivElement;
 
   constructor(
     protected currentProjectService: CurrentProjectService,
@@ -84,6 +86,11 @@ export class NoMysteryVisualization extends PlanVisualization {
     return this.mainDomElement$;
   }
 
+  getValueAttributesDisplayDOMElem(): Observable<Element> {
+
+    return this.valuesDomElement$;
+  }
+
   async init() {
 
     this.mainSVG = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
@@ -94,11 +101,13 @@ export class NoMysteryVisualization extends PlanVisualization {
     gsap.registerPlugin(Draggable);
     // tslint:disable-next-line:no-unused-expression
     new Draggable(this.mainSVG);
+    this.createValuesContainer();
 
     await this.createScene();
     this.animation.initPositions();
 
     this.mainDomElement$.next(this.mainSVG);
+    this.valuesDomElement$.next(this.valuesContainer);
   }
 
   updateLocationPositions() {
@@ -126,12 +135,20 @@ export class NoMysteryVisualization extends PlanVisualization {
             this.mainSVG.appendChild(backgroundImage);
 
             this.updateLocationPositions();
-            await loadTrucks(this.animationTask, this.mainSVG);
+            await loadTrucks(this.animationTask, this.mainSVG, this.valuesContainer);
             await loadPackages(this.animationTask, this.mainSVG);
             resolve();
           }
         });
       });
+  }
+
+  createValuesContainer() {
+    this.valuesContainer = document.createElement('div');
+    this.valuesContainer.style.height = '100px';
+    this.valuesContainer.style.display = 'flex';
+    this.valuesContainer.style.justifyContent = 'space-evenly';
+    this.valuesContainer.style.alignItems = 'center';
   }
 
 
