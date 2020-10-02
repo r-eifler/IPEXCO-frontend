@@ -46,7 +46,7 @@ export class OverviewDataComponent implements OnInit {
     this.plansData = [];
     for (const entry of this.dataEntries) {
       this.plansData.push({
-        name: entry.user._id,
+        name: entry.user.prolificId !== '000000' ? entry.user.prolificId : entry.user._id.slice(-5),
         value: entry.planRuns.length
       });
     }
@@ -56,7 +56,7 @@ export class OverviewDataComponent implements OnInit {
     this.questionData = [];
     for (const entry of this.dataEntries) {
       this.questionData.push({
-        name: entry.user._id,
+        name: entry.user.prolificId !== '000000' ? entry.user.prolificId : entry.user._id.slice(-5),
         value: entry.expRuns.length
       });
     }

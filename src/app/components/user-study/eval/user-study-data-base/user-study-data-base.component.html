@@ -8,7 +8,7 @@
       <mat-card-content>
         <mat-selection-list #users [(ngModel)]="selectedDataEntries">
           <mat-list-option *ngFor="let entry of data" [value]="entry">
-            <p mat-line>{{entry.user.prolificId}}</p>
+            <p mat-line>{{entry.user.prolificId}} ({{entry.user._id.slice(-5)}})</p>
             <p mat-line>{{entry.user.createdAt | date}}</p>
           </mat-list-option>
         </mat-selection-list>
