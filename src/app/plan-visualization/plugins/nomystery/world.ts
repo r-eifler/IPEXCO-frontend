@@ -8,7 +8,7 @@ export async function loadTrucks(task: NoMysteryAnimationTask, parentSVG: SVGEle
     const svgGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
     const image = document.createElementNS('http://www.w3.org/2000/svg', 'image');
     image.setAttribute('href', 'assets/' + fileName);
-    image.style.height = '60';
+    image.style.height = '60px';
     image.style.width = 'auto';
     truck.svg = image;
     truck.group = svgGroup;
@@ -30,7 +30,7 @@ export  function loadPackages(task: NoMysteryAnimationTask, parentSVG: SVGElemen
   for (const pack of task.packages.values()) {
     const image = document.createElementNS('http://www.w3.org/2000/svg', 'image');
     image.setAttribute('href', 'assets/package.svg');
-    image.style.height = '20';
+    image.style.height = '20px';
     image.style.width = 'auto';
     const svgGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
     const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
