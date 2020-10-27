@@ -61,7 +61,7 @@ export class AnimationSettingsNoMysteryVisu {
     this.animationSettings.locationDropPositions = this.locationPosSettings.getCurrentLocationsDropPositions();
     this.currentProject.animationSettings = this.animationSettings.toJSON();
 
-    // console.log(this.currentProject.animationSettings);
+    // console.log(this.currentProject);
 
     this.projectsService.saveObject(this.currentProject);
     this.projectService.saveObject(this.currentProject);

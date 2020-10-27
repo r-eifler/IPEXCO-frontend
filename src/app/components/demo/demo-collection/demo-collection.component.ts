@@ -102,11 +102,13 @@ export class DemoCollectionComponent implements OnInit, OnDestroy {
 
   openAnimationSettings(demo: Demo) {
     this.runningDemoService.saveObject(demo);
-    this.projectsService.getObject(demo._id)
-    .pipe(takeUntil(this.ngUnsubscribe))
-    .subscribe((project: Project) => {
-      this.currentProjectService.saveObject(project);
-    });
+    this.currentProjectService.saveObject(demo);
+    // this.projectsService.getObject(demo._id)
+    // .pipe(takeUntil(this.ngUnsubscribe))
+    // .subscribe((project: Project) => {
+    //   console.log('update selected project');
+    //   this.currentProjectService.saveObject(project);
+    // });
     this.bottomSheet.open(AnimationsSettingsDemoComponent, {data: demo});
   }
 

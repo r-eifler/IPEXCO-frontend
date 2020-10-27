@@ -50,6 +50,7 @@ export class AnimationSettingsNomysteryComponent implements OnInit, AfterViewIni
     .subscribe(
       elems => {
         for ( const e of elems) {
+          this.locationSettingsContainer.nativeElement.innerHTML = '';
           this.locationSettingsContainer.nativeElement.appendChild(e);
         }
       }
