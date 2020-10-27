@@ -73,7 +73,7 @@ export class UserMainPageComponent implements OnInit, OnDestroy {
   }
 
   async  openUserStudy(study: UserStudy) {
-    await this.router.navigate([''.concat(...['/user-studies/', study._id, '/start'])], { relativeTo: this.route });
+    await this.router.navigate([''.concat(...['/user-studies/', study._id])], { relativeTo: this.route });
   }
 
   async  toUserStudyCollection() {
