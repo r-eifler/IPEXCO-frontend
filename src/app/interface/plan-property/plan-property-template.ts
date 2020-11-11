@@ -71,9 +71,10 @@ export class PlanPropertyTemplate {
     let naturalLanguageDescription = this.sentenceTemplate;
 
     for (const pair of varValueMapping.entries()) {
-      formula = formula.replace(pair[0], pair[1]);
-      name = name.replace(pair[0], pair[1]);
-      naturalLanguageDescription = naturalLanguageDescription.replace(pair[0], pair[1]);
+      const regex = new RegExp(pair[0].replace('$', '\\$'), 'g');
+      formula = formula.replace(regex, pair[1]);
+      name = name.replace(regex, pair[1]);
+      naturalLanguageDescription = naturalLanguageDescription.replace(regex, pair[1]);
     }
 
     const actionSets: ActionSet[] = [];
