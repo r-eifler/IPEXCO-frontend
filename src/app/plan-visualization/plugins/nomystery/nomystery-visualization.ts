@@ -12,6 +12,7 @@ import {NoMysteryTask} from './nomystery-task';
 import {gsap} from 'gsap';
 import {Draggable} from 'gsap/Draggable';
 import {Action} from '../../../interface/plan';
+import {Demo} from '../../../interface/demo';
 
 
 interface Position {
@@ -56,7 +57,7 @@ export class NoMysteryVisualization extends PlanVisualization {
     this.currentProjectService.getSelectedObject().subscribe(
       project => {
         if (project) {
-          this.backgroundImagePath = project.animationImage;
+          this.backgroundImagePath = (project as Demo).summaryImage;
           this.animationSettings = new AnimationSettingsNoMystery(project.animationSettings);
           this.scaleDropPositions();
         }
@@ -129,7 +130,7 @@ export class NoMysteryVisualization extends PlanVisualization {
             const backgroundImage: SVGImageElement = document.createElementNS('http://www.w3.org/2000/svg', 'image');
             backgroundImage.style.height = '700px';
             backgroundImage.style.width = '700px';
-            backgroundImage.setAttribute('href', 'assets/task1.svg');
+            backgroundImage.setAttribute('href', this.backgroundImagePath);
 
             // svgBackground.appendChild(backgroundImage);
             this.mainSVG.appendChild(backgroundImage);

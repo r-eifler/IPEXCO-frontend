@@ -5,6 +5,7 @@ import {Project} from 'src/app/interface/project';
 import {CurrentProjectService, ProjectsService} from 'src/app/service/project/project-services';
 import {TaskSchemaService} from '../../../../service/task-info/schema.service';
 import {AnimationSettingsNoMystery} from './animation-settings-nomystery';
+import {Demo} from '../../../../interface/demo';
 
 
 interface Position {
@@ -34,11 +35,14 @@ export class AnimationSettingsNoMysteryVisu {
           this.currentProject = project;
           this.animationSettings = new AnimationSettingsNoMystery(project.animationSettings);
 
+          let backgroundImagePath = '';
+          backgroundImagePath = (project as Demo).summaryImage;
+
           taskSchemaService.getSchema().subscribe(
             schema => {
               if (schema) {
                 const task = new NoMysteryTask(schema);
-                this.locationPosSettings = new LocationPositioningSettings(task, this.animationSettings);
+                this.locationPosSettings = new LocationPositioningSettings(backgroundImagePath, task, this.animationSettings);
                 this.displayObservable.next([this.locationPosSettings.display()]);
               }
             }

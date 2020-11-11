@@ -3,8 +3,9 @@ import {NoMysteryAnimationTask} from './animation/nomystery-animation-task';
 
 export async function loadTrucks(task: NoMysteryAnimationTask, parentSVG: SVGElement, valuesContainer: HTMLDivElement) {
   for (const truck of task.trucks.values()) {
-    truck.displayName = truck.id === 't0' ? 'red truck' : 'blue truck';
-    const fileName = truck.id === 't0' ? 'truck_red.svg' : 'truck_blue.svg';
+    const truckID = truck.id.replace('t', '');
+    truck.displayName = 'truck ' + truckID;
+    const fileName = 'truck_' + truckID + '.svg';
     const svgGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
     const image = document.createElementNS('http://www.w3.org/2000/svg', 'image');
     image.setAttribute('href', 'assets/' + fileName);

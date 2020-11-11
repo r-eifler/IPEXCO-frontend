@@ -46,6 +46,7 @@ export class LocationPositioningSettings {
   dropLocations: MoveDropLocation[] = [];
 
   constructor(
+    private backgroundImagePath: string,
     private task: NoMysteryTask,
     private animationSettings: AnimationSettingsNoMystery) {
 
@@ -60,7 +61,7 @@ export class LocationPositioningSettings {
     const backgroundImage: SVGImageElement = document.createElementNS('http://www.w3.org/2000/svg', 'image');
     backgroundImage.style.height = '700px';
     backgroundImage.style.width = '700px';
-    backgroundImage.setAttribute('href', 'assets/task1.svg');
+    backgroundImage.setAttribute('href', backgroundImagePath);
     this.svg.appendChild(backgroundImage);
 
     this.createLocations();
