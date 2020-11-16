@@ -50,6 +50,8 @@ export class DemoPlannerService extends PlannerService {
 
 
     private static filterMUGS(questionPlanProperties: string[], demo: Demo): string [][] {
+      // console.log(questionPlanProperties);
+      // console.log(demo.data.MUGS);
       const filteredMugs = [];
       for (const mugs of demo.data.MUGS) {
         for (const questionFact of questionPlanProperties) {
@@ -60,10 +62,7 @@ export class DemoPlannerService extends PlannerService {
                 mugsRest.push(fact);
               }
             }
-            if (mugsRest.length !== 0) {
-              filteredMugs.push(mugsRest);
-            }
-
+            filteredMugs.push(mugsRest);
             break;
           }
         }

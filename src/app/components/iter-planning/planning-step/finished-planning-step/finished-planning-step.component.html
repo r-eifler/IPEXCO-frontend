@@ -3,14 +3,14 @@
     <a mat-tab-link (click)="showTab = 1" [active]="showTab == 1">
       Goal
     </a>
-    <a mat-tab-link [disabled]="! hasPlan" (click)="showTab = 2" [active]="showTab == 2">
-      Plan
-    </a>
+<!--    <a mat-tab-link [disabled]="! hasPlan" (click)="showTab = 2" [active]="showTab == 2">-->
+<!--      Plan-->
+<!--    </a>-->
   </nav>
   <div class="content-container" *ngIf="showTab == 1">
     <app-task-view style="height: 100%;overflow: auto;"></app-task-view>
   </div>
-  <div class="content-container" *ngIf="showTab == 2">
-    <app-plan-view style="height: 100%;overflow: auto;"></app-plan-view>
-  </div>
+<!--  <div class="content-container" *ngIf="showTab == 2">-->
+<!--    <app-plan-view style="height: 100%;overflow: auto;"></app-plan-view>-->
+<!--  </div>-->
 </div>

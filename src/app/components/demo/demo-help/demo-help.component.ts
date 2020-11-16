@@ -18,6 +18,8 @@ export class DemoHelpComponent implements OnInit, OnDestroy {
 
   isMobile: boolean;
   canUseQuestions = false;
+  numSteps = 0;
+  seenEverything = false;
 
   private ngUnsubscribe: Subject<any> = new Subject();
 
@@ -45,6 +47,7 @@ export class DemoHelpComponent implements OnInit, OnDestroy {
         settings => {
           if (settings) {
             this.canUseQuestions = settings.allowQuestions;
+            this.numSteps = settings.allowQuestions ? 3 : 2;
           }
         }
       );
@@ -64,14 +67,11 @@ export class DemoHelpComponent implements OnInit, OnDestroy {
     stepper.previous();
   }
 
-  goForward(stepper: MatStepper, startButton: MatButton) {
+  goForward(stepper: MatStepper) {
     stepper.next();
-    if (this.canUseQuestions && stepper.selectedIndex === 3) {
-      startButton.disabled = false;
+    if (stepper.selectedIndex === this.numSteps - 1) {
+      this.seenEverything = true;
     }
-    /* if (!this.canUseQuestions && stepper.selectedIndex === 2) {
-      startButton.disabled = false;
-    }*/
   }
 
 }

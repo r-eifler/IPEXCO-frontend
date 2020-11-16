@@ -1,7 +1,7 @@
 <div class="main-container">
   <mat-card class="main-card">
     <mat-card-header>
-      <mat-card-title>Demo Introduction</mat-card-title>
+      <mat-card-title>Introductions</mat-card-title>
     </mat-card-header>
     <mat-card-content>
       <mat-horizontal-stepper #stepper [contentEditable]="true">
@@ -15,97 +15,16 @@
             done
           </span>
         </ng-template>
-        <mat-step label="Overall Goal" >
-          <div class="scroll-content">
-          <div>
-            <p>Given a planning task like <span>delivering packages</span> the goal is to find a plan.
-            A plan is a sequence of actions which describes what you have to do in order to solve the planning task.
-              If you have to deliver packages, a plan could tell you for example where you would have to drive to and where you would have to load and unload the packages.</p>
-          </div>
-<!--          <div style="display: flex; justify-content: space-evenly; padding: 30px 0px;">-->
-<!--            <div style="width: 200px; height: 100px; background-color: #5e5e5e;">-->
-<!--              TODO: add example image-->
-<!--            </div>-->
-<!--            <div style="width: 200px; height: 100px; background-color: #5e5e5e;">-->
-<!--              TODO: add example image-->
-<!--            </div>-->
-<!--          </div>-->
-          <div>
-            <p>The number of actions you can perform are always limited. For example your truck only has a limited amount of fuel.</p>
-
-            <p>Depending on your situation you might prefer certain plans over others.
-              Maybe you prefer plans where: "The route through downtown is not used, because there is always to much traffic."</p>
-
-            <p>The goal is to find the <span style="font-weight: bold;">best</span> plan possible given the resource constraints and your preferences.</p>
-          </div>
-
-          <p>To find the best plan we use <span style="font-weight: bold;">Iterative Planning</span> with human guidance. This approach is explained in the next step.</p>
-
-          </div>
-        </mat-step>
-
-        <mat-step label="Iterative Planning" >
-          <div class="scroll-content">
-            <p><span style="font-weight: bold;">Iterative Planning</span> with human guidance works the following way. You define a set of properties you want to be satisfied by the plan (in the following called hard-goals). The planner then computes a plan which satisfies these hard-goals if possible.
-            If there is no plan you have to remove properties from the hard goals until there exists a plan.</p>
-
-            <p>If the planner finds a plan two cases are possible:</p>
-
-            <mat-list dense>
-              <mat-list-item>
-                1. The plan satisfies all the properties you desire. In this case your job is done.
-              </mat-list-item>
-              <mat-list-item>
-                2. The plan does not satisfy all the properties you would like to.
-              </mat-list-item>
-            </mat-list>
-
-            <p>
-              In case 2. you may simply want to enforce the missing properties.
-              But what happens if this is not possible? It might be the case that there exists no such plan.
-              In the setting of delivering packages there might not be enough fuel available.
-              Additionally, properties you would like to be satisfied might somehow contradict each other.
-            </p>
-
-            <ng-container *ngIf="canUseQuestions">
-              <p>Instead of randomly trying to find out, for which property selection there exists a plan,
-                you might want to ask questions about properties not satisfied in the current plan.
-                Such a question could for example be: "Why don't you use the less busy route around down town?".
-              </p>
-
-              <p>
-                The system will then provide an answer describing which currently satisfied properties can no longer be
-                satisfied if you would satisfy the property/ies in your question.
-                "If you used the route avoiding down town, you could no longer deliver package 1", could for example be the answer of the sample question.
-              </p>
-            </ng-container>
-
-            <p>
-              The following steps explain how to compute a plan.
-            </p>
-
-          </div>
-        </mat-step>
         <mat-step label="HOW TO: Compute Plans">
 
-          <p>To compute a new plan, you have to click the <mat-icon [inline]="true">add</mat-icon>-button in the navigation bar:</p>
-
-          <img src="assets/screenshots/navigation.png" style="height: 400px; width: auto; padding: 20px 0">
+          <p>To compute a new plan, you have to click the <span style="font-weight: bold">New Plan</span> button in the navigation bar:</p>
 
           <p>
-            This opens a new view.
-            In the top left you can see the global hard-goals. These goals have to be satisfied by all plans and are
+            This opens a new view on the right.
+            Here you can select the goals for the next iteration.
+            In the top you can see the global goals. These goals have to be satisfied by all plans and are
             automatically included.
           </p>
-
-          <img src="assets/screenshots/global-hardgoals.png" style="height: 400px; width: auto; padding: 20px 0">
-
-          <p>
-            Below the global hard-goals there are the properties which you can select as additional hard-goals.
-          </p>
-
-          <img src="assets/screenshots/selected-hardgoal.png" style="height: 400px; width: auto;  padding: 20px 0">
-
 
           <p>
             You start the plan computation with the button in the bottom right corner.
@@ -113,63 +32,66 @@
           </p>
 
           <p>
-            When the computation finished a new plan will appear in the navigation bar.
-            By clicking the 'Details'-button you get access to the following information:
+            When the computation finished, a new plan will appear in the navigation bar.
           </p>
 
-          <p>
-            The goals, the computed plan, and an animation of the plan.
-            Those are accessible via the corresponding tabs.
-          </p>
-
-          <img src="assets/screenshots/plan-tabs.png" style="height: 400px; width: auto;  padding: 20px 0">
-
-            <p>The tab Goals includes:</p>
+            <p>The middle column provides you the following information:</p>
 
             <mat-list>
               <mat-list-item>
-                The plan-properties which are enforced as hard-goals. This includes the global hard-goals and the once you
-                selected.
+                The goals you selected.
               </mat-list-item>
               <mat-list-item>
-                The plan-properties which are satisfied by the plan although they are not enforced.
+                The properties which are additionally satisfied by the plan.
               </mat-list-item>
               <mat-list-item>
                 The overall utility of the plan.
               </mat-list-item>
               <mat-list-item>
-                The plan-properties which are not satisfied by the plan.
+                The properties which are not satisfied by the plan.
               </mat-list-item>
             </mat-list>
 
-          <p>The tab Plan shows the computed plan.</p>
-
-          <p>How you ask question with respect to a plan is explained in the following step.</p>
+          <p>In the left column you can play an animation of the plan.</p>
 
         </mat-step>
-        <mat-step label="HOW TO: Ask Questions"> <!--*ngIf="canUseQuestions">-->
+        <mat-step label="HOW TO: Ask Questions" *ngIf="canUseQuestions">
 
           <p>
-            To ask a question about a specific plan you can click the button in the bottom right corner in the detail-view
-            of a plan. This opens the question view. On the left you can see the same information as in the details-view
-            of a plan. On the right you have the possibility to specify your question.
+            To ask a question you can click the <span style="font-weight: bold">Ask Question </span>.
+            This opens the question view.
           </p>
 
           <img src="assets/screenshots/question-selected.png" style="height: 400px; width: auto; padding: 20px 0">
 
           <p>
-            A question always has the structure of: <span style="font-weight: bold;">Why not A and B and ... ?</span>,
-            where A and B are plan-properties which are currently not satisfied by the plan.
-            You have to select at least one plan-property you would like to include in your question.
+            You can ask questions of the structure: "Why not A?".
+            Where A is a property, which is currently not satisfied by the plan.
           </p>
 
           <p>
-            By pressing the button in the bottom right corner you start the computation of the answer.
+            By pressing the button in the bottom you start the computation of the answer.
           </p>
 
-          <p>
-            The answer to your question is shown below your question.
-          </p>
+          <p>There are different possible answers:</p>
+
+          <mat-list>
+            <mat-list-item>
+              There is no reason, why the property is not satisfied. The system then answers you:
+              "There exists a plan which satisfies the properties in your question."
+            </mat-list-item>
+            <mat-list-item>
+              It is not possible to satisfy the property in your question. The system then answers:
+              "There is no plan which satisfies this properties.
+              All global goals and the properties in the question can not be satisfied together."
+            </mat-list-item>
+            <mat-list-item>
+              The property in your questions can be satisfied, if you give up at least you of the selected goals.
+              The system the tells you which goals you have to give up.
+            </mat-list-item>
+          </mat-list>
+
+          <p>The following two pictures give some example questions and answers.</p>
 
           <div style="display: flex; flex-direction: row; justify-content: space-evenly">
             <img src="assets/screenshots/answer-mugs.png" style="height: 400px; width: auto; padding: 20px 0">
@@ -177,17 +99,17 @@
           </div>
 
           <p>
-            It can also happen, that enforcing the plan-properties in you question is possible without giving up any of
-            the other currently satisfied plan-properties.
-            Then the answer is: "There exists a plan, which satisfied all the plan-properties."
+            If the properties you selected can not be satisfied you can only ask one question: "Why?"
+            The system answers your question by showing you which properties can not be satisfied together.
           </p>
+
+        </mat-step>
+        <mat-step label="HOW TO: Finish">
 
           <p>
-            On the other side it is also possible, that there does not exists a plan at all, which satisfies the current
-            hard-goals and the plan-properties in the question. Then the answer is: "There is no plan which satisfies this properties.
-            All global hard goals and the plan-properties in the question can not be satisfied together."
+            If you think you found the best plan (highest utility) possible you can leave the task with the
+            <span style="font-weight: bold">Finish</span> button.
           </p>
-
 
 
         </mat-step>
@@ -197,14 +119,16 @@
 
     <mat-card-actions style="width: 100%">
       <div class="button-box">
-        <button #nextButton mat-flat-button class='skip-button' (click)="nextStep()" >Skip</button>
+        <!--        <button #nextButton mat-flat-button class='skip-button' (click)="nextStep()" >Skip</button>-->
         <button mat-icon-button (click)="goBack(stepper)" [disabled]="stepper.selectedIndex === 0" class="step-button">
           <mat-icon>keyboard_arrow_left</mat-icon>
         </button>
-        <button  mat-icon-button (click)="goForward(stepper, startButton)" [disabled]="stepper.selectedIndex === 3" class="step-button">
+        <button  mat-icon-button (click)="goForward(stepper)"
+                 [disabled]="stepper.selectedIndex === this.numSteps - 1" class="step-button">
           <mat-icon>keyboard_arrow_right</mat-icon>
         </button>
-        <button #startButton mat-flat-button color="primary" (click)="nextStep()" [disabled]="true">Start</button>
+        <button #startButton mat-flat-button color="primary" (click)="nextStep()"
+                [disabled]="stepper.selectedIndex !== this.numSteps - 1 && ! seenEverything">Start</button>
       </div>
     </mat-card-actions>
 

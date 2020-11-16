@@ -6,10 +6,36 @@
       </mat-card-title>
     </mat-card-header>
     <mat-card-content>
-      <a mat-flat-button color="primary" [href]="this.url"></a>
+      <div class="center-container">
+        <p>
+          The next step is a questionnaire.
+          The button below will open a new tab with a Google Form.
+        </p>
+        <p style="margin-bottom: 50px">
+          Please enter your Prolific ID: {{prolificID}} in the first question.
+        </p>
+
+        <a mat-flat-button color="primary" [href]="url" target="_blank" style="margin-bottom: 200px">Questionnaire</a>
+
+        <p style="margin-bottom: 20px">
+          If you finish the questionnaire you will receive a validation code you can enter below to continue.
+        </p>
+        <mat-form-field appearance="fill" [(ngModel)]="userInputCode" ngDefaultControl style="margin-bottom: 50px">
+          <mat-label>validation code</mat-label>
+          <input matInput>
+        </mat-form-field>
+
+        <p *ngIf="userInputCode !== '' && userInputCode !== verificationCode" style="color: red">
+          Wrong validation code!
+        </p>
+        <p *ngIf="userInputCode === verificationCode" style="color: green">
+          Correct validation code, please continue with the next step.
+        </p>
+
+      </div>
     </mat-card-content>
     <mat-card-actions align="end">
-      <button mat-flat-button color="primary" (click)="nextStep()">Next</button>
+      <button mat-flat-button color="primary" [disabled]="verificationCode != userInputCode" (click)="nextStep()">Next</button>
     </mat-card-actions>
   </mat-card>
 

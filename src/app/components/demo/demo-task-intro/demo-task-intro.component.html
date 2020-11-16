@@ -4,32 +4,11 @@
     <mat-card-title>Task Introduction</mat-card-title>
   </mat-card-header>
   <mat-card-content>
-    <mat-horizontal-stepper #stepper [contentEditable]="true">
-      <ng-template matStepperIcon="edit">
-        <span class="material-icons">
-          done
-        </span>
-      </ng-template>
-      <ng-template matStepperIcon="done">
-        <span class="material-icons">
-          done
-        </span>
-      </ng-template>
-
-      <mat-step label="Domain Info" >
-        <div [innerHTML]="(demo$ | async).taskInfo | marked"></div>
-      </mat-step>
-
-
-      <mat-step label="Picture & Plan-Properties" >
         <div  style="height: 100%; width: 100%; display: flex; flex-direction: row;">
           <div style="height: 100%; width: 50%; display: flex; flex-direction: row; justify-content: center;">
             <img [src]="srcUrl + (demo$ | async).summaryImage" style="max-height: 100%; max-width: 100%">
           </div>
           <div style="height: 100%; width: 50%; display: flex; flex-direction: column;">
-          <p *ngIf="(settings$ | async).usePlanPropertyValues">
-            Every plan-property has an utility, which indicates how much worth the plan-property is.
-          </p>
 
           <p>The following properties are available:</p>
 
@@ -43,20 +22,10 @@
           </mat-list>
           </div>
         </div>
-      </mat-step>
-
-    </mat-horizontal-stepper>
-
   </mat-card-content>
   <mat-card-actions align="end">
     <div class="button-box">
-      <button mat-icon-button (click)="goBack(stepper)" [disabled]="stepper.selectedIndex === 0">
-        <mat-icon>keyboard_arrow_left</mat-icon>
-      </button>
-      <button mat-icon-button (click)="goForward(stepper, startButton)" [disabled]="stepper.selectedIndex === 1">
-        <mat-icon>keyboard_arrow_right</mat-icon>
-      </button>
-      <button #startButton mat-flat-button color="accent" (click)="nextStep()" [disabled]="true">Start</button>
+      <button #startButton mat-flat-button color="accent" (click)="nextStep()" >Start</button>
     </div>
   </mat-card-actions>
 </mat-card>

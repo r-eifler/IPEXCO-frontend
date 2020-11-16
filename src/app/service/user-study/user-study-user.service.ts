@@ -11,6 +11,8 @@ export class UserStudyUserService {
   tokenName = 'xai-user-study-jwt-token';
   BASE_URL = environment.apiURL + 'user-study-users';
 
+  private user = null;
+
   constructor(
     private http: HttpClient,
   ) {}
@@ -23,6 +25,7 @@ export class UserStudyUserService {
         this.http.post<{token: string, user: USUser}>(this.BASE_URL, user)
           .subscribe(httpData => {
               localStorage.setItem(this.tokenName, httpData.token);
+              this.user = httpData.user;
               resolve(true);
             },
             (err) => {
@@ -54,5 +57,9 @@ export class UserStudyUserService {
         reject();
       }
     });
+  }
+
+  getLoggedInUser(): USUser {
+    return this.user;
   }
 }
