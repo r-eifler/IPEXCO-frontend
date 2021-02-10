@@ -27,7 +27,7 @@
     </button>
   </div>
 
-  <div>
+  <div style="width: 100%; overflow: auto">
     <nav mat-tab-nav-bar>
       <a mat-tab-link *ngFor="let planRun of  runs$ | async"
          (click)="selectPlan(planRun)"
