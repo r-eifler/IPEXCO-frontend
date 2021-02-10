@@ -211,4 +211,24 @@ export class PropertyCreatorComponent implements OnInit, OnDestroy {
     return true;
   }
 
+  upload_properties(changeEvent) {
+    const file = changeEvent.target.files[0];
+    if (!file) {
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const contents = e.target.result as string;
+
+      const newPlanProperties = JSON.parse(contents) as PlanProperty[];
+      for (const planProp of newPlanProperties) {
+        planProp._id = null;
+        planProp.project = this.currentProject._id;
+        planProp.isUsed = false;
+        this.propertiesService.saveObject(planProp);
+      }
+    };
+    reader.readAsText(file);
+  }
+
 }

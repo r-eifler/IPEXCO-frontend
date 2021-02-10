@@ -82,6 +82,7 @@ export class PropertyCollectionComponent implements OnInit, AfterViewInit, OnDes
     if (this.propertyTable) {
       this.propertyTable.renderRows();
     }
+    this.download_properties();
   }
 
   ngOnDestroy(): void {
@@ -123,6 +124,14 @@ export class PropertyCollectionComponent implements OnInit, AfterViewInit, OnDes
     });
 
     cellElement.appendChild(input);
+  }
+
+  download_properties() {
+    const jsonProps = JSON.stringify(this.planProperties);
+    const file = new Blob([jsonProps], {type: 'plain/text'});
+    const a: any = document.getElementById('prop_download');
+    a.href = URL.createObjectURL(file);
+    a.download = 'plan_properties.txt';
   }
 
   async openSettings() {

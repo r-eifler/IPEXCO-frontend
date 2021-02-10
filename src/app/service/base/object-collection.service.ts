@@ -12,7 +12,7 @@ type Id = string | number;
 interface Identifiable {
   _id?: Id;
 }
-interface QueryParam {
+export interface QueryParam {
   param: string;
   value: string;
 }

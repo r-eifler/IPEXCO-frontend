@@ -19,6 +19,15 @@
       <img *ngIf="demo.summaryImage && demo.summaryImage != ''" matCardImage [src]="srcUrl + demo.summaryImage"
          style="max-width: 300px; height: auto; align-self: center">
     </div>
+    <div style="width: 100%" *ngIf="demo.data">
+      <p>MUGS</p>
+      <mat-list>
+        <mat-list-item *ngFor="let line of demo.data.MUGS">
+          <mat-icon matListIcon>bolt</mat-icon>
+          <p matLine>({{line.length}}) {{line}}</p>
+        </mat-list-item>
+      </mat-list>
+    </div>
     <mat-card-content>
       {{demo.description}}
     </mat-card-content>

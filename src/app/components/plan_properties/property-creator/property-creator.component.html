@@ -75,6 +75,10 @@
             </mat-expansion-panel>
             </mat-accordion>
       </mat-expansion-panel>
+<!--      <button mat-flat-button color="primary" (click)="upload_properties()">-->
+<!--        <mat-icon>upload</mat-icon>-->
+<!--      </button>-->
+      <input type="file" id="file-input" (change)="upload_properties($event)">
     </div>
     <div *ngIf="! expertMode">
       <mat-horizontal-stepper #stepper="matHorizontalStepper" [linear]="true">
