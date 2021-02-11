@@ -10,7 +10,11 @@ export function computePlanValue(planRun: PlanRun, planProperties: Map<string, P
   }
   let planValue = 0;
   for (const propName of planRun.hardGoals) {
-    planValue += planProperties.get(propName).value;
+    const prop = planProperties.get(propName);
+    if (! prop) {
+      return null;
+    }
+    planValue += prop.value;
   }
   for (const propName of planRun.satPlanProperties) {
     if (! planRun.hardGoals.find(p => p === propName)) {

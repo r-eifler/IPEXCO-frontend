@@ -23,31 +23,35 @@ export class SelectedPlanRunService extends SelectedObjectService<PlanRun> {
     }
 
     saveObject(planRun: PlanRun) {
-        if (planRun.planString && !planRun.plan) {
-            combineLatest([this.taskSchemaService.getSchema(), this.planPropertyMapService.getMap()]).subscribe(
-                ([schema, planProperties]) => {
-                    if (schema) {
-                        planRun.planValue = computePlanValue(planRun, planProperties);
-                        handlePlanString(planRun.planString, planRun, schema);
-                        this.selectedObjectStore.dispatch({type: LOAD, data: planRun});
-                    }
-                });
+      if (planRun === null || planRun === undefined) {
+        this.selectedObjectStore.dispatch({type: LOAD, data: planRun});
+        return;
+      }
+      if (planRun.planString && !planRun.plan) {
+          combineLatest([this.taskSchemaService.getSchema(), this.planPropertyMapService.getMap()]).subscribe(
+              ([schema, planProperties]) => {
+                  if (schema && planProperties) {
+                      planRun.planValue = computePlanValue(planRun, planProperties);
+                      handlePlanString(planRun.planString, planRun, schema);
+                      this.selectedObjectStore.dispatch({type: LOAD, data: planRun});
+                  }
+              });
 
 
-        } else if (planRun.planPath && !planRun.plan) {
-            const planContent$ = this.fileUtilsService.getFileContent(planRun.planPath);
-            // console.log('Loade Plan');
-            combineLatest([this.taskSchemaService.getSchema(), planContent$, this.planPropertyMapService.getMap()]).subscribe(
-                ([schema, content, planProperties]) => {
-                    // console.log(content);
-                    if (content) {
-                        planRun.planValue = computePlanValue(planRun, planProperties);
-                        handlePlanString(content, planRun, schema);
-                        this.selectedObjectStore.dispatch({type: LOAD, data: planRun});
-                    }
-                });
-        } else {
-            this.selectedObjectStore.dispatch({type: LOAD, data: planRun});
-        }
+      } else if (planRun.planPath && !planRun.plan) {
+          const planContent$ = this.fileUtilsService.getFileContent(planRun.planPath);
+          // console.log('Loade Plan');
+          combineLatest([this.taskSchemaService.getSchema(), planContent$, this.planPropertyMapService.getMap()]).subscribe(
+              ([schema, content, planProperties]) => {
+                  // console.log(content);
+                  if (content && planProperties) {
+                      planRun.planValue = computePlanValue(planRun, planProperties);
+                      handlePlanString(content, planRun, schema);
+                      this.selectedObjectStore.dispatch({type: LOAD, data: planRun});
+                  }
+              });
+      } else {
+          this.selectedObjectStore.dispatch({type: LOAD, data: planRun});
+      }
     }
 }

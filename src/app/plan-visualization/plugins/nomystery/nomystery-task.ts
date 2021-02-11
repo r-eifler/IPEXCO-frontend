@@ -24,7 +24,7 @@ export class Truck {
   constructor(public name: string) {}
 }
 
-export class Package{
+export class Package {
   startLocation?: Location;
   goalLocation?: Location;
 

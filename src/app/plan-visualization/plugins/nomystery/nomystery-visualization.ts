@@ -42,6 +42,7 @@ export class NoMysteryVisualization extends PlanVisualization {
   private backgroundImagePath: string;
 
   private newRunLoaded = false;
+  private sceneLoaded = false;
 
   private mainDomElement$: BehaviorSubject<Element> = new BehaviorSubject<Element>(null);
   private mainSVG: SVGElement;
@@ -55,21 +56,38 @@ export class NoMysteryVisualization extends PlanVisualization {
     super(currentProjectService, taskSchemaService, currentRunService);
 
     this.currentProjectService.getSelectedObject().subscribe(
-      project => {
+      async project => {
         if (project) {
+          //console.log('New Project: ' + project.name);
+          this.clear();
           this.backgroundImagePath = (project as Demo).summaryImage;
           this.animationSettings = new AnimationSettingsNoMystery(project.animationSettings);
           this.scaleDropPositions();
+          await this.init();
         }
       });
 
     this.currentRunService.getSelectedObject().subscribe(
       run => {
-        this.newRunLoaded = true;
+        if (run) {
+          this.newRunLoaded = true;
+        }
       }
     );
 
-    this.init();
+
+  }
+
+  clear() {
+    this.backgroundImagePath = null;
+    this.animationSettings = null;
+    this.animationTask = null;
+    this.animation = null;
+    this.newRunLoaded = false;
+    this.sceneLoaded = false;
+    this.mainSVG = null;
+    this.valuesContainer = null;
+    this.mainDomElement$.next(null);
   }
 
   scaleDropPositions() {
@@ -103,12 +121,8 @@ export class NoMysteryVisualization extends PlanVisualization {
     // tslint:disable-next-line:no-unused-expression
     new Draggable(this.mainSVG);
     this.createValuesContainer();
-
-    await this.createScene();
-    this.animation.initPositions();
-
-    this.mainDomElement$.next(this.mainSVG);
     this.valuesDomElement$.next(this.valuesContainer);
+    this.createScene();
   }
 
   updateLocationPositions() {
@@ -124,6 +138,7 @@ export class NoMysteryVisualization extends PlanVisualization {
       return new Promise<void>((resolve, reject) => {
         this.taskSchemaService.getSchema().subscribe(async (ts) => {
           if (ts && ! this.animationTask) {
+
             this.animationTask = new NoMysteryAnimationTask(new NoMysteryTask(ts), this.animationSettings.locationDropPositions);
             this.animation = new NoMysteryAnimation(this.animationTask);
 
@@ -138,6 +153,11 @@ export class NoMysteryVisualization extends PlanVisualization {
             this.updateLocationPositions();
             await loadTrucks(this.animationTask, this.mainSVG, this.valuesContainer);
             await loadPackages(this.animationTask, this.mainSVG);
+
+            this.animation.initPositions();
+
+            this.mainDomElement$.next(this.mainSVG);
+            this.sceneLoaded = true;
             resolve();
           }
         });
@@ -162,11 +182,13 @@ export class NoMysteryVisualization extends PlanVisualization {
   }
 
   restart(): void {
-    this.animation?.initPositions();
+    if (this.sceneLoaded) {
+      this.animation?.initPositions();
+    }
   }
 
   update() {
-    if (this.newRunLoaded) {
+    if (this.newRunLoaded && this.sceneLoaded) {
       this.animation?.initPositions();
       this.newRunLoaded = false;
     }

@@ -32,4 +32,8 @@ export class SelectedObjectService<T> {
   deleteObject(obj: T) {
     this.selectedObjectStore.dispatch({type: REMOVE, data: obj});
   }
+
+  removeCurrentObject() {
+    this.selectedObjectStore.dispatch({type: REMOVE, data: this.selectedObject$.getValue()});
+  }
 }

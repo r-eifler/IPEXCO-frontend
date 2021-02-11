@@ -7,6 +7,7 @@ import {BehaviorSubject, Observable} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import {TaskSchemaStore} from '../../store/stores.store';
 import {environment} from '../../../environments/environment';
+import {REMOVE} from '../../store/generic-list.store';
 
 @Injectable({
   providedIn: 'root'
@@ -35,6 +36,10 @@ export class TaskSchemaService {
 
   getSchema(): Observable<TaskSchema> {
     return this.currentSchema$;
+  }
+
+  removeCurrentSchema() {
+    this.selectedObjectStore.dispatch({type: REMOVE, data: this.currentSchema$.getValue()});
   }
 
 }

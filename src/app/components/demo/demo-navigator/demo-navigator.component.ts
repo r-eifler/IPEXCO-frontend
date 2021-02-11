@@ -134,6 +134,9 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(
         () => {
+          this.selectedPlanRunService.removeCurrentObject();
+          this.currentProjectService.removeCurrentObject();
+          this.currentSchemaService.removeCurrentSchema();
           this.finishedDemo.emit();
         }
       );
@@ -184,7 +187,7 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
       previousRun: null,
     };
 
-    console.log(run);
+    //console.log(run);
 
     this.plannerService.execute_plan_run(run);
     this.taskCreatorClose(true);

@@ -26,9 +26,9 @@ constructor(
     this.currentRunService.getSelectedObject().subscribe((run) => {
       if (run) {
         this.plan = run.plan;
-        this.animation.update();
         if (this.plan) {
           this.hasAnimation.next(true);
+          this.restart();
         } else {
           this.hasAnimation.next(false);
         }
@@ -98,6 +98,11 @@ restart() {
   this.index = 0;
   this.animation.restart();
   this.nextEvents();
+}
+
+newAnimation() {
+  this.index = 0;
+  this.animation.restart();
 }
 
 zoomIn() {

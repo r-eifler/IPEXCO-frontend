@@ -35,8 +35,9 @@ export class CurrentProjectService extends SelectedObjectService<Project> {
 
   saveObject(project: Project) {
     this.selectedObjectStore.dispatch({type: LOAD, data: project});
-    this.settingsService.load(project.settings);
-    this.DomainSpecService.findSpec(project);
-    this.taskSchemaService.findSchema(project);
+    if (project) {
+      this.settingsService.load(project.settings);
+      this.DomainSpecService.findSpec(project);
+      this.taskSchemaService.findSchema(project);}
   }
 }
