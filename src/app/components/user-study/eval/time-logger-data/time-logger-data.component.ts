@@ -26,6 +26,13 @@ export class TimeLoggerDataComponent implements OnInit {
   };
 
   dataEntries: UserStudyData[] = [];
+  private selectedDemoId: string;
+
+  @Input()
+  set demoId(id: string) {
+    this.selectedDemoId = id;
+    this.getAvgTimeLogData();
+  }
 
   @Input()
   set data(entries: UserStudyData[]) {
@@ -48,6 +55,7 @@ export class TimeLoggerDataComponent implements OnInit {
         continue;
       }
       const logData: LogEntry[] = JSON.parse(data.user.timeLog);
+      console.log(logData);
 
       for (const entry of logData) {
         if (! entry.start || ! entry.end) {

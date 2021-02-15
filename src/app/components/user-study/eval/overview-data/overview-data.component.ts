@@ -1,6 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {UserStudyData} from '../../../../interface/user-study/user-study';
+import {UserStudyData, UserStudyDemoData} from '../../../../interface/user-study/user-study';
 import {Subject} from 'rxjs';
+import {Demo} from '../../../../interface/demo';
 
 @Component({
   selector: 'app-overview-data',
@@ -10,6 +11,7 @@ import {Subject} from 'rxjs';
 export class OverviewDataComponent implements OnInit {
 
   private ngUnsubscribe: Subject<any> = new Subject();
+  showPlots = true;
 
   view: any[] = [700, 400];
 
@@ -25,12 +27,18 @@ export class OverviewDataComponent implements OnInit {
   };
 
   dataEntries: UserStudyData[] = [];
+  selectedDemoId: string;
+
+  @Input()
+  set demoId(id: string) {
+    this.selectedDemoId = id;
+    this.update();
+  }
 
   @Input()
   set data(entries: UserStudyData[]) {
     this.dataEntries = entries;
-    this.getPlansData();
-    this.getQuestionData();
+    this.update();
   }
 
 
@@ -42,24 +50,27 @@ export class OverviewDataComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  getPlansData() {
+  update() {
+    this.showPlots = false;
     this.plansData = [];
-    for (const entry of this.dataEntries) {
-      this.plansData.push({
-        name: entry.user.prolificId !== '000000' ? entry.user.prolificId : entry.user._id.slice(-5),
-        value: entry.planRuns.length
-      });
-    }
-  }
-
-  getQuestionData() {
     this.questionData = [];
     for (const entry of this.dataEntries) {
+      const demoData: UserStudyDemoData = entry.demosData.find(e => e.demoId === this.selectedDemoId)?.data;
+      if (! demoData) {
+        return;
+      }
+      const displayId = entry.user.prolificId !== '000000' ? entry.user.prolificId : entry.user._id.slice(-5);
+      this.plansData.push({
+        name: displayId,
+        value: demoData.planRuns.length
+      });
       this.questionData.push({
-        name: entry.user.prolificId !== '000000' ? entry.user.prolificId : entry.user._id.slice(-5),
-        value: entry.expRuns.length
+        name: displayId,
+        value: demoData.expRuns.length
       });
     }
+    window.setTimeout(() => this.showPlots = true, 200);
   }
+
 
 }

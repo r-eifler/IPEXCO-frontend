@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {UserStudyData} from '../../../../interface/user-study/user-study';
+import {UserStudyData, UserStudyDemoData} from '../../../../interface/user-study/user-study';
 import {PlanRunsService} from '../../../../service/planner-runs/planruns.service';
 
 @Component({
@@ -25,6 +25,13 @@ export class IndividualRunUserDataComponent implements OnInit {
   dataEntries: UserStudyData[] = [];
   planRunData: any[];
   explanationRunData: any[];
+  selectedDemoId: string;
+
+  @Input()
+  set demoId(id: string) {
+    this.selectedDemoId = id;
+    this.getRunTimeline();
+  }
 
   @Input()
   set data(entries: UserStudyData[]) {
@@ -41,24 +48,23 @@ export class IndividualRunUserDataComponent implements OnInit {
 
   getRunTimeline() {
     this.planRunData = [];
+    this.explanationRunData = [];
     for (const entry of this.dataEntries) {
-      for (const planRun of entry.planRuns) {
-        const dataPoint = {
+      const demoData: UserStudyDemoData = entry.demosData.find(e => e.demoId === this.selectedDemoId)?.data;
+      if (! demoData) {
+        return;
+      }
+      for (const planRun of demoData.planRuns) {
+        const dataPointU = {
           name: planRun.run.name,
           value: this.planRunService.getPlanUtility(planRun.run)
         };
-        this.planRunData.push(dataPoint);
-      }
-    }
-
-    this.explanationRunData = [];
-    for (const entry of this.dataEntries) {
-      for (const planRun of entry.planRuns) {
-        const dataPoint = {
+        this.planRunData.push(dataPointU);
+        const dataPointN = {
           name: planRun.run.name,
           value: planRun.run.explanationRuns.length
         };
-        this.explanationRunData.push(dataPoint);
+        this.explanationRunData.push(dataPointN);
       }
     }
   }

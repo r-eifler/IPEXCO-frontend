@@ -24,6 +24,7 @@ export class UserStudyDataBaseComponent implements OnInit, OnDestroy {
   userStudy: UserStudy;
   data: UserStudyData[] = [];
 
+  usDemos: Map<string, Demo> = new Map<string, Demo>();
   demoIds: string[];
   selectedDemo: Demo;
 
@@ -49,7 +50,17 @@ export class UserStudyDataBaseComponent implements OnInit, OnDestroy {
             }
             this.selectDemo(this.demoIds[0]);
             this.data = await userStudiesService.loadData(this.userStudy._id);
-            // console.log(this.data);
+            for (const demoId of this.demoIds) {
+                this.demosService.getObject(demoId)
+                  .pipe(takeUntil(this.ngUnsubscribe))
+                  .subscribe(
+                    (demo: Demo) => {
+                      if (demo) {
+                        this.usDemos.set(demoId, demo);
+                      }
+                    }
+                  );
+            }
           }
         }
       );

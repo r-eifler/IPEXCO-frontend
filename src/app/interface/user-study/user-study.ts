@@ -34,8 +34,12 @@ export class UserStudy {
   }
 }
 
+export interface UserStudyDemoData {
+  planRuns: { timeStamp: Date , run: PlanRun}[];
+  expRuns: { timeStamp: Date , run: ExplanationRun }[];
+}
+
 export interface UserStudyData {
   user: USUser;
-  planRuns: {timeStamp: Date, run: PlanRun}[];
-  expRuns: {timeStamp: Date, run: ExplanationRun}[];
+  demosData: { demoId: string, data: UserStudyDemoData}[];
 }

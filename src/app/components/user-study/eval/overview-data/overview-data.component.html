@@ -7,6 +7,7 @@
   </mat-card-header>
   <mat-card-content>
     <ngx-charts-bar-vertical
+      *ngIf="showPlots"
       [view]="view"
       [scheme]="colorScheme"
       [results]="plansData"
@@ -30,6 +31,7 @@
   </mat-card-header>
   <mat-card-content>
     <ngx-charts-bar-vertical
+      *ngIf="showPlots"
       [view]="view"
       [scheme]="colorScheme"
       [results]="questionData"
