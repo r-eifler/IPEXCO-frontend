@@ -1,5 +1,5 @@
 <div class="main-container">
-  <mat-card class="basic-card" style="grid-column: 1 / span 1; grid-row: 1 / span 3;">
+  <mat-card class="basic-card" style="grid-column: 1 / span 1; grid-row: 1 / span 3; height: 1000px; overflow: auto">
     <mat-card-header>
       <mat-card-title>
         Test Persons
@@ -8,6 +8,8 @@
       <mat-card-content>
         <mat-selection-list #users [(ngModel)]="selectedDataEntries">
           <mat-list-option *ngFor="let entry of data" [value]="entry">
+            <mat-icon matListIcon *ngIf="entry.user.finished">done</mat-icon>
+            <mat-icon matListIcon *ngIf="! entry.user.finished">error_outline</mat-icon>
             <p mat-line>{{entry.user.prolificId}} ({{entry.user._id.slice(-5)}})</p>
             <p mat-line>{{entry.user.createdAt | date}}</p>
           </mat-list-option>

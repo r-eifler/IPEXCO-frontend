@@ -55,7 +55,6 @@ export class TimeLoggerDataComponent implements OnInit {
         continue;
       }
       const logData: LogEntry[] = JSON.parse(data.user.timeLog);
-      console.log(logData);
 
       for (const entry of logData) {
         if (! entry.start || ! entry.end) {
