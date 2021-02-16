@@ -8,6 +8,7 @@ export interface Demo extends Project {
   definition?: string;
   data?: DemoDefinition;
   taskInfo?: string;
+  maxUtility?: { value: number, selectedPlanProperties: string[]};
 }
 
 export interface DemoDefinition {

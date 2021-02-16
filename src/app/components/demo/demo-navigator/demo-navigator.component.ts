@@ -114,17 +114,18 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
     this.timeLogger.deregister(this.loggerId);
   }
 
-  finishDemo() {
+  finishDemo(maxUtilityAchieved: boolean) {
     this.finished = true;
-    this.showDemoFinished(false);
+    this.showDemoFinished(false, maxUtilityAchieved);
     clearInterval(this.timerIntervall);
   }
 
-  showDemoFinished(timesUp: boolean) {
+  showDemoFinished(timesUp: boolean, maxUtilityAchieved: boolean) {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.width = '500px';
     dialogConfig.data  = {
       demo: this.demo,
+      maxUtilityAchieved,
       timesUp
     };
 
@@ -163,7 +164,7 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
 
               if (this.timer <= 0 && ! this.finished) {
                 this.finished = true;
-                this.showDemoFinished(true);
+                this.showDemoFinished(true, false);
                 clearInterval(this.timerIntervall);
               }
 
@@ -187,7 +188,7 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
       previousRun: null,
     };
 
-    //console.log(run);
+    // console.log(run);
 
     this.plannerService.execute_plan_run(run);
     this.taskCreatorClose(true);
@@ -222,7 +223,11 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
         .subscribe(
           busy => {
             if (!busy) {
-              this.selectPlan(this.runsService.getLastRun());
+              const newRun: PlanRun = this.runsService.getLastRun();
+              this.selectPlan(newRun);
+              if (newRun.planValue === this.demo.maxUtility?.value) {
+                this.finishDemo(true);
+              }
             }
           }
         );

@@ -21,6 +21,7 @@ export class DemoFinishedComponent implements OnInit, OnDestroy {
   demo: Demo;
   timesUp = false;
   bestPlanValue = 0;
+  maxUtilityAchieved: boolean;
 
   constructor(
     private timeLogger: TimeLoggerService,
@@ -32,6 +33,7 @@ export class DemoFinishedComponent implements OnInit, OnDestroy {
     @Inject(MAT_DIALOG_DATA) data
   ) {
     this.timesUp = data.timesUp;
+    this.maxUtilityAchieved = data.maxUtilityAchieved;
     this.demo = data.demo;
   }
 
