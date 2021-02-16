@@ -225,7 +225,7 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
             if (!busy) {
               const newRun: PlanRun = this.runsService.getLastRun();
               this.selectPlan(newRun);
-              if (newRun.planValue === this.demo.maxUtility?.value) {
+              if (this.settings$.getValue().checkMaxUtility && newRun.planValue === this.demo.maxUtility?.value) {
                 this.finishDemo(true);
               }
             }

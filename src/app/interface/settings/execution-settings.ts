@@ -8,5 +8,6 @@ export interface ExecutionSettings {
   useTimer: boolean;
   measureTime: boolean;
   maxTime: number;
+  checkMaxUtility: boolean;
   showAnimation: boolean;
 }

@@ -39,6 +39,7 @@ export class DemoSettingsComponent implements OnInit, OnDestroy {
         measureTime: new FormControl(this.settings.measureTime),
         maxTime: new FormControl(this.settings.maxTime / 60000,
           [ Validators.required, Validators.min(0.05), Validators.max(60) ]),
+        checkMaxUtility: new FormControl(this.settings.checkMaxUtility),
         showAnimation: new FormControl(this.settings.showAnimation),
       });
 
@@ -61,6 +62,7 @@ export class DemoSettingsComponent implements OnInit, OnDestroy {
     this.settings.useTimer = this.demoSettingsForm.controls.useTimer.value;
     this.settings.measureTime = this.demoSettingsForm.controls.measureTime.value;
     this.settings.maxTime = this.demoSettingsForm.controls.maxTime.value * 60000;
+    this.settings.checkMaxUtility = this.demoSettingsForm.controls.checkMaxUtility.value;
     this.settings.showAnimation = this.demoSettingsForm.controls.showAnimation.value;
 
     this.settingsService.updateSettings(this.settings);
