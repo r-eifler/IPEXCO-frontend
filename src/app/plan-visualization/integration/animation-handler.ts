@@ -3,6 +3,7 @@ import {BehaviorSubject, Observable} from 'rxjs';
 import {PlanVisualization} from './plan-visualization';
 import {Inject, Injectable} from '@angular/core';
 import {SelectedPlanRunService} from '../../service/planner-runs/selected-planrun.service';
+import {TimeLoggerService} from '../../service/logger/time-logger.service';
 
 @Injectable({
   providedIn: 'root'

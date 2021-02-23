@@ -54,6 +54,15 @@ export class PlanAnimationViewComponent implements OnInit, AfterViewInit, OnDest
           }
         }
       );
+    this.animationHandler.currentAnimationPausedEvent
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(
+        elem => {
+          if (elem) {
+            this.timeLogger.addInfo(this.loggerId, 'pausedEvent: ' + elem);
+          }
+        }
+      );
   }
 
   ngOnInit(): void {

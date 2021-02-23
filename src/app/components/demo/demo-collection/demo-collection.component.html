@@ -28,6 +28,7 @@
                 INFO
               </mat-panel-title>
             </mat-expansion-panel-header>
+            <p>ID: {{demo._id}}</p>
             <p>Max Utility: {{demo.maxUtility?.value}}</p>
             <mat-list>
               <mat-list-item *ngFor="let line of demo.maxUtility?.selectedPlanProperties">

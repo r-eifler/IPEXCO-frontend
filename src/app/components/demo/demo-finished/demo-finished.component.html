@@ -8,8 +8,11 @@
       <span style="font-size: xx-large;">Time's up!</span>
     </div>
     <div *ngIf="(settingsService.getSelectedObject() | async).usePlanPropertyValues" style="margin: 30px auto;">
-      <h2>Your best plan achieved an overall utility of: {{bestPlanValue}}.</h2>
-      <h2 *ngIf="this.maxUtilityAchieved">Great! This is the maximal utility possible.</h2>
+      <h2>Your best plan achieved an overall utility of: {{maxAchievedUtility}}.</h2>
+      <ng-container *ngIf="(settingsService.getSelectedObject() | async).checkMaxUtility">
+        <h2 *ngIf="maxUtility === maxAchievedUtility">Great! This is the maximal utility possible.</h2>
+        <h2>You will be payed: {{payment | currency : 'GBP' : 'symbol' : '1.2-2'}}</h2>
+      </ng-container>
     </div>
   </div>
 </div>

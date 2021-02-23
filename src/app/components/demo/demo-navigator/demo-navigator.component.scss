@@ -43,11 +43,12 @@
 }
 
 .bar-container {
-  width: 100%;
+  width: 40%;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-evenly;
+  margin-top: 10px;
 }
 
 .two-columns {

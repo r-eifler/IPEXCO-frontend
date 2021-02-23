@@ -120,18 +120,20 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
     this.timeLogger.deregister(this.loggerId);
   }
 
-  finishDemo(maxUtilityAchieved: boolean) {
+  finishDemo() {
     this.finished = true;
-    this.showDemoFinished(false, maxUtilityAchieved);
+    this.showDemoFinished(false);
     clearInterval(this.timerIntervall);
   }
 
-  showDemoFinished(timesUp: boolean, maxUtilityAchieved: boolean) {
+  showDemoFinished(timesUp: boolean) {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.width = '500px';
     dialogConfig.data  = {
       demo: this.demo,
-      maxUtilityAchieved,
+      maxUtility: this.maxUtility,
+      maxAchievedUtility: this.maxAchievedUtility,
+      payment: this.payment,
       timesUp
     };
 
@@ -170,7 +172,7 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
 
               if (this.timer <= 0 && ! this.finished) {
                 this.finished = true;
-                this.showDemoFinished(true, false);
+                this.showDemoFinished(true);
                 clearInterval(this.timerIntervall);
               }
 
@@ -239,17 +241,16 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
                   let stepFraction = 0;
                   for (let i = 0; i < cSettings.paymentInfo.steps.length; i++) {
                     if (cSettings.paymentInfo.steps[i] <= this.progressValue &&
-                      (i + 1 === cSettings.paymentInfo.steps.length || cSettings.paymentInfo.steps[i+1] > this.progressValue)) {
+                      (i + 1 === cSettings.paymentInfo.steps.length || cSettings.paymentInfo.steps[i + 1] > this.progressValue)) {
                       stepFraction = cSettings.paymentInfo.steps[i];
                     }
                   }
-                  console.log(stepFraction);
                   this.payment = cSettings.paymentInfo.min +
                     stepFraction * (cSettings.paymentInfo.max - cSettings.paymentInfo.min);
                 }
               }
               if (cSettings.checkMaxUtility && newRun.planValue === this.demo.maxUtility?.value) {
-                this.finishDemo(true);
+                this.finishDemo();
               }
             }
           }

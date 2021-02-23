@@ -33,6 +33,7 @@ export class DemoBaseComponent implements OnInit, OnDestroy {
 
   // Steps are help, task info and then the demo itself.
   step = 0;
+  private loggerId: number;
 
   constructor(
     private timeLogger: TimeLoggerService,
@@ -50,6 +51,8 @@ export class DemoBaseComponent implements OnInit, OnDestroy {
           .subscribe(
              (demo: Demo) => {
               if (demo) {
+                this.loggerId = this.timeLogger.register('demo-base');
+                this.timeLogger.addInfo(this.loggerId, 'demoId: ' + demo._id);
                 this.runningDemoService.saveObject(demo);
                 this.propertiesService.findCollection([{param: 'projectId', value: demo._id}]);
               }
@@ -65,6 +68,7 @@ export class DemoBaseComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
+    this.timeLogger.deregister(this.loggerId);
   }
 
   async toDemoCollection() {

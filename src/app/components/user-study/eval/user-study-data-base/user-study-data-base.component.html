@@ -10,8 +10,9 @@
           <mat-list-option *ngFor="let entry of data" [value]="entry">
             <mat-icon matListIcon *ngIf="entry.user.finished">done</mat-icon>
             <mat-icon matListIcon *ngIf="! entry.user.finished">error_outline</mat-icon>
-            <p mat-line>{{entry.user.prolificId}} ({{entry.user._id.slice(-5)}})</p>
-            <p mat-line>{{entry.user.createdAt | date}}</p>
+            <p mat-line>{{entry.user.prolificId}}</p>
+            <p mat-line>{{entry.user._id}}</p>
+            <p mat-line>{{entry.user.createdAt | date:'short'}}</p>
           </mat-list-option>
         </mat-selection-list>
       </mat-card-content>
