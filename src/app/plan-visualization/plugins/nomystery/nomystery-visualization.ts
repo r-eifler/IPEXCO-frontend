@@ -122,7 +122,7 @@ export class NoMysteryVisualization extends PlanVisualization {
     new Draggable(this.mainSVG);
     this.createValuesContainer();
     this.valuesDomElement$.next(this.valuesContainer);
-    this.createScene();
+    await this.createScene();
   }
 
   updateLocationPositions() {
@@ -195,7 +195,7 @@ export class NoMysteryVisualization extends PlanVisualization {
   }
 
   scale(factor: number): void {
-    if (factor >= this.mainScale) {
+    if (factor + this.mainScale > 2 || factor + this.mainScale < 0.4) {
       return;
     }
     this.mainScale += factor;

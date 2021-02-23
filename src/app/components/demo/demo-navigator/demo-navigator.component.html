@@ -19,6 +19,11 @@
         Ask Question
       </button>
     </div>
+    <div class="bar-container" *ngIf="(settingsService.getSelectedObject()| async)?.checkMaxUtility">
+      <p style="font-size: large;">Utility: <span style="font-weight: bold;">{{maxAchievedUtility}}/{{maxUtility}}</span></p>
+      <mat-progress-bar mode="determinate" color="accent" [value]="progressValue * 100" style="width: 50%"></mat-progress-bar>
+      <p style="font-size: large;">Payment: {{payment | currency : 'GBP' : true : '1.2-2'}}</p>
+    </div>
     <button mat-stroked-button (click)="finishDemo(false)">
       Finish
     </button>

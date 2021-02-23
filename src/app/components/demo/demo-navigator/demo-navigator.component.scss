@@ -42,6 +42,14 @@
   overflow: auto;
 }
 
+.bar-container {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
 .two-columns {
   grid-template-columns: 1fr 5px 2fr;
 }

@@ -5,6 +5,7 @@ import {HttpClient} from '@angular/common/http';
 import {ExecutionSettingsStore} from '../../store/stores.store';
 import {IHTTPData} from '../../interface/http-data.interface';
 import {environment} from 'src/environments/environment';
+import set = Reflect.set;
 
 @Injectable({
   providedIn: 'root'
@@ -25,7 +26,11 @@ export class ExecutionSettingsService extends SelectedObjectService<ExecutionSet
       try {
         this.http.get<IHTTPData<ExecutionSettings>>(this.BASE_URL + '/' + settingsId )
         .subscribe(httpData => {
-          this.saveObject(httpData.data);
+          const settings = httpData.data;
+          if (settings.paymentInfo) {
+            settings.paymentInfo = JSON.parse(settings.paymentInfo.toString());
+          }
+          this.saveObject(settings);
           resolve();
           return;
         },
@@ -42,7 +47,7 @@ export class ExecutionSettingsService extends SelectedObjectService<ExecutionSet
   updateSettings(settings: ExecutionSettings) {
     this.http.put<IHTTPData<ExecutionSettings>>(this.BASE_URL + '/' + settings._id, settings )
       .subscribe(httpData => {
-          // console.log(httpData);
+          //console.log(httpData);
           super.saveObject(httpData.data);
         });
   }

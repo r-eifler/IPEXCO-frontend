@@ -1,3 +1,10 @@
+export interface PaymentInfo {
+  min: number;
+  max: number;
+  steps: number[];
+}
+
+
 export interface ExecutionSettings {
   _id?: string;
   maxRuns: number;
@@ -9,5 +16,6 @@ export interface ExecutionSettings {
   measureTime: boolean;
   maxTime: number;
   checkMaxUtility: boolean;
+  paymentInfo: PaymentInfo;
   showAnimation: boolean;
 }

@@ -1,4 +1,4 @@
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormArray, FormControl, FormGroup, Validators} from '@angular/forms';
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef} from '@angular/material/bottom-sheet';
 import {ExecutionSettings} from 'src/app/interface/settings/execution-settings';
@@ -26,6 +26,9 @@ export class DemoSettingsComponent implements OnInit, OnDestroy {
 
       this.name = data.name;
       this.settings = data.settings;
+      if (! this.settings.paymentInfo) {
+        this.settings.paymentInfo = {min: 0, max: 0, steps: []};
+      }
       this.demoSettingsForm = new FormGroup({
         maxRuns: new FormControl(this.settings.maxRuns,
           [Validators.required, Validators.min(1), Validators.max(100)]),
@@ -41,6 +44,13 @@ export class DemoSettingsComponent implements OnInit, OnDestroy {
           [ Validators.required, Validators.min(0.05), Validators.max(60) ]),
         checkMaxUtility: new FormControl(this.settings.checkMaxUtility),
         showAnimation: new FormControl(this.settings.showAnimation),
+        minPayment: new FormControl(
+          this.settings.paymentInfo?.min,
+          [Validators.required, Validators.min(0), Validators.max(100)]),
+        maxPayment: new FormControl(
+          this.settings.paymentInfo?.max,
+          [Validators.required, Validators.min(0), Validators.max(100)]),
+        paymentSteps: new FormControl(this.settings.paymentInfo?.steps.join(',')),
       });
 
       this.demoSettingsForm.controls.maxQuestionSize.enable();
@@ -64,6 +74,9 @@ export class DemoSettingsComponent implements OnInit, OnDestroy {
     this.settings.maxTime = this.demoSettingsForm.controls.maxTime.value * 60000;
     this.settings.checkMaxUtility = this.demoSettingsForm.controls.checkMaxUtility.value;
     this.settings.showAnimation = this.demoSettingsForm.controls.showAnimation.value;
+    this.settings.paymentInfo.min = this.demoSettingsForm.controls.minPayment.value;
+    this.settings.paymentInfo.max = this.demoSettingsForm.controls.maxPayment.value;
+    this.settings.paymentInfo.steps = this.demoSettingsForm.controls.paymentSteps.value.split(',').map(s => s as number);
 
     this.settingsService.updateSettings(this.settings);
 

@@ -49,6 +49,11 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
   maxTime = 15000;
   timer: number;
 
+  maxAchievedUtility = 0;
+  maxUtility = 0;
+  progressValue = 0;
+  payment = 0;
+
   finished = false;
 
   demo: Demo;
@@ -83,6 +88,7 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
             this.runsService.reset();
             this.currentProjectService.saveObject(demo);
             this.currentSchemaService.findSchema(demo);
+            this.maxUtility = demo.maxUtility?.value;
           }
 
         }
@@ -225,7 +231,24 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
             if (!busy) {
               const newRun: PlanRun = this.runsService.getLastRun();
               this.selectPlan(newRun);
-              if (this.settings$.getValue().checkMaxUtility && newRun.planValue === this.demo.maxUtility?.value) {
+              const cSettings = this.settings$.getValue();
+              if (newRun.planValue && cSettings.checkMaxUtility) {
+                this.maxAchievedUtility = Math.max(this.maxAchievedUtility, newRun.planValue);
+                if (this.maxAchievedUtility > 0 && this.maxUtility > 0) {
+                  this.progressValue = this.maxAchievedUtility / this.maxUtility;
+                  let stepFraction = 0;
+                  for (let i = 0; i < cSettings.paymentInfo.steps.length; i++) {
+                    if (cSettings.paymentInfo.steps[i] <= this.progressValue &&
+                      (i + 1 === cSettings.paymentInfo.steps.length || cSettings.paymentInfo.steps[i+1] > this.progressValue)) {
+                      stepFraction = cSettings.paymentInfo.steps[i];
+                    }
+                  }
+                  console.log(stepFraction);
+                  this.payment = cSettings.paymentInfo.min +
+                    stepFraction * (cSettings.paymentInfo.max - cSettings.paymentInfo.min);
+                }
+              }
+              if (cSettings.checkMaxUtility && newRun.planValue === this.demo.maxUtility?.value) {
                 this.finishDemo(true);
               }
             }
