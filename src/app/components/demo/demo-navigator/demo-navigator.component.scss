@@ -43,6 +43,15 @@
 }
 
 .bar-container {
+  position: relative;
+  display: flex;
+  align-content: center;
+  //height: 60px;
+  width: 50%;
+  height: 100%;
+}
+
+.payment-container {
   width: 40%;
   display: flex;
   flex-direction: row;

@@ -29,6 +29,9 @@ export class DemoSettingsComponent implements OnInit, OnDestroy {
       if (! this.settings.paymentInfo) {
         this.settings.paymentInfo = {min: 0, max: 0, steps: []};
       }
+      if (! this.settings.introTask) {
+        this.settings.introTask = false;
+      }
       this.demoSettingsForm = new FormGroup({
         maxRuns: new FormControl(this.settings.maxRuns,
           [Validators.required, Validators.min(1), Validators.max(100)]),
@@ -37,6 +40,7 @@ export class DemoSettingsComponent implements OnInit, OnDestroy {
            this.settings.maxQuestionSize.toString(),
           [Validators.required, Validators.min(1), Validators.max(3)]),
         public: new FormControl(this.settings.public),
+        introTask: new FormControl(this.settings.introTask),
         usePlanPropertyValues: new FormControl(this.settings.usePlanPropertyValues),
         useTimer: new FormControl(this.settings.useTimer),
         measureTime: new FormControl(this.settings.measureTime),
@@ -68,6 +72,7 @@ export class DemoSettingsComponent implements OnInit, OnDestroy {
     this.settings.allowQuestions = this.demoSettingsForm.controls.allowQuestions.value;
     this.settings.maxQuestionSize = +this.demoSettingsForm.controls.maxQuestionSize.value;
     this.settings.public = this.demoSettingsForm.controls.public.value;
+    this.settings.introTask = this.demoSettingsForm.controls.introTask.value;
     this.settings.usePlanPropertyValues = this.demoSettingsForm.controls.usePlanPropertyValues.value;
     this.settings.useTimer = this.demoSettingsForm.controls.useTimer.value;
     this.settings.measureTime = this.demoSettingsForm.controls.measureTime.value;

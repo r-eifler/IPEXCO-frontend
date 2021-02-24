@@ -47,10 +47,6 @@ export class DemoFinishedComponent implements OnInit, OnDestroy {
       .subscribe();
   }
 
-  backToDemoOverview() {
-    this.dialogRef.close();
-  }
-
   ngOnDestroy(): void {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();

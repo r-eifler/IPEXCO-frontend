@@ -9,25 +9,54 @@
 <!--  </div>-->
   <div class="action-container">
     <div class="iter-planning-buttons">
-      <button mat-stroked-button (click)="newPlanRun()"
+      <button mat-flat-button color="accent" (click)="newPlanRun()"
               [disabled]="(plannerService.isPlannerBusy() | async) || runsService.getNumRuns() >= (settingsService.getSelectedObject()| async)?.maxRuns">
+        <mat-icon>create</mat-icon>
         New Plan
       </button>
-      <button mat-stroked-button (click)="newQuestion();"
+      <button mat-flat-button color="accent" (click)="newQuestion();"
               *ngIf="(settingsService.getSelectedObject()| async)?.allowQuestions"
               [disabled]="! (selectedPlan?.status == runStatus.finished  || selectedPlan?.status === runStatus.noSolution)">
+        <mat-icon>question_answer</mat-icon>
         Ask Question
       </button>
     </div>
-    <div class="bar-container" *ngIf="(settingsService.getSelectedObject()| async)?.checkMaxUtility">
+    <div class="payment-container" *ngIf="(settingsService.getSelectedObject()| async)?.checkMaxUtility">
       <p style="font-size: large;">Utility: <span style="font-weight: bold;">{{maxAchievedUtility}}/{{maxUtility}}</span></p>
-      <mat-progress-bar mode="determinate" color="accent" [value]="progressValue * 100" style="width: 50%"></mat-progress-bar>
-      <p style="font-size: large;">Payment: {{payment | currency : 'GBP' : 'symbol' : '1.2-2'}}</p>
+      <div class="bar-container" #barContainer>
+        <mat-progress-bar mode="determinate" color="accent" [value]="progressValue * 100"
+                          style="height: 20px; position: absolute;">
+        </mat-progress-bar>
+      </div>
+      <p style="font-size: large;" *ngIf="payment > 0">
+        Payment: {{payment | currency : 'GBP' : 'symbol' : '1.2-2'}}/{{maxPayment | currency : 'GBP' : 'symbol' : '1.2-2'}}
+      </p>
     </div>
-    <button mat-stroked-button (click)="finishDemo()">
-      Finish
-    </button>
+    <div style="margin: 5px"
+         *ngIf="(settingsService.getSelectedObject()| async)?.allowQuestions"
+        matTooltip="You have to compute at least 1 plan and ask 1 question before you can finish the intro task."
+         [matTooltipDisabled]="!((settingsService.getSelectedObject()| async)?.introTask && (askedQuestions < 1 || computedPlans < 2))">
+      <button mat-stroked-button  style="height: 100%"
+              [disabled]="(settingsService.getSelectedObject()| async)?.introTask && (askedQuestions < 1 || computedPlans < 2)"
+              (click)="finishDemo()">
+        <mat-icon>exit_to_app</mat-icon>
+        Finish
+      </button>
+    </div>
+    <div style="margin: 5px"
+         *ngIf="! (settingsService.getSelectedObject()| async)?.allowQuestions"
+         matTooltip="You have to compute at least 1 plan before you can finish the intro task."
+         [matTooltipDisabled]="!((settingsService.getSelectedObject()| async)?.introTask && (askedQuestions < 1 || computedPlans < 2))">
+      <button mat-stroked-button  style="height: 100%"
+              [disabled]="(settingsService.getSelectedObject()| async)?.introTask &&  computedPlans < 2"
+              (click)="finishDemo()">
+        <mat-icon>exit_to_app</mat-icon>
+        Finish
+      </button>
+    </div>
+
     <button mat-stroked-button (click)="showDemoHelp()">
+      <mat-icon>help</mat-icon>
       Help
     </button>
   </div>

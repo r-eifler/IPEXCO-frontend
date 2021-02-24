@@ -1,5 +1,5 @@
 import {DemoFinishedComponent} from './../demo-finished/demo-finished.component';
-import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
 import {Demo} from 'src/app/interface/demo';
 import {BehaviorSubject, combineLatest, Subject} from 'rxjs';
 import {PlanRun, RunStatus, RunType} from 'src/app/interface/run';
@@ -20,18 +20,22 @@ import {TimeLoggerService} from '../../../service/logger/time-logger.service';
 import {PlanProperty} from '../../../interface/plan-property/plan-property';
 import {DemoHelpDialogComponent} from '../demo-help-dialog/demo-help-dialog.component';
 import {SelectedQuestionService} from '../../../service/planner-runs/selected-question.service';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {CurrencyPipe} from '@angular/common';
 
 @Component({
   selector: 'app-demo-navigator',
   templateUrl: './demo-navigator.component.html',
   styleUrls: ['./demo-navigator.component.scss']
 })
-export class DemoNavigatorComponent implements OnInit, OnDestroy {
+export class DemoNavigatorComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private loggerId: number;
   private ngUnsubscribe: Subject<any> = new Subject();
 
   @Output() finishedDemo = new EventEmitter<void>();
+
+  @ViewChild('barContainer') barContainerRef: ElementRef;
 
   computeNewPlan = false;
   askQuestion = false;
@@ -53,6 +57,10 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
   maxUtility = 0;
   progressValue = 0;
   payment = 0;
+  maxPayment = 0;
+
+  computedPlans = 0;
+  askedQuestions = 0;
 
   finished = false;
 
@@ -76,7 +84,8 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
     private selectedPlanRunService: SelectedPlanRunService,
     public plannerService: PlannerService,
     private selectedQuestionService: SelectedQuestionService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private snackBar: MatSnackBar
   ) {
 
     this.runningDemoService.getSelectedObject()
@@ -96,6 +105,7 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
 
     this.runs$ = this.runsService.getList();
     this.settings$ = settingsService.getSelectedObject();
+    this.maxPayment = this.settings$.getValue()?.paymentInfo.max;
 
     this.propertiesService.getMap()
       .pipe(takeUntil(this.ngUnsubscribe))
@@ -111,6 +121,39 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
     this.loggerId = this.timeLogger.register('demo-navigator');
     this.initPlanRuns();
     this.initTimer();
+
+    if (this.settings$.getValue().introTask) {
+      setTimeout(() => {
+        if (this.computedPlans === 1 || this.askedQuestions === 0) {
+          if (this.settings$.getValue().allowQuestions) {
+            this.snackBar.open('You have not computed any plans or asked any questions yet. Are you facing any difficulties? ' +
+              'You can open the help page with the button in the upper right corner.', 'OK');
+          } else {
+            this.snackBar.open('You have not computed any plans yet. Are you facing any difficulties? ' +
+              'You can open the help page with the button in the upper right corner.', 'OK');
+          }
+        }
+      }, 120000);
+    }
+  }
+
+  ngAfterViewInit() {
+    console.log('bar labels');
+    const payInfo = this.settings$.getValue().paymentInfo;
+    const pipe = new CurrencyPipe('en-US', 'GBP');
+    for (const s of payInfo.steps) {
+      if (s == 1) {
+        break;
+      }
+      console.log(s);
+      const label = document.createElement('div');
+      const value = payInfo.min + (payInfo.max - payInfo.min) * s;
+      label.innerText = pipe.transform(value, 'GBP', 'symbol', '1.2-2');
+      label.style.position = 'absolute';
+      label.style.left = (s * 100).toString() + '%';
+      label.style.top = '55%';
+      this.barContainerRef.nativeElement.appendChild(label);
+    }
   }
 
   ngOnDestroy(): void {
@@ -142,11 +185,14 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed()
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(
-        () => {
-          this.selectedPlanRunService.removeCurrentObject();
-          this.currentProjectService.removeCurrentObject();
-          this.currentSchemaService.removeCurrentSchema();
-          this.finishedDemo.emit();
+        (result) => {
+          if (result) {
+            this.snackBar.dismiss();
+            this.selectedPlanRunService.removeCurrentObject();
+            this.currentProjectService.removeCurrentObject();
+            this.currentSchemaService.removeCurrentSchema();
+            this.finishedDemo.emit();
+          }
         }
       );
   }
@@ -231,9 +277,15 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
         .subscribe(
           busy => {
             if (!busy) {
+              this.computedPlans++;
               const newRun: PlanRun = this.runsService.getLastRun();
               this.selectPlan(newRun);
               const cSettings = this.settings$.getValue();
+
+              if (cSettings.introTask && cSettings.allowQuestions && this.computedPlans === 2 && this.askedQuestions === 0) {
+                this.snackBar.open('Great you computed your first plan. How about asking a question to improve the plan?', 'Got it');
+              }
+
               if (newRun.planValue && cSettings.checkMaxUtility) {
                 this.maxAchievedUtility = Math.max(this.maxAchievedUtility, newRun.planValue);
                 if (this.maxAchievedUtility > 0 && this.maxUtility > 0) {
@@ -266,6 +318,7 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
         .subscribe(
         (busy) => {
           if (! busy) {
+            this.askedQuestions++;
             const planRun = this.selectedPlanRunService.getSelectedObject().getValue();
             const expRun = this.selectedQuestionService.getSelectedObject().getValue();
             if (planRun && expRun) {

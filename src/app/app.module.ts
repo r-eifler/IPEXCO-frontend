@@ -162,6 +162,7 @@ import {NgxChartsModule} from '@swimlane/ngx-charts';
 import { OverviewDataComponent } from './components/user-study/eval/overview-data/overview-data.component';
 import { TimeLoggerDataComponent } from './components/user-study/eval/time-logger-data/time-logger-data.component';
 import { IndividualRunUserDataComponent } from './components/user-study/eval/individual-run-user-data/individual-run-user-data.component';
+import {MatTooltipModule} from '@angular/material/tooltip';
 
 @NgModule({
   declarations: [
@@ -276,6 +277,7 @@ import { IndividualRunUserDataComponent } from './components/user-study/eval/ind
         InlineSVGModule.forRoot(),
         MatCarouselModule.forRoot(),
         NgxChartsModule,
+        MatTooltipModule,
     ],
   providers: [
     UserStore,

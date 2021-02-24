@@ -11,12 +11,22 @@
       <h2>Your best plan achieved an overall utility of: {{maxAchievedUtility}}.</h2>
       <ng-container *ngIf="(settingsService.getSelectedObject() | async).checkMaxUtility">
         <h2 *ngIf="maxUtility === maxAchievedUtility">Great! This is the maximal utility possible.</h2>
-        <h2>You will be payed: {{payment | currency : 'GBP' : 'symbol' : '1.2-2'}}</h2>
+        <h2 *ngIf="payment > 0">
+          You will be payed: {{payment | currency : 'GBP' : 'symbol' : '1.2-2'}}
+        </h2>
+        <h3 *ngIf="(settingsService.getSelectedObject() | async).introTask">
+          Have you familiarized you with the tool?
+          If yes, you can exit the intro task.
+          If no, please make sure, that you understand how to use the tool.
+        </h3>
       </ng-container>
     </div>
   </div>
 </div>
 <div style="width: 100%; display: flex; flex-direction: row; justify-content: flex-end;">
-  <button mat-flat-button color="primary" (click)="backToDemoOverview()">Continue</button>
+  <button mat-flat-button style="margin-right: 10px;" (click)="dialogRef.close(false)">
+    Continue
+  </button>
+  <button mat-flat-button color="primary" (click)="dialogRef.close(true)">Exit</button>
 </div>
 

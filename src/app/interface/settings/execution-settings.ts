@@ -18,4 +18,5 @@ export interface ExecutionSettings {
   checkMaxUtility: boolean;
   paymentInfo: PaymentInfo;
   showAnimation: boolean;
+  introTask: boolean;
 }
