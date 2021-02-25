@@ -138,14 +138,12 @@ export class DemoNavigatorComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   ngAfterViewInit() {
-    console.log('bar labels');
     const payInfo = this.settings$.getValue().paymentInfo;
     const pipe = new CurrencyPipe('en-US', 'GBP');
     for (const s of payInfo.steps) {
       if (s == 1) {
         break;
       }
-      console.log(s);
       const label = document.createElement('div');
       const value = payInfo.min + (payInfo.max - payInfo.min) * s;
       label.innerText = pipe.transform(value, 'GBP', 'symbol', '1.2-2');

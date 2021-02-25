@@ -12,6 +12,7 @@
             <mat-icon matListIcon *ngIf="! entry.user.finished">error_outline</mat-icon>
             <p mat-line>{{entry.user.prolificId}}</p>
             <p mat-line>{{entry.user._id}}</p>
+            <p mat-line>{{entry.user.payment | currency : 'GBP' : 'symbol' : '1.2-2'}}</p>
             <p mat-line>{{entry.user.createdAt | date:'short'}}</p>
           </mat-list-option>
         </mat-selection-list>

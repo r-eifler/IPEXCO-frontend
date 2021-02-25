@@ -6,6 +6,7 @@ import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {TimeLoggerService} from '../../../service/logger/time-logger.service';
 import {CurrencyPipe} from '@angular/common';
+import {UserStudyUserService} from '../../../service/user-study/user-study-user.service';
 
 @Component({
   selector: 'app-demo-finished',
@@ -26,6 +27,7 @@ export class DemoFinishedComponent implements OnInit, OnDestroy {
   constructor(
     private timeLogger: TimeLoggerService,
     public settingsService: ExecutionSettingsService,
+    public userService: UserStudyUserService,
     public dialogRef: MatDialogRef<DemoFinishedComponent>,
     @Inject(MAT_DIALOG_DATA) data
   ) {
@@ -45,6 +47,8 @@ export class DemoFinishedComponent implements OnInit, OnDestroy {
     this.settingsService.getSelectedObject()
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe();
+
+    await this.userService.update(this.payment);
   }
 
   ngOnDestroy(): void {

@@ -7,4 +7,5 @@ export interface USUser {
   finished?: string;
   createdAt?: Date;
   timeLog?: string;
+  payment?: number;
 }
