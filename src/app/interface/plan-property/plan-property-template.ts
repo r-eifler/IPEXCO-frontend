@@ -9,7 +9,7 @@ export class PlanPropertyTemplate {
   public type: GoalType;
   public variables: {
     name: string;
-    type: string;
+    type: string | string[];
   }[];
   public nameTemplate: string;
   public formulaTemplate: string;
@@ -130,7 +130,10 @@ export class PlanPropertyTemplate {
     for (const variable of this.variables) {
       const matchingObjects: Set<string> = new Set();
       for (const obj of taskSchema.objects) {
-        if (obj.type === variable.type) {
+        if (variable.type.length === 1 && obj.type === variable.type) {
+          matchingObjects.add(obj.name);
+        }
+        if (variable.type.length > 1 && variable.type.includes(obj.type)) {
           matchingObjects.add(obj.name);
         }
       }

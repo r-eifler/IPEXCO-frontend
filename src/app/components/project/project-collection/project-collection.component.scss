@@ -32,6 +32,7 @@ mat-grid-tile {
 .project-container-web {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
 }
 
 .project-container-mobile {
