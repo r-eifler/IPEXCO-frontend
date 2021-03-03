@@ -17,6 +17,8 @@ import {Project} from 'src/app/interface/project';
 import {AuthenticationService} from '../../../service/authentication/authentication.service';
 import {DemoCreatorComponent} from '../demo-creator/demo-creator.component';
 import {environment} from '../../../../environments/environment';
+import {DemoFinishedComponent} from '../demo-finished/demo-finished.component';
+import {DemoInfoComponent} from '../demo-info/demo-info.component';
 
 @Component({
   selector: 'app-demo-selection',
@@ -98,6 +100,18 @@ export class DemoCollectionComponent implements OnInit, OnDestroy {
   async openSettings(demo: Demo) {
     await this.settingsService.load(demo.settings);
     this.bottomSheet.open(DemoSettingsComponent, {data: {settings: this.settingsService.getSelectedObject().value, name: demo.name}});
+  }
+
+
+  openDemoInfo(demo: Demo) {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = '1000px';
+    dialogConfig.height = '750px';
+    dialogConfig.data  = {
+      demo,
+    };
+
+    const dialogRef = this.dialog.open(DemoInfoComponent, dialogConfig);
   }
 
   openAnimationSettings(demo: Demo) {

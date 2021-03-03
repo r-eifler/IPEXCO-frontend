@@ -21,43 +21,7 @@
     </div>
     <mat-card-content>
       <div style="width: 100%">
-        <mat-accordion>
-          <mat-expansion-panel *ngIf="demo.status == runStatus.finished">
-            <mat-expansion-panel-header>
-              <mat-panel-title>
-                INFO
-              </mat-panel-title>
-            </mat-expansion-panel-header>
-            <p>ID: {{demo._id}}</p>
-            <p>Max Utility: {{demo.maxUtility?.value}}</p>
-            <mat-list>
-              <mat-list-item *ngFor="let line of demo.maxUtility?.selectedPlanProperties">
-                <p matLine>{{line}}</p>
-              </mat-list-item>
-            </mat-list>
-          </mat-expansion-panel>
-          <mat-expansion-panel *ngIf="demo.data">
-            <mat-expansion-panel-header>
-              <mat-panel-title>
-                MUGS
-              </mat-panel-title>
-            </mat-expansion-panel-header>
-            <mat-list>
-              <mat-list-item *ngFor="let line of demo.data.MUGS">
-                <mat-icon matListIcon>bolt</mat-icon>
-                <p matLine>({{line.length}}) {{line}}</p>
-              </mat-list-item>
-            </mat-list>
-          </mat-expansion-panel>
-          <mat-expansion-panel *ngIf="demo.status == runStatus.finished">
-            <mat-expansion-panel-header>
-              <mat-panel-title>
-                Description
-              </mat-panel-title>
-            </mat-expansion-panel-header>
-            {{demo.description}}
-          </mat-expansion-panel>
-        </mat-accordion>
+        {{demo.description}}
       </div>
     </mat-card-content>
     <mat-card-actions align="end" style="margin-bottom: 0; padding-bottom: 0">
@@ -75,6 +39,12 @@
     </mat-card-actions>
 
     <mat-menu #demoMenu="matMenu">
+      <button mat-menu-item
+              [disabled]="demo.status == runStatus.running || demo.status == runStatus.pending"
+              (click)="openDemoInfo(demo)">
+        <mat-icon>info</mat-icon>
+        <span>Info</span>
+      </button>
       <button mat-menu-item
               [disabled]="demo.status == runStatus.failed || demo.status == runStatus.running || demo.status == runStatus.pending"
               (click)="openSettings(demo)">

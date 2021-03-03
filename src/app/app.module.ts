@@ -163,6 +163,7 @@ import { OverviewDataComponent } from './components/user-study/eval/overview-dat
 import { TimeLoggerDataComponent } from './components/user-study/eval/time-logger-data/time-logger-data.component';
 import { IndividualRunUserDataComponent } from './components/user-study/eval/individual-run-user-data/individual-run-user-data.component';
 import {MatTooltipModule} from '@angular/material/tooltip';
+import { DemoInfoComponent } from './components/demo/demo-info/demo-info.component';
 
 @NgModule({
   declarations: [
@@ -232,6 +233,7 @@ import {MatTooltipModule} from '@angular/material/tooltip';
     OverviewDataComponent,
     TimeLoggerDataComponent,
     IndividualRunUserDataComponent,
+    DemoInfoComponent,
   ],
     imports: [
         RouterModule.forRoot(appRoutes,
