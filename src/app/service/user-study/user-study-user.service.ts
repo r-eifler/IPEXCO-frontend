@@ -60,6 +60,9 @@ export class UserStudyUserService {
   }
 
   update(payment: number): Promise<boolean> {
+    if (! this.user) {
+      return;
+    }
     this.user.payment = payment;
     return new Promise<boolean>((resolve, reject) => {
       try {

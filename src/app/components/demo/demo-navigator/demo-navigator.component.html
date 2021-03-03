@@ -46,7 +46,7 @@
     <div style="margin: 5px"
          *ngIf="! (settingsService.getSelectedObject()| async)?.allowQuestions"
          matTooltip="You have to compute at least 1 plan before you can finish the intro task."
-         [matTooltipDisabled]="!((settingsService.getSelectedObject()| async)?.introTask && (askedQuestions < 1 || computedPlans < 2))">
+         [matTooltipDisabled]="!((settingsService.getSelectedObject()| async)?.introTask && (computedPlans < 2))">
       <button mat-stroked-button  style="height: 100%"
               [disabled]="(settingsService.getSelectedObject()| async)?.introTask &&  computedPlans < 2"
               (click)="finishDemo()">

@@ -14,12 +14,12 @@
         <h2 *ngIf="payment > 0">
           You will be payed: {{payment | currency : 'GBP' : 'symbol' : '1.2-2'}}
         </h2>
-        <h3 *ngIf="(settingsService.getSelectedObject() | async).introTask">
-          Have you familiarized you with the tool?
-          If yes, you can exit the intro task.
-          If no, please make sure, that you understand how to use the tool.
-        </h3>
       </ng-container>
+      <h3 *ngIf="(settingsService.getSelectedObject() | async).introTask">
+        Have you familiarized you with the tool?
+        If yes, you can exit the intro task.
+        If no, please make sure, that you understand how to use the tool.
+      </h3>
     </div>
   </div>
 </div>

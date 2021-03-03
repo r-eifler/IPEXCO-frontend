@@ -22,6 +22,8 @@ import {DemoHelpDialogComponent} from '../demo-help-dialog/demo-help-dialog.comp
 import {SelectedQuestionService} from '../../../service/planner-runs/selected-question.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {CurrencyPipe} from '@angular/common';
+// @ts-ignore
+import Timeout = NodeJS.Timeout;
 
 @Component({
   selector: 'app-demo-navigator',
@@ -52,6 +54,8 @@ export class DemoNavigatorComponent implements OnInit, AfterViewInit, OnDestroy 
 
   maxTime = 15000;
   timer: number;
+
+  notificationTimer: Timeout[] = [];
 
   maxAchievedUtility = 0;
   maxUtility = 0;
@@ -123,34 +127,37 @@ export class DemoNavigatorComponent implements OnInit, AfterViewInit, OnDestroy 
     this.initTimer();
 
     if (this.settings$.getValue().introTask) {
-      setTimeout(() => {
-        if (this.computedPlans === 1 || this.askedQuestions === 0) {
-          if (this.settings$.getValue().allowQuestions) {
+      const notTimer = setTimeout(() => {
+        if (this.settings$.getValue().allowQuestions && (this.computedPlans === 1 || this.askedQuestions === 0)) {
             this.snackBar.open('You have not computed any plans or asked any questions yet. Are you facing any difficulties? ' +
               'You can open the help page with the button in the upper right corner.', 'OK');
-          } else {
+            return;
+        }
+        if (this.computedPlans === 1) {
             this.snackBar.open('You have not computed any plans yet. Are you facing any difficulties? ' +
               'You can open the help page with the button in the upper right corner.', 'OK');
-          }
         }
       }, 120000);
+      this.notificationTimer.push(notTimer);
     }
   }
 
   ngAfterViewInit() {
-    const payInfo = this.settings$.getValue().paymentInfo;
-    const pipe = new CurrencyPipe('en-US', 'GBP');
-    for (const s of payInfo.steps) {
-      if (s == 1) {
-        break;
+    if (this.settings$.getValue().checkMaxUtility) {
+      const payInfo = this.settings$.getValue().paymentInfo;
+      const pipe = new CurrencyPipe('en-US', 'GBP');
+      for (const s of payInfo.steps) {
+        if (s == 1) {
+          break;
+        }
+        const label = document.createElement('div');
+        const value = payInfo.min + (payInfo.max - payInfo.min) * s;
+        label.innerText = pipe.transform(value, 'GBP', 'symbol', '1.2-2');
+        label.style.position = 'absolute';
+        label.style.left = (s * 100).toString() + '%';
+        label.style.top = '55%';
+        this.barContainerRef.nativeElement.appendChild(label);
       }
-      const label = document.createElement('div');
-      const value = payInfo.min + (payInfo.max - payInfo.min) * s;
-      label.innerText = pipe.transform(value, 'GBP', 'symbol', '1.2-2');
-      label.style.position = 'absolute';
-      label.style.left = (s * 100).toString() + '%';
-      label.style.top = '55%';
-      this.barContainerRef.nativeElement.appendChild(label);
     }
   }
 
@@ -158,6 +165,9 @@ export class DemoNavigatorComponent implements OnInit, AfterViewInit, OnDestroy 
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
     clearInterval(this.timerIntervall);
+    for (const t of this.notificationTimer) {
+      clearTimeout(t);
+    }
     this.timeLogger.deregister(this.loggerId);
   }
 
@@ -284,8 +294,8 @@ export class DemoNavigatorComponent implements OnInit, AfterViewInit, OnDestroy 
                 this.snackBar.open('Great you computed your first plan. How about asking a question to improve the plan?', 'Got it');
               }
 
+              this.maxAchievedUtility = Math.max(this.maxAchievedUtility, newRun.planValue);
               if (newRun.planValue && cSettings.checkMaxUtility) {
-                this.maxAchievedUtility = Math.max(this.maxAchievedUtility, newRun.planValue);
                 if (this.maxAchievedUtility > 0 && this.maxUtility > 0) {
                   this.progressValue = this.maxAchievedUtility / this.maxUtility;
                   let stepFraction = 0;
