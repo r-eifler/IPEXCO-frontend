@@ -1,4 +1,4 @@
-import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
+import {AfterViewInit, Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {Demo} from '../../../interface/demo';
 import {PlanPropertyMapService} from '../../../service/plan-properties/plan-property-services';
@@ -12,7 +12,7 @@ import {Subject} from 'rxjs';
   templateUrl: './demo-info.component.html',
   styleUrls: ['./demo-info.component.css']
 })
-export class DemoInfoComponent implements OnInit, OnDestroy {
+export class DemoInfoComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private ngUnsubscribe: Subject<any> = new Subject();
 
@@ -47,5 +47,17 @@ export class DemoInfoComponent implements OnInit, OnDestroy {
     this.ngUnsubscribe.complete();
   }
 
+  downloadDemoData() {
+    const jsonDemoData = JSON.stringify(this.demo.data);
+    const jsonMaxUtilityData = JSON.stringify(this.demo.maxUtility);
+    const file = new Blob([jsonDemoData, '\n\n', jsonMaxUtilityData], {type: 'plain/json'});
+    const a: any = document.getElementById('demo_download');
+    a.href = URL.createObjectURL(file);
+    a.download = 'demo.json';
+  }
+
+  ngAfterViewInit(): void {
+    this.downloadDemoData();
+  }
 
 }

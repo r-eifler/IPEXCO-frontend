@@ -36,6 +36,21 @@
     <p style="margin: 0; align-self: center;">{{imageFileName}}</p>
   </div>
 
+  <div>
+    <mat-slide-toggle formControlName="precomputeToggle" [(ngModel)]="precomputedData">Add precomputed data</mat-slide-toggle>
+
+    <ng-container *ngIf="precomputedData">
+      <mat-form-field class="example-full-width">
+        <mat-label>Demo Data</mat-label>
+        <textarea matInput formControlName="demoData" [(ngModel)]="demoData"></textarea>
+      </mat-form-field>
+      <mat-form-field class="example-full-width">
+        <mat-label>Max Utility Data</mat-label>
+        <textarea matInput formControlName="maxUtilityData" [(ngModel)]="maxUtilityData"></textarea>
+      </mat-form-field>
+    </ng-container>
+  </div>
+
   <div style="display: flex">
     <button mat-flat-button color="secondray" type=button (click)="onBack()" style="flex-grow: 1">
       <mat-icon>

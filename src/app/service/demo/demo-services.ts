@@ -107,6 +107,32 @@ export class DemosService extends ObjectCollectionService<Demo> {
       });
   }
 
+  addPrecomputedDemo(projectId: string, demo: Demo, demoData: string, maxUtilityData: string): void {
+
+    const formData = new FormData();
+    formData.append('name', demo.name);
+    formData.append('summaryImage', demo.summaryImage);
+    formData.append('introduction', demo.introduction);
+    formData.append('description', demo.description);
+    formData.append('projectId', projectId);
+    formData.append('demoData', demoData);
+    formData.append('maxUtility', maxUtilityData);
+
+    // console.log('summaryImage: '  + demo.summaryImage);
+
+    this.http.post<IHTTPData<Demo>>(this.BASE_URL + '/precomputed', formData)
+      .subscribe(httpData => {
+        const runLoaded = this.existsObjectInStore(httpData.data._id);
+        let action = null;
+        if (runLoaded) {
+          action = {type: EDIT, data: httpData.data};
+        } else {
+          action = {type: ADD, data: httpData.data};
+        }
+        this.listStore.dispatch(action);
+      });
+  }
+
   updateDemo(demo: Demo): void {
 
     // const formData = new FormData();

@@ -2,6 +2,10 @@
     <mat-tab-group>
       <mat-tab label="General">
         <p>ID: {{demo._id}}</p>
+
+        <a mat-flat-button id="demo_download">
+          <mat-icon>download</mat-icon>
+        </a>
       </mat-tab>
       <mat-tab label="MUGS" *ngIf="demo.data">
         <mat-list>

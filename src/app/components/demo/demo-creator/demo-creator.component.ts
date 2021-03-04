@@ -17,6 +17,10 @@ export class DemoCreatorComponent implements OnInit {
   public readonly update: boolean;
 
   taskInfo: string;
+  maxUtilityData: string;
+  demoData: string;
+
+  precomputedData = false;
 
   demoForm: FormGroup;
 
@@ -35,11 +39,16 @@ export class DemoCreatorComponent implements OnInit {
     this.update = data.update;
 
     this.taskInfo = this.demo ? this.demo.taskInfo : '';
+    this.demoData = this.demo ? this.demo.data.toString() : '';
+    this.maxUtilityData = this.demo ? this.demo.maxUtility.toString() : '';
 
     this.demoForm = new FormGroup({
       name: new FormControl(this.demo ? this.demo.name : ''),
       description: new FormControl(this.demo ? this.demo.description : ''),
       taskInfo: new FormControl(this.demo ? this.demo.taskInfo : ''),
+      precomputeToggle: new FormControl(),
+      demoData: new FormControl(this.demo ? this.demo.data : ''),
+      maxUtilityData: new FormControl(this.demo ? this.demo.maxUtility : ''),
     });
   }
 
@@ -60,7 +69,11 @@ export class DemoCreatorComponent implements OnInit {
     if (this.update) {
       this.demosService.updateDemo(newDemo);
     } else {
-      this.demosService.generateDemo(this.currentProjectId, newDemo);
+      if (this.precomputedData) {
+        this.demosService.addPrecomputedDemo(this.currentProjectId, newDemo, this.demoData, this.maxUtilityData);
+      } else {
+        this.demosService.generateDemo(this.currentProjectId, newDemo);
+      }
     }
 
     this.dialogRef.close();
