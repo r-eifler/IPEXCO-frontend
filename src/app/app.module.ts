@@ -164,6 +164,7 @@ import { TimeLoggerDataComponent } from './components/user-study/eval/time-logge
 import { IndividualRunUserDataComponent } from './components/user-study/eval/individual-run-user-data/individual-run-user-data.component';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import { DemoInfoComponent } from './components/demo/demo-info/demo-info.component';
+import { DemoTaskInfoComponent } from './components/demo/demo-task-info/demo-task-info.component';
 
 @NgModule({
   declarations: [
@@ -234,6 +235,7 @@ import { DemoInfoComponent } from './components/demo/demo-info/demo-info.compone
     TimeLoggerDataComponent,
     IndividualRunUserDataComponent,
     DemoInfoComponent,
+    DemoTaskInfoComponent,
   ],
     imports: [
         RouterModule.forRoot(appRoutes,

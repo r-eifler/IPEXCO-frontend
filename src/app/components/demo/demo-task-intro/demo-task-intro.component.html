@@ -9,17 +9,27 @@
             <img [src]="srcUrl + (demo$ | async).summaryImage" style="max-height: 100%; max-width: 100%">
           </div>
           <div style="height: 100%; width: 50%; display: flex; flex-direction: column;">
+            <mat-tab-group>
+              <mat-tab label="Info">
+                <div [innerHTML]="(demo$ | async).taskInfo | marked" style="margin: 20px;">
 
-          <p>The following properties are available:</p>
+                </div>
+              </mat-tab>
+              <mat-tab label="Properties">
+                <p style="margin: 20px; font-size: larger">
+                  The following properties are available:
+                </p>
 
-          <mat-list>
-            <mat-list-item *ngFor="let entry of (planPropertiesMap$ | async) | keyvalue;last as last">
-              <mat-icon matListIcon>bookmark</mat-icon>
-              <p matLine>{{entry.value.naturalLanguageDescription}}</p>
-              <p matLine *ngIf="(settings$ | async).usePlanPropertyValues">Utility: {{entry.value.value}}</p>
-              <mat-divider [inset]="true" *ngIf="! last"></mat-divider>
-            </mat-list-item>
-          </mat-list>
+                <mat-list>
+                  <mat-list-item *ngFor="let entry of (planPropertiesMap$ | async) | keyvalue;last as last">
+                    <mat-icon matListIcon>bookmark</mat-icon>
+                    <p matLine>{{entry.value.naturalLanguageDescription}}</p>
+                    <p matLine *ngIf="(settings$ | async).usePlanPropertyValues">Utility: {{entry.value.value}}</p>
+                    <mat-divider [inset]="true" *ngIf="! last"></mat-divider>
+                  </mat-list-item>
+                </mat-list>
+              </mat-tab>
+            </mat-tab-group>
           </div>
         </div>
   </mat-card-content>
