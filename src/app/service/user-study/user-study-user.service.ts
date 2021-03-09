@@ -59,7 +59,7 @@ export class UserStudyUserService {
     });
   }
 
-  update(payment: number): Promise<boolean> {
+  updatePayment(payment: number): Promise<boolean> {
     if (! this.user) {
       return;
     }
@@ -67,6 +67,22 @@ export class UserStudyUserService {
     return new Promise<boolean>((resolve, reject) => {
       try {
         this.http.put(this.BASE_URL + '/payment', {payment})
+          .subscribe(httpData => {
+              resolve(true);
+            },
+            (err) => {
+              reject(null);
+            });
+      } catch {
+        reject();
+      }
+    });
+  }
+
+  update(user: USUser): Promise<boolean> {
+    return new Promise<boolean>((resolve, reject) => {
+      try {
+        this.http.put(this.BASE_URL + '/' + user._id, {usUser: user})
           .subscribe(httpData => {
               resolve(true);
             },

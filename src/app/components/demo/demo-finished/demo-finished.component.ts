@@ -48,7 +48,7 @@ export class DemoFinishedComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe();
 
-    await this.userService.update(this.payment);
+    await this.userService.updatePayment(this.payment);
   }
 
   ngOnDestroy(): void {

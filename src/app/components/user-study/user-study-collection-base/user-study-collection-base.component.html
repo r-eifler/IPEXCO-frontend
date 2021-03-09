@@ -1,0 +1,17 @@
+<div class="tab-container">
+  <nav mat-tab-nav-bar style="width: 100%; height: 100%;">
+    <a mat-tab-link (click)="showTab = 1" [active]="showTab == 1">
+      User Studies
+    </a>
+    <a mat-tab-link (click)="showTab = 2" [active]="showTab == 2">
+      Meta Studies
+    </a>
+  </nav>
+  <div class="content-container" *ngIf="showTab == 1">
+    <app-user-study-selection></app-user-study-selection>
+  </div>
+  <div class="content-container" *ngIf="showTab == 2">
+    <app-meta-study-collection></app-meta-study-collection>
+  </div>
+</div>
+

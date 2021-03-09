@@ -294,19 +294,21 @@ export class DemoNavigatorComponent implements OnInit, AfterViewInit, OnDestroy 
                 this.snackBar.open('Great you computed your first plan. How about asking a question to improve the plan?', 'Got it');
               }
 
-              this.maxAchievedUtility = Math.max(this.maxAchievedUtility, newRun.planValue);
-              if (newRun.planValue && cSettings.checkMaxUtility) {
-                if (this.maxAchievedUtility > 0 && this.maxUtility > 0) {
-                  this.progressValue = this.maxAchievedUtility / this.maxUtility;
-                  let stepFraction = 0;
-                  for (let i = 0; i < cSettings.paymentInfo.steps.length; i++) {
-                    if (cSettings.paymentInfo.steps[i] <= this.progressValue &&
-                      (i + 1 === cSettings.paymentInfo.steps.length || cSettings.paymentInfo.steps[i + 1] > this.progressValue)) {
-                      stepFraction = cSettings.paymentInfo.steps[i];
+              if (newRun.planValue) {
+                this.maxAchievedUtility = Math.max(this.maxAchievedUtility, newRun.planValue);
+                if (cSettings.checkMaxUtility) {
+                  if (this.maxAchievedUtility > 0 && this.maxUtility > 0) {
+                    this.progressValue = this.maxAchievedUtility / this.maxUtility;
+                    let stepFraction = 0;
+                    for (let i = 0; i < cSettings.paymentInfo.steps.length; i++) {
+                      if (cSettings.paymentInfo.steps[i] <= this.progressValue &&
+                        (i + 1 === cSettings.paymentInfo.steps.length || cSettings.paymentInfo.steps[i + 1] > this.progressValue)) {
+                        stepFraction = cSettings.paymentInfo.steps[i];
+                      }
                     }
+                    this.payment = cSettings.paymentInfo.min +
+                      stepFraction * (cSettings.paymentInfo.max - cSettings.paymentInfo.min);
                   }
-                  this.payment = cSettings.paymentInfo.min +
-                    stepFraction * (cSettings.paymentInfo.max - cSettings.paymentInfo.min);
                 }
               }
               if (cSettings.checkMaxUtility && newRun.planValue === this.demo.maxUtility?.value) {

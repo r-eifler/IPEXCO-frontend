@@ -12,6 +12,7 @@ import {DomainSpecification} from '../interface/files/domain-specification';
 import {Demo} from '../interface/demo';
 import {User} from '../interface/user';
 import {UserStudy} from '../interface/user-study/user-study';
+import {MetaStudy} from '../interface/user-study/meta-study';
 
 
 // User/Authentication
@@ -52,4 +53,8 @@ export class RunningDemoStore extends  ItemStore<Demo> {}
 // User Study
 export class UserStudiesStore extends  ListStore<UserStudy> {}
 export class RunningUserStudyStore extends  ItemStore<UserStudy> {}
+
+// User Study
+export class MetaStudiesStore extends  ListStore<MetaStudy> {}
+export class SelectedMetaStudyStore extends  ItemStore<MetaStudy> {}
 

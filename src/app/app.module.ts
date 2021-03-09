@@ -87,13 +87,13 @@ import {
   DomainFilesStore,
   DomainSpecificationFilesStore,
   DomainSpecStore,
-  ExecutionSettingsStore,
+  ExecutionSettingsStore, MetaStudiesStore,
   PlanPropertyMapStore,
   ProblemFilesStore,
   ProjectsStore,
   RunningDemoStore,
   RunningUserStudyStore,
-  RunsStore,
+  RunsStore, SelectedMetaStudyStore,
   TaskSchemaStore,
   UserStore,
   UserStudiesStore,
@@ -165,6 +165,12 @@ import { IndividualRunUserDataComponent } from './components/user-study/eval/ind
 import {MatTooltipModule} from '@angular/material/tooltip';
 import { DemoInfoComponent } from './components/demo/demo-info/demo-info.component';
 import { DemoTaskInfoComponent } from './components/demo/demo-task-info/demo-task-info.component';
+import { MetaStudyCollectionComponent } from './components/user-study/meta-study/meta-study-collection/meta-study-collection.component';
+import { MetaStudyCreatorComponent } from './components/user-study/meta-study/meta-study-creator/meta-study-creator.component';
+import {MetaStudiesService, SelectedMetaStudyService} from './service/user-study/meta-study-services';
+import { StudySelectionRedirectionComponent } from './components/user-study/meta-study/study-selection-redirection/study-selection-redirection.component';
+import { UserStudyCollectionBaseComponent } from './components/user-study/user-study-collection-base/user-study-collection-base.component';
+import { AcceptedTestPersonsComponent } from './components/user-study/eval/accepted-test-persons/accepted-test-persons.component';
 
 @NgModule({
   declarations: [
@@ -236,6 +242,11 @@ import { DemoTaskInfoComponent } from './components/demo/demo-task-info/demo-tas
     IndividualRunUserDataComponent,
     DemoInfoComponent,
     DemoTaskInfoComponent,
+    MetaStudyCollectionComponent,
+    MetaStudyCreatorComponent,
+    StudySelectionRedirectionComponent,
+    UserStudyCollectionBaseComponent,
+    AcceptedTestPersonsComponent,
   ],
     imports: [
         RouterModule.forRoot(appRoutes,
@@ -322,6 +333,10 @@ import { DemoTaskInfoComponent } from './components/demo/demo-task-info/demo-tas
     UserStudiesService,
     RunningUserStudyStore,
     RunningUserStudyService,
+    MetaStudiesService,
+    MetaStudiesStore,
+    SelectedMetaStudyService,
+    SelectedMetaStudyStore,
     AnimationHandler,
     {provide: MAT_BOTTOM_SHEET_DEFAULT_OPTIONS, useValue: {hasBackdrop: true}},
     PlanVisualizationProvider,

@@ -8,4 +8,5 @@ export interface USUser {
   createdAt?: Date;
   timeLog?: string;
   payment?: number;
+  accepted?: boolean;
 }

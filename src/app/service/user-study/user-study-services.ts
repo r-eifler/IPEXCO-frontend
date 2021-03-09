@@ -7,6 +7,7 @@ import {SelectedObjectService} from '../base/selected-object.service';
 import {UserStudy, UserStudyData} from '../../interface/user-study/user-study';
 import {IHTTPData} from '../../interface/http-data.interface';
 import {LOAD} from '../../store/generic-list.store';
+import {USUser} from '../../interface/user-study/user-study-user';
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +21,24 @@ export class UserStudiesService extends ObjectCollectionService<UserStudy> {
   loadData(id: string): Promise<UserStudyData[]> {
     return new Promise(((resolve, reject) => {
       this.http.get<IHTTPData<UserStudyData[]>>(this.BASE_URL + id + '/data', )
+        .subscribe((res) => {
+          resolve(res.data);
+        });
+    }));
+  }
+
+  getUsers(id: string): Promise<USUser[]> {
+    return new Promise(((resolve, reject) => {
+      this.http.get<IHTTPData<USUser[]>>(this.BASE_URL + id + '/users', )
+        .subscribe((res) => {
+          resolve(res.data);
+        });
+    }));
+  }
+
+  getNumberAcceptedUsers(id: string): Promise<number> {
+    return new Promise(((resolve, reject) => {
+      this.http.get<IHTTPData<number>>(this.BASE_URL + id + '/num_accepted_users', )
         .subscribe((res) => {
           resolve(res.data);
         });
