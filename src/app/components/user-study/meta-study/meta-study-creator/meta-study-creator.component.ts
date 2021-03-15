@@ -38,7 +38,6 @@ export class MetaStudyCreatorComponent implements OnInit, OnDestroy  {
         if (study) {
           this.created = true;
           this.metaStudy = study;
-          console.log(study);
           for (const s of this.metaStudy.userStudies) {
             this.numAcceptedUser.set((s.userStudy as string), await this.userStudiesService.getNumberAcceptedUsers((s.userStudy as string)));
           }

@@ -36,6 +36,9 @@
         <mat-label>Number of test persons</mat-label>
         <input type="number" matInput placeholder="0" [(ngModel)]="selection.numberTestPersons">
       </mat-form-field>
+      <p>
+        Accepted: {{numAcceptedUser.get(selection.userStudy)}}/{{selection.numberTestPersons}}
+      </p>
       <mat-progress-bar mode="determinate" [value]="(numAcceptedUser.get(selection.userStudy) / selection.numberTestPersons) * 100"></mat-progress-bar>
     </mat-card-content>
     <mat-card-actions align="end">
