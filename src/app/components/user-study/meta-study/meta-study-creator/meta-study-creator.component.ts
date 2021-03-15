@@ -22,6 +22,8 @@ export class MetaStudyCreatorComponent implements OnInit, OnDestroy  {
   metaStudy: MetaStudy;
   numAcceptedUser: Map<string, number> = new Map<string, number>();
 
+  private created = false;
+
   constructor(
     private userStudiesService: UserStudiesService,
     private selectedMetaStudyService: SelectedMetaStudyService,
@@ -34,6 +36,7 @@ export class MetaStudyCreatorComponent implements OnInit, OnDestroy  {
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(async study => {
         if (study) {
+          this.created = true;
           this.metaStudy = study;
           console.log(study);
           for (const s of this.metaStudy.userStudies) {

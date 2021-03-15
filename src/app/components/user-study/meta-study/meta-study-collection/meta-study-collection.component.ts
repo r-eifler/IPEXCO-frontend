@@ -43,4 +43,7 @@ export class MetaStudyCollectionComponent implements OnInit {
     return this.urlBase + '/' + study._id;
   }
 
+  deleteMetaStudy(s: MetaStudy) {
+    this.metaStudyService.deleteObject(s);
+  }
 }
