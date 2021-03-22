@@ -5,7 +5,8 @@ import {BehaviorSubject, Observable, Subject} from 'rxjs';
 import {UserStudy} from '../../../../interface/user-study/user-study';
 import {MetaStudy, UserStudySelection} from '../../../../interface/user-study/meta-study';
 import {MetaStudiesService, SelectedMetaStudyService} from '../../../../service/user-study/meta-study-services';
-import {takeUntil} from 'rxjs/operators';
+import {switchMap, takeUntil} from 'rxjs/operators';
+import {ActivatedRoute, ParamMap} from '@angular/router';
 
 @Component({
   selector: 'app-meta-study-creator',
@@ -25,10 +26,24 @@ export class MetaStudyCreatorComponent implements OnInit, OnDestroy  {
   private created = false;
 
   constructor(
+    private route: ActivatedRoute,
     private userStudiesService: UserStudiesService,
     private selectedMetaStudyService: SelectedMetaStudyService,
     private metaStudiesService: MetaStudiesService
   ) {
+    this.route.paramMap.pipe(
+      switchMap((params: ParamMap) =>
+        this.metaStudiesService.getObject(params.get('metaStudyId')))
+    )
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(
+        async value => {
+          if (value != null) {
+            this.selectedMetaStudyService.saveObject(value);
+          }
+        }
+      );
+
     userStudiesService.findCollection();
     this.userStudies$ = this.userStudiesService.getList();
 

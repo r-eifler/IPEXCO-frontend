@@ -44,7 +44,7 @@ export const appRoutes: Routes = [
   { path: 'demos/:demoid', component: DemoBaseComponent},
 
   { path: 'user-studies', component: UserStudyCollectionBaseComponent},
-  { path: 'user-studies/meta-study', component: MetaStudyCreatorComponent},
+  { path: 'user-studies/meta-study/:metaStudyId', component: MetaStudyCreatorComponent},
   { path: 'user-studies/selection/:metaStudyId', component: StudySelectionRedirectionComponent},
   { path: 'user-studies/new-user-study', component: UserStudyCreatorComponent},
   { path: 'user-studies/:userStudyId', component: UserStudyNavigationComponent,

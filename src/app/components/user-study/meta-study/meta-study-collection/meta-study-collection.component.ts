@@ -31,8 +31,7 @@ export class MetaStudyCollectionComponent implements OnInit {
   }
 
   async openMetaStudy(s: MetaStudy) {
-    this.selectedMetaStudyService.saveObject(s);
-    await this.router.navigate(['./meta-study'], { relativeTo: this.route });
+    await this.router.navigate(['./meta-study', s._id], { relativeTo: this.route });
   }
 
   async newMetaStudy() {
