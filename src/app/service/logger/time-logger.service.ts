@@ -52,6 +52,7 @@ export class TimeLoggerService {
       entry.end = new Date();
     }
     // console.log('Deregister: ' + id);
+    // console.log(entry);
   }
 
   store(): Promise<void> {

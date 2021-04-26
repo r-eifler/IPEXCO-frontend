@@ -286,6 +286,7 @@ export class DemoNavigatorComponent implements OnInit, AfterViewInit, OnDestroy 
     this.computeNewPlan = false;
     this.askQuestion = false;
     this.showAnswer = false;
+    this.showGlobalExplanation = false;
     if (hardGoalsSelected) {
       this.selectedPlan = null;
       this.plannerService.isPlannerBusy()

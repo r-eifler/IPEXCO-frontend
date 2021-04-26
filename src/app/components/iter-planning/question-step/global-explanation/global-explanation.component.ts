@@ -28,7 +28,8 @@ export class GlobalExplanationComponent implements OnInit, OnDestroy {
 
   constructor(
     private timeLogger: TimeLoggerService,
-    private  demoService: RunningDemoService,
+    private demoService: RunningDemoService,
+    private selectedPlan: SelectedPlanRunService,
     private planPropertiesService: PlanPropertyMapService
   ) {
 
@@ -36,7 +37,6 @@ export class GlobalExplanationComponent implements OnInit, OnDestroy {
       [
         this.demoService.getSelectedObject(),
         this.planPropertiesService.getMap()])
-      .pipe(takeUntil(this.ngUnsubscribe))
     .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(
         ([demo, planPropertiesMap]) => {
@@ -57,6 +57,12 @@ export class GlobalExplanationComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.loggerId = this.timeLogger.register('global-explanation');
+
+    this.selectedPlan.getSelectedObject()
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(plan => {
+        this.timeLogger.addInfo(this.loggerId, 'selected plan: ' + plan._id);
+      });
   }
 
   ngOnDestroy(): void {
