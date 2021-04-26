@@ -101,12 +101,42 @@
         <mat-step *ngIf="canUseQuestions">
           <ng-template matStepLabel>
             <div style="font-size: large;">
+              HOW TO: Property Dependencies
+            </div>
+          </ng-template>
+
+          <h1 style="color: #03658c; font-weight: bold">Dependencies Overview</h1>
+          <p style="font-size: large">
+            To open the dependencies overview you can click on the <span style="font-weight: bold">Show Dependencies Overview</span> button.
+          </p>
+
+          <p  style="font-size: large">
+            Given the constraints (e.g. time, fuel, or energy), it is not possible to achieve all properties.
+            The dependencies overview groups the properties that cannot be achieved simultaneously.
+          </p>
+
+          <h3 style="color: #03658c; font-weight: bold; margin-top: 50px">Example</h3>
+          <p  style="font-size: large">
+            For example lists A,B,C and A,D mean it is not possible to achieve properties A, B and C or properties A and D simultaneously.
+          </p>
+
+          <h1 style="color: #03658c; font-weight: bold; margin-top: 50px">Filter</h1>
+          <p  style="font-size: large">
+            You can also filter the property groups with respect to a property.
+            Then only the groups containing the selected property will be displayed.
+          </p>
+
+        </mat-step>
+        <mat-step *ngIf="canUseQuestions">
+          <ng-template matStepLabel>
+            <div style="font-size: large;">
               HOW TO: Ask Questions
             </div>
           </ng-template>
 
           <h1 style="color: #03658c; font-weight: bold">Ask Question</h1>
           <p style="font-size: large">
+            As an alternative to the dependency overview, you can also ask specific questions about the currently selected plan.
             To ask a question you can click the <span style="font-weight: bold">Ask Question </span> button.
             This opens the question view.
           </p>
@@ -139,19 +169,21 @@
             <mat-list-item>
               <mat-icon matListIcon>question_answer</mat-icon>
               <p style="font-size: large" matLine>
-                If it is not possible to satisfy the property in your question, the system answers:
-                "There is no plan which satisfies this properties.
-                All global goals and the properties in the question can not be satisfied together."
+                If it is not possible to satisfy the property in your question at all, the system answers:
               </p>
               <p style="font-size: large" matLine>
-                This means you can not satisfy the property in your questions given the fuel, energy or time
-                constraints.
+                "There is no plan which satisfies this property.
+                All global goals and the property in the question can not be satisfied simultaneously."
+              </p>
+              <p style="font-size: large" matLine>
+                This means you can not satisfy the property in your questions given the priority property and
+                the fuel, energy or time constraints.
               </p>
             </mat-list-item>
             <mat-list-item>
               <mat-icon matListIcon>question_answer</mat-icon>
               <p style="font-size: large" matLine>
-                The property in your questions can be satisfied, if you give up at least you of the selected goals.
+                The property in your questions can be satisfied, if you give up at least one of the selected goals.
                 The system then tells you which goals you have to give up.
               </p>
             </mat-list-item>
@@ -161,7 +193,7 @@
           <h1 style="color: #03658c; font-weight: bold; margin-top: 50px">No Plan Possible</h1>
           <p  style="font-size: large">
             If the system can not find a plan for the selected goals you can ask <span style="font-weight: bold">why?</span>
-            The system answers your question by showing you which goals can not be achieved together.
+            The system answers your question by showing you which goals in your selection can not be achieved simultaneously.
           </p>
 
         </mat-step>
@@ -173,8 +205,7 @@
           </ng-template>
 
           <p  style="font-size: large">
-            If you think you found the best plan (highest utility) possible you can leave the task with the
-            <span style="font-weight: bold">Finish</span> button.
+            You can leave the task with the <span style="font-weight: bold">Finish</span> button at any time.
           </p>
 
 

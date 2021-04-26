@@ -171,6 +171,7 @@ import {MetaStudiesService, SelectedMetaStudyService} from './service/user-study
 import { StudySelectionRedirectionComponent } from './components/user-study/meta-study/study-selection-redirection/study-selection-redirection.component';
 import { UserStudyCollectionBaseComponent } from './components/user-study/user-study-collection-base/user-study-collection-base.component';
 import { AcceptedTestPersonsComponent } from './components/user-study/eval/accepted-test-persons/accepted-test-persons.component';
+import { GlobalExplanationComponent } from './components/iter-planning/question-step/global-explanation/global-explanation.component';
 
 @NgModule({
   declarations: [
@@ -247,6 +248,7 @@ import { AcceptedTestPersonsComponent } from './components/user-study/eval/accep
     StudySelectionRedirectionComponent,
     UserStudyCollectionBaseComponent,
     AcceptedTestPersonsComponent,
+    GlobalExplanationComponent,
   ],
     imports: [
         RouterModule.forRoot(appRoutes,

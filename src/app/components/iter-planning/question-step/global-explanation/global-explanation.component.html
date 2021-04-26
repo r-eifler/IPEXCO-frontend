@@ -1,0 +1,53 @@
+<mat-card class="card">
+  <mat-card-header>
+<!--    <div mat-card-avatar>-->
+<!--      <mat-icon>question_answer</mat-icon>-->
+<!--    </div>-->
+    <mat-card-title>
+      All Property Dependencies
+    </mat-card-title>
+    <button mat-icon-button (click)="close()" style="position: absolute; top: 5px; right: 5px">
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-card-header>
+  <mat-card-content style="overflow: auto">
+    <h3 class="mat-body-2">
+      The following lists group the properties that cannot be achieved simultaneously.
+    </h3>
+    <p class=".mat-body-1" style="color: #5e5e5e">
+      For example lists A,B,C and A,D mean it is not possible to achieve properties A, B and C or properties A and D simultaneously.
+    </p>
+    <mat-divider [inset]="true" style="margin-bottom: 20px"></mat-divider>
+    <div style="display: flex; flex-direction: row;">
+      <mat-form-field appearance="fill" matTooltip="Filters out all dependencies that do not contain the selected property.">
+        <mat-label>Filter dependencies</mat-label>
+        <mat-select [(value)]="selectedFilterPropertyName" (selectionChange)="filterMUGSWith()">
+          <mat-option *ngFor="let pp of planProperties" [value]="pp.name">
+            {{pp.naturalLanguageDescription}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <button mat-stroked-button style="margin-left: 20px; height:50px"
+              (click)="resetFilter()"
+              [disabled]="selectedFilterPropertyName == null">
+        reset filter
+      </button>
+    </div>
+    <ng-container *ngIf="filteredMUGS.length > 0">
+      <div *ngFor="let mugs of filteredMUGS;last as last; let index = index">
+        <div mat-subheader>Dependency {{index + 1}}</div>
+        <ng-container *ngFor="let elem of mugs;last as last2">
+          <app-scalable-list>
+            <p>{{elem.naturalLanguageDescription}}</p>
+          </app-scalable-list>
+  <!--        <mat-divider [inset]="true" *ngIf="! last2"></mat-divider>-->
+        </ng-container>
+  <!--      <p *ngIf="! last">or all in:</p>-->
+        <mat-divider [inset]="true" *ngIf="! last"></mat-divider>
+      </div>
+    </ng-container>
+    <h3 *ngIf="filteredMUGS.length == 0">
+      There is no dependency containing the selected property.
+    </h3>
+  </mat-card-content>
+</mat-card>

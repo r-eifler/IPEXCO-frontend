@@ -42,6 +42,7 @@ export class DemoNavigatorComponent implements OnInit, AfterViewInit, OnDestroy 
   computeNewPlan = false;
   askQuestion = false;
   showAnswer = false;
+  showGlobalExplanation = false;
   plannerBusy = false;
 
   selectedPlan: PlanRun = null;
@@ -271,6 +272,13 @@ export class DemoNavigatorComponent implements OnInit, AfterViewInit, OnDestroy 
   newQuestion() {
     this.askQuestion = true;
     this.showAnswer = false;
+    this.showGlobalExplanation = false;
+  }
+
+  globalExplanation() {
+    this.showGlobalExplanation = true;
+    this.askQuestion = false;
+    this.showAnswer = false;
   }
 
 
@@ -339,6 +347,10 @@ export class DemoNavigatorComponent implements OnInit, AfterViewInit, OnDestroy 
         }
       );
     }
+  }
+
+  globalExplanationClose() {
+    this.showGlobalExplanation = false;
   }
 
   showDemoHelp() {

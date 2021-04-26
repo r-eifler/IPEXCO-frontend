@@ -14,13 +14,21 @@
         <mat-icon>create</mat-icon>
         New Plan
       </button>
+      <mat-divider [inset]="true" [vertical]="true"></mat-divider>
       <button mat-flat-button color="accent" (click)="newQuestion();"
               *ngIf="(settingsService.getSelectedObject()| async)?.allowQuestions"
               [disabled]="! (selectedPlan?.status == runStatus.finished  || selectedPlan?.status === runStatus.noSolution)">
         <mat-icon>question_answer</mat-icon>
         Ask Question
       </button>
+      <button mat-flat-button color="accent" (click)="globalExplanation();"
+              *ngIf="(settingsService.getSelectedObject()| async)?.allowQuestions"
+              [disabled]="! (selectedPlan?.status == runStatus.finished  || selectedPlan?.status === runStatus.noSolution)">
+<!--        <mat-icon>question_answer</mat-icon>-->
+        Show Dependencies Overview
+      </button>
     </div>
+    <mat-divider [inset]="true" [vertical]="true"></mat-divider>
     <div class="payment-container" *ngIf="(settingsService.getSelectedObject()| async)?.checkMaxUtility">
       <p style="font-size: large;">Utility: <span style="font-weight: bold;">{{maxAchievedUtility}}/{{maxUtility}}</span></p>
       <div class="bar-container" #barContainer>
@@ -32,6 +40,7 @@
         Payment: {{payment | currency : 'GBP' : 'symbol' : '1.2-2'}}/{{maxPayment | currency : 'GBP' : 'symbol' : '1.2-2'}}
       </p>
     </div>
+    <mat-divider [inset]="true" [vertical]="true"></mat-divider>
     <div style="margin: 5px"
          *ngIf="(settingsService.getSelectedObject()| async)?.allowQuestions"
         matTooltip="You have to compute at least 1 plan and ask 1 question before you can finish the intro task."
@@ -85,7 +94,7 @@
 
     <div class="divider"></div>
 
-    <div class="center-container" [class.center-one-column]="! askQuestion" [class.center-two-columns]="askQuestion || showAnswer">
+    <div class="center-container" [class.center-one-column]="! askQuestion" [class.center-two-columns]="askQuestion || showAnswer || showGlobalExplanation">
       <app-finished-planning-step *ngIf="selectedPlan" style="height: 100%;overflow: auto;"></app-finished-planning-step>
 
       <div *ngIf="! selectedPlan" class="spinner-container">
@@ -95,10 +104,17 @@
         </div>
       </div>
 
-      <ng-container *ngIf="askQuestion && selectedPlan">
+      <ng-container *ngIf="askQuestion && selectedPlan && !showGlobalExplanation">
         <div class="divider"></div>
         <div class="task-creator-container">
           <app-question-creator style="height: 100%;overflow: auto;" (finished)="questionCreatorClose($event)"></app-question-creator>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="showGlobalExplanation && selectedPlan && !askQuestion">
+        <div class="divider"></div>
+        <div class="task-creator-container">
+          <app-global-explanation style="height: 100%; overflow: auto;" (finished)="globalExplanationClose()"></app-global-explanation>
         </div>
       </ng-container>
 

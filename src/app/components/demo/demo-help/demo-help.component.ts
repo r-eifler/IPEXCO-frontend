@@ -47,7 +47,7 @@ export class DemoHelpComponent implements OnInit, OnDestroy {
         settings => {
           if (settings) {
             this.canUseQuestions = settings.allowQuestions;
-            this.numSteps = settings.allowQuestions ? 3 : 2;
+            this.numSteps = settings.allowQuestions ? 4 : 2;
           }
         }
       );
