@@ -66,6 +66,7 @@ export class DemoNavigatorComponent implements OnInit, AfterViewInit, OnDestroy 
 
   computedPlans = 0;
   askedQuestions = 0;
+  usedGlobalExplanations = 0;
 
   finished = false;
 
@@ -279,6 +280,7 @@ export class DemoNavigatorComponent implements OnInit, AfterViewInit, OnDestroy 
     this.showGlobalExplanation = true;
     this.askQuestion = false;
     this.showAnswer = false;
+    this.usedGlobalExplanations++;
   }
 
 

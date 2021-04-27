@@ -43,10 +43,10 @@
     <mat-divider [inset]="true" [vertical]="true"></mat-divider>
     <div style="margin: 5px"
          *ngIf="(settingsService.getSelectedObject()| async)?.allowQuestions"
-        matTooltip="You have to compute at least 1 plan and ask 1 question before you can finish the intro task."
+        matTooltip="You have to compute at least 1 plan, take a look at the dependencies overview and ask 1 question before you can finish the intro task."
          [matTooltipDisabled]="!((settingsService.getSelectedObject()| async)?.introTask && (askedQuestions < 1 || computedPlans < 2))">
       <button mat-stroked-button  style="height: 100%"
-              [disabled]="(settingsService.getSelectedObject()| async)?.introTask && (askedQuestions < 1 || computedPlans < 2)"
+              [disabled]="(settingsService.getSelectedObject()| async)?.introTask && (askedQuestions < 1 || usedGlobalExplanations < 1 || computedPlans < 2)"
               (click)="finishDemo()">
         <mat-icon>exit_to_app</mat-icon>
         Finish
