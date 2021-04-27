@@ -25,7 +25,7 @@
               *ngIf="(settingsService.getSelectedObject()| async)?.allowQuestions"
               [disabled]="! (selectedPlan?.status == runStatus.finished  || selectedPlan?.status === runStatus.noSolution)">
 <!--        <mat-icon>question_answer</mat-icon>-->
-        Show Dependencies Overview
+        Show Incompatibilities Overview
       </button>
     </div>
     <mat-divider [inset]="true" [vertical]="true"></mat-divider>

@@ -4,7 +4,7 @@
 <!--      <mat-icon>question_answer</mat-icon>-->
 <!--    </div>-->
     <mat-card-title>
-      All Property Dependencies
+      All Property Incompatibility
     </mat-card-title>
     <button mat-icon-button (click)="close()" style="position: absolute; top: 5px; right: 5px">
       <mat-icon>close</mat-icon>
@@ -20,7 +20,7 @@
     <mat-divider [inset]="true" style="margin-bottom: 20px"></mat-divider>
     <div style="display: flex; flex-direction: row;">
       <mat-form-field appearance="fill" matTooltip="Filters out all dependencies that do not contain the selected property.">
-        <mat-label>Filter dependencies</mat-label>
+        <mat-label>filter incompatibility</mat-label>
         <mat-select [(value)]="selectedFilterPropertyName" (selectionChange)="filterMUGSWith()">
           <mat-option *ngFor="let pp of planProperties" [value]="pp.name">
             {{pp.naturalLanguageDescription}}
@@ -35,7 +35,7 @@
     </div>
     <ng-container *ngIf="filteredMUGS.length > 0">
       <div *ngFor="let mugs of filteredMUGS;last as last; let index = index">
-        <div mat-subheader>Dependency {{index + 1}}</div>
+        <div mat-subheader>Incompatibility {{index + 1}}</div>
         <ng-container *ngFor="let elem of mugs;last as last2">
           <app-scalable-list>
             <p>{{elem.naturalLanguageDescription}}</p>
