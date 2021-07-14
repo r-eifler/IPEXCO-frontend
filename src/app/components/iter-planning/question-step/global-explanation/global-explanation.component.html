@@ -19,7 +19,7 @@
     </p>
     <mat-divider [inset]="true" style="margin-bottom: 20px"></mat-divider>
     <div style="display: flex; flex-direction: row;">
-      <mat-form-field appearance="fill" matTooltip="Filters out all dependencies that do not contain the selected property.">
+      <mat-form-field appearance="fill" matTooltip="Filters out all incompatibilities that do not contain the selected property.">
         <mat-label>filter incompatibility</mat-label>
         <mat-select [(value)]="selectedFilterPropertyName" (selectionChange)="filterMUGSWith()">
           <mat-option *ngFor="let pp of planProperties" [value]="pp.name">
@@ -47,7 +47,7 @@
       </div>
     </ng-container>
     <h3 *ngIf="filteredMUGS.length == 0">
-      There is no dependency containing the selected property.
+      There is no incompatibility containing the selected property.
     </h3>
   </mat-card-content>
 </mat-card>
