@@ -5,7 +5,6 @@ import {IHTTPData} from '../../interface/http-data.interface';
 import {environment} from '../../../environments/environment';
 import {BehaviorSubject, Observable, of} from 'rxjs';
 import {map} from 'rxjs/operators';
-import * as assert from 'assert';
 
 
 type Id = string | number;
@@ -87,7 +86,6 @@ export class ObjectCollectionService<T extends Identifiable> {
   }
 
   copyObject(object: T) {
-    assert(object._id);
     return this.http.post<IHTTPData<T>>(this.BASE_URL + object._id, object)
       .subscribe(httpData => {
         // console.log('Result Post:');
@@ -106,7 +104,6 @@ export class ObjectCollectionService<T extends Identifiable> {
       // console.log('edit');
       return this.http.put<IHTTPData<T>>(this.BASE_URL + object._id, object)
         .subscribe(httpData => {
-          assert(httpData !== undefined);
           const action = {type: EDIT, data: httpData.data};
           this.listStore.dispatch(action);
         });
@@ -115,7 +112,6 @@ export class ObjectCollectionService<T extends Identifiable> {
     // console.log('add');
     return this.http.post<IHTTPData<T>>(this.BASE_URL, object)
       .subscribe(httpData => {
-        assert(httpData !== undefined);
         // console.log('Result Post:');
         // console.log(httpData);
         const action = {type: ADD, data: httpData.data};
@@ -124,7 +120,6 @@ export class ObjectCollectionService<T extends Identifiable> {
   }
 
   saveAndUpdateObject(object: T) {
-    assert(! object._id);
 
     const action1 = {type: ADD, data: object};
     this.listStore.dispatch(action1);

@@ -46,7 +46,6 @@ import {MatBadgeModule} from '@angular/material/badge';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatTableModule} from '@angular/material/table';
 import {MAT_BOTTOM_SHEET_DEFAULT_OPTIONS, MatBottomSheetModule} from '@angular/material/bottom-sheet';
-import { MatCarouselModule } from '@ngmodule/material-carousel';
 
 import {ResizableModule} from 'angular-resizable-element';
 // forms
@@ -248,6 +247,7 @@ import { GlobalExplanationComponent } from './components/iter-planning/question-
         StudySelectionRedirectionComponent,
         UserStudyCollectionBaseComponent,
         AcceptedTestPersonsComponent,
+        GlobalExplanationComponent,
     ],
     imports: [
         RouterModule.forRoot(appRoutes, { enableTracing: false, paramsInheritanceStrategy: 'always' }),
