@@ -289,7 +289,6 @@ import { GlobalExplanationComponent } from './components/iter-planning/question-
         MatTableModule,
         ResizableModule,
         InlineSVGModule.forRoot(),
-        MatCarouselModule.forRoot(),
         NgxChartsModule,
         MatTooltipModule,
     ],
