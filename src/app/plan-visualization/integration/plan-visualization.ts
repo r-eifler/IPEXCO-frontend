@@ -15,7 +15,9 @@ export abstract class PlanVisualization {
     protected  currentRunService: SelectedPlanRunService) {
     }
 
-  abstract async init(): Promise<void> ;
+  async init(): Promise<void> {
+
+  }
   abstract getDisplayDOMElem(): Observable<Element>;
   abstract getValueAttributesDisplayDOMElem(): Observable<Element>;
   abstract update();

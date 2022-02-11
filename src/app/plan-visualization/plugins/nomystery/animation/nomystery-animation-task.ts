@@ -109,7 +109,7 @@ export class AnimationTruck extends AnimationNode {
     return {x: 60, y: 10 - index * 20};
   }
 
-  animateDriveTo(targetLocation: AnimationLocation, fuelConsumption: number): Promise<any> {
+  animateDriveTo(targetLocation: AnimationLocation, fuelConsumption: number): Promise<void> {
 
     const startPosition = {x: this.currentLocation.x, y: this.currentLocation.y};
     const targetPosition = {x: targetLocation.x, y: targetLocation.y};
@@ -147,7 +147,7 @@ export class AnimationPackage extends AnimationNode {
     this.currentLocation.addObject();
   }
 
-  animateLoad(truck: AnimationTruck): Promise<any> {
+  animateLoad(truck: AnimationTruck): Promise<void> {
 
     truck.currentLocation.removeObject();
     truck.loadedPackages.push(this);
@@ -176,7 +176,7 @@ export class AnimationPackage extends AnimationNode {
   }
 
 
-  animateUnLoad(truck: AnimationTruck, loc: AnimationLocation): Promise<any> {
+  animateUnLoad(truck: AnimationTruck, loc: AnimationLocation): Promise<void> {
 
     const targetPosition = loc.getFreePosition();
 
