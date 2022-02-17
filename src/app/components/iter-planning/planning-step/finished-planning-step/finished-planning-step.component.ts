@@ -18,7 +18,7 @@ export class FinishedPlanningStepComponent implements OnInit, OnDestroy {
 
   private loggerId: number;
   hasPlan = false;
-  public showTab = 1;
+  public showTab = 3;
 
   @ViewChild('planAnimationView') planAnimationComponent: PlanAnimationViewComponent;
 

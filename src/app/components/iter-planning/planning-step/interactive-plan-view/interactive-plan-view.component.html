@@ -1,0 +1,71 @@
+<div class="action-container">
+  <mat-card class="state-card" *ngIf="states_visible[0]">
+    <mat-card-header>
+      <mat-card-title>Initial State</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <mat-list role="list">
+        <mat-list-item role="listitem"
+          *ngFor="let item of state_trace[0].values" >
+          <mat-icon mat-list-icon
+            *ngIf="action_trace[0].precondition.includes(item)">
+            security
+          </mat-icon>
+          {{item}}
+        </mat-list-item>
+      </mat-list>
+    </mat-card-content>
+  </mat-card>
+
+  <ng-container *ngFor ="let action of action_trace;let i=index">
+    <mat-card class="action-card">
+      <button mat-icon-button
+        (click)="states_visible[i] = ! states_visible[i]">
+        <mat-icon>list_alt</mat-icon>
+      </button>
+      <p class="action-name">{{action.name}}</p>
+      <button mat-icon-button
+        (click)="states_visible[i+1] = ! states_visible[i+1]">
+        <mat-icon>forward</mat-icon>
+      </button>
+    </mat-card>
+
+    <mat-card class="state-card"
+    *ngIf="i < planRun.plan.actions.length - 1 && states_visible[i+1]">
+      <mat-card-header>
+        <mat-card-title>State {{i+1}}</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <mat-list role="list">
+          <mat-list-item role="listitem"
+            *ngFor="let item of state_trace[i+1].values" >
+            <mat-icon mat-list-icon
+              *ngIf="action.effects.includes(item)">create
+            </mat-icon>
+            <mat-icon mat-list-icon
+              *ngIf="action_trace[i+1].precondition.includes(item)">
+              security
+            </mat-icon>
+              {{item}}
+          </mat-list-item>
+        </mat-list>
+      </mat-card-content>
+    </mat-card>
+  </ng-container>
+
+  <mat-card class="state-card" *ngIf="states_visible[state_trace.length - 1]">
+    <mat-card-header>
+      <mat-card-title>State {{state_trace.length}}</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <mat-list role="list">
+        <mat-list-item role="listitem"
+          *ngFor="let item of state_trace[state_trace.length - 1].values" >
+          <mat-icon mat-list-icon
+              *ngIf="action_trace[action_trace.length - 1].effects.includes(item)">create</mat-icon>
+          {{item}}
+        </mat-list-item>
+      </mat-list>
+    </mat-card-content>
+  </mat-card>
+</div>

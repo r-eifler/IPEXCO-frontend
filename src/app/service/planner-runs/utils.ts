@@ -39,7 +39,7 @@ function parsePlan(actionStrings: string[], schema: TaskSchema): Plan {
     const action = a.replace('(', '').replace(')', '');
     const [name, ...args] = action.split(' ');
     if (schema.actions.some(ac => ac.name === name)) {
-      res.actions.push({name, args});
+      res.actions.push({name, args, precondition: [], effects: []});
     }
   }
 

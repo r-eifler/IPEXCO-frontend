@@ -171,6 +171,7 @@ import { StudySelectionRedirectionComponent } from './components/user-study/meta
 import { UserStudyCollectionBaseComponent } from './components/user-study/user-study-collection-base/user-study-collection-base.component';
 import { AcceptedTestPersonsComponent } from './components/user-study/eval/accepted-test-persons/accepted-test-persons.component';
 import { GlobalExplanationComponent } from './components/iter-planning/question-step/global-explanation/global-explanation.component';
+import { InteractivePlanViewComponent } from './components/iter-planning/planning-step/interactive-plan-view/interactive-plan-view.component';
 
 @NgModule({
     declarations: [
@@ -248,6 +249,7 @@ import { GlobalExplanationComponent } from './components/iter-planning/question-
         UserStudyCollectionBaseComponent,
         AcceptedTestPersonsComponent,
         GlobalExplanationComponent,
+        InteractivePlanViewComponent,
     ],
     imports: [
         RouterModule.forRoot(appRoutes, { enableTracing: false, paramsInheritanceStrategy: 'always' }),
