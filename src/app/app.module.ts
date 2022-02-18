@@ -172,6 +172,7 @@ import { UserStudyCollectionBaseComponent } from './components/user-study/user-s
 import { AcceptedTestPersonsComponent } from './components/user-study/eval/accepted-test-persons/accepted-test-persons.component';
 import { GlobalExplanationComponent } from './components/iter-planning/question-step/global-explanation/global-explanation.component';
 import { InteractivePlanViewComponent } from './components/iter-planning/planning-step/interactive-plan-view/interactive-plan-view.component';
+import { NgxGraphModule } from '@swimlane/ngx-graph';
 
 @NgModule({
     declarations: [
@@ -293,6 +294,7 @@ import { InteractivePlanViewComponent } from './components/iter-planning/plannin
         InlineSVGModule.forRoot(),
         NgxChartsModule,
         MatTooltipModule,
+        NgxGraphModule,
     ],
     providers: [
         UserStore,

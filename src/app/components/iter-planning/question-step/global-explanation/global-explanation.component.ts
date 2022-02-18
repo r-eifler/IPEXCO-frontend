@@ -7,6 +7,13 @@ import {RunningDemoService} from '../../../../service/demo/demo-services';
 import {takeUntil} from 'rxjs/operators';
 import {combineLatest, Subject} from 'rxjs';
 import {PlanProperty} from '../../../../interface/plan-property/plan-property';
+import { Node, Edge } from '@swimlane/ngx-graph';
+
+interface CNode extends Node {
+}
+
+interface CEdge extends Edge {
+}
 
 @Component({
   selector: 'app-global-explanation',
@@ -21,10 +28,10 @@ export class GlobalExplanationComponent implements OnInit, OnDestroy {
   @Output() finished = new EventEmitter();
 
   MUGS: PlanProperty[][] = [];
-  filteredMUGS: PlanProperty[][] = [];
   planProperties: PlanProperty[];
 
-  selectedFilterPropertyName: string;
+  edges: CEdge[] = [];
+  nodes: CNode[] = [];
 
   constructor(
     private timeLogger: TimeLoggerService,
@@ -49,10 +56,33 @@ export class GlobalExplanationComponent implements OnInit, OnDestroy {
               }
               this.MUGS.push(ppList);
             }
-            this.filteredMUGS = [...this.MUGS];
           }
+          this.initGrap();
         }
       );
+  }
+
+  initGrap(): void {
+    console.log(this.MUGS);
+
+    for(const p of this.planProperties){
+      if(! p.globalHardGoal){
+        this.nodes.push({id: p.name, label: p.naturalLanguageDescription})
+      }
+    }
+
+    for(let M of this.MUGS){
+      for(let i = 0; i < M.length; i++){
+        const source = M[i];
+        for(let j = i+1; j < M.length; j++){
+          const target = M[j];
+          this.edges.push({id: source.name + '_' + target.name, label: "", source: source.name, target: target.name})
+        }
+      }
+    }
+
+    console.log(this.nodes);
+    console.log(this.edges);
   }
 
   ngOnInit(): void {
@@ -75,20 +105,6 @@ export class GlobalExplanationComponent implements OnInit, OnDestroy {
     this.finished.emit();
   }
 
-  filterMUGSWith() {
-    this.timeLogger.addInfo(this.loggerId, 'filter: ' + this.selectedFilterPropertyName);
-    this.filteredMUGS = [];
-    for (const ms of this.MUGS) {
-      if (ms.filter(pp => pp.name === this.selectedFilterPropertyName).length > 0) {
-        this.filteredMUGS.push([...ms]);
-      }
-    }
-  }
 
-  resetFilter() {
-    this.selectedFilterPropertyName = null;
-    this.timeLogger.addInfo(this.loggerId, 'filter: reset');
-    this.filteredMUGS = [...this.MUGS];
-  }
 
 }
