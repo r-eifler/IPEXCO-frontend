@@ -102,7 +102,7 @@ export class ObjectCollectionService<T extends Identifiable> {
 
     if (object._id) {
       // console.log('edit');
-      return this.http.put<IHTTPData<T>>(this.BASE_URL + object._id, object)
+      return this.http.put<IHTTPData<T>>(this.BASE_URL + object._id, {data: object})
         .subscribe(httpData => {
           const action = {type: EDIT, data: httpData.data};
           this.listStore.dispatch(action);
@@ -110,7 +110,7 @@ export class ObjectCollectionService<T extends Identifiable> {
     }
 
     // console.log('add');
-    return this.http.post<IHTTPData<T>>(this.BASE_URL, object)
+    return this.http.post<IHTTPData<T>>(this.BASE_URL, {data: object})
       .subscribe(httpData => {
         // console.log('Result Post:');
         // console.log(httpData);

@@ -3,16 +3,14 @@ import {AnimationSettings} from '../interface/settings/animation-settings';
 import {CurrentProjectService} from '../service/project/project-services';
 import {NoMysteryVisualization} from '../plan-visualization/plugins/nomystery/nomystery-visualization';
 import {PlanVisualization} from '../plan-visualization/integration/plan-visualization';
-import {TaskSchemaService} from '../service/task-info/schema.service';
 import {AnimationSettingsNoMysteryVisu} from '../plan-visualization/plugins/nomystery/settings/animation-settings-nomystery-visu';
 import {SelectedPlanRunService} from '../service/planner-runs/selected-planrun.service';
 
 const planVisualizationFactory = (
-    taskSchemaService: TaskSchemaService,
     currentRunService: SelectedPlanRunService,
     projectService: CurrentProjectService) => {
       if (projectService.getSelectedObject().value.domainFile.domain === 'nomystery') {
-        const visu = new NoMysteryVisualization(projectService, taskSchemaService, currentRunService);
+        const visu = new NoMysteryVisualization(projectService, currentRunService);
         return visu;
       }
       throw new Error('There exists no visualization for this domain.');
@@ -21,16 +19,15 @@ const planVisualizationFactory = (
 
 export let PlanVisualizationProvider = { provide: PlanVisualization,
     useFactory: planVisualizationFactory,
-    deps: [TaskSchemaService, SelectedPlanRunService, CurrentProjectService]
+    deps: [SelectedPlanRunService, CurrentProjectService]
   };
 
 
 const animationSettingsFactory = (
-  taskSchemaService: TaskSchemaService,
   projectService: CurrentProjectService,
   projectsService: ProjectsService) => {
     if (projectService.getSelectedObject().value.domainFile.domain === 'nomystery') {
-      return new AnimationSettingsNoMysteryVisu(taskSchemaService, projectService, projectsService);
+      return new AnimationSettingsNoMysteryVisu(projectService, projectsService);
     }
     throw new Error('There exists no animation setting for this domain.');
 };
@@ -38,5 +35,5 @@ const animationSettingsFactory = (
 
 export let AnimationSettingsProvider = { provide: AnimationSettings,
     useFactory: animationSettingsFactory,
-    deps: [TaskSchemaService, CurrentProjectService, ProjectsService]
+    deps: [CurrentProjectService, ProjectsService]
   };

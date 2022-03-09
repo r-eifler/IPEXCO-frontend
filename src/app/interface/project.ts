@@ -1,4 +1,6 @@
 import {DomainSpecificationFile, PDDLFile} from './files/files';
+import { PlanningTask } from './plannig-task';
+import { ExecutionSettings } from './settings/execution-settings';
 
 export interface Project {
   _id: string;
@@ -8,9 +10,10 @@ export interface Project {
   problemFile?: PDDLFile;
   domainSpecification?: DomainSpecificationFile;
   description?: string;
-  taskSchema?: string;
+  baseTask?: PlanningTask;
   properties?: string[];
-  settings?: string;
+  settings?: ExecutionSettings;
   animationSettings?: string;
   animationImage?: string;
 }
+

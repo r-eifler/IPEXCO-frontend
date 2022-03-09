@@ -3,7 +3,6 @@ import {NoMysteryTask} from '../nomystery-task';
 import {LocationPositioningSettings} from 'src/app/plan-visualization/plugins/nomystery/settings/location-positioning';
 import {Project} from 'src/app/interface/project';
 import {CurrentProjectService, ProjectsService} from 'src/app/service/project/project-services';
-import {TaskSchemaService} from '../../../../service/task-info/schema.service';
 import {AnimationSettingsNoMystery} from './animation-settings-nomystery';
 import {Demo} from '../../../../interface/demo';
 
@@ -23,7 +22,6 @@ export class AnimationSettingsNoMysteryVisu {
   private currentProject: Project;
 
   constructor(
-    private taskSchemaService: TaskSchemaService,
     private projectService: CurrentProjectService,
     private projectsService: ProjectsService,
   ) {
@@ -38,15 +36,9 @@ export class AnimationSettingsNoMysteryVisu {
           let backgroundImagePath = '';
           backgroundImagePath = (project as Demo).summaryImage;
 
-          taskSchemaService.getSchema().subscribe(
-            schema => {
-              if (schema) {
-                const task = new NoMysteryTask(schema);
-                this.locationPosSettings = new LocationPositioningSettings(backgroundImagePath, task, this.animationSettings);
-                this.displayObservable.next([this.locationPosSettings.display()]);
-              }
-            }
-          );
+          const task = new NoMysteryTask(project.baseTask);
+          this.locationPosSettings = new LocationPositioningSettings(backgroundImagePath, task, this.animationSettings);
+          this.displayObservable.next([this.locationPosSettings.display()]);
         }
       }
     );

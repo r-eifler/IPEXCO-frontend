@@ -1,6 +1,5 @@
 import {Observable} from 'rxjs';
-import {TaskSchemaService} from 'src/app/service/task-info/schema.service';
-import {Action} from 'src/app/interface/plan';
+import { Action } from 'src/app/interface/plannig-task';
 import {CurrentProjectService} from 'src/app/service/project/project-services';
 import {SelectedPlanRunService} from '../../service/planner-runs/selected-planrun.service';
 
@@ -11,7 +10,6 @@ export abstract class PlanVisualization {
 
   protected constructor(
     protected currentProjectService: CurrentProjectService,
-    protected taskSchemaService: TaskSchemaService,
     protected  currentRunService: SelectedPlanRunService) {
     }
 

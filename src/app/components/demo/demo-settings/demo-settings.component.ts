@@ -1,8 +1,10 @@
+import { DemosService } from 'src/app/service/demo/demo-services';
+import { Demo } from 'src/app/interface/demo';
+import { CurrentProjectService, ProjectsService } from 'src/app/service/project/project-services';
 import {FormArray, FormControl, FormGroup, Validators} from '@angular/forms';
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef} from '@angular/material/bottom-sheet';
 import {ExecutionSettings} from 'src/app/interface/settings/execution-settings';
-import {ExecutionSettingsService} from 'src/app/service/settings/execution-settings.service';
 import {Subject} from 'rxjs';
 
 @Component({
@@ -18,14 +20,16 @@ export class DemoSettingsComponent implements OnInit, OnDestroy {
 
   name: string;
   settings: ExecutionSettings;
+  demo: Demo
+
 
   constructor(
     @Inject(MAT_BOTTOM_SHEET_DATA) public data: any,
     private bottomSheetRef: MatBottomSheetRef<DemoSettingsComponent>,
-    private settingsService: ExecutionSettingsService) {
+    private demosService: DemosService) {
 
       this.name = data.name;
-      this.settings = data.settings;
+      this.settings = data.demo.settings;
       if (! this.settings.paymentInfo) {
         this.settings.paymentInfo = {min: 0, max: 0, steps: []};
       }
@@ -83,7 +87,8 @@ export class DemoSettingsComponent implements OnInit, OnDestroy {
     this.settings.paymentInfo.max = this.demoSettingsForm.controls.maxPayment.value;
     this.settings.paymentInfo.steps = this.demoSettingsForm.controls.paymentSteps.value.split(',').map(s => s as number);
 
-    this.settingsService.updateSettings(this.settings);
+    this.demo.settings = this.settings;
+    this.demosService.saveObject(this.demo);
 
     this.bottomSheetRef.dismiss();
   }

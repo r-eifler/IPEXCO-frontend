@@ -1,10 +1,10 @@
+import { CurrentProjectService } from 'src/app/service/project/project-services';
 import {PlanPropertyMapService} from '../../../../service/plan-properties/plan-property-services';
 import {takeUntil} from 'rxjs/operators';
 import {PlanProperty} from '../../../../interface/plan-property/plan-property';
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {CurrentRunStore} from '../../../../store/stores.store';
 import {combineLatest, Subject} from 'rxjs';
-import {ExecutionSettingsService} from '../../../../service/settings/execution-settings.service';
 import {TimeLoggerService} from '../../../../service/logger/time-logger.service';
 
 
@@ -29,7 +29,7 @@ export class TaskViewComponent implements OnInit, OnDestroy {
   constructor(
     private timeLogger: TimeLoggerService,
     private  currentRunStore: CurrentRunStore,
-    public settingsService: ExecutionSettingsService,
+    public currentProjectService: CurrentProjectService,
     private planPropertyCollectionService: PlanPropertyMapService,
   ) {
 

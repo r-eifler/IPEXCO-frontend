@@ -10,11 +10,11 @@
         <ng-container *ngFor="let item of enforcedSatPlanProperties;last as last">
           <app-scalable-list icon="priority_high" *ngIf="item.globalHardGoal">
             <span> {{item.naturalLanguageDescription}} </span>
-            <span *ngIf="(settingsService.getSelectedObject() | async).usePlanPropertyValues"> Utility: {{item.value}} </span>
+            <span *ngIf="(currentProjectService.findSelectedObject() | async).settings.usePlanPropertyValues"> Utility: {{item.value}} </span>
           </app-scalable-list>
           <app-scalable-list icon="bookmark" *ngIf="! item.globalHardGoal">
             <span> {{item.naturalLanguageDescription}} </span>
-            <span *ngIf="(settingsService.getSelectedObject() | async).usePlanPropertyValues"> Utility: {{item.value}} </span>
+            <span *ngIf="(currentProjectService.findSelectedObject() | async).settings.usePlanPropertyValues"> Utility: {{item.value}} </span>
           </app-scalable-list>
           <mat-divider [inset]="true" *ngIf="! last"></mat-divider>
         </ng-container>
@@ -30,7 +30,7 @@
         <ng-container *ngFor="let item of addSatPlanProperties;last as last">
           <app-scalable-list icon="bookmark">
             <span> {{item.naturalLanguageDescription}} </span>
-            <span *ngIf="(settingsService.getSelectedObject() | async).usePlanPropertyValues"> Utility: {{item.value}} </span>
+            <span *ngIf="(currentProjectService.findSelectedObject() | async).settings.usePlanPropertyValues"> Utility: {{item.value}} </span>
           </app-scalable-list>
           <mat-divider [inset]="true" *ngIf="! last"></mat-divider>
         </ng-container>
@@ -39,7 +39,7 @@
     </mat-card-content>
   </mat-card>
 
-  <mat-card class="card-style" *ngIf="hasPlan && (settingsService.getSelectedObject() | async).usePlanPropertyValues">
+  <mat-card class="card-style" *ngIf="hasPlan && (currentProjectService.findSelectedObject() | async).settings.usePlanPropertyValues">
     <mat-card-header>
       <mat-card-title>Overall Plan Utility: {{planValue}}</mat-card-title>
     </mat-card-header>
@@ -54,7 +54,7 @@
         <ng-container *ngFor="let item of notSatPlanProperties;last as last">
           <app-scalable-list icon="bookmark_border">
             <span> {{item.naturalLanguageDescription}} </span>
-            <span *ngIf="(settingsService.getSelectedObject() | async).usePlanPropertyValues"> Utility: {{item.value}} </span>
+            <span *ngIf="(currentProjectService.findSelectedObject() | async).settings.usePlanPropertyValues"> Utility: {{item.value}} </span>
           </app-scalable-list>
           <mat-divider [inset]="true" *ngIf="! last"></mat-divider>
         </ng-container>

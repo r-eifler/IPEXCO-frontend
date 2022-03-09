@@ -1,7 +1,7 @@
+import { CurrentProjectService } from 'src/app/service/project/project-services';
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {Demo} from 'src/app/interface/demo';
-import {ExecutionSettingsService} from '../../../service/settings/execution-settings.service';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {TimeLoggerService} from '../../../service/logger/time-logger.service';
@@ -26,7 +26,7 @@ export class DemoFinishedComponent implements OnInit, OnDestroy {
 
   constructor(
     private timeLogger: TimeLoggerService,
-    public settingsService: ExecutionSettingsService,
+    public projectService: CurrentProjectService,
     public userService: UserStudyUserService,
     public dialogRef: MatDialogRef<DemoFinishedComponent>,
     @Inject(MAT_DIALOG_DATA) data
@@ -44,7 +44,7 @@ export class DemoFinishedComponent implements OnInit, OnDestroy {
     this.timeLogger.addInfo(this.loggerId, 'max utility: ' + this.maxAchievedUtility);
     const pipe = new CurrencyPipe('en-US', 'GBP');
     this.timeLogger.addInfo(this.loggerId, 'payment: ' + (pipe.transform(this.payment, 'GBP', 'symbol', '1.2-2')));
-    this.settingsService.getSelectedObject()
+    this.projectService.getSelectedObject()
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe();
 

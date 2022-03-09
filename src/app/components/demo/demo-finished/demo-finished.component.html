@@ -7,15 +7,15 @@
       </span>
       <span style="font-size: xx-large;">Time's up!</span>
     </div>
-    <div *ngIf="(settingsService.getSelectedObject() | async).usePlanPropertyValues" style="margin: 30px auto;">
+    <div *ngIf="(projectService.getSelectedObject() | async).settings.usePlanPropertyValues" style="margin: 30px auto;">
       <h2>Your best plan achieved an overall utility of: {{maxAchievedUtility}}.</h2>
-      <ng-container *ngIf="(settingsService.getSelectedObject() | async).checkMaxUtility">
+      <ng-container *ngIf="(projectService.getSelectedObject() | async).settings.checkMaxUtility">
         <h2 *ngIf="maxUtility === maxAchievedUtility">Great! This is the maximal utility possible.</h2>
         <h2 *ngIf="payment > 0">
           You will be payed: {{payment | currency : 'GBP' : 'symbol' : '1.2-2'}}
         </h2>
       </ng-container>
-      <h3 *ngIf="(settingsService.getSelectedObject() | async).introTask">
+      <h3 *ngIf="(projectService.getSelectedObject() | async).settings.introTask">
         Have you familiarized you with the tool?
         If yes, you can exit the intro task.
         If no, please make sure, that you understand how to use the tool.

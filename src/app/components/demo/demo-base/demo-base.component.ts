@@ -8,7 +8,6 @@ import {takeUntil} from 'rxjs/operators';
 import {Demo} from '../../../interface/demo';
 import {DemosService, RunningDemoService} from '../../../service/demo/demo-services';
 import {Subject} from 'rxjs';
-import {ExecutionSettingsService} from '../../../service/settings/execution-settings.service';
 import {DemoPlannerService} from '../../../service/planner-runs/demo-planner.service';
 import {DemoRunService} from '../../../service/planner-runs/demo-planruns.service';
 import {PlanPropertyMapService} from '../../../service/plan-properties/plan-property-services';
@@ -39,7 +38,6 @@ export class DemoBaseComponent implements OnInit, OnDestroy {
     private timeLogger: TimeLoggerService,
     private demosService: DemosService,
     private runningDemoService: RunningDemoService,
-    private settingsService: ExecutionSettingsService,
     private propertiesService: PlanPropertyMapService,
     private route: ActivatedRoute,
     private router: Router,

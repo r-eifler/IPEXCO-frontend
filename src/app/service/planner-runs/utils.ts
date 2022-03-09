@@ -1,3 +1,5 @@
+import { map } from 'rxjs/operators';
+import { PlanningTask, Action } from './../../interface/plannig-task';
 import {PlanRun} from '../../interface/run';
 import {GoalType, PlanProperty} from '../../interface/plan-property/plan-property';
 import {TaskSchema} from '../../interface/task-schema';
@@ -24,22 +26,22 @@ export function computePlanValue(planRun: PlanRun, planProperties: Map<string, P
   return planValue;
 }
 
-export function handlePlanString(planString: string, planRun: PlanRun, schema: TaskSchema) {
+export function handlePlanString(planString: string, planRun: PlanRun, task: PlanningTask) {
   const lines = planString.split('\n');
   lines.splice(-1, 1); // remove empty line at the end
   const costString = lines.splice(-1, 1)[0];
-  const plan = parsePlan(lines, schema);
+  const plan = parsePlan(lines, task);
   plan.cost = Number(costString.split(' ')[3]);
   planRun.plan = plan;
 }
 
-function parsePlan(actionStrings: string[], schema: TaskSchema): Plan {
+function parsePlan(actionStrings: string[], task: PlanningTask): Plan {
   const res: Plan = {actions: [], cost: null};
   for (const a of actionStrings) {
     const action = a.replace('(', '').replace(')', '');
     const [name, ...args] = action.split(' ');
-    if (schema.actions.some(ac => ac.name === name)) {
-      res.actions.push({name, args, precondition: [], effects: []});
+    if (task.actions.some(ac => ac.name === name)) {
+      res.actions.push(new Action(name, args.map(a => {return {name: a, type: ''}}), [], []));
     }
   }
 

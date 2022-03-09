@@ -14,7 +14,7 @@
           checkboxPosition="before" [value]="property"
           style="box-sizing: border-box; height:auto; padding: 10px;">
             <p> {{property.naturalLanguageDescription}} </p>
-            <p *ngIf="(settingsService.getSelectedObject() | async).usePlanPropertyValues"> Utility: {{property.value}} </p>
+            <p *ngIf="this.currentProject.settings.usePlanPropertyValues"> Utility: {{property.value}} </p>
           </mat-list-option>
           <mat-divider [inset]="true" *ngIf="!last"></mat-divider>
         </ng-container>

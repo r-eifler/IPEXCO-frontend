@@ -9,9 +9,7 @@ import {CurrentProjectService} from 'src/app/service/project/project-services';
 import {PlanPropertyMapService} from 'src/app/service/plan-properties/plan-property-services';
 import {PlanRunsService} from 'src/app/service/planner-runs/planruns.service';
 import {DomainSpecificationService} from 'src/app/service/files/domain-specification.service';
-import {TaskSchemaService} from 'src/app/service/task-info/schema.service';
 import {take, takeUntil, takeWhile} from 'rxjs/operators';
-import {ExecutionSettingsService} from 'src/app/service/settings/execution-settings.service';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {ExecutionSettings} from '../../../interface/settings/execution-settings';
 import {PlannerService} from '../../../service/planner-runs/planner.service';
@@ -72,21 +70,18 @@ export class DemoNavigatorComponent implements OnInit, AfterViewInit, OnDestroy 
 
   demo: Demo;
   runs$: BehaviorSubject<PlanRun[]>;
-  settings$: BehaviorSubject<ExecutionSettings>;
   globalHardGoals: PlanProperty[];
 
   constructor(
     private timeLogger: TimeLoggerService,
     private route: ActivatedRoute,
     private router: Router,
-    public settingsService: ExecutionSettingsService,
     private demosService: DemosService,
     private runningDemoService: RunningDemoService,
-    private currentProjectService: CurrentProjectService,
+    public currentProjectService: CurrentProjectService,
     private propertiesService: PlanPropertyMapService,
     public runsService: PlanRunsService,
     private domainSpecService: DomainSpecificationService,
-    private currentSchemaService: TaskSchemaService,
     private selectedPlanRunService: SelectedPlanRunService,
     public plannerService: PlannerService,
     private selectedQuestionService: SelectedQuestionService,
@@ -102,7 +97,6 @@ export class DemoNavigatorComponent implements OnInit, AfterViewInit, OnDestroy 
             this.demo = demo;
             this.runsService.reset();
             this.currentProjectService.saveObject(demo);
-            this.currentSchemaService.findSchema(demo);
             this.maxUtility = demo.maxUtility?.value;
           }
 
@@ -110,8 +104,6 @@ export class DemoNavigatorComponent implements OnInit, AfterViewInit, OnDestroy 
       );
 
     this.runs$ = this.runsService.getList();
-    this.settings$ = settingsService.getSelectedObject();
-    this.maxPayment = this.settings$.getValue()?.paymentInfo.max;
 
     this.propertiesService.getMap()
       .pipe(takeUntil(this.ngUnsubscribe))
@@ -124,13 +116,14 @@ export class DemoNavigatorComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   ngOnInit(): void {
+    //TODO check if demo is already initialized
     this.loggerId = this.timeLogger.register('demo-navigator');
     this.initPlanRuns();
     this.initTimer();
 
-    if (this.settings$.getValue().introTask) {
+    if (this.demo.settings.introTask) {
       const notTimer = setTimeout(() => {
-        if (this.settings$.getValue().allowQuestions && (this.computedPlans === 1 || this.askedQuestions === 0)) {
+        if (this.demo.settings.allowQuestions && (this.computedPlans === 1 || this.askedQuestions === 0)) {
             this.snackBar.open('You have not computed any plans or asked any questions yet. Are you facing any difficulties? ' +
               'You can open the help page with the button in the upper right corner.', 'OK');
             return;
@@ -144,9 +137,10 @@ export class DemoNavigatorComponent implements OnInit, AfterViewInit, OnDestroy 
     }
   }
 
+
   ngAfterViewInit() {
-    if (this.settings$.getValue().checkMaxUtility) {
-      const payInfo = this.settings$.getValue().paymentInfo;
+    if (this.demo.settings.checkMaxUtility) {
+      const payInfo = this.demo.settings.paymentInfo;
       const pipe = new CurrencyPipe('en-US', 'GBP');
       for (const s of payInfo.steps) {
         if (s == 1) {
@@ -200,7 +194,6 @@ export class DemoNavigatorComponent implements OnInit, AfterViewInit, OnDestroy 
             this.snackBar.dismiss();
             this.selectedPlanRunService.removeCurrentObject();
             this.currentProjectService.removeCurrentObject();
-            this.currentSchemaService.removeCurrentSchema();
             this.finishedDemo.emit();
           }
         }
@@ -208,34 +201,27 @@ export class DemoNavigatorComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   initTimer() {
-    this.settings$
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe(
-        (settings: ExecutionSettings) => {
-
-          if (settings && (settings.measureTime || settings.useTimer)) {
-            this.maxTime = settings.maxTime ? settings.maxTime : 50000;
-            this.startTime = new Date().getTime();
-            this.timerIntervall = setInterval(() => {
-              if (this.finished) {
-                clearInterval(this.timerIntervall);
-              }
-
-              const c = new Date().getTime();
-              this.currentTime = c - this.startTime;
-              this.timer = this.maxTime - this.currentTime;
-              this.timer = this.timer < 0 ? 0 : this.timer;
-
-              if (this.timer <= 0 && ! this.finished) {
-                this.finished = true;
-                this.showDemoFinished(true);
-                clearInterval(this.timerIntervall);
-              }
-
-            }, 1000);
+      if (this.demo.settings && (this.demo.settings.measureTime || this.demo.settings.useTimer)) {
+        this.maxTime = this.demo.settings.maxTime ? this.demo.settings.maxTime : 50000;
+        this.startTime = new Date().getTime();
+        this.timerIntervall = setInterval(() => {
+          if (this.finished) {
+            clearInterval(this.timerIntervall);
           }
-        }
-      );
+
+          const c = new Date().getTime();
+          this.currentTime = c - this.startTime;
+          this.timer = this.maxTime - this.currentTime;
+          this.timer = this.timer < 0 ? 0 : this.timer;
+
+          if (this.timer <= 0 && ! this.finished) {
+            this.finished = true;
+            this.showDemoFinished(true);
+            clearInterval(this.timerIntervall);
+          }
+
+        }, 1000);
+      }
   }
 
   async initPlanRuns() {
@@ -299,7 +285,7 @@ export class DemoNavigatorComponent implements OnInit, AfterViewInit, OnDestroy 
               this.computedPlans++;
               const newRun: PlanRun = this.runsService.getLastRun();
               this.selectPlan(newRun);
-              const cSettings = this.settings$.getValue();
+              const cSettings = this.demo.settings;
 
               if (cSettings.introTask && cSettings.allowQuestions && this.computedPlans === 2 && this.askedQuestions === 0) {
                 this.snackBar.open('Great you computed your first plan. How about asking a question to improve the plan?', 'Got it');

@@ -4,7 +4,6 @@ import {DemosService, RunningDemoService} from '../../../service/demo/demo-servi
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {ActivatedRoute, Router} from '@angular/router';
-import {ExecutionSettingsService} from '../../../service/settings/execution-settings.service';
 import {PLANNER_REDIRECT, QUESTION_REDIRECT} from '../../../app.tokens';
 import {PlanRunsService} from '../../../service/planner-runs/planruns.service';
 import {PlannerService} from '../../../service/planner-runs/planner.service';

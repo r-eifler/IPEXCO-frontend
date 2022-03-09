@@ -8,7 +8,6 @@ import {IHTTPData} from '../../interface/http-data.interface';
 import {ADD, EDIT, LOAD, REMOVE} from '../../store/generic-list.store';
 import {SelectedObjectService} from '../base/selected-object.service';
 import {PddlFileUtilsService} from '../files/pddl-file-utils.service';
-import {ExecutionSettingsService} from '../settings/execution-settings.service';
 import {GoalType, PlanProperty} from '../../interface/plan-property/plan-property';
 import {combineLatest} from 'rxjs';
 import {PlanPropertyMapService} from '../plan-properties/plan-property-services';
@@ -177,7 +176,6 @@ export class RunningDemoService extends SelectedObjectService<Demo> {
 
   constructor(
     store: RunningDemoStore,
-    private settingsService: ExecutionSettingsService,
     private fileUtilsService: PddlFileUtilsService,
     private planPropertiesService: PlanPropertyMapService,
   ) {
@@ -200,7 +198,6 @@ export class RunningDemoService extends SelectedObjectService<Demo> {
         }
       });
 
-      this.settingsService.load(demo.settings);
     }
   }
 

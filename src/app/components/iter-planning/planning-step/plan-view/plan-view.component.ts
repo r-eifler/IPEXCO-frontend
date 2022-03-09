@@ -53,7 +53,7 @@ export class PlanViewComponent implements OnInit, OnDestroy {
 
   simpleAction() {
     for (const action of this.planRun.plan.actions) {
-      const s = action.name + ' ' + action.args.join(' ');
+      const s = action.name + ' ' + action.parameters.map(p => p.name).join(' ');
       this.actions.push(s);
     }
   }
@@ -73,16 +73,16 @@ export class PlanViewComponent implements OnInit, OnDestroy {
 
     for (const action of this.planRun.plan.actions) {
       if (action.name === 'drive') {
-          this.actions.push(`The ${truckNameMap.get(action.args[0])}
-            drives from the ${locationNameMap.get(action.args[1])} to the ${locationNameMap.get(action.args[2])}.`);
+          this.actions.push(`The ${truckNameMap.get(action.parameters[0].name)}
+            drives from the ${locationNameMap.get(action.parameters[1].name)} to the ${locationNameMap.get(action.parameters[2].name)}.`);
       }
       if (action.name === 'load') {
-        this.actions.push(`The ${truckNameMap.get(action.args[1])} loads package
-          ${action.args[0].replace('p', '')} at the ${locationNameMap.get(action.args[2])}.`);
+        this.actions.push(`The ${truckNameMap.get(action.parameters[1].name)} loads package
+          ${action.parameters[0].name.replace('p', '')} at the ${locationNameMap.get(action.parameters[2].name)}.`);
       }
       if (action.name === 'unload') {
-        this.actions.push(`The ${truckNameMap.get(action.args[1])} unloads package
-          ${action.args[0].replace('p', '')} at the ${locationNameMap.get(action.args[2])}.`);
+        this.actions.push(`The ${truckNameMap.get(action.parameters[1].name)} unloads package
+          ${action.parameters[0].name.replace('p', '')} at the ${locationNameMap.get(action.parameters[2].name)}.`);
       }
     }
   }

@@ -1,5 +1,5 @@
-import { Action } from './plan';
 import {GoalType, PlanProperty} from 'src/app/interface/plan-property/plan-property';
+import { Action } from './plannig-task';
 
 const zip = (a, b) => a.map((k, i) => [k, b[i]]);
 
@@ -46,7 +46,7 @@ export class SchemaAction {
       for (const eff of this.effects){
         i_eff.push(this.replace(eff,args_map))
       }
-      return {name: this.name, args, precondition: i_precon, effects: i_eff}
+      return null; //TODO remove this class completely
   }
 }
 

@@ -24,7 +24,7 @@
                   <mat-list-item *ngFor="let entry of (planPropertiesMap$ | async) | keyvalue;last as last">
                     <mat-icon matListIcon>bookmark</mat-icon>
                     <p matLine>{{entry.value.naturalLanguageDescription}}</p>
-                    <p matLine *ngIf="(settings$ | async).usePlanPropertyValues">Utility: {{entry.value.value}}</p>
+                    <p matLine *ngIf="(demo$ | async).settings.usePlanPropertyValues">Utility: {{entry.value.value}}</p>
                     <mat-divider [inset]="true" *ngIf="! last"></mat-divider>
                   </mat-list-item>
                 </mat-list>

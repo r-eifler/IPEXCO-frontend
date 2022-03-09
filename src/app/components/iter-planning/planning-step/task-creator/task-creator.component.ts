@@ -8,11 +8,8 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {PlanPropertyMapService} from 'src/app/service/plan-properties/plan-property-services';
 import {PlanRunsService} from 'src/app/service/planner-runs/planruns.service';
 import {takeUntil} from 'rxjs/operators';
-import {TaskSchemaService} from 'src/app/service/task-info/schema.service';
-import {MatSelectionListChange} from '@angular/material/list/selection-list';
 import {PLANNER_REDIRECT} from 'src/app/app.tokens';
 import {Subject} from 'rxjs';
-import {ExecutionSettingsService} from '../../../../service/settings/execution-settings.service';
 import {TimeLoggerService} from '../../../../service/logger/time-logger.service';
 
 @Component({
@@ -27,7 +24,7 @@ export class TaskCreatorComponent implements OnInit, OnDestroy {
 
   @Output() finished = new EventEmitter<boolean>();
 
-  private project: Project;
+  public project: Project;
   private readonly previousRun: PlanRun;
 
   public hasGlobalHardGoals = true;
@@ -41,11 +38,9 @@ export class TaskCreatorComponent implements OnInit, OnDestroy {
   constructor(
     private timeLogger: TimeLoggerService,
     private currentProjectService: CurrentProjectService,
-    private taskSchemaService: TaskSchemaService,
     private plannerService: PlannerService,
     private propertiesService: PlanPropertyMapService,
     private runService: PlanRunsService,
-    public settingsService: ExecutionSettingsService,
     private router: Router,
     private route: ActivatedRoute,
     @Inject(PLANNER_REDIRECT) private redirectURL: string) {

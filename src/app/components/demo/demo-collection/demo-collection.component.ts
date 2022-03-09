@@ -11,7 +11,6 @@ import {Demo} from 'src/app/interface/demo';
 import {RunStatus} from 'src/app/interface/run';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
-import {ExecutionSettingsService} from 'src/app/service/settings/execution-settings.service';
 import {AnimationsSettingsDemoComponent} from '../../animation/animations-settings-demo/animations-settings-demo.component';
 import {Project} from 'src/app/interface/project';
 import {AuthenticationService} from '../../../service/authentication/authentication.service';
@@ -40,7 +39,6 @@ export class DemoCollectionComponent implements OnInit, OnDestroy {
     private runningDemoService: RunningDemoService,
     private currentProjectService: CurrentProjectService,
     private projectsService: ProjectsService,
-    private settingsService: ExecutionSettingsService,
     public userService: AuthenticationService,
     public dialog: MatDialog,
     private bottomSheet: MatBottomSheet,
@@ -98,8 +96,7 @@ export class DemoCollectionComponent implements OnInit, OnDestroy {
   }
 
   async openSettings(demo: Demo) {
-    await this.settingsService.load(demo.settings);
-    this.bottomSheet.open(DemoSettingsComponent, {data: {settings: this.settingsService.getSelectedObject().value, name: demo.name}});
+    this.bottomSheet.open(DemoSettingsComponent, {data: {demo: demo, name: demo.name}});
   }
 
 

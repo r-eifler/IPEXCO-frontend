@@ -1,11 +1,11 @@
-import {TaskSchema} from '../../interface/task-schema';
+import { PlanningTask } from 'src/app/interface/plannig-task';
 
 
 export class Task {
 
-  protected taskSchema: TaskSchema;
+  protected planningTask: PlanningTask;
 
-  constructor(taskSchema: TaskSchema) {
-    this.taskSchema = taskSchema;
+  constructor(planningTask: PlanningTask) {
+    this.planningTask = planningTask;
   }
 }

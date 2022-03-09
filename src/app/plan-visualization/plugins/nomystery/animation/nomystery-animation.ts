@@ -1,9 +1,5 @@
+import { Action } from 'src/app/interface/plannig-task';
 import {AnimationLocation, AnimationPackage, AnimationTruck, NoMysteryAnimationTask} from './nomystery-animation-task';
-
-interface Action {
-  name: string;
-  args: string[];
-}
 
 const duration = 1.5;
 
@@ -29,12 +25,12 @@ export class NoMysteryAnimation {
     // console.log('generate animation');
     switch (action.name) {
       case 'drive':
-        const fuelCost: number =  Number(action.args[4].replace('level', ''));
-        return this.driveAnimation(action.args[0], action.args[1], action.args[2], fuelCost);
+        const fuelCost: number =  Number(action.parameters[4].name.replace('level', ''));
+        return this.driveAnimation(action.parameters[0].name, action.parameters[1].name, action.parameters[2].name, fuelCost);
       case 'load':
-        return this.loadAnimation(action.args[0], action.args[1], action.args[2]);
+        return this.loadAnimation(action.parameters[0].name, action.parameters[1].name, action.parameters[2].name);
       case 'unload':
-        return this.unloadAnimation(action.args[0], action.args[1], action.args[2]);
+        return this.unloadAnimation(action.parameters[0].name, action.parameters[1].name, action.parameters[2].name);
     }
   }
 
@@ -42,12 +38,12 @@ export class NoMysteryAnimation {
   // console.log('generate animation');
   switch (action.name) {
     case 'drive':
-      const fuelCost: number = - Number(action.args[4].replace('level', ''));
-      return this.driveAnimation(action.args[0], action.args[2], action.args[1], fuelCost);
+      const fuelCost: number = - Number(action.parameters[4].name.replace('level', ''));
+      return this.driveAnimation(action.parameters[0].name, action.parameters[1].name, action.parameters[2].name, fuelCost);
     case 'load':
-      return this.unloadAnimation(action.args[0], action.args[1], action.args[2]);
+      return this.unloadAnimation(action.parameters[0].name, action.parameters[1].name, action.parameters[2].name);
     case 'unload':
-      return this.loadAnimation(action.args[0], action.args[1], action.args[2]);
+      return this.loadAnimation(action.parameters[0].name, action.parameters[1].name, action.parameters[2].name);
   }
 }
 

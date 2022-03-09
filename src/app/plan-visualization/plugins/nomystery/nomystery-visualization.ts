@@ -1,7 +1,6 @@
 import {BehaviorSubject, Observable} from 'rxjs';
 import {CurrentProjectService} from 'src/app/service/project/project-services';
 import {PlanVisualization} from '../../integration/plan-visualization';
-import {TaskSchemaService} from 'src/app/service/task-info/schema.service';
 import {Injectable} from '@angular/core';
 import {SelectedPlanRunService} from '../../../service/planner-runs/selected-planrun.service';
 import {AnimationSettingsNoMystery} from './settings/animation-settings-nomystery';
@@ -11,8 +10,8 @@ import {NoMysteryAnimation} from './animation/nomystery-animation';
 import {NoMysteryTask} from './nomystery-task';
 import {gsap} from 'gsap';
 import {Draggable} from 'gsap/Draggable';
-import {Action} from '../../../interface/plan';
 import {Demo} from '../../../interface/demo';
+import { Action } from 'src/app/interface/plannig-task';
 
 
 interface Position {
@@ -51,9 +50,8 @@ export class NoMysteryVisualization extends PlanVisualization {
 
   constructor(
     protected currentProjectService: CurrentProjectService,
-    protected taskSchemaService: TaskSchemaService,
     protected  currentRunService: SelectedPlanRunService) {
-    super(currentProjectService, taskSchemaService, currentRunService);
+    super(currentProjectService, currentRunService);
 
     this.currentProjectService.getSelectedObject().subscribe(
       async project => {
@@ -136,10 +134,10 @@ export class NoMysteryVisualization extends PlanVisualization {
   createScene(): Promise<void> {
 
       return new Promise<void>((resolve, reject) => {
-        this.taskSchemaService.getSchema().subscribe(async (ts) => {
-          if (ts && ! this.animationTask) {
+        this.currentProjectService.findSelectedObject().subscribe(async (project) => {
+          if (project && ! this.animationTask) {
 
-            this.animationTask = new NoMysteryAnimationTask(new NoMysteryTask(ts), this.animationSettings.locationDropPositions);
+            this.animationTask = new NoMysteryAnimationTask(new NoMysteryTask(project.baseTask), this.animationSettings.locationDropPositions);
             this.animation = new NoMysteryAnimation(this.animationTask);
 
             const backgroundImage: SVGImageElement = document.createElementNS('http://www.w3.org/2000/svg', 'image');

@@ -1,14 +1,14 @@
-import { SchemaAction, TaskSchema } from 'src/app/interface/task-schema';
-import { TaskSchemaService } from 'src/app/service/task-info/schema.service';
+import { CurrentProjectService } from 'src/app/service/project/project-services';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { BehaviorSubject, Subject, Observable, combineLatest } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { PlanRun, RunStatus } from 'src/app/interface/run';
-import { Action } from 'src/app/interface/plan';
 import { TimeLoggerService } from 'src/app/service/logger/time-logger.service';
 import { SelectedPlanRunService } from 'src/app/service/planner-runs/selected-planrun.service';
 import { State } from 'src/app/interface/plan';
 import { CursorError } from '@angular/compiler/src/ml_parser/lexer';
+import { Project } from 'src/app/interface/project';
+import { Action, Fact, Predicat } from 'src/app/interface/plannig-task';
 
 @Component({
   selector: 'app-interactive-plan-view',
@@ -23,7 +23,7 @@ export class InteractivePlanViewComponent implements OnInit, OnDestroy {
   runStatus = RunStatus;
 
   private currentRun$: BehaviorSubject<PlanRun>;
-  private taskSchema$: Observable<TaskSchema>;
+  private project$: Observable<Project>;
 
   planRun: PlanRun;
 
@@ -34,9 +34,9 @@ export class InteractivePlanViewComponent implements OnInit, OnDestroy {
   constructor(
     private timeLogger: TimeLoggerService,
     private  currentRunService: SelectedPlanRunService,
-    private TaskSchemaService: TaskSchemaService) {
+    private currentProjectService: CurrentProjectService) {
     this.currentRun$ = this.currentRunService.getSelectedObject();
-    this.taskSchema$ = this.TaskSchemaService.getSchema();
+    this.project$ = this.currentProjectService.findSelectedObject();
   }
 
   ngOnInit(): void {
@@ -44,42 +44,41 @@ export class InteractivePlanViewComponent implements OnInit, OnDestroy {
 
     combineLatest(
       this.currentRun$,
-      this.taskSchema$
+      this.project$
     ).pipe(takeUntil(this.ngUnsubscribe))
     .subscribe(
-      ([run, taskSchema]) => {
-        if(run && taskSchema){
+      ([run, project]) => {
+        if(run && project){
           this.timeLogger.addInfo(this.loggerId, 'runId: ' + run._id);
           this.planRun = run;
 
           console.log(run);
 
-          let action_map: Map<string, SchemaAction> = new Map();
-          for (const action of taskSchema.actions){
+          let action_map: Map<string, Action> = new Map();
+          for (const action of project.baseTask.actions){
             action_map.set(action.name, action)
           }
 
-          this.state_trace.push(new State(taskSchema.init));
+          this.state_trace.push(new State(project.baseTask.init));
 
-          let used_effects: Set<string> = new Set();
+          let used_effects: Set<Predicat> = new Set();
 
           for(const action of this.planRun.plan.actions){
-            const i_action = action_map.get(action.name).instantiate(action.args);
+            const i_action = action_map.get(action.name).instantiate(action.parameters.map(o => o.name));
             i_action.effects.forEach(item => used_effects.add(item))
             this.action_trace.push(i_action);
             this.state_trace.push(this.state_trace[this.state_trace.length - 1].nextState(i_action));
           }
 
           // Filter not changed predicates
-          let used_predicates: Set<string> = new Set();
+          let used_predicates: Set<Fact> = new Set();
           for(let eff of used_effects){
-            const pre = eff.split('(')[0];
-            used_predicates.add(pre);
+            used_predicates.add(eff.toFact());
           }
 
           this.state_trace.forEach(state => {
             state.values = state.values.filter(
-              v => used_predicates.has(v.split('(')[0]))
+              v => used_predicates.has(v))
           });
 
           this.state_trace.forEach(state => {

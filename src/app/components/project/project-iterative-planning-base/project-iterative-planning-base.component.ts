@@ -6,13 +6,11 @@ import {ExecutionSettings} from '../../../interface/settings/execution-settings'
 import {PlanProperty} from '../../../interface/plan-property/plan-property';
 import {TimeLoggerService} from '../../../service/logger/time-logger.service';
 import {ActivatedRoute, Router} from '@angular/router';
-import {ExecutionSettingsService} from '../../../service/settings/execution-settings.service';
 import {DemosService, RunningDemoService} from '../../../service/demo/demo-services';
 import {CurrentProjectService} from '../../../service/project/project-services';
 import {PlanPropertyMapService} from '../../../service/plan-properties/plan-property-services';
 import {PlanRunsService} from '../../../service/planner-runs/planruns.service';
 import {DomainSpecificationService} from '../../../service/files/domain-specification.service';
-import {TaskSchemaService} from '../../../service/task-info/schema.service';
 import {SelectedPlanRunService} from '../../../service/planner-runs/selected-planrun.service';
 import {PlannerService} from '../../../service/planner-runs/planner.service';
 import {SelectedQuestionService} from '../../../service/planner-runs/selected-question.service';
@@ -53,22 +51,20 @@ export class ProjectIterativePlanningBaseComponent implements OnInit, OnDestroy 
   finished = false;
 
   demo: Demo;
+  settings: ExecutionSettings;
   runs$: BehaviorSubject<PlanRun[]>;
-  settings$: BehaviorSubject<ExecutionSettings>;
   globalHardGoals: PlanProperty[];
 
   constructor(
     private timeLogger: TimeLoggerService,
     private route: ActivatedRoute,
     private router: Router,
-    public settingsService: ExecutionSettingsService,
     private demosService: DemosService,
     private runningDemoService: RunningDemoService,
     private currentProjectService: CurrentProjectService,
     private propertiesService: PlanPropertyMapService,
     public runsService: PlanRunsService,
     private domainSpecService: DomainSpecificationService,
-    private currentSchemaService: TaskSchemaService,
     private selectedPlanRunService: SelectedPlanRunService,
     public plannerService: PlannerService,
     private selectedQuestionService: SelectedQuestionService,
@@ -83,7 +79,6 @@ export class ProjectIterativePlanningBaseComponent implements OnInit, OnDestroy 
             this.demo = demo;
             this.runsService.reset();
             this.currentProjectService.saveObject(demo);
-            this.currentSchemaService.findSchema(demo);
           }
 
         }
@@ -108,7 +103,7 @@ export class ProjectIterativePlanningBaseComponent implements OnInit, OnDestroy 
           this.showAnswer = !! run;
         });
 
-    this.settings$ = settingsService.getSelectedObject();
+    this.settings = this.demo.settings;
 
     this.propertiesService.getMap()
       .pipe(takeUntil(this.ngUnsubscribe))

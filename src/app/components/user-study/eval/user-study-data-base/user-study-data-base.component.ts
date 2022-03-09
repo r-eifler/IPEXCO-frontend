@@ -5,7 +5,6 @@ import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {Demo} from '../../../../interface/demo';
 import {DemosService, RunningDemoService} from '../../../../service/demo/demo-services';
-import {ExecutionSettingsService} from '../../../../service/settings/execution-settings.service';
 import {PlanPropertyMapService} from '../../../../service/plan-properties/plan-property-services';
 
 @Component({
@@ -33,7 +32,6 @@ export class UserStudyDataBaseComponent implements OnInit, OnDestroy {
     private userStudiesService: UserStudiesService,
     private demosService: DemosService,
     private runningDemoService: RunningDemoService,
-    private settingsService: ExecutionSettingsService,
     private propertiesService: PlanPropertyMapService,
   ) {
     this.selectedUserStudy.getSelectedObject()

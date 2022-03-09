@@ -3,7 +3,6 @@ import {AuthenticationService} from './service/authentication/authentication.ser
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {DemosService, RunningDemoService} from './service/demo/demo-services';
 import {ViewSettingsService} from './service/settings/setting.service';
-import {TaskSchemaService} from './service/task-info/schema.service';
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 import {RouterModule} from '@angular/router';
@@ -128,7 +127,6 @@ import {RegisterComponent} from './components/login/register/register.component'
 import {AuthenticationInterceptor} from './interceptor/authentication.interceptor';
 import {UserMainPageComponent} from './components/user/user-main-page/user-main-page.component';
 import {FilesCollectionComponent} from './components/files/files-collection/files-collection.component';
-import {ExecutionSettingsService} from './service/settings/execution-settings.service';
 import {AnimationSettingsComponent} from './components/animation/animation-settings/animation-settings.component';
 import {
   AnimationSettingsNomysteryComponent
@@ -302,7 +300,6 @@ import { NgxGraphModule } from '@swimlane/ngx-graph';
         { provide: HTTP_INTERCEPTORS, useClass: AuthenticationInterceptor, multi: true },
         AuthenticationInterceptor,
         ExecutionSettingsStore,
-        ExecutionSettingsService,
         DomainFilesStore,
         ProblemFilesStore,
         PddlFileUtilsService,
@@ -315,7 +312,6 @@ import { NgxGraphModule } from '@swimlane/ngx-graph';
         CurrentProjectStore,
         CurrentProjectService,
         TaskSchemaStore,
-        TaskSchemaService,
         PlanPropertyMapStore,
         PlanPropertyMapService,
         PlannerService,

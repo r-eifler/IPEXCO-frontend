@@ -10,7 +10,6 @@ import {PlanPropertyMapService} from 'src/app/service/plan-properties/plan-prope
 import {CurrentProjectService} from 'src/app/service/project/project-services';
 import {MatSelectionList} from '@angular/material/list/selection-list';
 import {ActivatedRoute, Router} from '@angular/router';
-import {ExecutionSettingsService} from 'src/app/service/settings/execution-settings.service';
 import {SelectedPlanRunService} from '../../../../service/planner-runs/selected-planrun.service';
 import {TimeLoggerService} from '../../../../service/logger/time-logger.service';
 
@@ -37,13 +36,12 @@ export class QuestionCreatorComponent implements OnInit, OnDestroy {
   private hardGoals: string[];
   private globalHardGoals: PlanProperty[];
 
-  private currentProject: Project;
+  public currentProject: Project;
 
   public maxSizeQuestionReached = false;
 
   constructor(
     private timeLogger: TimeLoggerService,
-    public settingsService: ExecutionSettingsService,
     private propertiesService: PlanPropertyMapService,
     private currentProjectService: CurrentProjectService,
     private plannerService: PlannerService,
@@ -103,7 +101,7 @@ export class QuestionCreatorComponent implements OnInit, OnDestroy {
     this.question = this.questionSelectionList.selectedOptions.selected.map(v => v.value);
     this.maxSizeQuestionReached =
       this.questionSelectionList.selectedOptions.selected.length >=
-      this.settingsService.getSelectedObject().getValue().maxQuestionSize;
+      this.currentProject.settings.maxQuestionSize;
   }
 
 

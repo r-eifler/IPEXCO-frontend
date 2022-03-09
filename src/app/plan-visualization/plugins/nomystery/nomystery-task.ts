@@ -1,4 +1,4 @@
-import {TaskSchema} from '../../../interface/task-schema';
+import { PlanningTask } from './../../../interface/plannig-task';
 import {Task} from '../task';
 
 
@@ -40,8 +40,8 @@ export class NoMysteryTask extends Task {
   public packages: Map<string, Package> = new Map();
 
 
-  constructor(taskSchema: TaskSchema) {
-    super(taskSchema);
+  constructor(task: PlanningTask) {
+    super(task);
     // console.log('Create NoMystery Task');
     this.parseObjects();
     this.parseInit();
@@ -50,7 +50,7 @@ export class NoMysteryTask extends Task {
   }
 
   parseObjects() {
-    for (const o of this.taskSchema.objects) {
+    for (const o of this.planningTask.objects) {
       if (o.type === 'location') {
         this.locations.set(o.name, new Location(o.name));
       }
@@ -69,8 +69,8 @@ export class NoMysteryTask extends Task {
     const regexInitPackage = RegExp('at\\(p(\\d),l(\\d+)\\)');
     const regexInitFuel = RegExp('fuel\\(t(\\d),level(\\d+)\\)');
 
-    for (const pred of this.taskSchema.init) {
-      let match = regexRoad.exec(pred);
+    for (const pred of this.planningTask.init) {
+      let match = regexRoad.exec(pred.toPDDL());
       if (match) {
         const souceName = 'l' + match[2];
         const targetName = 'l' + match[3];
@@ -79,7 +79,7 @@ export class NoMysteryTask extends Task {
         continue;
       }
 
-      match = regexInitTruck.exec(pred);
+      match = regexInitTruck.exec(pred.toPDDL());
       if (match) {
         const truckName = 't' + match[1];
         const loc = 'l' + match[2];
@@ -88,7 +88,7 @@ export class NoMysteryTask extends Task {
         truck.startLocation = this.locations.get(loc);
       }
 
-      match = regexInitPackage.exec(pred);
+      match = regexInitPackage.exec(pred.toPDDL());
       if (match) {
         const packageName = 'p' + match[1];
         const loc = 'l' + match[2];
@@ -97,7 +97,7 @@ export class NoMysteryTask extends Task {
         p.startLocation = this.locations.get(loc);
       }
 
-      match = regexInitFuel.exec(pred);
+      match = regexInitFuel.exec(pred.toPDDL());
       if (match) {
         const truckName = 't' + match[1];
         const fuellevel = Number(match[2]);
@@ -112,7 +112,7 @@ export class NoMysteryTask extends Task {
   parseGoals() {
     const regexGoalPackage = RegExp('at\\(p(\\d),l(\\d+)\\)');
 
-    for (const pred of this.taskSchema.goals) {
+    for (const pred of this.planningTask.goals) {
 
       const match = regexGoalPackage.exec(pred.name);
       if (match) {

@@ -2,7 +2,6 @@ import {takeUntil} from 'rxjs/operators';
 import {AnimationSettingsNoMysteryVisu} from '../../../../plan-visualization/plugins/nomystery/settings/animation-settings-nomystery-visu';
 import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ResponsiveService} from 'src/app/service/responsive/responsive.service';
-import {TaskSchemaService} from 'src/app/service/task-info/schema.service';
 import {CurrentProjectService, ProjectsService} from 'src/app/service/project/project-services';
 import {Subject} from 'rxjs';
 
@@ -23,11 +22,10 @@ export class AnimationSettingsNomysteryComponent implements OnInit, AfterViewIni
 
   constructor(
     private responsiveService: ResponsiveService,
-    private taskSchemaService: TaskSchemaService,
     private projectService: CurrentProjectService,
     private projectsService: ProjectsService,
   ) {
-    this.animationSettings = new AnimationSettingsNoMysteryVisu(taskSchemaService, projectService, projectsService);
+    this.animationSettings = new AnimationSettingsNoMysteryVisu(projectService, projectsService);
   }
 
   ngOnInit(): void {

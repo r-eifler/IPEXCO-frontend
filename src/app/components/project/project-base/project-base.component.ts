@@ -3,7 +3,6 @@ import {QUESTION_REDIRECT} from './../../../app.tokens';
 import {PlannerService} from '../../../service/planner-runs/planner.service';
 import {DemosService} from '../../../service/demo/demo-services';
 import {PlanRunsService} from 'src/app/service/planner-runs/planruns.service';
-import {TaskSchemaService} from '../../../service/task-info/schema.service';
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Project} from '../../../interface/project';
 import {ActivatedRoute, ParamMap, Router} from '@angular/router';
@@ -16,7 +15,6 @@ import {PlanVisualizationProvider} from 'src/app/provider/plan-visualisation.pro
 import {PLANNER_REDIRECT} from 'src/app/app.tokens';
 import {Subject} from 'rxjs';
 import {DemoSettingsComponent} from '../../demo/demo-settings/demo-settings.component';
-import {ExecutionSettingsService} from '../../../service/settings/execution-settings.service';
 
 @Component({
   selector: 'app-project-base',
@@ -49,12 +47,10 @@ export class ProjectBaseComponent implements OnInit, OnDestroy {
     private router: Router,
     private service: ProjectsService,
     private currentProjectService: CurrentProjectService,
-    private taskSchemaService: TaskSchemaService,
     private domainSpecService: DomainSpecificationService,
     private propertiesService: PlanPropertyMapService,
     private runsService: PlanRunsService,
     private demosService: DemosService,
-    private settingsService: ExecutionSettingsService,
     private bottomSheet: MatBottomSheet
   ) {
     this.route.paramMap.pipe(
@@ -92,9 +88,8 @@ export class ProjectBaseComponent implements OnInit, OnDestroy {
 
   async openSettings() {
     // this.bottomSheet.open(ViewSettingsMenuComponent);
-    await this.settingsService.load(this.project.settings);
     this.bottomSheet.open(DemoSettingsComponent,
-      {data: {settings: this.settingsService.getSelectedObject().value, name: this.project.name}});
+      {data: {settings: this.project.settings, name: this.project.name}});
   }
 
 }
