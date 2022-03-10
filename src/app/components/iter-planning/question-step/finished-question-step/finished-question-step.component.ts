@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {PlanRunsService} from 'src/app/service/planner-runs/planruns.service';
+import {IterationStepsService} from 'src/app/service/planner-runs/iteration-steps.service';
 import {ActivatedRoute, ParamMap} from '@angular/router';
 import {switchMap, takeUntil} from 'rxjs/operators';
 import {ResponsiveService} from 'src/app/service/responsive/responsive.service';
@@ -20,7 +20,7 @@ export class FinishedQuestionStepComponent implements OnInit, OnDestroy {
 
   constructor(
     private responsiveService: ResponsiveService,
-    private runService: PlanRunsService,
+    private runService: IterationStepsService,
     private route: ActivatedRoute,
     private currentRunService: SelectedPlanRunService,
     private currentQuestionService: SelectedQuestionService) {

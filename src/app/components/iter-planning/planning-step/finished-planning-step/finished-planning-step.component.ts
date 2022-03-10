@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {PlanRunsService} from '../../../../service/planner-runs/planruns.service';
+import {IterationStepsService} from '../../../../service/planner-runs/iteration-steps.service';
 import {ActivatedRoute, ParamMap, Router} from '@angular/router';
 import {switchMap, takeUntil} from 'rxjs/operators';
 import {Subject} from 'rxjs';
@@ -27,7 +27,7 @@ export class FinishedPlanningStepComponent implements OnInit, OnDestroy {
     private timeLogger: TimeLoggerService,
     private route: ActivatedRoute,
     private router: Router,
-    private runService: PlanRunsService,
+    private runService: IterationStepsService,
     public currentRunService: SelectedPlanRunService) {
 
     this.currentRunService.getSelectedObject()

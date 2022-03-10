@@ -5,6 +5,7 @@ import { ExecutionSettings } from './settings/execution-settings';
 export interface Project {
   _id: string;
   name: string;
+  public: boolean;
   user?: string;
   domainFile?: PDDLFile;
   problemFile?: PDDLFile;

@@ -5,7 +5,7 @@ import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {ActivatedRoute, Router} from '@angular/router';
 import {PLANNER_REDIRECT, QUESTION_REDIRECT} from '../../../app.tokens';
-import {PlanRunsService} from '../../../service/planner-runs/planruns.service';
+import {IterationStepsService} from '../../../service/planner-runs/iteration-steps.service';
 import {PlannerService} from '../../../service/planner-runs/planner.service';
 import {UserStudyPlannerService} from '../../../service/planner-runs/user-study-planner.service';
 import {DemoRunService} from '../../../service/planner-runs/demo-planruns.service';
@@ -17,7 +17,7 @@ import {TimeLoggerService} from '../../../service/logger/time-logger.service';
   templateUrl: './user-study-demo-view.component.html',
   styleUrls: ['./user-study-demo-view.component.css'],
   providers: [
-    {provide: PlanRunsService, useClass: DemoRunService},
+    {provide: IterationStepsService, useClass: DemoRunService},
     {provide: PlannerService, useClass: UserStudyPlannerService},
     { provide: PLANNER_REDIRECT, useValue: '../' },
     { provide: QUESTION_REDIRECT, useValue: '../../../' },

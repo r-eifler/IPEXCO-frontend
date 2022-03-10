@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {RunsStore} from '../../store/stores.store';
 import {PlanPropertyMapService} from '../plan-properties/plan-property-services';
-import {PlanRunsService} from './planruns.service';
+import {IterationStepsService} from './iteration-steps.service';
 
 interface QueryParam {
   param: string;
@@ -12,7 +12,7 @@ interface QueryParam {
 @Injectable({
     providedIn: 'root'
 })
-export class DemoRunService extends PlanRunsService {
+export class DemoRunService extends IterationStepsService {
 
     constructor(
         http: HttpClient,

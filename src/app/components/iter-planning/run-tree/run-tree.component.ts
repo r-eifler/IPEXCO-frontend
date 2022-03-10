@@ -7,7 +7,7 @@ import {NestedTreeControl} from '@angular/cdk/tree';
 import {MatTreeNestedDataSource} from '@angular/material/tree';
 import {ActivatedRoute, Router} from '@angular/router';
 import {CurrentProjectStore, CurrentRunStore} from 'src/app/store/stores.store';
-import {PlanRunsService} from 'src/app/service/planner-runs/planruns.service';
+import {IterationStepsService} from 'src/app/service/planner-runs/iteration-steps.service';
 import {SelectedPlanRunService} from '../../../service/planner-runs/selected-planrun.service';
 import {SelectedQuestionService} from '../../../service/planner-runs/selected-question.service';
 import {PlannerService} from '../../../service/planner-runs/planner.service';
@@ -46,7 +46,7 @@ export class RunTreeComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private currentProjectStore: CurrentProjectStore,
-    private runService: PlanRunsService,
+    private runService: IterationStepsService,
     private selectedPlanRunService: SelectedPlanRunService,
     private selectedQuestionService: SelectedQuestionService,
     public plannerService: PlannerService,

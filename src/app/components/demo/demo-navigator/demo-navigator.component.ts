@@ -7,7 +7,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {DemosService, RunningDemoService} from 'src/app/service/demo/demo-services';
 import {CurrentProjectService} from 'src/app/service/project/project-services';
 import {PlanPropertyMapService} from 'src/app/service/plan-properties/plan-property-services';
-import {PlanRunsService} from 'src/app/service/planner-runs/planruns.service';
+import {IterationStepsService} from 'src/app/service/planner-runs/iteration-steps.service';
 import {DomainSpecificationService} from 'src/app/service/files/domain-specification.service';
 import {take, takeUntil, takeWhile} from 'rxjs/operators';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
@@ -80,7 +80,7 @@ export class DemoNavigatorComponent implements OnInit, AfterViewInit, OnDestroy 
     private runningDemoService: RunningDemoService,
     public currentProjectService: CurrentProjectService,
     private propertiesService: PlanPropertyMapService,
-    public runsService: PlanRunsService,
+    public runsService: IterationStepsService,
     private domainSpecService: DomainSpecificationService,
     private selectedPlanRunService: SelectedPlanRunService,
     public plannerService: PlannerService,

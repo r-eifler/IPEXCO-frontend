@@ -19,12 +19,12 @@ export class State {
     let new_values = [...this.values];
     for (const eff of action.effects){
       if (eff.negated){
-        const index = new_values.indexOf(eff.toFact());
+        const index = new_values.indexOf(eff);
         new_values.splice(index, 1);
         // console.log("delete: " + eff)
       }
       else {
-        new_values.push(eff.toFact())
+        new_values.push(eff)
         // console.log("add: " + eff)
       }
     }

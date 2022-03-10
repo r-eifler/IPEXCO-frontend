@@ -19,14 +19,14 @@ interface QueryParam {
 @Injectable({
   providedIn: 'root'
 })
-export class PlanRunsService extends ObjectCollectionService<PlanRun> {
+export class IterationStepsService extends ObjectCollectionService<PlanRun> {
 
   constructor(
     http: HttpClient,
     store: RunsStore,
     private planPropertyMapService: PlanPropertyMapService) {
     super(http, store);
-    this.BASE_URL = environment.apiURL + 'run/plan-run/';
+    this.BASE_URL = environment.apiURL + 'run/iter-step/';
     // this.pipeFind = map(sortRuns);
 
     }

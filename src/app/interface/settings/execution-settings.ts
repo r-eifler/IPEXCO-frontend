@@ -6,17 +6,29 @@ export interface PaymentInfo {
 
 
 export interface ExecutionSettings {
-  _id?: string;
   maxRuns: number;
   maxQuestionSize: number;
-  public: boolean;
   allowQuestions: boolean;
   usePlanPropertyValues: boolean;
   useTimer: boolean;
   measureTime: boolean;
   maxTime: number;
   checkMaxUtility: boolean;
-  paymentInfo: PaymentInfo;
+  paymentInfo?: PaymentInfo;
   showAnimation: boolean;
   introTask: boolean;
+}
+
+export const defaultExecutionSetting :ExecutionSettings = {
+  maxRuns: 100,
+  maxQuestionSize: 1,
+  allowQuestions: true,
+  usePlanPropertyValues: false,
+  useTimer: false,
+  measureTime: false,
+  maxTime: 0,
+  checkMaxUtility: false,
+  showAnimation: false,
+  introTask: false,
+  paymentInfo: {min: 0, max: 10, steps:[0.5, 0.75, 1]}
 }

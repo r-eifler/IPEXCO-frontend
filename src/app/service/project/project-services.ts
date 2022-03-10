@@ -1,3 +1,4 @@
+import { ExecutionSettings } from 'src/app/interface/settings/execution-settings';
 import {SelectedObjectService} from '../base/selected-object.service';
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
@@ -31,8 +32,14 @@ export class CurrentProjectService extends SelectedObjectService<Project> {
   }
 
   saveObject(project: Project) {
+    console.log(project);
     if (project) {
-      project.baseTask = PlanningTask.fromJSON(project.baseTask);
+      project.baseTask = PlanningTask.fromJSON(project.baseTask, project.name + " Task", project.domainFile.domain);
+      console.log(project.settings);
+      // let jsonO = JSON.parse(project.settings) as ExecutionSettings;
+      // console.log(jsonO);
+      project.settings = JSON.parse(JSON.stringify(project.settings)) as ExecutionSettings;
+      console.log(project.settings);
     }
     this.selectedObjectStore.dispatch({type: LOAD, data: project});
     if (project) {

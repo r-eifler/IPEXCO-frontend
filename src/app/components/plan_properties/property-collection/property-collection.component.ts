@@ -12,7 +12,6 @@ import {MatCheckboxChange} from '@angular/material/checkbox';
 import {MatSelectionListChange} from '@angular/material/list/selection-list';
 import {MatTable, MatTableDataSource} from '@angular/material/table';
 import {DemoSettingsComponent} from '../../demo/demo-settings/demo-settings.component';
-import {ViewSettingsMenuComponent} from '../../settings/view-settings-menu/view-settings-menu.component';
 import {MatBottomSheet} from '@angular/material/bottom-sheet';
 
 @Component({
@@ -37,12 +36,9 @@ export class PropertyCollectionComponent implements OnInit, AfterViewInit, OnDes
   constructor(
     private responsiveService: ResponsiveService,
     private propertiesService: PlanPropertyMapService,
-    private viewSettingsService: ViewSettingsService,
     public dialog: MatDialog,
     private bottomSheet: MatBottomSheet
   ) {
-
-    this.viewSettings = this.viewSettingsService.getSelectedObject();
 
     this.propertiesService.getMap()
     .pipe(takeUntil(this.ngUnsubscribe))
@@ -134,7 +130,4 @@ export class PropertyCollectionComponent implements OnInit, AfterViewInit, OnDes
     a.download = 'plan_properties.txt';
   }
 
-  async openSettings() {
-    this.bottomSheet.open(ViewSettingsMenuComponent);
-  }
 }

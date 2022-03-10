@@ -2,7 +2,7 @@ import {AnimationSettingsProvider} from './../../../provider/plan-visualisation.
 import {QUESTION_REDIRECT} from './../../../app.tokens';
 import {PlannerService} from '../../../service/planner-runs/planner.service';
 import {DemosService} from '../../../service/demo/demo-services';
-import {PlanRunsService} from 'src/app/service/planner-runs/planruns.service';
+import {IterationStepsService} from 'src/app/service/planner-runs/iteration-steps.service';
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Project} from '../../../interface/project';
 import {ActivatedRoute, ParamMap, Router} from '@angular/router';
@@ -23,7 +23,7 @@ import {DemoSettingsComponent} from '../../demo/demo-settings/demo-settings.comp
   providers: [
      PlanVisualizationProvider,
      AnimationSettingsProvider,
-    {provide: PlanRunsService, useClass: PlanRunsService},
+    {provide: IterationStepsService, useClass: IterationStepsService},
     {provide: PlannerService, useClass: PlannerService},
     { provide: PLANNER_REDIRECT, useValue: '../run-overview-mobile' },
     { provide: QUESTION_REDIRECT, useValue: '../../../run-overview-mobile' }
@@ -36,7 +36,10 @@ export class ProjectBaseComponent implements OnInit, OnDestroy {
   activeLink = '';
   links = [
     {ref: './overview', name: 'Overview'},
+    {ref: './settings', name: 'Settings'},
+    {ref: './planning-task', name: 'Planning Task'},
     {ref: './properties', name: 'Plan Properties'},
+    {ref: './task-relaxations', name: 'Relaxations'},
     {ref: './iterative-planning', name: 'Iterative Planning'}
     ];
 
@@ -49,7 +52,7 @@ export class ProjectBaseComponent implements OnInit, OnDestroy {
     private currentProjectService: CurrentProjectService,
     private domainSpecService: DomainSpecificationService,
     private propertiesService: PlanPropertyMapService,
-    private runsService: PlanRunsService,
+    private runsService: IterationStepsService,
     private demosService: DemosService,
     private bottomSheet: MatBottomSheet
   ) {

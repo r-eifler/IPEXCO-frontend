@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {UserStudyData, UserStudyDemoData} from '../../../../interface/user-study/user-study';
-import {PlanRunsService} from '../../../../service/planner-runs/planruns.service';
+import {IterationStepsService} from '../../../../service/planner-runs/iteration-steps.service';
 
 @Component({
   selector: 'app-individual-run-user-data',
@@ -40,7 +40,7 @@ export class IndividualRunUserDataComponent implements OnInit {
   }
 
   constructor(
-    private planRunService: PlanRunsService
+    private planRunService: IterationStepsService
   ) { }
 
   ngOnInit(): void {

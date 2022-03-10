@@ -43,7 +43,6 @@ export class DemoSettingsComponent implements OnInit, OnDestroy {
         maxQuestionSize: new FormControl(
            this.settings.maxQuestionSize.toString(),
           [Validators.required, Validators.min(1), Validators.max(3)]),
-        public: new FormControl(this.settings.public),
         introTask: new FormControl(this.settings.introTask),
         usePlanPropertyValues: new FormControl(this.settings.usePlanPropertyValues),
         useTimer: new FormControl(this.settings.useTimer),
@@ -75,7 +74,6 @@ export class DemoSettingsComponent implements OnInit, OnDestroy {
     this.settings.maxRuns = this.demoSettingsForm.controls.maxRuns.value;
     this.settings.allowQuestions = this.demoSettingsForm.controls.allowQuestions.value;
     this.settings.maxQuestionSize = +this.demoSettingsForm.controls.maxQuestionSize.value;
-    this.settings.public = this.demoSettingsForm.controls.public.value;
     this.settings.introTask = this.demoSettingsForm.controls.introTask.value;
     this.settings.usePlanPropertyValues = this.demoSettingsForm.controls.usePlanPropertyValues.value;
     this.settings.useTimer = this.demoSettingsForm.controls.useTimer.value;

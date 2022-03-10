@@ -64,6 +64,7 @@ export class DemoCreatorComponent implements OnInit {
       summaryImage: this.imageFile,
       description: this.demoForm.controls.description.value ? this.demoForm.controls.description.value : '',
       taskInfo: this.demoForm.controls.taskInfo.value ? this.demoForm.controls.taskInfo.value : '',
+      public: false,
     };
 
     if (this.update) {

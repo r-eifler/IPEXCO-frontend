@@ -110,7 +110,6 @@ import {DemoBaseComponent} from './components/demo/demo-base/demo-base.component
 import {DemoSettingsComponent} from './components/demo/demo-settings/demo-settings.component';
 import {ProjectOverviewComponent} from './components/project/project-overview/project-overview.component';
 import {DomainSpecificationComponent} from './components/files/domain-specification/domain-specification.component';
-import {ViewSettingsMenuComponent} from './components/settings/view-settings-menu/view-settings-menu.component';
 import {RunTreeComponent} from './components/iter-planning/run-tree/run-tree.component';
 import {
   IterativePlanningBaseMobileComponent
@@ -171,6 +170,10 @@ import { AcceptedTestPersonsComponent } from './components/user-study/eval/accep
 import { GlobalExplanationComponent } from './components/iter-planning/question-step/global-explanation/global-explanation.component';
 import { InteractivePlanViewComponent } from './components/iter-planning/planning-step/interactive-plan-view/interactive-plan-view.component';
 import { NgxGraphModule } from '@swimlane/ngx-graph';
+import { PlanningTaskViewComponent } from './components/planning-task/planning-task-view/planning-task-view.component';
+import { PlanningTaskRelaxationsComponent } from './components/planning-task/planning-task-relaxations/planning-task-relaxations.component';
+import { ProjectSettingsComponent } from './components/project/project-settings/project-settings.component';
+import { CompleteActionComponent } from './components/planning-task/complete-action/complete-action.component';
 
 @NgModule({
     declarations: [
@@ -202,7 +205,6 @@ import { NgxGraphModule } from '@swimlane/ngx-graph';
         DemoSettingsComponent,
         ProjectOverviewComponent,
         DomainSpecificationComponent,
-        ViewSettingsMenuComponent,
         RunTreeComponent,
         IterativePlanningBaseMobileComponent,
         PlanViewComponent,
@@ -249,6 +251,10 @@ import { NgxGraphModule } from '@swimlane/ngx-graph';
         AcceptedTestPersonsComponent,
         GlobalExplanationComponent,
         InteractivePlanViewComponent,
+        PlanningTaskViewComponent,
+        PlanningTaskRelaxationsComponent,
+        ProjectSettingsComponent,
+        CompleteActionComponent,
     ],
     imports: [
         RouterModule.forRoot(appRoutes, { enableTracing: false, paramsInheritanceStrategy: 'always' }),

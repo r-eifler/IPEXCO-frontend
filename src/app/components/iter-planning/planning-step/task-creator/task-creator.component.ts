@@ -6,7 +6,7 @@ import {PlanRun, RunType} from '../../../../interface/run';
 import {PlannerService} from '../../../../service/planner-runs/planner.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {PlanPropertyMapService} from 'src/app/service/plan-properties/plan-property-services';
-import {PlanRunsService} from 'src/app/service/planner-runs/planruns.service';
+import {IterationStepsService} from 'src/app/service/planner-runs/iteration-steps.service';
 import {takeUntil} from 'rxjs/operators';
 import {PLANNER_REDIRECT} from 'src/app/app.tokens';
 import {Subject} from 'rxjs';
@@ -40,7 +40,7 @@ export class TaskCreatorComponent implements OnInit, OnDestroy {
     private currentProjectService: CurrentProjectService,
     private plannerService: PlannerService,
     private propertiesService: PlanPropertyMapService,
-    private runService: PlanRunsService,
+    private runService: IterationStepsService,
     private router: Router,
     private route: ActivatedRoute,
     @Inject(PLANNER_REDIRECT) private redirectURL: string) {

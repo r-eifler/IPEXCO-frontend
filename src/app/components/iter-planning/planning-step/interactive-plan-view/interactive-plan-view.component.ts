@@ -61,7 +61,7 @@ export class InteractivePlanViewComponent implements OnInit, OnDestroy {
 
           this.state_trace.push(new State(project.baseTask.init));
 
-          let used_effects: Set<Predicat> = new Set();
+          let used_effects: Set<Fact> = new Set();
 
           for(const action of this.planRun.plan.actions){
             const i_action = action_map.get(action.name).instantiate(action.parameters.map(o => o.name));
@@ -73,7 +73,7 @@ export class InteractivePlanViewComponent implements OnInit, OnDestroy {
           // Filter not changed predicates
           let used_predicates: Set<Fact> = new Set();
           for(let eff of used_effects){
-            used_predicates.add(eff.toFact());
+            used_predicates.add(eff);
           }
 
           this.state_trace.forEach(state => {

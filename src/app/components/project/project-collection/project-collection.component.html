@@ -1,3 +1,7 @@
+<div class="header-container">
+  <h1>Projects</h1>
+</div>
+
 <div [class.project-container-mobile]="isMobile" [class.project-container-web]="! isMobile">
 
   <ng-container *ngIf="(projects$ | async).length == 0">
@@ -10,7 +14,10 @@
 
 
   <ng-container *ngIf="(projects$ | async).length > 0">
-    <mat-card *ngFor="let project of projects$ | async" [class.project-card-mobile]="isMobile" [class.project-card-web]="! isMobile">
+    <mat-card *ngFor="let project of projects$ | async"
+      [class.project-card-mobile]="isMobile"
+      [class.project-card-web]="! isMobile"
+      [routerLink]="['/projects', project._id, 'overview']">
       <mat-card-header>
         <div mat-card-avatar>
         <span class="material-icons">
@@ -20,7 +27,7 @@
         <mat-card-title>{{project.name}}</mat-card-title>
         <mat-card-subtitle>Project</mat-card-subtitle>
 
-        <button mat-icon-button [matMenuTriggerFor]="menu" style="position: absolute; right: 5px">
+        <!-- <button mat-icon-button [matMenuTriggerFor]="menu" style="position: absolute; right: 5px">
           <mat-icon>more_vert</mat-icon>
         </button>
         <mat-menu #menu="matMenu">
@@ -36,7 +43,7 @@
             <mat-icon>delete</mat-icon>
             <span>delete</span>
           </button>
-        </mat-menu>
+        </mat-menu> -->
 
 
       </mat-card-header>
@@ -44,19 +51,12 @@
         <p>
           {{project.description}}
         </p>
-<!--        <mat-list>-->
-<!--          <mat-list-item>{{project.domainFile.name}}</mat-list-item>-->
-<!--          <mat-divider [inset]="true"></mat-divider>-->
-<!--          <mat-list-item>{{project.problemFile.name}}</mat-list-item>-->
-<!--          <mat-divider [inset]="true"></mat-divider>-->
-<!--          <mat-list-item>{{project.domainSpecification.name}}</mat-list-item>-->
-<!--        </mat-list>-->
       </mat-card-content>
-      <mat-card-actions style="display: flex; flex-direction: row">
+      <!-- <mat-card-actions style="display: flex; flex-direction: row">
         <button mat-icon-button style="margin-left: auto;" [routerLink]="['/projects', project._id, 'overview']">
           <mat-icon>play_arrow</mat-icon>
         </button>
-      </mat-card-actions>
+      </mat-card-actions> -->
     </mat-card>
   </ng-container>
 

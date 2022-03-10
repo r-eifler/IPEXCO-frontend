@@ -9,7 +9,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {DemosService, RunningDemoService} from '../../../service/demo/demo-services';
 import {CurrentProjectService} from '../../../service/project/project-services';
 import {PlanPropertyMapService} from '../../../service/plan-properties/plan-property-services';
-import {PlanRunsService} from '../../../service/planner-runs/planruns.service';
+import {IterationStepsService} from '../../../service/planner-runs/iteration-steps.service';
 import {DomainSpecificationService} from '../../../service/files/domain-specification.service';
 import {SelectedPlanRunService} from '../../../service/planner-runs/selected-planrun.service';
 import {PlannerService} from '../../../service/planner-runs/planner.service';
@@ -63,7 +63,7 @@ export class ProjectIterativePlanningBaseComponent implements OnInit, OnDestroy 
     private runningDemoService: RunningDemoService,
     private currentProjectService: CurrentProjectService,
     private propertiesService: PlanPropertyMapService,
-    public runsService: PlanRunsService,
+    public runsService: IterationStepsService,
     private domainSpecService: DomainSpecificationService,
     private selectedPlanRunService: SelectedPlanRunService,
     public plannerService: PlannerService,

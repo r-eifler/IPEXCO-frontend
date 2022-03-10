@@ -1,3 +1,4 @@
+import { defaultExecutionSetting } from './../../../interface/settings/execution-settings';
 import {Project} from './../../../interface/project';
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
@@ -82,7 +83,9 @@ export class ProjectCreatorComponent implements OnInit, OnDestroy {
       domainFile: this.selectedDomain,
       problemFile: this.selectedProblem,
       domainSpecification: this.selectedDomainSpec,
-      // properties: [],
+      settings: defaultExecutionSetting,
+      baseTask: null,
+      public: false,
     };
 
     this.projectService.saveObject(newProject);

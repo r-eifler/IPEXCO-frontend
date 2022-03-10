@@ -1,7 +1,7 @@
 import {DEMO_FINISHED_REDIRECT, QUESTION_REDIRECT} from './../../../app.tokens';
 import {PlannerService} from '../../../service/planner-runs/planner.service';
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {PlanRunsService} from 'src/app/service/planner-runs/planruns.service';
+import {IterationStepsService} from 'src/app/service/planner-runs/iteration-steps.service';
 import {PLANNER_REDIRECT} from 'src/app/app.tokens';
 import {ActivatedRoute, Router} from '@angular/router';
 import {takeUntil} from 'rxjs/operators';
@@ -19,7 +19,7 @@ import {TimeLoggerService} from '../../../service/logger/time-logger.service';
   templateUrl: './demo-base.component.html',
   styleUrls: ['./demo-base.component.scss'],
   providers: [
-    {provide: PlanRunsService, useClass: DemoRunService},
+    {provide: IterationStepsService, useClass: DemoRunService},
     {provide: PlannerService, useClass: DemoPlannerService},
     { provide: PLANNER_REDIRECT, useValue: '../' },
     { provide: QUESTION_REDIRECT, useValue: '../../../' },

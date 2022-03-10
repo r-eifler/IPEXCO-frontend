@@ -101,7 +101,7 @@ export class ObjectCollectionService<T extends Identifiable> {
     // console.log('Service save object:');
 
     if (object._id) {
-      // console.log('edit');
+      console.log('edit');
       return this.http.put<IHTTPData<T>>(this.BASE_URL + object._id, {data: object})
         .subscribe(httpData => {
           const action = {type: EDIT, data: httpData.data};
