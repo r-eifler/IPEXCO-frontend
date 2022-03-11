@@ -9,10 +9,10 @@
 //$warn: mat-color($EXPLORE-CLI-warn);
 
 $mat-primary: (
-  main: #03658c,
-  lighter: #b3d1dd,
-  darker: #02496f,
-  200: #03658c, // For slide toggle,
+  main: #44748c,
+  lighter: #73a3bc,
+  darker: #10495f,
+  200: #b0bec5, // For slide toggle,
   contrast : (
     main: white,
     lighter: rgba(black, 0.87),
@@ -21,10 +21,10 @@ $mat-primary: (
 );
 
 $mat-accent: (
-  main: #f29422,
-  lighter: #fbdfbd,
-  darker: #ec7714,
-  200: #f29422, // For slide toggle,
+  main: #ff7043,
+  lighter: #ffa270,
+  darker: #c63f17,
+  200: #ffab91, // For slide toggle,
   contrast : (
     main: rgba(black, 0.87),
     lighter: rgba(black, 0.87),
