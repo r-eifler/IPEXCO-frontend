@@ -174,6 +174,7 @@ import { PlanningTaskViewComponent } from './components/planning-task/planning-t
 import { PlanningTaskRelaxationsComponent } from './components/planning-task/planning-task-relaxations/planning-task-relaxations.component';
 import { ProjectSettingsComponent } from './components/project/project-settings/project-settings.component';
 import { CompleteActionComponent } from './components/planning-task/complete-action/complete-action.component';
+import { PlanningTaskRelaxationCreatorComponent } from './components/planning-task/planning-task-relaxation-creator/planning-task-relaxation-creator.component';
 
 @NgModule({
     declarations: [
@@ -255,6 +256,7 @@ import { CompleteActionComponent } from './components/planning-task/complete-act
         PlanningTaskRelaxationsComponent,
         ProjectSettingsComponent,
         CompleteActionComponent,
+        PlanningTaskRelaxationCreatorComponent,
     ],
     imports: [
         RouterModule.forRoot(appRoutes, { enableTracing: false, paramsInheritanceStrategy: 'always' }),

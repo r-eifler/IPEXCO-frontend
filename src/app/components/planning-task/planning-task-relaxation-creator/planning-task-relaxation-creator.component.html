@@ -1,0 +1,41 @@
+<div class="main-container">
+  <mat-form-field appearance="fill" style="width: 300px;" >
+    <mat-label>Predicate</mat-label>
+    <mat-select [(value)]="selctedPredicate" (selectionChange)="updateFacts(selctedPredicate)">
+      <mat-option *ngFor="let pred of task.predicates" [value]="pred">
+        {{pred.toString()}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <div class="bottom-container">
+    <mat-card class="predicate-collection-card">
+      <mat-chip-list class="mat-chip-list-stacked" cdkDropList
+      [cdkDropListData]="possibleFacts"
+      #listOne="cdkDropList" [cdkDropListConnectedTo]="[listTwo]"
+      (cdkDropListDropped)="drop($event)">
+        <mat-chip *ngFor="let fact of possibleFacts" [value]="fact" cdkDrag>{{fact.toString()}}</mat-chip>
+      </mat-chip-list>
+    </mat-card>
+
+    <mat-card class="relaxation-tree-card">
+      <mat-chip-list class="mat-chip-list-stacked selected-list" cdkDropList
+        [cdkDropListData]="selectedFacts"
+        #listTwo="cdkDropList" [cdkDropListConnectedTo]="[listOne]"
+        (cdkDropListDropped)="drop($event)">
+        <mat-chip class="selected-chip" selectable="false">
+          <mat-chip-avatar>
+            <mat-icon >south</mat-icon>
+          </mat-chip-avatar>
+          less relaxed</mat-chip>
+        <mat-chip class="selected-chip" *ngFor="let fact of selectedFacts" [value]="fact" cdkDrag>{{fact.toString()}}</mat-chip>
+        <mat-chip class="selected-chip" selectable="false">
+          <mat-chip-avatar>
+            <mat-icon >north</mat-icon>
+          </mat-chip-avatar>
+          more relaxed</mat-chip>
+      </mat-chip-list>
+    </mat-card>
+
+  </div>
+</div>

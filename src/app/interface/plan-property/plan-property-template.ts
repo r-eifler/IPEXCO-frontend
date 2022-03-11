@@ -1,3 +1,4 @@
+import { Fact, PlanningTask } from 'src/app/interface/plannig-task';
 import {Action, ActionSet, GoalType, toAction} from './plan-property';
 import {PlanProperty} from 'src/app/interface/plan-property/plan-property';
 import {Project} from '../project';
@@ -37,9 +38,9 @@ export class PlanPropertyTemplate {
     return parts;
   }
 
-  initializeVariableConstraints(taskSchema: TaskSchema) {
+  initializeVariableConstraints(task: PlanningTask) {
     // console.log('initializeVariableConstraints');
-    const varValues = this.getPossibleTypeVariableDomains(taskSchema);
+    const varValues = this.getPossibleTypeVariableDomains(task);
     for (const entry1 of varValues.entries()) {
       this.constraintDomains.addNewVar(entry1[0], entry1[1]);
       for (const v of entry1[1]) {
@@ -47,7 +48,7 @@ export class PlanPropertyTemplate {
           if (entry2[0] !== entry1[0]) {
             const constrainigVar = { name: entry1[0], value: v };
             const constrainedVar = { name: entry2[0], values: new Set<string>() };
-            const constrained = getConstraintSatValues(constrainigVar, constrainedVar, this.initVariableConstraints, taskSchema.init);
+            const constrained = getConstraintSatValues(constrainigVar, constrainedVar, this.initVariableConstraints, task.init);
             if (constrained) {
               this.constraintDomains.addVarValuePosibleValues(constrainigVar.name, constrainigVar.value, constrainedVar.name, constrainedVar.values);
             }
@@ -63,8 +64,8 @@ export class PlanPropertyTemplate {
     }
   }
 
-  generatePlanProperty(varValueMapping: Map<string, string>, taskSchema: TaskSchema, project: Project): PlanProperty {
-    this.completeVarValueMapping(varValueMapping, taskSchema);
+  generatePlanProperty(varValueMapping: Map<string, string>, task: PlanningTask, project: Project): PlanProperty {
+    this.completeVarValueMapping(varValueMapping, task);
 
     let name = this.nameTemplate;
     let formula = this.formulaTemplate;
@@ -95,15 +96,15 @@ export class PlanPropertyTemplate {
     };
   }
 
-  completeVarValueMapping(varValueMapping: Map<string, string>, taskSchema: TaskSchema) {
+  completeVarValueMapping(varValueMapping: Map<string, string>, task: PlanningTask) {
     for (const variable of this.variables) {
       if (!varValueMapping.has(variable.name)) {
-        varValueMapping.set(variable.name, this.findVarValue(variable.name, varValueMapping, taskSchema));
+        varValueMapping.set(variable.name, this.findVarValue(variable.name, varValueMapping, task));
       }
     }
   }
 
-  findVarValue(varName: string, varValueMapping: Map<string, string>, taskSchema: TaskSchema): string {
+  findVarValue(varName: string, varValueMapping: Map<string, string>, task: PlanningTask): string {
     for (const constraint of this.goalVariableConstraints) {
       if (constraint.includes(varName)) {
         let constraintInstance = constraint.replace('(', '\\(');
@@ -113,7 +114,7 @@ export class PlanPropertyTemplate {
           constraintInstance = constraintInstance.replace(pair[0], pair[1]);
         }
         const regex = RegExp(constraintInstance);
-        for (const goal of taskSchema.goals) {
+        for (const goal of task.goals) {
           const match = regex.exec(goal.name);
           if (match) {
             return match[1];
@@ -124,12 +125,12 @@ export class PlanPropertyTemplate {
     throw Error('Variable ' + varName + ' has no value.');
   }
 
-  getPossibleTypeVariableDomains(taskSchema: TaskSchema): Map<string, Set<string>> {
+  getPossibleTypeVariableDomains(task: PlanningTask): Map<string, Set<string>> {
     // get all values which have the right type
     const map = new Map<string, Set<string>>();
     for (const variable of this.variables) {
       const matchingObjects: Set<string> = new Set();
-      for (const obj of taskSchema.objects) {
+      for (const obj of task.objects) {
         if (variable.type.length === 1 && obj.type === variable.type) {
           matchingObjects.add(obj.name);
         }
@@ -142,9 +143,9 @@ export class PlanPropertyTemplate {
     return map;
   }
 
-  getPossibleVariableValues(taskSchema: TaskSchema, varValueMapping: Map<string, string>): Map<string, Set<string>> {
+  getPossibleVariableValues(task: PlanningTask, varValueMapping: Map<string, string>): Map<string, Set<string>> {
     // console.log('getPossibleVariableValues');
-    let resMap: Map<string, Set<string>> = this.getPossibleTypeVariableDomains(taskSchema);
+    let resMap: Map<string, Set<string>> = this.getPossibleTypeVariableDomains(task);
     for (const variable of varValueMapping.keys()) {
       resMap = domainIntersection(resMap, this.constraintDomains.getVarValuePosibleValues(variable, varValueMapping.get(variable)));
     }
@@ -191,7 +192,7 @@ export function domainIntersection(domains1: Map<string, Set<string>>, domains2:
 export function getConstraintSatValues(
   constrainingVar: {name: string, value: string},
   constrainedVar: {name: string, values: Set<string>},
-  constraints: string[], truePredicates: string[]): boolean {
+  constraints: string[], truePredicates: Fact[]): boolean {
 
   let isConstrained = false;
   for (const con of constraints) {
@@ -209,7 +210,7 @@ export function getConstraintSatValues(
 
       const conRegex = new RegExp(conRegexString);
       for (const pre of truePredicates) {
-        const m = conRegex.exec(pre);
+        const m = conRegex.exec(pre.toString());
         if (m) {
           constrainedVar.values.add(m[1]);
         }

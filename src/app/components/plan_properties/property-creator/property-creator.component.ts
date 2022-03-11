@@ -1,3 +1,4 @@
+import { PlanningTask } from 'src/app/interface/plannig-task';
 import {DomainSpecificationService} from '../../../service/files/domain-specification.service';
 import {takeUntil} from 'rxjs/operators';
 import {MatStepper} from '@angular/material/stepper';
@@ -6,9 +7,7 @@ import {FormArray, FormControl, FormGroup, Validators} from '@angular/forms';
 import {Action, ActionSet, PlanProperty} from '../../../interface/plan-property/plan-property';
 import {MatDialogRef} from '@angular/material/dialog';
 import {Project} from 'src/app/interface/project';
-import {TaskSchemaStore} from 'src/app/store/stores.store';
 import {matchRegexValidator} from '../../../validators/match-regex-validator';
-import {TaskSchema} from 'src/app/interface/task-schema';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import {MatSlideToggleChange} from '@angular/material/slide-toggle';
 import {DomainSpecification} from 'src/app/interface/files/domain-specification';
@@ -59,7 +58,7 @@ export class PropertyCreatorComponent implements OnInit, OnDestroy {
 
   currentProject: Project;
 
-  taskSchema: TaskSchema;
+  task: PlanningTask;
   actionOptions: string[];
 
   domainSpec: DomainSpecification;
@@ -74,7 +73,6 @@ export class PropertyCreatorComponent implements OnInit, OnDestroy {
   constructor(
     private propertiesService: PlanPropertyMapService,
     private currentProjectService: CurrentProjectService,
-    private taskSchemaStore: TaskSchemaStore,
     private domainSpecService: DomainSpecificationService,
     public dialogRef: MatDialogRef<PropertyCreatorComponent>) {
 
@@ -82,15 +80,8 @@ export class PropertyCreatorComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(project => {
         this.currentProject = project;
-      });
-
-      this.taskSchemaStore.item$
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe(ts => {
-        if (ts) {
-          this.taskSchema = ts;
-          this.actionOptions = this.taskSchema.actions.map(elem => elem.name);
-        }
+        this.task = project.baseTask;
+        this.actionOptions = this.task.actions.map(elem => elem.name);
       });
 
       this.domainSpecService.getSpec()
@@ -119,9 +110,9 @@ export class PropertyCreatorComponent implements OnInit, OnDestroy {
   propTemplateSelect(event: MatSelectionListChange) {
     this.propertyTemplateAccordion.closeAll();
     this.selectedPropertyTemplate = event.option.value;
-    this.selectedPropertyTemplate.initializeVariableConstraints(this.taskSchema);
+    this.selectedPropertyTemplate.initializeVariableConstraints(this.task);
     this.sentenceTemplateParts = this.selectedPropertyTemplate.getSentenceTemplateParts();
-    this.possibleVariableValues = this.selectedPropertyTemplate.getPossibleVariableValues(this.taskSchema, this.selectedVariableValue);
+    this.possibleVariableValues = this.selectedPropertyTemplate.getPossibleVariableValues(this.task, this.selectedVariableValue);
 
     this.propertyTemplateStepper.selected.completed = true;
     this.propertyTemplateStepper.next();
@@ -133,13 +124,13 @@ export class PropertyCreatorComponent implements OnInit, OnDestroy {
 
   selectVariableValue(value: string) {
     this.selectedVariableValue.set(this.selectedVariablePlaceholder, value);
-    this.possibleVariableValues = this.selectedPropertyTemplate.getPossibleVariableValues(this.taskSchema, this.selectedVariableValue);
+    this.possibleVariableValues = this.selectedPropertyTemplate.getPossibleVariableValues(this.task, this.selectedVariableValue);
     // console.log(this.possibleVariableValues);
   }
 
   resetVariableValue(variable: string) {
     this.selectedVariableValue.delete(variable);
-    this.possibleVariableValues = this.selectedPropertyTemplate.getPossibleVariableValues(this.taskSchema, this.selectedVariableValue);
+    this.possibleVariableValues = this.selectedPropertyTemplate.getPossibleVariableValues(this.task, this.selectedVariableValue);
   }
 
 
@@ -189,7 +180,7 @@ export class PropertyCreatorComponent implements OnInit, OnDestroy {
         value: 1,
       };
     } else {
-      planProperty = this.selectedPropertyTemplate.generatePlanProperty(this.selectedVariableValue, this.taskSchema, this.currentProject);
+      planProperty = this.selectedPropertyTemplate.generatePlanProperty(this.selectedVariableValue, this.task, this.currentProject);
     }
 
     this.propertiesService.saveObject(planProperty);

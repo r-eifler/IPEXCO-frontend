@@ -24,7 +24,7 @@ export class PropertyCollectionComponent implements OnInit, AfterViewInit, OnDes
   private ngUnsubscribe: Subject<any> = new Subject();
 
   isMobile: boolean;
-  viewSettings: Observable<ViewSettings>;
+  expertView = false;
 
   planProperties: PlanProperty[] = [];
 

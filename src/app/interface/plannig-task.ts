@@ -38,11 +38,22 @@ export class Predicat {
     }
 
     instantiateFromArgsMap(args: Map<string,string>): Predicat {
-      let init_params = []
-      for (const arg of this.parameters){
-        init_params.push({name: args.get(arg.name), type: arg.type})
+      return new Predicat(this.name, this.parameters.map(p => {return {name: args.get(p.name), type: p.type}}));
+    }
+
+    instantiateAll(typeObjectMap: Map<string,string[]>): Fact[] {
+      let init_params: string[][] = [[]]
+      for (const param of this.parameters){
+        let paratial_args_list: string[][] = [...init_params];
+        init_params = []
+        for (const object of typeObjectMap.get(param.type))
+          for(const partial_args of paratial_args_list){
+            let copy = [...partial_args];
+            copy.push(object);
+            init_params.push(copy);
+          }
       }
-      return new Predicat(this.name, init_params);
+      return init_params.map(ps => new Fact(this.name, ps));
     }
 
     toPDDL(withType = false): string {
@@ -179,31 +190,44 @@ export class PlanningTask extends Document {
     return new PlanningTask(name, domain_name, types, objects, predicates, initial, goal, actions)
   }
 
-    toPDDLDomain(): string {
-
-        let d = "(define (domain " + this.domain_name.replace(/\s+/g, '') + ")\n";
-        d += "(:requirements :typing :action-costs)\n";
-        d += "(:types " + this.types.map(t => t.name + "-" + t.parent).join("\n") + "\n)\n";
-        d += "(predicates: " + this.predicates.map(p => p.toPDDL(true)).join("\n") + "\n)\n";
-        d += this.actions.map(a => a.toPDDL()).join("\n");
-        d += "\n)";
-
-        return d;
+  getObjectTypeMap(): Map<string, string[]> {
+    // TODO consider type hirarchy
+    let otmap = new Map<string, string[]>();
+    otmap.set('object', this.objects.map(o => o.name));
+    for (const o of this.objects) {
+      if (! otmap.has(o.type)) {
+        otmap.set(o.type, []);
+      }
+      otmap.get(o.type).push(o.name);
     }
-
-    toPDDLProblem(): string {
-
-      let p = "(define (problem " + this.name.replace(/\s+/g, '') + ")\n";
-      p += "(domain " + this.domain_name.replace(/\s+/g, '') + ")";
-      p += "(:objects " + this.objects.map(o => o.name + "-" + o.type).join("\n") + "\n)\n";
-      p += "(:init\n " + this.init.map(f => f.toPDDL()).join("\n") + "\n)\n";
-      p += "(goal: (and " + this.goals.map(p => p.toPDDL()).join("\n") + ")\n";
-      p += "\n)";
-
-      return p;
+    return otmap;
   }
 
-    taskSchema(): string {
-        return JSON.stringify(this);
-    }
+  toPDDLDomain(): string {
+
+      let d = "(define (domain " + this.domain_name.replace(/\s+/g, '') + ")\n";
+      d += "(:requirements :typing :action-costs)\n";
+      d += "(:types " + this.types.map(t => t.name + "-" + t.parent).join("\n") + "\n)\n";
+      d += "(predicates: " + this.predicates.map(p => p.toPDDL(true)).join("\n") + "\n)\n";
+      d += this.actions.map(a => a.toPDDL()).join("\n");
+      d += "\n)";
+
+      return d;
+  }
+
+  toPDDLProblem(): string {
+
+    let p = "(define (problem " + this.name.replace(/\s+/g, '') + ")\n";
+    p += "(domain " + this.domain_name.replace(/\s+/g, '') + ")";
+    p += "(:objects " + this.objects.map(o => o.name + "-" + o.type).join("\n") + "\n)\n";
+    p += "(:init\n " + this.init.map(f => f.toPDDL()).join("\n") + "\n)\n";
+    p += "(goal: (and " + this.goals.map(p => p.toPDDL()).join("\n") + ")\n";
+    p += "\n)";
+
+    return p;
+  }
+
+  taskSchema(): string {
+    return JSON.stringify(this);
+  }
 }

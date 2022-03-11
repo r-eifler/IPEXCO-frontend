@@ -1,6 +1,6 @@
 <div class="main-container">
 
-  <div *ngIf="(viewSettings | async).expertView" class="expert-view-container">
+  <div *ngIf="expertView" class="expert-view-container">
     <mat-card *ngFor="let property of planProperties"
               [class.property-card-web]=" ! isMobile" [class.property-card-mobile]="isMobile"
               [class.property-card-not-selected]="! property.isUsed">
@@ -61,7 +61,7 @@
     </mat-card>
   </div>
 
-  <mat-card *ngIf="! (viewSettings | async).expertView" class="basic-card" style="grid-column: 1 / span 1;">
+  <mat-card *ngIf="! expertView" class="basic-card" style="grid-column: 1 / span 1;">
     <mat-card-header>
       <mat-card-title>Plan Properties Collection</mat-card-title>
     </mat-card-header>
