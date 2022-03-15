@@ -1,6 +1,10 @@
+import { PlanningTaskRelaxationSpace } from 'src/app/interface/planning-task-relaxation';
 import { PlanningTaskRelaxationCreatorComponent } from './../planning-task-relaxation-creator/planning-task-relaxation-creator.component';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { PlanningTaskRelaxationService } from 'src/app/service/planning-task/planning-task-relaxations-services';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-planning-task-relaxations',
@@ -9,9 +13,22 @@ import { MatDialog } from '@angular/material/dialog';
 })
 export class PlanningTaskRelaxationsComponent implements OnInit {
 
-  constructor(public dialog: MatDialog,) { }
+  json=JSON;
+  private ngUnsubscribe: Subject<any> = new Subject();
+
+ relaxationSpaces : PlanningTaskRelaxationSpace[] = [];
+
+  constructor(
+    private relaxationService: PlanningTaskRelaxationService,
+    public dialog: MatDialog,) { }
 
   ngOnInit(): void {
+    this.relaxationService.getList()
+    .pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe(spaces => {
+      if(spaces)
+        this.relaxationSpaces = spaces;
+    });
   }
 
   new_relaxation_form(): void {
@@ -19,6 +36,11 @@ export class PlanningTaskRelaxationsComponent implements OnInit {
       width: '80%',
       height: '80%'
     });
+  }
+
+  ngOnDestroy(): void {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 
 }

@@ -104,6 +104,8 @@ export class Fact {
       }
       return this.name + "(" + this.arguments.join(', ') + ")";
     }
+
+
 }
 
 export class Action {

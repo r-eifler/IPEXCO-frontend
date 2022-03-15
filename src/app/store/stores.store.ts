@@ -13,6 +13,7 @@ import {Demo} from '../interface/demo';
 import {User} from '../interface/user';
 import {UserStudy} from '../interface/user-study/user-study';
 import {MetaStudy} from '../interface/user-study/meta-study';
+import { PlanningTaskRelaxationSpace } from '../interface/planning-task-relaxation';
 
 
 // User/Authentication
@@ -57,4 +58,7 @@ export class RunningUserStudyStore extends  ItemStore<UserStudy> {}
 // User Study
 export class MetaStudiesStore extends  ListStore<MetaStudy> {}
 export class SelectedMetaStudyStore extends  ItemStore<MetaStudy> {}
+
+//Relaxations
+export class PlanningTaskRelaxationsStore extends  ListStore<PlanningTaskRelaxationSpace> {}
 

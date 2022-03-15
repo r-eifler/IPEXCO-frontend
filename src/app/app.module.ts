@@ -1,3 +1,4 @@
+import { PlanningTaskRelaxationService } from './service/planning-task/planning-task-relaxations-services';
 import {AnimationSettingsDirective} from './components/animation/animation-settings.directive';
 import {AuthenticationService} from './service/authentication/authentication.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
@@ -86,6 +87,7 @@ import {
   DomainSpecificationFilesStore,
   DomainSpecStore,
   ExecutionSettingsStore, MetaStudiesStore,
+  PlanningTaskRelaxationsStore,
   PlanPropertyMapStore,
   ProblemFilesStore,
   ProjectsStore,
@@ -322,6 +324,8 @@ import { PlanningTaskRelaxationCreatorComponent } from './components/planning-ta
         TaskSchemaStore,
         PlanPropertyMapStore,
         PlanPropertyMapService,
+        PlanningTaskRelaxationService,
+        PlanningTaskRelaxationsStore,
         PlannerService,
         RunsStore,
         SelectedPlanRunService,

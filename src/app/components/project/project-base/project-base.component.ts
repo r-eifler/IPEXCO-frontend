@@ -1,3 +1,4 @@
+import { PlanningTaskRelaxationService } from './../../../service/planning-task/planning-task-relaxations-services';
 import {AnimationSettingsProvider} from './../../../provider/plan-visualisation.provider';
 import {QUESTION_REDIRECT} from './../../../app.tokens';
 import {PlannerService} from '../../../service/planner-runs/planner.service';
@@ -52,6 +53,7 @@ export class ProjectBaseComponent implements OnInit, OnDestroy {
     private currentProjectService: CurrentProjectService,
     private domainSpecService: DomainSpecificationService,
     private propertiesService: PlanPropertyMapService,
+    private relaxationService: PlanningTaskRelaxationService,
     private runsService: IterationStepsService,
     private demosService: DemosService,
     private bottomSheet: MatBottomSheet
@@ -69,6 +71,7 @@ export class ProjectBaseComponent implements OnInit, OnDestroy {
           this.runsService.reset(); // delete possible stored runs which do not belong to the project
           this.runsService.findCollection([{param: 'projectId', value: this.project._id}]);
           this.propertiesService.findCollection([{param: 'projectId', value: this.project._id}]);
+          this.relaxationService.findCollection([{param: 'projectId', value: this.project._id}]);
           this.demosService.findCollection([{param: 'projectId', value: this.project._id}]);
         }
       }

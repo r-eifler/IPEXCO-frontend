@@ -1,5 +1,6 @@
-<mat-horizontal-stepper [linear]="true" #stepper class="stepper">
-  <mat-step class="step" label="Select initial values" (interacted)="updateFacts(selctedPredicate)">
+<mat-horizontal-stepper [linear]="true" #stepper class="stepper" (selectionChange)="updateFacts(selctedPredicate); initFactsSelected()">
+  <mat-step class="step" label="Select initial values" [editable]="false"
+  [completed]="this.selectedInitialFacts.length > 0">
     <div class="main-container">
       <mat-form-field appearance="fill" style="width: 300px;" >
         <mat-label>Predicate</mat-label>
@@ -34,8 +35,8 @@
             </mat-chip>
           </mat-chip-list>
         </mat-card>
-
       </div>
+      <button mat-stroked-button matStepperNext>Next</button>
     </div>
   </mat-step>
 
@@ -61,26 +62,19 @@
           </mat-chip-list>
         </mat-card>
 
-        <mat-card class="relaxation-tree-card">
-
-          <div class="relaxation-level-scroll-container">
-          <div  class="relaxation-level-container" id="relax_level">
-            <ng-container *ngFor="let level of relaxationLevels; let i = index">
-            <mat-card class="relax-card" *ngFor="let node of level" id="relax_card_{{node.id}}">
+        <mat-card class="fact-lists-card">
+          <div class="relaxation-container">
+            <mat-card class="relax-card" *ngFor="let relax of relaxationFactLists">
               <div class="fact-container">
-                <mat-chip-list *ngIf="i == 0">
-                  <mat-chip class="selected-chip" *ngFor="let fact of node.facts" [value]="fact" cdkDrag>{{fact.toString()}}</mat-chip>
-                </mat-chip-list>
-
-                <p>id: {{node.id}}</p>
-                <p *ngIf="node.parents.length > 0">p: {{node.parents[0].id}}</p>
-                <mat-chip-list *ngIf="i != 0"
+                <mat-chip-list
                   class="mat-chip-list-stacked selected-list" cdkDropList
-                  [cdkDropListData]="node.facts"
+                  [cdkDropListData]="relax.facts"
                   cdkDropList
                   (cdkDropListDropped)="drop($event);updateSelectedFacts($event)">
-                  <mat-chip class="selected-chip" *ngFor="let fact of node.facts"
-                    [value]="fact" (removed)="deleteFactFromRelax(fact, node)">
+                  <mat-chip class="selected-chip" color="accent">{{relax.init.toString()}}</mat-chip>
+                  <mat-divider [inset]="true"></mat-divider>
+                  <mat-chip class="selected-chip" *ngFor="let fact of relax.facts"
+                    [value]="fact" (removed)="deleteFactFromRelax(fact, relax)" cdkDrag>
                     {{fact.toString()}}
                     <button matChipRemove>
                       <mat-icon>cancel</mat-icon>
@@ -88,29 +82,11 @@
                   </mat-chip>
                 </mat-chip-list>
               </div>
-              <div class="action-container">
-                  <button mat-icon-button (click)="deleteRelaxation(node, i)" *ngIf="i != 0" [disabled]="linkNode">
-                    <mat-icon>remove</mat-icon>
-                  </button>
-                  <button *ngIf="! linkNode" mat-icon-button (click)="startLink(node)" [disabled]="! canInitLink(node)">
-                    <mat-icon>link</mat-icon>
-                  </button>
-                  <button *ngIf="linkNode" mat-icon-button (click)="stopLink(node)" [disabled]="! canLink(this.linkNode, node)">
-                    <mat-icon>link</mat-icon>
-                  </button>
-                  <button mat-icon-button  (click)="addUpper(node, i+1)" [disabled]="linkNode || ! canAdd(node)">
-                    <mat-icon>add</mat-icon>
-                  </button>
-              </div>
             </mat-card>
-            </ng-container>
           </div>
-          </div>
-          <button *ngIf="linkNode" mat-icon-button (click)="abortLink()">
-            <mat-icon>link_off</mat-icon>
-          </button>
         </mat-card>
       </div>
+      <button mat-stroked-button (click)="onSave()">Save</button>
     </div>
   </mat-step>
 </mat-horizontal-stepper>

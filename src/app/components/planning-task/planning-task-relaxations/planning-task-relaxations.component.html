@@ -3,6 +3,12 @@
 
 <mat-card class="main-card">
 
+  <mat-list>
+    <mat-list-item *ngFor="let relax of this.relaxationSpaces">
+      {{json.stringify(relax)}}
+    </mat-list-item>
+  </mat-list>
+
 </mat-card>
 
 <mat-card style="grid-column: 2 / span 1;" class="action-card">
