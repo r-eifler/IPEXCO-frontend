@@ -1,41 +1,116 @@
-<div class="main-container">
-  <mat-form-field appearance="fill" style="width: 300px;" >
-    <mat-label>Predicate</mat-label>
-    <mat-select [(value)]="selctedPredicate" (selectionChange)="updateFacts(selctedPredicate)">
-      <mat-option *ngFor="let pred of task.predicates" [value]="pred">
-        {{pred.toString()}}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
+<mat-horizontal-stepper [linear]="true" #stepper class="stepper">
+  <mat-step class="step" label="Select initial values" (interacted)="updateFacts(selctedPredicate)">
+    <div class="main-container">
+      <mat-form-field appearance="fill" style="width: 300px;" >
+        <mat-label>Predicate</mat-label>
+        <mat-select [(value)]="selctedPredicate" (selectionChange)="updateInitialFacts(selctedPredicate)">
+          <mat-option *ngFor="let pred of task.predicates" [value]="pred">
+            {{pred.toString()}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
 
-  <div class="bottom-container">
-    <mat-card class="predicate-collection-card">
-      <mat-chip-list class="mat-chip-list-stacked" cdkDropList
-      [cdkDropListData]="possibleFacts"
-      #listOne="cdkDropList" [cdkDropListConnectedTo]="[listTwo]"
-      (cdkDropListDropped)="drop($event)">
-        <mat-chip *ngFor="let fact of possibleFacts" [value]="fact" cdkDrag>{{fact.toString()}}</mat-chip>
-      </mat-chip-list>
-    </mat-card>
+      <div class="bottom-container">
+        <mat-card class="predicate-collection-card">
+          <mat-chip-list class="mat-chip-list-stacked" cdkDropList
+          [cdkDropListData]="initialFacts"
+          #listOneInit="cdkDropList" [cdkDropListConnectedTo]="[listTwoInit]"
+          (cdkDropListDropped)="drop($event)">
+            <mat-chip *ngFor="let fact of initialFacts" [value]="fact" cdkDrag>{{fact.toString()}}</mat-chip>
+          </mat-chip-list>
+        </mat-card>
 
-    <mat-card class="relaxation-tree-card">
-      <mat-chip-list class="mat-chip-list-stacked selected-list" cdkDropList
-        [cdkDropListData]="selectedFacts"
-        #listTwo="cdkDropList" [cdkDropListConnectedTo]="[listOne]"
-        (cdkDropListDropped)="drop($event)">
-        <mat-chip class="selected-chip" selectable="false">
-          <mat-chip-avatar>
-            <mat-icon >south</mat-icon>
-          </mat-chip-avatar>
-          less relaxed</mat-chip>
-        <mat-chip class="selected-chip" *ngFor="let fact of selectedFacts" [value]="fact" cdkDrag>{{fact.toString()}}</mat-chip>
-        <mat-chip class="selected-chip" selectable="false">
-          <mat-chip-avatar>
-            <mat-icon >north</mat-icon>
-          </mat-chip-avatar>
-          more relaxed</mat-chip>
-      </mat-chip-list>
-    </mat-card>
+        <mat-card class="relaxation-tree-card">
+          <mat-chip-list class="mat-chip-list-stacked selected-list" cdkDropList
+            [cdkDropListData]="selectedInitialFacts"
+            #listTwoInit="cdkDropList" [cdkDropListConnectedTo]="[listOneInit]"
+            (cdkDropListDropped)="drop($event);updateSelectedFacts($event)">
+            <p>initial values:</p>
+            <mat-chip class="selected-chip" *ngFor="let fact of selectedInitialFacts" [value]="fact" (removed)="removeInitFact(fact)">
+              {{fact.toString()}}
+              <button matChipRemove>
+                <mat-icon>cancel</mat-icon>
+              </button>
+            </mat-chip>
+          </mat-chip-list>
+        </mat-card>
 
-  </div>
-</div>
+      </div>
+    </div>
+  </mat-step>
+
+
+  <mat-step class="step" label="Define Relaxation Order">
+    <div class="main-container">
+      <mat-form-field appearance="fill" style="width: 300px;" >
+        <mat-label>Predicate</mat-label>
+        <mat-select [(value)]="selctedPredicate" (selectionChange)="updateFacts(selctedPredicate)">
+          <mat-option *ngFor="let pred of task.predicates" [value]="pred">
+            {{pred.toString()}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <div class="bottom-container" cdkDropListGroup>
+        <mat-card class="predicate-collection-card">
+          <mat-chip-list class="mat-chip-list-stacked" cdkDropList
+          [cdkDropListData]="possibleFacts"
+          cdkDropList
+          (cdkDropListDropped)="drop($event)">
+            <mat-chip *ngFor="let fact of possibleFacts" [value]="fact" cdkDrag>{{fact.toString()}}</mat-chip>
+          </mat-chip-list>
+        </mat-card>
+
+        <mat-card class="relaxation-tree-card">
+
+          <div class="relaxation-level-scroll-container">
+          <div  class="relaxation-level-container" id="relax_level">
+            <ng-container *ngFor="let level of relaxationLevels; let i = index">
+            <mat-card class="relax-card" *ngFor="let node of level" id="relax_card_{{node.id}}">
+              <div class="fact-container">
+                <mat-chip-list *ngIf="i == 0">
+                  <mat-chip class="selected-chip" *ngFor="let fact of node.facts" [value]="fact" cdkDrag>{{fact.toString()}}</mat-chip>
+                </mat-chip-list>
+
+                <p>id: {{node.id}}</p>
+                <p *ngIf="node.parents.length > 0">p: {{node.parents[0].id}}</p>
+                <mat-chip-list *ngIf="i != 0"
+                  class="mat-chip-list-stacked selected-list" cdkDropList
+                  [cdkDropListData]="node.facts"
+                  cdkDropList
+                  (cdkDropListDropped)="drop($event);updateSelectedFacts($event)">
+                  <mat-chip class="selected-chip" *ngFor="let fact of node.facts"
+                    [value]="fact" (removed)="deleteFactFromRelax(fact, node)">
+                    {{fact.toString()}}
+                    <button matChipRemove>
+                      <mat-icon>cancel</mat-icon>
+                    </button>
+                  </mat-chip>
+                </mat-chip-list>
+              </div>
+              <div class="action-container">
+                  <button mat-icon-button (click)="deleteRelaxation(node, i)" *ngIf="i != 0" [disabled]="linkNode">
+                    <mat-icon>remove</mat-icon>
+                  </button>
+                  <button *ngIf="! linkNode" mat-icon-button (click)="startLink(node)" [disabled]="! canInitLink(node)">
+                    <mat-icon>link</mat-icon>
+                  </button>
+                  <button *ngIf="linkNode" mat-icon-button (click)="stopLink(node)" [disabled]="! canLink(this.linkNode, node)">
+                    <mat-icon>link</mat-icon>
+                  </button>
+                  <button mat-icon-button  (click)="addUpper(node, i+1)" [disabled]="linkNode || ! canAdd(node)">
+                    <mat-icon>add</mat-icon>
+                  </button>
+              </div>
+            </mat-card>
+            </ng-container>
+          </div>
+          </div>
+          <button *ngIf="linkNode" mat-icon-button (click)="abortLink()">
+            <mat-icon>link_off</mat-icon>
+          </button>
+        </mat-card>
+      </div>
+    </div>
+  </mat-step>
+</mat-horizontal-stepper>

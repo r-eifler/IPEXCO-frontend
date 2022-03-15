@@ -22,4 +22,20 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   overflow: auto;
 }
 
+.mat-stepper-vertical {
+  display: grid;
+}
+
+.mat-stepper-horizontal {
+  display: grid;
+}
+
+.mat-horizontal-stepper-content {
+  height: 100%;
+}
+
+.mat-horizontal-content-container {
+  height: 100%;
+}
+
 
