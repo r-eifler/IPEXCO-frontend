@@ -10,14 +10,22 @@
 
 .main-card {
   box-sizing: border-box;
-}
-
-.action-card {
   display: flex;
   flex-direction: column;
 }
 
-.action-card > button {
-  width: 100%;
-  margin-bottom: 10px;
+.relax-card {
+  box-sizing: border-box;
+  margin-top: 20px;
+  width: 100%
+}
+
+.relax-table {
+  width: 30%;
+}
+
+.actions {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
 }

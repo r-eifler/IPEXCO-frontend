@@ -1,4 +1,4 @@
-<mat-horizontal-stepper [linear]="true" #stepper class="stepper" (selectionChange)="updateFacts(selctedPredicate); initFactsSelected()">
+<mat-horizontal-stepper [linear]="true" #stepper class="stepper" (selectionChange)="initNextStep()">
   <mat-step class="step" label="Select initial values" [editable]="false"
   [completed]="this.selectedInitialFacts.length > 0">
     <div class="main-container">
@@ -21,7 +21,7 @@
           </mat-chip-list>
         </mat-card>
 
-        <mat-card class="relaxation-tree-card">
+        <mat-card class="predicate-collection-card">
           <mat-chip-list class="mat-chip-list-stacked selected-list" cdkDropList
             [cdkDropListData]="selectedInitialFacts"
             #listTwoInit="cdkDropList" [cdkDropListConnectedTo]="[listOneInit]"
@@ -58,24 +58,24 @@
           [cdkDropListData]="possibleFacts"
           cdkDropList
           (cdkDropListDropped)="drop($event)">
-            <mat-chip *ngFor="let fact of possibleFacts" [value]="fact" cdkDrag>{{fact.toString()}}</mat-chip>
+            <mat-chip *ngFor="let update of possibleFacts" [value]="update" cdkDrag>{{update.fact.toString()}}</mat-chip>
           </mat-chip-list>
         </mat-card>
 
         <mat-card class="fact-lists-card">
           <div class="relaxation-container">
-            <mat-card class="relax-card" *ngFor="let relax of relaxationFactLists">
+            <mat-card class="relax-card" *ngFor="let relax of relaxationSpace.taskUpdatList">
               <div class="fact-container">
                 <mat-chip-list
                   class="mat-chip-list-stacked selected-list" cdkDropList
-                  [cdkDropListData]="relax.facts"
+                  [cdkDropListData]="relax.newFacts"
                   cdkDropList
                   (cdkDropListDropped)="drop($event);updateSelectedFacts($event)">
-                  <mat-chip class="selected-chip" color="accent">{{relax.init.toString()}}</mat-chip>
+                  <mat-chip class="selected-chip" color="accent">{{relax.orgFact.toString()}}</mat-chip>
                   <mat-divider [inset]="true"></mat-divider>
-                  <mat-chip class="selected-chip" *ngFor="let fact of relax.facts"
-                    [value]="fact" (removed)="deleteFactFromRelax(fact, relax)" cdkDrag>
-                    {{fact.toString()}}
+                  <mat-chip class="selected-chip" *ngFor="let update of relax.newFacts"
+                    [value]="update" (removed)="deleteFactFromRelax(update, relax)" cdkDrag>
+                    {{update.fact.toString()}}
                     <button matChipRemove>
                       <mat-icon>cancel</mat-icon>
                     </button>
@@ -86,7 +86,48 @@
           </div>
         </mat-card>
       </div>
-      <button mat-stroked-button (click)="onSave()">Save</button>
+      <button mat-stroked-button matStepperNext>Next</button>
     </div>
+  </mat-step>
+  <mat-step class="step" label="Relaxation Values">
+    <div class="main-container-values">
+      <div *ngFor="let updates of relaxationSpace.taskUpdatList" class="relaxation-value-container">
+      <table mat-table id="plan-property-collection-table" [dataSource]="updates.newFacts" class="value-table">
+
+        <ng-container matColumnDef="value">
+          <th mat-header-cell *matHeaderCellDef>Utility</th>
+          <td mat-cell *matCellDef="let update">
+            <mat-form-field class="value-form-field">
+              <input matInput type="number" value="{{update.value}}" (change)="$event ? updateValueChanged($event, update) : null" class="value-input">
+            </mat-form-field>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="fact">
+          <th mat-header-cell *matHeaderCellDef> Fact </th>
+          <td mat-cell *matCellDef="let update" #cellElement>
+            {{update.fact.toString()}}
+          </td>
+        </ng-container>
+
+
+        <tr mat-header-row *matHeaderRowDef="['fact', 'value']"></tr>
+        <tr mat-row *matRowDef="let row; columns: ['fact', 'value'];">
+        </tr>
+
+      </table>
+      </div>
+      <button mat-stroked-button matStepperNext>Next</button>
+    </div>
+  </mat-step>
+
+  <mat-step class="step" label="Name">
+    <form [formGroup]="relaxationForm">
+      <mat-form-field appearance="fill" style="width: 300px;">
+        <mat-label>Name</mat-label>
+        <input matInput placeholder="Name" type="text" formControlName="name">
+      </mat-form-field>
+    </form>
+    <button mat-stroked-button (click)="onSave()">Save</button>
   </mat-step>
 </mat-horizontal-stepper>

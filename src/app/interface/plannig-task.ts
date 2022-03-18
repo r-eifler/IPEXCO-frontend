@@ -81,6 +81,10 @@ export class Fact {
         this.negated = negated;
     }
 
+    equals(f: Fact): boolean {
+        return this.name == f.name && JSON.stringify(this.arguments) === JSON.stringify(f.arguments)
+    }
+
     instantiateFromArgsMap(args: Map<string,string>): Fact {
       let init_args = []
       for (const arg of this.arguments){
@@ -91,6 +95,10 @@ export class Fact {
 
     static fromJSON(json){
       return new Fact(json.name, json.arguments, json.negated);
+    }
+
+    static fromObject(o){
+      return new Fact(o.name, o.arguments, o.negated);
     }
 
     toPDDL(): string {

@@ -28,19 +28,35 @@ export class PlanningTaskRelaxationsComponent implements OnInit {
     .subscribe(spaces => {
       if(spaces)
         this.relaxationSpaces = spaces;
+        console.log(spaces);
     });
   }
 
   new_relaxation_form(): void {
     this.dialog.open(PlanningTaskRelaxationCreatorComponent, {
       width: '80%',
-      height: '80%'
+      height: '80%',
+      data: null
     });
   }
 
   ngOnDestroy(): void {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
+  }
+
+
+
+  deleteRelaxation(space: PlanningTaskRelaxationSpace): void {
+    this.relaxationService.deleteObject(space);
+  }
+
+  editRelaxation(space: PlanningTaskRelaxationSpace): void {
+    this.dialog.open(PlanningTaskRelaxationCreatorComponent, {
+      width: '80%',
+      height: '80%',
+      data: {space}
+    });
   }
 
 }

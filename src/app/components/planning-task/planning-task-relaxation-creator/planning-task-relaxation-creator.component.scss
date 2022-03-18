@@ -112,3 +112,36 @@ mat-step {
 .init-selection-list{
   min-height: 200px;
 }
+
+.main-container-values {
+  box-sizing: border-box;
+  padding: 20px;
+  overflow: auto;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.relaxation-value-container {
+  box-sizing: border-box;
+  padding: 20px;
+  overflow: auto;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+}
+
+.value-table {
+  height: fit-content;
+  width: fit-content;
+}
+
+.mat-column-value {
+ padding-left: 20px;
+}
+
+.value-input {
+  width: 40px;
+}

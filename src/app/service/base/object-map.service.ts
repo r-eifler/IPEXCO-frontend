@@ -85,7 +85,7 @@ export abstract class ObjectMapService<K, T extends Identifiable> {
   }
 
   copyObject(object: T) {
-    return this.http.post<IHTTPData<T>>(this.BASE_URL + object._id, object)
+    return this.http.post<IHTTPData<T>>(this.BASE_URL + object._id, {data: object})
       .subscribe(httpData => {
         // console.log('Result Post:');
         // console.log(httpData.data);
@@ -101,7 +101,7 @@ export abstract class ObjectMapService<K, T extends Identifiable> {
 
     if (object._id) {
       // console.log('edit');
-      return this.http.put<IHTTPData<T>>(this.BASE_URL + object._id, object)
+      return this.http.put<IHTTPData<T>>(this.BASE_URL + object._id, {data: object})
         .subscribe(httpData => {
           const action = {type: EDIT, key: this.getKey(httpData.data), data: httpData.data};
           this.mapStore.dispatch(action);
@@ -109,7 +109,7 @@ export abstract class ObjectMapService<K, T extends Identifiable> {
     }
 
     // console.log('add');
-    return this.http.post<IHTTPData<T>>(this.BASE_URL, object)
+    return this.http.post<IHTTPData<T>>(this.BASE_URL, {data: object})
       .subscribe(httpData => {
         // console.log('Result Post:');
         // console.log(httpData);
@@ -122,7 +122,7 @@ export abstract class ObjectMapService<K, T extends Identifiable> {
 
     const action1 = {type: ADD, key: this.getKey(object), data: object};
     this.mapStore.dispatch(action1);
-    return this.http.post<IHTTPData<T>>(this.BASE_URL, object)
+    return this.http.post<IHTTPData<T>>(this.BASE_URL, {data: object})
       .subscribe(httpData => {
         // console.log('Result Post:');
         // console.log(httpData.data);
