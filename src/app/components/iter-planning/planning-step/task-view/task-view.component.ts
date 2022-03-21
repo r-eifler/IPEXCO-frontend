@@ -46,18 +46,19 @@ export class TaskViewComponent implements OnInit, OnDestroy {
         }
         this.timeLogger.addInfo(this.loggerId, 'runId: ' + run._id);
 
-        this.planValue = run.planValue;
+        this.planValue = run.planValue();
         this.hasPlan = !!run.plan;
 
-        for (const propName of run.hardGoals) {
-          this.enforcedSatPlanProperties.push(planProperties.get(propName));
-        }
+        // TODO
+        // for (const propName of run.hardGoals) {
+        //   this.enforcedSatPlanProperties.push(planProperties.get(propName));
+        // }
         this.enforcedSatPlanProperties.sort((a, b) => a.globalHardGoal ? -1 : 0);
 
         if (this.hasPlan) {
-          for (const propName of run.satPlanProperties) {
-            if (!this.enforcedSatPlanProperties.find(p => p.name === propName)) {
-              this.addSatPlanProperties.push(planProperties.get(propName));
+          for (const satP of run.satPlanProperties) {
+            if (!this.enforcedSatPlanProperties.find(p => p.name === satP.name)) {
+              this.addSatPlanProperties.push(satP);
             }
           }
           for (const prop of planProperties.values()) {

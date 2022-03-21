@@ -24,15 +24,16 @@ export class QuestionStepComponent implements OnInit, OnDestroy {
     private runService: IterationStepsService,
     currentRunService: SelectedPlanRunService) {
 
-    this.route.paramMap.pipe(
-      switchMap((params: ParamMap) =>
-        this.runService.getObject(params.get('runid'))
-      )
-    )
-    .pipe(takeUntil(this.ngUnsubscribe))
-    .subscribe(value => {
-      currentRunService.saveObject(value);
-    });
+      // TODO
+    // this.route.paramMap.pipe(
+    //   switchMap((params: ParamMap) =>
+    //     this.runService.getObject(params.get('runid'))
+    //   )
+    // )
+    // .pipe(takeUntil(this.ngUnsubscribe))
+    // .subscribe(value => {
+    //   currentRunService.saveObject(value);
+    // });
   }
 
   ngOnInit(): void {

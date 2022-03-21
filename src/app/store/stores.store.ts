@@ -1,3 +1,4 @@
+import { IterationStep } from './../interface/run';
 import {MapStore} from './generic-map.store';
 import {ExecutionSettings} from '../interface/settings/execution-settings';
 import {ViewSettings} from '../interface/settings/view-settings';
@@ -6,7 +7,7 @@ import {DomainSpecificationFile, PDDLFile} from '../interface/files/files';
 import {ItemStore} from './generic-item.store';
 import {PlanProperty} from '../interface/plan-property/plan-property';
 import {Project} from '../interface/project';
-import {ExplanationRun, PlanRun} from '../interface/run';
+import {DepExplanationRun, PlanRun} from '../interface/run';
 import {TaskSchema} from '../interface/task-schema';
 import {DomainSpecification} from '../interface/files/domain-specification';
 import {Demo} from '../interface/demo';
@@ -35,9 +36,11 @@ export class PlanPropertyMapStore extends  MapStore<string, PlanProperty> {}
 
 
 // PlanRun and ExpRun
+export class CurrentIterationStepStore extends  ItemStore<IterationStep> {}
+export class IterationStepsStore extends  ListStore<IterationStep> {}
 export class RunsStore extends  ListStore<PlanRun> {}
 export class CurrentRunStore extends  ItemStore<PlanRun> {}
-export class CurrentQuestionStore extends  ItemStore<ExplanationRun> {}
+export class CurrentQuestionStore extends  ItemStore<DepExplanationRun> {}
 
 // Additional Task Info
 export class TaskSchemaStore extends  ItemStore<TaskSchema> {}

@@ -1,3 +1,4 @@
+import { IterationStep, StepStatus } from './run';
 import {DomainSpecificationFile, PDDLFile} from './files/files';
 import { PlanningTask } from './plannig-task';
 import { ExecutionSettings } from './settings/execution-settings';
@@ -12,7 +13,6 @@ export interface Project {
   domainSpecification?: DomainSpecificationFile;
   description?: string;
   baseTask?: PlanningTask;
-  properties?: string[];
   settings?: ExecutionSettings;
   animationSettings?: string;
   animationImage?: string;

@@ -1,3 +1,4 @@
+import { PlanningTask } from 'src/app/interface/plannig-task';
 import { Fact } from "./plannig-task"
 
 export interface TaskUpdate {
@@ -39,4 +40,12 @@ export class PlanningTaskRelaxationSpace {
     }
     return space;
   }
+}
+
+export interface ModifiedPlanningTask{
+  _id?: string;
+  name: string;
+  project: string,
+  basetask: PlanningTask;
+  taskUpdatList: TaskUpdates[];
 }

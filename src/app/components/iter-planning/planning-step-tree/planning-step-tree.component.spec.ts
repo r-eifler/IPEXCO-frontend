@@ -1,20 +1,20 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import {RunTreeComponent} from './run-tree.component';
+import {PlanningStepTreeComponent} from './planning-step-tree.component';
 
-describe('RunTreeComponent', () => {
-  let component: RunTreeComponent;
-  let fixture: ComponentFixture<RunTreeComponent>;
+describe('PlanningStepTreeComponent', () => {
+  let component: PlanningStepTreeComponent;
+  let fixture: ComponentFixture<PlanningStepTreeComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ RunTreeComponent ]
+      declarations: [ PlanningStepTreeComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(RunTreeComponent);
+    fixture = TestBed.createComponent(PlanningStepTreeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,8 +1,10 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {RunsStore} from '../../store/stores.store';
+import {IterationStepsStore, RunsStore} from '../../store/stores.store';
 import {PlanPropertyMapService} from '../plan-properties/plan-property-services';
 import {IterationStepsService} from './iteration-steps.service';
+import { CurrentProjectService } from '../project/project-services';
+import { SelectedIterationStepService } from './selected-iteration-step.service';
 
 interface QueryParam {
   param: string;
@@ -16,9 +18,11 @@ export class DemoRunService extends IterationStepsService {
 
     constructor(
         http: HttpClient,
-        store: RunsStore,
+        store: IterationStepsStore,
+        workingIterationStepService: SelectedIterationStepService,
+        selectedProjectService: CurrentProjectService,
         planPropertyMapService: PlanPropertyMapService) {
-        super(http, store, planPropertyMapService);
+        super(http, store, workingIterationStepService, selectedProjectService, planPropertyMapService);
     }
 
     findCollection(queryParams: QueryParam[] = []) {

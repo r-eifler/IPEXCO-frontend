@@ -1,5 +1,5 @@
 import {USUser} from './user-study-user';
-import {ExplanationRun, PlanRun} from '../run';
+import {DepExplanationRun, PlanRun} from '../run';
 
 export enum UserStudyStepType {
   description = 'description',
@@ -36,7 +36,7 @@ export class UserStudy {
 
 export interface UserStudyDemoData {
   planRuns: { timeStamp: Date , run: PlanRun}[];
-  expRuns: { timeStamp: Date , run: ExplanationRun }[];
+  expRuns: { timeStamp: Date , run: DepExplanationRun }[];
 }
 
 export interface UserStudyData {

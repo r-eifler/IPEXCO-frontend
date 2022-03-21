@@ -5,7 +5,7 @@ import {Component, EventEmitter, Inject, OnDestroy, OnInit, Output, ViewChild} f
 import {Observable, Subject} from 'rxjs';
 import {Project} from '../../../../interface/project';
 import {PlannerService} from '../../../../service/planner-runs/planner.service';
-import {ExplanationRun, PlanRun, RunType} from '../../../../interface/run';
+import {DepExplanationRun, PlanRun} from '../../../../interface/run';
 import {PlanPropertyMapService} from 'src/app/service/plan-properties/plan-property-services';
 import {CurrentProjectService} from 'src/app/service/project/project-services';
 import {MatSelectionList} from '@angular/material/list/selection-list';
@@ -68,15 +68,15 @@ export class QuestionCreatorComponent implements OnInit, OnDestroy {
         this.timeLogger.addInfo(this.loggerId, 'runId: ' + run._id);
 
         this.currentRun = run;
-        this.hardGoals = run.hardGoals;
+        this.hardGoals = []; // TODO run.hardGoals;
 
         this.propertiesService.getMap()
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe(properties => {
           this.allPlanProperties = [...properties.values()].filter(p => p.isUsed);
           if (this.solved) {
-            this.notSatPlanProperties = this.allPlanProperties.filter(
-              p => !this.currentRun.satPlanProperties.includes(p.name) && !this.currentRun.hardGoals.includes(p.name));
+            this.notSatPlanProperties = []; // TODO this.allPlanProperties.filter(
+              // p => !this.currentRun.satPlanProperties.includes(p.name) && !this.currentRun.hardGoals.includes(p.name));
           } else {
             this.globalHardGoals = this.allPlanProperties.filter(p => p.isUsed && p.globalHardGoal);
           }
@@ -107,16 +107,13 @@ export class QuestionCreatorComponent implements OnInit, OnDestroy {
 
   // create a new explanation run with the currently selected properties
   async compute_dependencies() {
-    const expRun: ExplanationRun = {
-      _id: this.currentRun.explanationRuns.length.toString(),
-      name: 'Question ' + (this.currentRun.explanationRuns.length + 1),
+    const expRun: DepExplanationRun = {
+      _id: "0000", // this.currentRun.explanationRuns.length.toString(),
+      name: 'Question ?? ', // TODO + (this.currentRun.explanationRuns.length + 1),
       status: null,
-      type: RunType.mugs,
-      planProperties: this.allPlanProperties,
       softGoals: this.allPlanProperties
-        .filter(p => ! this.question.includes(p))
-        .map(value => (value.name)),
-      hardGoals: this.question.map(value => (value.name)),
+        .filter(p => ! this.question.includes(p)),
+      hardGoals: this.question,
       result: null,
       log: null,
     };
@@ -129,14 +126,13 @@ export class QuestionCreatorComponent implements OnInit, OnDestroy {
 
   async compute_dependencies_unsolvable() {
     const globalHardGoalNames = this.globalHardGoals.map(p => p.name);
-    const expRun: ExplanationRun = {
-      _id: this.currentRun.explanationRuns.length.toString(),
-      name: 'Question ' + (this.currentRun.explanationRuns.length + 1),
+    const expRun: DepExplanationRun = {
+      _id: "0000", // TODO this.currentRun.explanationRuns.length.toString(),
+      name: 'Question ?', // TODO + (this.currentRun.explanationRuns.length + 1),
       status: null,
-      type: RunType.mugs,
-      planProperties: this.allPlanProperties.filter(p => this.hardGoals.find( hg => hg === p.name)),
-      softGoals: this.hardGoals.filter(hg => ! globalHardGoalNames.find( ghg => hg === ghg)),
-      hardGoals: globalHardGoalNames,
+      //planProperties: this.allPlanProperties.filter(p => this.hardGoals.find( hg => hg === p.name)),
+      softGoals: [], //this.hardGoals.filter(hg => ! globalHardGoalNames.find( ghg => hg === ghg)),
+      hardGoals: [], //globalHardGoalNames,
       result: null,
       log: null,
     };

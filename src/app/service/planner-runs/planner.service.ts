@@ -1,7 +1,7 @@
 import {ADD, EDIT} from '../../store/generic-list.store';
 import {EventEmitter, Injectable} from '@angular/core';
 import {ObjectCollectionService} from '../base/object-collection.service';
-import {ExplanationRun, PlanRun} from '../../interface/run';
+import {DepExplanationRun, PlanRun} from '../../interface/run';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {RunsStore} from '../../store/stores.store';
 import {environment} from '../../../environments/environment';
@@ -48,7 +48,7 @@ export class PlannerService extends ObjectCollectionService<PlanRun> {
       });
   }
 
-  execute_mugs_run(planRun: PlanRun, expRun: ExplanationRun): void {
+  execute_mugs_run(planRun: PlanRun, expRun: DepExplanationRun): void {
     this.plannerBusy.next(true);
 
     const url = this.myBaseURL + 'mugs/' + planRun._id;

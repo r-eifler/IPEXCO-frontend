@@ -3,7 +3,7 @@ import {PlanPropertyMapStore} from '../../../../store/stores.store';
 import {PlanProperty} from 'src/app/interface/plan-property/plan-property';
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {combineLatest, Observable, Subject} from 'rxjs';
-import {ExplanationRun, PlanRun} from 'src/app/interface/run';
+import {DepExplanationRun, PlanRun} from 'src/app/interface/run';
 import {CurrentQuestionStore, CurrentRunStore} from 'src/app/store/stores.store';
 
 @Component({
@@ -17,7 +17,7 @@ export class QuestionViewComponent implements OnInit, OnDestroy {
 
   public solvable: boolean;
   currentRun$: Observable<PlanRun>;
-  currentQuestion$: Observable<ExplanationRun>;
+  currentQuestion$: Observable<DepExplanationRun>;
   planProperties$: Observable<Map<string, PlanProperty>>;
 
   currentHardGoals: string[] = [];
@@ -43,8 +43,8 @@ export class QuestionViewComponent implements OnInit, OnDestroy {
       if (run && question && planProperties.size > 0) {
         this.solvable = !! run.plan;
         if (this.solvable){
-          this.currentHardGoals = run.hardGoals;
-          const questionElements = this.arrayMinus(question.hardGoals, this.currentHardGoals.map(value => (value)));
+          this.currentHardGoals = [] // TODO run.hardGoals;
+          const questionElements = [] // TODO this.arrayMinus(question.hardGoals, this.currentHardGoals.map(value => (value)));
           this.question = questionElements.map(elem => planProperties.get(elem));
         }
       }

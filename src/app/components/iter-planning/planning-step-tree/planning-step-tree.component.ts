@@ -1,7 +1,7 @@
 import {takeUntil} from 'rxjs/operators';
 import {RunStatus} from '../../../interface/run';
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ExplanationRun, PlanRun, RunType} from 'src/app/interface/run';
+import {DepExplanationRun, PlanRun} from 'src/app/interface/run';
 import {Observable, Subject} from 'rxjs';
 import {NestedTreeControl} from '@angular/cdk/tree';
 import {MatTreeNestedDataSource} from '@angular/material/tree';
@@ -14,20 +14,19 @@ import {PlannerService} from '../../../service/planner-runs/planner.service';
 
 
 interface RunNode {
-  _id: string;
+  _id?: string;
   name: string;
   explanationRuns?: RunNode[];
-  type: RunType;
   planRun?: string;
   status: RunStatus;
 }
 
 @Component({
-  selector: 'app-run-tree',
-  templateUrl: './run-tree.component.html',
-  styleUrls: ['./run-tree.component.scss']
+  selector: 'app-planning-step-tree',
+  templateUrl: './planning-step-tree.component.html',
+  styleUrls: ['./planning-step-tree.component.scss']
 })
-export class RunTreeComponent implements OnInit, OnDestroy {
+export class PlanningStepTreeComponent implements OnInit, OnDestroy {
 
   private ngUnsubscribe: Subject<any> = new Subject();
   expanded = true;
@@ -37,21 +36,20 @@ export class RunTreeComponent implements OnInit, OnDestroy {
   runs$: Observable<PlanRun[]>;
 
   selectedPlan: PlanRun;
-  selectedQuestion: ExplanationRun;
+  selectedQuestion: DepExplanationRun;
 
   treeControl = new NestedTreeControl<RunNode>(node => node.explanationRuns);
   dataSource = new MatTreeNestedDataSource<RunNode>();
 
   constructor(
-    private route: ActivatedRoute,
-    private router: Router,
     private currentProjectStore: CurrentProjectStore,
     private runService: IterationStepsService,
     private selectedPlanRunService: SelectedPlanRunService,
     private selectedQuestionService: SelectedQuestionService,
     public plannerService: PlannerService,
   ) {
-    this.runs$ = this.runService.getList();
+    // TODO
+    // this.runs$ = this.runService.getList();
 
     this.runs$
       .pipe(takeUntil(this.ngUnsubscribe))
@@ -68,7 +66,8 @@ export class RunTreeComponent implements OnInit, OnDestroy {
         run => {
           this.selectedPlan = run;
           if (run) {
-            this.treeControl.expand(run);
+            // TODO
+            // this.treeControl.expand(run);
           }
         });
 
@@ -86,18 +85,20 @@ export class RunTreeComponent implements OnInit, OnDestroy {
   }
 
   hasChild = (_: number, node: RunNode) => !!node.explanationRuns && node.explanationRuns.length > 0;
-  isPlanRun = (_: number, node: RunNode) => node.type === RunType.plan;
-  isExpRun = (_: number, node: RunNode) => node.type === RunType.mugs;
+  isPlanRun = (_: number, node: RunNode) => true; // TODO node.type === RunType.plan;
+  isExpRun = (_: number, node: RunNode) => true; // TODO node.type === RunType.mugs;
 
 
   async delete(run: PlanRun) {
-    this.runService.deleteObject(run);
+    // TODO
+    // this.runService.deleteObject(run);
     this.selectedPlanRunService.saveObject(null);
     this.selectedQuestionService.saveObject(null);
   }
 
-  deleteExpRun(run: ExplanationRun) {
-    this.runService.deleteExpRun(run);
+  deleteExpRun(run: DepExplanationRun) {
+    // TODO
+    // this.runService.deleteExpRun(run);
     this.selectedQuestionService.saveObject(null);
   }
 
@@ -106,14 +107,15 @@ export class RunTreeComponent implements OnInit, OnDestroy {
     this.selectedQuestionService.saveObject(null);
   }
 
-  selectQuestion(planRunId: string, question: ExplanationRun): void {
-    this.runService.getObject(planRunId)
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe(
-        run => {
-          this.selectedPlanRunService.saveObject(run);
-        });
-    this.selectedQuestionService.saveObject(question);
+  selectQuestion(planRunId: string, question: DepExplanationRun): void {
+    // TODO
+    // this.runService.getObject(planRunId)
+    //   .pipe(takeUntil(this.ngUnsubscribe))
+    //   .subscribe(
+    //     run => {
+    //       this.selectedPlanRunService.saveObject(run);
+    //     });
+    // this.selectedQuestionService.saveObject(question);
   }
 
   toggleExpand() {

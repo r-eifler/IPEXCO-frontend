@@ -1,8 +1,9 @@
+import { RunStatus } from 'src/app/interface/run';
 import {CurrentProjectService} from '../../../../service/project/project-services';
 import {PlanProperty} from '../../../../interface/plan-property/plan-property';
 import {Component, EventEmitter, Inject, OnDestroy, OnInit, Output} from '@angular/core';
 import {Project} from '../../../../interface/project';
-import {PlanRun, RunType} from '../../../../interface/run';
+import {PlanRun} from '../../../../interface/run';
 import {PlannerService} from '../../../../service/planner-runs/planner.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {PlanPropertyMapService} from 'src/app/service/plan-properties/plan-property-services';
@@ -45,7 +46,8 @@ export class TaskCreatorComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     @Inject(PLANNER_REDIRECT) private redirectURL: string) {
 
-    this.previousRun = this.runService.getLastRun();
+    //TODO
+    // this.previousRun = this.runService.getLastRun();
 
     this.propertiesService.getMap()
     .pipe(takeUntil(this.ngUnsubscribe))
@@ -56,13 +58,14 @@ export class TaskCreatorComponent implements OnInit, OnDestroy {
         this.hasGlobalHardGoals = this.planProperties.filter(v => v.globalHardGoal).length > 0;
         this.completed = this.hasGlobalHardGoals;
 
-        if (this.previousRun) {
-          this.selectedGoalFacts = propsList.filter(
-            (p: PlanProperty) => {
-              return p.isUsed && ! p.globalHardGoal && this.previousRun.hardGoals.find(v => v === p.name);
-            });
-          this.checkComplete();
-        }
+        // TODO
+        // if (this.previousRun) {
+        //   this.selectedGoalFacts = propsList.filter(
+        //     (p: PlanProperty) => {
+        //       return p.isUsed && ! p.globalHardGoal && this.previousRun.hardGoals.find(v => v === p.name);
+        //     });
+        //   this.checkComplete();
+        // }
      });
 
     this.currentProjectService.getSelectedObject()
@@ -92,18 +95,9 @@ export class TaskCreatorComponent implements OnInit, OnDestroy {
 
   async computePlan() {
 
-    const run: PlanRun = {
-      _id: this.runService.getNumRuns().toString(),
-      name: 'Plan ' + (this.runService.getNumRuns() + 1),
-      type: RunType.plan,
-      status: null,
-      project: this.project,
-      planProperties: this.selectedGoalFacts.concat(this.planProperties.filter(v => v.globalHardGoal)),
-      hardGoals: this.selectedGoalFacts.concat(this.planProperties.filter(v => v.globalHardGoal)).map(value => (value.name) ),
-      log: null,
-      explanationRuns: [],
-      previousRun: this.previousRun ? this.previousRun._id : null,
-    };
+    // TODO
+    const run: PlanRun = new PlanRun('Plan ' + (this.runService.getNumRuns() + 1), RunStatus.pending);
+    run._id = this.runService.getNumRuns().toString();
 
     this.plannerService.execute_plan_run(run);
     this.finished.emit(true);

@@ -1,57 +1,57 @@
+import { IterationStep } from './../../interface/run';
 import { CurrentProjectService } from 'src/app/service/project/project-services';
 import {Injectable} from '@angular/core';
 import {SelectedObjectService} from '../base/selected-object.service';
-import {PlanRun} from '../../interface/run';
-import {CurrentRunStore} from '../../store/stores.store';
+import {CurrentIterationStepStore, CurrentRunStore} from '../../store/stores.store';
 import {PddlFileUtilsService} from '../files/pddl-file-utils.service';
 import {PlanPropertyMapService} from '../plan-properties/plan-property-services';
 import {combineLatest} from 'rxjs/internal/observable/combineLatest';
 import {LOAD} from '../../store/generic-list.store';
+import {handlePlanString} from './utils';
 
 @Injectable({
     providedIn: 'root'
 })
-export class SelectedPlanRunService extends SelectedObjectService<PlanRun> {
+export class SelectedIterationStepService extends SelectedObjectService<IterationStep> {
 
     constructor(
-        store: CurrentRunStore,
+        store: CurrentIterationStepStore,
         private fileUtilsService: PddlFileUtilsService,
         private currentProjectService: CurrentProjectService,
         private planPropertyMapService: PlanPropertyMapService) {
         super(store);
     }
 
-    //TODO
-    // saveObject(planRun: PlanRun) {
-    //   if (planRun === null || planRun === undefined) {
-    //     this.selectedObjectStore.dispatch({type: LOAD, data: planRun});
+    // saveObject(iterStep: IterationStep) {
+    //   if (iterStep === null || iterStep === undefined) {
+    //     this.selectedObjectStore.dispatch({type: LOAD, data: iterStep});
     //     return;
     //   }
-    //   if (planRun.planString && !planRun.plan) {
+    //   if (iterStep.planString && !iterStep.plan) {
     //       combineLatest([this.currentProjectService.findSelectedObject(), this.planPropertyMapService.getMap()]).subscribe(
     //           ([project, planProperties]) => {
     //               if (project && planProperties) {
-    //                   planRun.planValue = computePlanValue(planRun, planProperties);
-    //                   handlePlanString(planRun.planString, planRun, project.baseTask);
-    //                   this.selectedObjectStore.dispatch({type: LOAD, data: planRun});
+    //                   iterStep.planValue = computePlanValue(iterStep, planProperties);
+    //                   handlePlanString(iterStep.planString, iterStep, project.baseTask);
+    //                   this.selectedObjectStore.dispatch({type: LOAD, data: iterStep});
     //               }
     //           });
 
 
-    //   } else if (planRun.planPath && !planRun.plan) {
-    //       const planContent$ = this.fileUtilsService.getFileContent(planRun.planPath);
+    //   } else if (iterStep.planPath && !iterStep.plan) {
+    //       const planContent$ = this.fileUtilsService.getFileContent(iterStep.planPath);
     //       // console.log('Loade Plan');
     //       combineLatest([this.currentProjectService.findSelectedObject(), planContent$, this.planPropertyMapService.getMap()]).subscribe(
     //           ([project, content, planProperties]) => {
     //               // console.log(content);
     //               if (content && planProperties) {
-    //                   planRun.planValue = computePlanValue(planRun, planProperties);
-    //                   handlePlanString(content, planRun, project.baseTask);
-    //                   this.selectedObjectStore.dispatch({type: LOAD, data: planRun});
+    //                   iterStep.planValue = computePlanValue(iterStep, planProperties);
+    //                   handlePlanString(content, iterStep, project.baseTask);
+    //                   this.selectedObjectStore.dispatch({type: LOAD, data: iterStep});
     //               }
     //           });
     //   } else {
-    //       this.selectedObjectStore.dispatch({type: LOAD, data: planRun});
+    //       this.selectedObjectStore.dispatch({type: LOAD, data: iterStep});
     //   }
     // }
 }

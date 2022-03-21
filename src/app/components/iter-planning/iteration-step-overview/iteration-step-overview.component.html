@@ -1,0 +1,15 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>
+      {{(step$ | async)?.name}}
+    </mat-card-title>
+    <mat-card-content>
+      <ng-container *ngFor="let pp of (step$ | async)?.hardGoals">
+        <app-scalable-list >
+          <span> {{pp.naturalLanguageDescription}} </span>
+          <span> Utility: {{pp.value}} </span>
+        </app-scalable-list>
+      </ng-container>
+    </mat-card-content>
+  </mat-card-header>
+</mat-card>

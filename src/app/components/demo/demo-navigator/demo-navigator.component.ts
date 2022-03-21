@@ -2,16 +2,15 @@ import {DemoFinishedComponent} from './../demo-finished/demo-finished.component'
 import {AfterViewInit, Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
 import {Demo} from 'src/app/interface/demo';
 import {BehaviorSubject, combineLatest, Subject} from 'rxjs';
-import {PlanRun, RunStatus, RunType} from 'src/app/interface/run';
+import {PlanRun, RunStatus} from 'src/app/interface/run';
 import {ActivatedRoute, Router} from '@angular/router';
 import {DemosService, RunningDemoService} from 'src/app/service/demo/demo-services';
 import {CurrentProjectService} from 'src/app/service/project/project-services';
 import {PlanPropertyMapService} from 'src/app/service/plan-properties/plan-property-services';
 import {IterationStepsService} from 'src/app/service/planner-runs/iteration-steps.service';
 import {DomainSpecificationService} from 'src/app/service/files/domain-specification.service';
-import {take, takeUntil, takeWhile} from 'rxjs/operators';
+import {takeUntil, takeWhile} from 'rxjs/operators';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
-import {ExecutionSettings} from '../../../interface/settings/execution-settings';
 import {PlannerService} from '../../../service/planner-runs/planner.service';
 import {SelectedPlanRunService} from '../../../service/planner-runs/selected-planrun.service';
 import {TimeLoggerService} from '../../../service/logger/time-logger.service';
@@ -103,7 +102,8 @@ export class DemoNavigatorComponent implements OnInit, AfterViewInit, OnDestroy 
         }
       );
 
-    this.runs$ = this.runsService.getList();
+    // TODO
+    // this.runs$ = this.runsService.getList();
 
     this.propertiesService.getMap()
       .pipe(takeUntil(this.ngUnsubscribe))
@@ -225,18 +225,16 @@ export class DemoNavigatorComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   async initPlanRuns() {
-    const run: PlanRun = {
-      _id: this.runsService.getNumRuns().toString(),
-      name: 'Plan ' + (this.runsService.getNumRuns() + 1),
-      type: RunType.plan,
-      status: null,
-      project: this.demo,
-      planProperties: this.globalHardGoals,
-      hardGoals: this.globalHardGoals.map(value => (value.name)),
-      log: null,
-      explanationRuns: [],
-      previousRun: null,
-    };
+    const run: PlanRun = new PlanRun('Plan ' + (this.runsService.getNumRuns() + 1), RunStatus.pending);
+    run._id= this.runsService.getNumRuns().toString();
+    //   name: 'Plan ' + (this.runsService.getNumRuns() + 1),
+    //   status: null,
+    //   planProperties: this.globalHardGoals,
+    //   hardGoals: this.globalHardGoals.map(value => (value.name)),
+    //   log: null,
+    //   explanationRuns: [],
+    //   previousRun: null,
+    // };
 
     // console.log(run);
 
@@ -281,37 +279,38 @@ export class DemoNavigatorComponent implements OnInit, AfterViewInit, OnDestroy 
         .pipe(takeWhile(v => v, true))
         .subscribe(
           busy => {
-            if (!busy) {
-              this.computedPlans++;
-              const newRun: PlanRun = this.runsService.getLastRun();
-              this.selectPlan(newRun);
-              const cSettings = this.demo.settings;
+            // TODO
+            // if (!busy) {
+            //   this.computedPlans++;
+            //   const newRun: PlanRun = this.runsService.getLastRun();
+            //   this.selectPlan(newRun);
+            //   const cSettings = this.demo.settings;
 
-              if (cSettings.introTask && cSettings.allowQuestions && this.computedPlans === 2 && this.askedQuestions === 0) {
-                this.snackBar.open('Great you computed your first plan. How about asking a question to improve the plan?', 'Got it');
-              }
+            //   if (cSettings.introTask && cSettings.allowQuestions && this.computedPlans === 2 && this.askedQuestions === 0) {
+            //     this.snackBar.open('Great you computed your first plan. How about asking a question to improve the plan?', 'Got it');
+            //   }
 
-              if (newRun.planValue) {
-                this.maxAchievedUtility = Math.max(this.maxAchievedUtility, newRun.planValue);
-                if (cSettings.checkMaxUtility) {
-                  if (this.maxAchievedUtility > 0 && this.maxUtility > 0) {
-                    this.progressValue = this.maxAchievedUtility / this.maxUtility;
-                    let stepFraction = 0;
-                    for (let i = 0; i < cSettings.paymentInfo.steps.length; i++) {
-                      if (cSettings.paymentInfo.steps[i] <= this.progressValue &&
-                        (i + 1 === cSettings.paymentInfo.steps.length || cSettings.paymentInfo.steps[i + 1] > this.progressValue)) {
-                        stepFraction = cSettings.paymentInfo.steps[i];
-                      }
-                    }
-                    this.payment = cSettings.paymentInfo.min +
-                      stepFraction * (cSettings.paymentInfo.max - cSettings.paymentInfo.min);
-                  }
-                }
-              }
-              if (cSettings.checkMaxUtility && newRun.planValue === this.demo.maxUtility?.value) {
-                this.finishDemo();
-              }
-            }
+            //   if (newRun.planValue) {
+            //     this.maxAchievedUtility = Math.max(this.maxAchievedUtility, newRun.planValue());
+            //     if (cSettings.checkMaxUtility) {
+            //       if (this.maxAchievedUtility > 0 && this.maxUtility > 0) {
+            //         this.progressValue = this.maxAchievedUtility / this.maxUtility;
+            //         let stepFraction = 0;
+            //         for (let i = 0; i < cSettings.paymentInfo.steps.length; i++) {
+            //           if (cSettings.paymentInfo.steps[i] <= this.progressValue &&
+            //             (i + 1 === cSettings.paymentInfo.steps.length || cSettings.paymentInfo.steps[i + 1] > this.progressValue)) {
+            //             stepFraction = cSettings.paymentInfo.steps[i];
+            //           }
+            //         }
+            //         this.payment = cSettings.paymentInfo.min +
+            //           stepFraction * (cSettings.paymentInfo.max - cSettings.paymentInfo.min);
+            //       }
+            //     }
+            //   }
+            //   if (cSettings.checkMaxUtility && newRun.planValue() === this.demo.maxUtility?.value) {
+            //     this.finishDemo();
+            //   }
+            // }
           }
         );
     }

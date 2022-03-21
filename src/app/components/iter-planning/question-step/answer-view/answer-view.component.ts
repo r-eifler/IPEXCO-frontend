@@ -3,7 +3,7 @@ import {takeUntil} from 'rxjs/operators';
 import {PlanPropertyMapService} from 'src/app/service/plan-properties/plan-property-services';
 import {combineLatest, Observable, Subject} from 'rxjs';
 import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
-import {ExplanationRun, PlanRun} from 'src/app/interface/run';
+import {DepExplanationRun, PlanRun} from 'src/app/interface/run';
 import {SelectedPlanRunService} from '../../../../service/planner-runs/selected-planrun.service';
 import {SelectedQuestionService} from '../../../../service/planner-runs/selected-question.service';
 import {TimeLoggerService} from '../../../../service/logger/time-logger.service';
@@ -25,7 +25,7 @@ export class AnswerViewComponent implements OnInit, OnDestroy {
   @Output() finished = new EventEmitter();
 
   currentRun$: Observable<PlanRun>;
-  currentQuestion$: Observable<ExplanationRun>;
+  currentQuestion$: Observable<DepExplanationRun>;
 
   public solvable: boolean;
   planForQuestionExists = true;
@@ -69,45 +69,48 @@ export class AnswerViewComponent implements OnInit, OnDestroy {
     );
   }
 
-  private filterMUGSolvable(planRun: PlanRun, expRun: ExplanationRun, planProperties: Map<string, PlanProperty>) {
+  private filterMUGSolvable(planRun: PlanRun, expRun: DepExplanationRun, planProperties: Map<string, PlanProperty>) {
     this.filteredMUGSs = [];
     // console.log(expRun.result);
     // console.log('MUGS:');
     // console.log(expRun.mugs);
 
-    for (const entry of expRun.mugs) {
-      const filteredMUGS: PlanProperty[] = [];
-      let containsOnlyGlobalHardGoals = true;
-      for (const fact of entry) {
-        const p = planProperties.get(fact);
-        containsOnlyGlobalHardGoals = containsOnlyGlobalHardGoals && p.globalHardGoal;
-        // only show property if it is satisfied by the corresponding plan run
-        if (planRun.satPlanProperties.find(v => v === fact) || planRun.hardGoals.find(v => v === fact)) {
-          filteredMUGS.push(p);
-        }
-      }
-      if (containsOnlyGlobalHardGoals) {
-        this.planForQuestionExists = false;
-        return;
-      }
-      if (filteredMUGS.length < entry.length) {
-        continue;
-      }
-      filteredMUGS.sort((a, b) => a.globalHardGoal ? -1 : 0);
-      this.filteredMUGSs.push(filteredMUGS);
-    }
+    // for (const entry of expRun.mugs) {
+      // TODO
+    //   const filteredMUGS: PlanProperty[] = [];
+    //   let containsOnlyGlobalHardGoals = true;
+    //   for (const fact of entry) {
+    //     const p = planProperties.get(fact);
+    //     containsOnlyGlobalHardGoals = containsOnlyGlobalHardGoals && p.globalHardGoal;
+    //     // only show property if it is satisfied by the corresponding plan run
+    //     // TODO
+    //     // if (planRun.satPlanProperties.find(v => v === fact) || planRun.hardGoals.find(v => v === fact)) {
+    //     //   filteredMUGS.push(p);
+    //     // }
+    //   }
+    //   if (containsOnlyGlobalHardGoals) {
+    //     this.planForQuestionExists = false;
+    //     return;
+    //   }
+    //   if (filteredMUGS.length < entry.length) {
+    //     continue;
+    //   }
+    //   filteredMUGS.sort((a, b) => a.globalHardGoal ? -1 : 0);
+    //   this.filteredMUGSs.push(filteredMUGS);
+    // }
     // console.log(this.filteredMUGSs);
   }
 
-  private filterMUGSUnsolvable(planRun: PlanRun, expRun: ExplanationRun, planProperties: Map<string, PlanProperty>) {
+  private filterMUGSUnsolvable(planRun: PlanRun, expRun: DepExplanationRun, planProperties: Map<string, PlanProperty>) {
     this.filteredMUGSs = [];
     // console.log('MUGS:');
     // console.log(expRun.mugs);
-    for (const entry of expRun.mugs) {
-      if (this.isSubsetEq(entry, planRun.hardGoals)) {
-        this.filteredMUGSs.push(entry.map(e => planProperties.get(e)));
-      }
-    }
+    // TODO
+    // for (const entry of expRun.mugs) {
+    //   if (this.isSubsetEq(entry, planRun.hardGoals)) {
+    //     this.filteredMUGSs.push(entry.map(e => planProperties.get(e)));
+    //   }
+    // }
   }
 
   private isSubsetEq(a1: string[], a2: string[]): boolean {

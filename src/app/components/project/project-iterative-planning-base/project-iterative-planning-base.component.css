@@ -39,6 +39,7 @@
   width: 100%;
   display: grid;
   overflow: auto;
+  grid-template-columns: 1fr 3fr 3fr
 }
 
 .two-columns {

@@ -6,26 +6,6 @@ import {TaskSchema} from '../../interface/task-schema';
 import {Plan} from '../../interface/plan';
 import {Demo} from '../../interface/demo';
 
-export function computePlanValue(planRun: PlanRun, planProperties: Map<string, PlanProperty>): number {
-  if (! planRun.planString && ! planRun.planPath) {
-    return 0;
-  }
-  let planValue = 0;
-  for (const propName of planRun.hardGoals) {
-    const prop = planProperties.get(propName);
-    if (! prop) {
-      return null;
-    }
-    planValue += prop.value;
-  }
-  for (const propName of planRun.satPlanProperties) {
-    if (! planRun.hardGoals.find(p => p === propName)) {
-      planValue += planProperties.get(propName).value;
-    }
-  }
-  return planValue;
-}
-
 export function handlePlanString(planString: string, planRun: PlanRun, task: PlanningTask) {
   const lines = planString.split('\n');
   lines.splice(-1, 1); // remove empty line at the end

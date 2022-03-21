@@ -5,7 +5,7 @@ import {HttpClient} from '@angular/common/http';
 import {RunsStore} from '../../store/stores.store';
 import {RunningDemoService} from '../demo/demo-services';
 import {PlanPropertyMapService} from '../plan-properties/plan-property-services';
-import {ExplanationRun, PlanRun} from '../../interface/run';
+import {DepExplanationRun, PlanRun} from '../../interface/run';
 import {SelectedPlanRunService} from './selected-planrun.service';
 import {SelectedQuestionService} from './selected-question.service';
 
@@ -31,7 +31,7 @@ export class UserStudyPlannerService extends DemoPlannerService {
     }
 
 
-    execute_mugs_run(planRun: PlanRun, expRun: ExplanationRun): void {
+    execute_mugs_run(planRun: PlanRun, expRun: DepExplanationRun): void {
         super.execute_mugs_run(planRun, expRun, true);
     }
 

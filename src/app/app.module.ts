@@ -1,3 +1,5 @@
+import { SelectedIterationStepService } from './service/planner-runs/selected-iteration-step.service';
+import { IterationStepsService } from 'src/app/service/planner-runs/iteration-steps.service';
 import { PlanningTaskRelaxationService } from './service/planning-task/planning-task-relaxations-services';
 import {AnimationSettingsDirective} from './components/animation/animation-settings.directive';
 import {AuthenticationService} from './service/authentication/authentication.service';
@@ -79,6 +81,7 @@ import {AnswerViewComponent} from './components/iter-planning/question-step/answ
 // Store
 import {PddlFileUtilsService} from './service/files/pddl-file-utils.service';
 import {
+  CurrentIterationStepStore,
   CurrentProjectStore,
   CurrentQuestionStore,
   CurrentRunStore,
@@ -86,7 +89,7 @@ import {
   DomainFilesStore,
   DomainSpecificationFilesStore,
   DomainSpecStore,
-  ExecutionSettingsStore, MetaStudiesStore,
+  ExecutionSettingsStore, IterationStepsStore, MetaStudiesStore,
   PlanningTaskRelaxationsStore,
   PlanPropertyMapStore,
   ProblemFilesStore,
@@ -112,7 +115,7 @@ import {DemoBaseComponent} from './components/demo/demo-base/demo-base.component
 import {DemoSettingsComponent} from './components/demo/demo-settings/demo-settings.component';
 import {ProjectOverviewComponent} from './components/project/project-overview/project-overview.component';
 import {DomainSpecificationComponent} from './components/files/domain-specification/domain-specification.component';
-import {RunTreeComponent} from './components/iter-planning/run-tree/run-tree.component';
+import {PlanningStepTreeComponent} from './components/iter-planning/planning-step-tree/planning-step-tree.component';
 import {
   IterativePlanningBaseMobileComponent
 } from './components/iter-planning/mobile/iterative-planning-base-mobile/iterative-planning-base-mobile.component';
@@ -177,6 +180,8 @@ import { PlanningTaskRelaxationsComponent } from './components/planning-task/pla
 import { ProjectSettingsComponent } from './components/project/project-settings/project-settings.component';
 import { CompleteActionComponent } from './components/planning-task/complete-action/complete-action.component';
 import { PlanningTaskRelaxationCreatorComponent } from './components/planning-task/planning-task-relaxation-creator/planning-task-relaxation-creator.component';
+import { IterationStepsListComponent } from './components/iter-planning/iteration-steps-list/iteration-steps-list.component';
+import { IterationStepOverviewComponent } from './components/iter-planning/iteration-step-overview/iteration-step-overview.component';
 
 @NgModule({
     declarations: [
@@ -208,7 +213,7 @@ import { PlanningTaskRelaxationCreatorComponent } from './components/planning-ta
         DemoSettingsComponent,
         ProjectOverviewComponent,
         DomainSpecificationComponent,
-        RunTreeComponent,
+        PlanningStepTreeComponent,
         IterativePlanningBaseMobileComponent,
         PlanViewComponent,
         NomysteryTaskViewComponent,
@@ -259,6 +264,8 @@ import { PlanningTaskRelaxationCreatorComponent } from './components/planning-ta
         ProjectSettingsComponent,
         CompleteActionComponent,
         PlanningTaskRelaxationCreatorComponent,
+        IterationStepsListComponent,
+        IterationStepOverviewComponent,
     ],
     imports: [
         RouterModule.forRoot(appRoutes, { enableTracing: false, paramsInheritanceStrategy: 'always' }),
@@ -332,6 +339,10 @@ import { PlanningTaskRelaxationCreatorComponent } from './components/planning-ta
         CurrentRunStore,
         CurrentQuestionStore,
         SelectedQuestionService,
+        IterationStepsService,
+        IterationStepsStore,
+        CurrentIterationStepStore,
+        SelectedIterationStepService,
         DomainSpecStore,
         ViewSettingsStore,
         ViewSettingsService,

@@ -47,25 +47,27 @@ export class IndividualRunUserDataComponent implements OnInit {
   }
 
   getRunTimeline() {
-    this.planRunData = [];
-    this.explanationRunData = [];
-    for (const entry of this.dataEntries) {
-      const demoData: UserStudyDemoData = entry.demosData.find(e => e.demoId === this.selectedDemoId)?.data;
-      if (! demoData) {
-        return;
-      }
-      for (const planRun of demoData.planRuns) {
-        const dataPointU = {
-          name: planRun.run.name,
-          value: this.planRunService.getPlanUtility(planRun.run)
-        };
-        this.planRunData.push(dataPointU);
-        const dataPointN = {
-          name: planRun.run.name,
-          value: planRun.run.explanationRuns.length
-        };
-        this.explanationRunData.push(dataPointN);
-      }
-    }
+    // TODO
+  //   this.planRunData = [];
+  //   this.explanationRunData = [];
+  //   for (const entry of this.dataEntries) {
+  //     const demoData: UserStudyDemoData = entry.demosData.find(e => e.demoId === this.selectedDemoId)?.data;
+  //     if (! demoData) {
+  //       return;
+  //     }
+  //     for (const planRun of demoData.planRuns) {
+  //       const dataPointU = {
+  //         name: planRun.run.name,
+  //         value: this.planRunService.getPlanUtility(planRun.run)
+  //       };
+  //       this.planRunData.push(dataPointU);
+  //       const dataPointN = {
+  //         name: planRun.run.name,
+  //         value: planRun.run.depExplanations.length
+  //       };
+  //       this.explanationRunData.push(dataPointN);
+  //     }
+  //   }
+  // }
   }
 }

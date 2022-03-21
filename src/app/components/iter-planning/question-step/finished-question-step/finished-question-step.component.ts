@@ -36,11 +36,12 @@ export class FinishedQuestionStepComponent implements OnInit, OnDestroy {
               .pipe(takeUntil(this.ngUnsubscribe))
               .subscribe(
                 planRun => {
-                  this.currentRunService.saveObject(planRun);
-                  const expRun = planRun.explanationRuns.find((value => value._id === expRunId));
-                  if (expRun) {
-                    this.currentQuestionService.saveObject(expRun);
-                  }
+                  // TODO
+                  // this.currentRunService.saveObject(planRun);
+                  // const expRun = planRun.explanationRuns.find((value => value._id === expRunId));
+                  // if (expRun) {
+                  //   this.currentQuestionService.saveObject(expRun);
+                  // }
                 }
               );
           }
