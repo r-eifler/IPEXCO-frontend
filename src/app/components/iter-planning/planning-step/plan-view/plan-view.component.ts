@@ -1,9 +1,9 @@
-import {RunStatus} from 'src/app/interface/run';
+import { SelectedIterationStepService } from './../../../../service/planner-runs/selected-iteration-step.service';
+import { RunStatus, IterationStep } from 'src/app/interface/run';
 import {takeUntil} from 'rxjs/operators';
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {BehaviorSubject, Subject} from 'rxjs';
 import {PlanRun} from '../../../../interface/run';
-import {SelectedPlanRunService} from '../../../../service/planner-runs/selected-planrun.service';
 import {TimeLoggerService} from '../../../../service/logger/time-logger.service';
 
 interface Action {
@@ -25,23 +25,24 @@ export class PlanViewComponent implements OnInit, OnDestroy {
 
   planRun: PlanRun;
   actions: string[] = [];
-  private currentRun$: BehaviorSubject<PlanRun>;
+  private step$: BehaviorSubject<IterationStep>;
 
     constructor(
       private timeLogger: TimeLoggerService,
-      private  currentRunService: SelectedPlanRunService) {
-      this.currentRun$ = this.currentRunService.getSelectedObject();
+      private  currentIterationStepService: SelectedIterationStepService) {
+
+      this.step$ = this.currentIterationStepService.getSelectedObject();
     }
 
   ngOnInit(): void {
     this.loggerId = this.timeLogger.register('plan-view');
 
-    this.currentRun$
+    this.step$
     .pipe(takeUntil(this.ngUnsubscribe))
-    .subscribe(run => {
-      if (run) {
-        this.timeLogger.addInfo(this.loggerId, 'runId: ' + run._id);
-        this.planRun = run;
+    .subscribe(step => {
+      if (step) {
+        this.timeLogger.addInfo(this.loggerId, 'stepId: ' + step._id);
+        this.planRun = step.plan;
         this.actions = [];
         if (this.planRun.plan) {
           // this.niceText();

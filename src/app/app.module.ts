@@ -5,7 +5,6 @@ import {AnimationSettingsDirective} from './components/animation/animation-setti
 import {AuthenticationService} from './service/authentication/authentication.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {DemosService, RunningDemoService} from './service/demo/demo-services';
-import {ViewSettingsService} from './service/settings/setting.service';
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 import {RouterModule} from '@angular/router';
@@ -100,7 +99,6 @@ import {
   TaskSchemaStore,
   UserStore,
   UserStudiesStore,
-  ViewSettingsStore
 } from './store/stores.store';
 import {
   DomainFilesService,
@@ -182,6 +180,8 @@ import { CompleteActionComponent } from './components/planning-task/complete-act
 import { PlanningTaskRelaxationCreatorComponent } from './components/planning-task/planning-task-relaxation-creator/planning-task-relaxation-creator.component';
 import { IterationStepsListComponent } from './components/iter-planning/iteration-steps-list/iteration-steps-list.component';
 import { IterationStepOverviewComponent } from './components/iter-planning/iteration-step-overview/iteration-step-overview.component';
+import { IterationStepDetailNavigatorComponent } from './components/iter-planning/iteration-step-detail-navigator/iteration-step-detail-navigator.component';
+import { HardGoalSelectorComponent } from './components/iter-planning/planning-step/hard-goal-selector/hard-goal-selector.component';
 
 @NgModule({
     declarations: [
@@ -266,6 +266,8 @@ import { IterationStepOverviewComponent } from './components/iter-planning/itera
         PlanningTaskRelaxationCreatorComponent,
         IterationStepsListComponent,
         IterationStepOverviewComponent,
+        IterationStepDetailNavigatorComponent,
+        HardGoalSelectorComponent
     ],
     imports: [
         RouterModule.forRoot(appRoutes, { enableTracing: false, paramsInheritanceStrategy: 'always' }),
@@ -344,8 +346,6 @@ import { IterationStepOverviewComponent } from './components/iter-planning/itera
         CurrentIterationStepStore,
         SelectedIterationStepService,
         DomainSpecStore,
-        ViewSettingsStore,
-        ViewSettingsService,
         DemosStore,
         DemosService,
         RunningDemoStore,

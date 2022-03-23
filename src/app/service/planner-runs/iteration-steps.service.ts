@@ -2,8 +2,8 @@ import { ModifiedPlanningTask } from './../../interface/planning-task-relaxation
 import { SelectedIterationStepService } from './selected-iteration-step.service';
 import { CurrentProjectService } from 'src/app/service/project/project-services';
 import { IterationStepsStore, CurrentIterationStepStore } from './../../store/stores.store';
-import { IterationStep, StepStatus } from './../../interface/run';
-import {EDIT, LOAD, REMOVE} from '../../store/generic-list.store';
+import { IterationStep, StepStatus, ModIterationStep } from './../../interface/run';
+import {ADD, EDIT, LOAD, REMOVE} from '../../store/generic-list.store';
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {RunsStore} from '../../store/stores.store';
@@ -37,6 +37,28 @@ export class IterationStepsService extends ObjectCollectionService<IterationStep
 
     }
 
+    saveObject(step: IterationStep) {
+
+      if (step._id) {
+        console.log('edit');
+        return this.http.put<IHTTPData<IterationStep>>(this.BASE_URL + step._id, {data: step})
+          .subscribe(httpData => {
+            let rStep = IterationStep.fromObject(httpData.data)
+            this.workingIterationStepService.saveObject(rStep);
+            const action = {type: EDIT, data: rStep};
+            this.listStore.dispatch(action);
+          });
+      }
+
+      return this.http.post<IHTTPData<IterationStep>>(this.BASE_URL, {data: step})
+        .subscribe(httpData => {
+          let rStep = IterationStep.fromObject(httpData.data)
+          this.workingIterationStepService.saveObject(rStep);
+          const action = {type: ADD, data: rStep};
+          this.listStore.dispatch(action);
+        });
+    }
+
     findCollection(queryParams: QueryParam[] = []) {
       // console.log('find: ' + this.BASE_URL);
       let httpParams = new HttpParams();
@@ -48,24 +70,32 @@ export class IterationStepsService extends ObjectCollectionService<IterationStep
         .pipe(this.pipeFindData, this.pipeFind)
         .subscribe((res) => {
           // console.log('find: ' + this.BASE_URL);
-          // console.log(res);
-          if(res.length == 0){
+          let steps = res.map(s => IterationStep.fromObject(s));
+          console.log(steps);
+          if(steps.length == 0){
             let obs = combineLatest(this.selectedProjectService.findSelectedObject(), this.planPropertiesService.getMap())
             .subscribe(
               ([project, planPropertiesMap]) => {
-                let modTask: ModifiedPlanningTask = {name: 'init', project: project._id, basetask: project.baseTask, taskUpdatList: []};
-                let initial_step = new IterationStep('Initial Step', project._id,
-                StepStatus.unknown, Array.from(planPropertiesMap.values()).filter(pp => pp.globalHardGoal),
-                Array.from(planPropertiesMap.values()).filter(pp => ! pp.globalHardGoal), modTask)
-                this.workingIterationStepService.saveObject(initial_step);
+                if (project && planPropertiesMap.size > 0){
+                  let modTask: ModifiedPlanningTask = {name: 'init', project: project._id, basetask: project.baseTask, taskUpdatList: []};
+                  let initial_step = new IterationStep('Initial Step', project._id,
+                  StepStatus.unknown, Array.from(planPropertiesMap.values()).filter(pp => pp.globalHardGoal),
+                  Array.from(planPropertiesMap.values()).filter(pp => ! pp.globalHardGoal), modTask, null)
+
+                  let initalModStep = new ModIterationStep('Initial Step', initial_step);
+                  // console.log(initial_step);
+                  // this.saveObject(initial_step);
+                  this.workingIterationStepService.saveObject(initalModStep);
+                  // obs.unsubscribe(); TODO
+                }
               }
             );
           }
           else{
-            this.workingIterationStepService.saveObject(res[res.length-1])
+            this.workingIterationStepService.saveObject(steps[steps.length-1])
           }
 
-          this.listStore.dispatch({type: LOAD, data: res});
+          this.listStore.dispatch({type: LOAD, data: steps});
         });
 
       return this.collection$;

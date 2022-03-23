@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {environment} from '../../../environments/environment';
 import {HttpClient} from '@angular/common/http';
-import {RunsStore} from '../../store/stores.store';
+import {IterationStepsStore, RunsStore} from '../../store/stores.store';
 import {RunningDemoService} from '../demo/demo-services';
 import {DepExplanationRun, PlanRun} from '../../interface/run';
 import {Demo} from '../../interface/demo';
@@ -12,6 +12,8 @@ import {SelectedPlanRunService} from './selected-planrun.service';
 import {SelectedQuestionService} from './selected-question.service';
 import {DomainSpecification} from '../../interface/files/domain-specification';
 import {GoalType, PlanProperty} from '../../interface/plan-property/plan-property';
+import { IterationStepsService } from './iteration-steps.service';
+import { SelectedIterationStepService } from './selected-iteration-step.service';
 
 @Injectable({
     providedIn: 'root'
@@ -20,11 +22,9 @@ export class DemoPlannerService extends PlannerService {
 
     constructor(
         http: HttpClient,
-        store: RunsStore,
-        private runningDemoService: RunningDemoService,
-        private selectedPlanRunService: SelectedPlanRunService,
-        private selectedQuestionService: SelectedQuestionService) {
-        super(http, store);
+        selectedStepService: SelectedIterationStepService,
+        iterationStepsStore: IterationStepsStore) {
+        super(http, selectedStepService, iterationStepsStore);
         this.BASE_URL = environment.apiURL + 'planner/';
     }
 

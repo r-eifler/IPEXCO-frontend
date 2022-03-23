@@ -2,11 +2,12 @@ import {Injectable} from '@angular/core';
 import {BehaviorSubject} from 'rxjs';
 import {LOAD, REMOVE} from '../../store/generic-list.store';
 import {ItemStore} from '../../store/generic-item.store';
+import { Identifiable } from './object-collection.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class SelectedObjectService<T> {
+export class SelectedObjectService<T extends Identifiable> {
 
   selectedObjectStore: ItemStore<T>;
 
@@ -23,6 +24,11 @@ export class SelectedObjectService<T> {
 
   getSelectedObject(): BehaviorSubject<T> {
     return this.selectedObject$;
+  }
+  updateIfSame(obj: T) {
+    if(this.selectedObject$.getValue()._id == obj._id){
+      this.selectedObjectStore.dispatch({type: LOAD, data: obj});
+    }
   }
 
   saveObject(obj: T) {

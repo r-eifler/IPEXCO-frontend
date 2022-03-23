@@ -12,6 +12,7 @@ import { Observable } from 'rxjs';
 export class IterationStepsListComponent implements OnInit {
 
   steps$: Observable<IterationStep[]>;
+  selected$: Observable<IterationStep>;
 
   constructor(
     private iterationStepsService: IterationStepsService,
@@ -19,10 +20,15 @@ export class IterationStepsListComponent implements OnInit {
   ) {
 
     this.steps$ = iterationStepsService.getList();
+    this.selected$ = selectedIterationStepService.findSelectedObject();
 
   }
 
   ngOnInit(): void {
+  }
+
+  selectStep(step: IterationStep): void {
+    this.selectedIterationStepService.saveObject(step);
   }
 
 }

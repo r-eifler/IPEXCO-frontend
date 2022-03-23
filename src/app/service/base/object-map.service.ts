@@ -65,6 +65,10 @@ export abstract class ObjectMapService<K, T extends Identifiable> {
     return this.map$;
   }
 
+  // getList(): BehaviorSubject<T[]> {
+  //   return new BehaviorSubject(Array.from(this.map$.value.values()))
+  // }
+
   getMap(): BehaviorSubject<Map<K, T>> {
     return this.map$;
   }

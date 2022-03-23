@@ -8,9 +8,11 @@ import {map} from 'rxjs/operators';
 
 
 type Id = string | number;
-interface Identifiable {
+
+export interface Identifiable {
   _id?: Id;
 }
+
 export interface QueryParam {
   param: string;
   value: string;

@@ -1,10 +1,13 @@
-<mat-list>
-  <mat-list-item *ngFor="let step of (steps$ | async)">
-    <mat-icon matListIcon>folder</mat-icon>
-    <h3 matLine> {{step.name}} </h3>
-    <!-- <p matLine>
-      <span> {{message.subject}} </span>
-      <span class="demo-2"> -- {{message.content}} </span>
-    </p> -->
-  </mat-list-item>
-</mat-list>
+<mat-selection-list [multiple]="false">
+  <mat-list-option *ngFor="let step of (steps$ | async)"
+    (click)="selectStep(step)">
+    <!-- [selected]="step._id == (selected$ | async)?._id"> -->
+    <mat-icon matListIcon>label</mat-icon>
+    <div class="step-item">
+      <p class="step-name"> {{step.name}}</p>
+      <mat-icon class="step-icon" *ngIf="step.hasPlan()">done</mat-icon>
+      <mat-icon class="step-icon" *ngIf="step.notSolvable()">warning</mat-icon>
+      <mat-spinner class="spinner" *ngIf="step.isPending()" diameter="25"></mat-spinner>
+    </div>
+  </mat-list-option>
+</mat-selection-list>

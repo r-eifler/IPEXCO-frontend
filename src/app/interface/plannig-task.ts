@@ -165,21 +165,21 @@ export class Action {
 }
 
 
-export class PlanningTask extends Document {
+export class PlanningTask{
+    public _id?: string;
     public name: string;
     public types: Type[];
-    public domain_name: string;
+    public domain: string;
     public objects: Object[];
     public predicates: Predicat[];
     public init: Fact[];
     public goals: Fact[];
     public actions: Action[];
 
-    constructor(name: string, domain_name: string, types: Type[], objects: Object[],
+    constructor(name: string, domain: string, types: Type[], objects: Object[],
         predicates: Predicat[], initial: Fact[], goal: Fact[], actions: Action[]){
-        super();
         this.name = name;
-        this.domain_name = domain_name;
+        this.domain = domain;
         this.types = types;
         this.objects = objects;
         this.predicates = predicates;
@@ -188,7 +188,7 @@ export class PlanningTask extends Document {
         this.actions = actions;
     }
 
-  static fromJSON(json, name, domain_name){
+  static fromJSON(json, name, domain){
     console.log(json);
     let types = json.types;
     let objects = json.objects;
@@ -197,7 +197,9 @@ export class PlanningTask extends Document {
     let initial = json.initial.map(p => Fact.fromJSON(p))
     let goal = json.goal.map(p => Fact.fromJSON(p));
 
-    return new PlanningTask(name, domain_name, types, objects, predicates, initial, goal, actions)
+    let task = new PlanningTask(name, domain, types, objects, predicates, initial, goal, actions);
+    task._id = json._id;
+    return task;
   }
 
   getObjectTypeMap(): Map<string, string[]> {
@@ -215,7 +217,7 @@ export class PlanningTask extends Document {
 
   toPDDLDomain(): string {
 
-      let d = "(define (domain " + this.domain_name.replace(/\s+/g, '') + ")\n";
+      let d = "(define (domain " + this.domain.replace(/\s+/g, '') + ")\n";
       d += "(:requirements :typing :action-costs)\n";
       d += "(:types " + this.types.map(t => t.name + "-" + t.parent).join("\n") + "\n)\n";
       d += "(predicates: " + this.predicates.map(p => p.toPDDL(true)).join("\n") + "\n)\n";
@@ -228,7 +230,7 @@ export class PlanningTask extends Document {
   toPDDLProblem(): string {
 
     let p = "(define (problem " + this.name.replace(/\s+/g, '') + ")\n";
-    p += "(domain " + this.domain_name.replace(/\s+/g, '') + ")";
+    p += "(domain " + this.domain.replace(/\s+/g, '') + ")";
     p += "(:objects " + this.objects.map(o => o.name + "-" + o.type).join("\n") + "\n)\n";
     p += "(:init\n " + this.init.map(f => f.toPDDL()).join("\n") + "\n)\n";
     p += "(goal: (and " + this.goals.map(p => p.toPDDL()).join("\n") + ")\n";
