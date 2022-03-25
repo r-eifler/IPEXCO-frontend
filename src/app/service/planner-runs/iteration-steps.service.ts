@@ -44,7 +44,7 @@ export class IterationStepsService extends ObjectCollectionService<IterationStep
         return this.http.put<IHTTPData<IterationStep>>(this.BASE_URL + step._id, {data: step})
           .subscribe(httpData => {
             let rStep = IterationStep.fromObject(httpData.data)
-            this.workingIterationStepService.saveObject(rStep);
+            // this.workingIterationStepService.saveObject(rStep);
             const action = {type: EDIT, data: rStep};
             this.listStore.dispatch(action);
           });
@@ -52,8 +52,10 @@ export class IterationStepsService extends ObjectCollectionService<IterationStep
 
       return this.http.post<IHTTPData<IterationStep>>(this.BASE_URL, {data: step})
         .subscribe(httpData => {
+          console.log(httpData)
           let rStep = IterationStep.fromObject(httpData.data)
-          this.workingIterationStepService.saveObject(rStep);
+          console.log(rStep);
+          // this.workingIterationStepService.saveObject(rStep);
           const action = {type: ADD, data: rStep};
           this.listStore.dispatch(action);
         });

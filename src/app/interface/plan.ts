@@ -15,11 +15,11 @@ export class State {
 
   nextState(action: Action): State {
     // console.log(action.name);
-    // console.log(this.values);
     let new_values = [...this.values];
     for (const eff of action.effects){
       if (eff.negated){
-        const index = new_values.indexOf(eff);
+        const index = new_values.findIndex(e => e.equals(eff));
+        // console.log(index);
         new_values.splice(index, 1);
         // console.log("delete: " + eff)
       }
@@ -27,9 +27,9 @@ export class State {
         new_values.push(eff)
         // console.log("add: " + eff)
       }
+      // console.log(new_values.map(v => v.toString()));
     }
     new_values.sort();
-    // console.log(new_values);
     return new State(new_values);
   }
 }

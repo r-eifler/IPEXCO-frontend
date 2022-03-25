@@ -3,3 +3,13 @@
   height: 100%;
   box-sizing: border-box;
 }
+
+
+.list-item-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.list-item-button {
+  margin-left: auto;
+}

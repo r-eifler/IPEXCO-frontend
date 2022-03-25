@@ -12,3 +12,13 @@
   align-items: flex-end;
   gap: 10px;
 }
+
+.list-item-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.list-item-button {
+  margin-left: auto;
+}
+

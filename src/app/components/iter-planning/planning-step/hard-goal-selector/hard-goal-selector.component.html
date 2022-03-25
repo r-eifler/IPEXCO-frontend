@@ -1,13 +1,18 @@
 <mat-card class="main-card">
-  <ng-container *ngIf="possiblePP?.length > 0">
-    <mat-selection-list [multiple]="false">
-      <mat-list-option *ngFor="let pp of possiblePP"
-        (click)="selectPP(pp)">
-        {{pp.naturalLanguageDescription}}
-      </mat-list-option>
-    </mat-selection-list>
+  <ng-container *ngIf="(possiblePP$ | async)?.length > 0">
+    <mat-list>
+    <mat-list-item *ngFor="let pp of (possiblePP$ | async)">
+      <div class="list-item-text">
+        <span> {{pp.naturalLanguageDescription}} </span>
+        <span> Utility: {{pp.value}} </span>
+      </div>
+      <button mat-icon-button (click)="selectPP(pp)" class="list-item-button">
+        <mat-icon>add</mat-icon>
+      </button>
+    </mat-list-item>
+    </mat-list>
   </ng-container>
-  <p *ngIf="possiblePP?.length == 0">
+  <p *ngIf="(possiblePP$ | async)?.length == 0">
     No other goal facts available.
   </p>
 </mat-card>
