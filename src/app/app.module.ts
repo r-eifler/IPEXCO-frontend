@@ -182,6 +182,7 @@ import { IterationStepsListComponent } from './components/iter-planning/iteratio
 import { IterationStepOverviewComponent } from './components/iter-planning/iteration-step-overview/iteration-step-overview.component';
 import { IterationStepDetailNavigatorComponent } from './components/iter-planning/iteration-step-detail-navigator/iteration-step-detail-navigator.component';
 import { HardGoalSelectorComponent } from './components/iter-planning/planning-step/hard-goal-selector/hard-goal-selector.component';
+import { RelaxationSelectorComponent } from './components/iter-planning/planning-step/relaxation-selector/relaxation-selector.component';
 
 @NgModule({
     declarations: [
@@ -267,7 +268,8 @@ import { HardGoalSelectorComponent } from './components/iter-planning/planning-s
         IterationStepsListComponent,
         IterationStepOverviewComponent,
         IterationStepDetailNavigatorComponent,
-        HardGoalSelectorComponent
+        HardGoalSelectorComponent,
+        RelaxationSelectorComponent
     ],
     imports: [
         RouterModule.forRoot(appRoutes, { enableTracing: false, paramsInheritanceStrategy: 'always' }),

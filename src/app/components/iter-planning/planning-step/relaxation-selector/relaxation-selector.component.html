@@ -1,0 +1,11 @@
+<ng-container *ngFor="let relaxSpace of (relaxationSpaces$ | async)">
+  <h3>{{relaxSpace.name}}</h3>
+  <mat-form-field appearance="fill" *ngFor="let updateList of relaxSpace.taskUpdatList">
+      <mat-label>{{updateList.orgFact.toString()}}</mat-label>
+      <mat-select (selectionChange)="updateSelected($event)">
+        <mat-option *ngFor="let newFact of updateList.newFacts" [value]="{list: updateList, value: newFact}">
+          {{newFact.fact.toString()}}
+        </mat-option>
+      </mat-select>
+  </mat-form-field>
+</ng-container>

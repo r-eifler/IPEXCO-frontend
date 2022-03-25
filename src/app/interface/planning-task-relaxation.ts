@@ -33,8 +33,7 @@ export class PlanningTaskRelaxationSpace {
   }
 
   static fromObject(o: PlanningTaskRelaxationSpace){
-    let space = new PlanningTaskRelaxationSpace(o.name, o.project,
-      o.taskUpdatList.map(e => TaskUpdates.fromObject(e)));
+    let space = new PlanningTaskRelaxationSpace(o.name, o.project, o.taskUpdatList.map(e => TaskUpdates.fromObject(e)));
     if(o._id){
       space._id = o._id
     }

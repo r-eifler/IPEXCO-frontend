@@ -1,3 +1,4 @@
+import { ModifiedPlanningTask } from './../../../interface/planning-task-relaxation';
 import { PlanProperty } from './../../../interface/plan-property/plan-property';
 import { IterationStepsService } from 'src/app/service/planner-runs/iteration-steps.service';
 import { BehaviorSubject, combineLatest, Subject } from 'rxjs';
@@ -29,7 +30,6 @@ export class IterationStepOverviewComponent implements OnInit, OnDestroy {
 
     this.step$ = selectedIterationStepService.findSelectedObject();
     this.planPropertiesMap$ = planpropertiesService.getMap();
-    console.log(this.step$.getValue());
 
   }
 
@@ -67,7 +67,10 @@ export class IterationStepOverviewComponent implements OnInit, OnDestroy {
             softGoals.push(pp);
           }
         }
-        let newStep = new IterationStep(name, step.project, StepStatus.unknown, step.hardGoals, softGoals, step.task, null);
+        let newTask: ModifiedPlanningTask = {name: 'task', project: step.task.project, basetask: step.task.basetask, taskUpdatList: step.task.taskUpdatList};
+        let newStep = new IterationStep(name, step.project, StepStatus.unknown, [...step.hardGoals], [...softGoals], newTask, null);
+        console.log("New Step");
+        console.log(newStep);
         this.iterationStepsService.saveObject(newStep);
       }
     });
