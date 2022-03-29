@@ -1,12 +1,19 @@
-<ng-container *ngFor="let relaxSpace of (relaxationSpaces$ | async); let i = index">
-  <h3>{{relaxSpace.name}}</h3>
-  <mat-form-field appearance="fill" *ngFor="let updateList of relaxSpace.possibleInitFactUpdates; let j = index">
-        <mat-label>{{updateList.orgFact.toString()}}</mat-label>
-        <mat-select (selectionChange)="updateSelected($event, updateList)" [(value)]="selectedUpdates[i][j]">
-          <mat-option *ngFor="let possibleFact of updateList.updates"
-            [value]="possibleFact">
-            {{possibleFact.fact.toString()}}
-          </mat-option>
-        </mat-select>
-  </mat-form-field>
-</ng-container>
+<mat-card class="main-card">
+  <mat-card-header>
+    <mat-card-title>Relaxations</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+  <ng-container *ngFor="let relaxSpace of (relaxationSpaces$ | async); let i = index">
+    <h3>{{relaxSpace.name}}</h3>
+    <mat-form-field appearance="fill" *ngFor="let updateList of relaxSpace.possibleInitFactUpdates; let j = index">
+          <mat-label>{{updateList.orgFact.toString()}}</mat-label>
+          <mat-select (selectionChange)="updateSelected($event, updateList)" [(value)]="selectedUpdates[i][j]">
+            <mat-option *ngFor="let possibleFact of updateList.updates"
+              [value]="possibleFact">
+              {{possibleFact.fact.toString()}}
+            </mat-option>
+          </mat-select>
+    </mat-form-field>
+  </ng-container>
+  </mat-card-content>
+</mat-card>

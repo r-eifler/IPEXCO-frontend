@@ -1,9 +1,9 @@
+import { PlanProperty } from './../../interface/plan-property/plan-property';
+
 import { SelectedIterationStepService } from './selected-iteration-step.service';
-import { IterationStepsService } from 'src/app/service/planner-runs/iteration-steps.service';
 import { IterationStep, RunStatus } from 'src/app/interface/run';
-import {ADD, EDIT} from '../../store/generic-list.store';
-import {EventEmitter, Injectable} from '@angular/core';
-import {ObjectCollectionService} from '../base/object-collection.service';
+import { EDIT} from '../../store/generic-list.store';
+import { Injectable} from '@angular/core';
 import {DepExplanationRun, PlanRun} from '../../interface/run';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {IterationStepsStore} from '../../store/stores.store';
@@ -25,7 +25,7 @@ export class PlannerService{
   constructor(
       protected http: HttpClient,
       protected selectedStepService: SelectedIterationStepService,
-      protected iterationStepsStore: IterationStepsStore,
+      protected iterationStepsStore: IterationStepsStore
   ) {
     this.BASE_URL = environment.apiURL + 'planner/';
   }
@@ -58,14 +58,26 @@ export class PlannerService{
     console.log('not imlemented');
   }
 
-  execute_mugs_run(planRun: PlanRun, expRun: DepExplanationRun): void {
-    this.plannerBusy.next(true);
+  computeMUGS(step: IterationStep, question: string[], planProperties: PlanProperty[]): void {
 
-    const url = this.myBaseURL + 'mugs/' + planRun._id;
+    const url = this.myBaseURL + 'mugs/' + step._id;
 
-    this.http.post<IHTTPData<PlanRun>>(url, expRun)
+
+    let hardGoals : string[]  = planProperties.filter(pp => pp.isUsed && pp.globalHardGoal && step.hardGoals.some(h => h == pp._id)).map(pp => pp._id);
+    question.forEach(q => hardGoals.push(q));
+    let softGoals : string[] = planProperties.filter(pp => pp.isUsed && ! hardGoals.some(h => h == pp._id)).map(pp => pp._id);
+
+    let expRun = new DepExplanationRun("DExp", RunStatus.pending, hardGoals, softGoals);
+
+    // step.depExplanations.push(expRun);
+    // this.selectedStepService.saveObject(step);
+
+    this.http.post<IHTTPData<IterationStep>>(url, expRun)
       .subscribe(httpData => {
-        // TODO
+        let step = IterationStep.fromObject(httpData.data)
+        const action = {type: EDIT, data: step};
+        this.iterationStepsStore.dispatch(action);
+        this.selectedStepService.updateIfSame(step);
       });
   }
 

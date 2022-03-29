@@ -12,7 +12,7 @@ export class PPDependencies {
     this.conflicts = dep
   }
 
-  static parse(result: string, ppMap: Map<string, PlanProperty>): PPDependencies {
+  static parse(result: string): PPDependencies {
     // TODO: implement
     return new PPDependencies([]);
   }

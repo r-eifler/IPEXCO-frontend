@@ -24,6 +24,6 @@ export class PlanPropertyMapService extends ObjectMapService<string, PlanPropert
   }
 
   getKey(t: PlanProperty): string {
-    return t.name;
+    return t._id;
   }
 }

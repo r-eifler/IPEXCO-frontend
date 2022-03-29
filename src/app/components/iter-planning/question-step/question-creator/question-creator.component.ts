@@ -107,41 +107,41 @@ export class QuestionCreatorComponent implements OnInit, OnDestroy {
 
   // create a new explanation run with the currently selected properties
   async compute_dependencies() {
-    const expRun: DepExplanationRun = {
-      _id: "0000", // this.currentRun.explanationRuns.length.toString(),
-      name: 'Question ?? ', // TODO + (this.currentRun.explanationRuns.length + 1),
-      status: null,
-      softGoals: this.allPlanProperties
-        .filter(p => ! this.question.includes(p)),
-      hardGoals: this.question,
-      result: null,
-      log: null,
-    };
+    // const expRun: DepExplanationRun = {
+    //   _id: "0000", // this.currentRun.explanationRuns.length.toString(),
+    //   name: 'Question ?? ', // TODO + (this.currentRun.explanationRuns.length + 1),
+    //   status: null,
+    //   softGoals: this.allPlanProperties
+    //     .filter(p => ! this.question.includes(p)),
+    //   hardGoals: this.question,
+    //   result: null,
+    //   log: null,
+    // };
 
-    this.plannerService.execute_mugs_run(this.currentRun, expRun);
-    //await this.router.navigate([this.redirectURL], { relativeTo: this.route });
-    this.finished.emit(true);
-    this.timeLogger.addInfo(this.loggerId, 'question asked');
+    // // this.plannerService.computeMUGS(this.currentRun, expRun);
+    // //await this.router.navigate([this.redirectURL], { relativeTo: this.route });
+    // this.finished.emit(true);
+    // this.timeLogger.addInfo(this.loggerId, 'question asked');
   }
 
   async compute_dependencies_unsolvable() {
-    const globalHardGoalNames = this.globalHardGoals.map(p => p.name);
-    const expRun: DepExplanationRun = {
-      _id: "0000", // TODO this.currentRun.explanationRuns.length.toString(),
-      name: 'Question ?', // TODO + (this.currentRun.explanationRuns.length + 1),
-      status: null,
-      //planProperties: this.allPlanProperties.filter(p => this.hardGoals.find( hg => hg === p.name)),
-      softGoals: [], //this.hardGoals.filter(hg => ! globalHardGoalNames.find( ghg => hg === ghg)),
-      hardGoals: [], //globalHardGoalNames,
-      result: null,
-      log: null,
-    };
+    // const globalHardGoalNames = this.globalHardGoals.map(p => p.name);
+    // const expRun: DepExplanationRun = {
+    //   _id: "0000", // TODO this.currentRun.explanationRuns.length.toString(),
+    //   name: 'Question ?', // TODO + (this.currentRun.explanationRuns.length + 1),
+    //   status: null,
+    //   //planProperties: this.allPlanProperties.filter(p => this.hardGoals.find( hg => hg === p.name)),
+    //   softGoals: [], //this.hardGoals.filter(hg => ! globalHardGoalNames.find( ghg => hg === ghg)),
+    //   hardGoals: [], //globalHardGoalNames,
+    //   result: null,
+    //   log: null,
+    // };
 
-    this.plannerService.execute_mugs_run(this.currentRun, expRun);
+    // // this.plannerService.computeMUGS(this.currentRun, expRun);
 
-    //await this.router.navigate([this.redirectURL], { relativeTo: this.route });
-    this.finished.emit(true);
-    this.timeLogger.addInfo(this.loggerId, 'question asked');
+    // //await this.router.navigate([this.redirectURL], { relativeTo: this.route });
+    // this.finished.emit(true);
+    // this.timeLogger.addInfo(this.loggerId, 'question asked');
   }
 
   abortWithoutQuestion() {

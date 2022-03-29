@@ -1,3 +1,4 @@
+import { PlannerService } from 'src/app/service/planner-runs/planner.service';
 import { ModIterationStep } from './../../../../interface/run';
 import { PlanProperty } from 'src/app/interface/plan-property/plan-property';
 import { BehaviorSubject, combineLatest, Observable, Subject } from 'rxjs';
@@ -5,7 +6,7 @@ import { PlanPropertyMapService } from 'src/app/service/plan-properties/plan-pro
 import { SelectedIterationStepService } from './../../../../service/planner-runs/selected-iteration-step.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { IterationStep } from 'src/app/interface/run';
-import { filter, map, takeUntil, tap } from 'rxjs/operators';
+import { filter, map, take, takeUntil, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-hard-goal-selector',
@@ -20,13 +21,16 @@ export class HardGoalSelectorComponent implements OnInit, OnDestroy {
   currentStep: IterationStep;
   planPropertiesMap$: BehaviorSubject<Map<string, PlanProperty>>;
 
-  possiblePP: PlanProperty[] = [];
-
   possiblePP$: Observable<PlanProperty[]>;
+
+  withConlicts$: Observable<PlanProperty[]>;
+  withoutConlicts$: Observable<PlanProperty[]>;
+  unknownConflicts$: Observable<PlanProperty[]>;
 
   constructor(
     private selectedIterationStepService: SelectedIterationStepService,
     private planpropertiesService: PlanPropertyMapService,
+    private plannerService: PlannerService,
   ) {
     this.step$ = selectedIterationStepService.getSelectedObject();
     this.planPropertiesMap$ = planpropertiesService.getMap();
@@ -36,35 +40,18 @@ export class HardGoalSelectorComponent implements OnInit, OnDestroy {
         filter(([step, properties]) => !!step && properties && properties.size > 0),
         map(([step, properties]) => {
           const props = [];
-
           for (let property of properties.values()) {
-
-            props.push(property);
+            if (property.isUsed && !step.hardGoals.includes(property._id))
+              props.push(property);
           }
 
           return props
-            .filter(property => {
-              const hardGoalIds = step.hardGoals.map(g => g._id);
-              return property.isUsed && !hardGoalIds.includes(property._id)
-            });
         })
       )
       .pipe(takeUntil(this.unsubscribe$));
 
-      this.step$.subscribe(step => this.currentStep = step)
-
-
-    // this.possiblePP$.subscribe(([step, planProperties]) => {
-    //   if (step && planProperties) {
-    //     this.currentStep = step;
-    //     // this.possiblePP = [];
-    //     // for (const pp of planProperties.values()) {
-    //     //   if (!step.hardGoals.find(p => p._id === pp._id) && pp.isUsed) {
-    //     //     this.possiblePP.push(pp);
-    //     //   }
-    //     // }
-    //   }
-    // });
+      this.step$.pipe(takeUntil(this.unsubscribe$)).
+        subscribe(step => this.currentStep = step)
   }
 
   ngOnInit() {
@@ -72,14 +59,32 @@ export class HardGoalSelectorComponent implements OnInit, OnDestroy {
 
   selectPP(pp: PlanProperty) {
     if (this.currentStep.canBeModified()) {
-      this.currentStep.hardGoals.push(pp);
+      this.currentStep.hardGoals.push(pp._id);
       this.selectedIterationStepService.saveObject(this.currentStep);
     }
     else {
       let modStep = new ModIterationStep('Next Step', this.currentStep)
-      modStep.hardGoals.push(pp);
+      modStep.hardGoals.push(pp._id);
       this.selectedIterationStepService.saveObject(modStep);
     }
+  }
+
+  askQuestion(pp: PlanProperty){
+    combineLatest([this.step$, this.planPropertiesMap$]).
+    pipe(take(1)).subscribe(
+      ([step, planProperties]) => {
+        if (step && planProperties) {
+
+          if (step.getDepExplanation(pp._id)){
+              return
+          }
+          console.log("Compute Explanation");
+          console.log(pp.naturalLanguageDescription);
+          this.plannerService.computeMUGS(step, [pp._id], Array.from(planProperties.values()));
+        }
+      }
+    );
+
   }
 
   ngOnDestroy(): void {

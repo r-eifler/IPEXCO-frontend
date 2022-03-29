@@ -55,7 +55,6 @@ export class RelaxationSelectorComponent implements OnInit, OnDestroy {
                 }
               }
             }
-            console.log(this.selectedUpdates);
           }
       });
   }

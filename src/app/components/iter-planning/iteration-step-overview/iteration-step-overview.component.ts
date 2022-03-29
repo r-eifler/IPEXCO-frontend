@@ -45,12 +45,12 @@ export class IterationStepOverviewComponent implements OnInit, OnDestroy {
     console.log(pp);
     let currentStep = this.step$.getValue();
     if(currentStep.canBeModified()){
-      currentStep.hardGoals = currentStep.hardGoals.filter(p => p._id !== pp._id);
+      currentStep.hardGoals = currentStep.hardGoals.filter(p => p !== pp._id);
       this.selectedIterationStepService.saveObject(currentStep);
     }
     else {
       let modStep = new ModIterationStep('Next Step', currentStep)
-      modStep.hardGoals = modStep.hardGoals.filter(p => p._id !== pp._id)
+      modStep.hardGoals = modStep.hardGoals.filter(p => p !== pp._id)
       this.selectedIterationStepService.saveObject(modStep);
     }
   }
@@ -62,7 +62,7 @@ export class IterationStepOverviewComponent implements OnInit, OnDestroy {
       let name = 'Step ' +  this.iterationStepsService.getNumRuns();
       let softGoals = [];
       for (const pp of planProperties.values()) {
-        if (!step.hardGoals.find(p => p._id === pp._id) && pp.isUsed) {
+        if (!step.hardGoals.find(p => p === pp._id) && pp.isUsed) {
           softGoals.push(pp);
         }
       }

@@ -1,49 +1,24 @@
-<mat-card class="main-card">
-  <mat-card-header>
-    <mat-card-title>
-      {{(step$ | async)?.name}}
-    </mat-card-title>
-  </mat-card-header>
-  <mat-card-content>
-    <div class="main-content">
-      <div clas="sub-content">
-        <ng-container *ngIf="(step$ | async)?.hardGoals.length > 0">
-        <mat-list>
-          <mat-list-item *ngFor="let pp of (step$ | async)?.hardGoals">
-            <div class="list-item-text">
-              <span> {{pp.naturalLanguageDescription}} </span>
-              <span> Utility: {{pp.value}} </span>
-            </div>
-            <button mat-icon-button
-              *ngIf="! pp.globalHardGoal"
-              (click)="deselectPP(pp)"
-              class="list-item-button">
-              <mat-icon>remove</mat-icon>
-            </button>
-          </mat-list-item>
-        </mat-list>
-        </ng-container>
-        <p *ngIf="(step$ | async)?.hardGoals.length == 0">
-          No hard goals selected.
-        </p>
-      </div>
-      <app-relaxation-selector clas="sub-content"></app-relaxation-selector>
-    </div>
-  </mat-card-content>
-  <mat-card-actions class="actions-container">
+<div class="main-container">
+  <app-selected-hard-goals></app-selected-hard-goals>
+
+  <app-relaxation-selector clas="sub-content"></app-relaxation-selector>
+
+  <mat-card class="actions-container">
     <button mat-flat-button color="primary"
-      *ngIf="! (step$ | async)?.canBeModified() && ! (step$ | async)?.hasPlan()"
-      (click)="computePlan()">
-      Compute Plan
-    </button>
-    <button mat-flat-button color="primary"
-      (click)="addNewStep()"
-      *ngIf="(step$ | async)?.canBeModified()">
-      Add Step
-    </button>
-    <button mat-icon-button color="primary" style="margin-right: auto;"
-      (click)="deleteStep()">
-      <mat-icon>delete</mat-icon>
-    </button>
-  </mat-card-actions>
-</mat-card>
+        *ngIf="! (step$ | async)?.canBeModified() && ! (step$ | async)?.hasPlan()"
+        (click)="computePlan()">
+        Compute Plan
+      </button>
+      <button mat-flat-button color="primary"
+        (click)="addNewStep()"
+        *ngIf="(step$ | async)?.canBeModified()">
+        Add Step
+      </button>
+      <button mat-icon-button color="primary" style="margin-right: auto;"
+        (click)="deleteStep()">
+        <mat-icon>delete</mat-icon>
+      </button>
+  </mat-card>
+</div>
+
+

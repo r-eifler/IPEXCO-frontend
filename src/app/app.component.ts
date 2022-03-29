@@ -21,6 +21,10 @@ export class AppComponent implements OnInit {
       'questionmark',
       this.domSanitizer.bypassSecurityTrustResourceUrl('../assets/questionmark.svg')
     );
+    this.matIconRegistry.addSvgIcon(
+      'no_map',
+      this.domSanitizer.bypassSecurityTrustResourceUrl('../assets/no_map.svg')
+    );
   }
 
   ngOnInit(): void {

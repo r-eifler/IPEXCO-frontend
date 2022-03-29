@@ -183,6 +183,8 @@ import { IterationStepOverviewComponent } from './components/iter-planning/itera
 import { IterationStepDetailNavigatorComponent } from './components/iter-planning/iteration-step-detail-navigator/iteration-step-detail-navigator.component';
 import { HardGoalSelectorComponent } from './components/iter-planning/planning-step/hard-goal-selector/hard-goal-selector.component';
 import { RelaxationSelectorComponent } from './components/iter-planning/planning-step/relaxation-selector/relaxation-selector.component';
+import { SelectedHardGoalsComponent } from './components/iter-planning/selected-hard-goals/selected-hard-goals.component';
+import { ConflictViewComponent } from './components/iter-planning/planning-step/conflict-view/conflict-view.component';
 
 @NgModule({
     declarations: [
@@ -269,7 +271,9 @@ import { RelaxationSelectorComponent } from './components/iter-planning/planning
         IterationStepOverviewComponent,
         IterationStepDetailNavigatorComponent,
         HardGoalSelectorComponent,
-        RelaxationSelectorComponent
+        RelaxationSelectorComponent,
+        SelectedHardGoalsComponent,
+        ConflictViewComponent
     ],
     imports: [
         RouterModule.forRoot(appRoutes, { enableTracing: false, paramsInheritanceStrategy: 'always' }),

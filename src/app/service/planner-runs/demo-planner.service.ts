@@ -3,7 +3,7 @@ import {environment} from '../../../environments/environment';
 import {HttpClient} from '@angular/common/http';
 import {IterationStepsStore, RunsStore} from '../../store/stores.store';
 import {RunningDemoService} from '../demo/demo-services';
-import {DepExplanationRun, PlanRun} from '../../interface/run';
+import {DepExplanationRun, IterationStep, PlanRun} from '../../interface/run';
 import {Demo} from '../../interface/demo';
 import {ADD, EDIT} from '../../store/generic-list.store';
 import {IHTTPData} from '../../interface/http-data.interface';
@@ -91,7 +91,7 @@ export class DemoPlannerService extends PlannerService {
       // this.plannerBusy.next(false);
     }
 
-    execute_mugs_run(planRun: PlanRun, expRun: DepExplanationRun, save = false): void {
+    computeMUGS(step: IterationStep, question: string[], planProperties: PlanProperty[], save = false): void {
 
       // TODO
       // this.plannerBusy.next(true);

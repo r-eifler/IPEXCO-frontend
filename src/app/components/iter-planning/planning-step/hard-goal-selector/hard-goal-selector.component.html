@@ -1,19 +1,32 @@
 <mat-card class="main-card">
   <ng-container *ngIf="(possiblePP$ | async)?.length > 0">
-    <mat-list>
-    <mat-list-item *ngFor="let pp of (possiblePP$ | async)">
-      <div class="list-item-text">
-        <span> {{pp.naturalLanguageDescription}} </span>
-        <span> Utility: {{pp.value}} </span>
+    <div class="list">
+      <div *ngFor="let pp of (possiblePP$ | async)" class="list-main-container">
+        <div class="list-item-container">
+          <mat-icon matListIcon >star_border</mat-icon>
+          <div class="list-item-text">
+            <span> {{pp.naturalLanguageDescription}} </span>
+            <span> Utility: {{pp.value}} </span>
+          </div>
+          <div class="list-item-buttons">
+            <button mat-icon-button (click)="selectPP(pp)">
+              <mat-icon>add</mat-icon>
+            </button>
+            <button mat-icon-button (click)="askQuestion(pp)">
+              <mat-icon>help_center</mat-icon>
+            </button>
+          </div>
+        </div>
+        <app-conflict-view *ngIf="(step$ | async).getDepExplanation(pp._id)"
+          [question]="pp"
+          [explanation]="(step$ | async).getDepExplanation(pp._id)">
+        </app-conflict-view>
       </div>
-      <button mat-icon-button (click)="selectPP(pp)" class="list-item-button">
-        <mat-icon>add</mat-icon>
-      </button>
-    </mat-list-item>
-    </mat-list>
+      <mat-divider [inset]="true"></mat-divider>
+    </div>
   </ng-container>
   <p *ngIf="(possiblePP$ | async)?.length == 0">
-    No other goal facts available.
+    No other goals available.
   </p>
 </mat-card>
 

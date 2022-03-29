@@ -11,6 +11,7 @@ import {environment} from '../../../environments/environment';
 import {IHTTPData} from '../../interface/http-data.interface';
 import {PlanPropertyMapService} from '../plan-properties/plan-property-services';
 import {combineLatest } from 'rxjs';
+import { PlanProperty } from 'src/app/interface/plan-property/plan-property';
 
 
 interface QueryParam {
@@ -26,7 +27,7 @@ export class IterationStepsService extends ObjectCollectionService<IterationStep
   constructor(
     http: HttpClient,
     store: IterationStepsStore,
-    private workingIterationStepService: SelectedIterationStepService,
+    private selectedIterationStepService: SelectedIterationStepService,
     private selectedProjectService: CurrentProjectService,
     private planPropertiesService: PlanPropertyMapService) {
     super(http, store);
@@ -53,7 +54,7 @@ export class IterationStepsService extends ObjectCollectionService<IterationStep
           console.log(httpData)
           let rStep = IterationStep.fromObject(httpData.data)
           console.log(rStep);
-          this.workingIterationStepService.saveObject(rStep);
+          this.selectedIterationStepService.saveObject(rStep);
           const action = {type: ADD, data: rStep};
           this.listStore.dispatch(action);
         });
@@ -77,22 +78,27 @@ export class IterationStepsService extends ObjectCollectionService<IterationStep
             .subscribe(
               ([project, planPropertiesMap]) => {
                 if (project && planPropertiesMap.size > 0){
-                  let modTask: ModifiedPlanningTask = {name: 'init', project: project._id, basetask: project.baseTask, initUpdates: []};
-                  let initial_step = new IterationStep('Initial Step', project._id,
-                  StepStatus.unknown, Array.from(planPropertiesMap.values()).filter(pp => pp.globalHardGoal),
-                  Array.from(planPropertiesMap.values()).filter(pp => ! pp.globalHardGoal), modTask, null)
 
+                  let modTask: ModifiedPlanningTask = {name: 'init', project: project._id, basetask: project.baseTask, initUpdates: []};
+
+                  let globalHardGoals : string [];
+                  for(let pp of planPropertiesMap.values()){
+                    if(pp.globalHardGoal){
+                      globalHardGoals.push(pp._id);
+                    }
+                  }
+
+                  let initial_step = new IterationStep('Initial Step', project._id,StepStatus.unknown, globalHardGoals, [], modTask, null)
                   let initalModStep = new ModIterationStep('Initial Step', initial_step);
-                  // console.log(initial_step);
-                  // this.saveObject(initial_step);
-                  this.workingIterationStepService.saveObject(initalModStep);
+
+                  this.selectedIterationStepService.saveObject(initalModStep);
                   // obs.unsubscribe(); TODO
                 }
               }
             );
           }
           else{
-            this.workingIterationStepService.saveObject(steps[steps.length-1])
+            this.selectedIterationStepService.saveObject(steps[steps.length-1])
           }
 
           this.listStore.dispatch({type: LOAD, data: steps});
@@ -117,11 +123,11 @@ export class IterationStepsService extends ObjectCollectionService<IterationStep
     }
   }
 
-  getBestRun(): IterationStep {
+  getBestRun(planProperties: Map<string, PlanProperty>): IterationStep {
     if(this.collection$.value.length == 0){
       return null
     }
-    return this.collection$.value.reduce((max, cur) => cur.planValue() >= max.planValue() ? cur : max, this.collection$.value[0])
+    return this.collection$.value.reduce((max, cur) => cur.planValue(planProperties) >= max.planValue(planProperties) ? cur : max, this.collection$.value[0])
   }
 
   getNumRuns(): number {
@@ -147,10 +153,10 @@ export class IterationStepsService extends ObjectCollectionService<IterationStep
       .subscribe(response => {
         this.listStore.dispatch({type: REMOVE, data: object});
         if(index < this.collection$.getValue().length){
-          this.workingIterationStepService.saveObject(this.collection$.getValue()[index]);
+          this.selectedIterationStepService.saveObject(this.collection$.getValue()[index]);
           return
         }
-        this.workingIterationStepService.saveObject(this.collection$.getValue()[this.collection$.getValue().length - 1]);
+        this.selectedIterationStepService.saveObject(this.collection$.getValue()[this.collection$.getValue().length - 1]);
       });
   }
 

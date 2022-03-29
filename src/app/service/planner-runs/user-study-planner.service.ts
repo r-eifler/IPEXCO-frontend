@@ -3,8 +3,9 @@ import {DemoPlannerService} from './demo-planner.service';
 import {environment} from '../../../environments/environment';
 import {HttpClient} from '@angular/common/http';
 import {IterationStepsStore} from '../../store/stores.store';
-import {DepExplanationRun, PlanRun} from '../../interface/run';
+import {DepExplanationRun, IterationStep, PlanRun} from '../../interface/run';
 import { SelectedIterationStepService } from './selected-iteration-step.service';
+import { PlanProperty } from 'src/app/interface/plan-property/plan-property';
 
 
 @Injectable({
@@ -27,8 +28,8 @@ export class UserStudyPlannerService extends DemoPlannerService {
     }
 
 
-    execute_mugs_run(planRun: PlanRun, expRun: DepExplanationRun): void {
-        super.execute_mugs_run(planRun, expRun, true);
+    computeMUGS(step: IterationStep, question: string[], planProperties: PlanProperty[]): void {
+        super.computeMUGS(step, question, planProperties, true);
     }
 
 }

@@ -27,15 +27,15 @@ export class IterationStep{
   createdAt?: Date;
   project: Project | string;
   status: StepStatus;
-  hardGoals: PlanProperty[];
-  softGoals: PlanProperty[];
+  hardGoals: string[];
+  softGoals: string[];
   task: ModifiedPlanningTask;
   plan: PlanRun | null;
   depExplanations: DepExplanationRun[];
   predecessorStep: IterationStep | null;
 
   constructor(name: string, project: Project | string, status: StepStatus,
-    hardGoals: PlanProperty[], softGoals: PlanProperty[], task: ModifiedPlanningTask, plan: PlanRun) {
+    hardGoals: string[], softGoals: string[], task: ModifiedPlanningTask, plan: PlanRun) {
       this.name = name;
       this.project = project;
       this.status = status;
@@ -59,6 +59,9 @@ export class IterationStep{
     if (step._id){
       nStep._id = step._id;
     }
+    if (step.depExplanations){
+      nStep.depExplanations = step.depExplanations.map(e => DepExplanationRun.fromObject(e));
+    }
     return nStep;
   }
 
@@ -78,14 +81,26 @@ export class IterationStep{
     return this.plan && this.plan.status == RunStatus.pending;
   }
 
-  planValue(): number | null {
+  hasError(): boolean {
+    return this.plan && this.plan.status == RunStatus.failed;
+  }
+
+
+  planValue(planProperties: Map<string,PlanProperty>): number | null {
     if (this.status == StepStatus.unknown){
       return null;
     }
     if (this.status == StepStatus.unsolvable){
       return 0;
     }
-    return this.hardGoals.reduce((acc, cur) => acc + cur.value, 0)
+    return this.hardGoals.reduce((acc, cur) => acc + planProperties.get(cur).value, 0)
+  }
+
+  getDepExplanation(question: string) {
+    if(! this.depExplanations) {
+      return null;
+    }
+    return this.depExplanations.find(exp => exp.hardGoals.some(h => h == question));
   }
 
 }
@@ -149,12 +164,34 @@ export class DepExplanationRun{
   createdAt?: Date;
   name: string;
   status: RunStatus;
-  hardGoals: PlanProperty[];
-  softGoals: PlanProperty[];
+  hardGoals: string[];
+  softGoals: string[];
   log: string;
   result: string;
   dependencies?: PPDependencies;
   relaxationExplanations?: RelaxationExplanationRun[];
+
+  constructor (name: string, status: RunStatus, hardGoals: string[], softGoals: string[]) {
+    this.name = name;
+    this.status = status;
+    this.hardGoals = hardGoals;
+    this.softGoals = softGoals;
+  }
+
+  static fromObject(o : DepExplanationRun): DepExplanationRun {
+    let run = new DepExplanationRun(o.name, o.status, o.hardGoals, o.softGoals);
+    run._id = o._id;
+    run.createdAt = o.createdAt;
+    run.log = o.log;
+    run.result = o.result;
+    if(o.relaxationExplanations) {
+      run.relaxationExplanations = o.relaxationExplanations;
+    }
+    if (run.status = RunStatus.finished) {
+      run.dependencies = PPDependencies.parse(run.result);
+    }
+    return run;
+  }
 }
 
 export class RelaxationExplanationRun{
