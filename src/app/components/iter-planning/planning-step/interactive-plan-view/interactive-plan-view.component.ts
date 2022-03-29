@@ -77,7 +77,7 @@ export class InteractivePlanViewComponent implements OnInit, OnDestroy {
             action_map.set(action.name, action)
           }
 
-          let init_state = new State(project.baseTask.init);
+          let init_state = new State(project.baseTask.initial);
           this.state_trace.push(init_state);
           this.state_trace_ex.push({facts: init_state.values.map(v => {return {fact: v, precon: false, effect_pos: false, effect_neg: false}})})
 

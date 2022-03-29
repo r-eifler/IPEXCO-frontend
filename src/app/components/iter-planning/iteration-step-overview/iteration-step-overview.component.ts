@@ -56,28 +56,30 @@ export class IterationStepOverviewComponent implements OnInit, OnDestroy {
   }
 
   addNewStep(): void {
-    combineLatest([this.step$, this.planPropertiesMap$])
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe(([step, planProperties]) => {
-      if (step && planProperties) {
-        let name = 'Step ' +  this.iterationStepsService.getNumRuns();
-        let softGoals = [];
-        for (const pp of planProperties.values()) {
-          if (!step.hardGoals.find(p => p._id === pp._id) && pp.isUsed) {
-            softGoals.push(pp);
-          }
+    let step = this.step$.getValue();
+    let planProperties = this.planPropertiesMap$.getValue();
+    if (step && planProperties) {
+      let name = 'Step ' +  this.iterationStepsService.getNumRuns();
+      let softGoals = [];
+      for (const pp of planProperties.values()) {
+        if (!step.hardGoals.find(p => p._id === pp._id) && pp.isUsed) {
+          softGoals.push(pp);
         }
-        let newTask: ModifiedPlanningTask = {name: 'task', project: step.task.project, basetask: step.task.basetask, taskUpdatList: step.task.taskUpdatList};
-        let newStep = new IterationStep(name, step.project, StepStatus.unknown, [...step.hardGoals], [...softGoals], newTask, null);
-        console.log("New Step");
-        console.log(newStep);
-        this.iterationStepsService.saveObject(newStep);
       }
-    });
+      let newTask: ModifiedPlanningTask = {name: 'task', project: step.task.project, basetask: step.task.basetask, initUpdates: step.task.initUpdates};
+      let newStep = new IterationStep(name, step.project, StepStatus.unknown, [...step.hardGoals], [...softGoals], newTask, null);
+      console.log("New Step");
+      console.log(newStep);
+      this.iterationStepsService.saveObject(newStep);
+    }
   }
 
   computePlan(): void {
     this.plannerService.computePlan(this.step$.value);
+  }
+
+  deleteStep(): void {
+    this.iterationStepsService.deleteObject(this.step$.getValue());
   }
 
 }

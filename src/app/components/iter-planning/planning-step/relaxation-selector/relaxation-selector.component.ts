@@ -1,11 +1,12 @@
 import { PlanningTaskRelaxationService } from 'src/app/service/planning-task/planning-task-relaxations-services';
 import { map, filter, takeUntil, tap } from 'rxjs/operators';
-import { ModifiedPlanningTask, PlanningTaskRelaxationSpace, TaskUpdate, TaskUpdates } from './../../../../interface/planning-task-relaxation';
+import { InitFactUpdate, ModifiedPlanningTask, PlanningTaskRelaxationSpace, PossibleInitFactUpdate } from './../../../../interface/planning-task-relaxation';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { BehaviorSubject, Subject, Observable } from 'rxjs';
+import { BehaviorSubject, Subject, Observable, combineLatest } from 'rxjs';
 import { IterationStep, ModIterationStep } from 'src/app/interface/run';
 import { SelectedIterationStepService } from 'src/app/service/planner-runs/selected-iteration-step.service';
 import { MatSelectChange } from '@angular/material/select';
+import { Fact } from 'src/app/interface/plannig-task';
 
 @Component({
   selector: 'app-relaxation-selector',
@@ -20,6 +21,8 @@ export class RelaxationSelectorComponent implements OnInit, OnDestroy {
   task$: Observable<ModifiedPlanningTask>;
   relaxationSpaces$: Observable<PlanningTaskRelaxationSpace[]>;
 
+  selectedUpdates: {fact: Fact, value: number}[][] = [];
+
   constructor(
     private selectedIterationStepService: SelectedIterationStepService,
     private relaxationService: PlanningTaskRelaxationService
@@ -27,17 +30,34 @@ export class RelaxationSelectorComponent implements OnInit, OnDestroy {
 
     this.step$ = selectedIterationStepService.findSelectedObject();
 
-    this.step$.subscribe(
-      t => console.log(t)
-    )
-
     this.task$ = this.step$.pipe(
       filter(step => !!step),
-      map(step => step.task),
-      tap(t => console.log(t))
+      map(step => step.task)
     ).pipe(takeUntil(this.unsubscribe$));
 
     this.relaxationSpaces$ = relaxationService.getList();
+
+    combineLatest([this.task$, this.relaxationSpaces$]).
+      pipe(takeUntil(this.unsubscribe$)).
+      subscribe(([task, updatesSpace]) => {
+          if(task && updatesSpace) {
+            this.selectedUpdates = [];
+            for(let updateSpace of updatesSpace){
+              this.selectedUpdates.push([]);
+              for(let possibleUpdates of updateSpace.possibleInitFactUpdates){
+                let matchingInitUpdates = task.initUpdates.filter(f => f.orgFact.equals(possibleUpdates.orgFact))
+                if(matchingInitUpdates.length == 1){
+                  let usedUpdates = possibleUpdates.updates.filter(f => f.fact.equals(matchingInitUpdates[0].newFact))
+                  this.selectedUpdates[this.selectedUpdates.length-1].push(usedUpdates[0])
+                }
+                else{
+                  this.selectedUpdates[this.selectedUpdates.length-1].push(null)
+                }
+              }
+            }
+            console.log(this.selectedUpdates);
+          }
+      });
   }
 
   ngOnInit(): void {
@@ -48,18 +68,20 @@ export class RelaxationSelectorComponent implements OnInit, OnDestroy {
     this.unsubscribe$.complete();
   }
 
-  updateSelected(event: MatSelectChange): void {
-      let updates : TaskUpdates = event.value;
+  updateSelected(event: MatSelectChange, possibleUpdates: PossibleInitFactUpdate): void {
+      let selectedUpdate = event.value;
+      let newInitUpdate : InitFactUpdate = {orgFact: possibleUpdates.orgFact, newFact: selectedUpdate.fact, value: selectedUpdate.value};
+      console.log(newInitUpdate);
       let step = this.step$.getValue();
       if (step.canBeModified()) {
-        step.task.taskUpdatList = step.task.taskUpdatList.filter(up => ! up.orgFact.equals(updates.orgFact))
-        step.task.taskUpdatList.push(updates);
+        step.task.initUpdates = step.task.initUpdates.filter(up => ! up.orgFact.equals(newInitUpdate.orgFact))
+        step.task.initUpdates.push(newInitUpdate);
         this.selectedIterationStepService.saveObject(step);
       }
       else {
         let modStep = new ModIterationStep('Next Step', step)
-        modStep.task.taskUpdatList = modStep.task.taskUpdatList.filter(up => ! up.orgFact.equals(updates.orgFact))
-        modStep.task.taskUpdatList.push(updates);
+        modStep.task.initUpdates = modStep.task.initUpdates.filter(up => ! up.orgFact.equals(newInitUpdate.orgFact))
+        modStep.task.initUpdates.push(newInitUpdate);
         this.selectedIterationStepService.saveObject(modStep);
       }
 

@@ -22,36 +22,9 @@ export class SelectedIterationStepService extends SelectedObjectService<Iteratio
         super(store);
     }
 
-    // saveObject(iterStep: IterationStep) {
-    //   if (iterStep === null || iterStep === undefined) {
-    //     this.selectedObjectStore.dispatch({type: LOAD, data: iterStep});
-    //     return;
-    //   }
-    //   if (iterStep.planString && !iterStep.plan) {
-    //       combineLatest([this.currentProjectService.findSelectedObject(), this.planPropertyMapService.getMap()]).subscribe(
-    //           ([project, planProperties]) => {
-    //               if (project && planProperties) {
-    //                   iterStep.planValue = computePlanValue(iterStep, planProperties);
-    //                   handlePlanString(iterStep.planString, iterStep, project.baseTask);
-    //                   this.selectedObjectStore.dispatch({type: LOAD, data: iterStep});
-    //               }
-    //           });
-
-
-    //   } else if (iterStep.planPath && !iterStep.plan) {
-    //       const planContent$ = this.fileUtilsService.getFileContent(iterStep.planPath);
-    //       // console.log('Loade Plan');
-    //       combineLatest([this.currentProjectService.findSelectedObject(), planContent$, this.planPropertyMapService.getMap()]).subscribe(
-    //           ([project, content, planProperties]) => {
-    //               // console.log(content);
-    //               if (content && planProperties) {
-    //                   iterStep.planValue = computePlanValue(iterStep, planProperties);
-    //                   handlePlanString(content, iterStep, project.baseTask);
-    //                   this.selectedObjectStore.dispatch({type: LOAD, data: iterStep});
-    //               }
-    //           });
-    //   } else {
-    //       this.selectedObjectStore.dispatch({type: LOAD, data: iterStep});
-    //   }
-    // }
+    saveObject(obj: IterationStep) {
+      console.log("Selected Step");
+      console.log(obj);
+      this.selectedObjectStore.dispatch({type: LOAD, data: obj});
+    }
 }

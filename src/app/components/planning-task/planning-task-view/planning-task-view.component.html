@@ -51,7 +51,7 @@
     </mat-panel-title>
   </mat-expansion-panel-header>
   <mat-list>
-    <mat-list-item *ngFor="let fact of (project$ |async).baseTask.init">
+    <mat-list-item *ngFor="let fact of (project$ |async).baseTask.initial">
       {{fact.toString()}}
     </mat-list-item>
    </mat-list>

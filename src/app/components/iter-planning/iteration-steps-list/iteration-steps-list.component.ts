@@ -1,3 +1,4 @@
+import { MatSelectionListChange } from '@angular/material/list';
 import { IterationStep } from './../../../interface/run';
 import { SelectedIterationStepService } from './../../../service/planner-runs/selected-iteration-step.service';
 import { Component, OnInit } from '@angular/core';
@@ -27,7 +28,8 @@ export class IterationStepsListComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  selectStep(step: IterationStep): void {
+  selectStep(event: MatSelectionListChange): void {
+    let step = event.options[0].value as IterationStep
     this.selectedIterationStepService.saveObject(step);
   }
 

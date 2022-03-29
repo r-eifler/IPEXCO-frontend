@@ -48,7 +48,7 @@ export class PlanPropertyTemplate {
           if (entry2[0] !== entry1[0]) {
             const constrainigVar = { name: entry1[0], value: v };
             const constrainedVar = { name: entry2[0], values: new Set<string>() };
-            const constrained = getConstraintSatValues(constrainigVar, constrainedVar, this.initVariableConstraints, task.init);
+            const constrained = getConstraintSatValues(constrainigVar, constrainedVar, this.initVariableConstraints, task.initial);
             if (constrained) {
               this.constraintDomains.addVarValuePosibleValues(constrainigVar.name, constrainigVar.value, constrainedVar.name, constrainedVar.values);
             }
@@ -114,7 +114,7 @@ export class PlanPropertyTemplate {
           constraintInstance = constraintInstance.replace(pair[0], pair[1]);
         }
         const regex = RegExp(constraintInstance);
-        for (const goal of task.goals) {
+        for (const goal of task.goal) {
           const match = regex.exec(goal.name);
           if (match) {
             return match[1];

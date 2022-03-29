@@ -10,8 +10,11 @@
       </mat-card-title>
     </mat-card-header>
     <mat-card-content>
-      <div *ngFor="let update of relax.taskUpdatList">
-        <table mat-table [dataSource]="update.newFacts" class="relax-table">
+      <div *ngFor="let possibleUpdates of relax.possibleInitFactUpdates">
+        <div>
+          <p>INIT: {{possibleUpdates.orgFact.toString()}}</p>
+        </div>
+        <table mat-table [dataSource]="possibleUpdates.updates" class="relax-table">
 
           <ng-container matColumnDef="fact">
             <th mat-header-cell *matHeaderCellDef> Fact </th>

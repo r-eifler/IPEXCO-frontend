@@ -1,16 +1,14 @@
 import { ModifiedPlanningTask } from './../../interface/planning-task-relaxation';
 import { SelectedIterationStepService } from './selected-iteration-step.service';
 import { CurrentProjectService } from 'src/app/service/project/project-services';
-import { IterationStepsStore, CurrentIterationStepStore } from './../../store/stores.store';
-import { IterationStep, StepStatus, ModIterationStep } from './../../interface/run';
+import { IterationStepsStore } from './../../store/stores.store';
+import { IterationStep, StepStatus, ModIterationStep, PlanRun } from './../../interface/run';
 import {ADD, EDIT, LOAD, REMOVE} from '../../store/generic-list.store';
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
-import {RunsStore} from '../../store/stores.store';
 import {ObjectCollectionService} from '../base/object-collection.service';
 import {environment} from '../../../environments/environment';
 import {IHTTPData} from '../../interface/http-data.interface';
-import {DepExplanationRun, PlanRun} from '../../interface/run';
 import {PlanPropertyMapService} from '../plan-properties/plan-property-services';
 import {combineLatest } from 'rxjs';
 
@@ -55,7 +53,7 @@ export class IterationStepsService extends ObjectCollectionService<IterationStep
           console.log(httpData)
           let rStep = IterationStep.fromObject(httpData.data)
           console.log(rStep);
-          // this.workingIterationStepService.saveObject(rStep);
+          this.workingIterationStepService.saveObject(rStep);
           const action = {type: ADD, data: rStep};
           this.listStore.dispatch(action);
         });
@@ -75,11 +73,11 @@ export class IterationStepsService extends ObjectCollectionService<IterationStep
           let steps = res.map(s => IterationStep.fromObject(s));
           console.log(steps);
           if(steps.length == 0){
-            let obs = combineLatest(this.selectedProjectService.findSelectedObject(), this.planPropertiesService.getMap())
+            let obs = combineLatest([this.selectedProjectService.findSelectedObject(), this.planPropertiesService.getMap()])
             .subscribe(
               ([project, planPropertiesMap]) => {
                 if (project && planPropertiesMap.size > 0){
-                  let modTask: ModifiedPlanningTask = {name: 'init', project: project._id, basetask: project.baseTask, taskUpdatList: []};
+                  let modTask: ModifiedPlanningTask = {name: 'init', project: project._id, basetask: project.baseTask, initUpdates: []};
                   let initial_step = new IterationStep('Initial Step', project._id,
                   StepStatus.unknown, Array.from(planPropertiesMap.values()).filter(pp => pp.globalHardGoal),
                   Array.from(planPropertiesMap.values()).filter(pp => ! pp.globalHardGoal), modTask, null)
@@ -133,13 +131,27 @@ export class IterationStepsService extends ObjectCollectionService<IterationStep
   getNumQuestions(): number {
     let res = 0;
     for (const r of this.collection$.value) {
-      res += r.depExplanations.length;
+      if(r.depExplanations)
+        res += r.depExplanations.length;
     }
     return res;
   }
 
   reset() {
     this.listStore.reset();
+  }
+
+  deleteObject(object: IterationStep) {
+    let index = this.collection$.getValue().indexOf(object);
+    return this.http.delete(this.BASE_URL + object._id)
+      .subscribe(response => {
+        this.listStore.dispatch({type: REMOVE, data: object});
+        if(index < this.collection$.getValue().length){
+          this.workingIterationStepService.saveObject(this.collection$.getValue()[index]);
+          return
+        }
+        this.workingIterationStepService.saveObject(this.collection$.getValue()[this.collection$.getValue().length - 1]);
+      });
   }
 
 }

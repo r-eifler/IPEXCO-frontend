@@ -1,20 +1,16 @@
+import { InitFactUpdate } from './../../../interface/planning-task-relaxation';
 import { MatStepper } from '@angular/material/stepper';
-import { TaskUpdate } from './../../../interface/planning-task-relaxation';
-import { PlanningTaskRelaxationSpace, TaskUpdates } from 'src/app/interface/planning-task-relaxation';
+import { PlanningTaskRelaxationSpace, PossibleInitFactUpdate } from 'src/app/interface/planning-task-relaxation';
 import { PlanningTaskRelaxationService } from './../../../service/planning-task/planning-task-relaxations-services';
-import { MatCardModule } from '@angular/material/card';
-import { logging } from 'protractor';
 import { Fact, PlanningTask, Predicat } from 'src/app/interface/plannig-task';
-import { AfterViewInit, Component, FactorySansProvider, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Project } from 'src/app/interface/project';
-import { Subject } from 'rxjs';
+import { Subject, BehaviorSubject } from 'rxjs';
 import { CurrentProjectService } from 'src/app/service/project/project-services';
 import { PropertyCreatorComponent } from '../../plan_properties/property-creator/property-creator.component';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { takeUntil, map } from 'rxjs/operators';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { ChildActivationEnd } from '@angular/router';
-import { max } from 'd3';
 import { FormControl, FormGroup } from '@angular/forms';
 
 @Component({
@@ -22,7 +18,7 @@ import { FormControl, FormGroup } from '@angular/forms';
   templateUrl: './planning-task-relaxation-creator.component.html',
   styleUrls: ['./planning-task-relaxation-creator.component.scss']
 })
-export class PlanningTaskRelaxationCreatorComponent implements OnInit, AfterViewInit, OnDestroy {
+export class PlanningTaskRelaxationCreatorComponent implements OnInit, OnDestroy {
 
   math = Math;
   private ngUnsubscribe: Subject<any> = new Subject();
@@ -43,10 +39,12 @@ export class PlanningTaskRelaxationCreatorComponent implements OnInit, AfterView
   selectedInitialFacts: Fact[] = [];
 
   selctedPredicate: Predicat = null;
-  possibleFacts: TaskUpdate[] = [];
-  selectedFacts: TaskUpdate[] = [];
+  possibleFacts: {fact: Fact, value: number}[] = [];
+  selectedFacts: {fact: Fact, value: number}[] = [];
 
   relaxationSpace: PlanningTaskRelaxationSpace = new PlanningTaskRelaxationSpace("Relax Test" , null , []);
+
+  public initFactUpdates$ = new BehaviorSubject<InitFactUpdate[]>([]);
 
   constructor(
     private currentProjectService: CurrentProjectService,
@@ -60,7 +58,7 @@ export class PlanningTaskRelaxationCreatorComponent implements OnInit, AfterView
       this.isedit = true;
       this.relaxationSpace = data.space;
       this.relaxationForm.controls.name.setValue(this.relaxationSpace.name);
-      this.selectedInitialFacts = this.relaxationSpace.taskUpdatList.map(e =>  e.orgFact);
+      this.selectedInitialFacts = this.relaxationSpace.possibleInitFactUpdates.map(e =>  e.orgFact);
     }
 
     this.currentProjectService.getSelectedObject()
@@ -80,22 +78,10 @@ export class PlanningTaskRelaxationCreatorComponent implements OnInit, AfterView
   ngOnInit(): void {
   }
 
-  ngAfterViewInit(): void {
-    if (this.isedit && this.step == 0) {
-      // this.stepper.selectedIndex = ++this.step;
-    }
-  }
-
   ngOnDestroy(): void {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
   }
-
-  // initEdit(stepper: MatStepper) {
-  //   stepper.next();
-  //   // if (stepper.selectedIndex === this.numSteps - 1) {
-  //   // }
-  // }
 
   initNextStep(): void {
     console.log(this.relaxationSpace);
@@ -107,20 +93,20 @@ export class PlanningTaskRelaxationCreatorComponent implements OnInit, AfterView
 
   updateInitialFacts(predicate: Predicat): void {
     this.selctedInitialPredicate = predicate;
-    this.initialFacts = this.task.init.filter(f => f.name == this.selctedInitialPredicate.name && ! this.selectedInitialFacts.includes(f))
+    this.initialFacts = this.task.initial.filter(f => f.name == this.selctedInitialPredicate.name && ! this.selectedInitialFacts.includes(f))
   }
 
   removeInitFact(fact: Fact){
     this.selectedInitialFacts = this.selectedInitialFacts.filter(f => f != fact);
     // this.selectedFacts = this.selectedFacts.filter(e => e != fact);
-    this.initialFacts = this.task.init.filter(f => f.name == this.selctedPredicate.name && ! this.selectedInitialFacts.includes(f))
+    this.initialFacts = this.task.initial.filter(f => f.name == this.selctedPredicate.name && ! this.selectedInitialFacts.includes(f))
   }
 
   initFactsSelected(): void {
     for(let f of this.selectedInitialFacts){
-      if (this.relaxationSpace.taskUpdatList.filter(u => u.orgFact.equals(f)).length == 0){
-        let newTaskUpdate = new TaskUpdates(f, []);
-        this.relaxationSpace.taskUpdatList.push(newTaskUpdate);
+      if (this.relaxationSpace.possibleInitFactUpdates.filter(u => u.orgFact.equals(f)).length == 0){
+        let newTaskUpdate = new PossibleInitFactUpdate(f, []);
+        this.relaxationSpace.possibleInitFactUpdates.push(newTaskUpdate);
       }
     }
   }
@@ -134,25 +120,20 @@ export class PlanningTaskRelaxationCreatorComponent implements OnInit, AfterView
     }
   }
 
-  deleteFactFromRelax(update: TaskUpdate, updates: TaskUpdates){
-    updates.newFacts = updates.newFacts.filter(e => e != update);
-    this.selectedFacts = this.selectedFacts.filter(e => e != update);
-    if (update.fact.name == this.selctedPredicate.name){
-      this.possibleFacts.push(update);
+  deleteFactFromRelax(updateFact: {fact: Fact, value: number}, possibleUpdates: PossibleInitFactUpdate){
+    possibleUpdates.updates = possibleUpdates.updates.filter(e => e != updateFact);
+    this.selectedFacts = this.selectedFacts.filter(e => e != updateFact);
+    if (updateFact.fact.name == this.selctedPredicate.name){
+      this.possibleFacts.push(updateFact);
       this.possibleFacts = this.possibleFacts.sort();
     }
   }
 
-  updateValueChanged(event,  update: TaskUpdate): void {
+  updateValueChanged(event,  update: {fact: Fact, value: number}): void {
     update.value = event.target.value;
   }
 
   onSave(): void {
-
-    // let relaxationSpace = {name: "Relax", project: this.currentProject._id, taskUpdatList: []}
-    // for(let relaxList of this.relaxationFactLists){
-    //   relaxationSpace.taskUpdatList.push({orgFact: relaxList.init, newFacts: relaxList.facts.map(f => {return {fact:f, value: 1}})})
-    // }
     this.relaxationSpace.name = this.relaxationForm.controls.name.value;
     this.relaxationService.saveObject(this.relaxationSpace);
     this.dialogRef.close();

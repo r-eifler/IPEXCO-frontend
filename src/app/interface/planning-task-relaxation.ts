@@ -1,22 +1,33 @@
 import { PlanningTask } from 'src/app/interface/plannig-task';
 import { Fact } from "./plannig-task"
 
-export interface TaskUpdate {
-  fact: Fact,
+export class InitFactUpdate {
+  orgFact: Fact;
+  newFact: Fact;
   value: number;
-}
 
-export class TaskUpdates{
-  public orgFact: Fact;
-  public newFacts: TaskUpdate[];
-
-  constructor(orgFact: Fact, newFacts: TaskUpdate[]) {
-    this.orgFact = orgFact;
-    this.newFacts = newFacts;
+  constructor(orgFact: Fact, newFact: Fact, value: number) {
+    this. orgFact = orgFact;
+    this.newFact = newFact;
+    this.value = value;
   }
 
-  static fromObject(o: TaskUpdates){
-    return new TaskUpdates(Fact.fromObject(o.orgFact), o.newFacts.map(e => {return {fact: Fact.fromObject(e.fact), value: e.value}}));
+  static fromObject(o: InitFactUpdate){
+    return new InitFactUpdate(Fact.fromObject(o.orgFact), Fact.fromObject(o.newFact), o.value);
+  }
+}
+
+export class PossibleInitFactUpdate{
+  public orgFact: Fact;
+  public updates: {fact: Fact, value: number}[];
+
+  constructor(orgFact: Fact, updates: {fact: Fact, value: number}[]) {
+    this. orgFact = orgFact;
+    this.updates = updates;
+  }
+
+  static fromObject(o: PossibleInitFactUpdate){
+    return new PossibleInitFactUpdate(Fact.fromObject(o.orgFact), o.updates.map(e => {return {fact: Fact.fromObject(e.fact), value: e.value}}));
   }
 }
 
@@ -24,16 +35,16 @@ export class PlanningTaskRelaxationSpace {
   public _id?: string;
   public name: string;
   public project: string;
-  public taskUpdatList: TaskUpdates[];
+  public possibleInitFactUpdates: PossibleInitFactUpdate[];
 
-  constructor(name: string, project: string, taskUpdatList: TaskUpdates[]) {
+  constructor(name: string, project: string, initUpdates: PossibleInitFactUpdate[]) {
     this.name = name;
     this.project = project;
-    this.taskUpdatList = taskUpdatList;
+    this.possibleInitFactUpdates = initUpdates;
   }
 
   static fromObject(o: PlanningTaskRelaxationSpace){
-    let space = new PlanningTaskRelaxationSpace(o.name, o.project, o.taskUpdatList.map(e => TaskUpdates.fromObject(e)));
+    let space = new PlanningTaskRelaxationSpace(o.name, o.project, o.possibleInitFactUpdates.map(e => PossibleInitFactUpdate.fromObject(e)));
     if(o._id){
       space._id = o._id
     }
@@ -41,10 +52,25 @@ export class PlanningTaskRelaxationSpace {
   }
 }
 
-export interface ModifiedPlanningTask{
+export class ModifiedPlanningTask{
   _id?: string;
   name: string;
-  project: string,
+  project: string;
   basetask: PlanningTask;
-  taskUpdatList: TaskUpdates[];
+  initUpdates: InitFactUpdate[];
+
+  constructor(name: string, project: string, baseTask: PlanningTask, initUpdates: InitFactUpdate[]) {
+    this.name = name;
+    this.project = project;
+    this.basetask = baseTask;
+    this.initUpdates = initUpdates;
+  }
+
+  static fromObject(o: ModifiedPlanningTask) {
+    let task = new ModifiedPlanningTask(o.name, o.project, PlanningTask.fromObject(o.basetask), o.initUpdates.map(e => InitFactUpdate.fromObject(e)));
+    if(o._id){
+      task._id = o._id
+    }
+    return task;
+  }
 }

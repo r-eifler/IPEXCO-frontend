@@ -69,7 +69,7 @@ export class NoMysteryTask extends Task {
     const regexInitPackage = RegExp('at\\(p(\\d),l(\\d+)\\)');
     const regexInitFuel = RegExp('fuel\\(t(\\d),level(\\d+)\\)');
 
-    for (const pred of this.planningTask.init) {
+    for (const pred of this.planningTask.initial) {
       let match = regexRoad.exec(pred.toPDDL());
       if (match) {
         const souceName = 'l' + match[2];
@@ -111,8 +111,7 @@ export class NoMysteryTask extends Task {
 
   parseGoals() {
     const regexGoalPackage = RegExp('at\\(p(\\d),l(\\d+)\\)');
-
-    for (const pred of this.planningTask.goals) {
+    for (const pred of this.planningTask.goal) {
 
       const match = regexGoalPackage.exec(pred.name);
       if (match) {

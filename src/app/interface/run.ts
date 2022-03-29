@@ -45,7 +45,8 @@ export class IterationStep{
       this.plan = plan;
       if(this.plan) {
         this.plan = plan;
-        this.plan.initPlan(this.task.basetask);
+        if(this.plan.status == RunStatus.finished)
+          this.plan.initPlan(this.task.basetask);
       }
     }
 
@@ -54,7 +55,7 @@ export class IterationStep{
     if (step.plan) {
       plan = PlanRun.fromObject(step.plan);
     }
-    let nStep = new IterationStep(step.name, step.project, step.status, step.hardGoals, step.softGoals, step.task, plan);
+    let nStep = new IterationStep(step.name, step.project, step.status, step.hardGoals, step.softGoals, ModifiedPlanningTask.fromObject(step.task), plan);
     if (step._id){
       nStep._id = step._id;
     }
@@ -94,7 +95,7 @@ export class ModIterationStep extends IterationStep{
   baseStep: IterationStep
 
   constructor(name, baseStep: IterationStep) {
-      let newModTask: ModifiedPlanningTask = {name: baseStep.task.name, project: baseStep.project as string, basetask: baseStep.task.basetask, taskUpdatList: []}
+      let newModTask: ModifiedPlanningTask = {name: baseStep.task.name, project: baseStep.project as string, basetask: baseStep.task.basetask, initUpdates: [...baseStep.task.initUpdates]}
       console.log(newModTask);
       super(name, baseStep.project, StepStatus.unknown, [...baseStep.hardGoals], [...baseStep.softGoals], newModTask, null)
       this.baseStep = baseStep;

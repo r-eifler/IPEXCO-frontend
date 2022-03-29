@@ -172,8 +172,8 @@ export class PlanningTask{
     public domain: string;
     public objects: Object[];
     public predicates: Predicat[];
-    public init: Fact[];
-    public goals: Fact[];
+    public initial: Fact[];
+    public goal: Fact[];
     public actions: Action[];
 
     constructor(name: string, domain: string, types: Type[], objects: Object[],
@@ -183,22 +183,21 @@ export class PlanningTask{
         this.types = types;
         this.objects = objects;
         this.predicates = predicates;
-        this.init = initial;
-        this.goals = goal;
+        this.initial = initial;
+        this.goal = goal;
         this.actions = actions;
     }
 
-  static fromJSON(json, name, domain){
-    console.log(json);
-    let types = json.types;
-    let objects = json.objects;
-    let predicates = json.predicates.map(p => Predicat.fromJSON(p));
-    let actions = json.actions.map(p => Action.fromJSON(p))
-    let initial = json.initial.map(p => Fact.fromJSON(p))
-    let goal = json.goal.map(p => Fact.fromJSON(p));
+  static fromObject(o: PlanningTask){
+    let types = o.types;
+    let objects = o.objects;
+    let predicates = o.predicates.map(p => Predicat.fromJSON(p));
+    let actions = o.actions.map(p => Action.fromJSON(p))
+    let initial = o.initial.map(p => Fact.fromJSON(p))
+    let goal = o.goal.map(p => Fact.fromJSON(p));
 
-    let task = new PlanningTask(name, domain, types, objects, predicates, initial, goal, actions);
-    task._id = json._id;
+    let task = new PlanningTask(o.name, o.domain, types, objects, predicates, initial, goal, actions);
+    task._id = o._id;
     return task;
   }
 
@@ -232,8 +231,8 @@ export class PlanningTask{
     let p = "(define (problem " + this.name.replace(/\s+/g, '') + ")\n";
     p += "(domain " + this.domain.replace(/\s+/g, '') + ")";
     p += "(:objects " + this.objects.map(o => o.name + "-" + o.type).join("\n") + "\n)\n";
-    p += "(:init\n " + this.init.map(f => f.toPDDL()).join("\n") + "\n)\n";
-    p += "(goal: (and " + this.goals.map(p => p.toPDDL()).join("\n") + ")\n";
+    p += "(:init\n " + this.initial.map(f => f.toPDDL()).join("\n") + "\n)\n";
+    p += "(goal: (and " + this.goal.map(p => p.toPDDL()).join("\n") + ")\n";
     p += "\n)";
 
     return p;

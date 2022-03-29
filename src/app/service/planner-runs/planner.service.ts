@@ -39,9 +39,9 @@ export class PlannerService{
     let httpParams = new HttpParams();
     httpParams = httpParams.set('save', String(save));
 
-    // const planRun: PlanRun = new PlanRun('Plan ', RunStatus.pending);
-    // step.plan = planRun;
-    // this.iterationStepsService.saveObject(step);
+    const planRun: PlanRun = new PlanRun('Plan ', RunStatus.pending);
+    step.plan = planRun;
+    this.selectedStepService.saveObject(step);
 
     this.BASE_URL = this.myBaseURL + 'plan';
     this.http.post<IHTTPData<IterationStep>>(this.BASE_URL, {data: step}, {params: httpParams})

@@ -41,5 +41,9 @@
       *ngIf="(step$ | async)?.canBeModified()">
       Add Step
     </button>
+    <button mat-icon-button color="primary" style="margin-right: auto;"
+      (click)="deleteStep()">
+      <mat-icon>delete</mat-icon>
+    </button>
   </mat-card-actions>
 </mat-card>

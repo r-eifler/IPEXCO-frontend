@@ -64,16 +64,16 @@
 
         <mat-card class="fact-lists-card">
           <div class="relaxation-container">
-            <mat-card class="relax-card" *ngFor="let relax of relaxationSpace.taskUpdatList">
+            <mat-card class="relax-card" *ngFor="let relax of relaxationSpace.possibleInitFactUpdates">
               <div class="fact-container">
                 <mat-chip-list
                   class="mat-chip-list-stacked selected-list" cdkDropList
-                  [cdkDropListData]="relax.newFacts"
+                  [cdkDropListData]="relax.updates"
                   cdkDropList
                   (cdkDropListDropped)="drop($event);updateSelectedFacts($event)">
                   <mat-chip class="selected-chip" color="accent">{{relax.orgFact.toString()}}</mat-chip>
                   <mat-divider [inset]="true"></mat-divider>
-                  <mat-chip class="selected-chip" *ngFor="let update of relax.newFacts"
+                  <mat-chip class="selected-chip" *ngFor="let update of relax.updates"
                     [value]="update" (removed)="deleteFactFromRelax(update, relax)" cdkDrag>
                     {{update.fact.toString()}}
                     <button matChipRemove>
@@ -91,8 +91,8 @@
   </mat-step>
   <mat-step class="step" label="Relaxation Values">
     <div class="main-container-values">
-      <div *ngFor="let updates of relaxationSpace.taskUpdatList" class="relaxation-value-container">
-      <table mat-table id="plan-property-collection-table" [dataSource]="updates.newFacts" class="value-table">
+      <div *ngFor="let updates of relaxationSpace.possibleInitFactUpdates" class="relaxation-value-container">
+      <table mat-table [dataSource]="updates.updates" class="value-table">
 
         <ng-container matColumnDef="value">
           <th mat-header-cell *matHeaderCellDef>Utility</th>
