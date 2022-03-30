@@ -32,11 +32,9 @@ export class CurrentProjectService extends SelectedObjectService<Project> {
   }
 
   saveObject(project: Project) {
-    console.log(project);
     if (project) {
       project.baseTask = PlanningTask.fromObject(project.baseTask);
       project.settings = JSON.parse(JSON.stringify(project.settings)) as ExecutionSettings;
-      console.log(project);
     }
     this.selectedObjectStore.dispatch({type: LOAD, data: project});
     if (project) {

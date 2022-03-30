@@ -86,4 +86,11 @@ export class RelaxationSelectorComponent implements OnInit, OnDestroy {
 
   }
 
+  getSelectedUpdate(i, j) {
+    if(this.selectedUpdates.length > i && this.selectedUpdates[i].length > j){
+      return this.selectedUpdates[i][j]
+    }
+    return null;
+  }
+
 }

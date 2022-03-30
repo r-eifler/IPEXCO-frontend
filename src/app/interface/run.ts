@@ -60,7 +60,6 @@ export class IterationStep{
       nStep._id = step._id;
     }
     if (step.depExplanations){
-      console.log(step.depExplanations);
       nStep.depExplanations = step.depExplanations.map(e => DepExplanationRun.fromObject(e));
     }
     return nStep;
@@ -142,9 +141,13 @@ export class ModIterationStep extends IterationStep{
     }
 
     getAllHardGoals(): string[] {
-      let hg = new Set([...this.hardGoals]);
-      this.baseStep.hardGoals.forEach(g => hg.add(g));
-      return Array.from(hg);
+      let hg = [...this.baseStep.hardGoals]
+      this.hardGoals.forEach(g => {
+        if(! hg.some(h => h == g)){
+          hg.push(g);
+        }
+      });
+      return hg;
     }
 
     hasPlan(): boolean {

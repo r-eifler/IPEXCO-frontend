@@ -45,7 +45,6 @@ export class SelectedHardGoalsComponent implements OnInit {
   }
 
   deselectPP(pp: PlanProperty) {
-    console.log(pp);
     let currentStep = this.step$.getValue();
     if(currentStep.canBeModified()){
       currentStep.hardGoals = currentStep.hardGoals.filter(p => p !== pp._id);
