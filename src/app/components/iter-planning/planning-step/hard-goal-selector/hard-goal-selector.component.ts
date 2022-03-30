@@ -27,6 +27,8 @@ export class HardGoalSelectorComponent implements OnInit, OnDestroy {
   withoutConlicts$: Observable<PlanProperty[]>;
   unknownConflicts$: Observable<PlanProperty[]>;
 
+  display = new Set<string>();
+
   constructor(
     private selectedIterationStepService: SelectedIterationStepService,
     private planpropertiesService: PlanPropertyMapService,
@@ -70,6 +72,13 @@ export class HardGoalSelectorComponent implements OnInit, OnDestroy {
   }
 
   askQuestion(pp: PlanProperty){
+    if(this.display.has(pp._id)){
+      this.display.delete(pp._id);
+      return
+    }
+    else {
+      this.display.add(pp._id);
+    }
     combineLatest([this.step$, this.planPropertiesMap$]).
     pipe(take(1)).subscribe(
       ([step, planProperties]) => {
@@ -78,8 +87,6 @@ export class HardGoalSelectorComponent implements OnInit, OnDestroy {
           if (step.getDepExplanation(pp._id)){
               return
           }
-          console.log("Compute Explanation");
-          console.log(pp.naturalLanguageDescription);
           this.plannerService.computeMUGS(step, [pp._id], Array.from(planProperties.values()));
         }
       }

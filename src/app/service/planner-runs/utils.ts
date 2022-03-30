@@ -1,10 +1,9 @@
-import { map } from 'rxjs/operators';
+import { PPConflict } from './../../interface/explanations';
 import { PlanningTask, Action } from './../../interface/plannig-task';
 import {PlanRun} from '../../interface/run';
 import {GoalType, PlanProperty} from '../../interface/plan-property/plan-property';
-import {TaskSchema} from '../../interface/task-schema';
 import {Plan} from '../../interface/plan';
-import {Demo} from '../../interface/demo';
+import { PPDependencies } from 'src/app/interface/explanations';
 
 export function handlePlanString(planString: string, planRun: PlanRun, task: PlanningTask) {
   const lines = planString.split('\n');
@@ -49,3 +48,18 @@ export function updateMUGSPropsNames(oldMugs: string[][], planProperties: Map<st
   }
   return newMUGS;
 }
+
+export function toPPDependencies(oldMugs: string[][], planProperties: Map<string, PlanProperty>): PPDependencies {
+
+  const newMUGS = updateMUGSPropsNames(oldMugs, planProperties);
+  const ppList = Array.from(planProperties.values());
+
+  let dep = new PPDependencies();
+
+  for (const mugs of newMUGS) {
+    dep.addConflict(new PPConflict(mugs.map(e => ppList.find(pp => pp.name == e)._id)))
+  }
+
+  return dep;
+}
+

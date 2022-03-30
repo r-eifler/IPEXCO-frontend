@@ -1,0 +1,21 @@
+.outer-container {
+  box-sizing: border-box;
+  padding-top: 20px;
+}
+
+.header {
+  font-size: larger;
+  font-weight: bold;
+}
+
+.card-container {
+  display: flex;
+  flex-direction: column;
+  row-gap: 20px;
+}
+
+.button-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+}

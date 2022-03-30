@@ -7,7 +7,8 @@
     <h3>{{relaxSpace.name}}</h3>
     <mat-form-field appearance="fill" *ngFor="let updateList of relaxSpace.possibleInitFactUpdates; let j = index">
           <mat-label>{{updateList.orgFact.toString()}}</mat-label>
-          <mat-select (selectionChange)="updateSelected($event, updateList)" [(value)]="selectedUpdates[i][j]">
+          <mat-select (selectionChange)="updateSelected($event, updateList)">
+          <!-- [(value)]="selectedUpdates[i][j]"> -->
             <mat-option *ngFor="let possibleFact of updateList.updates"
               [value]="possibleFact">
               {{possibleFact.fact.toString()}}

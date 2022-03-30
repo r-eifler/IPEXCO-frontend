@@ -62,15 +62,11 @@ export class PlannerService{
 
     const url = this.myBaseURL + 'mugs/' + step._id;
 
+    let softGoals : string[] = step.hardGoals.filter(pp => ! question.some(h => h == pp));
 
-    let hardGoals : string[]  = planProperties.filter(pp => pp.isUsed && pp.globalHardGoal && step.hardGoals.some(h => h == pp._id)).map(pp => pp._id);
-    question.forEach(q => hardGoals.push(q));
-    let softGoals : string[] = planProperties.filter(pp => pp.isUsed && ! hardGoals.some(h => h == pp._id)).map(pp => pp._id);
+    let expRun = new DepExplanationRun("DExp", RunStatus.pending, question, softGoals);
 
-    let expRun = new DepExplanationRun("DExp", RunStatus.pending, hardGoals, softGoals);
-
-    // step.depExplanations.push(expRun);
-    // this.selectedStepService.saveObject(step);
+    console.log(expRun);
 
     this.http.post<IHTTPData<IterationStep>>(url, expRun)
       .subscribe(httpData => {
@@ -79,6 +75,9 @@ export class PlannerService{
         this.iterationStepsStore.dispatch(action);
         this.selectedStepService.updateIfSame(step);
       });
+
+    step.depExplanations.push(expRun);
+    this.selectedStepService.saveObject(step);
   }
 
 }

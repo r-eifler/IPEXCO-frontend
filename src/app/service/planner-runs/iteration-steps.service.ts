@@ -71,6 +71,7 @@ export class IterationStepsService extends ObjectCollectionService<IterationStep
         .pipe(this.pipeFindData, this.pipeFind)
         .subscribe((res) => {
           // console.log('find: ' + this.BASE_URL);
+          console.log(res);
           let steps = res.map(s => IterationStep.fromObject(s));
           console.log(steps);
           if(steps.length == 0){
@@ -81,7 +82,7 @@ export class IterationStepsService extends ObjectCollectionService<IterationStep
 
                   let modTask: ModifiedPlanningTask = {name: 'init', project: project._id, basetask: project.baseTask, initUpdates: []};
 
-                  let globalHardGoals : string [];
+                  let globalHardGoals : string [] = [];
                   for(let pp of planPropertiesMap.values()){
                     if(pp.globalHardGoal){
                       globalHardGoals.push(pp._id);

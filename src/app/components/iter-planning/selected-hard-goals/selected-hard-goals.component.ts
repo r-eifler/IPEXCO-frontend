@@ -7,6 +7,12 @@ import { PlanProperty } from 'src/app/interface/plan-property/plan-property';
 import { IterationStep, ModIterationStep } from 'src/app/interface/run';
 import { SelectedIterationStepService } from 'src/app/service/planner-runs/selected-iteration-step.service';
 
+interface ModHardGoal {
+  planProperty: PlanProperty,
+  added: boolean;
+  removed: boolean;
+}
+
 @Component({
   selector: 'app-selected-hard-goals',
   templateUrl: './selected-hard-goals.component.html',
@@ -17,7 +23,7 @@ export class SelectedHardGoalsComponent implements OnInit {
   step$: BehaviorSubject<IterationStep>;
   planProperties$: BehaviorSubject<Map<string,PlanProperty>>;
 
-  hardGoals$: Observable<PlanProperty[]>;
+  hardGoals$: Observable<ModHardGoal[]>;
 
   constructor(
     private selectedIterationStepService: SelectedIterationStepService,
@@ -29,8 +35,9 @@ export class SelectedHardGoalsComponent implements OnInit {
 
     this.hardGoals$ = combineLatest([this.step$, this.planProperties$]).pipe(
       filter(([step, planProperties]) => !!step && planProperties && planProperties.size > 0),
-      map(([step, planProperties]) => step.hardGoals.map(h => planProperties.get(h))),
-      map(hardGoals => hardGoals.sort((a,b) => a.globalHardGoal ? -1 : 0 )),
+      map(([step, planProperties]) => step.getAllHardGoals().map(pp_id =>
+        {return {planProperty: planProperties.get(pp_id), added: step.hasBeenAdded(pp_id), removed: step.hasBeenRemoved(pp_id)}})),
+      map(hardGoals => hardGoals.sort((a,b) => a.planProperty.globalHardGoal ? -1 : 0 )),
     );
   }
 

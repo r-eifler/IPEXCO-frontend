@@ -4,26 +4,27 @@
   </mat-card-header>
   <mat-card-content>
     <ng-container *ngIf="(hardGoals$ | async)?.length > 0">
-      <mat-list>
-        <mat-list-item *ngFor="let pp of (hardGoals$ | async)">
+      <div>
+        <div *ngFor="let modGoal of (hardGoals$ | async)" [class.added]="modGoal.added" [class.removed]="modGoal.removed">
           <div class="list-item-container">
-            <mat-icon matListIcon *ngIf="pp.globalHardGoal">star</mat-icon>
-            <mat-icon matListIcon *ngIf="! pp.globalHardGoal">star_border</mat-icon>
+            <mat-icon matListIcon *ngIf="modGoal.planProperty.globalHardGoal">star</mat-icon>
+            <mat-icon matListIcon *ngIf="! modGoal.planProperty.globalHardGoal">star_border</mat-icon>
             <div class="list-item-text">
-              <span> {{pp.naturalLanguageDescription}} </span>
-              <span> Utility: {{pp.value}} </span>
+              <span> {{modGoal.planProperty.naturalLanguageDescription}} </span>
+              <span> Utility: {{modGoal.planProperty.value}} </span>
             </div>
             <div class="list-item-buttons">
               <button mat-icon-button
-                *ngIf="! pp.globalHardGoal"
-                (click)="deselectPP(pp)"
+                *ngIf="! modGoal.planProperty.globalHardGoal && ! modGoal.removed"
+                (click)="deselectPP(modGoal.planProperty)"
                 class="list-item-button">
                 <mat-icon>remove</mat-icon>
               </button>
             </div>
           </div>
-        </mat-list-item>
-      </mat-list>
+          <mat-divider inset="true"></mat-divider>
+        </div>
+      </div>
       </ng-container>
       <p *ngIf="(hardGoals$| async)?.length == 0">
         No hard goals selected.

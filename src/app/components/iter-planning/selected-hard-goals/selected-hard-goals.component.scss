@@ -5,6 +5,8 @@
 }
 
 .list-item-container {
+  box-sizing: border-box;
+  padding: 10px;;
   width: 100%;
   display: grid;
   grid-template-columns: 50px 1fr 1fr;
@@ -21,4 +23,12 @@
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
+}
+
+.added {
+  background-color: rgb(183, 200, 186);
+}
+
+.removed {
+  opacity: 50%;
 }

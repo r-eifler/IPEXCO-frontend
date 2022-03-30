@@ -1,23 +1,30 @@
-import { PlanProperty } from 'src/app/interface/plan-property/plan-property';
+import { devOnlyGuardedExpression } from "@angular/compiler";
 
 export class PPConflict {
-  elems: PlanProperty[];
+  _id? : string;
+  elems: string[];
+
+  constructor(elems) {
+    this.elems = elems;
+  }
 }
 
 export class PPDependencies {
-
+  _id? : string;
   conflicts: PPConflict[];
 
-  constructor(dep: PPConflict[]) {
-    this.conflicts = dep
+  constructor() {
+    this.conflicts = []
   }
 
-  static parse(result: string): PPDependencies {
-    // TODO: implement
-    return new PPDependencies([]);
+
+  static fromObject(o: PPDependencies) {
+    let dep = new PPDependencies();
+    dep.conflicts = o.conflicts.map(c => new PPConflict(c.elems));
+    return dep;
   }
 
-  addMUGS(con: PPConflict): void {
+  addConflict(con: PPConflict): void {
     this.conflicts.push(con)
   }
 }

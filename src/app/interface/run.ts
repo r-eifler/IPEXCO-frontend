@@ -4,7 +4,7 @@ import {PlanProperty} from './plan-property/plan-property';
 import {Project} from './project';
 import {Plan} from './plan';
 import { ModifiedPlanningTask } from './planning-task-relaxation';
-import { handlePlanString } from '../service/planner-runs/utils';
+import { handlePlanString, toPPDependencies } from '../service/planner-runs/utils';
 
 export enum StepStatus{
   unknown,
@@ -60,6 +60,7 @@ export class IterationStep{
       nStep._id = step._id;
     }
     if (step.depExplanations){
+      console.log(step.depExplanations);
       nStep.depExplanations = step.depExplanations.map(e => DepExplanationRun.fromObject(e));
     }
     return nStep;
@@ -67,6 +68,18 @@ export class IterationStep{
 
   canBeModified(): boolean {
     return false;
+  }
+
+  hasBeenAdded(id: string): boolean {
+    return false;
+  }
+
+  hasBeenRemoved(id: string): boolean {
+    return false;
+  }
+
+  getAllHardGoals(): string[] {
+    return this.hardGoals;
   }
 
   hasPlan(): boolean {
@@ -96,7 +109,7 @@ export class IterationStep{
     return this.hardGoals.reduce((acc, cur) => acc + planProperties.get(cur).value, 0)
   }
 
-  getDepExplanation(question: string) {
+  getDepExplanation(question: string): DepExplanationRun {
     if(! this.depExplanations) {
       return null;
     }
@@ -118,6 +131,20 @@ export class ModIterationStep extends IterationStep{
 
     canBeModified(): boolean {
       return true;
+    }
+
+    hasBeenAdded(id: string): boolean {
+      return this.hardGoals.some(h => h == id) && ! this.baseStep.hardGoals.some(h => h == id);
+    }
+
+    hasBeenRemoved(id: string): boolean {
+      return ! this.hardGoals.some(h => h == id) && this.baseStep.hardGoals.some(h => h == id);
+    }
+
+    getAllHardGoals(): string[] {
+      let hg = new Set([...this.hardGoals]);
+      this.baseStep.hardGoals.forEach(g => hg.add(g));
+      return Array.from(hg);
     }
 
     hasPlan(): boolean {
@@ -188,7 +215,7 @@ export class DepExplanationRun{
       run.relaxationExplanations = o.relaxationExplanations;
     }
     if (run.status = RunStatus.finished) {
-      run.dependencies = PPDependencies.parse(run.result);
+      run.dependencies = PPDependencies.fromObject(o.dependencies)
     }
     return run;
   }
