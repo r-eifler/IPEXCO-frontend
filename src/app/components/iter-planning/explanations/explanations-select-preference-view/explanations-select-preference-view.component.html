@@ -1,0 +1,25 @@
+<mat-card class="main-card">
+  <h2>Why not ... ?</h2>
+  <ng-container *ngIf="(possiblePP$ | async)?.length > 0">
+    <div class="list">
+      <div *ngFor="let pp of (possiblePP$ | async)" class="list-main-container" [class.selected]="selectedPPId == pp._id">
+        <div class="list-item-container" (click)="selectPP(pp)">
+          <mat-icon matListIcon >star_border</mat-icon>
+          <div class="list-item-text">
+            <span style="font-size: larger;"> {{pp.naturalLanguageDescription}} </span>
+            <span> Utility: {{pp.value}} </span>
+          </div>
+          <!-- <div class="list-item-buttons">
+            <button mat-icon-button (click)="selectPP(pp)">
+              <mat-icon>help_center</mat-icon>
+            </button>
+          </div> -->
+        </div>
+        <mat-divider inset="true"></mat-divider>
+      </div>
+    </div>
+  </ng-container>
+  <p *ngIf="(possiblePP$ | async)?.length == 0">
+    No other goals available.
+  </p>
+</mat-card>

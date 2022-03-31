@@ -1,0 +1,17 @@
+<mat-card class="main-card">
+  <mat-card-header>
+    <mat-card-title>Relaxations</mat-card-title>
+  </mat-card-header>
+  <mat-card-content class="content">
+    <div *ngFor="let updatesList of (selectedUpdates$ | async)" class="relax-space">
+      <p class="name">{{updatesList.name}}</p>
+      <div class="list-container">
+        <div *ngFor="let update of updatesList.updates">
+          <mat-chip-list *ngFor="let elem of update">
+              <mat-chip [class.selected]="elem.selected">{{elem.fact.toString()}}</mat-chip>
+          </mat-chip-list>
+        </div>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

@@ -1,6 +1,6 @@
 import { PlanningTaskRelaxationService } from 'src/app/service/planning-task/planning-task-relaxations-services';
 import { map, filter, takeUntil, tap } from 'rxjs/operators';
-import { InitFactUpdate, ModifiedPlanningTask, PlanningTaskRelaxationSpace, PossibleInitFactUpdate } from './../../../../interface/planning-task-relaxation';
+import { InitFactUpdate, ModifiedPlanningTask, PlanningTaskRelaxationSpace, PossibleInitFactUpdate } from '../../../../interface/planning-task-relaxation';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { BehaviorSubject, Subject, Observable, combineLatest } from 'rxjs';
 import { IterationStep, ModIterationStep } from 'src/app/interface/run';

@@ -1,4 +1,4 @@
-import { SelectedIterationStepService } from './service/planner-runs/selected-iteration-step.service';
+import { SelectedIterationStepService, NewIterationStepService } from './service/planner-runs/selected-iteration-step.service';
 import { IterationStepsService } from 'src/app/service/planner-runs/iteration-steps.service';
 import { PlanningTaskRelaxationService } from './service/planning-task/planning-task-relaxations-services';
 import {AnimationSettingsDirective} from './components/animation/animation-settings.directive';
@@ -64,7 +64,7 @@ import {ProjectBaseComponent} from './components/project/project-base/project-ba
 import {PropertyCollectionComponent} from './components/plan_properties/property-collection/property-collection.component';
 import {ProjectIterativePlanningBaseComponent} from './components/project/project-iterative-planning-base/project-iterative-planning-base.component';
 import {TaskViewComponent} from './components/iter-planning/planning-step/task-view/task-view.component';
-import {PlanViewComponent} from './components/iter-planning/planning-step/plan-view/plan-view.component';
+import {PlanViewComponent} from './components/iter-planning/plan/plan-view/plan-view.component';
 import {QuestionStepComponent} from './components/iter-planning/question-step/question-step/question-step.component';
 import {PlanningStepComponent} from './components/iter-planning/planning-step/planning-step/planning-step.component';
 import {
@@ -80,7 +80,7 @@ import {AnswerViewComponent} from './components/iter-planning/question-step/answ
 // Store
 import {PddlFileUtilsService} from './service/files/pddl-file-utils.service';
 import {
-  CurrentIterationStepStore,
+  SelectedIterationStepStore,
   CurrentProjectStore,
   CurrentQuestionStore,
   CurrentRunStore,
@@ -99,6 +99,7 @@ import {
   TaskSchemaStore,
   UserStore,
   UserStudiesStore,
+  NewIterationStepStore,
 } from './store/stores.store';
 import {
   DomainFilesService,
@@ -171,7 +172,7 @@ import { StudySelectionRedirectionComponent } from './components/user-study/meta
 import { UserStudyCollectionBaseComponent } from './components/user-study/user-study-collection-base/user-study-collection-base.component';
 import { AcceptedTestPersonsComponent } from './components/user-study/eval/accepted-test-persons/accepted-test-persons.component';
 import { GlobalExplanationComponent } from './components/iter-planning/question-step/global-explanation/global-explanation.component';
-import { InteractivePlanViewComponent } from './components/iter-planning/planning-step/interactive-plan-view/interactive-plan-view.component';
+import { InteractivePlanViewComponent } from './components/iter-planning/plan/interactive-plan-view/interactive-plan-view.component';
 import { NgxGraphModule } from '@swimlane/ngx-graph';
 import { PlanningTaskViewComponent } from './components/planning-task/planning-task-view/planning-task-view.component';
 import { PlanningTaskRelaxationsComponent } from './components/planning-task/planning-task-relaxations/planning-task-relaxations.component';
@@ -179,12 +180,17 @@ import { ProjectSettingsComponent } from './components/project/project-settings/
 import { CompleteActionComponent } from './components/planning-task/complete-action/complete-action.component';
 import { PlanningTaskRelaxationCreatorComponent } from './components/planning-task/planning-task-relaxation-creator/planning-task-relaxation-creator.component';
 import { IterationStepsListComponent } from './components/iter-planning/iteration-steps-list/iteration-steps-list.component';
-import { IterationStepOverviewComponent } from './components/iter-planning/iteration-step-overview/iteration-step-overview.component';
+import { IterationStepOverviewComponent } from './components/iter-planning/finished-step/iteration-step-overview/iteration-step-overview.component';
 import { IterationStepDetailNavigatorComponent } from './components/iter-planning/iteration-step-detail-navigator/iteration-step-detail-navigator.component';
-import { HardGoalSelectorComponent } from './components/iter-planning/planning-step/hard-goal-selector/hard-goal-selector.component';
-import { RelaxationSelectorComponent } from './components/iter-planning/planning-step/relaxation-selector/relaxation-selector.component';
-import { SelectedHardGoalsComponent } from './components/iter-planning/selected-hard-goals/selected-hard-goals.component';
-import { ConflictViewComponent } from './components/iter-planning/planning-step/conflict-view/conflict-view.component';
+import { HardGoalSelectorComponent } from './components/iter-planning/goals/hard-goal-selector/hard-goal-selector.component';
+import { RelaxationSelectorComponent } from './components/iter-planning/relaxations/relaxation-selector/relaxation-selector.component';
+import { SelectedHardGoalsComponent } from './components/iter-planning/goals/selected-hard-goals/selected-hard-goals.component';
+import { ConflictViewComponent } from './components/iter-planning/explanations/conflict-view/conflict-view.component';
+import { FinishedStepNavigatorComponent } from './components/iter-planning/finished-step/finished-step-navigator/finished-step-navigator.component';
+import { SelectedRelaxationsViewComponent } from './components/iter-planning/relaxations/selected-relaxations-view/selected-relaxations-view.component';
+import { ExplanationsViewComponent } from './components/iter-planning/finished-step/explanations-view/explanations-view.component';
+import { ExplanationsSelectPreferenceViewComponent } from './components/iter-planning/explanations/explanations-select-preference-view/explanations-select-preference-view.component';
+import { ExplanationsRelaxationsViewComponent } from './components/iter-planning/explanations/explanations-relaxations-view/explanations-relaxations-view.component';
 
 @NgModule({
     declarations: [
@@ -273,7 +279,12 @@ import { ConflictViewComponent } from './components/iter-planning/planning-step/
         HardGoalSelectorComponent,
         RelaxationSelectorComponent,
         SelectedHardGoalsComponent,
-        ConflictViewComponent
+        ConflictViewComponent,
+        FinishedStepNavigatorComponent,
+        SelectedRelaxationsViewComponent,
+        ExplanationsViewComponent,
+        ExplanationsSelectPreferenceViewComponent,
+        ExplanationsRelaxationsViewComponent
     ],
     imports: [
         RouterModule.forRoot(appRoutes, { enableTracing: false, paramsInheritanceStrategy: 'always' }),
@@ -349,8 +360,10 @@ import { ConflictViewComponent } from './components/iter-planning/planning-step/
         SelectedQuestionService,
         IterationStepsService,
         IterationStepsStore,
-        CurrentIterationStepStore,
+        SelectedIterationStepStore,
         SelectedIterationStepService,
+        NewIterationStepStore,
+        NewIterationStepService,
         DomainSpecStore,
         DemosStore,
         DemosService,

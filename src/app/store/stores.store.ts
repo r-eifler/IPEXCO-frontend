@@ -36,7 +36,8 @@ export class PlanPropertyMapStore extends  MapStore<string, PlanProperty> {}
 
 
 // PlanRun and ExpRun
-export class CurrentIterationStepStore extends  ItemStore<IterationStep> {}
+export class SelectedIterationStepStore extends  ItemStore<IterationStep> {}
+export class NewIterationStepStore extends  ItemStore<IterationStep> {}
 export class IterationStepsStore extends  ListStore<IterationStep> {}
 export class RunsStore extends  ListStore<PlanRun> {}
 export class CurrentRunStore extends  ItemStore<PlanRun> {}

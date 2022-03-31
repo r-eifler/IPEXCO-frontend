@@ -1,0 +1,48 @@
+<div class="tab-container">
+  <nav mat-tab-nav-bar style="width: 100%; height: 100%;" color="acccent">
+    <a mat-tab-link (click)="showTab = 1"
+      [active]="showTab == 1">
+      <mat-icon style="margin-right: 10px;">star_border</mat-icon>
+      Overview
+    </a>
+    <a mat-tab-link (click)="showTab = 2"
+      [active]="showTab == 2">
+      <mat-icon style="margin-right: 10px;">star_border</mat-icon>
+      Task Info
+    </a>
+    <a mat-tab-link *ngIf="(step$ | async)?.hasPlan()" (click)="showTab = 3"
+      [active]="showTab == 3">
+      <mat-icon style="margin-right: 10px;">map</mat-icon>
+      Plan
+    </a>
+    <a mat-tab-link *ngIf="(step$ | async)?.hasPlan()" (click)="showTab = 4"
+      [active]="showTab == 4">
+      <mat-icon style="margin-right: 10px;">map</mat-icon>
+      Advanced Plan
+    </a>
+    <a mat-tab-link (click)="showTab = 5"
+      [active]="showTab == 5">
+      <mat-icon style="margin-right: 10px;">error</mat-icon>
+      Conflicts
+    </a>
+  </nav>
+  <div class="content-container" *ngIf="showTab == 1">
+    <app-iteration-step-overview style="height: 100%;overflow: auto;"></app-iteration-step-overview>
+  </div>
+
+  <div class="content-container" *ngIf="showTab == 2">
+   <h3>TODO</h3>
+  </div>
+
+  <div class="content-container" *ngIf="showTab == 3">
+      <app-plan-view style="height: 100%;overflow: auto;"></app-plan-view>
+  </div>
+
+  <div class="content-container" *ngIf="showTab == 4">
+      <app-interactive-plan-view style="height: 100%;overflow: auto;"></app-interactive-plan-view>
+  </div>
+
+  <div class="content-container" *ngIf="showTab == 5">
+    <app-explanations-view style="height: 100%;overflow: auto;"></app-explanations-view>
+  </div>
+</div>

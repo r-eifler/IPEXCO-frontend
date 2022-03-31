@@ -31,3 +31,38 @@
       </p>
     </mat-card-content>
 </mat-card>
+
+<div class="main-card">
+  <ng-container *ngIf="(possiblePP$ | async)?.length > 0">
+    <div class="list">
+      <mat-card *ngFor="let pp of (possiblePP$ | async)" class="list-main-container">
+        <div class="list-item-container">
+          <mat-icon matListIcon >star_border</mat-icon>
+          <div class="list-item-text">
+            <span style="font-size: larger;"> {{pp.naturalLanguageDescription}} </span>
+            <span> Utility: {{pp.value}} </span>
+          </div>
+          <div class="list-item-buttons">
+            <button mat-icon-button (click)="selectPP(pp)">
+              <mat-icon>add</mat-icon>
+            </button>
+            <button mat-icon-button (click)="askQuestion(pp)" *ngIf="! (step$ | async).canBeModified()">
+              <mat-icon>help_center</mat-icon>
+            </button>
+          </div>
+        </div>
+        <div *ngIf="(step$ | async).getDepExplanation(pp._id) && this.display.has(pp._id)">
+          <mat-divider [inset]="true"></mat-divider>
+          <app-conflict-view
+            [question]="pp"
+            [explanation]="(step$ | async).getDepExplanation(pp._id)">
+          </app-conflict-view>
+        </div>
+      </mat-card>
+    </div>
+  </ng-container>
+  <p *ngIf="(possiblePP$ | async)?.length == 0">
+    No other goals available.
+  </p>
+</div>
+

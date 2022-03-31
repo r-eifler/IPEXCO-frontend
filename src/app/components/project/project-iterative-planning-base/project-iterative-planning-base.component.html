@@ -1,19 +1,5 @@
 <div class="main-container">
   <div class="action-container">
-    <div class="iter-planning-buttons">
-      <!-- <button mat-stroked-button (click)="newStep()">
-        New Step
-      </button> -->
-      <!-- <button mat-stroked-button (click)="newPlanRun()"
-              [disabled]="(plannerService.isPlannerBusy() | async)">
-        New Plan
-      </button>
-      <button mat-stroked-button (click)="newQuestion();"
-              *ngIf="(settings)?.allowQuestions"
-              [disabled]="! (selectedPlan?.status == runStatus.finished  || selectedPlan?.status === runStatus.noSolution)">
-        Ask Question
-      </button> -->
-    </div>
     <button mat-stroked-button (click)="showHelp()">
       Help
     </button>
@@ -22,65 +8,15 @@
 
   <div class="bottom-container">
     <div class="center-container">
-      <!--<app-plan-animation-view style="height: 100%;overflow: auto;"></app-plan-animation-view>-->
       <app-iteration-steps-list style="height: 100%;overflow: auto;"></app-iteration-steps-list>
     </div>
 
     <div class="center-container">
-      <app-iteration-step-overview style="height: 100%;overflow: auto;"></app-iteration-step-overview>
+      <app-finished-step-navigator style="height: 100%;overflow: auto;"></app-finished-step-navigator>
     </div>
 
-    <div class="center-container">
+    <!-- <div class="center-container">
       <app-iteration-step-detail-navigator style="height: 100%;overflow: auto;"></app-iteration-step-detail-navigator>
-    </div>
+    </div> -->
 
 </div>
-
-<!--              <button mat-flat-button color="primary" [routerLink]="['./planning-step', planRun._id, 'question-step', expRun._id]">Details</button>-->
-
-
-<!-- <div *ngIf="! selectedPlan && (plannerService.isPlannerBusy() | async)" class="spinner-container">
-  <div>
-    <h1>Computing plan ...</h1>
-    <mat-spinner  diameter="200"></mat-spinner>
-  </div>
-</div>
-
-<div *ngIf="! selectedPlan && ! (plannerService.isPlannerBusy() | async)" class="spinner-container">
-  <div>
-    <h1>No plan selected.</h1>
-  </div>
-</div>
-
-<ng-container *ngIf="askQuestion && selectedPlan">
-  <div class="divider"></div>
-  <div class="task-creator-container">
-    <app-question-creator style="height: 100%;overflow: auto;" (finished)="questionCreatorClose($event)"></app-question-creator>
-  </div>
-</ng-container>
-
-<ng-container *ngIf="showAnswer && selectedPlan && ! selectedQuestion">
-  <div class="divider"></div>
-  <div *ngIf="(plannerService.isPlannerBusy() | async)" class="spinner-container">
-    <div>
-      <h1>Computing explanation ...</h1>
-      <mat-spinner  diameter="200"></mat-spinner>
-    </div>
-  </div>
-</ng-container>
-
-<ng-container *ngIf="showAnswer && selectedPlan && selectedQuestion">
-  <div class="divider"></div>
-  <div class="task-creator-container" *ngIf="! (plannerService.isPlannerBusy() | async)">
-    <app-question-view></app-question-view>
-    <app-explanation-view style="height: 100%;overflow: auto;" (finished)="answerViewClose()"></app-explanation-view>
-  </div>
-</ng-container>
-</div>
-
-<ng-container *ngIf="computeNewPlan">
-<div class="divider"></div>
-<div class="task-creator-container">
-  <app-task-creator style="height: 100%;overflow: auto;" (finished)="taskCreatorClose($event)"></app-task-creator>
-</div>
-</ng-container> -->

@@ -1,5 +1,5 @@
-import { Plan } from './../../../../interface/plan';
-import { SelectedIterationStepService } from './../../../../service/planner-runs/selected-iteration-step.service';
+import { Plan } from '../../../../interface/plan';
+import { SelectedIterationStepService } from '../../../../service/planner-runs/selected-iteration-step.service';
 import { RunStatus, IterationStep } from 'src/app/interface/run';
 import {filter, map, takeUntil} from 'rxjs/operators';
 import {Component, OnDestroy, OnInit} from '@angular/core';

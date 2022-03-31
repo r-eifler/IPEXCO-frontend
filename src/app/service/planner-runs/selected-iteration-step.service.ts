@@ -2,7 +2,7 @@ import { IterationStep } from './../../interface/run';
 import { CurrentProjectService } from 'src/app/service/project/project-services';
 import {Injectable} from '@angular/core';
 import {SelectedObjectService} from '../base/selected-object.service';
-import {CurrentIterationStepStore, CurrentRunStore} from '../../store/stores.store';
+import {SelectedIterationStepStore, CurrentRunStore, NewIterationStepStore} from '../../store/stores.store';
 import {PddlFileUtilsService} from '../files/pddl-file-utils.service';
 import {PlanPropertyMapService} from '../plan-properties/plan-property-services';
 import {combineLatest} from 'rxjs/internal/observable/combineLatest';
@@ -15,7 +15,7 @@ import {handlePlanString} from './utils';
 export class SelectedIterationStepService extends SelectedObjectService<IterationStep> {
 
     constructor(
-        store: CurrentIterationStepStore,
+        store: SelectedIterationStepStore,
         private fileUtilsService: PddlFileUtilsService,
         private currentProjectService: CurrentProjectService,
         private planPropertyMapService: PlanPropertyMapService) {
@@ -27,4 +27,17 @@ export class SelectedIterationStepService extends SelectedObjectService<Iteratio
       console.log(obj);
       this.selectedObjectStore.dispatch({type: LOAD, data: obj});
     }
+}
+
+
+@Injectable({
+  providedIn: 'root'
+})
+export class NewIterationStepService extends SelectedObjectService<IterationStep> {
+
+  constructor(
+      store: NewIterationStepStore) {
+      super(store);
+  }
+
 }

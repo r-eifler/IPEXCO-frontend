@@ -1,5 +1,5 @@
-import { IterationStep } from './../../../../interface/run';
-import { SelectedIterationStepService } from './../../../../service/planner-runs/selected-iteration-step.service';
+import { IterationStep } from '../../../../interface/run';
+import { SelectedIterationStepService } from '../../../../service/planner-runs/selected-iteration-step.service';
 import { CurrentProjectService } from 'src/app/service/project/project-services';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { BehaviorSubject, Subject, Observable, combineLatest } from 'rxjs';

@@ -1,0 +1,28 @@
+<mat-card class="main-card">
+  <mat-card-header>
+    <mat-card-title>Hard Goals</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <ng-container *ngIf="(hardGoals$ | async)?.length > 0">
+      <div>
+        <div *ngFor="let pp of (hardGoals$ | async)">
+          <div class="list-item-container">
+            <mat-icon matListIcon *ngIf="pp.globalHardGoal">star</mat-icon>
+            <mat-icon matListIcon *ngIf="! pp.globalHardGoal">star_border</mat-icon>
+            <div class="list-item-text">
+              <span> {{pp.naturalLanguageDescription}} </span>
+              <span> Utility: {{pp.value}} </span>
+            </div>
+            <div class="list-item-buttons">
+
+            </div>
+          </div>
+          <mat-divider inset="true"></mat-divider>
+        </div>
+      </div>
+      </ng-container>
+      <p *ngIf="(hardGoals$| async)?.length == 0">
+        No hard goals selected.
+      </p>
+    </mat-card-content>
+</mat-card>

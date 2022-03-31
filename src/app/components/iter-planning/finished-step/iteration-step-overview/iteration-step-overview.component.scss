@@ -3,9 +3,15 @@
   width: 100%;
   height: 100%;
   display: grid;
-  grid-template-rows: 1fr 1fr 75px;
+  grid-template-columns: 1fr 1fr;
   row-gap: 10px;
   column-gap: 10px;
+}
+
+.sub-subconatiner {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
 }
 
 .actions-container {
