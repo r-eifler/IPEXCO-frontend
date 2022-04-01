@@ -10,7 +10,7 @@
       <mat-icon style="margin-right: 10px;">star_border</mat-icon>
       Task Info
     </a>
-    <a mat-tab-link *ngIf="(step$ | async)?.hasPlan()" (click)="showTab = 3"
+    <a mat-tab-link (click)="showTab = 3"
       [active]="showTab == 3">
       <mat-icon style="margin-right: 10px;">map</mat-icon>
       Plan

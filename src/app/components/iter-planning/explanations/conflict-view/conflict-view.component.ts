@@ -4,7 +4,7 @@ import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { PlanProperty } from '../../../../interface/plan-property/plan-property';
 import { DepExplanationRun, RunStatus } from 'src/app/interface/run';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { map, tap } from 'rxjs/operators';
+import { map, tap, filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-conflict-view',
@@ -37,11 +37,8 @@ export class ConflictViewComponent implements OnInit {
     this.planProperties$ = planPropertiesService.getMap();
 
     this.dependencies$ = combineLatest([this.explanation$, this.planProperties$]).pipe(
-      map(([exp, planProperties]) => {
-        if (exp && planProperties){
-          return exp.dependencies.conflicts.map(con => con.elems.map(e => planProperties.get(e)))
-        }
-      })
+      filter(([exp, planProperties]) => !!exp && exp.status == RunStatus.finished && !!planProperties),
+      map(([exp, planProperties]) =>  exp.dependencies.conflicts.map(con => con.elems.map(e => planProperties.get(e))))
     );
   }
 

@@ -3,13 +3,18 @@
         <mat-card-title>Plan</mat-card-title>
     </mat-card-header>
     <mat-card-content>
-      <div style="width: 100%; height: calc(100% - 50px); overflow-y: auto;" *ngIf="(solved$ | async)">
-        <p *ngFor="let action of (actions$ | async)" class="actions">
-          {{action}}</p>
-      </div>
-      <div style="width: 100%; height: calc(100% - 50px); overflow-y: scroll;" *ngIf="!(solved$ | async)">
-        <p style="margin-left: 30px;">The planning task is unsolvable.</p>
-      </div>
+      <ng-container *ngIf="(hasPlan$ | async)">
+        <div style="width: 100%; height: calc(100% - 50px); overflow-y: auto;" *ngIf="(solved$ | async)">
+          <p *ngFor="let action of (actions$ | async)" class="actions">
+            {{action}}</p>
+        </div>
+        <div style="width: 100%; height: calc(100% - 50px); overflow-y: scroll;" *ngIf="!(solved$ | async)">
+          <p style="margin-left: 30px;">The planning task is unsolvable.</p>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="! (hasPlan$ | async)">
+        <button mat-flat-button color="primary" (click)="computePlan()">Compute Plan</button>
+      </ng-container>
     </mat-card-content>
 </mat-card>
 

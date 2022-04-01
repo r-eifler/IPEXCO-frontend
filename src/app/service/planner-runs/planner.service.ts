@@ -58,7 +58,7 @@ export class PlannerService{
     console.log('not imlemented');
   }
 
-  computeMUGS(step: IterationStep, question: string[], planProperties: PlanProperty[]): void {
+  computeMUGS(step: IterationStep, question: string[], planProperties: PlanProperty[]): DepExplanationRun {
 
     const url = this.myBaseURL + 'mugs/' + step._id;
 
@@ -76,8 +76,7 @@ export class PlannerService{
         this.selectedStepService.updateIfSame(step);
       });
 
-    step.depExplanations.push(expRun);
-    this.selectedStepService.saveObject(step);
+    return expRun;
   }
 
 }

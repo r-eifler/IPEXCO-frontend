@@ -36,8 +36,11 @@ export class ExplanationsViewComponent implements OnInit, OnDestroy {
 
     this.step$.pipe(
       takeUntil(this.unsubscribe$),
-      filter(step => !!step && !!this.selectedPP)).subscribe(step =>
-        this.selectedDepExp$.next(step.getDepExplanation(this.selectedPP))
+      filter(step => !!step && !!this.selectedPP)).subscribe(
+        step =>{
+          console.log("Update Dep explanation");
+          this.selectedDepExp$.next(step.getDepExplanation(this.selectedPP))
+        }
       );
   }
 
@@ -54,7 +57,8 @@ export class ExplanationsViewComponent implements OnInit, OnDestroy {
             this.selectedDepExp$.next(step.getDepExplanation(this.selectedPP))
             return
           }
-          this.plannerService.computeMUGS(step, [this.selectedPP], Array.from(planProperties.values()));
+          let exp = this.plannerService.computeMUGS(step, [this.selectedPP], Array.from(planProperties.values()));
+          this.selectedDepExp$.next(exp);
         }
       }
     );
@@ -72,3 +76,7 @@ export class ExplanationsViewComponent implements OnInit, OnDestroy {
   }
 
 }
+function tab(arg0: (a: any) => void): import("rxjs").OperatorFunction<IterationStep, unknown> {
+  throw new Error('Function not implemented.');
+}
+
