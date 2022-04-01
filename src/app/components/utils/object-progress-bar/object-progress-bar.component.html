@@ -1,0 +1,10 @@
+<div class="container">
+  <mat-progress-bar mode="determinate" [value]="value$ | async"></mat-progress-bar>
+  <div class="display-container">
+    <div class="label-container">
+      <span *ngFor="let v of (values$ | async); let i = index" class="label" [style.left]="((i / ((values$ | async).length - 1)) * 100) + '%'">
+        {{v.display}}
+      </span>
+    </div>
+  </div>
+</div>

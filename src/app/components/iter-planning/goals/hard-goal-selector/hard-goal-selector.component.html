@@ -1,68 +1,70 @@
-<mat-card class="main-card">
-  <mat-card-header>
-    <mat-card-title>Hard Goals</mat-card-title>
-  </mat-card-header>
-  <mat-card-content>
-    <ng-container *ngIf="(hardGoals$ | async)?.length > 0">
-      <div>
-        <div *ngFor="let modGoal of (hardGoals$ | async)" [class.added]="modGoal.added" [class.removed]="modGoal.removed">
-          <div class="list-item-container">
-            <mat-icon matListIcon *ngIf="modGoal.planProperty.globalHardGoal">star</mat-icon>
-            <mat-icon matListIcon *ngIf="! modGoal.planProperty.globalHardGoal">star_border</mat-icon>
-            <div class="list-item-text">
-              <span> {{modGoal.planProperty.naturalLanguageDescription}} </span>
-              <span> Utility: {{modGoal.planProperty.value}} </span>
+<div class="main-conatiner">
+  <mat-card class="main-card">
+    <mat-card-header>
+      <mat-card-title>Hard Goals</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <ng-container *ngIf="(hardGoals$ | async)?.length > 0">
+        <div>
+          <div *ngFor="let pp of (hardGoals$ | async); last as last">
+            <div class="list-item-container">
+              <mat-icon matListIcon *ngIf="pp.globalHardGoal">star</mat-icon>
+              <mat-icon matListIcon *ngIf="! pp.globalHardGoal">star_border</mat-icon>
+              <div class="list-item-text">
+                <span> {{pp.naturalLanguageDescription}} </span>
+                <span> Utility: {{pp.value}} </span>
+              </div>
+              <div class="list-item-buttons">
+                <button mat-icon-button
+                  *ngIf="! pp.globalHardGoal"
+                  (click)="deselectPP(pp)"
+                  class="list-item-button">
+                  <mat-icon>remove</mat-icon>
+                </button>
+              </div>
             </div>
-            <div class="list-item-buttons">
-              <button mat-icon-button
-                *ngIf="! modGoal.planProperty.globalHardGoal && ! modGoal.removed"
-                (click)="deselectPP(modGoal.planProperty)"
-                class="list-item-button">
-                <mat-icon>remove</mat-icon>
-              </button>
-            </div>
+            <mat-divider inset="true" *ngIf="!last"></mat-divider>
           </div>
-          <mat-divider inset="true"></mat-divider>
         </div>
-      </div>
-      </ng-container>
-      <p *ngIf="(hardGoals$| async)?.length == 0">
-        No hard goals selected.
-      </p>
-    </mat-card-content>
-</mat-card>
+        </ng-container>
+        <p *ngIf="(hardGoals$| async)?.length == 0">
+          No hard goals selected.
+        </p>
+      </mat-card-content>
+  </mat-card>
 
-<div class="main-card">
-  <ng-container *ngIf="(possiblePP$ | async)?.length > 0">
-    <div class="list">
-      <mat-card *ngFor="let pp of (possiblePP$ | async)" class="list-main-container">
-        <div class="list-item-container">
-          <mat-icon matListIcon >star_border</mat-icon>
-          <div class="list-item-text">
-            <span style="font-size: larger;"> {{pp.naturalLanguageDescription}} </span>
-            <span> Utility: {{pp.value}} </span>
-          </div>
-          <div class="list-item-buttons">
-            <button mat-icon-button (click)="selectPP(pp)">
-              <mat-icon>add</mat-icon>
-            </button>
-            <button mat-icon-button (click)="askQuestion(pp)" *ngIf="! (step$ | async).canBeModified()">
-              <mat-icon>help_center</mat-icon>
-            </button>
+  <mat-card class="main-card">
+    <mat-card-header>
+      <mat-card-title>Preferences</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <ng-container *ngIf="(possiblePP$ | async)?.length > 0">
+        <div>
+          <div *ngFor="let pp of (possiblePP$ | async); last as last">
+            <div class="list-item-container">
+              <mat-icon matListIcon *ngIf="pp.globalHardGoal">star</mat-icon>
+              <mat-icon matListIcon *ngIf="! pp.globalHardGoal">star_border</mat-icon>
+              <div class="list-item-text">
+                <span> {{pp.naturalLanguageDescription}} </span>
+                <span> Utility: {{pp.value}} </span>
+              </div>
+              <div class="list-item-buttons">
+                <button mat-icon-button
+                  (click)="selectPP(pp)"
+                  class="list-item-button">
+                  <mat-icon>add</mat-icon>
+                </button>
+              </div>
+            </div>
+            <mat-divider inset="true" *ngIf="!last"></mat-divider>
           </div>
         </div>
-        <div *ngIf="(step$ | async).getDepExplanation(pp._id) && this.display.has(pp._id)">
-          <mat-divider [inset]="true"></mat-divider>
-          <app-conflict-view
-            [question]="pp"
-            [explanation]="(step$ | async).getDepExplanation(pp._id)">
-          </app-conflict-view>
-        </div>
-      </mat-card>
-    </div>
-  </ng-container>
-  <p *ngIf="(possiblePP$ | async)?.length == 0">
-    No other goals available.
-  </p>
+        </ng-container>
+        <p *ngIf="(possiblePP$ | async)?.length == 0">
+          No other preferences available.
+        </p>
+      </mat-card-content>
+  </mat-card>
+
 </div>
 

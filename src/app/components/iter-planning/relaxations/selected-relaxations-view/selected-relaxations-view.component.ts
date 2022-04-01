@@ -1,4 +1,4 @@
-import { InitFactUpdate } from './../../../../interface/planning-task-relaxation';
+import { MetaFact } from './../../../../interface/planning-task-relaxation';
 import { ModifiedPlanningTask, PlanningTaskRelaxationSpace } from '../../../../interface/planning-task-relaxation';
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { BehaviorSubject, combineLatest, Observable, Subject } from 'rxjs';
@@ -8,9 +8,9 @@ import { SelectedIterationStepService } from 'src/app/service/planner-runs/selec
 import { PlanningTaskRelaxationService } from 'src/app/service/planning-task/planning-task-relaxations-services';
 import { Fact } from 'src/app/interface/plannig-task';
 
-interface SelectedInitUpdate {
+interface SelectedInitUpdates {
   name: string;
-  updates: {fact: Fact; selected: boolean}[][];
+  updates: {possibleValues: MetaFact[]; selected: MetaFact}[];
 }
 
 @Component({
@@ -20,12 +20,18 @@ interface SelectedInitUpdate {
 })
 export class SelectedRelaxationsViewComponent implements OnInit, OnDestroy {
 
-  @Input() step : IterationStep;
+  @Input()
+  set step(step : IterationStep){
+    console.log("Selected Hardgoals");
+    this.step$.next(step);
+  }
 
   private unsubscribe$: Subject<any> = new Subject();
 
+
   relaxationSpaces$: Observable<PlanningTaskRelaxationSpace[]>;
-  selectedUpdates$: Observable<SelectedInitUpdate[]>;
+  selectedUpdates$: Observable<SelectedInitUpdates[]>;
+  private step$ = new BehaviorSubject<IterationStep>(null);
 
   constructor(
     private relaxationService: PlanningTaskRelaxationService
@@ -34,31 +40,37 @@ export class SelectedRelaxationsViewComponent implements OnInit, OnDestroy {
     this.relaxationSpaces$ = relaxationService.getList();
 
 
-    this.selectedUpdates$ = this.relaxationSpaces$.pipe(
-      map((updatesSpace) => {
-          if(updatesSpace) {
+    this.selectedUpdates$ = combineLatest([this.step$, this.relaxationSpaces$]).pipe(
+      map(([step, updatesSpace]) => {
+          if(step && updatesSpace) {
             let selectedUpdates = [];
             for(let updateSpace of updatesSpace){
               let updatesList = {name: updateSpace.name, updates: []};
 
               for(let possibleUpdates of updateSpace.possibleInitFactUpdates){
 
-                let matchingInitUpdates = this.step.task.initUpdates.filter(f => f.orgFact.equals(possibleUpdates.orgFact))
+                let matchingInitUpdates = step.task.initUpdates.filter(f => f.orgFact.equals(possibleUpdates.orgFact.fact))
 
-                let list : {fact: Fact; selected: boolean}[] = [];
+                let list : {possibleValues: MetaFact[]; selected: MetaFact} = {possibleValues: [], selected: null};
+                list.possibleValues.push(possibleUpdates.orgFact)
+                possibleUpdates.updates.forEach(up => list.possibleValues.push(up))
 
                 if(matchingInitUpdates.length == 1){
-                  list.push({fact: possibleUpdates.orgFact, selected: false});
-                  possibleUpdates.updates.forEach(up => list.push({fact: up.fact, selected: matchingInitUpdates[0].newFact.equals(up.fact)}))
+                  console.log(matchingInitUpdates[0]);
+                  possibleUpdates.updates.forEach(up => {
+                    if (matchingInitUpdates[0].newFact.equals(up.fact)) {
+                      list.selected = up
+                    }
+                  });
                 }
                 else{
-                  list.push({fact: possibleUpdates.orgFact, selected: true});
-                  possibleUpdates.updates.forEach(up => list.push({fact: up.fact, selected: false}))
+                  list.selected = possibleUpdates.orgFact
                 }
                 updatesList.updates.push(list);
               }
               selectedUpdates.push(updatesList);
             }
+            console.log(selectedUpdates);
             return selectedUpdates;
           }
       })
@@ -73,4 +85,8 @@ export class SelectedRelaxationsViewComponent implements OnInit, OnDestroy {
     this.unsubscribe$.complete();
   }
 
+  formatLabel(metaFact: MetaFact) {
+    return metaFact.display;
+  }
 }
+

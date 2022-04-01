@@ -1,3 +1,4 @@
+import { NewIterationStepService } from './../../../../service/planner-runs/selected-iteration-step.service';
 import { PlanPropertyMapService } from '../../../../service/plan-properties/plan-property-services';
 import { HardGoalSelectorComponent } from '../hard-goal-selector/hard-goal-selector.component';
 import { map, filter, tap } from 'rxjs/operators';
@@ -15,21 +16,32 @@ import { SelectedIterationStepService } from 'src/app/service/planner-runs/selec
 })
 export class SelectedHardGoalsComponent implements OnInit {
 
-  @Input() step : IterationStep;
+  @Input()
+  set step(step : IterationStep){
+    console.log("Selected Hardgoals");
+    this.step$.next(step);
+  }
 
   planProperties$: BehaviorSubject<Map<string,PlanProperty>>;
+  private step$ = new BehaviorSubject<IterationStep>(null);
+  // step$ :  BehaviorSubject<IterationStep>;
 
   hardGoals$: Observable<PlanProperty[]>;
 
   constructor(
-    private planPropertiesMapService: PlanPropertyMapService
+    private planPropertiesMapService: PlanPropertyMapService,
+    private newIterationStepService: NewIterationStepService
   ) {
 
     this.planProperties$ = planPropertiesMapService.getMap();
 
-    this.hardGoals$ = this.planProperties$.pipe(
-      filter((planProperties) => planProperties && planProperties.size > 0),
-      map((planProperties) => this.step.getAllHardGoals().map(pp_id => planProperties.get(pp_id))),
+    this.step$.subscribe(step => console.log("!!!!!!!!!!!!!!!!!!!!!!!!"));
+
+    // this.step$ = newIterationStepService.getSelectedObject();
+
+    this.hardGoals$ = combineLatest([this.step$, this.planProperties$]).pipe(
+      filter(([step, planProperties]) => !!step && planProperties && planProperties.size > 0),
+      map(([step, planProperties]) => step.hardGoals.map(pp_id => planProperties.get(pp_id))),
       map(hardGoals => hardGoals.sort((a,b) => a.globalHardGoal ? -1 : 0 )),
     );
   }

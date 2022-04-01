@@ -1,10 +1,16 @@
-import { PlanningTaskRelaxationSpace } from 'src/app/interface/planning-task-relaxation';
+import { MetaFact, PlanningTaskRelaxationSpace } from 'src/app/interface/planning-task-relaxation';
 import { PlanningTaskRelaxationCreatorComponent } from './../planning-task-relaxation-creator/planning-task-relaxation-creator.component';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { PlanningTaskRelaxationService } from 'src/app/service/planning-task/planning-task-relaxations-services';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Subject, Observable } from 'rxjs';
+import { filter, map, takeUntil } from 'rxjs/operators';
+
+interface InitUpdates {
+  name: string;
+  updates: MetaFact[][];
+  space: PlanningTaskRelaxationSpace;
+}
 
 @Component({
   selector: 'app-planning-task-relaxations',
@@ -16,20 +22,20 @@ export class PlanningTaskRelaxationsComponent implements OnInit {
   json=JSON;
   private ngUnsubscribe: Subject<any> = new Subject();
 
- relaxationSpaces : PlanningTaskRelaxationSpace[] = [];
+ relaxationSpaces$ : Observable<InitUpdates[]>
 
   constructor(
     private relaxationService: PlanningTaskRelaxationService,
     public dialog: MatDialog,) { }
 
   ngOnInit(): void {
-    this.relaxationService.getList()
-    .pipe(takeUntil(this.ngUnsubscribe))
-    .subscribe(spaces => {
-      if(spaces)
-        this.relaxationSpaces = spaces;
-        console.log(spaces);
-    });
+    this. relaxationSpaces$ = this.relaxationService.getList().pipe(
+      filter(spaces => !!spaces),
+      map(spaces => spaces.map(space => ({name: space.name,
+        updates: space.possibleInitFactUpdates.map(pup => [pup.orgFact, ...pup.updates]),
+        space: space}))
+      )
+    )
   }
 
   new_relaxation_form(): void {

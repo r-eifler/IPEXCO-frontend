@@ -1,13 +1,29 @@
-<mat-selection-list [multiple]="false" (selectionChange)="selectStep($event)">
-  <mat-list-option *ngFor="let step of (steps$ | async)" [value]="step"
-    [selected]="step._id == (selected$ | async)?._id">
-    <!-- <mat-icon matListIcon>label</mat-icon> -->
-    <div class="step-item">
-      <p class="step-name"> {{step.name}}</p>
-      <mat-icon class="step-icon" *ngIf="step.hasPlan()">map</mat-icon>
-      <mat-icon svgIcon="no_map" class="step-icon" *ngIf="step.notSolvable()"></mat-icon>
-      <mat-icon class="step-icon" *ngIf="step.hasError()">error</mat-icon>
-      <mat-spinner class="spinner" *ngIf="step.isPending()" diameter="25"></mat-spinner>
+<div class="main-container">
+  <div>
+    <mat-selection-list [multiple]="false" (selectionChange)="selectStep($event)">
+      <mat-list-option *ngFor="let step of (steps$ | async)" [value]="step"
+        [selected]="step._id == (selected$ | async)?._id">
+        <!-- <mat-icon matListIcon>label</mat-icon> -->
+        <div class="step-item">
+          <mat-icon class="step-icon" *ngIf="step.hasPlan()">map</mat-icon>
+          <mat-icon svgIcon="no_map" class="step-icon" *ngIf="step.notSolvable()"></mat-icon>
+          <mat-icon class="step-icon" *ngIf="step.hasError()">error</mat-icon>
+          <mat-spinner class="spinner" *ngIf="step.isPending()" diameter="25"></mat-spinner>
+          <p class="step-name"> {{step.name}}</p>
+          <button mat-icon-button class="delete-button" (click)="deleteStep(step)"d>
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </mat-list-option>
+    </mat-selection-list>
+    <mat-divider inset="true"></mat-divider>
+    <div class="new-step" *ngIf="(newStep$ | async)" (click)="selectNewStep()">
+      <p class="new-step-name">{{(newStep$ | async).name}}</p>
     </div>
-  </mat-list-option>
-</mat-selection-list>
+  </div>
+  <button mat-flat-button color="primary"
+    [disabled]="(newStep$ | async)"
+    (click)="newStep()">
+      New Step
+  </button>
+</div>

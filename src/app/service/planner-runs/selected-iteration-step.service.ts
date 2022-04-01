@@ -1,3 +1,5 @@
+import { ModIterationStep } from 'src/app/interface/run';
+import { ModifiedPlanningTask } from './../../interface/planning-task-relaxation';
 import { IterationStep } from './../../interface/run';
 import { CurrentProjectService } from 'src/app/service/project/project-services';
 import {Injectable} from '@angular/core';
@@ -23,8 +25,6 @@ export class SelectedIterationStepService extends SelectedObjectService<Iteratio
     }
 
     saveObject(obj: IterationStep) {
-      console.log("Selected Step");
-      console.log(obj);
       this.selectedObjectStore.dispatch({type: LOAD, data: obj});
     }
 }
@@ -33,11 +33,18 @@ export class SelectedIterationStepService extends SelectedObjectService<Iteratio
 @Injectable({
   providedIn: 'root'
 })
-export class NewIterationStepService extends SelectedObjectService<IterationStep> {
+export class NewIterationStepService extends SelectedObjectService<ModIterationStep> {
 
   constructor(
       store: NewIterationStepStore) {
       super(store);
+  }
+
+  saveObject(obj: ModIterationStep) {
+    let step = ModIterationStep.fromObject(obj);
+    console.log("New Step");
+    console.log(step);
+    this.selectedObjectStore.dispatch({type: LOAD, data: step});
   }
 
 }

@@ -1,0 +1,19 @@
+<div class="container">
+  <mat-slider
+    [disabled]="disabled"
+    tickInterval="1"
+    step="1"
+    [min]="min"
+    [max]="max$ | async"
+    [value]="(value$ | async)"
+    class="slider"
+    (change)="valueChanged($event)">
+  </mat-slider>
+  <div class="display-container">
+    <div class="label-container">
+      <span *ngFor="let v of (values$ | async); let i = index" class="label" [style.left]="((i / ((values$ | async).length - 1)) * 100) + '%'">
+        {{v.display}}
+      </span>
+    </div>
+  </div>
+</div>

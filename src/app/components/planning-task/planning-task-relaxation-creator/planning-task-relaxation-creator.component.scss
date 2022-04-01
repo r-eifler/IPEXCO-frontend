@@ -135,7 +135,7 @@ mat-step {
 
 .value-table {
   height: fit-content;
-  width: fit-content;
+  width: 100%;
 }
 
 .mat-column-value {
@@ -144,4 +144,8 @@ mat-step {
 
 .value-input {
   width: 40px;
+}
+
+.display-form-field {
+  width: 100px;
 }

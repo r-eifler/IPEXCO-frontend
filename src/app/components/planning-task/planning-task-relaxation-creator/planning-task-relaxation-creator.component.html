@@ -55,26 +55,26 @@
       <div class="bottom-container" cdkDropListGroup>
         <mat-card class="predicate-collection-card">
           <mat-chip-list class="mat-chip-list-stacked" cdkDropList
-          [cdkDropListData]="possibleFacts"
+          [cdkDropListData]="possibleMetaFacts"
           cdkDropList
           (cdkDropListDropped)="drop($event)">
-            <mat-chip *ngFor="let update of possibleFacts" [value]="update" cdkDrag>{{update.fact.toString()}}</mat-chip>
+            <mat-chip *ngFor="let metaFact of possibleMetaFacts" [value]="metaFact" cdkDrag>{{metaFact.fact.toString()}}</mat-chip>
           </mat-chip-list>
         </mat-card>
 
         <mat-card class="fact-lists-card">
           <div class="relaxation-container">
-            <mat-card class="relax-card" *ngFor="let relax of relaxationSpace.possibleInitFactUpdates">
+            <mat-card class="relax-card" *ngFor="let possibleInitFactUpdates of relaxationSpace.possibleInitFactUpdates">
               <div class="fact-container">
                 <mat-chip-list
                   class="mat-chip-list-stacked selected-list" cdkDropList
-                  [cdkDropListData]="relax.updates"
+                  [cdkDropListData]="possibleInitFactUpdates.updates"
                   cdkDropList
                   (cdkDropListDropped)="drop($event);updateSelectedFacts($event)">
-                  <mat-chip class="selected-chip" color="accent">{{relax.orgFact.toString()}}</mat-chip>
+                  <mat-chip class="selected-chip" color="accent">{{possibleInitFactUpdates.orgFact.fact.toString()}}</mat-chip>
                   <mat-divider [inset]="true"></mat-divider>
-                  <mat-chip class="selected-chip" *ngFor="let update of relax.updates"
-                    [value]="update" (removed)="deleteFactFromRelax(update, relax)" cdkDrag>
+                  <mat-chip class="selected-chip" *ngFor="let update of possibleInitFactUpdates.updates"
+                    [value]="update" (removed)="deleteFactFromRelax(update, possibleInitFactUpdates)" cdkDrag>
                     {{update.fact.toString()}}
                     <button matChipRemove>
                       <mat-icon>cancel</mat-icon>
@@ -92,13 +92,22 @@
   <mat-step class="step" label="Relaxation Values">
     <div class="main-container-values">
       <div *ngFor="let updates of relaxationSpace.possibleInitFactUpdates" class="relaxation-value-container">
-      <table mat-table [dataSource]="updates.updates" class="value-table">
+      <table mat-table [dataSource]="getAllMetaFacts(updates)" class="value-table">
 
         <ng-container matColumnDef="value">
           <th mat-header-cell *matHeaderCellDef>Utility</th>
           <td mat-cell *matCellDef="let update">
             <mat-form-field class="value-form-field">
               <input matInput type="number" value="{{update.value}}" (change)="$event ? updateValueChanged($event, update) : null" class="value-input">
+            </mat-form-field>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="display">
+          <th mat-header-cell *matHeaderCellDef>Display</th>
+          <td mat-cell *matCellDef="let update">
+            <mat-form-field class="display-form-field">
+              <input matInput type="text" value="{{update.display}}" (change)="$event ? updateDisplayChanged($event, update) : null" class="value-input">
             </mat-form-field>
           </td>
         </ng-container>
@@ -111,8 +120,8 @@
         </ng-container>
 
 
-        <tr mat-header-row *matHeaderRowDef="['fact', 'value']"></tr>
-        <tr mat-row *matRowDef="let row; columns: ['fact', 'value'];">
+        <tr mat-header-row *matHeaderRowDef="['fact', 'display', 'value']"></tr>
+        <tr mat-row *matRowDef="let row; columns: ['fact', 'display', 'value'];">
         </tr>
 
       </table>

@@ -191,6 +191,9 @@ import { SelectedRelaxationsViewComponent } from './components/iter-planning/rel
 import { ExplanationsViewComponent } from './components/iter-planning/finished-step/explanations-view/explanations-view.component';
 import { ExplanationsSelectPreferenceViewComponent } from './components/iter-planning/explanations/explanations-select-preference-view/explanations-select-preference-view.component';
 import { ExplanationsRelaxationsViewComponent } from './components/iter-planning/explanations/explanations-relaxations-view/explanations-relaxations-view.component';
+import { NewStepNavigatorComponent } from './components/iter-planning/new-step/new-step-navigator/new-step-navigator.component';
+import { ObjectSliderComponent } from './components/utils/object-slider/object-slider.component';
+import { ObjectProgressBarComponent } from './components/utils/object-progress-bar/object-progress-bar.component';
 
 @NgModule({
     declarations: [
@@ -284,7 +287,10 @@ import { ExplanationsRelaxationsViewComponent } from './components/iter-planning
         SelectedRelaxationsViewComponent,
         ExplanationsViewComponent,
         ExplanationsSelectPreferenceViewComponent,
-        ExplanationsRelaxationsViewComponent
+        ExplanationsRelaxationsViewComponent,
+        NewStepNavigatorComponent,
+        ObjectSliderComponent,
+        ObjectProgressBarComponent
     ],
     imports: [
         RouterModule.forRoot(appRoutes, { enableTracing: false, paramsInheritanceStrategy: 'always' }),

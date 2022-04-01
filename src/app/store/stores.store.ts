@@ -1,3 +1,4 @@
+import { ModIterationStep } from 'src/app/interface/run';
 import { IterationStep } from './../interface/run';
 import {MapStore} from './generic-map.store';
 import {ExecutionSettings} from '../interface/settings/execution-settings';
@@ -37,7 +38,7 @@ export class PlanPropertyMapStore extends  MapStore<string, PlanProperty> {}
 
 // PlanRun and ExpRun
 export class SelectedIterationStepStore extends  ItemStore<IterationStep> {}
-export class NewIterationStepStore extends  ItemStore<IterationStep> {}
+export class NewIterationStepStore extends  ItemStore<ModIterationStep> {}
 export class IterationStepsStore extends  ListStore<IterationStep> {}
 export class RunsStore extends  ListStore<PlanRun> {}
 export class CurrentRunStore extends  ItemStore<PlanRun> {}

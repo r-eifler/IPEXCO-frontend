@@ -30,6 +30,7 @@ export class PlanningTaskRelaxationService extends ObjectCollectionService<Plann
       .pipe(this.pipeFindData, this.pipeFind)
       .subscribe((res) => {
         let spaces = res.map(e => PlanningTaskRelaxationSpace.fromObject(e))
+        console.log(spaces);
         this.listStore.dispatch({type: LOAD, data: spaces});
       });
 
@@ -37,6 +38,8 @@ export class PlanningTaskRelaxationService extends ObjectCollectionService<Plann
   }
 
   saveObject(object: PlanningTaskRelaxationSpace) {
+
+    console.log(object);
 
     if (object._id) {
       return this.http.put<IHTTPData<PlanningTaskRelaxationSpace>>(this.BASE_URL + object._id, {data: object})

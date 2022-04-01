@@ -128,6 +128,14 @@ export class ModIterationStep extends IterationStep{
       this.baseStep = baseStep;
     }
 
+    static fromObject(step: ModIterationStep){
+      let nStep = new ModIterationStep(step.name, step.baseStep);
+      nStep.hardGoals = [...step.hardGoals];
+      nStep.softGoals = [...step.softGoals];
+      nStep.task = step.task
+      return nStep;
+    }
+
     canBeModified(): boolean {
       return true;
     }

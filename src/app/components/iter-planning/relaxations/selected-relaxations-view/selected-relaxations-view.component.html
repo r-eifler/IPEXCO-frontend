@@ -7,9 +7,7 @@
       <p class="name">{{updatesList.name}}</p>
       <div class="list-container">
         <div *ngFor="let update of updatesList.updates">
-          <mat-chip-list *ngFor="let elem of update">
-              <mat-chip [class.selected]="elem.selected">{{elem.fact.toString()}}</mat-chip>
-          </mat-chip-list>
+          <app-object-progress-bar [values]="update.possibleValues" [selected]="update.selected"></app-object-progress-bar>
         </div>
       </div>
     </div>

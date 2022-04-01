@@ -1,6 +1,8 @@
+import { NewIterationStepService } from './../../../service/planner-runs/selected-iteration-step.service';
+import { SelectedIterationStepService } from 'src/app/service/planner-runs/selected-iteration-step.service';
 import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
-import {BehaviorSubject, Subject} from 'rxjs';
-import {DepExplanationRun, PlanRun, RunStatus} from '../../../interface/run';
+import { BehaviorSubject, Subject, Observable } from 'rxjs';
+import {DepExplanationRun, IterationStep, ModIterationStep, PlanRun, RunStatus} from '../../../interface/run';
 import {Demo} from '../../../interface/demo';
 import {ExecutionSettings} from '../../../interface/settings/execution-settings';
 import {PlanProperty} from '../../../interface/plan-property/plan-property';
@@ -28,29 +30,13 @@ export class ProjectIterativePlanningBaseComponent implements OnInit, OnDestroy 
 
   @Output() finishedDemo = new EventEmitter<void>();
 
-  computeNewPlan = false;
-  askQuestion = false;
-  showAnswer = false;
-  plannerBusy = false;
-
-  selectedPlan: PlanRun = null;
-  selectedQuestion: DepExplanationRun = null;
-  runStatus = RunStatus;
-
-  timerIntervall;
-
-  startTime: number;
-  currentTime = 0;
-
-  maxTime = 15000;
-  timer: number;
-
-  finished = false;
-
   demo: Demo;
   settings: ExecutionSettings;
   runs$: BehaviorSubject<PlanRun[]>;
   globalHardGoals: PlanProperty[];
+
+  step$ : Observable<IterationStep>;
+  newStep$ : Observable<IterationStep>;
 
   constructor(
     private timeLogger: TimeLoggerService,
@@ -58,8 +44,13 @@ export class ProjectIterativePlanningBaseComponent implements OnInit, OnDestroy 
     private currentProjectService: CurrentProjectService,
     private propertiesService: PlanPropertyMapService,
     public iterationStepService: IterationStepsService,
+    selectedIterationStepService: SelectedIterationStepService,
+    newIterationStepService: NewIterationStepService,
     public dialog: MatDialog
   ) {
+
+    this.step$ = selectedIterationStepService.getSelectedObject();
+    this.newStep$ = newIterationStepService.getSelectedObject();
 
     this.runningDemoService.getSelectedObject()
       .pipe(takeUntil(this.ngUnsubscribe))
@@ -73,9 +64,6 @@ export class ProjectIterativePlanningBaseComponent implements OnInit, OnDestroy 
 
         }
       );
-
-    // TODO
-    // this.runs$ = this.runsService.getList();
 
     this.propertiesService.getMap()
       .pipe(takeUntil(this.ngUnsubscribe))
@@ -93,7 +81,7 @@ export class ProjectIterativePlanningBaseComponent implements OnInit, OnDestroy 
   ngOnDestroy(): void {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
-    clearInterval(this.timerIntervall);
+    // clearInterval(this.timerIntervall);
     this.timeLogger.deregister(this.loggerId);
   }
 

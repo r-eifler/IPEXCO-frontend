@@ -21,11 +21,24 @@
 }
 
 .relax-table {
-  width: 30%;
+  width: 100%;
 }
 
 .actions {
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
+}
+
+.content {
+  box-sizing: border-box;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  column-gap: 30px;
+}
+
+.table-container {
+  box-sizing: border-box;
+  width: 50%;
 }

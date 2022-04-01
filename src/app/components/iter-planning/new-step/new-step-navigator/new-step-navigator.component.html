@@ -1,0 +1,31 @@
+<mat-stepper [linear]="false" #stepper class="stepper">
+  <mat-step label="Select hard goals">
+    <div class="step">
+      <app-hard-goal-selector class="componenets"></app-hard-goal-selector>
+      <div class="button-container">
+        <button mat-flat-button matStepperNext color="primary">Next</button>
+      </div>
+    </div>
+  </mat-step>
+  <mat-step  label="Select relaxation">
+    <div class="step">
+      <app-relaxation-selector class="componenets"></app-relaxation-selector>
+      <div class="button-container">
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-flat-button matStepperNext color="primary">Next</button>
+      </div>
+  </div>
+  </mat-step>
+  <mat-step label="Finish">
+    <div class="step">
+      <div class="finish-container">
+        <app-selected-hard-goals [step]="(step$ | async)" class="componenets"></app-selected-hard-goals>
+        <app-selected-relaxations-view [step]="(step$ | async)" class="componenets"></app-selected-relaxations-view>
+      </div>
+      <div class="button-container">
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-flat-button (click)="addNewStep()" color="primary">Add new Step</button>
+      </div>
+    </div>
+  </mat-step>
+</mat-stepper>
