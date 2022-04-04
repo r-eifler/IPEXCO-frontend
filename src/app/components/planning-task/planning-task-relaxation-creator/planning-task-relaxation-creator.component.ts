@@ -121,11 +121,11 @@ export class PlanningTaskRelaxationCreatorComponent implements OnInit, OnDestroy
     }
   }
 
-  deleteFactFromRelax(fact : Fact, possibleUpdates: PossibleInitFactUpdates){
-    possibleUpdates.updates = possibleUpdates.updates.filter(e => ! e.fact.equals(fact));
-    this.selectedFacts = this.selectedFacts.filter(e => ! e.equals(fact));
-    if (fact.name == this.selctedPredicate.name){
-      this.possibleMetaFacts.push(new MetaFact(fact, 0, fact.toString()));
+  deleteFactFromRelax(metaFact : MetaFact, possibleUpdates: PossibleInitFactUpdates){
+    possibleUpdates.updates = possibleUpdates.updates.filter(e => ! e.fact.equals(metaFact.fact));
+    this.selectedFacts = this.selectedFacts.filter(e => ! e.equals(metaFact.fact));
+    if (this.selctedPredicate && metaFact.fact.name == this.selctedPredicate.name){
+      this.possibleMetaFacts.push(metaFact);
       this.possibleMetaFacts = this.possibleMetaFacts.sort();
     }
   }

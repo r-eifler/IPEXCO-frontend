@@ -1,15 +1,24 @@
 <div class="main-container">
-  <div class="slide-container" [class.slide-pos-one]="viewpos == 1" [class.slide-pos-two]="viewpos == 2">
-    <div class="middle-container">
-      <app-explanations-select-preference-view [step]="(step$ | async)" (selectedPP)="selectQuestion($event)"></app-explanations-select-preference-view>
+  <ng-container *ngIf="(step$ | async).relaxationExplanations && (step$ | async).relaxationExplanations.length > 0">
+    <div class="slide-container"
+      [class.slide-pos-one]="viewpos == 1"
+      [class.slide-pos-two]="viewpos == 2">
+      <div class="middle-container">
+        <app-explanations-select-preference-view [step]="(step$ | async)" (selectedPP)="selectQuestion($event)"></app-explanations-select-preference-view>
+      </div>
+      <div class="middle-container">
+        <app-conflict-view [explanation]="(selectedDependencies$ | async)" [question]="selectedPP" (selectedConflict)="selectConflict($event)"></app-conflict-view>
+      </div>
+      <div class="middle-container">
+        <app-explanations-relaxations-view [step]="(step$ | async)" [conflict]="selectedConflict"></app-explanations-relaxations-view>
+      </div>
     </div>
-    <div class="middle-container">
-      <app-conflict-view [explanation]="(selectedDepExp$ | async)" [question]="selectedPP" (selectedConflict)="selectConflict($event)"></app-conflict-view>
-    </div>
-    <div class="middle-container">
-      <app-explanations-relaxations-view [step]="(step$ | async)" [depExplanation]="(selectedDepExp$ | async)" [conflict]="selectedConflict"></app-explanations-relaxations-view>
-    </div>
+    <button mat-flat-button (click)="viewpos = 1" style="position: absolute; left: 90%; top: 90%">left</button>
+    <button mat-flat-button (click)="viewpos = 2" style="position: absolute; left: 95%; top: 90%">right</button>
+  </ng-container>
+
+  <div class="compute-container"
+    *ngIf="! (step$ | async).relaxationExplanations || (step$ | async).relaxationExplanations.length == 0">
+    <button mat-flat-button (click)="computeExplanations()" color="primary">Compute Explanations</button>
   </div>
-  <button mat-flat-button (click)="viewpos = 1" style="position: absolute; left: 90%; top: 90%">left</button>
-  <button mat-flat-button (click)="viewpos = 2" style="position: absolute; left: 95%; top: 90%">right</button>
 </div>

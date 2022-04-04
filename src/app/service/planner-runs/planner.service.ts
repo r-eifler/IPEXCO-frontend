@@ -79,5 +79,19 @@ export class PlannerService{
     return expRun;
   }
 
+  computeRelaxExplanations(step: IterationStep) {
+
+    const url = this.myBaseURL + 'relax_exp/' + step._id;
+
+    this.http.post<IHTTPData<IterationStep>>(url, {})
+      .subscribe(httpData => {
+        let step = IterationStep.fromObject(httpData.data)
+        const action = {type: EDIT, data: step};
+        this.iterationStepsStore.dispatch(action);
+        this.selectedStepService.updateIfSame(step);
+      });
+
+  }
+
 }
 

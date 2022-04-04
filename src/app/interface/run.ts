@@ -1,9 +1,10 @@
+import { map } from 'rxjs/operators';
 import { PlanningTask } from 'src/app/interface/plannig-task';
 import { PPDependencies, PPConflict } from './explanations';
 import {PlanProperty} from './plan-property/plan-property';
 import {Project} from './project';
 import {Plan} from './plan';
-import { ModifiedPlanningTask } from './planning-task-relaxation';
+import { ModifiedPlanningTask, PlanningTaskRelaxationSpace, MetaFact } from './planning-task-relaxation';
 import { handlePlanString, toPPDependencies } from '../service/planner-runs/utils';
 
 export enum StepStatus{
@@ -32,6 +33,7 @@ export class IterationStep{
   task: ModifiedPlanningTask;
   plan: PlanRun | null;
   depExplanations: DepExplanationRun[];
+  relaxationExplanations: RelaxationExplanationRun[];
   predecessorStep: IterationStep | null;
 
   constructor(name: string, project: Project | string, status: StepStatus,
@@ -61,6 +63,9 @@ export class IterationStep{
     }
     if (step.depExplanations){
       nStep.depExplanations = step.depExplanations.map(e => DepExplanationRun.fromObject(e));
+    }
+    if (step.relaxationExplanations){
+      nStep.relaxationExplanations = step.relaxationExplanations;
     }
     return nStep;
   }
@@ -114,6 +119,23 @@ export class IterationStep{
     }
     return this.depExplanations.find(exp => exp.hardGoals.some(h => h == question));
   }
+
+  getDependencies(question: string): PPDependencies {
+    if(! this.relaxationExplanations) {
+      return null;
+    }
+    return filterDependencies(question, this.hardGoals, this.relaxationExplanations[0].dependencies[0]);
+  }
+
+  getRelaxationExplanations(conflict: PPConflict, relaxationSpeace: PlanningTaskRelaxationSpace): MetaFact[] {
+    console.log(conflict);
+    let relaxExp = this.relaxationExplanations.find(relaxExp => relaxExp.relaxationSpace == relaxationSpeace._id);
+    let indexes = getRelaxationExplanations(conflict, relaxExp.dependencies);
+    let list = [relaxationSpeace.possibleInitFactUpdates[0].orgFact, ...relaxationSpeace.possibleInitFactUpdates[0].updates];
+    return indexes.map(i => list[i]);
+
+  }
+
 
 }
 
@@ -237,8 +259,38 @@ export class RelaxationExplanationRun{
   createdAt?: Date;
   name: string;
   status: RunStatus;
-  conflict: PPConflict;
+  relaxationSpace: string;
   log: string;
   result: string;
+  dependencies?: PPDependencies[];
 }
+
+ function filterDependencies(question: string, hardGoals: string[], allDependencies: PPDependencies): PPDependencies {
+  let g =[question, ...hardGoals];
+  let filteredDependencies = new PPDependencies();
+  for(let conflict of allDependencies.conflicts) {
+    if(g.filter(f => conflict.elems.includes(f)).length == conflict.elems.length){
+      filteredDependencies.addConflict(new PPConflict(conflict.elems.filter(e => e != question)));
+    }
+  }
+  return filteredDependencies;
+ }
+
+ function getRelaxationExplanations(conflict: PPConflict, allDependencies: PPDependencies[]): number[] {
+  console.log("getRelaxationExplanations");
+  let index = 0;
+  for (let dep of allDependencies) {
+    let found = false;
+    for (let c of dep.conflicts) {
+      if (conflict.elems.every(e => c.elems.includes(e))){
+        found = true;
+      }
+    }
+    if (! found) {
+      return [index];
+    }
+    index++;
+  }
+  return [];
+ }
 

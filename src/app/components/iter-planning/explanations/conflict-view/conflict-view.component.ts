@@ -1,4 +1,4 @@
-import { PPConflict } from './../../../../interface/explanations';
+import { PPConflict, PPDependencies } from './../../../../interface/explanations';
 import { PlanPropertyMapService } from '../../../../service/plan-properties/plan-property-services';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { PlanProperty } from '../../../../interface/plan-property/plan-property';
@@ -18,17 +18,18 @@ export class ConflictViewComponent implements OnInit {
 
   @Input() question: PlanProperty;
   @Input()
-  set explanation(explanation : DepExplanationRun){
+  set explanation(explanation : PPDependencies){
     console.log(explanation);
     this.explanation$.next(explanation);
   }
 
   @Output() selectedConflict = new EventEmitter<PPConflict>();
 
-  explanation$ = new BehaviorSubject<DepExplanationRun>(null);
+  explanation$ = new BehaviorSubject<PPDependencies>(null);
 
   dependencies$ : Observable<PlanProperty[][]>;
   planProperties$ : Observable<Map<string,PlanProperty>>;
+  solvableAtAll$ : Observable<boolean>;
 
 
   constructor(
@@ -37,8 +38,12 @@ export class ConflictViewComponent implements OnInit {
     this.planProperties$ = planPropertiesService.getMap();
 
     this.dependencies$ = combineLatest([this.explanation$, this.planProperties$]).pipe(
-      filter(([exp, planProperties]) => !!exp && exp.status == RunStatus.finished && !!planProperties),
-      map(([exp, planProperties]) =>  exp.dependencies.conflicts.map(con => con.elems.map(e => planProperties.get(e))))
+      filter(([exp, planProperties]) => !!exp && !!planProperties),
+      map(([exp, planProperties]) =>  exp.conflicts.map(con => con.elems.map(e => planProperties.get(e))))
+    );
+
+    this.solvableAtAll$ = this.dependencies$.pipe(
+      map(dep => dep.filter(c => c.length == 0).length == 0)
     );
   }
 
@@ -46,7 +51,13 @@ export class ConflictViewComponent implements OnInit {
   }
 
   selectConflict(c : PlanProperty[]) {
-    this.selectedConflict.emit(new PPConflict(c.map(pp => pp._id)));
+    this.selectedConflict.emit(new PPConflict([this.question, ...c.map(pp => pp._id)]));
+  }
+
+  selectUnsolvable() {
+    let newC = new PPConflict([this.question]);
+    console.log(newC);
+    this.selectedConflict.emit(newC);
   }
 
 }

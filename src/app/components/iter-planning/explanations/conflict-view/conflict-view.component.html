@@ -4,32 +4,33 @@
     <p>No preference selected</p>
   </div>
   <ng-container *ngIf="question && (explanation$ | async)">
-    <div *ngIf="(explanation$ | async).status == runStatus.pending">
-      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    <p *ngIf="(dependencies$ | async).length == 0">
+      There are no conflicts.
+    </p>
+    <div class="card-container" *ngIf="(dependencies$ | async).length > 0 && (solvableAtAll$ | async)">
+      <mat-accordion multi>
+        <mat-expansion-panel hideToggle *ngFor="let conflict of (dependencies$ | async); let i=index">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Conflict {{i+1}}
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <mat-list>
+            <mat-list-item *ngFor="let pp of conflict">
+              {{pp.naturalLanguageDescription}}
+            </mat-list-item>
+          </mat-list>
+          <div class="button-container">
+            <button mat-stroked-button color="primary" (click)="selectConflict(conflict)">Relaxation?</button>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
     </div>
-    <ng-container *ngIf="(explanation$ | async).status == runStatus.finished">
-      <p *ngIf="(dependencies$ | async).length == 0">
-        There are no conflicts.
-      </p>
-      <div class="card-container">
-        <mat-accordion multi>
-          <mat-expansion-panel hideToggle *ngFor="let conflict of (dependencies$ | async); let i=index">
-            <mat-expansion-panel-header>
-              <mat-panel-title>
-                Conflict {{i+1}}
-              </mat-panel-title>
-            </mat-expansion-panel-header>
-            <mat-list>
-              <mat-list-item *ngFor="let pp of conflict">
-                {{pp.naturalLanguageDescription}}
-              </mat-list-item>
-            </mat-list>
-            <div class="button-container">
-              <button mat-stroked-button color="primary" (click)="selectConflict(conflict)">Relaxation?</button>
-            </div>
-          </mat-expansion-panel>
-        </mat-accordion>
-      </div>
-    </ng-container>
+    <div class="card-container" *ngIf=" ! (solvableAtAll$ | async)">
+        This preference can not be achieved.
+        <div class="button-container">
+          <button mat-stroked-button color="primary" (click)="selectUnsolvable()">Relaxation?</button>
+        </div>
+    </div>
   </ng-container>
 </div>

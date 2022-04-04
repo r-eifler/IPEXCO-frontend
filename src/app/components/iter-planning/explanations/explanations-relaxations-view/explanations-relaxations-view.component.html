@@ -1,1 +1,18 @@
-<p>explanations-relaxations-view works!</p>
+<mat-card class="main-card">
+  <mat-card-header>
+    <mat-card-title>Relaxations</mat-card-title>
+  </mat-card-header>
+  <mat-card-content class="content">
+    <div *ngFor="let relaxExp of (relaxations$ | async)" class="relax-space">
+      <p class="name">{{relaxExp.name}}</p>
+      <div class="list-container">
+        <ng-container *ngIf="relaxExp.selected">
+          <app-object-progress-bar [values]="relaxExp.possibleValues" [selected]="relaxExp.selected"></app-object-progress-bar>
+        </ng-container>
+        <ng-container *ngIf="! relaxExp.selected">
+          <p>No relaxation possible.</p>
+        </ng-container>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>
