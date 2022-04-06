@@ -99,9 +99,11 @@ export class UserStudyStartComponent implements OnInit, OnDestroy {
       return false;
     }
     const date = new Date();
-    const start = new Date(this.userStudy.startDate);
-    const end = new Date(this.userStudy.endDate);
-    return date > start && date < end;
+    // TODO
+    // const start = new Date(this.userStudy.startDate);
+    // const end = new Date(this.userStudy.endDate);
+    // return date > start && date < end;
+    return false;
   }
 
   async onAgree() {

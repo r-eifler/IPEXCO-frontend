@@ -1,10 +1,11 @@
+import { RunStatus, StepStatus } from 'src/app/interface/run';
 import { MatSelectionListChange } from '@angular/material/list';
 import { IterationStep, ModIterationStep } from './../../../interface/run';
 import { SelectedIterationStepService, NewIterationStepService } from './../../../service/planner-runs/selected-iteration-step.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { IterationStepsService } from 'src/app/service/planner-runs/iteration-steps.service';
 import { Observable, BehaviorSubject, Subject } from 'rxjs';
-import { take } from 'rxjs/operators';
+import { filter, map, take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-iteration-steps-list',
@@ -18,6 +19,7 @@ export class IterationStepsListComponent implements OnInit, OnDestroy {
   steps$: BehaviorSubject<IterationStep[]>;
   newStep$: BehaviorSubject<IterationStep>;
   selected$: BehaviorSubject<IterationStep>;
+  hasPlan$: Observable<boolean>;
 
   constructor(
     private iterationStepsService: IterationStepsService,
@@ -51,7 +53,14 @@ export class IterationStepsListComponent implements OnInit, OnDestroy {
   newStep() {
     this.selected$.pipe(take(1)).subscribe(step => {
       if(step){
-        let modStep = new ModIterationStep('Step ' + (this.iterationStepsService.getNumRuns() + 1), step)
+        let modStep: ModIterationStep = {
+          name: 'Step ' + (this.iterationStepsService.getNumRuns() + 1),
+          baseStep: step,
+          task: step.task,
+          status: StepStatus.unknown,
+          project: step.project,
+          hardGoals: [...step.hardGoals],
+          softGoals: []};
         this.newIterationStepService.saveObject(modStep);
         this.selectedIterationStepService.removeCurrentObject();
       }
@@ -60,6 +69,22 @@ export class IterationStepsListComponent implements OnInit, OnDestroy {
 
   deleteStep(step: IterationStep): void {
     this.iterationStepsService.deleteObject(step);
+  }
+
+  hasPlan(step: IterationStep): boolean {
+    return !!step.plan && step.plan.status == RunStatus.finished;
+  }
+
+  notSolvable(step: IterationStep): boolean {
+    return step.status == StepStatus.unsolvable || (step.plan && step.plan.status == RunStatus.noSolution);
+  }
+
+  hasError(step: IterationStep): boolean {
+    return step.plan && step.plan.status == RunStatus.failed
+  }
+
+  isPending(step: IterationStep): boolean {
+    return step.plan && step.plan.status == RunStatus.pending;
   }
 
 }

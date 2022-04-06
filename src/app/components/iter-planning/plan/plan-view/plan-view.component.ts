@@ -7,6 +7,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {BehaviorSubject, Observable, Subject} from 'rxjs';
 import {PlanRun} from '../../../../interface/run';
 import {TimeLoggerService} from '../../../../service/logger/time-logger.service';
+import { parsePlan } from 'src/app/service/planner-runs/utils';
 
 interface Action {
   name: string;
@@ -44,11 +45,12 @@ export class PlanViewComponent implements OnInit, OnDestroy {
     this.actions$ = this.step$
     .pipe(takeUntil(this.unsubscribe$))
     .pipe(
-      filter((step) => !!step && step.hasPlan()),
+      filter((step) => !!step && !!step.plan && step.plan.status == RunStatus.finished),
       map( step => {
         this.timeLogger.addInfo(this.loggerId, 'stepId: ' + step._id);
         let actions = [];
-        for (const action of step.plan.plan.actions) {
+        let plan = parsePlan(step.plan.result, step.task.basetask);
+        for (const action of plan.actions) {
           const s = action.name + ' ' + action.parameters.map(p => p.name).join(' ');
          actions.push(s);
         }

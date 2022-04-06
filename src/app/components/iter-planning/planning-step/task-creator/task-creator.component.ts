@@ -96,10 +96,10 @@ export class TaskCreatorComponent implements OnInit, OnDestroy {
   async computePlan() {
 
     // TODO
-    const run: PlanRun = new PlanRun('Plan ' + (this.runService.getNumRuns() + 1), RunStatus.pending);
-    run._id = this.runService.getNumRuns().toString();
+    // const run: PlanRun = new PlanRun('Plan ' + (this.runService.getNumRuns() + 1), RunStatus.pending);
+    // run._id = this.runService.getNumRuns().toString();
 
-    this.plannerService.execute_plan_run(run);
+    // this.plannerService.execute_plan_run(run);
     this.finished.emit(true);
     this.timeLogger.addInfo(this.loggerId, 'hard goals selected');
     // await this.router.navigate([this.redirectURL], { relativeTo: this.route });

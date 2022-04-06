@@ -61,7 +61,7 @@ export class QuestionCreatorComponent implements OnInit, OnDestroy {
     .pipe(takeUntil(this.ngUnsubscribe))
     .subscribe(run => {
       if (run) {
-        this.solved = !!run.plan;
+        // this.solved = !!run.plan;
         if (! this.loggerId) {
           this.loggerId = this.timeLogger.register('question-creator');
         }

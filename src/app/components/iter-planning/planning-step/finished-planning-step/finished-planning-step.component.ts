@@ -40,9 +40,9 @@ export class FinishedPlanningStepComponent implements OnInit, OnDestroy {
           }
           this.timeLogger.addInfo(this.loggerId, 'runId: ' + run._id);
         }
-        if (run.plan) {
-          this.hasPlan = true;
-        }
+        // if (run.plan) {
+        //   this.hasPlan = true;
+        // }
       }
     });
   }

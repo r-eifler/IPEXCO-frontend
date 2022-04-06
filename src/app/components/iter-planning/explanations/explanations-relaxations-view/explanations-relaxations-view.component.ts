@@ -2,7 +2,7 @@ import { filter, map, tap } from 'rxjs/operators';
 import { PlanningTaskRelaxationService } from './../../../../service/planning-task/planning-task-relaxations-services';
 import { MetaFact, PlanningTaskRelaxationSpace } from './../../../../interface/planning-task-relaxation';
 import { PPConflict } from './../../../../interface/explanations';
-import { DepExplanationRun, IterationStep } from 'src/app/interface/run';
+import { DepExplanationRun, getRelaxationExplanationsFromStep, IterationStep } from 'src/app/interface/run';
 import { Component, Input, OnInit } from '@angular/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 
@@ -43,7 +43,7 @@ export class ExplanationsRelaxationsViewComponent implements OnInit {
           {
             name: space.name,
             possibleValues: [space.possibleInitFactUpdates[0].orgFact, ...space.possibleInitFactUpdates[0].updates],
-            selected: step.getRelaxationExplanations(conflict, space)[0]
+            selected: getRelaxationExplanationsFromStep(step, conflict, space)[0]
           }))
       ),
       tap(a =>  console.log(a))

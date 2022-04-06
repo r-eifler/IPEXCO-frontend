@@ -225,8 +225,8 @@ export class DemoNavigatorComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   async initPlanRuns() {
-    const run: PlanRun = new PlanRun('Plan ' + (this.runsService.getNumRuns() + 1), RunStatus.pending);
-    run._id= this.runsService.getNumRuns().toString();
+    // const run: PlanRun = new PlanRun('Plan ' + (this.runsService.getNumRuns() + 1), RunStatus.pending);
+    // run._id= this.runsService.getNumRuns().toString();
     //   name: 'Plan ' + (this.runsService.getNumRuns() + 1),
     //   status: null,
     //   planProperties: this.globalHardGoals,
@@ -238,8 +238,8 @@ export class DemoNavigatorComponent implements OnInit, AfterViewInit, OnDestroy 
 
     // console.log(run);
 
-    this.plannerService.execute_plan_run(run);
-    this.taskCreatorClose(true);
+    // this.plannerService.execute_plan_run(run);
+    // this.taskCreatorClose(true);
   }
 
 

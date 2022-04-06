@@ -6,6 +6,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {CurrentRunStore} from '../../../../store/stores.store';
 import {combineLatest, Subject} from 'rxjs';
 import {TimeLoggerService} from '../../../../service/logger/time-logger.service';
+import { planValue } from 'src/app/interface/run';
 
 
 @Component({
@@ -46,8 +47,8 @@ export class TaskViewComponent implements OnInit, OnDestroy {
         }
         this.timeLogger.addInfo(this.loggerId, 'runId: ' + run._id);
 
-        this.planValue = run.planValue();
-        this.hasPlan = !!run.plan;
+        // this.planValue = planValue(run);
+        // this.hasPlan = !!run.plan;
 
         // TODO
         // for (const propName of run.hardGoals) {
@@ -57,8 +58,8 @@ export class TaskViewComponent implements OnInit, OnDestroy {
 
         if (this.hasPlan) {
           for (const satP of run.satPlanProperties) {
-            if (!this.enforcedSatPlanProperties.find(p => p.name === satP.name)) {
-              this.addSatPlanProperties.push(satP);
+            if (!this.enforcedSatPlanProperties.find(p => p._id === satP)) {
+              this.addSatPlanProperties.push(planProperties.get(satP));
             }
           }
           for (const prop of planProperties.values()) {

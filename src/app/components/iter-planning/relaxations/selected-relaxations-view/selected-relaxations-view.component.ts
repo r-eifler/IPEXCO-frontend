@@ -6,7 +6,7 @@ import { filter, map, takeUntil } from 'rxjs/operators';
 import { IterationStep } from 'src/app/interface/run';
 import { SelectedIterationStepService } from 'src/app/service/planner-runs/selected-iteration-step.service';
 import { PlanningTaskRelaxationService } from 'src/app/service/planning-task/planning-task-relaxations-services';
-import { Fact } from 'src/app/interface/plannig-task';
+import { Fact, factEquals } from 'src/app/interface/plannig-task';
 
 interface SelectedInitUpdates {
   name: string;
@@ -49,7 +49,7 @@ export class SelectedRelaxationsViewComponent implements OnInit, OnDestroy {
 
               for(let possibleUpdates of updateSpace.possibleInitFactUpdates){
 
-                let matchingInitUpdates = step.task.initUpdates.filter(f => f.orgFact.equals(possibleUpdates.orgFact.fact))
+                let matchingInitUpdates = step.task.initUpdates.filter(f => factEquals(f.orgFact, possibleUpdates.orgFact.fact))
 
                 let list : {possibleValues: MetaFact[]; selected: MetaFact} = {possibleValues: [], selected: null};
                 list.possibleValues.push(possibleUpdates.orgFact)
@@ -58,7 +58,7 @@ export class SelectedRelaxationsViewComponent implements OnInit, OnDestroy {
                 if(matchingInitUpdates.length == 1){
                   console.log(matchingInitUpdates[0]);
                   possibleUpdates.updates.forEach(up => {
-                    if (matchingInitUpdates[0].newFact.equals(up.fact)) {
+                    if (factEquals(matchingInitUpdates[0].newFact, up.fact)) {
                       list.selected = up
                     }
                   });

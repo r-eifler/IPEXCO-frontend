@@ -26,13 +26,13 @@ constructor(
   @Inject(PlanVisualization) public animation: PlanVisualization) {
     this.currentRunService.getSelectedObject().subscribe((run) => {
       if (run) {
-        this.plan = run.plan;
-        if (this.plan) {
-          this.hasAnimation.next(true);
-          this.restart();
-        } else {
-          this.hasAnimation.next(false);
-        }
+        // this.plan = run.plan;
+        // if (this.plan) {
+        //   this.hasAnimation.next(true);
+        //   this.restart();
+        // } else {
+        //   this.hasAnimation.next(false);
+        // }
       }
     });
 }

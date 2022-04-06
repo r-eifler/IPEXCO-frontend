@@ -12,26 +12,16 @@ export interface UserStudyStep {
   content: string;
 }
 
-export class UserStudy {
-
-  _id: string;
-  user: string;
-  available = false;
-  redirectUrl: string;
-
-  steps: UserStudyStep[] = [];
-
-  constructor(
-    public name: string,
-    public description: string,
-    public startDate: string,
-    public endDate: string) {
-
-  }
-
-  addPart(part: UserStudyStep) {
-    this.steps.push(part);
-  }
+export interface UserStudy {
+  _id?: string,
+  name: string,
+  user: string,
+  available: boolean,
+  redirectUrl: string,
+  description: string,
+  startDate?: Date,
+  endDate?: Date,
+  steps?: UserStudyStep[],
 }
 
 export interface UserStudyDemoData {

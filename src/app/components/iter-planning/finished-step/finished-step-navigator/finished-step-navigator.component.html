@@ -15,11 +15,11 @@
       <mat-icon style="margin-right: 10px;">map</mat-icon>
       Plan
     </a>
-    <!-- <a mat-tab-link *ngIf="(step$ | async)?.hasPlan()" (click)="showTab = 4"
+    <a mat-tab-link *ngIf="(step$ | async)?.plan" (click)="showTab = 4"
       [active]="showTab == 4">
       <mat-icon style="margin-right: 10px;">map</mat-icon>
       Advanced Plan
-    </a> -->
+    </a>
     <a mat-tab-link (click)="showTab = 5"
       [active]="showTab == 5">
       <mat-icon style="margin-right: 10px;">error</mat-icon>

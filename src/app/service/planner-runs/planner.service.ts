@@ -41,14 +41,14 @@ export class PlannerService{
     let httpParams = new HttpParams();
     httpParams = httpParams.set('save', String(save));
 
-    const planRun: PlanRun = new PlanRun('Plan ', RunStatus.pending);
+    const planRun: PlanRun = {name: 'Plan ', status: RunStatus.pending};
     step.plan = planRun;
     this.selectedStepService.saveObject(step);
 
     this.BASE_URL = this.myBaseURL + 'plan';
     this.http.post<IHTTPData<IterationStep>>(this.BASE_URL, {data: step}, {params: httpParams})
       .subscribe(httpData => {
-        let step = IterationStep.fromObject(httpData.data)
+        let step = httpData.data
         const action = {type: EDIT, data: step};
         this.iterationStepsStore.dispatch(action);
         this.selectedStepService.updateIfSame(step);
@@ -68,11 +68,11 @@ export class PlannerService{
 
     let softGoals : string[] = step.hardGoals.filter(pp => ! question.some(h => h == pp));
 
-    let expRun = new DepExplanationRun("DExp", RunStatus.pending, question, softGoals);
+    let expRun : DepExplanationRun = {name: "DExp", status: RunStatus.pending, hardGoals: question, softGoals};
 
     this.http.post<IHTTPData<IterationStep>>(url, expRun)
       .subscribe(httpData => {
-        let step = IterationStep.fromObject(httpData.data)
+        let step = httpData.data;
         const action = {type: EDIT, data: step};
         this.iterationStepsStore.dispatch(action);
         this.selectedStepService.updateIfSame(step);
@@ -88,7 +88,7 @@ export class PlannerService{
 
     this.http.post<IHTTPData<IterationStep>>(url, {})
       .subscribe(httpData => {
-        let step = IterationStep.fromObject(httpData.data)
+        let step = httpData.data;
         const action = {type: EDIT, data: step};
         this.iterationStepsStore.dispatch(action);
         this.selectedStepService.updateIfSame(step);

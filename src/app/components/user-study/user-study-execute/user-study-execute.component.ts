@@ -33,7 +33,7 @@ export class UserStudyExecuteComponent implements OnInit, OnDestroy {
       .subscribe(
         study => {
           this.userStudy = study;
-          this.currentStep = study?.steps[0];
+          // this.currentStep = study?.steps[0];
         }
       );
   }
@@ -53,14 +53,15 @@ export class UserStudyExecuteComponent implements OnInit, OnDestroy {
 
   async nextStep() {
     if (this.hasNextStep()) {
-      this.currentStep = this.userStudy.steps[++this.currentStepIndex];
+      // this.currentStep = this.userStudy.steps[++this.currentStepIndex];
     } else {
       await this.router.navigate([''.concat(...['/user-studies/' + this.userStudy._id + '/run/end'])], { relativeTo: this.route });
     }
   }
 
   hasNextStep() {
-    return this.currentStepIndex < this.userStudy.steps.length - 1;
+    // return this.currentStepIndex < this.userStudy.steps.length - 1;
+    return false
   }
 
 }

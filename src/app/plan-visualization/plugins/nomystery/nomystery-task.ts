@@ -64,48 +64,48 @@ export class NoMysteryTask extends Task {
   }
 
   parseInit() {
-    const regexRoad = RegExp('fuelcost\\(level(\\d+),l(\\d+),l(\\d+)\\)');
-    const regexInitTruck = RegExp('at\\(t(\\d),l(\\d+)\\)');
-    const regexInitPackage = RegExp('at\\(p(\\d),l(\\d+)\\)');
-    const regexInitFuel = RegExp('fuel\\(t(\\d),level(\\d+)\\)');
+    // const regexRoad = RegExp('fuelcost\\(level(\\d+),l(\\d+),l(\\d+)\\)');
+    // const regexInitTruck = RegExp('at\\(t(\\d),l(\\d+)\\)');
+    // const regexInitPackage = RegExp('at\\(p(\\d),l(\\d+)\\)');
+    // const regexInitFuel = RegExp('fuel\\(t(\\d),level(\\d+)\\)');
 
-    for (const pred of this.planningTask.initial) {
-      let match = regexRoad.exec(pred.toPDDL());
-      if (match) {
-        const souceName = 'l' + match[2];
-        const targetName = 'l' + match[3];
-        const fuelCost = Number(match[1]);
-        this.roads.push(new Road(this.locations.get(souceName), this.locations.get(targetName), fuelCost));
-        continue;
-      }
+    // for (const pred of this.planningTask.initial) {
+    //   let match = regexRoad.exec(pred.toPDDL());
+    //   if (match) {
+    //     const souceName = 'l' + match[2];
+    //     const targetName = 'l' + match[3];
+    //     const fuelCost = Number(match[1]);
+    //     this.roads.push(new Road(this.locations.get(souceName), this.locations.get(targetName), fuelCost));
+    //     continue;
+    //   }
 
-      match = regexInitTruck.exec(pred.toPDDL());
-      if (match) {
-        const truckName = 't' + match[1];
-        const loc = 'l' + match[2];
+    //   match = regexInitTruck.exec(pred.toPDDL());
+    //   if (match) {
+    //     const truckName = 't' + match[1];
+    //     const loc = 'l' + match[2];
 
-        const truck = this.trucks.get(truckName);
-        truck.startLocation = this.locations.get(loc);
-      }
+    //     const truck = this.trucks.get(truckName);
+    //     truck.startLocation = this.locations.get(loc);
+    //   }
 
-      match = regexInitPackage.exec(pred.toPDDL());
-      if (match) {
-        const packageName = 'p' + match[1];
-        const loc = 'l' + match[2];
+    //   match = regexInitPackage.exec(pred.toPDDL());
+    //   if (match) {
+    //     const packageName = 'p' + match[1];
+    //     const loc = 'l' + match[2];
 
-        const p = this.packages.get(packageName);
-        p.startLocation = this.locations.get(loc);
-      }
+    //     const p = this.packages.get(packageName);
+    //     p.startLocation = this.locations.get(loc);
+    //   }
 
-      match = regexInitFuel.exec(pred.toPDDL());
-      if (match) {
-        const truckName = 't' + match[1];
-        const fuellevel = Number(match[2]);
+    //   match = regexInitFuel.exec(pred.toPDDL());
+    //   if (match) {
+    //     const truckName = 't' + match[1];
+    //     const fuellevel = Number(match[2]);
 
-        const truck = this.trucks.get(truckName);
-        truck.startFuel = fuellevel;
-      }
-    }
+    //     const truck = this.trucks.get(truckName);
+    //     truck.startFuel = fuellevel;
+    //   }
+    // }
   }
 
 

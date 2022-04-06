@@ -25,7 +25,7 @@ export class IterationStepDetailNavigatorComponent implements OnInit, OnDestroy 
     this.step$
     .pipe(takeUntil(this.unsubscribe$))
     .subscribe(step => {
-        if (step && (step.canBeModified() || ! step.hasPlan())){
+        if (step){
           this.showTab = 1;
           return;
         }

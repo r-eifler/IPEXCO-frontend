@@ -90,7 +90,7 @@ export class UserStudyCreatorComponent implements OnInit, OnDestroy {
             this.userStudyForm.controls.endDate.setValue(this.userStudy.endDate);
             this.userStudyForm.controls.redirectUrl.setValue(this.userStudy.redirectUrl);
           } else {
-            this.userStudy = new UserStudy('', '', null, null);
+            this.userStudy = {name: '', description: '', user: null, available: false, redirectUrl: ''};
             const firstPart: Part = {
               index: 0,
               active: true,
@@ -172,28 +172,29 @@ export class UserStudyCreatorComponent implements OnInit, OnDestroy {
   }
 
   async saveUserStudy() {
-    this.userStudy.name = this.userStudyForm.controls.name.value;
-    this.userStudy.description = this.userStudyForm.controls.description.value;
-    this.userStudy.startDate = this.userStudyForm.controls.startDate.value;
-    this.userStudy.endDate = this.userStudyForm.controls.endDate.value;
-    this.userStudy.redirectUrl = this.userStudyForm.controls.redirectUrl.value;
+    //TODO
+    // this.userStudy.name = this.userStudyForm.controls.name.value;
+    // this.userStudy.description = this.userStudyForm.controls.description.value;
+    // this.userStudy.startDate = this.userStudyForm.controls.startDate.value;
+    // this.userStudy.endDate = this.userStudyForm.controls.endDate.value;
+    // this.userStudy.redirectUrl = this.userStudyForm.controls.redirectUrl.value;
 
-    this.userStudy.steps = [];
-    for (const part of this.parts) {
-      const nextStep: UserStudyStep = {type: part.type, content: null};
-      switch (part.type) {
-        case UserStudyStepType.description:
-          nextStep.content = part.content;
-          break;
-        case UserStudyStepType.form:
-          nextStep.content = part.url;
-          break;
-        case UserStudyStepType.demo:
-          nextStep.content = part.demo._id;
-          break;
-      }
-      this.userStudy.steps.push(nextStep);
-    }
+    // this.userStudy.steps = [];
+    // for (const part of this.parts) {
+    //   const nextStep: UserStudyStep = {type: part.type, content: null};
+    //   switch (part.type) {
+    //     case UserStudyStepType.description:
+    //       nextStep.content = part.content;
+    //       break;
+    //     case UserStudyStepType.form:
+    //       nextStep.content = part.url;
+    //       break;
+    //     case UserStudyStepType.demo:
+    //       nextStep.content = part.demo._id;
+    //       break;
+    //   }
+      // this.userStudy.steps.push(nextStep);
+    // }
 
     this.userStudiesService.saveObject(this.userStudy);
 

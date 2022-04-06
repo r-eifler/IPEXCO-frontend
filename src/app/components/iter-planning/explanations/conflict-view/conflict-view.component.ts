@@ -60,14 +60,14 @@ export class ConflictViewComponent implements OnInit {
   selectConflict(c : PlanProperty[], index: number) {
     this.selectedConflictIndex = index;
     this.question$.pipe(take(1)).subscribe(
-      question => this.selectedConflict.emit(new PPConflict([question._id, ...c.map(pp => pp._id)])));
+      question => this.selectedConflict.emit({elems: [question._id, ...c.map(pp => pp._id)]}));
     ;
   }
 
   selectUnsolvable(index: number) {
     this.selectedConflictIndex = index;
     this.question$.pipe(take(1)).subscribe(
-      question => this.selectedConflict.emit(new PPConflict([question._id])));
+      question => this.selectedConflict.emit({elems: [question._id]}));
     ;
   }
 

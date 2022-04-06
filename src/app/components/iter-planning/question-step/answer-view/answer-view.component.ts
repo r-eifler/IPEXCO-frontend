@@ -57,7 +57,7 @@ export class AnswerViewComponent implements OnInit, OnDestroy {
           this.timeLogger.addInfo(this.loggerId, 'runId: ' + planRun._id);
           this.timeLogger.addInfo(this.loggerId, 'expRunId: ' + expRun._id);
 
-          this.solvable = !!planRun.plan;
+          // this.solvable = !!planRun.plan;
 
           if (this.solvable) {
             this.filterMUGSolvable(planRun, expRun, planProperties);

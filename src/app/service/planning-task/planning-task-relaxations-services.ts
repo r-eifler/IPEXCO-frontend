@@ -28,9 +28,7 @@ export class PlanningTaskRelaxationService extends ObjectCollectionService<Plann
 
     this.http.get<IHTTPData<PlanningTaskRelaxationSpace[]>>(this.BASE_URL, {params: httpParams})
       .pipe(this.pipeFindData, this.pipeFind)
-      .subscribe((res) => {
-        let spaces = res.map(e => PlanningTaskRelaxationSpace.fromObject(e))
-        console.log(spaces);
+      .subscribe((spaces) => {
         this.listStore.dispatch({type: LOAD, data: spaces});
       });
 
@@ -44,14 +42,14 @@ export class PlanningTaskRelaxationService extends ObjectCollectionService<Plann
     if (object._id) {
       return this.http.put<IHTTPData<PlanningTaskRelaxationSpace>>(this.BASE_URL + object._id, {data: object})
         .subscribe(httpData => {
-          const action = {type: EDIT, data: PlanningTaskRelaxationSpace.fromObject(httpData.data)};
+          const action = {type: EDIT, data: httpData.data};
           this.listStore.dispatch(action);
         });
     }
 
     return this.http.post<IHTTPData<PlanningTaskRelaxationSpace>>(this.BASE_URL, {data: object})
       .subscribe(httpData => {
-        const action = {type: ADD, data: PlanningTaskRelaxationSpace.fromObject(httpData.data)};
+        const action = {type: ADD, data: httpData.data};
         this.listStore.dispatch(action);
       });
   }

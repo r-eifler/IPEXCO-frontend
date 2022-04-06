@@ -8,7 +8,7 @@ import { BehaviorSubject, Subject, Observable, combineLatest } from 'rxjs';
 import { IterationStep, ModIterationStep } from 'src/app/interface/run';
 import { SelectedIterationStepService } from 'src/app/service/planner-runs/selected-iteration-step.service';
 import { MatSelectChange } from '@angular/material/select';
-import { Fact } from 'src/app/interface/plannig-task';
+import { Fact, factEquals } from 'src/app/interface/plannig-task';
 
 interface SelectedInitUpdates {
   name: string;
@@ -47,7 +47,7 @@ export class RelaxationSelectorComponent implements OnInit, OnDestroy {
 
               for(let possibleUpdates of updateSpace.possibleInitFactUpdates){
 
-                let matchingInitUpdates = step.task.initUpdates.filter(f => f.orgFact.equals(possibleUpdates.orgFact.fact))
+                let matchingInitUpdates = step.task.initUpdates.filter(f => factEquals(f.orgFact, possibleUpdates.orgFact.fact))
 
                 let list : {possibleValues: MetaFact[]; selected: MetaFact, orgFact: MetaFact} = {possibleValues: [], selected: null, orgFact: possibleUpdates.orgFact};
                 list.possibleValues.push(possibleUpdates.orgFact)
@@ -56,7 +56,7 @@ export class RelaxationSelectorComponent implements OnInit, OnDestroy {
                 if(matchingInitUpdates.length == 1){
                   console.log(matchingInitUpdates[0]);
                   possibleUpdates.updates.forEach(up => {
-                    if (matchingInitUpdates[0].newFact.equals(up.fact)) {
+                    if (factEquals(matchingInitUpdates[0].newFact, up.fact)) {
                       list.selected = up
                     }
                   });
@@ -90,9 +90,9 @@ export class RelaxationSelectorComponent implements OnInit, OnDestroy {
 
     this.step$.pipe(filter(step => !!step), take(1)).subscribe(
       step => {
-        step.task.initUpdates = step.task.initUpdates.filter(mt => ! mt.orgFact.equals(orgFact.fact));
-        if(! newSelected.fact.equals(orgFact.fact)){
-          step.task.initUpdates.push(new FactUpdate(orgFact.fact, newSelected.fact));
+        step.task.initUpdates = step.task.initUpdates.filter(mt => ! factEquals(mt.orgFact, orgFact.fact));
+        if(! factEquals(newSelected.fact, orgFact.fact)){
+          step.task.initUpdates.push({orgFact: orgFact.fact, newFact: newSelected.fact});
         }
         this.newIterationStepService.saveObject(step);
       }

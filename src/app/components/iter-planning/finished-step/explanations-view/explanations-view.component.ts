@@ -1,7 +1,7 @@
 import { filter, map, take, takeUntil, tap } from 'rxjs/operators';
 import { BehaviorSubject, combineLatest, Observable, Subject } from 'rxjs';
 import { SelectedIterationStepService } from 'src/app/service/planner-runs/selected-iteration-step.service';
-import { DepExplanationRun, IterationStep } from 'src/app/interface/run';
+import { DepExplanationRun, getDependencies, IterationStep } from 'src/app/interface/run';
 import { PPConflict, PPDependencies } from './../../../../interface/explanations';
 import { PlanProperty } from './../../../../interface/plan-property/plan-property';
 import { Component, OnInit, OnDestroy } from '@angular/core';
@@ -68,7 +68,7 @@ export class ExplanationsViewComponent implements OnInit, OnDestroy {
       ([step, planProperties]) => {
         if (step && planProperties) {
           // if (step.getDepExplanation(this.selectedPP)){
-            this.selectedDependencies$.next(step.getDependencies(this.selectedPP))
+            this.selectedDependencies$.next(getDependencies(step, this.selectedPP))
             this.questions$.next(planProperties.get(this.selectedPP));
           //   return
           // }

@@ -9,7 +9,6 @@ import {PddlFileUtilsService} from '../files/pddl-file-utils.service';
 import {PlanPropertyMapService} from '../plan-properties/plan-property-services';
 import {combineLatest} from 'rxjs/internal/observable/combineLatest';
 import {LOAD} from '../../store/generic-list.store';
-import {handlePlanString} from './utils';
 
 @Injectable({
     providedIn: 'root'
@@ -40,8 +39,8 @@ export class NewIterationStepService extends SelectedObjectService<ModIterationS
       super(store);
   }
 
-  saveObject(obj: ModIterationStep) {
-    let step = ModIterationStep.fromObject(obj);
+  saveObject(object: ModIterationStep) {
+    let step = {...object};
     console.log("New Step");
     console.log(step);
     this.selectedObjectStore.dispatch({type: LOAD, data: step});

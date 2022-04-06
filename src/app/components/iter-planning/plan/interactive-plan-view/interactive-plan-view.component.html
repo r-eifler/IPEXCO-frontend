@@ -10,7 +10,7 @@
           [class.effect_pos]="item.effect_pos && ! item.effect_neg"
           [class.effect_neg]="! item.effect_pos && item.effect_neg"
           [class.effect_neg_pos]="item.effect_pos && item.effect_neg">
-          {{item.fact}}
+          {{toString(item.fact)}}
         </mat-chip>
       </mat-chip-list>
     </mat-card-content>
@@ -30,7 +30,7 @@
     </mat-card>
 
     <mat-card class="state-card"
-    *ngIf="i < planRun.plan.actions.length - 1 && states_visible[i+1]">
+    *ngIf="i < (plan$ | async).actions.length - 1 && states_visible[i+1]">
       <!-- <mat-card-header>
         <mat-card-title>State {{i+1}}</mat-card-title>
       </mat-card-header> -->
@@ -41,7 +41,7 @@
           [class.effect_pos]="item.effect_pos && ! item.effect_neg"
           [class.effect_neg]="! item.effect_pos && item.effect_neg"
           [class.effect_neg_pos]="item.effect_pos && item.effect_neg">
-            {{item.fact}}
+            {{toString(item.fact)}}
           </mat-chip>
         </mat-chip-list>
       </mat-card-content>
@@ -59,7 +59,7 @@
         [class.effect_pos]="item.effect_pos && ! item.effect_neg"
         [class.effect_neg]="! item.effect_pos && item.effect_neg"
         [class.effect_neg_pos]="item.effect_pos && item.effect_neg">
-          {{item.fact}}
+          {{toString(item.fact)}}
         </mat-chip>
       </mat-chip-list>
     </mat-card-content>

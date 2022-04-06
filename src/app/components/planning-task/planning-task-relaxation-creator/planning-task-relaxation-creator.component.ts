@@ -2,7 +2,7 @@ import { FactUpdate, PossibleInitFactUpdates } from './../../../interface/planni
 import { MatStepper } from '@angular/material/stepper';
 import { PlanningTaskRelaxationSpace, MetaFact } from 'src/app/interface/planning-task-relaxation';
 import { PlanningTaskRelaxationService } from './../../../service/planning-task/planning-task-relaxations-services';
-import { Fact, PlanningTask, Predicat } from 'src/app/interface/plannig-task';
+import { Fact, factEquals, getObjectTypeMap, instantiatePredicateAll, PlanningTask, Predicat } from 'src/app/interface/plannig-task';
 import { Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Project } from 'src/app/interface/project';
 import { Subject, BehaviorSubject } from 'rxjs';
@@ -42,7 +42,7 @@ export class PlanningTaskRelaxationCreatorComponent implements OnInit, OnDestroy
   possibleMetaFacts: MetaFact[] = [];
   selectedFacts: Fact[] = [];
 
-  relaxationSpace: PlanningTaskRelaxationSpace = new PlanningTaskRelaxationSpace("Relaxation X" , null , []);
+  relaxationSpace: PlanningTaskRelaxationSpace = {name: "Relaxation X" , project: null , possibleInitFactUpdates: []};
 
   public initFactUpdates$ = new BehaviorSubject<FactUpdate[]>([]);
 
@@ -104,9 +104,9 @@ export class PlanningTaskRelaxationCreatorComponent implements OnInit, OnDestroy
 
   initFactsSelected(): void {
     for(let f of this.selectedInitialFacts){
-      if (this.relaxationSpace.possibleInitFactUpdates.filter(u => u.orgFact.fact.equals(f)).length == 0){
-        let newMetaFact = new MetaFact(f, 0, f.toString())
-        let newTaskUpdate = new PossibleInitFactUpdates(newMetaFact, []);
+      if (this.relaxationSpace.possibleInitFactUpdates.filter(u => factEquals(u.orgFact.fact,f)).length == 0){
+        let newMetaFact: MetaFact = {fact: f, value: 0, display: f.toString()};
+        let newTaskUpdate: PossibleInitFactUpdates = {orgFact: newMetaFact, updates: []};
         this.relaxationSpace.possibleInitFactUpdates.push(newTaskUpdate);
       }
     }
@@ -115,15 +115,15 @@ export class PlanningTaskRelaxationCreatorComponent implements OnInit, OnDestroy
   updateFacts(predicate: Predicat): void {
     if (predicate) {
       this.selctedPredicate = predicate;
-      this.possibleMetaFacts = this.selctedPredicate.instantiateAll(this.task.getObjectTypeMap()).map(f => ({fact: f, value: 0, display: f.toString()}));
+      this.possibleMetaFacts = instantiatePredicateAll(this.selctedPredicate, getObjectTypeMap(this.task)).map(f => ({fact: f, value: 0, display: f.toString()}));
       this.possibleMetaFacts = this.possibleMetaFacts.
-      filter(f =>  ! this.selectedFacts.some(e => e.equals(f.fact)));
+      filter(f =>  ! this.selectedFacts.some(e => factEquals(e, f.fact)));
     }
   }
 
   deleteFactFromRelax(metaFact : MetaFact, possibleUpdates: PossibleInitFactUpdates){
-    possibleUpdates.updates = possibleUpdates.updates.filter(e => ! e.fact.equals(metaFact.fact));
-    this.selectedFacts = this.selectedFacts.filter(e => ! e.equals(metaFact.fact));
+    possibleUpdates.updates = possibleUpdates.updates.filter(e => ! factEquals(e.fact, metaFact.fact));
+    this.selectedFacts = this.selectedFacts.filter(e => ! factEquals(e, metaFact.fact));
     if (this.selctedPredicate && metaFact.fact.name == this.selctedPredicate.name){
       this.possibleMetaFacts.push(metaFact);
       this.possibleMetaFacts = this.possibleMetaFacts.sort();

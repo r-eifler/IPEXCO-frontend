@@ -45,7 +45,13 @@ export class NewStepNavigatorComponent implements OnInit {
             }
           }
           let newTask: ModifiedPlanningTask = {name: 'task', project: step.task.project, basetask: step.task.basetask, initUpdates: step.task.initUpdates};
-          let newStep = new IterationStep(step.name, step.project, StepStatus.unknown, [...step.hardGoals], [...softGoals], newTask, null);
+          let newStep: IterationStep = {
+            name: step.name,
+            project: step.project,
+            status: StepStatus.unknown,
+            hardGoals: [...step.hardGoals],
+            softGoals: [...softGoals],
+            task: newTask};
           console.log("New Step");
           console.log(newStep);
           this.iterationStepsService.saveObject(newStep);

@@ -5,10 +5,10 @@
         [selected]="step._id == (selected$ | async)?._id">
         <!-- <mat-icon matListIcon>label</mat-icon> -->
         <div class="step-item">
-          <mat-icon class="step-icon" *ngIf="step.hasPlan()">map</mat-icon>
-          <mat-icon svgIcon="no_map" class="step-icon" *ngIf="step.notSolvable()"></mat-icon>
-          <mat-icon class="step-icon" *ngIf="step.hasError()">error</mat-icon>
-          <mat-spinner class="spinner" *ngIf="step.isPending()" diameter="25"></mat-spinner>
+          <mat-icon class="step-icon" *ngIf="hasPlan(step)">map</mat-icon>
+          <mat-icon svgIcon="no_map" class="step-icon" *ngIf="notSolvable(step)"></mat-icon>
+          <mat-icon class="step-icon" *ngIf="hasError(step)">error</mat-icon>
+          <mat-spinner class="spinner" *ngIf="isPending(step)" diameter="25"></mat-spinner>
           <p class="step-name"> {{step.name}}</p>
           <button mat-icon-button class="delete-button" (click)="deleteStep(step)"d>
             <mat-icon>delete</mat-icon>
