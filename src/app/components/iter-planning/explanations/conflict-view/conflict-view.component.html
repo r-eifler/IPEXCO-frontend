@@ -1,15 +1,33 @@
-<div class="outer-container">
-  <!-- <p class="header">Conflicts</p> -->
-  <div *ngIf="! question">
-    <p>No preference selected</p>
+<mat-card class="outer-container">
+  <mat-card-header>
+    <mat-card-title>... because preference </mat-card-title>
+  </mat-card-header>
+  <div *ngIf="! (question$ | async)">
+    <p style="font-size: large;">No preference selected.</p>
   </div>
-  <ng-container *ngIf="question && (explanation$ | async)">
-    <p *ngIf="(dependencies$ | async).length == 0">
-      There are no conflicts.
-    </p>
+  <ng-container *ngIf="(question$ | async) && (explanation$ | async)">
+    <mat-card>
+      <div class="list-item-container">
+        <mat-icon matListIcon >star_border</mat-icon>
+        <div class="list-item-text">
+          <span style="font-size: larger;"> {{(question$ | async).naturalLanguageDescription}} </span>
+          <span> Utility: {{(question$ | async).value}} </span>
+        </div>
+      </div>
+    </mat-card>
+    <div class="card-container" *ngIf="(dependencies$ | async).length == 0 && (solvableAtAll$ | async)">
+      <mat-card-header>
+        <mat-card-title>has no conflicts.</mat-card-title>
+      </mat-card-header>
+    </div>
     <div class="card-container" *ngIf="(dependencies$ | async).length > 0 && (solvableAtAll$ | async)">
+      <mat-card-header>
+        <mat-card-title>has the following conflicts ...</mat-card-title>
+      </mat-card-header>
       <mat-accordion multi>
-        <mat-expansion-panel hideToggle *ngFor="let conflict of (dependencies$ | async); let i=index">
+        <mat-expansion-panel hideToggle
+          *ngFor="let conflict of (dependencies$ | async); let i=index" expanded="true"
+          [class.selected]="selectedConflictIndex == i">
           <mat-expansion-panel-header>
             <mat-panel-title>
               Conflict {{i+1}}
@@ -17,20 +35,23 @@
           </mat-expansion-panel-header>
           <mat-list>
             <mat-list-item *ngFor="let pp of conflict">
-              {{pp.naturalLanguageDescription}}
+              <span matLine>{{pp.naturalLanguageDescription}}</span>
+              <span matLine> Utility: {{pp.value}} </span>
             </mat-list-item>
           </mat-list>
-          <div class="button-container">
-            <button mat-stroked-button color="primary" (click)="selectConflict(conflict)">Relaxation?</button>
+          <div class="button-container" >
+            <button mat-stroked-button color="primary" (click)="selectConflict(conflict, i)">Relax Constraints</button>
           </div>
         </mat-expansion-panel>
       </mat-accordion>
     </div>
     <div class="card-container" *ngIf=" ! (solvableAtAll$ | async)">
-        This preference can not be achieved.
-        <div class="button-container">
-          <button mat-stroked-button color="primary" (click)="selectUnsolvable()">Relaxation?</button>
-        </div>
+      <mat-card-header>
+        <mat-card-title>can with the current constraints not be achieved.</mat-card-title>
+      </mat-card-header>
+      <div class="button-container" >
+        <button mat-stroked-button color="primary" (click)="selectUnsolvable(-1)">Relax Constraints</button>
+      </div>
     </div>
   </ng-container>
-</div>
+</mat-card>

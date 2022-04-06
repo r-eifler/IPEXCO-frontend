@@ -16,6 +16,7 @@ export class ExplanationsSelectPreferenceViewComponent implements OnInit {
 
   @Input()
   set step(step : IterationStep){
+    this.selectedPPId = '';
     this.step$.next(step);
   }
   @Output() selectedPP = new EventEmitter<string>();

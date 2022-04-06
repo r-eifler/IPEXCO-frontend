@@ -98,6 +98,10 @@ export class IterationStep{
     return this.plan && this.plan.status == RunStatus.pending;
   }
 
+  isBusyComputionExplanations(): boolean {
+    return this.relaxationExplanations.some(r => r.status == RunStatus.pending);
+  }
+
   hasError(): boolean {
     return this.plan && this.plan.status == RunStatus.failed;
   }

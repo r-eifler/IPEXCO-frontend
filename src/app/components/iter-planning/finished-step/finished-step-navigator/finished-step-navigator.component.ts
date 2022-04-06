@@ -14,7 +14,7 @@ export class FinishedStepNavigatorComponent implements OnInit, OnDestroy {
   private unsubscribe$: Subject<any> = new Subject();
 
   step$: BehaviorSubject<IterationStep>;
-  showTab = 5;
+  showTab = 1;
 
   constructor(
     private selectedIterationStepService: SelectedIterationStepService

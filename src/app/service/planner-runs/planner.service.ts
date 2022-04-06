@@ -35,6 +35,8 @@ export class PlannerService{
   }
 
   computePlan(step: IterationStep, save = true): void {
+    this.plannerBusy.next(true);
+
     console.log("compute plan");
     let httpParams = new HttpParams();
     httpParams = httpParams.set('save', String(save));
@@ -50,23 +52,23 @@ export class PlannerService{
         const action = {type: EDIT, data: step};
         this.iterationStepsStore.dispatch(action);
         this.selectedStepService.updateIfSame(step);
+        this.plannerBusy.next(false);
       });
   }
 
   execute_plan_run(run: PlanRun, save= true): void {
+    this.plannerBusy.next(true);
     // TODO
     console.log('not imlemented');
   }
 
   computeMUGS(step: IterationStep, question: string[], planProperties: PlanProperty[]): DepExplanationRun {
-
+    this.plannerBusy.next(true);
     const url = this.myBaseURL + 'mugs/' + step._id;
 
     let softGoals : string[] = step.hardGoals.filter(pp => ! question.some(h => h == pp));
 
     let expRun = new DepExplanationRun("DExp", RunStatus.pending, question, softGoals);
-
-    console.log(expRun);
 
     this.http.post<IHTTPData<IterationStep>>(url, expRun)
       .subscribe(httpData => {
@@ -74,13 +76,14 @@ export class PlannerService{
         const action = {type: EDIT, data: step};
         this.iterationStepsStore.dispatch(action);
         this.selectedStepService.updateIfSame(step);
+        this.plannerBusy.next(false);
       });
 
     return expRun;
   }
 
   computeRelaxExplanations(step: IterationStep) {
-
+    this.plannerBusy.next(true);
     const url = this.myBaseURL + 'relax_exp/' + step._id;
 
     this.http.post<IHTTPData<IterationStep>>(url, {})
@@ -89,6 +92,7 @@ export class PlannerService{
         const action = {type: EDIT, data: step};
         this.iterationStepsStore.dispatch(action);
         this.selectedStepService.updateIfSame(step);
+        this.plannerBusy.next(false);
       });
 
   }

@@ -4,7 +4,7 @@ import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { PlanProperty } from '../../../../interface/plan-property/plan-property';
 import { DepExplanationRun, RunStatus } from 'src/app/interface/run';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { map, tap, filter } from 'rxjs/operators';
+import { map, tap, filter, take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-conflict-view',
@@ -16,21 +16,28 @@ export class ConflictViewComponent implements OnInit {
   runStatus = RunStatus;
 
 
-  @Input() question: PlanProperty;
+  @Input()
+  set question(question : PlanProperty){
+    this.selectedConflictIndex = null;
+    this.question$.next(question);
+  }
   @Input()
   set explanation(explanation : PPDependencies){
     console.log(explanation);
+    this.selectedConflictIndex = null;
     this.explanation$.next(explanation);
   }
 
   @Output() selectedConflict = new EventEmitter<PPConflict>();
 
   explanation$ = new BehaviorSubject<PPDependencies>(null);
+  question$ = new BehaviorSubject<PlanProperty>(null);
 
   dependencies$ : Observable<PlanProperty[][]>;
   planProperties$ : Observable<Map<string,PlanProperty>>;
   solvableAtAll$ : Observable<boolean>;
 
+  selectedConflictIndex: number = null;
 
   constructor(
     planPropertiesService: PlanPropertyMapService
@@ -50,14 +57,18 @@ export class ConflictViewComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  selectConflict(c : PlanProperty[]) {
-    this.selectedConflict.emit(new PPConflict([this.question, ...c.map(pp => pp._id)]));
+  selectConflict(c : PlanProperty[], index: number) {
+    this.selectedConflictIndex = index;
+    this.question$.pipe(take(1)).subscribe(
+      question => this.selectedConflict.emit(new PPConflict([question._id, ...c.map(pp => pp._id)])));
+    ;
   }
 
-  selectUnsolvable() {
-    let newC = new PPConflict([this.question]);
-    console.log(newC);
-    this.selectedConflict.emit(newC);
+  selectUnsolvable(index: number) {
+    this.selectedConflictIndex = index;
+    this.question$.pipe(take(1)).subscribe(
+      question => this.selectedConflict.emit(new PPConflict([question._id])));
+    ;
   }
 
 }

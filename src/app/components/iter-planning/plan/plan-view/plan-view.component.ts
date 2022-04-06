@@ -27,6 +27,7 @@ export class PlanViewComponent implements OnInit, OnDestroy {
   actions$: Observable<string[]>;
   solved$: Observable<boolean>;
   hasPlan$: Observable<boolean>;
+  plannerBusy$ : Observable<boolean>;
 
     constructor(
       private timeLogger: TimeLoggerService,
@@ -34,6 +35,7 @@ export class PlanViewComponent implements OnInit, OnDestroy {
       private plannerService: PlannerService) {
 
       this.step$ = this.currentIterationStepService.getSelectedObject();
+      this.plannerBusy$ = this.plannerService.isPlannerBusy();
     }
 
   ngOnInit(): void {
