@@ -1,10 +1,11 @@
-import { filter, map, tap } from 'rxjs/operators';
+import { filter, find, flatMap, map, tap } from 'rxjs/operators';
 import { PlanningTaskRelaxationService } from './../../../../service/planning-task/planning-task-relaxations-services';
 import { MetaFact, PlanningTaskRelaxationSpace } from './../../../../interface/planning-task-relaxation';
 import { PPConflict } from './../../../../interface/explanations';
 import { DepExplanationRun, getRelaxationExplanationsFromStep, IterationStep } from 'src/app/interface/run';
 import { Component, Input, OnInit } from '@angular/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
+import { Fact, factEquals } from 'src/app/interface/plannig-task';
 
 @Component({
   selector: 'app-explanations-relaxations-view',
@@ -26,7 +27,7 @@ export class ExplanationsRelaxationsViewComponent implements OnInit {
   private step$ = new BehaviorSubject<IterationStep>(null);
   private conflict$ = new BehaviorSubject<PPConflict>(null);
 
-  relaxations$ : Observable<{name: string, possibleValues: MetaFact[], selected: MetaFact}[]>;
+  relaxations$ : Observable<{name: string, dimensions: {possibleValues: MetaFact[], selected: MetaFact}[]}[]>;
   relaxationSpaces$ : BehaviorSubject<PlanningTaskRelaxationSpace[]>;
 
   constructor(
@@ -38,13 +39,25 @@ export class ExplanationsRelaxationsViewComponent implements OnInit {
     this.relaxations$ = combineLatest([this.step$, this.conflict$, this.relaxationSpaces$]).pipe(
       filter(([step, conflict, spaces]) => !!step && !!conflict && !!spaces),
       tap(([step, conflict, spaces]) => console.log(conflict)),
-      map(([step, conflict, spaces]) =>
-        spaces.map(space => (
-          {
-            name: space.name,
-            possibleValues: [space.possibleInitFactUpdates[0].orgFact, ...space.possibleInitFactUpdates[0].updates],
-            selected: getRelaxationExplanationsFromStep(step, conflict, space)[0]
-          }))
+      flatMap(([step, conflict, spaces]) =>
+        spaces.map(space => {
+          let relaxations: {name: string, dimensions: {possibleValues: MetaFact[], selected: MetaFact}[]}[] = []
+          let nodes = getRelaxationExplanationsFromStep(step, conflict, space);
+          for (let node of nodes){
+            let dimensions: {possibleValues: MetaFact[], selected: MetaFact}[] = [];
+            let d_index = 0;
+            for(let demension of space.possibleInitFactUpdates) {
+              let values = [demension.orgFact, ...demension.updates]
+              dimensions.push({
+                  possibleValues: values,
+                  selected: values.find(mf => factEquals(mf.fact, node.updates[d_index]))
+                });
+                d_index++;
+            }
+            relaxations.push({name: space.name, dimensions});
+          }
+          return relaxations;
+        })
       ),
       tap(a =>  console.log(a))
     );

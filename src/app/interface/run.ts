@@ -1,9 +1,5 @@
-import { map } from 'rxjs/operators';
-import { PlanningTask } from 'src/app/interface/plannig-task';
-import { PPDependencies, PPConflict } from './explanations';
+import { PPDependencies, PPConflict, RelaxationExplanationNode } from './explanations';
 import {PlanProperty} from './plan-property/plan-property';
-import {Project} from './project';
-import {Plan} from './plan';
 import { ModifiedPlanningTask, PlanningTaskRelaxationSpace, MetaFact } from './planning-task-relaxation';
 
 export enum StepStatus{
@@ -39,7 +35,7 @@ export interface RelaxationExplanationRun{
   relaxationSpace: string,
   log: string,
   result: string,
-  dependencies?: PPDependencies[],
+  dependencies?: RelaxationExplanationNode[];
 }
 
 export interface DepExplanationRun{
@@ -93,33 +89,40 @@ export function getDependencies(step: IterationStep, question: string): PPDepend
   if(! step.relaxationExplanations) {
     return null;
   }
-  return filterDependencies(question, step.hardGoals, step.relaxationExplanations[0].dependencies[0]);
+  return filterDependencies(question, step.hardGoals, step.relaxationExplanations[0].dependencies[0].dependencies);
 }
 
-function findRelaxationLevels(conflict: PPConflict, allDependencies: PPDependencies[]): number[] {
-  let index = 0;
-  for (let dep of allDependencies) {
+function findRelaxationNodes(conflict: PPConflict, explanationTree: RelaxationExplanationNode[]): RelaxationExplanationNode[] {
+  //TODO fix finding the real minimal
+  let minimalNodes: RelaxationExplanationNode[] = [];
+  let todo : number[] = [0];
+  let done : Set<number> = new Set();
+  while (todo.length > 0) {
+    let index = todo.shift();
+    done.add(index);
+    let node = explanationTree[index];
     let found = false;
-    for (let c of dep.conflicts) {
+    for (let c of node.dependencies.conflicts) {
       if (conflict.elems.every(e => c.elems.includes(e))){
         found = true;
+        break;
       }
     }
+    if (found) {
+      node.upper_cover.forEach(i => {if(!done.has(i)) todo.push(i)});
+    }
     if (! found) {
-      return [index];
+      minimalNodes.push(node);
     }
     index++;
   }
-  return [];
+  return minimalNodes;
   }
 
-export function getRelaxationExplanationsFromStep(step: IterationStep, conflict: PPConflict, relaxationSpeace: PlanningTaskRelaxationSpace): MetaFact[] {
-  console.log(conflict);
+export function getRelaxationExplanationsFromStep(step: IterationStep, conflict: PPConflict, relaxationSpeace: PlanningTaskRelaxationSpace): RelaxationExplanationNode[] {
   let relaxExp = step.relaxationExplanations.find(relaxExp => relaxExp.relaxationSpace == relaxationSpeace._id);
-  let indexes = findRelaxationLevels(conflict, relaxExp.dependencies);
-  let list = [relaxationSpeace.possibleInitFactUpdates[0].orgFact, ...relaxationSpeace.possibleInitFactUpdates[0].updates];
-  return indexes.map(i => list[i]);
+  let nodes = findRelaxationNodes(conflict, relaxExp.dependencies);
+  return nodes
 }
-
 
 
