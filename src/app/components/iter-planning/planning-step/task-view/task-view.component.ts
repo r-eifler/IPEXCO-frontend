@@ -6,7 +6,6 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {CurrentRunStore} from '../../../../store/stores.store';
 import {combineLatest, Subject} from 'rxjs';
 import {TimeLoggerService} from '../../../../service/logger/time-logger.service';
-import { planValue } from 'src/app/interface/run';
 
 
 @Component({

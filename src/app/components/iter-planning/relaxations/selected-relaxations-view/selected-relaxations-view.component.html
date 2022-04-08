@@ -6,9 +6,8 @@
     <div *ngFor="let updatesList of (selectedUpdates$ | async)" class="relax-space">
       <p class="name">{{updatesList.name}}</p>
       <div class="list-container">
-        <div *ngFor="let update of updatesList.updates">
-          <app-object-progress-bar [values]="update.possibleValues" [selected]="update.selected"></app-object-progress-bar>
-        </div>
+          <app-object-progress-bar *ngFor="let update of updatesList.updates"
+          class="slider" [values]="update.possibleValues" [selected]="update.selected"></app-object-progress-bar>
       </div>
     </div>
   </mat-card-content>

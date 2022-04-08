@@ -1,24 +1,9 @@
 <div class="main-container">
-  <app-selected-hard-goals clas="sub-content" [step]="(step$ | async)"></app-selected-hard-goals>
-
-  <app-selected-relaxations-view clas="sub-content" [step]="(step$ | async)"></app-selected-relaxations-view>
-
-  <!-- <mat-card class="actions-container">
-    <button mat-flat-button color="primary"
-        *ngIf="! (step$ | async)?.canBeModified() && ! (step$ | async)?.hasPlan()"
-        (click)="computePlan()">
-        Compute Plan
-      </button>
-      <button mat-flat-button color="primary"
-        (click)="addNewStep()"
-        *ngIf="(step$ | async)?.canBeModified()">
-        Add Step
-      </button>
-      <button mat-icon-button color="primary" style="margin-right: auto;"
-        (click)="deleteStep()">
-        <mat-icon>delete</mat-icon>
-      </button>
-  </mat-card> -->
+  <div class="sub-container" >
+    <app-score-view class="sub-content" [step]="(step$ | async)"></app-score-view>
+    <app-selected-hard-goals class="sub-content" [step]="(step$ | async)"></app-selected-hard-goals>
+  </div>
+  <app-selected-relaxations-view class="sub-content" [step]="(step$ | async)"></app-selected-relaxations-view>
 </div>
 
 

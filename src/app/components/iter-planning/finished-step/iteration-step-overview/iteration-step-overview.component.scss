@@ -8,17 +8,20 @@
   column-gap: 10px;
 }
 
-.sub-subconatiner {
+.sub-container {
   box-sizing: border-box;
   width: 100%;
   height: 100%;
+  display: grid;
+  grid-template-rows: 1fr 3fr;
+  row-gap: 10px;
+  column-gap: 10px;
 }
 
-.actions-container {
-  display: flex;
-  flex-direction: row-reverse;
-  align-items: flex-end;
-  gap: 10px;
+.sub-content {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
 }
 
 

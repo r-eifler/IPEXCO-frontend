@@ -1,24 +1,43 @@
+@import '../../../../variables.scss';
+
 .container {
   width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  display: grid;
+  grid-template-rows: 20px 50px 20px;
+  grid-template-columns: 50px 1fr;
+  column-gap: 10px;
   align-items: center;
 }
 
-
-.display-container {
-  width: 100%;
-  box-sizing: border-box;
-  min-height: 50px;
-  padding-top: 10px;
-}
-
-.label-container {
+.bar-container {
   width: 100%;
   position: relative;
-  min-height: 50px;
-  // background-color: aqua;
+  height: 10px;
+}
+
+.back {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  background-color: $primary;
+  opacity: 50%;
+}
+
+.bar {
+  box-sizing: border-box;
+  height: 100%;
+  position: absolute;
+  background-color: $primary;
+}
+
+
+.label-box {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  position: relative;
 }
 
 .label {
@@ -30,3 +49,22 @@
 }
 
 
+.cost-box {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.cost {
+  width: fit-content;
+  margin: 0;
+  position: absolute;
+  font-size: larger;
+  font-weight: 400;
+}
+
+.axis-label {
+  font-size: larger;
+  font-weight: 400
+}

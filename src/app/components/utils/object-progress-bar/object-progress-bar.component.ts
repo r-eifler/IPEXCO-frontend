@@ -4,6 +4,7 @@ import { filter, map } from 'rxjs/operators';
 
 interface Displayable {
   display: string;
+  value: number;
 }
 
 @Component({
