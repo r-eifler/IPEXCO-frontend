@@ -1,3 +1,4 @@
+
 export interface Action {
   _id?: string;
   name: string;
@@ -33,4 +34,11 @@ export interface PlanProperty {
   isUsed: boolean;
   globalHardGoal: boolean;
   value: number;
+}
+
+
+export function getMaximalPlanValue(planProperties: Map<string,PlanProperty>): number {
+  let sum = 0;
+  planProperties.forEach((pp, key) => {sum += pp.value});
+  return sum;
 }

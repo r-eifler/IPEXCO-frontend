@@ -5,6 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { PlanningTaskRelaxationService } from 'src/app/service/planning-task/planning-task-relaxations-services';
 import { Subject, Observable } from 'rxjs';
 import { filter, map, takeUntil } from 'rxjs/operators';
+import { FactToString, predicateToString } from 'src/app/interface/plannig-task';
 
 interface InitUpdates {
   name: string;
@@ -20,6 +21,8 @@ interface InitUpdates {
 export class PlanningTaskRelaxationsComponent implements OnInit {
 
   json=JSON;
+  predicatOut = predicateToString;
+  factOut = FactToString;
   private ngUnsubscribe: Subject<any> = new Subject();
 
  relaxationSpaces$ : Observable<InitUpdates[]>

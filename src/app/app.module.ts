@@ -194,6 +194,8 @@ import { ExplanationsRelaxationsViewComponent } from './components/iter-planning
 import { NewStepNavigatorComponent } from './components/iter-planning/new-step/new-step-navigator/new-step-navigator.component';
 import { ObjectSliderComponent } from './components/utils/object-slider/object-slider.component';
 import { ObjectProgressBarComponent } from './components/utils/object-progress-bar/object-progress-bar.component';
+import { ScoreViewComponent } from './components/iter-planning/finished-step/score-view/score-view.component';
+import { ScoreBarComponent } from './components/utils/score-bar/score-bar.component';
 
 @NgModule({
     declarations: [
@@ -290,7 +292,9 @@ import { ObjectProgressBarComponent } from './components/utils/object-progress-b
         ExplanationsRelaxationsViewComponent,
         NewStepNavigatorComponent,
         ObjectSliderComponent,
-        ObjectProgressBarComponent
+        ObjectProgressBarComponent,
+        ScoreViewComponent,
+        ScoreBarComponent
     ],
     imports: [
         RouterModule.forRoot(appRoutes, { enableTracing: false, paramsInheritanceStrategy: 'always' }),

@@ -40,3 +40,13 @@ export function getUpdatedInitialState(modTask : ModifiedPlanningTask): Fact[] {
 
   return initial;
 }
+
+export function getMaxRelaxationCost(spaces : PlanningTaskRelaxationSpace[]): number {
+  let sum = 0;
+  spaces.forEach(space => {
+    for(let dim of space.possibleInitFactUpdates){
+      sum += Math.max(...dim.updates.map(u => u.value))
+    }
+  })
+  return sum;
+}

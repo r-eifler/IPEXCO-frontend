@@ -17,7 +17,7 @@
   </mat-expansion-panel-header>
   <mat-list>
     <mat-list-item *ngFor="let predicate of (project$ |async).baseTask.predicates">
-      {{predicate.toString()}}
+      {{predicatOut(predicate)}}
     </mat-list-item>
    </mat-list>
 </mat-expansion-panel>
@@ -52,7 +52,7 @@
   </mat-expansion-panel-header>
   <mat-list>
     <mat-list-item *ngFor="let fact of (project$ |async).baseTask.initial">
-      {{fact.toString()}}
+      {{factOut(fact)}}
     </mat-list-item>
    </mat-list>
 </mat-expansion-panel>

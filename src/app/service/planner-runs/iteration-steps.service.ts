@@ -1,8 +1,9 @@
+import { computePlanValue } from 'src/app/interface/run';
 import { ModifiedPlanningTask } from './../../interface/planning-task-relaxation';
 import { SelectedIterationStepService } from './selected-iteration-step.service';
 import { CurrentProjectService } from 'src/app/service/project/project-services';
 import { IterationStepsStore } from './../../store/stores.store';
-import { IterationStep, StepStatus, ModIterationStep, PlanRun, planValue } from './../../interface/run';
+import { IterationStep, StepStatus, ModIterationStep, PlanRun } from './../../interface/run';
 import {ADD, EDIT, LOAD, REMOVE} from '../../store/generic-list.store';
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
@@ -134,7 +135,7 @@ export class IterationStepsService extends ObjectCollectionService<IterationStep
     if(this.collection$.value.length == 0){
       return null
     }
-    return this.collection$.value.reduce((max, cur) => planValue(cur, planProperties) >= planValue(cur, planProperties) ? cur : max, this.collection$.value[0])
+    return this.collection$.value.reduce((max, cur) => computePlanValue(cur, planProperties) >= computePlanValue(cur, planProperties) ? cur : max, this.collection$.value[0])
   }
 
   getNumRuns(): number {

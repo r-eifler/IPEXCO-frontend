@@ -15,7 +15,7 @@
 
           <ng-container matColumnDef="fact">
             <th mat-header-cell *matHeaderCellDef> Fact </th>
-            <td mat-cell *matCellDef="let element"> {{element.fact.toString()}} </td>
+            <td mat-cell *matCellDef="let element"> {{factOut(element.fact)}} </td>
           </ng-container>
 
           <ng-container matColumnDef="value">

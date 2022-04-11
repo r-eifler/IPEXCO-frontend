@@ -1,3 +1,4 @@
+import { factEquals } from 'src/app/interface/plannig-task';
 import { PPDependencies, PPConflict, RelaxationExplanationNode } from './explanations';
 import {PlanProperty} from './plan-property/plan-property';
 import { ModifiedPlanningTask, PlanningTaskRelaxationSpace, MetaFact } from './planning-task-relaxation';
@@ -70,8 +71,39 @@ export interface ModIterationStep extends IterationStep{
   baseStep: IterationStep
 }
 
-export function planValue(step: IterationStep, planProperties: Map<string,PlanProperty>) {
-  return step.plan.satPlanProperties.reduce((acc, cur) => acc + planProperties.get(cur).value, 0)
+export function computePlanValue(step: IterationStep, planProperties: Map<string,PlanProperty>): number {
+  if (step.status == StepStatus.solvable){
+    let sum = 0
+    step.plan.satPlanProperties.forEach(ppID =>  {
+      let pp = planProperties.get(ppID);
+      if (pp)
+        sum += pp.value
+      else
+        console.log(ppID);
+    });
+    return sum;
+  }
+  if (step.status == StepStatus.unsolvable){
+    return 0;
+  }
+  if (step.status == StepStatus.unknown){
+    return null;
+  }
+}
+
+
+export function computeRelaxationCost(step: IterationStep, relaxationSpeaces: PlanningTaskRelaxationSpace[]): number {
+  let cost = 0;
+  relaxationSpeaces.forEach(space => {
+    space.possibleInitFactUpdates.forEach(updates => {
+      let match = step.task.initUpdates.find(iu => factEquals(iu.orgFact, updates.orgFact.fact));
+      if(match) {
+        let update = updates.updates.find(u => factEquals(u.fact, match.newFact));
+        cost += update.value;
+      }
+    })
+  });
+  return cost;
 }
 
 function filterDependencies(question: string, hardGoals: string[], allDependencies: PPDependencies): PPDependencies {

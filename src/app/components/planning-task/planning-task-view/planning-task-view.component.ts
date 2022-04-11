@@ -1,4 +1,4 @@
-import { PlanningTask } from 'src/app/interface/plannig-task';
+import { PlanningTask, predicateToString, FactToString } from 'src/app/interface/plannig-task';
 import { Project } from 'src/app/interface/project';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CurrentProjectService } from 'src/app/service/project/project-services';
@@ -29,5 +29,9 @@ export class PlanningTaskViewComponent implements OnInit, OnDestroy {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
   }
+
+  predicatOut = predicateToString;
+  factOut = FactToString;
+
 
 }

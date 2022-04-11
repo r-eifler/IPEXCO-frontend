@@ -6,7 +6,7 @@
         <mat-label>Predicate</mat-label>
         <mat-select [(value)]="selctedPredicate" (selectionChange)="updateInitialFacts(selctedPredicate)">
           <mat-option *ngFor="let pred of task.predicates" [value]="pred">
-            {{pred.toString()}}
+            {{predicatOut(pred)}}
           </mat-option>
         </mat-select>
       </mat-form-field>
@@ -17,7 +17,7 @@
           [cdkDropListData]="initialFacts"
           #listOneInit="cdkDropList" [cdkDropListConnectedTo]="[listTwoInit]"
           (cdkDropListDropped)="drop($event)">
-            <mat-chip *ngFor="let fact of initialFacts" [value]="fact" cdkDrag>{{fact.toString()}}</mat-chip>
+            <mat-chip *ngFor="let fact of initialFacts" [value]="fact" cdkDrag>{{factOut(fact)}}</mat-chip>
           </mat-chip-list>
         </mat-card>
 
@@ -28,7 +28,7 @@
             (cdkDropListDropped)="drop($event);updateSelectedFacts($event)">
             <p>initial values:</p>
             <mat-chip class="selected-chip" *ngFor="let fact of selectedInitialFacts" [value]="fact" (removed)="removeInitFact(fact)">
-              {{fact.toString()}}
+              {{factOut(fact)}}
               <button matChipRemove>
                 <mat-icon>cancel</mat-icon>
               </button>
@@ -47,7 +47,7 @@
         <mat-label>Predicate</mat-label>
         <mat-select [(value)]="selctedPredicate" (selectionChange)="updateFacts(selctedPredicate)">
           <mat-option *ngFor="let pred of task.predicates" [value]="pred">
-            {{pred.toString()}}
+            {{predicatOut(pred)}}
           </mat-option>
         </mat-select>
       </mat-form-field>
@@ -58,7 +58,7 @@
           [cdkDropListData]="possibleMetaFacts"
           cdkDropList
           (cdkDropListDropped)="drop($event)">
-            <mat-chip *ngFor="let metaFact of possibleMetaFacts" [value]="metaFact" cdkDrag>{{metaFact.fact.toString()}}</mat-chip>
+            <mat-chip *ngFor="let metaFact of possibleMetaFacts" [value]="metaFact" cdkDrag>{{factOut(metaFact.fact)}}</mat-chip>
           </mat-chip-list>
         </mat-card>
 
@@ -71,11 +71,11 @@
                   [cdkDropListData]="possibleInitFactUpdates.updates"
                   cdkDropList
                   (cdkDropListDropped)="drop($event);updateSelectedFacts($event)">
-                  <mat-chip class="selected-chip" color="accent">{{possibleInitFactUpdates.orgFact.fact.toString()}}</mat-chip>
+                  <mat-chip class="selected-chip" color="accent">{{factOut(possibleInitFactUpdates.orgFact.fact)}}</mat-chip>
                   <mat-divider [inset]="true"></mat-divider>
                   <mat-chip class="selected-chip" *ngFor="let update of possibleInitFactUpdates.updates"
                     [value]="update" (removed)="deleteFactFromRelax(update, possibleInitFactUpdates)" cdkDrag>
-                    {{update.fact.toString()}}
+                    {{factOut(update.fact)}}
                     <button matChipRemove>
                       <mat-icon>cancel</mat-icon>
                     </button>
@@ -115,7 +115,7 @@
         <ng-container matColumnDef="fact">
           <th mat-header-cell *matHeaderCellDef> Fact </th>
           <td mat-cell *matCellDef="let update" #cellElement>
-            {{update.fact.toString()}}
+            {{factOut(update.fact)}}
           </td>
         </ng-container>
 

@@ -2,7 +2,7 @@ import { FactUpdate, PossibleInitFactUpdates } from './../../../interface/planni
 import { MatStepper } from '@angular/material/stepper';
 import { PlanningTaskRelaxationSpace, MetaFact } from 'src/app/interface/planning-task-relaxation';
 import { PlanningTaskRelaxationService } from './../../../service/planning-task/planning-task-relaxations-services';
-import { Fact, factEquals, getObjectTypeMap, instantiatePredicateAll, PlanningTask, Predicat } from 'src/app/interface/plannig-task';
+import { Fact, factEquals, getObjectTypeMap, instantiatePredicateAll, PlanningTask, Predicat, predicateToString, FactToString } from 'src/app/interface/plannig-task';
 import { Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Project } from 'src/app/interface/project';
 import { Subject, BehaviorSubject } from 'rxjs';
@@ -21,6 +21,8 @@ import { FormControl, FormGroup } from '@angular/forms';
 export class PlanningTaskRelaxationCreatorComponent implements OnInit, OnDestroy {
 
   math = Math;
+  predicatOut = predicateToString;
+  factOut = FactToString;
   private ngUnsubscribe: Subject<any> = new Subject();
 
   isedit = false;

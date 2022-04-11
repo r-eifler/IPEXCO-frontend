@@ -1,5 +1,7 @@
 <div class="main-container">
   <!-- <button mat-flat-button (click)="viewpos = 1">Select other preference</button> -->
+  <button mat-flat-button (click)="computeExplanations()"
+  color="primary" style="position: absolute; left: 80%; top: 80%">Compute Explanations</button>
   <ng-container *ngIf="(displayExplanations$ | async)">
     <div class="slide-container"
       [class.slide-pos-one]="viewpos == 1"
@@ -33,4 +35,5 @@
     *ngIf="(plannerBusy$ | async) && ! (displayExplanations$ | async)">
     <mat-progress-bar mode="indeterminate"></mat-progress-bar>
   </div>
+
 </div>
