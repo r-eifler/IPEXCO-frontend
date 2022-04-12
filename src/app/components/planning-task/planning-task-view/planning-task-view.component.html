@@ -5,7 +5,7 @@
       </mat-panel-title>
     </mat-expansion-panel-header>
     <mat-list>
-      <mat-list-item *ngFor="let type of (project$ |async).baseTask.types"> {{type.name}} </mat-list-item>
+      <mat-list-item *ngFor="let type of (project$ |async).baseTask.types"> {{type.name}}: {{type.parent}} </mat-list-item>
      </mat-list>
 </mat-expansion-panel>
 

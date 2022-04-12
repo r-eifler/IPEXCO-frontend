@@ -3,13 +3,18 @@
     <mat-card-title>Relaxations</mat-card-title>
   </mat-card-header>
   <mat-card-content class="content">
-    <div *ngFor="let updatesList of (selectedUpdates$ | async)" class="relax-space">
-      <p class="name">{{updatesList.name}}</p>
-      <div class="list-container">
-        <div *ngFor="let update of updatesList.updates">
-          <app-object-slider [values]="update.possibleValues" [selected]="update.selected" (change)="newUpdateSelected($event, update.selected, update.orgFact)"></app-object-slider>
+    <ng-container *ngIf="(selectedUpdates$ | async).length > 0">
+      <div *ngFor="let updatesList of (selectedUpdates$ | async)" class="relax-space">
+        <p class="name">{{updatesList.name}}</p>
+        <div class="list-container">
+          <div *ngFor="let update of updatesList.updates">
+            <app-object-slider [values]="update.possibleValues" [selected]="update.selected" (change)="newUpdateSelected($event, update.selected, update.orgFact)"></app-object-slider>
+          </div>
         </div>
       </div>
-    </div>
+    </ng-container>
   </mat-card-content>
+  <div *ngIf="(selectedUpdates$ | async).length == 0">
+    <p>There are no relaxations available.</p>
+  </div>
 </mat-card>

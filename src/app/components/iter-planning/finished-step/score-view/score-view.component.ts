@@ -44,23 +44,46 @@ export class ScoreViewComponent implements OnInit {
     )
 
     this.planValue$ = combineLatest([this.step$, this.planProperties$]).pipe(
-      filter(([step, planProperties]) => !!step && !! planProperties && planProperties.size > 0),
-      map(([step, planProperties]) => computePlanValue(step, planProperties))
+      map(([step, planProperties]) => {
+        if(!!step && !! planProperties && planProperties.size > 0) {
+          return computePlanValue(step, planProperties)}
+        else {
+          return 0;
+        }
+      })
     );
 
     this.maxPlanValue$ = this.planProperties$.pipe(
-      filter(planProperties => !!planProperties && planProperties.size > 0),
-      map(planProperties => getMaximalPlanValue(planProperties))
+      map(planProperties => {
+        if(!!planProperties && planProperties.size > 0){
+          return getMaximalPlanValue(planProperties);
+        }
+        else {
+          return 0;
+        }
+      })
     )
 
     this.relqaxationCost$ = combineLatest([this.step$, this.relaxationSpaces$]).pipe(
-      filter(([step, spaces]) => !!step && !!spaces && spaces.length > 0),
-      map(([step, spaces]) => - computeRelaxationCost(step, spaces))
+      map(([step, spaces]) => {
+        if(!!step && !!spaces && spaces.length > 0){
+          return - computeRelaxationCost(step, spaces);
+        }
+        else{
+          return 0;
+        }
+      })
     );
 
     this.maxRelqaxationCost$ = this.relaxationSpaces$.pipe(
-      filter(spaces => !!spaces && spaces.length > 0),
-      map(spaces => - getMaxRelaxationCost(spaces))
+      map(spaces => {
+        if(!!spaces && spaces.length > 0){
+          return - getMaxRelaxationCost(spaces);
+        }
+        else {
+          return 0;
+        }
+      })
     )
 
     this.overallScore$ = combineLatest([this.planValue$, this.relqaxationCost$]).pipe(
