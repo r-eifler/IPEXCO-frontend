@@ -77,7 +77,7 @@ export class ExplanationsViewComponent implements OnInit, OnDestroy {
 
     this.displayExplanations$ = this.step$.pipe(
       filter(step => !!step),
-      map(step => step.relaxationExplanations && step.relaxationExplanations.length > 0)
+      map(step => !!step.depExplanation || (step.relaxationExplanations && step.relaxationExplanations.length > 0))
     )
   }
 

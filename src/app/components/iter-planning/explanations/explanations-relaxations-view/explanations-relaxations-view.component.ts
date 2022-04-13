@@ -46,7 +46,7 @@ export class ExplanationsRelaxationsViewComponent implements OnInit {
           for (let node of nodes){
             let dimensions: {possibleValues: MetaFact[], selected: MetaFact}[] = [];
             let d_index = 0;
-            for(let demension of space.possibleInitFactUpdates) {
+            for(let demension of space.dimensions) {
               let values = [demension.orgFact, ...demension.updates]
               dimensions.push({
                   possibleValues: values,

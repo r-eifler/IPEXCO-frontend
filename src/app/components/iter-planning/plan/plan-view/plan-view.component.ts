@@ -69,7 +69,7 @@ export class PlanViewComponent implements OnInit, OnDestroy {
     .pipe(takeUntil(this.unsubscribe$))
     .pipe(
       filter((step) => !!step),
-      map( step => !!step.plan),
+      map( step => !!step.plan && step.plan.status == RunStatus.finished),
       tap(a => console.log(a))
     );
   }

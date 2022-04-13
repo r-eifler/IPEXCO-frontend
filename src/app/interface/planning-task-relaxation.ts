@@ -13,7 +13,8 @@ export interface MetaFact {
   display: string
 }
 
-export interface PossibleInitFactUpdates{
+export interface RelaxationDimension{
+  name: string,
   orgFact: MetaFact,
   updates: MetaFact[]
 }
@@ -22,7 +23,7 @@ export interface PlanningTaskRelaxationSpace {
   _id?: string,
   name: string,
   project: string,
-  possibleInitFactUpdates: PossibleInitFactUpdates[]
+  dimensions: RelaxationDimension[]
 }
 
 export interface ModifiedPlanningTask{
@@ -44,7 +45,7 @@ export function getUpdatedInitialState(modTask : ModifiedPlanningTask): Fact[] {
 export function getMaxRelaxationCost(spaces : PlanningTaskRelaxationSpace[]): number {
   let sum = 0;
   spaces.forEach(space => {
-    for(let dim of space.possibleInitFactUpdates){
+    for(let dim of space.dimensions){
       sum += Math.max(...dim.updates.map(u => u.value))
     }
   })

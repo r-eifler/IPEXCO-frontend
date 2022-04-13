@@ -90,6 +90,10 @@ export function factToPDDL(fact: Fact): string {
 }
 
 export function FactToString(fact: Fact): string {
+  // if(!fact.name || !fact.arguments) {
+  //   console.log(fact);
+  //   return "error";
+  // }
   if (fact.negated) {
     return "! " + fact.name + "(" + fact.arguments.join(', ') + ")";
   }

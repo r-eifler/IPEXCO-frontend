@@ -95,7 +95,7 @@ export function computePlanValue(step: IterationStep, planProperties: Map<string
 export function computeRelaxationCost(step: IterationStep, relaxationSpeaces: PlanningTaskRelaxationSpace[]): number {
   let cost = 0;
   relaxationSpeaces.forEach(space => {
-    space.possibleInitFactUpdates.forEach(updates => {
+    space.dimensions.forEach(updates => {
       let match = step.task.initUpdates.find(iu => factEquals(iu.orgFact, updates.orgFact.fact));
       if(match) {
         let update = updates.updates.find(u => factEquals(u.fact, match.newFact));
@@ -119,7 +119,7 @@ function filterDependencies(question: string, hardGoals: string[], allDependenci
 
 export function getDependencies(step: IterationStep, question: string): PPDependencies {
   console.log("getDependencies");
-  if(step.relaxationExplanations) {
+  if(step.relaxationExplanations && step.relaxationExplanations.length > 0) {
     return filterDependencies(question, step.hardGoals, step.relaxationExplanations[0].dependencies[0].dependencies);
   }
   if(step.depExplanation) {

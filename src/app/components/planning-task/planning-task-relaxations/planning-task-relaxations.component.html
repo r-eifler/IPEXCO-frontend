@@ -10,8 +10,9 @@
       </mat-card-title>
     </mat-card-header>
     <mat-card-content class="content">
-      <div *ngFor="let possibleUpdates of space.updates" class="table-container">
-        <table mat-table [dataSource]="possibleUpdates" class="relax-table">
+      <div *ngFor="let dim of space.dimensions" class="table-container">
+        <p style="font-size: larger; font-weight: bold;">{{dim.name}}</p>
+        <table mat-table [dataSource]="dim.facts" class="relax-table">
 
           <ng-container matColumnDef="fact">
             <th mat-header-cell *matHeaderCellDef> Fact </th>

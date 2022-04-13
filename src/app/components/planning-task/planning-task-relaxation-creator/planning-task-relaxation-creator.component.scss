@@ -131,6 +131,8 @@ mat-step {
   height: 100%;
   display: flex;
   flex-direction: row;
+  align-items: baseline;
+  gap: 40px;
 }
 
 .value-table {
@@ -146,6 +148,14 @@ mat-step {
   width: 40px;
 }
 
+.value-form-field {
+  width: 40px;
+}
+
+.display-input {
+  width: 200px;
+}
+
 .display-form-field {
-  width: 100px;
+  width: 200px;
 }

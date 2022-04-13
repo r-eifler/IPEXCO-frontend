@@ -8,9 +8,16 @@ import { SelectedIterationStepService } from 'src/app/service/planner-runs/selec
 import { PlanningTaskRelaxationService } from 'src/app/service/planning-task/planning-task-relaxations-services';
 import { Fact, factEquals } from 'src/app/interface/plannig-task';
 
+interface Dimension {
+  name: string,
+  possibleValues: MetaFact[];
+  selected: MetaFact
+}
+
+
 interface SelectedInitUpdates {
   name: string;
-  updates: {possibleValues: MetaFact[]; selected: MetaFact}[];
+  dimensions: Dimension[];
 }
 
 @Component({
@@ -45,28 +52,28 @@ export class SelectedRelaxationsViewComponent implements OnInit, OnDestroy {
           if(step && updatesSpace) {
             let selectedUpdates = [];
             for(let updateSpace of updatesSpace){
-              let updatesList = {name: updateSpace.name, updates: []};
+              let updatesList = {name: updateSpace.name, dimensions: []};
 
-              for(let possibleUpdates of updateSpace.possibleInitFactUpdates){
+              for(let dim of updateSpace.dimensions){
 
-                let matchingInitUpdates = step.task.initUpdates.filter(f => factEquals(f.orgFact, possibleUpdates.orgFact.fact))
+                let matchingInitUpdates = step.task.initUpdates.filter(f => factEquals(f.orgFact, dim.orgFact.fact))
 
-                let list : {possibleValues: MetaFact[]; selected: MetaFact} = {possibleValues: [], selected: null};
-                list.possibleValues.push(possibleUpdates.orgFact)
-                possibleUpdates.updates.forEach(up => list.possibleValues.push(up))
+                let list : Dimension = {name: dim.name, possibleValues: [], selected: null};
+                list.possibleValues.push(dim.orgFact)
+                dim.updates.forEach(up => list.possibleValues.push(up))
 
                 if(matchingInitUpdates.length == 1){
                   console.log(matchingInitUpdates[0]);
-                  possibleUpdates.updates.forEach(up => {
+                  dim.updates.forEach(up => {
                     if (factEquals(matchingInitUpdates[0].newFact, up.fact)) {
                       list.selected = up
                     }
                   });
                 }
                 else{
-                  list.selected = possibleUpdates.orgFact
+                  list.selected = dim.orgFact
                 }
-                updatesList.updates.push(list);
+                updatesList.dimensions.push(list);
               }
               selectedUpdates.push(updatesList);
             }

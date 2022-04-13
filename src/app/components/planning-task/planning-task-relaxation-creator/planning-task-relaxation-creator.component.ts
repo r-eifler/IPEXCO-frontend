@@ -1,4 +1,4 @@
-import { FactUpdate, PossibleInitFactUpdates } from './../../../interface/planning-task-relaxation';
+import { FactUpdate, RelaxationDimension } from './../../../interface/planning-task-relaxation';
 import { MatStepper } from '@angular/material/stepper';
 import { PlanningTaskRelaxationSpace, MetaFact } from 'src/app/interface/planning-task-relaxation';
 import { PlanningTaskRelaxationService } from './../../../service/planning-task/planning-task-relaxations-services';
@@ -44,7 +44,7 @@ export class PlanningTaskRelaxationCreatorComponent implements OnInit, OnDestroy
   possibleMetaFacts: MetaFact[] = [];
   selectedFacts: Fact[] = [];
 
-  relaxationSpace: PlanningTaskRelaxationSpace = {name: "Relaxation X" , project: null , possibleInitFactUpdates: []};
+  relaxationSpace: PlanningTaskRelaxationSpace = {name: "Relaxation X" , project: null , dimensions: []};
 
   public initFactUpdates$ = new BehaviorSubject<FactUpdate[]>([]);
 
@@ -60,7 +60,12 @@ export class PlanningTaskRelaxationCreatorComponent implements OnInit, OnDestroy
       this.isedit = true;
       this.relaxationSpace = data.space;
       this.relaxationForm.controls.name.setValue(this.relaxationSpace.name);
-      this.selectedInitialFacts = this.relaxationSpace.possibleInitFactUpdates.map(e =>  e.orgFact.fact);
+      this.selectedInitialFacts = this.relaxationSpace.dimensions.map(e =>  e.orgFact.fact);
+      let index = 0;
+      for(let dim of this.relaxationSpace.dimensions){
+        let newControl = new FormControl();
+        this.relaxationForm.addControl('dim' + index++, newControl);
+      }
     }
 
     this.currentProjectService.getSelectedObject()
@@ -105,11 +110,14 @@ export class PlanningTaskRelaxationCreatorComponent implements OnInit, OnDestroy
   }
 
   initFactsSelected(): void {
+    let index = 0;
     for(let f of this.selectedInitialFacts){
-      if (this.relaxationSpace.possibleInitFactUpdates.filter(u => factEquals(u.orgFact.fact,f)).length == 0){
-        let newMetaFact: MetaFact = {fact: f, value: 0, display: f.toString()};
-        let newTaskUpdate: PossibleInitFactUpdates = {orgFact: newMetaFact, updates: []};
-        this.relaxationSpace.possibleInitFactUpdates.push(newTaskUpdate);
+      if (this.relaxationSpace.dimensions.filter(u => factEquals(u.orgFact.fact,f)).length == 0){
+        let newMetaFact: MetaFact = {fact: f, value: 0, display: FactToString(f)};
+        let newTaskUpdate: RelaxationDimension = {name: '', orgFact: newMetaFact, updates: []};
+        let newControl = new FormControl();
+        this.relaxationForm.addControl('dim' + index++, newControl);
+        this.relaxationSpace.dimensions.push(newTaskUpdate);
       }
     }
   }
@@ -117,13 +125,13 @@ export class PlanningTaskRelaxationCreatorComponent implements OnInit, OnDestroy
   updateFacts(predicate: Predicat): void {
     if (predicate) {
       this.selctedPredicate = predicate;
-      this.possibleMetaFacts = instantiatePredicateAll(this.selctedPredicate, getObjectTypeMap(this.task)).map(f => ({fact: f, value: 0, display: f.toString()}));
+      this.possibleMetaFacts = instantiatePredicateAll(this.selctedPredicate, getObjectTypeMap(this.task)).map(f => ({fact: f, value: 0, display: FactToString(f)}));
       this.possibleMetaFacts = this.possibleMetaFacts.
       filter(f =>  ! this.selectedFacts.some(e => factEquals(e, f.fact)));
     }
   }
 
-  deleteFactFromRelax(metaFact : MetaFact, possibleUpdates: PossibleInitFactUpdates){
+  deleteFactFromRelax(metaFact : MetaFact, possibleUpdates: RelaxationDimension){
     possibleUpdates.updates = possibleUpdates.updates.filter(e => ! factEquals(e.fact, metaFact.fact));
     this.selectedFacts = this.selectedFacts.filter(e => ! factEquals(e, metaFact.fact));
     if (this.selctedPredicate && metaFact.fact.name == this.selctedPredicate.name){
@@ -141,6 +149,7 @@ export class PlanningTaskRelaxationCreatorComponent implements OnInit, OnDestroy
   }
 
   onSave(): void {
+    console.log(this.relaxationSpace);
     this.relaxationSpace.name = this.relaxationForm.controls.name.value;
     this.relaxationService.saveObject(this.relaxationSpace);
     this.dialogRef.close();
@@ -168,7 +177,7 @@ export class PlanningTaskRelaxationCreatorComponent implements OnInit, OnDestroy
     // this.possibleFacts = this.possibleFacts.filter(f =>  ! this.selectedFacts.includes(f));
   }
 
-  getAllMetaFacts(possibleUpdates: PossibleInitFactUpdates): MetaFact[] {
+  getAllMetaFacts(possibleUpdates: RelaxationDimension): MetaFact[] {
     return [possibleUpdates.orgFact, ...possibleUpdates.updates]
   }
 

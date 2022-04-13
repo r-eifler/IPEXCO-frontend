@@ -9,7 +9,7 @@ import { FactToString, predicateToString } from 'src/app/interface/plannig-task'
 
 interface InitUpdates {
   name: string;
-  updates: MetaFact[][];
+  dimensions: {name: string, facts: MetaFact[]}[];
   space: PlanningTaskRelaxationSpace;
 }
 
@@ -35,7 +35,7 @@ export class PlanningTaskRelaxationsComponent implements OnInit {
     this. relaxationSpaces$ = this.relaxationService.getList().pipe(
       filter(spaces => !!spaces),
       map(spaces => spaces.map(space => ({name: space.name,
-        updates: space.possibleInitFactUpdates.map(pup => [pup.orgFact, ...pup.updates]),
+        dimensions: space.dimensions.map(dim  => ({name: dim.name, facts: [dim.orgFact, ...dim.updates]})),
         space: space}))
       )
     )
