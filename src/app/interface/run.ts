@@ -63,7 +63,7 @@ export interface IterationStep{
   softGoals: string[],
   task: ModifiedPlanningTask,
   plan?: PlanRun,
-  depExplanations?: DepExplanationRun[],
+  depExplanation?: DepExplanationRun,
   relaxationExplanations?: RelaxationExplanationRun[],
 }
 
@@ -118,10 +118,15 @@ function filterDependencies(question: string, hardGoals: string[], allDependenci
  }
 
 export function getDependencies(step: IterationStep, question: string): PPDependencies {
-  if(! step.relaxationExplanations) {
-    return null;
+  console.log("getDependencies");
+  if(step.relaxationExplanations) {
+    return filterDependencies(question, step.hardGoals, step.relaxationExplanations[0].dependencies[0].dependencies);
   }
-  return filterDependencies(question, step.hardGoals, step.relaxationExplanations[0].dependencies[0].dependencies);
+  if(step.depExplanation) {
+    return filterDependencies(question, step.hardGoals, step.depExplanation.dependencies);
+  }
+
+  return null;
 }
 
 function findRelaxationNodes(conflict: PPConflict, explanationTree: RelaxationExplanationNode[]): RelaxationExplanationNode[] {

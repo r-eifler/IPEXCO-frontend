@@ -1,8 +1,11 @@
+import { combineLatest } from 'rxjs/internal/observable/combineLatest';
+import { FinishedStepInterfaceStatusService } from './../../../../service/user-interface/interface-status-services';
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Subject, BehaviorSubject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Subject, BehaviorSubject, Observable } from 'rxjs';
+import { filter, map, takeUntil, find, take } from 'rxjs/operators';
 import { IterationStep } from 'src/app/interface/run';
 import { SelectedIterationStepService } from 'src/app/service/planner-runs/selected-iteration-step.service';
+import { FinishedStepInterfaceStatus, NewStepInterfaceStatus } from 'src/app/interface/interface-status';
 
 @Component({
   selector: 'app-finished-step-navigator',
@@ -14,21 +17,43 @@ export class FinishedStepNavigatorComponent implements OnInit, OnDestroy {
   private unsubscribe$: Subject<any> = new Subject();
 
   step$: BehaviorSubject<IterationStep>;
-  showTab = 1;
+  showTab$: Observable<number>;
+  iterfaceStatus$: Observable<FinishedStepInterfaceStatus[]>;
 
   constructor(
-    private selectedIterationStepService: SelectedIterationStepService
+    private selectedIterationStepService: SelectedIterationStepService,
+    private finishedStepInterfaceStatusService: FinishedStepInterfaceStatusService
   ) {
     this.step$ = selectedIterationStepService.getSelectedObject();
+    this.iterfaceStatus$ = finishedStepInterfaceStatusService.getList();
 
-    this.step$
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe(step => {
-        if (step){
-          this.showTab = 1;
-          return;
+
+    this.showTab$ = combineLatest([this.step$, this.iterfaceStatus$]).pipe(
+      filter(([step, stati]) => !!step && !!stati),
+      map(([step, stati]) =>{
+        let status: FinishedStepInterfaceStatus = stati.find(s => s._id == step._id);
+        if(status){
+          return status.tab;
         }
-    });
+        status = {_id: step._id, tab: 1, question: null, conflict: null, dependencies: null, viewPos: 0};
+        this.finishedStepInterfaceStatusService.saveObject(status);
+        return 1;
+      })
+    );
+  }
+
+  setTab(tab: number) {
+    combineLatest([this.step$, this.iterfaceStatus$]).pipe(
+      filter(([step, stati]) => !!step && !!stati),
+      take(1)).
+      subscribe(([step, stati]) =>{
+        let status: FinishedStepInterfaceStatus = stati.find(s => s._id == step._id);
+        if(status){
+          let newStatus = {...status, tab};
+          console.log(newStatus);
+          this.finishedStepInterfaceStatusService.saveObject(newStatus);
+        }
+      });
   }
 
   ngOnInit(): void {

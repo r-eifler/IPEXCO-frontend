@@ -28,8 +28,8 @@ export class UserStudyPlannerService extends DemoPlannerService {
     }
 
 
-    computeMUGS(step: IterationStep, question: string[], planProperties: PlanProperty[]): DepExplanationRun {
-        return super.computeMUGS(step, question, planProperties, true);
+    computeMUGSfromQuestion(step: IterationStep, question: string[]): DepExplanationRun {
+        return super.computeMUGSfromQuestion(step, question, true);
     }
 
 }

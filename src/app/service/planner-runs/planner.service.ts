@@ -62,13 +62,32 @@ export class PlannerService{
     console.log('not imlemented');
   }
 
-  computeMUGS(step: IterationStep, question: string[], planProperties: PlanProperty[]): DepExplanationRun {
+  computeMUGSfromQuestion(step: IterationStep, question: string[]): DepExplanationRun {
     this.plannerBusy.next(true);
     const url = this.myBaseURL + 'mugs/' + step._id;
 
     let softGoals : string[] = step.hardGoals.filter(pp => ! question.some(h => h == pp));
 
-    let expRun : DepExplanationRun = {name: "DExp", status: RunStatus.pending, hardGoals: question, softGoals};
+    let expRun : DepExplanationRun = {name: "DExpQ", status: RunStatus.pending, hardGoals: question, softGoals};
+
+    this.http.post<IHTTPData<IterationStep>>(url, expRun)
+      .subscribe(httpData => {
+        let step = httpData.data;
+        const action = {type: EDIT, data: step};
+        this.iterationStepsStore.dispatch(action);
+        this.selectedStepService.updateIfSame(step);
+        this.plannerBusy.next(false);
+      });
+
+    return expRun;
+  }
+
+  computeMUGS(step: IterationStep): DepExplanationRun {
+    this.plannerBusy.next(true);
+    const url = this.myBaseURL + 'mugs/' + step._id;
+
+    let expRun : DepExplanationRun = {name: "DExp", status: RunStatus.pending, hardGoals: [], softGoals: [...step.hardGoals, ...step.softGoals]};
+    console.log(expRun);
 
     this.http.post<IHTTPData<IterationStep>>(url, expRun)
       .subscribe(httpData => {

@@ -16,6 +16,7 @@ import {User} from '../interface/user';
 import {UserStudy} from '../interface/user-study/user-study';
 import {MetaStudy} from '../interface/user-study/meta-study';
 import { PlanningTaskRelaxationSpace } from '../interface/planning-task-relaxation';
+import { FinishedStepInterfaceStatus, NewStepInterfaceStatus } from '../interface/interface-status';
 
 
 // User/Authentication
@@ -66,4 +67,8 @@ export class SelectedMetaStudyStore extends  ItemStore<MetaStudy> {}
 
 //Relaxations
 export class PlanningTaskRelaxationsStore extends  ListStore<PlanningTaskRelaxationSpace> {}
+
+//Interface stati
+export class FinishedStepInterfaceStatiStore extends  ListStore<FinishedStepInterfaceStatus> {}
+export class NewStepInterfaceStatusStore extends  ItemStore<NewStepInterfaceStatus> {}
 

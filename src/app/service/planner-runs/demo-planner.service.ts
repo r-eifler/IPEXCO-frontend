@@ -91,7 +91,7 @@ export class DemoPlannerService extends PlannerService {
       // this.plannerBusy.next(false);
     }
 
-    computeMUGS(step: IterationStep, question: string[], planProperties: PlanProperty[], save = false): DepExplanationRun {
+    computeMUGS(step: IterationStep, save = false): DepExplanationRun {
 
       // TODO
       // this.plannerBusy.next(true);
@@ -117,6 +117,14 @@ export class DemoPlannerService extends PlannerService {
       // if (save) {
       //     this.save_mugs_run(planRun, expRun);
       // }
+      return null;
+
+    }
+
+    computeMUGSfromQuestion(step: IterationStep, question: string[], save = false): DepExplanationRun {
+
+      // TODO
+
       return null;
 
     }

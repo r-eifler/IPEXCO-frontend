@@ -1,4 +1,6 @@
-<mat-stepper [linear]="false" #stepper class="stepper">
+<mat-stepper [linear]="false" #stepper class="stepper"
+  [selectedIndex]="(interfaceStatus$ | async)?.stepperStep"
+  (selectionChange)="stepperChanged($event)">
   <mat-step label="Select hard goals">
     <div class="step">
       <app-hard-goal-selector class="componenets"></app-hard-goal-selector>

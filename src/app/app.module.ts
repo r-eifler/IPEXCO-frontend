@@ -100,6 +100,8 @@ import {
   UserStore,
   UserStudiesStore,
   NewIterationStepStore,
+  NewStepInterfaceStatusStore,
+  FinishedStepInterfaceStatiStore,
 } from './store/stores.store';
 import {
   DomainFilesService,
@@ -196,6 +198,7 @@ import { ObjectSliderComponent } from './components/utils/object-slider/object-s
 import { ObjectProgressBarComponent } from './components/utils/object-progress-bar/object-progress-bar.component';
 import { ScoreViewComponent } from './components/iter-planning/finished-step/score-view/score-view.component';
 import { ScoreBarComponent } from './components/utils/score-bar/score-bar.component';
+import { FinishedStepInterfaceStatusService, NewStepInterfaceStatusService } from './service/user-interface/interface-status-services';
 
 @NgModule({
     declarations: [
@@ -387,6 +390,10 @@ import { ScoreBarComponent } from './components/utils/score-bar/score-bar.compon
         MetaStudiesStore,
         SelectedMetaStudyService,
         SelectedMetaStudyStore,
+        FinishedStepInterfaceStatiStore,
+        FinishedStepInterfaceStatusService,
+        NewStepInterfaceStatusStore,
+        NewStepInterfaceStatusService,
         AnimationHandler,
         { provide: MAT_BOTTOM_SHEET_DEFAULT_OPTIONS, useValue: { hasBackdrop: true } },
         PlanVisualizationProvider,

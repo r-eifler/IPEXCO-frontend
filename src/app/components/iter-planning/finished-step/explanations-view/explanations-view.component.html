@@ -1,7 +1,5 @@
 <div class="main-container">
   <!-- <button mat-flat-button (click)="viewpos = 1">Select other preference</button> -->
-  <button mat-flat-button (click)="computeExplanations()"
-  color="primary" style="position: absolute; left: 80%; top: 80%">Compute Explanations</button>
   <ng-container *ngIf="(displayExplanations$ | async)">
     <div class="slide-container"
       [class.slide-pos-one]="viewpos == 1"
@@ -10,7 +8,7 @@
         <app-explanations-select-preference-view [step]="(step$ | async)" (selectedPP)="selectQuestion($event)"></app-explanations-select-preference-view>
       </div>
       <div class="middle-container">
-        <app-conflict-view [explanation]="(selectedDependencies$ | async)" [question]="(questions$ |async)" (selectedConflict)="selectConflict($event)"></app-conflict-view>
+        <app-conflict-view [explanation]="(computedDependencies$ | async)" [question]="(questions$ |async)" (selectedConflict)="selectConflict($event)"></app-conflict-view>
       </div>
       <div class="middle-container">
         <app-explanations-relaxations-view [step]="(step$ | async)" [conflict]="selectedConflict$ | async"></app-explanations-relaxations-view>

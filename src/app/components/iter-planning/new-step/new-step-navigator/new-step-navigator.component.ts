@@ -1,3 +1,5 @@
+import { NewStepInterfaceStatusService } from './../../../../service/user-interface/interface-status-services';
+import { NewStepInterfaceStatus } from 'src/app/interface/interface-status';
 import { IterationStepsService } from 'src/app/service/planner-runs/iteration-steps.service';
 import { take } from 'rxjs/operators';
 import { PlanProperty } from './../../../../interface/plan-property/plan-property';
@@ -8,6 +10,7 @@ import { PlannerService } from 'src/app/service/planner-runs/planner.service';
 import { NewIterationStepService } from './../../../../service/planner-runs/selected-iteration-step.service';
 import { Component, OnInit } from '@angular/core';
 import { ModifiedPlanningTask } from 'src/app/interface/planning-task-relaxation';
+import { StepperSelectionEvent } from '@angular/cdk/stepper';
 
 @Component({
   selector: 'app-new-step-navigator',
@@ -18,16 +21,25 @@ export class NewStepNavigatorComponent implements OnInit {
 
   step$: Observable<IterationStep>;
   planProperties$: Observable<Map<string,PlanProperty>>;
+  interfaceStatus$: Observable<NewStepInterfaceStatus>;
 
   constructor(
     private newIterationStepService: NewIterationStepService,
     private iterationStepsService: IterationStepsService,
     private planPropertyMapService: PlanPropertyMapService,
+    private newStepInterfaceStatusService: NewStepInterfaceStatusService
   ) {
     this.step$ = newIterationStepService.getSelectedObject();
     this.planProperties$ = planPropertyMapService.getMap();
 
-    this.step$.subscribe(step => console.log(step));
+    this.interfaceStatus$ = this.newStepInterfaceStatusService.getSelectedObject()
+      .pipe(status => {
+          if(status){
+            return status;
+          }
+          let newStatus: NewStepInterfaceStatus = {_id: "0", stepperStep: 0};
+          this.newStepInterfaceStatusService.saveObject(newStatus);
+      });
   }
 
   ngOnInit(): void {
@@ -41,7 +53,7 @@ export class NewStepNavigatorComponent implements OnInit {
           let softGoals = [];
           for (const pp of planProperties.values()) {
             if (!step.hardGoals.find(p => p === pp._id) && pp.isUsed) {
-              softGoals.push(pp);
+              softGoals.push(pp._id);
             }
           }
           let newTask: ModifiedPlanningTask = {name: 'task', project: step.task.project, basetask: step.task.basetask, initUpdates: step.task.initUpdates};
@@ -60,6 +72,10 @@ export class NewStepNavigatorComponent implements OnInit {
       }
     )
 
+    }
+
+    stepperChanged(event: StepperSelectionEvent): void {
+      this.newStepInterfaceStatusService.saveObject({_id: "0", stepperStep: event.selectedIndex});
     }
 
 }

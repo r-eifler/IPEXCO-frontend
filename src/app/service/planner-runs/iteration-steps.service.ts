@@ -144,10 +144,7 @@ export class IterationStepsService extends ObjectCollectionService<IterationStep
 
   getNumQuestions(): number {
     let res = 0;
-    for (const r of this.collection$.value) {
-      if(r.depExplanations)
-        res += r.depExplanations.length;
-    }
+    //TODO
     return res;
   }
 
