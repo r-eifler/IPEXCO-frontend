@@ -1,4 +1,28 @@
 <div class="main-container">
+  <div class="action-container">
+    <button mat-stroked-button (click)="showHelp()">
+      Help
+    </button>
+  </div>
+
+
+  <div class="bottom-container">
+    <div class="center-container">
+      <app-iteration-steps-list style="height: 100%;overflow: auto;"></app-iteration-steps-list>
+    </div>
+
+    <div class="center-container" *ngIf="(step$ | async)">
+      <app-finished-step-navigator style="height: 100%;overflow: auto;"></app-finished-step-navigator>
+    </div>
+
+    <div class="center-container" *ngIf="! (step$ | async) && (newStep$ | async)">
+      <app-new-step-navigator> style="height: 100%;overflow: auto;"></app-new-step-navigator>
+    </div>
+
+</div>
+
+
+<!-- <div class="main-container">
 
   <div class="action-container">
     <div class="iter-planning-buttons">
@@ -17,7 +41,6 @@
       <button mat-flat-button color="accent" (click)="globalExplanation();"
               *ngIf="(currentProjectService.getSelectedObject()| async).settings?.allowQuestions"
               [disabled]="! (selectedPlan?.status == runStatus.finished  || selectedPlan?.status === runStatus.noSolution)">
-<!--        <mat-icon>question_answer</mat-icon>-->
         Show Incompatibilities Overview
       </button>
     </div>
@@ -68,7 +91,6 @@
 
     <div class="bottom-container" [class.two-columns]="!computeNewPlan" [class.three-columns]="computeNewPlan">
       <div class="center-container">
-  <!--      <app-plan-animation-view style="height: 100%;overflow: auto;"></app-plan-animation-view>-->
         <app-demo-task-info style="height: 100%;overflow: auto;"></app-demo-task-info>
       </div>
 
@@ -117,4 +139,4 @@
     </div>
   </div>
 
-</div>
+</div> -->

@@ -24,6 +24,7 @@ export class SelectedIterationStepService extends SelectedObjectService<Iteratio
     }
 
     saveObject(obj: IterationStep) {
+      console.log(obj);
       this.selectedObjectStore.dispatch({type: LOAD, data: obj});
     }
 }

@@ -26,23 +26,13 @@ import {DemoHelpDialogComponent} from '../../demo/demo-help-dialog/demo-help-dia
 export class ProjectIterativePlanningBaseComponent implements OnInit, OnDestroy {
 
   private loggerId: number;
-  private ngUnsubscribe: Subject<any> = new Subject();
-
-  @Output() finishedDemo = new EventEmitter<void>();
-
-  demo: Demo;
-  settings: ExecutionSettings;
-  runs$: BehaviorSubject<PlanRun[]>;
-  globalHardGoals: PlanProperty[];
+  private ngUnsubscribe$: Subject<any> = new Subject();
 
   step$ : Observable<IterationStep>;
   newStep$ : Observable<IterationStep>;
 
   constructor(
     private timeLogger: TimeLoggerService,
-    private runningDemoService: RunningDemoService,
-    private currentProjectService: CurrentProjectService,
-    private propertiesService: PlanPropertyMapService,
     public iterationStepService: IterationStepsService,
     selectedIterationStepService: SelectedIterationStepService,
     newIterationStepService: NewIterationStepService,
@@ -52,35 +42,14 @@ export class ProjectIterativePlanningBaseComponent implements OnInit, OnDestroy 
     this.step$ = selectedIterationStepService.getSelectedObject();
     this.newStep$ = newIterationStepService.getSelectedObject();
 
-    this.runningDemoService.getSelectedObject()
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe(
-        demo => {
-          if (demo) {
-            this.demo = demo;
-            this.iterationStepService.reset();
-            this.currentProjectService.saveObject(demo);
-          }
-
-        }
-      );
-
-    this.propertiesService.getMap()
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe(
-        props => {
-          const propsList = [...props.values()];
-          const planProperties = propsList.filter((p: PlanProperty) => p.isUsed);
-          this.globalHardGoals = planProperties.filter(v => v.globalHardGoal);
-        });
   }
 
   ngOnInit(): void {
   }
 
   ngOnDestroy(): void {
-    this.ngUnsubscribe.next();
-    this.ngUnsubscribe.complete();
+    this.ngUnsubscribe$.next();
+    this.ngUnsubscribe$.complete();
     // clearInterval(this.timerIntervall);
     this.timeLogger.deregister(this.loggerId);
   }
@@ -89,9 +58,7 @@ export class ProjectIterativePlanningBaseComponent implements OnInit, OnDestroy 
     const dialogConfig = new MatDialogConfig();
     dialogConfig.width = '80%';
     dialogConfig.height = '80%';
-    dialogConfig.data  = {
-      demo: this.demo
-    };
+    dialogConfig.data  = {};
 
     const dialogRef = this.dialog.open(DemoHelpDialogComponent, dialogConfig);
   }

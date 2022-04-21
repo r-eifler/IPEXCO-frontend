@@ -88,7 +88,7 @@ export class ObjectCollectionService<T extends Identifiable> {
   }
 
   copyObject(object: T) {
-    return this.http.post<IHTTPData<T>>(this.BASE_URL + object._id, object)
+    this.http.post<IHTTPData<T>>(this.BASE_URL + object._id, object)
       .subscribe(httpData => {
         // console.log('Result Post:');
         // console.log(httpData.data);
@@ -104,15 +104,16 @@ export class ObjectCollectionService<T extends Identifiable> {
 
     if (object._id) {
       console.log('edit');
-      return this.http.put<IHTTPData<T>>(this.BASE_URL + object._id, {data: object})
+      this.http.put<IHTTPData<T>>(this.BASE_URL + object._id, {data: object})
         .subscribe(httpData => {
           const action = {type: EDIT, data: httpData.data};
           this.listStore.dispatch(action);
         });
+      return;
     }
 
     // console.log('add');
-    return this.http.post<IHTTPData<T>>(this.BASE_URL, {data: object})
+    this.http.post<IHTTPData<T>>(this.BASE_URL, {data: object})
       .subscribe(httpData => {
         // console.log('Result Post:');
         // console.log(httpData);
@@ -125,7 +126,7 @@ export class ObjectCollectionService<T extends Identifiable> {
 
     const action1 = {type: ADD, data: object};
     this.listStore.dispatch(action1);
-    return this.http.post<IHTTPData<T>>(this.BASE_URL, object)
+    this.http.post<IHTTPData<T>>(this.BASE_URL, object)
       .subscribe(httpData => {
         // console.log('Result Post:');
         // console.log(httpData.data);
@@ -136,7 +137,7 @@ export class ObjectCollectionService<T extends Identifiable> {
 
   deleteObject(object: T) {
     // console.log('Delete : ' + object._id);
-    return this.http.delete(this.BASE_URL + object._id)
+    this.http.delete(this.BASE_URL + object._id)
       .subscribe(response => {
         // console.log('Delete File response');
         this.listStore.dispatch({type: REMOVE, data: object});

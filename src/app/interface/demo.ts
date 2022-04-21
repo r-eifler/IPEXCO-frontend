@@ -1,12 +1,20 @@
+import { FactUpdate } from './planning-task-relaxation';
 import {Project} from './project';
-import {RunStatus} from './run';
+import {RelaxationExplanationRun, RunStatus} from './run';
+
+export interface DemoExplanation{
+  initUpdates: FactUpdate[];
+  relaxationExplanations: RelaxationExplanationRun[];
+}
 
 export interface Demo extends Project {
   summaryImage?: string;
   introduction?: string;
   status?: RunStatus;
+  completion: number;
   definition?: string;
   data?: DemoDefinition;
+  explanations: DemoExplanation[];
   taskInfo?: string;
   maxUtility?: { value: number, selectedPlanProperties: string[]};
 }

@@ -29,7 +29,7 @@ export class ExplanationsSelectPreferenceViewComponent implements OnInit {
     private planpropertiesService: PlanPropertyMapService,
   ) {
 
-    this.possiblePP$ = combineLatest([this.step$, planpropertiesService.getMap()]).pipe(
+    this.possiblePP$ = combineLatest([this.step$, this.planpropertiesService.getMap()]).pipe(
         filter(([step, properties] ) => step && properties && properties.size > 0),
         map(([step, properties]) => {
           const props = [];

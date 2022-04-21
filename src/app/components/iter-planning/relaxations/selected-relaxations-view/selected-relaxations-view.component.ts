@@ -29,7 +29,6 @@ export class SelectedRelaxationsViewComponent implements OnInit, OnDestroy {
 
   @Input()
   set step(step : IterationStep){
-    console.log("Selected Hardgoals");
     this.step$.next(step);
   }
 
@@ -63,7 +62,6 @@ export class SelectedRelaxationsViewComponent implements OnInit, OnDestroy {
                 dim.updates.forEach(up => list.possibleValues.push(up))
 
                 if(matchingInitUpdates.length == 1){
-                  console.log(matchingInitUpdates[0]);
                   dim.updates.forEach(up => {
                     if (factEquals(matchingInitUpdates[0].newFact, up.fact)) {
                       list.selected = up
@@ -77,7 +75,6 @@ export class SelectedRelaxationsViewComponent implements OnInit, OnDestroy {
               }
               selectedUpdates.push(updatesList);
             }
-            console.log(selectedUpdates);
             return selectedUpdates;
           }
       })

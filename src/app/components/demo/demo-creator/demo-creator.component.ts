@@ -62,9 +62,11 @@ export class DemoCreatorComponent implements OnInit {
       _id: this.demo ? this.demo._id : null,
       name: this.demoForm.controls.name.value,
       summaryImage: this.imageFile,
-      description: this.demoForm.controls.description.value ? this.demoForm.controls.description.value : '',
-      taskInfo: this.demoForm.controls.taskInfo.value ? this.demoForm.controls.taskInfo.value : '',
+      description: this.demoForm.controls.description.value ? this.demoForm.controls.description.value : 'TODO',
+      taskInfo: this.demoForm.controls.taskInfo.value ? this.demoForm.controls.taskInfo.value : 'TODO',
       public: false,
+      completion: this.demo ? this.demo.completion : 0.0,
+      explanations: this.demo ? this.demo.explanations : []
     };
 
     if (this.update) {

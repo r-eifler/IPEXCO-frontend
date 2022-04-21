@@ -19,10 +19,8 @@ export class DemoRunService extends IterationStepsService {
     constructor(
         http: HttpClient,
         store: IterationStepsStore,
-        workingIterationStepService: SelectedIterationStepService,
-        selectedProjectService: CurrentProjectService,
-        planPropertyMapService: PlanPropertyMapService) {
-        super(http, store, workingIterationStepService, selectedProjectService, planPropertyMapService);
+        workingIterationStepService: SelectedIterationStepService) {
+        super(http, store, workingIterationStepService);
     }
 
     findCollection(queryParams: QueryParam[] = []) {

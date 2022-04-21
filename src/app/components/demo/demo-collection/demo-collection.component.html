@@ -23,7 +23,9 @@
       <div style="width: 100%">
         {{demo.description}}
       </div>
+      <mat-progress-bar mode="determinate" [value]="demo.completion * 100" *ngIf="demo.status == runStatus.running"></mat-progress-bar>
     </mat-card-content>
+
     <mat-card-actions align="end" style="margin-bottom: 0; padding-bottom: 0">
       <button mat-icon-button
         [disabled]="demo.status == runStatus.failed || demo.status == runStatus.running || demo.status == runStatus.pending"

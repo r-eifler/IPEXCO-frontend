@@ -27,6 +27,8 @@ export class PlanViewComponent implements OnInit, OnDestroy {
   step$: BehaviorSubject<IterationStep>;
   actions$: Observable<string[]>;
   solved$: Observable<boolean>;
+  notSolvable$: Observable<boolean>;
+  isRunning$: Observable<boolean>;
   hasPlan$: Observable<boolean>;
   plannerBusy$ : Observable<boolean>;
 
@@ -62,14 +64,31 @@ export class PlanViewComponent implements OnInit, OnDestroy {
     .pipe(takeUntil(this.unsubscribe$))
     .pipe(
       filter((step) => !!step && !!step.plan),
-      map( step => step.plan.status == RunStatus.finished)
+      map( step => step.plan.status == RunStatus.finished),
+      tap(a => console.log(a))
+    );
+
+    this.notSolvable$ = this.step$
+    .pipe(takeUntil(this.unsubscribe$))
+    .pipe(
+      filter((step) => !!step && !!step.plan),
+      map( step => step.plan.status == RunStatus.noSolution),
+      tap(a => console.log(a))
+    );
+
+    this.isRunning$ = this.step$
+    .pipe(takeUntil(this.unsubscribe$))
+    .pipe(
+      filter((step) => !!step && !!step.plan),
+      map( step => step.plan.status == RunStatus.pending),
+      tap(a => console.log(a))
     );
 
     this.hasPlan$ = this.step$
     .pipe(takeUntil(this.unsubscribe$))
     .pipe(
       filter((step) => !!step),
-      map( step => !!step.plan && step.plan.status == RunStatus.finished),
+      map( step => !!step.plan),
       tap(a => console.log(a))
     );
   }

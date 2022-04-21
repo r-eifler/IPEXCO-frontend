@@ -61,7 +61,6 @@ export class RelaxationSelectorComponent implements OnInit, OnDestroy {
                 dim.updates.forEach(up => list.possibleValues.push(up))
 
                 if(matchingInitUpdates.length == 1){
-                  console.log(matchingInitUpdates[0]);
                   dim.updates.forEach(up => {
                     if (factEquals(matchingInitUpdates[0].newFact, up.fact)) {
                       list.selected = up
@@ -75,7 +74,6 @@ export class RelaxationSelectorComponent implements OnInit, OnDestroy {
               }
               selectedUpdates.push(updatesList);
             }
-            console.log(selectedUpdates);
             return selectedUpdates;
           }
       })

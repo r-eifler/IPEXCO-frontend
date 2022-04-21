@@ -28,9 +28,7 @@ export class IterationStepsService extends ObjectCollectionService<IterationStep
   constructor(
     http: HttpClient,
     store: IterationStepsStore,
-    private selectedIterationStepService: SelectedIterationStepService,
-    private selectedProjectService: CurrentProjectService,
-    private planPropertiesService: PlanPropertyMapService) {
+    protected selectedIterationStepService: SelectedIterationStepService) {
     super(http, store);
     this.BASE_URL = environment.apiURL + 'run/iter-step/';
     // this.pipeFind = map(sortRuns);
@@ -39,22 +37,24 @@ export class IterationStepsService extends ObjectCollectionService<IterationStep
 
     saveObject(step: IterationStep) {
 
+      console.log("IterationStepsService Project");
       if (step._id) {
-        console.log('edit');
-        return this.http.put<IHTTPData<IterationStep>>(this.BASE_URL + step._id, {data: step})
+        this.http.put<IHTTPData<IterationStep>>(this.BASE_URL + step._id, {data: step})
           .subscribe(httpData => {
             const action = {type: EDIT, data: httpData.data};
             this.listStore.dispatch(action);
           });
+        return
       }
 
-      return this.http.post<IHTTPData<IterationStep>>(this.BASE_URL, {data: step})
+      this.http.post<IHTTPData<IterationStep>>(this.BASE_URL, {data: step})
         .subscribe(httpData => {
           let rStep = httpData.data
           this.selectedIterationStepService.saveObject(rStep);
           const action = {type: ADD, data: rStep};
           this.listStore.dispatch(action);
         });
+
     }
 
     findCollection(queryParams: QueryParam[] = []) {
@@ -68,44 +68,7 @@ export class IterationStepsService extends ObjectCollectionService<IterationStep
         .pipe(this.pipeFindData, this.pipeFind)
         .subscribe((steps) => {
           console.log(steps);
-          if(steps.length == 0){
-            let obs = combineLatest([this.selectedProjectService.findSelectedObject(), this.planPropertiesService.getMap()])
-            .subscribe(
-              ([project, planPropertiesMap]) => {
-                if (project && planPropertiesMap.size > 0){
-
-                  let modTask: ModifiedPlanningTask = {name: 'init', project: project._id, basetask: project.baseTask, initUpdates: []};
-
-                  let globalHardGoals : string [] = [];
-                  for(let pp of planPropertiesMap.values()){
-                    if(pp.globalHardGoal){
-                      globalHardGoals.push(pp._id);
-                    }
-                  }
-
-                  let initial_step : IterationStep = {
-                    name: 'Initial Step',
-                    project: project._id,
-                    status: StepStatus.unknown,
-                    hardGoals: globalHardGoals,
-                    softGoals: [],
-                    task: modTask}
-                  let initalModStep : ModIterationStep= {
-                    name: 'Initial Step',
-                    baseStep: initial_step,
-                    project: project._id,
-                    status: StepStatus.unknown,
-                    hardGoals: globalHardGoals,
-                    softGoals: [],
-                    task: modTask}
-
-                  this.selectedIterationStepService.saveObject(initalModStep);
-                  // obs.unsubscribe(); TODO
-                }
-              }
-            );
-          }
-          else{
+          if(steps.length > 0){
             this.selectedIterationStepService.saveObject(steps[steps.length-1])
           }
 
@@ -116,7 +79,7 @@ export class IterationStepsService extends ObjectCollectionService<IterationStep
     }
 
   deleteExpRun(expRun: IterationStep) {
-    return this.http.delete<IHTTPData<PlanRun>>( environment.apiURL + 'run/explanation/' + expRun._id)
+    this.http.delete<IHTTPData<PlanRun>>( environment.apiURL + 'run/explanation/' + expRun._id)
       .subscribe(response => {
         this.listStore.dispatch({type: EDIT, data: response.data});
       });
@@ -154,7 +117,7 @@ export class IterationStepsService extends ObjectCollectionService<IterationStep
 
   deleteObject(object: IterationStep) {
     let index = this.collection$.getValue().indexOf(object);
-    return this.http.delete(this.BASE_URL + object._id)
+    this.http.delete(this.BASE_URL + object._id)
       .subscribe(response => {
         this.listStore.dispatch({type: REMOVE, data: object});
         if(index < this.collection$.getValue().length){

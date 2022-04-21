@@ -18,26 +18,19 @@ export class SelectedHardGoalsComponent implements OnInit {
 
   @Input()
   set step(step : IterationStep){
-    console.log("Selected Hardgoals");
     this.step$.next(step);
   }
 
   planProperties$: BehaviorSubject<Map<string,PlanProperty>>;
   private step$ = new BehaviorSubject<IterationStep>(null);
-  // step$ :  BehaviorSubject<IterationStep>;
 
   hardGoals$: Observable<PlanProperty[]>;
 
   constructor(
-    private planPropertiesMapService: PlanPropertyMapService,
-    private newIterationStepService: NewIterationStepService
+    private planPropertiesMapService: PlanPropertyMapService
   ) {
 
-    this.planProperties$ = planPropertiesMapService.getMap();
-
-    this.step$.subscribe(step => console.log("!!!!!!!!!!!!!!!!!!!!!!!!"));
-
-    // this.step$ = newIterationStepService.getSelectedObject();
+    this.planProperties$ = this.planPropertiesMapService.getMap();
 
     this.hardGoals$ = combineLatest([this.step$, this.planProperties$]).pipe(
       filter(([step, planProperties]) => !!step && planProperties && planProperties.size > 0),

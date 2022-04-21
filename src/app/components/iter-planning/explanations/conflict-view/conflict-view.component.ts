@@ -15,7 +15,11 @@ export class ConflictViewComponent implements OnInit {
 
   runStatus = RunStatus;
 
-
+  @Input()
+  set solvable(b: boolean){
+    this.selectedConflictIndex = null;
+    this.solvable$.next(b);
+  }
   @Input()
   set question(question : PlanProperty){
     this.selectedConflictIndex = null;
@@ -32,6 +36,7 @@ export class ConflictViewComponent implements OnInit {
 
   explanation$ = new BehaviorSubject<PPDependencies>(null);
   question$ = new BehaviorSubject<PlanProperty>(null);
+  solvable$ = new BehaviorSubject<boolean>(null);
 
   dependencies$ : Observable<PlanProperty[][]>;
   planProperties$ : Observable<Map<string,PlanProperty>>;
@@ -64,11 +69,16 @@ export class ConflictViewComponent implements OnInit {
     ;
   }
 
-  selectUnsolvable(index: number) {
+  selectPreferenceUnsolvable(index: number) {
     this.selectedConflictIndex = index;
     this.question$.pipe(take(1)).subscribe(
       question => this.selectedConflict.emit({elems: [question._id]}));
     ;
+  }
+
+  selectConflictStepUnsolvable(c : PlanProperty[], index: number) {
+    this.selectedConflictIndex = index;
+    this.selectedConflict.emit({elems: c.map(pp => pp._id)});
   }
 
 }

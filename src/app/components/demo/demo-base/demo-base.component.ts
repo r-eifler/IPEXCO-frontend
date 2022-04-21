@@ -1,3 +1,5 @@
+import { DemoIterationStepsService } from './../../../service/planner-runs/demo-iteration-steps.service';
+import { CurrentProjectService } from 'src/app/service/project/project-services';
 import {DEMO_FINISHED_REDIRECT, QUESTION_REDIRECT} from './../../../app.tokens';
 import {PlannerService} from '../../../service/planner-runs/planner.service';
 import {Component, OnDestroy, OnInit} from '@angular/core';
@@ -9,9 +11,9 @@ import {Demo} from '../../../interface/demo';
 import {DemosService, RunningDemoService} from '../../../service/demo/demo-services';
 import {Subject} from 'rxjs';
 import {DemoPlannerService} from '../../../service/planner-runs/demo-planner.service';
-import {DemoRunService} from '../../../service/planner-runs/demo-planruns.service';
 import {PlanPropertyMapService} from '../../../service/plan-properties/plan-property-services';
 import {TimeLoggerService} from '../../../service/logger/time-logger.service';
+import { PlanningTaskRelaxationService } from 'src/app/service/planning-task/planning-task-relaxations-services';
 
 
 @Component({
@@ -19,7 +21,7 @@ import {TimeLoggerService} from '../../../service/logger/time-logger.service';
   templateUrl: './demo-base.component.html',
   styleUrls: ['./demo-base.component.scss'],
   providers: [
-    {provide: IterationStepsService, useClass: DemoRunService},
+    {provide: IterationStepsService, useClass: DemoIterationStepsService},
     {provide: PlannerService, useClass: DemoPlannerService},
     { provide: PLANNER_REDIRECT, useValue: '../' },
     { provide: QUESTION_REDIRECT, useValue: '../../../' },
@@ -31,7 +33,7 @@ export class DemoBaseComponent implements OnInit, OnDestroy {
   private ngUnsubscribe: Subject<any> = new Subject();
 
   // Steps are help, task info and then the demo itself.
-  step = 0;
+  step = 2;
   private loggerId: number;
 
   constructor(
@@ -39,6 +41,8 @@ export class DemoBaseComponent implements OnInit, OnDestroy {
     private demosService: DemosService,
     private runningDemoService: RunningDemoService,
     private propertiesService: PlanPropertyMapService,
+    private relaxationService: PlanningTaskRelaxationService,
+    private currentProjectService: CurrentProjectService,
     private route: ActivatedRoute,
     private router: Router,
   ) {
@@ -52,7 +56,9 @@ export class DemoBaseComponent implements OnInit, OnDestroy {
                 this.loggerId = this.timeLogger.register('demo-base');
                 this.timeLogger.addInfo(this.loggerId, 'demoId: ' + demo._id);
                 this.runningDemoService.saveObject(demo);
+                this.currentProjectService.saveObject(demo);
                 this.propertiesService.findCollection([{param: 'projectId', value: demo._id}]);
+                this.relaxationService.findCollection([{param: 'projectId', value: demo._id}]);
               }
             }
           );

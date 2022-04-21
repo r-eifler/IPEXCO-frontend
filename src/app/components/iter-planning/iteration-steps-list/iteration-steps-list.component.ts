@@ -51,10 +51,11 @@ export class IterationStepsListComponent implements OnInit, OnDestroy {
   }
 
   newStep() {
+    console.log("New Step");
     this.selected$.pipe(take(1)).subscribe(step => {
       if(step){
         let modStep: ModIterationStep = {
-          name: 'Step ' + (this.iterationStepsService.getNumRuns() + 1),
+          name: 'Iteration Step ' + (this.iterationStepsService.getNumRuns() + 1),
           baseStep: step,
           task: step.task,
           status: StepStatus.unknown,

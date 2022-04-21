@@ -8,7 +8,7 @@
         <app-explanations-select-preference-view [step]="(step$ | async)" (selectedPP)="selectQuestion($event)"></app-explanations-select-preference-view>
       </div>
       <div class="middle-container">
-        <app-conflict-view [explanation]="(computedDependencies$ | async)" [question]="(questions$ |async)" (selectedConflict)="selectConflict($event)"></app-conflict-view>
+        <app-conflict-view [solvable]="! (notSolvable$ | async)" [explanation]="(computedDependencies$ | async)" [question]="(questions$ |async)" (selectedConflict)="selectConflict($event)"></app-conflict-view>
       </div>
       <div class="middle-container">
         <app-explanations-relaxations-view [step]="(step$ | async)" [conflict]="selectedConflict$ | async"></app-explanations-relaxations-view>
@@ -16,7 +16,7 @@
     </div>
     <button mat-raised-button
       color="primary"
-      *ngIf="viewpos == 2"
+      *ngIf="viewpos == 2 && ! (notSolvable$ | async)"
       (click)="viewpos = 1"
       style="position: absolute; left: 92%; top: 92%">
       Ask other Question
@@ -24,10 +24,10 @@
     <!-- <button mat-flat-button (click)="viewpos = 2" style="position: absolute; left: 95%; top: 90%">right</button> -->
   </ng-container>
 
-  <div class="compute-container"
+  <!-- <div class="compute-container"
     *ngIf="! (plannerBusy$ | async) && ! (displayExplanations$ | async)">
     <button mat-flat-button (click)="computeExplanations()" color="primary">Compute Explanations</button>
-  </div>
+  </div> -->
 
   <div class="compute-container"
     *ngIf="(plannerBusy$ | async) && ! (displayExplanations$ | async)">

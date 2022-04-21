@@ -68,9 +68,10 @@ export class NewStepNavigatorComponent implements OnInit {
           console.log(newStep);
           this.iterationStepsService.saveObject(newStep);
           this.newIterationStepService.removeCurrentObject();
+          this.newStepInterfaceStatusService.removeCurrentObject();
         }
       }
-    )
+    );
 
     }
 

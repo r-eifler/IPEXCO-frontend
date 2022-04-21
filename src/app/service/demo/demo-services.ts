@@ -1,5 +1,10 @@
+import { PlanningTaskRelaxationSpace } from './../../interface/planning-task-relaxation';
+import { PlanProperty } from 'src/app/interface/plan-property/plan-property';
+import { PlanningTaskRelaxationService } from 'src/app/service/planning-task/planning-task-relaxations-services';
+import { DemoIterationStepsService } from './../planner-runs/demo-iteration-steps.service';
+import { take, filter, flatMap, map } from 'rxjs/operators';
 import {DemosStore, RunningDemoStore} from '../../store/stores.store';
-import {Demo, DemoDefinition} from '../../interface/demo';
+import {Demo} from '../../interface/demo';
 import {Injectable} from '@angular/core';
 import {ObjectCollectionService, QueryParam} from '../base/object-collection.service';
 import {HttpClient, HttpParams} from '@angular/common/http';
@@ -7,35 +12,12 @@ import {environment} from 'src/environments/environment';
 import {IHTTPData} from '../../interface/http-data.interface';
 import {ADD, EDIT, LOAD, REMOVE} from '../../store/generic-list.store';
 import {SelectedObjectService} from '../base/selected-object.service';
-import {PddlFileUtilsService} from '../files/pddl-file-utils.service';
-import {GoalType, PlanProperty} from '../../interface/plan-property/plan-property';
-import {combineLatest} from 'rxjs';
 import {PlanPropertyMapService} from '../plan-properties/plan-property-services';
+import { IterationStep, RunStatus, StepStatus } from 'src/app/interface/run';
+import { ModifiedPlanningTask } from 'src/app/interface/planning-task-relaxation';
+import { combineLatest, Observable } from 'rxjs';
 
 
-function updateMUGSPropsNames(demo: Demo, planProperties: Map<string, PlanProperty>) {
-  const newMUGS = [];
-  for (const mugs of demo.data.MUGS) {
-    const list = [];
-    for (const elem of mugs) {
-      if (elem.startsWith('Atom')) {
-        const fact = elem.replace('Atom ', '').replace(' ', '');
-        let name = fact;
-        for (const p of planProperties.values()) {
-          if (p.type === GoalType.goalFact && fact === p.formula) {
-            name = p.name;
-            break;
-          }
-        }
-        list.push(name);
-      } else {
-        list.push(elem.replace('sat_', '').replace('soft_accepting(', '').replace(')', ''));
-      }
-    }
-    newMUGS.push(list);
-  }
-  demo.data.MUGS = newMUGS;
-}
 
 @Injectable({
   providedIn: 'root'
@@ -44,9 +26,7 @@ export class DemosService extends ObjectCollectionService<Demo> {
 
   constructor(
     http: HttpClient,
-    store: DemosStore,
-    private fileUtilsService: PddlFileUtilsService,
-    private planPropertiesService: PlanPropertyMapService,
+    store: DemosStore
   ) {
     super(http, store);
     this.BASE_URL = environment.apiURL + 'demo/';
@@ -62,24 +42,31 @@ export class DemosService extends ObjectCollectionService<Demo> {
     this.http.get<IHTTPData<Demo[]>>(this.BASE_URL, {params: httpParams})
       .pipe(this.pipeFindData, this.pipeFind)
       .subscribe((demos) => {
-        // console.log('find: ' + this.BASE_URL);
-        // console.log(res);
-        for (const demo of demos) {
-          const definitionContent$ = this.fileUtilsService.getFileContent(`${demo.definition}/demo.json`);
-          combineLatest([definitionContent$, this.planPropertiesService.getMap()]).subscribe(
-            ([content, planPropertiesMap]) => {
-              // console.log(content);
-              if (content) {
-                demo.data = JSON.parse(content) as DemoDefinition;
-                updateMUGSPropsNames(demo, planPropertiesMap); //Plan properties not yet loaded
-                this.listStore.dispatch({type: EDIT, data: demo});
-              }
-            });
-        }
+        console.log(demos);
         this.listStore.dispatch({type: LOAD, data: demos});
       });
 
     return this.collection$;
+  }
+
+  static sleep(milliseconds) {
+    return new Promise(resolve => setTimeout(resolve, milliseconds));
+   }
+
+  async updateDemoComputationCompletion(demo: Demo): Promise<void> {
+    await DemosService.sleep(60 * 1000);
+    console.log("updateDemoComputationCompletion");
+    this.http.get<IHTTPData<Demo>>(this.BASE_URL + demo._id).
+    pipe(this.pipeGetData, this.pipeGet).pipe(take(1)).
+    subscribe(demo => {
+      let action = {type: EDIT, data: demo};
+      this.listStore.dispatch(action);
+      console.log(demo.completion);
+      if(demo.completion != 1 && demo.status == RunStatus.running){
+        this.updateDemoComputationCompletion(demo);
+      }
+    });
+
   }
 
   generateDemo(projectId: string, demo: Demo): void {
@@ -103,7 +90,9 @@ export class DemosService extends ObjectCollectionService<Demo> {
           action = {type: ADD, data: httpData.data};
         }
         this.listStore.dispatch(action);
+        this.updateDemoComputationCompletion(httpData.data);
       });
+
   }
 
   addPrecomputedDemo(projectId: string, demo: Demo, demoData: string, maxUtilityData: string): void {
@@ -134,11 +123,6 @@ export class DemosService extends ObjectCollectionService<Demo> {
 
   updateDemo(demo: Demo): void {
 
-    // const formData = new FormData();
-    // formData.append('name', demo.name);
-    // // formData.append('summaryImage', demo.summaryImage);
-    // formData.append('introduction', demo.introduction);
-
     this.http.put<IHTTPData<Demo>>(this.BASE_URL, demo)
       .subscribe(httpData => {
         const action = {type: EDIT, data: httpData.data};
@@ -162,10 +146,6 @@ export class DemosService extends ObjectCollectionService<Demo> {
     return this.collection$.value.length;
   }
 
-  // getNumOfProject(project: Project) {
-  //   return this.collection$.value.filter(d => d.project === project._id).length;
-  // }
-
 }
 
 
@@ -174,31 +154,63 @@ export class DemosService extends ObjectCollectionService<Demo> {
 })
 export class RunningDemoService extends SelectedObjectService<Demo> {
 
+  planProperties$: Observable<Map<string, PlanProperty>>;
+  relaxationSpaces$: Observable<PlanningTaskRelaxationSpace[]>;
+
   constructor(
     store: RunningDemoStore,
-    private fileUtilsService: PddlFileUtilsService,
     private planPropertiesService: PlanPropertyMapService,
+    private planningTaskRelaxationService: PlanningTaskRelaxationService,
+    private iterationStepsService: DemoIterationStepsService
   ) {
     super(store);
+
+    this.planProperties$ = this.planPropertiesService.getMap();
+    this.relaxationSpaces$ = this.planningTaskRelaxationService.getList();
   }
 
-
-
   saveObject(demo: Demo) {
-    if (demo.definition) {
-      const definitionContent$ = this.fileUtilsService.getFileContent(`${demo.definition}/demo.json`);
-      combineLatest([definitionContent$, this.planPropertiesService.getMap()]).subscribe(
-        ([content, planPropertiesMap]) => {
-        // console.log(content);
-        if (content) {
-          const demoDef = JSON.parse(content) as DemoDefinition;
-          demo.data = demoDef;
-          updateMUGSPropsNames(demo, planPropertiesMap);
-          this.selectedObjectStore.dispatch({type: LOAD, data: demo});
-        }
-      });
+    this.selectedObjectStore.dispatch({type: LOAD, data: demo});
 
-    }
+    console.log(demo);
+    this.iterationStepsService.reset();
+
+    combineLatest([this.planProperties$, this.relaxationSpaces$]).
+      pipe(filter(([ppM, spaces]) => !!ppM && ppM.size > 0 && !!spaces && spaces.length > 0), take(1)).subscribe(
+      ([planProperties, relaxationSpaces]) => {
+          console.log("Generate initial Iteration Step");
+          console.log("#planProperties: " + planProperties.size);
+          let softGoals = [];
+          let hardGoals = [];
+          for (const pp of planProperties.values()) {
+            if (pp.globalHardGoal) {
+              hardGoals.push(pp._id);
+            }
+            else {
+              softGoals.push(pp._id);
+            }
+          }
+          let initUpdates = [];
+          relaxationSpaces.forEach(space => space.dimensions.forEach(
+            dim => initUpdates.push({orgFact: dim.orgFact.fact, newFact: dim.orgFact.fact})))
+          let newTask: ModifiedPlanningTask = {
+            name: 'task',
+            project:demo._id,
+            basetask: demo.baseTask,
+            initUpdates
+          };
+          let newStep: IterationStep = {
+            name: "Itertaion Step 1",
+            project: demo._id,
+            status: StepStatus.unknown,
+            hardGoals: [...hardGoals],
+            softGoals: [...softGoals],
+            task: newTask};
+          console.log("New Step");
+          console.log(newStep);
+          this.iterationStepsService.saveObject(newStep);
+      }
+    )
   }
 
 }

@@ -1,3 +1,4 @@
+import { IterationStepsService } from 'src/app/service/planner-runs/iteration-steps.service';
 import {Injectable} from '@angular/core';
 import {DemoPlannerService} from './demo-planner.service';
 import {environment} from '../../../environments/environment';
@@ -6,6 +7,8 @@ import {IterationStepsStore} from '../../store/stores.store';
 import {DepExplanationRun, IterationStep, PlanRun} from '../../interface/run';
 import { SelectedIterationStepService } from './selected-iteration-step.service';
 import { PlanProperty } from 'src/app/interface/plan-property/plan-property';
+import { RunningDemoService } from '../demo/demo-services';
+import { DemoIterationStepsService } from './demo-iteration-steps.service';
 
 
 @Injectable({
@@ -18,18 +21,14 @@ export class UserStudyPlannerService extends DemoPlannerService {
     constructor(
         http: HttpClient,
         selectedStepService: SelectedIterationStepService,
-        iterationStepsStore: IterationStepsStore) {
-        super(http, selectedStepService, iterationStepsStore);
+        iterationStepsService: DemoIterationStepsService,
+        demoService: RunningDemoService) {
+        super(http, selectedStepService, iterationStepsService, demoService);
         this.BASE_URL = environment.apiURL + 'planner/';
     }
 
-    execute_plan_run(run: PlanRun): void {
-        super.execute_plan_run(run, true);
-    }
-
-
-    computeMUGSfromQuestion(step: IterationStep, question: string[]): DepExplanationRun {
-        return super.computeMUGSfromQuestion(step, question, true);
+    computePlan(step: IterationStep): void {
+        super.computePlan(step, true);
     }
 
 }

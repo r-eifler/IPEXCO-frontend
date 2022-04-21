@@ -1,3 +1,4 @@
+import { IterationStepsService } from 'src/app/service/planner-runs/iteration-steps.service';
 import { PlanProperty } from './../../interface/plan-property/plan-property';
 
 import { SelectedIterationStepService } from './selected-iteration-step.service';
@@ -25,7 +26,7 @@ export class PlannerService{
   constructor(
       protected http: HttpClient,
       protected selectedStepService: SelectedIterationStepService,
-      protected iterationStepsStore: IterationStepsStore
+      protected iterationStepsService: IterationStepsService
   ) {
     this.BASE_URL = environment.apiURL + 'planner/';
   }
@@ -48,19 +49,16 @@ export class PlannerService{
     this.BASE_URL = this.myBaseURL + 'plan';
     this.http.post<IHTTPData<IterationStep>>(this.BASE_URL, {data: step}, {params: httpParams})
       .subscribe(httpData => {
-        let step = httpData.data
-        const action = {type: EDIT, data: step};
-        this.iterationStepsStore.dispatch(action);
-        this.selectedStepService.updateIfSame(step);
+        let stepBack = httpData.data
+        stepBack._id = step._id;
+        console.log("Plan Computed");
+        console.log(step);
+        this.iterationStepsService.saveObject(stepBack);
+        this.selectedStepService.updateIfSame(stepBack);
         this.plannerBusy.next(false);
       });
   }
 
-  execute_plan_run(run: PlanRun, save= true): void {
-    this.plannerBusy.next(true);
-    // TODO
-    console.log('not imlemented');
-  }
 
   computeMUGSfromQuestion(step: IterationStep, question: string[]): DepExplanationRun {
     this.plannerBusy.next(true);
@@ -73,8 +71,7 @@ export class PlannerService{
     this.http.post<IHTTPData<IterationStep>>(url, expRun)
       .subscribe(httpData => {
         let step = httpData.data;
-        const action = {type: EDIT, data: step};
-        this.iterationStepsStore.dispatch(action);
+        this.iterationStepsService.saveObject(step);
         this.selectedStepService.updateIfSame(step);
         this.plannerBusy.next(false);
       });
@@ -92,8 +89,7 @@ export class PlannerService{
     this.http.post<IHTTPData<IterationStep>>(url, expRun)
       .subscribe(httpData => {
         let step = httpData.data;
-        const action = {type: EDIT, data: step};
-        this.iterationStepsStore.dispatch(action);
+        this.iterationStepsService.saveObject(step);
         this.selectedStepService.updateIfSame(step);
         this.plannerBusy.next(false);
       });
@@ -108,8 +104,7 @@ export class PlannerService{
     this.http.post<IHTTPData<IterationStep>>(url, {})
       .subscribe(httpData => {
         let step = httpData.data;
-        const action = {type: EDIT, data: step};
-        this.iterationStepsStore.dispatch(action);
+        this.iterationStepsService.saveObject(step);
         this.selectedStepService.updateIfSame(step);
         this.plannerBusy.next(false);
       });

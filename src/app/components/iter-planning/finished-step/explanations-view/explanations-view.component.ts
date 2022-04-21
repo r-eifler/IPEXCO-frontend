@@ -3,7 +3,7 @@ import { PlanningTaskRelaxationService } from './../../../../service/planning-ta
 import { filter, map, take, takeUntil, tap } from 'rxjs/operators';
 import { BehaviorSubject, combineLatest, Observable, Subject } from 'rxjs';
 import { SelectedIterationStepService } from 'src/app/service/planner-runs/selected-iteration-step.service';
-import { DepExplanationRun, getDependencies, IterationStep } from 'src/app/interface/run';
+import { DepExplanationRun, getDependencies, getDependenciesForUnsolvability, IterationStep, StepStatus } from 'src/app/interface/run';
 import { PPConflict, PPDependencies } from './../../../../interface/explanations';
 import { PlanProperty } from './../../../../interface/plan-property/plan-property';
 import { Component, OnInit, OnDestroy } from '@angular/core';
@@ -31,6 +31,7 @@ export class ExplanationsViewComponent implements OnInit, OnDestroy {
   computedDependencies$ = new BehaviorSubject<PPDependencies>(null);
   plannerBusy$ : BehaviorSubject<boolean>;
   displayExplanations$ : Observable<boolean>;
+  notSolvable$ : Observable<boolean>;
   planPropertiesMap$: BehaviorSubject<Map<string, PlanProperty>>;
   relaxationSpaces$: BehaviorSubject<PlanningTaskRelaxationSpace[]>;
 
@@ -49,13 +50,24 @@ export class ExplanationsViewComponent implements OnInit, OnDestroy {
     this.plannerBusy$ = plannerService.isPlannerBusy();
     this.iterfaceStati$ = finishedStepInterfaceStatusService.getList();
 
+    this.step$.pipe(filter(s => !!s),takeUntil(this.unsubscribe$)).subscribe(
+      step => {
+        console.log(step.status);
+        if(step.status == StepStatus.unsolvable){
+          console.log("Step not solvable.");
+          this.stepNotSolvable(step);
+
+        }
+      }
+    )
+
 
     combineLatest([this.step$, this.iterfaceStati$, this.planPropertiesMap$]).pipe(
       filter(([step, stati, planProperties]) => !!step && !!stati && !!planProperties),
       takeUntil(this.unsubscribe$)).
       subscribe(([step, stati, planProperties]) =>{
+        console.log()
         let status: FinishedStepInterfaceStatus = stati.find(s => s._id == step._id);
-        console.log("interface update");
         if(this.interfaceStatus == status){
           return;
         }
@@ -78,10 +90,31 @@ export class ExplanationsViewComponent implements OnInit, OnDestroy {
     this.displayExplanations$ = this.step$.pipe(
       filter(step => !!step),
       map(step => !!step.depExplanation || (step.relaxationExplanations && step.relaxationExplanations.length > 0))
-    )
+    );
+
+    this.notSolvable$ = this.step$.pipe(
+      filter(step => !!step),
+      map(step => step.status == StepStatus.unsolvable)
+    );
   }
 
   ngOnInit(): void {
+    this.computeExplanations();
+  }
+
+  stepNotSolvable(step: IterationStep): void {
+    let dependencies = getDependenciesForUnsolvability(step);
+    this.computedDependencies$.next(dependencies);
+    this.questions$.next(null);
+    this.viewpos = 2;
+
+    if (this.interfaceStatus){
+      this.interfaceStatus = {_id: this.interfaceStatus._id, tab: this.interfaceStatus.tab, question: null, dependencies, conflict: null, viewPos: 2}
+    }
+    else {
+      this.interfaceStatus = {_id: step._id, tab: 5, question: this.selectedPP, dependencies, conflict: null, viewPos: 2}
+    }
+    this.finishedStepInterfaceStatusService.saveObject(this.interfaceStatus);
   }
 
   selectQuestion(id : string): void {
@@ -90,23 +123,17 @@ export class ExplanationsViewComponent implements OnInit, OnDestroy {
     pipe(take(1)).subscribe(
       ([step, planProperties]) => {
         if (step && planProperties) {
-          // if (step.getDepExplanation(this.selectedPP)){
             let dependencies = getDependencies(step, this.selectedPP)
-            console.log(dependencies);
             this.computedDependencies$.next(dependencies);
             this.questions$.next(planProperties.get(this.selectedPP));
 
             if (this.interfaceStatus){
-              this.interfaceStatus = {_id: this.interfaceStatus._id, tab: this.interfaceStatus.tab, question: this.selectedPP, dependencies, conflict: null, viewPos: 0}
+              this.interfaceStatus = {_id: this.interfaceStatus._id, tab: this.interfaceStatus.tab, question: this.selectedPP, dependencies, conflict: null, viewPos: 1}
             }
             else {
-              this.interfaceStatus = {_id: step._id, tab: 5, question: this.selectedPP, dependencies, conflict: null, viewPos: 0}
+              this.interfaceStatus = {_id: step._id, tab: 5, question: this.selectedPP, dependencies, conflict: null, viewPos: 1}
             }
             this.finishedStepInterfaceStatusService.saveObject(this.interfaceStatus);
-          //   return
-          // }
-          // let exp = this.plannerService.computeMUGS(step, [this.selectedPP], Array.from(planProperties.values()));
-          // this.selectedDepExp$.next(exp);
         }
       }
     );
@@ -115,8 +142,6 @@ export class ExplanationsViewComponent implements OnInit, OnDestroy {
 
   selectConflict(conflict : PPConflict): void {
     this.viewpos = 2;
-    console.log("selectConflict");
-    console.log(conflict);
     this.selectedConflict$.next(conflict);
     this.interfaceStatus = {...this.interfaceStatus, conflict, viewPos: 2}
     this.finishedStepInterfaceStatusService.saveObject(this.interfaceStatus);
@@ -124,14 +149,12 @@ export class ExplanationsViewComponent implements OnInit, OnDestroy {
 
   computeExplanations(): void {
     combineLatest([this.step$, this.relaxationSpaces$]).pipe(
-      filter(([step, spaces]) => !!step), take(1)).subscribe(
+      filter(([step, spaces]) => !!step && !!spaces), take(1)).subscribe(
         ([step, spaces]) => {
           if (spaces.length > 0){
-            console.log("compute relaxation explanation");
             this.plannerService.computeRelaxExplanations(step);
           }
           else {
-            console.log("compute MUGS")
             this.plannerService.computeMUGS(step);
           }
       }

@@ -95,10 +95,10 @@ export function computePlanValue(step: IterationStep, planProperties: Map<string
 export function computeRelaxationCost(step: IterationStep, relaxationSpeaces: PlanningTaskRelaxationSpace[]): number {
   let cost = 0;
   relaxationSpeaces.forEach(space => {
-    space.dimensions.forEach(updates => {
-      let match = step.task.initUpdates.find(iu => factEquals(iu.orgFact, updates.orgFact.fact));
+    space.dimensions.forEach(dim => {
+      let match = step.task.initUpdates.find(iu => factEquals(iu.orgFact, dim.orgFact.fact));
       if(match) {
-        let update = updates.updates.find(u => factEquals(u.fact, match.newFact));
+        let update = [dim.orgFact,...dim.updates].find(u => factEquals(u.fact, match.newFact));
         cost += update.value;
       }
     })
@@ -124,6 +124,30 @@ export function getDependencies(step: IterationStep, question: string): PPDepend
   }
   if(step.depExplanation) {
     return filterDependencies(question, step.hardGoals, step.depExplanation.dependencies);
+  }
+
+  return null;
+}
+
+
+
+function filterDependenciesForUnsolvability(hardGoals: string[], allDependencies: PPDependencies): PPDependencies {
+  let filteredDependencies : PPDependencies = {conflicts: []};
+  for(let conflict of allDependencies.conflicts) {
+    if(conflict.elems.every(ce => hardGoals.some(hg => ce == hg))){
+      filteredDependencies.conflicts.push({elems: conflict.elems});
+    }
+  }
+  return filteredDependencies;
+ }
+
+export function getDependenciesForUnsolvability(step: IterationStep): PPDependencies {
+  console.log("getDependenciesForUnsolvability");
+  if(step.relaxationExplanations && step.relaxationExplanations.length > 0) {
+    return filterDependenciesForUnsolvability(step.hardGoals, step.relaxationExplanations[0].dependencies[0].dependencies);
+  }
+  if(step.depExplanation) {
+    return filterDependenciesForUnsolvability(step.hardGoals, step.depExplanation.dependencies);
   }
 
   return null;
