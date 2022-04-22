@@ -66,14 +66,9 @@ import {ProjectIterativePlanningBaseComponent} from './components/project/projec
 import {TaskViewComponent} from './components/iter-planning/planning-step/task-view/task-view.component';
 import {PlanViewComponent} from './components/iter-planning/plan/plan-view/plan-view.component';
 import {QuestionStepComponent} from './components/iter-planning/question-step/question-step/question-step.component';
-import {PlanningStepComponent} from './components/iter-planning/planning-step/planning-step/planning-step.component';
-import {
-  FinishedPlanningStepComponent
-} from './components/iter-planning/planning-step/finished-planning-step/finished-planning-step.component';
 import {
   FinishedQuestionStepComponent
 } from './components/iter-planning/question-step/finished-question-step/finished-question-step.component';
-import {TaskCreatorComponent} from './components/iter-planning/planning-step/task-creator/task-creator.component';
 import {QuestionCreatorComponent} from './components/iter-planning/question-step/question-creator/question-creator.component';
 import {QuestionViewComponent} from './components/iter-planning/question-step/question-view/question-view.component';
 import {AnswerViewComponent} from './components/iter-planning/question-step/answer-view/answer-view.component';
@@ -117,10 +112,6 @@ import {DemoSettingsComponent} from './components/demo/demo-settings/demo-settin
 import {ProjectOverviewComponent} from './components/project/project-overview/project-overview.component';
 import {DomainSpecificationComponent} from './components/files/domain-specification/domain-specification.component';
 import {PlanningStepTreeComponent} from './components/iter-planning/planning-step-tree/planning-step-tree.component';
-import {
-  IterativePlanningBaseMobileComponent
-} from './components/iter-planning/mobile/iterative-planning-base-mobile/iterative-planning-base-mobile.component';
-import {PlanAnimationViewComponent} from './components/iter-planning/planning-step/plan-animation-view/plan-animation-view.component';
 import {NomysteryTaskViewComponent} from './components/plugins/nomystery/nomystery-task-view/nomystery-task-view.component';
 import {AnimationHandler} from './plan-visualization/integration/animation-handler';
 import {PlanVisualizationProvider} from './provider/plan-visualisation.provider';
@@ -217,10 +208,7 @@ import { FinishedStepInterfaceStatusService, NewStepInterfaceStatusService } fro
         TaskViewComponent,
         PlanViewComponent,
         QuestionStepComponent,
-        PlanningStepComponent,
-        FinishedPlanningStepComponent,
         FinishedQuestionStepComponent,
-        TaskCreatorComponent,
         QuestionCreatorComponent,
         QuestionViewComponent,
         AnswerViewComponent,
@@ -231,10 +219,8 @@ import { FinishedStepInterfaceStatusService, NewStepInterfaceStatusService } fro
         ProjectOverviewComponent,
         DomainSpecificationComponent,
         PlanningStepTreeComponent,
-        IterativePlanningBaseMobileComponent,
         PlanViewComponent,
         NomysteryTaskViewComponent,
-        PlanAnimationViewComponent,
         DemoCreatorComponent,
         DemoHelpComponent,
         DemoNavigatorComponent,
