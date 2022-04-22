@@ -4,7 +4,6 @@ import {
 } from "./service/planner-runs/selected-iteration-step.service";
 import { IterationStepsService } from "src/app/service/planner-runs/iteration-steps.service";
 import { PlanningTaskRelaxationService } from "./service/planning-task/planning-task-relaxations-services";
-import { AnimationSettingsDirective } from "./components/animation/animation-settings.directive";
 import { AuthenticationService } from "./service/authentication/authentication.service";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { DemosService, RunningDemoService } from "./service/demo/demo-services";
@@ -69,13 +68,7 @@ import { PlannerService } from "./service/planner-runs/planner.service";
 import { ProjectBaseComponent } from "./components/project/project-base/project-base.component";
 import { PropertyCollectionComponent } from "./components/plan_properties/property-collection/property-collection.component";
 import { ProjectIterativePlanningBaseComponent } from "./components/project/project-iterative-planning-base/project-iterative-planning-base.component";
-import { TaskViewComponent } from "./components/iter-planning/planning-step/task-view/task-view.component";
 import { PlanViewComponent } from "./components/iter-planning/plan/plan-view/plan-view.component";
-import { QuestionStepComponent } from "./components/iter-planning/question-step/question-step/question-step.component";
-import { FinishedQuestionStepComponent } from "./components/iter-planning/question-step/finished-question-step/finished-question-step.component";
-import { QuestionCreatorComponent } from "./components/iter-planning/question-step/question-creator/question-creator.component";
-import { QuestionViewComponent } from "./components/iter-planning/question-step/question-view/question-view.component";
-import { AnswerViewComponent } from "./components/iter-planning/question-step/answer-view/answer-view.component";
 // Store
 import { PddlFileUtilsService } from "./service/files/pddl-file-utils.service";
 import {
@@ -121,8 +114,6 @@ import { DemoBaseComponent } from "./components/demo/demo-base/demo-base.compone
 import { DemoSettingsComponent } from "./components/demo/demo-settings/demo-settings.component";
 import { ProjectOverviewComponent } from "./components/project/project-overview/project-overview.component";
 import { DomainSpecificationComponent } from "./components/files/domain-specification/domain-specification.component";
-import { PlanningStepTreeComponent } from "./components/iter-planning/planning-step-tree/planning-step-tree.component";
-import { NomysteryTaskViewComponent } from "./components/plugins/nomystery/nomystery-task-view/nomystery-task-view.component";
 import { AnimationHandler } from "./plan-visualization/integration/animation-handler";
 import { PlanVisualizationProvider } from "./provider/plan-visualisation.provider";
 import { DemoCreatorComponent } from "./components/demo/demo-creator/demo-creator.component";
@@ -133,9 +124,6 @@ import { RegisterComponent } from "./components/login/register/register.componen
 import { AuthenticationInterceptor } from "./interceptor/authentication.interceptor";
 import { UserMainPageComponent } from "./components/user/user-main-page/user-main-page.component";
 import { FilesCollectionComponent } from "./components/files/files-collection/files-collection.component";
-import { AnimationSettingsComponent } from "./components/animation/animation-settings/animation-settings.component";
-import { AnimationSettingsNomysteryComponent } from "./components/plugins/nomystery/animation-settings-nomystery/animation-settings-nomystery.component";
-import { AnimationsSettingsDemoComponent } from "./components/animation/animations-settings-demo/animations-settings-demo.component";
 import { MainInfoComponent } from "./components/login/main-info/main-info.component";
 import { appRoutes } from "./app.routes";
 import { HelpPageComponent } from "./components/login/help-page/help-page.component";
@@ -178,7 +166,6 @@ import {
 import { StudySelectionRedirectionComponent } from "./components/user-study/meta-study/study-selection-redirection/study-selection-redirection.component";
 import { UserStudyCollectionBaseComponent } from "./components/user-study/user-study-collection-base/user-study-collection-base.component";
 import { AcceptedTestPersonsComponent } from "./components/user-study/eval/accepted-test-persons/accepted-test-persons.component";
-import { GlobalExplanationComponent } from "./components/iter-planning/question-step/global-explanation/global-explanation.component";
 import { InteractivePlanViewComponent } from "./components/iter-planning/plan/interactive-plan-view/interactive-plan-view.component";
 import { NgxGraphModule } from "@swimlane/ngx-graph";
 import { PlanningTaskViewComponent } from "./components/planning-task/planning-task-view/planning-task-view.component";
@@ -222,22 +209,14 @@ import {
     ProjectBaseComponent,
     PropertyCollectionComponent,
     ProjectIterativePlanningBaseComponent,
-    TaskViewComponent,
     PlanViewComponent,
-    QuestionStepComponent,
-    FinishedQuestionStepComponent,
-    QuestionCreatorComponent,
-    QuestionViewComponent,
-    AnswerViewComponent,
     LoginComponent,
     DemoCollectionComponent,
     DemoBaseComponent,
     DemoSettingsComponent,
     ProjectOverviewComponent,
     DomainSpecificationComponent,
-    PlanningStepTreeComponent,
     PlanViewComponent,
-    NomysteryTaskViewComponent,
     DemoCreatorComponent,
     DemoHelpComponent,
     DemoNavigatorComponent,
@@ -245,10 +224,6 @@ import {
     RegisterComponent,
     UserMainPageComponent,
     FilesCollectionComponent,
-    AnimationSettingsComponent,
-    AnimationSettingsNomysteryComponent,
-    AnimationSettingsDirective,
-    AnimationsSettingsDemoComponent,
     MainInfoComponent,
     HelpPageComponent,
     DemoFinishedComponent,
@@ -277,7 +252,6 @@ import {
     StudySelectionRedirectionComponent,
     UserStudyCollectionBaseComponent,
     AcceptedTestPersonsComponent,
-    GlobalExplanationComponent,
     InteractivePlanViewComponent,
     PlanningTaskViewComponent,
     PlanningTaskRelaxationsComponent,

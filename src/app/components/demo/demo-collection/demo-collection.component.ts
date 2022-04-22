@@ -18,7 +18,6 @@ import { Demo } from "src/app/interface/demo";
 import { RunStatus } from "src/app/interface/run";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
-import { AnimationsSettingsDemoComponent } from "../../animation/animations-settings-demo/animations-settings-demo.component";
 import { Project } from "src/app/interface/project";
 import { AuthenticationService } from "../../../service/authentication/authentication.service";
 import { DemoCreatorComponent } from "../demo-creator/demo-creator.component";

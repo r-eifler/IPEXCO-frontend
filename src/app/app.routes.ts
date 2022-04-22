@@ -11,7 +11,6 @@ import { ProjectBaseComponent } from "./components/project/project-base/project-
 import { ProjectOverviewComponent } from "./components/project/project-overview/project-overview.component";
 import { PropertyCollectionComponent } from "./components/plan_properties/property-collection/property-collection.component";
 import { ProjectIterativePlanningBaseComponent } from "./components/project/project-iterative-planning-base/project-iterative-planning-base.component";
-import { AnimationSettingsComponent } from "./components/animation/animation-settings/animation-settings.component";
 import { DemoCollectionComponent } from "./components/demo/demo-collection/demo-collection.component";
 import { DemoBaseComponent } from "./components/demo/demo-base/demo-base.component";
 import { FilesCollectionComponent } from "./components/files/files-collection/files-collection.component";
@@ -55,8 +54,7 @@ export const appRoutes: Routes = [
       {
         path: "iterative-planning",
         component: ProjectIterativePlanningBaseComponent,
-      },
-      { path: "animation-settings", component: AnimationSettingsComponent },
+      }
     ],
   },
 
