@@ -4,6 +4,7 @@ export const LOAD = 'LOAD';
 export const ADD = 'ADD';
 export const EDIT = 'EDIT';
 export const REMOVE = 'REMOVE';
+export const CLEAR = 'CLEAR';
 
 
 type Id = string | number;
@@ -42,6 +43,8 @@ export class ListStore<T extends Identifiable> {
         });
       case REMOVE:
         return items.filter(task => task._id !== action.data._id);
+      case CLEAR:
+        return [];
       default:
         return items;
     }

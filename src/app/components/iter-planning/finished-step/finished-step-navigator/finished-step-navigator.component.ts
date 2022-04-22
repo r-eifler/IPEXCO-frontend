@@ -1,3 +1,4 @@
+import { CurrentProjectService } from 'src/app/service/project/project-services';
 import { combineLatest } from 'rxjs/internal/observable/combineLatest';
 import { FinishedStepInterfaceStatusService } from './../../../../service/user-interface/interface-status-services';
 import { Component, OnInit, OnDestroy } from '@angular/core';
@@ -19,13 +20,21 @@ export class FinishedStepNavigatorComponent implements OnInit, OnDestroy {
   step$: BehaviorSubject<IterationStep>;
   showTab$: Observable<number>;
   iterfaceStatus$: Observable<FinishedStepInterfaceStatus[]>;
+  showConflicts$: Observable<boolean>;
 
   constructor(
     private selectedIterationStepService: SelectedIterationStepService,
-    private finishedStepInterfaceStatusService: FinishedStepInterfaceStatusService
+    private finishedStepInterfaceStatusService: FinishedStepInterfaceStatusService,
+    private currentProjectService: CurrentProjectService,
   ) {
-    this.step$ = selectedIterationStepService.getSelectedObject();
-    this.iterfaceStatus$ = finishedStepInterfaceStatusService.getList();
+    this.step$ = this.selectedIterationStepService.getSelectedObject();
+    this.iterfaceStatus$ = this.finishedStepInterfaceStatusService.getList();
+
+    this.showConflicts$ = this.currentProjectService.getSelectedObject().
+      pipe(
+        filter(p => !!p),
+        map(project => project.settings.allowQuestions)
+      );
 
 
     this.showTab$ = combineLatest([this.step$, this.iterfaceStatus$]).pipe(
@@ -62,6 +71,7 @@ export class FinishedStepNavigatorComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
+    this.finishedStepInterfaceStatusService.clear();
   }
 
 }

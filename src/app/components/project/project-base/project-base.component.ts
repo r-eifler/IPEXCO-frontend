@@ -16,6 +16,7 @@ import {PlanVisualizationProvider} from 'src/app/provider/plan-visualisation.pro
 import {PLANNER_REDIRECT} from 'src/app/app.tokens';
 import {Subject} from 'rxjs';
 import {DemoSettingsComponent} from '../../demo/demo-settings/demo-settings.component';
+import { NewIterationStepGenerationService } from 'src/app/service/new-iteration-step-generation-service.service';
 
 @Component({
   selector: 'app-project-base',
@@ -26,6 +27,7 @@ import {DemoSettingsComponent} from '../../demo/demo-settings/demo-settings.comp
      AnimationSettingsProvider,
     {provide: IterationStepsService, useClass: IterationStepsService},
     {provide: PlannerService, useClass: PlannerService},
+    {provide: NewIterationStepGenerationService, useClass: NewIterationStepGenerationService},
     { provide: PLANNER_REDIRECT, useValue: '../run-overview-mobile' },
     { provide: QUESTION_REDIRECT, useValue: '../../../run-overview-mobile' }
    ],

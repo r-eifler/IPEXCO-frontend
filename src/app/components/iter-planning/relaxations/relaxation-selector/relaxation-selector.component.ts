@@ -1,5 +1,5 @@
 import { FactUpdate } from './../../../../interface/planning-task-relaxation';
-import { NewIterationStepService } from './../../../../service/planner-runs/selected-iteration-step.service';
+import { NewIterationStepStoreService } from './../../../../service/planner-runs/selected-iteration-step.service';
 import { PlanningTaskRelaxationService } from 'src/app/service/planning-task/planning-task-relaxations-services';
 import { map, filter, takeUntil, tap, take } from 'rxjs/operators';
 import { ModifiedPlanningTask, PlanningTaskRelaxationSpace, MetaFact } from '../../../../interface/planning-task-relaxation';
@@ -38,7 +38,7 @@ export class RelaxationSelectorComponent implements OnInit, OnDestroy {
 
   constructor(
     private relaxationService: PlanningTaskRelaxationService,
-    private newIterationStepService: NewIterationStepService
+    private newIterationStepService: NewIterationStepStoreService
   ) {
 
     this.relaxationSpaces$ = relaxationService.getList();

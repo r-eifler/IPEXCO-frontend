@@ -74,7 +74,7 @@ export interface ModIterationStep extends IterationStep{
 export function computePlanValue(step: IterationStep, planProperties: Map<string,PlanProperty>): number {
   if (step.status == StepStatus.solvable){
     let sum = 0
-    step.plan.satPlanProperties.forEach(ppID =>  {
+    step.hardGoals.forEach(ppID =>  {
       let pp = planProperties.get(ppID);
       if (pp)
         sum += pp.value
@@ -148,6 +148,17 @@ export function getDependenciesForUnsolvability(step: IterationStep): PPDependen
   }
   if(step.depExplanation) {
     return filterDependenciesForUnsolvability(step.hardGoals, step.depExplanation.dependencies);
+  }
+
+  return null;
+}
+
+export function isStepSolvable(step: IterationStep): boolean {
+  if(step.relaxationExplanations && step.relaxationExplanations.length > 0) {
+    return filterDependenciesForUnsolvability(step.hardGoals, step.relaxationExplanations[0].dependencies[0].dependencies).conflicts.length == 0;
+  }
+  if(step.depExplanation) {
+    return filterDependenciesForUnsolvability(step.hardGoals, step.depExplanation.dependencies).conflicts.length == 0;
   }
 
   return null;

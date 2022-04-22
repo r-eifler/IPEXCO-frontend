@@ -26,18 +26,15 @@ export class ProjectsService extends ObjectCollectionService<Project> {
 })
 export class CurrentProjectService extends SelectedObjectService<Project> {
   constructor(
-    store: CurrentProjectStore,
-    private DomainSpecService: DomainSpecificationService) {
+    store: CurrentProjectStore) {
     super(store);
   }
 
   saveObject(project: Project) {
-    if (project) {
-      project.settings = JSON.parse(JSON.stringify(project.settings)) as ExecutionSettings;
-    }
+    // if (project) {
+    //   project.settings = JSON.parse(project.settings.toString()) as ExecutionSettings;
+    //   console.log(project);
+    // }
     this.selectedObjectStore.dispatch({type: LOAD, data: project});
-    if (project) {
-      this.DomainSpecService.findSpec(project);
-    }
   }
 }

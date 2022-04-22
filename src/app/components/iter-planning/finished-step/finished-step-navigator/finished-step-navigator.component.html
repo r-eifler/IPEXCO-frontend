@@ -20,7 +20,7 @@
       <mat-icon style="margin-right: 10px;">map</mat-icon>
       Advanced Plan
     </a>
-    <a mat-tab-link (click)="setTab(5)"
+    <a mat-tab-link (click)="setTab(5)" *ngIf="showConflicts$ | async"
       [active]="(showTab$ | async) == 5">
       <mat-icon style="margin-right: 10px;">error</mat-icon>
       Conflicts

@@ -1,8 +1,5 @@
-import { PlanningTaskRelaxationSpace } from './../../interface/planning-task-relaxation';
-import { PlanProperty } from 'src/app/interface/plan-property/plan-property';
-import { PlanningTaskRelaxationService } from 'src/app/service/planning-task/planning-task-relaxations-services';
-import { DemoIterationStepsService } from './../planner-runs/demo-iteration-steps.service';
-import { take, filter, flatMap, map } from 'rxjs/operators';
+
+import {take} from 'rxjs/operators';
 import {DemosStore, RunningDemoStore} from '../../store/stores.store';
 import {Demo} from '../../interface/demo';
 import {Injectable} from '@angular/core';
@@ -12,10 +9,9 @@ import {environment} from 'src/environments/environment';
 import {IHTTPData} from '../../interface/http-data.interface';
 import {ADD, EDIT, LOAD, REMOVE} from '../../store/generic-list.store';
 import {SelectedObjectService} from '../base/selected-object.service';
-import {PlanPropertyMapService} from '../plan-properties/plan-property-services';
-import { IterationStep, RunStatus, StepStatus } from 'src/app/interface/run';
-import { ModifiedPlanningTask } from 'src/app/interface/planning-task-relaxation';
-import { combineLatest, Observable } from 'rxjs';
+import {RunStatus} from 'src/app/interface/run';
+import { DemoNewIterationStepGenerationService } from '../new-iteration-step-generation-service.service';
+;
 
 
 
@@ -42,7 +38,15 @@ export class DemosService extends ObjectCollectionService<Demo> {
     this.http.get<IHTTPData<Demo[]>>(this.BASE_URL, {params: httpParams})
       .pipe(this.pipeFindData, this.pipeFind)
       .subscribe((demos) => {
-        console.log(demos);
+        // let allDemos = demos.map(d => {
+        //   console.log(d);
+        //   if (d.settings){
+        //     let set: ExecutionSettings = JSON.parse(d.settings.toString()) as ExecutionSettings;
+        //     d.settings = set;
+        //   }
+        //   return d;
+        // });
+        // console.log(demos);
         this.listStore.dispatch({type: LOAD, data: demos});
       });
 
@@ -154,63 +158,16 @@ export class DemosService extends ObjectCollectionService<Demo> {
 })
 export class RunningDemoService extends SelectedObjectService<Demo> {
 
-  planProperties$: Observable<Map<string, PlanProperty>>;
-  relaxationSpaces$: Observable<PlanningTaskRelaxationSpace[]>;
-
   constructor(
-    store: RunningDemoStore,
-    private planPropertiesService: PlanPropertyMapService,
-    private planningTaskRelaxationService: PlanningTaskRelaxationService,
-    private iterationStepsService: DemoIterationStepsService
+    store: RunningDemoStore
   ) {
     super(store);
-
-    this.planProperties$ = this.planPropertiesService.getMap();
-    this.relaxationSpaces$ = this.planningTaskRelaxationService.getList();
   }
 
   saveObject(demo: Demo) {
+
     this.selectedObjectStore.dispatch({type: LOAD, data: demo});
-
     console.log(demo);
-    this.iterationStepsService.reset();
-
-    combineLatest([this.planProperties$, this.relaxationSpaces$]).
-      pipe(filter(([ppM, spaces]) => !!ppM && ppM.size > 0 && !!spaces && spaces.length > 0), take(1)).subscribe(
-      ([planProperties, relaxationSpaces]) => {
-          console.log("Generate initial Iteration Step");
-          console.log("#planProperties: " + planProperties.size);
-          let softGoals = [];
-          let hardGoals = [];
-          for (const pp of planProperties.values()) {
-            if (pp.globalHardGoal) {
-              hardGoals.push(pp._id);
-            }
-            else {
-              softGoals.push(pp._id);
-            }
-          }
-          let initUpdates = [];
-          relaxationSpaces.forEach(space => space.dimensions.forEach(
-            dim => initUpdates.push({orgFact: dim.orgFact.fact, newFact: dim.orgFact.fact})))
-          let newTask: ModifiedPlanningTask = {
-            name: 'task',
-            project:demo._id,
-            basetask: demo.baseTask,
-            initUpdates
-          };
-          let newStep: IterationStep = {
-            name: "Itertaion Step 1",
-            project: demo._id,
-            status: StepStatus.unknown,
-            hardGoals: [...hardGoals],
-            softGoals: [...softGoals],
-            task: newTask};
-          console.log("New Step");
-          console.log(newStep);
-          this.iterationStepsService.saveObject(newStep);
-      }
-    )
   }
 
 }

@@ -15,7 +15,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { CurrencyPipe } from '@angular/common';
 // @ts-ignore
 import Timeout = NodeJS.Timeout;
-import { NewIterationStepService, SelectedIterationStepService } from 'src/app/service/planner-runs/selected-iteration-step.service';
+import { NewIterationStepStoreService, SelectedIterationStepService } from 'src/app/service/planner-runs/selected-iteration-step.service';
 
 @Component({
   selector: 'app-demo-navigator',
@@ -76,7 +76,7 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
     private runningDemoService: RunningDemoService,
     public currentProjectService: CurrentProjectService,
     private selectedIterationStepService: SelectedIterationStepService,
-    private newIterationStepService: NewIterationStepService,
+    private newIterationStepService: NewIterationStepStoreService,
     public dialog: MatDialog,
     private snackBar: MatSnackBar
   ) {

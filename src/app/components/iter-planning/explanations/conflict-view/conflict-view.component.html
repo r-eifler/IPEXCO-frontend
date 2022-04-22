@@ -19,8 +19,8 @@
               <span matLine> Utility: {{pp.value}} </span>
             </mat-list-item>
           </mat-list>
-          <div class="button-container" >
-            <button mat-stroked-button color="primary" (click)="selectConflictStepUnsolvable(conflict, i)">Relax Constraints</button>
+          <div class="button-container" *ngIf="provideRelaxationExplanations$ | async">
+            <button mat-stroked-button color="primary" (click)="selectConflictStepUnsolvable(conflict, i)">Possible Relaxations</button>
           </div>
         </mat-expansion-panel>
       </mat-accordion>
@@ -68,8 +68,8 @@
                 <span matLine> Utility: {{pp.value}} </span>
               </mat-list-item>
             </mat-list>
-            <div class="button-container" >
-              <button mat-stroked-button color="primary" (click)="selectConflict(conflict, i)">Relax Constraints</button>
+            <div class="button-container" *ngIf="provideRelaxationExplanations$ | async">
+              <button mat-stroked-button color="primary" (click)="selectConflict(conflict, i)">Possible Relaxations</button>
             </div>
           </mat-expansion-panel>
         </mat-accordion>
@@ -78,8 +78,8 @@
         <mat-card-header>
           <mat-card-title>can with the current constraints not be achieved.</mat-card-title>
         </mat-card-header>
-        <div class="button-container" >
-          <button mat-stroked-button color="primary" (click)="selectPreferenceUnsolvable(-1)">Relax Constraints</button>
+        <div class="button-container" *ngIf="provideRelaxationExplanations$ | async">
+          <button mat-stroked-button color="primary" (click)="selectPreferenceUnsolvable(-1)">Possible Relaxations</button>
         </div>
       </div>
     </ng-container>

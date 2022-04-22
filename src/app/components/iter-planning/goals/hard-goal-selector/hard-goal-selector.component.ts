@@ -1,4 +1,4 @@
-import { NewIterationStepService } from './../../../../service/planner-runs/selected-iteration-step.service';
+import { NewIterationStepStoreService } from './../../../../service/planner-runs/selected-iteration-step.service';
 import { PlannerService } from 'src/app/service/planner-runs/planner.service';
 import { ModIterationStep } from '../../../../interface/run';
 import { PlanProperty } from 'src/app/interface/plan-property/plan-property';
@@ -25,7 +25,7 @@ export class HardGoalSelectorComponent implements OnInit, OnDestroy {
   hardGoals$: Observable<PlanProperty[]>;
 
   constructor(
-    private newIterationStepService: NewIterationStepService,
+    private newIterationStepService: NewIterationStepStoreService,
     private planpropertiesService: PlanPropertyMapService,
     private plannerService: PlannerService,
   ) {

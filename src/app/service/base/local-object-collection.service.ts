@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
-import {ADD, EDIT, ListStore, LOAD, REMOVE} from '../../store/generic-list.store';
+import {ADD, CLEAR, EDIT, ListStore, LOAD, REMOVE} from '../../store/generic-list.store';
 import {IHTTPData} from '../../interface/http-data.interface';
 import {environment} from '../../../environments/environment';
 import {BehaviorSubject, Observable, of} from 'rxjs';
@@ -66,5 +66,9 @@ export class LocalObjectCollectionService<T extends Identifiable> {
 
   deleteObject(object: T) {
     this.listStore.dispatch({type: REMOVE, data: object});
+  }
+
+  clear() {
+    this.listStore.dispatch({type: CLEAR, data: null});
   }
 }

@@ -24,6 +24,7 @@ export class ScoreViewComponent implements OnInit {
   private relaxationSpaces$: BehaviorSubject<PlanningTaskRelaxationSpace[]>
 
   isSolvable$: Observable<boolean>;
+  isUnSolvable$: Observable<boolean>;
 
   planValue$: Observable<number>;
   maxPlanValue$: Observable<number>;
@@ -41,6 +42,11 @@ export class ScoreViewComponent implements OnInit {
     this.isSolvable$ = this.step$.pipe(
       filter(step => !!step),
       map(step => step.status == StepStatus.solvable)
+    )
+
+    this.isUnSolvable$ = this.step$.pipe(
+      filter(step => !!step),
+      map(step => step.status == StepStatus.unsolvable)
     )
 
     this.planValue$ = combineLatest([this.step$, this.planProperties$]).pipe(

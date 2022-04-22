@@ -1,7 +1,8 @@
+import { NewIterationStepGenerationService } from './../../../service/new-iteration-step-generation-service.service';
 import { RunStatus, StepStatus } from 'src/app/interface/run';
 import { MatSelectionListChange } from '@angular/material/list';
 import { IterationStep, ModIterationStep } from './../../../interface/run';
-import { SelectedIterationStepService, NewIterationStepService } from './../../../service/planner-runs/selected-iteration-step.service';
+import { SelectedIterationStepService, NewIterationStepStoreService } from './../../../service/planner-runs/selected-iteration-step.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { IterationStepsService } from 'src/app/service/planner-runs/iteration-steps.service';
 import { Observable, BehaviorSubject, Subject } from 'rxjs';
@@ -24,11 +25,12 @@ export class IterationStepsListComponent implements OnInit, OnDestroy {
   constructor(
     private iterationStepsService: IterationStepsService,
     private selectedIterationStepService: SelectedIterationStepService,
-    private newIterationStepService: NewIterationStepService
+    private newIterationStepStoreService: NewIterationStepStoreService,
+    private newIterationStepGenerationService: NewIterationStepGenerationService
   ) {
 
     this.steps$ = iterationStepsService.getList();
-    this.newStep$ = newIterationStepService.getSelectedObject()
+    this.newStep$ = newIterationStepStoreService.getSelectedObject();
     this.selected$ = selectedIterationStepService.getSelectedObject();
 
   }
@@ -51,21 +53,7 @@ export class IterationStepsListComponent implements OnInit, OnDestroy {
   }
 
   newStep() {
-    console.log("New Step");
-    this.selected$.pipe(take(1)).subscribe(step => {
-      if(step){
-        let modStep: ModIterationStep = {
-          name: 'Iteration Step ' + (this.iterationStepsService.getNumRuns() + 1),
-          baseStep: step,
-          task: step.task,
-          status: StepStatus.unknown,
-          project: step.project,
-          hardGoals: [...step.hardGoals],
-          softGoals: []};
-        this.newIterationStepService.saveObject(modStep);
-        this.selectedIterationStepService.removeCurrentObject();
-      }
-    });
+    this.newIterationStepGenerationService.initNewStep();
   }
 
   deleteStep(step: IterationStep): void {

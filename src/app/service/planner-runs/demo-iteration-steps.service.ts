@@ -39,7 +39,7 @@ export class DemoIterationStepsService extends IterationStepsService {
 
     saveObject(step: IterationStep) {
 
-      console.log("Don't save the itertaion step.");
+      console.log("DemoIterationStepsService: Don't save the itertaion step.");
       if (step._id){
         this.listStore.dispatch({type: EDIT, data: step});
       }

@@ -14,6 +14,7 @@ import {DemoPlannerService} from '../../../service/planner-runs/demo-planner.ser
 import {PlanPropertyMapService} from '../../../service/plan-properties/plan-property-services';
 import {TimeLoggerService} from '../../../service/logger/time-logger.service';
 import { PlanningTaskRelaxationService } from 'src/app/service/planning-task/planning-task-relaxations-services';
+import { NewIterationStepGenerationService, DemoNewIterationStepGenerationService } from 'src/app/service/new-iteration-step-generation-service.service';
 
 
 @Component({
@@ -23,6 +24,7 @@ import { PlanningTaskRelaxationService } from 'src/app/service/planning-task/pla
   providers: [
     {provide: IterationStepsService, useClass: DemoIterationStepsService},
     {provide: PlannerService, useClass: DemoPlannerService},
+    {provide: NewIterationStepGenerationService, useClass: DemoNewIterationStepGenerationService},
     { provide: PLANNER_REDIRECT, useValue: '../' },
     { provide: QUESTION_REDIRECT, useValue: '../../../' },
     { provide: DEMO_FINISHED_REDIRECT, useValue: '/demos' }
@@ -43,9 +45,14 @@ export class DemoBaseComponent implements OnInit, OnDestroy {
     private propertiesService: PlanPropertyMapService,
     private relaxationService: PlanningTaskRelaxationService,
     private currentProjectService: CurrentProjectService,
+    private iterationStepsService: IterationStepsService,
+    private demoNewIterationStepGenerationService: DemoNewIterationStepGenerationService,
     private route: ActivatedRoute,
     private router: Router,
   ) {
+
+    this.iterationStepsService.reset();
+
     this.route.params.subscribe(
       params => {
         this.demosService.getObject(params.demoid)
@@ -59,6 +66,7 @@ export class DemoBaseComponent implements OnInit, OnDestroy {
                 this.currentProjectService.saveObject(demo);
                 this.propertiesService.findCollection([{param: 'projectId', value: demo._id}]);
                 this.relaxationService.findCollection([{param: 'projectId', value: demo._id}]);
+                this.demoNewIterationStepGenerationService.createInitialStep();
               }
             }
           );
@@ -73,6 +81,7 @@ export class DemoBaseComponent implements OnInit, OnDestroy {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
     this.timeLogger.deregister(this.loggerId);
+    this.iterationStepsService.reset();
   }
 
   async toDemoCollection() {

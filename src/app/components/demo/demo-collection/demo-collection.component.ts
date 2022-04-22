@@ -1,3 +1,5 @@
+import { DemoSettingsComponent } from './../demo-settings/demo-settings.component';
+import { SettingsComponent } from '../../project/settings/settings.component';
 import {CurrentProjectService, ProjectsService} from 'src/app/service/project/project-services';
 import {takeUntil} from 'rxjs/operators';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -6,7 +8,6 @@ import {DemosService, RunningDemoService} from '../../../service/demo/demo-servi
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ResponsiveService} from 'src/app/service/responsive/responsive.service';
 import {MatBottomSheet} from '@angular/material/bottom-sheet';
-import {DemoSettingsComponent} from '../demo-settings/demo-settings.component';
 import {Demo} from 'src/app/interface/demo';
 import {RunStatus} from 'src/app/interface/run';
 import {MatSnackBar} from '@angular/material/snack-bar';
@@ -36,9 +37,6 @@ export class DemoCollectionComponent implements OnInit, OnDestroy {
   constructor(
     private responsiveService: ResponsiveService,
     private demosService: DemosService,
-    private runningDemoService: RunningDemoService,
-    private currentProjectService: CurrentProjectService,
-    private projectsService: ProjectsService,
     public userService: AuthenticationService,
     public dialog: MatDialog,
     private bottomSheet: MatBottomSheet,
@@ -96,6 +94,8 @@ export class DemoCollectionComponent implements OnInit, OnDestroy {
   }
 
   async openSettings(demo: Demo) {
+    console.log("OPen Settings:");
+    console.log(demo);
     this.bottomSheet.open(DemoSettingsComponent, {data: {demo: demo, name: demo.name}});
   }
 
@@ -109,18 +109,6 @@ export class DemoCollectionComponent implements OnInit, OnDestroy {
     };
 
     const dialogRef = this.dialog.open(DemoInfoComponent, dialogConfig);
-  }
-
-  openAnimationSettings(demo: Demo) {
-    this.runningDemoService.saveObject(demo);
-    this.currentProjectService.saveObject(demo);
-    // this.projectsService.getObject(demo._id)
-    // .pipe(takeUntil(this.ngUnsubscribe))
-    // .subscribe((project: Project) => {
-    //   console.log('update selected project');
-    //   this.currentProjectService.saveObject(project);
-    // });
-    this.bottomSheet.open(AnimationsSettingsDemoComponent, {data: demo});
   }
 
   myDemo(demo: Demo): boolean {

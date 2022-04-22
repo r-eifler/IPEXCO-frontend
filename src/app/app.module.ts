@@ -1,4 +1,4 @@
-import { SelectedIterationStepService, NewIterationStepService } from './service/planner-runs/selected-iteration-step.service';
+import { SelectedIterationStepService, NewIterationStepStoreService } from './service/planner-runs/selected-iteration-step.service';
 import { IterationStepsService } from 'src/app/service/planner-runs/iteration-steps.service';
 import { PlanningTaskRelaxationService } from './service/planning-task/planning-task-relaxations-services';
 import {AnimationSettingsDirective} from './components/animation/animation-settings.directive';
@@ -178,7 +178,7 @@ import { InteractivePlanViewComponent } from './components/iter-planning/plan/in
 import { NgxGraphModule } from '@swimlane/ngx-graph';
 import { PlanningTaskViewComponent } from './components/planning-task/planning-task-view/planning-task-view.component';
 import { PlanningTaskRelaxationsComponent } from './components/planning-task/planning-task-relaxations/planning-task-relaxations.component';
-import { ProjectSettingsComponent } from './components/project/project-settings/project-settings.component';
+import { SettingsComponent } from './components/project/settings/settings.component';
 import { CompleteActionComponent } from './components/planning-task/complete-action/complete-action.component';
 import { PlanningTaskRelaxationCreatorComponent } from './components/planning-task/planning-task-relaxation-creator/planning-task-relaxation-creator.component';
 import { IterationStepsListComponent } from './components/iter-planning/iteration-steps-list/iteration-steps-list.component';
@@ -278,7 +278,7 @@ import { FinishedStepInterfaceStatusService, NewStepInterfaceStatusService } fro
         InteractivePlanViewComponent,
         PlanningTaskViewComponent,
         PlanningTaskRelaxationsComponent,
-        ProjectSettingsComponent,
+        SettingsComponent,
         CompleteActionComponent,
         PlanningTaskRelaxationCreatorComponent,
         IterationStepsListComponent,
@@ -376,7 +376,7 @@ import { FinishedStepInterfaceStatusService, NewStepInterfaceStatusService } fro
         SelectedIterationStepStore,
         SelectedIterationStepService,
         NewIterationStepStore,
-        NewIterationStepService,
+        NewIterationStepStoreService,
         DomainSpecStore,
         DemosStore,
         DemosService,

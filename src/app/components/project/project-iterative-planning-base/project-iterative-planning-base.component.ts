@@ -1,22 +1,12 @@
-import { NewIterationStepService } from './../../../service/planner-runs/selected-iteration-step.service';
+import { NewIterationStepStoreService } from './../../../service/planner-runs/selected-iteration-step.service';
 import { SelectedIterationStepService } from 'src/app/service/planner-runs/selected-iteration-step.service';
-import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
-import { BehaviorSubject, Subject, Observable } from 'rxjs';
-import {DepExplanationRun, IterationStep, ModIterationStep, PlanRun, RunStatus} from '../../../interface/run';
-import {Demo} from '../../../interface/demo';
-import {ExecutionSettings} from '../../../interface/settings/execution-settings';
-import {PlanProperty} from '../../../interface/plan-property/plan-property';
+import {Component,OnDestroy, OnInit} from '@angular/core';
+import {IterationStep} from '../../../interface/run';
 import {TimeLoggerService} from '../../../service/logger/time-logger.service';
-import {RunningDemoService} from '../../../service/demo/demo-services';
-import {CurrentProjectService} from '../../../service/project/project-services';
-import {PlanPropertyMapService} from '../../../service/plan-properties/plan-property-services';
 import {IterationStepsService} from '../../../service/planner-runs/iteration-steps.service';
-import {SelectedPlanRunService} from '../../../service/planner-runs/selected-planrun.service';
-import {PlannerService} from '../../../service/planner-runs/planner.service';
-import {SelectedQuestionService} from '../../../service/planner-runs/selected-question.service';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
-import {takeUntil, takeWhile} from 'rxjs/operators';
 import {DemoHelpDialogComponent} from '../../demo/demo-help-dialog/demo-help-dialog.component';
+import { Subject, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-project-iterative-planning-base',
@@ -34,13 +24,13 @@ export class ProjectIterativePlanningBaseComponent implements OnInit, OnDestroy 
   constructor(
     private timeLogger: TimeLoggerService,
     public iterationStepService: IterationStepsService,
-    selectedIterationStepService: SelectedIterationStepService,
-    newIterationStepService: NewIterationStepService,
+    private selectedIterationStepService: SelectedIterationStepService,
+    private newIterationStepStoreService: NewIterationStepStoreService,
     public dialog: MatDialog
   ) {
 
-    this.step$ = selectedIterationStepService.getSelectedObject();
-    this.newStep$ = newIterationStepService.getSelectedObject();
+    this.step$ = this.selectedIterationStepService.getSelectedObject();
+    this.newStep$ = this.newIterationStepStoreService.getSelectedObject();
 
   }
 

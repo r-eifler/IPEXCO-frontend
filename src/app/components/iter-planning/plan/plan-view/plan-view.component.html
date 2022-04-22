@@ -21,7 +21,7 @@
           </div>
       </mat-card-content>
     </ng-container>
-    <ng-container *ngIf="! (hasPlan$ | async)">
+    <ng-container *ngIf="! (hasPlan$ | async) && ! (notSolvable$ | async)">
       <button mat-flat-button color="primary" (click)="computePlan()">Compute Plan</button>
     </ng-container>
     <div class="compute-container" *ngIf="(plannerBusy$ | async) && (isRunning$| async)">

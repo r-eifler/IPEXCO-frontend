@@ -21,9 +21,8 @@ export class UserStudyPlannerService extends DemoPlannerService {
     constructor(
         http: HttpClient,
         selectedStepService: SelectedIterationStepService,
-        iterationStepsService: DemoIterationStepsService,
-        demoService: RunningDemoService) {
-        super(http, selectedStepService, iterationStepsService, demoService);
+        iterationStepsService: DemoIterationStepsService) {
+        super(http, selectedStepService, iterationStepsService);
         this.BASE_URL = environment.apiURL + 'planner/';
     }
 

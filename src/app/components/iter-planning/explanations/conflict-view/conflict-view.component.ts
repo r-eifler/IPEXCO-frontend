@@ -5,6 +5,7 @@ import { PlanProperty } from '../../../../interface/plan-property/plan-property'
 import { DepExplanationRun, RunStatus } from 'src/app/interface/run';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { map, tap, filter, take } from 'rxjs/operators';
+import { CurrentProjectService } from 'src/app/service/project/project-services';
 
 @Component({
   selector: 'app-conflict-view',
@@ -41,13 +42,21 @@ export class ConflictViewComponent implements OnInit {
   dependencies$ : Observable<PlanProperty[][]>;
   planProperties$ : Observable<Map<string,PlanProperty>>;
   solvableAtAll$ : Observable<boolean>;
+  provideRelaxationExplanations$: Observable<boolean>;
 
   selectedConflictIndex: number = null;
 
   constructor(
-    planPropertiesService: PlanPropertyMapService
+    planPropertiesService: PlanPropertyMapService,
+    private currentProjectService: CurrentProjectService,
   ) {
     this.planProperties$ = planPropertiesService.getMap();
+
+    this.provideRelaxationExplanations$ = this.currentProjectService.getSelectedObject().
+      pipe(
+        filter(p => !!p),
+        map(project => project.settings.provideRelaxationExplanations)
+      );
 
     this.dependencies$ = combineLatest([this.explanation$, this.planProperties$]).pipe(
       filter(([exp, planProperties]) => !!exp && !!planProperties),

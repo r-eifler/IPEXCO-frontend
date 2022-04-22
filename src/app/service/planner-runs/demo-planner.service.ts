@@ -6,7 +6,7 @@ import {Injectable} from '@angular/core';
 import {environment} from '../../../environments/environment';
 import {HttpClient} from '@angular/common/http';
 import {RunningDemoService} from '../demo/demo-services';
-import {DepExplanationRun, IterationStep, PlanRun, RunStatus} from '../../interface/run';
+import {DepExplanationRun, isStepSolvable, IterationStep, PlanRun, RunStatus, StepStatus} from '../../interface/run';
 import {Demo} from '../../interface/demo';
 import {PlannerService} from './planner.service';
 import { SelectedIterationStepService } from './selected-iteration-step.service';
@@ -17,18 +17,13 @@ import { SelectedIterationStepService } from './selected-iteration-step.service'
 })
 export class DemoPlannerService extends PlannerService {
 
-    $demo: Observable<Demo>;
-
     constructor(
         http: HttpClient,
         selectedStepService: SelectedIterationStepService,
-        iterationStepsService: DemoIterationStepsService,
-        private demoService: RunningDemoService) {
+        iterationStepsService: DemoIterationStepsService) {
 
         super(http, selectedStepService, iterationStepsService);
         this.BASE_URL = environment.apiURL + 'planner/';
-
-        this.$demo = this.demoService.getSelectedObject();
     }
 
     myBaseURL = environment.apiURL + 'planner/';
@@ -53,25 +48,28 @@ export class DemoPlannerService extends PlannerService {
 
     }
 
-    computeRelaxExplanations(step: IterationStep) {
+    computeRelaxExplanations(step: IterationStep, demo: Demo = null): boolean {
       console.log("Demo computeRelaxExplanations")
-      this.$demo.pipe(take(1)).subscribe(
-        demo =>{
-          let initUpdates = step.task.initUpdates;
-          let expRuns = demo.explanations.filter(
-            expRun => expRun.initUpdates.every(up1 => initUpdates.some(
-              up2 => factEquals(up1.orgFact, up2.orgFact) && factEquals(up1.newFact, up2.newFact))));
-          if (expRuns.length == 1){
-            step.relaxationExplanations = expRuns[0].relaxationExplanations;
-            console.log(step.relaxationExplanations[0].dependencies)
-            this.iterationStepsService.saveObject(step);
-            this.selectedStepService.updateIfSame(step);
-          }
-          else{
-            console.error("No matching explanation");
-          }
-      });
-
+      if (! demo){
+        return false;
+      }
+      let initUpdates = step.task.initUpdates;
+      let expRuns = demo.explanations.filter(
+        expRun => expRun.initUpdates.every(up1 => initUpdates.some(
+          up2 => factEquals(up1.orgFact, up2.orgFact) && factEquals(up1.newFact, up2.newFact))));
+      if (expRuns.length == 1){
+        step.relaxationExplanations = expRuns[0].relaxationExplanations;
+        console.log(step.relaxationExplanations[0].dependencies)
+        let solvable = isStepSolvable(step)
+        step.status = solvable ? StepStatus.solvable : StepStatus.unsolvable;
+        this.iterationStepsService.saveObject(step);
+        this.selectedStepService.updateIfSame(step);
+        return solvable;
+      }
+      else{
+        console.error("No matching explanation");
+        return false;
+      }
     }
 
 }

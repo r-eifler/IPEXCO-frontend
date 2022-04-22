@@ -51,13 +51,7 @@
               [disabled]="demo.status == runStatus.failed || demo.status == runStatus.running || demo.status == runStatus.pending"
               (click)="openSettings(demo)">
         <mat-icon>settings</mat-icon>
-        <span>Execution Settings</span>
-      </button>
-      <button mat-menu-item
-              [disabled]="demo.status == runStatus.failed || demo.status == runStatus.running || demo.status == runStatus.pending"
-              (click)="openAnimationSettings(demo)">
-        <mat-icon>movie_creation</mat-icon>
-        <span>Animation Settings</span>
+        <span>Settings</span>
       </button>
       <button mat-menu-item
               [disabled]="demo.status == runStatus.failed || demo.status == runStatus.running || demo.status == runStatus.pending"

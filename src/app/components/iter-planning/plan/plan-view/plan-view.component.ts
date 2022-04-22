@@ -1,7 +1,7 @@
 import { PlannerService } from 'src/app/service/planner-runs/planner.service';
 import { Plan } from '../../../../interface/plan';
 import { SelectedIterationStepService } from '../../../../service/planner-runs/selected-iteration-step.service';
-import { RunStatus, IterationStep } from 'src/app/interface/run';
+import { RunStatus, IterationStep, StepStatus } from 'src/app/interface/run';
 import {filter, map, take, takeUntil, tap} from 'rxjs/operators';
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {BehaviorSubject, Observable, Subject} from 'rxjs';
@@ -71,8 +71,8 @@ export class PlanViewComponent implements OnInit, OnDestroy {
     this.notSolvable$ = this.step$
     .pipe(takeUntil(this.unsubscribe$))
     .pipe(
-      filter((step) => !!step && !!step.plan),
-      map( step => step.plan.status == RunStatus.noSolution),
+      filter((step) => !!step),
+      map( step => step.status == StepStatus.unsolvable),
       tap(a => console.log(a))
     );
 

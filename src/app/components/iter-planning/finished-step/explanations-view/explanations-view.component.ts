@@ -11,6 +11,7 @@ import { PlanPropertyMapService } from 'src/app/service/plan-properties/plan-pro
 import { PlannerService } from 'src/app/service/planner-runs/planner.service';
 import { FinishedStepInterfaceStatusService } from 'src/app/service/user-interface/interface-status-services';
 import { FinishedStepInterfaceStatus } from 'src/app/interface/interface-status';
+import { CurrentProjectService } from 'src/app/service/project/project-services';
 
 @Component({
   selector: 'app-explanations-view',
@@ -34,6 +35,7 @@ export class ExplanationsViewComponent implements OnInit, OnDestroy {
   notSolvable$ : Observable<boolean>;
   planPropertiesMap$: BehaviorSubject<Map<string, PlanProperty>>;
   relaxationSpaces$: BehaviorSubject<PlanningTaskRelaxationSpace[]>;
+  provideRelaxationExplanations$: Observable<boolean>;
 
   viewpos = 1;
 
@@ -43,12 +45,19 @@ export class ExplanationsViewComponent implements OnInit, OnDestroy {
     planningTaskRelaxationService: PlanningTaskRelaxationService,
     private finishedStepInterfaceStatusService: FinishedStepInterfaceStatusService,
     private plannerService: PlannerService,
+    private currentProjectService: CurrentProjectService,
   ) {
     this.step$ = selectedIterationStepService.findSelectedObject().pipe(filter(step => !!step));
     this.planPropertiesMap$ = planpropertiesService.getMap();
     this.relaxationSpaces$ = planningTaskRelaxationService.getList();
     this.plannerBusy$ = plannerService.isPlannerBusy();
     this.iterfaceStati$ = finishedStepInterfaceStatusService.getList();
+
+    this.provideRelaxationExplanations$ = this.currentProjectService.getSelectedObject().
+      pipe(
+        filter(p => !!p),
+        map(project => project.settings.provideRelaxationExplanations)
+      );
 
     this.step$.pipe(filter(s => !!s),takeUntil(this.unsubscribe$)).subscribe(
       step => {

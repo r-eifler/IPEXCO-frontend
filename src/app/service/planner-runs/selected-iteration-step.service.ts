@@ -33,7 +33,7 @@ export class SelectedIterationStepService extends SelectedObjectService<Iteratio
 @Injectable({
   providedIn: 'root'
 })
-export class NewIterationStepService extends SelectedObjectService<ModIterationStep> {
+export class NewIterationStepStoreService extends SelectedObjectService<ModIterationStep> {
 
   constructor(
       store: NewIterationStepStore) {

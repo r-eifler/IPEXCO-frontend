@@ -1,4 +1,4 @@
-import { NewIterationStepService } from './../../../../service/planner-runs/selected-iteration-step.service';
+import { NewIterationStepStoreService } from './../../../../service/planner-runs/selected-iteration-step.service';
 import { PlanPropertyMapService } from '../../../../service/plan-properties/plan-property-services';
 import { HardGoalSelectorComponent } from '../hard-goal-selector/hard-goal-selector.component';
 import { map, filter, tap } from 'rxjs/operators';
