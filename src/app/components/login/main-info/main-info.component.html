@@ -1,107 +1,162 @@
 <mat-card class="card-style">
-    <mat-card-header>
-      <div mat-card-avatar>
-        <mat-icon>
-          bookmarks
-        </mat-icon>
-      </div>
-      <mat-card-title>Publications</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-        <mat-list>
-          <mat-list-item>
-            <mat-icon mat-list-icon>bookmark</mat-icon>
-            <div mat-line>Plan-Space Explanation via Plan-Property Dependencies: Faster Algorithms & More Powerful Properties</div>
-            <div mat-line>Proceedings of the 29th International Joint Conference on Artificial Intelligence (IJCAI'20), 2020</div>
-            <div mat-line>R. Eifler, M. Steinmetz, A. Torralba, and J. Hoffmann</div>
-          </mat-list-item>
-          <mat-list-item>
-            <mat-icon mat-list-icon>bookmark</mat-icon>
-            <div mat-line>A New Approach to Plan-Space Explanation: Analyzing Plan-Property Dependencies in Oversubscription Planning</div>
-            <div mat-line>Proceedings of the 34th AAAI Conference on Artificial Intelligence (AAAI'20), New York City, USA, 2020</div>
-            <div mat-line>R. Eifler, M. Cashmore, J. Hoffmann, D. Magazzeni, and M. Steinmetz</div>
-          </mat-list-item>
-          <mat-list-item>
-            <mat-icon mat-list-icon>bookmark_border</mat-icon>
-            <div mat-line>Explaining the Space of Plans through Plan-Property Dependencies</div>
-            <div mat-line>Proceedings of the 2nd Workshop on Explainable AI Planning (XAIP'19), at ICAPS'19</div>
-            <div mat-line>R. Eifler, M. Cashmore, J. Hoffmann, D. Magazzeni, and M. Steinmetz</div>
-          </mat-list-item>
-        </mat-list>
-    </mat-card-content>
-    <mat-card-actions align="end">
-      <button mat-button (click)="goToLink('https://fai.cs.uni-saarland.de/publications.html')">FAI Publications</button>
-
-    </mat-card-actions>
-</mat-card>
-
-
-<mat-card class="card-style">
   <mat-card-header>
-      <div mat-card-avatar>
-        <mat-icon>
-          attach_money
-        </mat-icon>
-      </div>
-      <mat-card-title>Explaining the Space of Plans</mat-card-title>
-      <mat-card-subtitle>Funding</mat-card-subtitle>
+    <div mat-card-avatar>
+      <mat-icon> bookmarks </mat-icon>
+    </div>
+    <mat-card-title>Publications</mat-card-title>
   </mat-card-header>
   <mat-card-content>
-    This project is conducted jointly with <span style="font-weight: bold;">Daniele Magazzeni</span>
-    at <span style="font-weight: bold;">King's College London</span>.
-    It is funded by <span style="font-weight: bold;">AFOSR</span> (U.S. Air Force Office of Scientific Research).
-
-    <p>
-
-    Explainability of AI methods is one of the grand challenges at this
-    time. Model-based AI lends itself naturally to this purpose, as it
-    takes decisions based on explicit reasoning about world behaviour as
-    captured in the model. The difficulty then lies in actually making
-    such reasoning -- enumerating vast spaces of alternate possibilities
-    -- amenable to human users. Our central thesis in this project is that
-    this can be naturally done in terms of explaining the space of plans,
-    pointing out the most relevant plan properties and their dependencies
-    (such as "if we achieve objective A then we have to forego either
-    objective B or objective C, or consume an excessive amount of
-    energy").
-
-    <p>
-
-    In the project, we capture such dependencies in the form of entailment
-    relations over plan properties in plan space. We develop suitable
-    concepts, and technologies for inferring such entailment relations,
-    for a range of planning frameworks including classical planning,
-    temporal planning, and oversubscription planning.
+    <mat-list>
+      <mat-list-item>
+        <mat-icon mat-list-icon>bookmark</mat-icon>
+        <div mat-line>
+          Plan-Space Explanation via Plan-Property Dependencies: Faster
+          Algorithms & More Powerful Properties
+        </div>
+        <div mat-line>
+          Proceedings of the 29th International Joint Conference on Artificial
+          Intelligence (IJCAI'20), 2020
+        </div>
+        <div mat-line>
+          R. Eifler, M. Steinmetz, A. Torralba, and J. Hoffmann
+        </div>
+      </mat-list-item>
+      <mat-list-item>
+        <mat-icon mat-list-icon>bookmark</mat-icon>
+        <div mat-line>
+          A New Approach to Plan-Space Explanation: Analyzing Plan-Property
+          Dependencies in Oversubscription Planning
+        </div>
+        <div mat-line>
+          Proceedings of the 34th AAAI Conference on Artificial Intelligence
+          (AAAI'20), New York City, USA, 2020
+        </div>
+        <div mat-line>
+          R. Eifler, M. Cashmore, J. Hoffmann, D. Magazzeni, and M. Steinmetz
+        </div>
+      </mat-list-item>
+      <mat-list-item>
+        <mat-icon mat-list-icon>bookmark_border</mat-icon>
+        <div mat-line>
+          Explaining the Space of Plans through Plan-Property Dependencies
+        </div>
+        <div mat-line>
+          Proceedings of the 2nd Workshop on Explainable AI Planning (XAIP'19),
+          at ICAPS'19
+        </div>
+        <div mat-line>
+          R. Eifler, M. Cashmore, J. Hoffmann, D. Magazzeni, and M. Steinmetz
+        </div>
+      </mat-list-item>
+    </mat-list>
   </mat-card-content>
   <mat-card-actions align="end">
-      <button mat-button (click)="goToLink('https://nms.kcl.ac.uk/daniele.magazzeni/')">Daniele Magazzeni</button>
-      <button mat-button (click)="goToLink('https://www.kcl.ac.uk/index.aspx')">King's College London</button>
-      <button mat-button (click)="goToLink('http://www.wpafb.af.mil/afrl/afosr/')">AFOSR</button>
+    <button
+      mat-button
+      (click)="goToLink('https://fai.cs.uni-saarland.de/publications.html')"
+    >
+      FAI Publications
+    </button>
   </mat-card-actions>
 </mat-card>
 
 <mat-card class="card-style">
   <mat-card-header>
-      <div mat-card-avatar>
-        <mat-icon>
-          attach_money
-        </mat-icon>
-      </div>
-      <mat-card-title>Foundations of Perspicuous Software Systems</mat-card-title>
-      <mat-card-subtitle>Funding</mat-card-subtitle>
+    <div mat-card-avatar>
+      <mat-icon> attach_money </mat-icon>
+    </div>
+    <mat-card-title>Explaining the Space of Plans</mat-card-title>
+    <mat-card-subtitle>Funding</mat-card-subtitle>
   </mat-card-header>
-  <img src="assets/Logo_CPEC_final_RGB_v2.svg" alt="Perspicuous Computing" style="width: 200px; height: auto;" />
   <mat-card-content>
-    This work is partially funded by the Collaborative research center (Sonderforschungsbereich)
-    <span style="font-weight: bold;"> Foundations of Perspicuous Software Systems</span>, funded
-    by <span style="font-weight: bold;">DFG</span> (German Research Foundation/Deutsche Forschungsgemeinschaft).
+    This project is conducted jointly with
+    <span style="font-weight: bold">Daniele Magazzeni</span> at
+    <span style="font-weight: bold">King's College London</span>. It is funded
+    by <span style="font-weight: bold">AFOSR</span> (U.S. Air Force Office of
+    Scientific Research).
+
+    <p>
+      Explainability of AI methods is one of the grand challenges at this time.
+      Model-based AI lends itself naturally to this purpose, as it takes
+      decisions based on explicit reasoning about world behaviour as captured in
+      the model. The difficulty then lies in actually making such reasoning --
+      enumerating vast spaces of alternate possibilities -- amenable to human
+      users. Our central thesis in this project is that this can be naturally
+      done in terms of explaining the space of plans, pointing out the most
+      relevant plan properties and their dependencies (such as "if we achieve
+      objective A then we have to forego either objective B or objective C, or
+      consume an excessive amount of energy").
+    </p>
+
+    <p>
+      In the project, we capture such dependencies in the form of entailment
+      relations over plan properties in plan space. We develop suitable
+      concepts, and technologies for inferring such entailment relations, for a
+      range of planning frameworks including classical planning, temporal
+      planning, and oversubscription planning.
+    </p></mat-card-content
+  >
+
+  <mat-card-actions align="end">
+    <button
+      mat-button
+      (click)="goToLink('https://nms.kcl.ac.uk/daniele.magazzeni/')"
+    >
+      Daniele Magazzeni
+    </button>
+    <button mat-button (click)="goToLink('https://www.kcl.ac.uk/index.aspx')">
+      King's College London
+    </button>
+    <button
+      mat-button
+      (click)="goToLink('http://www.wpafb.af.mil/afrl/afosr/')"
+    >
+      AFOSR
+    </button>
+  </mat-card-actions>
+</mat-card>
+
+<mat-card class="card-style">
+  <mat-card-header>
+    <div mat-card-avatar>
+      <mat-icon> attach_money </mat-icon>
+    </div>
+    <mat-card-title>Foundations of Perspicuous Software Systems</mat-card-title>
+    <mat-card-subtitle>Funding</mat-card-subtitle>
+  </mat-card-header>
+  <img
+    src="assets/Logo_CPEC_final_RGB_v2.svg"
+    alt="Perspicuous Computing"
+    style="width: 200px; height: auto"
+  />
+  <mat-card-content>
+    This work is partially funded by the Collaborative research center
+    (Sonderforschungsbereich)
+    <span style="font-weight: bold">
+      Foundations of Perspicuous Software Systems</span
+    >, funded by <span style="font-weight: bold">DFG</span> (German Research
+    Foundation/Deutsche Forschungsgemeinschaft).
 
     <h2>C6: Fast, Safe, and Perspicuous Run-Time Planning</h2>
 
-    Run-time planning serves flexible decision making in dynamic environments. To do so under time pressure, a trained action policy such as a deep neural network can be employed. Our mission is to help tackle the perspicuity and safety issues arising in this context. Among others, we will safeguard the action policy via run-time lookahead search, and by exploiting synergies with design-time analysis; we help to debug the policy via static and dynamic analyses of the behaviours it induces; and we support human understanding of policies through zoomable visualisations. We will advance techniques for search, predicate abstraction, and supervised learning to these ends.
+    Run-time planning serves flexible decision making in dynamic environments.
+    To do so under time pressure, a trained action policy such as a deep neural
+    network can be employed. Our mission is to help tackle the perspicuity and
+    safety issues arising in this context. Among others, we will safeguard the
+    action policy via run-time lookahead search, and by exploiting synergies
+    with design-time analysis; we help to debug the policy via static and
+    dynamic analyses of the behaviours it induces; and we support human
+    understanding of policies through zoomable visualisations. We will advance
+    techniques for search, predicate abstraction, and supervised learning to
+    these ends.
   </mat-card-content>
   <mat-card-actions align="end">
-      <button mat-button (click)="goToLink('https://www.perspicuous-computing.science/')">CPEC</button>
-      <button mat-button (click)="goToLink('http://www.dfg.de/en/')">DFG</button>
+    <button
+      mat-button
+      (click)="goToLink('https://www.perspicuous-computing.science/')"
+    >
+      CPEC
+    </button>
+    <button mat-button (click)="goToLink('http://www.dfg.de/en/')">DFG</button>
   </mat-card-actions>
 </mat-card>

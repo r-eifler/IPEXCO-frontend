@@ -1,19 +1,20 @@
-
 <app-user-study-description-view
   *ngIf="currentStep?.type === stepType.description"
   [content]="currentStep.content"
-  (next)="nextStep()">
+  (next)="nextStep()"
+>
 </app-user-study-description-view>
 
 <app-user-study-demo-view
   *ngIf="currentStep?.type === stepType.demo"
   [demoId]="currentStep.content"
-  (next)="nextStep()">
+  (next)="nextStep()"
+>
 </app-user-study-demo-view>
 
 <app-user-study-form-view
   *ngIf="currentStep?.type === stepType.form"
   [data]="currentStep.content"
-
-  (next)="nextStep()">
+  (next)="nextStep()"
+>
 </app-user-study-form-view>

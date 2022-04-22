@@ -1,16 +1,15 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
-import {AnimationSettingsComponent} from './animation-settings.component';
+import { AnimationSettingsComponent } from "./animation-settings.component";
 
-describe('AnimationSettingsComponent', () => {
+describe("AnimationSettingsComponent", () => {
   let component: AnimationSettingsComponent;
   let fixture: ComponentFixture<AnimationSettingsComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AnimationSettingsComponent ]
-    })
-    .compileComponents();
+      declarations: [AnimationSettingsComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -19,7 +18,7 @@ describe('AnimationSettingsComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

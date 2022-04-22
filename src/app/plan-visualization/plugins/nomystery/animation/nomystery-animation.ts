@@ -1,12 +1,15 @@
-import { Action } from 'src/app/interface/plannig-task';
-import {AnimationLocation, AnimationPackage, AnimationTruck, NoMysteryAnimationTask} from './nomystery-animation-task';
+import { Action } from "src/app/interface/plannig-task";
+import {
+  AnimationLocation,
+  AnimationPackage,
+  AnimationTruck,
+  NoMysteryAnimationTask,
+} from "./nomystery-animation-task";
 
 const duration = 1.5;
 
 export class NoMysteryAnimation {
-
-  constructor(protected animationTask: NoMysteryAnimationTask) {
-  }
+  constructor(protected animationTask: NoMysteryAnimationTask) {}
 
   initPositions() {
     for (const loc of this.animationTask.locations.values()) {
@@ -20,42 +23,74 @@ export class NoMysteryAnimation {
     }
   }
 
-
   animateAction(action: Action): Promise<void> {
     // console.log('generate animation');
     switch (action.name) {
-      case 'drive':
-        const fuelCost: number =  Number(action.parameters[4].name.replace('level', ''));
-        return this.driveAnimation(action.parameters[0].name, action.parameters[1].name, action.parameters[2].name, fuelCost);
-      case 'load':
-        return this.loadAnimation(action.parameters[0].name, action.parameters[1].name, action.parameters[2].name);
-      case 'unload':
-        return this.unloadAnimation(action.parameters[0].name, action.parameters[1].name, action.parameters[2].name);
+      case "drive":
+        const fuelCost: number = Number(
+          action.parameters[4].name.replace("level", "")
+        );
+        return this.driveAnimation(
+          action.parameters[0].name,
+          action.parameters[1].name,
+          action.parameters[2].name,
+          fuelCost
+        );
+      case "load":
+        return this.loadAnimation(
+          action.parameters[0].name,
+          action.parameters[1].name,
+          action.parameters[2].name
+        );
+      case "unload":
+        return this.unloadAnimation(
+          action.parameters[0].name,
+          action.parameters[1].name,
+          action.parameters[2].name
+        );
     }
   }
 
   reverseAnimateAction(action: Action): Promise<void> {
-  // console.log('generate animation');
-  switch (action.name) {
-    case 'drive':
-      const fuelCost: number = - Number(action.parameters[4].name.replace('level', ''));
-      return this.driveAnimation(action.parameters[0].name, action.parameters[1].name, action.parameters[2].name, fuelCost);
-    case 'load':
-      return this.unloadAnimation(action.parameters[0].name, action.parameters[1].name, action.parameters[2].name);
-    case 'unload':
-      return this.loadAnimation(action.parameters[0].name, action.parameters[1].name, action.parameters[2].name);
+    // console.log('generate animation');
+    switch (action.name) {
+      case "drive":
+        const fuelCost: number = -Number(
+          action.parameters[4].name.replace("level", "")
+        );
+        return this.driveAnimation(
+          action.parameters[0].name,
+          action.parameters[1].name,
+          action.parameters[2].name,
+          fuelCost
+        );
+      case "load":
+        return this.unloadAnimation(
+          action.parameters[0].name,
+          action.parameters[1].name,
+          action.parameters[2].name
+        );
+      case "unload":
+        return this.loadAnimation(
+          action.parameters[0].name,
+          action.parameters[1].name,
+          action.parameters[2].name
+        );
+    }
   }
-}
 
-
-  driveAnimation(truckId: string, sourceLocId: string, targetLocId: string, fuelDelta: number): Promise<void> {
+  driveAnimation(
+    truckId: string,
+    sourceLocId: string,
+    targetLocId: string,
+    fuelDelta: number
+  ): Promise<void> {
     const truck: AnimationTruck = this.animationTask.trucks.get(truckId);
-    const targetLocation: AnimationLocation = this.animationTask.locations.get(targetLocId);
+    const targetLocation: AnimationLocation =
+      this.animationTask.locations.get(targetLocId);
 
     return truck.animateDriveTo(targetLocation, fuelDelta);
-
   }
-
 
   loadAnimation(p: string, t: string, locId: string) {
     const truck: AnimationTruck = this.animationTask.trucks.get(t);
@@ -71,5 +106,4 @@ export class NoMysteryAnimation {
 
     return pack.animateUnLoad(truck, loc);
   }
-
 }

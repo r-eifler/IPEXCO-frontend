@@ -1,24 +1,39 @@
 <div class="main-container">
   <!-- <button mat-flat-button (click)="viewpos = 1">Select other preference</button> -->
-  <ng-container *ngIf="(displayExplanations$ | async)">
-    <div class="slide-container"
+  <ng-container *ngIf="displayExplanations$ | async">
+    <div
+      class="slide-container"
       [class.slide-pos-one]="viewpos == 1"
-      [class.slide-pos-two]="viewpos == 2">
+      [class.slide-pos-two]="viewpos == 2"
+    >
       <div class="middle-container">
-        <app-explanations-select-preference-view [step]="(step$ | async)" (selectedPP)="selectQuestion($event)"></app-explanations-select-preference-view>
+        <app-explanations-select-preference-view
+          [step]="step$ | async"
+          (selectedPP)="selectQuestion($event)"
+        ></app-explanations-select-preference-view>
       </div>
       <div class="middle-container">
-        <app-conflict-view [solvable]="! (notSolvable$ | async)" [explanation]="(computedDependencies$ | async)" [question]="(questions$ |async)" (selectedConflict)="selectConflict($event)"></app-conflict-view>
+        <app-conflict-view
+          [solvable]="!(notSolvable$ | async)"
+          [explanation]="computedDependencies$ | async"
+          [question]="questions$ | async"
+          (selectedConflict)="selectConflict($event)"
+        ></app-conflict-view>
       </div>
       <div class="middle-container">
-        <app-explanations-relaxations-view [step]="(step$ | async)" [conflict]="selectedConflict$ | async"></app-explanations-relaxations-view>
+        <app-explanations-relaxations-view
+          [step]="step$ | async"
+          [conflict]="selectedConflict$ | async"
+        ></app-explanations-relaxations-view>
       </div>
     </div>
-    <button mat-raised-button
+    <button
+      mat-raised-button
       color="primary"
-      *ngIf="viewpos == 2 && ! (notSolvable$ | async)"
+      *ngIf="viewpos == 2 && !(notSolvable$ | async)"
       (click)="viewpos = 1"
-      style="position: absolute; left: 92%; top: 92%">
+      style="position: absolute; left: 92%; top: 92%"
+    >
       Ask other Question
     </button>
     <!-- <button mat-flat-button (click)="viewpos = 2" style="position: absolute; left: 95%; top: 90%">right</button> -->
@@ -29,9 +44,10 @@
     <button mat-flat-button (click)="computeExplanations()" color="primary">Compute Explanations</button>
   </div> -->
 
-  <div class="compute-container"
-    *ngIf="(plannerBusy$ | async) && ! (displayExplanations$ | async)">
+  <div
+    class="compute-container"
+    *ngIf="(plannerBusy$ | async) && !(displayExplanations$ | async)"
+  >
     <mat-progress-bar mode="indeterminate"></mat-progress-bar>
   </div>
-
 </div>

@@ -1,25 +1,35 @@
 <div class="container">
   <div><span class="axis-label">cost</span></div>
   <div class="cost-box">
-    <span *ngFor="let v of (values$ | async); let i = index" class="cost" [style.left]="((i / ((values$ | async).length - 1)) * 100) + '%'">
-      {{v.value}}
+    <span
+      *ngFor="let v of values$ | async; let i = index"
+      class="cost"
+      [style.left]="(i / ((values$ | async).length - 1)) * 100 + '%'"
+    >
+      {{ v.value }}
     </span>
   </div>
   <div></div>
-    <mat-slider class="slider"
+  <mat-slider
+    class="slider"
     [disabled]="disabled"
     tickInterval="1"
     step="1"
     [min]="min"
     [max]="max$ | async"
-    [value]="(value$ | async)"
+    [value]="value$ | async"
     class="slider"
-    (change)="valueChanged($event)">
+    (change)="valueChanged($event)"
+  >
   </mat-slider>
   <div><span class="axis-label">value</span></div>
   <div class="label-box">
-      <span *ngFor="let v of (values$ | async); let i = index" class="label" [style.left]="((i / ((values$ | async).length - 1)) * 100) + '%'">
-        {{v.display}}
-      </span>
+    <span
+      *ngFor="let v of values$ | async; let i = index"
+      class="label"
+      [style.left]="(i / ((values$ | async).length - 1)) * 100 + '%'"
+    >
+      {{ v.display }}
+    </span>
   </div>
 </div>

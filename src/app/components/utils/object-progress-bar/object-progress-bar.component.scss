@@ -1,4 +1,4 @@
-@import '../../../../variables.scss';
+@import "../../../../variables.scss";
 
 .container {
   width: 100%;
@@ -32,7 +32,6 @@
   background-color: $primary;
 }
 
-
 .label-box {
   box-sizing: border-box;
   width: 100%;
@@ -47,7 +46,6 @@
   font-size: larger;
   font-weight: 400;
 }
-
 
 .cost-box {
   box-sizing: border-box;
@@ -66,5 +64,5 @@
 
 .axis-label {
   font-size: larger;
-  font-weight: 400
+  font-weight: 400;
 }

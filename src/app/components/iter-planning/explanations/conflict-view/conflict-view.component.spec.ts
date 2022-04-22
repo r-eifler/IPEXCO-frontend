@@ -1,16 +1,15 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { ConflictViewComponent } from './conflict-view.component';
+import { ConflictViewComponent } from "./conflict-view.component";
 
-describe('ConflictViewComponent', () => {
+describe("ConflictViewComponent", () => {
   let component: ConflictViewComponent;
   let fixture: ComponentFixture<ConflictViewComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ConflictViewComponent ]
-    })
-    .compileComponents();
+      declarations: [ConflictViewComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -19,7 +18,7 @@ describe('ConflictViewComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

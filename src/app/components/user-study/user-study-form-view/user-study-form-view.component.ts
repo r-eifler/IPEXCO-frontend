@@ -1,29 +1,28 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {DomSanitizer} from '@angular/platform-browser';
-import {UserStudyUserService} from '../../../service/user-study/user-study-user.service';
+import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { DomSanitizer } from "@angular/platform-browser";
+import { UserStudyUserService } from "../../../service/user-study/user-study-user.service";
 
 @Component({
-  selector: 'app-user-study-form-view',
-  templateUrl: './user-study-form-view.component.html',
-  styleUrls: ['./user-study-form-view.component.css']
+  selector: "app-user-study-form-view",
+  templateUrl: "./user-study-form-view.component.html",
+  styleUrls: ["./user-study-form-view.component.css"],
 })
 export class UserStudyFormViewComponent implements OnInit {
-
   @Input() data;
   url: string;
   verificationCode: string;
   @Output() next = new EventEmitter<void>();
 
-  userInputCode = '';
+  userInputCode = "";
   prolificID: string;
 
   constructor(
     private domSanitizer: DomSanitizer,
-    private userStudyUserService: UserStudyUserService,
-  ) { }
+    private userStudyUserService: UserStudyUserService
+  ) {}
 
   ngOnInit(): void {
-    const parts = this.data.split(' ');
+    const parts = this.data.split(" ");
     this.url = parts[0];
     this.verificationCode = parts[1];
 
@@ -35,7 +34,8 @@ export class UserStudyFormViewComponent implements OnInit {
   }
 
   makeTrustedURL(url: string) {
-    return this.domSanitizer.bypassSecurityTrustResourceUrl(url + '?embedded=true');
+    return this.domSanitizer.bypassSecurityTrustResourceUrl(
+      url + "?embedded=true"
+    );
   }
-
 }

@@ -1,19 +1,28 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {RunningUserStudyService, UserStudiesService} from '../../../../service/user-study/user-study-services';
-import {UserStudy, UserStudyData, UserStudyStepType} from '../../../../interface/user-study/user-study';
-import {Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
-import {Demo} from '../../../../interface/demo';
-import {DemosService, RunningDemoService} from '../../../../service/demo/demo-services';
-import {PlanPropertyMapService} from '../../../../service/plan-properties/plan-property-services';
+import { Component, OnDestroy, OnInit } from "@angular/core";
+import {
+  RunningUserStudyService,
+  UserStudiesService,
+} from "../../../../service/user-study/user-study-services";
+import {
+  UserStudy,
+  UserStudyData,
+  UserStudyStepType,
+} from "../../../../interface/user-study/user-study";
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
+import { Demo } from "../../../../interface/demo";
+import {
+  DemosService,
+  RunningDemoService,
+} from "../../../../service/demo/demo-services";
+import { PlanPropertyMapService } from "../../../../service/plan-properties/plan-property-services";
 
 @Component({
-  selector: 'app-user-study-data-base',
-  templateUrl: './user-study-data-base.component.html',
-  styleUrls: ['./user-study-data-base.component.css']
+  selector: "app-user-study-data-base",
+  templateUrl: "./user-study-data-base.component.html",
+  styleUrls: ["./user-study-data-base.component.css"],
 })
 export class UserStudyDataBaseComponent implements OnInit, OnDestroy {
-
   private ngUnsubscribe: Subject<any> = new Subject();
 
   selectedDemoId: string;
@@ -32,41 +41,37 @@ export class UserStudyDataBaseComponent implements OnInit, OnDestroy {
     private userStudiesService: UserStudiesService,
     private demosService: DemosService,
     private runningDemoService: RunningDemoService,
-    private propertiesService: PlanPropertyMapService,
+    private propertiesService: PlanPropertyMapService
   ) {
-    this.selectedUserStudy.getSelectedObject()
+    this.selectedUserStudy
+      .getSelectedObject()
       .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe(
-        async v => {
-          if (v) {
-            this.userStudy = v;
-            this.demoIds = [];
-            for (const userStudyStep of this.userStudy.steps) {
-              if (userStudyStep.type === UserStudyStepType.demo) {
-                this.demoIds.push(userStudyStep.content);
-              }
-            }
-            this.selectDemo(this.demoIds[0]);
-            this.data = await userStudiesService.loadData(this.userStudy._id);
-            for (const demoId of this.demoIds) {
-                this.demosService.getObject(demoId)
-                  .pipe(takeUntil(this.ngUnsubscribe))
-                  .subscribe(
-                    (demo: Demo) => {
-                      if (demo) {
-                        this.usDemos.set(demoId, demo);
-                      }
-                    }
-                  );
+      .subscribe(async (v) => {
+        if (v) {
+          this.userStudy = v;
+          this.demoIds = [];
+          for (const userStudyStep of this.userStudy.steps) {
+            if (userStudyStep.type === UserStudyStepType.demo) {
+              this.demoIds.push(userStudyStep.content);
             }
           }
+          this.selectDemo(this.demoIds[0]);
+          this.data = await userStudiesService.loadData(this.userStudy._id);
+          for (const demoId of this.demoIds) {
+            this.demosService
+              .getObject(demoId)
+              .pipe(takeUntil(this.ngUnsubscribe))
+              .subscribe((demo: Demo) => {
+                if (demo) {
+                  this.usDemos.set(demoId, demo);
+                }
+              });
+          }
         }
-      );
-
+      });
   }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   ngOnDestroy(): void {
     this.ngUnsubscribe.next();
@@ -75,18 +80,17 @@ export class UserStudyDataBaseComponent implements OnInit, OnDestroy {
 
   selectDemo(demoId: string) {
     this.selectedDemoId = demoId;
-    this.demosService.getObject(demoId)
+    this.demosService
+      .getObject(demoId)
       .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe(
-        (demo: Demo) => {
-          if (demo) {
-            this.selectedDemo = demo;
-            this.runningDemoService.saveObject(demo);
-            this.propertiesService.findCollection([{param: 'projectId', value: demo._id}]);
-          }
+      .subscribe((demo: Demo) => {
+        if (demo) {
+          this.selectedDemo = demo;
+          this.runningDemoService.saveObject(demo);
+          this.propertiesService.findCollection([
+            { param: "projectId", value: demo._id },
+          ]);
         }
-      );
+      });
   }
-
-
 }

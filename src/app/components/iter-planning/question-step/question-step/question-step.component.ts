@@ -1,18 +1,17 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ResponsiveService} from 'src/app/service/responsive/responsive.service';
-import {ActivatedRoute, ParamMap, Router} from '@angular/router';
-import {IterationStepsService} from 'src/app/service/planner-runs/iteration-steps.service';
-import {switchMap, takeUntil} from 'rxjs/operators';
-import {Subject} from 'rxjs';
-import {SelectedPlanRunService} from '../../../../service/planner-runs/selected-planrun.service';
+import { Component, OnDestroy, OnInit } from "@angular/core";
+import { ResponsiveService } from "src/app/service/responsive/responsive.service";
+import { ActivatedRoute, ParamMap, Router } from "@angular/router";
+import { IterationStepsService } from "src/app/service/planner-runs/iteration-steps.service";
+import { switchMap, takeUntil } from "rxjs/operators";
+import { Subject } from "rxjs";
+import { SelectedPlanRunService } from "../../../../service/planner-runs/selected-planrun.service";
 
 @Component({
-  selector: 'app-question-step',
-  templateUrl: './question-step.component.html',
-  styleUrls: ['./question-step.component.css']
+  selector: "app-question-step",
+  templateUrl: "./question-step.component.html",
+  styleUrls: ["./question-step.component.css"],
 })
 export class QuestionStepComponent implements OnInit, OnDestroy {
-
   private ngUnsubscribe: Subject<any> = new Subject();
 
   isMobile: boolean;
@@ -22,9 +21,9 @@ export class QuestionStepComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private runService: IterationStepsService,
-    currentRunService: SelectedPlanRunService) {
-
-      // TODO
+    currentRunService: SelectedPlanRunService
+  ) {
+    // TODO
     // this.route.paramMap.pipe(
     //   switchMap((params: ParamMap) =>
     //     this.runService.getObject(params.get('runid'))
@@ -37,11 +36,12 @@ export class QuestionStepComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.responsiveService.getMobileStatus()
-    .pipe(takeUntil(this.ngUnsubscribe))
-    .subscribe( isMobile => {
-      this.isMobile = isMobile;
-    });
+    this.responsiveService
+      .getMobileStatus()
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe((isMobile) => {
+        this.isMobile = isMobile;
+      });
     this.responsiveService.checkWidth();
   }
 
@@ -49,5 +49,4 @@ export class QuestionStepComponent implements OnInit, OnDestroy {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
   }
-
 }

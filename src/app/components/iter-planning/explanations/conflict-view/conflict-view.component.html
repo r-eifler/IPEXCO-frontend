@@ -1,85 +1,130 @@
 <mat-card class="outer-container">
-  <ng-container *ngIf="! (solvable$ | async)">
-    <div class="card-container" *ngIf="(dependencies$ | async).length > 0 && (solvableAtAll$ | async)">
+  <ng-container *ngIf="!(solvable$ | async)">
+    <div
+      class="card-container"
+      *ngIf="(dependencies$ | async).length > 0 && (solvableAtAll$ | async)"
+    >
       <mat-card-header>
-        <mat-card-title>The selected preferences are not solvable. There are the following conflicts ...</mat-card-title>
+        <mat-card-title
+          >The selected preferences are not solvable. There are the following
+          conflicts ...</mat-card-title
+        >
       </mat-card-header>
       <mat-accordion multi>
-        <mat-expansion-panel hideToggle
-          *ngFor="let conflict of (dependencies$ | async); let i=index" expanded="true"
-          [class.selected]="selectedConflictIndex == i">
+        <mat-expansion-panel
+          hideToggle
+          *ngFor="let conflict of dependencies$ | async; let i = index"
+          expanded="true"
+          [class.selected]="selectedConflictIndex == i"
+        >
           <mat-expansion-panel-header>
-            <mat-panel-title>
-              Conflict {{i+1}}
-            </mat-panel-title>
+            <mat-panel-title> Conflict {{ i + 1 }} </mat-panel-title>
           </mat-expansion-panel-header>
           <mat-list>
             <mat-list-item *ngFor="let pp of conflict">
-              <span matLine>{{pp.naturalLanguageDescription}}</span>
-              <span matLine> Utility: {{pp.value}} </span>
+              <span matLine>{{ pp.naturalLanguageDescription }}</span>
+              <span matLine> Utility: {{ pp.value }} </span>
             </mat-list-item>
           </mat-list>
-          <div class="button-container" *ngIf="provideRelaxationExplanations$ | async">
-            <button mat-stroked-button color="primary" (click)="selectConflictStepUnsolvable(conflict, i)">Possible Relaxations</button>
+          <div
+            class="button-container"
+            *ngIf="provideRelaxationExplanations$ | async"
+          >
+            <button
+              mat-stroked-button
+              color="primary"
+              (click)="selectConflictStepUnsolvable(conflict, i)"
+            >
+              Possible Relaxations
+            </button>
           </div>
         </mat-expansion-panel>
       </mat-accordion>
     </div>
   </ng-container>
 
-  <ng-container *ngIf="(solvable$ | async)">
+  <ng-container *ngIf="solvable$ | async">
     <mat-card-header>
       <mat-card-title>... because preference </mat-card-title>
     </mat-card-header>
-    <div *ngIf="! (question$ | async)">
-      <p style="font-size: large;">No preference selected.</p>
+    <div *ngIf="!(question$ | async)">
+      <p style="font-size: large">No preference selected.</p>
     </div>
     <ng-container *ngIf="(question$ | async) && (explanation$ | async)">
       <mat-card>
         <div class="list-item-container">
-          <mat-icon matListIcon >star_border</mat-icon>
+          <mat-icon matListIcon>star_border</mat-icon>
           <div class="list-item-text">
-            <span style="font-size: larger;"> {{(question$ | async).naturalLanguageDescription}} </span>
-            <span> Utility: {{(question$ | async).value}} </span>
+            <span style="font-size: larger">
+              {{ (question$ | async).naturalLanguageDescription }}
+            </span>
+            <span> Utility: {{ (question$ | async).value }} </span>
           </div>
         </div>
       </mat-card>
-      <div class="card-container" *ngIf="(dependencies$ | async).length == 0 && (solvableAtAll$ | async)">
+      <div
+        class="card-container"
+        *ngIf="(dependencies$ | async).length == 0 && (solvableAtAll$ | async)"
+      >
         <mat-card-header>
           <mat-card-title>has no conflicts.</mat-card-title>
         </mat-card-header>
       </div>
-      <div class="card-container" *ngIf="(dependencies$ | async).length > 0 && (solvableAtAll$ | async)">
+      <div
+        class="card-container"
+        *ngIf="(dependencies$ | async).length > 0 && (solvableAtAll$ | async)"
+      >
         <mat-card-header>
           <mat-card-title>has the following conflicts ...</mat-card-title>
         </mat-card-header>
         <mat-accordion multi>
-          <mat-expansion-panel hideToggle
-            *ngFor="let conflict of (dependencies$ | async); let i=index" expanded="true"
-            [class.selected]="selectedConflictIndex == i">
+          <mat-expansion-panel
+            hideToggle
+            *ngFor="let conflict of dependencies$ | async; let i = index"
+            expanded="true"
+            [class.selected]="selectedConflictIndex == i"
+          >
             <mat-expansion-panel-header>
-              <mat-panel-title>
-                Conflict {{i+1}}
-              </mat-panel-title>
+              <mat-panel-title> Conflict {{ i + 1 }} </mat-panel-title>
             </mat-expansion-panel-header>
             <mat-list>
               <mat-list-item *ngFor="let pp of conflict">
-                <span matLine>{{pp.naturalLanguageDescription}}</span>
-                <span matLine> Utility: {{pp.value}} </span>
+                <span matLine>{{ pp.naturalLanguageDescription }}</span>
+                <span matLine> Utility: {{ pp.value }} </span>
               </mat-list-item>
             </mat-list>
-            <div class="button-container" *ngIf="provideRelaxationExplanations$ | async">
-              <button mat-stroked-button color="primary" (click)="selectConflict(conflict, i)">Possible Relaxations</button>
+            <div
+              class="button-container"
+              *ngIf="provideRelaxationExplanations$ | async"
+            >
+              <button
+                mat-stroked-button
+                color="primary"
+                (click)="selectConflict(conflict, i)"
+              >
+                Possible Relaxations
+              </button>
             </div>
           </mat-expansion-panel>
         </mat-accordion>
       </div>
-      <div class="card-container" *ngIf=" ! (solvableAtAll$ | async)">
+      <div class="card-container" *ngIf="!(solvableAtAll$ | async)">
         <mat-card-header>
-          <mat-card-title>can with the current constraints not be achieved.</mat-card-title>
+          <mat-card-title
+            >can with the current constraints not be achieved.</mat-card-title
+          >
         </mat-card-header>
-        <div class="button-container" *ngIf="provideRelaxationExplanations$ | async">
-          <button mat-stroked-button color="primary" (click)="selectPreferenceUnsolvable(-1)">Possible Relaxations</button>
+        <div
+          class="button-container"
+          *ngIf="provideRelaxationExplanations$ | async"
+        >
+          <button
+            mat-stroked-button
+            color="primary"
+            (click)="selectPreferenceUnsolvable(-1)"
+          >
+            Possible Relaxations
+          </button>
         </div>
       </div>
     </ng-container>

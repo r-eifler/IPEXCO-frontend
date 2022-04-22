@@ -1,32 +1,74 @@
 <div>
   <h1>Demo Finished.</h1>
-  <div style="width: 100%; display: flex; flex-direction: column; align-items: center;">
-    <div *ngIf="timesUp" style="margin: 40px auto; display: flex; flex-direction: row; align-items: center;">
-      <span class="material-icons" style="font-size: 50px; margin-bottom: 0px;">
+  <div
+    style="
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    "
+  >
+    <div
+      *ngIf="timesUp"
+      style="
+        margin: 40px auto;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+      "
+    >
+      <span class="material-icons" style="font-size: 50px; margin-bottom: 0px">
         timer
       </span>
-      <span style="font-size: xx-large;">Time's up!</span>
+      <span style="font-size: xx-large">Time's up!</span>
     </div>
-    <div *ngIf="(projectService.getSelectedObject() | async).settings.usePlanPropertyValues" style="margin: 30px auto;">
-      <h2>Your best plan achieved an overall utility of: {{maxAchievedUtility}}.</h2>
-      <ng-container *ngIf="(projectService.getSelectedObject() | async).settings.checkMaxUtility">
-        <h2 *ngIf="maxUtility === maxAchievedUtility">Great! This is the maximal utility possible.</h2>
+    <div
+      *ngIf="
+        (projectService.getSelectedObject() | async).settings
+          .usePlanPropertyValues
+      "
+      style="margin: 30px auto"
+    >
+      <h2>
+        Your best plan achieved an overall utility of: {{ maxAchievedUtility }}.
+      </h2>
+      <ng-container
+        *ngIf="
+          (projectService.getSelectedObject() | async).settings.checkMaxUtility
+        "
+      >
+        <h2 *ngIf="maxUtility === maxAchievedUtility">
+          Great! This is the maximal utility possible.
+        </h2>
         <h2 *ngIf="payment > 0">
-          You will be payed: {{payment | currency : 'GBP' : 'symbol' : '1.2-2'}}
+          You will be payed: {{ payment | currency: "GBP":"symbol":"1.2-2" }}
         </h2>
       </ng-container>
-      <h3 *ngIf="(projectService.getSelectedObject() | async).settings.introTask">
-        Have you familiarized you with the tool?
-        If yes, you can exit the intro task.
-        If no, please make sure, that you understand how to use the tool.
+      <h3
+        *ngIf="(projectService.getSelectedObject() | async).settings.introTask"
+      >
+        Have you familiarized you with the tool? If yes, you can exit the intro
+        task. If no, please make sure, that you understand how to use the tool.
       </h3>
     </div>
   </div>
 </div>
-<div style="width: 100%; display: flex; flex-direction: row; justify-content: flex-end;">
-  <button mat-flat-button style="margin-right: 10px;" (click)="dialogRef.close(false)">
+<div
+  style="
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+  "
+>
+  <button
+    mat-flat-button
+    style="margin-right: 10px"
+    (click)="dialogRef.close(false)"
+  >
     Continue
   </button>
-  <button mat-flat-button color="primary" (click)="dialogRef.close(true)">Exit</button>
+  <button mat-flat-button color="primary" (click)="dialogRef.close(true)">
+    Exit
+  </button>
 </div>
-

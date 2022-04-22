@@ -1,16 +1,15 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
-import {DomainSpecificationComponent} from './domain-specification.component';
+import { DomainSpecificationComponent } from "./domain-specification.component";
 
-describe('DomainSpecificationComponent', () => {
+describe("DomainSpecificationComponent", () => {
   let component: DomainSpecificationComponent;
   let fixture: ComponentFixture<DomainSpecificationComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DomainSpecificationComponent ]
-    })
-    .compileComponents();
+      declarations: [DomainSpecificationComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -19,7 +18,7 @@ describe('DomainSpecificationComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

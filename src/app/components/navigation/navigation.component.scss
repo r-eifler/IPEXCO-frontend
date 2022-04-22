@@ -1,4 +1,4 @@
-@import '../../../variables.scss';
+@import "../../../variables.scss";
 
 .main-container {
   display: flex;
@@ -10,7 +10,7 @@
   right: 0;
 }
 
-.is-mobile .main-toolbar{
+.is-mobile .main-toolbar {
   position: fixed;
   z-index: 2;
   display: flex;
@@ -28,7 +28,7 @@ h1.app-name {
   margin-left: 15px;
 }
 
-.login-button{
+.login-button {
   align-self: flex-end;
 }
 
@@ -43,4 +43,3 @@ h1.app-name {
      `<body>` to be our scrolling element for mobile layouts. */
   flex: 1 0 auto;
 }
-

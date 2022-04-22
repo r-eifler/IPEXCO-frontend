@@ -4,12 +4,19 @@
   </mat-card-header>
   <mat-card-content class="content">
     <ng-container *ngIf="(selectedUpdates$ | async).length > 0">
-      <div *ngFor="let updatesList of (selectedUpdates$ | async)" class="relax-space">
-        <p class="name">{{updatesList.name}}</p>
+      <div
+        *ngFor="let updatesList of selectedUpdates$ | async"
+        class="relax-space"
+      >
+        <p class="name">{{ updatesList.name }}</p>
         <div class="list-container">
           <div *ngFor="let dim of updatesList.dimensions">
-            <p style="font-weight: 700;">{{dim.name}}</p>
-            <app-object-slider [values]="dim.possibleValues" [selected]="dim.selected" (change)="newUpdateSelected($event, dim.selected, dim.orgFact)"></app-object-slider>
+            <p style="font-weight: 700">{{ dim.name }}</p>
+            <app-object-slider
+              [values]="dim.possibleValues"
+              [selected]="dim.selected"
+              (change)="newUpdateSelected($event, dim.selected, dim.orgFact)"
+            ></app-object-slider>
           </div>
         </div>
       </div>

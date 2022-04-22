@@ -1,16 +1,15 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { PlanningTaskRelaxationCreatorComponent } from './planning-task-relaxation-creator.component';
+import { PlanningTaskRelaxationCreatorComponent } from "./planning-task-relaxation-creator.component";
 
-describe('PlanningTaskRelaxationCreatorComponent', () => {
+describe("PlanningTaskRelaxationCreatorComponent", () => {
   let component: PlanningTaskRelaxationCreatorComponent;
   let fixture: ComponentFixture<PlanningTaskRelaxationCreatorComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PlanningTaskRelaxationCreatorComponent ]
-    })
-    .compileComponents();
+      declarations: [PlanningTaskRelaxationCreatorComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -19,7 +18,7 @@ describe('PlanningTaskRelaxationCreatorComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

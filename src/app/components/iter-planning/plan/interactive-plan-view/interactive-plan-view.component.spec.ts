@@ -1,16 +1,15 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { InteractivePlanViewComponent } from './interactive-plan-view.component';
+import { InteractivePlanViewComponent } from "./interactive-plan-view.component";
 
-describe('InteractivePlanViewComponent', () => {
+describe("InteractivePlanViewComponent", () => {
   let component: InteractivePlanViewComponent;
   let fixture: ComponentFixture<InteractivePlanViewComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ InteractivePlanViewComponent ]
-    })
-    .compileComponents();
+      declarations: [InteractivePlanViewComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -19,7 +18,7 @@ describe('InteractivePlanViewComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

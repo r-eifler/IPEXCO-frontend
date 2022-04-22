@@ -1,16 +1,15 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { CompleteActionComponent } from './complete-action.component';
+import { CompleteActionComponent } from "./complete-action.component";
 
-describe('CompleteActionComponent', () => {
+describe("CompleteActionComponent", () => {
   let component: CompleteActionComponent;
   let fixture: ComponentFixture<CompleteActionComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ CompleteActionComponent ]
-    })
-    .compileComponents();
+      declarations: [CompleteActionComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -19,7 +18,7 @@ describe('CompleteActionComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

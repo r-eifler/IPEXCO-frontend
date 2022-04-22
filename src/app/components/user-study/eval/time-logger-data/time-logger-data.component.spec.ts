@@ -1,16 +1,15 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { TimeLoggerDataComponent } from './time-logger-data.component';
+import { TimeLoggerDataComponent } from "./time-logger-data.component";
 
-describe('TimeLoggerDataComponent', () => {
+describe("TimeLoggerDataComponent", () => {
   let component: TimeLoggerDataComponent;
   let fixture: ComponentFixture<TimeLoggerDataComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TimeLoggerDataComponent ]
-    })
-    .compileComponents();
+      declarations: [TimeLoggerDataComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -19,7 +18,7 @@ describe('TimeLoggerDataComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

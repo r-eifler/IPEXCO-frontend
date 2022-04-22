@@ -1,16 +1,15 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
-import {PlanningStepTreeComponent} from './planning-step-tree.component';
+import { PlanningStepTreeComponent } from "./planning-step-tree.component";
 
-describe('PlanningStepTreeComponent', () => {
+describe("PlanningStepTreeComponent", () => {
   let component: PlanningStepTreeComponent;
   let fixture: ComponentFixture<PlanningStepTreeComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PlanningStepTreeComponent ]
-    })
-    .compileComponents();
+      declarations: [PlanningStepTreeComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -19,7 +18,7 @@ describe('PlanningStepTreeComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

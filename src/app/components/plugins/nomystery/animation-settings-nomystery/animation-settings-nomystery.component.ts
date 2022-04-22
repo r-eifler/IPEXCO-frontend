@@ -1,58 +1,70 @@
-import {takeUntil} from 'rxjs/operators';
-import {AnimationSettingsNoMysteryVisu} from '../../../../plan-visualization/plugins/nomystery/settings/animation-settings-nomystery-visu';
-import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {ResponsiveService} from 'src/app/service/responsive/responsive.service';
-import {CurrentProjectService, ProjectsService} from 'src/app/service/project/project-services';
-import {Subject} from 'rxjs';
+import { takeUntil } from "rxjs/operators";
+import { AnimationSettingsNoMysteryVisu } from "../../../../plan-visualization/plugins/nomystery/settings/animation-settings-nomystery-visu";
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from "@angular/core";
+import { ResponsiveService } from "src/app/service/responsive/responsive.service";
+import {
+  CurrentProjectService,
+  ProjectsService,
+} from "src/app/service/project/project-services";
+import { Subject } from "rxjs";
 
 @Component({
-  selector: 'app-animation-settings-nomystery',
-  templateUrl: './animation-settings-nomystery.component.html',
-  styleUrls: ['./animation-settings-nomystery.component.css']
+  selector: "app-animation-settings-nomystery",
+  templateUrl: "./animation-settings-nomystery.component.html",
+  styleUrls: ["./animation-settings-nomystery.component.css"],
 })
-export class AnimationSettingsNomysteryComponent implements OnInit, AfterViewInit, OnDestroy {
-
+export class AnimationSettingsNomysteryComponent
+  implements OnInit, AfterViewInit, OnDestroy
+{
   private ngUnsubscribe: Subject<any> = new Subject();
 
   isMobile: boolean;
 
-  @ViewChild('animationsettingscontainer') locationSettingsContainer: ElementRef;
+  @ViewChild("animationsettingscontainer")
+  locationSettingsContainer: ElementRef;
 
   public animationSettings: AnimationSettingsNoMysteryVisu;
 
   constructor(
     private responsiveService: ResponsiveService,
     private projectService: CurrentProjectService,
-    private projectsService: ProjectsService,
+    private projectsService: ProjectsService
   ) {
-    this.animationSettings = new AnimationSettingsNoMysteryVisu(projectService, projectsService);
+    this.animationSettings = new AnimationSettingsNoMysteryVisu(
+      projectService,
+      projectsService
+    );
   }
 
   ngOnInit(): void {
-    this.responsiveService.getMobileStatus()
-    .pipe(takeUntil(this.ngUnsubscribe))
-    .subscribe( isMobile => {
-      if (isMobile) {
-        this.isMobile = true;
-      } else {
-        this.isMobile = false;
-      }
-    });
+    this.responsiveService
+      .getMobileStatus()
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe((isMobile) => {
+        if (isMobile) {
+          this.isMobile = true;
+        } else {
+          this.isMobile = false;
+        }
+      });
     this.responsiveService.checkWidth();
   }
 
   ngAfterViewInit(): void {
     const obs$ = this.animationSettings.displayElemObservable();
-    obs$
-    .pipe(takeUntil(this.ngUnsubscribe))
-    .subscribe(
-      elems => {
-        for ( const e of elems) {
-          this.locationSettingsContainer.nativeElement.innerHTML = '';
-          this.locationSettingsContainer.nativeElement.appendChild(e);
-        }
+    obs$.pipe(takeUntil(this.ngUnsubscribe)).subscribe((elems) => {
+      for (const e of elems) {
+        this.locationSettingsContainer.nativeElement.innerHTML = "";
+        this.locationSettingsContainer.nativeElement.appendChild(e);
       }
-    );
+    });
   }
 
   ngOnDestroy(): void {
@@ -63,5 +75,4 @@ export class AnimationSettingsNomysteryComponent implements OnInit, AfterViewIni
   saveSettings() {
     this.animationSettings.save();
   }
-
 }

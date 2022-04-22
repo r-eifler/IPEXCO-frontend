@@ -1,29 +1,51 @@
 <div class="main-container">
   <div>
-    <mat-selection-list [multiple]="false" (selectionChange)="selectStep($event)">
-      <mat-list-option *ngFor="let step of (steps$ | async)" [value]="step"
-        [selected]="step._id == (selected$ | async)?._id">
+    <mat-selection-list
+      [multiple]="false"
+      (selectionChange)="selectStep($event)"
+    >
+      <mat-list-option
+        *ngFor="let step of steps$ | async"
+        [value]="step"
+        [selected]="step._id == (selected$ | async)?._id"
+      >
         <!-- <mat-icon matListIcon>label</mat-icon> -->
         <div class="step-item">
           <mat-icon class="step-icon" *ngIf="hasPlan(step)">map</mat-icon>
-          <mat-icon svgIcon="no_map" class="step-icon" *ngIf="notSolvable(step)"></mat-icon>
+          <mat-icon
+            svgIcon="no_map"
+            class="step-icon"
+            *ngIf="notSolvable(step)"
+          ></mat-icon>
           <mat-icon class="step-icon" *ngIf="hasError(step)">error</mat-icon>
-          <mat-spinner class="spinner" *ngIf="isPending(step)" diameter="25"></mat-spinner>
-          <p class="step-name"> {{step.name}}</p>
-          <button mat-icon-button class="delete-button" (click)="deleteStep(step)"d>
+          <mat-spinner
+            class="spinner"
+            *ngIf="isPending(step)"
+            diameter="25"
+          ></mat-spinner>
+          <p class="step-name">{{ step.name }}</p>
+          <button
+            mat-icon-button
+            class="delete-button"
+            (click)="deleteStep(step)"
+            d
+          >
             <mat-icon>delete</mat-icon>
           </button>
         </div>
       </mat-list-option>
     </mat-selection-list>
     <mat-divider inset="true"></mat-divider>
-    <div class="new-step" *ngIf="(newStep$ | async)" (click)="selectNewStep()">
-      <p class="new-step-name">{{(newStep$ | async).name}}</p>
+    <div class="new-step" *ngIf="newStep$ | async" (click)="selectNewStep()">
+      <p class="new-step-name">{{ (newStep$ | async).name }}</p>
     </div>
   </div>
-  <button mat-flat-button color="primary"
-    [disabled]="(newStep$ | async)"
-    (click)="newStep()">
-      New Step
+  <button
+    mat-flat-button
+    color="primary"
+    [disabled]="newStep$ | async"
+    (click)="newStep()"
+  >
+    New Step
   </button>
 </div>

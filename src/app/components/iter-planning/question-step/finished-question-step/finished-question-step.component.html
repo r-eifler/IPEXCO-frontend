@@ -1,6 +1,9 @@
-<div *ngIf="! isMobile" style="width: 100%; height: 100%; display: flex; flex-direction: row;">
+<div
+  *ngIf="!isMobile"
+  style="width: 100%; height: 100%; display: flex; flex-direction: row"
+>
   <div style="width: 50%">
-    <mat-tab-group  style="width: 100%; height: 100%;">
+    <mat-tab-group style="width: 100%; height: 100%">
       <mat-tab label="Goal">
         <app-task-view></app-task-view>
       </mat-tab>
@@ -10,22 +13,22 @@
     </mat-tab-group>
   </div>
   <div style="width: 50%">
-    <div style="width: 100%;">
+    <div style="width: 100%">
       <app-question-view></app-question-view>
     </div>
-    <div style="width: 100%;">
+    <div style="width: 100%">
       <app-explanation-view></app-explanation-view>
     </div>
   </div>
 </div>
 
-<div *ngIf="isMobile" style="width: 100%; height: 100%;">
-  <mat-tab-group  style="width: 100%; height: 100%;">
+<div *ngIf="isMobile" style="width: 100%; height: 100%">
+  <mat-tab-group style="width: 100%; height: 100%">
     <mat-tab label="Question">
-      <div style="width: 100%;">
+      <div style="width: 100%">
         <app-question-view></app-question-view>
       </div>
-      <div style="width: 100%;">
+      <div style="width: 100%">
         <app-explanation-view></app-explanation-view>
       </div>
     </mat-tab>

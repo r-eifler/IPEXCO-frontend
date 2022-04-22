@@ -1,5 +1,5 @@
 // Custom Theming for Angular Material
-@use '@angular/material' as mat;
+@use "@angular/material" as mat;
 // For more information: https://material.angular.io/guide/theming
 // Plus imports for other components in your app.
 
@@ -12,24 +12,28 @@ $mat-primary: (
   main: #44748c,
   lighter: #73a3bc,
   darker: #10495f,
-  200: #b0bec5, // For slide toggle,
-  contrast : (
-    main: white,
-    lighter: rgba(black, 0.87),
-    darker: white,
-  )
+  200: #b0bec5,
+  // For slide toggle,
+  contrast:
+    (
+      main: white,
+      lighter: rgba(black, 0.87),
+      darker: white,
+    ),
 );
 
 $mat-accent: (
   main: #ff7043,
   lighter: #ffa270,
   darker: #c63f17,
-  200: #ffab91, // For slide toggle,
-  contrast : (
-    main: rgba(black, 0.87),
-    lighter: rgba(black, 0.87),
-    darker: rgba(black, 0.87),
-  )
+  200: #ffab91,
+  // For slide toggle,
+  contrast:
+    (
+      main: rgba(black, 0.87),
+      lighter: rgba(black, 0.87),
+      darker: rgba(black, 0.87),
+    ),
 );
 
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
@@ -42,11 +46,13 @@ $EXPLORE-CLI-accent: mat.define-palette($mat-accent, main, lighter, darker);
 $EXPLORE-CLI-warn: mat.define-palette(mat.$red-palette);
 
 // Create the theme object (a Sass map containing all of the palettes).
-$EXPLORE-CLI-theme: mat.define-light-theme($EXPLORE-CLI-primary, $EXPLORE-CLI-accent, $EXPLORE-CLI-warn);
+$EXPLORE-CLI-theme: mat.define-light-theme(
+  $EXPLORE-CLI-primary,
+  $EXPLORE-CLI-accent,
+  $EXPLORE-CLI-warn
+);
 
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
 @include mat.all-component-themes($EXPLORE-CLI-theme);
-
-

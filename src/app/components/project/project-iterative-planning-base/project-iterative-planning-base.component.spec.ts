@@ -1,16 +1,15 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
-import {ProjectIterativePlanningBaseComponent} from './iterative-planning-base.component';
+import { ProjectIterativePlanningBaseComponent } from "./iterative-planning-base.component";
 
-describe('IterativePlanningBaseComponent', () => {
+describe("IterativePlanningBaseComponent", () => {
   let component: ProjectIterativePlanningBaseComponent;
   let fixture: ComponentFixture<ProjectIterativePlanningBaseComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ProjectIterativePlanningBaseComponent ]
-    })
-    .compileComponents();
+      declarations: [ProjectIterativePlanningBaseComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -19,7 +18,7 @@ describe('IterativePlanningBaseComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

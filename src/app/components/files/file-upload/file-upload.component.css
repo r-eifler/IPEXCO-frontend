@@ -3,7 +3,6 @@ table {
   box-shadow: none !important;
 }
 
-
 .main-container {
   width: 100%;
   height: 100%;
@@ -19,14 +18,14 @@ table {
   flex-direction: row;
 }
 
-.upload-form-desktop{
+.upload-form-desktop {
   width: 100%;
   display: inline-flex;
   flex-direction: row;
   justify-content: space-between;
 }
 
-.upload-form-mobile{
+.upload-form-mobile {
   width: 100%;
   display: inline-flex;
   flex-direction: column;
@@ -44,4 +43,3 @@ table {
 .flex-container {
   display: inline-flex;
 }
-

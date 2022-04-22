@@ -1,4 +1,4 @@
-@import '../../../../variables.scss';
+@import "../../../../variables.scss";
 
 .container {
   width: 100%;
@@ -10,7 +10,7 @@
 }
 
 .slider {
-  width:  100%;
+  width: 100%;
 }
 
 .label-box {
@@ -27,7 +27,6 @@
   font-size: larger;
   font-weight: 400;
 }
-
 
 .cost-box {
   box-sizing: border-box;
@@ -46,5 +45,5 @@
 
 .axis-label {
   font-size: larger;
-  font-weight: 400
+  font-weight: 400;
 }

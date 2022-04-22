@@ -1,8 +1,8 @@
-import {TestBed} from '@angular/core/testing';
+import { TestBed } from "@angular/core/testing";
 
-import {DomainSpecificationService} from './domain-specification.service';
+import { DomainSpecificationService } from "./domain-specification.service";
 
-describe('DomainSpecificationService', () => {
+describe("DomainSpecificationService", () => {
   let service: DomainSpecificationService;
 
   beforeEach(() => {
@@ -10,7 +10,7 @@ describe('DomainSpecificationService', () => {
     service = TestBed.inject(DomainSpecificationService);
   });
 
-  it('should be created', () => {
+  it("should be created", () => {
     expect(service).toBeTruthy();
   });
 });

@@ -1,36 +1,38 @@
-import { PlanProperty } from './../../../../interface/plan-property/plan-property';
-import { IterationStep } from 'src/app/interface/run';
-import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
-import { PlanPropertyMapService } from 'src/app/service/plan-properties/plan-property-services';
-import { Observable, combineLatest, Subject, BehaviorSubject } from 'rxjs';
-import { filter, map, takeUntil, tap } from 'rxjs/operators';
+import { PlanProperty } from "./../../../../interface/plan-property/plan-property";
+import { IterationStep } from "src/app/interface/run";
+import { Component, Input, OnInit, Output, EventEmitter } from "@angular/core";
+import { PlanPropertyMapService } from "src/app/service/plan-properties/plan-property-services";
+import { Observable, combineLatest, Subject, BehaviorSubject } from "rxjs";
+import { filter, map, takeUntil, tap } from "rxjs/operators";
 
 @Component({
-  selector: 'app-explanations-select-preference-view',
-  templateUrl: './explanations-select-preference-view.component.html',
-  styleUrls: ['./explanations-select-preference-view.component.scss']
+  selector: "app-explanations-select-preference-view",
+  templateUrl: "./explanations-select-preference-view.component.html",
+  styleUrls: ["./explanations-select-preference-view.component.scss"],
 })
 export class ExplanationsSelectPreferenceViewComponent implements OnInit {
-
   private unsubscribe$: Subject<any> = new Subject();
 
   @Input()
-  set step(step : IterationStep){
-    this.selectedPPId = '';
+  set step(step: IterationStep) {
+    this.selectedPPId = "";
     this.step$.next(step);
   }
   @Output() selectedPP = new EventEmitter<string>();
-  selectedPPId : string;
+  selectedPPId: string;
 
   possiblePP$: Observable<PlanProperty[]>;
   private step$ = new BehaviorSubject<IterationStep>(null);
 
-  constructor(
-    private planpropertiesService: PlanPropertyMapService,
-  ) {
-
-    this.possiblePP$ = combineLatest([this.step$, this.planpropertiesService.getMap()]).pipe(
-        filter(([step, properties] ) => step && properties && properties.size > 0),
+  constructor(private planpropertiesService: PlanPropertyMapService) {
+    this.possiblePP$ = combineLatest([
+      this.step$,
+      this.planpropertiesService.getMap(),
+    ])
+      .pipe(
+        filter(
+          ([step, properties]) => step && properties && properties.size > 0
+        ),
         map(([step, properties]) => {
           const props = [];
           for (let property of properties.values()) {
@@ -38,23 +40,21 @@ export class ExplanationsSelectPreferenceViewComponent implements OnInit {
               props.push(property);
           }
 
-          return props
-        }),
+          return props;
+        })
       )
       .pipe(takeUntil(this.unsubscribe$));
   }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   ngOnDestroy(): void {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }
 
-  selectPP(pp : PlanProperty): void {
-    this.selectedPPId = pp._id
+  selectPP(pp: PlanProperty): void {
+    this.selectedPPId = pp._id;
     this.selectedPP.emit(pp._id);
   }
-
 }

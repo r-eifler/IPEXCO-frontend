@@ -1,8 +1,7 @@
-import {BehaviorSubject} from 'rxjs';
+import { BehaviorSubject } from "rxjs";
 
-export const LOAD = 'LOAD';
-export const REMOVE = 'REMOVE';
-
+export const LOAD = "LOAD";
+export const REMOVE = "REMOVE";
 
 export class ItemStore<T> {
   item = null;

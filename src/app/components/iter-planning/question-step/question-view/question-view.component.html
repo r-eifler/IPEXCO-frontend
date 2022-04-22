@@ -1,6 +1,4 @@
-
-
-<mat-card *ngIf="solvable" style="margin: 10px;">
+<mat-card *ngIf="solvable" style="margin: 10px">
   <mat-card-header>
     <div mat-card-avatar>
       <mat-icon svgIcon="questionmark"></mat-icon>
@@ -9,16 +7,16 @@
   </mat-card-header>
   <mat-card-content>
     <h2>Why not ...</h2>
-    <mat-list *ngFor="let q of question;last as last">
+    <mat-list *ngFor="let q of question; last as last">
       <mat-list-item>
-          {{q.naturalLanguageDescription}}
-          <mat-divider *ngIf="! last"></mat-divider>
+        {{ q.naturalLanguageDescription }}
+        <mat-divider *ngIf="!last"></mat-divider>
       </mat-list-item>
     </mat-list>
   </mat-card-content>
 </mat-card>
 
-<mat-card *ngIf="!solvable" style="margin: 10px;">
+<mat-card *ngIf="!solvable" style="margin: 10px">
   <mat-card-header>
     <div mat-card-avatar>
       <mat-icon svgIcon="questionmark"></mat-icon>
@@ -29,5 +27,3 @@
     <h2>Why is the selection of hard goals unsolvable?</h2>
   </mat-card-content>
 </mat-card>
-
-

@@ -1,16 +1,15 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
-import {AnimationSettingsNomysteryComponent} from './animation-settings-nomystery.component';
+import { AnimationSettingsNomysteryComponent } from "./animation-settings-nomystery.component";
 
-describe('AnimationSettingsNomysteryComponent', () => {
+describe("AnimationSettingsNomysteryComponent", () => {
   let component: AnimationSettingsNomysteryComponent;
   let fixture: ComponentFixture<AnimationSettingsNomysteryComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AnimationSettingsNomysteryComponent ]
-    })
-    .compileComponents();
+      declarations: [AnimationSettingsNomysteryComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -19,7 +18,7 @@ describe('AnimationSettingsNomysteryComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

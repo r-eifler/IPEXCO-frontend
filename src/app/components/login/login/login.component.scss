@@ -1,5 +1,4 @@
-@import '../../../../variables.scss';
-
+@import "../../../../variables.scss";
 
 .main-container {
   height: 100%;
@@ -8,7 +7,7 @@
   display: inline-block;
 }
 
-.control-container-desktop{
+.control-container-desktop {
   width: 20%;
   margin: 0;
   position: absolute;
@@ -48,7 +47,6 @@
   margin: 5px 0px;
 }
 
-
 .logo-mobile {
   width: 80%;
   height: auto;
@@ -66,6 +64,6 @@
 }
 
 svg:not(:root) {
-  width:100%;
+  width: 100%;
   height: auto;
 }

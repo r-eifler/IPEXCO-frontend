@@ -1,9 +1,8 @@
-import {PlanProperty} from 'src/app/interface/plan-property/plan-property';
-import {DomainSpecification} from 'src/app/interface/files/domain-specification';
-import {TaskSchema} from './task-schema';
+import { PlanProperty } from "src/app/interface/plan-property/plan-property";
+import { DomainSpecification } from "src/app/interface/files/domain-specification";
+import { TaskSchema } from "./task-schema";
 
 export class DisplayTask {
-
   private goalDescription: Map<string, string> = new Map();
 
   constructor(taskSchema: TaskSchema, domainSpec: DomainSpecification) {

@@ -1,4 +1,4 @@
-<div class="main-container" >
+<div class="main-container">
   <mat-card class="base-card-desktop">
     <mat-card-header>
       <mat-card-title>User Study Distribution</mat-card-title>
@@ -8,38 +8,68 @@
       <form [formGroup]="metaForm">
         <mat-form-field class="full-line-input">
           <mat-label>Name</mat-label>
-          <input matInput type="text" formControlName="name" [(ngModel)]="metaStudy.name">
+          <input
+            matInput
+            type="text"
+            formControlName="name"
+            [(ngModel)]="metaStudy.name"
+          />
         </mat-form-field>
 
         <mat-form-field class="full-line-input">
           <mat-label>Description</mat-label>
-          <textarea matInput formControlName="description" [(ngModel)]="metaStudy.description"></textarea>
+          <textarea
+            matInput
+            formControlName="description"
+            [(ngModel)]="metaStudy.description"
+          ></textarea>
         </mat-form-field>
       </form>
     </mat-card-content>
   </mat-card>
 
-  <mat-card class="base-card-desktop" *ngFor="let selection of metaStudy.userStudies">
+  <mat-card
+    class="base-card-desktop"
+    *ngFor="let selection of metaStudy.userStudies"
+  >
     <mat-card-header>
-      <mat-card-title>User Study: {{selection.userStudy?.name}}</mat-card-title>
+      <mat-card-title
+        >User Study: {{ selection.userStudy?.name }}</mat-card-title
+      >
     </mat-card-header>
-    <mat-card-content style="display: flex; flex-direction: column; align-items: center;">
-      <mat-form-field appearance="fill" style="width: 80%; margin: 20px;">
+    <mat-card-content
+      style="display: flex; flex-direction: column; align-items: center"
+    >
+      <mat-form-field appearance="fill" style="width: 80%; margin: 20px">
         <mat-label>User Study</mat-label>
         <mat-select [(ngModel)]="selection.userStudy">
-          <mat-option *ngFor="let us of (userStudies$ | async)" [value]="us._id">
-            {{us.name}}
+          <mat-option *ngFor="let us of userStudies$ | async" [value]="us._id">
+            {{ us.name }}
           </mat-option>
         </mat-select>
       </mat-form-field>
-      <mat-form-field  style="width: 80%; margin: 20px;">
+      <mat-form-field style="width: 80%; margin: 20px">
         <mat-label>Number of test persons</mat-label>
-        <input type="number" matInput placeholder="0" [(ngModel)]="selection.numberTestPersons">
+        <input
+          type="number"
+          matInput
+          placeholder="0"
+          [(ngModel)]="selection.numberTestPersons"
+        />
       </mat-form-field>
       <p>
-        Accepted: {{numAcceptedUser.get(selection.userStudy)}}/{{selection.numberTestPersons}}
+        Accepted: {{ numAcceptedUser.get(selection.userStudy) }}/{{
+          selection.numberTestPersons
+        }}
       </p>
-      <mat-progress-bar mode="determinate" [value]="(numAcceptedUser.get(selection.userStudy) / selection.numberTestPersons) * 100"></mat-progress-bar>
+      <mat-progress-bar
+        mode="determinate"
+        [value]="
+          (numAcceptedUser.get(selection.userStudy) /
+            selection.numberTestPersons) *
+          100
+        "
+      ></mat-progress-bar>
     </mat-card-content>
     <mat-card-actions align="end">
       <button mat-icon-button (click)="delete(selection)">

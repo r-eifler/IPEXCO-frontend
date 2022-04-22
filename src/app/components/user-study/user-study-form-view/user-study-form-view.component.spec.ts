@@ -1,16 +1,15 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
-import {UserStudyFormViewComponent} from './user-study-form-view.component';
+import { UserStudyFormViewComponent } from "./user-study-form-view.component";
 
-describe('UserStudyFormViewComponent', () => {
+describe("UserStudyFormViewComponent", () => {
   let component: UserStudyFormViewComponent;
   let fixture: ComponentFixture<UserStudyFormViewComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ UserStudyFormViewComponent ]
-    })
-    .compileComponents();
+      declarations: [UserStudyFormViewComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -19,7 +18,7 @@ describe('UserStudyFormViewComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

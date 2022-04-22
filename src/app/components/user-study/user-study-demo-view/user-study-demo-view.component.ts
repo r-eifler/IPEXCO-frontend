@@ -1,30 +1,39 @@
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
-import {Demo} from '../../../interface/demo';
-import {DemosService, RunningDemoService} from '../../../service/demo/demo-services';
-import {Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
-import {ActivatedRoute, Router} from '@angular/router';
-import {PLANNER_REDIRECT, QUESTION_REDIRECT} from '../../../app.tokens';
-import {IterationStepsService} from '../../../service/planner-runs/iteration-steps.service';
-import {PlannerService} from '../../../service/planner-runs/planner.service';
-import {UserStudyPlannerService} from '../../../service/planner-runs/user-study-planner.service';
-import {DemoRunService} from '../../../service/planner-runs/demo-planruns.service';
-import {PlanPropertyMapService} from '../../../service/plan-properties/plan-property-services';
-import {TimeLoggerService} from '../../../service/logger/time-logger.service';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from "@angular/core";
+import { Demo } from "../../../interface/demo";
+import {
+  DemosService,
+  RunningDemoService,
+} from "../../../service/demo/demo-services";
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
+import { ActivatedRoute, Router } from "@angular/router";
+import { PLANNER_REDIRECT, QUESTION_REDIRECT } from "../../../app.tokens";
+import { IterationStepsService } from "../../../service/planner-runs/iteration-steps.service";
+import { PlannerService } from "../../../service/planner-runs/planner.service";
+import { UserStudyPlannerService } from "../../../service/planner-runs/user-study-planner.service";
+import { DemoRunService } from "../../../service/planner-runs/demo-planruns.service";
+import { PlanPropertyMapService } from "../../../service/plan-properties/plan-property-services";
+import { TimeLoggerService } from "../../../service/logger/time-logger.service";
 
 @Component({
-  selector: 'app-user-study-demo-view',
-  templateUrl: './user-study-demo-view.component.html',
-  styleUrls: ['./user-study-demo-view.component.css'],
+  selector: "app-user-study-demo-view",
+  templateUrl: "./user-study-demo-view.component.html",
+  styleUrls: ["./user-study-demo-view.component.css"],
   providers: [
-    {provide: IterationStepsService, useClass: DemoRunService},
-    {provide: PlannerService, useClass: UserStudyPlannerService},
-    { provide: PLANNER_REDIRECT, useValue: '../' },
-    { provide: QUESTION_REDIRECT, useValue: '../../../' },
-  ]
+    { provide: IterationStepsService, useClass: DemoRunService },
+    { provide: PlannerService, useClass: UserStudyPlannerService },
+    { provide: PLANNER_REDIRECT, useValue: "../" },
+    { provide: QUESTION_REDIRECT, useValue: "../../../" },
+  ],
 })
 export class UserStudyDemoViewComponent implements OnInit, OnDestroy {
-
   private ngUnsubscribe: Subject<any> = new Subject();
 
   @Input() demoId: string;
@@ -38,21 +47,22 @@ export class UserStudyDemoViewComponent implements OnInit, OnDestroy {
     private timeLogger: TimeLoggerService,
     private demosService: DemosService,
     private propertiesService: PlanPropertyMapService,
-    private selectedDemoService: RunningDemoService,
-  ) { }
+    private selectedDemoService: RunningDemoService
+  ) {}
 
   ngOnInit(): void {
-    this.demosService.getObject(this.demoId)
+    this.demosService
+      .getObject(this.demoId)
       .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe(
-        demo => {
-          if (demo) {
-            this.selectedDemoService.saveObject(demo);
-            this.propertiesService.findCollection([{param: 'projectId', value: demo._id}]);
-            this.demo = demo;
-          }
+      .subscribe((demo) => {
+        if (demo) {
+          this.selectedDemoService.saveObject(demo);
+          this.propertiesService.findCollection([
+            { param: "projectId", value: demo._id },
+          ]);
+          this.demo = demo;
         }
-      );
+      });
   }
 
   nextInternalStep() {

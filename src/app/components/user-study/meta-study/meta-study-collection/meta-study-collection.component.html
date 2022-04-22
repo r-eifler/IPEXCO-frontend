@@ -1,17 +1,16 @@
 <div class="container-web">
-
   <mat-card *ngFor="let s of metaStudies$ | async">
     <mat-card-header>
       <div mat-card-avatar>
         <mat-icon>question_answer</mat-icon>
       </div>
       <mat-card-title>
-        {{s.name}}
+        {{ s.name }}
       </mat-card-title>
       <mat-card-subtitle>Meta Study</mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
-      <p>{{getStudyLink(s)}}</p>
+      <p>{{ getStudyLink(s) }}</p>
     </mat-card-content>
     <mat-card-actions align="end">
       <button mat-icon-button (click)="deleteMetaStudy(s)">

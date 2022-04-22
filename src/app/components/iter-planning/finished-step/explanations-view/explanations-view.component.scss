@@ -31,9 +31,7 @@
   overflow: auto;
 }
 
-
-.selec-one{
-
+.selec-one {
   grid-area: left;
 }
 
@@ -41,23 +39,21 @@
   visibility: hidden;
 }
 
-.conf-one{
+.conf-one {
   grid-area: right;
 }
 
 .conf-two {
   grid-area: left;
-
 }
 
-.relax-one{
+.relax-one {
   visibility: hidden;
 }
 
 .relax-two {
   grid-area: right;
 }
-
 
 .compute-container {
   padding: 50px;

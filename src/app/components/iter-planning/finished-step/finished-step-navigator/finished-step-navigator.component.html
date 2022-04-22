@@ -1,48 +1,59 @@
 <div class="tab-container">
-  <nav mat-tab-nav-bar style="width: 100%; height: 100%;" color="acccent">
-    <a mat-tab-link (click)="setTab(1)"
-      [active]="(showTab$ | async) == 1">
+  <nav mat-tab-nav-bar style="width: 100%; height: 100%" color="acccent">
+    <a mat-tab-link (click)="setTab(1)" [active]="(showTab$ | async) == 1">
       <!-- <mat-icon style="margin-right: 10px;">star_border</mat-icon> -->
       Overview
     </a>
-    <a mat-tab-link (click)="setTab(2)"
-      [active]="(showTab$ | async) == 2">
+    <a mat-tab-link (click)="setTab(2)" [active]="(showTab$ | async) == 2">
       <!-- <mat-icon style="margin-right: 10px;">star_border</mat-icon> -->
       Task Info
     </a>
-    <a mat-tab-link (click)="setTab(3)"
-      [active]="(showTab$ | async) == 3">
-      <mat-icon style="margin-right: 10px;">map</mat-icon>
+    <a mat-tab-link (click)="setTab(3)" [active]="(showTab$ | async) == 3">
+      <mat-icon style="margin-right: 10px">map</mat-icon>
       Plan
     </a>
-    <a mat-tab-link *ngIf="(step$ | async)?.plan" (click)="setTab(4)"
-      [active]="(showTab$ | async) == 4">
-      <mat-icon style="margin-right: 10px;">map</mat-icon>
+    <a
+      mat-tab-link
+      *ngIf="(step$ | async)?.plan"
+      (click)="setTab(4)"
+      [active]="(showTab$ | async) == 4"
+    >
+      <mat-icon style="margin-right: 10px">map</mat-icon>
       Advanced Plan
     </a>
-    <a mat-tab-link (click)="setTab(5)" *ngIf="showConflicts$ | async"
-      [active]="(showTab$ | async) == 5">
-      <mat-icon style="margin-right: 10px;">error</mat-icon>
+    <a
+      mat-tab-link
+      (click)="setTab(5)"
+      *ngIf="showConflicts$ | async"
+      [active]="(showTab$ | async) == 5"
+    >
+      <mat-icon style="margin-right: 10px">error</mat-icon>
       Conflicts
     </a>
   </nav>
   <div class="content-container" *ngIf="(showTab$ | async) == 1">
-    <app-iteration-step-overview style="height: 100%;overflow: auto;"></app-iteration-step-overview>
+    <app-iteration-step-overview
+      style="height: 100%; overflow: auto"
+    ></app-iteration-step-overview>
   </div>
 
   <div class="content-container" *ngIf="(showTab$ | async) == 2">
-   <h3>TODO</h3>
+    <h3>TODO</h3>
   </div>
 
   <div class="content-container" *ngIf="(showTab$ | async) == 3">
-      <app-plan-view style="height: 100%;overflow: auto;"></app-plan-view>
+    <app-plan-view style="height: 100%; overflow: auto"></app-plan-view>
   </div>
 
   <div class="content-container" *ngIf="(showTab$ | async) == 4">
-      <app-interactive-plan-view style="height: 100%;overflow: auto;"></app-interactive-plan-view>
+    <app-interactive-plan-view
+      style="height: 100%; overflow: auto"
+    ></app-interactive-plan-view>
   </div>
 
   <div class="content-container" *ngIf="(showTab$ | async) == 5">
-    <app-explanations-view style="height: 100%;overflow: auto;"></app-explanations-view>
+    <app-explanations-view
+      style="height: 100%; overflow: auto"
+    ></app-explanations-view>
   </div>
 </div>

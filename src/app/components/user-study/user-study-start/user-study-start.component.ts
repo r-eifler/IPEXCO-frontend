@@ -1,20 +1,22 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {RunningUserStudyService, UserStudiesService} from '../../../service/user-study/user-study-services';
-import {Subject} from 'rxjs';
-import {UserStudy} from '../../../interface/user-study/user-study';
-import {takeUntil} from 'rxjs/operators';
-import {ActivatedRoute, ParamMap, Router} from '@angular/router';
-import {USUser} from '../../../interface/user-study/user-study-user';
-import {UserStudyUserService} from '../../../service/user-study/user-study-user.service';
-import {AuthenticationService} from '../../../service/authentication/authentication.service';
+import { Component, OnDestroy, OnInit } from "@angular/core";
+import {
+  RunningUserStudyService,
+  UserStudiesService,
+} from "../../../service/user-study/user-study-services";
+import { Subject } from "rxjs";
+import { UserStudy } from "../../../interface/user-study/user-study";
+import { takeUntil } from "rxjs/operators";
+import { ActivatedRoute, ParamMap, Router } from "@angular/router";
+import { USUser } from "../../../interface/user-study/user-study-user";
+import { UserStudyUserService } from "../../../service/user-study/user-study-user.service";
+import { AuthenticationService } from "../../../service/authentication/authentication.service";
 
 @Component({
-  selector: 'app-user-study-start',
-  templateUrl: './user-study-start.component.html',
-  styleUrls: ['./user-study-start.component.css']
+  selector: "app-user-study-start",
+  templateUrl: "./user-study-start.component.html",
+  styleUrls: ["./user-study-start.component.css"],
 })
 export class UserStudyStartComponent implements OnInit, OnDestroy {
-
   private ngUnsubscribe: Subject<any> = new Subject();
 
   continue = false;
@@ -32,8 +34,7 @@ export class UserStudyStartComponent implements OnInit, OnDestroy {
     private userStudyUserService: UserStudyUserService,
     private userStudiesService: UserStudiesService,
     private selectedUserStudyService: RunningUserStudyService
-  ) {
-  }
+  ) {}
 
   ngOnInit(): void {
     this.userStudyUserService.removeToken(); // TODO only for testing
@@ -49,7 +50,7 @@ export class UserStudyStartComponent implements OnInit, OnDestroy {
     this.route.paramMap
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((params: ParamMap) => {
-        this.userStudyId = params.get('userStudyId');
+        this.userStudyId = params.get("userStudyId");
       });
   }
 
@@ -57,16 +58,16 @@ export class UserStudyStartComponent implements OnInit, OnDestroy {
     this.route.paramMap
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((params: ParamMap) => {
-        const userStudyId = params.get('userStudyId');
-        this.userStudiesService.getObject(userStudyId)
+        const userStudyId = params.get("userStudyId");
+        this.userStudiesService
+          .getObject(userStudyId)
           .pipe(takeUntil(this.ngUnsubscribe))
-          .subscribe(
-            study => {
-              if (study) {
-                this.userStudy = study;
-                this.selectedUserStudyService.saveObject(study);
-              }
-            });
+          .subscribe((study) => {
+            if (study) {
+              this.userStudy = study;
+              this.selectedUserStudyService.saveObject(study);
+            }
+          });
       });
   }
 
@@ -74,19 +75,17 @@ export class UserStudyStartComponent implements OnInit, OnDestroy {
     return new Promise<string[]>((resolve, reject) => {
       this.route.queryParams
         .pipe(takeUntil(this.ngUnsubscribe))
-        .subscribe(
-          params => {
-            const prolificPID = params.PROLIFIC_PID;
-            const studyID = params.STUDY_ID;
-            const sessionID = params.SESSION_ID;
-            if (prolificPID && studyID) {
-              resolve([prolificPID, studyID]);
-            } else {
-              // resolve(['000000000', '000000000']);
-              reject(null);
-            }
+        .subscribe((params) => {
+          const prolificPID = params.PROLIFIC_PID;
+          const studyID = params.STUDY_ID;
+          const sessionID = params.SESSION_ID;
+          if (prolificPID && studyID) {
+            resolve([prolificPID, studyID]);
+          } else {
+            // resolve(['000000000', '000000000']);
+            reject(null);
           }
-        );
+        });
     });
   }
 
@@ -95,7 +94,7 @@ export class UserStudyStartComponent implements OnInit, OnDestroy {
   }
 
   dateValid() {
-    if (! this.userStudy) {
+    if (!this.userStudy) {
       return false;
     }
     const date = new Date();
@@ -108,28 +107,39 @@ export class UserStudyStartComponent implements OnInit, OnDestroy {
 
   async onAgree() {
     if (this.authenticationService.loggedIn()) {
-      const prolificUser: USUser = {prolificId: '000000', userStudyExtId: '000000', userStudy: this.userStudyId};
+      const prolificUser: USUser = {
+        prolificId: "000000",
+        userStudyExtId: "000000",
+        userStudy: this.userStudyId,
+      };
 
-      this.userRegistered = await this.userStudyUserService.register(prolificUser);
+      this.userRegistered = await this.userStudyUserService.register(
+        prolificUser
+      );
       if (this.userRegistered) {
         this.initUserStudy();
       }
       return;
     }
     this.getProlificIDs().then(
-      async ids => {
-        const prolificUser: USUser = {prolificId: ids[0], userStudyExtId: ids[1], userStudy: this.userStudyId};
+      async (ids) => {
+        const prolificUser: USUser = {
+          prolificId: ids[0],
+          userStudyExtId: ids[1],
+          userStudy: this.userStudyId,
+        };
 
-        this.userRegistered = await this.userStudyUserService.register(prolificUser);
+        this.userRegistered = await this.userStudyUserService.register(
+          prolificUser
+        );
         if (this.userRegistered) {
           this.initUserStudy();
         }
       },
       () => {
         this.error = true;
-        this.errorMessage = 'No valid user study link.';
+        this.errorMessage = "No valid user study link.";
       }
     );
   }
-
 }

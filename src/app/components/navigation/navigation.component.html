@@ -1,55 +1,121 @@
-<base href="/">
+<base href="/" />
 
 <div class="main-container" [class.example-is-mobile]="isMobile">
   <mat-toolbar color="primary" class="main-toolbar">
-    <button mat-icon-button *ngIf="! userStudyPath() || userService.loggedIn()" (click)="sideNav.toggle()" [disabled]="! userService.loggedIn()">
+    <button
+      mat-icon-button
+      *ngIf="!userStudyPath() || userService.loggedIn()"
+      (click)="sideNav.toggle()"
+      [disabled]="!userService.loggedIn()"
+    >
       <mat-icon>menu</mat-icon>
     </button>
-    <img style="height: 80%; margin: auto 10px;" src="assets/iter_logo.svg">
+    <img style="height: 80%; margin: auto 10px" src="assets/iter_logo.svg" />
     <h1 class="example-app-name">Iterative Planning Tool</h1>
-    <span style="flex: 1 1 auto;"></span>
-    <button mat-icon-button *ngIf="! userStudyPath()" [matMenuTriggerFor]="userMenu">
+    <span style="flex: 1 1 auto"></span>
+    <button
+      mat-icon-button
+      *ngIf="!userStudyPath()"
+      [matMenuTriggerFor]="userMenu"
+    >
       <mat-icon style="font-size: 36px">account_circle</mat-icon>
     </button>
   </mat-toolbar>
 
   <mat-menu #userMenu="matMenu">
-    <button mat-menu-item *ngIf="! userService.loggedIn()" (click)="newLoginForm()">Login</button>
-    <button mat-menu-item *ngIf="userService.loggedIn()" (click)="logout()">Logout</button>
+    <button
+      mat-menu-item
+      *ngIf="!userService.loggedIn()"
+      (click)="newLoginForm()"
+    >
+      Login
+    </button>
+    <button mat-menu-item *ngIf="userService.loggedIn()" (click)="logout()">
+      Logout
+    </button>
   </mat-menu>
 
   <mat-sidenav-container class="sidenav-container">
-    <mat-sidenav #sideNav [mode]="isMobile ? 'over' : 'side'" [fixedInViewport]="isMobile" fixedTopGap="56" style="width: 200px;">
+    <mat-sidenav
+      #sideNav
+      [mode]="isMobile ? 'over' : 'side'"
+      [fixedInViewport]="isMobile"
+      fixedTopGap="56"
+      style="width: 200px"
+    >
       <mat-nav-list>
-        <a mat-list-item routerLink="/overview" routerLinkActive="mat-list-single-selected-option"  (click)="sideNav.toggle()">
-          <span class="material-icons" style="margin-right: 10px;">home</span>Home
+        <a
+          mat-list-item
+          routerLink="/overview"
+          routerLinkActive="mat-list-single-selected-option"
+          (click)="sideNav.toggle()"
+        >
+          <span class="material-icons" style="margin-right: 10px">home</span
+          >Home
         </a>
-        <a mat-list-item routerLink="/projects" routerLinkActive="mat-list-single-selected-option"  (click)="sideNav.toggle()">
-          <span class="material-icons" style="margin-right: 10px;">games</span>Projects
+        <a
+          mat-list-item
+          routerLink="/projects"
+          routerLinkActive="mat-list-single-selected-option"
+          (click)="sideNav.toggle()"
+        >
+          <span class="material-icons" style="margin-right: 10px">games</span
+          >Projects
         </a>
-        <a mat-list-item routerLink="/demos" routerLinkActive="mat-list-single-selected-option" (click)="sideNav.toggle()">
-          <span class="material-icons" style="margin-right: 10px;">send</span>Demos
+        <a
+          mat-list-item
+          routerLink="/demos"
+          routerLinkActive="mat-list-single-selected-option"
+          (click)="sideNav.toggle()"
+        >
+          <span class="material-icons" style="margin-right: 10px">send</span
+          >Demos
         </a>
-        <a mat-list-item routerLink="/user-studies" routerLinkActive="mat-list-single-selected-option" (click)="sideNav.toggle()">
-          <span class="material-icons" style="margin-right: 10px;">question_answer</span>User Studies
+        <a
+          mat-list-item
+          routerLink="/user-studies"
+          routerLinkActive="mat-list-single-selected-option"
+          (click)="sideNav.toggle()"
+        >
+          <span class="material-icons" style="margin-right: 10px"
+            >question_answer</span
+          >User Studies
         </a>
-        <a mat-list-item routerLink="/pddl-database" routerLinkActive="mat-list-single-selected-option" (click)="sideNav.toggle()">
-          <span class="material-icons" style="margin-right: 10px;">text_snippet</span>PDDL Database
+        <a
+          mat-list-item
+          routerLink="/pddl-database"
+          routerLinkActive="mat-list-single-selected-option"
+          (click)="sideNav.toggle()"
+        >
+          <span class="material-icons" style="margin-right: 10px"
+            >text_snippet</span
+          >PDDL Database
         </a>
-        <a mat-list-item routerLink="/info" routerLinkActive="mat-list-single-selected-option" (click)="sideNav.toggle()">
-          <span class="material-icons" style="margin-right: 10px;">info</span>Info
+        <a
+          mat-list-item
+          routerLink="/info"
+          routerLinkActive="mat-list-single-selected-option"
+          (click)="sideNav.toggle()"
+        >
+          <span class="material-icons" style="margin-right: 10px">info</span
+          >Info
         </a>
-        <a mat-list-item routerLink="/help" routerLinkActive="mat-list-single-selected-option" (click)="sideNav.toggle()">
-          <span class="material-icons" style="margin-right: 10px;">help</span>Help
+        <a
+          mat-list-item
+          routerLink="/help"
+          routerLinkActive="mat-list-single-selected-option"
+          (click)="sideNav.toggle()"
+        >
+          <span class="material-icons" style="margin-right: 10px">help</span
+          >Help
         </a>
       </mat-nav-list>
     </mat-sidenav>
 
-    <mat-sidenav-content >
-      <div style="height: calc(100vh - 50px); width: 100%;">
+    <mat-sidenav-content>
+      <div style="height: calc(100vh - 50px); width: 100%">
         <router-outlet></router-outlet>
       </div>
     </mat-sidenav-content>
   </mat-sidenav-container>
 </div>
-

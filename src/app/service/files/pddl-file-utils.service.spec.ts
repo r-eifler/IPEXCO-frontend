@@ -1,8 +1,8 @@
-import {TestBed} from '@angular/core/testing';
+import { TestBed } from "@angular/core/testing";
 
-import {PddlFileUtilsService} from './pddl-file-utils.service';
+import { PddlFileUtilsService } from "./pddl-file-utils.service";
 
-describe('FileContentService', () => {
+describe("FileContentService", () => {
   let service: PddlFileUtilsService;
 
   beforeEach(() => {
@@ -10,7 +10,7 @@ describe('FileContentService', () => {
     service = TestBed.inject(PddlFileUtilsService);
   });
 
-  it('should be created', () => {
+  it("should be created", () => {
     expect(service).toBeTruthy();
   });
 });

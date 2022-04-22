@@ -1,15 +1,21 @@
 /* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
 
-.mat-tab-body-wrapper{
+.mat-tab-body-wrapper {
   height: 100%;
   width: 100%;
 }
 
-.mat-card{
-  display:flex;
+.mat-card {
+  display: flex;
   flex-direction: column;
 }
 
@@ -17,7 +23,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   flex-shrink: 0;
 }
 
-.mat-card-content{
+.mat-card-content {
   flex-grow: 1;
   overflow: auto;
 }
@@ -37,5 +43,3 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .mat-horizontal-content-container {
   height: 100%;
 }
-
-

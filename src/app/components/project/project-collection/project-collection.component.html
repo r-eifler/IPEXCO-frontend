@@ -2,29 +2,39 @@
   <h1>Projects</h1>
 </div>
 
-<div [class.project-container-mobile]="isMobile" [class.project-container-web]="! isMobile">
-
+<div
+  [class.project-container-mobile]="isMobile"
+  [class.project-container-web]="!isMobile"
+>
   <ng-container *ngIf="(projects$ | async).length == 0">
-    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
-      <h1 >There are no projects available!</h1>
-      <h2>You can create a new project with the button in the bottom right corner.</h2>
+    <div
+      style="
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+      "
+    >
+      <h1>There are no projects available!</h1>
+      <h2>
+        You can create a new project with the button in the bottom right corner.
+      </h2>
     </div>
-
   </ng-container>
 
-
   <ng-container *ngIf="(projects$ | async).length > 0">
-    <mat-card *ngFor="let project of projects$ | async"
+    <mat-card
+      *ngFor="let project of projects$ | async"
       [class.project-card-mobile]="isMobile"
-      [class.project-card-web]="! isMobile"
-      [routerLink]="['/projects', project._id, 'overview']">
+      [class.project-card-web]="!isMobile"
+      [routerLink]="['/projects', project._id, 'overview']"
+    >
       <mat-card-header>
         <div mat-card-avatar>
-        <span class="material-icons">
-          games
-        </span>
+          <span class="material-icons"> games </span>
         </div>
-        <mat-card-title>{{project.name}}</mat-card-title>
+        <mat-card-title>{{ project.name }}</mat-card-title>
         <mat-card-subtitle>Project</mat-card-subtitle>
 
         <!-- <button mat-icon-button [matMenuTriggerFor]="menu" style="position: absolute; right: 5px">
@@ -44,12 +54,10 @@
             <span>delete</span>
           </button>
         </mat-menu> -->
-
-
       </mat-card-header>
       <mat-card-content>
         <p>
-          {{project.description}}
+          {{ project.description }}
         </p>
       </mat-card-content>
       <!-- <mat-card-actions style="display: flex; flex-direction: row">
@@ -60,7 +68,12 @@
     </mat-card>
   </ng-container>
 
-  <button mat-fab color="accent" class="add-button" (click)="new_project_form()">
+  <button
+    mat-fab
+    color="accent"
+    class="add-button"
+    (click)="new_project_form()"
+  >
     <mat-icon>add</mat-icon>
   </button>
 </div>

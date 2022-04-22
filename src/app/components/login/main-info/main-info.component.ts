@@ -1,19 +1,16 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit } from "@angular/core";
 
 @Component({
-  selector: 'app-main-info',
-  templateUrl: './main-info.component.html',
-  styleUrls: ['./main-info.component.css']
+  selector: "app-main-info",
+  templateUrl: "./main-info.component.html",
+  styleUrls: ["./main-info.component.css"],
 })
 export class MainInfoComponent implements OnInit {
+  constructor() {}
 
-  constructor() { }
-
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   goToLink(url: string) {
-    window.open(url, '_blank');
-}
-
+    window.open(url, "_blank");
+  }
 }

@@ -1,16 +1,15 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { FinishedStepNavigatorComponent } from './finished-step-navigator.component';
+import { FinishedStepNavigatorComponent } from "./finished-step-navigator.component";
 
-describe('FinishedStepNavigatorComponent', () => {
+describe("FinishedStepNavigatorComponent", () => {
   let component: FinishedStepNavigatorComponent;
   let fixture: ComponentFixture<FinishedStepNavigatorComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ FinishedStepNavigatorComponent ]
-    })
-    .compileComponents();
+      declarations: [FinishedStepNavigatorComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -19,7 +18,7 @@ describe('FinishedStepNavigatorComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

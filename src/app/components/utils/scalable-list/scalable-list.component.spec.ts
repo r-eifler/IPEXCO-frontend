@@ -1,16 +1,15 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { ScalableListComponent } from './scalable-list.component';
+import { ScalableListComponent } from "./scalable-list.component";
 
-describe('ScalableListComponent', () => {
+describe("ScalableListComponent", () => {
   let component: ScalableListComponent;
   let fixture: ComponentFixture<ScalableListComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ScalableListComponent ]
-    })
-    .compileComponents();
+      declarations: [ScalableListComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -19,7 +18,7 @@ describe('ScalableListComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

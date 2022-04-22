@@ -1,16 +1,15 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
-import {DomainSelectorComponent} from './domain-selector.component';
+import { DomainSelectorComponent } from "./domain-selector.component";
 
-describe('DomainSelectorComponent', () => {
+describe("DomainSelectorComponent", () => {
   let component: DomainSelectorComponent;
   let fixture: ComponentFixture<DomainSelectorComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DomainSelectorComponent ]
-    })
-    .compileComponents();
+      declarations: [DomainSelectorComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -19,7 +18,7 @@ describe('DomainSelectorComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

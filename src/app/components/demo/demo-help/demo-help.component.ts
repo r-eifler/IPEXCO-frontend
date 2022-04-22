@@ -1,19 +1,24 @@
-import { CurrentProjectService } from 'src/app/service/project/project-services';
-import {takeUntil} from 'rxjs/operators';
-import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
-import {ResponsiveService} from 'src/app/service/responsive/responsive.service';
-import {Subject} from 'rxjs';
-import { MatStepper } from '@angular/material/stepper';
-import {MatButton} from '@angular/material/button';
-import {TimeLoggerService} from '../../../service/logger/time-logger.service';
+import { CurrentProjectService } from "src/app/service/project/project-services";
+import { takeUntil } from "rxjs/operators";
+import {
+  Component,
+  EventEmitter,
+  OnDestroy,
+  OnInit,
+  Output,
+} from "@angular/core";
+import { ResponsiveService } from "src/app/service/responsive/responsive.service";
+import { Subject } from "rxjs";
+import { MatStepper } from "@angular/material/stepper";
+import { MatButton } from "@angular/material/button";
+import { TimeLoggerService } from "../../../service/logger/time-logger.service";
 
 @Component({
-  selector: 'app-demo-help',
-  templateUrl: './demo-help.component.html',
-  styleUrls: ['./demo-help.component.css']
+  selector: "app-demo-help",
+  templateUrl: "./demo-help.component.html",
+  styleUrls: ["./demo-help.component.css"],
 })
 export class DemoHelpComponent implements OnInit, OnDestroy {
-
   private loggerId: number;
 
   isMobile: boolean;
@@ -28,29 +33,29 @@ export class DemoHelpComponent implements OnInit, OnDestroy {
   constructor(
     private timeLogger: TimeLoggerService,
     private project: CurrentProjectService,
-    private responsiveService: ResponsiveService,
-  ) { }
+    private responsiveService: ResponsiveService
+  ) {}
 
   ngOnInit(): void {
-    this.loggerId = this.timeLogger.register('demo-help');
+    this.loggerId = this.timeLogger.register("demo-help");
 
-    this.responsiveService.getMobileStatus()
-    .pipe(takeUntil(this.ngUnsubscribe))
-    .subscribe( isMobile => {
-      this.isMobile = isMobile;
-    });
+    this.responsiveService
+      .getMobileStatus()
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe((isMobile) => {
+        this.isMobile = isMobile;
+      });
     this.responsiveService.checkWidth();
 
-    this.project.getSelectedObject()
+    this.project
+      .getSelectedObject()
       .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe(
-        project => {
-          if (project) {
-            this.canUseQuestions = project.settings.allowQuestions;
-            this.numSteps = project.settings.allowQuestions ? 4 : 2;
-          }
+      .subscribe((project) => {
+        if (project) {
+          this.canUseQuestions = project.settings.allowQuestions;
+          this.numSteps = project.settings.allowQuestions ? 4 : 2;
         }
-      );
+      });
   }
 
   ngOnDestroy(): void {
@@ -73,5 +78,4 @@ export class DemoHelpComponent implements OnInit, OnDestroy {
       this.seenEverything = true;
     }
   }
-
 }

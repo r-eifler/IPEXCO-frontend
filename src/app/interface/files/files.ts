@@ -7,11 +7,6 @@ export interface File {
   content: string;
 }
 
+export interface PDDLFile extends File {}
 
-export interface PDDLFile extends File {
-
-}
-
-export interface DomainSpecificationFile extends File {
-
-}
+export interface DomainSpecificationFile extends File {}

@@ -1,24 +1,29 @@
-import {PlanProperty} from '../../../../interface/plan-property/plan-property';
-import {takeUntil} from 'rxjs/operators';
-import {PlanPropertyMapService} from 'src/app/service/plan-properties/plan-property-services';
-import {combineLatest, Observable, Subject} from 'rxjs';
-import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
-import {DepExplanationRun, PlanRun} from 'src/app/interface/run';
-import {SelectedPlanRunService} from '../../../../service/planner-runs/selected-planrun.service';
-import {SelectedQuestionService} from '../../../../service/planner-runs/selected-question.service';
-import {TimeLoggerService} from '../../../../service/logger/time-logger.service';
+import { PlanProperty } from "../../../../interface/plan-property/plan-property";
+import { takeUntil } from "rxjs/operators";
+import { PlanPropertyMapService } from "src/app/service/plan-properties/plan-property-services";
+import { combineLatest, Observable, Subject } from "rxjs";
+import {
+  Component,
+  EventEmitter,
+  OnDestroy,
+  OnInit,
+  Output,
+} from "@angular/core";
+import { DepExplanationRun, PlanRun } from "src/app/interface/run";
+import { SelectedPlanRunService } from "../../../../service/planner-runs/selected-planrun.service";
+import { SelectedQuestionService } from "../../../../service/planner-runs/selected-question.service";
+import { TimeLoggerService } from "../../../../service/logger/time-logger.service";
 
 interface Answer {
   MUGS: string[];
 }
 
 @Component({
-  selector: 'app-explanation-view',
-  templateUrl: './answer-view.component.html',
-  styleUrls: ['./answer-view.component.css']
+  selector: "app-explanation-view",
+  templateUrl: "./answer-view.component.html",
+  styleUrls: ["./answer-view.component.css"],
 })
 export class AnswerViewComponent implements OnInit, OnDestroy {
-
   private loggerId: number;
   private ngUnsubscribe: Subject<any> = new Subject();
 
@@ -34,28 +39,27 @@ export class AnswerViewComponent implements OnInit, OnDestroy {
 
   constructor(
     private timeLogger: TimeLoggerService,
-    private  currentRunService: SelectedPlanRunService,
+    private currentRunService: SelectedPlanRunService,
     private currentQuestionService: SelectedQuestionService,
-    private planPropertiesService: PlanPropertyMapService) {
-
+    private planPropertiesService: PlanPropertyMapService
+  ) {
     this.currentRun$ = this.currentRunService.getSelectedObject();
     this.currentQuestion$ = this.currentQuestionService.getSelectedObject();
   }
 
   ngOnInit(): void {
-    this.loggerId = this.timeLogger.register('answer');
+    this.loggerId = this.timeLogger.register("answer");
 
-    combineLatest(
-      [
-        this.currentRun$,
-        this.currentQuestion$,
-        this.planPropertiesService.getMap()])
-    .pipe(takeUntil(this.ngUnsubscribe))
-    .subscribe(
-      ([planRun, expRun, planProperties]) => {
+    combineLatest([
+      this.currentRun$,
+      this.currentQuestion$,
+      this.planPropertiesService.getMap(),
+    ])
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(([planRun, expRun, planProperties]) => {
         if (planRun && expRun && planProperties) {
-          this.timeLogger.addInfo(this.loggerId, 'runId: ' + planRun._id);
-          this.timeLogger.addInfo(this.loggerId, 'expRunId: ' + expRun._id);
+          this.timeLogger.addInfo(this.loggerId, "runId: " + planRun._id);
+          this.timeLogger.addInfo(this.loggerId, "expRunId: " + expRun._id);
 
           // this.solvable = !!planRun.plan;
 
@@ -65,18 +69,21 @@ export class AnswerViewComponent implements OnInit, OnDestroy {
             this.filterMUGSUnsolvable(planRun, expRun, planProperties);
           }
         }
-      }
-    );
+      });
   }
 
-  private filterMUGSolvable(planRun: PlanRun, expRun: DepExplanationRun, planProperties: Map<string, PlanProperty>) {
+  private filterMUGSolvable(
+    planRun: PlanRun,
+    expRun: DepExplanationRun,
+    planProperties: Map<string, PlanProperty>
+  ) {
     this.filteredMUGSs = [];
     // console.log(expRun.result);
     // console.log('MUGS:');
     // console.log(expRun.mugs);
 
     // for (const entry of expRun.mugs) {
-      // TODO
+    // TODO
     //   const filteredMUGS: PlanProperty[] = [];
     //   let containsOnlyGlobalHardGoals = true;
     //   for (const fact of entry) {
@@ -101,7 +108,11 @@ export class AnswerViewComponent implements OnInit, OnDestroy {
     // console.log(this.filteredMUGSs);
   }
 
-  private filterMUGSUnsolvable(planRun: PlanRun, expRun: DepExplanationRun, planProperties: Map<string, PlanProperty>) {
+  private filterMUGSUnsolvable(
+    planRun: PlanRun,
+    expRun: DepExplanationRun,
+    planProperties: Map<string, PlanProperty>
+  ) {
     this.filteredMUGSs = [];
     // console.log('MUGS:');
     // console.log(expRun.mugs);
@@ -114,7 +125,7 @@ export class AnswerViewComponent implements OnInit, OnDestroy {
   }
 
   private isSubsetEq(a1: string[], a2: string[]): boolean {
-    return a1.every(p => a2.includes(p));
+    return a1.every((p) => a2.includes(p));
   }
 
   ngOnDestroy(): void {

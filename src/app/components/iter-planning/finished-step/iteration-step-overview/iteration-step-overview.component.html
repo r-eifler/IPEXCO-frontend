@@ -1,9 +1,13 @@
 <div class="main-container">
-  <div class="sub-container" >
-    <app-score-view class="sub-content" [step]="(step$ | async)"></app-score-view>
-    <app-selected-hard-goals class="sub-content" [step]="(step$ | async)"></app-selected-hard-goals>
+  <div class="sub-container">
+    <app-score-view class="sub-content" [step]="step$ | async"></app-score-view>
+    <app-selected-hard-goals
+      class="sub-content"
+      [step]="step$ | async"
+    ></app-selected-hard-goals>
   </div>
-  <app-selected-relaxations-view class="sub-content" [step]="(step$ | async)"></app-selected-relaxations-view>
+  <app-selected-relaxations-view
+    class="sub-content"
+    [step]="step$ | async"
+  ></app-selected-relaxations-view>
 </div>
-
-

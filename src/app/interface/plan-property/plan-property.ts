@@ -1,4 +1,3 @@
-
 export interface Action {
   _id?: string;
   name: string;
@@ -6,8 +5,8 @@ export interface Action {
 }
 
 export function toAction(as: string): Action {
-  const [name, ...params] = as.split(' ');
-  return {name, params};
+  const [name, ...params] = as.split(" ");
+  return { name, params };
 }
 
 export interface ActionSet {
@@ -17,9 +16,9 @@ export interface ActionSet {
 }
 
 export enum GoalType {
-  goalFact= 'G',
-  LTL = 'LTL',
-  AS = 'AS'
+  goalFact = "G",
+  LTL = "LTL",
+  AS = "AS",
 }
 
 export interface PlanProperty {
@@ -36,9 +35,12 @@ export interface PlanProperty {
   value: number;
 }
 
-
-export function getMaximalPlanValue(planProperties: Map<string,PlanProperty>): number {
+export function getMaximalPlanValue(
+  planProperties: Map<string, PlanProperty>
+): number {
   let sum = 0;
-  planProperties.forEach((pp, key) => {sum += pp.value});
+  planProperties.forEach((pp, key) => {
+    sum += pp.value;
+  });
   return sum;
 }

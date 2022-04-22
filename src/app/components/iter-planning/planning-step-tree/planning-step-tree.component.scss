@@ -1,4 +1,4 @@
-@import '../../../../variables.scss';
+@import "../../../../variables.scss";
 
 .tree-card {
   box-sizing: border-box;
@@ -30,11 +30,11 @@
 }
 
 .finished-icon {
-  color: $primary
+  color: $primary;
 }
 
 .noSolution-icon {
-  color: $accent
+  color: $accent;
 }
 
 .highlight {

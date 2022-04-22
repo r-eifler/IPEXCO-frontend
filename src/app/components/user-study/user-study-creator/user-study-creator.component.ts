@@ -1,14 +1,21 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Observable, Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
-import {ResponsiveService} from '../../../service/responsive/responsive.service';
-import {DemosService} from '../../../service/demo/demo-services';
-import {Demo} from '../../../interface/demo';
-import {DomSanitizer} from '@angular/platform-browser';
-import {UserStudy, UserStudyStep, UserStudyStepType} from '../../../interface/user-study/user-study';
-import {FormControl, FormGroup} from '@angular/forms';
-import {RunningUserStudyService, UserStudiesService} from '../../../service/user-study/user-study-services';
-import {ActivatedRoute, Router} from '@angular/router';
+import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Observable, Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
+import { ResponsiveService } from "../../../service/responsive/responsive.service";
+import { DemosService } from "../../../service/demo/demo-services";
+import { Demo } from "../../../interface/demo";
+import { DomSanitizer } from "@angular/platform-browser";
+import {
+  UserStudy,
+  UserStudyStep,
+  UserStudyStepType,
+} from "../../../interface/user-study/user-study";
+import { FormControl, FormGroup } from "@angular/forms";
+import {
+  RunningUserStudyService,
+  UserStudiesService,
+} from "../../../service/user-study/user-study-services";
+import { ActivatedRoute, Router } from "@angular/router";
 
 interface Part {
   index: number;
@@ -20,12 +27,11 @@ interface Part {
 }
 
 @Component({
-  selector: 'app-user-study-creator',
-  templateUrl: './user-study-creator.component.html',
-  styleUrls: ['./user-study-creator.component.css']
+  selector: "app-user-study-creator",
+  templateUrl: "./user-study-creator.component.html",
+  styleUrls: ["./user-study-creator.component.css"],
 })
 export class UserStudyCreatorComponent implements OnInit, OnDestroy {
-
   private ngUnsubscribe: Subject<any> = new Subject();
   isMobile: boolean;
 
@@ -47,7 +53,7 @@ export class UserStudyCreatorComponent implements OnInit, OnDestroy {
     private demosService: DemosService,
     private responsiveService: ResponsiveService,
     private route: ActivatedRoute,
-    private router: Router,
+    private router: Router
   ) {
     demosService.findCollection();
     this.demos$ = demosService.getList();
@@ -60,53 +66,71 @@ export class UserStudyCreatorComponent implements OnInit, OnDestroy {
       redirectUrl: new FormControl(),
     });
 
-    this.selectedUserStudyService.getSelectedObject()
+    this.selectedUserStudyService
+      .getSelectedObject()
       .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe(
-        study => {
-          if (study) {
-            this.userStudy = study;
-            let index = 0;
-            for (const step of this.userStudy.steps) {
-              const nextStep: Part = {type: step.type, index: index++, active: false};
-              switch (step.type) {
-                case UserStudyStepType.description:
-                  nextStep.content = step.content;
-                  break;
-                case UserStudyStepType.form:
-                  nextStep.url = step.content;
-                  break;
-                case UserStudyStepType.demo:
-                  demosService.getObject(step.content)
-                    .subscribe(d => nextStep.demo = d);
-                  break;
-              }
-              this.parts.push(nextStep);
-              this.userStudyForm.disable();
-            }
-            this.userStudyForm.controls.name.setValue(this.userStudy.name);
-            this.userStudyForm.controls.description.setValue(this.userStudy.description);
-            this.userStudyForm.controls.startDate.setValue(this.userStudy.startDate);
-            this.userStudyForm.controls.endDate.setValue(this.userStudy.endDate);
-            this.userStudyForm.controls.redirectUrl.setValue(this.userStudy.redirectUrl);
-          } else {
-            this.userStudy = {name: '', description: '', user: null, available: false, redirectUrl: ''};
-            const firstPart: Part = {
-              index: 0,
-              active: true,
-              type: UserStudyStepType.description,
+      .subscribe((study) => {
+        if (study) {
+          this.userStudy = study;
+          let index = 0;
+          for (const step of this.userStudy.steps) {
+            const nextStep: Part = {
+              type: step.type,
+              index: index++,
+              active: false,
             };
-            this.parts.push(firstPart);
-            this.edit = true;
-            this.userStudyForm.enable();
+            switch (step.type) {
+              case UserStudyStepType.description:
+                nextStep.content = step.content;
+                break;
+              case UserStudyStepType.form:
+                nextStep.url = step.content;
+                break;
+              case UserStudyStepType.demo:
+                demosService
+                  .getObject(step.content)
+                  .subscribe((d) => (nextStep.demo = d));
+                break;
+            }
+            this.parts.push(nextStep);
+            this.userStudyForm.disable();
           }
-        });
+          this.userStudyForm.controls.name.setValue(this.userStudy.name);
+          this.userStudyForm.controls.description.setValue(
+            this.userStudy.description
+          );
+          this.userStudyForm.controls.startDate.setValue(
+            this.userStudy.startDate
+          );
+          this.userStudyForm.controls.endDate.setValue(this.userStudy.endDate);
+          this.userStudyForm.controls.redirectUrl.setValue(
+            this.userStudy.redirectUrl
+          );
+        } else {
+          this.userStudy = {
+            name: "",
+            description: "",
+            user: null,
+            available: false,
+            redirectUrl: "",
+          };
+          const firstPart: Part = {
+            index: 0,
+            active: true,
+            type: UserStudyStepType.description,
+          };
+          this.parts.push(firstPart);
+          this.edit = true;
+          this.userStudyForm.enable();
+        }
+      });
   }
 
   ngOnInit(): void {
-    this.responsiveService.getMobileStatus()
+    this.responsiveService
+      .getMobileStatus()
       .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe( isMobile => {
+      .subscribe((isMobile) => {
         this.isMobile = isMobile;
       });
     this.responsiveService.checkWidth();
@@ -135,7 +159,10 @@ export class UserStudyCreatorComponent implements OnInit, OnDestroy {
   }
 
   deletePart(part: Part) {
-    this.parts = this.parts.map(p => {p.index = p.index > part.index ? p.index - 1 : p.index; return p; } );
+    this.parts = this.parts.map((p) => {
+      p.index = p.index > part.index ? p.index - 1 : p.index;
+      return p;
+    });
     this.parts.splice(part.index, 1);
   }
 
@@ -156,19 +183,27 @@ export class UserStudyCreatorComponent implements OnInit, OnDestroy {
   }
 
   activate(event, index: number) {
-    if (! this.edit) {
+    if (!this.edit) {
       return;
     }
-    this.parts = this.parts.map(p => {p.active = p.index === index; return p; } );
+    this.parts = this.parts.map((p) => {
+      p.active = p.index === index;
+      return p;
+    });
     event?.stopPropagation();
   }
 
   deactivateAll() {
-    this.parts = this.parts.map(p => {p.active = false; return p; } );
+    this.parts = this.parts.map((p) => {
+      p.active = false;
+      return p;
+    });
   }
 
   makeTrustedURL(url: string) {
-    return this.domSanitizer.bypassSecurityTrustResourceUrl(url + '?embedded=true');
+    return this.domSanitizer.bypassSecurityTrustResourceUrl(
+      url + "?embedded=true"
+    );
   }
 
   async saveUserStudy() {
@@ -193,11 +228,11 @@ export class UserStudyCreatorComponent implements OnInit, OnDestroy {
     //       nextStep.content = part.demo._id;
     //       break;
     //   }
-      // this.userStudy.steps.push(nextStep);
+    // this.userStudy.steps.push(nextStep);
     // }
 
     this.userStudiesService.saveObject(this.userStudy);
 
-    await this.router.navigate(['/user-studies'], { relativeTo: this.route });
+    await this.router.navigate(["/user-studies"], { relativeTo: this.route });
   }
 }

@@ -1,8 +1,8 @@
-import {TestBed} from '@angular/core/testing';
+import { TestBed } from "@angular/core/testing";
 
-import {ResponsiveService} from './responsive.service';
+import { ResponsiveService } from "./responsive.service";
 
-describe('ResponsiveService', () => {
+describe("ResponsiveService", () => {
   let service: ResponsiveService;
 
   beforeEach(() => {
@@ -10,7 +10,7 @@ describe('ResponsiveService', () => {
     service = TestBed.inject(ResponsiveService);
   });
 
-  it('should be created', () => {
+  it("should be created", () => {
     expect(service).toBeTruthy();
   });
 });

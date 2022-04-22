@@ -1,19 +1,27 @@
 <div class="container">
   <div><span class="axis-label">cost</span></div>
   <div class="cost-box">
-    <span *ngFor="let v of (values$ | async); let i = index" class="cost" [style.left]="((i / ((values$ | async).length - 1)) * 100) + '%'">
-      {{v.value}}
+    <span
+      *ngFor="let v of values$ | async; let i = index"
+      class="cost"
+      [style.left]="(i / ((values$ | async).length - 1)) * 100 + '%'"
+    >
+      {{ v.value }}
     </span>
   </div>
   <div></div>
   <div class="bar-container">
     <div class="back"></div>
-    <div class=bar [style.left.%]="0" [style.width.%]="value$ | async"></div>
+    <div class="bar" [style.left.%]="0" [style.width.%]="value$ | async"></div>
   </div>
   <div><span class="axis-label">value</span></div>
   <div class="label-box">
-      <span *ngFor="let v of (values$ | async); let i = index" class="label" [style.left]="((i / ((values$ | async).length - 1)) * 100) + '%'">
-        {{v.display}}
-      </span>
+    <span
+      *ngFor="let v of values$ | async; let i = index"
+      class="label"
+      [style.left]="(i / ((values$ | async).length - 1)) * 100 + '%'"
+    >
+      {{ v.display }}
+    </span>
   </div>
 </div>

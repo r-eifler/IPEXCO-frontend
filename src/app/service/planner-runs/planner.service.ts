@@ -1,34 +1,33 @@
-import { IterationStepsService } from 'src/app/service/planner-runs/iteration-steps.service';
-import { PlanProperty } from './../../interface/plan-property/plan-property';
+import { IterationStepsService } from "src/app/service/planner-runs/iteration-steps.service";
+import { PlanProperty } from "./../../interface/plan-property/plan-property";
 
-import { SelectedIterationStepService } from './selected-iteration-step.service';
-import { IterationStep, RunStatus } from 'src/app/interface/run';
-import { EDIT} from '../../store/generic-list.store';
-import { Injectable} from '@angular/core';
-import {DepExplanationRun, PlanRun} from '../../interface/run';
-import {HttpClient, HttpParams} from '@angular/common/http';
-import {IterationStepsStore} from '../../store/stores.store';
-import {environment} from '../../../environments/environment';
-import {IHTTPData} from '../../interface/http-data.interface';
-import {BehaviorSubject} from 'rxjs';
+import { SelectedIterationStepService } from "./selected-iteration-step.service";
+import { IterationStep, RunStatus } from "src/app/interface/run";
+import { EDIT } from "../../store/generic-list.store";
+import { Injectable } from "@angular/core";
+import { DepExplanationRun, PlanRun } from "../../interface/run";
+import { HttpClient, HttpParams } from "@angular/common/http";
+import { IterationStepsStore } from "../../store/stores.store";
+import { environment } from "../../../environments/environment";
+import { IHTTPData } from "../../interface/http-data.interface";
+import { BehaviorSubject } from "rxjs";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
-export class PlannerService{
-
-  BASE_URL : string;
-  myBaseURL = environment.apiURL + 'planner/';
+export class PlannerService {
+  BASE_URL: string;
+  myBaseURL = environment.apiURL + "planner/";
 
   // Indicates if the Planner is currently busy and it is possible to request an other plan.
   plannerBusy = new BehaviorSubject(false);
 
   constructor(
-      protected http: HttpClient,
-      protected selectedStepService: SelectedIterationStepService,
-      protected iterationStepsService: IterationStepsService
+    protected http: HttpClient,
+    protected selectedStepService: SelectedIterationStepService,
+    protected iterationStepsService: IterationStepsService
   ) {
-    this.BASE_URL = environment.apiURL + 'planner/';
+    this.BASE_URL = environment.apiURL + "planner/";
   }
 
   isPlannerBusy(): BehaviorSubject<boolean> {
@@ -40,16 +39,21 @@ export class PlannerService{
 
     console.log("compute plan");
     let httpParams = new HttpParams();
-    httpParams = httpParams.set('save', String(save));
+    httpParams = httpParams.set("save", String(save));
 
-    const planRun: PlanRun = {name: 'Plan ', status: RunStatus.pending};
+    const planRun: PlanRun = { name: "Plan ", status: RunStatus.pending };
     step.plan = planRun;
     this.selectedStepService.saveObject(step);
 
-    this.BASE_URL = this.myBaseURL + 'plan';
-    this.http.post<IHTTPData<IterationStep>>(this.BASE_URL, {data: step}, {params: httpParams})
-      .subscribe(httpData => {
-        let stepBack = httpData.data
+    this.BASE_URL = this.myBaseURL + "plan";
+    this.http
+      .post<IHTTPData<IterationStep>>(
+        this.BASE_URL,
+        { data: step },
+        { params: httpParams }
+      )
+      .subscribe((httpData) => {
+        let stepBack = httpData.data;
         stepBack._id = step._id;
         console.log("Plan Computed");
         console.log(step);
@@ -59,17 +63,27 @@ export class PlannerService{
       });
   }
 
-
-  computeMUGSfromQuestion(step: IterationStep, question: string[]): DepExplanationRun {
+  computeMUGSfromQuestion(
+    step: IterationStep,
+    question: string[]
+  ): DepExplanationRun {
     this.plannerBusy.next(true);
-    const url = this.myBaseURL + 'mugs/' + step._id;
+    const url = this.myBaseURL + "mugs/" + step._id;
 
-    let softGoals : string[] = step.hardGoals.filter(pp => ! question.some(h => h == pp));
+    let softGoals: string[] = step.hardGoals.filter(
+      (pp) => !question.some((h) => h == pp)
+    );
 
-    let expRun : DepExplanationRun = {name: "DExpQ", status: RunStatus.pending, hardGoals: question, softGoals};
+    let expRun: DepExplanationRun = {
+      name: "DExpQ",
+      status: RunStatus.pending,
+      hardGoals: question,
+      softGoals,
+    };
 
-    this.http.post<IHTTPData<IterationStep>>(url, expRun)
-      .subscribe(httpData => {
+    this.http
+      .post<IHTTPData<IterationStep>>(url, expRun)
+      .subscribe((httpData) => {
         let step = httpData.data;
         this.iterationStepsService.saveObject(step);
         this.selectedStepService.updateIfSame(step);
@@ -81,13 +95,19 @@ export class PlannerService{
 
   computeMUGS(step: IterationStep): DepExplanationRun {
     this.plannerBusy.next(true);
-    const url = this.myBaseURL + 'mugs/' + step._id;
+    const url = this.myBaseURL + "mugs/" + step._id;
 
-    let expRun : DepExplanationRun = {name: "DExp", status: RunStatus.pending, hardGoals: [], softGoals: [...step.hardGoals, ...step.softGoals]};
+    let expRun: DepExplanationRun = {
+      name: "DExp",
+      status: RunStatus.pending,
+      hardGoals: [],
+      softGoals: [...step.hardGoals, ...step.softGoals],
+    };
     console.log(expRun);
 
-    this.http.post<IHTTPData<IterationStep>>(url, expRun)
-      .subscribe(httpData => {
+    this.http
+      .post<IHTTPData<IterationStep>>(url, expRun)
+      .subscribe((httpData) => {
         let step = httpData.data;
         this.iterationStepsService.saveObject(step);
         this.selectedStepService.updateIfSame(step);
@@ -99,17 +119,13 @@ export class PlannerService{
 
   computeRelaxExplanations(step: IterationStep) {
     this.plannerBusy.next(true);
-    const url = this.myBaseURL + 'relax_exp/' + step._id;
+    const url = this.myBaseURL + "relax_exp/" + step._id;
 
-    this.http.post<IHTTPData<IterationStep>>(url, {})
-      .subscribe(httpData => {
-        let step = httpData.data;
-        this.iterationStepsService.saveObject(step);
-        this.selectedStepService.updateIfSame(step);
-        this.plannerBusy.next(false);
-      });
-
+    this.http.post<IHTTPData<IterationStep>>(url, {}).subscribe((httpData) => {
+      let step = httpData.data;
+      this.iterationStepsService.saveObject(step);
+      this.selectedStepService.updateIfSame(step);
+      this.plannerBusy.next(false);
+    });
   }
-
 }
-

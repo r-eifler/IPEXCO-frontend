@@ -1,4 +1,4 @@
-@import '../../../../variables.scss';
+@import "../../../../variables.scss";
 
 .main-container {
   box-sizing: border-box;
@@ -7,7 +7,7 @@
   padding: 10px;
   display: grid;
   grid-template-columns: 1fr 100px;
-  column-gap: 10px
+  column-gap: 10px;
 }
 
 .basic-card {
@@ -30,7 +30,7 @@
   row-gap: 10px;
 }
 
-.flex-container{
+.flex-container {
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
@@ -82,4 +82,3 @@ h2 {
   width: 100%;
   margin-bottom: 10px;
 }
-

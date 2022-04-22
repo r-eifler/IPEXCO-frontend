@@ -1,16 +1,15 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { StudySelectionRedirectionComponent } from './study-selection-redirection.component';
+import { StudySelectionRedirectionComponent } from "./study-selection-redirection.component";
 
-describe('StudySelectionRedirectionComponent', () => {
+describe("StudySelectionRedirectionComponent", () => {
   let component: StudySelectionRedirectionComponent;
   let fixture: ComponentFixture<StudySelectionRedirectionComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ StudySelectionRedirectionComponent ]
-    })
-    .compileComponents();
+      declarations: [StudySelectionRedirectionComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -19,7 +18,7 @@ describe('StudySelectionRedirectionComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

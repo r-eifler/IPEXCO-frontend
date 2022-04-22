@@ -6,19 +6,23 @@
     <mat-card-content>
       <ng-container *ngIf="(hardGoals$ | async)?.length > 0">
         <div>
-          <div *ngFor="let pp of (hardGoals$ | async); last as last">
+          <div *ngFor="let pp of hardGoals$ | async; last as last">
             <div class="list-item-container">
               <mat-icon matListIcon *ngIf="pp.globalHardGoal">star</mat-icon>
-              <mat-icon matListIcon *ngIf="! pp.globalHardGoal">star_border</mat-icon>
+              <mat-icon matListIcon *ngIf="!pp.globalHardGoal"
+                >star_border</mat-icon
+              >
               <div class="list-item-text">
-                <span> {{pp.naturalLanguageDescription}} </span>
-                <span> Utility: {{pp.value}} </span>
+                <span> {{ pp.naturalLanguageDescription }} </span>
+                <span> Utility: {{ pp.value }} </span>
               </div>
               <div class="list-item-buttons">
-                <button mat-icon-button
-                  *ngIf="! pp.globalHardGoal"
+                <button
+                  mat-icon-button
+                  *ngIf="!pp.globalHardGoal"
                   (click)="deselectPP(pp)"
-                  class="list-item-button">
+                  class="list-item-button"
+                >
                   <mat-icon>remove</mat-icon>
                 </button>
               </div>
@@ -26,11 +30,9 @@
             <mat-divider inset="true" *ngIf="!last"></mat-divider>
           </div>
         </div>
-        </ng-container>
-        <p *ngIf="(hardGoals$| async)?.length == 0">
-          No hard goals selected.
-        </p>
-      </mat-card-content>
+      </ng-container>
+      <p *ngIf="(hardGoals$ | async)?.length == 0">No hard goals selected.</p>
+    </mat-card-content>
   </mat-card>
 
   <mat-card class="main-card">
@@ -40,18 +42,22 @@
     <mat-card-content>
       <ng-container *ngIf="(possiblePP$ | async)?.length > 0">
         <div>
-          <div *ngFor="let pp of (possiblePP$ | async); last as last">
+          <div *ngFor="let pp of possiblePP$ | async; last as last">
             <div class="list-item-container">
               <mat-icon matListIcon *ngIf="pp.globalHardGoal">star</mat-icon>
-              <mat-icon matListIcon *ngIf="! pp.globalHardGoal">star_border</mat-icon>
+              <mat-icon matListIcon *ngIf="!pp.globalHardGoal"
+                >star_border</mat-icon
+              >
               <div class="list-item-text">
-                <span> {{pp.naturalLanguageDescription}} </span>
-                <span> Utility: {{pp.value}} </span>
+                <span> {{ pp.naturalLanguageDescription }} </span>
+                <span> Utility: {{ pp.value }} </span>
               </div>
               <div class="list-item-buttons">
-                <button mat-icon-button
+                <button
+                  mat-icon-button
                   (click)="selectPP(pp)"
-                  class="list-item-button">
+                  class="list-item-button"
+                >
                   <mat-icon>add</mat-icon>
                 </button>
               </div>
@@ -59,12 +65,10 @@
             <mat-divider inset="true" *ngIf="!last"></mat-divider>
           </div>
         </div>
-        </ng-container>
-        <p *ngIf="(possiblePP$ | async)?.length == 0">
-          No other preferences available.
-        </p>
-      </mat-card-content>
+      </ng-container>
+      <p *ngIf="(possiblePP$ | async)?.length == 0">
+        No other preferences available.
+      </p>
+    </mat-card-content>
   </mat-card>
-
 </div>
-

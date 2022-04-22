@@ -9,7 +9,6 @@ export interface FinishedStepInterfaceStatus {
   dependencies: PPDependencies;
 }
 
-
 export interface NewStepInterfaceStatus {
   _id: string;
   stepperStep: number;

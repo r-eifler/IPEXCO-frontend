@@ -3,5 +3,5 @@ export interface ViewSettings {
 }
 
 export const defaultViewSettings: ViewSettings = {
-  expertView: false
+  expertView: false,
 };

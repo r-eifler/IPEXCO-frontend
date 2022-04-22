@@ -10,10 +10,10 @@
   height: 100%;
 }
 
-.mat-horizontal-content-container{
+.mat-horizontal-content-container {
   height: 100%;
 }
-.mat-horizontal-stepper-content{
+.mat-horizontal-stepper-content {
   height: 100%;
   display: flex;
 }
@@ -30,7 +30,7 @@ mat-step {
   padding: 10px;
   display: grid;
   grid-template-rows: 80px 1fr 50px;
-  column-gap: 10px
+  column-gap: 10px;
 }
 
 .bottom-container {
@@ -43,7 +43,6 @@ mat-step {
   column-gap: 10px;
   overflow: auto;
 }
-
 
 .predicate-collection-card {
   box-sizing: border-box;
@@ -60,7 +59,6 @@ mat-step {
   overflow: auto;
 }
 
-
 .relaxation-container {
   box-sizing: border-box;
   padding: 20px;
@@ -70,7 +68,6 @@ mat-step {
   display: flex;
   flex-direction: row;
 }
-
 
 .relaxation-level-container {
   display: grid;
@@ -83,13 +80,13 @@ mat-step {
   margin-left: 20px;
 }
 
-.fact-container{
+.fact-container {
   display: flex;
   flex-direction: row;
   justify-content: start;
 }
 
-.action-container{
+.action-container {
   display: flex;
   flex-direction: row;
   justify-content: end;
@@ -109,7 +106,7 @@ mat-step {
   min-width: 0;
 }
 
-.init-selection-list{
+.init-selection-list {
   min-height: 200px;
 }
 
@@ -141,7 +138,7 @@ mat-step {
 }
 
 .mat-column-value {
- padding-left: 20px;
+  padding-left: 20px;
 }
 
 .value-input {

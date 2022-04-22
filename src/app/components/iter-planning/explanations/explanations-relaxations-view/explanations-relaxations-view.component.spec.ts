@@ -1,16 +1,15 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { ExplanationsRelaxationsViewComponent } from './explanations-relaxations-view.component';
+import { ExplanationsRelaxationsViewComponent } from "./explanations-relaxations-view.component";
 
-describe('ExplanationsRelaxationsViewComponent', () => {
+describe("ExplanationsRelaxationsViewComponent", () => {
   let component: ExplanationsRelaxationsViewComponent;
   let fixture: ComponentFixture<ExplanationsRelaxationsViewComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ExplanationsRelaxationsViewComponent ]
-    })
-    .compileComponents();
+      declarations: [ExplanationsRelaxationsViewComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -19,7 +18,7 @@ describe('ExplanationsRelaxationsViewComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

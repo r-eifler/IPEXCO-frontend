@@ -1,11 +1,17 @@
-import {Injectable} from '@angular/core';
-import {HttpClient, HttpParams} from '@angular/common/http';
-import {ADD, CLEAR, EDIT, ListStore, LOAD, REMOVE} from '../../store/generic-list.store';
-import {IHTTPData} from '../../interface/http-data.interface';
-import {environment} from '../../../environments/environment';
-import {BehaviorSubject, Observable, of} from 'rxjs';
-import {map} from 'rxjs/operators';
-
+import { Injectable } from "@angular/core";
+import { HttpClient, HttpParams } from "@angular/common/http";
+import {
+  ADD,
+  CLEAR,
+  EDIT,
+  ListStore,
+  LOAD,
+  REMOVE,
+} from "../../store/generic-list.store";
+import { IHTTPData } from "../../interface/http-data.interface";
+import { environment } from "../../../environments/environment";
+import { BehaviorSubject, Observable, of } from "rxjs";
+import { map } from "rxjs/operators";
 
 type Id = string | number;
 
@@ -14,10 +20,9 @@ export interface Identifiable {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class LocalObjectCollectionService<T extends Identifiable> {
-
   protected readonly collection$: BehaviorSubject<T[]>;
 
   http: HttpClient;
@@ -33,8 +38,8 @@ export class LocalObjectCollectionService<T extends Identifiable> {
   }
 
   getObject(id: number | string): Observable<T> {
-    if (! id ) {
-      throw  new Error('Undefined ID');
+    if (!id) {
+      throw new Error("Undefined ID");
     }
     const o = this.existsObjectInStore(id);
     if (o) {
@@ -53,22 +58,21 @@ export class LocalObjectCollectionService<T extends Identifiable> {
   }
 
   saveObject(object: T) {
-
-    if (this.collection$.value.find(e => e._id == object._id)) {
-      const action = {type: EDIT, data: object};
+    if (this.collection$.value.find((e) => e._id == object._id)) {
+      const action = { type: EDIT, data: object };
       this.listStore.dispatch(action);
       return;
     }
 
-    const action = {type: ADD, data: object};
+    const action = { type: ADD, data: object };
     this.listStore.dispatch(action);
   }
 
   deleteObject(object: T) {
-    this.listStore.dispatch({type: REMOVE, data: object});
+    this.listStore.dispatch({ type: REMOVE, data: object });
   }
 
   clear() {
-    this.listStore.dispatch({type: CLEAR, data: null});
+    this.listStore.dispatch({ type: CLEAR, data: null });
   }
 }

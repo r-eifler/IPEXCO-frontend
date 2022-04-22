@@ -1,16 +1,15 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
-import {NomysteryTaskViewComponent} from './nomystery-task-view.component';
+import { NomysteryTaskViewComponent } from "./nomystery-task-view.component";
 
-describe('NomysteryTaskViewComponent', () => {
+describe("NomysteryTaskViewComponent", () => {
   let component: NomysteryTaskViewComponent;
   let fixture: ComponentFixture<NomysteryTaskViewComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ NomysteryTaskViewComponent ]
-    })
-    .compileComponents();
+      declarations: [NomysteryTaskViewComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -19,7 +18,7 @@ describe('NomysteryTaskViewComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

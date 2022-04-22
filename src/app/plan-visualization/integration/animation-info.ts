@@ -1,6 +1,5 @@
-import {Task} from '../plugins/task';
+import { Task } from "../plugins/task";
 
 export class AnimationInfo {
-
   constructor(protected task: Task) {}
 }

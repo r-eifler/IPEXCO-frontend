@@ -1,16 +1,15 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { MetaStudyCollectionComponent } from './meta-study-collection.component';
+import { MetaStudyCollectionComponent } from "./meta-study-collection.component";
 
-describe('MetaStudyCollectionComponent', () => {
+describe("MetaStudyCollectionComponent", () => {
   let component: MetaStudyCollectionComponent;
   let fixture: ComponentFixture<MetaStudyCollectionComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ MetaStudyCollectionComponent ]
-    })
-    .compileComponents();
+      declarations: [MetaStudyCollectionComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -19,7 +18,7 @@ describe('MetaStudyCollectionComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

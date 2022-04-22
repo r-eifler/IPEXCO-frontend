@@ -1,35 +1,46 @@
-import { ExecutionSettings } from 'src/app/interface/settings/execution-settings';
-import { DemoFinishedComponent } from './../demo-finished/demo-finished.component';
-import { AfterViewInit, Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
-import { Demo } from 'src/app/interface/demo';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { IterationStep, PlanRun, RunStatus } from 'src/app/interface/run';
-import { RunningDemoService } from 'src/app/service/demo/demo-services';
-import { CurrentProjectService } from 'src/app/service/project/project-services';
-import { takeUntil, filter, map } from 'rxjs/operators';
-import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { TimeLoggerService } from '../../../service/logger/time-logger.service';
-import { PlanProperty } from '../../../interface/plan-property/plan-property';
-import { DemoHelpDialogComponent } from '../demo-help-dialog/demo-help-dialog.component';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { CurrencyPipe } from '@angular/common';
+import { ExecutionSettings } from "src/app/interface/settings/execution-settings";
+import { DemoFinishedComponent } from "./../demo-finished/demo-finished.component";
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  EventEmitter,
+  OnDestroy,
+  OnInit,
+  Output,
+  ViewChild,
+} from "@angular/core";
+import { Demo } from "src/app/interface/demo";
+import { BehaviorSubject, Observable, Subject } from "rxjs";
+import { IterationStep, PlanRun, RunStatus } from "src/app/interface/run";
+import { RunningDemoService } from "src/app/service/demo/demo-services";
+import { CurrentProjectService } from "src/app/service/project/project-services";
+import { takeUntil, filter, map } from "rxjs/operators";
+import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
+import { TimeLoggerService } from "../../../service/logger/time-logger.service";
+import { PlanProperty } from "../../../interface/plan-property/plan-property";
+import { DemoHelpDialogComponent } from "../demo-help-dialog/demo-help-dialog.component";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { CurrencyPipe } from "@angular/common";
 // @ts-ignore
 import Timeout = NodeJS.Timeout;
-import { NewIterationStepStoreService, SelectedIterationStepService } from 'src/app/service/planner-runs/selected-iteration-step.service';
+import {
+  NewIterationStepStoreService,
+  SelectedIterationStepService,
+} from "src/app/service/planner-runs/selected-iteration-step.service";
 
 @Component({
-  selector: 'app-demo-navigator',
-  templateUrl: './demo-navigator.component.html',
-  styleUrls: ['./demo-navigator.component.scss']
+  selector: "app-demo-navigator",
+  templateUrl: "./demo-navigator.component.html",
+  styleUrls: ["./demo-navigator.component.scss"],
 })
 export class DemoNavigatorComponent implements OnInit, OnDestroy {
-
   private loggerId: number;
   private ngUnsubscribe$: Subject<any> = new Subject();
 
   @Output() finishedDemo = new EventEmitter<void>();
 
-  @ViewChild('barContainer') barContainerRef: ElementRef;
+  @ViewChild("barContainer") barContainerRef: ElementRef;
 
   computeNewPlan = false;
   askQuestion = false;
@@ -80,14 +91,13 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
     public dialog: MatDialog,
     private snackBar: MatSnackBar
   ) {
-
     this.step$ = this.selectedIterationStepService.getSelectedObject();
     this.newStep$ = this.newIterationStepService.getSelectedObject();
 
     this.settings$ = this.runningDemoService.getSelectedObject().pipe(
-      filter(d => !!d),
-      map(d => d.settings)
-    )
+      filter((d) => !!d),
+      map((d) => d.settings)
+    );
 
     // this.runningDemoService.getSelectedObject()
     //   .pipe(takeUntil(this.ngUnsubscribe$))
@@ -106,30 +116,38 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     //TODO check if demo is already initialized
-    this.loggerId = this.timeLogger.register('demo-navigator');
+    this.loggerId = this.timeLogger.register("demo-navigator");
     this.initPlanRuns();
     this.initTimer();
 
-    this.settings$.pipe(
-      takeUntil(this.ngUnsubscribe$),
-      filter(s => !!s)).subscribe(
-      settings => {
+    this.settings$
+      .pipe(
+        takeUntil(this.ngUnsubscribe$),
+        filter((s) => !!s)
+      )
+      .subscribe((settings) => {
         if (settings.introTask) {
           const notTimer = setTimeout(() => {
             //TODO update
             if (settings.allowQuestions) {
-              this.snackBar.open('You have not computed any plans or asked any questions yet. Are you facing any difficulties? ' +
-                'You can open the help page with the button in the upper right corner.', 'OK');
+              this.snackBar.open(
+                "You have not computed any plans or asked any questions yet. Are you facing any difficulties? " +
+                  "You can open the help page with the button in the upper right corner.",
+                "OK"
+              );
               return;
             }
             if (this.computedPlans === 1) {
-              this.snackBar.open('You have not computed any plans yet. Are you facing any difficulties? ' +
-                'You can open the help page with the button in the upper right corner.', 'OK');
+              this.snackBar.open(
+                "You have not computed any plans yet. Are you facing any difficulties? " +
+                  "You can open the help page with the button in the upper right corner.",
+                "OK"
+              );
             }
           }, 120000);
           this.notificationTimer.push(notTimer);
         }
-    })
+      });
   }
 
   //TODO do in score component
@@ -172,32 +190,31 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
 
   showDemoFinished(timesUp: boolean) {
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.width = '500px';
+    dialogConfig.width = "500px";
     dialogConfig.data = {
       demo: this.demo,
       maxUtility: this.maxUtility,
       maxAchievedUtility: this.maxAchievedUtility,
       payment: this.payment,
-      timesUp
+      timesUp,
     };
 
     const dialogRef = this.dialog.open(DemoFinishedComponent, dialogConfig);
 
-    dialogRef.afterClosed()
+    dialogRef
+      .afterClosed()
       .pipe(takeUntil(this.ngUnsubscribe$))
-      .subscribe(
-        (result) => {
-          if (result) {
-            this.snackBar.dismiss();
-            this.currentProjectService.removeCurrentObject();
-            this.finishedDemo.emit();
-          }
+      .subscribe((result) => {
+        if (result) {
+          this.snackBar.dismiss();
+          this.currentProjectService.removeCurrentObject();
+          this.finishedDemo.emit();
         }
-      );
+      });
   }
 
   initTimer() {
-    this.settings$.subscribe(settings => {
+    this.settings$.subscribe((settings) => {
       if (settings && (settings.measureTime || settings.useTimer)) {
         this.maxTime = settings.maxTime ? settings.maxTime : 50000;
         this.startTime = new Date().getTime();
@@ -216,7 +233,6 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
             this.showDemoFinished(true);
             clearInterval(this.timerIntervall);
           }
-
         }, 1000);
       }
     });
@@ -234,23 +250,19 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
     //   explanationRuns: [],
     //   previousRun: null,
     // };
-
     // console.log(run);
-
     // this.plannerService.execute_plan_run(run);
     // this.taskCreatorClose(true);
   }
 
-
   showHelp() {
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.width = '80%';
-    dialogConfig.height = '80%';
+    dialogConfig.width = "80%";
+    dialogConfig.height = "80%";
     dialogConfig.data = {
-      demo: this.demo
+      demo: this.demo,
     };
 
     const dialogRef = this.dialog.open(DemoHelpDialogComponent, dialogConfig);
   }
-
 }

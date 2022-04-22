@@ -1,14 +1,11 @@
 <mat-card class="basic-card">
   <mat-card-header>
-    <mat-card-title>
-      Time Logger Data
-    </mat-card-title>
+    <mat-card-title> Time Logger Data </mat-card-title>
   </mat-card-header>
   <mat-card-content>
-    <p *ngIf="dataEntries?.length == 0">
-      No test person selected.
-    </p>
-    <ngx-charts-bar-vertical *ngIf="dataEntries?.length > 0"
+    <p *ngIf="dataEntries?.length == 0">No test person selected.</p>
+    <ngx-charts-bar-vertical
+      *ngIf="dataEntries?.length > 0"
       [view]="view"
       [scheme]="colorScheme"
       [results]="avgTimeLogData"
@@ -18,7 +15,8 @@
       [showXAxisLabel]="showXAxisLabel"
       [showYAxisLabel]="showYAxisLabel"
       xAxisLabel="Components"
-      yAxisLabel="Time">
+      yAxisLabel="Time"
+    >
     </ngx-charts-bar-vertical>
   </mat-card-content>
 </mat-card>

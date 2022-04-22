@@ -1,13 +1,18 @@
 <mat-card class="main-card">
   <mat-card-header>
-    <mat-card-title> Possible relaxations to resolve the conflict </mat-card-title>
+    <mat-card-title>
+      Possible relaxations to resolve the conflict
+    </mat-card-title>
   </mat-card-header>
   <mat-card-content class="content">
-    <div *ngFor="let relaxation of (relaxations$ | async)" class="relax-space">
-      <p class="name">{{relaxation.name}}</p>
+    <div *ngFor="let relaxation of relaxations$ | async" class="relax-space">
+      <p class="name">{{ relaxation.name }}</p>
       <div class="list-container">
         <ng-container *ngFor="let dim of relaxation.dimensions">
-          <app-object-progress-bar [values]="dim.possibleValues" [selected]="dim.selected"></app-object-progress-bar>
+          <app-object-progress-bar
+            [values]="dim.possibleValues"
+            [selected]="dim.selected"
+          ></app-object-progress-bar>
         </ng-container>
         <ng-container *ngIf="relaxation.dimensions.length == 0">
           <p>No relaxation possible.</p>

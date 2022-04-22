@@ -1,5 +1,5 @@
 <mat-card class="card">
-    <ngx-graph
+  <ngx-graph
     class="chart-container"
     layout="dagre"
     [view]="[800, 800]"
@@ -7,17 +7,21 @@
     [links]="edges"
     [nodes]="nodes"
   >
-  <ng-template #nodeTemplate let-node>
-    <svg:g class="node">
-      <svg:rect
-        [attr.width]="node.dimension.width"
-        [attr.height]="node.dimension.height"
-        [attr.fill]="node.data.color"
-      />
-      <svg:text alignment-baseline="central" [attr.x]="10" [attr.y]="node.dimension.height / 2">
-        {{node.label}}
-      </svg:text>
-    </svg:g>
-  </ng-template>
+    <ng-template #nodeTemplate let-node>
+      <svg:g class="node">
+        <svg:rect
+          [attr.width]="node.dimension.width"
+          [attr.height]="node.dimension.height"
+          [attr.fill]="node.data.color"
+        />
+        <svg:text
+          alignment-baseline="central"
+          [attr.x]="10"
+          [attr.y]="node.dimension.height / 2"
+        >
+          {{ node.label }}
+        </svg:text>
+      </svg:g>
+    </ng-template>
   </ngx-graph>
 </mat-card>

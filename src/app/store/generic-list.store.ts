@@ -1,17 +1,15 @@
-import {BehaviorSubject} from 'rxjs';
+import { BehaviorSubject } from "rxjs";
 
-export const LOAD = 'LOAD';
-export const ADD = 'ADD';
-export const EDIT = 'EDIT';
-export const REMOVE = 'REMOVE';
-export const CLEAR = 'CLEAR';
-
+export const LOAD = "LOAD";
+export const ADD = "ADD";
+export const EDIT = "EDIT";
+export const REMOVE = "REMOVE";
+export const CLEAR = "CLEAR";
 
 type Id = string | number;
 interface Identifiable {
   _id?: Id;
 }
-
 
 export class ListStore<T extends Identifiable> {
   items = [];
@@ -34,7 +32,7 @@ export class ListStore<T extends Identifiable> {
       case ADD:
         return [...items, action.data];
       case EDIT:
-        return items.map(task => {
+        return items.map((task) => {
           const editedItem = action.data;
           if (task._id !== editedItem._id) {
             return task;
@@ -42,7 +40,7 @@ export class ListStore<T extends Identifiable> {
           return editedItem;
         });
       case REMOVE:
-        return items.filter(task => task._id !== action.data._id);
+        return items.filter((task) => task._id !== action.data._id);
       case CLEAR:
         return [];
       default:

@@ -1,20 +1,22 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Observable, Subject} from 'rxjs';
-import {ResponsiveService} from '../../../service/responsive/responsive.service';
-import {takeUntil} from 'rxjs/operators';
-import {RunningUserStudyService, UserStudiesService} from '../../../service/user-study/user-study-services';
-import {UserStudy} from '../../../interface/user-study/user-study';
-import {ActivatedRoute, Router} from '@angular/router';
-import {environment} from '../../../../environments/environment';
+import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Observable, Subject } from "rxjs";
+import { ResponsiveService } from "../../../service/responsive/responsive.service";
+import { takeUntil } from "rxjs/operators";
+import {
+  RunningUserStudyService,
+  UserStudiesService,
+} from "../../../service/user-study/user-study-services";
+import { UserStudy } from "../../../interface/user-study/user-study";
+import { ActivatedRoute, Router } from "@angular/router";
+import { environment } from "../../../../environments/environment";
 
 @Component({
-  selector: 'app-user-study-selection',
-  templateUrl: './user-study-collection.component.html',
-  styleUrls: ['./user-study-collection.component.css']
+  selector: "app-user-study-selection",
+  templateUrl: "./user-study-collection.component.html",
+  styleUrls: ["./user-study-collection.component.css"],
 })
 export class UserStudyCollectionComponent implements OnInit, OnDestroy {
-
-  urlBase = environment.localURL + '/user-studies';
+  urlBase = environment.localURL + "/user-studies";
   private ngUnsubscribe: Subject<any> = new Subject();
 
   isMobile: boolean;
@@ -26,14 +28,16 @@ export class UserStudyCollectionComponent implements OnInit, OnDestroy {
     private selectedUserStudyService: RunningUserStudyService,
     private responsiveService: ResponsiveService,
     private route: ActivatedRoute,
-    private router: Router) {
+    private router: Router
+  ) {
     userStudiesService.findCollection();
   }
 
   ngOnInit(): void {
-    this.responsiveService.getMobileStatus()
+    this.responsiveService
+      .getMobileStatus()
       .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe( isMobile => {
+      .subscribe((isMobile) => {
         this.isMobile = isMobile;
       });
     this.responsiveService.checkWidth();
@@ -48,12 +52,16 @@ export class UserStudyCollectionComponent implements OnInit, OnDestroy {
 
   async openInfo(study: UserStudy) {
     this.selectedUserStudyService.saveObject(study);
-    await this.router.navigate(['../user-studies/' + study._id], { relativeTo: this.route });
+    await this.router.navigate(["../user-studies/" + study._id], {
+      relativeTo: this.route,
+    });
   }
 
   async newUserStudy() {
     this.selectedUserStudyService.saveObject(null);
-    await this.router.navigate(['./new-user-study'], { relativeTo: this.route });
+    await this.router.navigate(["./new-user-study"], {
+      relativeTo: this.route,
+    });
   }
 
   delete(study: UserStudy) {
@@ -61,7 +69,6 @@ export class UserStudyCollectionComponent implements OnInit, OnDestroy {
   }
 
   getStudyLink(study: UserStudy) {
-    return this.urlBase + '/' + study._id + '/run/start';
+    return this.urlBase + "/" + study._id + "/run/start";
   }
-
 }

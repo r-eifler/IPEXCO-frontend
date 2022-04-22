@@ -1,9 +1,9 @@
-import {TestBed} from '@angular/core/testing';
+import { TestBed } from "@angular/core/testing";
 
-import {ObjectCollectionService} from './object-collection.service';
-import {PlanProperty} from '../../interface/plan-property/plan-property';
+import { ObjectCollectionService } from "./object-collection.service";
+import { PlanProperty } from "../../interface/plan-property/plan-property";
 
-describe('PlanPropertyService', () => {
+describe("PlanPropertyService", () => {
   let service: ObjectCollectionService<PlanProperty>;
 
   beforeEach(() => {
@@ -11,7 +11,7 @@ describe('PlanPropertyService', () => {
     service = TestBed.inject(ObjectCollectionService);
   });
 
-  it('should be created', () => {
+  it("should be created", () => {
     expect(service).toBeTruthy();
   });
 });

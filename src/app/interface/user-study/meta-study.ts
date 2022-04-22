@@ -1,4 +1,4 @@
-import {UserStudy} from './user-study';
+import { UserStudy } from "./user-study";
 
 export interface UserStudySelection {
   userStudy: UserStudy | string;

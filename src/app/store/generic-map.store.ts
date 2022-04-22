@@ -1,16 +1,14 @@
-import {BehaviorSubject} from 'rxjs';
+import { BehaviorSubject } from "rxjs";
 
-export const LOAD = 'LOAD';
-export const ADD = 'ADD';
-export const EDIT = 'EDIT';
-export const REMOVE = 'REMOVE';
-
+export const LOAD = "LOAD";
+export const ADD = "ADD";
+export const EDIT = "EDIT";
+export const REMOVE = "REMOVE";
 
 type Id = string | number;
 interface Identifiable {
   _id?: Id;
 }
-
 
 export class MapStore<K, T extends Identifiable> {
   items = new Map<K, T>();

@@ -4,27 +4,47 @@
   </mat-card-header>
   <ng-container *ngIf="!(isUnSolvable$ | async)">
     <div class="bar-container" *ngIf="isSolvable$ | async">
-      <mat-icon >grade</mat-icon>
-      <app-score-bar [min]="maxRelqaxationCost$ | async" [max]="maxPlanValue$ | async" [value1]="0" [value2]="planValue$ | async" style="width: 100%; height: 20%;"></app-score-bar>
+      <mat-icon>grade</mat-icon>
+      <app-score-bar
+        [min]="maxRelqaxationCost$ | async"
+        [max]="maxPlanValue$ | async"
+        [value1]="0"
+        [value2]="planValue$ | async"
+        style="width: 100%; height: 20%"
+      ></app-score-bar>
     </div>
-    <div class="bar-container" *ngIf="! (isSolvable$ | async)">
-      <mat-icon >grade</mat-icon>
+    <div class="bar-container" *ngIf="!(isSolvable$ | async)">
+      <mat-icon>grade</mat-icon>
       <p>Compute plan before plan score can be displayed.</p>
     </div>
     <div class="bar-container">
-      <mat-icon >battery_full</mat-icon>
-      <app-score-bar [min]="maxRelqaxationCost$ | async" [max]="maxPlanValue$ | async" [value1]="relqaxationCost$ | async" [value2]="0" style="width: 100%; height: 20%;"></app-score-bar>
+      <mat-icon>battery_full</mat-icon>
+      <app-score-bar
+        [min]="maxRelqaxationCost$ | async"
+        [max]="maxPlanValue$ | async"
+        [value1]="relqaxationCost$ | async"
+        [value2]="0"
+        style="width: 100%; height: 20%"
+      ></app-score-bar>
     </div>
     <div class="bar-container" *ngIf="isSolvable$ | async">
-      <mat-icon >trending_up</mat-icon>
-      <app-score-bar [min]="maxRelqaxationCost$ | async" [max]="maxPlanValue$ | async" [value1]="0" [value2]="overallScore$ | async" style="width: 100%; height: 20%;"></app-score-bar>
+      <mat-icon>trending_up</mat-icon>
+      <app-score-bar
+        [min]="maxRelqaxationCost$ | async"
+        [max]="maxPlanValue$ | async"
+        [value1]="0"
+        [value2]="overallScore$ | async"
+        style="width: 100%; height: 20%"
+      ></app-score-bar>
     </div>
-    <div class="bar-container" *ngIf="! (isSolvable$ | async)">
-      <mat-icon >trending_up</mat-icon>
+    <div class="bar-container" *ngIf="!(isSolvable$ | async)">
+      <mat-icon>trending_up</mat-icon>
       <p>Compute plan before overall score can be displayed.</p>
     </div>
   </ng-container>
-  <div *ngIf="(isUnSolvable$ | async)">
-    <p>The selection of preferences is not solvable under the given constraints.</p>
+  <div *ngIf="isUnSolvable$ | async">
+    <p>
+      The selection of preferences is not solvable under the given constraints.
+    </p>
   </div>
 </mat-card>

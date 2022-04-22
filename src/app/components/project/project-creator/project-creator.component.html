@@ -1,9 +1,13 @@
 <h2>New Project</h2>
-<form class="example-form" [formGroup]="projectForm" (ngSubmit)="onSave()" style="display: flex; flex-direction: column">
-
+<form
+  class="example-form"
+  [formGroup]="projectForm"
+  (ngSubmit)="onSave()"
+  style="display: flex; flex-direction: column"
+>
   <mat-form-field class="example-full-width">
     <mat-label>Name</mat-label>
-    <input matInput type="text" formControlName="name">
+    <input matInput type="text" formControlName="name" />
   </mat-form-field>
 
   <mat-form-field>
@@ -14,31 +18,50 @@
   <mat-form-field appearance="fill">
     <mat-label>Domain File</mat-label>
     <mat-select [(value)]="selectedDomain" [disabled]="disableSelect">
-      <mat-option *ngFor="let domain of domainFiles$ | async" [value]="domain">{{domain.name}}</mat-option>
+      <mat-option
+        *ngFor="let domain of domainFiles$ | async"
+        [value]="domain"
+        >{{ domain.name }}</mat-option
+      >
     </mat-select>
   </mat-form-field>
 
   <mat-form-field appearance="fill">
     <mat-label>Problem File</mat-label>
     <mat-select [(value)]="selectedProblem" [disabled]="disableSelect">
-      <mat-option *ngFor="let problem of problemFiles | async" [value]="problem">{{problem.name}}</mat-option>
+      <mat-option
+        *ngFor="let problem of problemFiles | async"
+        [value]="problem"
+        >{{ problem.name }}</mat-option
+      >
     </mat-select>
   </mat-form-field>
 
   <mat-form-field appearance="fill">
     <mat-label>Domain Specification</mat-label>
     <mat-select [(value)]="selectedDomainSpec" [disabled]="disableSelect">
-      <mat-option *ngFor="let file of domainSpecFiles | async" [value]="file">{{file.name}}</mat-option>
+      <mat-option *ngFor="let file of domainSpecFiles | async" [value]="file">{{
+        file.name
+      }}</mat-option>
     </mat-select>
   </mat-form-field>
 
   <div style="display: flex">
-    <button mat-flat-button color="secondray" type=button (click)="onBack()" style="flex-grow: 1">
-      <mat-icon>
-        keyboard_backspace
-      </mat-icon>
+    <button
+      mat-flat-button
+      color="secondray"
+      type="button"
+      (click)="onBack()"
+      style="flex-grow: 1"
+    >
+      <mat-icon> keyboard_backspace </mat-icon>
     </button>
-    <button mat-flat-button color="primary" style="flex-grow: 4; margin-left: 10px">Save</button>
+    <button
+      mat-flat-button
+      color="primary"
+      style="flex-grow: 4; margin-left: 10px"
+    >
+      Save
+    </button>
   </div>
 </form>
-

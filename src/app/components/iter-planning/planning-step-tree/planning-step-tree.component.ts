@@ -1,17 +1,19 @@
-import {takeUntil} from 'rxjs/operators';
-import {RunStatus} from '../../../interface/run';
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {DepExplanationRun, PlanRun} from 'src/app/interface/run';
-import {Observable, Subject} from 'rxjs';
-import {NestedTreeControl} from '@angular/cdk/tree';
-import {MatTreeNestedDataSource} from '@angular/material/tree';
-import {ActivatedRoute, Router} from '@angular/router';
-import {CurrentProjectStore, CurrentRunStore} from 'src/app/store/stores.store';
-import {IterationStepsService} from 'src/app/service/planner-runs/iteration-steps.service';
-import {SelectedPlanRunService} from '../../../service/planner-runs/selected-planrun.service';
-import {SelectedQuestionService} from '../../../service/planner-runs/selected-question.service';
-import {PlannerService} from '../../../service/planner-runs/planner.service';
-
+import { takeUntil } from "rxjs/operators";
+import { RunStatus } from "../../../interface/run";
+import { Component, OnDestroy, OnInit } from "@angular/core";
+import { DepExplanationRun, PlanRun } from "src/app/interface/run";
+import { Observable, Subject } from "rxjs";
+import { NestedTreeControl } from "@angular/cdk/tree";
+import { MatTreeNestedDataSource } from "@angular/material/tree";
+import { ActivatedRoute, Router } from "@angular/router";
+import {
+  CurrentProjectStore,
+  CurrentRunStore,
+} from "src/app/store/stores.store";
+import { IterationStepsService } from "src/app/service/planner-runs/iteration-steps.service";
+import { SelectedPlanRunService } from "../../../service/planner-runs/selected-planrun.service";
+import { SelectedQuestionService } from "../../../service/planner-runs/selected-question.service";
+import { PlannerService } from "../../../service/planner-runs/planner.service";
 
 interface RunNode {
   _id?: string;
@@ -22,12 +24,11 @@ interface RunNode {
 }
 
 @Component({
-  selector: 'app-planning-step-tree',
-  templateUrl: './planning-step-tree.component.html',
-  styleUrls: ['./planning-step-tree.component.scss']
+  selector: "app-planning-step-tree",
+  templateUrl: "./planning-step-tree.component.html",
+  styleUrls: ["./planning-step-tree.component.scss"],
 })
 export class PlanningStepTreeComponent implements OnInit, OnDestroy {
-
   private ngUnsubscribe: Subject<any> = new Subject();
   expanded = true;
 
@@ -38,7 +39,7 @@ export class PlanningStepTreeComponent implements OnInit, OnDestroy {
   selectedPlan: PlanRun;
   selectedQuestion: DepExplanationRun;
 
-  treeControl = new NestedTreeControl<RunNode>(node => node.explanationRuns);
+  treeControl = new NestedTreeControl<RunNode>((node) => node.explanationRuns);
   dataSource = new MatTreeNestedDataSource<RunNode>();
 
   constructor(
@@ -46,37 +47,34 @@ export class PlanningStepTreeComponent implements OnInit, OnDestroy {
     private runService: IterationStepsService,
     private selectedPlanRunService: SelectedPlanRunService,
     private selectedQuestionService: SelectedQuestionService,
-    public plannerService: PlannerService,
+    public plannerService: PlannerService
   ) {
     // TODO
     // this.runs$ = this.runService.getList();
 
-    this.runs$
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe(
-        runs => {
-          this.dataSource.data = runs;
-        });
+    this.runs$.pipe(takeUntil(this.ngUnsubscribe)).subscribe((runs) => {
+      this.dataSource.data = runs;
+    });
   }
 
   ngOnInit(): void {
-    this.selectedPlanRunService.getSelectedObject()
+    this.selectedPlanRunService
+      .getSelectedObject()
       .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe(
-        run => {
-          this.selectedPlan = run;
-          if (run) {
-            // TODO
-            // this.treeControl.expand(run);
-          }
-        });
+      .subscribe((run) => {
+        this.selectedPlan = run;
+        if (run) {
+          // TODO
+          // this.treeControl.expand(run);
+        }
+      });
 
-    this.selectedQuestionService.getSelectedObject()
+    this.selectedQuestionService
+      .getSelectedObject()
       .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe(
-        run => {
-          this.selectedQuestion = run;
-        });
+      .subscribe((run) => {
+        this.selectedQuestion = run;
+      });
   }
 
   ngOnDestroy(): void {
@@ -84,10 +82,10 @@ export class PlanningStepTreeComponent implements OnInit, OnDestroy {
     this.ngUnsubscribe.complete();
   }
 
-  hasChild = (_: number, node: RunNode) => !!node.explanationRuns && node.explanationRuns.length > 0;
+  hasChild = (_: number, node: RunNode) =>
+    !!node.explanationRuns && node.explanationRuns.length > 0;
   isPlanRun = (_: number, node: RunNode) => true; // TODO node.type === RunType.plan;
   isExpRun = (_: number, node: RunNode) => true; // TODO node.type === RunType.mugs;
-
 
   async delete(run: PlanRun) {
     // TODO
@@ -119,7 +117,6 @@ export class PlanningStepTreeComponent implements OnInit, OnDestroy {
   }
 
   toggleExpand() {
-    this.expanded = ! this.expanded;
+    this.expanded = !this.expanded;
   }
-
 }

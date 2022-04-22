@@ -1,31 +1,36 @@
-import { Action } from 'src/app/interface/plannig-task';
-import { PPConflict } from './../../interface/explanations';
-import { PlanningTask } from './../../interface/plannig-task';
-import {PlanRun} from '../../interface/run';
-import {GoalType, PlanProperty} from '../../interface/plan-property/plan-property';
-import {Plan} from '../../interface/plan';
-import { PPDependencies } from 'src/app/interface/explanations';
+import { Action } from "src/app/interface/plannig-task";
+import { PPConflict } from "./../../interface/explanations";
+import { PlanningTask } from "./../../interface/plannig-task";
+import { PlanRun } from "../../interface/run";
+import {
+  GoalType,
+  PlanProperty,
+} from "../../interface/plan-property/plan-property";
+import { Plan } from "../../interface/plan";
+import { PPDependencies } from "src/app/interface/explanations";
 
 export function parsePlan(planString: string, task: PlanningTask): Plan {
-  const lines = planString.split('\n');
+  const lines = planString.split("\n");
   lines.splice(-1, 1); // remove empty line at the end
   const costString = lines.splice(-1, 1)[0];
   const plan = parseActions(lines, task);
-  plan.cost = Number(costString.split(' ')[3]);
-  return plan
+  plan.cost = Number(costString.split(" ")[3]);
+  return plan;
 }
 
 function parseActions(actionStrings: string[], task: PlanningTask): Plan {
-  const res: Plan = {actions: [], cost: null};
+  const res: Plan = { actions: [], cost: null };
   for (const a of actionStrings) {
-    const action = a.replace('(', '').replace(')', '');
-    const [name, ...args] = action.split(' ');
-    if (task.actions.some(ac => ac.name === name)) {
+    const action = a.replace("(", "").replace(")", "");
+    const [name, ...args] = action.split(" ");
+    if (task.actions.some((ac) => ac.name === name)) {
       res.actions.push({
         name: name,
-        parameters: args.map(a => {return {name: a, type: ''}}),
+        parameters: args.map((a) => {
+          return { name: a, type: "" };
+        }),
         precondition: [],
-        effects: []
+        effects: [],
       });
     }
   }
@@ -33,13 +38,16 @@ function parseActions(actionStrings: string[], task: PlanningTask): Plan {
   return res;
 }
 
-export function updateMUGSPropsNames(oldMugs: string[][], planProperties: Map<string, PlanProperty>): string[][] {
+export function updateMUGSPropsNames(
+  oldMugs: string[][],
+  planProperties: Map<string, PlanProperty>
+): string[][] {
   const newMUGS = [];
   for (const mugs of oldMugs) {
     const list = [];
     for (const elem of mugs) {
-      if (elem.startsWith('Atom')) {
-        const fact = elem.replace('Atom ', '').replace(' ', '');
+      if (elem.startsWith("Atom")) {
+        const fact = elem.replace("Atom ", "").replace(" ", "");
         for (const p of planProperties.values()) {
           if (p.type === GoalType.goalFact && fact === p.formula) {
             list.push(p.name);
@@ -47,7 +55,12 @@ export function updateMUGSPropsNames(oldMugs: string[][], planProperties: Map<st
           }
         }
       } else {
-        list.push(elem.replace('sat_', '').replace('soft_accepting(', '').replace(')', ''));
+        list.push(
+          elem
+            .replace("sat_", "")
+            .replace("soft_accepting(", "")
+            .replace(")", "")
+        );
       }
     }
     newMUGS.push(list);
@@ -55,17 +68,20 @@ export function updateMUGSPropsNames(oldMugs: string[][], planProperties: Map<st
   return newMUGS;
 }
 
-export function toPPDependencies(oldMugs: string[][], planProperties: Map<string, PlanProperty>): PPDependencies {
-
+export function toPPDependencies(
+  oldMugs: string[][],
+  planProperties: Map<string, PlanProperty>
+): PPDependencies {
   const newMUGS = updateMUGSPropsNames(oldMugs, planProperties);
   const ppList = Array.from(planProperties.values());
 
-  let dep : PPDependencies = {conflicts: []};
+  let dep: PPDependencies = { conflicts: [] };
 
   for (const mugs of newMUGS) {
-    dep.conflicts.push({elems: mugs.map(e => ppList.find(pp => pp.name == e)._id)})
+    dep.conflicts.push({
+      elems: mugs.map((e) => ppList.find((pp) => pp.name == e)._id),
+    });
   }
 
   return dep;
 }
-

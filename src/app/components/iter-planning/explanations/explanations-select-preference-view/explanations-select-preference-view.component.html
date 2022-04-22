@@ -2,12 +2,18 @@
   <h2>Why not ... ?</h2>
   <ng-container *ngIf="(possiblePP$ | async)?.length > 0">
     <div class="list">
-      <div *ngFor="let pp of (possiblePP$ | async)" class="list-main-container" [class.selected]="selectedPPId == pp._id">
+      <div
+        *ngFor="let pp of possiblePP$ | async"
+        class="list-main-container"
+        [class.selected]="selectedPPId == pp._id"
+      >
         <div class="list-item-container" (click)="selectPP(pp)">
-          <mat-icon matListIcon >star_border</mat-icon>
+          <mat-icon matListIcon>star_border</mat-icon>
           <div class="list-item-text">
-            <span style="font-size: larger;"> {{pp.naturalLanguageDescription}} </span>
-            <span> Utility: {{pp.value}} </span>
+            <span style="font-size: larger">
+              {{ pp.naturalLanguageDescription }}
+            </span>
+            <span> Utility: {{ pp.value }} </span>
           </div>
           <!-- <div class="list-item-buttons">
             <button mat-icon-button (click)="selectPP(pp)">
@@ -19,7 +25,5 @@
       </div>
     </div>
   </ng-container>
-  <p *ngIf="(possiblePP$ | async)?.length == 0">
-    No other goals available.
-  </p>
+  <p *ngIf="(possiblePP$ | async)?.length == 0">No other goals available.</p>
 </mat-card>

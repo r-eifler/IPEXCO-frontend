@@ -1,4 +1,4 @@
-@import '../../../../variables.scss';
+@import "../../../../variables.scss";
 
 .main-container {
   height: 100%;
@@ -13,13 +13,12 @@
   gap: 10px;
 }
 
-.step-name{
+.step-name {
   margin: 0px;
   padding: 0px;
 }
 
 .step-icon {
-
 }
 
 .new-step {
@@ -46,10 +45,10 @@
   visibility: hidden;
 }
 
-.step-item .delete-button{
+.step-item .delete-button {
   visibility: hidden;
 }
 
-.step-item:hover .delete-button{
+.step-item:hover .delete-button {
   visibility: visible;
 }

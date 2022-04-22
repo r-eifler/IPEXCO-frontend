@@ -1,16 +1,15 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { RelaxationSelectorComponent } from './relaxation-selector.component';
+import { RelaxationSelectorComponent } from "./relaxation-selector.component";
 
-describe('RelaxationSelectorComponent', () => {
+describe("RelaxationSelectorComponent", () => {
   let component: RelaxationSelectorComponent;
   let fixture: ComponentFixture<RelaxationSelectorComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ RelaxationSelectorComponent ]
-    })
-    .compileComponents();
+      declarations: [RelaxationSelectorComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -19,7 +18,7 @@ describe('RelaxationSelectorComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

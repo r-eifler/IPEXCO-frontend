@@ -1,75 +1,73 @@
 <ng-container *ngIf="currentProject">
+  <div [class.container-web]="!isMobile" [class.container-mobile]="isMobile">
+    <mat-card>
+      <mat-card-header>
+        <div mat-card-avatar>
+          <mat-icon>info</mat-icon>
+        </div>
+        <mat-card-title>{{ currentProject.name }}</mat-card-title>
+        <mat-card-subtitle>Overview</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        {{ currentProject.description }}
+      </mat-card-content>
+    </mat-card>
 
-<div [class.container-web]="! isMobile" [class.container-mobile]="isMobile">
-  <mat-card>
-    <mat-card-header>
-      <div mat-card-avatar>
-        <mat-icon>info</mat-icon>
-      </div>
-      <mat-card-title>{{currentProject.name}}</mat-card-title>
-      <mat-card-subtitle>Overview</mat-card-subtitle>
-    </mat-card-header>
-    <mat-card-content>
-        {{currentProject.description}}
-    </mat-card-content>
-  </mat-card>
+    <mat-card>
+      <mat-card-header>
+        <div mat-card-avatar>
+          <mat-icon>insert_drive_file</mat-icon>
+        </div>
+        <mat-card-title> Files </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <h2>Domain</h2>
+        <p>{{ currentProject.domainFile.name }}</p>
+        <h2>Problem</h2>
+        <p>{{ currentProject.problemFile.name }}</p>
+        <h2>Specification</h2>
+        <p>{{ currentProject.domainSpecification.name }}</p>
+      </mat-card-content>
+    </mat-card>
 
-  <mat-card>
-    <mat-card-header>
-      <div mat-card-avatar>
-        <mat-icon>insert_drive_file</mat-icon>
-      </div>
-      <mat-card-title>
-        Files
-      </mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <h2>Domain</h2>
-      <p>{{currentProject.domainFile.name}}</p>
-      <h2>Problem</h2>
-      <p>{{currentProject.problemFile.name}}</p>
-      <h2>Specification</h2>
-      <p>{{currentProject.domainSpecification.name}}</p>
-    </mat-card-content>
-  </mat-card>
+    <mat-card>
+      <mat-card-header>
+        <div mat-card-avatar>
+          <mat-icon>show_chart</mat-icon>
+        </div>
+        <mat-card-title>Statistics</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <mat-list>
+          <mat-list-item>
+            #properties: {{ (properties$ | async).size }}
+            <mat-divider [inset]="true"></mat-divider>
+          </mat-list-item>
+          <mat-list-item>
+            #planning runs: {{ runsService.getNumRuns() }}
+            <mat-divider [inset]="true"></mat-divider>
+          </mat-list-item>
+          <mat-list-item>
+            #questions: {{ runsService.getNumQuestions() }}
+            <mat-divider [inset]="true"></mat-divider>
+          </mat-list-item>
+          <!--        <mat-list-item>-->
+          <!--          #demos: {{demosService.getNumOfProject(currentProject)}}-->
+          <!--        </mat-list-item>-->
+        </mat-list>
+      </mat-card-content>
+    </mat-card>
 
-  <mat-card>
-    <mat-card-header>
-      <div mat-card-avatar>
-        <mat-icon>show_chart</mat-icon>
-      </div>
-      <mat-card-title>Statistics</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <mat-list>
-        <mat-list-item>
-          #properties: {{(properties$ | async).size}}
-          <mat-divider [inset]="true"></mat-divider>
-        </mat-list-item>
-        <mat-list-item>
-          #planning runs: {{runsService.getNumRuns()}}
-          <mat-divider [inset]="true"></mat-divider>
-        </mat-list-item>
-        <mat-list-item>
-          #questions: {{runsService.getNumQuestions()}}
-          <mat-divider [inset]="true"></mat-divider>
-        </mat-list-item>
-<!--        <mat-list-item>-->
-<!--          #demos: {{demosService.getNumOfProject(currentProject)}}-->
-<!--        </mat-list-item>-->
-      </mat-list>
-    </mat-card-content>
-  </mat-card>
-
-  <mat-card class="action-card">
-    <mat-card-header>
-      <div mat-card-avatar>
-        <mat-icon>create</mat-icon>
-      </div>
-      <mat-card-title>Create from Project</mat-card-title>
-    </mat-card-header>
-    <button mat-stroked-button color="accent" (click)="createDemo()">Demo</button>
-  </mat-card>
-</div>
-
+    <mat-card class="action-card">
+      <mat-card-header>
+        <div mat-card-avatar>
+          <mat-icon>create</mat-icon>
+        </div>
+        <mat-card-title>Create from Project</mat-card-title>
+      </mat-card-header>
+      <button mat-stroked-button color="accent" (click)="createDemo()">
+        Demo
+      </button>
+    </mat-card>
+  </div>
 </ng-container>

@@ -5,7 +5,7 @@
   padding: 10px;
 }
 
-.main-card{
+.main-card {
   box-sizing: border-box;
   height: 100%;
   display: flex;
@@ -44,7 +44,6 @@ mat-step {
   width: 100%;
   justify-content: flex-end;
 }
-
 
 .button-box > * {
   margin: 0 10px;

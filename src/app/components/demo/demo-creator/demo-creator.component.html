@@ -1,9 +1,13 @@
 <h2>New Demo</h2>
-<form class="example-form" [formGroup]="demoForm" (ngSubmit)="createOrUpdateDemo()" style="display: flex; flex-direction: column">
-
+<form
+  class="example-form"
+  [formGroup]="demoForm"
+  (ngSubmit)="createOrUpdateDemo()"
+  style="display: flex; flex-direction: column"
+>
   <mat-form-field class="example-full-width">
     <mat-label>Name</mat-label>
-    <input matInput type="text" formControlName="name">
+    <input matInput type="text" formControlName="name" />
   </mat-form-field>
 
   <mat-form-field class="example-full-width">
@@ -15,7 +19,11 @@
     <mat-tab-group>
       <mat-tab label="Info">
         <mat-form-field class="example-full-width">
-          <textarea matInput formControlName="taskInfo" [(ngModel)]="taskInfo"></textarea>
+          <textarea
+            matInput
+            formControlName="taskInfo"
+            [(ngModel)]="taskInfo"
+          ></textarea>
         </mat-form-field>
       </mat-tab>
       <mat-tab label="Preview">
@@ -24,40 +32,62 @@
     </mat-tab-group>
   </div>
 
-
-  <div style="display: flex;" *ngIf="! update">
+  <div style="display: flex" *ngIf="!update">
     <input
-    style="display: none"
-    type="file" (change)="onFileChanged($event)"
-    #fileInput>
-    <button mat-icon-button (click)="fileInput.click()" type=button>
+      style="display: none"
+      type="file"
+      (change)="onFileChanged($event)"
+      #fileInput
+    />
+    <button mat-icon-button (click)="fileInput.click()" type="button">
       <mat-icon>add_photo_alternate</mat-icon>
     </button>
-    <p style="margin: 0; align-self: center;">{{imageFileName}}</p>
+    <p style="margin: 0; align-self: center">{{ imageFileName }}</p>
   </div>
 
   <div>
-    <mat-slide-toggle formControlName="precomputeToggle" [(ngModel)]="precomputedData">Add precomputed data</mat-slide-toggle>
+    <mat-slide-toggle
+      formControlName="precomputeToggle"
+      [(ngModel)]="precomputedData"
+      >Add precomputed data</mat-slide-toggle
+    >
 
     <ng-container *ngIf="precomputedData">
       <mat-form-field class="example-full-width">
         <mat-label>Demo Data</mat-label>
-        <textarea matInput formControlName="demoData" [(ngModel)]="demoData"></textarea>
+        <textarea
+          matInput
+          formControlName="demoData"
+          [(ngModel)]="demoData"
+        ></textarea>
       </mat-form-field>
       <mat-form-field class="example-full-width">
         <mat-label>Max Utility Data</mat-label>
-        <textarea matInput formControlName="maxUtilityData" [(ngModel)]="maxUtilityData"></textarea>
+        <textarea
+          matInput
+          formControlName="maxUtilityData"
+          [(ngModel)]="maxUtilityData"
+        ></textarea>
       </mat-form-field>
     </ng-container>
   </div>
 
   <div style="display: flex">
-    <button mat-flat-button color="secondray" type=button (click)="onBack()" style="flex-grow: 1">
-      <mat-icon>
-        keyboard_backspace
-      </mat-icon>
+    <button
+      mat-flat-button
+      color="secondray"
+      type="button"
+      (click)="onBack()"
+      style="flex-grow: 1"
+    >
+      <mat-icon> keyboard_backspace </mat-icon>
     </button>
-    <button mat-flat-button color="primary" style="flex-grow: 4; margin-left: 10px">Save</button>
+    <button
+      mat-flat-button
+      color="primary"
+      style="flex-grow: 4; margin-left: 10px"
+    >
+      Save
+    </button>
   </div>
 </form>
-

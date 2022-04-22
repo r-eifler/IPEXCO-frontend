@@ -1,16 +1,15 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
-import {ProjectCollectionComponent} from './project-collection.component';
+import { ProjectCollectionComponent } from "./project-collection.component";
 
-describe('StartPageComponent', () => {
+describe("StartPageComponent", () => {
   let component: ProjectCollectionComponent;
   let fixture: ComponentFixture<ProjectCollectionComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ProjectCollectionComponent ]
-    })
-    .compileComponents();
+      declarations: [ProjectCollectionComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -19,7 +18,7 @@ describe('StartPageComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

@@ -1,23 +1,28 @@
 <div class="main-container">
   <div class="action-container">
-    <button mat-stroked-button (click)="showHelp()">
-      Help
-    </button>
+    <button mat-stroked-button (click)="showHelp()">Help</button>
   </div>
-
 
   <div class="bottom-container">
     <div class="center-container">
-      <app-iteration-steps-list style="height: 100%;overflow: auto;"></app-iteration-steps-list>
+      <app-iteration-steps-list
+        style="height: 100%; overflow: auto"
+      ></app-iteration-steps-list>
     </div>
 
-    <div class="center-container" *ngIf="(step$ | async)">
-      <app-finished-step-navigator style="height: 100%;overflow: auto;"></app-finished-step-navigator>
+    <div class="center-container" *ngIf="step$ | async">
+      <app-finished-step-navigator
+        style="height: 100%; overflow: auto"
+      ></app-finished-step-navigator>
     </div>
 
-    <div class="center-container" *ngIf="! (step$ | async) && (newStep$ | async)">
-      <app-new-step-navigator> style="height: 100%;overflow: auto;"></app-new-step-navigator>
+    <div
+      class="center-container"
+      *ngIf="!(step$ | async) && (newStep$ | async)"
+    >
+      <app-new-step-navigator>
+        style="height: 100%;overflow: auto;"></app-new-step-navigator
+      >
     </div>
-
+  </div>
 </div>
-

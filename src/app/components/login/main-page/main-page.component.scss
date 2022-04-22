@@ -1,5 +1,4 @@
-@import '../../../../variables.scss';
-
+@import "../../../../variables.scss";
 
 .page-container {
   height: 100%;
@@ -8,7 +7,7 @@
   grid-template-rows: auto 1fr auto;
 }
 
-.control-container-desktop{
+.control-container-desktop {
   width: 20%;
   margin: 0;
   position: absolute;
@@ -48,7 +47,6 @@
   margin: 5px 0px;
 }
 
-
 .logo-mobile {
   width: 80%;
   height: auto;
@@ -66,7 +64,7 @@
 }
 
 svg:not(:root) {
-  width:100%;
+  width: 100%;
   height: auto;
 }
 
@@ -87,7 +85,7 @@ svg:not(:root) {
 
 .demo-button {
   font-size: 60px;
-  font-family: 'Julius Sans One';
+  font-family: "Julius Sans One";
   width: 450px;
   height: 90px;
 }
@@ -110,5 +108,5 @@ svg:not(:root) {
   width: 400px;
   height: 70px;
   font-size: 40px;
-  font-family: 'Julius Sans One';
+  font-family: "Julius Sans One";
 }

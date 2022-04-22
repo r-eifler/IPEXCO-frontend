@@ -1,11 +1,11 @@
-import {Component} from '@angular/core';
-import {map} from 'rxjs/operators';
-import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
+import { Component } from "@angular/core";
+import { map } from "rxjs/operators";
+import { BreakpointObserver, Breakpoints } from "@angular/cdk/layout";
 
 @Component({
-  selector: 'app-footer',
-  templateUrl: './footer.component.html',
-  styleUrls: ['./footer.component.css']
+  selector: "app-footer",
+  templateUrl: "./footer.component.html",
+  styleUrls: ["./footer.component.css"],
 })
 export class FooterComponent {
   /** Based on the screen size, switch from standard to one column per row */
@@ -13,18 +13,18 @@ export class FooterComponent {
     map(({ matches }) => {
       if (matches) {
         return [
-          { title: 'Card 1', cols: 1, rows: 1 },
-          { title: 'Card 2', cols: 1, rows: 1 },
-          { title: 'Card 3', cols: 1, rows: 1 },
-          { title: 'Card 4', cols: 1, rows: 1 }
+          { title: "Card 1", cols: 1, rows: 1 },
+          { title: "Card 2", cols: 1, rows: 1 },
+          { title: "Card 3", cols: 1, rows: 1 },
+          { title: "Card 4", cols: 1, rows: 1 },
         ];
       }
 
       return [
-        { title: 'Card 1', cols: 2, rows: 1 },
-        { title: 'Card 2', cols: 1, rows: 1 },
-        { title: 'Card 3', cols: 1, rows: 2 },
-        { title: 'Card 4', cols: 1, rows: 1 }
+        { title: "Card 1", cols: 2, rows: 1 },
+        { title: "Card 2", cols: 1, rows: 1 },
+        { title: "Card 3", cols: 1, rows: 2 },
+        { title: "Card 4", cols: 1, rows: 1 },
       ];
     })
   );

@@ -1,21 +1,28 @@
-<mat-tab-group style="width: 100%; height: 100%;">
+<mat-tab-group style="width: 100%; height: 100%">
   <mat-tab label="Main">
-    <div [class.grid-container-desktop]="! isMobile" [class.container-mobile]="isMobile">
-
-      <mat-card [class.card-style-desktop]="! isMobile">
+    <div
+      [class.grid-container-desktop]="!isMobile"
+      [class.container-mobile]="isMobile"
+    >
+      <mat-card [class.card-style-desktop]="!isMobile">
         <mat-card-header>
           <div mat-card-avatar>
-            <span class="material-icons">
-              games
-            </span>
+            <span class="material-icons"> games </span>
           </div>
           <mat-card-title>Projects</mat-card-title>
         </mat-card-header>
         <mat-card-content>
           <mat-action-list>
-            <button mat-list-item *ngFor="let project of (projectsService.getList() | async); last as last" (click)="openProject(project)">
+            <button
+              mat-list-item
+              *ngFor="
+                let project of projectsService.getList() | async;
+                last as last
+              "
+              (click)="openProject(project)"
+            >
               <mat-icon matListIcon>label</mat-icon>
-              {{project.name}}
+              {{ project.name }}
               <mat-divider [inset]="true" *ngIf="!last"></mat-divider>
             </button>
           </mat-action-list>
@@ -30,21 +37,25 @@
       <mat-card>
         <mat-card-header>
           <div mat-card-avatar>
-            <span class="material-icons">
-              send
-            </span>
+            <span class="material-icons"> send </span>
           </div>
           <mat-card-title>Demos</mat-card-title>
         </mat-card-header>
         <mat-card-content>
           <mat-action-list *ngIf="(demosService.getList() | async).length > 0">
-            <button mat-list-item *ngFor="let demo of (demosService.getList() | async); last as last" (click)="openDemo(demo)">
+            <button
+              mat-list-item
+              *ngFor="let demo of demosService.getList() | async; last as last"
+              (click)="openDemo(demo)"
+            >
               <mat-icon matListIcon>label</mat-icon>
-              {{demo.name}}
+              {{ demo.name }}
               <mat-divider [inset]="true" *ngIf="!last"></mat-divider>
             </button>
           </mat-action-list>
-          <p *ngIf="(demosService.getList() | async).length == 0">No demos available.</p>
+          <p *ngIf="(demosService.getList() | async).length == 0">
+            No demos available.
+          </p>
         </mat-card-content>
         <mat-card-actions>
           <button mat-icon-button (click)="toDemoCollection()">
@@ -56,21 +67,30 @@
       <mat-card>
         <mat-card-header>
           <div mat-card-avatar>
-            <span class="material-icons">
-              question_answer
-            </span>
+            <span class="material-icons"> question_answer </span>
           </div>
           <mat-card-title>User Studies</mat-card-title>
         </mat-card-header>
         <mat-card-content>
-          <mat-action-list *ngIf="(userStudiesService.getList() | async).length > 0">
-            <button mat-list-item *ngFor="let study of (userStudiesService.getList() | async); last as last" (click)="openUserStudy(study)">
+          <mat-action-list
+            *ngIf="(userStudiesService.getList() | async).length > 0"
+          >
+            <button
+              mat-list-item
+              *ngFor="
+                let study of userStudiesService.getList() | async;
+                last as last
+              "
+              (click)="openUserStudy(study)"
+            >
               <mat-icon matListIcon>label</mat-icon>
-              {{study.name}}
+              {{ study.name }}
               <mat-divider [inset]="true" *ngIf="!last"></mat-divider>
             </button>
           </mat-action-list>
-          <p *ngIf="(userStudiesService.getList() | async).length == 0">No user studies available.</p>
+          <p *ngIf="(userStudiesService.getList() | async).length == 0">
+            No user studies available.
+          </p>
         </mat-card-content>
         <mat-card-actions>
           <button mat-icon-button (click)="toUserStudyCollection()">
@@ -78,7 +98,6 @@
           </button>
         </mat-card-actions>
       </mat-card>
-
     </div>
   </mat-tab>
 
@@ -147,8 +166,4 @@
 
     </div>
   </mat-tab> -->
-
-
 </mat-tab-group>
-
-

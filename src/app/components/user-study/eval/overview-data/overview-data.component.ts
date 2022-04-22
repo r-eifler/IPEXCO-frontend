@@ -1,15 +1,17 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {UserStudyData, UserStudyDemoData} from '../../../../interface/user-study/user-study';
-import {Subject} from 'rxjs';
-import {Demo} from '../../../../interface/demo';
+import { Component, Input, OnInit } from "@angular/core";
+import {
+  UserStudyData,
+  UserStudyDemoData,
+} from "../../../../interface/user-study/user-study";
+import { Subject } from "rxjs";
+import { Demo } from "../../../../interface/demo";
 
 @Component({
-  selector: 'app-overview-data',
-  templateUrl: './overview-data.component.html',
-  styleUrls: ['./overview-data.component.css']
+  selector: "app-overview-data",
+  templateUrl: "./overview-data.component.html",
+  styleUrls: ["./overview-data.component.css"],
 })
 export class OverviewDataComponent implements OnInit {
-
   private ngUnsubscribe: Subject<any> = new Subject();
   showPlots = true;
 
@@ -23,7 +25,7 @@ export class OverviewDataComponent implements OnInit {
   showYAxisLabel = true;
 
   colorScheme = {
-    domain: ['#02496f']
+    domain: ["#02496f"],
   };
 
   dataEntries: UserStudyData[] = [];
@@ -41,36 +43,37 @@ export class OverviewDataComponent implements OnInit {
     this.update();
   }
 
-
   plansData: any[];
   questionData: any[];
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   update() {
     this.showPlots = false;
     this.plansData = [];
     this.questionData = [];
     for (const entry of this.dataEntries) {
-      const demoData: UserStudyDemoData = entry.demosData.find(e => e.demoId === this.selectedDemoId)?.data;
-      if (! demoData) {
+      const demoData: UserStudyDemoData = entry.demosData.find(
+        (e) => e.demoId === this.selectedDemoId
+      )?.data;
+      if (!demoData) {
         return;
       }
-      const displayId = entry.user.prolificId !== '000000' ? entry.user.prolificId : entry.user._id.slice(-5);
+      const displayId =
+        entry.user.prolificId !== "000000"
+          ? entry.user.prolificId
+          : entry.user._id.slice(-5);
       this.plansData.push({
         name: displayId,
-        value: demoData.planRuns.length
+        value: demoData.planRuns.length,
       });
       this.questionData.push({
         name: displayId,
-        value: demoData.expRuns.length
+        value: demoData.expRuns.length,
       });
     }
-    window.setTimeout(() => this.showPlots = true, 200);
+    window.setTimeout(() => (this.showPlots = true), 200);
   }
-
-
 }

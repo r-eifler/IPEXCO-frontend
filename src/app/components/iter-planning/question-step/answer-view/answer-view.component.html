@@ -1,76 +1,77 @@
-<mat-card *ngIf="solvable" style="margin: 10px; position: relative;">
-  <mat-card-header >
+<mat-card *ngIf="solvable" style="margin: 10px; position: relative">
+  <mat-card-header>
     <div mat-card-avatar>
       <mat-icon>question_answer</mat-icon>
     </div>
-    <mat-card-title>
-      Answer
-    </mat-card-title>
-    <button mat-icon-button (click)="close()" style="position: absolute; top: 5px; right: 5px">
+    <mat-card-title> Answer </mat-card-title>
+    <button
+      mat-icon-button
+      (click)="close()"
+      style="position: absolute; top: 5px; right: 5px"
+    >
       <mat-icon>close</mat-icon>
     </button>
   </mat-card-header>
   <mat-card-content>
     <ng-container *ngIf="planForQuestionExists && filteredMUGSs.length > 0">
       <h2>... because then you have to live without:</h2>
-        <mat-tab-group animationDuration="0ms">
-          <mat-tab *ngFor="let mugs of filteredMUGSs; let index = index">
-            <ng-template mat-tab-label>
-              Dependency {{index + 1}}
-            </ng-template>
-            <div style="padding-top: 20px;">
-              <p>You have to give up at least one of ...</p>
-              <ng-container *ngFor="let elem of mugs;last as last">
-                <app-scalable-list *ngIf="! elem.globalHardGoal" icon="bookmark">
-                  <span> {{elem.naturalLanguageDescription}} </span>
-                </app-scalable-list>
-                <app-scalable-list *ngIf="elem.globalHardGoal" icon="priority_high">
-                  <span> {{elem.naturalLanguageDescription}} </span>
-                </app-scalable-list>
-                <mat-divider [inset]="true" *ngIf="! last"></mat-divider>
-              </ng-container>
-            </div>
-          </mat-tab>
-        </mat-tab-group>
+      <mat-tab-group animationDuration="0ms">
+        <mat-tab *ngFor="let mugs of filteredMUGSs; let index = index">
+          <ng-template mat-tab-label> Dependency {{ index + 1 }} </ng-template>
+          <div style="padding-top: 20px">
+            <p>You have to give up at least one of ...</p>
+            <ng-container *ngFor="let elem of mugs; last as last">
+              <app-scalable-list *ngIf="!elem.globalHardGoal" icon="bookmark">
+                <span> {{ elem.naturalLanguageDescription }} </span>
+              </app-scalable-list>
+              <app-scalable-list
+                *ngIf="elem.globalHardGoal"
+                icon="priority_high"
+              >
+                <span> {{ elem.naturalLanguageDescription }} </span>
+              </app-scalable-list>
+              <mat-divider [inset]="true" *ngIf="!last"></mat-divider>
+            </ng-container>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
     </ng-container>
 
     <p *ngIf="planForQuestionExists && filteredMUGSs.length == 0">
       There exists a plan which satisfies the properties in your question.
     </p>
 
-    <p *ngIf="! planForQuestionExists">
-      There is no plan which satisfies this properties.
-      All global hard goals and the plan-properties in the question can not be satisfied together.
+    <p *ngIf="!planForQuestionExists">
+      There is no plan which satisfies this properties. All global hard goals
+      and the plan-properties in the question can not be satisfied together.
     </p>
-
   </mat-card-content>
 </mat-card>
 
-
-<mat-card *ngIf="! solvable" style="margin: 10px;">
+<mat-card *ngIf="!solvable" style="margin: 10px">
   <mat-card-header>
     <div mat-card-avatar>
       <mat-icon>question_answer</mat-icon>
     </div>
-    <mat-card-title>
-      Answer
-    </mat-card-title>
-    <button mat-icon-button (click)="close()" style="position: absolute; top: 5px; right: 5px">
+    <mat-card-title> Answer </mat-card-title>
+    <button
+      mat-icon-button
+      (click)="close()"
+      style="position: absolute; top: 5px; right: 5px"
+    >
       <mat-icon>close</mat-icon>
     </button>
   </mat-card-header>
   <mat-card-content>
-      <h2>... because you can not satisfy all properties in:</h2>
-      <div *ngFor="let mugs of filteredMUGSs;last as last">
-        <ng-container *ngFor="let elem of mugs;last as last2">
-          <app-scalable-list>
-            <p>{{elem.naturalLanguageDescription}}</p>
-          </app-scalable-list>
-          <mat-divider [inset]="true" *ngIf="! last2"></mat-divider>
-        </ng-container>
-        <p *ngIf="! last">or all in:</p>
-      </div>
+    <h2>... because you can not satisfy all properties in:</h2>
+    <div *ngFor="let mugs of filteredMUGSs; last as last">
+      <ng-container *ngFor="let elem of mugs; last as last2">
+        <app-scalable-list>
+          <p>{{ elem.naturalLanguageDescription }}</p>
+        </app-scalable-list>
+        <mat-divider [inset]="true" *ngIf="!last2"></mat-divider>
+      </ng-container>
+      <p *ngIf="!last">or all in:</p>
+    </div>
   </mat-card-content>
 </mat-card>
-
-

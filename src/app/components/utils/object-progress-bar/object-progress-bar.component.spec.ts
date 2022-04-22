@@ -1,16 +1,15 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { ObjectProgressBarComponent } from './object-progress-bar.component';
+import { ObjectProgressBarComponent } from "./object-progress-bar.component";
 
-describe('ObjectProgressBarComponent', () => {
+describe("ObjectProgressBarComponent", () => {
   let component: ObjectProgressBarComponent;
   let fixture: ComponentFixture<ObjectProgressBarComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ObjectProgressBarComponent ]
-    })
-    .compileComponents();
+      declarations: [ObjectProgressBarComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -19,7 +18,7 @@ describe('ObjectProgressBarComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

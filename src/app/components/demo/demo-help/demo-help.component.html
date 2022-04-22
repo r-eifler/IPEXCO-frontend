@@ -6,228 +6,268 @@
     <mat-card-content>
       <mat-horizontal-stepper #stepper [contentEditable]="true">
         <ng-template matStepperIcon="edit">
-          <span class="material-icons">
-            done
-          </span>
+          <span class="material-icons"> done </span>
         </ng-template>
         <ng-template matStepperIcon="done">
-          <span class="material-icons">
-            done
-          </span>
+          <span class="material-icons"> done </span>
         </ng-template>
         <mat-step>
           <ng-template matStepLabel>
-            <div style="font-size: large;">
-              HOW TO: Compute Plans
-            </div>
+            <div style="font-size: large">HOW TO: Compute Plans</div>
           </ng-template>
 
           <h1 style="color: #03658c; font-weight: bold">Compute Plan</h1>
           <p style="font-size: large">
-            To compute a new plan, you have to click the <span style="font-weight: bold">New Plan</span> button in the
+            To compute a new plan, you have to click the
+            <span style="font-weight: bold">New Plan</span> button in the
             navigation bar.
           </p>
 
           <p style="font-size: large">
-            This opens a new view on the right.
-            Here you can select the goals for the plan.
-            In the top you can see the global goals. These goals have to be satisfied by all plans and are
-            automatically included.
+            This opens a new view on the right. Here you can select the goals
+            for the plan. In the top you can see the global goals. These goals
+            have to be satisfied by all plans and are automatically included.
           </p>
 
           <p style="font-size: large">
-            You start the plan computation with the button in the bottom right corner.
-            To compute the plan can take some time.
+            You start the plan computation with the button in the bottom right
+            corner. To compute the plan can take some time.
           </p>
 
           <p style="font-size: large">
-            When the computation finished, a new plan will appear in the navigation bar.
-            The number in the orange circle indicates the utility of the plan.
+            When the computation finished, a new plan will appear in the
+            navigation bar. The number in the orange circle indicates the
+            utility of the plan.
           </p>
 
-          <h1 style="color: #03658c; font-weight: bold; margin-top: 50px">Plan Information</h1>
-            <p style="font-size: large">
-              For a selected plan the middle column provides you the following information:
-            </p>
+          <h1 style="color: #03658c; font-weight: bold; margin-top: 50px">
+            Plan Information
+          </h1>
+          <p style="font-size: large">
+            For a selected plan the middle column provides you the following
+            information:
+          </p>
 
-            <mat-list>
-              <mat-list-item>
-                <mat-icon matListIcon>info</mat-icon>
-                <p style="font-size: large" matLine>The goals you selected.</p>
-              </mat-list-item>
-              <mat-list-item>
-                <mat-icon matListIcon>info</mat-icon>
-                <p style="font-size: large" matLine>The properties which are additionally satisfied by the plan.</p>
-              </mat-list-item>
-              <mat-list-item>
-                <mat-icon matListIcon>info</mat-icon>
-                <p style="font-size: large" matLine>The overall utility of the plan.</p>
-              </mat-list-item>
-              <mat-list-item>
-                <mat-icon matListIcon>info</mat-icon>
-                <p style="font-size: large" matLine>The properties which are not satisfied by the plan.</p>
-              </mat-list-item>
-            </mat-list>
+          <mat-list>
+            <mat-list-item>
+              <mat-icon matListIcon>info</mat-icon>
+              <p style="font-size: large" matLine>The goals you selected.</p>
+            </mat-list-item>
+            <mat-list-item>
+              <mat-icon matListIcon>info</mat-icon>
+              <p style="font-size: large" matLine>
+                The properties which are additionally satisfied by the plan.
+              </p>
+            </mat-list-item>
+            <mat-list-item>
+              <mat-icon matListIcon>info</mat-icon>
+              <p style="font-size: large" matLine>
+                The overall utility of the plan.
+              </p>
+            </mat-list-item>
+            <mat-list-item>
+              <mat-icon matListIcon>info</mat-icon>
+              <p style="font-size: large" matLine>
+                The properties which are not satisfied by the plan.
+              </p>
+            </mat-list-item>
+          </mat-list>
 
           <p style="font-size: large; margin-top: 20px">
-            If it is not possible to find a plan for the selected goals, the tool will tell you,
-            that the selection of goals is unsolvable.
+            If it is not possible to find a plan for the selected goals, the
+            tool will tell you, that the selection of goals is unsolvable.
           </p>
 
-          <h1 style="color: #03658c; font-weight: bold; margin-top: 50px">Task Information</h1>
+          <h1 style="color: #03658c; font-weight: bold; margin-top: 50px">
+            Task Information
+          </h1>
           <p style="font-size: large">
-            In the left column you can access the task information.
-            This includes a picture of the initial setup and additional information about the contained objects
-            and their constraints.
+            In the left column you can access the task information. This
+            includes a picture of the initial setup and additional information
+            about the contained objects and their constraints.
           </p>
 
-<!--          <h1 style="color: #03658c; font-weight: bold; margin-top: 50px">Plan Animation</h1>-->
-<!--          <p style="font-size: large">-->
-<!--            In the left column you can play an animation of the plan.-->
-<!--          </p>-->
+          <!--          <h1 style="color: #03658c; font-weight: bold; margin-top: 50px">Plan Animation</h1>-->
+          <!--          <p style="font-size: large">-->
+          <!--            In the left column you can play an animation of the plan.-->
+          <!--          </p>-->
 
-<!--          <p style="font-size: large">-->
-<!--            To start the animation click the play button.-->
-<!--            With the arrow on the left an right of the play button you can can play on step of the plan at the time.-->
-<!--            With the right most button you can reset the animation.-->
-<!--          </p>-->
+          <!--          <p style="font-size: large">-->
+          <!--            To start the animation click the play button.-->
+          <!--            With the arrow on the left an right of the play button you can can play on step of the plan at the time.-->
+          <!--            With the right most button you can reset the animation.-->
+          <!--          </p>-->
 
-<!--          <p style="font-size: large">-->
-<!--            Below the animation you see the current fuel/energy level of the components.-->
-<!--          </p>-->
-
-
+          <!--          <p style="font-size: large">-->
+          <!--            Below the animation you see the current fuel/energy level of the components.-->
+          <!--          </p>-->
         </mat-step>
         <mat-step *ngIf="canUseQuestions">
           <ng-template matStepLabel>
-            <div style="font-size: large;">
+            <div style="font-size: large">
               HOW TO: Property Incompatibilities
             </div>
           </ng-template>
 
-          <h1 style="color: #03658c; font-weight: bold">Incompatibilities Overview</h1>
+          <h1 style="color: #03658c; font-weight: bold">
+            Incompatibilities Overview
+          </h1>
           <p style="font-size: large">
-            To open the incompatibilities overview you can click on the <span style="font-weight: bold">Show Incompatibilities Overview</span> button.
+            To open the incompatibilities overview you can click on the
+            <span style="font-weight: bold"
+              >Show Incompatibilities Overview</span
+            >
+            button.
           </p>
 
-          <p  style="font-size: large">
-            Given the constraints (e.g. time, fuel, or energy), it is not possible to achieve all properties.
-            The incompatibilities overview groups the properties that cannot be achieved simultaneously.
+          <p style="font-size: large">
+            Given the constraints (e.g. time, fuel, or energy), it is not
+            possible to achieve all properties. The incompatibilities overview
+            groups the properties that cannot be achieved simultaneously.
           </p>
 
-          <h3 style="color: #03658c; font-weight: bold; margin-top: 50px">Example</h3>
-          <p  style="font-size: large">
-            For example lists A,B,C and A,D mean it is not possible to achieve properties A, B and C or properties A and D simultaneously.
+          <h3 style="color: #03658c; font-weight: bold; margin-top: 50px">
+            Example
+          </h3>
+          <p style="font-size: large">
+            For example lists A,B,C and A,D mean it is not possible to achieve
+            properties A, B and C or properties A and D simultaneously.
           </p>
 
-          <h1 style="color: #03658c; font-weight: bold; margin-top: 50px">Filter</h1>
-          <p  style="font-size: large">
+          <h1 style="color: #03658c; font-weight: bold; margin-top: 50px">
+            Filter
+          </h1>
+          <p style="font-size: large">
             You can also filter the property groups with respect to a property.
-            Then only the groups containing the selected property will be displayed.
+            Then only the groups containing the selected property will be
+            displayed.
           </p>
-
         </mat-step>
         <mat-step *ngIf="canUseQuestions">
           <ng-template matStepLabel>
-            <div style="font-size: large;">
-              HOW TO: Ask Questions
-            </div>
+            <div style="font-size: large">HOW TO: Ask Questions</div>
           </ng-template>
 
           <h1 style="color: #03658c; font-weight: bold">Ask Question</h1>
           <p style="font-size: large">
-            As an alternative to the incompatibilities overview, you can also ask specific questions about the currently selected plan.
-            To ask a question you can click the <span style="font-weight: bold">Ask Question </span> button.
-            This opens the question view.
+            As an alternative to the incompatibilities overview, you can also
+            ask specific questions about the currently selected plan. To ask a
+            question you can click the
+            <span style="font-weight: bold">Ask Question </span> button. This
+            opens the question view.
           </p>
 
-          <p  style="font-size: large">
-            You can ask questions of the structure: "Why not <span style="font-weight: bold">X</span>?".
-            Where <span style="font-weight: bold">X</span> is a property, which is currently not satisfied by the plan.
+          <p style="font-size: large">
+            You can ask questions of the structure: "Why not
+            <span style="font-weight: bold">X</span>?". Where
+            <span style="font-weight: bold">X</span> is a property, which is
+            currently not satisfied by the plan.
           </p>
 
-          <p  style="font-size: large">
-            By pressing the button in the bottom you start the computation of the answer.
+          <p style="font-size: large">
+            By pressing the button in the bottom you start the computation of
+            the answer.
           </p>
 
-          <h1 style="color: #03658c; font-weight: bold; margin-top: 50px">Answers</h1>
-          <p  style="font-size: large">There are different possible answers:</p>
+          <h1 style="color: #03658c; font-weight: bold; margin-top: 50px">
+            Answers
+          </h1>
+          <p style="font-size: large">There are different possible answers:</p>
 
           <mat-list>
             <mat-list-item>
               <mat-icon matListIcon>question_answer</mat-icon>
               <p style="font-size: large" matLine>
-                If there is no reason, why the property is not satisfied,
-                the system then answers you:
-                "There exists a plan which satisfies the properties in your question."
+                If there is no reason, why the property is not satisfied, the
+                system then answers you: "There exists a plan which satisfies
+                the properties in your question."
               </p>
               <p style="font-size: large" matLine>
-                This means you can add the property in your question to the goals to increase the utility.
-              </p>
-
-            </mat-list-item>
-            <mat-list-item>
-              <mat-icon matListIcon>question_answer</mat-icon>
-              <p style="font-size: large" matLine>
-                If it is not possible to satisfy the property in your question at all, the system answers:
-              </p>
-              <p style="font-size: large" matLine>
-                "There is no plan which satisfies this property.
-                All global goals and the property in the question can not be satisfied simultaneously."
-              </p>
-              <p style="font-size: large" matLine>
-                This means you can not satisfy the property in your questions given the priority property and
-                the fuel, energy or time constraints.
+                This means you can add the property in your question to the
+                goals to increase the utility.
               </p>
             </mat-list-item>
             <mat-list-item>
               <mat-icon matListIcon>question_answer</mat-icon>
               <p style="font-size: large" matLine>
-                The property in your questions can be satisfied, if you give up at least one of the selected goals.
-                The system then tells you which goals you have to give up.
+                If it is not possible to satisfy the property in your question
+                at all, the system answers:
+              </p>
+              <p style="font-size: large" matLine>
+                "There is no plan which satisfies this property. All global
+                goals and the property in the question can not be satisfied
+                simultaneously."
+              </p>
+              <p style="font-size: large" matLine>
+                This means you can not satisfy the property in your questions
+                given the priority property and the fuel, energy or time
+                constraints.
+              </p>
+            </mat-list-item>
+            <mat-list-item>
+              <mat-icon matListIcon>question_answer</mat-icon>
+              <p style="font-size: large" matLine>
+                The property in your questions can be satisfied, if you give up
+                at least one of the selected goals. The system then tells you
+                which goals you have to give up.
               </p>
             </mat-list-item>
           </mat-list>
 
-
-          <h1 style="color: #03658c; font-weight: bold; margin-top: 50px">No Plan Possible</h1>
-          <p  style="font-size: large">
-            If the system can not find a plan for the selected goals you can ask <span style="font-weight: bold">why?</span>
-            The system answers your question by showing you which goals in your selection can not be achieved simultaneously.
+          <h1 style="color: #03658c; font-weight: bold; margin-top: 50px">
+            No Plan Possible
+          </h1>
+          <p style="font-size: large">
+            If the system can not find a plan for the selected goals you can ask
+            <span style="font-weight: bold">why?</span>
+            The system answers your question by showing you which goals in your
+            selection can not be achieved simultaneously.
           </p>
-
         </mat-step>
-        <mat-step >
+        <mat-step>
           <ng-template matStepLabel>
-            <div style="font-size: large;">
-              HOW TO: Finish
-            </div>
+            <div style="font-size: large">HOW TO: Finish</div>
           </ng-template>
 
-          <p  style="font-size: large">
-            You can leave the task with the <span style="font-weight: bold">Finish</span> button at any time.
+          <p style="font-size: large">
+            You can leave the task with the
+            <span style="font-weight: bold">Finish</span> button at any time.
           </p>
-
-
         </mat-step>
       </mat-horizontal-stepper>
-
     </mat-card-content>
 
     <mat-card-actions style="width: 100%">
       <div class="button-box">
         <!--        <button #nextButton mat-flat-button class='skip-button' (click)="nextStep()" >Skip</button>-->
-        <button mat-icon-button (click)="goBack(stepper)" [disabled]="stepper.selectedIndex === 0" class="step-button">
+        <button
+          mat-icon-button
+          (click)="goBack(stepper)"
+          [disabled]="stepper.selectedIndex === 0"
+          class="step-button"
+        >
           <mat-icon>keyboard_arrow_left</mat-icon>
         </button>
-        <button  mat-icon-button (click)="goForward(stepper)"
-                 [disabled]="stepper.selectedIndex === this.numSteps - 1" class="step-button">
+        <button
+          mat-icon-button
+          (click)="goForward(stepper)"
+          [disabled]="stepper.selectedIndex === this.numSteps - 1"
+          class="step-button"
+        >
           <mat-icon>keyboard_arrow_right</mat-icon>
         </button>
-        <button #startButton mat-flat-button color="primary" (click)="nextStep()"
-                [disabled]="stepper.selectedIndex !== this.numSteps - 1 && ! seenEverything">Start</button>
+        <button
+          #startButton
+          mat-flat-button
+          color="primary"
+          (click)="nextStep()"
+          [disabled]="
+            stepper.selectedIndex !== this.numSteps - 1 && !seenEverything
+          "
+        >
+          Start
+        </button>
       </div>
     </mat-card-actions>
-
   </mat-card>
 </div>

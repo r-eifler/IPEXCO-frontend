@@ -1,16 +1,15 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { IterationStepOverviewComponent } from './iteration-step-overview.component';
+import { IterationStepOverviewComponent } from "./iteration-step-overview.component";
 
-describe('IterationStepOverviewComponent', () => {
+describe("IterationStepOverviewComponent", () => {
   let component: IterationStepOverviewComponent;
   let fixture: ComponentFixture<IterationStepOverviewComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ IterationStepOverviewComponent ]
-    })
-    .compileComponents();
+      declarations: [IterationStepOverviewComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -19,7 +18,7 @@ describe('IterationStepOverviewComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

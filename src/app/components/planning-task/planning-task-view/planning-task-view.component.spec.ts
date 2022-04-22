@@ -1,16 +1,15 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { PlanningTaskViewComponent } from './planning-task-view.component';
+import { PlanningTaskViewComponent } from "./planning-task-view.component";
 
-describe('PlanningTaskViewComponent', () => {
+describe("PlanningTaskViewComponent", () => {
   let component: PlanningTaskViewComponent;
   let fixture: ComponentFixture<PlanningTaskViewComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PlanningTaskViewComponent ]
-    })
-    .compileComponents();
+      declarations: [PlanningTaskViewComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -19,7 +18,7 @@ describe('PlanningTaskViewComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

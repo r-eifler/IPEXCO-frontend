@@ -1,14 +1,40 @@
 <div class="container">
   <div class="back"></div>
-  <div class=bar [style.left.%]="left$ | async" [style.width.%]="width$ | async"></div>
+  <div
+    class="bar"
+    [style.left.%]="left$ | async"
+    [style.width.%]="width$ | async"
+  ></div>
   <div class="values-box">
-    <p class="value" [style.left.%]="0">{{min$ | async}}</p>
-    <p class="value" [style.right.%]="0">{{max$ | async}}</p>
-    <p class="value" [style.left.%]="left$ | async" *ngIf="(v_small$ | async) > (min$ | async)">{{v_small$ | async}}</p>
-    <p class="value" [style.left.%]="(left$ | async) +  (width$ | async)" *ngIf="(v_large$ | async) < (max$ | async)">{{v_large$ | async}}</p>
+    <p class="value" [style.left.%]="0">{{ min$ | async }}</p>
+    <p class="value" [style.right.%]="0">{{ max$ | async }}</p>
+    <p
+      class="value"
+      [style.left.%]="left$ | async"
+      *ngIf="(v_small$ | async) > (min$ | async)"
+    >
+      {{ v_small$ | async }}
+    </p>
+    <p
+      class="value"
+      [style.left.%]="(left$ | async) + (width$ | async)"
+      *ngIf="(v_large$ | async) < (max$ | async)"
+    >
+      {{ v_large$ | async }}
+    </p>
 
-    <p class="value" [style.left.%]="null_pos$ | async"
-      *ngIf="(null_pos$ | async) && (v_small$ | async) != 0 && (v_large$ | async) != 0 && (max$ | async) != 0 && (min$ | async) != 0">
-      0</p>
+    <p
+      class="value"
+      [style.left.%]="null_pos$ | async"
+      *ngIf="
+        (null_pos$ | async) &&
+        (v_small$ | async) != 0 &&
+        (v_large$ | async) != 0 &&
+        (max$ | async) != 0 &&
+        (min$ | async) != 0
+      "
+    >
+      0
+    </p>
   </div>
 </div>

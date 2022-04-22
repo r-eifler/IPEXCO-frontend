@@ -1,14 +1,16 @@
 <div class="main-grid">
   <nav mat-tab-nav-bar>
-    <a mat-tab-link *ngFor="let link of links"
-       (click)="activeLink = link.ref"
-       [active]="activeLink == link.ref"
-       [routerLink]="link.ref" >
-        {{link.name}}
+    <a
+      mat-tab-link
+      *ngFor="let link of links"
+      (click)="activeLink = link.ref"
+      [active]="activeLink == link.ref"
+      [routerLink]="link.ref"
+    >
+      {{ link.name }}
     </a>
   </nav>
   <div style="height: 100%; width: 100%; overflow: auto">
     <router-outlet></router-outlet>
   </div>
 </div>
-

@@ -1,5 +1,5 @@
-.mat-card{
-  display:flex;
+.mat-card {
+  display: flex;
   flex-direction: column;
 }
 
@@ -7,18 +7,18 @@
   flex-shrink: 0;
 }
 
-.mat-card-content{
+.mat-card-content {
   flex-grow: 1;
   overflow: auto;
 }
 
-.mat-card-actions{
-  display:flex;
+.mat-card-actions {
+  display: flex;
   flex-direction: row;
   justify-content: flex-end;
 }
 
-.grid-container-desktop{
+.grid-container-desktop {
   box-sizing: border-box;
   padding: 10px;
   width: 100%;
@@ -34,8 +34,7 @@
   height: 100%;
 }
 
-
-.container-mobile{
+.container-mobile {
   box-sizing: border-box;
   padding: 10px;
   width: 100%;
@@ -47,4 +46,3 @@
 .container-mobile > * {
   margin-bottom: 10px;
 }
-

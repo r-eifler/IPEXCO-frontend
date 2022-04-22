@@ -4,7 +4,6 @@ export interface PaymentInfo {
   steps: number[];
 }
 
-
 export interface ExecutionSettings {
   public: boolean;
   maxRuns: number;
@@ -23,7 +22,7 @@ export interface ExecutionSettings {
   computeDependenciesAutomatically: boolean;
 }
 
-export const defaultExecutionSetting :ExecutionSettings = {
+export const defaultExecutionSetting: ExecutionSettings = {
   public: false,
   maxRuns: 100,
   maxQuestionSize: 1,
@@ -38,5 +37,5 @@ export const defaultExecutionSetting :ExecutionSettings = {
   introTask: false,
   computePlanAutomatically: false,
   computeDependenciesAutomatically: false,
-  paymentInfo: {min: 0, max: 10, steps:[0.5, 0.75, 1]}
-}
+  paymentInfo: { min: 0, max: 10, steps: [0.5, 0.75, 1] },
+};

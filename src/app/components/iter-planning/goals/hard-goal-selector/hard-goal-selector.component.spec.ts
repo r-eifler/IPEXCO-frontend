@@ -1,19 +1,18 @@
 /* tslint:disable:no-unused-variable */
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { DebugElement } from '@angular/core';
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { By } from "@angular/platform-browser";
+import { DebugElement } from "@angular/core";
 
-import { HardGoalSelectorComponent } from './hard-goal-selector.component';
+import { HardGoalSelectorComponent } from "./hard-goal-selector.component";
 
-describe('HardGoalSelectorComponent', () => {
+describe("HardGoalSelectorComponent", () => {
   let component: HardGoalSelectorComponent;
   let fixture: ComponentFixture<HardGoalSelectorComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ HardGoalSelectorComponent ]
-    })
-    .compileComponents();
+      declarations: [HardGoalSelectorComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -22,7 +21,7 @@ describe('HardGoalSelectorComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });
