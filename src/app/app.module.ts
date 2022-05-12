@@ -115,7 +115,6 @@ import { DemoSettingsComponent } from "./components/demo/demo-settings/demo-sett
 import { ProjectOverviewComponent } from "./components/project/project-overview/project-overview.component";
 import { DomainSpecificationComponent } from "./components/files/domain-specification/domain-specification.component";
 import { AnimationHandler } from "./plan-visualization/integration/animation-handler";
-import { PlanVisualizationProvider } from "./provider/plan-visualisation.provider";
 import { DemoCreatorComponent } from "./components/demo/demo-creator/demo-creator.component";
 import { DemoHelpComponent } from "./components/demo/demo-help/demo-help.component";
 import { DemoNavigatorComponent } from "./components/demo/demo-navigator/demo-navigator.component";
@@ -383,7 +382,6 @@ import {
       provide: MAT_BOTTOM_SHEET_DEFAULT_OPTIONS,
       useValue: { hasBackdrop: true },
     },
-    PlanVisualizationProvider,
     MatSnackBar,
   ],
   bootstrap: [AppComponent],

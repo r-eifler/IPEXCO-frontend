@@ -1,5 +1,4 @@
 import { PlanningTaskRelaxationService } from "./../../../service/planning-task/planning-task-relaxations-services";
-import { AnimationSettingsProvider } from "./../../../provider/plan-visualisation.provider";
 import { QUESTION_REDIRECT } from "./../../../app.tokens";
 import { PlannerService } from "../../../service/planner-runs/planner.service";
 import { DemosService } from "../../../service/demo/demo-services";
@@ -15,7 +14,6 @@ import {
 import { DomainSpecificationService } from "src/app/service/files/domain-specification.service";
 import { MatBottomSheet } from "@angular/material/bottom-sheet";
 import { PlanPropertyMapService } from "src/app/service/plan-properties/plan-property-services";
-import { PlanVisualizationProvider } from "src/app/provider/plan-visualisation.provider";
 import { PLANNER_REDIRECT } from "src/app/app.tokens";
 import { Subject } from "rxjs";
 import { DemoSettingsComponent } from "../../demo/demo-settings/demo-settings.component";
@@ -26,8 +24,6 @@ import { NewIterationStepGenerationService } from "src/app/service/new-iteration
   templateUrl: "./project-base.component.html",
   styleUrls: ["./project-base.component.css"],
   providers: [
-    PlanVisualizationProvider,
-    AnimationSettingsProvider,
     { provide: IterationStepsService, useClass: IterationStepsService },
     { provide: PlannerService, useClass: PlannerService },
     {

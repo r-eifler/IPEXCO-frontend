@@ -19,8 +19,6 @@
         >Compute dependencies automatically</mat-slide-toggle
       >
 
-      <!-- <mat-slide-toggle formControlName='showAnimation'>Show Plan Animation</mat-slide-toggle> -->
-
       <mat-form-field style="width: 200px">
         <mat-label>Maximal number of iteration steps</mat-label>
         <input matInput type="number" formControlName="maxRuns" />
@@ -52,6 +50,25 @@
       <mat-slide-toggle formControlName="checkMaxUtility"
         >Stop demo if max utility achieved</mat-slide-toggle
       >
+
+      <mat-slide-toggle formControlName="showPaymentScore"
+        >Show payment score</mat-slide-toggle
+      >
+
+      <mat-form-field style="width: 200px">
+        <mat-label>min payment</mat-label>
+        <input matInput type="number" formControlName="minPayment" />
+      </mat-form-field>
+
+      <mat-form-field style="width: 200px">
+        <mat-label>max payment</mat-label>
+        <input matInput type="number" formControlName="maxPayment" />
+      </mat-form-field>
+
+      <mat-form-field style="width: 200px">
+        <mat-label>Steps</mat-label>
+        <input matInput type="string" formControlName="paymentSteps" />
+      </mat-form-field>
 
       <div class="button-box">
         <button mat-flat-button color="accent" class="save-button">Save</button>

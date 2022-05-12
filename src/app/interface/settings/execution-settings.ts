@@ -7,7 +7,6 @@ export interface PaymentInfo {
 export interface ExecutionSettings {
   public: boolean;
   maxRuns: number;
-  maxQuestionSize: number;
   allowQuestions: boolean;
   provideRelaxationExplanations: boolean;
   usePlanPropertyValues: boolean;
@@ -15,6 +14,7 @@ export interface ExecutionSettings {
   measureTime: boolean;
   maxTime: number;
   checkMaxUtility: boolean;
+  showPaymentInfo: boolean;
   paymentInfo?: PaymentInfo;
   showAnimation: boolean;
   introTask: boolean;
@@ -25,7 +25,6 @@ export interface ExecutionSettings {
 export const defaultExecutionSetting: ExecutionSettings = {
   public: false,
   maxRuns: 100,
-  maxQuestionSize: 1,
   allowQuestions: true,
   provideRelaxationExplanations: true,
   usePlanPropertyValues: false,
@@ -37,5 +36,6 @@ export const defaultExecutionSetting: ExecutionSettings = {
   introTask: false,
   computePlanAutomatically: false,
   computeDependenciesAutomatically: false,
+  showPaymentInfo: false,
   paymentInfo: { min: 0, max: 10, steps: [0.5, 0.75, 1] },
 };

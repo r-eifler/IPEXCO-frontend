@@ -29,11 +29,6 @@ export class SettingsComponent implements OnInit {
       ]),
       allowQuestions: new FormControl(),
       provideRelaxationExplanations: new FormControl(),
-      maxQuestionSize: new FormControl([
-        Validators.required,
-        Validators.min(1),
-        Validators.max(3),
-      ]),
       introTask: new FormControl(),
       public: new FormControl(),
       usePlanPropertyValues: new FormControl(),
@@ -47,44 +42,48 @@ export class SettingsComponent implements OnInit {
       checkMaxUtility: new FormControl(),
       computePlanAutomatically: new FormControl(),
       computeDependenciesAutomatically: new FormControl(),
+      showPaymentScore: new FormControl(),
+      minPayment: new FormControl(),
+      maxPayment: new FormControl(),
+      paymentSteps: new FormControl(),
     });
   }
 
   ngOnInit(): void {
     console.log(this.settings);
-    this.initForm();
+    this.initForm(this.settings);
   }
 
-  initForm(): void {
-    this.settingsForm.controls.maxRuns.setValue(this.settings.maxRuns);
+  initForm(settings): void {
+    this.settingsForm.controls.maxRuns.setValue(settings.maxRuns);
     this.settingsForm.controls.allowQuestions.setValue(
-      this.settings.allowQuestions
+      settings.allowQuestions
     );
     this.settingsForm.controls.provideRelaxationExplanations.setValue(
-      this.settings.provideRelaxationExplanations
+      settings.provideRelaxationExplanations
     );
-    this.settingsForm.controls.maxQuestionSize.setValue(
-      this.settings.maxQuestionSize
-    );
-    this.settingsForm.controls.introTask.setValue(this.settings.introTask);
-    this.settingsForm.controls.public.setValue(this.settings.public);
+    this.settingsForm.controls.introTask.setValue(settings.introTask);
+    this.settingsForm.controls.public.setValue(settings.public);
     this.settingsForm.controls.usePlanPropertyValues.setValue(
-      this.settings.usePlanPropertyValues
+      settings.usePlanPropertyValues
     );
-    this.settingsForm.controls.useTimer.setValue(this.settings.useTimer);
-    this.settingsForm.controls.measureTime.setValue(this.settings.measureTime);
-    this.settingsForm.controls.maxTime.setValue(this.settings.maxTime);
+    this.settingsForm.controls.useTimer.setValue(settings.useTimer);
+    this.settingsForm.controls.measureTime.setValue(settings.measureTime);
+    this.settingsForm.controls.maxTime.setValue(settings.maxTime);
     this.settingsForm.controls.checkMaxUtility.setValue(
-      this.settings.checkMaxUtility
+      settings.checkMaxUtility
     );
     this.settingsForm.controls.computePlanAutomatically.setValue(
-      this.settings.computePlanAutomatically
+      settings.computePlanAutomatically
     );
     this.settingsForm.controls.computeDependenciesAutomatically.setValue(
-      this.settings.computeDependenciesAutomatically
+      settings.computeDependenciesAutomatically
     );
 
-    this.settingsForm.controls.maxQuestionSize.enable();
+    this.settingsForm.controls.showPaymentScore.setValue(settings.showPaymentInfo);
+    this.settingsForm.controls.minPayment.setValue(settings.paymentInfo.min);
+    this.settingsForm.controls.maxPayment.setValue(settings.paymentInfo.max);
+    this.settingsForm.controls.paymentSteps.setValue(settings.paymentInfo.steps);
   }
 
   onSave() {
@@ -94,8 +93,6 @@ export class SettingsComponent implements OnInit {
       this.settingsForm.controls.allowQuestions.value;
     this.settings.provideRelaxationExplanations =
       this.settingsForm.controls.provideRelaxationExplanations.value;
-    this.settings.maxQuestionSize =
-      +this.settingsForm.controls.maxQuestionSize.value;
     this.settings.introTask = this.settingsForm.controls.introTask.value;
     this.settings.usePlanPropertyValues =
       this.settingsForm.controls.usePlanPropertyValues.value;
@@ -106,6 +103,11 @@ export class SettingsComponent implements OnInit {
       this.settingsForm.controls.computePlanAutomatically.value;
     this.settings.computeDependenciesAutomatically =
       this.settingsForm.controls.computeDependenciesAutomatically.value;
+
+    this.settings.showPaymentInfo = this.settingsForm.controls.showPaymentScore.value;
+    this.settings.paymentInfo.max = this.settingsForm.controls.minPayment.value;
+    this.settings.paymentInfo.min = this.settingsForm.controls.maxPayment.value;
+    this.settings.paymentInfo.steps = this.settingsForm.controls.paymentSteps.value;
 
     this.updatedSettings.next(this.settings);
   }
