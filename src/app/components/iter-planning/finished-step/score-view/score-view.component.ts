@@ -1,3 +1,5 @@
+import { ExecutionSettingsServiceService } from './../../../../service/settings/ExecutionSettingsService.service';
+import { ExecutionSettings } from 'src/app/interface/settings/execution-settings';
 import {
   getMaxRelaxationCost,
   PlanningTaskRelaxationSpace,
@@ -42,9 +44,12 @@ export class ScoreViewComponent implements OnInit {
   maxRelqaxationCost$: Observable<number>;
   overallScore$: Observable<number>;
 
+  settings$: Observable<ExecutionSettings>;
+
   constructor(
     private planPropertiesMapService: PlanPropertyMapService,
-    private planningTaskRelaxationService: PlanningTaskRelaxationService
+    private planningTaskRelaxationService: PlanningTaskRelaxationService,
+    private settingsService: ExecutionSettingsServiceService,
   ) {
     this.planProperties$ = planPropertiesMapService.getMap();
     this.relaxationSpaces$ = planningTaskRelaxationService.getList();
@@ -106,6 +111,8 @@ export class ScoreViewComponent implements OnInit {
       this.planValue$,
       this.relqaxationCost$,
     ]).pipe(map(([planValue, relaxationCost]) => relaxationCost + planValue));
+
+    this.settings$ = this.settingsService.getSelectedObject();
   }
 
   ngOnInit(): void {}

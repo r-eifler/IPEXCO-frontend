@@ -42,3 +42,12 @@
   position: absolute;
   font-size: larger;
 }
+
+.tick {
+  box-sizing: border-box;
+  height: 12px;
+  width: 5px;
+  top: -1px;
+  position: absolute;
+  background-color: $accent;
+}

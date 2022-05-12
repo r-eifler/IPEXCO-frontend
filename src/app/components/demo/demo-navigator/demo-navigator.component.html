@@ -1,6 +1,21 @@
 <div class="main-container">
   <div class="action-container">
-    <button mat-stroked-button (click)="showHelp()">Help</button>
+    <div class="bar-container" *ngIf="(settings$ | async).showPaymentInfo">
+      <mat-icon>paid</mat-icon>
+      <app-payment-bar
+        [min]="0"
+        [max]="maxPlanValue$ | async"
+        [value1]="0"
+        [value2]="overallScore$ | async"
+        [paymentInfo]="(settings$ | async).paymentInfo"
+        style="width: 100%; height: 20%;"
+      ></app-payment-bar>
+    </div>
+    <div class="button-container">
+      <button mat-stroked-button (click)="showHelp()">Finish</button>
+      <button mat-stroked-button (click)="showHelp()">Help</button>
+    </div>
+
   </div>
 
   <div class="bottom-container">

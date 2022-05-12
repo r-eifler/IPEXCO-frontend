@@ -1,0 +1,26 @@
+<div class="container">
+
+  <div class="back"></div>
+  <div
+    class="bar"
+    [style.left.%]="left$ | async"
+    [style.width.%]="width$ | async"
+  ></div>
+
+  <div class="tick" [style.left.%]="null_pos$ | async"></div>
+  <div *ngFor="let level of (paymentLevels$ | async)"
+      class="tick" [style.left.%]="level[0]"></div>
+
+  <div class="values-box" *ngIf="(showPayment$ | async)">
+    <p
+    class="label"
+    [style.left.%]="null_pos$ | async">
+      {{ (paymentInfo$ | async).min | currency: 'GBP'}}
+    </p>
+
+    <p *ngFor="let level of (paymentLevels$ | async)"
+      class="label" [style.left.%]="level[0]">
+      {{ level[1] | currency: 'GBP'}}</p>
+  </div>
+</div>
+

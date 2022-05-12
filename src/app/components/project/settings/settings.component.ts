@@ -105,8 +105,8 @@ export class SettingsComponent implements OnInit {
       this.settingsForm.controls.computeDependenciesAutomatically.value;
 
     this.settings.showPaymentInfo = this.settingsForm.controls.showPaymentScore.value;
-    this.settings.paymentInfo.max = this.settingsForm.controls.minPayment.value;
-    this.settings.paymentInfo.min = this.settingsForm.controls.maxPayment.value;
+    this.settings.paymentInfo.max = this.settingsForm.controls.maxPayment.value;
+    this.settings.paymentInfo.min = this.settingsForm.controls.minPayment.value;
     this.settings.paymentInfo.steps = this.settingsForm.controls.paymentSteps.value;
 
     this.updatedSettings.next(this.settings);

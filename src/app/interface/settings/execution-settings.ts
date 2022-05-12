@@ -5,6 +5,7 @@ export interface PaymentInfo {
 }
 
 export interface ExecutionSettings {
+  _id: string|number;
   public: boolean;
   maxRuns: number;
   allowQuestions: boolean;
@@ -23,6 +24,7 @@ export interface ExecutionSettings {
 }
 
 export const defaultExecutionSetting: ExecutionSettings = {
+  _id: 0,
   public: false,
   maxRuns: 100,
   allowQuestions: true,

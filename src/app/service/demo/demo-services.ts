@@ -13,6 +13,8 @@ import { ADD, EDIT, LOAD, REMOVE } from "../../store/generic-list.store";
 import { SelectedObjectService } from "../base/selected-object.service";
 import { RunStatus } from "src/app/interface/run";
 import { DemoNewIterationStepGenerationService } from "../new-iteration-step-generation-service.service";
+import { ExecutionSettingsServiceService } from "../settings/ExecutionSettingsService.service";
+import { BaseProjectService } from "../project/project-services";
 @Injectable({
   providedIn: "root",
 })
@@ -157,12 +159,15 @@ export class DemosService extends ObjectCollectionService<Demo> {
 @Injectable({
   providedIn: "root",
 })
-export class RunningDemoService extends SelectedObjectService<Demo> {
-  constructor(store: RunningDemoStore) {
-    super(store);
+export class RunningDemoService extends BaseProjectService<Demo> {
+  constructor(
+    store: RunningDemoStore,
+    settingsService: ExecutionSettingsServiceService) {
+    super(store, settingsService);
   }
 
   saveObject(demo: Demo) {
+    this.settingsService.saveObject(demo.settings);
     this.selectedObjectStore.dispatch({ type: LOAD, data: demo });
     console.log(demo);
   }

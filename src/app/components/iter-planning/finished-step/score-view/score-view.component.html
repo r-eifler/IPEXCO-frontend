@@ -2,18 +2,18 @@
   <mat-card-header>
     <mat-card-title>Score</mat-card-title>
   </mat-card-header>
-  <ng-container *ngIf="!(isUnSolvable$ | async)">
+  <ng-container *ngIf="(isUnSolvable$ | async)  === false">
     <div class="bar-container" *ngIf="isSolvable$ | async">
       <mat-icon>grade</mat-icon>
       <app-score-bar
-        [min]="maxRelqaxationCost$ | async"
+        [min]="0"
         [max]="maxPlanValue$ | async"
         [value1]="0"
         [value2]="planValue$ | async"
         style="width: 100%; height: 20%"
       ></app-score-bar>
     </div>
-    <div class="bar-container" *ngIf="!(isSolvable$ | async)">
+    <div class="bar-container" *ngIf="(isSolvable$ | async) === false">
       <mat-icon>grade</mat-icon>
       <p>Compute plan before plan score can be displayed.</p>
     </div>
@@ -21,7 +21,7 @@
       <mat-icon>battery_full</mat-icon>
       <app-score-bar
         [min]="maxRelqaxationCost$ | async"
-        [max]="maxPlanValue$ | async"
+        [max]="0"
         [value1]="relqaxationCost$ | async"
         [value2]="0"
         style="width: 100%; height: 20%"
@@ -37,9 +37,20 @@
         style="width: 100%; height: 20%"
       ></app-score-bar>
     </div>
-    <div class="bar-container" *ngIf="!(isSolvable$ | async)">
+    <div class="bar-container" *ngIf="(isSolvable$ | async)  === false">
       <mat-icon>trending_up</mat-icon>
       <p>Compute plan before overall score can be displayed.</p>
+    </div>
+    <div class="bar-container" *ngIf="(isSolvable$ | async) && (settings$ | async).showPaymentInfo">
+      <mat-icon>paid</mat-icon>
+      <app-payment-bar *ngIf="(settings$ | async).showPaymentInfo"
+        [min]="maxRelqaxationCost$ | async"
+        [max]="maxPlanValue$ | async"
+        [value1]="0"
+        [value2]="overallScore$ | async"
+        [paymentInfo]="(settings$ | async).paymentInfo"
+        style="width: 100%; height: 20%;"
+      ></app-payment-bar>
     </div>
   </ng-container>
   <div *ngIf="isUnSolvable$ | async">

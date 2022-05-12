@@ -1,3 +1,4 @@
+import { IterationStepsService } from './../../../service/planner-runs/iteration-steps.service';
 import { ExecutionSettings } from "src/app/interface/settings/execution-settings";
 import { DemoFinishedComponent } from "./../demo-finished/demo-finished.component";
 import {
@@ -11,14 +12,14 @@ import {
   ViewChild,
 } from "@angular/core";
 import { Demo } from "src/app/interface/demo";
-import { BehaviorSubject, Observable, Subject } from "rxjs";
-import { IterationStep, PlanRun, RunStatus } from "src/app/interface/run";
+import { BehaviorSubject, combineLatest, Observable, Subject } from "rxjs";
+import { computePlanValue, computeRelaxationCost, IterationStep, PlanRun, RunStatus } from "src/app/interface/run";
 import { RunningDemoService } from "src/app/service/demo/demo-services";
 import { CurrentProjectService } from "src/app/service/project/project-services";
 import { takeUntil, filter, map } from "rxjs/operators";
 import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
 import { TimeLoggerService } from "../../../service/logger/time-logger.service";
-import { PlanProperty } from "../../../interface/plan-property/plan-property";
+import { getMaximalPlanValue, PlanProperty } from "../../../interface/plan-property/plan-property";
 import { DemoHelpDialogComponent } from "../demo-help-dialog/demo-help-dialog.component";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { CurrencyPipe } from "@angular/common";
@@ -28,6 +29,10 @@ import {
   NewIterationStepStoreService,
   SelectedIterationStepService,
 } from "src/app/service/planner-runs/selected-iteration-step.service";
+import { PlanPropertyMapService } from "src/app/service/plan-properties/plan-property-services";
+import { PlanningTaskRelaxationService } from "src/app/service/planning-task/planning-task-relaxations-services";
+import { ExecutionSettingsServiceService } from "src/app/service/settings/ExecutionSettingsService.service";
+import { PlanningTaskRelaxationSpace } from "src/app/interface/planning-task-relaxation";
 
 @Component({
   selector: "app-demo-navigator",
@@ -74,12 +79,18 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
   finished = false;
 
   demo: Demo;
-  runs$: BehaviorSubject<PlanRun[]>;
-  globalHardGoals: PlanProperty[];
 
   step$: Observable<IterationStep>;
+  steps$: Observable<IterationStep[]>;
   newStep$: Observable<IterationStep>;
 
+  private planProperties$: BehaviorSubject<Map<string, PlanProperty>>;
+  private relaxationSpaces$: BehaviorSubject<PlanningTaskRelaxationSpace[]>;
+
+  maxPlanValue$: Observable<number>;
+  planValue$: Observable<number>;
+  relqaxationCost$: Observable<number>;
+  overallScore$: Observable<number>;
   settings$: Observable<ExecutionSettings>;
 
   constructor(
@@ -88,30 +99,21 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
     public currentProjectService: CurrentProjectService,
     private selectedIterationStepService: SelectedIterationStepService,
     private newIterationStepService: NewIterationStepStoreService,
+    private iterationStepsService: IterationStepsService,
+    private planPropertiesMapService: PlanPropertyMapService,
+    private planningTaskRelaxationService: PlanningTaskRelaxationService,
+    private settingsService: ExecutionSettingsServiceService,
     public dialog: MatDialog,
     private snackBar: MatSnackBar
   ) {
     this.step$ = this.selectedIterationStepService.getSelectedObject();
+    this.steps$ = this.iterationStepsService.getList();
     this.newStep$ = this.newIterationStepService.getSelectedObject();
+    this.planProperties$ = planPropertiesMapService.getMap();
+    this.relaxationSpaces$ = planningTaskRelaxationService.getList();
 
-    this.settings$ = this.runningDemoService.getSelectedObject().pipe(
-      filter((d) => !!d),
-      map((d) => d.settings)
-    );
+    this.settings$ = this.settingsService.getSelectedObject();
 
-    // this.runningDemoService.getSelectedObject()
-    //   .pipe(takeUntil(this.ngUnsubscribe$))
-    //   .subscribe(
-    //     demo => {
-    //       if (demo) {
-    //         this.demo = demo;
-    //         // this.runsService.reset();
-    //         this.currentProjectService.saveObject(demo);
-    //         this.maxUtility = demo.maxUtility?.value;
-    //       }
-
-    //     }
-    //   );
   }
 
   ngOnInit(): void {
@@ -119,6 +121,32 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
     this.loggerId = this.timeLogger.register("demo-navigator");
     this.initPlanRuns();
     this.initTimer();
+
+    this.maxPlanValue$ = this.planProperties$.pipe(
+      map((planProperties) => {
+        if (!!planProperties && planProperties.size > 0) {
+          return getMaximalPlanValue(planProperties);
+        } else {
+          return 0;
+        }
+      })
+    );
+
+    this.overallScore$ = combineLatest([
+      this.steps$,
+      this.planProperties$,
+      this.relaxationSpaces$,
+    ]).pipe(
+      filter(([steps, planProperties, spaces]) => !!steps && !!planProperties && !! spaces),
+      map(([steps, planProperties, spaces]) => {
+        let max = 0;
+        for(let step of steps){
+          let score = computePlanValue(step, planProperties) - computeRelaxationCost(step, spaces);
+          max = score > max ? score : max;
+        }
+        return max;
+      })
+    );
 
     this.settings$
       .pipe(

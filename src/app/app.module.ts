@@ -193,6 +193,7 @@ import {
   FinishedStepInterfaceStatusService,
   NewStepInterfaceStatusService,
 } from "./service/user-interface/interface-status-services";
+import { PaymentBarComponent } from './components/utils/payment-bar/payment-bar.component';
 
 @NgModule({
   declarations: [
@@ -274,6 +275,7 @@ import {
     ObjectProgressBarComponent,
     ScoreViewComponent,
     ScoreBarComponent,
+    PaymentBarComponent,
   ],
   imports: [
     RouterModule.forRoot(appRoutes, {
