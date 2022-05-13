@@ -45,7 +45,7 @@ export class DemoBaseComponent implements OnInit, OnDestroy {
   private ngUnsubscribe: Subject<any> = new Subject();
 
   // Steps are help, task info and then the demo itself.
-  step = 2;
+  step = 0;
   private loggerId: number;
 
   constructor(

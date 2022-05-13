@@ -1,11 +1,11 @@
-<app-demo-help *ngIf="step == 0" (next)="nextStep()"></app-demo-help>
+<app-demo-help *ngIf="step === 0" (next)="nextStep()"></app-demo-help>
 
 <app-demo-task-intro
-  *ngIf="step == 1"
+  *ngIf="step === 1"
   (next)="nextStep()"
 ></app-demo-task-intro>
 
 <app-demo-navigator
-  *ngIf="step == 2"
+  *ngIf="step === 2"
   (finishedDemo)="toDemoCollection()"
 ></app-demo-navigator>

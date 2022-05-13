@@ -1,5 +1,8 @@
 <div class="main-container">
   <div class="action-container">
+    <div class="timer-container">
+      <p>Timer: <span>{{(timer |async) | date:'mm:ss'}}</span></p>
+    </div>
     <div class="bar-container" *ngIf="(settings$ | async).showPaymentInfo">
       <mat-icon>paid</mat-icon>
       <app-payment-bar
@@ -12,7 +15,7 @@
       ></app-payment-bar>
     </div>
     <div class="button-container">
-      <button mat-stroked-button (click)="showHelp()">Finish</button>
+      <button mat-stroked-button (click)="finishDemo()">Finish</button>
       <button mat-stroked-button (click)="showHelp()">Help</button>
     </div>
 

@@ -275,7 +275,7 @@ import { PaymentBarComponent } from './components/utils/payment-bar/payment-bar.
     ObjectProgressBarComponent,
     ScoreViewComponent,
     ScoreBarComponent,
-    PaymentBarComponent,
+    PaymentBarComponent
   ],
   imports: [
     RouterModule.forRoot(appRoutes, {

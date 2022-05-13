@@ -16,7 +16,7 @@ import { BehaviorSubject, combineLatest, Observable, Subject } from "rxjs";
 import { computePlanValue, computeRelaxationCost, IterationStep, PlanRun, RunStatus } from "src/app/interface/run";
 import { RunningDemoService } from "src/app/service/demo/demo-services";
 import { CurrentProjectService } from "src/app/service/project/project-services";
-import { takeUntil, filter, map } from "rxjs/operators";
+import { takeUntil, filter, map, take } from "rxjs/operators";
 import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
 import { TimeLoggerService } from "../../../service/logger/time-logger.service";
 import { getMaximalPlanValue, PlanProperty } from "../../../interface/plan-property/plan-property";
@@ -45,40 +45,19 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
 
   @Output() finishedDemo = new EventEmitter<void>();
 
-  @ViewChild("barContainer") barContainerRef: ElementRef;
-
-  computeNewPlan = false;
-  askQuestion = false;
-  showAnswer = false;
-  showGlobalExplanation = false;
-  plannerBusy = false;
-
-  selectedPlan: PlanRun = null;
-  runStatus = RunStatus;
-
   timerIntervall;
 
   startTime: number;
   currentTime = 0;
 
   maxTime = 15000;
-  timer: number;
+  timer: BehaviorSubject<number> = new BehaviorSubject(0);
 
   notificationTimer: Timeout[] = [];
 
-  maxAchievedUtility = 0;
-  maxUtility = 0;
-  progressValue = 0;
-  payment = 0;
-  maxPayment = 0;
-
-  computedPlans = 0;
-  askedQuestions = 0;
-  usedGlobalExplanations = 0;
-
   finished = false;
 
-  demo: Demo;
+  demo$: Observable<Demo>;
 
   step$: Observable<IterationStep>;
   steps$: Observable<IterationStep[]>;
@@ -106,6 +85,7 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
     public dialog: MatDialog,
     private snackBar: MatSnackBar
   ) {
+    this.demo$ = this.runningDemoService.getSelectedObject();
     this.step$ = this.selectedIterationStepService.getSelectedObject();
     this.steps$ = this.iterationStepsService.getList();
     this.newStep$ = this.newIterationStepService.getSelectedObject();
@@ -117,9 +97,7 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    //TODO check if demo is already initialized
     this.loggerId = this.timeLogger.register("demo-navigator");
-    this.initPlanRuns();
     this.initTimer();
 
     this.maxPlanValue$ = this.planProperties$.pipe(
@@ -155,50 +133,26 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
       )
       .subscribe((settings) => {
         if (settings.introTask) {
+          let text = "You have not computed any plans yet. Are you facing any difficulties? " +
+          "You can open the help page with the button in the upper right corner."
+          if (settings.allowQuestions) {
+            text = "You have not computed any plans or asked any questions yet. Are you facing any difficulties? " +
+            "You can open the help page with the button in the upper right corner."
+          }
           const notTimer = setTimeout(() => {
-            //TODO update
-            if (settings.allowQuestions) {
-              this.snackBar.open(
-                "You have not computed any plans or asked any questions yet. Are you facing any difficulties? " +
-                  "You can open the help page with the button in the upper right corner.",
-                "OK"
-              );
-              return;
-            }
-            if (this.computedPlans === 1) {
-              this.snackBar.open(
-                "You have not computed any plans yet. Are you facing any difficulties? " +
-                  "You can open the help page with the button in the upper right corner.",
-                "OK"
-              );
-            }
+            this.steps$.pipe(
+              filter(steps => !!steps),
+              take(1),
+            ).subscribe(steps => {
+              if(steps.length <= 1){
+                this.snackBar.open(text, 'OK');
+              }
+            })
           }, 120000);
           this.notificationTimer.push(notTimer);
         }
       });
   }
-
-  //TODO do in score component
-  // ngAfterViewInit() {
-  //   this.settings$.subscribe(settings => {
-  //     if (this.demo.settings.checkMaxUtility) {
-  //       const payInfo = this.demo.settings.paymentInfo;
-  //       const pipe = new CurrencyPipe('en-US', 'GBP');
-  //       for (const s of payInfo.steps) {
-  //         if (s == 1) {
-  //           break;
-  //         }
-  //         const label = document.createElement('div');
-  //         const value = payInfo.min + (payInfo.max - payInfo.min) * s;
-  //         label.innerText = pipe.transform(value, 'GBP', 'symbol', '1.2-2');
-  //         label.style.position = 'absolute';
-  //         label.style.left = (s * 100).toString() + '%';
-  //         label.style.top = '55%';
-  //         this.barContainerRef.nativeElement.appendChild(label);
-  //       }
-  //     }
-  //   });
-  // }
 
   ngOnDestroy(): void {
     this.ngUnsubscribe$.next();
@@ -217,13 +171,27 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
   }
 
   showDemoFinished(timesUp: boolean) {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.width = "500px";
-    dialogConfig.data = {
-      demo: this.demo,
-      maxUtility: this.maxUtility,
-      maxAchievedUtility: this.maxAchievedUtility,
-      payment: this.payment,
+
+    combineLatest([this.demo$, this.overallScore$, this.maxPlanValue$, this.settings$]).pipe(
+      filter(([demo, maxAchievedUtility, maxPlanValue, settings]) => !!demo),
+      take(1)
+    ).subscribe(([demo, maxAchievedUtility, maxPlanValue, settings]) => {
+      // TODO udate with demo max uitility
+      let achieved = (maxAchievedUtility / maxPlanValue);
+      let payment = settings.paymentInfo.min;
+      for(let step of settings.paymentInfo.steps){
+        if(achieved >= step){
+          payment = settings.paymentInfo.min + (settings.paymentInfo.max - settings.paymentInfo.min) * achieved
+        }
+      }
+
+      const dialogConfig = new MatDialogConfig();
+      dialogConfig.width = "500px";
+      dialogConfig.data = {
+      demo: demo,
+      maxUtility: maxPlanValue,
+      maxAchievedUtility: maxAchievedUtility,
+      payment: payment,
       timesUp,
     };
 
@@ -231,7 +199,7 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
 
     dialogRef
       .afterClosed()
-      .pipe(takeUntil(this.ngUnsubscribe$))
+      .pipe(take(1))
       .subscribe((result) => {
         if (result) {
           this.snackBar.dismiss();
@@ -239,11 +207,14 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
           this.finishedDemo.emit();
         }
       });
+    });
+
   }
 
   initTimer() {
-    this.settings$.subscribe((settings) => {
+    this.settings$.pipe(takeUntil(this.ngUnsubscribe$)).subscribe((settings) => {
       if (settings && (settings.measureTime || settings.useTimer)) {
+        console.log("init Timer")
         this.maxTime = settings.maxTime ? settings.maxTime : 50000;
         this.startTime = new Date().getTime();
         this.timerIntervall = setInterval(() => {
@@ -253,10 +224,11 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
 
           const c = new Date().getTime();
           this.currentTime = c - this.startTime;
-          this.timer = this.maxTime - this.currentTime;
-          this.timer = this.timer < 0 ? 0 : this.timer;
+          let timeToGo = this.maxTime - this.currentTime;
+          timeToGo = timeToGo < 0 ? 0 : timeToGo
+          this.timer.next(timeToGo);
 
-          if (this.timer <= 0 && !this.finished) {
+          if (timeToGo <= 0 && !this.finished) {
             this.finished = true;
             this.showDemoFinished(true);
             clearInterval(this.timerIntervall);
@@ -266,31 +238,19 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
     });
   }
 
-  async initPlanRuns() {
-    // TODO move this to service
-    // const run: PlanRun = new PlanRun('Plan ' + (this.runsService.getNumRuns() + 1), RunStatus.pending);
-    // run._id= this.runsService.getNumRuns().toString();
-    //   name: 'Plan ' + (this.runsService.getNumRuns() + 1),
-    //   status: null,
-    //   planProperties: this.globalHardGoals,
-    //   hardGoals: this.globalHardGoals.map(value => (value.name)),
-    //   log: null,
-    //   explanationRuns: [],
-    //   previousRun: null,
-    // };
-    // console.log(run);
-    // this.plannerService.execute_plan_run(run);
-    // this.taskCreatorClose(true);
-  }
-
   showHelp() {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.width = "80%";
-    dialogConfig.height = "80%";
-    dialogConfig.data = {
-      demo: this.demo,
-    };
+    this.demo$.pipe(
+      filter(d => !!d),
+      take(1)
+    ).subscribe(d => {
+      const dialogConfig = new MatDialogConfig();
+      dialogConfig.width = "80%";
+      dialogConfig.height = "80%";
+      dialogConfig.data = {
+        demo: d,
+      };
 
-    const dialogRef = this.dialog.open(DemoHelpDialogComponent, dialogConfig);
+      const dialogRef = this.dialog.open(DemoHelpDialogComponent, dialogConfig);
+    });
   }
 }
