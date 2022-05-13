@@ -55,7 +55,7 @@ export class DemoInfoComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   downloadDemoData() {
-    const jsonDemoData = JSON.stringify(this.demo.data);
+    const jsonDemoData = "" // TODO JSON.stringify(this.demo.data);
     const jsonMaxUtilityData = JSON.stringify(this.demo.maxUtility);
     const file = new Blob([jsonDemoData, "\n\n", jsonMaxUtilityData], {
       type: "plain/json",

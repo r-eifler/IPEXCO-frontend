@@ -13,7 +13,6 @@ export interface Demo extends Project {
   status?: RunStatus;
   completion: number;
   definition?: string;
-  data?: DemoDefinition;
   explanations: DemoExplanation[];
   taskInfo?: string;
   maxUtility?: { value: number; selectedPlanProperties: string[] };

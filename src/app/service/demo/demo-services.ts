@@ -129,7 +129,7 @@ export class DemosService extends ObjectCollectionService<Demo> {
 
   updateDemo(demo: Demo): void {
     this.http
-      .put<IHTTPData<Demo>>(this.BASE_URL, demo)
+      .put<IHTTPData<Demo>>(`${this.BASE_URL}/${demo._id}`, {data: demo})
       .subscribe((httpData) => {
         const action = { type: EDIT, data: httpData.data };
         this.listStore.dispatch(action);

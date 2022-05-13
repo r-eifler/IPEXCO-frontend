@@ -114,11 +114,7 @@
       </button>
       <button
         mat-menu-item
-        [disabled]="
-          demo.status == runStatus.running || demo.status == runStatus.pending
-        "
-        (click)="deleteDemo(demo)"
-      >
+        (click)="deleteDemo(demo)">
         <mat-icon>delete</mat-icon>
         <span>Delete</span>
       </button>

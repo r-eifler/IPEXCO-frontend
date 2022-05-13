@@ -32,21 +32,21 @@ export class DemoCreatorComponent implements OnInit {
     public dialogRef: MatDialogRef<DemoCreatorComponent>,
     @Inject(MAT_DIALOG_DATA) data
   ) {
-    // console.log(data);
+    console.log(data);
     this.currentProjectId = data.projectId;
     this.demo = data.demo;
     this.update = data.update;
 
     this.taskInfo = this.demo ? this.demo.taskInfo : "";
-    this.demoData = this.demo ? this.demo.data.toString() : "";
-    this.maxUtilityData = this.demo ? this.demo.maxUtility.toString() : "";
+    this.demoData = this.demo ? JSON.stringify(this.demo.explanations) : "";
+    this.maxUtilityData = this.demo.maxUtility ? this.demo.maxUtility.toString() : "";
 
     this.demoForm = new FormGroup({
       name: new FormControl(this.demo ? this.demo.name : ""),
       description: new FormControl(this.demo ? this.demo.description : ""),
       taskInfo: new FormControl(this.demo ? this.demo.taskInfo : ""),
       precomputeToggle: new FormControl(),
-      demoData: new FormControl(this.demo ? this.demo.data : ""),
+      demoData: new FormControl(this.demo ? JSON.stringify(this.demo.explanations) : ""),
       maxUtilityData: new FormControl(this.demo ? this.demo.maxUtility : ""),
     });
   }
