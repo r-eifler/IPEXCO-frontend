@@ -1,13 +1,5 @@
 <div class="main-container">
-  <mat-card
-    class="basic-card"
-    style="
-      grid-column: 1 / span 1;
-      grid-row: 1 / span 3;
-      height: 1000px;
-      overflow: auto;
-    "
-  >
+  <mat-card class="basic-card">
     <mat-card-header>
       <mat-card-title> Test Persons </mat-card-title>
     </mat-card-header>
@@ -35,35 +27,35 @@
         mat-tab-link
         *ngFor="let demoId of demoIds"
         (click)="selectDemo(demoId)"
-        [active]="selectedDemoId == demoId"
+        [active]="selectedDemoId === demoId"
         >{{ usDemos.get(demoId)?.name }}</a
       >
     </nav>
     <div style="height: 100%; width: 100%">
       <nav mat-tab-nav-bar>
-        <a mat-tab-link (click)="tabId = 1" [active]="tabId == 1">Overview</a>
-        <a mat-tab-link (click)="tabId = 2" [active]="tabId == 2"
+        <a mat-tab-link (click)="tabId = 1" [active]="tabId === 1">Overview</a>
+        <a mat-tab-link (click)="tabId = 2" [active]="tabId === 2"
           >Time Logger</a
         >
-        <a mat-tab-link (click)="tabId = 3" [active]="tabId == 3"
+        <a mat-tab-link (click)="tabId = 3" [active]="tabId === 3"
           >Test Person</a
         >
       </nav>
       <div style="height: 100%; width: 100%; overflow: auto">
         <app-overview-data
-          *ngIf="tabId == 1"
+          *ngIf="tabId === 1"
           style="height: 100%; overflow: auto"
           [data]="data"
           [demoId]="selectedDemoId"
         ></app-overview-data>
         <app-time-logger-data
-          *ngIf="tabId == 2"
+          *ngIf="tabId === 2"
           style="height: 100%; overflow: auto"
           [data]="selectedDataEntries"
           [demoId]="selectedDemoId"
         ></app-time-logger-data>
         <app-individual-run-user-data
-          *ngIf="tabId == 3"
+          *ngIf="tabId === 3"
           style="height: 100%; overflow: auto"
           [data]="selectedDataEntries"
           [demoId]="selectedDemoId"

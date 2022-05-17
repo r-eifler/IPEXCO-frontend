@@ -18,10 +18,7 @@ export class UserStudyBaseComponent implements OnInit, OnDestroy {
   isMobile: boolean;
 
   constructor(
-    private userStudiesService: UserStudiesService,
-    private selectedUserStudyService: RunningUserStudyService,
     private responsiveService: ResponsiveService,
-    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {

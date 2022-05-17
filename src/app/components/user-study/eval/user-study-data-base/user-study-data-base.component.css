@@ -16,4 +16,8 @@
 
 .basic-card {
   margin-top: 10px;
+  grid-column: 1 / span 1;
+  grid-row: 1 / span 3;
+  height: 1000px;
+  overflow: auto;
 }

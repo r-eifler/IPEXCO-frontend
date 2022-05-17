@@ -46,12 +46,12 @@ export class ObjectCollectionService<T extends Identifiable> {
   pipeGet = map((value: T): T => value);
 
   findCollection(queryParams: QueryParam[] = []) {
-    // console.log('find: ' + this.BASE_URL);
+    console.log('get collection from ' + this.BASE_URL);
     let httpParams = new HttpParams();
     for (const qp of queryParams) {
       httpParams = httpParams.set(qp.param, qp.value);
     }
-
+    console.log(httpParams);
     this.http
       .get<IHTTPData<T[]>>(this.BASE_URL, { params: httpParams })
       .pipe(this.pipeFindData, this.pipeFind)

@@ -1,18 +1,15 @@
+import { UserStudyDataService } from './../../../../service/user-study/user-study-data.service';
 import { Component, OnInit } from "@angular/core";
-import { Subject } from "rxjs";
+import { Observable, Subject } from "rxjs";
 import {
   RunningUserStudyService,
   UserStudiesService,
 } from "../../../../service/user-study/user-study-services";
 import { takeUntil } from "rxjs/operators";
-import {
-  UserStudy,
-  UserStudyStepType,
-} from "../../../../interface/user-study/user-study";
-import { Demo } from "../../../../interface/demo";
+import {UserStudy} from "../../../../interface/user-study/user-study";
 import { USUser } from "../../../../interface/user-study/user-study-user";
-import { SelectionModel } from "@angular/cdk/collections";
 import { UserStudyUserService } from "../../../../service/user-study/user-study-user.service";
+import { UserStudyData } from 'src/app/interface/user-study/user-study-store';
 
 @Component({
   selector: "app-accepted-test-persons",
@@ -20,10 +17,7 @@ import { UserStudyUserService } from "../../../../service/user-study/user-study-
   styleUrls: ["./accepted-test-persons.component.css"],
 })
 export class AcceptedTestPersonsComponent implements OnInit {
-  private ngUnsubscribe: Subject<any> = new Subject();
-  private userStudy: UserStudy;
-
-  usUsers: USUser[] = [];
+  private ngUnsubscribe$: Subject<any> = new Subject();
 
   displayedColumns: string[] = [
     "_id",
@@ -34,27 +28,18 @@ export class AcceptedTestPersonsComponent implements OnInit {
     "accepted",
   ];
 
+  dataPoints$ : Observable<UserStudyData[]>;
+
   constructor(
-    private usUserService: UserStudyUserService,
-    private userStudiesService: UserStudiesService,
-    private selectedUserStudy: RunningUserStudyService
+    private userStudyDataService: UserStudyDataService
   ) {
-    this.selectedUserStudy
-      .getSelectedObject()
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe(async (v) => {
-        if (v) {
-          this.userStudy = v;
-          this.usUsers = await this.userStudiesService.getUsers(v._id);
-        }
-      });
+    this.dataPoints$ = this.userStudyDataService.getList();
   }
 
   ngOnInit(): void {}
 
-  async updateAccepted(event, usUser: USUser) {
-    //TODO
-    // usUser.accepted = event;
-    // await this.usUserService.update(usUser);
+  async updateAccepted(event, dataPoint: UserStudyData) {
+    dataPoint.accepted = event;
+    await this.userStudyDataService.saveObject(dataPoint);
   }
 }

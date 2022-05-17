@@ -39,7 +39,7 @@ updateObject(data: UserStudyData) {
 })
 export class UserStudyDataService extends ObjectCollectionService<UserStudyData> {
 
-  BASE_URL = environment.apiURL + "user-study-data";
+  BASE_URL = environment.apiURL + "user-study-data/";
 
 constructor(http: HttpClient, store: UserStudyDataStore) {
   super(http, store);
