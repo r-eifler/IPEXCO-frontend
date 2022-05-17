@@ -68,7 +68,8 @@ export class UserStudyCreatorComponent implements OnInit, OnDestroy {
 
     this.selectedUserStudyService
       .getSelectedObject()
-      .pipe(takeUntil(this.ngUnsubscribe))
+      .pipe(
+        takeUntil(this.ngUnsubscribe))
       .subscribe((study) => {
         if (study) {
           this.userStudy = study;
@@ -207,29 +208,28 @@ export class UserStudyCreatorComponent implements OnInit, OnDestroy {
   }
 
   async saveUserStudy() {
-    //TODO
-    // this.userStudy.name = this.userStudyForm.controls.name.value;
-    // this.userStudy.description = this.userStudyForm.controls.description.value;
-    // this.userStudy.startDate = this.userStudyForm.controls.startDate.value;
-    // this.userStudy.endDate = this.userStudyForm.controls.endDate.value;
-    // this.userStudy.redirectUrl = this.userStudyForm.controls.redirectUrl.value;
+    this.userStudy.name = this.userStudyForm.controls.name.value;
+    this.userStudy.description = this.userStudyForm.controls.description.value;
+    this.userStudy.startDate = this.userStudyForm.controls.startDate.value;
+    this.userStudy.endDate = this.userStudyForm.controls.endDate.value;
+    this.userStudy.redirectUrl = this.userStudyForm.controls.redirectUrl.value;
 
-    // this.userStudy.steps = [];
-    // for (const part of this.parts) {
-    //   const nextStep: UserStudyStep = {type: part.type, content: null};
-    //   switch (part.type) {
-    //     case UserStudyStepType.description:
-    //       nextStep.content = part.content;
-    //       break;
-    //     case UserStudyStepType.form:
-    //       nextStep.content = part.url;
-    //       break;
-    //     case UserStudyStepType.demo:
-    //       nextStep.content = part.demo._id;
-    //       break;
-    //   }
-    // this.userStudy.steps.push(nextStep);
-    // }
+    this.userStudy.steps = [];
+    for (const part of this.parts) {
+      const nextStep: UserStudyStep = {type: part.type, content: null};
+      switch (part.type) {
+        case UserStudyStepType.description:
+          nextStep.content = part.content;
+          break;
+        case UserStudyStepType.form:
+          nextStep.content = part.url;
+          break;
+        case UserStudyStepType.demo:
+          nextStep.content = part.demo._id;
+          break;
+      }
+    this.userStudy.steps.push(nextStep);
+    }
 
     this.userStudiesService.saveObject(this.userStudy);
 

@@ -23,7 +23,7 @@ import { PlanningTaskRelaxationService } from "src/app/service/planning-task/pla
 import {
   NewIterationStepGenerationService,
   DemoNewIterationStepGenerationService,
-} from "src/app/service/new-iteration-step-generation-service.service";
+} from "src/app/service/planner-runs/new-iteration-step-generation-service.service";
 
 @Component({
   selector: "app-demo-base",
@@ -56,7 +56,7 @@ export class DemoBaseComponent implements OnInit, OnDestroy {
     private relaxationService: PlanningTaskRelaxationService,
     private currentProjectService: CurrentProjectService,
     private iterationStepsService: IterationStepsService,
-    private demoNewIterationStepGenerationService: DemoNewIterationStepGenerationService,
+    private newIterationStepGenerationService: NewIterationStepGenerationService,
     private route: ActivatedRoute,
     private router: Router
   ) {
@@ -78,7 +78,7 @@ export class DemoBaseComponent implements OnInit, OnDestroy {
             this.relaxationService.findCollection([
               { param: "projectId", value: demo._id },
             ]);
-            this.demoNewIterationStepGenerationService.createInitialStep();
+            this.newIterationStepGenerationService.createInitialStep();
           }
         });
     });

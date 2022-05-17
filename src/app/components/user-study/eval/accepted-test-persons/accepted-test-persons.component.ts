@@ -53,7 +53,8 @@ export class AcceptedTestPersonsComponent implements OnInit {
   ngOnInit(): void {}
 
   async updateAccepted(event, usUser: USUser) {
-    usUser.accepted = event;
-    await this.usUserService.update(usUser);
+    //TODO
+    // usUser.accepted = event;
+    // await this.usUserService.update(usUser);
   }
 }

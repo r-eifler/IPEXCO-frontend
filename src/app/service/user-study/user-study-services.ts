@@ -7,13 +7,10 @@ import {
 } from "../../store/stores.store";
 import { environment } from "../../../environments/environment";
 import { SelectedObjectService } from "../base/selected-object.service";
-import {
-  UserStudy,
-  UserStudyData,
-} from "../../interface/user-study/user-study";
+import { UserStudy } from "../../interface/user-study/user-study";
 import { IHTTPData } from "../../interface/http-data.interface";
-import { LOAD } from "../../store/generic-list.store";
 import { USUser } from "../../interface/user-study/user-study-user";
+import { UserStudyData } from "src/app/interface/user-study/user-study-store";
 
 @Injectable({
   providedIn: "root",

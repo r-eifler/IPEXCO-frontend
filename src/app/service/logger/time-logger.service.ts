@@ -1,9 +1,11 @@
+import { UserStudyCurrentDataService } from './../user-study/user-study-data.service';
 import { Injectable } from "@angular/core";
 import { IHTTPData } from "../../interface/http-data.interface";
 import { Demo } from "../../interface/demo";
 import { EDIT } from "../../store/generic-list.store";
 import { HttpClient } from "@angular/common/http";
 import { environment } from "../../../environments/environment";
+import { filter, take } from 'rxjs/operators';
 
 export interface LogEntry {
   id: number;
@@ -17,12 +19,11 @@ export interface LogEntry {
   providedIn: "root",
 })
 export class TimeLoggerService {
-  private BASE_URL: string;
   private id = 0;
   private log = new Map<number, LogEntry>();
 
-  constructor(private http: HttpClient) {
-    this.BASE_URL = environment.apiURL + "user-study-users/timelog";
+  constructor(private userStudyCurrentDataService: UserStudyCurrentDataService) {
+
   }
 
   register(name): number {
@@ -60,12 +61,13 @@ export class TimeLoggerService {
   store(): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       const timeLog = JSON.stringify(Array.from(this.log.values()));
-      this.http
-        .post<IHTTPData<Demo>>(this.BASE_URL, { timeLog })
-        .subscribe((httpData) => {
-          // console.log('time log stored');
-          return resolve();
-        });
+      this.userStudyCurrentDataService.getSelectedObject()
+      .pipe(filter(d => !!d), take(1))
+      .subscribe(async d => {
+        d.timeLog = timeLog;
+        await this.userStudyCurrentDataService.updateObject(d);
+        resolve()
+      })
     });
   }
 

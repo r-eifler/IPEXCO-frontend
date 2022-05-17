@@ -18,48 +18,73 @@ import { PLANNER_REDIRECT, QUESTION_REDIRECT } from "../../../app.tokens";
 import { IterationStepsService } from "../../../service/planner-runs/iteration-steps.service";
 import { PlannerService } from "../../../service/planner-runs/planner.service";
 import { UserStudyPlannerService } from "../../../service/planner-runs/user-study-planner.service";
-import { DemoRunService } from "../../../service/planner-runs/demo-planruns.service";
 import { PlanPropertyMapService } from "../../../service/plan-properties/plan-property-services";
 import { TimeLoggerService } from "../../../service/logger/time-logger.service";
+import { DemoNewIterationStepGenerationService, NewIterationStepGenerationService } from "src/app/service/planner-runs/new-iteration-step-generation-service.service";
+import { PlanningTaskRelaxationService } from "src/app/service/planning-task/planning-task-relaxations-services";
+import { CurrentProjectService } from "src/app/service/project/project-services";
 
 @Component({
   selector: "app-user-study-demo-view",
   templateUrl: "./user-study-demo-view.component.html",
   styleUrls: ["./user-study-demo-view.component.css"],
   providers: [
-    { provide: IterationStepsService, useClass: DemoRunService },
+    { provide: IterationStepsService, useClass: IterationStepsService },
     { provide: PlannerService, useClass: UserStudyPlannerService },
+    {
+      provide: NewIterationStepGenerationService,
+      useClass: NewIterationStepGenerationService,
+    },
     { provide: PLANNER_REDIRECT, useValue: "../" },
     { provide: QUESTION_REDIRECT, useValue: "../../../" },
   ],
 })
 export class UserStudyDemoViewComponent implements OnInit, OnDestroy {
-  private ngUnsubscribe: Subject<any> = new Subject();
+  private ngUnsubscribe$: Subject<any> = new Subject();
 
   @Input() demoId: string;
   @Output() next = new EventEmitter<void>();
 
   step = 0;
+  private loggerId: number;
 
   demo: Demo;
 
   constructor(
     private timeLogger: TimeLoggerService,
     private demosService: DemosService,
+    private selectedDemoService: RunningDemoService,
     private propertiesService: PlanPropertyMapService,
-    private selectedDemoService: RunningDemoService
-  ) {}
+    private relaxationService: PlanningTaskRelaxationService,
+    private currentProjectService: CurrentProjectService,
+    private iterationStepsService: IterationStepsService,
+    private newIterationStepGenerationService: NewIterationStepGenerationService,
+  ) {
+  }
 
   ngOnInit(): void {
+    console.log("USER STUDY DEMO VIEW");
+    this.iterationStepsService.reset();
+
     this.demosService
       .getObject(this.demoId)
-      .pipe(takeUntil(this.ngUnsubscribe))
+      .pipe(takeUntil(this.ngUnsubscribe$))
       .subscribe((demo) => {
         if (demo) {
+
+          this.loggerId = this.timeLogger.register("demo-base");
+          this.timeLogger.addInfo(this.loggerId, "demoId: " + demo._id);
           this.selectedDemoService.saveObject(demo);
+          this.currentProjectService.saveObject(demo);
           this.propertiesService.findCollection([
             { param: "projectId", value: demo._id },
           ]);
+          this.relaxationService.findCollection([
+            { param: "projectId", value: demo._id },
+          ]);
+
+          this.newIterationStepGenerationService.createInitialStep();
+
           this.demo = demo;
         }
       });
@@ -74,8 +99,9 @@ export class UserStudyDemoViewComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.ngUnsubscribe.next();
-    this.ngUnsubscribe.complete();
+    this.timeLogger.deregister(this.loggerId);
     this.timeLogger.store();
+    this.ngUnsubscribe$.next();
+    this.ngUnsubscribe$.complete();
   }
 }

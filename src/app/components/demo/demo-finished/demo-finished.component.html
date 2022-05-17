@@ -15,8 +15,8 @@
         <h2 *ngIf="maxUtility === maxAchievedUtility">
           Great! This is the maximal utility possible.
         </h2>
-        <h2 *ngIf="payment > 0">
-          You will be payed: {{ payment | currency: "GBP":"symbol":"1.2-2" }}
+        <h2>
+          You will be payed: {{ payment | currency: "GBP":"symbol":"1.2-2" }}.
         </h2>
       </ng-container>
       <h3 *ngIf="(settings$ | async).introTask">

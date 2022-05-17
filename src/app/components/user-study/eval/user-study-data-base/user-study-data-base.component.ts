@@ -5,7 +5,6 @@ import {
 } from "../../../../service/user-study/user-study-services";
 import {
   UserStudy,
-  UserStudyData,
   UserStudyStepType,
 } from "../../../../interface/user-study/user-study";
 import { Subject } from "rxjs";
@@ -16,6 +15,7 @@ import {
   RunningDemoService,
 } from "../../../../service/demo/demo-services";
 import { PlanPropertyMapService } from "../../../../service/plan-properties/plan-property-services";
+import { UserStudyData } from "src/app/interface/user-study/user-study-store";
 
 @Component({
   selector: "app-user-study-data-base",

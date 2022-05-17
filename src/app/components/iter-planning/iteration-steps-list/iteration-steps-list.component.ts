@@ -1,4 +1,4 @@
-import { NewIterationStepGenerationService } from "./../../../service/new-iteration-step-generation-service.service";
+import { NewIterationStepGenerationService } from "../../../service/planner-runs/new-iteration-step-generation-service.service";
 import { RunStatus, StepStatus } from "src/app/interface/run";
 import { MatSelectionListChange } from "@angular/material/list";
 import { IterationStep, ModIterationStep } from "./../../../interface/run";

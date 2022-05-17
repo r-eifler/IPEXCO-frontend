@@ -1,5 +1,6 @@
-import { CurrentProjectService } from "src/app/service/project/project-services";
-import { takeUntil } from "rxjs/operators";
+import { ExecutionSettingsServiceService } from 'src/app/service/settings/ExecutionSettingsService.service';
+import { ExecutionSettings } from 'src/app/interface/settings/execution-settings';
+import { filter, takeUntil } from "rxjs/operators";
 import {
   Component,
   EventEmitter,
@@ -8,9 +9,8 @@ import {
   Output,
 } from "@angular/core";
 import { ResponsiveService } from "src/app/service/responsive/responsive.service";
-import { Subject } from "rxjs";
+import { Observable, Subject } from "rxjs";
 import { MatStepper } from "@angular/material/stepper";
-import { MatButton } from "@angular/material/button";
 import { TimeLoggerService } from "../../../service/logger/time-logger.service";
 
 @Component({
@@ -26,41 +26,45 @@ export class DemoHelpComponent implements OnInit, OnDestroy {
   numSteps = 0;
   seenEverything = false;
 
-  private ngUnsubscribe: Subject<any> = new Subject();
+  private ngUnsubscribe$: Subject<any> = new Subject();
+  settings$: Observable<ExecutionSettings>;
 
   @Output() next = new EventEmitter<void>();
 
   constructor(
     private timeLogger: TimeLoggerService,
-    private project: CurrentProjectService,
+    private settingsService: ExecutionSettingsServiceService,
     private responsiveService: ResponsiveService
-  ) {}
+  ) {
+    this.settings$ = this.settingsService.getSelectedObject();
+    console.log("DEMO HELP");
+  }
 
   ngOnInit(): void {
     this.loggerId = this.timeLogger.register("demo-help");
 
     this.responsiveService
       .getMobileStatus()
-      .pipe(takeUntil(this.ngUnsubscribe))
+      .pipe(takeUntil(this.ngUnsubscribe$))
       .subscribe((isMobile) => {
         this.isMobile = isMobile;
       });
     this.responsiveService.checkWidth();
 
-    this.project
-      .getSelectedObject()
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe((project) => {
-        if (project) {
-          this.canUseQuestions = project.settings.allowQuestions;
-          this.numSteps = project.settings.allowQuestions ? 4 : 2;
-        }
+    this.settings$
+      .pipe(
+        filter(s => !!s),
+        takeUntil(this.ngUnsubscribe$)
+        ).subscribe((settings) => {
+          console.log(settings);
+          this.canUseQuestions = settings.allowQuestions;
+          this.numSteps = settings.allowQuestions ? 4 : 2;
       });
   }
 
   ngOnDestroy(): void {
-    this.ngUnsubscribe.next();
-    this.ngUnsubscribe.complete();
+    this.ngUnsubscribe$.next();
+    this.ngUnsubscribe$.complete();
     this.timeLogger.deregister(this.loggerId);
   }
 

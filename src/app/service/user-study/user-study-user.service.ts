@@ -1,7 +1,9 @@
+import { UserStudyCurrentDataService } from './user-study-data.service';
 import { Injectable } from "@angular/core";
 import { environment } from "../../../environments/environment";
 import { HttpClient } from "@angular/common/http";
 import { USUser } from "../../interface/user-study/user-study-user";
+import { UserStudyData } from 'src/app/interface/user-study/user-study-store';
 
 @Injectable({
   providedIn: "root",
@@ -12,17 +14,23 @@ export class UserStudyUserService {
 
   private user = null;
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private userStudyCurrentDataService: UserStudyCurrentDataService) {}
 
-  register(user: USUser): Promise<boolean> {
+  register(user: USUser, userStudyId: string): Promise<boolean> {
+
+    let body = {user, userStudyId}
+
     return new Promise<boolean>((resolve, reject) => {
       try {
         this.http
-          .post<{ token: string; user: USUser }>(this.BASE_URL, user)
+          .post<{token: string; user: USUser, metaData: UserStudyData }>(this.BASE_URL, {data: body})
           .subscribe(
             (httpData) => {
               localStorage.setItem(this.tokenName, httpData.token);
               this.user = httpData.user;
+              this.userStudyCurrentDataService.saveObject(httpData.metaData);
               resolve(true);
             },
             (err) => {
@@ -55,27 +63,6 @@ export class UserStudyUserService {
             localStorage.removeItem(this.tokenName);
             resolve();
           });
-      } catch {
-        reject();
-      }
-    });
-  }
-
-  updatePayment(payment: number): Promise<boolean> {
-    if (!this.user) {
-      return;
-    }
-    this.user.payment = payment;
-    return new Promise<boolean>((resolve, reject) => {
-      try {
-        this.http.put(this.BASE_URL + "/payment", { payment }).subscribe(
-          (httpData) => {
-            resolve(true);
-          },
-          (err) => {
-            reject(null);
-          }
-        );
       } catch {
         reject();
       }

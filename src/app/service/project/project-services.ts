@@ -49,6 +49,7 @@ export class CurrentProjectService extends BaseProjectService<Project> {
     //   project.settings = JSON.parse(project.settings.toString()) as ExecutionSettings;
     //   console.log(project);
     // }
+    console.log("Service store project and its settings");
     this.settingsService.saveObject(project.settings);
     this.selectedObjectStore.dispatch({ type: LOAD, data: project });
   }

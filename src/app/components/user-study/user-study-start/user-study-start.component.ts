@@ -97,12 +97,11 @@ export class UserStudyStartComponent implements OnInit, OnDestroy {
     if (!this.userStudy) {
       return false;
     }
+    console.log("check date");
     const date = new Date();
-    // TODO
-    // const start = new Date(this.userStudy.startDate);
-    // const end = new Date(this.userStudy.endDate);
-    // return date > start && date < end;
-    return false;
+    const start = new Date(this.userStudy.startDate);
+    const end = new Date(this.userStudy.endDate);
+    return date > start && date < end;
   }
 
   async onAgree() {
@@ -110,28 +109,23 @@ export class UserStudyStartComponent implements OnInit, OnDestroy {
       const prolificUser: USUser = {
         prolificId: "000000",
         userStudyExtId: "000000",
-        userStudy: this.userStudyId,
       };
-
-      this.userRegistered = await this.userStudyUserService.register(
-        prolificUser
-      );
+      console.log("Register user");
+      this.userRegistered = await this.userStudyUserService.register(prolificUser, this.userStudyId);
       if (this.userRegistered) {
         this.initUserStudy();
       }
       return;
     }
+
     this.getProlificIDs().then(
       async (ids) => {
         const prolificUser: USUser = {
           prolificId: ids[0],
-          userStudyExtId: ids[1],
-          userStudy: this.userStudyId,
+          userStudyExtId: ids[1]
         };
 
-        this.userRegistered = await this.userStudyUserService.register(
-          prolificUser
-        );
+        this.userRegistered = await this.userStudyUserService.register(prolificUser, this.userStudyId);
         if (this.userRegistered) {
           this.initUserStudy();
         }
@@ -141,5 +135,6 @@ export class UserStudyStartComponent implements OnInit, OnDestroy {
         this.errorMessage = "No valid user study link.";
       }
     );
+
   }
 }

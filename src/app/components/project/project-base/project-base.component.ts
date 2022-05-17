@@ -17,7 +17,7 @@ import { PlanPropertyMapService } from "src/app/service/plan-properties/plan-pro
 import { PLANNER_REDIRECT } from "src/app/app.tokens";
 import { Subject } from "rxjs";
 import { DemoSettingsComponent } from "../../demo/demo-settings/demo-settings.component";
-import { NewIterationStepGenerationService } from "src/app/service/new-iteration-step-generation-service.service";
+import { NewIterationStepGenerationService } from "src/app/service/planner-runs/new-iteration-step-generation-service.service";
 
 @Component({
   selector: "app-project-base",

@@ -1,3 +1,4 @@
+import { defaultExecutionSetting } from './../../../interface/settings/execution-settings';
 import { DemosService } from "../../../service/demo/demo-services";
 import { Component, Inject, OnInit } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
@@ -39,7 +40,7 @@ export class DemoCreatorComponent implements OnInit {
 
     this.taskInfo = this.demo ? this.demo.taskInfo : "";
     this.demoData = this.demo ? JSON.stringify(this.demo.explanations) : "";
-    this.maxUtilityData = this.demo.maxUtility ? this.demo.maxUtility.toString() : "";
+    this.maxUtilityData = this.demo && this.demo.maxUtility ? this.demo.maxUtility.toString() : "";
 
     this.demoForm = new FormGroup({
       name: new FormControl(this.demo ? this.demo.name : ""),
@@ -67,6 +68,7 @@ export class DemoCreatorComponent implements OnInit {
       public: false,
       completion: this.demo ? this.demo.completion : 0.0,
       explanations: this.demo ? this.demo.explanations : [],
+      settings: this.demo ? this.demo.settings : defaultExecutionSetting
     };
 
     if (this.update) {

@@ -97,6 +97,8 @@ import {
   NewIterationStepStore,
   NewStepInterfaceStatusStore,
   FinishedStepInterfaceStatiStore,
+  UserStudyCurrentDataStore,
+  UserStudyDataStore,
 } from "./store/stores.store";
 import {
   DomainFilesService,
@@ -114,7 +116,6 @@ import { DemoBaseComponent } from "./components/demo/demo-base/demo-base.compone
 import { DemoSettingsComponent } from "./components/demo/demo-settings/demo-settings.component";
 import { ProjectOverviewComponent } from "./components/project/project-overview/project-overview.component";
 import { DomainSpecificationComponent } from "./components/files/domain-specification/domain-specification.component";
-import { AnimationHandler } from "./plan-visualization/integration/animation-handler";
 import { DemoCreatorComponent } from "./components/demo/demo-creator/demo-creator.component";
 import { DemoHelpComponent } from "./components/demo/demo-help/demo-help.component";
 import { DemoNavigatorComponent } from "./components/demo/demo-navigator/demo-navigator.component";
@@ -141,7 +142,6 @@ import { UserStudyDemoViewComponent } from "./components/user-study/user-study-d
 import { UserStudyStartComponent } from "./components/user-study/user-study-start/user-study-start.component";
 import { UserStudyExecuteComponent } from "./components/user-study/user-study-execute/user-study-execute.component";
 import { UserStudyEndComponent } from "./components/user-study/user-study-end/user-study-end.component";
-import { SelectedPlanRunService } from "./service/planner-runs/selected-planrun.service";
 import { SelectedQuestionService } from "./service/planner-runs/selected-question.service";
 import { MarkedPipe } from "./pipes/marked.pipe";
 
@@ -194,6 +194,7 @@ import {
   NewStepInterfaceStatusService,
 } from "./service/user-interface/interface-status-services";
 import { PaymentBarComponent } from './components/utils/payment-bar/payment-bar.component';
+import { UserStudyCurrentDataService, UserStudyDataService } from "./service/user-study/user-study-data.service";
 
 @NgModule({
   declarations: [
@@ -352,7 +353,6 @@ import { PaymentBarComponent } from './components/utils/payment-bar/payment-bar.
     PlanningTaskRelaxationsStore,
     PlannerService,
     RunsStore,
-    SelectedPlanRunService,
     CurrentRunStore,
     CurrentQuestionStore,
     SelectedQuestionService,
@@ -379,7 +379,10 @@ import { PaymentBarComponent } from './components/utils/payment-bar/payment-bar.
     FinishedStepInterfaceStatusService,
     NewStepInterfaceStatusStore,
     NewStepInterfaceStatusService,
-    AnimationHandler,
+    UserStudyCurrentDataService,
+    UserStudyCurrentDataStore,
+    UserStudyDataService,
+    UserStudyDataStore,
     {
       provide: MAT_BOTTOM_SHEET_DEFAULT_OPTIONS,
       useValue: { hasBackdrop: true },

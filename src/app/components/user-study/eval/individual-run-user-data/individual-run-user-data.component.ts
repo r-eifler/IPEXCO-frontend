@@ -1,8 +1,5 @@
 import { Component, Input, OnInit } from "@angular/core";
-import {
-  UserStudyData,
-  UserStudyDemoData,
-} from "../../../../interface/user-study/user-study";
+import { UserStudyData } from "src/app/interface/user-study/user-study-store";
 import { IterationStepsService } from "../../../../service/planner-runs/iteration-steps.service";
 
 @Component({

@@ -1,3 +1,4 @@
+import { UserStudyCurrentDataService } from './../../../service/user-study/user-study-data.service';
 import { ExecutionSettingsServiceService } from 'src/app/service/settings/ExecutionSettingsService.service';
 import { ExecutionSettings } from 'src/app/interface/settings/execution-settings';
 import { CurrentProjectService } from "src/app/service/project/project-services";
@@ -5,7 +6,7 @@ import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { Demo } from "src/app/interface/demo";
 import { Observable, Subject } from "rxjs";
-import { takeUntil } from "rxjs/operators";
+import { filter, take, takeUntil } from "rxjs/operators";
 import { TimeLoggerService } from "../../../service/logger/time-logger.service";
 import { CurrencyPipe } from "@angular/common";
 import { UserStudyUserService } from "../../../service/user-study/user-study-user.service";
@@ -30,7 +31,7 @@ export class DemoFinishedComponent implements OnInit, OnDestroy {
   constructor(
     private timeLogger: TimeLoggerService,
     public settingsService: ExecutionSettingsServiceService,
-    public userService: UserStudyUserService,
+    private userStudyCurrentDataService: UserStudyCurrentDataService,
     public dialogRef: MatDialogRef<DemoFinishedComponent>,
     @Inject(MAT_DIALOG_DATA) data
   ) {
@@ -44,7 +45,7 @@ export class DemoFinishedComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
-
+    console.log("Init demo finished ...")
     this.loggerId = this.timeLogger.register("finished-demo");
     this.timeLogger.addInfo(this.loggerId, "demoId: " + this.demo._id);
 
@@ -58,7 +59,12 @@ export class DemoFinishedComponent implements OnInit, OnDestroy {
       "payment: " + this.payment
     );
 
-    await this.userService.updatePayment(this.payment);
+    this.userStudyCurrentDataService.getSelectedObject()
+      .pipe(filter(d => !!d), take(1))
+      .subscribe(d => {
+        d.payment = this.payment;
+        this.userStudyCurrentDataService.updateObject(d);
+      })
   }
 
   ngOnDestroy(): void {

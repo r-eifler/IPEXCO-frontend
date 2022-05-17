@@ -20,6 +20,7 @@ import {
   FinishedStepInterfaceStatus,
   NewStepInterfaceStatus,
 } from "../interface/interface-status";
+import { UserStudyData } from "../interface/user-study/user-study-store";
 
 // User/Authentication
 export class UserStore extends ItemStore<User> {}
@@ -60,9 +61,11 @@ export class RunningDemoStore extends ItemStore<Demo> {}
 export class UserStudiesStore extends ListStore<UserStudy> {}
 export class RunningUserStudyStore extends ItemStore<UserStudy> {}
 
-// User Study
 export class MetaStudiesStore extends ListStore<MetaStudy> {}
 export class SelectedMetaStudyStore extends ItemStore<MetaStudy> {}
+
+export class UserStudyCurrentDataStore extends ItemStore<UserStudyData> {}
+export class UserStudyDataStore extends ListStore<UserStudyData> {}
 
 //Relaxations
 export class PlanningTaskRelaxationsStore extends ListStore<PlanningTaskRelaxationSpace> {}

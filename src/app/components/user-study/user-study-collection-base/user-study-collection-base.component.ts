@@ -17,7 +17,7 @@ export class UserStudyCollectionBaseComponent implements OnInit, OnDestroy {
   private ngUnsubscribe: Subject<any> = new Subject();
   isMobile: boolean;
 
-  public showTab = 2;
+  public showTab = 1;
 
   constructor(
     private userStudiesService: UserStudiesService,

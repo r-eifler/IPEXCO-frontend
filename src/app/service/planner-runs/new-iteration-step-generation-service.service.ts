@@ -1,27 +1,27 @@
 import { RunningDemoService } from "src/app/service/demo/demo-services";
 import { Project } from "src/app/interface/project";
 import { CurrentProjectService } from "src/app/service/project/project-services";
-import { DemoPlannerService } from "./planner-runs/demo-planner.service";
+import { DemoPlannerService } from "./demo-planner.service";
 import { PlannerService } from "src/app/service/planner-runs/planner.service";
-import { DemoIterationStepsService } from "./planner-runs/demo-iteration-steps.service";
+import { DemoIterationStepsService } from "./demo-iteration-steps.service";
 import { Injectable } from "@angular/core";
 import { combineLatest, Observable } from "rxjs";
 import { filter, take } from "rxjs/operators";
-import { PlanProperty } from "../interface/plan-property/plan-property";
+import { PlanProperty } from "../../interface/plan-property/plan-property";
 import {
   ModifiedPlanningTask,
   PlanningTaskRelaxationSpace,
-} from "../interface/planning-task-relaxation";
-import { IterationStep, ModIterationStep, StepStatus } from "../interface/run";
-import { PlanPropertyMapService } from "./plan-properties/plan-property-services";
-import { IterationStepsService } from "./planner-runs/iteration-steps.service";
+} from "../../interface/planning-task-relaxation";
+import { IterationStep, ModIterationStep, StepStatus } from "../../interface/run";
+import { PlanPropertyMapService } from "../plan-properties/plan-property-services";
+import { IterationStepsService } from "./iteration-steps.service";
 import {
   NewIterationStepStoreService,
   SelectedIterationStepService,
-} from "./planner-runs/selected-iteration-step.service";
-import { PlanningTaskRelaxationService } from "./planning-task/planning-task-relaxations-services";
-import { Demo } from "../interface/demo";
-import { SelectedObjectService } from "./base/selected-object.service";
+} from "./selected-iteration-step.service";
+import { PlanningTaskRelaxationService } from "../planning-task/planning-task-relaxations-services";
+import { Demo } from "../../interface/demo";
+import { SelectedObjectService } from "../base/selected-object.service";
 
 @Injectable({
   providedIn: "root",
@@ -180,7 +180,7 @@ export class DemoNewIterationStepGenerationService extends NewIterationStepGener
     this.demo$ = currentProjectService.getSelectedObject();
   }
 
-  createInitialStep() {
+  createInitialStep(save=false) {
     console.log("Create initial iteration step DEMO");
     combineLatest([this.demo$, this.planProperties$, this.relaxationSpaces$])
       .pipe(
@@ -225,9 +225,11 @@ export class DemoNewIterationStepGenerationService extends NewIterationStepGener
           softGoals: [...softGoals],
           task: newTask,
         };
+
         console.log("New Step");
         console.log(newStep);
         this.iterationStepsService.saveObject(newStep);
+
         let solvable = true;
         if (demo.settings.computeDependenciesAutomatically) {
           solvable = this.plannerService.computeRelaxExplanations(

@@ -1,10 +1,7 @@
-import { USUser } from "./user-study-user";
-import { DepExplanationRun, PlanRun } from "../run";
-
 export enum UserStudyStepType {
-  description = "description",
-  form = "form",
-  demo = "demo",
+  description,
+  form,
+  demo,
 }
 
 export interface UserStudyStep {
@@ -22,14 +19,4 @@ export interface UserStudy {
   startDate?: Date;
   endDate?: Date;
   steps?: UserStudyStep[];
-}
-
-export interface UserStudyDemoData {
-  planRuns: { timeStamp: Date; run: PlanRun }[];
-  expRuns: { timeStamp: Date; run: DepExplanationRun }[];
-}
-
-export interface UserStudyData {
-  user: USUser;
-  demosData: { demoId: string; data: UserStudyDemoData }[];
 }

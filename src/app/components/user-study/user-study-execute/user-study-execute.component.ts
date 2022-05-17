@@ -36,7 +36,7 @@ export class UserStudyExecuteComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((study) => {
         this.userStudy = study;
-        // this.currentStep = study?.steps[0];
+        this.currentStep = study?.steps[0];
       });
   }
 
@@ -56,7 +56,7 @@ export class UserStudyExecuteComponent implements OnInit, OnDestroy {
 
   async nextStep() {
     if (this.hasNextStep()) {
-      // this.currentStep = this.userStudy.steps[++this.currentStepIndex];
+      this.currentStep = this.userStudy.steps[++this.currentStepIndex];
     } else {
       await this.router.navigate(
         ["".concat(...["/user-studies/" + this.userStudy._id + "/run/end"])],
@@ -66,7 +66,6 @@ export class UserStudyExecuteComponent implements OnInit, OnDestroy {
   }
 
   hasNextStep() {
-    // return this.currentStepIndex < this.userStudy.steps.length - 1;
-    return false;
+    return this.currentStepIndex < this.userStudy.steps.length - 1;
   }
 }

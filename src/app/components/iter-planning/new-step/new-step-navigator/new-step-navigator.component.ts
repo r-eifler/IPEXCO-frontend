@@ -7,7 +7,7 @@ import { Observable } from "rxjs";
 import { NewIterationStepStoreService } from "./../../../../service/planner-runs/selected-iteration-step.service";
 import { Component, OnInit } from "@angular/core";
 import { StepperSelectionEvent } from "@angular/cdk/stepper";
-import { NewIterationStepGenerationService } from "../../../../service/new-iteration-step-generation-service.service";
+import { NewIterationStepGenerationService } from "../../../../service/planner-runs/new-iteration-step-generation-service.service";
 
 @Component({
   selector: "app-new-step-navigator",
