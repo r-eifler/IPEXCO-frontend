@@ -1,3 +1,4 @@
+import { LogEvent, TimeLoggerService } from 'src/app/service/logger/time-logger.service';
 import { filter, find, flatMap, map, tap } from "rxjs/operators";
 import { PlanningTaskRelaxationService } from "./../../../../service/planning-task/planning-task-relaxations-services";
 import {
@@ -10,7 +11,7 @@ import {
   getRelaxationExplanationsFromStep,
   IterationStep,
 } from "src/app/interface/run";
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, Input, OnDestroy, OnInit } from "@angular/core";
 import { BehaviorSubject, Observable, combineLatest } from "rxjs";
 import { Fact, factEquals } from "src/app/interface/plannig-task";
 
@@ -19,7 +20,7 @@ import { Fact, factEquals } from "src/app/interface/plannig-task";
   templateUrl: "./explanations-relaxations-view.component.html",
   styleUrls: ["./explanations-relaxations-view.component.scss"],
 })
-export class ExplanationsRelaxationsViewComponent implements OnInit {
+export class ExplanationsRelaxationsViewComponent implements OnInit, OnDestroy {
   @Input()
   set step(step: IterationStep) {
     this.step$.next(step);
@@ -41,7 +42,10 @@ export class ExplanationsRelaxationsViewComponent implements OnInit {
   >;
   relaxationSpaces$: BehaviorSubject<PlanningTaskRelaxationSpace[]>;
 
-  constructor(private relaxationSpacesService: PlanningTaskRelaxationService) {
+  constructor(
+    private timeLogger: TimeLoggerService,
+    private relaxationSpacesService: PlanningTaskRelaxationService
+  ) {
     this.relaxationSpaces$ = relaxationSpacesService.getList();
 
     this.relaxations$ = combineLatest([
@@ -83,5 +87,11 @@ export class ExplanationsRelaxationsViewComponent implements OnInit {
     );
   }
 
-  ngOnInit(): void {}
+  ngOnDestroy(): void {
+    this.timeLogger.log(LogEvent.END_CHECK_RELAXATION_EXPLANATION);
+  }
+
+  ngOnInit(): void {
+    this.timeLogger.log(LogEvent.START_CHECK_RELAXATION_EXPLANATION);
+  }
 }

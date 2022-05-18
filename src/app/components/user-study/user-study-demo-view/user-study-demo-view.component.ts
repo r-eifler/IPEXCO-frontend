@@ -19,7 +19,7 @@ import { IterationStepsService } from "../../../service/planner-runs/iteration-s
 import { PlannerService } from "../../../service/planner-runs/planner.service";
 import { UserStudyPlannerService } from "../../../service/planner-runs/user-study-planner.service";
 import { PlanPropertyMapService } from "../../../service/plan-properties/plan-property-services";
-import { TimeLoggerService } from "../../../service/logger/time-logger.service";
+import { LogEvent, TimeLoggerService } from "../../../service/logger/time-logger.service";
 import { DemoNewIterationStepGenerationService, NewIterationStepGenerationService } from "src/app/service/planner-runs/new-iteration-step-generation-service.service";
 import { PlanningTaskRelaxationService } from "src/app/service/planning-task/planning-task-relaxations-services";
 import { CurrentProjectService } from "src/app/service/project/project-services";
@@ -46,7 +46,6 @@ export class UserStudyDemoViewComponent implements OnInit, OnDestroy {
   @Output() next = new EventEmitter<void>();
 
   step = 0;
-  private loggerId: number;
 
   demo: Demo;
 
@@ -72,8 +71,7 @@ export class UserStudyDemoViewComponent implements OnInit, OnDestroy {
       .subscribe((demo) => {
         if (demo) {
 
-          this.loggerId = this.timeLogger.register("demo-base");
-          this.timeLogger.addInfo(this.loggerId, "demoId: " + demo._id);
+          this.timeLogger.log(LogEvent.START_DEMO, {demoId: demo._id});
           this.selectedDemoService.saveObject(demo);
           this.currentProjectService.saveObject(demo);
           this.propertiesService.findCollection([
@@ -99,7 +97,6 @@ export class UserStudyDemoViewComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.timeLogger.deregister(this.loggerId);
     this.timeLogger.store();
     this.ngUnsubscribe$.next();
     this.ngUnsubscribe$.complete();

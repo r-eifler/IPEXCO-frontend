@@ -1,3 +1,4 @@
+import { LogEvent } from './../../../service/logger/time-logger.service';
 import { DemoIterationStepsService } from "./../../../service/planner-runs/demo-iteration-steps.service";
 import { CurrentProjectService } from "src/app/service/project/project-services";
 import {
@@ -68,8 +69,7 @@ export class DemoBaseComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe((demo: Demo) => {
           if (demo) {
-            this.loggerId = this.timeLogger.register("demo-base");
-            this.timeLogger.addInfo(this.loggerId, "demoId: " + demo._id);
+            this.timeLogger.log(LogEvent.START_DEMO, {demoId:  demo._id});
             this.runningDemoService.saveObject(demo);
             this.currentProjectService.saveObject(demo);
             this.propertiesService.findCollection([
@@ -89,7 +89,6 @@ export class DemoBaseComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
-    this.timeLogger.deregister(this.loggerId);
     this.iterationStepsService.reset();
   }
 

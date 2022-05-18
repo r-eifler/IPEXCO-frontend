@@ -6,7 +6,7 @@ import { filter, map, take, takeUntil, tap } from "rxjs/operators";
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { BehaviorSubject, Observable, Subject } from "rxjs";
 import { PlanRun } from "../../../../interface/run";
-import { TimeLoggerService } from "../../../../service/logger/time-logger.service";
+import { LogEvent, TimeLoggerService } from "../../../../service/logger/time-logger.service";
 import { parsePlan } from "src/app/service/planner-runs/utils";
 
 interface Action {
@@ -20,7 +20,6 @@ interface Action {
   styleUrls: ["./plan-view.component.css"],
 })
 export class PlanViewComponent implements OnInit, OnDestroy {
-  private loggerId: number;
   private unsubscribe$: Subject<any> = new Subject();
 
   step$: BehaviorSubject<IterationStep>;
@@ -41,7 +40,6 @@ export class PlanViewComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.loggerId = this.timeLogger.register("plan-view");
 
     this.actions$ = this.step$.pipe(takeUntil(this.unsubscribe$)).pipe(
       filter(
@@ -49,7 +47,7 @@ export class PlanViewComponent implements OnInit, OnDestroy {
           !!step && !!step.plan && step.plan.status == RunStatus.finished
       ),
       map((step) => {
-        this.timeLogger.addInfo(this.loggerId, "stepId: " + step._id);
+        this.timeLogger.log(LogEvent.START_CHECK_PLAN, {stepId: step._id});
         let actions = [];
         let plan = parsePlan(step.plan.result, step.task.basetask);
         for (const action of plan.actions) {
@@ -89,7 +87,10 @@ export class PlanViewComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
-    this.timeLogger.deregister(this.loggerId);
+    this.step$.pipe(
+      filter(s => !!s),
+      take(1)
+    ).subscribe(step => this.timeLogger.log(LogEvent.END_CHECK_PLAN, {stepId: step._id}))
   }
 
   computePlan(): void {
@@ -98,6 +99,9 @@ export class PlanViewComponent implements OnInit, OnDestroy {
         filter((step) => !!step),
         take(1)
       )
-      .subscribe((step) => this.plannerService.computePlan(step));
+      .subscribe((step) => {
+        this.plannerService.computePlan(step)
+        this.timeLogger.log(LogEvent.COMPUTE_PLAN, {stepId: step._id});
+      });
   }
 }

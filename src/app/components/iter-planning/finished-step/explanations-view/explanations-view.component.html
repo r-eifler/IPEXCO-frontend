@@ -3,8 +3,8 @@
   <ng-container *ngIf="displayExplanations$ | async">
     <div
       class="slide-container"
-      [class.slide-pos-one]="viewpos == 1"
-      [class.slide-pos-two]="viewpos == 2"
+      [class.slide-pos-one]="viewpos === 1"
+      [class.slide-pos-two]="viewpos === 2"
     >
       <div class="middle-container">
         <app-explanations-select-preference-view
@@ -14,7 +14,7 @@
       </div>
       <div class="middle-container">
         <app-conflict-view
-          [solvable]="!(notSolvable$ | async)"
+          [solvable]="(notSolvable$ | async) === false"
           [explanation]="computedDependencies$ | async"
           [question]="questions$ | async"
           (selectedConflict)="selectConflict($event)"
@@ -30,10 +30,9 @@
     <button
       mat-raised-button
       color="primary"
-      *ngIf="viewpos == 2 && !(notSolvable$ | async)"
+      *ngIf="viewpos === 2 && (notSolvable$ | async) === false"
       (click)="viewpos = 1"
-      style="position: absolute; left: 92%; top: 92%"
-    >
+      style="position: absolute; left: 92%; top: 92%">
       Ask other Question
     </button>
     <!-- <button mat-flat-button (click)="viewpos = 2" style="position: absolute; left: 95%; top: 90%">right</button> -->
@@ -46,7 +45,7 @@
 
   <div
     class="compute-container"
-    *ngIf="(plannerBusy$ | async) && !(displayExplanations$ | async)"
+    *ngIf="(plannerBusy$ | async) && (displayExplanations$ | async) === false"
   >
     <mat-progress-bar mode="indeterminate"></mat-progress-bar>
   </div>

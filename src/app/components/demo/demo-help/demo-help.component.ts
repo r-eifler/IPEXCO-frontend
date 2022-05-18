@@ -11,7 +11,7 @@ import {
 import { ResponsiveService } from "src/app/service/responsive/responsive.service";
 import { Observable, Subject } from "rxjs";
 import { MatStepper } from "@angular/material/stepper";
-import { TimeLoggerService } from "../../../service/logger/time-logger.service";
+import { LogEvent, TimeLoggerService } from "../../../service/logger/time-logger.service";
 
 @Component({
   selector: "app-demo-help",
@@ -19,7 +19,6 @@ import { TimeLoggerService } from "../../../service/logger/time-logger.service";
   styleUrls: ["./demo-help.component.css"],
 })
 export class DemoHelpComponent implements OnInit, OnDestroy {
-  private loggerId: number;
 
   isMobile: boolean;
   canUseQuestions = false;
@@ -41,7 +40,8 @@ export class DemoHelpComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.loggerId = this.timeLogger.register("demo-help");
+
+    this.timeLogger.log(LogEvent.START_USE_HELP);
 
     this.responsiveService
       .getMobileStatus()
@@ -65,7 +65,7 @@ export class DemoHelpComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.ngUnsubscribe$.next();
     this.ngUnsubscribe$.complete();
-    this.timeLogger.deregister(this.loggerId);
+    this.timeLogger.log(LogEvent.END_USE_HELP);
   }
 
   nextStep() {

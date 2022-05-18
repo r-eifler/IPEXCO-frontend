@@ -5,20 +5,20 @@
   <!-- Position Column -->
   <ng-container matColumnDef="_id">
     <th mat-header-cell *matHeaderCellDef>ID</th>
-    <td mat-cell *matCellDef="let element">{{ element._id }}</td>
+    <td mat-cell *matCellDef="let element">{{ element.user._id }}</td>
   </ng-container>
 
   <!-- Name Column -->
   <ng-container matColumnDef="prolificId">
     <th mat-header-cell *matHeaderCellDef>Prolific ID</th>
-    <td mat-cell *matCellDef="let element">{{ element.prolificId }}</td>
+    <td mat-cell *matCellDef="let element">{{ element.user.prolificId }}</td>
   </ng-container>
 
   <!-- Weight Column -->
   <ng-container matColumnDef="finished">
     <th mat-header-cell *matHeaderCellDef>Finished</th>
     <td mat-cell *matCellDef="let element">
-      <mat-icon *ngIf="element.finished">check_circle_outline</mat-icon>
+      <mat-icon *ngIf="element.finished">done</mat-icon>
       <mat-icon *ngIf="!element.finished">query_builder</mat-icon>
     </td>
   </ng-container>

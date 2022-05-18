@@ -1,7 +1,11 @@
+import { USUser } from './../../../../interface/user-study/user-study-user';
+import { UserStudyDataService, DataPoint } from './../../../../service/user-study/user-study-data.service';
+import { filter } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
+import { IterationStep } from 'src/app/interface/run';
 import { Component, Input, OnInit } from "@angular/core";
-import { Subject } from "rxjs";
-import { UserStudyData } from "src/app/interface/user-study/user-study-store";
-import { Demo } from "../../../../interface/demo";
+import { BehaviorSubject, combineLatest, Subject } from "rxjs";
+import { UserStudyData, UserStudyDemoData } from "src/app/interface/user-study/user-study-store";
 
 @Component({
   selector: "app-overview-data",
@@ -9,7 +13,7 @@ import { Demo } from "../../../../interface/demo";
   styleUrls: ["./overview-data.component.css"],
 })
 export class OverviewDataComponent implements OnInit {
-  private ngUnsubscribe: Subject<any> = new Subject();
+  private ngUnsubscribe$: Subject<any> = new Subject();
   showPlots = true;
 
   view: any[] = [700, 400];
@@ -25,53 +29,34 @@ export class OverviewDataComponent implements OnInit {
     domain: ["#02496f"],
   };
 
-  dataEntries: UserStudyData[] = [];
-  selectedDemoId: string;
+  users$ = new BehaviorSubject<USUser[]>([]);
+  selectedDemoId$ = new BehaviorSubject<string>(null);
 
   @Input()
   set demoId(id: string) {
-    this.selectedDemoId = id;
-    this.update();
+    this.selectedDemoId$.next(id);
   }
 
   @Input()
-  set data(entries: UserStudyData[]) {
-    this.dataEntries = entries;
-    this.update();
+  set users(users: USUser[]) {
+    this.users$.next(users);
   }
 
-  plansData: any[];
-  questionData: any[];
+  iterationStepsData: DataPoint[];
 
-  constructor() {}
+  constructor(
+    private userStudyDataService: UserStudyDataService
+  ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
 
-  update() {
-    //TODO
-  //   this.showPlots = false;
-  //   this.plansData = [];
-  //   this.questionData = [];
-  //   for (const entry of this.dataEntries) {
-  //     const demoData: UserStudyDemoData = entry.demosData.find(
-  //       (e) => e.demoId === this.selectedDemoId
-  //     )?.data;
-  //     if (!demoData) {
-  //       return;
-  //     }
-  //     const displayId =
-  //       entry.user.prolificId !== "000000"
-  //         ? entry.user.prolificId
-  //         : entry.user._id.slice(-5);
-  //     this.plansData.push({
-  //       name: displayId,
-  //       value: demoData.planRuns.length,
-  //     });
-  //     this.questionData.push({
-  //       name: displayId,
-  //       value: demoData.expRuns.length,
-  //     });
-  //   }
-  //   window.setTimeout(() => (this.showPlots = true), 200);
+    combineLatest(([this.selectedDemoId$, this.users$])).pipe(
+      takeUntil(this.ngUnsubscribe$),
+      filter(([id, users]) => !!id && !!users)
+    ).subscribe(async ([id, users]) => {
+      this.iterationStepsData = await this.userStudyDataService.getIterationStepsPerUser(id, users);
+      window.setTimeout(() => (this.showPlots = true), 200);
+    });
   }
+
 }

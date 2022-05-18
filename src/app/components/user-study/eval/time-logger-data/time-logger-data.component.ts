@@ -1,6 +1,10 @@
 import { Component, Input, OnInit } from "@angular/core";
-import { Subject } from "rxjs";
+import { BehaviorSubject, combineLatest, Subject } from "rxjs";
+import { takeUntil, filter } from "rxjs/operators";
+import { IterationStep } from "src/app/interface/run";
 import { UserStudyData } from "src/app/interface/user-study/user-study-store";
+import { USUser } from "src/app/interface/user-study/user-study-user";
+import { UserStudyDataService } from "src/app/service/user-study/user-study-data.service";
 import { LogEntry } from "../../../../service/logger/time-logger.service";
 
 @Component({
@@ -9,7 +13,7 @@ import { LogEntry } from "../../../../service/logger/time-logger.service";
   styleUrls: ["./time-logger-data.component.css"],
 })
 export class TimeLoggerDataComponent implements OnInit {
-  private ngUnsubscribe: Subject<any> = new Subject();
+  private ngUnsubscribe$: Subject<any> = new Subject();
 
   view: any[] = [700, 400];
 
@@ -24,26 +28,39 @@ export class TimeLoggerDataComponent implements OnInit {
     domain: ["#02496f"],
   };
 
-  dataEntries: UserStudyData[] = [];
-  private selectedDemoId: string;
+  users$ = new BehaviorSubject<USUser[]>([]);
+  selectedDemoId$ = new BehaviorSubject<string>(null);
 
   @Input()
   set demoId(id: string) {
-    this.selectedDemoId = id;
-    this.getAvgTimeLogData();
+    this.selectedDemoId$.next(id);
   }
 
   @Input()
-  set data(entries: UserStudyData[]) {
-    this.dataEntries = entries;
-    this.getAvgTimeLogData();
+  set users(users: USUser[]) {
+    this.users$.next(users);
   }
 
-  avgTimeLogData: any[];
+  timeLogData: any[];
+  iterationStepTimeData: any[];
 
-  constructor() {}
+  constructor(
+    private userStudyDataService: UserStudyDataService
+  ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+
+    combineLatest(([this.selectedDemoId$, this.users$])).pipe(
+      takeUntil(this.ngUnsubscribe$),
+      filter(([id, users]) => !!id && !!users)
+    ).subscribe(async ([id, users]) => {
+      this.iterationStepTimeData = await this.userStudyDataService.getProcessingTimePerUser(id, users);
+      this.timeLogData = await this.userStudyDataService.getProcessingTimeLogPerUser(id, users);
+      // window.setTimeout(() => (this.showPlots = true), 200);
+    });
+
+  }
+
 
   getAvgTimeLogData() {
     const dataMap = new Map<string, number>();

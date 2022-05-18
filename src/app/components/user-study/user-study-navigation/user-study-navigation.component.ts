@@ -17,7 +17,7 @@ import { Subject } from "rxjs";
 export class UserStudyNavigationComponent implements OnInit, OnDestroy {
   private ngUnsubscribe: Subject<any> = new Subject();
 
-  step = 3;
+  step = 2;
 
   constructor(
     private route: ActivatedRoute,

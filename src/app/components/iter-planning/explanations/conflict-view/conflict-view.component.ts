@@ -6,16 +6,17 @@ import { PlanPropertyMapService } from "../../../../service/plan-properties/plan
 import { BehaviorSubject, Observable, combineLatest } from "rxjs";
 import { PlanProperty } from "../../../../interface/plan-property/plan-property";
 import { DepExplanationRun, RunStatus } from "src/app/interface/run";
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from "@angular/core";
 import { map, tap, filter, take } from "rxjs/operators";
 import { CurrentProjectService } from "src/app/service/project/project-services";
+import { LogEvent, TimeLoggerService } from "src/app/service/logger/time-logger.service";
 
 @Component({
   selector: "app-conflict-view",
   templateUrl: "./conflict-view.component.html",
   styleUrls: ["./conflict-view.component.scss"],
 })
-export class ConflictViewComponent implements OnInit {
+export class ConflictViewComponent implements OnInit, OnDestroy {
   runStatus = RunStatus;
 
   @Input()
@@ -49,6 +50,7 @@ export class ConflictViewComponent implements OnInit {
   selectedConflictIndex: number = null;
 
   constructor(
+    private timeLogger: TimeLoggerService,
     planPropertiesService: PlanPropertyMapService,
     private currentProjectService: CurrentProjectService
   ) {
@@ -76,7 +78,13 @@ export class ConflictViewComponent implements OnInit {
     );
   }
 
-  ngOnInit(): void {}
+  ngOnDestroy(): void {
+    this.timeLogger.log(LogEvent.END_CHECK_CONFLICT_EXPLANATION);
+  }
+
+  ngOnInit(): void {
+    this.timeLogger.log(LogEvent.START_CHECK_CONFLICT_EXPLANATION);
+  }
 
   selectConflict(c: PlanProperty[], index: number) {
     this.selectedConflictIndex = index;

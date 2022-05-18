@@ -37,7 +37,6 @@ interface ExState {
 export class InteractivePlanViewComponent implements OnInit, OnDestroy {
   toString = FactToString;
 
-  private loggerId: number;
   private ngUnsubscribe: Subject<any> = new Subject();
 
   runStatus = RunStatus;
@@ -62,7 +61,6 @@ export class InteractivePlanViewComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.loggerId = this.timeLogger.register("plan-view");
 
     this.plan$ = this.step$.pipe(
       filter(
@@ -84,7 +82,6 @@ export class InteractivePlanViewComponent implements OnInit, OnDestroy {
             return;
           }
 
-          this.timeLogger.addInfo(this.loggerId, "runId: " + step._id);
           let plan: Plan = parsePlan(step.plan.result, step.task.basetask);
 
           let action_map: Map<string, Action> = new Map();
@@ -176,6 +173,5 @@ export class InteractivePlanViewComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
-    this.timeLogger.deregister(this.loggerId);
   }
 }

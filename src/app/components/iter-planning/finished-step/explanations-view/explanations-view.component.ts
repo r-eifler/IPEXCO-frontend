@@ -1,3 +1,4 @@
+import { LogEvent, TimeLoggerService } from 'src/app/service/logger/time-logger.service';
 import { PlanningTaskRelaxationSpace } from "./../../../../interface/planning-task-relaxation";
 import { PlanningTaskRelaxationService } from "./../../../../service/planning-task/planning-task-relaxations-services";
 import { filter, map, take, takeUntil, tap } from "rxjs/operators";
@@ -48,6 +49,7 @@ export class ExplanationsViewComponent implements OnInit, OnDestroy {
   viewpos = 1;
 
   constructor(
+    private timeLogger: TimeLoggerService,
     selectedIterationStepService: SelectedIterationStepService,
     planpropertiesService: PlanPropertyMapService,
     planningTaskRelaxationService: PlanningTaskRelaxationService,
@@ -165,40 +167,43 @@ export class ExplanationsViewComponent implements OnInit, OnDestroy {
   selectQuestion(id: string): void {
     this.selectedPP = id;
     combineLatest([this.step$, this.planPropertiesMap$])
-      .pipe(take(1))
+      .pipe(
+        filter(([step, planProperties]) => !!step && !!planProperties),
+        take(1)
+      )
       .subscribe(([step, planProperties]) => {
-        if (step && planProperties) {
-          let dependencies = getDependencies(step, this.selectedPP);
-          this.computedDependencies$.next(dependencies);
-          this.questions$.next(planProperties.get(this.selectedPP));
+        this.timeLogger.log(LogEvent.ASK_CONFLICT_QUESTION, {stepId: step._id, selectedPP: id})
+        let dependencies = getDependencies(step, this.selectedPP);
+        this.computedDependencies$.next(dependencies);
+        this.questions$.next(planProperties.get(this.selectedPP));
 
-          if (this.interfaceStatus) {
-            this.interfaceStatus = {
-              _id: this.interfaceStatus._id,
-              tab: this.interfaceStatus.tab,
-              question: this.selectedPP,
-              dependencies,
-              conflict: null,
-              viewPos: 1,
-            };
-          } else {
-            this.interfaceStatus = {
-              _id: step._id,
-              tab: 5,
-              question: this.selectedPP,
-              dependencies,
-              conflict: null,
-              viewPos: 1,
-            };
-          }
-          this.finishedStepInterfaceStatusService.saveObject(
-            this.interfaceStatus
-          );
+        if (this.interfaceStatus) {
+          this.interfaceStatus = {
+            _id: this.interfaceStatus._id,
+            tab: this.interfaceStatus.tab,
+            question: this.selectedPP,
+            dependencies,
+            conflict: null,
+            viewPos: 1,
+          };
+        } else {
+          this.interfaceStatus = {
+            _id: step._id,
+            tab: 5,
+            question: this.selectedPP,
+            dependencies,
+            conflict: null,
+            viewPos: 1,
+          };
         }
+        this.finishedStepInterfaceStatusService.saveObject(
+          this.interfaceStatus
+        );
       });
   }
 
   selectConflict(conflict: PPConflict): void {
+    this.timeLogger.log(LogEvent.ASK_RELAXATION_QUESTION, {conflict: conflict})
     this.viewpos = 2;
     this.selectedConflict$.next(conflict);
     this.interfaceStatus = { ...this.interfaceStatus, conflict, viewPos: 2 };

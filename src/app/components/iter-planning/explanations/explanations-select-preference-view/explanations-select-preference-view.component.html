@@ -5,7 +5,7 @@
       <div
         *ngFor="let pp of possiblePP$ | async"
         class="list-main-container"
-        [class.selected]="selectedPPId == pp._id"
+        [class.selected]="selectedPPId === pp._id"
       >
         <div class="list-item-container" (click)="selectPP(pp)">
           <mat-icon matListIcon>star_border</mat-icon>
@@ -25,5 +25,5 @@
       </div>
     </div>
   </ng-container>
-  <p *ngIf="(possiblePP$ | async)?.length == 0">No other goals available.</p>
+  <p *ngIf="(possiblePP$ | async)?.length === 0">No other goals available.</p>
 </mat-card>

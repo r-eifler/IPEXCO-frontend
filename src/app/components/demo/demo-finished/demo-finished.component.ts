@@ -7,7 +7,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { Demo } from "src/app/interface/demo";
 import { Observable, Subject } from "rxjs";
 import { filter, take, takeUntil } from "rxjs/operators";
-import { TimeLoggerService } from "../../../service/logger/time-logger.service";
+import { LogEvent, TimeLoggerService } from "../../../service/logger/time-logger.service";
 import { CurrencyPipe } from "@angular/common";
 import { UserStudyUserService } from "../../../service/user-study/user-study-user.service";
 
@@ -17,7 +17,6 @@ import { UserStudyUserService } from "../../../service/user-study/user-study-use
   styleUrls: ["./demo-finished.component.css"],
 })
 export class DemoFinishedComponent implements OnInit, OnDestroy {
-  private loggerId: number;
   private ngUnsubscribe: Subject<any> = new Subject();
 
   demo: Demo;
@@ -46,18 +45,6 @@ export class DemoFinishedComponent implements OnInit, OnDestroy {
 
   async ngOnInit() {
     console.log("Init demo finished ...")
-    this.loggerId = this.timeLogger.register("finished-demo");
-    this.timeLogger.addInfo(this.loggerId, "demoId: " + this.demo._id);
-
-    this.timeLogger.addInfo(
-      this.loggerId,
-      "max utility: " + this.maxAchievedUtility
-    );
-
-    this.timeLogger.addInfo(
-      this.loggerId,
-      "payment: " + this.payment
-    );
 
     this.userStudyCurrentDataService.getSelectedObject()
       .pipe(filter(d => !!d), take(1))
@@ -70,6 +57,20 @@ export class DemoFinishedComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
-    this.timeLogger.deregister(this.loggerId);
+  }
+
+  continueDemo(){
+    this.dialogRef.close(false)
+  }
+
+  finishDemo(){
+    this.timeLogger.log(LogEvent.END_DEMO,
+      {
+        demoId: this.demo._id,
+        max_utility: this.maxAchievedUtility,
+        payment: this.payment
+    });
+
+    this.dialogRef.close(true)
   }
 }

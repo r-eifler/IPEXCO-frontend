@@ -1,3 +1,5 @@
+import { LogEvent } from './../../../service/logger/time-logger.service';
+import { filter, take } from 'rxjs/operators';
 import {
   Component,
   EventEmitter,
@@ -42,11 +44,17 @@ export class DemoTaskIntroComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.loggerId = this.timeLogger.register("demo-task-intro");
+    this.demo$.pipe(
+      filter(d => !!d),
+      take(1)
+    ).subscribe(d => this.timeLogger.log(LogEvent.START_READ_TASK_INTRO, {demoId: d._id}))
   }
 
   ngOnDestroy(): void {
-    this.timeLogger.deregister(this.loggerId);
+    this.demo$.pipe(
+      filter(d => !!d),
+      take(1)
+    ).subscribe(d => this.timeLogger.log(LogEvent.END_READ_TASK_INTRO, {demoId: d._id}))
   }
 
   nextStep() {

@@ -3,7 +3,8 @@ import { IterationStep } from "src/app/interface/run";
 import { Component, Input, OnInit, Output, EventEmitter } from "@angular/core";
 import { PlanPropertyMapService } from "src/app/service/plan-properties/plan-property-services";
 import { Observable, combineLatest, Subject, BehaviorSubject } from "rxjs";
-import { filter, map, takeUntil, tap } from "rxjs/operators";
+import { filter, map, take, takeUntil, tap } from "rxjs/operators";
+import { LogEvent, TimeLoggerService } from "src/app/service/logger/time-logger.service";
 
 @Component({
   selector: "app-explanations-select-preference-view",
@@ -24,7 +25,9 @@ export class ExplanationsSelectPreferenceViewComponent implements OnInit {
   possiblePP$: Observable<PlanProperty[]>;
   private step$ = new BehaviorSubject<IterationStep>(null);
 
-  constructor(private planpropertiesService: PlanPropertyMapService) {
+  constructor(
+    private planpropertiesService: PlanPropertyMapService
+  ) {
     this.possiblePP$ = combineLatest([
       this.step$,
       this.planpropertiesService.getMap(),

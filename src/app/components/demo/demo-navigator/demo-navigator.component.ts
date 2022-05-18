@@ -40,7 +40,6 @@ import { PlanningTaskRelaxationSpace } from "src/app/interface/planning-task-rel
   styleUrls: ["./demo-navigator.component.scss"],
 })
 export class DemoNavigatorComponent implements OnInit, OnDestroy {
-  private loggerId: number;
   private ngUnsubscribe$: Subject<any> = new Subject();
 
   @Output() finishedDemo = new EventEmitter<void>();
@@ -97,7 +96,6 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.loggerId = this.timeLogger.register("demo-navigator");
     this.initTimer();
 
     this.maxPlanValue$ = this.planProperties$.pipe(
@@ -161,7 +159,6 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
     for (const t of this.notificationTimer) {
       clearTimeout(t);
     }
-    this.timeLogger.deregister(this.loggerId);
   }
 
   finishDemo() {

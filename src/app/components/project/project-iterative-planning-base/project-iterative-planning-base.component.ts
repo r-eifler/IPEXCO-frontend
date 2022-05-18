@@ -2,7 +2,6 @@ import { NewIterationStepStoreService } from "./../../../service/planner-runs/se
 import { SelectedIterationStepService } from "src/app/service/planner-runs/selected-iteration-step.service";
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { IterationStep } from "../../../interface/run";
-import { TimeLoggerService } from "../../../service/logger/time-logger.service";
 import { IterationStepsService } from "../../../service/planner-runs/iteration-steps.service";
 import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
 import { DemoHelpDialogComponent } from "../../demo/demo-help-dialog/demo-help-dialog.component";
@@ -16,14 +15,12 @@ import { Subject, Observable } from "rxjs";
 export class ProjectIterativePlanningBaseComponent
   implements OnInit, OnDestroy
 {
-  private loggerId: number;
   private ngUnsubscribe$: Subject<any> = new Subject();
 
   step$: Observable<IterationStep>;
   newStep$: Observable<IterationStep>;
 
   constructor(
-    private timeLogger: TimeLoggerService,
     public iterationStepService: IterationStepsService,
     private selectedIterationStepService: SelectedIterationStepService,
     private newIterationStepStoreService: NewIterationStepStoreService,
@@ -39,7 +36,6 @@ export class ProjectIterativePlanningBaseComponent
     this.ngUnsubscribe$.next();
     this.ngUnsubscribe$.complete();
     // clearInterval(this.timerIntervall);
-    this.timeLogger.deregister(this.loggerId);
   }
 
   showHelp() {
