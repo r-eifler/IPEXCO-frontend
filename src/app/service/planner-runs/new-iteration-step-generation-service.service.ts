@@ -52,7 +52,7 @@ export class NewIterationStepGenerationService {
         filter(([project, ppM]) => !!project && !!ppM && ppM.size > 0),
         take(1)
       )
-      .subscribe(([project, planProperties]) => {
+      .subscribe(async ([project, planProperties]) => {
         console.log("Generate initial Iteration Step");
         console.log("#planProperties: " + planProperties.size);
         let softGoals = [];
@@ -80,13 +80,18 @@ export class NewIterationStepGenerationService {
         };
         console.log("New Step");
         console.log(newStep);
+
+        let storedStep = await this.iterationStepsService.saveObject(newStep);
+
         if (project.settings.computeDependenciesAutomatically) {
-          this.plannerService.computeRelaxExplanations(newStep);
+          console.log("Project: Compute Explanations automatically...")
+          storedStep = await this.plannerService.computeRelaxExplanations(storedStep);
         }
         if (project.settings.computePlanAutomatically) {
-          this.plannerService.computePlan(newStep);
+          console.log("Compute plan automatically...")
+          await this.plannerService.computePlan(newStep);
         }
-        this.iterationStepsService.saveObject(newStep);
+
       });
   }
 
@@ -160,10 +165,10 @@ export class DemoNewIterationStepGenerationService extends NewIterationStepGener
 
   constructor(
     newIterationStepStoreService: NewIterationStepStoreService,
-    iterationStepsService: DemoIterationStepsService,
+    iterationStepsService: IterationStepsService,
     selectedIterationStepService: SelectedIterationStepService,
     planPropertyMapService: PlanPropertyMapService,
-    protected plannerService: DemoPlannerService,
+    protected plannerService: PlannerService,
     protected currentProjectService: RunningDemoService,
     protected planningTaskRelaxationService: PlanningTaskRelaxationService
   ) {
@@ -190,7 +195,7 @@ export class DemoNewIterationStepGenerationService extends NewIterationStepGener
         ),
         take(1)
       )
-      .subscribe(([demo, planProperties, relaxationSpaces]) => {
+      .subscribe(async ([demo, planProperties, relaxationSpaces]) => {
         console.log("Generate initial Iteration Step");
         console.log("#planProperties: " + planProperties.size);
         let softGoals = [];
@@ -228,17 +233,16 @@ export class DemoNewIterationStepGenerationService extends NewIterationStepGener
 
         console.log("New Step");
         console.log(newStep);
-        this.iterationStepsService.saveObject(newStep);
+        let storedStep = await this.iterationStepsService.saveObject(newStep);
 
         let solvable = true;
         if (demo.settings.computeDependenciesAutomatically) {
-          solvable = this.plannerService.computeRelaxExplanations(
-            newStep,
-            demo
-          );
+          console.log("Demo: Compute Explanations automatically...")
+          storedStep = await this.plannerService.computeRelaxExplanations(storedStep,demo);
         }
-        if (demo.settings.computePlanAutomatically && solvable) {
-          this.plannerService.computePlan(newStep);
+        if (demo.settings.computePlanAutomatically && storedStep.status == StepStatus.solvable) {
+          console.log("Demo: Compute Plan automatically...")
+          this.plannerService.computePlan(storedStep);
         }
       });
   }
@@ -251,7 +255,7 @@ export class DemoNewIterationStepGenerationService extends NewIterationStepGener
         ),
         take(1)
       )
-      .subscribe(([step, planProperties, demo]) => {
+      .subscribe(async ([step, planProperties, demo]) => {
         if (step && planProperties) {
           // let name = 'Step ' +  this.iterationStepsService.getNumRuns();
           let softGoals = [];
@@ -276,16 +280,16 @@ export class DemoNewIterationStepGenerationService extends NewIterationStepGener
           };
           console.log("New Step");
           console.log(newStep);
-          this.iterationStepsService.saveObject(newStep);
+
+          let storedStep = await this.iterationStepsService.saveObject(newStep);
           this.newIterationStepStoreService.removeCurrentObject();
-          let solvable = true;
+
           if (demo.settings.computeDependenciesAutomatically) {
-            solvable = this.plannerService.computeRelaxExplanations(
-              newStep,
-              demo
-            );
+            console.log("Compute Explanations automatically...")
+            storedStep = await this.plannerService.computeRelaxExplanations(newStep,demo);
           }
-          if (demo.settings.computePlanAutomatically && solvable) {
+          if (demo.settings.computePlanAutomatically && storedStep.status == StepStatus.solvable) {
+            console.log("Compute Plan automatically...")
             this.plannerService.computePlan(newStep);
           }
         }

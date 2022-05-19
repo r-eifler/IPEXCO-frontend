@@ -38,26 +38,31 @@ export class IterationStepsService extends ObjectCollectionService<IterationStep
     // this.pipeFind = map(sortRuns);
   }
 
-  saveObject(step: IterationStep) {
+  saveObject(step: IterationStep): Promise<IterationStep> {
     console.log("IterationStepsService Project");
-    if (step._id) {
-      this.http
-        .put<IHTTPData<IterationStep>>(this.BASE_URL + step._id, { data: step })
-        .subscribe((httpData) => {
-          const action = { type: EDIT, data: httpData.data };
-          this.listStore.dispatch(action);
-        });
-      return;
-    }
+    return new Promise<IterationStep>((resolve, reject) => {
+      if (step._id) {
+        this.http
+          .put<IHTTPData<IterationStep>>(this.BASE_URL + step._id, { data: step })
+          .subscribe((httpData) => {
+            const action = { type: EDIT, data: httpData.data };
+            this.listStore.dispatch(action);
+            resolve(httpData.data)
+          });
+      }
+      else{
+        this.http
+          .post<IHTTPData<IterationStep>>(this.BASE_URL, { data: step })
+          .subscribe((httpData) => {
+            let rStep = httpData.data;
+            this.selectedIterationStepService.saveObject(rStep);
+            const action = { type: ADD, data: rStep };
+            this.listStore.dispatch(action);
+            resolve(httpData.data)
+          });
+      }
+    });
 
-    this.http
-      .post<IHTTPData<IterationStep>>(this.BASE_URL, { data: step })
-      .subscribe((httpData) => {
-        let rStep = httpData.data;
-        this.selectedIterationStepService.saveObject(rStep);
-        const action = { type: ADD, data: rStep };
-        this.listStore.dispatch(action);
-      });
   }
 
   findCollection(queryParams: QueryParam[] = []) {

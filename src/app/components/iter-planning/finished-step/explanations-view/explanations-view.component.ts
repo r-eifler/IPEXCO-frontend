@@ -1,3 +1,5 @@
+import { ExecutionSettings } from 'src/app/interface/settings/execution-settings';
+import { ExecutionSettingsServiceService } from 'src/app/service/settings/ExecutionSettingsService.service';
 import { LogEvent, TimeLoggerService } from 'src/app/service/logger/time-logger.service';
 import { PlanningTaskRelaxationSpace } from "./../../../../interface/planning-task-relaxation";
 import { PlanningTaskRelaxationService } from "./../../../../service/planning-task/planning-task-relaxations-services";
@@ -45,6 +47,7 @@ export class ExplanationsViewComponent implements OnInit, OnDestroy {
   planPropertiesMap$: BehaviorSubject<Map<string, PlanProperty>>;
   relaxationSpaces$: BehaviorSubject<PlanningTaskRelaxationSpace[]>;
   provideRelaxationExplanations$: Observable<boolean>;
+  settings$: Observable<ExecutionSettings>;
 
   viewpos = 1;
 
@@ -55,7 +58,8 @@ export class ExplanationsViewComponent implements OnInit, OnDestroy {
     planningTaskRelaxationService: PlanningTaskRelaxationService,
     private finishedStepInterfaceStatusService: FinishedStepInterfaceStatusService,
     private plannerService: PlannerService,
-    private currentProjectService: CurrentProjectService
+    private currentProjectService: CurrentProjectService,
+    public settingsService: ExecutionSettingsServiceService
   ) {
     this.step$ = selectedIterationStepService
       .findSelectedObject()
@@ -64,6 +68,7 @@ export class ExplanationsViewComponent implements OnInit, OnDestroy {
     this.relaxationSpaces$ = planningTaskRelaxationService.getList();
     this.plannerBusy$ = plannerService.isPlannerBusy();
     this.iterfaceStati$ = finishedStepInterfaceStatusService.getList();
+    this.settings$ = settingsService.getSelectedObject()
 
     this.provideRelaxationExplanations$ = this.currentProjectService
       .getSelectedObject()
@@ -72,16 +77,21 @@ export class ExplanationsViewComponent implements OnInit, OnDestroy {
         map((project) => project.settings.provideRelaxationExplanations)
       );
 
-    this.step$
+    combineLatest([this.step$, this.settings$])
       .pipe(
-        filter((s) => !!s),
+        filter(([step, settings]) => !!step && !!settings),
         takeUntil(this.unsubscribe$)
       )
-      .subscribe((step) => {
+      .subscribe(([step, settings]) => {
         console.log(step.status);
         if (step.status == StepStatus.unsolvable) {
           console.log("Step not solvable.");
           this.stepNotSolvable(step);
+        }
+        if((!step.depExplanation && !step.relaxationExplanations)
+        && settings.computeDependenciesAutomatically){
+          console.log("ExplanationView: compute explanations automatically...")
+          this.computeExplanations();
         }
       });
 
@@ -133,7 +143,7 @@ export class ExplanationsViewComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.computeExplanations();
+
   }
 
   stepNotSolvable(step: IterationStep): void {

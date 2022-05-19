@@ -140,10 +140,7 @@ function filterDependencies(
   return filteredDependencies;
 }
 
-export function getDependencies(
-  step: IterationStep,
-  question: string
-): PPDependencies {
+export function getDependencies(step: IterationStep, question: string): PPDependencies {
   console.log("getDependencies");
   if (step.relaxationExplanations && step.relaxationExplanations.length > 0) {
     return filterDependencies(
@@ -163,10 +160,7 @@ export function getDependencies(
   return null;
 }
 
-function filterDependenciesForUnsolvability(
-  hardGoals: string[],
-  allDependencies: PPDependencies
-): PPDependencies {
+function filterDependenciesForUnsolvability(hardGoals: string[], allDependencies: PPDependencies): PPDependencies {
   let filteredDependencies: PPDependencies = { conflicts: [] };
   for (let conflict of allDependencies.conflicts) {
     if (conflict.elems.every((ce) => hardGoals.some((hg) => ce == hg))) {

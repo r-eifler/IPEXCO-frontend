@@ -97,7 +97,6 @@ export class UserStudyStartComponent implements OnInit, OnDestroy {
     if (!this.userStudy) {
       return false;
     }
-    console.log("check date");
     const date = new Date();
     const start = new Date(this.userStudy.startDate);
     const end = new Date(this.userStudy.endDate);

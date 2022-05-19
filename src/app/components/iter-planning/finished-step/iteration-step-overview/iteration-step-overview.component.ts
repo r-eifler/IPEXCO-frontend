@@ -27,8 +27,7 @@ export class IterationStepOverviewComponent implements OnInit, OnDestroy {
 
   constructor(selectedIterationStepService: SelectedIterationStepService) {
     this.step$ = selectedIterationStepService.findSelectedObject().pipe(
-      filter((step) => !!step),
-      tap((a) => console.log(a))
+      filter((step) => !!step)
     );
   }
 

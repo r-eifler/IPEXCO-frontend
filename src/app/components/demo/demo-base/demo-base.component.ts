@@ -78,13 +78,18 @@ export class DemoBaseComponent implements OnInit, OnDestroy {
             this.relaxationService.findCollection([
               { param: "projectId", value: demo._id },
             ]);
-            this.newIterationStepGenerationService.createInitialStep();
+
           }
         });
     });
   }
 
   ngOnInit(): void {}
+
+  startDemo(){
+    console.log("start demo ....");
+    this.newIterationStepGenerationService.createInitialStep();
+  }
 
   ngOnDestroy(): void {
     this.ngUnsubscribe.next();

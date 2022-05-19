@@ -33,7 +33,7 @@ import { CurrentProjectService } from "src/app/service/project/project-services"
     { provide: PlannerService, useClass: UserStudyPlannerService },
     {
       provide: NewIterationStepGenerationService,
-      useClass: NewIterationStepGenerationService,
+      useClass: DemoNewIterationStepGenerationService,
     },
     { provide: PLANNER_REDIRECT, useValue: "../" },
     { provide: QUESTION_REDIRECT, useValue: "../../../" },

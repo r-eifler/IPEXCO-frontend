@@ -40,15 +40,18 @@ export class DemoIterationStepsService extends IterationStepsService {
     // this.pipeFind = map(sortRuns);
   }
 
-  saveObject(step: IterationStep) {
+  saveObject(step: IterationStep): Promise<IterationStep> {
     console.log("DemoIterationStepsService: Don't save the itertaion step.");
-    if (step._id) {
-      this.listStore.dispatch({ type: EDIT, data: step });
-    } else {
-      step._id = "localId_" + this.collection$.value.length;
-      this.selectedIterationStepService.saveObject(step);
-      this.listStore.dispatch({ type: ADD, data: step });
-    }
+    return new Promise((resolve, reject) => {
+      if (step._id) {
+        this.listStore.dispatch({ type: EDIT, data: step });
+      } else {
+        step._id = "localId_" + this.collection$.value.length;
+        this.selectedIterationStepService.saveObject(step);
+        this.listStore.dispatch({ type: ADD, data: step });
+      }
+      resolve(step);
+    });
   }
 
   findCollection() {

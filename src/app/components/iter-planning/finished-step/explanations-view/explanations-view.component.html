@@ -38,10 +38,10 @@
     <!-- <button mat-flat-button (click)="viewpos = 2" style="position: absolute; left: 95%; top: 90%">right</button> -->
   </ng-container>
 
-  <!-- <div class="compute-container"
-    *ngIf="! (plannerBusy$ | async) && ! (displayExplanations$ | async)">
+  <div class="compute-container"
+    *ngIf="(plannerBusy$ | async) === false  && (displayExplanations$ | async) === false">
     <button mat-flat-button (click)="computeExplanations()" color="primary">Compute Explanations</button>
-  </div> -->
+  </div>
 
   <div
     class="compute-container"

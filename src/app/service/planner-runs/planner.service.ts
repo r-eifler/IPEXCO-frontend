@@ -2,7 +2,7 @@ import { IterationStepsService } from "src/app/service/planner-runs/iteration-st
 import { PlanProperty } from "./../../interface/plan-property/plan-property";
 
 import { SelectedIterationStepService } from "./selected-iteration-step.service";
-import { IterationStep, RunStatus } from "src/app/interface/run";
+import { IterationStep, RunStatus, StepStatus } from "src/app/interface/run";
 import { EDIT } from "../../store/generic-list.store";
 import { Injectable } from "@angular/core";
 import { DepExplanationRun, PlanRun } from "../../interface/run";
@@ -11,6 +11,7 @@ import { IterationStepsStore } from "../../store/stores.store";
 import { environment } from "../../../environments/environment";
 import { IHTTPData } from "../../interface/http-data.interface";
 import { BehaviorSubject } from "rxjs";
+import { Demo } from "src/app/interface/demo";
 
 @Injectable({
   providedIn: "root",
@@ -117,15 +118,19 @@ export class PlannerService {
     return expRun;
   }
 
-  computeRelaxExplanations(step: IterationStep) {
+  computeRelaxExplanations(step: IterationStep, demo: Demo = null): Promise<IterationStep> {
     this.plannerBusy.next(true);
     const url = this.myBaseURL + "relax_exp/" + step._id;
 
-    this.http.post<IHTTPData<IterationStep>>(url, {}).subscribe((httpData) => {
-      let step = httpData.data;
-      this.iterationStepsService.saveObject(step);
-      this.selectedStepService.updateIfSame(step);
-      this.plannerBusy.next(false);
-    });
+    return new Promise((resolve, reject) => {
+      this.http.post<IHTTPData<IterationStep>>(url, {}).subscribe((httpData) => {
+        let step = httpData.data;
+        this.iterationStepsService.saveObject(step);
+        this.selectedStepService.updateIfSame(step);
+        this.plannerBusy.next(false);
+        resolve(httpData.data);
+      });
+    })
+
   }
 }

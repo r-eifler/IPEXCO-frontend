@@ -24,8 +24,9 @@ export class SelectedObjectService<T extends Identifiable> {
   getSelectedObject(): BehaviorSubject<T> {
     return this.selectedObject$;
   }
+
   updateIfSame(obj: T) {
-    if (this.selectedObject$.getValue()._id == obj._id) {
+    if (this.selectedObject$.getValue() && this.selectedObject$.getValue()._id == obj._id) {
       this.selectedObjectStore.dispatch({ type: LOAD, data: obj });
     }
   }

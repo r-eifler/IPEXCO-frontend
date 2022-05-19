@@ -43,8 +43,8 @@ export class NewIterationStepStoreService extends SelectedObjectService<ModItera
 
   saveObject(object: ModIterationStep) {
     let step = { ...object };
-    console.log("New Step");
-    console.log(step);
+    // console.log("New Step");
+    // console.log(step);
     this.selectedObjectStore.dispatch({ type: LOAD, data: step });
   }
 }
