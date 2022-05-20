@@ -20,9 +20,10 @@ import { PlannerService } from "../../../service/planner-runs/planner.service";
 import { UserStudyPlannerService } from "../../../service/planner-runs/user-study-planner.service";
 import { PlanPropertyMapService } from "../../../service/plan-properties/plan-property-services";
 import { LogEvent, TimeLoggerService } from "../../../service/logger/time-logger.service";
-import { DemoNewIterationStepGenerationService, NewIterationStepGenerationService } from "src/app/service/planner-runs/new-iteration-step-generation-service.service";
+import { NewIterationStepGenerationService } from "src/app/service/planner-runs/new-iteration-step-generation-service.service";
 import { PlanningTaskRelaxationService } from "src/app/service/planning-task/planning-task-relaxations-services";
 import { CurrentProjectService } from "src/app/service/project/project-services";
+import { DemoNewIterationStepGenerationService } from "src/app/service/planner-runs/demo-new-iteration-step-generation-service.service";
 
 @Component({
   selector: "app-user-study-demo-view",

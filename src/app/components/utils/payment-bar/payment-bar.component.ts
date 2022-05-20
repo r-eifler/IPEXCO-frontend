@@ -1,6 +1,7 @@
+import { OnDestroy } from '@angular/core';
 import { Component, Input, OnInit } from '@angular/core';
 import { Subject, BehaviorSubject, Observable, combineLatest } from 'rxjs';
-import { takeUntil, filter, map } from 'rxjs/operators';
+import { takeUntil, filter, map, tap } from 'rxjs/operators';
 import { PaymentInfo } from 'src/app/interface/settings/execution-settings';
 
 @Component({
@@ -8,7 +9,7 @@ import { PaymentInfo } from 'src/app/interface/settings/execution-settings';
   templateUrl: './payment-bar.component.html',
   styleUrls: ['./payment-bar.component.scss']
 })
-export class PaymentBarComponent implements OnInit {
+export class PaymentBarComponent implements OnInit, OnDestroy {
   @Input()
   set min(min: number) {
     this.min$.next(min);
@@ -27,7 +28,6 @@ export class PaymentBarComponent implements OnInit {
   }
   @Input()
   set paymentInfo(info: PaymentInfo) {
-    console.log("Payment");
     this.paymentInfo$.next(info);
   }
 
@@ -49,6 +49,10 @@ export class PaymentBarComponent implements OnInit {
   paymentLevels$: Observable<number[][]>
 
   constructor() {
+
+  }
+
+  ngOnInit(): void {
     this.v_small$ = combineLatest([this.value1$, this.value2$]).pipe(
       takeUntil(this.unsubscribe$),
       filter(([value1, value2]) => value1 != null && value2 != null),
@@ -115,16 +119,14 @@ export class PaymentBarComponent implements OnInit {
     this.paymentLevels$ = combineLatest([
       this.min$,
       this.max$,
-      this.v_small$,
-      this.v_large$,
       this.paymentInfo$
     ]).pipe(
       takeUntil(this.unsubscribe$),
       filter(
-        ([min, max, v_small, v_large, info]) =>
-          min != null && max != null && v_small != null && v_large != null && info != null
+        ([min, max, info]) =>
+          min != null && max != null && info != null
       ),
-      map(([min, max, v_small, v_large, info]) => {
+      map(([min, max, info]) => {
 
         let div = max - min;
         let moneyDiv = info.max - info.min;
@@ -132,9 +134,8 @@ export class PaymentBarComponent implements OnInit {
         return info.steps.map(step => [((zeroPos + step * max) / div)* 100, info.min + step * moneyDiv])
       })
     );
-  }
 
-  ngOnInit(): void {}
+  }
 
   ngOnDestroy(): void {
     this.unsubscribe$.next();

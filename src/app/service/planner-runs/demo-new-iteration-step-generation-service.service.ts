@@ -22,37 +22,48 @@ import {
 import { PlanningTaskRelaxationService } from "../planning-task/planning-task-relaxations-services";
 import { Demo } from "../../interface/demo";
 import { SelectedObjectService } from "../base/selected-object.service";
+import { NewIterationStepGenerationService } from "./new-iteration-step-generation-service.service";
 
 @Injectable({
   providedIn: "root",
 })
-export class NewIterationStepGenerationService {
-  newStep$: Observable<IterationStep>;
-  selectedStep$: Observable<IterationStep>;
-  planProperties$: Observable<Map<string, PlanProperty>>;
-  project$: Observable<Project>;
+export class DemoNewIterationStepGenerationService extends NewIterationStepGenerationService {
+  relaxationSpaces$: Observable<PlanningTaskRelaxationSpace[]>;
+  demo$: Observable<Demo>;
 
   constructor(
-    protected newIterationStepStoreService: NewIterationStepStoreService,
-    protected iterationStepsService: IterationStepsService,
-    protected selectedIterationStepService: SelectedIterationStepService,
-    protected planPropertyMapService: PlanPropertyMapService,
+    newIterationStepStoreService: NewIterationStepStoreService,
+    iterationStepsService: IterationStepsService,
+    selectedIterationStepService: SelectedIterationStepService,
+    planPropertyMapService: PlanPropertyMapService,
     protected plannerService: PlannerService,
-    protected currentProjectService: CurrentProjectService
+    protected currentProjectService: RunningDemoService,
+    protected planningTaskRelaxationService: PlanningTaskRelaxationService
   ) {
-    this.newStep$ = this.newIterationStepStoreService.getSelectedObject();
-    this.selectedStep$ = selectedIterationStepService.getSelectedObject();
-    this.planProperties$ = this.planPropertyMapService.getMap();
-    this.project$ = this.currentProjectService.getSelectedObject();
+    super(
+      newIterationStepStoreService,
+      iterationStepsService,
+      selectedIterationStepService,
+      planPropertyMapService,
+      plannerService,
+      currentProjectService
+    );
+
+    this.relaxationSpaces$ = this.planningTaskRelaxationService.getList();
+    this.demo$ = currentProjectService.getSelectedObject();
   }
 
-  createInitialStep() {
-    combineLatest([this.project$, this.planProperties$])
+  createInitialStep(save=false) {
+    console.log("Create initial iteration step DEMO");
+    combineLatest([this.demo$, this.planProperties$, this.relaxationSpaces$])
       .pipe(
-        filter(([project, ppM]) => !!project && !!ppM && ppM.size > 0),
+        filter(
+          ([demo, ppM, spaces]) =>
+            !!demo && !!ppM && ppM.size > 0 && !!spaces && spaces.length > 0
+        ),
         take(1)
       )
-      .subscribe(async ([project, planProperties]) => {
+      .subscribe(async ([demo, planProperties, relaxationSpaces]) => {
         console.log("Generate initial Iteration Step");
         console.log("#planProperties: " + planProperties.size);
         let softGoals = [];
@@ -64,67 +75,55 @@ export class NewIterationStepGenerationService {
             softGoals.push(pp._id);
           }
         }
+        let initUpdates = [];
+        relaxationSpaces.forEach((space) =>
+          space.dimensions.forEach((dim) =>
+            initUpdates.push({
+              orgFact: dim.orgFact.fact,
+              newFact: dim.orgFact.fact,
+            })
+          )
+        );
         let newTask: ModifiedPlanningTask = {
           name: "task",
-          project: project._id,
-          basetask: project.baseTask,
-          initUpdates: [],
+          project: demo._id,
+          basetask: demo.baseTask,
+          initUpdates,
         };
         let newStep: IterationStep = {
           name: "Itertaion Step 1",
-          project: project._id,
+          project: demo._id,
           status: StepStatus.unknown,
           hardGoals: [...hardGoals],
           softGoals: [...softGoals],
           task: newTask,
         };
+
         console.log("New Step");
         console.log(newStep);
-
         let storedStep = await this.iterationStepsService.saveObject(newStep);
 
-        if (project.settings.computeDependenciesAutomatically) {
-          console.log("Project: Compute Explanations automatically...")
-          storedStep = await this.plannerService.computeRelaxExplanations(storedStep);
+        let solvable = true;
+        if (demo.settings.computeDependenciesAutomatically) {
+          console.log("Demo: Compute Explanations automatically...")
+          storedStep = await this.plannerService.computeRelaxExplanations(storedStep,demo);
         }
-        if (project.settings.computePlanAutomatically) {
-          console.log("Compute plan automatically...")
-          await this.plannerService.computePlan(storedStep);
+        if (demo.settings.computePlanAutomatically && storedStep.status == StepStatus.solvable) {
+          console.log("Demo: Compute Plan automatically...")
+          this.plannerService.computePlan(storedStep);
         }
-
       });
   }
 
-  initNewStep() {
-    console.log("New Step");
-    this.selectedStep$.pipe(take(1)).subscribe((step) => {
-      if (step) {
-        let modStep: ModIterationStep = {
-          name:
-            "Iteration Step " + (this.iterationStepsService.getNumRuns() + 1),
-          baseStep: step,
-          task: step.task,
-          status: StepStatus.unknown,
-          project: step.project,
-          hardGoals: [...step.hardGoals],
-          softGoals: [],
-        };
-        this.newIterationStepStoreService.saveObject(modStep);
-        this.selectedIterationStepService.removeCurrentObject();
-      }
-    });
-  }
-
   finishNewStep(): void {
-    combineLatest([this.newStep$, this.planProperties$, this.project$])
+    combineLatest([this.newStep$, this.planProperties$, this.demo$])
       .pipe(
         filter(
-          ([step, planProperties, project]) =>
-            !!step && !!planProperties && !!project
+          ([step, planProperties, demo]) => !!step && !!planProperties && !!demo
         ),
         take(1)
       )
-      .subscribe(async ([step, planProperties, project]) => {
+      .subscribe(async ([step, planProperties, demo]) => {
         if (step && planProperties) {
           // let name = 'Step ' +  this.iterationStepsService.getNumRuns();
           let softGoals = [];
@@ -150,21 +149,18 @@ export class NewIterationStepGenerationService {
           console.log("New Step");
           console.log(newStep);
 
-          this.iterationStepsService.saveObject(newStep);
           this.newIterationStepStoreService.removeCurrentObject();
-
           let storedStep = await this.iterationStepsService.saveObject(newStep);
 
-          if (project.settings.computeDependenciesAutomatically) {
-            console.log("Project: Compute Explanations automatically...")
-            storedStep = await this.plannerService.computeRelaxExplanations(storedStep);
+          if (demo.settings.computeDependenciesAutomatically) {
+            console.log("Compute Explanations automatically...")
+            storedStep = await this.plannerService.computeRelaxExplanations(storedStep,demo);
           }
-          if (project.settings.computePlanAutomatically) {
-            console.log("Compute plan automatically...")
-            await this.plannerService.computePlan(storedStep);
+          if (demo.settings.computePlanAutomatically && storedStep.status == StepStatus.solvable) {
+            console.log("Compute Plan automatically...")
+            this.plannerService.computePlan(storedStep);
           }
         }
       });
   }
 }
-

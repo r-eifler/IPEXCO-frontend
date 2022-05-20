@@ -12,7 +12,7 @@ import { IHTTPData } from "../../interface/http-data.interface";
 import { ADD, EDIT, LOAD, REMOVE } from "../../store/generic-list.store";
 import { SelectedObjectService } from "../base/selected-object.service";
 import { RunStatus } from "src/app/interface/run";
-import { DemoNewIterationStepGenerationService } from "../planner-runs/new-iteration-step-generation-service.service";
+import { DemoNewIterationStepGenerationService } from "../planner-runs/demo-new-iteration-step-generation-service.service";
 import { ExecutionSettingsServiceService } from "../settings/ExecutionSettingsService.service";
 import { BaseProjectService } from "../project/project-services";
 @Injectable({

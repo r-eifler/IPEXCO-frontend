@@ -13,10 +13,10 @@ import {
 } from "@angular/core";
 import { Demo } from "src/app/interface/demo";
 import { BehaviorSubject, combineLatest, Observable, Subject } from "rxjs";
-import { computePlanValue, computeRelaxationCost, IterationStep, PlanRun, RunStatus } from "src/app/interface/run";
+import { computePlanValue, computeRelaxationCost, computeStepUtility, IterationStep, PlanRun, RunStatus } from "src/app/interface/run";
 import { RunningDemoService } from "src/app/service/demo/demo-services";
 import { CurrentProjectService } from "src/app/service/project/project-services";
-import { takeUntil, filter, map, take } from "rxjs/operators";
+import { takeUntil, filter, map, take, tap } from "rxjs/operators";
 import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
 import { TimeLoggerService } from "../../../service/logger/time-logger.service";
 import { getMaximalPlanValue, PlanProperty } from "../../../interface/plan-property/plan-property";
@@ -70,6 +70,7 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
   relqaxationCost$: Observable<number>;
   overallScore$: Observable<number>;
   settings$: Observable<ExecutionSettings>;
+  paymentInfo$: Observable<any>;
 
   constructor(
     private timeLogger: TimeLoggerService,
@@ -98,7 +99,15 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.initTimer();
 
+    this.paymentInfo$ = this.settings$.pipe(
+      takeUntil(this.ngUnsubscribe$),
+      filter(settings => !!settings && !!settings.paymentInfo),
+      map(settings => settings.paymentInfo),
+      tap(s => console.log("Payment info loaded"))
+    )
+
     this.maxPlanValue$ = this.planProperties$.pipe(
+      takeUntil(this.ngUnsubscribe$),
       map((planProperties) => {
         if (!!planProperties && planProperties.size > 0) {
           return getMaximalPlanValue(planProperties);
@@ -113,11 +122,12 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
       this.planProperties$,
       this.relaxationSpaces$,
     ]).pipe(
-      filter(([steps, planProperties, spaces]) => !!steps && !!planProperties && planProperties.size == 0 && !! spaces),
+      takeUntil(this.ngUnsubscribe$),
+      filter(([steps, planProperties, spaces]) => !!steps && !!planProperties && planProperties.size > 0 && !! spaces),
       map(([steps, planProperties, spaces]) => {
         let max = 0;
         for(let step of steps){
-          let score = computePlanValue(step, planProperties) - computeRelaxationCost(step, spaces);
+          let score = computeStepUtility(step, planProperties, spaces);
           max = score > max ? score : max;
         }
         return max;
@@ -130,6 +140,7 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
         filter((s) => !!s)
       )
       .subscribe((settings) => {
+        console.log(settings);
         if (settings.introTask) {
           let text = "You have not computed any plans yet. Are you facing any difficulties? " +
           "You can open the help page with the button in the upper right corner."

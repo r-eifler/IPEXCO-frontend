@@ -21,10 +21,8 @@ import { DemoPlannerService } from "../../../service/planner-runs/demo-planner.s
 import { PlanPropertyMapService } from "../../../service/plan-properties/plan-property-services";
 import { TimeLoggerService } from "../../../service/logger/time-logger.service";
 import { PlanningTaskRelaxationService } from "src/app/service/planning-task/planning-task-relaxations-services";
-import {
-  NewIterationStepGenerationService,
-  DemoNewIterationStepGenerationService,
-} from "src/app/service/planner-runs/new-iteration-step-generation-service.service";
+import { NewIterationStepGenerationService } from "src/app/service/planner-runs/new-iteration-step-generation-service.service";
+import { DemoNewIterationStepGenerationService } from 'src/app/service/planner-runs/demo-new-iteration-step-generation-service.service';
 
 @Component({
   selector: "app-demo-base",

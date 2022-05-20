@@ -1,6 +1,7 @@
 <div class="main-container">
   <div class="action-container">
-    <div class="timer-container">
+    <div class="timer-container"
+    *ngIf="(settings$ | async).useTimer">
       <p>Timer: <span>{{(timer |async) | date:'mm:ss'}}</span></p>
     </div>
     <div class="bar-container" *ngIf="(settings$ | async).showPaymentInfo">
