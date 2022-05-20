@@ -4,6 +4,9 @@
       <mat-card-title> Test Persons </mat-card-title>
     </mat-card-header>
     <mat-card-content>
+      <div>
+        <mat-slide-toggle [checked]="allAcceptedUsers" (change)="selectAllAccepted()">All accepted</mat-slide-toggle>
+      </div>
       <mat-selection-list #users [(ngModel)]="selectedUsers" (selectionChange)="userSelectionChanged()">
         <mat-list-option *ngFor="let data of (data$ | async)" [value]="data.user">
           <mat-icon matListIcon *ngIf="data.finished">done</mat-icon>
@@ -29,9 +32,10 @@
     </nav>
     <div style="height: 100%; width: 100%">
       <nav mat-tab-nav-bar>
-        <a mat-tab-link (click)="tabId = 1" [active]="tabId === 1">Overview</a>
-        <a mat-tab-link (click)="tabId = 2" [active]="tabId === 2">Time Logger</a>
-        <a mat-tab-link (click)="tabId = 3" [active]="tabId === 3">Test Person</a>
+        <a mat-tab-link (click)="tabId = 1" [active]="tabId === 1">Overview All</a>
+        <a mat-tab-link (click)="tabId = 2" [active]="tabId === 2">Overview Selected</a>
+        <a mat-tab-link (click)="tabId = 3" [active]="tabId === 3">Time Logger</a>
+        <a mat-tab-link (click)="tabId = 4" [active]="tabId === 4">Single Test Person</a>
       </nav>
       <div style="height: 100%; width: 100%; overflow: auto">
         <app-overview-data
@@ -40,18 +44,24 @@
           [users]="(allUsers$ | async)"
           [demoId]="(selectedDemoId$ | async)"
         ></app-overview-data>
-        <app-time-logger-data
+        <app-overview-data
           *ngIf="tabId === 2"
+          style="height: 100%; overflow: auto"
+          [users]="(selectedUsers$ | async)"
+          [demoId]="(selectedDemoId$ | async)"
+        ></app-overview-data>
+        <app-time-logger-data
+          *ngIf="tabId === 3"
           style="height: 100%; overflow: auto"
           [users]="(allUsers$ | async)"
           [demoId]="(selectedDemoId$ | async)"
         ></app-time-logger-data>
-        <!-- <app-individual-run-user-data
-          *ngIf="tabId === 3"
+        <app-individual-run-user-data
+          *ngIf="tabId === 4"
           style="height: 100%; overflow: auto"
           [users]="(selectedUsers$ | async)"
           [demoId]="(selectedDemoId$ | async)"
-        ></app-individual-run-user-data> -->
+        ></app-individual-run-user-data>
       </div>
     </div>
   </div>

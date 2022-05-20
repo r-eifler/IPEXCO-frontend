@@ -30,12 +30,13 @@ export class UserStudyDataBaseComponent implements OnInit, OnDestroy {
   private ngUnsubscribe$: Subject<any> = new Subject();
 
 
-  tabId = 2;
+  tabId = 1;
 
   demos$: Observable<Demo[]>;
   demoIds$: Observable<string[]>;
   selectedDemoId$ = new BehaviorSubject<string>(null);
   selectedDemo$: Observable<Demo>;
+  allAcceptedUsers: boolean = false;
 
 
   userStudy$: Observable<UserStudy>;
@@ -111,7 +112,9 @@ export class UserStudyDataBaseComponent implements OnInit, OnDestroy {
       })
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.selectAllAccepted();
+  }
 
   ngOnDestroy(): void {
     this.ngUnsubscribe$.next();
@@ -124,5 +127,23 @@ export class UserStudyDataBaseComponent implements OnInit, OnDestroy {
 
   selectDemo(demoId: string) {
     this.selectedDemoId$.next(demoId);
+  }
+
+  selectAllAccepted(): void {
+    this.allAcceptedUsers = !this.allAcceptedUsers
+    if(!this.allAcceptedUsers){
+      this.selectedUsers = []
+      this.userSelectionChanged()
+    }
+    else {
+      this.data$.pipe(
+        takeUntil(this.ngUnsubscribe$),
+        filter(data => !!data && data.length > 0))
+        .subscribe(data => {
+          this.selectedUsers = data.filter(d => d.accepted).map(d => d.user);
+          this.userSelectionChanged()
+        })
+    }
+
   }
 }

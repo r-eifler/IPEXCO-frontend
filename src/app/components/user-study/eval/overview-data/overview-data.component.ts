@@ -1,9 +1,9 @@
 import { USUser } from './../../../../interface/user-study/user-study-user';
-import { UserStudyDataService, DataPoint } from './../../../../service/user-study/user-study-data.service';
+import { UserStudyDataService, DataPoint, LineChartData } from './../../../../service/user-study/user-study-data.service';
 import { filter } from 'rxjs/operators';
 import { takeUntil } from 'rxjs/operators';
 import { IterationStep } from 'src/app/interface/run';
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, Input, OnDestroy, OnInit } from "@angular/core";
 import { BehaviorSubject, combineLatest, Subject } from "rxjs";
 import { UserStudyData, UserStudyDemoData } from "src/app/interface/user-study/user-study-store";
 
@@ -12,7 +12,7 @@ import { UserStudyData, UserStudyDemoData } from "src/app/interface/user-study/u
   templateUrl: "./overview-data.component.html",
   styleUrls: ["./overview-data.component.css"],
 })
-export class OverviewDataComponent implements OnInit {
+export class OverviewDataComponent implements OnInit, OnDestroy {
   private ngUnsubscribe$: Subject<any> = new Subject();
   showPlots = true;
 
@@ -43,6 +43,9 @@ export class OverviewDataComponent implements OnInit {
   }
 
   iterationStepsData: DataPoint[];
+  questionsData: DataPoint[];
+  utilityData: DataPoint[];
+  utilityTimeData: LineChartData[];
 
   constructor(
     private userStudyDataService: UserStudyDataService
@@ -52,11 +55,19 @@ export class OverviewDataComponent implements OnInit {
 
     combineLatest(([this.selectedDemoId$, this.users$])).pipe(
       takeUntil(this.ngUnsubscribe$),
-      filter(([id, users]) => !!id && !!users)
+      filter(([id, users]) => !!id && !!users && users.length > 0)
     ).subscribe(async ([id, users]) => {
       this.iterationStepsData = await this.userStudyDataService.getIterationStepsPerUser(id, users);
+      this.questionsData = await this.userStudyDataService.getQuestionsPerUser(id, users);
+      this.utilityData = await this.userStudyDataService.getUtilityPerUser(id, users);
+      this.utilityTimeData = await this.userStudyDataService.getAverageMaxUtilityOverTime(id, users);
       window.setTimeout(() => (this.showPlots = true), 200);
     });
+  }
+
+  ngOnDestroy(): void {
+    this.ngUnsubscribe$.next();
+    this.ngUnsubscribe$.complete();
   }
 
 }

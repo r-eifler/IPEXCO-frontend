@@ -113,7 +113,7 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
       this.planProperties$,
       this.relaxationSpaces$,
     ]).pipe(
-      filter(([steps, planProperties, spaces]) => !!steps && !!planProperties && !! spaces),
+      filter(([steps, planProperties, spaces]) => !!steps && !!planProperties && planProperties.size == 0 && !! spaces),
       map(([steps, planProperties, spaces]) => {
         let max = 0;
         for(let step of steps){

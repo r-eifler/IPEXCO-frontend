@@ -7,10 +7,7 @@ import {
 import { takeUntil } from "rxjs/operators";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Observable, Subject } from "rxjs";
-import {
-  DemosService,
-  RunningDemoService,
-} from "../../../service/demo/demo-services";
+import { DemosService } from "../../../service/demo/demo-services";
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ResponsiveService } from "src/app/service/responsive/responsive.service";
 import { MatBottomSheet } from "@angular/material/bottom-sheet";
@@ -18,11 +15,9 @@ import { Demo } from "src/app/interface/demo";
 import { RunStatus } from "src/app/interface/run";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
-import { Project } from "src/app/interface/project";
 import { AuthenticationService } from "../../../service/authentication/authentication.service";
 import { DemoCreatorComponent } from "../demo-creator/demo-creator.component";
 import { environment } from "../../../../environments/environment";
-import { DemoFinishedComponent } from "../demo-finished/demo-finished.component";
 import { DemoInfoComponent } from "../demo-info/demo-info.component";
 
 @Component({

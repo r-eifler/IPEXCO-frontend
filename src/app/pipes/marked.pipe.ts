@@ -7,7 +7,7 @@ import * as marked from "marked";
 export class MarkedPipe implements PipeTransform {
   transform(value: string, ...args: unknown[]): unknown {
     if (value && value.length > 0) {
-      return marked(value);
+      return marked.marked(value);
     }
     return value;
   }

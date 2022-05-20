@@ -82,13 +82,19 @@ export function computePlanValue(
   step: IterationStep,
   planProperties: Map<string, PlanProperty>
 ): number {
+  // console.log("Compute plan value ...");
   if (step.status == StepStatus.solvable) {
     let sum = 0;
+    // console.log(step);
     step.hardGoals.forEach((ppID) => {
       let pp = planProperties.get(ppID);
-      if (pp) sum += pp.value;
+      if (pp){
+        sum += pp.value;
+        // console.log(ppID + ": " + pp.value )
+      }
       else console.log(ppID);
     });
+    // console.log("----> " + sum);
     return sum;
   }
   if (step.status == StepStatus.unsolvable) {
@@ -118,6 +124,10 @@ export function computeRelaxationCost(
     });
   });
   return cost;
+}
+
+export function computeStepUtility(step, planProperties: Map<string, PlanProperty>, relaxationSpeaces: PlanningTaskRelaxationSpace[]): number {
+  return computePlanValue(step, planProperties) - computeRelaxationCost(step, relaxationSpeaces);
 }
 
 function filterDependencies(

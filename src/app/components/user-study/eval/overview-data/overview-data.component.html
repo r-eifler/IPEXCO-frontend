@@ -1,6 +1,6 @@
 <mat-card class="basic-card">
   <mat-card-header>
-    <mat-card-title> Iteration Steps </mat-card-title>
+    <mat-card-title> Iteration Steps per User</mat-card-title>
   </mat-card-header>
   <mat-card-content>
     <ngx-charts-bar-vertical
@@ -16,5 +16,67 @@
       xAxisLabel="Users"
       yAxisLabel="#Iteration Steps">
     </ngx-charts-bar-vertical>
+  </mat-card-content>
+</mat-card>
+
+<mat-card class="basic-card">
+  <mat-card-header>
+    <mat-card-title>Questions per User</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <ngx-charts-bar-vertical
+      *ngIf="showPlots"
+      [view]="view"
+      [scheme]="colorScheme"
+      [results]="questionsData"
+      [xAxis]="showXAxis"
+      [yAxis]="showYAxis"
+      [legend]="false"
+      [showXAxisLabel]="showXAxisLabel"
+      [showYAxisLabel]="showYAxisLabel"
+      xAxisLabel="Users"
+      yAxisLabel="#Questions">
+    </ngx-charts-bar-vertical>
+  </mat-card-content>
+</mat-card>
+
+
+<mat-card class="basic-card">
+  <mat-card-header>
+    <mat-card-title>Max Utility per User</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <ngx-charts-bar-vertical
+      *ngIf="showPlots"
+      [view]="view"
+      [scheme]="colorScheme"
+      [results]="utilityData"
+      [xAxis]="showXAxis"
+      [yAxis]="showYAxis"
+      [legend]="false"
+      [showXAxisLabel]="showXAxisLabel"
+      [showYAxisLabel]="showYAxisLabel"
+      xAxisLabel="Users"
+      yAxisLabel="Utility">
+    </ngx-charts-bar-vertical>
+  </mat-card-content>
+</mat-card>
+
+<mat-card class="basic-card">
+  <mat-card-header>
+    <mat-card-title>Max utility over time</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <ngx-charts-line-chart
+      [view]="view"
+      [scheme]="colorScheme"
+      [showXAxisLabel]="showXAxisLabel"
+      [showYAxisLabel]="showYAxisLabel"
+      [xAxis]="showXAxis"
+      [yAxis]="showYAxis"
+      xAxisLabel="Time"
+      yAxisLabel="Utility"
+      [results]="utilityTimeData">
+</ngx-charts-line-chart>
   </mat-card-content>
 </mat-card>

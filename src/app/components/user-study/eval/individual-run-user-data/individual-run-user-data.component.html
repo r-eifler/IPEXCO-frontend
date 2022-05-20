@@ -1,21 +1,21 @@
 <mat-card class="basic-card">
   <mat-card-header>
-    <mat-card-title> Plan Runs </mat-card-title>
+    <mat-card-title> Utility per Iteration Step </mat-card-title>
   </mat-card-header>
   <mat-card-content>
-    <p *ngIf="dataEntries?.length == 0">No test person selected.</p>
-    <p *ngIf="dataEntries?.length > 1">To many test persons selected.</p>
+    <p *ngIf="(users$ | async)?.length === 0">No test person selected.</p>
+    <p *ngIf="(users$ | async)?.length > 1">To many test persons selected.</p>
     <ngx-charts-bar-vertical
-      *ngIf="dataEntries?.length == 1"
+      *ngIf="(users$ | async)?.length === 1"
       [view]="view"
       [scheme]="colorScheme"
-      [results]="planRunData"
+      [results]="iterationStepsData"
       [xAxis]="showXAxis"
       [yAxis]="showYAxis"
       [legend]="false"
       [showXAxisLabel]="showXAxisLabel"
       [showYAxisLabel]="showYAxisLabel"
-      xAxisLabel="Plan"
+      xAxisLabel="Iteration Step"
       yAxisLabel="Utility"
     >
     </ngx-charts-bar-vertical>
@@ -24,24 +24,22 @@
 
 <mat-card class="basic-card">
   <mat-card-header>
-    <mat-card-title> Questions </mat-card-title>
+    <mat-card-title>Max utility over time</mat-card-title>
   </mat-card-header>
   <mat-card-content>
-    <p *ngIf="dataEntries?.length == 0">No test person selected.</p>
-    <p *ngIf="dataEntries?.length > 1">To many test persons selected.</p>
-    <ngx-charts-bar-vertical
-      *ngIf="dataEntries?.length == 1"
+    <p *ngIf="(users$ | async)?.length === 0">No test person selected.</p>
+    <p *ngIf="(users$ | async)?.length > 1">To many test persons selected.</p>
+    <ngx-charts-line-chart
+      *ngIf="(users$ | async)?.length === 1"
       [view]="view"
       [scheme]="colorScheme"
-      [results]="explanationRunData"
-      [xAxis]="showXAxis"
-      [yAxis]="showYAxis"
-      [legend]="false"
       [showXAxisLabel]="showXAxisLabel"
       [showYAxisLabel]="showYAxisLabel"
-      xAxisLabel="Plan"
-      yAxisLabel="#Questions"
-    >
-    </ngx-charts-bar-vertical>
+      [xAxis]="showXAxis"
+      [yAxis]="showYAxis"
+      xAxisLabel="Time"
+      yAxisLabel="Utility"
+      [results]="utilityTimeData">
+</ngx-charts-line-chart>
   </mat-card-content>
 </mat-card>
