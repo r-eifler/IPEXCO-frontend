@@ -3,13 +3,13 @@
   <div
     class="bar"
     [style.left.%]="left$ | async"
-    [style.width.%]="width$ | async"
-  ></div>
+    [style.width.%]="width$ | async">
+  </div>
   <div class="values-box">
     <p class="label" [style.left.%]="0"
       *ngIf="(v_small$ | async) !== (min$ | async) && (v_large$ | async) !== (min$ | async)">
       {{ min$ | async }}</p>
-    <p class="label" [style.right.%]="0"
+    <p class="label" [style.left.%]="100"
       *ngIf="(v_small$ | async) !== (max$ | async) && (v_large$ | async) !== (max$ | async)">
       {{ max$ | async }}</p>
     <p

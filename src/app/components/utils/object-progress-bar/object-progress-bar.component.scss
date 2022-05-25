@@ -3,7 +3,7 @@
 .container {
   width: 100%;
   display: grid;
-  grid-template-rows: 20px 50px 20px;
+  grid-template-rows: 16px 40px 20px;
   grid-template-columns: 50px 1fr;
   column-gap: 10px;
   align-items: center;
@@ -32,6 +32,14 @@
   background-color: $primary;
 }
 
+.tick {
+  width: 4px;
+  height: 20px;
+  position: absolute;
+  background-color: $accent;
+  transform: translateX(-50%);
+}
+
 .label-box {
   box-sizing: border-box;
   width: 100%;
@@ -45,6 +53,7 @@
   position: absolute;
   font-size: larger;
   font-weight: 400;
+  transform: translateX(-50%);
 }
 
 .cost-box {
@@ -60,6 +69,7 @@
   position: absolute;
   font-size: larger;
   font-weight: 400;
+  transform: translateX(-50%);
 }
 
 .axis-label {

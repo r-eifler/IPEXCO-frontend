@@ -4,8 +4,7 @@
     <span
       *ngFor="let v of values$ | async; let i = index"
       class="cost"
-      [style.left]="(i / ((values$ | async).length - 1)) * 100 + '%'"
-    >
+      [style.left]="(i / ((values$ | async).length - 1)) * 100 + '%'">
       {{ v.value }}
     </span>
   </div>
@@ -13,14 +12,16 @@
   <div class="bar-container">
     <div class="back"></div>
     <div class="bar" [style.left.%]="0" [style.width.%]="value$ | async"></div>
+    <div class="tick"
+      *ngFor="let v of values$ | async; let i = index"
+      [style.left]="(i / ((values$ | async).length - 1)) * 100 + '%'"></div>
   </div>
   <div><span class="axis-label">value</span></div>
   <div class="label-box">
     <span
       *ngFor="let v of values$ | async; let i = index"
       class="label"
-      [style.left]="(i / ((values$ | async).length - 1)) * 100 + '%'"
-    >
+      [style.left]="(i / ((values$ | async).length - 1)) * 100 + '%'">
       {{ v.display }}
     </span>
   </div>
