@@ -11,6 +11,7 @@ export interface ExecutionSettings {
   allowQuestions: boolean;
   provideRelaxationExplanations: boolean;
   usePlanPropertyValues: boolean;
+  useConstraints: boolean;
   useTimer: boolean;
   measureTime: boolean;
   maxTime: number;
@@ -30,6 +31,7 @@ export const defaultExecutionSetting: ExecutionSettings = {
   allowQuestions: true,
   provideRelaxationExplanations: true,
   usePlanPropertyValues: false,
+  useConstraints: false,
   useTimer: false,
   measureTime: false,
   maxTime: 0,
