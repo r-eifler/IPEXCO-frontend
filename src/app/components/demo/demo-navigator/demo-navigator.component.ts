@@ -2,23 +2,19 @@ import { IterationStepsService } from './../../../service/planner-runs/iteration
 import { ExecutionSettings } from "src/app/interface/settings/execution-settings";
 import { DemoFinishedComponent } from "./../demo-finished/demo-finished.component";
 import {
-  AfterViewInit,
   Component,
-  ElementRef,
   EventEmitter,
   OnDestroy,
   OnInit,
   Output,
-  ViewChild,
 } from "@angular/core";
 import { Demo } from "src/app/interface/demo";
 import { BehaviorSubject, combineLatest, Observable, Subject } from "rxjs";
-import { computePlanValue, computeRelaxationCost, computeStepUtility, IterationStep, PlanRun, RunStatus } from "src/app/interface/run";
+import { computeStepUtility, IterationStep} from "src/app/interface/run";
 import { RunningDemoService } from "src/app/service/demo/demo-services";
 import { CurrentProjectService } from "src/app/service/project/project-services";
 import { takeUntil, filter, map, take, tap } from "rxjs/operators";
 import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
-import { TimeLoggerService } from "../../../service/logger/time-logger.service";
 import { getMaximalPlanValue, PlanProperty } from "../../../interface/plan-property/plan-property";
 import { DemoHelpDialogComponent } from "../demo-help-dialog/demo-help-dialog.component";
 import { MatSnackBar } from "@angular/material/snack-bar";
@@ -55,10 +51,11 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
   notificationTimer: Timeout[] = [];
 
   finished = false;
+  showTaskInfo = false;
 
   demo$: Observable<Demo>;
 
-  step$: Observable<IterationStep>;
+  selectedStep$: Observable<IterationStep>;
   steps$: Observable<IterationStep[]>;
   newStep$: Observable<IterationStep>;
 
@@ -73,20 +70,19 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
   paymentInfo$: Observable<any>;
 
   constructor(
-    private timeLogger: TimeLoggerService,
     private runningDemoService: RunningDemoService,
     public currentProjectService: CurrentProjectService,
     private selectedIterationStepService: SelectedIterationStepService,
     private newIterationStepService: NewIterationStepStoreService,
     private iterationStepsService: IterationStepsService,
-    private planPropertiesMapService: PlanPropertyMapService,
-    private planningTaskRelaxationService: PlanningTaskRelaxationService,
+    planPropertiesMapService: PlanPropertyMapService,
+    planningTaskRelaxationService: PlanningTaskRelaxationService,
     private settingsService: ExecutionSettingsServiceService,
     public dialog: MatDialog,
     private snackBar: MatSnackBar
   ) {
     this.demo$ = this.runningDemoService.getSelectedObject();
-    this.step$ = this.selectedIterationStepService.getSelectedObject();
+    this.selectedStep$ = this.selectedIterationStepService.getSelectedObject();
     this.steps$ = this.iterationStepsService.getList();
     this.newStep$ = this.newIterationStepService.getSelectedObject();
     this.planProperties$ = planPropertiesMapService.getMap();
@@ -98,6 +94,15 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.initTimer();
+
+    this.selectedStep$.pipe(
+      takeUntil(this.ngUnsubscribe$),
+      filter(step => !!step)
+    ).subscribe(step => {
+      this.showTaskInfo = false;
+    }
+    );
+
 
     this.paymentInfo$ = this.settings$.pipe(
       takeUntil(this.ngUnsubscribe$),
@@ -260,5 +265,11 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
 
       const dialogRef = this.dialog.open(DemoHelpDialogComponent, dialogConfig);
     });
+  }
+
+  openTaskInfo() {
+    console.log("Open Task Info");
+    this.showTaskInfo = true;
+    this.selectedIterationStepService.removeCurrentObject();
   }
 }

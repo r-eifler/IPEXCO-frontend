@@ -1,10 +1,9 @@
+<div class="main-container">
 <h2>New Demo</h2>
 <form
-  class="example-form"
+  class="form"
   [formGroup]="demoForm"
-  (ngSubmit)="createOrUpdateDemo()"
-  style="display: flex; flex-direction: column"
->
+  (ngSubmit)="createOrUpdateDemo()">
   <mat-form-field class="example-full-width">
     <mat-label>Name</mat-label>
     <input matInput type="text" formControlName="name" />
@@ -32,11 +31,11 @@
     </mat-tab-group>
   </div>
 
-  <div style="display: flex" *ngIf="!update">
+  <div style="display: flex">
     <input
       style="display: none"
       type="file"
-      (change)="onFileChanged($event)"
+      (change)="onFileChanged($event); imageSelected=true;"
       #fileInput
     />
     <button mat-icon-button (click)="fileInput.click()" type="button">
@@ -48,9 +47,9 @@
   <div>
     <mat-slide-toggle
       formControlName="precomputeToggle"
-      [(ngModel)]="precomputedData"
-      >Add precomputed data</mat-slide-toggle
-    >
+      [(ngModel)]="precomputedData">
+      Add precomputed data
+    </mat-slide-toggle>
 
     <ng-container *ngIf="precomputedData">
       <mat-form-field class="example-full-width">
@@ -91,3 +90,4 @@
     </button>
   </div>
 </form>
+</div>

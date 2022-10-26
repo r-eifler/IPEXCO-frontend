@@ -4,6 +4,11 @@
     *ngIf="(settings$ | async)?.useTimer">
       <p>Timer: <span>{{(timer |async) | date:'mm:ss'}}</span></p>
     </div>
+    <div class="button-container">
+      <button mat-stroked-button (click)="openTaskInfo()">
+        Task Info
+      </button>
+    </div>
     <div class="bar-container" *ngIf="(settings$ | async).showPaymentInfo">
       <mat-icon>paid</mat-icon>
       <app-payment-bar
@@ -28,24 +33,20 @@
 
   <div class="bottom-container">
     <div class="center-container">
-      <app-iteration-steps-list
-        style="height: 100%; overflow: auto"
-      ></app-iteration-steps-list>
+      <app-iteration-steps-list style="height: 100%; overflow: auto"></app-iteration-steps-list>
     </div>
 
-    <div class="center-container" *ngIf="step$ | async">
-      <app-finished-step-navigator
-        style="height: 100%; overflow: auto"
-      ></app-finished-step-navigator>
+    <div class="center-container" *ngIf="showTaskInfo">
+      <app-demo-task-info></app-demo-task-info>
     </div>
 
-    <div
-      class="center-container"
-      *ngIf="!(step$ | async) && (newStep$ | async)"
-    >
-      <app-new-step-navigator>
-        style="height: 100%;overflow: auto;"></app-new-step-navigator
-      >
+    <div class="center-container" *ngIf="!showTaskInfo && selectedStep$ | async">
+      <app-finished-step-navigator style="height: 100%; overflow: auto"></app-finished-step-navigator>
     </div>
+
+    <div class="center-container" *ngIf="!showTaskInfo && (selectedStep$ | async) === null && (newStep$ | async)">
+      <app-new-step-navigator>style="height: 100%;overflow: auto;"></app-new-step-navigator>
+    </div>
+
   </div>
 </div>

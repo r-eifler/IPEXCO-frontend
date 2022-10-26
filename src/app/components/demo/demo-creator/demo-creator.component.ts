@@ -9,7 +9,7 @@ import { AuthenticationService } from "../../../service/authentication/authentic
 @Component({
   selector: "app-demo-creator",
   templateUrl: "./demo-creator.component.html",
-  styleUrls: ["./demo-creator.component.css"],
+  styleUrls: ["./demo-creator.component.scss"],
 })
 export class DemoCreatorComponent implements OnInit {
   public currentProjectId: string;
@@ -26,6 +26,7 @@ export class DemoCreatorComponent implements OnInit {
 
   imageFileName = "";
   imageFile;
+  imageSelected = false;
 
   constructor(
     private demosService: DemosService,
@@ -72,7 +73,7 @@ export class DemoCreatorComponent implements OnInit {
     };
 
     if (this.update) {
-      this.demosService.updateDemo(newDemo);
+      this.demosService.updateDemo(newDemo, this.imageSelected);
     } else {
       if (this.precomputedData) {
         this.demosService.addPrecomputedDemo(

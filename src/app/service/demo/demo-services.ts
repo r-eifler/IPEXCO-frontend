@@ -35,15 +35,6 @@ export class DemosService extends ObjectCollectionService<Demo> {
       .get<IHTTPData<Demo[]>>(this.BASE_URL, { params: httpParams })
       .pipe(this.pipeFindData, this.pipeFind)
       .subscribe((demos) => {
-        // let allDemos = demos.map(d => {
-        //   console.log(d);
-        //   if (d.settings){
-        //     let set: ExecutionSettings = JSON.parse(d.settings.toString()) as ExecutionSettings;
-        //     d.settings = set;
-        //   }
-        //   return d;
-        // });
-        // console.log(demos);
         this.listStore.dispatch({ type: LOAD, data: demos });
       });
 
@@ -127,11 +118,34 @@ export class DemosService extends ObjectCollectionService<Demo> {
       });
   }
 
-  updateDemo(demo: Demo): void {
+  updateDemo(demo: Demo, updateImage = false): void {
     this.http
       .put<IHTTPData<Demo>>(`${this.BASE_URL}/${demo._id}`, {data: demo})
       .subscribe((httpData) => {
         const action = { type: EDIT, data: httpData.data };
+        this.listStore.dispatch(action);
+        if(updateImage)
+          this.updateDemoImage(demo);
+      });
+  }
+
+  updateDemoImage(demo: Demo): void {
+
+    const formData = new FormData();
+    formData.append("summaryImage", demo.summaryImage);
+
+    this.http
+      .post<IHTTPData<Demo>>(`${this.BASE_URL}/${demo._id}/image`, formData)
+      .subscribe((httpData) => {
+        console.log(httpData);
+        console.log(httpData.data);
+        const runLoaded = this.existsObjectInStore(httpData.data._id);
+        let action = null;
+        if (runLoaded) {
+          action = { type: EDIT, data: httpData.data };
+        } else {
+          action = { type: ADD, data: httpData.data };
+        }
         this.listStore.dispatch(action);
       });
   }

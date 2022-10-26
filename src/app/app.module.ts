@@ -195,7 +195,6 @@ import {
 } from "./service/user-interface/interface-status-services";
 import { PaymentBarComponent } from './components/utils/payment-bar/payment-bar.component';
 import { UserStudyCurrentDataService, UserStudyDataService } from "./service/user-study/user-study-data.service";
-import { GlobalExplanationsViewComponent } from './components/iter-planning/explanations/global-explanations-view/global-explanations-view.component';
 
 @NgModule({
   declarations: [
@@ -278,7 +277,6 @@ import { GlobalExplanationsViewComponent } from './components/iter-planning/expl
     ScoreViewComponent,
     ScoreBarComponent,
     PaymentBarComponent,
-    GlobalExplanationsViewComponent
   ],
   imports: [
     RouterModule.forRoot(appRoutes, {
