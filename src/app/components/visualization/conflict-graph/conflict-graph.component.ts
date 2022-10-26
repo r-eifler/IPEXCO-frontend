@@ -1,3 +1,5 @@
+import { combineLatest } from 'rxjs';
+import { PPDependencies } from 'src/app/interface/explanations';
 import { OnDestroy } from '@angular/core';
 import { PlanProperty } from 'src/app/interface/plan-property/plan-property';
 import { Observable, Subject } from 'rxjs';
@@ -5,8 +7,21 @@ import { PlanPropertyMapService } from 'src/app/service/plan-properties/plan-pro
 import { RunningDemoService } from 'src/app/service/demo/demo-services';
 import { Component, OnInit } from '@angular/core';
 import { Demo, getSimpleConflicts } from 'src/app/interface/demo';
-import { PPDependencies } from 'src/app/interface/explanations';
 import { filter, map, takeUntil } from 'rxjs/operators';
+import * as d3 from 'd3';
+import { SimulationNodeDatum } from 'd3';
+
+interface Node extends SimulationNodeDatum
+
+{
+  id: string,
+  name: string
+}
+
+interface Link {
+  source: string,
+  target: string,
+}
 
 @Component({
   selector: 'app-conflict-graph',
@@ -39,6 +54,7 @@ export class ConflictGraphComponent implements OnInit, OnDestroy {
 
     this.conflicts$.subscribe( c => console.log(c));
     this.planProperties$.subscribe(p => console.log(p));
+
   }
 
   ngOnDestroy(): void {
