@@ -13,11 +13,11 @@
         style="width: 100%; height: 20%"
       ></app-score-bar>
     </div>
-    <div class="bar-container" *ngIf="(isSolvable$ | async) === false">
+    <div class="bar-container" *ngIf="(isSolvable$ | async) === false  && (settings$ | async).useConstraints">
       <mat-icon>grade</mat-icon>
       <p>Compute plan before plan score can be displayed.</p>
     </div>
-    <div class="bar-container">
+    <div class="bar-container" *ngIf="(settings$ | async).useConstraints">
       <mat-icon>battery_full</mat-icon>
       <app-score-bar
         [min]="maxRelqaxationCost$ | async"
@@ -27,7 +27,7 @@
         style="width: 100%; height: 20%"
       ></app-score-bar>
     </div>
-    <div class="bar-container" *ngIf="isSolvable$ | async">
+    <div class="bar-container" *ngIf="(isSolvable$ | async) && (settings$ | async).useConstraints">
       <mat-icon>trending_up</mat-icon>
       <app-score-bar
         [min]="maxRelqaxationCost$ | async"
@@ -43,14 +43,22 @@
     </div>
     <div class="bar-container" *ngIf="(isSolvable$ | async) && (settings$ | async).showPaymentInfo">
       <mat-icon>paid</mat-icon>
-      <app-payment-bar *ngIf="(settings$ | async).showPaymentInfo"
+      <app-payment-bar *ngIf="(settings$ | async).useConstraints"
         [min]="maxRelqaxationCost$ | async"
         [max]="maxPlanValue$ | async"
         [value1]="0"
         [value2]="overallScore$ | async"
         [paymentInfo]="(settings$ | async).paymentInfo"
-        style="width: 100%; height: 20%;"
-      ></app-payment-bar>
+        style="width: 100%; height: 20%;">
+      </app-payment-bar>
+      <app-payment-bar *ngIf="(settings$ | async).useConstraints === false"
+        [min]="0"
+        [max]="maxPlanValue$ | async"
+        [value1]="0"
+        [value2]="planValue$ | async"
+        [paymentInfo]="(settings$ | async).paymentInfo"
+        style="width: 100%; height: 20%;">
+      </app-payment-bar>
     </div>
   </ng-container>
   <div *ngIf="isUnSolvable$ | async">

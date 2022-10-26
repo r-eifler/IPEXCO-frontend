@@ -44,8 +44,7 @@ export class DemoBaseComponent implements OnInit, OnDestroy {
   private ngUnsubscribe: Subject<any> = new Subject();
 
   // Steps are help, task info and then the demo itself.
-  step = 0;
-  private loggerId: number;
+  step = 2;
 
   constructor(
     private timeLogger: TimeLoggerService,
@@ -70,13 +69,9 @@ export class DemoBaseComponent implements OnInit, OnDestroy {
             this.timeLogger.log(LogEvent.START_DEMO, {demoId:  demo._id});
             this.runningDemoService.saveObject(demo);
             this.currentProjectService.saveObject(demo);
-            this.propertiesService.findCollection([
-              { param: "projectId", value: demo._id },
-            ]);
-            this.relaxationService.findCollection([
-              { param: "projectId", value: demo._id },
-            ]);
-
+            this.propertiesService.findCollection([{ param: "projectId", value: demo._id },]);
+            this.relaxationService.findCollection([{ param: "projectId", value: demo._id },]);
+            this.startDemo()
           }
         });
     });

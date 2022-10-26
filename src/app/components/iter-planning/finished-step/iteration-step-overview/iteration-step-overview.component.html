@@ -1,13 +1,17 @@
-<div class="main-container">
-  <div class="sub-container">
-    <app-score-view class="sub-content" [step]="step$ | async"></app-score-view>
+<div
+  [class.main-container-goals]="( settings$ | async).useConstraints === false"
+  [class.main-container-constraints]="( settings$ | async).useConstraints">
+    <app-score-view
+      class="sub-content"
+      [step]="step$ | async">
+    </app-score-view>
     <app-selected-hard-goals
       class="sub-content"
-      [step]="step$ | async"
-    ></app-selected-hard-goals>
-  </div>
-  <app-selected-relaxations-view
-    class="sub-content"
-    [step]="step$ | async"
-  ></app-selected-relaxations-view>
+      [step]="step$ | async">
+    </app-selected-hard-goals>
+    <app-selected-relaxations-view
+      *ngIf="( settings$ | async).useConstraints"
+      class="sub-content"
+      [step]="step$ | async">
+    </app-selected-relaxations-view>
 </div>
