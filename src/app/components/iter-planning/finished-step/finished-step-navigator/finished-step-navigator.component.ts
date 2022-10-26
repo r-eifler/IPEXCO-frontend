@@ -38,6 +38,7 @@ export class FinishedStepNavigatorComponent implements OnInit, OnDestroy {
     );
 
     this.showTab$ = combineLatest([this.step$, this.iterfaceStatus$]).pipe(
+      takeUntil(this.unsubscribe$),
       filter(([step, stati]) => !!step && !!stati),
       map(([step, stati]) => {
         let status: FinishedStepInterfaceStatus = stati.find(

@@ -195,6 +195,8 @@ import {
 } from "./service/user-interface/interface-status-services";
 import { PaymentBarComponent } from './components/utils/payment-bar/payment-bar.component';
 import { UserStudyCurrentDataService, UserStudyDataService } from "./service/user-study/user-study-data.service";
+import { ConflictVisuMainComponent } from './components/visualization/conflict-visu-main/conflict-visu-main.component';
+import { ConflictGraphComponent } from './components/visualization/conflict-graph/conflict-graph.component';
 
 @NgModule({
   declarations: [
@@ -277,6 +279,8 @@ import { UserStudyCurrentDataService, UserStudyDataService } from "./service/use
     ScoreViewComponent,
     ScoreBarComponent,
     PaymentBarComponent,
+    ConflictVisuMainComponent,
+    ConflictGraphComponent,
   ],
   imports: [
     RouterModule.forRoot(appRoutes, {

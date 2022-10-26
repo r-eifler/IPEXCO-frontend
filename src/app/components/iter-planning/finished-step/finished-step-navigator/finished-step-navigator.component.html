@@ -8,23 +8,26 @@
       <mat-icon style="margin-right: 10px">map</mat-icon>
       Plan
     </a>
-    <a
-      mat-tab-link
+    <a mat-tab-link
       *ngIf="(step$ | async)?.plan"
       (click)="setTab(3)"
-      [active]="(showTab$ | async) === 3"
-    >
+      [active]="(showTab$ | async) === 3">
       <mat-icon style="margin-right: 10px">map</mat-icon>
       Advanced Plan
     </a>
-    <a
-      mat-tab-link
+    <a mat-tab-link
       (click)="setTab(4)"
       *ngIf="showConflicts$ | async"
-      [active]="(showTab$ | async) === 4"
-    >
+      [active]="(showTab$ | async) === 4" >
       <mat-icon style="margin-right: 10px">error</mat-icon>
       Conflicts
+    </a>
+    <a mat-tab-link
+      (click)="setTab(5)"
+      *ngIf="showConflicts$ | async"
+      [active]="(showTab$ | async) === 5" >
+      <mat-icon style="margin-right: 10px">error</mat-icon>
+      Global Conflicts
     </a>
   </nav>
   <div class="content-container" *ngIf="(showTab$ | async) === 1">
@@ -37,14 +40,14 @@
   </div>
 
   <div class="content-container" *ngIf="(showTab$ | async) === 3">
-    <app-interactive-plan-view
-      style="height: 100%; overflow: auto"
-    ></app-interactive-plan-view>
+    <app-interactive-plan-view style="height: 100%; overflow: auto"></app-interactive-plan-view>
   </div>
 
   <div class="content-container" *ngIf="(showTab$ | async) === 4">
-    <app-explanations-view
-      style="height: 100%; overflow: auto"
-    ></app-explanations-view>
+    <app-explanations-view style="height: 100%; overflow: auto" ></app-explanations-view>
+  </div>
+
+  <div class="content-container" *ngIf="(showTab$ | async) === 5">
+    <app-conflict-visu-main style="height: 100%; overflow: auto"></app-conflict-visu-main>
   </div>
 </div>

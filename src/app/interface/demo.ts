@@ -1,3 +1,4 @@
+import { PPDependencies } from 'src/app/interface/explanations';
 import { FactUpdate } from "./planning-task-relaxation";
 import { Project } from "./project";
 import { RelaxationExplanationRun, RunStatus } from "./run";
@@ -16,6 +17,10 @@ export interface Demo extends Project {
   explanations: DemoExplanation[];
   taskInfo?: string;
   maxUtility?: { value: number; selectedPlanProperties: string[] };
+}
+
+export function getSimpleConflicts(demo: Demo): PPDependencies {
+  return demo.explanations[0]?.relaxationExplanations[0]?.dependencies[0]?.dependencies;
 }
 
 export interface DemoDefinition {
