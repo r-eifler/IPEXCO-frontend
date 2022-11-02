@@ -101,7 +101,7 @@ export class PropertyCreatorComponent implements OnInit, OnDestroy {
 
   propTemplateSelect(event: MatSelectionListChange) {
     this.propertyTemplateAccordion.closeAll();
-    this.selectedPropertyTemplate = event.option.value;
+    this.selectedPropertyTemplate = event.options[0].value;
     this.selectedPropertyTemplate.initializeVariableConstraints(this.task);
     this.sentenceTemplateParts =
       this.selectedPropertyTemplate.getSentenceTemplateParts();
