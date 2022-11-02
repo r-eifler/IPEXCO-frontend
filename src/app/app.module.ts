@@ -12,6 +12,7 @@ import { NgModule } from "@angular/core";
 import { RouterModule } from "@angular/router";
 
 import { InlineSVGModule } from "ng-inline-svg";
+import { ColorPickerModule } from 'ngx-color-picker';
 
 import { AppComponent } from "./app.component";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
@@ -328,6 +329,7 @@ import { ConflictGraphComponent } from './components/visualization/conflict-grap
     NgxChartsModule,
     MatTooltipModule,
     NgxGraphModule,
+    ColorPickerModule
   ],
   providers: [
     UserStore,

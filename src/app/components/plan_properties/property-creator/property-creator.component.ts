@@ -4,11 +4,7 @@ import { takeUntil } from "rxjs/operators";
 import { MatStepper } from "@angular/material/stepper";
 import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { FormArray, FormControl, FormGroup, Validators } from "@angular/forms";
-import {
-  Action,
-  ActionSet,
-  PlanProperty,
-} from "../../../interface/plan-property/plan-property";
+import { Action, ActionSet, PlanProperty } from "../../../interface/plan-property/plan-property";
 import { MatDialogRef } from "@angular/material/dialog";
 import { Project } from "src/app/interface/project";
 import { matchRegexValidator } from "../../../validators/match-regex-validator";
@@ -83,6 +79,8 @@ export class PropertyCreatorComponent implements OnInit, OnDestroy {
       .getSpec()
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((ds) => {
+        console.log("domainSpecService");
+        console.log(ds);
         if (ds) {
           this.domainSpec = ds;
           this.propertyClassMap = this.domainSpec.getPropertyTemplateClassMap();
@@ -185,6 +183,9 @@ export class PropertyCreatorComponent implements OnInit, OnDestroy {
         isUsed: false,
         globalHardGoal: false,
         value: 1,
+        color: "#696969",
+        icon: "star",
+        class: "main"
       };
     } else {
       planProperty = this.selectedPropertyTemplate.generatePlanProperty(

@@ -57,6 +57,9 @@ export class PddlFileUtilsService {
               isUsed: false,
               globalHardGoal: false,
               value: 1,
+              color: "#696969",
+              icon: "star",
+              class: "main"
             };
             this.domainSpec?.getGoalDescription(goal);
             goalFacts.push(goal);

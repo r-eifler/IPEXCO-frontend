@@ -36,6 +36,9 @@ export class PropertyCollectionComponent
     "description",
     "globalHardGoal",
     "value",
+    "color",
+    "icon",
+    "class",
     "options",
   ];
   dataSource = new MatTableDataSource<PlanProperty>(this.planProperties);

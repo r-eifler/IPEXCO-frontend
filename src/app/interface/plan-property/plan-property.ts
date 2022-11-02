@@ -33,6 +33,9 @@ export interface PlanProperty {
   isUsed: boolean;
   globalHardGoal: boolean;
   value: number;
+  color: string;
+  icon: string;
+  class: string;
 }
 
 export function getMaximalPlanValue(

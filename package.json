@@ -35,6 +35,7 @@
     "jstat": "^1.9.5",
     "marked": "^4.0.16",
     "ng-inline-svg": "^10.0.0",
+    "ngx-color-picker": "^13.0.0",
     "ngx-monaco-editor": "^8.1.1",
     "passport-local": "^1.0.0",
     "rxjs": "~6.5.5",

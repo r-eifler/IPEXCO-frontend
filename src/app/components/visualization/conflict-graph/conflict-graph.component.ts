@@ -1,3 +1,4 @@
+import { SelectedIterationStepService } from 'src/app/service/planner-runs/selected-iteration-step.service';
 import { combineLatest } from 'rxjs';
 import { PPDependencies } from 'src/app/interface/explanations';
 import { OnDestroy } from '@angular/core';
@@ -10,6 +11,7 @@ import { Demo, getSimpleConflicts } from 'src/app/interface/demo';
 import { filter, map, takeUntil } from 'rxjs/operators';
 import * as d3 from 'd3';
 import { SimulationNodeDatum } from 'd3';
+import { getAllDependencies, IterationStep } from 'src/app/interface/run';
 
 interface Node extends SimulationNodeDatum
 
@@ -33,19 +35,22 @@ export class ConflictGraphComponent implements OnInit, OnDestroy {
   private unsubscribe$: Subject<any> = new Subject();
 
   demo$: Observable<Demo>;
+  selectedStep$: Observable<IterationStep>
   conflicts$:  Observable<PPDependencies>;
   planProperties$: Observable<Map<string,PlanProperty>>;
 
   constructor(
     demoService: RunningDemoService,
-    planPropertiesService: PlanPropertyMapService
+    planPropertiesService: PlanPropertyMapService,
+    stepService: SelectedIterationStepService,
   ) {
 
     this.demo$ = demoService.getSelectedObject();
-    this.conflicts$ = this.demo$.pipe(
+    this.selectedStep$ = stepService.getSelectedObject();
+    this.conflicts$ = this.selectedStep$.pipe(
       takeUntil(this.unsubscribe$),
-      filter(demo => !!demo),
-      map(demo => getSimpleConflicts(demo))
+      filter(step => !!step),
+      map(step => getAllDependencies(step))
     );
     this.planProperties$ = planPropertiesService.getMap();
   }
