@@ -3,7 +3,7 @@ import { DomainSpecificationService } from "../../../service/files/domain-specif
 import { takeUntil } from "rxjs/operators";
 import { MatStepper } from "@angular/material/stepper";
 import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
-import { FormArray, FormControl, FormGroup, Validators } from "@angular/forms";
+import { UntypedFormArray, UntypedFormControl, UntypedFormGroup, Validators } from "@angular/forms";
 import { Action, ActionSet, PlanProperty } from "../../../interface/plan-property/plan-property";
 import { MatDialogRef } from "@angular/material/dialog";
 import { Project } from "src/app/interface/project";
@@ -33,19 +33,19 @@ export class PropertyCreatorComponent implements OnInit, OnDestroy {
   actionSets: ActionSet[];
 
   // form fields
-  propertyForm = new FormGroup({
-    name: new FormControl("", [
+  propertyForm = new UntypedFormGroup({
+    name: new UntypedFormControl("", [
       Validators.required,
       Validators.minLength(3),
       matchRegexValidator(new RegExp("^\\w*$")),
     ]),
-    type: new FormControl("", [Validators.required]),
-    formula: new FormControl("", [Validators.required]),
-    actionSetName: new FormControl(),
+    type: new UntypedFormControl("", [Validators.required]),
+    formula: new UntypedFormControl("", [Validators.required]),
+    actionSetName: new UntypedFormControl(),
   });
 
   propertyType: string;
-  actionSetFromControls = new Map<string, FormArray>();
+  actionSetFromControls = new Map<string, UntypedFormArray>();
 
   currentProject: Project;
 
@@ -147,8 +147,8 @@ export class PropertyCreatorComponent implements OnInit, OnDestroy {
       name: newName,
     };
 
-    const newFromControl = new FormControl();
-    const newFormArray = new FormArray([newFromControl]);
+    const newFromControl = new UntypedFormControl();
+    const newFormArray = new UntypedFormArray([newFromControl]);
     this.actionSetFromControls.set(newName, newFormArray);
 
     this.actionSets.push(newActionSet);

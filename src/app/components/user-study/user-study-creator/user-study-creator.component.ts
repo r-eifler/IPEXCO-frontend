@@ -10,7 +10,7 @@ import {
   UserStudyStep,
   UserStudyStepType,
 } from "../../../interface/user-study/user-study";
-import { FormControl, FormGroup } from "@angular/forms";
+import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
 import {
   RunningUserStudyService,
   UserStudiesService,
@@ -42,7 +42,7 @@ export class UserStudyCreatorComponent implements OnInit, OnDestroy {
   userStudy: UserStudy;
   parts: Part[] = [];
 
-  userStudyForm: FormGroup;
+  userStudyForm: UntypedFormGroup;
 
   edit = false;
 
@@ -58,12 +58,12 @@ export class UserStudyCreatorComponent implements OnInit, OnDestroy {
     demosService.findCollection();
     this.demos$ = demosService.getList();
 
-    this.userStudyForm = new FormGroup({
-      name: new FormControl(),
-      description: new FormControl(),
-      startDate: new FormControl(),
-      endDate: new FormControl(),
-      redirectUrl: new FormControl(),
+    this.userStudyForm = new UntypedFormGroup({
+      name: new UntypedFormControl(),
+      description: new UntypedFormControl(),
+      startDate: new UntypedFormControl(),
+      endDate: new UntypedFormControl(),
+      redirectUrl: new UntypedFormControl(),
     });
 
     this.selectedUserStudyService

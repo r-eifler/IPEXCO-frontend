@@ -30,7 +30,7 @@ import {
   moveItemInArray,
   transferArrayItem,
 } from "@angular/cdk/drag-drop";
-import { FormControl, FormGroup } from "@angular/forms";
+import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
 
 @Component({
   selector: "app-planning-task-relaxation-creator",
@@ -52,8 +52,8 @@ export class PlanningTaskRelaxationCreatorComponent
   currentProject: Project;
   task: PlanningTask;
 
-  relaxationForm = new FormGroup({
-    name: new FormControl(),
+  relaxationForm = new UntypedFormGroup({
+    name: new UntypedFormControl(),
   });
 
   selctedInitialPredicate: Predicat = null;
@@ -88,7 +88,7 @@ export class PlanningTaskRelaxationCreatorComponent
       );
       let index = 0;
       for (let dim of this.relaxationSpace.dimensions) {
-        let newControl = new FormControl();
+        let newControl = new UntypedFormControl();
         this.relaxationForm.addControl("dim" + index++, newControl);
       }
     }
@@ -160,7 +160,7 @@ export class PlanningTaskRelaxationCreatorComponent
           orgFact: newMetaFact,
           updates: [],
         };
-        let newControl = new FormControl();
+        let newControl = new UntypedFormControl();
         this.relaxationForm.addControl("dim" + index++, newControl);
         this.relaxationSpace.dimensions.push(newTaskUpdate);
       }

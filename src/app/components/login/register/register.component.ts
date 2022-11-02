@@ -1,7 +1,7 @@
 import { AuthenticationService } from "../../../service/authentication/authentication.service";
 import { Component, OnInit } from "@angular/core";
 import { MatDialogRef } from "@angular/material/dialog";
-import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { UntypedFormControl, UntypedFormGroup, Validators } from "@angular/forms";
 import { User } from "src/app/interface/user";
 import { passwordValidator } from "src/app/validators/user.validators";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -12,19 +12,19 @@ import { ActivatedRoute, Router } from "@angular/router";
   styleUrls: ["./register.component.css"],
 })
 export class RegisterComponent implements OnInit {
-  registerForm = new FormGroup(
+  registerForm = new UntypedFormGroup(
     {
-      name: new FormControl("", [
+      name: new UntypedFormControl("", [
         Validators.required,
         Validators.minLength(5),
         Validators.maxLength(32),
       ]),
-      password: new FormControl("", [
+      password: new UntypedFormControl("", [
         Validators.required,
         Validators.minLength(8),
         Validators.maxLength(32),
       ]),
-      passwordRepeat: new FormControl("", [
+      passwordRepeat: new UntypedFormControl("", [
         Validators.required,
         Validators.minLength(8),
         Validators.maxLength(32),

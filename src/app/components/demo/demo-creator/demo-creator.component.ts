@@ -3,7 +3,7 @@ import { DemosService } from "../../../service/demo/demo-services";
 import { Component, Inject, OnInit } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { Demo } from "src/app/interface/demo";
-import { FormControl, FormGroup } from "@angular/forms";
+import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
 import { AuthenticationService } from "../../../service/authentication/authentication.service";
 
 @Component({
@@ -22,7 +22,7 @@ export class DemoCreatorComponent implements OnInit {
 
   precomputedData = false;
 
-  demoForm: FormGroup;
+  demoForm: UntypedFormGroup;
 
   imageFileName = "";
   imageFile;
@@ -43,13 +43,13 @@ export class DemoCreatorComponent implements OnInit {
     this.demoData = this.demo ? JSON.stringify(this.demo.explanations) : "";
     this.maxUtilityData = this.demo && this.demo.maxUtility ? this.demo.maxUtility.toString() : "";
 
-    this.demoForm = new FormGroup({
-      name: new FormControl(this.demo ? this.demo.name : ""),
-      description: new FormControl(this.demo ? this.demo.description : ""),
-      taskInfo: new FormControl(this.demo ? this.demo.taskInfo : ""),
-      precomputeToggle: new FormControl(),
-      demoData: new FormControl(this.demo ? JSON.stringify(this.demo.explanations) : ""),
-      maxUtilityData: new FormControl(this.demo ? this.demo.maxUtility : ""),
+    this.demoForm = new UntypedFormGroup({
+      name: new UntypedFormControl(this.demo ? this.demo.name : ""),
+      description: new UntypedFormControl(this.demo ? this.demo.description : ""),
+      taskInfo: new UntypedFormControl(this.demo ? this.demo.taskInfo : ""),
+      precomputeToggle: new UntypedFormControl(),
+      demoData: new UntypedFormControl(this.demo ? JSON.stringify(this.demo.explanations) : ""),
+      maxUtilityData: new UntypedFormControl(this.demo ? this.demo.maxUtility : ""),
     });
   }
 

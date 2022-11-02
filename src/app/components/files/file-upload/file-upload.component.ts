@@ -1,6 +1,6 @@
 import { takeUntil } from "rxjs/operators";
 import { Component, Input, OnDestroy, OnInit } from "@angular/core";
-import { FormControl, FormGroup } from "@angular/forms";
+import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
 import { FilesService } from "../../../service/files/pddl-files.service";
 
 import { PDDLFile } from "../../../interface/files/files";
@@ -21,11 +21,11 @@ export class TemplateFileUploadComponent implements OnInit, OnDestroy {
   displayedColumns: string[] = ["file-icon", "name", "domain", "delete"];
 
   // form fields
-  fileForm = new FormGroup({
-    name: new FormControl(),
-    domain: new FormControl(),
-    type: new FormControl(),
-    file: new FormControl(),
+  fileForm = new UntypedFormGroup({
+    name: new UntypedFormControl(),
+    domain: new UntypedFormControl(),
+    type: new UntypedFormControl(),
+    file: new UntypedFormControl(),
   });
 
   // uploaded file

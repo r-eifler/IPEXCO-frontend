@@ -1,7 +1,7 @@
 import { takeUntil } from "rxjs/operators";
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ResponsiveService } from "src/app/service/responsive/responsive.service";
-import { FormControl, FormGroup } from "@angular/forms";
+import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
 import { AuthenticationService } from "src/app/service/authentication/authentication.service";
 import { User } from "src/app/interface/user";
 import { MatDialogRef } from "@angular/material/dialog";
@@ -18,9 +18,9 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   isMobile: boolean;
 
-  registerForm = new FormGroup({
-    name: new FormControl(),
-    password: new FormControl(),
+  registerForm = new UntypedFormGroup({
+    name: new UntypedFormControl(),
+    password: new UntypedFormControl(),
   });
 
   constructor(
