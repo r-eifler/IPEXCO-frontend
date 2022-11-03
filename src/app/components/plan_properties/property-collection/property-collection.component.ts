@@ -1,3 +1,4 @@
+import { IconSelectorComponent } from './../../utils/icon-selector/icon-selector.component';
 import { takeUntil } from "rxjs/operators";
 import { PlanProperty } from "src/app/interface/plan-property/plan-property";
 import {
@@ -77,6 +78,13 @@ export class PropertyCollectionComponent
     this.propertiesService.saveObject(prop);
   }
 
+  colorChanged(event, prop: PlanProperty): void {
+    console.group(event);
+    prop.color = event;
+    this.propertiesService.saveObject(prop);
+  }
+
+
   ngOnInit(): void {
     this.responsiveService
       .getMobileStatus()
@@ -137,6 +145,48 @@ export class PropertyCollectionComponent
     });
 
     cellElement.appendChild(input);
+  }
+
+  modifyClass(
+    planProperty: PlanProperty,
+    propClass: Element,
+    cellElement: Element
+  ) {
+    cellElement.removeChild(propClass);
+    const input = document.createElement("input");
+    input.type = "text";
+    input.setAttribute("style", "width: 80%;");
+    input.value = planProperty.class;
+
+    input.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") {
+        planProperty.class = input.value;
+        this.propertiesService.saveObject(planProperty);
+        cellElement.removeChild(input);
+        const newDescription = document.createElement("h3");
+        newDescription.innerText = planProperty.class;
+        cellElement.appendChild(newDescription);
+      }
+    });
+
+    cellElement.appendChild(input);
+  }
+
+  openIconSelector(prop: PlanProperty){
+
+    let dialogRef = this.dialog.open(IconSelectorComponent, {
+      height: '400px',
+      width: '300px',
+      data: { icon: prop.icon }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if(result){
+        prop.icon = result;
+        this.propertiesService.saveObject(prop);
+      }
+    });
+
   }
 
   download_properties() {

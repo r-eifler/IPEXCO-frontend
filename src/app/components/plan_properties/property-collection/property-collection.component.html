@@ -146,35 +146,41 @@
         <ng-container matColumnDef="class">
           <th mat-header-cell *matHeaderCellDef>Class</th>
           <td mat-cell *matCellDef="let element" #cellElement>
-            <h3 #class>
-              {{ element.class }}
-            </h3>
+            <h3
+            #propCalss
+            (dblclick)="
+              modifyClass(
+                element,
+                propCalss,
+                cellElement
+              )
+            ">
+            {{ element.class }}
+          </h3>
           </td>
         </ng-container>
 
         <ng-container matColumnDef="color">
           <th mat-header-cell *matHeaderCellDef>Color</th>
           <td mat-cell *matCellDef="let prop">
-            <mat-form-field class="value-form-field">
-              <input
-                matInput
-                type="text"
-                value="{{ prop.color }}"
-              />
-            </mat-form-field>
+            <div class="color-input">
+              <div class="color-box"
+                [(colorPicker)]="prop.color"
+                [style.background]="prop.color"
+                [cpOutputFormat] = "'hex'"
+                (colorPickerSelect) = "colorChanged($event, prop)">
+              </div>
+              <p>{{prop.color}}</p>
+            </div>
           </td>
         </ng-container>
 
         <ng-container matColumnDef="icon">
           <th mat-header-cell *matHeaderCellDef>Icon</th>
           <td mat-cell *matCellDef="let prop">
-            <mat-form-field class="value-form-field">
-              <input
-                matInput
-                type="text"
-                value="{{ prop.color }}"
-              />
-            </mat-form-field>
+              <button mat-icon-button (click)="openIconSelector(prop)">
+                <mat-icon>{{prop.icon}}</mat-icon>
+              </button>
           </td>
         </ng-container>
 

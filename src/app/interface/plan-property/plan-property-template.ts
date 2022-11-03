@@ -127,7 +127,7 @@ export class PlanPropertyTemplate {
       isUsed: false,
       globalHardGoal: false,
       value: 1,
-      color: "#696969",
+      color: "696969",
       icon: "star",
       class: "main"
     };

@@ -198,6 +198,7 @@ import { PaymentBarComponent } from './components/utils/payment-bar/payment-bar.
 import { UserStudyCurrentDataService, UserStudyDataService } from "./service/user-study/user-study-data.service";
 import { ConflictVisuMainComponent } from './components/visualization/conflict-visu-main/conflict-visu-main.component';
 import { ConflictGraphComponent } from './components/visualization/conflict-graph/conflict-graph.component';
+import { IconSelectorComponent } from './components/utils/icon-selector/icon-selector.component';
 
 @NgModule({
   declarations: [
@@ -282,6 +283,7 @@ import { ConflictGraphComponent } from './components/visualization/conflict-grap
     PaymentBarComponent,
     ConflictVisuMainComponent,
     ConflictGraphComponent,
+    IconSelectorComponent,
   ],
   imports: [
     RouterModule.forRoot(appRoutes, {
@@ -329,7 +331,7 @@ import { ConflictGraphComponent } from './components/visualization/conflict-grap
     NgxChartsModule,
     MatTooltipModule,
     NgxGraphModule,
-    ColorPickerModule
+    ColorPickerModule,
   ],
   providers: [
     UserStore,
