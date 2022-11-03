@@ -22,7 +22,7 @@
       </mat-expansion-panel-header>
       <mat-list>
         <mat-list-item *ngFor="let p of this.action.precondition">
-          {{ p.toString() }}
+          {{ factOut(p) }}
         </mat-list-item>
       </mat-list>
     </mat-expansion-panel>
@@ -33,7 +33,7 @@
       </mat-expansion-panel-header>
       <mat-list>
         <mat-list-item *ngFor="let p of this.action.effects">
-          {{ p.toString() }}
+          {{ factOut(p) }}
         </mat-list-item>
       </mat-list>
     </mat-expansion-panel>
