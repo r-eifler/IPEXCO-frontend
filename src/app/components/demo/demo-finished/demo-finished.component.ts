@@ -1,15 +1,12 @@
 import { UserStudyCurrentDataService } from './../../../service/user-study/user-study-data.service';
-import { ExecutionSettingsServiceService } from 'src/app/service/settings/ExecutionSettingsService.service';
-import { ExecutionSettings } from 'src/app/interface/settings/execution-settings';
-import { CurrentProjectService } from "src/app/service/project/project-services";
+import { GeneralSettings } from 'src/app/interface/settings/general-settings';
 import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { Demo } from "src/app/interface/demo";
-import { Observable, Subject } from "rxjs";
-import { filter, take, takeUntil } from "rxjs/operators";
+import { Subject } from "rxjs";
+import { filter, take } from "rxjs/operators";
 import { LogEvent, TimeLoggerService } from "../../../service/logger/time-logger.service";
-import { CurrencyPipe } from "@angular/common";
-import { UserStudyUserService } from "../../../service/user-study/user-study-user.service";
+
 
 @Component({
   selector: "app-demo-finished",
@@ -25,11 +22,10 @@ export class DemoFinishedComponent implements OnInit, OnDestroy {
   maxUtility: number;
   payment: number;
 
-  settings$: Observable<ExecutionSettings>;
+  settings: GeneralSettings;
 
   constructor(
     private timeLogger: TimeLoggerService,
-    public settingsService: ExecutionSettingsServiceService,
     private userStudyCurrentDataService: UserStudyCurrentDataService,
     public dialogRef: MatDialogRef<DemoFinishedComponent>,
     @Inject(MAT_DIALOG_DATA) data
@@ -40,7 +36,7 @@ export class DemoFinishedComponent implements OnInit, OnDestroy {
     this.payment = data.payment;
     this.demo = data.demo;
 
-    this.settings$ = this.settingsService.getSelectedObject();
+    this.settings = this.demo.settings
   }
 
   async ngOnInit() {

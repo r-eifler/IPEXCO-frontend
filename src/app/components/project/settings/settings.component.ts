@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { UntypedFormControl, UntypedFormGroup, Validators } from "@angular/forms";
 import { Subject, Observable, BehaviorSubject } from "rxjs";
-import { ExecutionSettings } from "src/app/interface/settings/execution-settings";
+import { GeneralSettings } from "src/app/interface/settings/general-settings";
 import { Project } from "src/app/interface/project";
 import { takeUntil } from "rxjs/operators";
 
@@ -16,9 +16,9 @@ export class SettingsComponent implements OnInit {
   settingsForm: UntypedFormGroup;
 
   @Input() name: string;
-  @Input() settings: ExecutionSettings;
+  @Input() settings: GeneralSettings;
 
-  @Output() updatedSettings = new EventEmitter<ExecutionSettings>();
+  @Output() updatedSettings = new EventEmitter<GeneralSettings>();
 
   constructor() {
     this.settingsForm = new UntypedFormGroup({
@@ -55,7 +55,7 @@ export class SettingsComponent implements OnInit {
     this.initForm(this.settings);
   }
 
-  initForm(settings: ExecutionSettings): void {
+  initForm(settings: GeneralSettings): void {
     this.settingsForm.controls.maxRuns.setValue(settings.maxRuns);
 
     this.settingsForm.controls.allowQuestions.setValue(settings.allowQuestions);

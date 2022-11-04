@@ -1,7 +1,6 @@
 import { ModIterationStep } from "src/app/interface/run";
 import { IterationStep } from "./../interface/run";
 import { MapStore } from "./generic-map.store";
-import { ExecutionSettings } from "../interface/settings/execution-settings";
 import { ViewSettings } from "../interface/settings/view-settings";
 import { ListStore } from "./generic-list.store";
 import { DomainSpecificationFile, PDDLFile } from "../interface/files/files";
@@ -51,7 +50,6 @@ export class DomainSpecStore extends ItemStore<DomainSpecification> {}
 
 // Settings
 export class ViewSettingsStore extends ItemStore<ViewSettings> {}
-export class ExecutionSettingsStore extends ItemStore<ExecutionSettings> {}
 
 // Demo
 export class DemosStore extends ListStore<Demo> {}

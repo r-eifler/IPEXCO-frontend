@@ -3,17 +3,16 @@
     <form
       class="settings-form"
       [formGroup]="settingsForm"
-      (ngSubmit)="onSave()"
-    >
+      (ngSubmit)="onSave()">
       <mat-slide-toggle formControlName="public">public</mat-slide-toggle>
 
-      <mat-slide-toggle formControlName="introTask"
-        >Intro Task</mat-slide-toggle
-      >
+      <mat-slide-toggle formControlName="introTask">
+        Intro Task
+      </mat-slide-toggle>
 
-      <mat-slide-toggle formControlName="computePlanAutomatically"
-        >Compute plan automatically</mat-slide-toggle
-      >
+      <mat-slide-toggle formControlName="computePlanAutomatically">
+        Compute plan automatically
+      </mat-slide-toggle>
 
       <mat-slide-toggle formControlName="computeDependenciesAutomatically"
         >Compute dependencies automatically</mat-slide-toggle
@@ -24,40 +23,40 @@
         <input matInput type="number" formControlName="maxRuns" />
       </mat-form-field>
 
-      <mat-slide-toggle formControlName="usePlanPropertyValues"
-        >Use plan-property utility</mat-slide-toggle
-      >
+      <mat-slide-toggle formControlName="usePlanPropertyValues">
+        Use plan-property utility
+      </mat-slide-toggle>
 
-      <mat-slide-toggle formControlName="useConstraints"
-        >Use constraints</mat-slide-toggle
-      >
+      <mat-slide-toggle formControlName="useConstraints">
+        Use constraints
+      </mat-slide-toggle>
 
-      <mat-slide-toggle formControlName="allowQuestions"
-        >Allow questions</mat-slide-toggle
-      >
+      <mat-slide-toggle formControlName="allowQuestions">
+        Allow questions
+        </mat-slide-toggle>
 
-      <mat-slide-toggle formControlName="provideRelaxationExplanations"
-        >Provide relaxation explanations</mat-slide-toggle
-      >
+      <mat-slide-toggle formControlName="provideRelaxationExplanations">
+        Provide relaxation explanations
+      </mat-slide-toggle>
 
       <mat-slide-toggle formControlName="useTimer">Use Timer</mat-slide-toggle>
 
-      <mat-slide-toggle formControlName="measureTime"
-        >Measure Time</mat-slide-toggle
-      >
+      <mat-slide-toggle formControlName="measureTime">
+        Measure Time
+      </mat-slide-toggle>
 
       <mat-form-field style="width: 200px">
         <mat-label>Max processing time (in min)</mat-label>
         <input matInput type="number" formControlName="maxTime" />
       </mat-form-field>
 
-      <mat-slide-toggle formControlName="checkMaxUtility"
-        >Stop demo if max utility achieved</mat-slide-toggle
-      >
+      <mat-slide-toggle formControlName="checkMaxUtility">
+        Stop demo if max utility achieved
+      </mat-slide-toggle>
 
-      <mat-slide-toggle formControlName="showPaymentScore"
-        >Show payment score</mat-slide-toggle
-      >
+      <mat-slide-toggle formControlName="showPaymentScore">
+        Show payment score
+      </mat-slide-toggle>
 
       <mat-form-field style="width: 200px">
         <mat-label>min payment</mat-label>

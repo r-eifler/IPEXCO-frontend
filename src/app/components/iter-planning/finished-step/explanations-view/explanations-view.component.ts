@@ -1,22 +1,12 @@
-import { ExecutionSettings } from 'src/app/interface/settings/execution-settings';
-import { ExecutionSettingsServiceService } from 'src/app/service/settings/ExecutionSettingsService.service';
+import { GeneralSettings } from 'src/app/interface/settings/general-settings';
 import { LogEvent, TimeLoggerService } from 'src/app/service/logger/time-logger.service';
 import { PlanningTaskRelaxationSpace } from "./../../../../interface/planning-task-relaxation";
 import { PlanningTaskRelaxationService } from "./../../../../service/planning-task/planning-task-relaxations-services";
 import { filter, map, take, takeUntil, tap } from "rxjs/operators";
 import { BehaviorSubject, combineLatest, Observable, Subject } from "rxjs";
 import { SelectedIterationStepService } from "src/app/service/planner-runs/selected-iteration-step.service";
-import {
-  DepExplanationRun,
-  getDependencies,
-  getDependenciesForUnsolvability,
-  IterationStep,
-  StepStatus,
-} from "src/app/interface/run";
-import {
-  PPConflict,
-  PPDependencies,
-} from "./../../../../interface/explanations";
+import { getDependencies, getDependenciesForUnsolvability, IterationStep, StepStatus } from "src/app/interface/run";
+import { PPConflict, PPDependencies } from "./../../../../interface/explanations";
 import { PlanProperty } from "./../../../../interface/plan-property/plan-property";
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { PlanPropertyMapService } from "src/app/service/plan-properties/plan-property-services";
@@ -47,7 +37,7 @@ export class ExplanationsViewComponent implements OnInit, OnDestroy {
   planPropertiesMap$: BehaviorSubject<Map<string, PlanProperty>>;
   relaxationSpaces$: BehaviorSubject<PlanningTaskRelaxationSpace[]>;
   provideRelaxationExplanations$: Observable<boolean>;
-  settings$: Observable<ExecutionSettings>;
+  settings$: Observable<GeneralSettings>;
 
   viewpos = 1;
 
@@ -59,7 +49,6 @@ export class ExplanationsViewComponent implements OnInit, OnDestroy {
     private finishedStepInterfaceStatusService: FinishedStepInterfaceStatusService,
     private plannerService: PlannerService,
     private currentProjectService: CurrentProjectService,
-    public settingsService: ExecutionSettingsServiceService
   ) {
     this.step$ = selectedIterationStepService
       .findSelectedObject()
@@ -68,7 +57,10 @@ export class ExplanationsViewComponent implements OnInit, OnDestroy {
     this.relaxationSpaces$ = planningTaskRelaxationService.getList();
     this.plannerBusy$ = plannerService.isPlannerBusy();
     this.iterfaceStati$ = finishedStepInterfaceStatusService.getList();
-    this.settings$ = settingsService.getSelectedObject()
+    this.settings$ = currentProjectService.getSelectedObject().pipe(
+      filter(p => !!p),
+      map(p => p.settings)
+    );
 
     this.provideRelaxationExplanations$ = this.currentProjectService
       .getSelectedObject()

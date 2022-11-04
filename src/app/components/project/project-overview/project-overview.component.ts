@@ -35,7 +35,6 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
     public demosService: DemosService,
     public dialog: MatDialog,
     private router: Router,
-    private route: ActivatedRoute,
   ) {
     this.properties$ = this.propertiesService.getMap();
     this.currentProjectService.selectedObject$

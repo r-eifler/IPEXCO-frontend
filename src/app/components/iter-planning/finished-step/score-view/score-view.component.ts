@@ -1,23 +1,12 @@
-import { ExecutionSettingsServiceService } from './../../../../service/settings/ExecutionSettingsService.service';
-import { ExecutionSettings } from 'src/app/interface/settings/execution-settings';
-import {
-  getMaxRelaxationCost,
-  PlanningTaskRelaxationSpace,
-} from "src/app/interface/planning-task-relaxation";
+import { CurrentProjectService } from 'src/app/service/project/project-services';
+import { GeneralSettings } from 'src/app/interface/settings/general-settings';
+import { getMaxRelaxationCost, PlanningTaskRelaxationSpace } from "src/app/interface/planning-task-relaxation";
 import { PlanningTaskRelaxationService } from "src/app/service/planning-task/planning-task-relaxations-services";
 import { Component, Input, OnInit } from "@angular/core";
 import { BehaviorSubject, Observable, combineLatest } from "rxjs";
 import { filter, map } from "rxjs/operators";
-import {
-  getMaximalPlanValue,
-  PlanProperty,
-} from "src/app/interface/plan-property/plan-property";
-import {
-  computePlanValue,
-  computeRelaxationCost,
-  IterationStep,
-  StepStatus,
-} from "src/app/interface/run";
+import { getMaximalPlanValue, PlanProperty } from "src/app/interface/plan-property/plan-property";
+import { computePlanValue, computeRelaxationCost, IterationStep, StepStatus } from "src/app/interface/run";
 import { PlanPropertyMapService } from "src/app/service/plan-properties/plan-property-services";
 
 @Component({
@@ -44,12 +33,12 @@ export class ScoreViewComponent implements OnInit {
   maxRelqaxationCost$: Observable<number>;
   overallScore$: Observable<number>;
 
-  settings$: Observable<ExecutionSettings>;
+  settings$: Observable<GeneralSettings>;
 
   constructor(
     private planPropertiesMapService: PlanPropertyMapService,
     private planningTaskRelaxationService: PlanningTaskRelaxationService,
-    private settingsService: ExecutionSettingsServiceService,
+    private selectedProjectService: CurrentProjectService
   ) {
     this.planProperties$ = planPropertiesMapService.getMap();
     this.relaxationSpaces$ = planningTaskRelaxationService.getList();
@@ -112,7 +101,10 @@ export class ScoreViewComponent implements OnInit {
       this.relqaxationCost$,
     ]).pipe(map(([planValue, relaxationCost]) => relaxationCost + planValue));
 
-    this.settings$ = this.settingsService.getSelectedObject();
+    this.settings$ = this.selectedProjectService.getSelectedObject().pipe(
+      filter(p => !!p),
+      map(p => p.settings)
+    );
   }
 
   ngOnInit(): void {}

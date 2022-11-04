@@ -81,7 +81,6 @@ import {
   DomainFilesStore,
   DomainSpecificationFilesStore,
   DomainSpecStore,
-  ExecutionSettingsStore,
   IterationStepsStore,
   MetaStudiesStore,
   PlanningTaskRelaxationsStore,
@@ -199,6 +198,7 @@ import { UserStudyCurrentDataService, UserStudyDataService } from "./service/use
 import { ConflictVisuMainComponent } from './components/visualization/conflict-visu-main/conflict-visu-main.component';
 import { ConflictGraphComponent } from './components/visualization/conflict-graph/conflict-graph.component';
 import { IconSelectorComponent } from './components/utils/icon-selector/icon-selector.component';
+import { ProjectSettingsContainerComponent } from './components/project/project-settings-container/project-settings-container.component';
 
 @NgModule({
   declarations: [
@@ -284,6 +284,7 @@ import { IconSelectorComponent } from './components/utils/icon-selector/icon-sel
     ConflictVisuMainComponent,
     ConflictGraphComponent,
     IconSelectorComponent,
+    ProjectSettingsContainerComponent,
   ],
   imports: [
     RouterModule.forRoot(appRoutes, {
@@ -342,7 +343,6 @@ import { IconSelectorComponent } from './components/utils/icon-selector/icon-sel
       multi: true,
     },
     AuthenticationInterceptor,
-    ExecutionSettingsStore,
     DomainFilesStore,
     ProblemFilesStore,
     PddlFileUtilsService,

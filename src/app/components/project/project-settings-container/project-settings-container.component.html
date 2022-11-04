@@ -1,0 +1,6 @@
+<app-settings
+  [name]="'Project Settings'"
+  [settings]="settings$ | async"
+  (updatedSettings)="onSave($event)">
+</app-settings>
+

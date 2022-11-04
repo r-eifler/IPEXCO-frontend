@@ -1,3 +1,4 @@
+import { ProjectSettingsContainerComponent } from './components/project/project-settings-container/project-settings-container.component';
 import { SettingsComponent } from "./components/project/settings/settings.component";
 import { PlanningTaskRelaxationsComponent } from "./components/planning-task/planning-task-relaxations/planning-task-relaxations.component";
 import { PlanningTaskViewComponent } from "./components/planning-task/planning-task-view/planning-task-view.component";
@@ -47,7 +48,7 @@ export const appRoutes: Routes = [
     canActivate: [AuthGuard],
     children: [
       { path: "overview", component: ProjectOverviewComponent },
-      { path: "settings", component: SettingsComponent },
+      { path: "settings", component: ProjectSettingsContainerComponent },
       { path: "planning-task", component: PlanningTaskViewComponent },
       { path: "properties", component: PropertyCollectionComponent },
       { path: "task-relaxations", component: PlanningTaskRelaxationsComponent },

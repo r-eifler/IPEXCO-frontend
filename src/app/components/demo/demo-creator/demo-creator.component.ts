@@ -1,4 +1,4 @@
-import { defaultExecutionSetting } from './../../../interface/settings/execution-settings';
+import { defaultGeneralSetting } from '../../../interface/settings/general-settings';
 import { DemosService } from "../../../service/demo/demo-services";
 import { Component, Inject, OnInit } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
@@ -69,7 +69,7 @@ export class DemoCreatorComponent implements OnInit {
       public: false,
       completion: this.demo ? this.demo.completion : 0.0,
       explanations: this.demo ? this.demo.explanations : [],
-      settings: this.demo ? this.demo.settings : defaultExecutionSetting
+      settings: this.demo ? this.demo.settings : defaultGeneralSetting
     };
 
     if (this.update) {

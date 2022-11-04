@@ -1,5 +1,4 @@
-import { ExecutionSettingsServiceService } from './../settings/ExecutionSettingsService.service';
-import { ExecutionSettings } from "src/app/interface/settings/execution-settings";
+import { GeneralSettings } from "src/app/interface/settings/general-settings";
 import { SelectedObjectService } from "../base/selected-object.service";
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
@@ -28,7 +27,6 @@ export class ProjectsService extends ObjectCollectionService<Project> {
 export class BaseProjectService<T> extends SelectedObjectService<T> {
   constructor(
     selectedObjectStore: ItemStore<T>,
-    protected settingsService: ExecutionSettingsServiceService,
     protected domainSpecService: DomainSpecificationService) {
     super(selectedObjectStore);
   }
@@ -41,9 +39,8 @@ export class BaseProjectService<T> extends SelectedObjectService<T> {
 export class CurrentProjectService extends BaseProjectService<Project> {
   constructor(
     store: CurrentProjectStore,
-    settingsService: ExecutionSettingsServiceService,
     domainSpecService: DomainSpecificationService) {
-    super(store, settingsService, domainSpecService);
+    super(store, domainSpecService);
   }
 
   saveObject(project: Project) {
@@ -51,10 +48,10 @@ export class CurrentProjectService extends BaseProjectService<Project> {
     //   project.settings = JSON.parse(project.settings.toString()) as ExecutionSettings;
     //   console.log(project);
     // }
-    console.log("Service store project, its settings and the deomain specification");
-    this.settingsService.saveObject(project.settings);
+    console.log("Service store project and its domain specification");
     this.domainSpecService.findSpec(project);
 
     this.selectedObjectStore.dispatch({ type: LOAD, data: project });
   }
+
 }

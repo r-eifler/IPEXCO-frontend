@@ -10,7 +10,7 @@ import {
   MAT_BOTTOM_SHEET_DATA,
   MatBottomSheetRef,
 } from "@angular/material/bottom-sheet";
-import { ExecutionSettings } from "src/app/interface/settings/execution-settings";
+import { GeneralSettings } from "src/app/interface/settings/general-settings";
 import { Subject } from "rxjs";
 
 @Component({
@@ -22,7 +22,7 @@ export class DemoSettingsComponent implements OnInit, OnDestroy {
   private ngUnsubscribe: Subject<any> = new Subject();
 
   name: string;
-  settings: ExecutionSettings;
+  settings: GeneralSettings;
   demo: Demo;
 
   constructor(
@@ -43,7 +43,7 @@ export class DemoSettingsComponent implements OnInit, OnDestroy {
     this.ngUnsubscribe.complete();
   }
 
-  onSave(settings: ExecutionSettings) {
+  onSave(settings: GeneralSettings) {
     this.demo.settings = settings;
     this.demosService.saveObject(this.demo);
     this.bottomSheetRef.dismiss();
