@@ -6,11 +6,12 @@ import { IterationStepsService } from "../../../service/planner-runs/iteration-s
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ResponsiveService } from "src/app/service/responsive/responsive.service";
 import { PlanPropertyMapService } from "src/app/service/plan-properties/plan-property-services";
-import { CurrentProjectService } from "src/app/service/project/project-services";
+import { CurrentProjectService, ProjectsService } from "src/app/service/project/project-services";
 import { Observable, Subject } from "rxjs";
 import { PlanProperty } from "src/app/interface/plan-property/plan-property";
 import { Project } from "src/app/interface/project";
 import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
+import { ActivatedRoute, Router } from "@angular/router";
 
 @Component({
   selector: "app-project-overview",
@@ -29,9 +30,12 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
     private responsiveService: ResponsiveService,
     private propertiesService: PlanPropertyMapService,
     private currentProjectService: CurrentProjectService,
+    private projectsService: ProjectsService,
     public runsService: IterationStepsService,
     public demosService: DemosService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private router: Router,
+    private route: ActivatedRoute,
   ) {
     this.properties$ = this.propertiesService.getMap();
     this.currentProjectService.selectedObject$
@@ -67,5 +71,10 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
     };
 
     this.dialog.open(DemoCreatorComponent, dialogConfig);
+  }
+
+  deleteProject(): void {
+    this.projectsService.deleteObject(this.currentProject);
+    this.router.navigate(['/projects']);
   }
 }

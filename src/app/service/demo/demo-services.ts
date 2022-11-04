@@ -15,6 +15,7 @@ import { RunStatus } from "src/app/interface/run";
 import { DemoNewIterationStepGenerationService } from "../planner-runs/demo-new-iteration-step-generation-service.service";
 import { ExecutionSettingsServiceService } from "../settings/ExecutionSettingsService.service";
 import { BaseProjectService } from "../project/project-services";
+import { DomainSpecificationService } from "../files/domain-specification.service";
 @Injectable({
   providedIn: "root",
 })
@@ -176,12 +177,15 @@ export class DemosService extends ObjectCollectionService<Demo> {
 export class RunningDemoService extends BaseProjectService<Demo> {
   constructor(
     store: RunningDemoStore,
-    settingsService: ExecutionSettingsServiceService) {
-    super(store, settingsService);
+    settingsService: ExecutionSettingsServiceService,
+    domainSpecService: DomainSpecificationService) {
+    super(store, settingsService, domainSpecService);
   }
 
   saveObject(demo: Demo) {
     this.settingsService.saveObject(demo.settings);
+    this.domainSpecService.findSpec(demo);
+
     this.selectedObjectStore.dispatch({ type: LOAD, data: demo });
     console.log(demo);
   }
