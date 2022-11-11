@@ -1,10 +1,10 @@
-import { ExecutionSettingsServiceService } from 'src/app/service/settings/ExecutionSettingsService.service';
-import { ExecutionSettings } from './../../../../interface/settings/execution-settings';
+import { CurrentProjectService } from 'src/app/service/project/project-services';
+import { GeneralSettings } from '../../../../interface/settings/general-settings';
 import { Subject, Observable } from "rxjs";
 import { IterationStep } from "../../../../interface/run";
 import { SelectedIterationStepService } from "../../../../service/planner-runs/selected-iteration-step.service";
 import { Component, OnInit, OnDestroy } from "@angular/core";
-import { filter } from "rxjs/operators";
+import { filter, map } from "rxjs/operators";
 
 @Component({
   selector: "app-iteration-step-overview",
@@ -15,14 +15,17 @@ export class IterationStepOverviewComponent implements OnInit, OnDestroy {
   private unsubscribe$: Subject<any> = new Subject();
 
   step$: Observable<IterationStep>;
-  settings$: Observable<ExecutionSettings>;
+  settings$: Observable<GeneralSettings>;
 
   constructor(
     selectedIterationStepService: SelectedIterationStepService,
-    settingsService: ExecutionSettingsServiceService
-    ) {
+    selectedProject: CurrentProjectService,
+  ) {
 
-    this.settings$ = settingsService.getSelectedObject();
+    this.settings$ = selectedProject.getSelectedObject().pipe(
+      filter(p => !!p),
+      map(p => p.settings)
+    );
 
     this.step$ = selectedIterationStepService.findSelectedObject().pipe(
       filter((step) => !!step)

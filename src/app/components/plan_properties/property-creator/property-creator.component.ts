@@ -3,12 +3,8 @@ import { DomainSpecificationService } from "../../../service/files/domain-specif
 import { takeUntil } from "rxjs/operators";
 import { MatStepper } from "@angular/material/stepper";
 import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
-import { FormArray, FormControl, FormGroup, Validators } from "@angular/forms";
-import {
-  Action,
-  ActionSet,
-  PlanProperty,
-} from "../../../interface/plan-property/plan-property";
+import { UntypedFormArray, UntypedFormControl, UntypedFormGroup, Validators } from "@angular/forms";
+import { Action, ActionSet, PlanProperty } from "../../../interface/plan-property/plan-property";
 import { MatDialogRef } from "@angular/material/dialog";
 import { Project } from "src/app/interface/project";
 import { matchRegexValidator } from "../../../validators/match-regex-validator";
@@ -37,19 +33,19 @@ export class PropertyCreatorComponent implements OnInit, OnDestroy {
   actionSets: ActionSet[];
 
   // form fields
-  propertyForm = new FormGroup({
-    name: new FormControl("", [
+  propertyForm = new UntypedFormGroup({
+    name: new UntypedFormControl("", [
       Validators.required,
       Validators.minLength(3),
       matchRegexValidator(new RegExp("^\\w*$")),
     ]),
-    type: new FormControl("", [Validators.required]),
-    formula: new FormControl("", [Validators.required]),
-    actionSetName: new FormControl(),
+    type: new UntypedFormControl("", [Validators.required]),
+    formula: new UntypedFormControl("", [Validators.required]),
+    actionSetName: new UntypedFormControl(),
   });
 
   propertyType: string;
-  actionSetFromControls = new Map<string, FormArray>();
+  actionSetFromControls = new Map<string, UntypedFormArray>();
 
   currentProject: Project;
 
@@ -83,6 +79,8 @@ export class PropertyCreatorComponent implements OnInit, OnDestroy {
       .getSpec()
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((ds) => {
+        console.log("domainSpecService");
+        console.log(ds);
         if (ds) {
           this.domainSpec = ds;
           this.propertyClassMap = this.domainSpec.getPropertyTemplateClassMap();
@@ -103,7 +101,7 @@ export class PropertyCreatorComponent implements OnInit, OnDestroy {
 
   propTemplateSelect(event: MatSelectionListChange) {
     this.propertyTemplateAccordion.closeAll();
-    this.selectedPropertyTemplate = event.option.value;
+    this.selectedPropertyTemplate = event.options[0].value;
     this.selectedPropertyTemplate.initializeVariableConstraints(this.task);
     this.sentenceTemplateParts =
       this.selectedPropertyTemplate.getSentenceTemplateParts();
@@ -149,8 +147,8 @@ export class PropertyCreatorComponent implements OnInit, OnDestroy {
       name: newName,
     };
 
-    const newFromControl = new FormControl();
-    const newFormArray = new FormArray([newFromControl]);
+    const newFromControl = new UntypedFormControl();
+    const newFormArray = new UntypedFormArray([newFromControl]);
     this.actionSetFromControls.set(newName, newFormArray);
 
     this.actionSets.push(newActionSet);
@@ -185,6 +183,9 @@ export class PropertyCreatorComponent implements OnInit, OnDestroy {
         isUsed: false,
         globalHardGoal: false,
         value: 1,
+        color: "#696969",
+        icon: "star",
+        class: "main"
       };
     } else {
       planProperty = this.selectedPropertyTemplate.generatePlanProperty(

@@ -1,7 +1,7 @@
 import { IterationStep, StepStatus } from "./run";
 import { DomainSpecificationFile, PDDLFile } from "./files/files";
 import { PlanningTask } from "./plannig-task";
-import { ExecutionSettings } from "./settings/execution-settings";
+import { GeneralSettings } from "./settings/general-settings";
 
 export interface Project {
   _id: string;
@@ -13,7 +13,7 @@ export interface Project {
   domainSpecification?: DomainSpecificationFile;
   description?: string;
   baseTask?: PlanningTask;
-  settings?: ExecutionSettings;
+  settings?: GeneralSettings;
   animationSettings?: string;
   animationImage?: string;
 }

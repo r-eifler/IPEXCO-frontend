@@ -63,10 +63,13 @@
         <div mat-card-avatar>
           <mat-icon>create</mat-icon>
         </div>
-        <mat-card-title>Create from Project</mat-card-title>
+        <mat-card-title>Actions</mat-card-title>
       </mat-card-header>
-      <button mat-stroked-button color="accent" (click)="createDemo()">
-        Demo
+      <button mat-stroked-button (click)="createDemo()">
+        Create Demo
+      </button>
+      <button mat-stroked-button (click)="deleteProject()">
+        Delete Project
       </button>
     </mat-card>
   </div>

@@ -1,7 +1,7 @@
-import { defaultExecutionSetting } from "./../../../interface/settings/execution-settings";
+import { defaultGeneralSetting } from "../../../interface/settings/general-settings";
 import { Project } from "./../../../interface/project";
 import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
-import { FormControl, FormGroup } from "@angular/forms";
+import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
 import { Observable, Subject } from "rxjs";
 import {
   DomainSpecificationFile,
@@ -25,9 +25,9 @@ export class ProjectCreatorComponent implements OnInit, OnDestroy {
   private ngUnsubscribe: Subject<any> = new Subject();
 
   // form fields
-  projectForm = new FormGroup({
-    name: new FormControl(),
-    description: new FormControl(),
+  projectForm = new UntypedFormGroup({
+    name: new UntypedFormControl(),
+    description: new UntypedFormControl(),
   });
 
   domainFiles$: Observable<PDDLFile[]>;
@@ -89,7 +89,7 @@ export class ProjectCreatorComponent implements OnInit, OnDestroy {
       domainFile: this.selectedDomain,
       problemFile: this.selectedProblem,
       domainSpecification: this.selectedDomainSpec,
-      settings: defaultExecutionSetting,
+      settings: defaultGeneralSetting,
       baseTask: null,
       public: false,
     };

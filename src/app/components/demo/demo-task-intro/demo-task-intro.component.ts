@@ -13,7 +13,7 @@ import { PlanProperty } from "../../../interface/plan-property/plan-property";
 import { BehaviorSubject, Observable } from "rxjs";
 import { RunningDemoService } from "../../../service/demo/demo-services";
 import { Demo } from "../../../interface/demo";
-import { ExecutionSettings } from "../../../interface/settings/execution-settings";
+import { GeneralSettings } from "../../../interface/settings/general-settings";
 import { MatStepper } from "@angular/material/stepper";
 import { environment } from "../../../../environments/environment";
 import { MatButton } from "@angular/material/button";

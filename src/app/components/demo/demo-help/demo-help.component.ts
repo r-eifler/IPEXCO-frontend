@@ -1,13 +1,7 @@
-import { ExecutionSettingsServiceService } from 'src/app/service/settings/ExecutionSettingsService.service';
-import { ExecutionSettings } from 'src/app/interface/settings/execution-settings';
-import { filter, takeUntil } from "rxjs/operators";
-import {
-  Component,
-  EventEmitter,
-  OnDestroy,
-  OnInit,
-  Output,
-} from "@angular/core";
+import { CurrentProjectService } from 'src/app/service/project/project-services';
+import { GeneralSettings } from 'src/app/interface/settings/general-settings';
+import { filter, map, takeUntil } from "rxjs/operators";
+import { Component, EventEmitter, OnDestroy, OnInit, Output } from "@angular/core";
 import { ResponsiveService } from "src/app/service/responsive/responsive.service";
 import { Observable, Subject } from "rxjs";
 import { MatStepper } from "@angular/material/stepper";
@@ -26,16 +20,19 @@ export class DemoHelpComponent implements OnInit, OnDestroy {
   seenEverything = false;
 
   private ngUnsubscribe$: Subject<any> = new Subject();
-  settings$: Observable<ExecutionSettings>;
+  settings$: Observable<GeneralSettings>;
 
   @Output() next = new EventEmitter<void>();
 
   constructor(
     private timeLogger: TimeLoggerService,
-    private settingsService: ExecutionSettingsServiceService,
-    private responsiveService: ResponsiveService
+    private responsiveService: ResponsiveService,
+    private currentProjectService: CurrentProjectService
   ) {
-    this.settings$ = this.settingsService.getSelectedObject();
+    this.settings$ = currentProjectService.getSelectedObject().pipe(
+      filter(p => !!p),
+      map(p => p.settings)
+    );
     console.log("DEMO HELP");
   }
 

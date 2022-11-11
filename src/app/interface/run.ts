@@ -150,6 +150,17 @@ function filterDependencies(
   return filteredDependencies;
 }
 
+export function getAllDependencies(step: IterationStep): PPDependencies {
+  if (step.relaxationExplanations && step.relaxationExplanations.length > 0) {
+    return step.relaxationExplanations[0].dependencies[0].dependencies;
+  }
+  if (step.depExplanation) {
+    return step.depExplanation.dependencies;
+  }
+
+  return null;
+}
+
 export function getDependencies(step: IterationStep, question: string): PPDependencies {
   console.log("getDependencies");
   if (step.relaxationExplanations && step.relaxationExplanations.length > 0) {

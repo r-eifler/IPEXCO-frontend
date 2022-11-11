@@ -12,6 +12,7 @@ import { NgModule } from "@angular/core";
 import { RouterModule } from "@angular/router";
 
 import { InlineSVGModule } from "ng-inline-svg";
+import { ColorPickerModule } from 'ngx-color-picker';
 
 import { AppComponent } from "./app.component";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
@@ -80,7 +81,6 @@ import {
   DomainFilesStore,
   DomainSpecificationFilesStore,
   DomainSpecStore,
-  ExecutionSettingsStore,
   IterationStepsStore,
   MetaStudiesStore,
   PlanningTaskRelaxationsStore,
@@ -197,6 +197,8 @@ import { PaymentBarComponent } from './components/utils/payment-bar/payment-bar.
 import { UserStudyCurrentDataService, UserStudyDataService } from "./service/user-study/user-study-data.service";
 import { ConflictVisuMainComponent } from './components/visualization/conflict-visu-main/conflict-visu-main.component';
 import { ConflictGraphComponent } from './components/visualization/conflict-graph/conflict-graph.component';
+import { IconSelectorComponent } from './components/utils/icon-selector/icon-selector.component';
+import { ProjectSettingsContainerComponent } from './components/project/project-settings-container/project-settings-container.component';
 
 @NgModule({
   declarations: [
@@ -281,6 +283,8 @@ import { ConflictGraphComponent } from './components/visualization/conflict-grap
     PaymentBarComponent,
     ConflictVisuMainComponent,
     ConflictGraphComponent,
+    IconSelectorComponent,
+    ProjectSettingsContainerComponent,
   ],
   imports: [
     RouterModule.forRoot(appRoutes, {
@@ -328,6 +332,7 @@ import { ConflictGraphComponent } from './components/visualization/conflict-grap
     NgxChartsModule,
     MatTooltipModule,
     NgxGraphModule,
+    ColorPickerModule,
   ],
   providers: [
     UserStore,
@@ -338,7 +343,6 @@ import { ConflictGraphComponent } from './components/visualization/conflict-grap
       multi: true,
     },
     AuthenticationInterceptor,
-    ExecutionSettingsStore,
     DomainFilesStore,
     ProblemFilesStore,
     PddlFileUtilsService,

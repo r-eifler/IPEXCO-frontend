@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from "@angular/core";
-import { Action } from "src/app/interface/plannig-task";
+import { Action, FactToString, predicateToString } from "src/app/interface/plannig-task";
 
 @Component({
   selector: "app-complete-action",
@@ -8,6 +8,9 @@ import { Action } from "src/app/interface/plannig-task";
 })
 export class CompleteActionComponent implements OnInit {
   @Input() action: Action;
+
+  factOut = FactToString;
+  predicatOut = predicateToString;
 
   constructor() {}
 

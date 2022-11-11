@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
-import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { UntypedFormControl, UntypedFormGroup, Validators } from "@angular/forms";
 import { Subject, Observable, BehaviorSubject } from "rxjs";
-import { ExecutionSettings } from "src/app/interface/settings/execution-settings";
+import { GeneralSettings } from "src/app/interface/settings/general-settings";
 import { Project } from "src/app/interface/project";
 import { takeUntil } from "rxjs/operators";
 
@@ -13,40 +13,40 @@ import { takeUntil } from "rxjs/operators";
 export class SettingsComponent implements OnInit {
   private ngUnsubscribe: Subject<any> = new Subject();
 
-  settingsForm: FormGroup;
+  settingsForm: UntypedFormGroup;
 
   @Input() name: string;
-  @Input() settings: ExecutionSettings;
+  @Input() settings: GeneralSettings;
 
-  @Output() updatedSettings = new EventEmitter<ExecutionSettings>();
+  @Output() updatedSettings = new EventEmitter<GeneralSettings>();
 
   constructor() {
-    this.settingsForm = new FormGroup({
-      maxRuns: new FormControl([
+    this.settingsForm = new UntypedFormGroup({
+      maxRuns: new UntypedFormControl([
         Validators.required,
         Validators.min(1),
         Validators.max(100),
       ]),
-      allowQuestions: new FormControl(),
-      provideRelaxationExplanations: new FormControl(),
-      introTask: new FormControl(),
-      public: new FormControl(),
-      usePlanPropertyValues: new FormControl(),
-      useConstraints: new FormControl(),
-      useTimer: new FormControl(),
-      measureTime: new FormControl(),
-      maxTime: new FormControl([
+      allowQuestions: new UntypedFormControl(),
+      provideRelaxationExplanations: new UntypedFormControl(),
+      introTask: new UntypedFormControl(),
+      public: new UntypedFormControl(),
+      usePlanPropertyValues: new UntypedFormControl(),
+      useConstraints: new UntypedFormControl(),
+      useTimer: new UntypedFormControl(),
+      measureTime: new UntypedFormControl(),
+      maxTime: new UntypedFormControl([
         Validators.required,
         Validators.min(0.05),
         Validators.max(60),
       ]),
-      checkMaxUtility: new FormControl(),
-      computePlanAutomatically: new FormControl(),
-      computeDependenciesAutomatically: new FormControl(),
-      showPaymentScore: new FormControl(),
-      minPayment: new FormControl(),
-      maxPayment: new FormControl(),
-      paymentSteps: new FormControl(),
+      checkMaxUtility: new UntypedFormControl(),
+      computePlanAutomatically: new UntypedFormControl(),
+      computeDependenciesAutomatically: new UntypedFormControl(),
+      showPaymentScore: new UntypedFormControl(),
+      minPayment: new UntypedFormControl(),
+      maxPayment: new UntypedFormControl(),
+      paymentSteps: new UntypedFormControl(),
     });
   }
 
@@ -55,7 +55,7 @@ export class SettingsComponent implements OnInit {
     this.initForm(this.settings);
   }
 
-  initForm(settings: ExecutionSettings): void {
+  initForm(settings: GeneralSettings): void {
     this.settingsForm.controls.maxRuns.setValue(settings.maxRuns);
 
     this.settingsForm.controls.allowQuestions.setValue(settings.allowQuestions);

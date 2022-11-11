@@ -1,13 +1,7 @@
 import { IterationStepsService } from './../../../service/planner-runs/iteration-steps.service';
-import { ExecutionSettings } from "src/app/interface/settings/execution-settings";
+import { GeneralSettings } from "src/app/interface/settings/general-settings";
 import { DemoFinishedComponent } from "./../demo-finished/demo-finished.component";
-import {
-  Component,
-  EventEmitter,
-  OnDestroy,
-  OnInit,
-  Output,
-} from "@angular/core";
+import { Component, EventEmitter, OnDestroy, OnInit, Output } from "@angular/core";
 import { Demo } from "src/app/interface/demo";
 import { BehaviorSubject, combineLatest, Observable, Subject } from "rxjs";
 import { computeStepUtility, IterationStep} from "src/app/interface/run";
@@ -18,16 +12,11 @@ import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
 import { getMaximalPlanValue, PlanProperty } from "../../../interface/plan-property/plan-property";
 import { DemoHelpDialogComponent } from "../demo-help-dialog/demo-help-dialog.component";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { CurrencyPipe } from "@angular/common";
 // @ts-ignore
 import Timeout = NodeJS.Timeout;
-import {
-  NewIterationStepStoreService,
-  SelectedIterationStepService,
-} from "src/app/service/planner-runs/selected-iteration-step.service";
+import { NewIterationStepStoreService, SelectedIterationStepService } from "src/app/service/planner-runs/selected-iteration-step.service";
 import { PlanPropertyMapService } from "src/app/service/plan-properties/plan-property-services";
 import { PlanningTaskRelaxationService } from "src/app/service/planning-task/planning-task-relaxations-services";
-import { ExecutionSettingsServiceService } from "src/app/service/settings/ExecutionSettingsService.service";
 import { PlanningTaskRelaxationSpace } from "src/app/interface/planning-task-relaxation";
 
 @Component({
@@ -66,7 +55,7 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
   planValue$: Observable<number>;
   relqaxationCost$: Observable<number>;
   overallScore$: Observable<number>;
-  settings$: Observable<ExecutionSettings>;
+  settings$: Observable<GeneralSettings>;
   paymentInfo$: Observable<any>;
 
   constructor(
@@ -77,7 +66,6 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
     private iterationStepsService: IterationStepsService,
     planPropertiesMapService: PlanPropertyMapService,
     planningTaskRelaxationService: PlanningTaskRelaxationService,
-    private settingsService: ExecutionSettingsServiceService,
     public dialog: MatDialog,
     private snackBar: MatSnackBar
   ) {
@@ -88,7 +76,10 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
     this.planProperties$ = planPropertiesMapService.getMap();
     this.relaxationSpaces$ = planningTaskRelaxationService.getList();
 
-    this.settings$ = this.settingsService.getSelectedObject();
+    this.settings$ = currentProjectService.getSelectedObject().pipe(
+      filter(p => !!p),
+      map(p => p.settings)
+    );
 
   }
 

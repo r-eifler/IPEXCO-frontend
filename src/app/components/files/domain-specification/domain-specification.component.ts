@@ -1,7 +1,7 @@
 import { takeUntil } from "rxjs/operators";
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ResponsiveService } from "src/app/service/responsive/responsive.service";
-import { FormControl, FormGroup } from "@angular/forms";
+import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
 import { Observable, Subject } from "rxjs";
 import { DomainSpecificationFile } from "src/app/interface/files/files";
 import { DomainSpecificationFilesService } from "src/app/service/files/pddl-file-services";
@@ -22,10 +22,10 @@ export class DomainSpecificationComponent implements OnInit, OnDestroy {
   type = "DomainSpecification";
 
   // form fields
-  fileForm = new FormGroup({
-    name: new FormControl(),
-    domain: new FormControl(),
-    file: new FormControl(),
+  fileForm = new UntypedFormGroup({
+    name: new UntypedFormControl(),
+    domain: new UntypedFormControl(),
+    file: new UntypedFormControl(),
   });
 
   // uploaded file

@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { FormControl, FormGroup } from "@angular/forms";
+import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
 import { UserStudiesService } from "../../../../service/user-study/user-study-services";
 import { BehaviorSubject, Observable, Subject } from "rxjs";
 import { UserStudy } from "../../../../interface/user-study/user-study";
@@ -23,7 +23,7 @@ export class MetaStudyCreatorComponent implements OnInit, OnDestroy {
   private ngUnsubscribe: Subject<any> = new Subject();
 
   userStudies$: BehaviorSubject<UserStudy[]>;
-  metaForm: FormGroup;
+  metaForm: UntypedFormGroup;
 
   metaStudy: MetaStudy;
   numAcceptedUser: Map<string, number> = new Map<string, number>();
@@ -72,9 +72,9 @@ export class MetaStudyCreatorComponent implements OnInit, OnDestroy {
         }
       });
 
-    this.metaForm = new FormGroup({
-      name: new FormControl(),
-      description: new FormControl(),
+    this.metaForm = new UntypedFormGroup({
+      name: new UntypedFormControl(),
+      description: new UntypedFormControl(),
     });
   }
 

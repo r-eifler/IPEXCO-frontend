@@ -7,10 +7,7 @@ import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Project } from "../../../interface/project";
 import { ActivatedRoute, ParamMap, Router } from "@angular/router";
 import { switchMap, takeUntil } from "rxjs/operators";
-import {
-  CurrentProjectService,
-  ProjectsService,
-} from "src/app/service/project/project-services";
+import { CurrentProjectService, ProjectsService } from "src/app/service/project/project-services";
 import { DomainSpecificationService } from "src/app/service/files/domain-specification.service";
 import { MatBottomSheet } from "@angular/material/bottom-sheet";
 import { PlanPropertyMapService } from "src/app/service/plan-properties/plan-property-services";
@@ -54,7 +51,6 @@ export class ProjectBaseComponent implements OnInit, OnDestroy {
     private router: Router,
     private service: ProjectsService,
     private currentProjectService: CurrentProjectService,
-    private domainSpecService: DomainSpecificationService,
     private propertiesService: PlanPropertyMapService,
     private relaxationService: PlanningTaskRelaxationService,
     private runsService: IterationStepsService,
@@ -71,6 +67,7 @@ export class ProjectBaseComponent implements OnInit, OnDestroy {
       .subscribe(async (value) => {
         if (value != null) {
           this.project = value;
+          //TODO move this update part to the current project service
           this.currentProjectService.saveObject(this.project);
           this.runsService.reset(); // delete possible stored runs which do not belong to the project
           this.runsService.findCollection([
@@ -103,10 +100,4 @@ export class ProjectBaseComponent implements OnInit, OnDestroy {
     this.ngUnsubscribe.complete();
   }
 
-  async openSettings() {
-    // this.bottomSheet.open(ViewSettingsMenuComponent);
-    this.bottomSheet.open(DemoSettingsComponent, {
-      data: { settings: this.project.settings, name: this.project.name },
-    });
-  }
 }

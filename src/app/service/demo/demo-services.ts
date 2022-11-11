@@ -2,19 +2,14 @@ import { take } from "rxjs/operators";
 import { DemosStore, RunningDemoStore } from "../../store/stores.store";
 import { Demo } from "../../interface/demo";
 import { Injectable } from "@angular/core";
-import {
-  ObjectCollectionService,
-  QueryParam,
-} from "../base/object-collection.service";
+import { ObjectCollectionService, QueryParam } from "../base/object-collection.service";
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { environment } from "src/environments/environment";
 import { IHTTPData } from "../../interface/http-data.interface";
 import { ADD, EDIT, LOAD, REMOVE } from "../../store/generic-list.store";
-import { SelectedObjectService } from "../base/selected-object.service";
 import { RunStatus } from "src/app/interface/run";
-import { DemoNewIterationStepGenerationService } from "../planner-runs/demo-new-iteration-step-generation-service.service";
-import { ExecutionSettingsServiceService } from "../settings/ExecutionSettingsService.service";
 import { BaseProjectService } from "../project/project-services";
+import { DomainSpecificationService } from "../files/domain-specification.service";
 @Injectable({
   providedIn: "root",
 })
@@ -176,12 +171,13 @@ export class DemosService extends ObjectCollectionService<Demo> {
 export class RunningDemoService extends BaseProjectService<Demo> {
   constructor(
     store: RunningDemoStore,
-    settingsService: ExecutionSettingsServiceService) {
-    super(store, settingsService);
+    domainSpecService: DomainSpecificationService) {
+    super(store, domainSpecService);
   }
 
   saveObject(demo: Demo) {
-    this.settingsService.saveObject(demo.settings);
+    this.domainSpecService.findSpec(demo);
+
     this.selectedObjectStore.dispatch({ type: LOAD, data: demo });
     console.log(demo);
   }

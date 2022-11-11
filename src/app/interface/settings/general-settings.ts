@@ -4,7 +4,7 @@ export interface PaymentInfo {
   steps: number[];
 }
 
-export interface ExecutionSettings {
+export interface GeneralSettings {
   _id: string|number;
   public: boolean;
   maxRuns: number;
@@ -24,7 +24,7 @@ export interface ExecutionSettings {
   computeDependenciesAutomatically: boolean;
 }
 
-export const defaultExecutionSetting: ExecutionSettings = {
+export const defaultGeneralSetting: GeneralSettings = {
   _id: 0,
   public: false,
   maxRuns: 100,
