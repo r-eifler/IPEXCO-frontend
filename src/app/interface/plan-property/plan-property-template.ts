@@ -1,4 +1,4 @@
-import { Fact, PlanningTask } from "src/app/interface/plannig-task";
+import { Fact, FactToString, PlanningTask } from "src/app/interface/plannig-task";
 import { Action, ActionSet, GoalType, toAction } from "./plan-property";
 import { PlanProperty } from "src/app/interface/plan-property/plan-property";
 import { Project } from "../project";
@@ -38,7 +38,6 @@ export class PlanPropertyTemplate {
   }
 
   initializeVariableConstraints(task: PlanningTask) {
-    // console.log('initializeVariableConstraints');
     const varValues = this.getPossibleTypeVariableDomains(task);
     for (const entry1 of varValues.entries()) {
       this.constraintDomains.addNewVar(entry1[0], entry1[1]);
@@ -194,17 +193,11 @@ export class PlanPropertyTemplate {
     task: PlanningTask,
     varValueMapping: Map<string, string>
   ): Map<string, Set<string>> {
-    // console.log('getPossibleVariableValues');
-    let resMap: Map<string, Set<string>> = this.getPossibleTypeVariableDomains(
-      task
-    );
+    let resMap: Map<string, Set<string>> = this.getPossibleTypeVariableDomains(task);
     for (const variable of varValueMapping.keys()) {
       resMap = domainIntersection(
         resMap,
-        this.constraintDomains.getVarValuePosibleValues(
-          variable,
-          varValueMapping.get(variable)
-        )
+        this.constraintDomains.getVarValuePosibleValues(variable, varValueMapping.get(variable))
       );
     }
     return resMap;
@@ -254,6 +247,7 @@ export function domainIntersection(
   return resMap;
 }
 
+//TODO make it more trolerat for different formats of fact srtings (spaces,...)
 export function getConstraintSatValues(
   constrainingVar: { name: string; value: string },
   constrainedVar: { name: string; values: Set<string> },
@@ -262,16 +256,14 @@ export function getConstraintSatValues(
 ): boolean {
   let isConstrained = false;
   for (const con of constraints) {
-    if (
-      con.includes(constrainingVar.name) &&
-      con.includes(constrainedVar.name)
-    ) {
+    if (con.includes(constrainingVar.name) && con.includes(constrainedVar.name)) {
       isConstrained = true;
 
       let conRegexString = con.replace(
         constrainingVar.name,
         constrainingVar.value
-      );
+      ).replace(/\s+/, "");
+
       conRegexString = conRegexString.replace("(", "\\(");
       conRegexString = conRegexString.replace(")", "\\)");
       conRegexString = conRegexString.replace(constrainedVar.name, "(\\w+)");
@@ -281,7 +273,7 @@ export function getConstraintSatValues(
 
       const conRegex = new RegExp(conRegexString);
       for (const pre of truePredicates) {
-        const m = conRegex.exec(pre.toString());
+        const m = conRegex.exec(FactToString(pre).replace(/\s+/, ""));
         if (m) {
           constrainedVar.values.add(m[1]);
         }
