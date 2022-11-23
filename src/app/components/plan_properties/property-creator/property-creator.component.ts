@@ -103,13 +103,12 @@ export class PropertyCreatorComponent implements OnInit, OnDestroy {
     this.propertyTemplateAccordion.closeAll();
     this.selectedPropertyTemplate = event.options[0].value;
     this.selectedPropertyTemplate.initializeVariableConstraints(this.task);
-    this.sentenceTemplateParts =
-      this.selectedPropertyTemplate.getSentenceTemplateParts();
+    this.sentenceTemplateParts = this.selectedPropertyTemplate.getSentenceTemplateParts();
     this.possibleVariableValues =
       this.selectedPropertyTemplate.getPossibleVariableValues(
-        this.task,
-        this.selectedVariableValue
-      );
+      this.task,
+      this.selectedVariableValue
+    );
 
     this.propertyTemplateStepper.selected.completed = true;
     this.propertyTemplateStepper.next();
@@ -126,7 +125,6 @@ export class PropertyCreatorComponent implements OnInit, OnDestroy {
         this.task,
         this.selectedVariableValue
       );
-    // console.log(this.possibleVariableValues);
   }
 
   resetVariableValue(variable: string) {
