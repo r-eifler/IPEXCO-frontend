@@ -4,6 +4,7 @@ import { PlanProperty } from "src/app/interface/plan-property/plan-property";
 import {
   AfterViewInit,
   Component,
+  Input,
   OnDestroy,
   OnInit,
   ViewChild,
@@ -27,21 +28,15 @@ export class PropertyCollectionComponent
 {
   private ngUnsubscribe: Subject<any> = new Subject();
 
+  @Input() modOnlyVisualization = false;
+
   isMobile: boolean;
   expertView = false;
 
   planProperties: PlanProperty[] = [];
 
-  displayedColumns: string[] = [
-    "select",
-    "description",
-    "globalHardGoal",
-    "value",
-    "color",
-    "icon",
-    "class",
-    "options",
-  ];
+  displayedColumns: string[];
+
   dataSource = new MatTableDataSource<PlanProperty>(this.planProperties);
 
   @ViewChild("#plan-property-collection-table")
@@ -60,7 +55,9 @@ export class PropertyCollectionComponent
         const propsList = [...props.values()];
         this.planProperties = propsList;
         this.dataSource.data = propsList;
+        console.log(propsList);
       });
+
   }
 
   propertyUsedChanged(prop: PlanProperty): void {
@@ -93,13 +90,36 @@ export class PropertyCollectionComponent
         this.isMobile = isMobile;
       });
     this.responsiveService.checkWidth();
+
+    if (this.modOnlyVisualization) {
+      this.displayedColumns = [
+        "description",
+        "globalHardGoal",
+        "value",
+        "color",
+        "icon",
+        "class",
+      ];
+    } else{
+      this.displayedColumns = [
+        "select",
+        "description",
+        "globalHardGoal",
+        "value",
+        "color",
+        "icon",
+        "class",
+        "options",
+      ];
+    }
   }
 
   ngAfterViewInit(): void {
     if (this.propertyTable) {
       this.propertyTable.renderRows();
     }
-    this.download_properties();
+    if(!this.modOnlyVisualization)
+      this.download_properties();
   }
 
   ngOnDestroy(): void {

@@ -1,3 +1,4 @@
+import { PlanPropertyMapService } from './../../../service/plan-properties/plan-property-services';
 import { defaultGeneralSetting } from '../../../interface/settings/general-settings';
 import { DemosService } from "../../../service/demo/demo-services";
 import { Component, Inject, OnInit } from "@angular/core";
@@ -5,6 +6,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { Demo } from "src/app/interface/demo";
 import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
 import { AuthenticationService } from "../../../service/authentication/authentication.service";
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: "app-demo-creator",
@@ -13,8 +15,10 @@ import { AuthenticationService } from "../../../service/authentication/authentic
 })
 export class DemoCreatorComponent implements OnInit {
   public currentProjectId: string;
-  private readonly demo: Demo;
+  public readonly demo: Demo;
   public readonly update: boolean;
+
+  srcUrl = environment.srcURL;
 
   taskInfo: string;
   maxUtilityData: string;
@@ -31,10 +35,10 @@ export class DemoCreatorComponent implements OnInit {
   constructor(
     private demosService: DemosService,
     private userService: AuthenticationService,
+    private planPropertiesService: PlanPropertyMapService,
     public dialogRef: MatDialogRef<DemoCreatorComponent>,
     @Inject(MAT_DIALOG_DATA) data
   ) {
-    console.log(data);
     this.currentProjectId = data.projectId;
     this.demo = data.demo;
     this.update = data.update;
@@ -51,6 +55,8 @@ export class DemoCreatorComponent implements OnInit {
       demoData: new UntypedFormControl(this.demo ? JSON.stringify(this.demo.explanations) : ""),
       maxUtilityData: new UntypedFormControl(this.demo ? this.demo.maxUtility : ""),
     });
+
+    planPropertiesService.findCollection([{ param: "projectId", value: this.demo._id }]);
   }
 
   ngOnInit(): void {}
