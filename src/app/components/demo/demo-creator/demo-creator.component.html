@@ -46,6 +46,7 @@
   <mat-tab label="Task Image" class="tab">
     <div style="display: flex; flex-direction: column;" class="tab-content">
       <img
+        *ngIf="demo && demo.summaryImage"
         matCardImage
         [src]="srcUrl + demo.summaryImage"
         style="max-width: 300px; height: auto; align-self: center"/>
@@ -63,7 +64,7 @@
     </div>
   </mat-tab>
 
-  <mat-tab *ngIf="!update" label="Precomputed Demo" class="tab">
+  <!-- <mat-tab *ngIf="!update" label="Precomputed Demo" class="tab">
     <div class="tab-content">
 
       <mat-slide-toggle
@@ -91,9 +92,9 @@
         </mat-form-field>
       </ng-container>
     </div>
-  </mat-tab>
+  </mat-tab> -->
 
-  <mat-tab label="Plan Properties" class="tab">
+  <mat-tab label="Plan Properties" class="tab" *ngIf="update">
     <app-property-collection modOnlyVisualization="true"></app-property-collection>
   </mat-tab>
 

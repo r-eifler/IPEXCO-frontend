@@ -21,7 +21,7 @@
           Use relaxations
         </mat-slide-toggle>
 
-        <mat-slide-toggle formControlName="provideRelaxationExplanations"
+        <mat-slide-toggle formControlName="provideRelaxationExplanations" *ngIf="settingsForm.controls.useConstraints.value"
           matTooltip="Provide the user with relaxation explanations while analysing
           the conflicts.">
           Provide Relaxation Explanations

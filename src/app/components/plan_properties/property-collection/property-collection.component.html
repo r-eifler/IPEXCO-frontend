@@ -91,7 +91,7 @@
         <ng-container matColumnDef="select">
           <th mat-header-cell *matHeaderCellDef>used</th>
           <td mat-cell *matCellDef="let prop">
-            <mat-checkbox disabled="modOnlyVisualization"
+            <mat-checkbox
               (click)="$event.stopPropagation()"
               (change)="$event ? propertyUsedChanged(prop) : null"
               [checked]="prop.isUsed"

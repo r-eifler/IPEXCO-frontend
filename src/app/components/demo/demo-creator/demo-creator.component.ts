@@ -56,7 +56,8 @@ export class DemoCreatorComponent implements OnInit {
       maxUtilityData: new UntypedFormControl(this.demo ? this.demo.maxUtility : ""),
     });
 
-    planPropertiesService.findCollection([{ param: "projectId", value: this.demo._id }]);
+    if (this.update)
+      planPropertiesService.findCollection([{ param: "projectId", value: this.demo._id }]);
   }
 
   ngOnInit(): void {}

@@ -60,27 +60,39 @@ export class DemoPlannerService extends PlannerService {
       if (!demo) {
         return reject(step);
       }
-      let initUpdates = step.task.initUpdates;
-      let expRuns = demo.explanations.filter((expRun) =>
-        expRun.initUpdates.every((up1) =>
-          initUpdates.some(
-            (up2) =>
-              factEquals(up1.orgFact, up2.orgFact) &&
-              factEquals(up1.newFact, up2.newFact)
+      if(demo.explanations.length > 0){
+        let initUpdates = step.task.initUpdates;
+        let expRuns = demo.explanations.filter((expRun) =>
+          expRun.initUpdates.every((up1) =>
+            initUpdates.some(
+              (up2) =>
+                factEquals(up1.orgFact, up2.orgFact) &&
+                factEquals(up1.newFact, up2.newFact)
+            )
           )
-        )
-      );
-      if (expRuns.length == 1) {
-        step.relaxationExplanations = expRuns[0].relaxationExplanations;
-        console.log(step.relaxationExplanations[0].dependencies);
+        );
+        if (expRuns.length == 1) {
+          step.relaxationExplanations = expRuns[0].relaxationExplanations;
+          console.log(step.relaxationExplanations[0].dependencies);
+          let solvable = isStepSolvable(step);
+          step.status = solvable ? StepStatus.solvable : StepStatus.unsolvable;
+          this.iterationStepsService.saveObject(step);
+          this.selectedStepService.updateIfSame(step);
+          return resolve(step);
+        } else {
+          console.error("No matching explanation");
+          return resolve(step);
+        }
+      } else if (demo.conflictExplanation) {
+        step.depExplanation = demo.conflictExplanation;
         let solvable = isStepSolvable(step);
         step.status = solvable ? StepStatus.solvable : StepStatus.unsolvable;
         this.iterationStepsService.saveObject(step);
         this.selectedStepService.updateIfSame(step);
         return resolve(step);
       } else {
-        console.error("No matching explanation");
-        return resolve(step);
+        console.error("Error: No explantion");
+        return reject(step);
       }
     });
 

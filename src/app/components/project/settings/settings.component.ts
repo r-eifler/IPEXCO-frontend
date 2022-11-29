@@ -90,6 +90,7 @@ export class SettingsComponent implements OnInit, OnChanges {
     this.settingsForm.controls.paymentSteps.setValue(settings.paymentInfo.steps);
   }
 
+  //TODO: also update current project/demo when saving the settigns
   onSave() {
     this.settings.maxRuns = parseInt(this.settingsForm.controls.maxRuns.value);
 

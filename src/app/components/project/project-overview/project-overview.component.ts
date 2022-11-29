@@ -1,4 +1,4 @@
-import { takeUntil } from "rxjs/operators";
+import { filter, take, takeUntil } from "rxjs/operators";
 import { DemoCreatorComponent } from "./../../demo/demo-creator/demo-creator.component";
 import { DemosService } from "../../../service/demo/demo-services";
 import { PlanRun } from "src/app/interface/run";
@@ -12,6 +12,7 @@ import { PlanProperty } from "src/app/interface/plan-property/plan-property";
 import { Project } from "src/app/interface/project";
 import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
 import { ActivatedRoute, Router } from "@angular/router";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 @Component({
   selector: "app-project-overview",
@@ -35,6 +36,7 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
     public demosService: DemosService,
     public dialog: MatDialog,
     private router: Router,
+    private snackBar: MatSnackBar
   ) {
     this.properties$ = this.propertiesService.getMap();
     this.currentProjectService.selectedObject$
@@ -62,18 +64,48 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
   }
 
   createDemo(): void {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.width = "500px";
-    dialogConfig.data = {
-      update: false,
-      projectId: this.currentProject._id,
-    };
+    this.properties$.pipe(take(1)).subscribe(
+      pp => {
+        console.log("Create Demo");
+        if(pp.size == 0){
+          this.openSnackBar("You need to create at least one plan property before generateing a demo.", "Close")
+        } else {
+          let used = 0;
+          let globalHardGoal = 0
+          pp.forEach((value, key) => {
+            if (value.isUsed) {
+              used++;
+              if (value.globalHardGoal)
+                globalHardGoal++;
+            }
+          });
+          if (used == 0) {
+            this.openSnackBar("You need to select at least one plan property.", "Close")
+          }
+          else if (globalHardGoal == 0) {
+            this.openSnackBar("You need to mark at least one of the selected plan property as global hard-goal.", "Close")
+          } else{
+            const dialogConfig = new MatDialogConfig();
+            dialogConfig.width = "1000px";
+            dialogConfig.data = {
+              update: false,
+              projectId: this.currentProject._id,
+            };
 
-    this.dialog.open(DemoCreatorComponent, dialogConfig);
+            this.dialog.open(DemoCreatorComponent, dialogConfig);
+          }
+        }
+      }
+    )
+
   }
 
   deleteProject(): void {
     this.projectsService.deleteObject(this.currentProject);
     this.router.navigate(['/projects']);
+  }
+
+  openSnackBar(message: string, action: string) {
+    this.snackBar.open(message, action);
   }
 }
