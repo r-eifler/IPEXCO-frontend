@@ -48,11 +48,11 @@ export class ConflictGraphComponent implements OnInit, OnDestroy {
     All mentinoed property have default values which can be changed in the
     properties overview in the project
     They contain:
-      - naturalLanguageDescription: a natural language sentence describing the
-        property
+      - naturalLanguageDescription: a natural language sentence describing the property
       - class: name of the class the property is group into
       - color: hex value
       - icon: mat icon name
+    All of these properties can be modified in the demo collection -> Menue --> Modify --> PlanProperties
 
     There is currently no easy why to access all object conatined in a plan
     property. The only possibility is to parse the formula itself.

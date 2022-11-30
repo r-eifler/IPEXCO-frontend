@@ -48,6 +48,7 @@ export class DemosService extends ObjectCollectionService<Demo> {
       .pipe(this.pipeGetData, this.pipeGet)
       .pipe(take(1))
       .subscribe((demo) => {
+        console.log(demo);
         let action = { type: EDIT, data: demo };
         this.listStore.dispatch(action);
         console.log(demo.completion);

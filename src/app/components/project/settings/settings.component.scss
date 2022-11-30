@@ -27,3 +27,9 @@
 .save-button {
   width: 100px;
 }
+
+.part {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}

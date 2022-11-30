@@ -59,7 +59,7 @@ export class DemoNewIterationStepGenerationService extends NewIterationStepGener
       .pipe(
         filter(
           ([demo, ppM, spaces]) =>
-            !!demo && !!ppM && ppM.size > 0 && !!spaces && spaces.length > 0
+            !!demo && !!ppM && ppM.size > 0 //&& !!spaces && spaces.length > 0
         ),
         take(1)
       )

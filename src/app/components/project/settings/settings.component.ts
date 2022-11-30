@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
 import { UntypedFormControl, UntypedFormGroup, Validators } from "@angular/forms";
 import { Subject, Observable, BehaviorSubject } from "rxjs";
 import { GeneralSettings } from "src/app/interface/settings/general-settings";
@@ -10,12 +10,12 @@ import { takeUntil } from "rxjs/operators";
   templateUrl: "./settings.component.html",
   styleUrls: ["./settings.component.scss"],
 })
-export class SettingsComponent implements OnInit {
+export class SettingsComponent implements OnInit, OnChanges {
   private ngUnsubscribe: Subject<any> = new Subject();
 
   settingsForm: UntypedFormGroup;
 
-  @Input() name: string;
+  @Input() isProject: boolean;
   @Input() settings: GeneralSettings;
 
   @Output() updatedSettings = new EventEmitter<GeneralSettings>();
@@ -50,9 +50,17 @@ export class SettingsComponent implements OnInit {
     });
   }
 
+
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log(this.settings);
+    if(this.settings)
+      this.initForm(this.settings);
+  }
+
   ngOnInit(): void {
     console.log(this.settings);
-    this.initForm(this.settings);
+    if(this.settings)
+      this.initForm(this.settings);
   }
 
   initForm(settings: GeneralSettings): void {
@@ -82,6 +90,7 @@ export class SettingsComponent implements OnInit {
     this.settingsForm.controls.paymentSteps.setValue(settings.paymentInfo.steps);
   }
 
+  //TODO: also update current project/demo when saving the settigns
   onSave() {
     this.settings.maxRuns = parseInt(this.settingsForm.controls.maxRuns.value);
 

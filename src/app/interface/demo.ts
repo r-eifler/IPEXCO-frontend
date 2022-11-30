@@ -1,7 +1,7 @@
 import { PPDependencies } from 'src/app/interface/explanations';
 import { FactUpdate } from "./planning-task-relaxation";
 import { Project } from "./project";
-import { RelaxationExplanationRun, RunStatus } from "./run";
+import { DepExplanationRun, RelaxationExplanationRun, RunStatus } from "./run";
 
 export interface DemoExplanation {
   initUpdates: FactUpdate[];
@@ -14,6 +14,7 @@ export interface Demo extends Project {
   status?: RunStatus;
   completion: number;
   definition?: string;
+  conflictExplanation?: DepExplanationRun;
   explanations: DemoExplanation[];
   taskInfo?: string;
   maxUtility?: { value: number; selectedPlanProperties: string[] };

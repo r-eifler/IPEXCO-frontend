@@ -39,9 +39,7 @@ export class ProjectBaseComponent implements OnInit, OnDestroy {
     { ref: "./overview", name: "Overview" },
     { ref: "./settings", name: "Settings" },
     { ref: "./planning-task", name: "Planning Task" },
-    { ref: "./properties", name: "Plan Properties" },
-    { ref: "./task-relaxations", name: "Relaxations" },
-    { ref: "./iterative-planning", name: "Iterative Planning" },
+    { ref: "./properties", name: "Plan Properties" }
   ];
 
   project: Project;
@@ -59,14 +57,17 @@ export class ProjectBaseComponent implements OnInit, OnDestroy {
   ) {
     this.route.paramMap
       .pipe(
-        switchMap((params: ParamMap) =>
-          this.service.getObject(params.get("projectid"))
-        )
-      )
-      .pipe(takeUntil(this.ngUnsubscribe))
+        switchMap((params: ParamMap) => this.service.getObject(params.get("projectid"))),
+        takeUntil(this.ngUnsubscribe))
       .subscribe(async (value) => {
         if (value != null) {
           this.project = value;
+
+          if (this.project.settings.useConstraints){
+            this.links.push({ ref: "./task-relaxations", name: "Relaxations" });
+          }
+          this.links.push({ ref: "./iterative-planning", name: "Iterative Planning" });
+
           //TODO move this update part to the current project service
           this.currentProjectService.saveObject(this.project);
           this.runsService.reset(); // delete possible stored runs which do not belong to the project
