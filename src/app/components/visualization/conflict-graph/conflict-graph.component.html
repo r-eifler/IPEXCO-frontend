@@ -1,10 +1,21 @@
 <div>
+  <!-- <mat-form-field appearance="fill">
+    <mat-label>Favorite food</mat-label>
+    <mat-select>
+      <mat-option *ngFor="let food of foods" [value]="food.value">
+        {food.viewValue}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>-->
 
-  <select id="sorting" onchange="test()">
-    <option value="-1">No Sorting Method</option>
-    <option value="0">Least Occurence First</option>
-    <option value="1">Most Occurence First</option>
-  </select>
+  <mat-form-field appearance="fill">
+    <mat-label>Select a sorting method</mat-label>
+    <mat-select [(value)]="optioned$" (selectionChange)="setOrder($event)">
+      <mat-option value="option1">No Sorting Method</mat-option>
+      <mat-option value="option2">Least Occurence First</mat-option>
+      <mat-option value="option3">Most Occurence First</mat-option>
+    </mat-select>
+  </mat-form-field>
 
   <div id="target">
     <div id="head"></div>
