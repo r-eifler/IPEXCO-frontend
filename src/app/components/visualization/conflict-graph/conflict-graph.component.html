@@ -10,7 +10,7 @@
 
   <mat-form-field appearance="fill">
     <mat-label>Select a sorting method</mat-label>
-    <mat-select [(value)]="optioned$" (selectionChange)="setOrder($event)">
+    <mat-select [(value)]="optioned" (selectionChange)="setOrder($event)">
       <mat-option value="option1">No Sorting Method</mat-option>
       <mat-option value="option2">Least Occurence First</mat-option>
       <mat-option value="option3">Most Occurence First</mat-option>
