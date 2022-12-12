@@ -5,7 +5,7 @@ import { PlanProperty } from 'src/app/interface/plan-property/plan-property';
 import { Observable, Subject } from 'rxjs';
 import { PlanPropertyMapService } from 'src/app/service/plan-properties/plan-property-services';
 import { RunningDemoService } from 'src/app/service/demo/demo-services';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { Demo } from 'src/app/interface/demo';
 import { filter, map, takeUntil, take } from 'rxjs/operators';
 import { getAllDependencies, IterationStep } from 'src/app/interface/run';
@@ -85,7 +85,7 @@ export class ConflictGraphComponent implements OnInit, OnDestroy {
   constructor(
     demoService: RunningDemoService,
     planPropertiesService: PlanPropertyMapService,
-    stepService: SelectedIterationStepService,
+    stepService: SelectedIterationStepService
   ) {
 
     // Access the data over these observables
@@ -170,7 +170,7 @@ export class ConflictGraphComponent implements OnInit, OnDestroy {
       //unsubscribe if not needed, save resources
       take(1)
     ).subscribe(([planProperties, demo, conflict]) => {
-      
+      console.log(planProperties);
       //retrieve all plan properties from here ==> use as x-axis (goal)
       for (var i = 0; i < Array.from(planProperties.values()).length; i++) {
         this.arrPlanProperties.push(Array.from(planProperties.values())[i].name);
@@ -193,6 +193,13 @@ export class ConflictGraphComponent implements OnInit, OnDestroy {
       }
       //console.log(this.arrConflict);
 
+      //setup checkbox with original arrConflict & arrPlanProperties
+      this.checkboxInit();
+
+      //create new arrays
+      this.filter();
+
+      //sort by selection
       this.sort();
 
       //setup height of svg
@@ -331,16 +338,16 @@ export class ConflictGraphComponent implements OnInit, OnDestroy {
                   }
                 });
 
-         /*     //highlight those rect in column
+              //highlight those rect in column
               var reColor = document.getElementsByTagName("rect");
               //console.log(reColor);
               for (var i = 0; i < reColor.length; i++) {
-                if (reColor[i].x.animVal.value == d.x.animVal.value) {
+                if (reColor[i].x.animVal.value == e.target.x.animVal.value) {
                   reColor[i].style.stroke = "#000000";
                   reColor[i].style.strokeWidth = "2";
                 }
               }
-        */
+        
             })
             .on("mouseout", (e: any) => {
               this.boxtip.transition()
@@ -372,7 +379,6 @@ export class ConflictGraphComponent implements OnInit, OnDestroy {
     this.arrConflict = [];
     this.tempArr = [];
     this.arrSort = [];
-    console.log(this.arrSort);
   }
 
   sort = function (): void {
@@ -390,6 +396,8 @@ export class ConflictGraphComponent implements OnInit, OnDestroy {
       }
     }
     var order = this.arrSort; //temp var
+    var avgOcc = 0; //temp var
+
     //sort the array if needed
     switch (this.optioned) {
       case "option1": //no sort
@@ -412,6 +420,32 @@ export class ConflictGraphComponent implements OnInit, OnDestroy {
         }
         break;
       case "option3": //most occur first
+        //use a bubble sorting to find max -> min
+        for (var i = 0; i < order.length - 1; i++) {
+          for (var j = 0; j < order.length - 1 - i; j++) {
+            if (order[j][1] < order[j + 1][1]) {
+              var tempOccur = order[j + 1][1];
+              order[j + 1][1] = order[j][1];
+              order[j][1] = tempOccur;
+              var tempName = order[j + 1][0];
+              order[j + 1][0] = order[j][0];
+              order[j][0] = tempName;
+            }
+          }
+        }
+        break;
+      case "option4": //most deviation first
+        //calculate average occurance
+        for (var i = 0; i < order.length; i++) {
+          avgOcc += order[i][1];
+        }
+        avgOcc = avgOcc / order.length;
+        //calculate deviation
+        for (var i = 0; i < order.length; i++) {
+          order[i][1] = Math.abs(order[i][1] - avgOcc);
+        }
+        console.log(order);
+        //
         //use a bubble sorting to find max -> min
         for (var i = 0; i < order.length - 1; i++) {
           for (var j = 0; j < order.length - 1 - i; j++) {
@@ -450,6 +484,74 @@ export class ConflictGraphComponent implements OnInit, OnDestroy {
       //console.log(this.optioned);
     this.varInit();
     this.loadVis();
+  }
+
+  checkboxInit = function () {
+    if (document.getElementsByTagName("input").length ==0){
+      for (var i = 0; i < this.arrPlanProperties.length; i++) {
+        var checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.id = "checkbox" + (i + 1);
+        checkbox.name = this.arrPlanProperties[i];
+
+        checkbox.checked = true;
+        checkbox.addEventListener("change", (event) => {
+          this.varInit();
+          this.loadVis();
+        })
+
+        var label = document.createElement("label");
+        label.htmlFor = "mugs";
+        label.appendChild(document.createTextNode(this.arrPlanProperties[i]));
+
+        var filterArea = document.getElementById("mugsFilterSection")
+        filterArea.appendChild(checkbox);
+        filterArea.appendChild(label);
+          filterArea.appendChild(document.createElement("br"));
+      }
+    } 
+  }
+
+  filter = function (): void {
+    //clear the previous vis
+    this.svg.selectAll("*").remove();
+    this.stickyHeader.selectAll("*").remove();
+
+
+    var filterCondition = [];
+    var tempDummy = [];
+    var tempConflict = [];
+    var flag = 1;
+
+    var checkbox = document.getElementsByTagName("input");
+    for (var i = 0; i < checkbox.length; i++) {
+      if (checkbox[i].checked == false) {
+        filterCondition.push(checkbox[i].name);
+      }
+    }
+    //console.log(filterCondition);
+    
+    for (var i = 0; i < this.arrConflict.length;i++) {
+      for (var j = 0; j < this.arrConflict[i].length; j++) {
+        if (filterCondition.lastIndexOf(this.arrConflict[i][j]) < 0) {
+          flag = flag && 1;
+        } else {
+          flag = flag && 0;
+        }
+      }
+
+      if (flag) {
+        tempConflict.push(this.arrConflict[i]);
+        tempDummy.push(this.dummy[i]);
+      }
+      flag = 1;
+
+    }
+    //console.log(tempConflict);
+    //console.log(tempDummy);
+    this.arrConflict = tempConflict;
+    this.dummy = tempDummy;
+
   }
 
   ngOnInit(): void {

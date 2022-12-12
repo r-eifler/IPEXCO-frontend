@@ -8,14 +8,21 @@
     </mat-select>
   </mat-form-field>-->
 
-  <mat-form-field appearance="fill">
+  <mat-form-field id="sortField" appearance="fill">
     <mat-label>Select a sorting method</mat-label>
     <mat-select [(value)]="optioned" (selectionChange)="setOrder($event)">
       <mat-option value="option1">No Sorting Method</mat-option>
       <mat-option value="option2">Least Occurence First</mat-option>
       <mat-option value="option3">Most Occurence First</mat-option>
+      <mat-option value="option4">Most Deviation First</mat-option>
     </mat-select>
   </mat-form-field>
+
+  <section id="mugsFilterSection">
+    <p style="font-weight:bold">Filter MUGS by Plan Properties</p>
+  </section>
+
+
 
   <div id="target">
     <div id="head"></div>
