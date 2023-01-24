@@ -1,12 +1,4 @@
 <div>
-  <!-- <mat-form-field appearance="fill">
-    <mat-label>Favorite food</mat-label>
-    <mat-select>
-      <mat-option *ngFor="let food of foods" [value]="food.value">
-        {food.viewValue}}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>-->
 
   <mat-form-field id="sortField" appearance="fill">
     <mat-label>Select a sorting method</mat-label>
@@ -18,11 +10,15 @@
     </mat-select>
   </mat-form-field>
 
-  <section id="mugsFilterSection">
-    <p style="font-weight:bold">Filter MUGS by Plan Properties</p>
-  </section>
+  <div style="margin-top: 30px; margin-left: 20px; border: 2px solid grey; border-radius: 5px; width: 255px;">
+    <p style="font-weight: bold; padding-top: 10px; padding-left: 3px;" (click)="extendFilter($event)">Filter MUGS by Plan Properties ◀</p>
+    <section id="mugsFilterSection" style="display:none"></section>
+  </div>
 
-
+  <div style="margin-top: 30px; margin-left: 20px; border: 2px solid grey; border-radius: 5px; width: 255px;">
+    <p style="font-weight: bold; padding-top: 10px; padding-left: 3px;" (click)="extendGroup($event)">Group MUGS ◀</p>
+    <section id="groupSection" style="display:none"></section>
+  </div>
 
   <div id="target">
     <div id="head"></div>

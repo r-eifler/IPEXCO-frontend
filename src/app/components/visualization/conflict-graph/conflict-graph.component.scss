@@ -1,26 +1,31 @@
 #head {
   position: absolute;
   top: 39px;
-  left: 230px;
-  width: 85%;
+  left: 250px;
+  width: 84%;
   height: 120px;
 }
 
 #vis {
   position: absolute;
   top: 160px;
-  left: 230px;
-  width: 85%;
+  left: 250px;
+  width: 84%;
   height: 650px;
   overflow-y: auto;
 }
 
 #sortField{
-    padding-top:63px;
-    padding-left:20px;
+  padding-top:63px;
+  padding-left:20px;
 }
 
 #mugsFilterSection {
-  padding-top: 30px;
-  padding-left: 20px;
+  padding-top: 0px;
+  padding-left: 3px;
+}
+
+#groupSection {
+  padding-top: 0px;
+  padding-left: 3px;
 }
