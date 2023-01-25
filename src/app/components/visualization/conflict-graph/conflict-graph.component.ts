@@ -68,6 +68,7 @@ export class ConflictGraphComponent implements OnInit, OnDestroy {
   yIndex: number;
   xSort: number;
   ySort: number;
+  collapseStart: number = -1;
   fillColor: String = "";
   optioned: String = "option1";
   dummy: Array<any> = [];
@@ -76,6 +77,7 @@ export class ConflictGraphComponent implements OnInit, OnDestroy {
   arrConflict: Array<any> = [];
   tempArr: Array<any> = [];
   arrSort: Array<any> = [];
+  userGoal: Array<any> = [];
   occRate: Array<any> = [];
   group: Array<any> =[];
   stickyHeader;
@@ -220,25 +222,26 @@ export class ConflictGraphComponent implements OnInit, OnDestroy {
       this.treeGroup();
 
       if (this.group.length > 0){
-        for (var i = 0; i < this.group.length; i= i+2) {
+        for (var i = 0; i < this.group.length; i= i+3) {
           for (var j = 0; j< this.dummy.length; j++) {
             if (this.dummy[j] == this.group[i][0]) {
               console.log(this.occRate[i]);
               console.log(this.group[i + 1]);
-              this.dummy[j] = this.occRate[i];
+              this.dummy[j] = this.occRate[i / 3 * 2];
               this.arrConflict[j] = this.group[i + 1];
               this.dummy.splice((j + 1), (this.group[i].length - 1));
               this.arrConflict.splice((j + 1), (this.group[i].length - 1));
+
             }
           }
         }
       }
-      console.log(this.dummy);
-      console.log(this.arrConflict);
-      console.log(this.group);
-      console.log(this.occRate);
-      console.log(this.dummy);
-      console.log(this.arrConflict);
+      //console.log(this.dummy);
+      //console.log(this.arrConflict);
+      //console.log(this.group);
+      //console.log(this.occRate);
+      //console.log(this.dummy);
+      //console.log(this.arrConflict);
       //console.log(this.arrPlanProperties);
 
       //re-setup height of svg
@@ -437,10 +440,11 @@ export class ConflictGraphComponent implements OnInit, OnDestroy {
               .style("pointer-events", "none");
 
             var rateSearch = this.occRate.indexOf(this.dummy[i]);
-            
+
+            //draw rect
             this.svg.append("rect")
               .attr("x", this.margin.left + (this.width - this.margin.right - this.margin.left) / this.arrPlanProperties.length * 0.5 * (2 * this.xIndex + 1) - 0.5 * this.boxSize)
-              .attr("y", 0.5 * (this.height - this.margin.bottom - this.margin.top) / this.dummy.length * (2 * this.yIndex + 1) - 0.5 * this.boxSize + 1 + (1 - this.occRate[rateSearch + 1][this.xIndex])* this.boxSize)
+              .attr("y", 0.5 * (this.height - this.margin.bottom - this.margin.top) / this.dummy.length * (2 * this.yIndex + 1) - 0.5 * this.boxSize + 1 + (1 - this.occRate[rateSearch + 1][this.xIndex]) * this.boxSize)
               .attr("width", this.boxSize)
               .attr("height", this.occRate[rateSearch + 1][this.xIndex] * this.boxSize)
               .style("fill", this.fillColor)
@@ -454,7 +458,7 @@ export class ConflictGraphComponent implements OnInit, OnDestroy {
                   .style("pointer-events", "auto");
 
                 var newX = Math.round(((e.target.x.animVal.value + 0.5 * this.boxSize - this.margin.left) / 0.5 * this.arrPlanProperties.length / (this.width - this.margin.right - this.margin.left) - 1) / 2);
-                
+
                 this.boxtip.html("Goal: " + this.arrPlanProperties[newX] + "</br>" + "Occurence rate: " + 100 * this.occRate[rateSearch + 1][newX] + "%")
                   .style("left", (e.clientX - 500) + "px")
                   .style("top", () => {
@@ -469,8 +473,20 @@ export class ConflictGraphComponent implements OnInit, OnDestroy {
                 this.boxtip.transition()
                   .duration(200)
                   .style("opacity", 0)
-                  .style("pointer-events", "none");                
-              })
+                  .style("pointer-events", "none");
+              });
+
+            //draw a marker of start of collapse
+            this.svg.append("rect")
+              .attr("x", this.margin.left + (this.width - this.margin.right - this.margin.left) / this.arrPlanProperties.length * 0.5 * (2 * this.group[rateSearch / 2 * 3 + 2] + 1) - 1.25 * this.boxSize)
+              .attr("y", 0.5 * (this.height - this.margin.bottom - this.margin.top) / this.dummy.length * (2 * this.yIndex + 1) - 0.5 * this.boxSize + 1)
+              .attr("width", 0.25 * this.boxSize)
+              .attr("height", this.boxSize)
+              .style("fill", "#000000")
+              .style("opacity", "0.5")
+              .style("border", "2px groove black")
+              .style("border-radius", "5px")
+              
               .on("click", (e: any) => {
                 this.uncollapseRow(e);
               });
@@ -560,7 +576,7 @@ export class ConflictGraphComponent implements OnInit, OnDestroy {
       }
       var order = this.arrSort; //temp var
       var avgOcc = 0; //temp var
-      //console.log(order);
+      console.log(order);
       //sort the array if needed
       switch (this.optioned) {
         case "option1": //no sort
@@ -607,7 +623,7 @@ export class ConflictGraphComponent implements OnInit, OnDestroy {
           for (var i = 0; i < order.length; i++) {
             order[i][1] = Math.abs(order[i][1] - avgOcc);
           }
-          console.log(order);
+          //console.log(order);
           //
           //use a bubble sorting to find max -> min
           for (var i = 0; i < order.length - 1; i++) {
@@ -622,6 +638,26 @@ export class ConflictGraphComponent implements OnInit, OnDestroy {
               }
             }
           }
+          break;
+        case "option5": //sort goals by user
+          var panel = document.getElementById("orderPanel");
+          panel.style.visibility = "visible";
+
+          for (var i = 0; i < order.length; i++) {
+            
+            var button = document.createElement("input");
+            button.type = "button";
+            button.id = "button" + (i + 1);
+            button.name = order[i][0];
+            button.value = order[i][0];
+            button.addEventListener("click", () => {
+              this.constructGoal(event);
+            });
+
+            document.getElementById("button").appendChild(button);
+            document.getElementById("button").appendChild(document.createElement("br"));
+          }
+
           break;
       }
 
@@ -672,6 +708,18 @@ export class ConflictGraphComponent implements OnInit, OnDestroy {
       event.target.innerHTML = "Group MUGS ◀";
       document.getElementById("groupSection").style.display = "none";
     }
+  }
+
+  constructGoal = function (event: any): void {
+    console.log(event.srcElement.name);
+    document.getElementById("construct").innerHTML += event.srcElement.name;
+    document.getElementById("construct").innerHTML += "</br>";
+
+    event.srcElement.disabled = true;
+  }
+
+  closePanel = function (event: any): void {
+    document.getElementById("orderPanel").style.visibility = "hidden";
   }
 
   checkboxInit = function () {
@@ -906,9 +954,12 @@ export class ConflictGraphComponent implements OnInit, OnDestroy {
     var tempDummy = [];
     var tempConflict = [];
     var tempGroup = [];
+    var doCollapse = 1;
 
     var newX = Math.round(((e.target.x.animVal.value + 0.5 * this.boxSize - this.margin.left) / 0.5 * this.arrPlanProperties.length / (this.width - this.margin.right - this.margin.left) - 1) / 2);
     var newY = Math.round(((e.target.y.animVal.value + 0.5 * this.boxSize - 1) / 0.5 * this.dummy.length / (this.height - this.margin.bottom - this.margin.top) - 1) / 2);
+
+    this.collapseStart = newX;
 
     for (var i = 0; i < this.arrPlanProperties.length; i++) {
       localOccRate.push(0);
@@ -952,10 +1003,19 @@ export class ConflictGraphComponent implements OnInit, OnDestroy {
 
     console.log(collapseArray);
 
-   
+    for (var i = 0; i < collapseArray.length; i++) {
+      console.log(this.dummy[collapseArray[i]].indexOf("collapsed row"));
+      if (this.dummy[collapseArray[i]].indexOf("collapsed row") > -1) {
+        doCollapse = doCollapse & 0;
+        //console.log(doCollapse);
+        break;
+      }
+    }
+    
+
     //do collapse operation
     //not taking groups that only have 1 component
-    if (collapseArray.length > 1 ) {
+    if (collapseArray.length > 1 && doCollapse > 0) {
 
       //if (!this.dummy.includes("collapsed row")) {   
       
@@ -999,7 +1059,7 @@ export class ConflictGraphComponent implements OnInit, OnDestroy {
         for (var i = 0; i < collapseArray.length; i++) {
           tempGroup.push(this.dummy[collapseArray[i]]);
         }
-        this.group.push(tempGroup, arr);
+        this.group.push(tempGroup, arr, this.collapseStart);
         console.log(this.group);
 
         //finish rest rows
@@ -1013,17 +1073,17 @@ export class ConflictGraphComponent implements OnInit, OnDestroy {
 
         this.dummy = tempDummy;
         this.arrConflict = tempConflict;
-        //console.log(this.dummy);
-        //console.log(this.arrConflict);
-        //console.log(this.arrPlanProperties);
-
+        console.log(this.dummy);
+        console.log(this.arrConflict);
+        console.log(this.arrPlanProperties);
+      }  
         //clear the previous vis
         this.svg.selectAll("*").remove();
         this.stickyHeader.selectAll("*").remove();
 
         this.loadVis();
 
-      }
+      
     //}   
   }
 
@@ -1035,11 +1095,11 @@ export class ConflictGraphComponent implements OnInit, OnDestroy {
 
     var uncollapseY = Math.round(((e.target.y.animVal.value + 0.5 * this.boxSize - 1) / 0.5 * this.dummy.length / (this.height - this.margin.bottom - this.margin.top) - 1) / 2);
     
-    this.group.splice(this.occRate.indexOf(this.dummy[uncollapseY]), 2);
+    this.group.splice(this.occRate.indexOf(this.dummy[uncollapseY]) / 2 * 3, 3);
     this.occRate.splice(this.occRate.indexOf(this.dummy[uncollapseY]), 2);
     
-    //console.log(this.occRate);
-    //console.log(this.group);
+    console.log(this.occRate);
+    console.log(this.group);
 
     this.varInit();
     //clear the previous vis

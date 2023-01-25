@@ -7,6 +7,7 @@
       <mat-option value="option2">Least Occurence First</mat-option>
       <mat-option value="option3">Most Occurence First</mat-option>
       <mat-option value="option4">Most Deviation First</mat-option>
+      <mat-option value="option5">User Preference</mat-option>
     </mat-select>
   </mat-form-field>
 
@@ -23,6 +24,12 @@
   <div id="target">
     <div id="head"></div>
     <div id="vis"></div>
+  </div>
+
+  <div id="orderPanel">
+    <div id="construct"></div>
+    <div id="button"></div>
+    <input type="button" value="close" style="bottom:5px;position:absolute;text-align:center" (click)="closePanel($event)"/>
   </div>
 
 </div>
