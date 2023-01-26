@@ -30,7 +30,7 @@
   padding-left: 3px;
 }
 
-#orderPanel{
+#orderPanel {
   text-align: center;
   background-color: #eeeeee;
   border: 2px groove black;
@@ -43,7 +43,7 @@
   bottom: 0;
   left: 0;
   right: 0;
-  visibility: hidden;
+  display: none;
 }
 
 #construct {

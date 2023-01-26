@@ -211,12 +211,18 @@ export class ConflictGraphComponent implements OnInit, OnDestroy {
         this.checkboxInit();
       }
         
-
-      //create new arrays
-      this.filter();
-
       //sort by selection
       this.sort();
+      
+      //create new arrays
+      if (this.optioned != "option5") {
+        this.filter();
+      } else {
+        //clear the previous vis
+        this.svg.selectAll("*").remove();
+        this.stickyHeader.selectAll("*").remove();
+      }
+      
 
       //group the mugs
       this.treeGroup();
@@ -524,6 +530,7 @@ export class ConflictGraphComponent implements OnInit, OnDestroy {
     this.arrConflict = [];
     this.tempArr = [];
     this.arrSort = [];
+    
     //console.log(this.arrPlanProperties);
   }
 
@@ -640,42 +647,68 @@ export class ConflictGraphComponent implements OnInit, OnDestroy {
           }
           break;
         case "option5": //sort goals by user
+          
           var panel = document.getElementById("orderPanel");
-          panel.style.visibility = "visible";
+          var buttonField = document.getElementById("button");
+          var textField = document.getElementById("construct");
 
-          for (var i = 0; i < order.length; i++) {
-            
-            var button = document.createElement("input");
-            button.type = "button";
-            button.id = "button" + (i + 1);
-            button.name = order[i][0];
-            button.value = order[i][0];
-            button.addEventListener("click", () => {
-              this.constructGoal(event);
-            });
+          if (this.userGoal.length == 0) {
+            panel.style.display = "block";
+          }
 
-            document.getElementById("button").appendChild(button);
-            document.getElementById("button").appendChild(document.createElement("br"));
+          while (buttonField.firstChild) {
+            buttonField.removeChild(buttonField.firstChild);
+          }
+
+          //textField.innerHTML = "";
+          //while (textField.firstChild) {
+           // textField.removeChild(buttonField.firstChild);
+          //}
+
+          console.log(this.arrPlanProperties);
+          console.log(panel.getElementsByTagName("input").length);
+          if (panel.getElementsByTagName("input").length == 1) {
+
+            for (var i = 0; i < order.length; i++) {
+              var button = document.createElement("input");
+              button.type = "button";
+              button.id = "button" + (i + 1);
+              button.name = order[i][0];
+              button.value = order[i][0];
+              button.addEventListener("click", () => {
+                this.constructGoal(event);
+              });
+
+              buttonField.appendChild(button);
+              buttonField.appendChild(document.createElement("br"));
+            }
           }
 
           break;
+          
       }
 
-      this.arrSort = order;
-      var goalSort = [];
-      for (var i = 0; i < this.arrSort.length; i++) {
-        //console.log(sort[i][0])
-        var sortIndex = this.arrPlanProperties.lastIndexOf(this.arrSort[i][0]);
-        //console.log("sort Index" + i + ": " + sortIndex);
-        goalSort.push(this.arrPlanProperties[sortIndex]);
-        //console.log("goalSort: " + goalSort);
-      }
-      this.arrPlanProperties = goalSort;
+      if (this.userGoal.length == order.length && this.optioned == "option5") {
+        this.arrPlanProperties = this.userGoal;
+        console.log(this.arrPlanProperties);
+        
+      } else {
+        this.arrSort = order;
+        var goalSort = [];
+        for (var i = 0; i < this.arrSort.length; i++) {
+          //console.log(sort[i][0])
+          var sortIndex = this.arrPlanProperties.lastIndexOf(this.arrSort[i][0]);
+          //console.log("sort Index" + i + ": " + sortIndex);
+          goalSort.push(this.arrPlanProperties[sortIndex]);
+          //console.log("goalSort: " + goalSort);
+        }
+        this.arrPlanProperties = goalSort;
 
-      this.arrSort = [];
+        this.arrSort = [];
+      }
     }
 
-    //console.log(this.arrPlanProperties);
+    console.log(this.arrPlanProperties);
   }
 
   setOrder = function (event: any): void {
@@ -711,15 +744,27 @@ export class ConflictGraphComponent implements OnInit, OnDestroy {
   }
 
   constructGoal = function (event: any): void {
-    console.log(event.srcElement.name);
+    
+    //console.log(event.srcElement.name);
+
     document.getElementById("construct").innerHTML += event.srcElement.name;
     document.getElementById("construct").innerHTML += "</br>";
 
+    this.userGoal.push(event.srcElement.name);
+
     event.srcElement.disabled = true;
+
+    console.log(this.userGoal.length);
+    console.log(document.getElementById("button").getElementsByTagName("input").length);
+    if (this.userGoal.length == document.getElementById("button").getElementsByTagName("input").length) {
+      console.log("success");
+      document.getElementById("orderPanel").style.display = "none";
+      this.loadVis();
+    }
   }
 
   closePanel = function (event: any): void {
-    document.getElementById("orderPanel").style.visibility = "hidden";
+    document.getElementById("orderPanel").style.display = "none";
   }
 
   checkboxInit = function () {
@@ -776,14 +821,19 @@ export class ConflictGraphComponent implements OnInit, OnDestroy {
     var tempProperty = [];
     
     //console.log(tempFilterDummy);
-    
+      console.log(this.arrPlanProperties);
     var checkbox = document.getElementById("mugsFilterSection").getElementsByTagName("input");
     for (var i = 0; i < checkbox.length; i++) {
       if (checkbox[i].checked == false) {
         filterCondition.push(checkbox[i].name);
-      } else {
-        tempProperty.push(checkbox[i].name);
+        if (this.arrPlanProperties.lastIndexOf(checkbox[i].name) > -1) {
+          this.arrPlanProperties.splice(this.arrPlanProperties.lastIndexOf(checkbox[i].name), 1);
+          //i = i - 1;
+        }
       }
+      //else {
+      //  tempProperty.push(checkbox[i].name);
+      //}
     }
     //console.log(this.arrConflict);
 
@@ -802,8 +852,8 @@ export class ConflictGraphComponent implements OnInit, OnDestroy {
     //console.log(tempFilterDummy);
     //this.arrConflict = tempFilterConflict;
     //this.dummy = tempFilterDummy;
-    this.arrPlanProperties = tempProperty;
-    //console.log(this.arrPlanProperties);
+    //this.arrPlanProperties = tempProperty;
+    console.log(this.arrPlanProperties);
     //console.log(this.dummy);
     //console.log(this.arrConflict);
     }
@@ -811,12 +861,12 @@ export class ConflictGraphComponent implements OnInit, OnDestroy {
 
   treeGroup = function (): void {
     var input = document.getElementById("groupSection").getElementsByTagName("input");
-    
+    console.log(this.arrPlanProperties);
     if (input[0].checked == true && this.dummy.lastIndexOf("collapsed row") < 0) {
 
       //clear the previous vis
-      this.svg.selectAll("*").remove();
-      this.stickyHeader.selectAll("*").remove();
+      //this.svg.selectAll("*").remove();
+      //this.stickyHeader.selectAll("*").remove();
 
       //clear 0 occur plan properties
       var occurGoal = 0;
