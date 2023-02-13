@@ -488,7 +488,7 @@ export class ConflictGraphComponent implements OnInit, OnDestroy {
               .attr("y", 0.5 * (this.height - this.margin.bottom - this.margin.top) / this.dummy.length * (2 * this.yIndex + 1) - 0.5 * this.boxSize + 1)
               .attr("width", 0.25 * this.boxSize)
               .attr("height", this.boxSize)
-              .style("fill", "#000000")
+              .style("fill", "#696969")
               .style("opacity", "0.5")
               .style("border", "2px groove black")
               .style("border-radius", "5px")
