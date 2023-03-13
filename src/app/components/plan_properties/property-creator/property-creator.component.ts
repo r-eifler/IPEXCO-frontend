@@ -229,6 +229,9 @@ export class PropertyCreatorComponent implements OnInit, OnDestroy {
         planProp._id = null;
         planProp.project = this.currentProject._id;
         planProp.isUsed = false;
+        planProp.class = "main";
+        planProp.icon = "star";
+        planProp.color ="#696969";
         this.propertiesService.saveObject(planProp);
       }
     };
