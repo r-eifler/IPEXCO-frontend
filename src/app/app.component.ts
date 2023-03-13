@@ -9,7 +9,7 @@ import { AuthenticationService } from "./service/authentication/authentication.s
   styleUrls: ["./app.component.css"],
 })
 export class AppComponent implements OnInit {
-  title = "XPP IPL";
+  title = "IPEXCO";
   editorOptions = { theme: "vs-dark", language: "javascript" };
 
   constructor(

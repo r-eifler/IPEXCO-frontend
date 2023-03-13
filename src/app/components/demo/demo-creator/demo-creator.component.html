@@ -64,6 +64,25 @@
     </div>
   </mat-tab>
 
+  <mat-tab label="Upload Demo" class="tab" *ngIf="!update">
+    <div style="display: flex; flex-direction: column;" class="tab-content">
+      <mat-slide-toggle formControlName="precomputeToggle" [(ngModel)]="precomputedData">
+        upload demo
+      </mat-slide-toggle>
+
+      <ng-container *ngIf="precomputedData">
+        <mat-form-field class="example-full-width">
+          <mat-label>Demo Data</mat-label>
+          <textarea matInput formControlName="demoData" [(ngModel)]="demoData"></textarea>
+        </mat-form-field>
+        <!-- <mat-form-field class="example-full-width">
+          <mat-label>Max Utility Data</mat-label>
+          <textarea matInput formControlName="maxUtilityData" [(ngModel)]="maxUtilityData"></textarea>
+        </mat-form-field> -->
+      </ng-container>
+    </div>
+  </mat-tab>
+
   <!-- <mat-tab *ngIf="!update" label="Precomputed Demo" class="tab">
     <div class="tab-content">
 

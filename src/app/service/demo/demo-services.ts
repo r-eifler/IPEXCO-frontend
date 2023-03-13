@@ -103,6 +103,7 @@ export class DemosService extends ObjectCollectionService<Demo> {
     this.http
       .post<IHTTPData<Demo>>(this.BASE_URL + "/precomputed", formData)
       .subscribe((httpData) => {
+        console.log(httpData.data)
         const runLoaded = this.existsObjectInStore(httpData.data._id);
         let action = null;
         if (runLoaded) {

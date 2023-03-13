@@ -10,15 +10,11 @@
     >
       <mat-icon>menu</mat-icon>
     </button>
-    <img style="height: 80%; margin: auto 10px" src="assets/iter_logo.svg" />
-    <h1 class="example-app-name">Iterative Planning Tool</h1>
+    <img style="height: 60%; margin: auto 10px" src="assets/iter_logo.svg" />
+    <h1 class="example-app-name">IPEXCO</h1>
     <span style="flex: 1 1 auto"></span>
-    <button
-      mat-icon-button
-      *ngIf="!userStudyPath()"
-      [matMenuTriggerFor]="userMenu"
-    >
-      <mat-icon style="font-size: 36px">account_circle</mat-icon>
+    <button mat-icon-button *ngIf="!userStudyPath()" [matMenuTriggerFor]="userMenu">
+      <mat-icon>account_circle</mat-icon>
     </button>
   </mat-toolbar>
 
