@@ -10,6 +10,8 @@ import { IterationStep } from "src/app/interface/run";
 import { SelectedIterationStepService } from "src/app/service/planner-runs/selected-iteration-step.service";
 import { PlanningTaskRelaxationService } from "src/app/service/planning-task/planning-task-relaxations-services";
 import { Fact, factEquals } from "src/app/interface/plannig-task";
+import { GeneralSettings } from "src/app/interface/settings/general-settings";
+import { CurrentProjectService } from "src/app/service/project/project-services";
 
 interface Dimension {
   name: string;
@@ -28,6 +30,7 @@ interface SelectedInitUpdates {
   styleUrls: ["./selected-relaxations-view.component.scss"],
 })
 export class SelectedRelaxationsViewComponent implements OnInit, OnDestroy {
+
   @Input()
   set step(step: IterationStep) {
     this.step$.next(step);
@@ -35,11 +38,22 @@ export class SelectedRelaxationsViewComponent implements OnInit, OnDestroy {
 
   private unsubscribe$: Subject<any> = new Subject();
 
+  settings$: Observable<GeneralSettings>;
+
   relaxationSpaces$: Observable<PlanningTaskRelaxationSpace[]>;
   selectedUpdates$: Observable<SelectedInitUpdates[]>;
   private step$ = new BehaviorSubject<IterationStep>(null);
 
-  constructor(private relaxationService: PlanningTaskRelaxationService) {
+  constructor(
+    private relaxationService: PlanningTaskRelaxationService,
+    private selectedProject: CurrentProjectService,
+    ) {
+
+    this.settings$ = selectedProject.getSelectedObject().pipe(
+      filter(p => !!p),
+      map(p => p.settings)
+    );
+
     this.relaxationSpaces$ = relaxationService.getList();
 
     this.selectedUpdates$ = combineLatest([

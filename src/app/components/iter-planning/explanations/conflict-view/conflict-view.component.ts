@@ -10,6 +10,7 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from "@angu
 import { map, tap, filter, take } from "rxjs/operators";
 import { CurrentProjectService } from "src/app/service/project/project-services";
 import { LogEvent, TimeLoggerService } from "src/app/service/logger/time-logger.service";
+import { GeneralSettings } from "src/app/interface/settings/general-settings";
 
 @Component({
   selector: "app-conflict-view",
@@ -46,6 +47,7 @@ export class ConflictViewComponent implements OnInit, OnDestroy {
   planProperties$: Observable<Map<string, PlanProperty>>;
   solvableAtAll$: Observable<boolean>;
   provideRelaxationExplanations$: Observable<boolean>;
+  settings$: Observable<GeneralSettings>;
 
   selectedConflictIndex: number = null;
 
@@ -55,6 +57,11 @@ export class ConflictViewComponent implements OnInit, OnDestroy {
     private currentProjectService: CurrentProjectService
   ) {
     this.planProperties$ = planPropertiesService.getMap();
+
+    this.settings$ = currentProjectService.getSelectedObject().pipe(
+      filter(p => !!p),
+      map(p => p.settings)
+    );
 
     this.provideRelaxationExplanations$ = this.currentProjectService
       .getSelectedObject()

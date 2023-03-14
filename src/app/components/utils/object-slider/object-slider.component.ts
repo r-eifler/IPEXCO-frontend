@@ -24,6 +24,11 @@ export class ObjectSliderComponent implements OnInit {
 
   @Input() disabled: boolean;
 
+  @Input()
+  set showCost(showCost: boolean) {
+    this.showCost$.next(showCost);
+  }
+
   @Output() change = new EventEmitter<any>();
 
   min: number;
@@ -32,6 +37,7 @@ export class ObjectSliderComponent implements OnInit {
 
   values$ = new BehaviorSubject<Displayable[]>(null);
   selected$ = new BehaviorSubject<Displayable>(null);
+  showCost$ = new BehaviorSubject<boolean>(null);
 
   constructor() {
     this.min = 0;

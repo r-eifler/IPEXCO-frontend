@@ -8,13 +8,10 @@
         <div>
           <div *ngFor="let pp of hardGoals$ | async; last as last">
             <div class="list-item-container">
-              <mat-icon matListIcon *ngIf="pp.globalHardGoal">star</mat-icon>
-              <mat-icon matListIcon *ngIf="!pp.globalHardGoal"
-                >star_border</mat-icon
-              >
+              <mat-icon matListIcon>{{pp.icon}}</mat-icon>
               <div class="list-item-text">
                 <span> {{ pp.naturalLanguageDescription }} </span>
-                <span> Utility: {{ pp.value }} </span>
+                <span *ngIf="( settings$ | async).usePlanPropertyValues"> Utility: {{ pp.value }} </span>
               </div>
               <div class="list-item-buttons">
                 <button
@@ -44,13 +41,10 @@
         <div>
           <div *ngFor="let pp of possiblePP$ | async; last as last">
             <div class="list-item-container">
-              <mat-icon matListIcon *ngIf="pp.globalHardGoal">star</mat-icon>
-              <mat-icon matListIcon *ngIf="!pp.globalHardGoal"
-                >star_border</mat-icon
-              >
+              <mat-icon matListIcon>{{pp.icon}}</mat-icon>
               <div class="list-item-text">
                 <span> {{ pp.naturalLanguageDescription }} </span>
-                <span> Utility: {{ pp.value }} </span>
+                <span *ngIf="( settings$ | async).usePlanPropertyValues"> Utility: {{ pp.value }} </span>
               </div>
               <div class="list-item-buttons">
                 <button

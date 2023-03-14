@@ -1,6 +1,6 @@
 <div class="container">
-  <div><span class="axis-label">cost</span></div>
-  <div class="cost-box">
+  <div><span *ngIf="showCost$ | async" class="axis-label">cost</span></div>
+  <div *ngIf="showCost$ | async" class="cost-box">
     <span
       *ngFor="let v of values$ | async; let i = index"
       class="cost"
@@ -8,6 +8,7 @@
       {{ v.value }}
     </span>
   </div>
+  <div *ngIf="(showCost$ | async) === false" class="cost-box"></div>
   <div></div>
   <div class="bar-container">
     <div class="back"></div>

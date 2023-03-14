@@ -8,6 +8,8 @@ import { SelectedIterationStepService } from "../../../../service/planner-runs/s
 import { Component, OnInit, OnDestroy, Input } from "@angular/core";
 import { IterationStep } from "src/app/interface/run";
 import { filter, map, take, takeUntil, tap } from "rxjs/operators";
+import { CurrentProjectService } from "src/app/service/project/project-services";
+import { GeneralSettings } from "src/app/interface/settings/general-settings";
 
 @Component({
   selector: "app-hard-goal-selector",
@@ -19,6 +21,8 @@ export class HardGoalSelectorComponent implements OnInit, OnDestroy {
 
   step$: BehaviorSubject<ModIterationStep>;
   planPropertiesMap$: BehaviorSubject<Map<string, PlanProperty>>;
+  settings$: Observable<GeneralSettings>;
+
 
   possiblePP$: Observable<PlanProperty[]>;
   hardGoals$: Observable<PlanProperty[]>;
@@ -26,10 +30,16 @@ export class HardGoalSelectorComponent implements OnInit, OnDestroy {
   constructor(
     private newIterationStepService: NewIterationStepStoreService,
     private planpropertiesService: PlanPropertyMapService,
-    private plannerService: PlannerService
+    private plannerService: PlannerService,
+    private selectedProject: CurrentProjectService,
   ) {
     this.step$ = newIterationStepService.getSelectedObject();
     this.planPropertiesMap$ = planpropertiesService.getMap();
+
+    this.settings$ = selectedProject.getSelectedObject().pipe(
+      filter(p => !!p),
+      map(p => p.settings)
+    );
 
     this.possiblePP$ = combineLatest([this.step$, this.planPropertiesMap$])
       .pipe(

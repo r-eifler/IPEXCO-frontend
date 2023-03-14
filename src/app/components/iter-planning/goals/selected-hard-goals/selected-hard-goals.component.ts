@@ -7,6 +7,7 @@ import { BehaviorSubject, Observable, combineLatest } from "rxjs";
 import { PlanProperty } from "src/app/interface/plan-property/plan-property";
 import { IterationStep, ModIterationStep } from "src/app/interface/run";
 import { SelectedIterationStepService } from "src/app/service/planner-runs/selected-iteration-step.service";
+import { GeneralSettings } from "src/app/interface/settings/general-settings";
 
 @Component({
   selector: "app-selected-hard-goals",
@@ -19,12 +20,19 @@ export class SelectedHardGoalsComponent implements OnInit {
     this.step$.next(step);
   }
 
+  @Input()
+  set settings(settings: GeneralSettings) {
+    this.settings$.next(settings);
+  }
+
   planProperties$: BehaviorSubject<Map<string, PlanProperty>>;
   private step$ = new BehaviorSubject<IterationStep>(null);
+  protected  settings$ = new BehaviorSubject<GeneralSettings>(null);
 
   hardGoals$: Observable<PlanProperty[]>;
 
   constructor(private planPropertiesMapService: PlanPropertyMapService) {
+
     this.planProperties$ = this.planPropertiesMapService.getMap();
 
     this.hardGoals$ = combineLatest([this.step$, this.planProperties$]).pipe(

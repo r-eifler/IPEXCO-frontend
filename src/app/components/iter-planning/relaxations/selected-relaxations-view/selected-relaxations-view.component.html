@@ -13,6 +13,7 @@
               class="slider"
               [values]="update.possibleValues"
               [selected]="update.selected"
+              [showCost]="(settings$ | async).usePlanPropertyValues"
             ></app-object-progress-bar>
           </div>
         </div>

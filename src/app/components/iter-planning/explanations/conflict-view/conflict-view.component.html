@@ -23,7 +23,7 @@
           <mat-list>
             <mat-list-item *ngFor="let pp of conflict">
               <span matLine>{{ pp.naturalLanguageDescription }}</span>
-              <span matLine> Utility: {{ pp.value }} </span>
+              <span *ngIf="( settings$ | async).usePlanPropertyValues" matLine> Utility: {{ pp.value }} </span>
             </mat-list-item>
           </mat-list>
           <div
@@ -53,12 +53,12 @@
     <ng-container *ngIf="(question$ | async) && (explanation$ | async)">
       <mat-card>
         <div class="list-item-container">
-          <mat-icon matListIcon>star_border</mat-icon>
+          <mat-icon matListIcon>{{(question$ | async).icon}}</mat-icon>
           <div class="list-item-text">
             <span style="font-size: larger">
               {{ (question$ | async).naturalLanguageDescription }}
             </span>
-            <span> Utility: {{ (question$ | async).value }} </span>
+            <span *ngIf="( settings$ | async).usePlanPropertyValues"> Utility: {{ (question$ | async).value }} </span>
           </div>
         </div>
       </mat-card>
@@ -90,7 +90,7 @@
             <mat-list>
               <mat-list-item *ngFor="let pp of conflict">
                 <span matLine>{{ pp.naturalLanguageDescription }}</span>
-                <span matLine> Utility: {{ pp.value }} </span>
+                <span matLine *ngIf="( settings$ | async).usePlanPropertyValues"> Utility: {{ pp.value }} </span>
               </mat-list-item>
             </mat-list>
             <div

@@ -23,10 +23,17 @@ export class ObjectProgressBarComponent implements OnInit {
     this.selected$.next(selected);
   }
 
+  @Input()
+  set showCost(showCost: boolean) {
+    this.showCost$.next(showCost);
+  }
+
   value$ = new Observable<number>(null);
 
   values$ = new BehaviorSubject<Displayable[]>(null);
   selected$ = new BehaviorSubject<Displayable>(null);
+
+  showCost$ = new BehaviorSubject<boolean>(null);
 
   constructor() {
     this.value$ = combineLatest([this.values$, this.selected$]).pipe(

@@ -8,6 +8,9 @@ import { NewIterationStepStoreService } from "./../../../../service/planner-runs
 import { Component, OnInit } from "@angular/core";
 import { StepperSelectionEvent } from "@angular/cdk/stepper";
 import { NewIterationStepGenerationService } from "../../../../service/planner-runs/new-iteration-step-generation-service.service";
+import { CurrentProjectService } from "src/app/service/project/project-services";
+import { GeneralSettings } from "src/app/interface/settings/general-settings";
+import { filter, map } from "rxjs/operators";
 
 @Component({
   selector: "app-new-step-navigator",
@@ -17,13 +20,20 @@ import { NewIterationStepGenerationService } from "../../../../service/planner-r
 export class NewStepNavigatorComponent implements OnInit {
   step$: Observable<IterationStep>;
   interfaceStatus$: Observable<NewStepInterfaceStatus>;
+  settings$: Observable<GeneralSettings>;
 
   constructor(
     private newIterationStepService: NewIterationStepStoreService,
     private newStepInterfaceStatusService: NewStepInterfaceStatusService,
-    private newIterationStepGenerationService: NewIterationStepGenerationService
+    private newIterationStepGenerationService: NewIterationStepGenerationService,
+    private selectedProject: CurrentProjectService,
   ) {
     this.step$ = this.newIterationStepService.getSelectedObject();
+
+    this.settings$ = selectedProject.getSelectedObject().pipe(
+      filter(p => !!p),
+      map(p => p.settings)
+    );
 
     this.interfaceStatus$ = this.newStepInterfaceStatusService
       .getSelectedObject()

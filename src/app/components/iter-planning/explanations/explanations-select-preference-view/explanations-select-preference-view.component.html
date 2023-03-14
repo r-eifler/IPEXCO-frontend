@@ -8,12 +8,12 @@
         [class.selected]="selectedPPId === pp._id"
       >
         <div class="list-item-container" (click)="selectPP(pp)">
-          <mat-icon matListIcon>star_border</mat-icon>
+          <mat-icon matListIcon>{{pp.icon}}</mat-icon>
           <div class="list-item-text">
             <span style="font-size: larger">
               {{ pp.naturalLanguageDescription }}
             </span>
-            <span> Utility: {{ pp.value }} </span>
+            <span *ngIf="( settings$ | async).usePlanPropertyValues"> Utility: {{ pp.value }} </span>
           </div>
           <!-- <div class="list-item-buttons">
             <button mat-icon-button (click)="selectPP(pp)">

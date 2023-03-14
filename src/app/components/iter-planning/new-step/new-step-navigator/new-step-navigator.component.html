@@ -13,7 +13,7 @@
       </div>
     </div>
   </mat-step>
-  <mat-step label="Select relaxation">
+  <mat-step label="Select relaxation" *ngIf="(settings$ | async).useConstraints">
     <div class="step">
       <app-relaxation-selector class="componenets"></app-relaxation-selector>
       <div class="button-container">
@@ -27,9 +27,11 @@
       <div class="finish-container">
         <app-selected-hard-goals
           [step]="step$ | async"
+          [settings]="settings$ | async"
           class="componenets"
         ></app-selected-hard-goals>
         <app-selected-relaxations-view
+          *ngIf="(settings$ | async).useConstraints"
           [step]="step$ | async"
           class="componenets"
         ></app-selected-relaxations-view>

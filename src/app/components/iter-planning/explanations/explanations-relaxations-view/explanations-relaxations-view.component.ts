@@ -14,6 +14,8 @@ import {
 import { Component, Input, OnDestroy, OnInit } from "@angular/core";
 import { BehaviorSubject, Observable, combineLatest } from "rxjs";
 import { Fact, factEquals } from "src/app/interface/plannig-task";
+import { GeneralSettings } from 'src/app/interface/settings/general-settings';
+import { CurrentProjectService } from 'src/app/service/project/project-services';
 
 @Component({
   selector: "app-explanations-relaxations-view",
@@ -34,6 +36,8 @@ export class ExplanationsRelaxationsViewComponent implements OnInit, OnDestroy {
   private step$ = new BehaviorSubject<IterationStep>(null);
   private conflict$ = new BehaviorSubject<PPConflict>(null);
 
+  settings$: Observable<GeneralSettings>;
+
   relaxations$: Observable<
     {
       name: string;
@@ -44,8 +48,15 @@ export class ExplanationsRelaxationsViewComponent implements OnInit, OnDestroy {
 
   constructor(
     private timeLogger: TimeLoggerService,
-    private relaxationSpacesService: PlanningTaskRelaxationService
+    private relaxationSpacesService: PlanningTaskRelaxationService,
+    private selectedProject: CurrentProjectService,
   ) {
+
+    this.settings$ = selectedProject.getSelectedObject().pipe(
+      filter(p => !!p),
+      map(p => p.settings)
+    );
+
     this.relaxationSpaces$ = relaxationSpacesService.getList();
 
     this.relaxations$ = combineLatest([

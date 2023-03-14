@@ -12,6 +12,7 @@
           <app-object-progress-bar
             [values]="dim.possibleValues"
             [selected]="dim.selected"
+            [showCost]="(settings$ | async).usePlanPropertyValues"
           ></app-object-progress-bar>
         </ng-container>
         <ng-container *ngIf="relaxation.dimensions.length == 0">

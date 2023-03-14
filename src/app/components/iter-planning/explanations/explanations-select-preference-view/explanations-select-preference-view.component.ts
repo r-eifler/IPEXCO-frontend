@@ -5,6 +5,8 @@ import { PlanPropertyMapService } from "src/app/service/plan-properties/plan-pro
 import { Observable, combineLatest, Subject, BehaviorSubject } from "rxjs";
 import { filter, map, take, takeUntil, tap } from "rxjs/operators";
 import { LogEvent, TimeLoggerService } from "src/app/service/logger/time-logger.service";
+import { CurrentProjectService } from "src/app/service/project/project-services";
+import { GeneralSettings } from "src/app/interface/settings/general-settings";
 
 @Component({
   selector: "app-explanations-select-preference-view",
@@ -24,10 +26,18 @@ export class ExplanationsSelectPreferenceViewComponent implements OnInit {
 
   possiblePP$: Observable<PlanProperty[]>;
   private step$ = new BehaviorSubject<IterationStep>(null);
+  settings$: Observable<GeneralSettings>;
 
   constructor(
-    private planpropertiesService: PlanPropertyMapService
+    private planpropertiesService: PlanPropertyMapService,
+    private currentProjectService: CurrentProjectService
   ) {
+
+    this.settings$ = currentProjectService.getSelectedObject().pipe(
+      filter(p => !!p),
+      map(p => p.settings)
+    );
+
     this.possiblePP$ = combineLatest([
       this.step$,
       this.planpropertiesService.getMap(),
