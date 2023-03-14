@@ -5,7 +5,7 @@
   <mat-card-content>
     <ng-container *ngIf="(hardGoals$ | async)?.length > 0">
       <div>
-        <div *ngFor="let pp of hardGoals$ | async">
+        <div *ngFor="let pp of (hardGoals$ | async)">
           <div class="list-item-container">
             <mat-icon>{{pp.icon}}</mat-icon>
             <div class="list-item-text">

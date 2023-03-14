@@ -43,7 +43,8 @@ export class SelectedHardGoalsComponent implements OnInit {
       map(([step, planProperties]) =>
         step.hardGoals.map((pp_id) => planProperties.get(pp_id))
       ),
-      map((hardGoals) => hardGoals.sort((a, b) => (a.globalHardGoal ? -1 : 0)))
+      filter(hardGoals => ! hardGoals.some(hg => hg === undefined)),
+      map((hardGoals) => hardGoals.sort((a, b) => (a.globalHardGoal ? -1 : 0))),
     );
   }
 
