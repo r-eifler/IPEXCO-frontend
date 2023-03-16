@@ -1,7 +1,7 @@
 <div class="main-conatiner">
   <mat-card class="main-card">
     <mat-card-header>
-      <mat-card-title>Hard Goals</mat-card-title>
+      <mat-card-title>Enforced Goals</mat-card-title>
     </mat-card-header>
     <mat-card-content>
       <ng-container *ngIf="(hardGoals$ | async)?.length > 0">
@@ -34,7 +34,7 @@
 
   <mat-card class="main-card">
     <mat-card-header>
-      <mat-card-title>Preferences</mat-card-title>
+      <mat-card-title>Soft Goals</mat-card-title>
     </mat-card-header>
     <mat-card-content>
       <ng-container *ngIf="(possiblePP$ | async)?.length > 0">
@@ -61,7 +61,7 @@
         </div>
       </ng-container>
       <p *ngIf="(possiblePP$ | async)?.length == 0">
-        No other preferences available.
+        No other soft goals available.
       </p>
     </mat-card-content>
   </mat-card>

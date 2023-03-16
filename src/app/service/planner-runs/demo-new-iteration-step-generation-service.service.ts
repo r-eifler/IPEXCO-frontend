@@ -59,7 +59,7 @@ export class DemoNewIterationStepGenerationService extends NewIterationStepGener
       .pipe(
         filter(
           ([demo, ppM, spaces]) =>
-            !!demo && !!ppM && ppM.size > 0 //&& !!spaces && spaces.length > 0
+            !!demo && !!ppM && ppM.size > 0 && (! demo.settings?.useConstraints || (!!spaces && spaces.length > 0))
         ),
         take(1)
       )
@@ -76,14 +76,16 @@ export class DemoNewIterationStepGenerationService extends NewIterationStepGener
           }
         }
         let initUpdates = [];
-        relaxationSpaces.forEach((space) =>
-          space.dimensions.forEach((dim) =>
-            initUpdates.push({
-              orgFact: dim.orgFact.fact,
-              newFact: dim.orgFact.fact,
-            })
-          )
-        );
+        if(relaxationSpaces){
+          relaxationSpaces.forEach((space) =>
+            space.dimensions.forEach((dim) =>
+              initUpdates.push({
+                orgFact: dim.orgFact.fact,
+                newFact: dim.orgFact.fact,
+              })
+            )
+          );
+        }
         let newTask: ModifiedPlanningTask = {
           name: "task",
           project: demo._id,
@@ -91,7 +93,7 @@ export class DemoNewIterationStepGenerationService extends NewIterationStepGener
           initUpdates,
         };
         let newStep: IterationStep = {
-          name: "Itertaion Step 1",
+          name: "Iteration Step 1",
           project: demo._id,
           status: StepStatus.unknown,
           hardGoals: [...hardGoals],

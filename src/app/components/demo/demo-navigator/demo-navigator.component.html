@@ -9,7 +9,7 @@
         Task Info
       </button>
     </div>
-    <div class="bar-container" *ngIf="(settings$ | async).showPaymentInfo">
+    <div class="bar-container" *ngIf="(settings$ | async)?.showPaymentInfo">
       <mat-icon>paid</mat-icon>
       <app-payment-bar
         [min]="0"

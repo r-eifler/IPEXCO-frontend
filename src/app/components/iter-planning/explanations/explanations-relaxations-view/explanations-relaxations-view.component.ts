@@ -11,7 +11,7 @@ import {
   getRelaxationExplanationsFromStep,
   IterationStep,
 } from "src/app/interface/run";
-import { Component, Input, OnDestroy, OnInit } from "@angular/core";
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from "@angular/core";
 import { BehaviorSubject, Observable, combineLatest } from "rxjs";
 import { Fact, factEquals } from "src/app/interface/plannig-task";
 import { GeneralSettings } from 'src/app/interface/settings/general-settings';
@@ -32,6 +32,8 @@ export class ExplanationsRelaxationsViewComponent implements OnInit, OnDestroy {
   set conflict(c: PPConflict) {
     this.conflict$.next(c);
   }
+
+  @Output() closeView = new EventEmitter<boolean>();
 
   private step$ = new BehaviorSubject<IterationStep>(null);
   private conflict$ = new BehaviorSubject<PPConflict>(null);
@@ -104,5 +106,9 @@ export class ExplanationsRelaxationsViewComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.timeLogger.log(LogEvent.START_CHECK_RELAXATION_EXPLANATION);
+  }
+
+  close(){
+    this.closeView.next(true);
   }
 }

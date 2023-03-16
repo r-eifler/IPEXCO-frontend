@@ -4,8 +4,7 @@
     <div
       class="slide-container"
       [class.slide-pos-one]="viewpos === 1"
-      [class.slide-pos-two]="viewpos === 2"
-    >
+      [class.slide-pos-two]="viewpos === 2">
       <div class="middle-container">
         <app-explanations-select-preference-view
           [step]="step$ | async"
@@ -24,17 +23,18 @@
         <app-explanations-relaxations-view
           [step]="step$ | async"
           [conflict]="selectedConflict$ | async"
+          (closeView)="viewpos = 1"
         ></app-explanations-relaxations-view>
       </div>
     </div>
-    <button
+    <!-- <button
       mat-raised-button
       color="primary"
       *ngIf="viewpos === 2 && (notSolvable$ | async) === false"
       (click)="viewpos = 1"
       style="position: absolute; left: 92%; top: 92%">
       Ask other Question
-    </button>
+    </button> -->
     <!-- <button mat-flat-button (click)="viewpos = 2" style="position: absolute; left: 95%; top: 90%">right</button> -->
   </ng-container>
 

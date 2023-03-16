@@ -6,7 +6,7 @@
     >
       <mat-card-header>
         <mat-card-title
-          >The selected preferences are not solvable. There are the following
+          >The selected soft goals are not solvable. There are the following
           conflicts ...</mat-card-title
         >
       </mat-card-header>
@@ -45,10 +45,10 @@
 
   <ng-container *ngIf="solvable$ | async">
     <mat-card-header>
-      <mat-card-title>... because preference </mat-card-title>
+      <mat-card-title>... because soft goal </mat-card-title>
     </mat-card-header>
     <div *ngIf="!(question$ | async)">
-      <p style="font-size: large">No preference selected.</p>
+      <p style="font-size: large">No soft goal selected.</p>
     </div>
     <ng-container *ngIf="(question$ | async) && (explanation$ | async)">
       <mat-card>
