@@ -4,6 +4,11 @@ export interface PaymentInfo {
   steps: number[];
 }
 
+export enum ExplanationInterfaceType {
+  QUETSIONANSWER = "question_answer",
+  MUGSVISU = "mugs_visualization"
+}
+
 export interface GeneralSettings {
   _id: string|number;
   public: boolean;
@@ -22,6 +27,8 @@ export interface GeneralSettings {
   introTask: boolean;
   computePlanAutomatically: boolean;
   computeDependenciesAutomatically: boolean;
+  explanationInterface: ExplanationInterfaceType;
+  globalExplanation: boolean;
 }
 
 export const defaultGeneralSetting: GeneralSettings = {
@@ -32,6 +39,8 @@ export const defaultGeneralSetting: GeneralSettings = {
   provideRelaxationExplanations: true,
   usePlanPropertyValues: false,
   useConstraints: false,
+  explanationInterface: ExplanationInterfaceType.QUETSIONANSWER,
+  globalExplanation: false,
   useTimer: false,
   measureTime: false,
   maxTime: 0,

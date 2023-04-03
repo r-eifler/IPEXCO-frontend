@@ -1,9 +1,11 @@
+import { ExplanationInterfaceType } from './../../../../interface/settings/general-settings';
+import { GeneralSettings } from 'src/app/interface/settings/general-settings';
 import { CurrentProjectService } from "src/app/service/project/project-services";
 import { combineLatest } from "rxjs/internal/observable/combineLatest";
 import { FinishedStepInterfaceStatusService } from "./../../../../service/user-interface/interface-status-services";
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Subject, BehaviorSubject, Observable } from "rxjs";
-import { filter, map, takeUntil, find, take } from "rxjs/operators";
+import { filter, map, takeUntil, find, take, tap } from "rxjs/operators";
 import { IterationStep } from "src/app/interface/run";
 import { SelectedIterationStepService } from "src/app/service/planner-runs/selected-iteration-step.service";
 import {
@@ -22,7 +24,9 @@ export class FinishedStepNavigatorComponent implements OnInit, OnDestroy {
   step$: BehaviorSubject<IterationStep>;
   showTab$: Observable<number>;
   iterfaceStatus$: Observable<FinishedStepInterfaceStatus[]>;
-  showConflicts$: Observable<boolean>;
+  settings$: Observable<GeneralSettings>;
+
+  ExplanationType = ExplanationInterfaceType;
 
   constructor(
     private selectedIterationStepService: SelectedIterationStepService,
@@ -32,9 +36,9 @@ export class FinishedStepNavigatorComponent implements OnInit, OnDestroy {
     this.step$ = this.selectedIterationStepService.getSelectedObject();
     this.iterfaceStatus$ = this.finishedStepInterfaceStatusService.getList();
 
-    this.showConflicts$ = this.currentProjectService.getSelectedObject().pipe(
+    this.settings$ = this.currentProjectService.getSelectedObject().pipe(
       filter((p) => !!p),
-      map((project) => project.settings.allowQuestions)
+      map((project) => project.settings)
     );
 
     this.showTab$ = combineLatest([this.step$, this.iterfaceStatus$]).pipe(

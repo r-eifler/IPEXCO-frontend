@@ -1,9 +1,8 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
 import { UntypedFormControl, UntypedFormGroup, Validators } from "@angular/forms";
-import { Subject, Observable, BehaviorSubject } from "rxjs";
-import { GeneralSettings } from "src/app/interface/settings/general-settings";
-import { Project } from "src/app/interface/project";
-import { takeUntil } from "rxjs/operators";
+import { Subject } from "rxjs";
+import { ExplanationInterfaceType, GeneralSettings } from "src/app/interface/settings/general-settings";
+
 
 @Component({
   selector: "app-settings",
@@ -20,6 +19,8 @@ export class SettingsComponent implements OnInit, OnChanges {
 
   @Output() updatedSettings = new EventEmitter<GeneralSettings>();
 
+  ExplanationTypes = ExplanationInterfaceType;
+
   constructor() {
     this.settingsForm = new UntypedFormGroup({
       maxRuns: new UntypedFormControl([
@@ -33,6 +34,8 @@ export class SettingsComponent implements OnInit, OnChanges {
       public: new UntypedFormControl(),
       usePlanPropertyValues: new UntypedFormControl(),
       useConstraints: new UntypedFormControl(),
+      explanationInterface: new UntypedFormControl(),
+      globalExplanation: new UntypedFormControl(),
       useTimer: new UntypedFormControl(),
       measureTime: new UntypedFormControl(),
       maxTime: new UntypedFormControl([
@@ -75,6 +78,9 @@ export class SettingsComponent implements OnInit, OnChanges {
     this.settingsForm.controls.usePlanPropertyValues.setValue(settings.usePlanPropertyValues);
     this.settingsForm.controls.useConstraints.setValue(settings.useConstraints);
 
+    this.settingsForm.controls.explanationInterface.setValue(settings.explanationInterface);
+    this.settingsForm.controls.globalExplanation.setValue(settings.globalExplanation);
+
     this.settingsForm.controls.useTimer.setValue(settings.useTimer);
     this.settingsForm.controls.measureTime.setValue(settings.measureTime);
     this.settingsForm.controls.maxTime.setValue(settings.maxTime / 6000);
@@ -100,8 +106,11 @@ export class SettingsComponent implements OnInit, OnChanges {
     this.settings.introTask = this.settingsForm.controls.introTask.value;
     this.settings.public = this.settingsForm.controls.public.value;
 
-    this.settings.usePlanPropertyValues =this.settingsForm.controls.usePlanPropertyValues.value;
-    this.settings.useConstraints =this.settingsForm.controls.useConstraints.value;
+    this.settings.usePlanPropertyValues = this.settingsForm.controls.usePlanPropertyValues.value;
+    this.settings.useConstraints = this.settingsForm.controls.useConstraints.value;
+
+    this.settings.explanationInterface = this.settingsForm.controls.explanationInterface.value;
+    this.settings.globalExplanation = this.settingsForm.controls.globalExplanation.value;
 
     this.settings.useTimer = this.settingsForm.controls.useTimer.value;
     this.settings.measureTime = this.settingsForm.controls.measureTime.value;

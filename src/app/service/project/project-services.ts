@@ -1,4 +1,3 @@
-import { GeneralSettings } from "src/app/interface/settings/general-settings";
 import { SelectedObjectService } from "../base/selected-object.service";
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
@@ -8,7 +7,6 @@ import { Project } from "../../interface/project";
 import { environment } from "../../../environments/environment";
 import { LOAD } from "../../store/generic-list.store";
 import { DomainSpecificationService } from "../files/domain-specification.service";
-import { PlanningTask } from "src/app/interface/plannig-task";
 import { ItemStore } from 'src/app/store/generic-item.store';
 
 @Injectable({

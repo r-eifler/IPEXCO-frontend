@@ -1,3 +1,5 @@
+import { find } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
 import { factEquals } from "src/app/interface/plannig-task";
 import {
   PPDependencies,
@@ -159,6 +161,19 @@ export function getAllDependencies(step: IterationStep): PPDependencies {
   }
 
   return null;
+}
+
+export function getAllReleventDependencies(step: IterationStep): PPDependencies {
+  let dependencies : PPDependencies;
+  if (step.relaxationExplanations && step.relaxationExplanations.length > 0) {
+    dependencies = step.relaxationExplanations[0].dependencies[0].dependencies;
+  }
+  if (step.depExplanation) {
+    dependencies = step.depExplanation.dependencies;
+  }
+  let filteredDependencies: PPDependencies = { conflicts: [] };
+  filteredDependencies.conflicts = dependencies.conflicts.filter((c : PPConflict) => step.plan.satPlanProperties.some(p => c.elems.find(e => e === p)))
+  return filteredDependencies;
 }
 
 export function getDependencies(step: IterationStep, question: string): PPDependencies {

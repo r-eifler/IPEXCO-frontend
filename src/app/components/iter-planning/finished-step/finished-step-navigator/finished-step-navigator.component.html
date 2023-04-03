@@ -8,26 +8,23 @@
       <mat-icon style="margin-right: 10px">map</mat-icon>
       Plan
     </a>
-    <a mat-tab-link
-      *ngIf="(step$ | async)?.plan"
+    <a mat-tab-link *ngIf="(step$ | async)?.plan"
       (click)="setTab(3)"
       [active]="(showTab$ | async) === 3">
       <mat-icon style="margin-right: 10px">map</mat-icon>
       Advanced Plan
     </a>
-    <a mat-tab-link
+    <a mat-tab-link *ngIf="(settings$ | async).allowQuestions && ((settings$ | async).explanationInterface) === ExplanationType.QUETSIONANSWER.toString()"
       (click)="setTab(4)"
-      *ngIf="showConflicts$ | async"
       [active]="(showTab$ | async) === 4" >
       <mat-icon style="margin-right: 10px">error</mat-icon>
       Conflicts
     </a>
-    <a mat-tab-link
+    <a mat-tab-link *ngIf="(settings$ | async).allowQuestions && (settings$ | async).explanationInterface === ExplanationType.MUGSVISU.toString()"
       (click)="setTab(5)"
-      *ngIf="showConflicts$ | async"
       [active]="(showTab$ | async) === 5" >
       <mat-icon style="margin-right: 10px">error</mat-icon>
-      Global Conflicts
+      Conflicts
     </a>
   </nav>
   <div class="content-container" *ngIf="(showTab$ | async) === 1">
@@ -48,6 +45,6 @@
   </div>
 
   <div class="content-container" *ngIf="(showTab$ | async) === 5">
-    <app-conflict-visu-main style="height: 100%; overflow: auto"></app-conflict-visu-main>
+    <app-conflict-visu-container style="height: 100%; overflow: auto"></app-conflict-visu-container>
   </div>
 </div>

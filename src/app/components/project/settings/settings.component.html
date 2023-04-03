@@ -15,6 +15,21 @@
           Provide Conflict Explanations
         </mat-slide-toggle>
 
+        <mat-slide-toggle formControlName="globalExplanation" *ngIf="settingsForm.controls.allowQuestions.value"
+          matTooltip="Global conflict explanation independent of the iteration step.">
+          Global Explanation
+        </mat-slide-toggle>
+
+        <mat-label matTooltip="Interface used for providing explanations" *ngIf="settingsForm.controls.allowQuestions.value">
+          Explanation Interface
+        </mat-label>
+        <mat-button-toggle-group  formControlName="explanationInterface" *ngIf="settingsForm.controls.allowQuestions.value">
+          <mat-button-toggle [value]="ExplanationTypes.QUETSIONANSWER">Question/Answer</mat-button-toggle>
+          <mat-button-toggle [value]="ExplanationTypes.MUGSVISU">MUGS Visualization</mat-button-toggle>
+        </mat-button-toggle-group>
+
+        <mat-divider [inset]="true"></mat-divider>
+
         <mat-slide-toggle formControlName="useConstraints"
           matTooltip="Allow to define relaxations and enable the option of
           relaxation level selection when definiting the next iteration step.">
@@ -99,21 +114,21 @@
             Show Payment Score
           </mat-slide-toggle>
 
-          <mat-form-field style="width: 200px">
+          <mat-form-field style="width: 200px" *ngIf="settingsForm.controls.showPaymentScore.value">
             <mat-label matTooltip="Payment for participation">
               Minimal Payment
             </mat-label>
             <input matInput type="number" formControlName="minPayment" />
           </mat-form-field>
 
-          <mat-form-field style="width: 200px">
+          <mat-form-field style="width: 200px" *ngIf="settingsForm.controls.showPaymentScore.value">
             <mat-label matTooltip="Payment for achieving the maximal utility">
               Max Payment
             </mat-label>
             <input matInput type="number" formControlName="maxPayment" />
           </mat-form-field>
 
-          <mat-form-field style="width: 200px">
+          <mat-form-field style="width: 200px" *ngIf="settingsForm.controls.showPaymentScore.value">
             <mat-label matTooltip="Different levels of payment, in fraction of the
               differents between the utiity of the global hard goals and the maximal possible utility.">
               Payment Steps

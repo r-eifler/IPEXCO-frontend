@@ -195,8 +195,8 @@ import {
 } from "./service/user-interface/interface-status-services";
 import { PaymentBarComponent } from './components/utils/payment-bar/payment-bar.component';
 import { UserStudyCurrentDataService, UserStudyDataService } from "./service/user-study/user-study-data.service";
-import { ConflictVisuMainComponent } from './components/visualization/conflict-visu-main/conflict-visu-main.component';
-import { ConflictGraphComponent } from './components/visualization/conflict-graph/conflict-graph.component';
+import { ConflictVisuContainerComponent } from './components/visualization/conflict-visu-container/conflict-visu-container.component';
+import { MUGSVisuMainComponent } from './components/visualization/mugs-visu-main/mugs-visu-main.component';
 import { IconSelectorComponent } from './components/utils/icon-selector/icon-selector.component';
 import { ProjectSettingsContainerComponent } from './components/project/project-settings-container/project-settings-container.component';
 
@@ -281,8 +281,8 @@ import { ProjectSettingsContainerComponent } from './components/project/project-
     ScoreViewComponent,
     ScoreBarComponent,
     PaymentBarComponent,
-    ConflictVisuMainComponent,
-    ConflictGraphComponent,
+    ConflictVisuContainerComponent,
+    MUGSVisuMainComponent,
     IconSelectorComponent,
     ProjectSettingsContainerComponent,
   ],

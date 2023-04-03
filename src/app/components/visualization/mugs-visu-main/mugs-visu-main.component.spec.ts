@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ConflictVisuMainComponent } from './conflict-visu-main.component';
+import { MUGSVisuMainComponent } from './mugs-visu-main.component';
 
-describe('ConflictVisuMainComponent', () => {
-  let component: ConflictVisuMainComponent;
-  let fixture: ComponentFixture<ConflictVisuMainComponent>;
+describe('ConflictGraphComponent', () => {
+  let component: MUGSVisuMainComponent;
+  let fixture: ComponentFixture<MUGSVisuMainComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ConflictVisuMainComponent ]
+      declarations: [ MUGSVisuMainComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ConflictVisuMainComponent);
+    fixture = TestBed.createComponent(MUGSVisuMainComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,3 +1,4 @@
+import { GeneralSettings } from 'src/app/interface/settings/general-settings';
 import { SelectedIterationStepService } from 'src/app/service/planner-runs/selected-iteration-step.service';
 import { PPDependencies } from 'src/app/interface/explanations';
 import { OnDestroy } from '@angular/core';
@@ -8,17 +9,18 @@ import { RunningDemoService } from 'src/app/service/demo/demo-services';
 import { Component, OnInit} from '@angular/core';
 import { Demo } from 'src/app/interface/demo';
 import { filter, map, takeUntil, take } from 'rxjs/operators';
-import { getAllDependencies, IterationStep } from 'src/app/interface/run';
+import { getAllDependencies, getAllReleventDependencies, IterationStep } from 'src/app/interface/run';
 import * as d3 from 'd3';
 import { combineLatest } from "rxjs/internal/observable/combineLatest";
+import { CurrentProjectService } from 'src/app/service/project/project-services';
 
 @Component({
-  selector: 'app-conflict-graph',
-  templateUrl: './conflict-graph.component.html',
-  styleUrls: ['./conflict-graph.component.scss']
+  selector: 'app-mugs-visu-main',
+  templateUrl: './mugs-visu-main.component.html',
+  styleUrls: ['./mugs-visu-main.component.scss']
 })
 
-export class ConflictGraphComponent implements OnInit, OnDestroy {
+export class MUGSVisuMainComponent implements OnInit, OnDestroy {
 
   private unsubscribe$: Subject<any> = new Subject();
 
@@ -60,6 +62,8 @@ export class ConflictGraphComponent implements OnInit, OnDestroy {
   */
   planProperties$: Observable<Map<string, PlanProperty>>;
 
+  settings$: Observable<GeneralSettings>;
+
   height: number;
   width: number;
   margin: { top: number, right: number, left: number, bottom: number};
@@ -89,17 +93,24 @@ export class ConflictGraphComponent implements OnInit, OnDestroy {
   constructor(
     demoService: RunningDemoService,
     planPropertiesService: PlanPropertyMapService,
-    stepService: SelectedIterationStepService
+    stepService: SelectedIterationStepService,
+    private currentProjectService: CurrentProjectService
   ) {
 
     // Access the data over these observables
     // If you subscribe to one, please add takeUntil(this.unsubscribe$) in the pipe
+    this.settings$ = this.currentProjectService.getSelectedObject().pipe(
+      filter((p) => !!p),
+      map((project) => project.settings)
+    );
+
     this.demo$ = demoService.getSelectedObject();
     this.selectedStep$ = stepService.getSelectedObject();
-    this.conflicts$ = this.selectedStep$.pipe(
+
+    this.conflicts$ = combineLatest([this.selectedStep$, this.settings$]).pipe(
       takeUntil(this.unsubscribe$),
-      filter(step => !!step),
-      map(step => getAllDependencies(step))
+      filter(([step, settings]) => !!step && !!settings),
+      map(([step, settings]) => settings.globalExplanation ? getAllDependencies(step) : getAllReleventDependencies(step))
     );
     this.planProperties$ = planPropertiesService.getMap();
   }
@@ -112,7 +123,7 @@ export class ConflictGraphComponent implements OnInit, OnDestroy {
       .attr("width", this.width)
       .style("margin-left", 50)
       .style("position", "absolute");
-    
+
     //set up svg for drawing
     this.svg = d3.select("#vis")
       .append("svg")
@@ -163,7 +174,7 @@ export class ConflictGraphComponent implements OnInit, OnDestroy {
   }
 
   loadVis():void {
-    
+
     combineLatest([
       this.planProperties$,
       this.demo$,
@@ -176,7 +187,7 @@ export class ConflictGraphComponent implements OnInit, OnDestroy {
     ).subscribe(([planProperties, demo, conflict]) => {
       //console.log(demo);
       //console.log(planProperties);
-      
+
       //retrieve all plan properties from here ==> use as x-axis (goal)
       if (this.arrPlanProperties.length  == 0 ) {
         for (var i = 0; i < Array.from(planProperties.values()).length; i++) {
@@ -184,7 +195,7 @@ export class ConflictGraphComponent implements OnInit, OnDestroy {
           this.arrDescription.push(Array.from(planProperties.values())[i].naturalLanguageDescription);
         }
       }
-      
+
       //console.log(this.arrPlanProperties);
 
       if (this.dummy.length == 0 ) {
@@ -210,10 +221,10 @@ export class ConflictGraphComponent implements OnInit, OnDestroy {
       if (this.dummy.lastIndexOf("collapsed row") < 0) {
         this.checkboxInit();
       }
-        
+
       //sort by selection
       this.sort();
-      
+
       //create new arrays
       if (this.optioned != "option5") {
         this.filter();
@@ -222,7 +233,7 @@ export class ConflictGraphComponent implements OnInit, OnDestroy {
         this.svg.selectAll("*").remove();
         this.stickyHeader.selectAll("*").remove();
       }
-      
+
 
       //group the mugs
       this.treeGroup();
@@ -253,7 +264,7 @@ export class ConflictGraphComponent implements OnInit, OnDestroy {
       //re-setup height of svg
       this.height = (this.boxSize + 3) * this.dummy.length + this.margin.top + this.margin.bottom;
       this.svg.attr("height", this.height);
-      
+
       //set up axis
       var x = d3.scaleBand()
         .domain(this.arrPlanProperties)
@@ -357,7 +368,7 @@ export class ConflictGraphComponent implements OnInit, OnDestroy {
       //add box to svg
       for (var i = 0; i < this.arrConflict.length; i++) {
         for (var j = 0; j < this.arrConflict[i].length; j++) {
-          
+
           this.xIndex = this.arrPlanProperties.lastIndexOf(this.arrConflict[i][j]);
           this.yIndex = i;
           //match color
@@ -368,7 +379,7 @@ export class ConflictGraphComponent implements OnInit, OnDestroy {
           }
 
           if (this.dummy[i].indexOf("collapsed row") < 0) {
-            
+
               this.svg.append("rect")
                 .attr("x", this.margin.left + (this.width - this.margin.right - this.margin.left) / this.arrPlanProperties.length * 0.5 * (2 * this.xIndex + 1) - 0.5 * this.boxSize)
                 //split svg into 2, no need to consider margin-top
@@ -430,7 +441,7 @@ export class ConflictGraphComponent implements OnInit, OnDestroy {
                 .on("click", (e: any) => {
                   this.collapseRow(e);
                 });
-            
+
           } else {
             //when a row is collapsed row
             //draw a darker background first
@@ -492,7 +503,7 @@ export class ConflictGraphComponent implements OnInit, OnDestroy {
               .style("opacity", "0.5")
               .style("border", "2px groove black")
               .style("border-radius", "5px")
-              
+
               .on("click", (e: any) => {
                 this.uncollapseRow(e);
               });
@@ -530,7 +541,7 @@ export class ConflictGraphComponent implements OnInit, OnDestroy {
     this.arrConflict = [];
     this.tempArr = [];
     this.arrSort = [];
-    
+
     //console.log(this.arrPlanProperties);
   }
 
@@ -647,7 +658,7 @@ export class ConflictGraphComponent implements OnInit, OnDestroy {
           }
           break;
         case "option5": //sort goals by user
-          
+
           var panel = document.getElementById("orderPanel");
           var buttonField = document.getElementById("button");
           var textField = document.getElementById("construct");
@@ -685,13 +696,13 @@ export class ConflictGraphComponent implements OnInit, OnDestroy {
           }
 
           break;
-          
+
       }
 
       if (this.userGoal.length == order.length && this.optioned == "option5") {
         this.arrPlanProperties = this.userGoal;
         console.log(this.arrPlanProperties);
-        
+
       } else {
         this.arrSort = order;
         var goalSort = [];
@@ -744,7 +755,7 @@ export class ConflictGraphComponent implements OnInit, OnDestroy {
   }
 
   constructGoal = function (event: any): void {
-    
+
     //console.log(event.srcElement.name);
 
     document.getElementById("construct").innerHTML += event.srcElement.name;
@@ -811,7 +822,7 @@ export class ConflictGraphComponent implements OnInit, OnDestroy {
   filter = function (): void {
     if (this.dummy.lastIndexOf("collapsed row") < 0) {
 
-    
+
     //clear the previous vis
     this.svg.selectAll("*").remove();
     this.stickyHeader.selectAll("*").remove();
@@ -819,7 +830,7 @@ export class ConflictGraphComponent implements OnInit, OnDestroy {
 
     var filterCondition = [];
     var tempProperty = [];
-    
+
     //console.log(tempFilterDummy);
       console.log(this.arrPlanProperties);
     var checkbox = document.getElementById("mugsFilterSection").getElementsByTagName("input");
@@ -911,7 +922,7 @@ export class ConflictGraphComponent implements OnInit, OnDestroy {
       //console.log(sumFlagArray);
 
       for (var k = 0; k < this.arrPlanProperties.length; k++) {
-      
+
         for (var i = 0; i < this.arrConflict.length - 1; i++) {
           for (var j = 0; j < this.arrConflict.length - 1 - i; j++) {
             //console.log(this.arrConflict[i][j]);
@@ -964,7 +975,7 @@ export class ConflictGraphComponent implements OnInit, OnDestroy {
                       } else {
                         flag = true;
                       }
-                      
+
                     }
                     break;
                   }
@@ -990,7 +1001,7 @@ export class ConflictGraphComponent implements OnInit, OnDestroy {
       }
     }
 
-    
+
   }
 
   collapseRow = function (e: any): void {
@@ -1034,7 +1045,7 @@ export class ConflictGraphComponent implements OnInit, OnDestroy {
             compareArray.push(0);
           }
         }
-        
+
         //create array contain the rows number that need to be collpsed
         if (compareArray.every(function (value, k) { return value === idArray[k] })) {
           /*this.svg.append("rect")
@@ -1061,14 +1072,14 @@ export class ConflictGraphComponent implements OnInit, OnDestroy {
         break;
       }
     }
-    
+
 
     //do collapse operation
     //not taking groups that only have 1 component
     if (collapseArray.length > 1 && doCollapse > 0) {
 
-      //if (!this.dummy.includes("collapsed row")) {   
-      
+      //if (!this.dummy.includes("collapsed row")) {
+
         //calculate the occurence rate of each planProperty
         for (var i = 0; i < collapseArray.length; i++) {
           for (var j = 0; j < this.arrPlanProperties.length; j++) {
@@ -1082,9 +1093,9 @@ export class ConflictGraphComponent implements OnInit, OnDestroy {
           localOccRate[i] = localOccRate[i] / collapseArray.length;
         }
         this.occRate.push(("collapsed row" + (this.occRate.length / 2 + 1)), localOccRate);
-      
+
         console.log(this.occRate);
-     
+
         //change arrConflict and dummy accordingly
         for (var i = 0; i < collapseArray[0]; i++) {
           tempDummy.push(this.dummy[i]);
@@ -1103,9 +1114,9 @@ export class ConflictGraphComponent implements OnInit, OnDestroy {
           }
         }
 
-    
+
         tempConflict.push(arr);
-      
+
         for (var i = 0; i < collapseArray.length; i++) {
           tempGroup.push(this.dummy[collapseArray[i]]);
         }
@@ -1126,15 +1137,15 @@ export class ConflictGraphComponent implements OnInit, OnDestroy {
         console.log(this.dummy);
         console.log(this.arrConflict);
         console.log(this.arrPlanProperties);
-      }  
+      }
         //clear the previous vis
         this.svg.selectAll("*").remove();
         this.stickyHeader.selectAll("*").remove();
 
         this.loadVis();
 
-      
-    //}   
+
+    //}
   }
 
   uncollapseRow = function (e: any): void {
@@ -1144,10 +1155,10 @@ export class ConflictGraphComponent implements OnInit, OnDestroy {
     //this.arrPlanProperties = [];*/
 
     var uncollapseY = Math.round(((e.target.y.animVal.value + 0.5 * this.boxSize - 1) / 0.5 * this.dummy.length / (this.height - this.margin.bottom - this.margin.top) - 1) / 2);
-    
+
     this.group.splice(this.occRate.indexOf(this.dummy[uncollapseY]) / 2 * 3, 3);
     this.occRate.splice(this.occRate.indexOf(this.dummy[uncollapseY]), 2);
-    
+
     console.log(this.occRate);
     console.log(this.group);
 
@@ -1163,7 +1174,7 @@ export class ConflictGraphComponent implements OnInit, OnDestroy {
     this.varInit();
     this.generateD3Components();
     this.loadVis();
-    
+
 /*    //this.planProperties$.subscribe(p => { console.log(p); });
     combineLatest([
       this.planProperties$,
@@ -1175,17 +1186,17 @@ export class ConflictGraphComponent implements OnInit, OnDestroy {
       //unsubscribe if not needed, save resources
       takeUntil(this.unsubscribe$)
     ).subscribe(([planProperties, demo, conflict]) => {     //then do sth. here
-      
-      
+
+
       console.log(planProperties);
       console.log(conflict.conflicts[0].elems);
       console.log(conflict.conflicts.length);
 
-      
+
       //console.log(goal);
       //console.log(planProperties["637df31f78942a00077cc0de"]);  //print out obj by the map from id to the obj
       console.log(demo);
-      
+
     }); //end of pipe
 */
   }
@@ -1195,5 +1206,5 @@ export class ConflictGraphComponent implements OnInit, OnDestroy {
     this.unsubscribe$.complete();
   }
 
-  
+
 }
