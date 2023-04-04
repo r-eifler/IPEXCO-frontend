@@ -4,7 +4,7 @@ import {
 } from "src/app/interface/planning-task-relaxation";
 import { PlanningTaskRelaxationCreatorComponent } from "./../planning-task-relaxation-creator/planning-task-relaxation-creator.component";
 import { Component, OnInit } from "@angular/core";
-import { MatDialog } from "@angular/material/dialog";
+import { MatLegacyDialog as MatDialog } from "@angular/material/legacy-dialog";
 import { PlanningTaskRelaxationService } from "src/app/service/planning-task/planning-task-relaxations-services";
 import { Subject, Observable } from "rxjs";
 import { filter, map, takeUntil } from "rxjs/operators";

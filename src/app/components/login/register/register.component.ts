@@ -1,6 +1,6 @@
 import { AuthenticationService } from "../../../service/authentication/authentication.service";
 import { Component, OnInit } from "@angular/core";
-import { MatDialogRef } from "@angular/material/dialog";
+import { MatLegacyDialogRef as MatDialogRef } from "@angular/material/legacy-dialog";
 import { UntypedFormControl, UntypedFormGroup, Validators } from "@angular/forms";
 import { User } from "src/app/interface/user";
 import { passwordValidator } from "src/app/validators/user.validators";

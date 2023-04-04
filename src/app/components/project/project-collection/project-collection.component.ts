@@ -3,7 +3,7 @@ import { Project } from "src/app/interface/project";
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Observable, Subject } from "rxjs";
 import { Router } from "@angular/router";
-import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
+import { MatLegacyDialog as MatDialog, MatLegacyDialogConfig as MatDialogConfig } from "@angular/material/legacy-dialog";
 import { ProjectCreatorComponent } from "../project-creator/project-creator.component";
 import {
   CurrentProjectService,

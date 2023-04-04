@@ -4,10 +4,10 @@ import { AfterViewChecked, Component, OnDestroy, OnInit } from "@angular/core";
 import { ResponsiveService } from "src/app/service/responsive/responsive.service";
 import { gsap } from "gsap";
 import {
-  MatDialog,
-  MatDialogConfig,
-  MatDialogRef,
-} from "@angular/material/dialog";
+  MatLegacyDialog as MatDialog,
+  MatLegacyDialogConfig as MatDialogConfig,
+  MatLegacyDialogRef as MatDialogRef,
+} from "@angular/material/legacy-dialog";
 import { RegisterComponent } from "../register/register.component";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Subject } from "rxjs";

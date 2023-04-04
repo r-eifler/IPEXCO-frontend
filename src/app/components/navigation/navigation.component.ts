@@ -4,13 +4,13 @@ import { LoginComponent } from "./../login/login/login.component";
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ResponsiveService } from "../../service/responsive/responsive.service";
 import {
-  MatDialog,
-  MatDialogConfig,
-  MatDialogRef,
-} from "@angular/material/dialog";
+  MatLegacyDialog as MatDialog,
+  MatLegacyDialogConfig as MatDialogConfig,
+  MatLegacyDialogRef as MatDialogRef,
+} from "@angular/material/legacy-dialog";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Subject } from "rxjs";
-import { MatSnackBar } from "@angular/material/snack-bar";
+import { MatLegacySnackBar as MatSnackBar } from "@angular/material/legacy-snack-bar";
 
 @Component({
   selector: "app-navigation",

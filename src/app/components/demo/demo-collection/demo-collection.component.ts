@@ -13,8 +13,8 @@ import { ResponsiveService } from "src/app/service/responsive/responsive.service
 import { MatBottomSheet } from "@angular/material/bottom-sheet";
 import { Demo } from "src/app/interface/demo";
 import { RunStatus } from "src/app/interface/run";
-import { MatSnackBar } from "@angular/material/snack-bar";
-import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
+import { MatLegacySnackBar as MatSnackBar } from "@angular/material/legacy-snack-bar";
+import { MatLegacyDialog as MatDialog, MatLegacyDialogConfig as MatDialogConfig } from "@angular/material/legacy-dialog";
 import { AuthenticationService } from "../../../service/authentication/authentication.service";
 import { DemoCreatorComponent } from "../demo-creator/demo-creator.component";
 import { environment } from "../../../../environments/environment";

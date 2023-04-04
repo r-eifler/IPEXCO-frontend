@@ -12,7 +12,7 @@ import {
   DomainSpecificationFilesService,
   ProblemFilesService,
 } from "../../../service/files/pddl-file-services";
-import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
+import { MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDialogRef } from "@angular/material/legacy-dialog";
 import { ProjectsService } from "src/app/service/project/project-services";
 import { AuthenticationService } from "../../../service/authentication/authentication.service";
 

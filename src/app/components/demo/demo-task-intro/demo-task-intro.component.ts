@@ -16,7 +16,7 @@ import { Demo } from "../../../interface/demo";
 import { GeneralSettings } from "../../../interface/settings/general-settings";
 import { MatStepper } from "@angular/material/stepper";
 import { environment } from "../../../../environments/environment";
-import { MatButton } from "@angular/material/button";
+import { MatLegacyButton as MatButton } from "@angular/material/legacy-button";
 import { TimeLoggerService } from "../../../service/logger/time-logger.service";
 
 @Component({

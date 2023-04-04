@@ -1,7 +1,7 @@
 import { UserStudyCurrentDataService } from './../../../service/user-study/user-study-data.service';
 import { GeneralSettings } from 'src/app/interface/settings/general-settings';
 import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
-import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
+import { MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDialogRef } from "@angular/material/legacy-dialog";
 import { Demo } from "src/app/interface/demo";
 import { Subject } from "rxjs";
 import { filter, take } from "rxjs/operators";

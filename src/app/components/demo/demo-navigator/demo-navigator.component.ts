@@ -8,10 +8,10 @@ import { computeStepUtility, IterationStep} from "src/app/interface/run";
 import { RunningDemoService } from "src/app/service/demo/demo-services";
 import { CurrentProjectService } from "src/app/service/project/project-services";
 import { takeUntil, filter, map, take, tap } from "rxjs/operators";
-import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
+import { MatLegacyDialog as MatDialog, MatLegacyDialogConfig as MatDialogConfig } from "@angular/material/legacy-dialog";
 import { getMaximalPlanValue, PlanProperty } from "../../../interface/plan-property/plan-property";
 import { DemoHelpDialogComponent } from "../demo-help-dialog/demo-help-dialog.component";
-import { MatSnackBar } from "@angular/material/snack-bar";
+import { MatLegacySnackBar as MatSnackBar } from "@angular/material/legacy-snack-bar";
 // @ts-ignore
 import Timeout = NodeJS.Timeout;
 import { NewIterationStepStoreService, SelectedIterationStepService } from "src/app/service/planner-runs/selected-iteration-step.service";
