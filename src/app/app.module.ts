@@ -5,7 +5,6 @@ import {
 import { IterationStepsService } from "src/app/service/planner-runs/iteration-steps.service";
 import { PlanningTaskRelaxationService } from "./service/planning-task/planning-task-relaxations-services";
 import { AuthenticationService } from "./service/authentication/authentication.service";
-import { MatLegacySnackBar as MatSnackBar } from "@angular/material/legacy-snack-bar";
 import { DemosService, RunningDemoService } from "./service/demo/demo-services";
 import { BrowserModule } from "@angular/platform-browser";
 import { NgModule } from "@angular/core";
@@ -21,34 +20,23 @@ import { CdkTableModule } from "@angular/cdk/table";
 import { FooterComponent } from "./components/footer/footer.component";
 // Material
 import { MatGridListModule } from "@angular/material/grid-list";
-import { MatLegacyCardModule as MatCardModule } from "@angular/material/legacy-card";
-import { MatLegacyMenuModule as MatMenuModule } from "@angular/material/legacy-menu";
 import { MatIconModule } from "@angular/material/icon";
-import { MatLegacyButtonModule as MatButtonModule } from "@angular/material/legacy-button";
 import { LayoutModule } from "@angular/cdk/layout";
-import { MatLegacyTabsModule as MatTabsModule } from "@angular/material/legacy-tabs";
 import { MatExpansionModule } from "@angular/material/expansion";
-import { MatLegacyProgressBarModule as MatProgressBarModule } from "@angular/material/legacy-progress-bar";
 import { MatStepperModule } from "@angular/material/stepper";
 import { MatDividerModule } from "@angular/material/divider";
 import { DragDropModule } from "@angular/cdk/drag-drop";
-import { MatLegacyListModule as MatListModule } from "@angular/material/legacy-list";
-import { MatLegacyInputModule as MatInputModule } from "@angular/material/legacy-input";
-import { MatLegacyRadioModule as MatRadioModule } from "@angular/material/legacy-radio";
 import { MatButtonToggleModule } from "@angular/material/button-toggle";
 import { MatSidenavModule } from "@angular/material/sidenav";
 import { MatToolbarModule } from "@angular/material/toolbar";
-import { MatLegacySelectModule as MatSelectModule } from "@angular/material/legacy-select";
-import { MatLegacyDialogModule as MatDialogModule } from "@angular/material/legacy-dialog";
-import { MatLegacyChipsModule as MatChipsModule } from "@angular/material/legacy-chips";
-import { MatLegacyProgressSpinnerModule as MatProgressSpinnerModule } from "@angular/material/legacy-progress-spinner";
 import { MatTreeModule } from "@angular/material/tree";
-import { MatLegacyAutocompleteModule as MatAutocompleteModule } from "@angular/material/legacy-autocomplete";
-import { MatLegacySliderModule as MatSliderModule } from "@angular/material/legacy-slider";
-import { MatLegacySlideToggleModule as MatSlideToggleModule } from "@angular/material/legacy-slide-toggle";
 import { MatBadgeModule } from "@angular/material/badge";
-import { MatLegacyCheckboxModule as MatCheckboxModule } from "@angular/material/legacy-checkbox";
-import { MatLegacyTableModule as MatTableModule } from "@angular/material/legacy-table";
+import { MatCardModule } from "@angular/material/card";
+import { MatProgressBarModule } from "@angular/material/progress-bar";
+import { MatTabsModule } from "@angular/material/tabs";
+import { MatChipsModule } from '@angular/material/chips';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSliderModule } from '@angular/material/slider';
 import {
   MAT_BOTTOM_SHEET_DEFAULT_OPTIONS,
   MatBottomSheetModule,
@@ -153,7 +141,6 @@ import { NgxChartsModule } from "@swimlane/ngx-charts";
 import { OverviewDataComponent } from "./components/user-study/eval/overview-data/overview-data.component";
 import { TimeLoggerDataComponent } from "./components/user-study/eval/time-logger-data/time-logger-data.component";
 import { IndividualRunUserDataComponent } from "./components/user-study/eval/individual-run-user-data/individual-run-user-data.component";
-import { MatLegacyTooltipModule as MatTooltipModule } from "@angular/material/legacy-tooltip";
 import { DemoInfoComponent } from "./components/demo/demo-info/demo-info.component";
 import { DemoTaskInfoComponent } from "./components/demo/demo-task-info/demo-task-info.component";
 import { MetaStudyCollectionComponent } from "./components/user-study/meta-study/meta-study-collection/meta-study-collection.component";
@@ -166,7 +153,6 @@ import { StudySelectionRedirectionComponent } from "./components/user-study/meta
 import { UserStudyCollectionBaseComponent } from "./components/user-study/user-study-collection-base/user-study-collection-base.component";
 import { AcceptedTestPersonsComponent } from "./components/user-study/eval/accepted-test-persons/accepted-test-persons.component";
 import { InteractivePlanViewComponent } from "./components/iter-planning/plan/interactive-plan-view/interactive-plan-view.component";
-import { NgxGraphModule } from "@swimlane/ngx-graph";
 import { PlanningTaskViewComponent } from "./components/planning-task/planning-task-view/planning-task-view.component";
 import { PlanningTaskRelaxationsComponent } from "./components/planning-task/planning-task-relaxations/planning-task-relaxations.component";
 import { SettingsComponent } from "./components/project/settings/settings.component";
@@ -199,6 +185,19 @@ import { ConflictVisuContainerComponent } from './components/visualization/confl
 import { MUGSVisuMainComponent } from './components/visualization/mugs-visu-main/mugs-visu-main.component';
 import { IconSelectorComponent } from './components/utils/icon-selector/icon-selector.component';
 import { ProjectSettingsContainerComponent } from './components/project/project-settings-container/project-settings-container.component';
+import { MatMenuModule } from "@angular/material/menu";
+import { MatButtonModule } from "@angular/material/button";
+import { MatInputModule } from "@angular/material/input";
+import { MatRadioModule } from "@angular/material/radio";
+import { MatSelectModule } from "@angular/material/select";
+import { MatDialogModule } from "@angular/material/dialog";
+import { MatAutocompleteModule } from "@angular/material/autocomplete";
+import { MatCheckboxModule } from "@angular/material/checkbox";
+import { MatListModule } from "@angular/material/list";
+import { MatSlideToggleModule } from "@angular/material/slide-toggle";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { MatTableModule } from "@angular/material/table";
+import { MatTooltipModule } from "@angular/material/tooltip";
 
 @NgModule({
   declarations: [
@@ -331,7 +330,6 @@ import { ProjectSettingsContainerComponent } from './components/project/project-
     InlineSVGModule.forRoot(),
     NgxChartsModule,
     MatTooltipModule,
-    NgxGraphModule,
     ColorPickerModule,
   ],
   providers: [

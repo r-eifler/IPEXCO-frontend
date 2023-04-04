@@ -4,8 +4,7 @@
     <span
       *ngFor="let v of values$ | async; let i = index"
       class="cost"
-      [style.left]="(i / ((values$ | async).length - 1)) * 100 + '%'"
-    >
+      [style.left]="(i / ((values$ | async).length - 1)) * 100 + '%'">
       {{ v.value }}
     </span>
   </div>
@@ -17,18 +16,16 @@
     step="1"
     [min]="min"
     [max]="max$ | async"
-    [value]="value$ | async"
     class="slider"
-    (change)="valueChanged($event)"
-  >
+    (change)="valueChanged($event)">
+    <input matSliderThumb [value]="value$ | async">
   </mat-slider>
   <div><span class="axis-label">value</span></div>
   <div class="label-box">
     <span
       *ngFor="let v of values$ | async; let i = index"
       class="label"
-      [style.left]="(i / ((values$ | async).length - 1)) * 100 + '%'"
-    >
+      [style.left]="(i / ((values$ | async).length - 1)) * 100 + '%'">
       {{ v.display }}
     </span>
   </div>

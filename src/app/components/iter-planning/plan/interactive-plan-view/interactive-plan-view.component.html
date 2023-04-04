@@ -4,7 +4,7 @@
       <mat-card-title>Initial State</mat-card-title>
     </mat-card-header>
     <mat-card-content class="state-card-content">
-      <mat-chip-list>
+      <mat-chip-listbox>
         <mat-chip
           *ngFor="let item of state_trace_ex[0].facts"
           [class.precondition]="item.precon"
@@ -14,7 +14,7 @@
         >
           {{ toString(item.fact) }}
         </mat-chip>
-      </mat-chip-list>
+      </mat-chip-listbox>
     </mat-card-content>
   </mat-card>
 
@@ -39,7 +39,7 @@
         <mat-card-title>State {{i+1}}</mat-card-title>
       </mat-card-header> -->
       <mat-card-content class="state-card-content">
-        <mat-chip-list>
+        <mat-chip-listbox>
           <mat-chip
             *ngFor="let item of state_trace_ex[i + 1].facts"
             [class.precondition]="item.precon"
@@ -49,7 +49,7 @@
           >
             {{ toString(item.fact) }}
           </mat-chip>
-        </mat-chip-list>
+        </mat-chip-listbox>
       </mat-card-content>
     </mat-card>
   </ng-container>
@@ -59,7 +59,7 @@
       <mat-card-title>State {{state_trace.length}}</mat-card-title>
     </mat-card-header> -->
     <mat-card-content class="state-card-content">
-      <mat-chip-list>
+      <mat-chip-listbox>
         <mat-chip
           *ngFor="let item of state_trace_ex[state_trace_ex.length - 1].facts"
           [class.precondition]="item.precon"
@@ -69,7 +69,7 @@
         >
           {{ toString(item.fact) }}
         </mat-chip>
-      </mat-chip-list>
+      </mat-chip-listbox>
     </mat-card-content>
   </mat-card>
 </div>
