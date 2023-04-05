@@ -12,9 +12,9 @@ import {
   DomainSpecificationFilesService,
   ProblemFilesService,
 } from "../../../service/files/pddl-file-services";
-import { MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDialogRef } from "@angular/material/legacy-dialog";
 import { ProjectsService } from "src/app/service/project/project-services";
 import { AuthenticationService } from "../../../service/authentication/authentication.service";
+import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 
 @Component({
   selector: "app-project-creator",

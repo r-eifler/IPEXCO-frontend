@@ -3,9 +3,9 @@ import { SelectedIterationStepService } from "src/app/service/planner-runs/selec
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { IterationStep } from "../../../interface/run";
 import { IterationStepsService } from "../../../service/planner-runs/iteration-steps.service";
-import { MatLegacyDialog as MatDialog, MatLegacyDialogConfig as MatDialogConfig } from "@angular/material/legacy-dialog";
 import { DemoHelpDialogComponent } from "../../demo/demo-help-dialog/demo-help-dialog.component";
 import { Subject, Observable } from "rxjs";
+import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
 
 @Component({
   selector: "app-project-iterative-planning-base",

@@ -5,13 +5,13 @@ import {
   OnDestroy,
   OnInit,
 } from "@angular/core";
-import { MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDialogRef } from "@angular/material/legacy-dialog";
 import { Demo } from "../../../interface/demo";
 import { PlanPropertyMapService } from "../../../service/plan-properties/plan-property-services";
 import { RunStatus } from "../../../interface/run";
 import { PlanProperty } from "../../../interface/plan-property/plan-property";
 import { takeUntil } from "rxjs/operators";
 import { Subject } from "rxjs";
+import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 
 @Component({
   selector: "app-demo-info",

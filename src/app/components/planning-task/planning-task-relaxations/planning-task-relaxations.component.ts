@@ -3,8 +3,7 @@ import {
   PlanningTaskRelaxationSpace,
 } from "src/app/interface/planning-task-relaxation";
 import { PlanningTaskRelaxationCreatorComponent } from "./../planning-task-relaxation-creator/planning-task-relaxation-creator.component";
-import { Component, OnInit } from "@angular/core";
-import { MatLegacyDialog as MatDialog } from "@angular/material/legacy-dialog";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { PlanningTaskRelaxationService } from "src/app/service/planning-task/planning-task-relaxations-services";
 import { Subject, Observable } from "rxjs";
 import { filter, map, takeUntil } from "rxjs/operators";
@@ -12,6 +11,7 @@ import {
   FactToString,
   predicateToString,
 } from "src/app/interface/plannig-task";
+import { MatDialog } from "@angular/material/dialog";
 
 interface InitUpdates {
   name: string;
@@ -24,7 +24,7 @@ interface InitUpdates {
   templateUrl: "./planning-task-relaxations.component.html",
   styleUrls: ["./planning-task-relaxations.component.scss"],
 })
-export class PlanningTaskRelaxationsComponent implements OnInit {
+export class PlanningTaskRelaxationsComponent implements OnInit, OnDestroy {
   json = JSON;
   predicatOut = predicateToString;
   factOut = FactToString;

@@ -3,14 +3,11 @@ import { AuthenticationService } from "src/app/service/authentication/authentica
 import { LoginComponent } from "./../login/login/login.component";
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ResponsiveService } from "../../service/responsive/responsive.service";
-import {
-  MatLegacyDialog as MatDialog,
-  MatLegacyDialogConfig as MatDialogConfig,
-  MatLegacyDialogRef as MatDialogRef,
-} from "@angular/material/legacy-dialog";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Subject } from "rxjs";
-import { MatLegacySnackBar as MatSnackBar } from "@angular/material/legacy-snack-bar";
+import { MatDialog, MatDialogConfig, MatDialogRef } from "@angular/material/dialog";
+import { MatSnackBar } from "@angular/material/snack-bar";
+
 
 @Component({
   selector: "app-navigation",

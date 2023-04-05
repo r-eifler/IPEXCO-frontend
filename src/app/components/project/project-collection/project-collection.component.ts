@@ -3,13 +3,13 @@ import { Project } from "src/app/interface/project";
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Observable, Subject } from "rxjs";
 import { Router } from "@angular/router";
-import { MatLegacyDialog as MatDialog, MatLegacyDialogConfig as MatDialogConfig } from "@angular/material/legacy-dialog";
 import { ProjectCreatorComponent } from "../project-creator/project-creator.component";
 import {
   CurrentProjectService,
   ProjectsService,
 } from "src/app/service/project/project-services";
 import { ResponsiveService } from "src/app/service/responsive/responsive.service";
+import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
 
 @Component({
   selector: "app-project-selection",

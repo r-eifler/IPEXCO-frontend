@@ -10,9 +10,9 @@ import { CurrentProjectService, ProjectsService } from "src/app/service/project/
 import { Observable, Subject } from "rxjs";
 import { PlanProperty } from "src/app/interface/plan-property/plan-property";
 import { Project } from "src/app/interface/project";
-import { MatLegacyDialog as MatDialog, MatLegacyDialogConfig as MatDialogConfig } from "@angular/material/legacy-dialog";
 import { ActivatedRoute, Router } from "@angular/router";
-import { MatLegacySnackBar as MatSnackBar } from "@angular/material/legacy-snack-bar";
+import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 @Component({
   selector: "app-project-overview",

@@ -4,9 +4,9 @@ import { ResponsiveService } from "src/app/service/responsive/responsive.service
 import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
 import { AuthenticationService } from "src/app/service/authentication/authentication.service";
 import { User } from "src/app/interface/user";
-import { MatLegacyDialogRef as MatDialogRef } from "@angular/material/legacy-dialog";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Subject } from "rxjs";
+import { MatDialogRef } from "@angular/material/dialog";
 
 @Component({
   selector: "app-login",

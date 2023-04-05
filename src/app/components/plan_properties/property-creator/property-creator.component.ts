@@ -5,18 +5,18 @@ import { MatStepper } from "@angular/material/stepper";
 import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { UntypedFormArray, UntypedFormControl, UntypedFormGroup, Validators } from "@angular/forms";
 import { Action, ActionSet, PlanProperty } from "../../../interface/plan-property/plan-property";
-import { MatLegacyDialogRef as MatDialogRef } from "@angular/material/legacy-dialog";
 import { Project } from "src/app/interface/project";
 import { matchRegexValidator } from "../../../validators/match-regex-validator";
 import { MatLegacyAutocompleteSelectedEvent as MatAutocompleteSelectedEvent } from "@angular/material/legacy-autocomplete";
-import { MatLegacySlideToggleChange as MatSlideToggleChange } from "@angular/material/legacy-slide-toggle";
 import { DomainSpecification } from "src/app/interface/files/domain-specification";
 import { PlanPropertyTemplate } from "src/app/interface/plan-property/plan-property-template";
-import { MatLegacySelectionListChange as MatSelectionListChange } from "@angular/material/legacy-list";
 import { MatAccordion } from "@angular/material/expansion";
 import { PlanPropertyMapService } from "src/app/service/plan-properties/plan-property-services";
 import { CurrentProjectService } from "src/app/service/project/project-services";
 import { Subject } from "rxjs";
+import { MatDialogRef } from "@angular/material/dialog";
+import { MatSlideToggleChange } from "@angular/material/slide-toggle";
+import { MatSelectionListChange } from "@angular/material/list";
 
 @Component({
   selector: "app-property-creator",

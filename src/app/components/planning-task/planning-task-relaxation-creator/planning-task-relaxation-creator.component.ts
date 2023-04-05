@@ -23,7 +23,6 @@ import { Project } from "src/app/interface/project";
 import { Subject, BehaviorSubject } from "rxjs";
 import { CurrentProjectService } from "src/app/service/project/project-services";
 import { PropertyCreatorComponent } from "../../plan_properties/property-creator/property-creator.component";
-import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA } from "@angular/material/legacy-dialog";
 import { takeUntil, map } from "rxjs/operators";
 import {
   CdkDragDrop,
@@ -31,6 +30,7 @@ import {
   transferArrayItem,
 } from "@angular/cdk/drag-drop";
 import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
+import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 
 @Component({
   selector: "app-planning-task-relaxation-creator",

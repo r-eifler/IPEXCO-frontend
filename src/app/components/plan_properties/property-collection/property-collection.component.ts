@@ -9,14 +9,14 @@ import {
   OnInit,
   ViewChild,
 } from "@angular/core";
-import { MatLegacyDialog as MatDialog } from "@angular/material/legacy-dialog";
 import { PropertyCreatorComponent } from "../property-creator/property-creator.component";
 import { PlanPropertyMapService } from "src/app/service/plan-properties/plan-property-services";
 import { ResponsiveService } from "src/app/service/responsive/responsive.service";
-import { MatLegacyCheckboxChange as MatCheckboxChange } from "@angular/material/legacy-checkbox";
-import { MatLegacyTable as MatTable, MatLegacyTableDataSource as MatTableDataSource } from "@angular/material/legacy-table";
 import { MatBottomSheet } from "@angular/material/bottom-sheet";
 import { Subject } from "rxjs";
+import { MatTable, MatTableDataSource } from '@angular/material/table';
+import { MatDialog } from '@angular/material/dialog';
+import { MatCheckboxChange } from '@angular/material/checkbox';
 
 @Component({
   selector: "app-property-collection",
