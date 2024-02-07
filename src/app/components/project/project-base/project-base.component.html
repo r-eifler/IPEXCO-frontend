@@ -1,5 +1,5 @@
 <div class="main-grid">
-  <nav mat-tab-nav-bar>
+  <nav mat-tab-nav-bar [tabPanel]="projectBaseTabPanel">
     <a
       mat-tab-link
       *ngFor="let link of links"
@@ -9,7 +9,7 @@
       {{ link.name }}
     </a>
   </nav>
-  <div style="height: 100%; width: 100%; overflow: auto">
+  <mat-tab-nav-panel #projectBaseTabPanel style="height: 100%; width: 100%; overflow: auto">
     <router-outlet></router-outlet>
-  </div>
+  </mat-tab-nav-panel>
 </div>
