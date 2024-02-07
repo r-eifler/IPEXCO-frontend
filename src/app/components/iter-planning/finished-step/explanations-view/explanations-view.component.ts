@@ -87,8 +87,19 @@ export class ExplanationsViewComponent implements OnInit, OnDestroy {
         }
       });
 
+      this.step$.subscribe(data => {
+        const x= data;
+      });
+      this.iterfaceStati$.subscribe(data => {
+        const x= data;
+      });
+      this.planPropertiesMap$.subscribe(data => {
+        const x= data;
+      });
+
     combineLatest([this.step$, this.iterfaceStati$, this.planPropertiesMap$])
       .pipe(
+        tap(console.log),
         filter(
           ([step, stati, planProperties]) =>
             !!step && !!stati && !!planProperties
@@ -104,6 +115,7 @@ export class ExplanationsViewComponent implements OnInit, OnDestroy {
           return;
         }
         this.interfaceStatus = status;
+        console.log(status)
         if (status) {
           this.selectedPP = status.question;
           this.questions$.next(planProperties.get(this.selectedPP));

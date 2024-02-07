@@ -19,6 +19,8 @@ import { environment } from "../../../../environments/environment";
 import { DemoInfoComponent } from "../demo-info/demo-info.component";
 import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { FinishedStepInterfaceStatiStore } from "src/app/store/stores.store";
+import { FinishedStepInterfaceStatusService } from "src/app/service/user-interface/interface-status-services";
 
 @Component({
   selector: "app-demo-selection",
@@ -41,7 +43,8 @@ export class DemoCollectionComponent implements OnInit, OnDestroy {
     private bottomSheet: MatBottomSheet,
     private snackBar: MatSnackBar,
     private router: Router,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private finishedStepInterfaceStatusService: FinishedStepInterfaceStatusService,
   ) {
     this.demos$ = demosService.getList();
   }
@@ -92,6 +95,8 @@ export class DemoCollectionComponent implements OnInit, OnDestroy {
   }
 
   openDemo(demo: Demo): void {
+    this.finishedStepInterfaceStatusService.clear();
+
     this.router.navigate(["../demos/" + demo._id], {
       relativeTo: this.activatedRoute,
     });
