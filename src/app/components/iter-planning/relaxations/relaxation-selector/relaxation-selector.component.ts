@@ -10,8 +10,6 @@ import {
 import { Component, Input, OnDestroy, OnInit } from "@angular/core";
 import { BehaviorSubject, Subject, Observable, combineLatest } from "rxjs";
 import { IterationStep, ModIterationStep } from "src/app/interface/run";
-import { SelectedIterationStepService } from "src/app/service/planner-runs/selected-iteration-step.service";
-import { MatLegacySelectChange as MatSelectChange } from "@angular/material/legacy-select";
 import { Fact, factEquals } from "src/app/interface/plannig-task";
 
 interface Dimension {
