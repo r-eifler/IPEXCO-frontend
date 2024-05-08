@@ -15,6 +15,7 @@ import { MatStepper } from "@angular/material/stepper";
 import { environment } from "../../../../environments/environment";
 import {MatButton} from '@angular/material/button';
 import { TimeLoggerService } from "../../../service/logger/time-logger.service";
+import { Observable } from 'rxjs';
 
 @Component({
   selector: "app-demo-task-intro",

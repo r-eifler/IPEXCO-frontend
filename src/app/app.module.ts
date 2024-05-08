@@ -10,7 +10,7 @@ import { BrowserModule } from "@angular/platform-browser";
 import { NgModule } from "@angular/core";
 import { RouterModule } from "@angular/router";
 
-import { InlineSVGModule } from "ng-inline-svg";
+// import { InlineSVGModule } from "ng-inline-svg";
 import { ColorPickerModule } from 'ngx-color-picker';
 
 import { AppComponent } from "./app.component";
@@ -327,7 +327,7 @@ import { MatTooltipModule } from "@angular/material/tooltip";
     MatSlideToggleModule,
     MatTableModule,
     ResizableModule,
-    InlineSVGModule.forRoot(),
+    // InlineSVGModule.forRoot(),
     NgxChartsModule,
     MatTooltipModule,
     ColorPickerModule,
