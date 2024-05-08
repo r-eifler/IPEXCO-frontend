@@ -5,6 +5,7 @@ import { GeneralSettings } from "./settings/general-settings";
 
 export interface Project {
   _id: string;
+  updated: string;
   name: string;
   public: boolean;
   user?: string;

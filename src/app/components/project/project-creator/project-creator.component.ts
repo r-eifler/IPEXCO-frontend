@@ -83,6 +83,7 @@ export class ProjectCreatorComponent implements OnInit, OnDestroy {
     // console.log('Save project');
     const newProject: Project = {
       _id: this.editedProject ? this.editedProject._id : null,
+      updated: new Date().toLocaleString(),
       name: this.projectForm.controls.name.value,
       user: this.userService.getUser()._id,
       description: this.projectForm.controls.description.value,

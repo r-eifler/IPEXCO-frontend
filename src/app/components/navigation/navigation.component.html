@@ -11,7 +11,7 @@
       <mat-icon>menu</mat-icon>
     </button>
     <img style="height: 60%; margin: auto 10px" src="assets/iter_logo.svg" />
-    <h1 class="example-app-name">IPEXCO</h1>
+    <h1 style="font-weight: bold;">IPEXCO</h1>
     <span style="flex: 1 1 auto"></span>
     <button mat-icon-button *ngIf="!userStudyPath()" [matMenuTriggerFor]="userMenu">
       <mat-icon>account_circle</mat-icon>
@@ -40,78 +40,81 @@
       style="width: 200px"
     >
       <mat-nav-list>
-        <a
+        <a 
           mat-list-item
           routerLink="/overview"
           routerLinkActive="mat-list-single-selected-option"
-          (click)="sideNav.toggle()"
-        >
-          <span class="material-icons" style="margin-right: 10px">home</span
-          >Home
+          (click)="sideNav.toggle()">
+          <span class="entry">
+            <mat-icon>home</mat-icon>
+            <span>Home</span>
+          </span>
         </a>
         <a
           mat-list-item
           routerLink="/projects"
           routerLinkActive="mat-list-single-selected-option"
-          (click)="sideNav.toggle()"
-        >
-          <span class="material-icons" style="margin-right: 10px">games</span
-          >Projects
+          (click)="sideNav.toggle()">
+          <span class="entry">
+            <mat-icon>games</mat-icon>
+            <span>Projects</span>
+          </span>
         </a>
         <a
           mat-list-item
           routerLink="/demos"
           routerLinkActive="mat-list-single-selected-option"
-          (click)="sideNav.toggle()"
-        >
-          <span class="material-icons" style="margin-right: 10px">send</span
-          >Demos
+          (click)="sideNav.toggle()">
+          <span class="entry">
+            <mat-icon>send</mat-icon>
+            <span>Demos</span>
+          </span>
         </a>
         <a
           mat-list-item
           routerLink="/user-studies"
           routerLinkActive="mat-list-single-selected-option"
-          (click)="sideNav.toggle()"
-        >
-          <span class="material-icons" style="margin-right: 10px"
-            >question_answer</span
-          >User Studies
+          (click)="sideNav.toggle()">
+        <span class="entry">
+          <mat-icon>question_answer</mat-icon>
+          <span>User Studies</span>
+        </span>
         </a>
         <a
           mat-list-item
           routerLink="/pddl-database"
           routerLinkActive="mat-list-single-selected-option"
-          (click)="sideNav.toggle()"
-        >
-          <span class="material-icons" style="margin-right: 10px"
-            >text_snippet</span
-          >PDDL Database
+          (click)="sideNav.toggle()">
+          <span class="entry">
+            <mat-icon>text_snippet</mat-icon>
+            <span>PDDL Database</span>
+          </span>
         </a>
         <a
           mat-list-item
           routerLink="/info"
           routerLinkActive="mat-list-single-selected-option"
-          (click)="sideNav.toggle()"
-        >
-          <span class="material-icons" style="margin-right: 10px">info</span
-          >Info
+          (click)="sideNav.toggle()">
+          <span class="entry">
+            <mat-icon>info</mat-icon>
+            <span>Info</span>
+          </span>
         </a>
         <a
           mat-list-item
           routerLink="/help"
           routerLinkActive="mat-list-single-selected-option"
-          (click)="sideNav.toggle()"
-        >
-          <span class="material-icons" style="margin-right: 10px">help</span
-          >Help
+          (click)="sideNav.toggle()">
+          <span class="entry">
+            <mat-icon>help</mat-icon>
+            <span>Help</span>
+          </span>
         </a>
       </mat-nav-list>
     </mat-sidenav>
 
     <mat-sidenav-content>
-      <div style="height: calc(100vh - 50px); width: 100%">
         <router-outlet></router-outlet>
-      </div>
     </mat-sidenav-content>
   </mat-sidenav-container>
 </div>

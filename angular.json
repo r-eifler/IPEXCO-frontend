@@ -28,8 +28,8 @@
               }
             ],
             "styles": [
-              "src/custom-theme.scss",
-              "src/styles.css"
+              "src/variables.scss",
+              "src/styles.scss"
             ],
             "scripts": [],
             "vendorChunk": true,

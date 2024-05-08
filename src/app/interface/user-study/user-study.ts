@@ -11,6 +11,7 @@ export interface UserStudyStep {
 
 export interface UserStudy {
   _id?: string;
+  updated: string;
   name: string;
   user: string;
   available: boolean;

@@ -18,7 +18,7 @@ import { UserStudy } from "../../../interface/user-study/user-study";
 @Component({
   selector: "app-user-main-page",
   templateUrl: "./user-main-page.component.html",
-  styleUrls: ["./user-main-page.component.css"],
+  styleUrls: ["./user-main-page.component.scss"],
 })
 export class UserMainPageComponent implements OnInit, OnDestroy {
   private ngUnsubscribe: Subject<any> = new Subject();

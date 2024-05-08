@@ -1,8 +1,8 @@
 @import "../../../variables.scss";
 
 .main-container {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-rows: 50px 1fr;
   position: absolute;
   top: 0;
   bottom: 0;
@@ -42,4 +42,12 @@ h1.app-name {
   /* When the sidenav is fixed, don't constrain the height of the sidenav container. This allows the
      `<body>` to be our scrolling element for mobile layouts. */
   flex: 1 0 auto;
+}
+
+
+.entry{
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding:0.75rem;
 }

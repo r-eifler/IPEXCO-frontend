@@ -1,38 +1,30 @@
 @use "@angular/material" as mat;
 
-//$EXPLORE-CLI-primary: mat-palette($mat-green, 400);
-//$EXPLORE-CLI-accent: mat-palette($mat-orange, 400);
-//$EXPLORE-CLI-warn: mat-palette($mat-red);
-//
-//$primary: mat-color($EXPLORE-CLI-primary);
-//$accent: mat-color($EXPLORE-CLI-accent);
-//$warn: mat-color($EXPLORE-CLI-warn);
-
 $mat-primary: (
-  main: #44748c,
+  main: #836FFF,
   lighter: #73a3bc,
-  darker: #10495f,
-  200: #b0bec5,
+  darker: #211951,
+  200: #73a3bc,
   // For slide toggle,
   contrast:
     (
-      main: white,
+      main: rgb(255, 255, 255),
       lighter: rgba(black, 0.87),
       darker: white,
     ),
 );
 
 $mat-accent: (
-  main: #ff7043,
-  lighter: #ffa270,
-  darker: #c63f17,
-  200: #ffab91,
+  main: #15F5BA,
+  lighter: #96fce1,
+  darker: #004e39,
+  200: #15F5BA,
   // For slide toggle,
   contrast:
     (
       main: rgba(black, 0.87),
       lighter: rgba(black, 0.87),
-      darker: rgba(black, 0.87),
+      darker: white,
     ),
 );
 
@@ -44,3 +36,12 @@ $primary: mat.get-color-from-palette($EXPLORE-CLI-primary);
 $primary-darker: mat.get-color-from-palette($EXPLORE-CLI-primary, darker);
 $accent: mat.get-color-from-palette($EXPLORE-CLI-accent);
 $warn: mat.get-color-from-palette($EXPLORE-CLI-warn);
+
+
+$EXPLORE-CLI-theme: mat.define-light-theme(
+  $EXPLORE-CLI-primary,
+  $EXPLORE-CLI-accent,
+  $EXPLORE-CLI-warn
+);
+
+@include mat.all-component-themes($EXPLORE-CLI-theme);

@@ -30,14 +30,18 @@ mat-grid-tile {
 }
 
 .project-container-web {
+  box-sizing: border-box;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  row-gap: 10px;
+  padding: 10px;
 }
 
 .project-container-mobile {
   display: flex;
   flex-direction: column;
+  row-gap: 10px;
 }
 
 .add-button {
@@ -47,6 +51,7 @@ mat-grid-tile {
 }
 
 .header-container {
+  box-sizing: border-box;
   width: 100%;
-  margin: 25px;
+  padding: 0px 25px 0px 25px;
 }

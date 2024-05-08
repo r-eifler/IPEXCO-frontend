@@ -109,6 +109,7 @@ export class UserStudyCreatorComponent implements OnInit, OnDestroy {
           );
         } else {
           this.userStudy = {
+            updated: new Date().toLocaleString(),
             name: "",
             description: "",
             user: null,

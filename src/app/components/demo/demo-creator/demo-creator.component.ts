@@ -65,6 +65,7 @@ export class DemoCreatorComponent implements OnInit {
   createOrUpdateDemo(): void {
     const newDemo: Demo = {
       _id: this.demo ? this.demo._id : null,
+      updated: new Date().toLocaleString(),
       name: this.demoForm.controls.name.value,
       summaryImage: this.imageFile,
       description: this.demoForm.controls.description.value
