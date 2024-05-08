@@ -7,7 +7,7 @@ import { UntypedFormArray, UntypedFormControl, UntypedFormGroup, Validators } fr
 import { Action, ActionSet, PlanProperty } from "../../../interface/plan-property/plan-property";
 import { Project } from "src/app/interface/project";
 import { matchRegexValidator } from "../../../validators/match-regex-validator";
-import { MatLegacyAutocompleteSelectedEvent as MatAutocompleteSelectedEvent } from "@angular/material/legacy-autocomplete";
+import { MatAutocompleteSelectedEvent } from "@angular/material/autocomplete";
 import { DomainSpecification } from "src/app/interface/files/domain-specification";
 import { PlanPropertyTemplate } from "src/app/interface/plan-property/plan-property-template";
 import { MatAccordion } from "@angular/material/expansion";

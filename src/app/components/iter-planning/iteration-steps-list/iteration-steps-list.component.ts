@@ -1,6 +1,6 @@
 import { NewIterationStepGenerationService } from "../../../service/planner-runs/new-iteration-step-generation-service.service";
 import { RunStatus, StepStatus } from "src/app/interface/run";
-import { MatLegacySelectionListChange as MatSelectionListChange } from "@angular/material/legacy-list";
+import { MatSelectionListChange } from "@angular/material/list";
 import { IterationStep, ModIterationStep } from "./../../../interface/run";
 import {
   SelectedIterationStepService,
@@ -9,7 +9,6 @@ import {
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { IterationStepsService } from "src/app/service/planner-runs/iteration-steps.service";
 import { Observable, BehaviorSubject, Subject } from "rxjs";
-import { filter, map, take } from "rxjs/operators";
 
 @Component({
   selector: "app-iteration-steps-list",
