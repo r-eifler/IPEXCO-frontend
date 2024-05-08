@@ -78,10 +78,10 @@
           },
           "configurations": {
             "production": {
-              "browserTarget": "EXPLORE-CLI:build:production"
+              "buildTarget": "EXPLORE-CLI:build:production"
             },
             "development": {
-              "browserTarget": "EXPLORE-CLI:build:development"
+              "buildTarget": "EXPLORE-CLI:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -89,7 +89,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "EXPLORE-CLI:build"
+            "buildTarget": "EXPLORE-CLI:build"
           }
         },
         "test": {
