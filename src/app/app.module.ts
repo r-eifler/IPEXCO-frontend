@@ -1,23 +1,16 @@
-import {
-  SelectedIterationStepService,
-  NewIterationStepStoreService,
-} from "./service/planner-runs/selected-iteration-step.service";
-import { IterationStepsService } from "src/app/service/planner-runs/iteration-steps.service";
-import { PlanningTaskRelaxationService } from "./service/planning-task/planning-task-relaxations-services";
-import { AuthenticationService } from "./service/authentication/authentication.service";
-import { DemosService, RunningDemoService } from "./service/demo/demo-services";
 import { BrowserModule } from "@angular/platform-browser";
 import { NgModule } from "@angular/core";
 import { RouterModule } from "@angular/router";
 
 // import { InlineSVGModule } from "ng-inline-svg";
 import { ColorPickerModule } from 'ngx-color-picker';
-
 import { AppComponent } from "./app.component";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
 import { CdkTableModule } from "@angular/cdk/table";
 import { FooterComponent } from "./components/footer/footer.component";
+
+
 // Material
 import { MatGridListModule } from "@angular/material/grid-list";
 import { MatIconModule } from "@angular/material/icon";
@@ -37,29 +30,31 @@ import { MatTabsModule } from "@angular/material/tabs";
 import { MatChipsModule } from '@angular/material/chips';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSliderModule } from '@angular/material/slider';
+import { MatMenuModule } from "@angular/material/menu";
+import { MatButtonModule } from "@angular/material/button";
+import { MatInputModule } from "@angular/material/input";
+import { MatRadioModule } from "@angular/material/radio";
+import { MatSelectModule } from "@angular/material/select";
+import { MatDialogModule } from "@angular/material/dialog";
+import { MatAutocompleteModule } from "@angular/material/autocomplete";
+import { MatCheckboxModule } from "@angular/material/checkbox";
+import { MatListModule } from "@angular/material/list";
+import { MatSlideToggleModule } from "@angular/material/slide-toggle";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { MatTableModule } from "@angular/material/table";
+import { MatTooltipModule } from "@angular/material/tooltip";
 import {
   MAT_BOTTOM_SHEET_DEFAULT_OPTIONS,
   MatBottomSheetModule,
 } from "@angular/material/bottom-sheet";
 
 import { ResizableModule } from "angular-resizable-element";
+
+
 // forms
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-// my components
-import { TemplateFileUploadComponent } from "./components/files/file-upload/file-upload.component";
-import { DomainSelectorComponent } from "./components/files/domain-selector/domain-selector.component";
-import { ProblemSelectorComponent } from "./components/files/problem-selector/problem-selector.component";
-import { PropertyCreatorComponent } from "./components/plan_properties/property-creator/property-creator.component";
-import { NavigationComponent } from "./components/navigation/navigation.component";
-import { ProjectCollectionComponent } from "./components/project/project-collection/project-collection.component";
-import { ProjectCreatorComponent } from "./components/project/project-creator/project-creator.component";
-import { PlannerService } from "./service/planner-runs/planner.service";
-import { ProjectBaseComponent } from "./components/project/project-base/project-base.component";
-import { PropertyCollectionComponent } from "./components/plan_properties/property-collection/property-collection.component";
-import { ProjectIterativePlanningBaseComponent } from "./components/project/project-iterative-planning-base/project-iterative-planning-base.component";
-import { PlanViewComponent } from "./components/iter-planning/plan/plan-view/plan-view.component";
+
 // Store
-import { PddlFileUtilsService } from "./service/files/pddl-file-utils.service";
 import {
   SelectedIterationStepStore,
   CurrentProjectStore,
@@ -88,6 +83,8 @@ import {
   UserStudyCurrentDataStore,
   UserStudyDataStore,
 } from "./store/stores.store";
+
+// Services
 import {
   DomainFilesService,
   DomainSpecificationFilesService,
@@ -98,6 +95,33 @@ import {
   ProjectsService,
 } from "./service/project/project-services";
 import { PlanPropertyMapService } from "./service/plan-properties/plan-property-services";
+import {
+  RunningUserStudyService,
+  UserStudiesService,
+} from "./service/user-study/user-study-services";
+import { PddlFileUtilsService } from "./service/files/pddl-file-utils.service";
+import {
+  SelectedIterationStepService,
+  NewIterationStepStoreService,
+} from "./service/planner-runs/selected-iteration-step.service";
+import { IterationStepsService } from "src/app/service/planner-runs/iteration-steps.service";
+import { PlanningTaskRelaxationService } from "./service/planning-task/planning-task-relaxations-services";
+import { AuthenticationService } from "./service/authentication/authentication.service";
+import { DemosService, RunningDemoService } from "./service/demo/demo-services";
+
+// my components
+import { TemplateFileUploadComponent } from "./components/files/file-upload/file-upload.component";
+import { DomainSelectorComponent } from "./components/files/domain-selector/domain-selector.component";
+import { ProblemSelectorComponent } from "./components/files/problem-selector/problem-selector.component";
+import { PropertyCreatorComponent } from "./components/plan_properties/property-creator/property-creator.component";
+import { NavigationComponent } from "./components/navigation/navigation.component";
+import { ProjectCollectionComponent } from "./components/project/project-collection/project-collection.component";
+import { ProjectCreatorComponent } from "./components/project/project-creator/project-creator.component";
+import { PlannerService } from "./service/planner-runs/planner.service";
+import { ProjectBaseComponent } from "./components/project/project-base/project-base.component";
+import { PropertyCollectionComponent } from "./components/plan_properties/property-collection/property-collection.component";
+import { ProjectIterativePlanningBaseComponent } from "./components/project/project-iterative-planning-base/project-iterative-planning-base.component";
+import { PlanViewComponent } from "./components/iter-planning/plan/plan-view/plan-view.component";
 import { LoginComponent } from "./components/login/login/login.component";
 import { DemoCollectionComponent } from "./components/demo/demo-collection/demo-collection.component";
 import { DemoBaseComponent } from "./components/demo/demo-base/demo-base.component";
@@ -119,10 +143,6 @@ import { DemoFinishedComponent } from "./components/demo/demo-finished/demo-fini
 import { DemoTaskIntroComponent } from "./components/demo/demo-task-intro/demo-task-intro.component";
 import { UserStudyCollectionComponent } from "./components/user-study/user-study-collection/user-study-collection.component";
 import { UserStudyCreatorComponent } from "./components/user-study/user-study-creator/user-study-creator.component";
-import {
-  RunningUserStudyService,
-  UserStudiesService,
-} from "./service/user-study/user-study-services";
 import { UserStudyBaseComponent } from "./components/user-study/user-study-base/user-study-base.component";
 import { UserStudyDescriptionViewComponent } from "./components/user-study/user-study-description-view/user-study-description-view.component";
 import { UserStudyFormViewComponent } from "./components/user-study/user-study-form-view/user-study-form-view.component";
@@ -132,7 +152,6 @@ import { UserStudyExecuteComponent } from "./components/user-study/user-study-ex
 import { UserStudyEndComponent } from "./components/user-study/user-study-end/user-study-end.component";
 import { SelectedQuestionService } from "./service/planner-runs/selected-question.service";
 import { MarkedPipe } from "./pipes/marked.pipe";
-
 import { DemoHelpDialogComponent } from "./components/demo/demo-help-dialog/demo-help-dialog.component";
 import { ScalableListComponent } from "./components/utils/scalable-list/scalable-list.component";
 import { UserStudyNavigationComponent } from "./components/user-study/user-study-navigation/user-study-navigation.component";
@@ -185,19 +204,8 @@ import { ConflictVisuContainerComponent } from './components/visualization/confl
 import { MUGSVisuMainComponent } from './components/visualization/mugs-visu-main/mugs-visu-main.component';
 import { IconSelectorComponent } from './components/utils/icon-selector/icon-selector.component';
 import { ProjectSettingsContainerComponent } from './components/project/project-settings-container/project-settings-container.component';
-import { MatMenuModule } from "@angular/material/menu";
-import { MatButtonModule } from "@angular/material/button";
-import { MatInputModule } from "@angular/material/input";
-import { MatRadioModule } from "@angular/material/radio";
-import { MatSelectModule } from "@angular/material/select";
-import { MatDialogModule } from "@angular/material/dialog";
-import { MatAutocompleteModule } from "@angular/material/autocomplete";
-import { MatCheckboxModule } from "@angular/material/checkbox";
-import { MatListModule } from "@angular/material/list";
-import { MatSlideToggleModule } from "@angular/material/slide-toggle";
-import { MatSnackBar } from "@angular/material/snack-bar";
-import { MatTableModule } from "@angular/material/table";
-import { MatTooltipModule } from "@angular/material/tooltip";
+
+
 
 @NgModule({
   declarations: [

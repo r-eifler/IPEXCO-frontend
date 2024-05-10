@@ -25,44 +25,42 @@
       <mat-card
         *ngFor="let project of projects$ | async"
         [class.project-card-mobile]="isMobile"
-        [class.project-card-web]="!isMobile"
-        [routerLink]="['/projects', project._id, 'overview']"
-      >
+        [class.project-card-web]="!isMobile">
         <mat-card-header>
           <div mat-card-avatar>
             <span class="material-icons"> games </span>
           </div>
           <mat-card-title>{{ project.name }}</mat-card-title>
-          <mat-card-subtitle>Project</mat-card-subtitle>
-
-          <!-- <button mat-icon-button [matMenuTriggerFor]="menu" style="position: absolute; right: 5px">
-            <mat-icon>more_vert</mat-icon>
-          </button>
-          <mat-menu #menu="matMenu">
-            <button mat-menu-item (click)="copy_project(project)">
-              <mat-icon>file_copy</mat-icon>
-              <span>copy</span>
-            </button>
-            <button mat-menu-item (click)="modify_project(project)">
-              <mat-icon>create</mat-icon>
-              <span>modify</span>
-            </button>
-            <button mat-menu-item (click)="delete(project)">
-              <mat-icon>delete</mat-icon>
-              <span>delete</span>
-            </button>
-          </mat-menu> -->
+          <mat-card-subtitle>Project</mat-card-subtitle>         
         </mat-card-header>
         <mat-card-content>
           <p>
             {{ project.description }}
           </p>
         </mat-card-content>
-        <!-- <mat-card-actions style="display: flex; flex-direction: row">
-          <button mat-icon-button style="margin-left: auto;" [routerLink]="['/projects', project._id, 'overview']">
+        
+        <mat-card-actions style="display: flex; flex-direction: row; justify-content: flex-end;">
+          <button mat-icon-button [matMenuTriggerFor]="menu">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <button mat-icon-button [routerLink]="['/projects', project._id, 'overview']">
             <mat-icon>play_arrow</mat-icon>
           </button>
-        </mat-card-actions> -->
+        </mat-card-actions>
+        <mat-menu #menu="matMenu" yPosition="below">
+          <button mat-menu-item (click)="copy_project(project)">
+            <mat-icon>file_copy</mat-icon>
+            <span>copy</span>
+          </button>
+          <button mat-menu-item (click)="modify_project(project)">
+            <mat-icon>create</mat-icon>
+            <span>modify</span>
+          </button>
+          <button mat-menu-item (click)="delete(project)">
+            <mat-icon>delete</mat-icon>
+            <span>delete</span>
+          </button>
+        </mat-menu>
       </mat-card>
     </ng-container>
 
