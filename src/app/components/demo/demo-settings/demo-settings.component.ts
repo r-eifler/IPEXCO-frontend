@@ -1,10 +1,5 @@
 import { DemosService } from "src/app/service/demo/demo-services";
 import { Demo } from "src/app/interface/demo";
-import {
-  CurrentProjectService,
-  ProjectsService,
-} from "src/app/service/project/project-services";
-import { FormArray, FormControl, FormGroup, Validators } from "@angular/forms";
 import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
 import {
   MAT_BOTTOM_SHEET_DATA,

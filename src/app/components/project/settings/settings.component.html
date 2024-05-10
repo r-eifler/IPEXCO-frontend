@@ -1,14 +1,17 @@
 <mat-card class="settings-card">
-  <mat-card-title>
-    General Settings
-  </mat-card-title>
+  <mat-card-header>
+    <div mat-card-avatar><mat-icon>settings</mat-icon></div>
+    <mat-card-title>Settings</mat-card-title>
+    <mat-card-subtitle *ngIf="!isProject">Demo</mat-card-subtitle>
+    <mat-card-subtitle *ngIf="isProject">Project</mat-card-subtitle>
+  </mat-card-header>
   <mat-card-content *ngIf="settings">
     <form class="settings-form"
       [formGroup]="settingsForm"
       (ngSubmit)="onSave()">
 
       <div class="part">
-        <h2>Features</h2>
+        <h3>Features</h3>
 
         <mat-slide-toggle formControlName="allowQuestions"
           matTooltip="Allow the user to ask conflict explanations.">
@@ -48,7 +51,7 @@
       </div>
       <mat-divider></mat-divider>
       <div class="part">
-        <h2>Automatic Computation</h2>
+        <h3>Automatic Computation</h3>
 
         <mat-slide-toggle formControlName="computePlanAutomatically"
           matTooltip="When a new iteration step is ceated, a plan is automatically computed.">
@@ -64,7 +67,7 @@
       </div>
       <mat-divider *ngIf="!isProject"></mat-divider>
       <div class="part" *ngIf="!isProject">
-        <h2>Demo</h2>
+        <h3>Demo</h3>
 
         <mat-slide-toggle formControlName="public"
           matTooltip="Makes the demo publicly available. Neets to be set to true, when the
@@ -74,14 +77,14 @@
       </div>
       <mat-divider *ngIf="!isProject"></mat-divider>
       <div class="part" *ngIf="!isProject">
-        <h2>Features for User Study</h2>
+        <h3>Features for User Study</h3>
 
         <mat-slide-toggle formControlName="introTask"
           matTooltip="If a demo is an intro task, additionall insturtcions are displayed.">
           Intro Task
         </mat-slide-toggle>
 
-        <mat-form-field style="width: 200px">
+        <mat-form-field style="width: 250px">
           <mat-label>Maximal number of iteration steps</mat-label>
           <input matInput type="number" formControlName="maxRuns" />
         </mat-form-field>
@@ -106,7 +109,7 @@
         </mat-slide-toggle>
         <mat-divider [inset]="true"></mat-divider>
         <div class="part">
-          <h3>Payment Score</h3>
+          <h4>Payment Score</h4>
 
           <mat-slide-toggle formControlName="showPaymentScore"
             matTooltip="Display a process bar with the achived utility and The
@@ -138,10 +141,9 @@
         </div>
 
       </div>
-
-      <div class="button-box">
-        <button mat-flat-button color="accent" class="save-button">Save</button>
-      </div>
     </form>
   </mat-card-content>
+  <mat-card-actions>
+    <button mat-flat-button color="accent" class="save-button">Save</button>
+  </mat-card-actions>
 </mat-card>

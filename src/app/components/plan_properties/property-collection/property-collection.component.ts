@@ -17,6 +17,7 @@ import { Subject } from "rxjs";
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { MatCheckboxChange } from '@angular/material/checkbox';
+import { AskDeleteComponent } from '../../utils/ask-delete/ask-delete.component';
 
 @Component({
   selector: "app-property-collection",
@@ -31,7 +32,7 @@ export class PropertyCollectionComponent
   @Input() modOnlyVisualization = false;
 
   isMobile: boolean;
-  expertView = false;
+  expertView = true;
 
   planProperties: PlanProperty[] = [];
 
@@ -127,8 +128,17 @@ export class PropertyCollectionComponent
     this.ngUnsubscribe.complete();
   }
 
-  delete(property: PlanProperty): void {
-    this.propertiesService.deleteObject(property);
+  openDeleteDialog(property: PlanProperty): void {
+    const dialogRef = this.dialog.open(AskDeleteComponent, {
+      data: {name: "Delete Property", text: "Are you sure you want to delete project: " + property.naturalLanguageDescription + "?"},
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      if(result){
+        this.propertiesService.deleteObject(property);
+      }
+    });
   }
 
   usePlanProperty(event: MatCheckboxChange, property: PlanProperty): void {
@@ -215,5 +225,14 @@ export class PropertyCollectionComponent
     const a: any = document.getElementById("prop_download");
     a.href = URL.createObjectURL(file);
     a.download = "plan_properties.txt";
+  }
+
+
+  upload_properties() {
+    // const jsonProps = JSON.stringify(this.planProperties);
+    // const file = new Blob([jsonProps], { type: "plain/text" });
+    // const a: any = document.getElementById("prop_download");
+    // a.href = URL.createObjectURL(file);
+    // a.download = "plan_properties.txt";
   }
 }

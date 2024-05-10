@@ -85,8 +85,7 @@ export class ProjectCollectionComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
       if(result){
-        // this.projectService.deleteObject(project);
-        console.log("Delete")
+        this.projectService.deleteObject(project);
       }
     });
   }

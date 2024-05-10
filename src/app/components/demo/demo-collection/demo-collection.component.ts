@@ -1,9 +1,4 @@
 import { DemoSettingsComponent } from "./../demo-settings/demo-settings.component";
-import { SettingsComponent } from "../../project/settings/settings.component";
-import {
-  CurrentProjectService,
-  ProjectsService,
-} from "src/app/service/project/project-services";
 import { takeUntil } from "rxjs/operators";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Observable, Subject } from "rxjs";
@@ -19,8 +14,8 @@ import { environment } from "../../../../environments/environment";
 import { DemoInfoComponent } from "../demo-info/demo-info.component";
 import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { FinishedStepInterfaceStatiStore } from "src/app/store/stores.store";
 import { FinishedStepInterfaceStatusService } from "src/app/service/user-interface/interface-status-services";
+import { AskDeleteComponent } from "../../utils/ask-delete/ask-delete.component";
 
 @Component({
   selector: "app-demo-selection",
@@ -66,8 +61,18 @@ export class DemoCollectionComponent implements OnInit, OnDestroy {
     this.ngUnsubscribe.complete();
   }
 
-  deleteDemo(demo: Demo): void {
-    this.demosService.deleteObject(demo);
+
+  openDeleteDialog(demo: Demo): void {
+    const dialogRef = this.dialog.open(AskDeleteComponent, {
+      data: {name: "Delete Demo", text: "Are you sure you want to delete demo: " + demo.name + "?"},
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      if(result){
+        this.demosService.deleteObject(demo)
+      }
+    });
   }
 
   async cancelDemo(demo: Demo): Promise<void> {

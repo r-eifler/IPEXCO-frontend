@@ -1,5 +1,7 @@
 .main-container{
+  padding: 10px;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  z-index: 1000;
 }

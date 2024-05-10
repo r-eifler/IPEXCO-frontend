@@ -1,33 +1,34 @@
 @import "../../../../variables.scss";
 
-.main-container-mobile {
+.header-container {
+  box-sizing: border-box;
   width: 100%;
-  height: 100%;
+  padding: 0px 25px 0px 25px;
+}
+
+.main-container-mobile {
   display: flex;
   flex-direction: column;
-  overflow: scroll;
+  row-gap: 10px;
 }
 
 .demo-card-mobile {
-  box-sizing: border-box;
-  margin: 10px 10px;
-}
-
-.main-container-web {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  align-content: stretch;
-  overflow: scroll;
+  width: 95%;
+  margin: 5px auto;
 }
 
 .demo-card-web {
-  box-sizing: border-box;
-  width: 45%;
-  min-width: 350px;
-  height: auto;
-  margin: 10px;
+  width: 20%;
+  min-width: 300px;
+  margin: 1%;
 }
+
+.main-container-web {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  row-gap: 10px;
+  padding: 10px;
+}
+
