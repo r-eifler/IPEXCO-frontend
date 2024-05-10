@@ -204,6 +204,7 @@ import { ConflictVisuContainerComponent } from './components/visualization/confl
 import { MUGSVisuMainComponent } from './components/visualization/mugs-visu-main/mugs-visu-main.component';
 import { IconSelectorComponent } from './components/utils/icon-selector/icon-selector.component';
 import { ProjectSettingsContainerComponent } from './components/project/project-settings-container/project-settings-container.component';
+import { AskDeleteComponent } from "./components/utils/ask-delete/ask-delete.component";
 
 
 
@@ -291,6 +292,7 @@ import { ProjectSettingsContainerComponent } from './components/project/project-
     ConflictVisuContainerComponent,
     MUGSVisuMainComponent,
     IconSelectorComponent,
+    AskDeleteComponent,
     ProjectSettingsContainerComponent,
   ],
   imports: [

@@ -10,6 +10,7 @@ import {
 } from "src/app/service/project/project-services";
 import { ResponsiveService } from "src/app/service/responsive/responsive.service";
 import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
+import { AskDeleteComponent } from "../../utils/ask-delete/ask-delete.component";
 
 @Component({
   selector: "app-project-selection",
@@ -74,5 +75,19 @@ export class ProjectCollectionComponent implements OnInit, OnDestroy {
     };
 
     this.dialog.open(ProjectCreatorComponent, dialogConfig);
+  }
+
+  openDeleteDialog(project: Project): void {
+    const dialogRef = this.dialog.open(AskDeleteComponent, {
+      data: {name: "Delete Project", text: "Are you sure you want to delete project: " + project.name + "?"},
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      if(result){
+        // this.projectService.deleteObject(project);
+        console.log("Delete")
+      }
+    });
   }
 }
