@@ -5,11 +5,10 @@
     <mat-card-subtitle *ngIf="!isProject">Demo</mat-card-subtitle>
     <mat-card-subtitle *ngIf="isProject">Project</mat-card-subtitle>
   </mat-card-header>
+  <form class="settings-form"
+    [formGroup]="settingsForm"
+    (ngSubmit)="onSave()">
   <mat-card-content *ngIf="settings">
-    <form class="settings-form"
-      [formGroup]="settingsForm"
-      (ngSubmit)="onSave()">
-
       <div class="part">
         <h3>Features</h3>
 
@@ -141,9 +140,9 @@
         </div>
 
       </div>
-    </form>
   </mat-card-content>
   <mat-card-actions>
     <button mat-flat-button color="accent" class="save-button">Save</button>
   </mat-card-actions>
+  </form>
 </mat-card>

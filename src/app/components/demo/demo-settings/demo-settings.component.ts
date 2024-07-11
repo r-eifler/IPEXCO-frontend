@@ -39,6 +39,7 @@ export class DemoSettingsComponent implements OnInit, OnDestroy {
   }
 
   onSave(settings: GeneralSettings) {
+    console.log("Save Settings ...")
     this.demo.settings = settings;
     this.demosService.saveObject(this.demo);
     this.bottomSheetRef.dismiss();
