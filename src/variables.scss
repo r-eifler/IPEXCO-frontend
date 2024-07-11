@@ -1,13 +1,14 @@
 @use "@angular/material" as mat;
+
 @use "./ipexco-theme";
 
 @include mat.core();
 
-html {
-  @include mat.core-theme(ipexco-theme.$light-theme);
-  @include mat.all-component-bases(ipexco-theme.$light-theme);
-  @include mat.all-component-colors(ipexco-theme.$light-theme);
-  @include mat.all-component-typographies(ipexco-theme.$light-theme);
-  @include mat.all-component-densities(ipexco-theme.$light-theme);
+$primary: mat.get-theme-color(ipexco-theme.$light-theme, primary, 60);
+$primary-darker: mat.get-theme-color(ipexco-theme.$light-theme, primary, 40);
+$accent: mat.get-theme-color(ipexco-theme.$light-theme, secondary, 80);
+$warn: mat.get-theme-color(ipexco-theme.$light-theme, error, 50);
+
+:root {
   @include mat.all-component-themes(ipexco-theme.$light-theme);
 }
