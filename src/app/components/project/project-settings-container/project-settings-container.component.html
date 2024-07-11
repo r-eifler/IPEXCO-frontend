@@ -1,6 +1,8 @@
-<app-settings
-  [isProject]="true"
-  [settings]="settings$ | async"
-  (updatedSettings)="onSave($event)">
-</app-settings>
+<div class="container">
+  <app-settings
+    [isProject]="true"
+    [settings]="settings$ | async"
+    (updatedSettings)="onSave($event)">
+  </app-settings>
+</div>
 

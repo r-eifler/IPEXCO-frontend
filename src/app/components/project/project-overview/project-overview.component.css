@@ -15,16 +15,6 @@
   margin: 10px auto;
 }
 
-.action-card {
-  display: flex;
-  flex-direction: column;
-}
-
-.action-card > button {
-  margin: 5px auto;
-  width: 100%;
-}
-
 .container-web {
   box-sizing: border-box;
   padding: 10px;
@@ -35,4 +25,14 @@
   grid-template-rows: 1fr 1fr;
   column-gap: 10px;
   row-gap: 10px;
+}
+
+.action-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.action-list > button {
+  margin: 5px auto;
+  width: 100%;
 }
