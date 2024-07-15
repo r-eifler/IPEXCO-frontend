@@ -65,7 +65,8 @@ $light-theme: mat.m2-define-light-theme((
 // @include mat.all-component-themes($dark-theme);
 
 // @media (prefers-color-scheme: light) {
+html, body {
   @include mat.core-color($light-theme);
   @include mat.button-color($light-theme);
   @include mat.all-component-themes($light-theme);
-//  }
+}
