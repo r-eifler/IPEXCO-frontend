@@ -1,72 +1,14 @@
 @use "@angular/material" as mat;
-// @import '@angular/material/theming';
+
+@use "./ipexco-theme";
+
 @include mat.core();
 
-$mat-primary: (
-  main: #836FFF,
-  lighter: #73a3bc,
-  darker: #211951,
-  200: #73a3bc,
-  // For slide toggle,
-  contrast:
-    (
-      main: rgb(255, 255, 255),
-      lighter: rgba(black, 0.87),
-      darker: white,
-    ),
-);
+$primary: mat.get-theme-color(ipexco-theme.$light-theme, primary, 60);
+$primary-darker: mat.get-theme-color(ipexco-theme.$light-theme, primary, 40);
+$accent: mat.get-theme-color(ipexco-theme.$light-theme, secondary, 80);
+$warn: mat.get-theme-color(ipexco-theme.$light-theme, error, 50);
 
-$mat-accent: (
-  main: #15F5BA,
-  lighter: #96fce1,
-  darker: #004e39,
-  200: #15F5BA,
-  // For slide toggle,
-  contrast:
-    (
-      main: rgba(black, 0.87),
-      lighter: rgba(black, 0.87),
-      darker: white,
-    ),
-);
-
-$EXPLORE-CLI-primary: mat.m2-define-palette($mat-primary, main, lighter, darker);
-$EXPLORE-CLI-accent: mat.m2-define-palette($mat-accent, main, lighter, darker);
-$EXPLORE-CLI-warn: mat.m2-define-palette(mat.$m2-red-palette);
-
-$primary: mat.m2-get-color-from-palette($EXPLORE-CLI-primary);
-$primary-darker: mat.m2-get-color-from-palette($EXPLORE-CLI-primary, darker);
-$accent: mat.m2-get-color-from-palette($EXPLORE-CLI-accent);
-$warn: mat.m2-get-color-from-palette($EXPLORE-CLI-warn);
-
-
-$dark-theme: mat.m2-define-dark-theme((
- color: (
-  primary: $EXPLORE-CLI-primary,
-  accent:  $EXPLORE-CLI-accent,
-  warn: $EXPLORE-CLI-warn,
- ),
- typography: mat.m2-define-typography-config(),
- density: 0,
-));
-
-
-$light-theme: mat.m2-define-light-theme((
- color: (
-   primary: $EXPLORE-CLI-primary,
-   accent:  $EXPLORE-CLI-accent,
-   warn: $EXPLORE-CLI-warn,
- )
-));
-
-
-// @include mat.core-theme($dark-theme);
-// @include mat.button-theme($dark-theme);
-// @include mat.all-component-themes($dark-theme);
-
-// @media (prefers-color-scheme: light) {
-html, body {
-  @include mat.core-color($light-theme);
-  @include mat.button-color($light-theme);
-  @include mat.all-component-themes($light-theme);
+:root {
+  @include mat.all-component-themes(ipexco-theme.$light-theme);
 }
