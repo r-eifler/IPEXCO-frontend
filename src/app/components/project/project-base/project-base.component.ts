@@ -47,7 +47,7 @@ export class ProjectBaseComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private service: ProjectsService,
+    private projectsService: ProjectsService,
     private currentProjectService: CurrentProjectService,
     private propertiesService: PlanPropertyMapService,
     private relaxationService: PlanningTaskRelaxationService,
@@ -55,9 +55,10 @@ export class ProjectBaseComponent implements OnInit, OnDestroy {
     private demosService: DemosService,
     private bottomSheet: MatBottomSheet
   ) {
+    // this.projectsService.getList();
     this.route.paramMap
       .pipe(
-        switchMap((params: ParamMap) => this.service.getObject(params.get("projectid"))),
+        switchMap((params: ParamMap) => this.projectsService.getObject(params.get("projectid"))),
         takeUntil(this.ngUnsubscribe))
       .subscribe(async (value) => {
         if (value != null) {

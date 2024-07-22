@@ -56,8 +56,8 @@ export class ObjectCollectionService<T extends Identifiable> {
       .get<IHTTPData<T[]>>(this.BASE_URL, { params: httpParams })
       .pipe(this.pipeFindData, this.pipeFind)
       .subscribe((res) => {
-        // console.log('find: ' + this.BASE_URL);
-        // console.log(res);
+        console.log('find: ' + this.BASE_URL);
+        console.log(res);
         this.listStore.dispatch({ type: LOAD, data: res });
       });
 
@@ -75,9 +75,9 @@ export class ObjectCollectionService<T extends Identifiable> {
     }
     const o = this.existsObjectInStore(id);
     if (o) {
-      const obs$ = new Observable();
       return of(o);
     }
+    console.log("request from server: " + this.BASE_URL + id)
     return this.http
       .get<IHTTPData<T>>(this.BASE_URL + id)
       .pipe(this.pipeGetData, this.pipeGet);

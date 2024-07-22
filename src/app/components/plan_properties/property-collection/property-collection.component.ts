@@ -32,7 +32,7 @@ export class PropertyCollectionComponent
   @Input() modOnlyVisualization = false;
 
   isMobile: boolean;
-  expertView = true;
+  expertView = false;
 
   planProperties: PlanProperty[] = [];
 
@@ -77,6 +77,7 @@ export class PropertyCollectionComponent
   }
 
   colorChanged(event, prop: PlanProperty): void {
+    console.log('Color changed: ' + event)
     console.group(event);
     prop.color = event;
     this.propertiesService.saveObject(prop);
@@ -213,6 +214,7 @@ export class PropertyCollectionComponent
     dialogRef.afterClosed().subscribe(result => {
       if(result){
         prop.icon = result;
+        console.log(prop.icon)
         this.propertiesService.saveObject(prop);
       }
     });
