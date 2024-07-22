@@ -1,6 +1,6 @@
 <ng-container *ngIf="currentProject">
   <div [class.container-web]="!isMobile" [class.container-mobile]="isMobile">
-    <mat-card>
+    <mat-card appearance="outlined">
       <mat-card-header>
         <div mat-card-avatar>
           <mat-icon>info</mat-icon>
@@ -13,7 +13,7 @@
       </mat-card-content>
     </mat-card>
 
-    <mat-card>
+    <mat-card appearance="outlined">
       <mat-card-header>
         <div mat-card-avatar>
           <mat-icon>insert_drive_file</mat-icon>
@@ -47,7 +47,7 @@
       </mat-card-content>
     </mat-card>
 
-    <mat-card>
+    <mat-card appearance="outlined">
       <mat-card-header>
         <div mat-card-avatar>
           <mat-icon>show_chart</mat-icon>
@@ -58,15 +58,14 @@
         <mat-list>
           <mat-list-item>
             #properties: {{ (properties$ | async).size }}
-            <mat-divider [inset]="true"></mat-divider>
           </mat-list-item>
+          <mat-divider></mat-divider>
           <mat-list-item>
             #planning runs: {{ runsService.getNumRuns() }}
-            <mat-divider [inset]="true"></mat-divider>
           </mat-list-item>
+          <mat-divider></mat-divider>
           <mat-list-item>
             #questions: {{ runsService.getNumQuestions() }}
-            <mat-divider [inset]="true"></mat-divider>
           </mat-list-item>
           <!--        <mat-list-item>-->
           <!--          #demos: {{demosService.getNumOfProject(currentProject)}}-->
@@ -75,7 +74,7 @@
       </mat-card-content>
     </mat-card>
 
-    <mat-card>
+    <mat-card appearance="outlined">
       <mat-card-header>
         <div mat-card-avatar>
           <mat-icon>create</mat-icon>
@@ -83,10 +82,10 @@
         <mat-card-title>Actions</mat-card-title>
       </mat-card-header>
       <mat-card-content class="action-list">
-        <button mat-flat-button color="primary" (click)="createDemo()">
+        <button mat-flat-button (click)="createDemo()">
           Create Demo
         </button>
-        <button mat-flat-button color="primary" (click)="deleteProject()">
+        <button mat-stroked-button (click)="deleteProject()">
           Delete Project
         </button>
     </mat-card-content>

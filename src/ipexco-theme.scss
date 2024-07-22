@@ -140,7 +140,7 @@ $light-theme: mat.define-theme((
     theme-type: light,
     primary: $_primary,
     tertiary: $_tertiary,
-  ),
+  )
 ));
 $dark-theme: mat.define-theme((
   color: (

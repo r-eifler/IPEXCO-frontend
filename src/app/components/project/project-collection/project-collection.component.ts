@@ -56,6 +56,7 @@ export class ProjectCollectionComponent implements OnInit, OnDestroy {
   new_project_form(): void {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.width = "500px";
+    // dialogConfig.height = "600px";
     dialogConfig.data = {
       project: null,
     };

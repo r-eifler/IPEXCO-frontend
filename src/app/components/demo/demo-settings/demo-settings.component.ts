@@ -1,10 +1,7 @@
 import { DemosService } from "src/app/service/demo/demo-services";
 import { Demo } from "src/app/interface/demo";
 import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
-import {
-  MAT_BOTTOM_SHEET_DATA,
-  MatBottomSheetRef,
-} from "@angular/material/bottom-sheet";
+import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { GeneralSettings } from "src/app/interface/settings/general-settings";
 import { Subject } from "rxjs";
 
@@ -21,8 +18,7 @@ export class DemoSettingsComponent implements OnInit, OnDestroy {
   demo: Demo;
 
   constructor(
-    @Inject(MAT_BOTTOM_SHEET_DATA) public data: any,
-    private bottomSheetRef: MatBottomSheetRef<DemoSettingsComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any,
     private demosService: DemosService
   ) {
     this.name = data.name;
@@ -42,6 +38,5 @@ export class DemoSettingsComponent implements OnInit, OnDestroy {
     console.log("Save Settings ...")
     this.demo.settings = settings;
     this.demosService.saveObject(this.demo);
-    this.bottomSheetRef.dismiss();
   }
 }

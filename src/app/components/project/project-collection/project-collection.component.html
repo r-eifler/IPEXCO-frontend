@@ -23,6 +23,7 @@
 
     <ng-container *ngIf="(projects$ | async).length > 0">
       <mat-card
+        appearance="outlined"
         *ngFor="let project of projects$ | async"
         [class.project-card-mobile]="isMobile"
         [class.project-card-web]="!isMobile">

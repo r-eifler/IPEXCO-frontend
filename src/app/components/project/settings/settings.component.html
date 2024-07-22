@@ -31,7 +31,6 @@
           <mat-button-toggle [value]="ExplanationTypes.MUGSVISU">MUGS Visualization</mat-button-toggle>
         </mat-button-toggle-group>
 
-        <mat-divider [inset]="true"></mat-divider>
 
         <mat-slide-toggle formControlName="useConstraints"
           matTooltip="Allow to define relaxations and enable the option of
@@ -49,7 +48,7 @@
           Use utility for soft-goals
         </mat-slide-toggle>
       </div>
-      <mat-divider></mat-divider>
+
       <div class="part">
         <h3>Automatic Computation</h3>
 
@@ -65,7 +64,7 @@
           Explanations
         </mat-slide-toggle>
       </div>
-      <mat-divider *ngIf="!isProject"></mat-divider>
+
       <div class="part" *ngIf="!isProject">
         <h3>Demo</h3>
 
@@ -75,7 +74,7 @@
           public
         </mat-slide-toggle>
       </div>
-      <mat-divider *ngIf="!isProject"></mat-divider>
+
       <div class="part" *ngIf="!isProject">
         <h3>Features for User Study</h3>
 
@@ -107,7 +106,7 @@
           matTooltip="The user is notified, when they reached the maximal possible utility.">
           Stop demo if max utility achieved
         </mat-slide-toggle>
-        <mat-divider [inset]="true"></mat-divider>
+
         <div class="part">
           <h4>Payment Score</h4>
 
@@ -143,7 +142,7 @@
       </div>
   </mat-card-content>
   <mat-card-actions>
-    <button mat-flat-button color="accent" class="save-button">Save</button>
+    <button mat-flat-button color="accent" class="save-button" [mat-dialog-close]="true">Save</button>
   </mat-card-actions>
   </form>
 </mat-card>

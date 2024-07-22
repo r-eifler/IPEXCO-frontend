@@ -7,6 +7,7 @@
     [class.main-container-mobile]="isMobile"
     *ngIf="(demos$ | async).length > 0">
     <mat-card
+      appearance="outlined"
       [class.demo-card-web]="!isMobile"
       [class.demo-card-mobile]="isMobile"
       *ngFor="let demo of demos$ | async">

@@ -35,7 +35,6 @@ export class DemoCollectionComponent implements OnInit, OnDestroy {
     private demosService: DemosService,
     public userService: AuthenticationService,
     public dialog: MatDialog,
-    private bottomSheet: MatBottomSheet,
     private snackBar: MatSnackBar,
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -107,12 +106,16 @@ export class DemoCollectionComponent implements OnInit, OnDestroy {
     });
   }
 
-  async openSettings(demo: Demo) {
-    console.log("OPen Settings:");
-    console.log(demo);
-    this.bottomSheet.open(DemoSettingsComponent, {
-      data: { demo: demo, name: demo.name },
-    });
+  openSettings(demo: Demo): void {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = "1000px";
+    dialogConfig.height = "750px";
+    dialogConfig.data = {
+      demo: demo, 
+      name: demo.name 
+    };
+
+    const dialogRef = this.dialog.open(DemoSettingsComponent, dialogConfig);
   }
 
   openDemoInfo(demo: Demo) {

@@ -29,7 +29,7 @@ export class PropertyCollectionComponent
 {
   private ngUnsubscribe: Subject<any> = new Subject();
 
-  @Input() modOnlyVisualization = false;
+  @Input() modOnlyVisualization: boolean = false;
 
   isMobile: boolean;
   expertView = false;
@@ -85,6 +85,7 @@ export class PropertyCollectionComponent
 
 
   ngOnInit(): void {
+    console.log(this.modOnlyVisualization);
     this.responsiveService
       .getMobileStatus()
       .pipe(takeUntil(this.ngUnsubscribe))
