@@ -1,20 +1,20 @@
 {
-  "/api/*": {
+  "/api": {
     "target": "http://localhost:3000",
     "secure": false,
     "logLevel": "debug"
   },
-  "/uploads/*": {
+  "/uploads": {
     "target": "http://localhost:3000",
     "secure": false,
     "logLevel": "debug"
   },
-  "/results/*": {
+  "/results": {
     "target": "http://localhost:3000",
     "secure": false,
     "logLevel": "debug"
   },
-  "/images/*": {
+  "/images": {
     "target": "http://localhost:3000",
     "secure": false,
     "logLevel": "debug"
