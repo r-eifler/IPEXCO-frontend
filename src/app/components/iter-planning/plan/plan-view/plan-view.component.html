@@ -1,4 +1,4 @@
-<mat-card class="card">
+<mat-card appearance="outlined" class="card">
   <ng-container *ngIf="notSolvable$ | async">
     <mat-card-header>
       <mat-card-title>Plan</mat-card-title>
@@ -17,10 +17,13 @@
     <mat-card-content>
       <div
         style="width: 100%; height: calc(100% - 50px); overflow-y: auto"
-        *ngIf="solved$ | async"
-      >
+        *ngIf="solved$ | async">
         <p *ngFor="let action of actions$ | async" class="actions">
-          {{ action }}
+          <span style="font-weight: 500;">{{ action.name }}</span>(
+          @for (p of action.parameters; track p) {
+          {{ p.name }}
+          @if (!$last) {, }
+          })
         </p>
       </div>
       <div

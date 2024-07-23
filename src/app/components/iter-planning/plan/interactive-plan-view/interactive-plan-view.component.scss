@@ -8,6 +8,7 @@
   margin: 10px;
   display: flex;
   flex-direction: column;
+  padding: 10px;
 }
 
 .action-name {
@@ -25,6 +26,27 @@
 }
 .state-card-content {
   overflow: visible;
+}
+
+.state-list {
+  padding: 10px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.fact {
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 5pc;
+  height: 50px;
+  box-sizing: border-box;
+  padding: 10px;
+  width: fit-content;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
 .precondition {

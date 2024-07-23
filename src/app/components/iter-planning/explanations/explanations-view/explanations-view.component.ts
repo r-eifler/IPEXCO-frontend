@@ -1,19 +1,21 @@
 import { GeneralSettings } from 'src/app/interface/settings/general-settings';
 import { LogEvent, TimeLoggerService } from 'src/app/service/logger/time-logger.service';
-import { PlanningTaskRelaxationSpace } from "./../../../../interface/planning-task-relaxation";
-import { PlanningTaskRelaxationService } from "./../../../../service/planning-task/planning-task-relaxations-services";
+import { PlanningTaskRelaxationSpace } from "../../../../interface/planning-task-relaxation";
+import { PlanningTaskRelaxationService } from "../../../../service/planning-task/planning-task-relaxations-services";
 import { filter, map, take, takeUntil, tap } from "rxjs/operators";
 import { BehaviorSubject, combineLatest, Observable, Subject } from "rxjs";
 import { SelectedIterationStepService } from "src/app/service/planner-runs/selected-iteration-step.service";
 import { getDependencies, getDependenciesForUnsolvability, IterationStep, StepStatus } from "src/app/interface/run";
-import { PPConflict, PPDependencies } from "./../../../../interface/explanations";
-import { PlanProperty } from "./../../../../interface/plan-property/plan-property";
+import { PPConflict, PPDependencies } from "../../../../interface/explanations";
+import { PlanProperty } from "../../../../interface/plan-property/plan-property";
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { PlanPropertyMapService } from "src/app/service/plan-properties/plan-property-services";
 import { PlannerService } from "src/app/service/planner-runs/planner.service";
 import { FinishedStepInterfaceStatusService } from "src/app/service/user-interface/interface-status-services";
 import { FinishedStepInterfaceStatus } from "src/app/interface/interface-status";
 import { CurrentProjectService } from "src/app/service/project/project-services";
+
+import { MatStepper } from '@angular/material/stepper';
 
 @Component({
   selector: "app-explanations-view",
@@ -39,7 +41,7 @@ export class ExplanationsViewComponent implements OnInit, OnDestroy {
   provideRelaxationExplanations$: Observable<boolean>;
   settings$: Observable<GeneralSettings>;
 
-  viewpos = 1;
+  view_pos = 0;
 
   constructor(
     private timeLogger: TimeLoggerService,
@@ -66,7 +68,8 @@ export class ExplanationsViewComponent implements OnInit, OnDestroy {
       .getSelectedObject()
       .pipe(
         filter((p) => !!p),
-        map((project) => project.settings.provideRelaxationExplanations)
+        map((project) => project.settings.provideRelaxationExplanations),
+        tap((p) => console.log(p))
       );
 
     combineLatest([this.step$, this.settings$])
@@ -121,12 +124,12 @@ export class ExplanationsViewComponent implements OnInit, OnDestroy {
           this.questions$.next(planProperties.get(this.selectedPP));
           this.computedDependencies$.next(status.dependencies);
           this.selectedConflict$.next(status.conflict);
-          this.viewpos = status.viewPos;
+          this.view_pos = status.viewPos;
         } else {
           this.questions$.next(null);
           this.computedDependencies$.next(null);
           this.selectedConflict$.next(null);
-          this.viewpos = 1;
+          this.view_pos = 0;
         }
       });
 
@@ -154,7 +157,7 @@ export class ExplanationsViewComponent implements OnInit, OnDestroy {
     let dependencies = getDependenciesForUnsolvability(step);
     this.computedDependencies$.next(dependencies);
     this.questions$.next(null);
-    this.viewpos = 2;
+    // this.viewpos = 2;
 
     if (this.interfaceStatus) {
       this.interfaceStatus = {
@@ -216,9 +219,10 @@ export class ExplanationsViewComponent implements OnInit, OnDestroy {
       });
   }
 
-  selectConflict(conflict: PPConflict): void {
+  selectConflict(conflict: PPConflict, stepper: MatStepper): void {
     this.timeLogger.log(LogEvent.ASK_RELAXATION_QUESTION, {conflict: conflict})
-    this.viewpos = 2;
+    this.view_pos = 1;
+    stepper.next()
     this.selectedConflict$.next(conflict);
     this.interfaceStatus = { ...this.interfaceStatus, conflict, viewPos: 2 };
     this.finishedStepInterfaceStatusService.saveObject(this.interfaceStatus);

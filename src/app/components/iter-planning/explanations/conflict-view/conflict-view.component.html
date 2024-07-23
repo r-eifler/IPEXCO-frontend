@@ -1,12 +1,13 @@
-<mat-card class="outer-container">
-  <ng-container *ngIf="!(solvable$ | async)">
+<mat-card appearance="outlined" class="outer-container">
+  @if (!(solvable$ | async)) {
     <div
       class="card-container"
       *ngIf="(dependencies$ | async).length > 0 && (solvableAtAll$ | async)">
       <mat-card-header>
-        <mat-card-title
-          >The selected soft goals are not solvable. There are the following
-          conflicts ...</mat-card-title>
+        <mat-card-title>
+          The selected soft goals are not solvable. There are the following
+          conflicts ...
+        </mat-card-title>
       </mat-card-header>
       <mat-accordion multi>
         <mat-expansion-panel
@@ -36,22 +37,25 @@
         </mat-expansion-panel>
       </mat-accordion>
     </div>
-  </ng-container>
+  }
 
-  <ng-container *ngIf="solvable$ | async">
+  @if (solvable$ | async){
     <mat-card-header *ngIf="(question$ | async)">
+
       <mat-card-title *ngIf="(dependencies$ | async).length > 0 && (solvableAtAll$ | async)">
-        ... because soft goal 
+        ... because to satisfy soft goal 
       </mat-card-title>
       <mat-card-title *ngIf="(dependencies$ | async).length == 0 && (solvableAtAll$ | async)">
         The selected soft goal has no conflicts.
       </mat-card-title>
+
     </mat-card-header>
     <div *ngIf="!(question$ | async)">
       <p style="font-size: large;">No soft goal selected.</p>
     </div>
-    <ng-container *ngIf="(question$ | async) && (explanation$ | async)">
-      <mat-card>
+
+    @if ((question$ | async) && (explanation$ | async)) {
+      <mat-card appearance="outlined">
         <div class="list-item-container" >
           <mat-icon matListIcon>{{(question$ | async).icon}}</mat-icon>
           <div class="list-item-text">
@@ -62,11 +66,11 @@
           </div>
         </div>
       </mat-card>
-      <div class="card-container" *ngIf="(dependencies$ | async).length > 0 && (solvableAtAll$ | async)">
+      <mat-card appearance="outlined" class="card-container" *ngIf="(dependencies$ | async).length > 0 && (solvableAtAll$ | async)">
         <mat-card-header>
-          <mat-card-title>has the following conflicts ...</mat-card-title>
+          <mat-card-title>you have to forgo at least one goal in each of the following conflicts ...</mat-card-title>
         </mat-card-header>
-        <mat-accordion multi>
+        <mat-accordion multi style="margin: 20px;">
           <mat-expansion-panel
             hideToggle
             *ngFor="let conflict of dependencies$ | async; let i = index"
@@ -76,10 +80,20 @@
               <mat-panel-title> Conflict {{ i + 1 }} </mat-panel-title>
             </mat-expansion-panel-header>
             <mat-list>
-              <mat-list-item *ngFor="let pp of conflict">
-                <span matLine>{{ pp.naturalLanguageDescription }}</span>
-                <span matLine *ngIf="( settings$ | async).usePlanPropertyValues"> Utility: {{ pp.value }} </span>
-              </mat-list-item>
+              @for (pp of conflict; track pp) {
+                <mat-list-item>
+                    <mat-icon matListItemIcon>{{ pp.icon }}</mat-icon>
+                    <h3 matListItemTitle>{{ pp.naturalLanguageDescription }}</h3>
+                    @if (( settings$ | async).usePlanPropertyValues) {
+                    <p matListItemLine>
+                      <span>Utility: {{ pp.value }}</span>
+                    </p>
+                    }
+                    @if (!$last) {
+                      <mat-divider inset="true"></mat-divider>
+                    }
+                </mat-list-item>
+              }
             </mat-list>
             <div
               class="button-container"
@@ -93,8 +107,8 @@
             </div>
           </mat-expansion-panel>
         </mat-accordion>
-      </div>
-      <div class="card-container" *ngIf="!(solvableAtAll$ | async)">
+      </mat-card>
+      <mat-card class="card-container" *ngIf="!(solvableAtAll$ | async)">
         <mat-card-header>
           <mat-card-title>can with the current constraints not be achieved.</mat-card-title>
         </mat-card-header>
@@ -108,7 +122,7 @@
             Possible Relaxations
           </button>
         </div>
-      </div>
-    </ng-container>
-  </ng-container>
+      </mat-card>
+    }
+  }
 </mat-card>

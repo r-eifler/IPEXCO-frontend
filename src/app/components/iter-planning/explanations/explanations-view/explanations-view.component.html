@@ -1,0 +1,56 @@
+<div class="main-container">
+  @if (displayExplanations$ | async) {
+  <mat-stepper  #stepper linear [selectedIndex]="view_pos">
+    <mat-step [completed]="view_pos == 1">
+      <ng-template matStepLabel>Conflict</ng-template>
+
+      <div class="step-container">
+        <app-explanations-select-preference-view
+          [step]="step$ | async"
+          (selectedPP)="selectQuestion($event)"
+        ></app-explanations-select-preference-view>
+
+        <app-conflict-view
+          [solvable]="(notSolvable$ | async) === false"
+          [explanation]="computedDependencies$ | async"
+          [question]="questions$ | async"
+          (selectedConflict)="selectConflict($event, stepper)"
+        ></app-conflict-view>
+        </div>
+    </mat-step>
+
+    @if ((provideRelaxationExplanations$ | async) == true) {
+    <mat-step>
+      <ng-template matStepLabel>Relaxation</ng-template>
+
+      <div class="step-container">
+        <app-conflict-view
+        [solvable]="(notSolvable$ | async) === false"
+        [explanation]="computedDependencies$ | async"
+        [question]="questions$ | async"
+        (selectedConflict)="selectConflict($event, null)"
+        ></app-conflict-view>
+
+        <app-explanations-relaxations-view
+          [step]="step$ | async"
+          [conflict]="selectedConflict$ | async"
+        ></app-explanations-relaxations-view>
+      </div>
+    </mat-step>
+    }
+
+  </mat-stepper>
+  }
+
+  @if ((plannerBusy$ | async) === false  && (displayExplanations$ | async) === false) {
+    <div class="compute-container">
+      <button mat-flat-button (click)="computeExplanations()" color="primary">Compute Explanations</button>
+    </div>
+  }
+
+  @if ((plannerBusy$ | async) && (displayExplanations$ | async) === false) {
+  <div class="compute-container">
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  </div>
+  }
+</div>

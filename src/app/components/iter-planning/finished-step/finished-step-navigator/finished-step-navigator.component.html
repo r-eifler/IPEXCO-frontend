@@ -1,52 +1,46 @@
 <div class="tab-container">
-  <nav mat-tab-nav-bar  [tabPanel]="finishedStepTabPanel" style="width: 100%; height: 100%" color="acccent">
-    <a mat-tab-link (click)="setTab(1)" [active]="(showTab$ | async) === 1">
-      <!-- <mat-icon style="margin-right: 10px;">star_border</mat-icon> -->
-      Overview
-    </a>
-    <a mat-tab-link (click)="setTab(2)" [active]="(showTab$ | async) === 2">
-      <mat-icon style="margin-right: 10px">map</mat-icon>
-      Plan
-    </a>
-    <a mat-tab-link *ngIf="(step$ | async)?.plan"
-      (click)="setTab(3)"
-      [active]="(showTab$ | async) === 3">
-      <mat-icon style="margin-right: 10px">map</mat-icon>
-      Advanced Plan
-    </a>
-    <a mat-tab-link *ngIf="(settings$ | async).allowQuestions && ((settings$ | async).explanationInterface) === ExplanationType.QUETSIONANSWER.toString()"
-      (click)="setTab(4)"
-      [active]="(showTab$ | async) === 4" >
-      <mat-icon style="margin-right: 10px">error</mat-icon>
-      Conflicts
-    </a>
-    <a mat-tab-link *ngIf="(settings$ | async).allowQuestions && (settings$ | async).explanationInterface === ExplanationType.MUGSVISU.toString()"
-      (click)="setTab(5)"
-      [active]="(showTab$ | async) === 5" >
-      <mat-icon style="margin-right: 10px">error</mat-icon>
-      Conflicts
-    </a>
-  </nav>
-  <div #finishedStepTabPanel>
-    <div class="content-container" *ngIf="(showTab$ | async) === 1">
-      <app-iteration-step-overview
-        style="height: 100%; overflow: auto"
-      ></app-iteration-step-overview>
-    </div>
-    <div class="content-container" *ngIf="(showTab$ | async) === 2">
-      <app-plan-view style="height: 100%; overflow: auto"></app-plan-view>
-    </div>
+  <mat-tab-group style="height: 100%;" 
+    (selectedTabChange)="setTab($event.index)"
+    [selectedIndex]="showTab$ | async">
+    <mat-tab> 
+      <ng-template mat-tab-label>
+        <mat-icon class="tab-icon">home</mat-icon>
+        Overview
+      </ng-template>
+      <app-iteration-step-overview class="content-container"></app-iteration-step-overview>
+    </mat-tab>
 
-    <div class="content-container" *ngIf="(showTab$ | async) === 3">
-      <app-interactive-plan-view style="height: 100%; overflow: auto"></app-interactive-plan-view>
-    </div>
+    <mat-tab *ngIf="(step$ | async)?.plan"> 
+      <ng-template mat-tab-label>
+        <mat-icon class="tab-icon">sort</mat-icon>
+        Plan
+      </ng-template>
+      <app-plan-view  class="content-container"></app-plan-view>
+    </mat-tab>
 
-    <div class="content-container" *ngIf="(showTab$ | async) === 4">
-      <app-explanations-view style="height: 100%; overflow: auto" ></app-explanations-view>
-    </div>
+    <mat-tab *ngIf="(step$ | async)?.plan"> 
+      <ng-template mat-tab-label>
+        <mat-icon class="tab-icon">sort</mat-icon>
+        Advanced Plan
+      </ng-template>
+      <app-interactive-plan-view  class="content-container"></app-interactive-plan-view>
+    </mat-tab>
 
-    <div class="content-container" *ngIf="(showTab$ | async) === 5">
-      <app-conflict-visu-container style="height: 100%; overflow: auto"></app-conflict-visu-container>
-    </div>
-  </div>
+    <mat-tab *ngIf="(settings$ | async).allowQuestions && ((settings$ | async).explanationInterface) === ExplanationType.QUETSIONANSWER.toString()"> 
+      <ng-template mat-tab-label>
+        <mat-icon class="tab-icon">error</mat-icon>
+        Explanations
+      </ng-template>
+      <app-explanations-view  class="content-container" ></app-explanations-view>
+    </mat-tab>
+
+    <mat-tab *ngIf="(settings$ | async).allowQuestions && (settings$ | async).explanationInterface === ExplanationType.MUGSVISU.toString()"> 
+      <ng-template mat-tab-label>
+        <mat-icon class="tab-icon">error</mat-icon>
+        Explanations
+      </ng-template>
+      <app-conflict-visu-container  class="content-container"></app-conflict-visu-container>
+    </mat-tab>
+
+  </mat-tab-group>
 </div>

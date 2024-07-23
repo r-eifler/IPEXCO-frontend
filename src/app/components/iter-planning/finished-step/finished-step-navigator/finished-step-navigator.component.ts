@@ -33,6 +33,7 @@ export class FinishedStepNavigatorComponent implements OnInit, OnDestroy {
     private finishedStepInterfaceStatusService: FinishedStepInterfaceStatusService,
     private currentProjectService: CurrentProjectService
   ) {
+
     this.step$ = this.selectedIterationStepService.getSelectedObject();
     this.iterfaceStatus$ = this.finishedStepInterfaceStatusService.getList();
 
@@ -53,7 +54,7 @@ export class FinishedStepNavigatorComponent implements OnInit, OnDestroy {
         }
         status = {
           _id: step._id,
-          tab: 1,
+          tab: 0,
           question: null,
           conflict: null,
           dependencies: null,

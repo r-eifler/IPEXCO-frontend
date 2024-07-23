@@ -1,29 +1,28 @@
-<mat-card class="main-card">
-  <h2>Why not ... ?</h2>
-  <ng-container *ngIf="(possiblePP$ | async)?.length > 0">
-    <div class="list">
-      <div
-        *ngFor="let pp of possiblePP$ | async"
-        class="list-main-container"
-        [class.selected]="selectedPPId === pp._id"
-      >
-        <div class="list-item-container" (click)="selectPP(pp)">
-          <mat-icon matListIcon>{{pp.icon}}</mat-icon>
-          <div class="list-item-text">
-            <span style="font-size: larger">
-              {{ pp.naturalLanguageDescription }}
-            </span>
-            <span *ngIf="( settings$ | async).usePlanPropertyValues"> Utility: {{ pp.value }} </span>
-          </div>
-          <!-- <div class="list-item-buttons">
-            <button mat-icon-button (click)="selectPP(pp)">
-              <mat-icon>help_center</mat-icon>
-            </button>
-          </div> -->
-        </div>
-        <mat-divider inset="true"></mat-divider>
-      </div>
-    </div>
-  </ng-container>
-  <p *ngIf="(possiblePP$ | async)?.length === 0">No other goals available.</p>
+<mat-card appearance="outlined" class="main-card">
+  <mat-card-header>
+    <mat-card-title>Why not ... ?</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+  @if ((possiblePP$ | async)?.length > 0) {
+    <mat-action-list>
+      @for (pp of (possiblePP$ | async); track pp) {
+        <mat-list-item (click)="selectPP(pp)" [class.selected]="selectedPPId === pp._id">
+          <mat-icon matListItemIcon>{{ pp.icon }}</mat-icon>
+          <h3 matListItemTitle>{{ pp.naturalLanguageDescription }}</h3>
+          @if (( settings$ | async).usePlanPropertyValues) {
+          <p matListItemLine>
+            <span>Utility: {{ pp.value }}</span>
+          </p>
+          }
+          @if (!$last) {
+            <mat-divider inset="true"></mat-divider>
+          }
+        </mat-list-item>
+      }
+    </mat-action-list>
+  }
+  @if ((possiblePP$ | async)?.length === 0) {
+    <p>No other goals available.</p>
+  }
+  </mat-card-content>
 </mat-card>

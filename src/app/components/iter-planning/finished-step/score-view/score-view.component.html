@@ -1,7 +1,8 @@
-<mat-card class="main-card">
+<mat-card appearance="outlined">
   <mat-card-header>
     <mat-card-title>Score</mat-card-title>
   </mat-card-header>
+  <mat-card-content class="main-card">
   <ng-container *ngIf="(isUnSolvable$ | async)  === false">
     <div class="bar-container" *ngIf="isSolvable$ | async">
       <mat-icon>grade</mat-icon>
@@ -66,4 +67,5 @@
       The selection of preferences is not solvable under the given constraints.
     </p>
   </div>
+  </mat-card-content>
 </mat-card>

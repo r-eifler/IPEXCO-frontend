@@ -1,23 +1,24 @@
-<mat-card class="main-card">
+<mat-card appearance="outlined" class="main-card">
   <mat-card-header>
     <mat-card-title>Enforced Goals</mat-card-title>
   </mat-card-header>
   <mat-card-content>
-    <ng-container *ngIf="(hardGoals$ | async)?.length > 0">
-      <div>
-        <div *ngFor="let pp of (hardGoals$ | async)">
-          <div class="list-item-container">
-            <mat-icon>{{pp.icon}}</mat-icon>
-            <div class="list-item-text">
-              <span> {{ pp.naturalLanguageDescription }} </span>
-              <span *ngIf="( settings$ | async).usePlanPropertyValues"> Utility: {{ pp.value }} </span>
-            </div>
-            <div class="list-item-buttons"></div>
-          </div>
-          <mat-divider inset="true"></mat-divider>
-        </div>
-      </div>
-    </ng-container>
+    <mat-list>
+        @for (pp of (hardGoals$ | async); track pp) {
+          <mat-list-item>
+              <mat-icon matListItemIcon>{{ pp.icon }}</mat-icon>
+              <h3 matListItemTitle>{{ pp.naturalLanguageDescription }}</h3>
+              @if (( settings$ | async).usePlanPropertyValues) {
+              <p matListItemLine>
+                <span>Utility: {{ pp.value }}</span>
+              </p>
+              }
+              @if (!$last) {
+                <mat-divider inset="true"></mat-divider>
+              }
+          </mat-list-item>
+        }
+      </mat-list>
     <p *ngIf="(hardGoals$ | async)?.length === 0">No hard goals selected.</p>
   </mat-card-content>
 </mat-card>

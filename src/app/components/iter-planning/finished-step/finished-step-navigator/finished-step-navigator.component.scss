@@ -1,13 +1,15 @@
 .tab-container {
   height: 100%;
   width: 100%;
-  display: grid;
-  grid-template-rows: auto 1fr;
 }
 
 .content-container {
   box-sizing: border-box;
   height: 100%;
   width: 100%;
-  overflow-y: auto;
+  margin: 10px;
+}
+
+.tab-icon {
+  margin-right: 8px;
 }

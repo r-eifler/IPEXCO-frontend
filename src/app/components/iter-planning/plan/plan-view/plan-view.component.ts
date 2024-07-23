@@ -8,22 +8,19 @@ import { BehaviorSubject, Observable, Subject } from "rxjs";
 import { PlanRun } from "../../../../interface/run";
 import { LogEvent, TimeLoggerService } from "../../../../service/logger/time-logger.service";
 import { parsePlan } from "src/app/service/planner-runs/utils";
+import { Action } from "src/app/interface/plannig-task";
 
-interface Action {
-  name: string;
-  args: string[];
-}
 
 @Component({
   selector: "app-plan-view",
   templateUrl: "./plan-view.component.html",
-  styleUrls: ["./plan-view.component.css"],
+  styleUrls: ["./plan-view.component.scss"],
 })
 export class PlanViewComponent implements OnInit, OnDestroy {
   private unsubscribe$: Subject<any> = new Subject();
 
   step$: BehaviorSubject<IterationStep>;
-  actions$: Observable<string[]>;
+  actions$: Observable<Action[]>;
   solved$: Observable<boolean>;
   notSolvable$: Observable<boolean>;
   isRunning$: Observable<boolean>;
@@ -50,12 +47,7 @@ export class PlanViewComponent implements OnInit, OnDestroy {
         this.timeLogger.log(LogEvent.START_CHECK_PLAN, {stepId: step._id});
         let actions = [];
         let plan = parsePlan(step.plan.result, step.task.basetask);
-        for (const action of plan.actions) {
-          const s =
-            action.name + " " + action.parameters.map((p) => p.name).join(" ");
-          actions.push(s);
-        }
-        return actions;
+        return plan.actions;
       })
     );
 

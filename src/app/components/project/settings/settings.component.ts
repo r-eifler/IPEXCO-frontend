@@ -125,6 +125,7 @@ export class SettingsComponent implements OnInit, OnChanges {
     this.settings.paymentInfo.min = this.settingsForm.controls.minPayment.value;
     this.settings.paymentInfo.steps = this.settingsForm.controls.paymentSteps.value;
 
+    console.log(this.settings);
     this.updatedSettings.next(this.settings);
   }
 }

@@ -1,0 +1,11 @@
+.main-container {
+  box-sizing: border-box;
+  width: 100%;
+  height: fit-content;
+}
+
+.step-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}

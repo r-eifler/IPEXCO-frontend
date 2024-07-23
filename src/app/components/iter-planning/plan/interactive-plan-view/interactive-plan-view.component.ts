@@ -157,6 +157,7 @@ export class InteractivePlanViewComponent implements OnInit, OnDestroy {
                 }
               }
             }
+            console.log(this.state_trace_ex)
           }
 
           this.state_trace_ex.forEach((state) => {
