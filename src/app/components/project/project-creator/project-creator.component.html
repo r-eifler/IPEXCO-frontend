@@ -31,6 +31,9 @@
       <mat-step label="Domain">
         <app-template-file-upload type="pddl" (fileSelected)="onDomainSelected($event)"></app-template-file-upload>
         <div>
+          {{translatedDomain$ | async}}
+        </div>
+        <div>
           <button mat-button matStepperPrevious>Back</button>
           <button mat-button matStepperNext>Next</button>
         </div>

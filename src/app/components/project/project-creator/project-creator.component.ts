@@ -2,7 +2,7 @@ import { defaultGeneralSetting } from "../../../interface/settings/general-setti
 import { Project } from "./../../../interface/project";
 import { Component, inject, Inject, OnDestroy, OnInit } from "@angular/core";
 import { FormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from "@angular/forms";
-import { Observable, Subject } from "rxjs";
+import { BehaviorSubject, Observable, Subject } from "rxjs";
 import {
   PDDLFile,
 } from "../../../interface/files/files";
@@ -10,6 +10,8 @@ import { ProjectsService } from "src/app/service/project/project-services";
 import { AuthenticationService } from "../../../service/authentication/authentication.service";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { defaultDomainSpecification, DomainSpecification } from "src/app/interface/files/domain-specification";
+import { PDDLService } from "src/app/service/pddl/pddl.service";
+import { take, tap } from "rxjs/operators";
 
 @Component({
   selector: "app-project-creator",
@@ -36,19 +38,27 @@ export class ProjectCreatorComponent implements OnInit, OnDestroy {
   editedProject: Project;
   disableSelect = false;
 
+  translatedDomain$: BehaviorSubject<any>;
+
   constructor(
     private projectService: ProjectsService,
     private userService: AuthenticationService,
+    private pddlService: PDDLService,
     public dialogRef: MatDialogRef<ProjectCreatorComponent>,
     @Inject(MAT_DIALOG_DATA) data
   ) {
 
     this.projects$ = this.projectService.getList();
-
     this.editedProject = data.project;
+
+    this.translatedDomain$ = this.pddlService.getDomain();
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.translatedDomain$.pipe(
+      tap(i => console.log(i))
+    );
+  }
 
   ngOnDestroy(): void {
     this.ngUnsubscribe.next();
@@ -57,6 +67,7 @@ export class ProjectCreatorComponent implements OnInit, OnDestroy {
 
   onDomainSelected(domain: string){
     this.selectedDomain = domain
+    this.pddlService.translateDomain(this.selectedDomain)
     // console.log(this.selectedDomain)
   }
 
