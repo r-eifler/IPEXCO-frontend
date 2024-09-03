@@ -11,7 +11,6 @@ import { environment } from "../../../environments/environment";
 import { IHTTPData } from "../../interface/http-data.interface";
 import { map } from "rxjs/operators";
 import { DomainSpecification } from "../../interface/files/domain-specification";
-import { DomainSpecificationService } from "./domain-specification.service";
 import { Project } from "../../interface/project";
 
 interface FileContent {
@@ -27,10 +26,9 @@ export class PddlFileUtilsService {
   domainSpec: DomainSpecification;
 
   constructor(
-    private http: HttpClient,
-    private domainSpecService: DomainSpecificationService
+    private http: HttpClient
   ) {
-    domainSpecService.getSpec().subscribe((spec) => (this.domainSpec = spec));
+    // domainSpecService.getSpec().subscribe((spec) => (this.domainSpec = spec));
   }
 
   getFileContent(path: string): Observable<string> {

@@ -8,7 +8,6 @@ import { Project } from "../../../interface/project";
 import { ActivatedRoute, ParamMap, Router } from "@angular/router";
 import { switchMap, takeUntil } from "rxjs/operators";
 import { CurrentProjectService, ProjectsService } from "src/app/service/project/project-services";
-import { DomainSpecificationService } from "src/app/service/files/domain-specification.service";
 import { MatBottomSheet } from "@angular/material/bottom-sheet";
 import { PlanPropertyMapService } from "src/app/service/plan-properties/plan-property-services";
 import { PLANNER_REDIRECT } from "src/app/app.tokens";

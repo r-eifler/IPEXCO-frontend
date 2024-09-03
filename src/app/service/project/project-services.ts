@@ -6,7 +6,6 @@ import { ObjectCollectionService } from "../base/object-collection.service";
 import { Project } from "../../interface/project";
 import { environment } from "../../../environments/environment";
 import { LOAD } from "../../store/generic-list.store";
-import { DomainSpecificationService } from "../files/domain-specification.service";
 import { ItemStore } from 'src/app/store/generic-item.store';
 
 @Injectable({
@@ -23,9 +22,7 @@ export class ProjectsService extends ObjectCollectionService<Project> {
   providedIn: "root",
 })
 export class BaseProjectService<T> extends SelectedObjectService<T> {
-  constructor(
-    selectedObjectStore: ItemStore<T>,
-    protected domainSpecService: DomainSpecificationService) {
+  constructor(selectedObjectStore: ItemStore<T>) {
     super(selectedObjectStore);
   }
 
@@ -35,20 +32,11 @@ export class BaseProjectService<T> extends SelectedObjectService<T> {
   providedIn: "root",
 })
 export class CurrentProjectService extends BaseProjectService<Project> {
-  constructor(
-    store: CurrentProjectStore,
-    domainSpecService: DomainSpecificationService) {
-    super(store, domainSpecService);
+  constructor(store: CurrentProjectStore) {
+    super(store);
   }
 
   saveObject(project: Project) {
-    // if (project) {
-    //   project.settings = JSON.parse(project.settings.toString()) as ExecutionSettings;
-    //   console.log(project);
-    // }
-    console.log("Service store project and its domain specification");
-    this.domainSpecService.findSpec(project);
-
     this.selectedObjectStore.dispatch({ type: LOAD, data: project });
   }
 

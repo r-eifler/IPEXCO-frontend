@@ -1,5 +1,4 @@
 import { PlanningTask } from "src/app/interface/plannig-task";
-import { DomainSpecificationService } from "../../../service/files/domain-specification.service";
 import { takeUntil } from "rxjs/operators";
 import { MatStepper } from "@angular/material/stepper";
 import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
@@ -63,7 +62,6 @@ export class PropertyCreatorComponent implements OnInit, OnDestroy {
   constructor(
     private propertiesService: PlanPropertyMapService,
     private currentProjectService: CurrentProjectService,
-    private domainSpecService: DomainSpecificationService,
     public dialogRef: MatDialogRef<PropertyCreatorComponent>
   ) {
     this.currentProjectService
@@ -73,18 +71,7 @@ export class PropertyCreatorComponent implements OnInit, OnDestroy {
         this.currentProject = project;
         this.task = project.baseTask;
         this.actionOptions = this.task.actions.map((elem) => elem.name);
-      });
-
-    this.domainSpecService
-      .getSpec()
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe((ds) => {
-        console.log("domainSpecService");
-        console.log(ds);
-        if (ds) {
-          this.domainSpec = ds;
-          this.propertyClassMap = this.domainSpec.getPropertyTemplateClassMap();
-        }
+        this.domainSpec = project.domainSpecification
       });
   }
 

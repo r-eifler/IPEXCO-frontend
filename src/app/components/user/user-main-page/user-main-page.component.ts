@@ -1,7 +1,6 @@
 import { Project } from "./../../../interface/project";
 import {
   DomainFilesService,
-  DomainSpecificationFilesService,
   ProblemFilesService,
 } from "../../../service/files/pddl-file-services";
 import { DemosService } from "../../../service/demo/demo-services";
@@ -30,9 +29,6 @@ export class UserMainPageComponent implements OnInit, OnDestroy {
     public projectsService: ProjectsService,
     public demosService: DemosService,
     public userStudiesService: UserStudiesService,
-    public domainFilesService: DomainFilesService,
-    public problemFilesService: ProblemFilesService,
-    public domainSpecificationFilesService: DomainSpecificationFilesService,
     private router: Router,
     private route: ActivatedRoute
   ) {}
@@ -49,9 +45,6 @@ export class UserMainPageComponent implements OnInit, OnDestroy {
     this.projectsService.findCollection();
     this.demosService.findCollection();
     this.userStudiesService.findCollection();
-    this.domainFilesService.findFiles();
-    this.problemFilesService.findFiles();
-    this.domainSpecificationFilesService.findFiles();
   }
 
   ngOnDestroy(): void {

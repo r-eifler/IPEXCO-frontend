@@ -29,14 +29,3 @@ export class ProblemFilesService extends FilesService {
     super(http, filesStore);
   }
 }
-
-@Injectable({
-  providedIn: "root",
-})
-export class DomainSpecificationFilesService extends FilesService {
-  type = "DomainSpecification";
-
-  constructor(http: HttpClient, filesStore: DomainSpecificationFilesStore) {
-    super(http, filesStore);
-  }
-}

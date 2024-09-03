@@ -9,7 +9,8 @@ import { IHTTPData } from "../../interface/http-data.interface";
 import { ADD, EDIT, LOAD, REMOVE } from "../../store/generic-list.store";
 import { RunStatus } from "src/app/interface/run";
 import { BaseProjectService } from "../project/project-services";
-import { DomainSpecificationService } from "../files/domain-specification.service";
+
+
 @Injectable({
   providedIn: "root",
 })
@@ -171,15 +172,11 @@ export class DemosService extends ObjectCollectionService<Demo> {
   providedIn: "root",
 })
 export class RunningDemoService extends BaseProjectService<Demo> {
-  constructor(
-    store: RunningDemoStore,
-    domainSpecService: DomainSpecificationService) {
-    super(store, domainSpecService);
+  constructor( store: RunningDemoStore) {
+    super(store);
   }
 
   saveObject(demo: Demo) {
-    this.domainSpecService.findSpec(demo);
-
     this.selectedObjectStore.dispatch({ type: LOAD, data: demo });
     console.log(demo);
   }

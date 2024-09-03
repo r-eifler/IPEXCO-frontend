@@ -76,6 +76,7 @@ export class DemoCreatorComponent implements OnInit {
         : "TODO",
       public: false,
       completion: this.demo ? this.demo.completion : 0.0,
+      domainSpecification: this.demo.domainSpecification,
       explanations: this.demo ? this.demo.explanations : [],
       settings: this.demo ? this.demo.settings : defaultGeneralSetting
     };

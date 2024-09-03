@@ -4,17 +4,12 @@ import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
 import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
 import { Observable, Subject } from "rxjs";
 import {
-  DomainSpecificationFile,
   PDDLFile,
 } from "../../../interface/files/files";
-import {
-  DomainFilesService,
-  DomainSpecificationFilesService,
-  ProblemFilesService,
-} from "../../../service/files/pddl-file-services";
 import { ProjectsService } from "src/app/service/project/project-services";
 import { AuthenticationService } from "../../../service/authentication/authentication.service";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { DomainSpecification } from "src/app/interface/files/domain-specification";
 
 @Component({
   selector: "app-project-creator",
@@ -36,7 +31,7 @@ export class ProjectCreatorComponent implements OnInit, OnDestroy {
 
   selectedDomain: PDDLFile;
   selectedProblem: PDDLFile;
-  selectedDomainSpec: DomainSpecificationFile;
+  selectedDomainSpec: DomainSpecification;
 
   projects$: Observable<Project[]>;
 
@@ -44,20 +39,12 @@ export class ProjectCreatorComponent implements OnInit, OnDestroy {
   disableSelect = false;
 
   constructor(
-    private domainFilesService: DomainFilesService,
-    private problemFilesService: ProblemFilesService,
-    private domainSpecFilesService: DomainSpecificationFilesService,
     private projectService: ProjectsService,
     private userService: AuthenticationService,
     public dialogRef: MatDialogRef<ProjectCreatorComponent>,
     @Inject(MAT_DIALOG_DATA) data
   ) {
-    this.domainFiles$ = this.domainFilesService.files$;
-    this.domainFilesService.findFiles();
-    this.problemFiles = this.problemFilesService.files$;
-    this.problemFilesService.findFiles();
-    this.domainSpecFiles = this.domainSpecFilesService.files$;
-    this.domainSpecFilesService.findFiles();
+
     this.projects$ = this.projectService.getList();
 
     this.editedProject = data.project;

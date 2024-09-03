@@ -19,6 +19,9 @@
               }
             }
           </mat-action-list>
+          @if ((projectsService.getList() | async).length == 0){
+            <p>No projects available.</p>
+            }
         </mat-card-content>
         <mat-card-actions>
           <button mat-icon-button (click)="toProjectCollection()">

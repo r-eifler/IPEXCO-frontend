@@ -87,7 +87,6 @@ import {
 // Services
 import {
   DomainFilesService,
-  DomainSpecificationFilesService,
   ProblemFilesService,
 } from "./service/files/pddl-file-services";
 import {
@@ -127,7 +126,6 @@ import { DemoCollectionComponent } from "./components/demo/demo-collection/demo-
 import { DemoBaseComponent } from "./components/demo/demo-base/demo-base.component";
 import { DemoSettingsComponent } from "./components/demo/demo-settings/demo-settings.component";
 import { ProjectOverviewComponent } from "./components/project/project-overview/project-overview.component";
-import { DomainSpecificationComponent } from "./components/files/domain-specification/domain-specification.component";
 import { DemoCreatorComponent } from "./components/demo/demo-creator/demo-creator.component";
 import { DemoHelpComponent } from "./components/demo/demo-help/demo-help.component";
 import { DemoNavigatorComponent } from "./components/demo/demo-navigator/demo-navigator.component";
@@ -228,7 +226,6 @@ import { AskDeleteComponent } from "./components/utils/ask-delete/ask-delete.com
     DemoBaseComponent,
     DemoSettingsComponent,
     ProjectOverviewComponent,
-    DomainSpecificationComponent,
     PlanViewComponent,
     DemoCreatorComponent,
     DemoHelpComponent,
@@ -357,7 +354,6 @@ import { AskDeleteComponent } from "./components/utils/ask-delete/ask-delete.com
     DomainFilesService,
     ProblemFilesService,
     DomainSpecificationFilesStore,
-    DomainSpecificationFilesService,
     ProjectsStore,
     ProjectsService,
     CurrentProjectStore,
