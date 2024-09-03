@@ -1,4 +1,4 @@
-<mat-card appearance="outlined">
+<mat-card appearance="outlined" class="main-card">
   <mat-card-header>
     <div mat-card-avatar>
       <mat-icon>create</mat-icon>
@@ -6,71 +6,58 @@
     <mat-card-title>New project</mat-card-title>
   </mat-card-header>
   <mat-card-content>
-    <form
-      class="example-form"
-      [formGroup]="projectForm"
-      (ngSubmit)="onSave()"
-      style="display: flex; flex-direction: column"
-    >
-      <mat-form-field class="example-full-width">
-        <mat-label>Name</mat-label>
-        <input matInput type="text" formControlName="name" />
-      </mat-form-field>
 
-      <mat-form-field>
-        <mat-label>Description</mat-label>
-        <textarea matInput formControlName="description"></textarea>
-      </mat-form-field>
+    <mat-stepper linear=true #stepper>
+      <mat-step [stepControl]="projectBasic" label="Name">
+        <form
+          class="main-form"
+          [formGroup]="projectBasic">
 
-      <mat-form-field appearance="fill">
-        <mat-label>Domain File</mat-label>
-        <mat-select [(value)]="selectedDomain" [disabled]="disableSelect">
-          <mat-option
-            *ngFor="let domain of domainFiles$ | async"
-            [value]="domain"
-            >{{ domain.name }}</mat-option
-          >
-        </mat-select>
-      </mat-form-field>
+          <mat-form-field class="example-full-width">
+            <mat-label>Name</mat-label>
+            <input matInput type="text" formControlName="name" />
+          </mat-form-field>
 
-      <mat-form-field appearance="fill">
-        <mat-label>Problem File</mat-label>
-        <mat-select [(value)]="selectedProblem" [disabled]="disableSelect">
-          <mat-option
-            *ngFor="let problem of problemFiles | async"
-            [value]="problem"
-            >{{ problem.name }}</mat-option
-          >
-        </mat-select>
-      </mat-form-field>
+          <mat-form-field>
+            <mat-label>Description</mat-label>
+            <textarea matInput formControlName="description"></textarea>
+          </mat-form-field>
+        </form>
+        <div>
+          <button mat-button matStepperNext>Next</button>
+        </div>
+      </mat-step>
 
-      <mat-form-field appearance="fill">
-        <mat-label>Domain Specification</mat-label>
-        <mat-select [(value)]="selectedDomainSpec" [disabled]="disableSelect">
-          <mat-option *ngFor="let file of domainSpecFiles | async" [value]="file">{{
-            file.name
-          }}</mat-option>
-        </mat-select>
-      </mat-form-field>
+      <mat-step label="Domain">
+        <app-template-file-upload type="pddl" (fileSelected)="onDomainSelected($event)"></app-template-file-upload>
+        <div>
+          <button mat-button matStepperPrevious>Back</button>
+          <button mat-button matStepperNext>Next</button>
+        </div>
+      </mat-step>
 
-      <div style="display: flex">
-        <button
-          mat-flat-button
-          color="secondray"
-          type="button"
-          (click)="onBack()"
-          style="flex-grow: 1"
-        >
-          <mat-icon> keyboard_backspace </mat-icon>
-        </button>
-        <button
-          mat-flat-button
-          color="primary"
-          style="flex-grow: 4; margin-left: 10px"
-        >
-          Save
-        </button>
-      </div>
-    </form>
-  </mat-card-content>
+      <mat-step label="Problem Instance">
+        <app-template-file-upload type="pddl" (fileSelected)="onProblemSelected($event)"></app-template-file-upload>
+        <div>
+          <button mat-button matStepperPrevious>Back</button>
+          <button mat-button matStepperNext>Next</button>
+        </div>
+      </mat-step>
+
+      <mat-step label="Specification">
+        <app-template-file-upload type="pddl" (fileSelected)="onSpecificationSelected($event)"></app-template-file-upload>
+
+        <div>
+          <button mat-button matStepperPrevious>Back</button>
+          <button mat-flat-button color="primary" (click)="onSave">Save</button>
+        </div>
+      </mat-step>
+
+      </mat-stepper>
+      </mat-card-content> 
+
+      <mat-card-actions>
+          <button mat-flat-button color="secondary"(click)="onBack()">Cancel</button>
+      </mat-card-actions>
+
 </mat-card>

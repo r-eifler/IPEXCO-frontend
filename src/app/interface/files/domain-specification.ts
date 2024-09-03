@@ -31,3 +31,7 @@ export class DomainSpecification {
     return goalFact.naturalLanguageDescription;
   }
 }
+
+export const defaultDomainSpecification = new DomainSpecification(
+  {name: '', planPropertyTemplates: [], domainDescription: ''}
+)

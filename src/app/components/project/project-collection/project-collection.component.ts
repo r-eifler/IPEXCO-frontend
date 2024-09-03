@@ -54,14 +54,10 @@ export class ProjectCollectionComponent implements OnInit, OnDestroy {
   }
 
   new_project_form(): void {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.width = "500px";
-    // dialogConfig.height = "600px";
-    dialogConfig.data = {
-      project: null,
-    };
-
-    this.dialog.open(ProjectCreatorComponent, dialogConfig);
+    this.dialog.open(ProjectCreatorComponent, {
+      minWidth: "1000px",
+      data: {project: null}
+    });
   }
 
   copy_project(project: Project): void {
@@ -70,7 +66,7 @@ export class ProjectCollectionComponent implements OnInit, OnDestroy {
 
   modify_project(project: Project): void {
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.width = "500px";
+    dialogConfig.width = "1000px";
     dialogConfig.data = {
       project,
     };
