@@ -18,7 +18,7 @@ export class DemoTaskInfoComponent implements OnInit {
   demo$: Observable<Demo>;
 
   constructor(runningDemoService: RunningDemoService) {
-    this.demo$ = runningDemoService.getSelectedObject();
+    this.demo$ = runningDemoService.getSelectedObject()  as BehaviorSubject<Demo>;
   }
 
   ngOnInit(): void {}

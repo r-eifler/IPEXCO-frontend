@@ -69,7 +69,7 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
     public dialog: MatDialog,
     private snackBar: MatSnackBar
   ) {
-    this.demo$ = this.runningDemoService.getSelectedObject();
+    this.demo$ = this.runningDemoService.getSelectedObject()  as BehaviorSubject<Demo>;
     this.selectedStep$ = this.selectedIterationStepService.getSelectedObject();
     this.steps$ = this.iterationStepsService.getList();
     this.newStep$ = this.newIterationStepService.getSelectedObject();

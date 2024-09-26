@@ -17,7 +17,7 @@
           [(value)]="selctedPredicate"
           (selectionChange)="updateInitialFacts(selctedPredicate)"
         >
-          <mat-option *ngFor="let pred of task.predicates" [value]="pred">
+          <mat-option *ngFor="let pred of task.model.predicates" [value]="pred">
             {{ predicatOut(pred) }}
           </mat-option>
         </mat-select>
@@ -78,7 +78,7 @@
           [(value)]="selctedPredicate"
           (selectionChange)="updateFacts(selctedPredicate)"
         >
-          <mat-option *ngFor="let pred of task.predicates" [value]="pred">
+          <mat-option *ngFor="let pred of task.model.predicates" [value]="pred">
             {{ predicatOut(pred) }}
           </mat-option>
         </mat-select>

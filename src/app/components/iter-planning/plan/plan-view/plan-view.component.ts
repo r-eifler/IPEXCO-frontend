@@ -8,7 +8,7 @@ import { BehaviorSubject, Observable, Subject } from "rxjs";
 import { PlanRun } from "../../../../interface/run";
 import { LogEvent, TimeLoggerService } from "../../../../service/logger/time-logger.service";
 import { parsePlan } from "src/app/service/planner-runs/utils";
-import { Action } from "src/app/interface/plannig-task";
+import { PDDLAction } from "src/app/interface/planning-task";
 
 
 @Component({
@@ -20,7 +20,7 @@ export class PlanViewComponent implements OnInit, OnDestroy {
   private unsubscribe$: Subject<any> = new Subject();
 
   step$: BehaviorSubject<IterationStep>;
-  actions$: Observable<Action[]>;
+  actions$: Observable<PDDLAction[]>;
   solved$: Observable<boolean>;
   notSolvable$: Observable<boolean>;
   isRunning$: Observable<boolean>;
@@ -46,7 +46,7 @@ export class PlanViewComponent implements OnInit, OnDestroy {
       map((step) => {
         this.timeLogger.log(LogEvent.START_CHECK_PLAN, {stepId: step._id});
         let actions = [];
-        let plan = parsePlan(step.plan.result, step.task.basetask);
+        let plan = parsePlan(step.plan.result, step.task);
         return plan.actions;
       })
     );

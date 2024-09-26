@@ -10,9 +10,4 @@
       [step]="step$ | async"
       [settings]="settings$ | async">
     </app-selected-hard-goals>
-    <app-selected-relaxations-view
-      *ngIf="( settings$ | async).useConstraints"
-      class="sub-content"
-      [step]="step$ | async">
-    </app-selected-relaxations-view>
 </div>

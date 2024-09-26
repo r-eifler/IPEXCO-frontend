@@ -6,13 +6,11 @@ import { IterationStepsService } from "src/app/service/planner-runs/iteration-st
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Project } from "../../../interface/project";
 import { ActivatedRoute, ParamMap, Router } from "@angular/router";
-import { switchMap, takeUntil } from "rxjs/operators";
+import { filter, switchMap, takeUntil } from "rxjs/operators";
 import { CurrentProjectService, ProjectsService } from "src/app/service/project/project-services";
-import { MatBottomSheet } from "@angular/material/bottom-sheet";
 import { PlanPropertyMapService } from "src/app/service/plan-properties/plan-property-services";
 import { PLANNER_REDIRECT } from "src/app/app.tokens";
 import { Subject } from "rxjs";
-import { DemoSettingsComponent } from "../../demo/demo-settings/demo-settings.component";
 import { NewIterationStepGenerationService } from "src/app/service/planner-runs/new-iteration-step-generation-service.service";
 
 @Component({
@@ -38,7 +36,8 @@ export class ProjectBaseComponent implements OnInit, OnDestroy {
     { ref: "./overview", name: "Overview" },
     { ref: "./settings", name: "Settings" },
     { ref: "./planning-task", name: "Planning Task" },
-    { ref: "./properties", name: "Plan Properties" }
+    { ref: "./properties", name: "Plan Properties" },
+    { ref: "./iterative-planning", name: "Iterative Planning" }
   ];
 
   project: Project;
@@ -52,38 +51,17 @@ export class ProjectBaseComponent implements OnInit, OnDestroy {
     private relaxationService: PlanningTaskRelaxationService,
     private runsService: IterationStepsService,
     private demosService: DemosService,
-    private bottomSheet: MatBottomSheet
   ) {
     // this.projectsService.getList();
     this.route.paramMap
       .pipe(
         switchMap((params: ParamMap) => this.projectsService.getObject(params.get("projectid"))),
+        filter((p: Project) => p != null),
         takeUntil(this.ngUnsubscribe))
       .subscribe(async (value) => {
-        if (value != null) {
-          this.project = value;
-
-          if (this.project.settings.useConstraints){
-            this.links.push({ ref: "./task-relaxations", name: "Relaxations" });
-          }
-          this.links.push({ ref: "./iterative-planning", name: "Iterative Planning" });
-
-          //TODO move this update part to the current project service
+        // TODO make nicer 
+        this.project = value
           this.currentProjectService.saveObject(this.project);
-          this.runsService.reset(); // delete possible stored runs which do not belong to the project
-          this.runsService.findCollection([
-            { param: "projectId", value: this.project._id },
-          ]);
-          this.propertiesService.findCollection([
-            { param: "projectId", value: this.project._id },
-          ]);
-          this.relaxationService.findCollection([
-            { param: "projectId", value: this.project._id },
-          ]);
-          this.demosService.findCollection([
-            { param: "projectId", value: this.project._id },
-          ]);
-        }
       });
   }
 

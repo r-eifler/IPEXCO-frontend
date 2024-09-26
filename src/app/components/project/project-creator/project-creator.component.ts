@@ -2,7 +2,7 @@ import { defaultGeneralSetting } from "../../../interface/settings/general-setti
 import { Project } from "./../../../interface/project";
 import { Component, inject, Inject, OnDestroy, OnInit } from "@angular/core";
 import { FormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from "@angular/forms";
-import { BehaviorSubject, Observable, Subject } from "rxjs";
+import { BehaviorSubject, combineLatest, Observable, Subject } from "rxjs";
 import {
   PDDLFile,
 } from "../../../interface/files/files";
@@ -11,7 +11,8 @@ import { AuthenticationService } from "../../../service/authentication/authentic
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { defaultDomainSpecification, DomainSpecification } from "src/app/interface/files/domain-specification";
 import { PDDLService } from "src/app/service/pddl/pddl.service";
-import { take, tap } from "rxjs/operators";
+import { take, tap, map} from "rxjs/operators";
+import { PlanningDomain, PlanningProblem } from "src/app/interface/planning-task";
 
 @Component({
   selector: "app-project-creator",
@@ -26,6 +27,7 @@ export class ProjectCreatorComponent implements OnInit, OnDestroy {
 
   projectBasic = this.formBuilder.group({
     name: ['', Validators.required],
+    domain_name: ['', Validators.required],
     description: ['', Validators.required],
   });
 
@@ -38,7 +40,11 @@ export class ProjectCreatorComponent implements OnInit, OnDestroy {
   editedProject: Project;
   disableSelect = false;
 
-  translatedDomain$: BehaviorSubject<any>;
+  translatedDomain$: BehaviorSubject<PlanningDomain>;
+  domainValid$: Observable<boolean>;
+
+  translatedProblem$: BehaviorSubject<PlanningProblem>;
+  problemValid$: Observable<boolean>;
 
   constructor(
     private projectService: ProjectsService,
@@ -52,12 +58,18 @@ export class ProjectCreatorComponent implements OnInit, OnDestroy {
     this.editedProject = data.project;
 
     this.translatedDomain$ = this.pddlService.getDomain();
+    this.translatedProblem$ = this.pddlService.getProblem()
   }
 
   ngOnInit(): void {
-    this.translatedDomain$.pipe(
-      tap(i => console.log(i))
-    );
+
+    this.domainValid$ = this.translatedDomain$.pipe(
+      map(d => !!this.selectedDomain && !!d)
+    )
+
+    this.problemValid$ = this.translatedProblem$.pipe(
+      map(p => !!this.selectedProblem && !!p)
+    )
   }
 
   ngOnDestroy(): void {
@@ -73,6 +85,7 @@ export class ProjectCreatorComponent implements OnInit, OnDestroy {
 
   onProblemSelected(problem: string){
     this.selectedProblem = problem
+    this.pddlService.translateProblem(this.selectedProblem)
     // console.log(this.selectedDomain)
   }
 
@@ -83,21 +96,35 @@ export class ProjectCreatorComponent implements OnInit, OnDestroy {
 
   onSave(): void {
     // console.log('Save project');
-    const newProject: Project = {
-      _id: this.editedProject ? this.editedProject._id : null,
-      updated: new Date().toLocaleString(),
-      name: this.projectBasic.controls.name.value,
-      user: this.userService.getUser()._id,
-      description: this.projectBasic.controls.description.value,
-      domainSpecification: defaultDomainSpecification,
-      settings: defaultGeneralSetting,
-      baseTask: null,
-      public: false,
-    };
+    combineLatest([this.translatedDomain$, this.translatedProblem$]).pipe(
+      // take(1),
+    ).subscribe(
+      ([domain, problem]) => {
 
-    this.projectService.saveObject(newProject);
+        console.log("Save new project")
 
-    this.dialogRef.close();
+        const newProject: Project = {
+          _id: this.editedProject ? this.editedProject._id : null,
+          updated: new Date().toLocaleString(),
+          name: this.projectBasic.controls.name.value,
+          user: this.userService.getUser()._id,
+          description: this.projectBasic.controls.description.value,
+          domainSpecification: defaultDomainSpecification,
+          settings: defaultGeneralSetting,
+          baseTask: {
+            name: this.projectBasic.controls.name.value,
+            domain_name: this.projectBasic.controls.domain_name.value,
+            encoding: "classic",
+            model: {...domain,...problem}
+          },
+          public: false,
+        };
+    
+        this.projectService.saveObject(newProject);
+    
+        this.dialogRef.close();
+      }
+    )
   }
 
   onBack(): void {

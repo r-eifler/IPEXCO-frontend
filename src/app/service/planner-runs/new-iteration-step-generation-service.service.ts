@@ -64,19 +64,14 @@ export class NewIterationStepGenerationService {
             softGoals.push(pp._id);
           }
         }
-        let newTask: ModifiedPlanningTask = {
-          name: "task",
-          project: project._id,
-          basetask: project.baseTask,
-          initUpdates: [],
-        };
+
         let newStep: IterationStep = {
           name: "Itertaion Step 1",
           project: project._id,
           status: StepStatus.unknown,
           hardGoals: [...hardGoals],
           softGoals: [...softGoals],
-          task: newTask,
+          task: project.baseTask,
         };
         console.log("New Step");
         console.log(newStep);
@@ -133,19 +128,14 @@ export class NewIterationStepGenerationService {
               softGoals.push(pp._id);
             }
           }
-          let newTask: ModifiedPlanningTask = {
-            name: "task",
-            project: step.task.project,
-            basetask: step.task.basetask,
-            initUpdates: step.task.initUpdates,
-          };
+
           let newStep: IterationStep = {
             name: step.name,
             project: step.project,
             status: StepStatus.unknown,
             hardGoals: [...step.hardGoals],
             softGoals: [...softGoals],
-            task: newTask,
+            task: step.task,
           };
           console.log("New Step");
           console.log(newStep);

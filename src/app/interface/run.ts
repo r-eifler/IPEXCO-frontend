@@ -1,6 +1,6 @@
 import { find } from 'rxjs/operators';
 import { filter } from 'rxjs/operators';
-import { factEquals } from "src/app/interface/plannig-task";
+import { factEquals, PlanningTask } from "src/app/interface/planning-task";
 import {
   PPDependencies,
   PPConflict,
@@ -70,7 +70,7 @@ export interface IterationStep {
   status: StepStatus;
   hardGoals: string[];
   softGoals: string[];
-  task: ModifiedPlanningTask;
+  task: PlanningTask;
   plan?: PlanRun;
   depExplanation?: DepExplanationRun;
   relaxationExplanations?: RelaxationExplanationRun[];
@@ -107,29 +107,10 @@ export function computePlanValue(
   }
 }
 
-export function computeRelaxationCost(
-  step: IterationStep,
-  relaxationSpeaces: PlanningTaskRelaxationSpace[]
-): number {
-  let cost = 0;
-  relaxationSpeaces.forEach((space) => {
-    space.dimensions.forEach((dim) => {
-      let match = step.task.initUpdates.find((iu) =>
-        factEquals(iu.orgFact, dim.orgFact.fact)
-      );
-      if (match) {
-        let update = [dim.orgFact, ...dim.updates].find((u) =>
-          factEquals(u.fact, match.newFact)
-        );
-        cost += update.value;
-      }
-    });
-  });
-  return cost;
-}
+
 
 export function computeStepUtility(step, planProperties: Map<string, PlanProperty>, relaxationSpeaces: PlanningTaskRelaxationSpace[]): number {
-  return computePlanValue(step, planProperties) - computeRelaxationCost(step, relaxationSpeaces);
+  return computePlanValue(step, planProperties);
 }
 
 function filterDependencies(

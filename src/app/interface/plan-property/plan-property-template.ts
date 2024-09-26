@@ -1,4 +1,4 @@
-import { Fact, FactToString, PlanningTask } from "src/app/interface/plannig-task";
+import { PDDLFact, FactToString, PlanningTask } from "src/app/interface/planning-task";
 import { Action, ActionSet, GoalType, toAction } from "./plan-property";
 import { PlanProperty } from "src/app/interface/plan-property/plan-property";
 import { Project } from "../project";
@@ -53,7 +53,7 @@ export class PlanPropertyTemplate {
               constrainigVar,
               constrainedVar,
               this.initVariableConstraints,
-              task.initial
+              task.model.initial
             );
             if (constrained) {
               this.constraintDomains.addVarValuePosibleValues(
@@ -160,7 +160,7 @@ export class PlanPropertyTemplate {
           constraintInstance = constraintInstance.replace(pair[0], pair[1]);
         }
         const regex = RegExp(constraintInstance);
-        for (const goal of task.goal) {
+        for (const goal of task.model.goal) {
           const match = regex.exec(goal.name);
           if (match) {
             return match[1];
@@ -176,7 +176,7 @@ export class PlanPropertyTemplate {
     const map = new Map<string, Set<string>>();
     for (const variable of this.variables) {
       const matchingObjects: Set<string> = new Set();
-      for (const obj of task.objects) {
+      for (const obj of task.model.objects) {
         if (variable.type.length === 1 && obj.type === variable.type) {
           matchingObjects.add(obj.name);
         }
@@ -252,7 +252,7 @@ export function getConstraintSatValues(
   constrainingVar: { name: string; value: string },
   constrainedVar: { name: string; values: Set<string> },
   constraints: string[],
-  truePredicates: Fact[]
+  truePredicates: PDDLFact[]
 ): boolean {
   let isConstrained = false;
   for (const con of constraints) {

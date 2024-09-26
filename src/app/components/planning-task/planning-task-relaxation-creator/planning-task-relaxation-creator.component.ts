@@ -9,15 +9,15 @@ import {
 } from "src/app/interface/planning-task-relaxation";
 import { PlanningTaskRelaxationService } from "./../../../service/planning-task/planning-task-relaxations-services";
 import {
-  Fact,
+  PDDLFact,
   factEquals,
   getObjectTypeMap,
   instantiatePredicateAll,
   PlanningTask,
-  Predicat,
+  PDDLPredicate,
   predicateToString,
   FactToString,
-} from "src/app/interface/plannig-task";
+} from "src/app/interface/planning-task";
 import { Component, Inject, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { Project } from "src/app/interface/project";
 import { Subject, BehaviorSubject } from "rxjs";
@@ -56,13 +56,13 @@ export class PlanningTaskRelaxationCreatorComponent
     name: new UntypedFormControl(),
   });
 
-  selctedInitialPredicate: Predicat = null;
-  initialFacts: Fact[] = [];
-  selectedInitialFacts: Fact[] = [];
+  selctedInitialPredicate: PDDLPredicate = null;
+  initialFacts: PDDLFact[] = [];
+  selectedInitialFacts: PDDLFact[] = [];
 
-  selctedPredicate: Predicat = null;
+  selctedPredicate: PDDLPredicate = null;
   possibleMetaFacts: MetaFact[] = [];
-  selectedFacts: Fact[] = [];
+  selectedFacts: PDDLFact[] = [];
 
   relaxationSpace: PlanningTaskRelaxationSpace = {
     name: "Relaxation X",
@@ -121,21 +121,21 @@ export class PlanningTaskRelaxationCreatorComponent
     }
   }
 
-  updateInitialFacts(predicate: Predicat): void {
+  updateInitialFacts(predicate: PDDLPredicate): void {
     this.selctedInitialPredicate = predicate;
-    this.initialFacts = this.task.initial.filter(
+    this.initialFacts = this.task.model.initial.filter(
       (f) =>
         f.name == this.selctedInitialPredicate.name &&
         !this.selectedInitialFacts.includes(f)
     );
   }
 
-  removeInitFact(fact: Fact) {
+  removeInitFact(fact: PDDLFact) {
     this.selectedInitialFacts = this.selectedInitialFacts.filter(
       (f) => f != fact
     );
     // this.selectedFacts = this.selectedFacts.filter(e => e != fact);
-    this.initialFacts = this.task.initial.filter(
+    this.initialFacts = this.task.model.initial.filter(
       (f) =>
         f.name == this.selctedPredicate.name &&
         !this.selectedInitialFacts.includes(f)
@@ -167,7 +167,7 @@ export class PlanningTaskRelaxationCreatorComponent
     }
   }
 
-  updateFacts(predicate: Predicat): void {
+  updateFacts(predicate: PDDLPredicate): void {
     if (predicate) {
       this.selctedPredicate = predicate;
       this.possibleMetaFacts = instantiatePredicateAll(
@@ -235,7 +235,7 @@ export class PlanningTaskRelaxationCreatorComponent
     }
   }
 
-  updateSelectedFacts(event: { container: { data: Fact[] } }) {
+  updateSelectedFacts(event: { container: { data: PDDLFact[] } }) {
     this.selectedFacts.push(event.container.data[0]);
     // this.possibleFacts = this.possibleFacts.filter(f =>  ! this.selectedFacts.includes(f));
   }

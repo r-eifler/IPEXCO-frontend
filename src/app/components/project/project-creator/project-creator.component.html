@@ -18,6 +18,11 @@
             <input matInput type="text" formControlName="name" />
           </mat-form-field>
 
+          <mat-form-field class="example-full-width">
+            <mat-label>Domain Name</mat-label>
+            <input matInput type="text" formControlName="domain_name" />
+          </mat-form-field>
+
           <mat-form-field>
             <mat-label>Description</mat-label>
             <textarea matInput formControlName="description"></textarea>
@@ -29,10 +34,13 @@
       </mat-step>
 
       <mat-step label="Domain">
-        <app-template-file-upload type="pddl" (fileSelected)="onDomainSelected($event)"></app-template-file-upload>
-        <div>
-          {{translatedDomain$ | async}}
-        </div>
+        <app-template-file-upload type="pddl_domain" (fileSelected)="onDomainSelected($event)"></app-template-file-upload>
+        <!-- <div>
+          {{translatedDomainJSON$ | async}}
+        </div> -->
+        @if (domainValid$ | async) {
+          <mat-icon fontIcon="done_outline"></mat-icon>
+        }
         <div>
           <button mat-button matStepperPrevious>Back</button>
           <button mat-button matStepperNext>Next</button>
@@ -40,21 +48,26 @@
       </mat-step>
 
       <mat-step label="Problem Instance">
-        <app-template-file-upload type="pddl" (fileSelected)="onProblemSelected($event)"></app-template-file-upload>
+        <app-template-file-upload type="pddl_problem" (fileSelected)="onProblemSelected($event)"></app-template-file-upload>
+        @if (problemValid$ | async) {
+          <mat-icon fontIcon="done_outline"></mat-icon>
+        }
         <div>
           <button mat-button matStepperPrevious>Back</button>
-          <button mat-button matStepperNext>Next</button>
+          @if ((domainValid$ | async) && (problemValid$ | async)) {
+          <button mat-flat-button color="primary" (click)="onSave()">Save</button>
+          }
         </div>
       </mat-step>
 
-      <mat-step label="Specification">
-        <app-template-file-upload type="pddl" (fileSelected)="onSpecificationSelected($event)"></app-template-file-upload>
+      <!-- <mat-step label="Specification">
+        <app-template-file-upload type="pddl_spec" (fileSelected)="onSpecificationSelected($event)"></app-template-file-upload>
 
         <div>
           <button mat-button matStepperPrevious>Back</button>
           <button mat-flat-button color="primary" (click)="onSave">Save</button>
         </div>
-      </mat-step>
+      </mat-step> -->
 
       </mat-stepper>
       </mat-card-content> 

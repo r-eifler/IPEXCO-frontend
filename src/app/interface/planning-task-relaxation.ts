@@ -1,13 +1,13 @@
-import { factEquals, PlanningTask } from "src/app/interface/plannig-task";
-import { Fact } from "./plannig-task";
+import { factEquals, PlanningTask } from "src/app/interface/planning-task";
+import { PDDLFact } from "./planning-task";
 
 export interface FactUpdate {
-  orgFact: Fact;
-  newFact: Fact;
+  orgFact: PDDLFact;
+  newFact: PDDLFact;
 }
 
 export interface MetaFact {
-  fact: Fact;
+  fact: PDDLFact;
   value: number;
   display: string;
 }
@@ -33,8 +33,8 @@ export interface ModifiedPlanningTask {
   initUpdates: FactUpdate[];
 }
 
-export function getUpdatedInitialState(modTask: ModifiedPlanningTask): Fact[] {
-  let initial = modTask.basetask.initial.filter(
+export function getUpdatedInitialState(modTask: ModifiedPlanningTask): PDDLFact[] {
+  let initial = modTask.basetask.model.initial.filter(
     (f) => !modTask.initUpdates.some((u) => factEquals(u.orgFact, f))
   );
   modTask.initUpdates.forEach((u) => initial.push(u.newFact));

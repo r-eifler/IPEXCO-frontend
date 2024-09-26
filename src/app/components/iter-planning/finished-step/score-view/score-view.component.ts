@@ -1,12 +1,10 @@
 import { CurrentProjectService } from 'src/app/service/project/project-services';
 import { GeneralSettings } from 'src/app/interface/settings/general-settings';
-import { getMaxRelaxationCost, PlanningTaskRelaxationSpace } from "src/app/interface/planning-task-relaxation";
-import { PlanningTaskRelaxationService } from "src/app/service/planning-task/planning-task-relaxations-services";
 import { Component, Input, OnInit } from "@angular/core";
 import { BehaviorSubject, Observable, combineLatest } from "rxjs";
 import { filter, map } from "rxjs/operators";
 import { getMaximalPlanValue, PlanProperty } from "src/app/interface/plan-property/plan-property";
-import { computePlanValue, computeRelaxationCost, IterationStep, StepStatus } from "src/app/interface/run";
+import { computePlanValue, IterationStep, StepStatus } from "src/app/interface/run";
 import { PlanPropertyMapService } from "src/app/service/plan-properties/plan-property-services";
 
 @Component({
@@ -22,26 +20,21 @@ export class ScoreViewComponent implements OnInit {
 
   private step$ = new BehaviorSubject<IterationStep>(null);
   private planProperties$: BehaviorSubject<Map<string, PlanProperty>>;
-  private relaxationSpaces$: BehaviorSubject<PlanningTaskRelaxationSpace[]>;
 
   isSolvable$: Observable<boolean>;
   isUnSolvable$: Observable<boolean>;
 
   planValue$: Observable<number>;
   maxPlanValue$: Observable<number>;
-  relqaxationCost$: Observable<number>;
-  maxRelqaxationCost$: Observable<number>;
   overallScore$: Observable<number>;
 
   settings$: Observable<GeneralSettings>;
 
   constructor(
     private planPropertiesMapService: PlanPropertyMapService,
-    private planningTaskRelaxationService: PlanningTaskRelaxationService,
     private selectedProjectService: CurrentProjectService
   ) {
     this.planProperties$ = planPropertiesMapService.getMap();
-    this.relaxationSpaces$ = planningTaskRelaxationService.getList();
 
     this.isSolvable$ = this.step$.pipe(
       filter((step) => !!step),
@@ -73,33 +66,8 @@ export class ScoreViewComponent implements OnInit {
       })
     );
 
-    this.relqaxationCost$ = combineLatest([
-      this.step$,
-      this.relaxationSpaces$,
-    ]).pipe(
-      map(([step, spaces]) => {
-        if (!!step && !!spaces && spaces.length > 0) {
-          return -computeRelaxationCost(step, spaces);
-        } else {
-          return 0;
-        }
-      })
-    );
-
-    this.maxRelqaxationCost$ = this.relaxationSpaces$.pipe(
-      map((spaces) => {
-        if (!!spaces && spaces.length > 0) {
-          return -getMaxRelaxationCost(spaces);
-        } else {
-          return 0;
-        }
-      })
-    );
-
-    this.overallScore$ = combineLatest([
-      this.planValue$,
-      this.relqaxationCost$,
-    ]).pipe(map(([planValue, relaxationCost]) => relaxationCost + planValue));
+   
+    this.overallScore$ = this.planValue$;
 
     this.settings$ = this.selectedProjectService.getSelectedObject().pipe(
       filter(p => !!p),

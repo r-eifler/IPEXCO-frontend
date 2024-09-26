@@ -1,5 +1,5 @@
 import { devOnlyGuardedExpression } from "@angular/compiler";
-import { Fact } from "./plannig-task";
+import { PDDLFact } from "./planning-task";
 
 export interface PPConflict {
   _id?: string;
@@ -14,7 +14,7 @@ export interface PPDependencies {
 export interface RelaxationExplanationNode {
   name: string;
   dependencies: PPDependencies;
-  updates: Fact[];
+  updates: PDDLFact[];
   lower_cover: number[];
   upper_cover: number[];
 }

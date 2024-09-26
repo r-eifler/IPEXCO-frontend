@@ -3,7 +3,7 @@ import { SelectedIterationStepService } from 'src/app/service/planner-runs/selec
 import { PPDependencies } from 'src/app/interface/explanations';
 import { OnDestroy } from '@angular/core';
 import { PlanProperty } from 'src/app/interface/plan-property/plan-property';
-import { Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { PlanPropertyMapService } from 'src/app/service/plan-properties/plan-property-services';
 import { RunningDemoService } from 'src/app/service/demo/demo-services';
 import { Component, OnInit} from '@angular/core';
@@ -104,7 +104,7 @@ export class MUGSVisuMainComponent implements OnInit, OnDestroy {
       map((project) => project.settings)
     );
 
-    this.demo$ = demoService.getSelectedObject();
+    this.demo$ = demoService.getSelectedObject() as BehaviorSubject<Demo>;
     this.selectedStep$ = stepService.getSelectedObject();
 
     this.conflicts$ = combineLatest([this.selectedStep$, this.settings$]).pipe(

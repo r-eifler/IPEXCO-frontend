@@ -1,34 +1,27 @@
 import { RunningDemoService } from "src/app/service/demo/demo-services";
-import { Project } from "src/app/interface/project";
-import { CurrentProjectService } from "src/app/service/project/project-services";
-import { DemoPlannerService } from "./demo-planner.service";
 import { PlannerService } from "src/app/service/planner-runs/planner.service";
-import { DemoIterationStepsService } from "./demo-iteration-steps.service";
 import { Injectable } from "@angular/core";
-import { combineLatest, Observable } from "rxjs";
+import { BehaviorSubject, combineLatest, Observable } from "rxjs";
 import { filter, take } from "rxjs/operators";
-import { PlanProperty } from "../../interface/plan-property/plan-property";
 import {
   ModifiedPlanningTask,
   PlanningTaskRelaxationSpace,
 } from "../../interface/planning-task-relaxation";
-import { IterationStep, ModIterationStep, StepStatus } from "../../interface/run";
+import { IterationStep, StepStatus } from "../../interface/run";
 import { PlanPropertyMapService } from "../plan-properties/plan-property-services";
 import { IterationStepsService } from "./iteration-steps.service";
 import {
   NewIterationStepStoreService,
   SelectedIterationStepService,
 } from "./selected-iteration-step.service";
-import { PlanningTaskRelaxationService } from "../planning-task/planning-task-relaxations-services";
 import { Demo } from "../../interface/demo";
-import { SelectedObjectService } from "../base/selected-object.service";
 import { NewIterationStepGenerationService } from "./new-iteration-step-generation-service.service";
 
 @Injectable({
   providedIn: "root",
 })
 export class DemoNewIterationStepGenerationService extends NewIterationStepGenerationService {
-  relaxationSpaces$: Observable<PlanningTaskRelaxationSpace[]>;
+
   demo$: Observable<Demo>;
 
   constructor(
@@ -38,7 +31,6 @@ export class DemoNewIterationStepGenerationService extends NewIterationStepGener
     planPropertyMapService: PlanPropertyMapService,
     protected plannerService: PlannerService,
     protected currentProjectService: RunningDemoService,
-    protected planningTaskRelaxationService: PlanningTaskRelaxationService
   ) {
     super(
       newIterationStepStoreService,
@@ -49,21 +41,20 @@ export class DemoNewIterationStepGenerationService extends NewIterationStepGener
       currentProjectService
     );
 
-    this.relaxationSpaces$ = this.planningTaskRelaxationService.getList();
-    this.demo$ = currentProjectService.getSelectedObject();
+    this.demo$ = currentProjectService.getSelectedObject() as BehaviorSubject<Demo>;
   }
 
   createInitialStep(save=false) {
     console.log("Create initial iteration step DEMO");
-    combineLatest([this.demo$, this.planProperties$, this.relaxationSpaces$])
+    combineLatest([this.demo$, this.planProperties$])
       .pipe(
         filter(
-          ([demo, ppM, spaces]) =>
-            !!demo && !!ppM && ppM.size > 0 && (! demo.settings?.useConstraints || (!!spaces && spaces.length > 0))
+          ([demo, ppM]) =>
+            !!demo && !!ppM && ppM.size > 0 && (! demo.settings?.useConstraints)
         ),
         take(1)
       )
-      .subscribe(async ([demo, planProperties, relaxationSpaces]) => {
+      .subscribe(async ([demo, planProperties]) => {
         console.log("Generate initial Iteration Step");
         console.log("#planProperties: " + planProperties.size);
         let softGoals = [];
@@ -75,30 +66,14 @@ export class DemoNewIterationStepGenerationService extends NewIterationStepGener
             softGoals.push(pp._id);
           }
         }
-        let initUpdates = [];
-        if(relaxationSpaces){
-          relaxationSpaces.forEach((space) =>
-            space.dimensions.forEach((dim) =>
-              initUpdates.push({
-                orgFact: dim.orgFact.fact,
-                newFact: dim.orgFact.fact,
-              })
-            )
-          );
-        }
-        let newTask: ModifiedPlanningTask = {
-          name: "task",
-          project: demo._id,
-          basetask: demo.baseTask,
-          initUpdates,
-        };
+
         let newStep: IterationStep = {
           name: "Iteration Step 1",
           project: demo._id,
           status: StepStatus.unknown,
           hardGoals: [...hardGoals],
           softGoals: [...softGoals],
-          task: newTask,
+          task: demo.baseTask,
         };
 
         console.log("New Step");
@@ -134,19 +109,14 @@ export class DemoNewIterationStepGenerationService extends NewIterationStepGener
               softGoals.push(pp._id);
             }
           }
-          let newTask: ModifiedPlanningTask = {
-            name: "task",
-            project: step.task.project,
-            basetask: step.task.basetask,
-            initUpdates: step.task.initUpdates,
-          };
+
           let newStep: IterationStep = {
             name: step.name,
             project: step.project,
             status: StepStatus.unknown,
             hardGoals: [...step.hardGoals],
             softGoals: [...softGoals],
-            task: newTask,
+            task: step.task,
           };
           console.log("New Step");
           console.log(newStep);

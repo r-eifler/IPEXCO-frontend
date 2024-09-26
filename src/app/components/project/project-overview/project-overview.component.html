@@ -18,32 +18,10 @@
         <div mat-card-avatar>
           <mat-icon>insert_drive_file</mat-icon>
         </div>
-        <mat-card-title> Files </mat-card-title>
+        <mat-card-title> ??? </mat-card-title>
       </mat-card-header>
       <mat-card-content>
-        <mat-list>
-          <mat-list-item>
-            <mat-icon matListItemIcon>article</mat-icon>
-            <h3 matListItemTitle>Domain</h3>
-            <p matListItemLine>
-              <span>{{ currentProject.domainFile.name }}</span>
-            </p>
-          </mat-list-item>
-          <mat-list-item>
-            <mat-icon matListItemIcon>article</mat-icon>
-            <h3 matListItemTitle>Problem</h3>
-            <p matListItemLine>
-              <span>{{ currentProject.problemFile.name }}</span>
-            </p>
-          </mat-list-item>
-          <mat-list-item>
-            <mat-icon matListItemIcon>article</mat-icon>
-            <h3 matListItemTitle>Specification</h3>
-            <p matListItemLine>
-              <span>{{ currentProject.domainSpecification.name }}</span>
-            </p>
-          </mat-list-item>
-        </mat-list> 
+
       </mat-card-content>
     </mat-card>
 
@@ -55,22 +33,7 @@
         <mat-card-title>Statistics</mat-card-title>
       </mat-card-header>
       <mat-card-content>
-        <mat-list>
-          <mat-list-item>
-            #properties: {{ (properties$ | async).size }}
-          </mat-list-item>
-          <mat-divider></mat-divider>
-          <mat-list-item>
-            #planning runs: {{ runsService.getNumRuns() }}
-          </mat-list-item>
-          <mat-divider></mat-divider>
-          <mat-list-item>
-            #questions: {{ runsService.getNumQuestions() }}
-          </mat-list-item>
-          <!--        <mat-list-item>-->
-          <!--          #demos: {{demosService.getNumOfProject(currentProject)}}-->
-          <!--        </mat-list-item>-->
-        </mat-list>
+       
       </mat-card-content>
     </mat-card>
 

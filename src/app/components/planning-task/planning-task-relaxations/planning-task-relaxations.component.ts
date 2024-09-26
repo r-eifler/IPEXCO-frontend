@@ -10,7 +10,7 @@ import { filter, map, takeUntil } from "rxjs/operators";
 import {
   FactToString,
   predicateToString,
-} from "src/app/interface/plannig-task";
+} from "src/app/interface/planning-task";
 import { MatDialog } from "@angular/material/dialog";
 
 interface InitUpdates {

@@ -179,11 +179,9 @@ import { IterationStepsListComponent } from "./components/iter-planning/iteratio
 import { IterationStepOverviewComponent } from "./components/iter-planning/finished-step/iteration-step-overview/iteration-step-overview.component";
 import { IterationStepDetailNavigatorComponent } from "./components/iter-planning/iteration-step-detail-navigator/iteration-step-detail-navigator.component";
 import { HardGoalSelectorComponent } from "./components/iter-planning/goals/hard-goal-selector/hard-goal-selector.component";
-import { RelaxationSelectorComponent } from "./components/iter-planning/relaxations/relaxation-selector/relaxation-selector.component";
 import { SelectedHardGoalsComponent } from "./components/iter-planning/goals/selected-hard-goals/selected-hard-goals.component";
 import { ConflictViewComponent } from "./components/iter-planning/explanations/conflict-view/conflict-view.component";
 import { FinishedStepNavigatorComponent } from "./components/iter-planning/finished-step/finished-step-navigator/finished-step-navigator.component";
-import { SelectedRelaxationsViewComponent } from "./components/iter-planning/relaxations/selected-relaxations-view/selected-relaxations-view.component";
 import { ExplanationsViewComponent } from "./components/iter-planning/explanations/explanations-view/explanations-view.component";
 import { ExplanationsSelectPreferenceViewComponent } from "./components/iter-planning/explanations/explanations-select-preference-view/explanations-select-preference-view.component";
 import { ExplanationsRelaxationsViewComponent } from "./components/iter-planning/explanations/explanations-relaxations-view/explanations-relaxations-view.component";
@@ -272,11 +270,9 @@ import { AskDeleteComponent } from "./components/utils/ask-delete/ask-delete.com
     IterationStepOverviewComponent,
     IterationStepDetailNavigatorComponent,
     HardGoalSelectorComponent,
-    RelaxationSelectorComponent,
     SelectedHardGoalsComponent,
     ConflictViewComponent,
     FinishedStepNavigatorComponent,
-    SelectedRelaxationsViewComponent,
     ExplanationsViewComponent,
     ExplanationsSelectPreferenceViewComponent,
     ExplanationsRelaxationsViewComponent,

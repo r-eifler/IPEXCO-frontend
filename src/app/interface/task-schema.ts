@@ -2,7 +2,7 @@ import {
   GoalType,
   PlanProperty,
 } from "src/app/interface/plan-property/plan-property";
-import { Action } from "./plannig-task";
+import { PDDLAction } from "./planning-task";
 
 const zip = (a, b) => a.map((k, i) => [k, b[i]]);
 
@@ -33,7 +33,7 @@ function replace(s: string, n_map): string {
 export function instantiateSchemaAction(
   action: SchemaAction,
   args: string[]
-): Action {
+): PDDLAction {
   let args_map = new Map();
   for (let i = 0; i < args.length; i++) {
     args_map.set(action.parameters[i].name, args[i]);

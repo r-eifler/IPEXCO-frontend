@@ -1,6 +1,6 @@
 import { IterationStep, StepStatus } from "./run";
 import { PDDLFile } from "./files/files";
-import { PlanningTask } from "./plannig-task";
+import { PlanningTask } from "./planning-task";
 import { GeneralSettings } from "./settings/general-settings";
 import { DomainSpecification } from "./files/domain-specification";
 

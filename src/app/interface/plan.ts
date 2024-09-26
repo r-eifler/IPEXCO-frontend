@@ -1,15 +1,15 @@
-import { Action, Fact, factEquals } from "./plannig-task";
+import { PDDLAction, PDDLFact, factEquals } from "./planning-task";
 
 export interface Plan {
-  actions: Action[];
+  actions: PDDLAction[];
   cost: number;
 }
 
 export interface State {
-  values: Fact[];
+  values: PDDLFact[];
 }
 
-export function nextState(state: State, action: Action): State {
+export function nextState(state: State, action: PDDLAction): State {
   // console.log(action.name);
   let new_values = [...state.values];
   for (const eff of action.effects) {

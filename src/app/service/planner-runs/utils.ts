@@ -1,6 +1,6 @@
-import { Action } from "src/app/interface/plannig-task";
+import { PDDLAction } from "src/app/interface/planning-task";
 import { PPConflict } from "./../../interface/explanations";
-import { PlanningTask } from "./../../interface/plannig-task";
+import { PlanningTask } from "../../interface/planning-task";
 import { PlanRun } from "../../interface/run";
 import {
   GoalType,
@@ -23,7 +23,7 @@ function parseActions(actionStrings: string[], task: PlanningTask): Plan {
   for (const a of actionStrings) {
     const action = a.replace("(", "").replace(")", "");
     const [name, ...args] = action.split(" ");
-    if (task.actions.some((ac) => ac.name === name)) {
+    if (task.model.actions.some((ac) => ac.name === name)) {
       res.actions.push({
         name: name,
         parameters: args.map((a) => {

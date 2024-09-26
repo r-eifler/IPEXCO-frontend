@@ -10,16 +10,16 @@ import { TimeLoggerService } from "src/app/service/logger/time-logger.service";
 import { nextState, Plan, State } from "src/app/interface/plan";
 import { Project } from "src/app/interface/project";
 import {
-  Action,
-  Fact,
+  PDDLAction,
+  PDDLFact,
   factEquals,
   FactToString,
   instantiateAction,
-} from "src/app/interface/plannig-task";
+} from "src/app/interface/planning-task";
 import { getUpdatedInitialState } from "src/app/interface/planning-task-relaxation";
 
 interface ExFact {
-  fact: Fact;
+  fact: PDDLFact;
   precon: boolean;
   effect_pos: boolean;
   effect_neg: boolean;
@@ -46,7 +46,7 @@ export class InteractivePlanViewComponent implements OnInit, OnDestroy {
 
   plan$: Observable<Plan>;
 
-  action_trace: Action[] = [];
+  action_trace: PDDLAction[] = [];
   state_trace: State[] = [];
   state_trace_ex: ExState[] = [];
   states_visible: boolean[] = [];
@@ -66,7 +66,7 @@ export class InteractivePlanViewComponent implements OnInit, OnDestroy {
       filter(
         (step) => !!step && step.plan && step.plan.status == RunStatus.finished
       ),
-      map((step) => parsePlan(step.plan.result, step.task.basetask))
+      map((step) => parsePlan(step.plan.result, step.task))
     );
 
     combineLatest([this.step$, this.plan$])
@@ -82,14 +82,14 @@ export class InteractivePlanViewComponent implements OnInit, OnDestroy {
             return;
           }
 
-          let plan: Plan = parsePlan(step.plan.result, step.task.basetask);
+          let plan: Plan = parsePlan(step.plan.result, step.task);
 
-          let action_map: Map<string, Action> = new Map();
-          for (const action of step.task.basetask.actions) {
+          let action_map: Map<string, PDDLAction> = new Map();
+          for (const action of step.task.model.actions) {
             action_map.set(action.name, action);
           }
 
-          let init_state: State = { values: getUpdatedInitialState(step.task) };
+          let init_state: State = { values: step.task.model.initial };
           this.state_trace.push(init_state);
           this.state_trace_ex.push({
             facts: init_state.values.map((v) => {

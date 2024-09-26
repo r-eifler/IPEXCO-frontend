@@ -1,4 +1,4 @@
-import { PlanningTask } from "src/app/interface/plannig-task";
+import { PlanningTask } from "src/app/interface/planning-task";
 import { takeUntil } from "rxjs/operators";
 import { MatStepper } from "@angular/material/stepper";
 import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
@@ -70,7 +70,7 @@ export class PropertyCreatorComponent implements OnInit, OnDestroy {
       .subscribe((project) => {
         this.currentProject = project;
         this.task = project.baseTask;
-        this.actionOptions = this.task.actions.map((elem) => elem.name);
+        this.actionOptions = this.task.model.actions.map((elem) => elem.name);
         this.domainSpec = project.domainSpecification
       });
   }

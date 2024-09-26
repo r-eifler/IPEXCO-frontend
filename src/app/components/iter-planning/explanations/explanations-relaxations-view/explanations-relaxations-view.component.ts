@@ -13,7 +13,7 @@ import {
 } from "src/app/interface/run";
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from "@angular/core";
 import { BehaviorSubject, Observable, combineLatest } from "rxjs";
-import { Fact, factEquals } from "src/app/interface/plannig-task";
+import { PDDLFact, factEquals } from "src/app/interface/planning-task";
 import { GeneralSettings } from 'src/app/interface/settings/general-settings';
 import { CurrentProjectService } from 'src/app/service/project/project-services';
 

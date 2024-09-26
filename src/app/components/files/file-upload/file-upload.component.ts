@@ -45,8 +45,9 @@ export class TemplateFileUploadComponent {
         this.fileSelected.emit(this.selectedFile)
       };
 
-      this.name = inputNode.files[0].name;
-      reader.readAsText(inputNode.files[0]);
+      this.name = fileObject.name;
+      console.log(this.name)
+      reader.readAsText(fileObject);
     }
   }
 

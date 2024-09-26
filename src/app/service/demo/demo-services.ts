@@ -8,7 +8,9 @@ import { environment } from "src/environments/environment";
 import { IHTTPData } from "../../interface/http-data.interface";
 import { ADD, EDIT, LOAD, REMOVE } from "../../store/generic-list.store";
 import { RunStatus } from "src/app/interface/run";
-import { BaseProjectService } from "../project/project-services";
+import { BaseProjectService, CurrentProjectService } from "../project/project-services";
+import { PlanPropertyMapService } from "../plan-properties/plan-property-services";
+import { IterationStepsService } from "../planner-runs/iteration-steps.service";
 
 
 @Injectable({
@@ -171,13 +173,24 @@ export class DemosService extends ObjectCollectionService<Demo> {
 @Injectable({
   providedIn: "root",
 })
-export class RunningDemoService extends BaseProjectService<Demo> {
-  constructor( store: RunningDemoStore) {
-    super(store);
+export class RunningDemoService extends CurrentProjectService {
+  constructor( 
+      store: RunningDemoStore,
+      propertiesService: PlanPropertyMapService,
+      runsService: IterationStepsService,) {
+    super(store, propertiesService,runsService);
   }
 
   saveObject(demo: Demo) {
     this.selectedObjectStore.dispatch({ type: LOAD, data: demo });
     console.log(demo);
+
+    this.runsService.reset()
+    this.runsService.findCollection([
+      { param: "projectId", value: demo._id },
+    ]);
+    this.propertiesService.findCollection([
+      { param: "projectId", value: demo._id },
+    ]);
   }
 }

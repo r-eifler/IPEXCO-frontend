@@ -2,12 +2,14 @@ import {
   PlanningTask,
   predicateToString,
   FactToString,
-} from "src/app/interface/plannig-task";
+  PlanningModel,
+  PDDLFact,
+} from "src/app/interface/planning-task";
 import { Project } from "src/app/interface/project";
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { CurrentProjectService } from "src/app/service/project/project-services";
-import { Subject, BehaviorSubject } from "rxjs";
-import { takeUntil } from "rxjs/operators";
+import { Subject, BehaviorSubject, Observable } from "rxjs";
+import { filter, map, tap } from "rxjs/operators";
 
 @Component({
   selector: "app-planning-task-view",
@@ -17,10 +19,26 @@ import { takeUntil } from "rxjs/operators";
 export class PlanningTaskViewComponent implements OnInit, OnDestroy {
   private ngUnsubscribe: Subject<any> = new Subject();
 
-  project$: BehaviorSubject<Project>;
+  domain_name$: Observable<string>
+  planning_model$: Observable<PlanningModel>
+  initial_state$: Observable<PDDLFact[]>
 
-  constructor(private projectsService: CurrentProjectService) {
-    this.project$ = projectsService.findSelectedObject();
+  constructor(projectsService: CurrentProjectService) {
+
+    this.domain_name$ = projectsService.findSelectedObject().pipe(map(p => p.baseTask.domain_name));
+
+    this.planning_model$ = projectsService.findSelectedObject().pipe(
+      filter(p => p != null),
+      map(p => p.baseTask.model),
+      filter(m => m != null)
+    );
+
+    this.initial_state$ = projectsService.findSelectedObject().pipe(
+      filter(p => p != null),
+      map(p => p.baseTask.model),
+      filter(m => m != null),
+      map(m => m.initial)
+    );
   }
 
   ngOnInit(): void {}

@@ -7,6 +7,9 @@ import { Project } from "../../interface/project";
 import { environment } from "../../../environments/environment";
 import { LOAD } from "../../store/generic-list.store";
 import { ItemStore } from 'src/app/store/generic-item.store';
+import { PlanPropertyMapService } from "../plan-properties/plan-property-services";
+import { IterationStepsService } from "../planner-runs/iteration-steps.service";
+import { DemosService } from "../demo/demo-services";
 
 @Injectable({
   providedIn: "root",
@@ -32,12 +35,34 @@ export class BaseProjectService<T> extends SelectedObjectService<T> {
   providedIn: "root",
 })
 export class CurrentProjectService extends BaseProjectService<Project> {
-  constructor(store: CurrentProjectStore) {
+  constructor(
+      store: CurrentProjectStore,
+      protected propertiesService: PlanPropertyMapService,
+      protected runsService: IterationStepsService,
+    ) {
     super(store);
   }
 
   saveObject(project: Project) {
+
+    // TODO 
+    project.baseTask = JSON.parse(project.baseTask as unknown as string)
+    project.domainSpecification = JSON.parse(project.domainSpecification as unknown as string)
+
+
     this.selectedObjectStore.dispatch({ type: LOAD, data: project });
+
+    console.log('current project:' + project._id)
+
+    this.runsService.reset()
+    this.runsService.findCollection([
+      { param: "projectId", value: project._id },
+    ]);
+    this.propertiesService.findCollection([
+      { param: "projectId", value: project._id },
+    ]);
+
+    // TODO demo service missing
   }
 
 }
