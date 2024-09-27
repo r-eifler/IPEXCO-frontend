@@ -1,9 +1,9 @@
-import { NewIterationStepStoreService } from "./../../../service/planner-runs/selected-iteration-step.service";
+import { NewIterationStepStoreService } from "../../../service/planner-runs/selected-iteration-step.service";
 import { SelectedIterationStepService } from "src/app/service/planner-runs/selected-iteration-step.service";
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { IterationStep } from "../../../interface/run";
 import { IterationStepsService } from "../../../service/planner-runs/iteration-steps.service";
-import { DemoHelpDialogComponent } from "../../demo/demo-help-dialog/demo-help-dialog.component";
+import { DemoHelpDialogComponent } from "../../../components/demo/demo-help-dialog/demo-help-dialog.component";
 import { Subject, Observable } from "rxjs";
 import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
 

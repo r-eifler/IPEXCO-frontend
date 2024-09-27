@@ -5,8 +5,6 @@ import { ViewSettings } from "../interface/settings/view-settings";
 import { ListStore } from "./generic-list.store";
 import { DomainSpecificationFile, PDDLFile } from "../interface/files/files";
 import { ItemStore } from "./generic-item.store";
-import { PlanProperty } from "../interface/plan-property/plan-property";
-import { Project } from "../interface/project";
 import { DepExplanationRun, PlanRun } from "../interface/run";
 import { TaskSchema } from "../interface/task-schema";
 import { DomainSpecification } from "../interface/files/domain-specification";
@@ -20,6 +18,8 @@ import {
   NewStepInterfaceStatus,
 } from "../interface/interface-status";
 import { UserStudyData } from "../interface/user-study/user-study-store";
+import { Project } from "../project/domain/project";
+import { PlanProperty } from "../interface/plan-property/plan-property";
 
 // User/Authentication
 export class UserStore extends ItemStore<User> {}

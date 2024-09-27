@@ -1,5 +1,5 @@
 import { filter, take, takeUntil } from "rxjs/operators";
-import { DemoCreatorComponent } from "./../../demo/demo-creator/demo-creator.component";
+import { DemoCreatorComponent } from "../../../components/demo/demo-creator/demo-creator.component";
 import { DemosService } from "../../../service/demo/demo-services";
 import { PlanRun } from "src/app/interface/run";
 import { IterationStepsService } from "../../../service/planner-runs/iteration-steps.service";
@@ -9,10 +9,10 @@ import { PlanPropertyMapService } from "src/app/service/plan-properties/plan-pro
 import { CurrentProjectService, ProjectsService } from "src/app/service/project/project-services";
 import { Observable, Subject } from "rxjs";
 import { PlanProperty } from "src/app/interface/plan-property/plan-property";
-import { Project } from "src/app/interface/project";
-import { ActivatedRoute, Router } from "@angular/router";
 import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { Project } from "../../domain/project";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-project-overview",

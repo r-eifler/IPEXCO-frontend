@@ -11,7 +11,7 @@ import { environment } from "../../../environments/environment";
 import { IHTTPData } from "../../interface/http-data.interface";
 import { map } from "rxjs/operators";
 import { DomainSpecification } from "../../interface/files/domain-specification";
-import { Project } from "../../interface/project";
+import { Project } from "src/app/project/domain/project";
 
 interface FileContent {
   data: string;

@@ -1,4 +1,3 @@
-import { Project } from "./../../../interface/project";
 import {
   DomainFilesService,
   ProblemFilesService,
@@ -13,6 +12,7 @@ import { Demo } from "src/app/interface/demo";
 import { Subject } from "rxjs";
 import { UserStudiesService } from "../../../service/user-study/user-study-services";
 import { UserStudy } from "../../../interface/user-study/user-study";
+import { Project } from "src/app/project/domain/project";
 
 @Component({
   selector: "app-user-main-page",

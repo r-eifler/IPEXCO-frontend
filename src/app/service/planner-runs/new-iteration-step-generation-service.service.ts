@@ -1,5 +1,4 @@
 import { RunningDemoService } from "src/app/service/demo/demo-services";
-import { Project } from "src/app/interface/project";
 import { CurrentProjectService } from "src/app/service/project/project-services";
 import { DemoPlannerService } from "./demo-planner.service";
 import { PlannerService } from "src/app/service/planner-runs/planner.service";
@@ -22,6 +21,7 @@ import {
 import { PlanningTaskRelaxationService } from "../planning-task/planning-task-relaxations-services";
 import { Demo } from "../../interface/demo";
 import { SelectedObjectService } from "../base/selected-object.service";
+import { Project } from "src/app/project/domain/project";
 
 @Injectable({
   providedIn: "root",

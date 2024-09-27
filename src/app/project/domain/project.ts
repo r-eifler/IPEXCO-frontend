@@ -1,8 +1,8 @@
-import { IterationStep, StepStatus } from "./run";
-import { PDDLFile } from "./files/files";
-import { PlanningTask } from "./planning-task";
-import { GeneralSettings } from "./settings/general-settings";
-import { DomainSpecification } from "./files/domain-specification";
+import { DomainSpecification } from "src/app/interface/files/domain-specification";
+import { PDDLFile } from "src/app/interface/files/files";
+import { PlanningTask } from "src/app/interface/planning-task";
+import { GeneralSettings } from "src/app/interface/settings/general-settings";
+
 
 export interface Project {
   _id: string;

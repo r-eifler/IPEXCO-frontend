@@ -1,7 +1,7 @@
 import { PPDependencies } from 'src/app/interface/explanations';
 import { FactUpdate } from "./planning-task-relaxation";
-import { Project } from "./project";
 import { DepExplanationRun, RelaxationExplanationRun, RunStatus } from "./run";
+import { Project } from '../project/domain/project';
 
 export interface DemoExplanation {
   initUpdates: FactUpdate[];

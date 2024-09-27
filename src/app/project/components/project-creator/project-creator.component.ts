@@ -1,5 +1,4 @@
 import { defaultGeneralSetting } from "../../../interface/settings/general-settings";
-import { Project } from "./../../../interface/project";
 import { Component, inject, Inject, OnDestroy, OnInit } from "@angular/core";
 import { FormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from "@angular/forms";
 import { BehaviorSubject, combineLatest, Observable, Subject } from "rxjs";
@@ -13,6 +12,7 @@ import { defaultDomainSpecification, DomainSpecification } from "src/app/interfa
 import { PDDLService } from "src/app/service/pddl/pddl.service";
 import { take, tap, map} from "rxjs/operators";
 import { PlanningDomain, PlanningProblem } from "src/app/interface/planning-task";
+import { Project } from "../../domain/project";
 
 @Component({
   selector: "app-project-creator",

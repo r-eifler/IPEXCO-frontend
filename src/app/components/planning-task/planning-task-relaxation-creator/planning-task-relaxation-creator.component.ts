@@ -19,7 +19,6 @@ import {
   FactToString,
 } from "src/app/interface/planning-task";
 import { Component, Inject, OnDestroy, OnInit, ViewChild } from "@angular/core";
-import { Project } from "src/app/interface/project";
 import { Subject, BehaviorSubject } from "rxjs";
 import { CurrentProjectService } from "src/app/service/project/project-services";
 import { PropertyCreatorComponent } from "../../plan_properties/property-creator/property-creator.component";
@@ -31,6 +30,7 @@ import {
 } from "@angular/cdk/drag-drop";
 import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { Project } from "src/app/project/domain/project";
 
 @Component({
   selector: "app-planning-task-relaxation-creator",

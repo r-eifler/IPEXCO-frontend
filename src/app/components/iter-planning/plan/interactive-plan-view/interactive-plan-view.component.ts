@@ -8,7 +8,6 @@ import { filter, map, takeUntil } from "rxjs/operators";
 import { PlanRun, RunStatus } from "src/app/interface/run";
 import { TimeLoggerService } from "src/app/service/logger/time-logger.service";
 import { nextState, Plan, State } from "src/app/interface/plan";
-import { Project } from "src/app/interface/project";
 import {
   PDDLAction,
   PDDLFact,
@@ -17,6 +16,7 @@ import {
   instantiateAction,
 } from "src/app/interface/planning-task";
 import { getUpdatedInitialState } from "src/app/interface/planning-task-relaxation";
+import { Project } from "src/app/project/domain/project";
 
 interface ExFact {
   fact: PDDLFact;

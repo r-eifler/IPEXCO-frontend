@@ -1,3 +1,5 @@
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+
 import { BrowserModule } from "@angular/platform-browser";
 import { NgModule } from "@angular/core";
 import { RouterModule } from "@angular/router";
@@ -114,18 +116,18 @@ import { DomainSelectorComponent } from "./components/files/domain-selector/doma
 import { ProblemSelectorComponent } from "./components/files/problem-selector/problem-selector.component";
 import { PropertyCreatorComponent } from "./components/plan_properties/property-creator/property-creator.component";
 import { NavigationComponent } from "./components/navigation/navigation.component";
-import { ProjectCollectionComponent } from "./components/project/project-collection/project-collection.component";
-import { ProjectCreatorComponent } from "./components/project/project-creator/project-creator.component";
+import { ProjectCollectionComponent } from "./project/components/project-collection/project-collection.component";
+import { ProjectCreatorComponent } from "./project/components/project-creator/project-creator.component";
 import { PlannerService } from "./service/planner-runs/planner.service";
-import { ProjectBaseComponent } from "./components/project/project-base/project-base.component";
+import { ProjectBaseComponent } from "./project/components/project-base/project-base.component";
 import { PropertyCollectionComponent } from "./components/plan_properties/property-collection/property-collection.component";
-import { ProjectIterativePlanningBaseComponent } from "./components/project/project-iterative-planning-base/project-iterative-planning-base.component";
+import { ProjectIterativePlanningBaseComponent } from "./project/components/project-iterative-planning-base/project-iterative-planning-base.component";
 import { PlanViewComponent } from "./components/iter-planning/plan/plan-view/plan-view.component";
 import { LoginComponent } from "./components/login/login/login.component";
 import { DemoCollectionComponent } from "./components/demo/demo-collection/demo-collection.component";
 import { DemoBaseComponent } from "./components/demo/demo-base/demo-base.component";
 import { DemoSettingsComponent } from "./components/demo/demo-settings/demo-settings.component";
-import { ProjectOverviewComponent } from "./components/project/project-overview/project-overview.component";
+import { ProjectOverviewComponent } from "./project/components/project-overview/project-overview.component";
 import { DemoCreatorComponent } from "./components/demo/demo-creator/demo-creator.component";
 import { DemoHelpComponent } from "./components/demo/demo-help/demo-help.component";
 import { DemoNavigatorComponent } from "./components/demo/demo-navigator/demo-navigator.component";
@@ -172,7 +174,7 @@ import { AcceptedTestPersonsComponent } from "./components/user-study/eval/accep
 import { InteractivePlanViewComponent } from "./components/iter-planning/plan/interactive-plan-view/interactive-plan-view.component";
 import { PlanningTaskViewComponent } from "./components/planning-task/planning-task-view/planning-task-view.component";
 import { PlanningTaskRelaxationsComponent } from "./components/planning-task/planning-task-relaxations/planning-task-relaxations.component";
-import { SettingsComponent } from "./components/project/settings/settings.component";
+import { SettingsComponent } from "./project/components/settings/settings.component";
 import { CompleteActionComponent } from "./components/planning-task/complete-action/complete-action.component";
 import { PlanningTaskRelaxationCreatorComponent } from "./components/planning-task/planning-task-relaxation-creator/planning-task-relaxation-creator.component";
 import { IterationStepsListComponent } from "./components/iter-planning/iteration-steps-list/iteration-steps-list.component";
@@ -199,8 +201,13 @@ import { UserStudyCurrentDataService, UserStudyDataService } from "./service/use
 import { ConflictVisuContainerComponent } from './components/visualization/conflict-visu-container/conflict-visu-container.component';
 import { MUGSVisuMainComponent } from './components/visualization/mugs-visu-main/mugs-visu-main.component';
 import { IconSelectorComponent } from './components/utils/icon-selector/icon-selector.component';
-import { ProjectSettingsContainerComponent } from './components/project/project-settings-container/project-settings-container.component';
+import { ProjectSettingsContainerComponent } from './project/components/project-settings-container/project-settings-container.component';
 import { AskDeleteComponent } from "./components/utils/ask-delete/ask-delete.component";
+import { StoreModule } from '@ngrx/store';
+import { projectFeature, projectReducer } from './project/state/project.reducer';
+import { EffectsModule } from '@ngrx/effects';
+import { LoadProjectListEffect } from './project/state/effects/load-project-list.effect';
+import { ProjectService } from './project/service/project.service';
 
 
 
@@ -289,6 +296,21 @@ import { AskDeleteComponent } from "./components/utils/ask-delete/ask-delete.com
     ProjectSettingsContainerComponent,
   ],
   imports: [
+    StoreModule.forRoot(
+      {
+        [projectFeature]: projectReducer
+      }),
+    EffectsModule.forRoot([
+      LoadProjectListEffect,
+    ]),
+    // Instrumentation must be imported after importing StoreModule (config is optional)
+    StoreDevtoolsModule.instrument({
+      maxAge: 25, // Retains last 25 states
+      autoPause: true, // Pauses recording actions and state changes when the extension window is not open
+      trace: false, //  If set to true, will include stack trace for every dispatched action, so you can see it in trace tab jumping directly to that part of code
+      traceLimit: 75, // maximum stack trace frames to be stored (in case trace option was provided as true)
+      connectInZone: true // If set to true, the connection is established within the Angular zone
+    }),
     RouterModule.forRoot(appRoutes, {
       enableTracing: false,
       paramsInheritanceStrategy: "always",
@@ -391,6 +413,8 @@ import { AskDeleteComponent } from "./components/utils/ask-delete/ask-delete.com
     UserStudyCurrentDataStore,
     UserStudyDataService,
     UserStudyDataStore,
+    // new ngrx
+    ProjectService,
     {
       provide: MAT_BOTTOM_SHEET_DEFAULT_OPTIONS,
       useValue: { hasBackdrop: true },

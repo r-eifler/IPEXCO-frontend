@@ -5,7 +5,6 @@ import {
   PlanningModel,
   PDDLFact,
 } from "src/app/interface/planning-task";
-import { Project } from "src/app/interface/project";
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { CurrentProjectService } from "src/app/service/project/project-services";
 import { Subject, BehaviorSubject, Observable } from "rxjs";

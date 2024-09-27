@@ -1,5 +1,4 @@
 import { takeUntil } from "rxjs/operators";
-import { Project } from "src/app/interface/project";
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Observable, Subject } from "rxjs";
 import { Router } from "@angular/router";
@@ -10,7 +9,12 @@ import {
 } from "src/app/service/project/project-services";
 import { ResponsiveService } from "src/app/service/responsive/responsive.service";
 import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
-import { AskDeleteComponent } from "../../utils/ask-delete/ask-delete.component";
+import { AskDeleteComponent } from "../../../components/utils/ask-delete/ask-delete.component";
+import { Project } from "../../domain/project";
+import { Store } from "@ngrx/store";
+import { loadProjectList } from "../../state/project.actions";
+import { selectProjects } from "../../state/project.selector";
+
 
 @Component({
   selector: "app-project-selection",
@@ -24,13 +28,16 @@ export class ProjectCollectionComponent implements OnInit, OnDestroy {
   isMobile: boolean;
 
   constructor(
+    private store: Store,
     private projectService: ProjectsService,
     private currentProjectService: CurrentProjectService,
     private responsiveService: ResponsiveService,
     private router: Router,
     public dialog: MatDialog
   ) {
-    this.projects$ = projectService.getList();
+    // this.projects$ = projectService.getList();
+    this.projects$ = store.select(selectProjects)
+    store.dispatch(loadProjectList())
   }
 
   ngOnInit(): void {

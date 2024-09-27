@@ -4,7 +4,6 @@ import { MatStepper } from "@angular/material/stepper";
 import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { UntypedFormArray, UntypedFormControl, UntypedFormGroup, Validators } from "@angular/forms";
 import { Action, ActionSet, PlanProperty } from "../../../interface/plan-property/plan-property";
-import { Project } from "src/app/interface/project";
 import { matchRegexValidator } from "../../../validators/match-regex-validator";
 import { MatAutocompleteSelectedEvent } from "@angular/material/autocomplete";
 import { DomainSpecification } from "src/app/interface/files/domain-specification";
@@ -16,6 +15,7 @@ import { Subject } from "rxjs";
 import { MatDialogRef } from "@angular/material/dialog";
 import { MatSlideToggleChange } from "@angular/material/slide-toggle";
 import { MatSelectionListChange } from "@angular/material/list";
+import { Project } from "src/app/project/domain/project";
 
 @Component({
   selector: "app-property-creator",

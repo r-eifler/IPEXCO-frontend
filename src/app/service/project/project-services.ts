@@ -3,13 +3,13 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { CurrentProjectStore, ProjectsStore } from "../../store/stores.store";
 import { ObjectCollectionService } from "../base/object-collection.service";
-import { Project } from "../../interface/project";
 import { environment } from "../../../environments/environment";
 import { LOAD } from "../../store/generic-list.store";
 import { ItemStore } from 'src/app/store/generic-item.store';
 import { PlanPropertyMapService } from "../plan-properties/plan-property-services";
 import { IterationStepsService } from "../planner-runs/iteration-steps.service";
 import { DemosService } from "../demo/demo-services";
+import { Project } from "src/app/project/domain/project";
 
 @Injectable({
   providedIn: "root",

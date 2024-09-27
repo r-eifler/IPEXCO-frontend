@@ -1,5 +1,5 @@
-import { ProjectSettingsContainerComponent } from './components/project/project-settings-container/project-settings-container.component';
-import { SettingsComponent } from "./components/project/settings/settings.component";
+import { ProjectSettingsContainerComponent } from './project/components/project-settings-container/project-settings-container.component';
+import { SettingsComponent } from "./project/components/settings/settings.component";
 import { PlanningTaskRelaxationsComponent } from "./components/planning-task/planning-task-relaxations/planning-task-relaxations.component";
 import { PlanningTaskViewComponent } from "./components/planning-task/planning-task-view/planning-task-view.component";
 import { HelpPageComponent } from "./components/login/help-page/help-page.component";
@@ -7,11 +7,11 @@ import { MainInfoComponent } from "./components/login/main-info/main-info.compon
 import { Routes } from "@angular/router";
 import { MainPageComponent } from "./components/login/main-page/main-page.component";
 import { UserMainPageComponent } from "./components/user/user-main-page/user-main-page.component";
-import { ProjectCollectionComponent } from "./components/project/project-collection/project-collection.component";
-import { ProjectBaseComponent } from "./components/project/project-base/project-base.component";
-import { ProjectOverviewComponent } from "./components/project/project-overview/project-overview.component";
+import { ProjectCollectionComponent } from "./project/components/project-collection/project-collection.component";
+import { ProjectBaseComponent } from "./project/components/project-base/project-base.component";
+import { ProjectOverviewComponent } from "./project/components/project-overview/project-overview.component";
 import { PropertyCollectionComponent } from "./components/plan_properties/property-collection/property-collection.component";
-import { ProjectIterativePlanningBaseComponent } from "./components/project/project-iterative-planning-base/project-iterative-planning-base.component";
+import { ProjectIterativePlanningBaseComponent } from "./project/components/project-iterative-planning-base/project-iterative-planning-base.component";
 import { DemoCollectionComponent } from "./components/demo/demo-collection/demo-collection.component";
 import { DemoBaseComponent } from "./components/demo/demo-base/demo-base.component";
 import { FilesCollectionComponent } from "./components/files/files-collection/files-collection.component";
