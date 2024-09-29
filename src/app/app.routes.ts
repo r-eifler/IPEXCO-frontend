@@ -1,13 +1,12 @@
 import { ProjectSettingsContainerComponent } from './project/components/project-settings-container/project-settings-container.component';
 import { SettingsComponent } from "./project/components/settings/settings.component";
-import { PlanningTaskRelaxationsComponent } from "./components/planning-task/planning-task-relaxations/planning-task-relaxations.component";
 import { PlanningTaskViewComponent } from "./components/planning-task/planning-task-view/planning-task-view.component";
 import { HelpPageComponent } from "./components/login/help-page/help-page.component";
 import { MainInfoComponent } from "./components/login/main-info/main-info.component";
 import { Routes } from "@angular/router";
 import { MainPageComponent } from "./components/login/main-page/main-page.component";
 import { UserMainPageComponent } from "./components/user/user-main-page/user-main-page.component";
-import { ProjectCollectionComponent } from "./project/components/project-collection/project-collection.component";
+import { ProjectCollectionComponent } from "./project-meta/components/project-collection/project-collection.component";
 import { ProjectBaseComponent } from "./project/components/project-base/project-base.component";
 import { ProjectOverviewComponent } from "./project/components/project-overview/project-overview.component";
 import { PropertyCollectionComponent } from "./components/plan_properties/property-collection/property-collection.component";
@@ -51,7 +50,6 @@ export const appRoutes: Routes = [
       { path: "settings", component: ProjectSettingsContainerComponent },
       { path: "planning-task", component: PlanningTaskViewComponent },
       { path: "properties", component: PropertyCollectionComponent },
-      { path: "task-relaxations", component: PlanningTaskRelaxationsComponent },
       {
         path: "iterative-planning",
         component: ProjectIterativePlanningBaseComponent,

@@ -116,8 +116,8 @@ import { DomainSelectorComponent } from "./components/files/domain-selector/doma
 import { ProblemSelectorComponent } from "./components/files/problem-selector/problem-selector.component";
 import { PropertyCreatorComponent } from "./components/plan_properties/property-creator/property-creator.component";
 import { NavigationComponent } from "./components/navigation/navigation.component";
-import { ProjectCollectionComponent } from "./project/components/project-collection/project-collection.component";
-import { ProjectCreatorComponent } from "./project/components/project-creator/project-creator.component";
+import { ProjectCollectionComponent } from "./project-meta/components/project-collection/project-collection.component";
+import { ProjectCreatorComponent } from "./project-meta/components/project-creator/project-creator.component";
 import { PlannerService } from "./service/planner-runs/planner.service";
 import { ProjectBaseComponent } from "./project/components/project-base/project-base.component";
 import { PropertyCollectionComponent } from "./components/plan_properties/property-collection/property-collection.component";
@@ -173,10 +173,8 @@ import { UserStudyCollectionBaseComponent } from "./components/user-study/user-s
 import { AcceptedTestPersonsComponent } from "./components/user-study/eval/accepted-test-persons/accepted-test-persons.component";
 import { InteractivePlanViewComponent } from "./components/iter-planning/plan/interactive-plan-view/interactive-plan-view.component";
 import { PlanningTaskViewComponent } from "./components/planning-task/planning-task-view/planning-task-view.component";
-import { PlanningTaskRelaxationsComponent } from "./components/planning-task/planning-task-relaxations/planning-task-relaxations.component";
 import { SettingsComponent } from "./project/components/settings/settings.component";
 import { CompleteActionComponent } from "./components/planning-task/complete-action/complete-action.component";
-import { PlanningTaskRelaxationCreatorComponent } from "./components/planning-task/planning-task-relaxation-creator/planning-task-relaxation-creator.component";
 import { IterationStepsListComponent } from "./components/iter-planning/iteration-steps-list/iteration-steps-list.component";
 import { IterationStepOverviewComponent } from "./components/iter-planning/finished-step/iteration-step-overview/iteration-step-overview.component";
 import { IterationStepDetailNavigatorComponent } from "./components/iter-planning/iteration-step-detail-navigator/iteration-step-detail-navigator.component";
@@ -206,8 +204,14 @@ import { AskDeleteComponent } from "./components/utils/ask-delete/ask-delete.com
 import { StoreModule } from '@ngrx/store';
 import { projectFeature, projectReducer } from './project/state/project.reducer';
 import { EffectsModule } from '@ngrx/effects';
-import { LoadProjectListEffect } from './project/state/effects/load-project-list.effect';
+import { LoadProjectEffect } from './project/state/effects/load-project.effect';
 import { ProjectService } from './project/service/project.service';
+import { projectMetaDataFeature, projectMetaDataReducer } from './project-meta/state/project-meta.reducer';
+import { LoadProjectMetaDataListEffect } from './project-meta/state/effects/load-project-meta-list.effect';
+import { ProjectMetaDataService } from './project-meta/service/project-meta-data.service';
+import { CreateProjectService } from './project-meta/service/create-project.service';
+import { CreateProjectEffect } from './project-meta/state/effects/create-project.effect';
+import { UpdateProjectEffect } from './project/state/effects/update-project.effect';
 
 
 
@@ -269,10 +273,8 @@ import { ProjectService } from './project/service/project.service';
     AcceptedTestPersonsComponent,
     InteractivePlanViewComponent,
     PlanningTaskViewComponent,
-    PlanningTaskRelaxationsComponent,
     SettingsComponent,
     CompleteActionComponent,
-    PlanningTaskRelaxationCreatorComponent,
     IterationStepsListComponent,
     IterationStepOverviewComponent,
     IterationStepDetailNavigatorComponent,
@@ -298,10 +300,14 @@ import { ProjectService } from './project/service/project.service';
   imports: [
     StoreModule.forRoot(
       {
-        [projectFeature]: projectReducer
+        [projectFeature]: projectReducer,
+        [projectMetaDataFeature]: projectMetaDataReducer,
       }),
     EffectsModule.forRoot([
-      LoadProjectListEffect,
+      LoadProjectEffect,
+      UpdateProjectEffect,
+      LoadProjectMetaDataListEffect,
+      CreateProjectEffect
     ]),
     // Instrumentation must be imported after importing StoreModule (config is optional)
     StoreDevtoolsModule.instrument({
@@ -415,6 +421,8 @@ import { ProjectService } from './project/service/project.service';
     UserStudyDataStore,
     // new ngrx
     ProjectService,
+    ProjectMetaDataService,
+    CreateProjectService,
     {
       provide: MAT_BOTTOM_SHEET_DEFAULT_OPTIONS,
       useValue: { hasBackdrop: true },

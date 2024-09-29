@@ -5,6 +5,11 @@ import { CurrentProjectService } from 'src/app/service/project/project-services'
 import { Component, OnInit } from '@angular/core';
 import { GeneralSettings } from 'src/app/interface/settings/general-settings';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { selectProject, selectProjectSettings } from '../../state/project.selector';
+import { Project } from '../../domain/project';
+import { updateProject } from '../../state/project.actions';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-project-settings-container',
@@ -14,24 +19,26 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class ProjectSettingsContainerComponent implements OnInit {
 
   settings$: Observable<GeneralSettings>
+  project$: Observable<Project>
 
   constructor(
-    private currentProjectService: CurrentProjectService,
-    private projectsService: ProjectsService,
+    private store: Store,
     private router: Router
   ) {
-    this.settings$ = currentProjectService.getSelectedObject().pipe(
-      filter(p => !!p),
-      map(p => p.settings)
-    )
+    this.settings$ = store.select(selectProjectSettings);
+    this.project$ = store.select(selectProject);
   }
 
   onSave(settings: GeneralSettings): void {
-    this.currentProjectService.getSelectedObject().pipe(take(1)).subscribe(
+
+    this.project$.pipe(take(1)).subscribe(
       project => {
-        project.settings = settings;
-        this.projectsService.saveObject(project);
-        this.router.navigate(['/projects', project._id, 'overview'],);
+        let newProject = {
+          ...project,
+          settings
+        }
+        this.store.dispatch(updateProject({project: newProject}))
+        // this.router.navigate(['/projects', project._id, 'overview'],);
       }
     )
   }

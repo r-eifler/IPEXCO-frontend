@@ -4,4 +4,7 @@ import { projectFeature, ProjectState } from "./project.reducer";
 
 const selectProjectFeature = createFeatureSelector<ProjectState>(projectFeature);
 
-export const selectProjects = createSelector(selectProjectFeature, (state) => state.projects.data)
+export const selectProject = createSelector(selectProjectFeature, (state) => state.project.data)
+
+export const selectProjectSettings = createSelector(selectProjectFeature, (state) => state.project.data?.settings)
+export const selectProjectPlanningTask = createSelector(selectProjectFeature, (state) => state.project.data?.baseTask)

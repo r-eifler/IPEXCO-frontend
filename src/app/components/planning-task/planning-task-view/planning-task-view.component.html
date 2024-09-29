@@ -1,9 +1,9 @@
-<!-- <mat-expansion-panel hideToggle class="expansion-panel">
-  <mat-expansion-panel-header> -->
-    <!-- <mat-panel-title> Types </mat-panel-title>
+<mat-expansion-panel hideToggle class="expansion-panel">
+  <mat-expansion-panel-header>
+    <mat-panel-title> Types </mat-panel-title>
   </mat-expansion-panel-header>
   <mat-list>
-    <mat-list-item *ngFor="let type of (planning_model$ | async)?types">
+    <mat-list-item *ngFor="let type of (planning_model$ | async)?.types">
       {{ type.name }}: {{ type.parent }}
     </mat-list-item>
   </mat-list>
@@ -15,7 +15,7 @@
   </mat-expansion-panel-header>
   <mat-list>
     <mat-list-item
-      *ngFor="let predicate of (planning_model$ | async)?predicates"
+      *ngFor="let predicate of (planning_model$ | async)?.predicates"
     >
       {{ predicatOut(predicate) }}
     </mat-list-item>
@@ -27,7 +27,7 @@
     <mat-panel-title> Actions </mat-panel-title>
   </mat-expansion-panel-header>
   <app-complete-action
-    *ngFor="let a of (planning_model$ | async)?actions"
+    *ngFor="let a of (planning_model$ | async)?.actions"
     [action]="a"
   ></app-complete-action>
 </mat-expansion-panel>
@@ -37,18 +37,18 @@
     <mat-panel-title> Objects </mat-panel-title>
   </mat-expansion-panel-header>
   <mat-list>
-    <mat-list-item *ngFor="let object of (planning_model$ | async)?objects">
+    <mat-list-item *ngFor="let object of (planning_model$ | async)?.objects">
       {{ object.name }} {{ object.type }}
     </mat-list-item>
   </mat-list>
-</mat-expansion-panel> -->
+</mat-expansion-panel> 
 
 <mat-expansion-panel hideToggle class="expansion-panel">
   <mat-expansion-panel-header>
     <mat-panel-title> Initial </mat-panel-title>
   </mat-expansion-panel-header>
   <mat-list>
-    <mat-list-item *ngFor="let fact of (initial_state$ | async)">
+    <mat-list-item *ngFor="let fact of (planning_model$ | async)?.initial">
       {{ factOut(fact) }}
     </mat-list-item>
   </mat-list>

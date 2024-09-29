@@ -25,7 +25,7 @@ export interface PDDLFact {
 export interface PDDLAction {
   name: string;
   parameters: PDDLObject[];
-  precondition: PDDLFact[];
+  preconditions: PDDLFact[];
   effects: PDDLFact[];
 }
 
@@ -190,7 +190,7 @@ export function instantiateAction(action: PDDLAction, args: string[]): PDDLActio
   });
 
   let i_precon = [];
-  for (const pre of action.precondition) {
+  for (const pre of action.preconditions) {
     i_precon.push(instantiateFactFromArgsMap(pre, args_map));
   }
 
@@ -201,7 +201,7 @@ export function instantiateAction(action: PDDLAction, args: string[]): PDDLActio
   return {
     name: action.name,
     parameters: i_params,
-    precondition: i_precon,
+    preconditions: i_precon,
     effects: i_eff,
   };
 }
@@ -214,7 +214,7 @@ export function actionToPDDL(action: PDDLAction): string {
     "\n";
   s +=
     "\tprecondition: (and " +
-    action.precondition.map((p) => factToPDDL(p)).join(" ") +
+    action.preconditions.map((p) => factToPDDL(p)).join(" ") +
     ")\n";
   s +=
     "\teffect: (and " +

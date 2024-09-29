@@ -12,7 +12,9 @@ import { defaultDomainSpecification, DomainSpecification } from "src/app/interfa
 import { PDDLService } from "src/app/service/pddl/pddl.service";
 import { take, tap, map} from "rxjs/operators";
 import { PlanningDomain, PlanningProblem } from "src/app/interface/planning-task";
-import { Project } from "../../domain/project";
+import { Project } from "../../../project/domain/project";
+import { Store } from "@ngrx/store";
+import { createProject } from "../../state/project-meta.actions";
 
 @Component({
   selector: "app-project-creator",
@@ -47,14 +49,13 @@ export class ProjectCreatorComponent implements OnInit, OnDestroy {
   problemValid$: Observable<boolean>;
 
   constructor(
-    private projectService: ProjectsService,
+    private store: Store,
     private userService: AuthenticationService,
     private pddlService: PDDLService,
     public dialogRef: MatDialogRef<ProjectCreatorComponent>,
     @Inject(MAT_DIALOG_DATA) data
   ) {
 
-    this.projects$ = this.projectService.getList();
     this.editedProject = data.project;
 
     this.translatedDomain$ = this.pddlService.getDomain();
@@ -120,7 +121,7 @@ export class ProjectCreatorComponent implements OnInit, OnDestroy {
           public: false,
         };
     
-        this.projectService.saveObject(newProject);
+        this.store.dispatch(createProject({project: newProject}))
     
         this.dialogRef.close();
       }

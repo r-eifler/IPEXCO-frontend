@@ -1,27 +1,35 @@
 import { createReducer, on } from "@ngrx/store";
 import { Project } from "../domain/project";
 import { Loadable, LoadingState } from "src/app/shared/common/loadable.interface";
-import { loadProjectList, loadProjectListSuccess } from "./project.actions";
+import { loadProject, loadProjectSuccess, updateProject, updateProjectSuccess } from "./project.actions";
 
 export interface ProjectState {
-    projects: Loadable<Project[]>;
+    project: Loadable<Project>;
 }
 
 export const projectFeature = 'project';
 
 const initialState: ProjectState = {
-    projects: {state: LoadingState.Initial, data: undefined}
+    project: {state: LoadingState.Initial, data: undefined}
 }
 
 
 export const projectReducer = createReducer(
     initialState,
-    on(loadProjectList, (state): ProjectState => ({
+    on(loadProject, (state): ProjectState => ({
         ...state,
-        projects: {state: LoadingState.Loading, data: undefined}
+        project: {state: LoadingState.Loading, data: undefined}
     })),
-    on(loadProjectListSuccess, (state, {projects}): ProjectState => ({
+    on(loadProjectSuccess, (state, {project}): ProjectState => ({
         ...state,
-        projects: {state: LoadingState.Done, data: projects}
-    }))
+        project: {state: LoadingState.Done, data: project}
+    })),
+    on(updateProject, (state): ProjectState => ({
+        ...state,
+        project: {state: LoadingState.Loading, data: undefined}
+    })),
+    on(updateProjectSuccess, (state, {project}): ProjectState => ({
+        ...state,
+        project: {state: LoadingState.Done, data: project}
+    })),
 );

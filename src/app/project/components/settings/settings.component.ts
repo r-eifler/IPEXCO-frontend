@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
 import { UntypedFormControl, UntypedFormGroup, Validators } from "@angular/forms";
-import { Subject } from "rxjs";
 import { ExplanationInterfaceType, GeneralSettings } from "src/app/interface/settings/general-settings";
 
 
@@ -10,7 +9,6 @@ import { ExplanationInterfaceType, GeneralSettings } from "src/app/interface/set
   styleUrls: ["./settings.component.scss"],
 })
 export class SettingsComponent implements OnInit, OnChanges {
-  private ngUnsubscribe: Subject<any> = new Subject();
 
   settingsForm: UntypedFormGroup;
 
@@ -96,36 +94,37 @@ export class SettingsComponent implements OnInit, OnChanges {
     this.settingsForm.controls.paymentSteps.setValue(settings.paymentInfo.steps);
   }
 
-  //TODO: also update current project/demo when saving the settigns
   onSave() {
-    this.settings.maxRuns = parseInt(this.settingsForm.controls.maxRuns.value);
 
-    this.settings.allowQuestions =this.settingsForm.controls.allowQuestions.value;
-    this.settings.provideRelaxationExplanations =this.settingsForm.controls.provideRelaxationExplanations.value;
+    let paymentInfo = {
+      max: this.settingsForm.controls.maxPayment.value,
+      min: this.settingsForm.controls.minPayment.value,
+      steps: this.settingsForm.controls.paymentSteps.value,
+    }
+     
+    let newSettings: GeneralSettings = {
+      _id: undefined,
+      maxRuns: parseInt(this.settingsForm.controls.maxRuns.value),  
+      allowQuestions: this.settingsForm.controls.allowQuestions.value,
+      provideRelaxationExplanations: this.settingsForm.controls.provideRelaxationExplanations.value,
+      introTask:  this.settingsForm.controls.introTask.value,
+      public: this.settingsForm.controls.public.value,
+      usePlanPropertyValues: this.settingsForm.controls.usePlanPropertyValues.value,
+      useConstraints: this.settingsForm.controls.useConstraints.value,
+      explanationInterface: this.settingsForm.controls.explanationInterface.value,
+      globalExplanation: this.settingsForm.controls.globalExplanation.value,
+      useTimer: this.settingsForm.controls.useTimer.value,
+      measureTime: this.settingsForm.controls.measureTime.value,
+      maxTime: this.settingsForm.controls.maxTime.value * 60000,
+      computePlanAutomatically: this.settingsForm.controls.computePlanAutomatically.value,
+      computeDependenciesAutomatically: this.settingsForm.controls.computeDependenciesAutomatically.value,
+      checkMaxUtility: this.settingsForm.controls.checkMaxUtility.value,
+      showPaymentInfo: this.settingsForm.controls.showPaymentScore.value,
+      paymentInfo,
+      showAnimation: false
+    }
 
-    this.settings.introTask = this.settingsForm.controls.introTask.value;
-    this.settings.public = this.settingsForm.controls.public.value;
-
-    this.settings.usePlanPropertyValues = this.settingsForm.controls.usePlanPropertyValues.value;
-    this.settings.useConstraints = this.settingsForm.controls.useConstraints.value;
-
-    this.settings.explanationInterface = this.settingsForm.controls.explanationInterface.value;
-    this.settings.globalExplanation = this.settingsForm.controls.globalExplanation.value;
-
-    this.settings.useTimer = this.settingsForm.controls.useTimer.value;
-    this.settings.measureTime = this.settingsForm.controls.measureTime.value;
-    this.settings.maxTime = this.settingsForm.controls.maxTime.value * 60000;
-
-    this.settings.computePlanAutomatically =this.settingsForm.controls.computePlanAutomatically.value;
-    this.settings.computeDependenciesAutomatically =this.settingsForm.controls.computeDependenciesAutomatically.value;
-
-    this.settings.checkMaxUtility = this.settingsForm.controls.checkMaxUtility.value;
-    this.settings.showPaymentInfo = this.settingsForm.controls.showPaymentScore.value;
-    this.settings.paymentInfo.max = this.settingsForm.controls.maxPayment.value;
-    this.settings.paymentInfo.min = this.settingsForm.controls.minPayment.value;
-    this.settings.paymentInfo.steps = this.settingsForm.controls.paymentSteps.value;
-
-    console.log(this.settings);
-    this.updatedSettings.next(this.settings);
+    console.log(newSettings);
+    this.updatedSettings.next(newSettings);
   }
 }

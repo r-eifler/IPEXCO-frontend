@@ -1,57 +1,56 @@
-<ng-container *ngIf="currentProject">
-  <div [class.container-web]="!isMobile" [class.container-mobile]="isMobile">
-    <mat-card appearance="outlined">
-      <mat-card-header>
-        <div mat-card-avatar>
-          <mat-icon>info</mat-icon>
-        </div>
-        <mat-card-title>{{ currentProject.name }}</mat-card-title>
-        <mat-card-subtitle>Overview</mat-card-subtitle>
-      </mat-card-header>
-      <mat-card-content>
-        {{ currentProject.description }}
-      </mat-card-content>
-    </mat-card>
-
-    <mat-card appearance="outlined">
-      <mat-card-header>
-        <div mat-card-avatar>
-          <mat-icon>insert_drive_file</mat-icon>
-        </div>
-        <mat-card-title> ??? </mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-
-      </mat-card-content>
-    </mat-card>
-
-    <mat-card appearance="outlined">
-      <mat-card-header>
-        <div mat-card-avatar>
-          <mat-icon>show_chart</mat-icon>
-        </div>
-        <mat-card-title>Statistics</mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-       
-      </mat-card-content>
-    </mat-card>
-
-    <mat-card appearance="outlined">
-      <mat-card-header>
-        <div mat-card-avatar>
-          <mat-icon>create</mat-icon>
-        </div>
-        <mat-card-title>Actions</mat-card-title>
-      </mat-card-header>
-      <mat-card-content class="action-list">
-        <button mat-flat-button (click)="createDemo()">
-          Create Demo
-        </button>
-        <button mat-stroked-button (click)="deleteProject()">
-          Delete Project
-        </button>
+<div class="container">
+  <mat-card appearance="outlined">
+    <mat-card-header>
+      <div mat-card-avatar>
+        <mat-icon>info</mat-icon>
+      </div>
+      <mat-card-title>{{ (project$ | async)?.name }}</mat-card-title>
+      <mat-card-subtitle>Overview</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      {{ (project$ | async)?.description }}
     </mat-card-content>
-    </mat-card>
-  </div>
-</ng-container>
+  </mat-card>
+
+  <mat-card appearance="outlined">
+    <mat-card-header>
+      <div mat-card-avatar>
+        <mat-icon>insert_drive_file</mat-icon>
+      </div>
+      <mat-card-title> ??? </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card appearance="outlined">
+    <mat-card-header>
+      <div mat-card-avatar>
+        <mat-icon>show_chart</mat-icon>
+      </div>
+      <mat-card-title>Statistics</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card appearance="outlined">
+    <mat-card-header>
+      <div mat-card-avatar>
+        <mat-icon>create</mat-icon>
+      </div>
+      <mat-card-title>Actions</mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="action-list">
+      <button mat-flat-button (click)="createDemo()">
+        Create Demo
+      </button>
+      <button mat-stroked-button (click)="deleteProject()">
+        Delete Project
+      </button>
+  </mat-card-content>
+  </mat-card>
+</div>
+

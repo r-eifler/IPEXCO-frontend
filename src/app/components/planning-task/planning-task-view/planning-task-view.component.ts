@@ -9,6 +9,8 @@ import { Component, OnInit, OnDestroy } from "@angular/core";
 import { CurrentProjectService } from "src/app/service/project/project-services";
 import { Subject, BehaviorSubject, Observable } from "rxjs";
 import { filter, map, tap } from "rxjs/operators";
+import { Store } from "@ngrx/store";
+import { selectProjectPlanningTask } from "src/app/project/state/project.selector";
 
 @Component({
   selector: "app-planning-task-view",
@@ -20,24 +22,12 @@ export class PlanningTaskViewComponent implements OnInit, OnDestroy {
 
   domain_name$: Observable<string>
   planning_model$: Observable<PlanningModel>
-  initial_state$: Observable<PDDLFact[]>
 
-  constructor(projectsService: CurrentProjectService) {
+  constructor(store: Store) {
 
-    this.domain_name$ = projectsService.findSelectedObject().pipe(map(p => p.baseTask.domain_name));
+    this.domain_name$ = store.select(selectProjectPlanningTask).pipe(map(pt => pt?.domain_name));
+    this.planning_model$ = store.select(selectProjectPlanningTask).pipe(map(pt => pt?.model));
 
-    this.planning_model$ = projectsService.findSelectedObject().pipe(
-      filter(p => p != null),
-      map(p => p.baseTask.model),
-      filter(m => m != null)
-    );
-
-    this.initial_state$ = projectsService.findSelectedObject().pipe(
-      filter(p => p != null),
-      map(p => p.baseTask.model),
-      filter(m => m != null),
-      map(m => m.initial)
-    );
   }
 
   ngOnInit(): void {}

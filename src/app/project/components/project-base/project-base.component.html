@@ -1,5 +1,5 @@
-<div class="main-grid">
-  <nav mat-tab-nav-bar [tabPanel]="projectBaseTabPanel">
+<div class="main">
+  <!-- <nav mat-tab-nav-bar [tabPanel]="projectBaseTabPanel">
     <a
       mat-tab-link
       *ngFor="let link of links"
@@ -11,5 +11,17 @@
   </nav>
   <mat-tab-nav-panel #projectBaseTabPanel style="height: 100%; width: 100%; overflow: auto">
     <router-outlet></router-outlet>
-  </mat-tab-nav-panel>
+  </mat-tab-nav-panel> -->
+
+  <mat-tab-group  style="height: 100%;">
+    <mat-tab label="Overview">
+      <app-project-overview></app-project-overview>
+    </mat-tab>
+    <mat-tab label="Planning Task">
+      <app-planning-task-view></app-planning-task-view>
+    </mat-tab>
+    <mat-tab label="Settings">
+      <app-project-settings-container></app-project-settings-container>
+    </mat-tab>
+  </mat-tab-group>
 </div>

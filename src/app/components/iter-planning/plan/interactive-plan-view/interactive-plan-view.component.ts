@@ -131,7 +131,7 @@ export class InteractivePlanViewComponent implements OnInit, OnDestroy {
               }),
             });
 
-            for (let pre of i_action.precondition) {
+            for (let pre of i_action.preconditions) {
               for (let fact of this.state_trace_ex[
                 this.state_trace_ex.length - 2
               ].facts) {

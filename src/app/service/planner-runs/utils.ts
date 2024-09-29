@@ -29,7 +29,7 @@ function parseActions(actionStrings: string[], task: PlanningTask): Plan {
         parameters: args.map((a) => {
           return { name: a, type: "" };
         }),
-        precondition: [],
+        preconditions: [],
         effects: [],
       });
     }

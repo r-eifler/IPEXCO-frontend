@@ -1,4 +1,4 @@
-.container-mobile {
+.container {
   box-sizing: border-box;
   padding: 10px;
   width: 100%;
@@ -7,24 +7,12 @@
   flex-direction: column;
 }
 
-.container-mobile > mat-card {
+.container > mat-card {
   margin: 10px auto;
 }
 
-.overview-card-mobile {
+.overview-card {
   margin: 10px auto;
-}
-
-.container-web {
-  box-sizing: border-box;
-  padding: 10px;
-  width: 100%;
-  height: 100%;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
-  column-gap: 10px;
-  row-gap: 10px;
 }
 
 .action-list {
