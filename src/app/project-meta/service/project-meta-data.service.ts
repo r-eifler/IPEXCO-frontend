@@ -42,4 +42,12 @@ export class ProjectMetaDataService{
         //     map(({data}) => array(ProjectSchema).parse(data)),
         // )
     }
+
+    deleteProject$(id: string): Observable<boolean> {
+
+        return this.http.delete<IHTTPData<boolean>>(this.BASE_URL + '/' + id).pipe(
+            map(({data}) => data),
+        )
+
+    }
 }

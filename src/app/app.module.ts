@@ -212,6 +212,7 @@ import { ProjectMetaDataService } from './project-meta/service/project-meta-data
 import { CreateProjectService } from './project-meta/service/create-project.service';
 import { CreateProjectEffect } from './project-meta/state/effects/create-project.effect';
 import { UpdateProjectEffect } from './project/state/effects/update-project.effect';
+import { DeleteProjectEffect } from './project-meta/state/effects/delete-project.effect';
 
 
 
@@ -307,7 +308,8 @@ import { UpdateProjectEffect } from './project/state/effects/update-project.effe
       LoadProjectEffect,
       UpdateProjectEffect,
       LoadProjectMetaDataListEffect,
-      CreateProjectEffect
+      CreateProjectEffect,
+      DeleteProjectEffect
     ]),
     // Instrumentation must be imported after importing StoreModule (config is optional)
     StoreDevtoolsModule.instrument({

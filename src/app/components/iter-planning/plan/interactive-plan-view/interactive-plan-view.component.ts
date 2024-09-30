@@ -109,7 +109,7 @@ export class InteractivePlanViewComponent implements OnInit, OnDestroy {
               action_map.get(action.name),
               action.parameters.map((o) => o.name)
             );
-            i_action.effects.forEach((item) =>
+            i_action.effect.forEach((item) =>
               used_predicate_names.add(item.name)
             );
             this.action_trace.push(i_action);
@@ -131,7 +131,7 @@ export class InteractivePlanViewComponent implements OnInit, OnDestroy {
               }),
             });
 
-            for (let pre of i_action.preconditions) {
+            for (let pre of i_action.precondition) {
               for (let fact of this.state_trace_ex[
                 this.state_trace_ex.length - 2
               ].facts) {
@@ -141,7 +141,7 @@ export class InteractivePlanViewComponent implements OnInit, OnDestroy {
               }
             }
 
-            for (let eff of i_action.effects) {
+            for (let eff of i_action.effect) {
               for (let fact of this.state_trace_ex[
                 this.state_trace_ex.length - 2
               ].facts) {

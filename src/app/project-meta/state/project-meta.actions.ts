@@ -11,3 +11,8 @@ export const createProject = createAction('[create-project] create new project',
     props<{project: Project}>());
 export const createProjectSuccess = createAction('[create-project] create new project success');
 export const createProjectFailure = createAction('[create-project] create new project failure');
+
+export const deleteProject = createAction('[delete-project] delete project', 
+    props<{id: string}>());
+export const deleteProjectSuccess = createAction('[delete-project] delete project success');
+export const deleteProjectFailure = createAction('[delete-project] delete project failure');

@@ -6,7 +6,7 @@ import { AskDeleteComponent } from "../../../components/utils/ask-delete/ask-del
 import { Store } from "@ngrx/store";
 import { ProjectMetaData } from "../../domain/project-meta";
 import { selectProjectCreationError, selectProjectCreationNone, selectProjectCreationPending, selectProjectsMetaData } from "../../state/project-meta.selector";
-import { loadProjectMetaDataList } from "../../state/project-meta.actions";
+import { deleteProject, loadProjectMetaDataList } from "../../state/project-meta.actions";
 import { CreationState } from "src/app/shared/common/creatable.interface";
 
 
@@ -23,7 +23,7 @@ export class ProjectCollectionComponent{
   projectCreationNone$: Observable<boolean>
 
   constructor(
-    store: Store,
+    private store: Store,
     public dialog: MatDialog
   ) {
 
@@ -53,7 +53,7 @@ export class ProjectCollectionComponent{
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
       if(result){
-        // this.projectService.deleteObject(projectMetaData);
+        this.store.dispatch(deleteProject({id: projectMetaData._id}));
       }
     });
   }

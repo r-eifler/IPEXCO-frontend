@@ -1,7 +1,7 @@
 import { createReducer, on } from "@ngrx/store";
 import { ProjectMetaData } from "../domain/project-meta";
 import { Loadable, LoadingState } from "src/app/shared/common/loadable.interface";
-import { createProject, createProjectFailure, createProjectSuccess, loadProjectMetaDataList, loadProjectMetaDataListSuccess } from "./project-meta.actions";
+import { createProject, createProjectFailure, createProjectSuccess, deleteProject, loadProjectMetaDataList, loadProjectMetaDataListSuccess } from "./project-meta.actions";
 import { Creatable, CreationState } from "src/app/shared/common/creatable.interface";
 import { Project } from "src/app/project/domain/project";
 
@@ -40,6 +40,11 @@ export const projectMetaDataReducer = createReducer(
     on(createProjectFailure, (state): ProjectMetaDataState => ({
         ...state,
         createdProject: {state: CreationState.Error, data: undefined}
-    }))
+    })),
+    on(deleteProject, (state, {id}): ProjectMetaDataState => ({
+        ...state,
+        projects: {state: LoadingState.Done, 
+            data: state.projects.data.filter(p => p._id != id)}
+    })),
 
 );

@@ -22,22 +22,28 @@ export interface PDDLFact {
   arguments: string[];
 }
 
+export interface PDDLFunctionAssignment {
+  name: string, 
+  arguments: string[], 
+  value: number
+}
+
 export interface PDDLAction {
   name: string;
   parameters: PDDLObject[];
-  preconditions: PDDLFact[];
-  effects: PDDLFact[];
+  precondition: PDDLFact[];
+  effect: PDDLFact[];
 }
 
 export interface PlanningDomain {
-  types: {name: string, parent: string}[]
+  types: PDDLType[]
   predicates: PDDLPredicate[]
   actions: PDDLAction[],
 }
 
 export interface PlanningProblem {
-  objects: {name: string, type: string}[],
-  initial: PDDLFact[]
+  objects: PDDLObject[],
+  initial: PDDLFact[],
   goal: PDDLFact[]
 }
 
@@ -190,19 +196,19 @@ export function instantiateAction(action: PDDLAction, args: string[]): PDDLActio
   });
 
   let i_precon = [];
-  for (const pre of action.preconditions) {
+  for (const pre of action.precondition) {
     i_precon.push(instantiateFactFromArgsMap(pre, args_map));
   }
 
   let i_eff = [];
-  for (const eff of action.effects) {
+  for (const eff of action.effect) {
     i_eff.push(instantiateFactFromArgsMap(eff, args_map));
   }
   return {
     name: action.name,
     parameters: i_params,
-    preconditions: i_precon,
-    effects: i_eff,
+    precondition: i_precon,
+    effect: i_eff,
   };
 }
 
@@ -214,11 +220,11 @@ export function actionToPDDL(action: PDDLAction): string {
     "\n";
   s +=
     "\tprecondition: (and " +
-    action.preconditions.map((p) => factToPDDL(p)).join(" ") +
+    action.precondition.map((p) => factToPDDL(p)).join(" ") +
     ")\n";
   s +=
     "\teffect: (and " +
-    action.effects.map((p) => factToPDDL(p)).join(" ") +
+    action.effect.map((p) => factToPDDL(p)).join(" ") +
     ")\n";
   return s + ")\n";
 }

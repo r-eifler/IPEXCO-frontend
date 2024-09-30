@@ -21,7 +21,7 @@
         <mat-panel-title> Precondition </mat-panel-title>
       </mat-expansion-panel-header>
       <mat-list>
-        <mat-list-item *ngFor="let p of this.action.preconditions">
+        <mat-list-item *ngFor="let p of this.action.precondition">
           {{ factOut(p) }}
         </mat-list-item>
       </mat-list>
@@ -32,7 +32,7 @@
         <mat-panel-title> Effect </mat-panel-title>
       </mat-expansion-panel-header>
       <mat-list>
-        <mat-list-item *ngFor="let p of this.action.effects">
+        <mat-list-item *ngFor="let p of this.action.effect">
           {{ factOut(p) }}
         </mat-list-item>
       </mat-list>

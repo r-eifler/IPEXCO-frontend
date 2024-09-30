@@ -12,7 +12,7 @@ export interface State {
 export function nextState(state: State, action: PDDLAction): State {
   // console.log(action.name);
   let new_values = [...state.values];
-  for (const eff of action.effects) {
+  for (const eff of action.effect) {
     if (eff.negated) {
       const index = new_values.findIndex((e) => factEquals(e, eff));
       // console.log(index);
