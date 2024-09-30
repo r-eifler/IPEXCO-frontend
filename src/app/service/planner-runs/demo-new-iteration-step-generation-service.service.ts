@@ -3,11 +3,6 @@ import { PlannerService } from "src/app/service/planner-runs/planner.service";
 import { Injectable } from "@angular/core";
 import { BehaviorSubject, combineLatest, Observable } from "rxjs";
 import { filter, take } from "rxjs/operators";
-import {
-  ModifiedPlanningTask,
-  PlanningTaskRelaxationSpace,
-} from "../../interface/planning-task-relaxation";
-import { IterationStep, StepStatus } from "../../interface/run";
 import { PlanPropertyMapService } from "../plan-properties/plan-property-services";
 import { IterationStepsService } from "./iteration-steps.service";
 import {
@@ -16,6 +11,7 @@ import {
 } from "./selected-iteration-step.service";
 import { Demo } from "../../interface/demo";
 import { NewIterationStepGenerationService } from "./new-iteration-step-generation-service.service";
+import { IterationStep, StepStatus } from "src/app/iterative_planning/domain/run";
 
 @Injectable({
   providedIn: "root",

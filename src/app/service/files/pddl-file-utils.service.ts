@@ -1,7 +1,7 @@
 import {
   GoalType,
   PlanProperty,
-} from "src/app/interface/plan-property/plan-property";
+} from "src/app/iterative_planning/domain/plan-property/plan-property";
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 
@@ -10,7 +10,7 @@ import { Observable } from "rxjs";
 import { environment } from "../../../environments/environment";
 import { IHTTPData } from "../../interface/http-data.interface";
 import { map } from "rxjs/operators";
-import { DomainSpecification } from "../../interface/files/domain-specification";
+import { DomainSpecification, getGoalDescription } from "../../interface/files/domain-specification";
 import { Project } from "src/app/project/domain/project";
 
 interface FileContent {
@@ -54,12 +54,12 @@ export class PddlFileUtilsService {
               project: project._id,
               isUsed: false,
               globalHardGoal: false,
-              value: 1,
+              utility: 1,
               color: "696969",
               icon: "star",
               class: "main"
             };
-            this.domainSpec?.getGoalDescription(goal);
+            getGoalDescription(goal);
             goalFacts.push(goal);
           }
           return goalFacts;

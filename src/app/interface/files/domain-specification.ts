@@ -1,5 +1,5 @@
-import { PlanPropertyTemplate } from "../plan-property/plan-property-template";
-import { PlanProperty } from "../plan-property/plan-property";
+import { PlanPropertyTemplate } from "../../iterative_planning/domain/plan-property/plan-property-template";
+import { PlanProperty } from "../../iterative_planning/domain/plan-property/plan-property";
 
 export class DomainSpecification {
   public name: string;
@@ -15,10 +15,11 @@ export class DomainSpecification {
     }
     this.domainDescription = json.domainDescription;
   }
+} 
 
-  getPropertyTemplateClassMap(): Map<string, PlanPropertyTemplate[]> {
+  export function getPropertyTemplateClassMap(domainSpec: DomainSpecification): Map<string, PlanPropertyTemplate[]> {
     const propMap = new Map<string, PlanPropertyTemplate[]>();
-    for (const pt of this.planPropertyTemplates) {
+    for (const pt of domainSpec.planPropertyTemplates) {
       if (!propMap.has(pt.class)) {
         propMap.set(pt.class, []);
       }
@@ -27,10 +28,10 @@ export class DomainSpecification {
     return propMap;
   }
 
-  getGoalDescription(goalFact: PlanProperty): string {
+  export function getGoalDescription(goalFact: PlanProperty): string {
     return goalFact.naturalLanguageDescription;
   }
-}
+
 
 export const defaultDomainSpecification = new DomainSpecification(
   {name: '', planPropertyTemplates: [], domainDescription: ''}

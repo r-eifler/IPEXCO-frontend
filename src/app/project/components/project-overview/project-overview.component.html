@@ -44,6 +44,9 @@
       <mat-card-title>Actions</mat-card-title>
     </mat-card-header>
     <mat-card-content class="action-list">
+      <button mat-flat-button [routerLink]="['/projects', (project$ | async)?._id, 'iterative-planning']">
+        Start Iterative Planning
+      </button>
       <button mat-flat-button (click)="createDemo()">
         Create Demo
       </button>

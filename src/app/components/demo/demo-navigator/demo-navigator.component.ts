@@ -4,20 +4,18 @@ import { DemoFinishedComponent } from "./../demo-finished/demo-finished.componen
 import { Component, EventEmitter, OnDestroy, OnInit, Output } from "@angular/core";
 import { Demo } from "src/app/interface/demo";
 import { BehaviorSubject, combineLatest, Observable, Subject } from "rxjs";
-import { computeStepUtility, IterationStep} from "src/app/interface/run";
 import { RunningDemoService } from "src/app/service/demo/demo-services";
 import { CurrentProjectService } from "src/app/service/project/project-services";
 import { takeUntil, filter, map, take, tap } from "rxjs/operators";
-import { getMaximalPlanValue, PlanProperty } from "../../../interface/plan-property/plan-property";
+import { getMaximalPlanValue, PlanProperty } from "../../../iterative_planning/domain/plan-property/plan-property";
 import { DemoHelpDialogComponent } from "../demo-help-dialog/demo-help-dialog.component";
 // @ts-ignore
 import Timeout = NodeJS.Timeout;
 import { NewIterationStepStoreService, SelectedIterationStepService } from "src/app/service/planner-runs/selected-iteration-step.service";
 import { PlanPropertyMapService } from "src/app/service/plan-properties/plan-property-services";
-import { PlanningTaskRelaxationService } from "src/app/service/planning-task/planning-task-relaxations-services";
-import { PlanningTaskRelaxationSpace } from "src/app/interface/planning-task-relaxation";
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { IterationStep } from 'src/app/iterative_planning/domain/run';
 
 @Component({
   selector: "app-demo-navigator",
@@ -49,7 +47,6 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
   newStep$: Observable<IterationStep>;
 
   private planProperties$: BehaviorSubject<Map<string, PlanProperty>>;
-  private relaxationSpaces$: BehaviorSubject<PlanningTaskRelaxationSpace[]>;
 
   maxPlanValue$: Observable<number>;
   planValue$: Observable<number>;
@@ -65,7 +62,6 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
     private newIterationStepService: NewIterationStepStoreService,
     private iterationStepsService: IterationStepsService,
     planPropertiesMapService: PlanPropertyMapService,
-    planningTaskRelaxationService: PlanningTaskRelaxationService,
     public dialog: MatDialog,
     private snackBar: MatSnackBar
   ) {
@@ -74,7 +70,6 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
     this.steps$ = this.iterationStepsService.getList();
     this.newStep$ = this.newIterationStepService.getSelectedObject();
     this.planProperties$ = planPropertiesMapService.getMap();
-    this.relaxationSpaces$ = planningTaskRelaxationService.getList();
 
     this.settings$ = currentProjectService.getSelectedObject().pipe(
       filter(p => !!p),
@@ -116,14 +111,13 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
     this.overallScore$ = combineLatest([
       this.steps$,
       this.planProperties$,
-      this.relaxationSpaces$,
     ]).pipe(
       takeUntil(this.ngUnsubscribe$),
-      filter(([steps, planProperties, spaces]) => !!steps && !!planProperties && planProperties.size > 0 && !! spaces),
-      map(([steps, planProperties, spaces]) => {
+      filter(([steps, planProperties]) => !!steps && !!planProperties && planProperties.size > 0),
+      map(([steps, planProperties]) => {
         let max = 0;
         for(let step of steps){
-          let score = computeStepUtility(step, planProperties, spaces);
+          let score = 0 // TODO computeStepUtility(step, planProperties);
           max = score > max ? score : max;
         }
         return max;

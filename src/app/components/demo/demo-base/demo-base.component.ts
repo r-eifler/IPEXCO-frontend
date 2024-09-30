@@ -20,7 +20,6 @@ import { Subject } from "rxjs";
 import { DemoPlannerService } from "../../../service/planner-runs/demo-planner.service";
 import { PlanPropertyMapService } from "../../../service/plan-properties/plan-property-services";
 import { TimeLoggerService } from "../../../service/logger/time-logger.service";
-import { PlanningTaskRelaxationService } from "src/app/service/planning-task/planning-task-relaxations-services";
 import { NewIterationStepGenerationService } from "src/app/service/planner-runs/new-iteration-step-generation-service.service";
 import { DemoNewIterationStepGenerationService } from 'src/app/service/planner-runs/demo-new-iteration-step-generation-service.service';
 
@@ -51,7 +50,6 @@ export class DemoBaseComponent implements OnInit, OnDestroy {
     private demosService: DemosService,
     private runningDemoService: RunningDemoService,
     private propertiesService: PlanPropertyMapService,
-    private relaxationService: PlanningTaskRelaxationService,
     private currentProjectService: CurrentProjectService,
     private iterationStepsService: IterationStepsService,
     private newIterationStepGenerationService: NewIterationStepGenerationService,
@@ -70,7 +68,6 @@ export class DemoBaseComponent implements OnInit, OnDestroy {
             this.runningDemoService.saveObject(demo);
             this.currentProjectService.saveObject(demo);
             this.propertiesService.findCollection([{ param: "projectId", value: demo._id },]);
-            this.relaxationService.findCollection([{ param: "projectId", value: demo._id },]);
             this.startDemo()
           }
         });

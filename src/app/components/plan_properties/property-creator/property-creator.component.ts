@@ -3,7 +3,7 @@ import { takeUntil } from "rxjs/operators";
 import { MatStepper } from "@angular/material/stepper";
 import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { UntypedFormArray, UntypedFormControl, UntypedFormGroup, Validators } from "@angular/forms";
-import { Action, ActionSet, PlanProperty } from "../../../interface/plan-property/plan-property";
+import { Action, ActionSet, PlanProperty } from "../../../iterative_planning/domain/plan-property/plan-property";
 import { matchRegexValidator } from "../../../validators/match-regex-validator";
 import { MatAutocompleteSelectedEvent } from "@angular/material/autocomplete";
 import { DomainSpecification } from "src/app/interface/files/domain-specification";
@@ -167,7 +167,7 @@ export class PropertyCreatorComponent implements OnInit, OnDestroy {
         project: this.currentProject._id,
         isUsed: false,
         globalHardGoal: false,
-        value: 1,
+        utility: 1,
         color: "#696969",
         icon: "star",
         class: "main"

@@ -7,11 +7,11 @@ import {
 } from "@angular/core";
 import { Demo } from "../../../interface/demo";
 import { PlanPropertyMapService } from "../../../service/plan-properties/plan-property-services";
-import { RunStatus } from "../../../interface/run";
-import { PlanProperty } from "../../../interface/plan-property/plan-property";
+import { PlanProperty } from "../../../iterative_planning/domain/plan-property/plan-property";
 import { takeUntil } from "rxjs/operators";
 import { Subject } from "rxjs";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { RunStatus } from "src/app/iterative_planning/domain/run";
 
 @Component({
   selector: "app-demo-info",

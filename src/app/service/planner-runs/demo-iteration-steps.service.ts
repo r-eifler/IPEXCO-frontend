@@ -1,25 +1,12 @@
-import { DemoPlannerService } from "./demo-planner.service";
-import { computePlanValue } from "src/app/interface/run";
-import { ModifiedPlanningTask } from "../../interface/planning-task-relaxation";
 import { SelectedIterationStepService } from "./selected-iteration-step.service";
-import { CurrentProjectService } from "src/app/service/project/project-services";
 import { IterationStepsStore } from "../../store/stores.store";
-import {
-  IterationStep,
-  StepStatus,
-  ModIterationStep,
-  PlanRun,
-} from "../../interface/run";
 import { ADD, EDIT, LOAD, REMOVE } from "../../store/generic-list.store";
 import { Injectable } from "@angular/core";
-import { HttpClient, HttpParams } from "@angular/common/http";
-import { ObjectCollectionService } from "../base/object-collection.service";
+import { HttpClient } from "@angular/common/http";
 import { environment } from "../../../environments/environment";
-import { IHTTPData } from "../../interface/http-data.interface";
-import { PlanPropertyMapService } from "../plan-properties/plan-property-services";
-import { combineLatest } from "rxjs";
-import { PlanProperty } from "src/app/interface/plan-property/plan-property";
+import { PlanProperty } from "src/app/iterative_planning/domain/plan-property/plan-property";
 import { IterationStepsService } from "./iteration-steps.service";
+import { computePlanValue, IterationStep } from "src/app/iterative_planning/domain/run";
 
 interface QueryParam {
   param: string;

@@ -19,7 +19,6 @@ import {
 import { PlanPropertyMapService } from "../../../../service/plan-properties/plan-property-services";
 import { UserStudyData } from "src/app/interface/user-study/user-study-store";
 import { CurrentProjectService } from 'src/app/service/project/project-services';
-import { PlanningTaskRelaxationService } from 'src/app/service/planning-task/planning-task-relaxations-services';
 
 @Component({
   selector: "app-user-study-data-base",
@@ -53,7 +52,6 @@ export class UserStudyDataBaseComponent implements OnInit, OnDestroy {
     private runningDemoService: RunningDemoService,
     private currentProjectService: CurrentProjectService,
     private propertiesService: PlanPropertyMapService,
-    private relaxationService: PlanningTaskRelaxationService,
   ) {
 
     console.log("User study base");
@@ -107,7 +105,6 @@ export class UserStudyDataBaseComponent implements OnInit, OnDestroy {
           this.runningDemoService.saveObject(demo);
           this.currentProjectService.saveObject(demo);
           this.propertiesService.findCollection([{ param: "projectId", value: demo._id }]);
-          this.relaxationService.findCollection([{ param: "projectId", value: demo._id }]);
         })
       })
   }

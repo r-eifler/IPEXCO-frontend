@@ -1,17 +1,12 @@
 import { IterationStepsService } from "src/app/service/planner-runs/iteration-steps.service";
-import { PlanProperty } from "./../../interface/plan-property/plan-property";
-
 import { SelectedIterationStepService } from "./selected-iteration-step.service";
-import { IterationStep, RunStatus, StepStatus } from "src/app/interface/run";
-import { EDIT } from "../../store/generic-list.store";
 import { Injectable } from "@angular/core";
-import { DepExplanationRun, PlanRun } from "../../interface/run";
 import { HttpClient, HttpParams } from "@angular/common/http";
-import { IterationStepsStore } from "../../store/stores.store";
 import { environment } from "../../../environments/environment";
 import { IHTTPData } from "../../interface/http-data.interface";
 import { BehaviorSubject } from "rxjs";
 import { Demo } from "src/app/interface/demo";
+import { DepExplanationRun, IterationStep, PlanRun, RunStatus } from "src/app/iterative_planning/domain/run";
 
 @Injectable({
   providedIn: "root",

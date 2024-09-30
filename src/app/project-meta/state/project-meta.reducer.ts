@@ -41,10 +41,10 @@ export const projectMetaDataReducer = createReducer(
         ...state,
         createdProject: {state: CreationState.Error, data: undefined}
     })),
-    on(deleteProject, (state, {id}): ProjectMetaDataState => ({
-        ...state,
-        projects: {state: LoadingState.Done, 
-            data: state.projects.data.filter(p => p._id != id)}
-    })),
+    // on(deleteProject, (state, {id}): ProjectMetaDataState => ({
+    //     ...state,
+    //     projects: {state: LoadingState.Done, 
+    //         data: state.projects.data.filter(p => p._id != id)}
+    // })),
 
 );

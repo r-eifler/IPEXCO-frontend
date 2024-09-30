@@ -1,12 +1,7 @@
-import { PPDependencies } from 'src/app/interface/explanations';
-import { FactUpdate } from "./planning-task-relaxation";
-import { DepExplanationRun, RelaxationExplanationRun, RunStatus } from "./run";
+import { PPDependencies } from '../iterative_planning/domain/explanations';
+import { DepExplanationRun, RunStatus } from '../iterative_planning/domain/run';
 import { Project } from '../project/domain/project';
 
-export interface DemoExplanation {
-  initUpdates: FactUpdate[];
-  relaxationExplanations: RelaxationExplanationRun[];
-}
 
 export interface Demo extends Project {
   summaryImage?: string;
@@ -15,7 +10,7 @@ export interface Demo extends Project {
   completion: number;
   definition?: string;
   conflictExplanation?: DepExplanationRun;
-  explanations: DemoExplanation[];
+  explanations: any[];
   taskInfo?: string;
   maxUtility?: { value: number; selectedPlanProperties: string[] };
 }

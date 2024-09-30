@@ -2,10 +2,8 @@ import { USUser } from './../../../../interface/user-study/user-study-user';
 import { UserStudyDataService, DataPoint, LineChartData } from './../../../../service/user-study/user-study-data.service';
 import { filter } from 'rxjs/operators';
 import { takeUntil } from 'rxjs/operators';
-import { IterationStep } from 'src/app/interface/run';
 import { Component, Input, OnDestroy, OnInit } from "@angular/core";
 import { BehaviorSubject, combineLatest, Subject } from "rxjs";
-import { UserStudyData, UserStudyDemoData } from "src/app/interface/user-study/user-study-store";
 
 @Component({
   selector: "app-overview-data",

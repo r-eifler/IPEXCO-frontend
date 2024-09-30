@@ -1,7 +1,7 @@
 import { PlanPropertyMapStore } from "../../store/stores.store";
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { PlanProperty } from "../../interface/plan-property/plan-property";
+import { PlanProperty } from "../../iterative_planning/domain/plan-property/plan-property";
 import { environment } from "../../../environments/environment";
 import { ObjectMapService } from "../base/object-map.service";
 

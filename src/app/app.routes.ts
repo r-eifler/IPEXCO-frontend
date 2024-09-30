@@ -1,6 +1,3 @@
-import { ProjectSettingsContainerComponent } from './project/components/project-settings-container/project-settings-container.component';
-import { SettingsComponent } from "./project/components/settings/settings.component";
-import { PlanningTaskViewComponent } from "./components/planning-task/planning-task-view/planning-task-view.component";
 import { HelpPageComponent } from "./components/login/help-page/help-page.component";
 import { MainInfoComponent } from "./components/login/main-info/main-info.component";
 import { Routes } from "@angular/router";
@@ -8,13 +5,10 @@ import { MainPageComponent } from "./components/login/main-page/main-page.compon
 import { UserMainPageComponent } from "./components/user/user-main-page/user-main-page.component";
 import { ProjectCollectionComponent } from "./project-meta/components/project-collection/project-collection.component";
 import { ProjectBaseComponent } from "./project/components/project-base/project-base.component";
-import { ProjectOverviewComponent } from "./project/components/project-overview/project-overview.component";
-import { PropertyCollectionComponent } from "./components/plan_properties/property-collection/property-collection.component";
 import { ProjectIterativePlanningBaseComponent } from "./project/components/project-iterative-planning-base/project-iterative-planning-base.component";
 import { DemoCollectionComponent } from "./components/demo/demo-collection/demo-collection.component";
 import { DemoBaseComponent } from "./components/demo/demo-base/demo-base.component";
 import { FilesCollectionComponent } from "./components/files/files-collection/files-collection.component";
-import { UserStudyCollectionComponent } from "./components/user-study/user-study-collection/user-study-collection.component";
 import { UserStudyCreatorComponent } from "./components/user-study/user-study-creator/user-study-creator.component";
 import { UserStudyBaseComponent } from "./components/user-study/user-study-base/user-study-base.component";
 import { UserStudyStartComponent } from "./components/user-study/user-study-start/user-study-start.component";
@@ -25,6 +19,7 @@ import { UserStudyNavigationComponent } from "./components/user-study/user-study
 import { MetaStudyCreatorComponent } from "./components/user-study/meta-study/meta-study-creator/meta-study-creator.component";
 import { StudySelectionRedirectionComponent } from "./components/user-study/meta-study/study-selection-redirection/study-selection-redirection.component";
 import { UserStudyCollectionBaseComponent } from "./components/user-study/user-study-collection-base/user-study-collection-base.component";
+import { IterativePlanningBaseComponent } from "./iterative_planning/components/iterative-planning-base/iterative-planning-base.component";
 
 export const appRoutes: Routes = [
   { path: "", component: MainPageComponent },
@@ -45,16 +40,12 @@ export const appRoutes: Routes = [
     path: "projects/:projectid",
     component: ProjectBaseComponent,
     canActivate: [AuthGuard],
-    children: [
-      { path: "overview", component: ProjectOverviewComponent },
-      { path: "settings", component: ProjectSettingsContainerComponent },
-      { path: "planning-task", component: PlanningTaskViewComponent },
-      { path: "properties", component: PropertyCollectionComponent },
-      {
-        path: "iterative-planning",
-        component: ProjectIterativePlanningBaseComponent,
-      }
-    ],
+    children: [],
+  },
+  {
+    path: "projects/:projectid/iterative-planning",
+    component: IterativePlanningBaseComponent,
+    canActivate: [AuthGuard],
   },
 
   { path: "demos", component: DemoCollectionComponent },

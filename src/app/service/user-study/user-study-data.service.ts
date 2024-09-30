@@ -1,6 +1,5 @@
-import { PlanningTaskRelaxationService } from 'src/app/service/planning-task/planning-task-relaxations-services';
 import { combineLatest } from 'rxjs';
-import { PlanProperty } from 'src/app/interface/plan-property/plan-property';
+import { PlanProperty } from 'src/app/iterative_planning/domain/plan-property/plan-property';
 import { Observable } from 'rxjs';
 import { PlanPropertyMapService } from 'src/app/service/plan-properties/plan-property-services';
 import { filter, map, take } from 'rxjs/operators';
@@ -14,10 +13,9 @@ import { LOAD } from 'src/app/store/generic-item.store';
 import { environment } from 'src/environments/environment';
 import { IHTTPData } from 'src/app/interface/http-data.interface';
 import { UserStudyData } from 'src/app/interface/user-study/user-study-store';
-import { computeStepUtility, IterationStep } from 'src/app/interface/run';
 import { LogEntry, LogEvent } from '../logger/time-logger.service';
 import { mean, normalci, variance } from 'jstat'
-import { PlanningTaskRelaxationSpace } from 'src/app/interface/planning-task-relaxation';
+import { computeStepUtility, IterationStep } from 'src/app/iterative_planning/domain/run';
 
 @Injectable({
   providedIn: 'root'
@@ -65,19 +63,16 @@ export class UserStudyDataService extends ObjectCollectionService<UserStudyData>
 
   BASE_URL = environment.apiURL + "user-study-data/";
   planProperties$: Observable<Map<string,PlanProperty>>;
-  relaxationSpaces$: Observable<PlanningTaskRelaxationSpace[]>
 
   timeBuckets = [0,5,10,15,20,25,30];
 
   constructor(
     http: HttpClient,
     store: UserStudyDataStore,
-    private planPropertiesService: PlanPropertyMapService,
-    private relaxationSpacesService: PlanningTaskRelaxationService) {
+    private planPropertiesService: PlanPropertyMapService) {
     super(http, store);
 
     this.planProperties$ = planPropertiesService.getMap();
-    this.relaxationSpaces$ = relaxationSpacesService.getList();
   }
 
   getIterationStepsPerUser(demoId: string, users: USUser[]): Promise<DataPoint[]> {
@@ -113,10 +108,10 @@ export class UserStudyDataService extends ObjectCollectionService<UserStudyData>
   getUtilityPerIterationStep(demoId: string, user: USUser): Promise<DataPoint[]> {
     console.log("getUtilityPerIterationStep");
     return new Promise((resolve, reject) => {
-      combineLatest([this.collection$, this.planProperties$, this.relaxationSpaces$]).pipe(
-        filter(([d, pp, rsp]) => !!d && d.length > 0 && !!pp && pp.size > 0 && !!rsp && rsp.length > 0),
+      combineLatest([this.collection$, this.planProperties$]).pipe(
+        filter(([d, pp]) => !!d && d.length > 0 && !!pp && pp.size > 0),
         take(1)
-      ).subscribe(([data, planProperties, relaxationSpaces]) => {
+      ).subscribe(([data, planProperties]) => {
           data = data.filter(d => user._id == d.user._id);
           let dataPoints = [];
           const steps: IterationStep[] = data[0].demosData.find((e) => e.demo === demoId)?.iterationSteps;
@@ -125,7 +120,7 @@ export class UserStudyDataService extends ObjectCollectionService<UserStudyData>
           }
           let firstStepTime = new Date(steps[0].createdAt).getTime();
           for(let step of steps){
-            let v = computeStepUtility(step, planProperties, relaxationSpaces)
+            let v = 0 // TODO computeStepUtility(step, planProperties)
             dataPoints.push({
               name: (new Date(step.createdAt).getTime() - firstStepTime) / 1000 / 60,
               value: v ? v : 0,
@@ -140,10 +135,10 @@ export class UserStudyDataService extends ObjectCollectionService<UserStudyData>
   getMaxUtilityOverTime(demoId: string, user: USUser): Promise<LineChartData[]> {
     console.log("getUtilityPerIterationStep");
     return new Promise((resolve, reject) => {
-      combineLatest([this.collection$, this.planProperties$, this.relaxationSpaces$]).pipe(
-        filter(([d, pp, rsp]) => !!d && d.length > 0 && !!pp && pp.size > 0  && !!rsp && rsp.length > 0),
+      combineLatest([this.collection$, this.planProperties$]).pipe(
+        filter(([d, pp]) => !!d && d.length > 0 && !!pp && pp.size > 0),
         take(1)
-      ).subscribe(([data, planProperties, relaxationSpaces]) => {
+      ).subscribe(([data, planProperties]) => {
           data = data.filter(d => user._id == d.user._id);
           let dataPoints = {name: user._id, series: []};
           const steps: IterationStep[] = data[0].demosData.find((e) => e.demo === demoId)?.iterationSteps;
@@ -154,7 +149,7 @@ export class UserStudyDataService extends ObjectCollectionService<UserStudyData>
           let maxValues = this.timeBuckets.map(v => 0);
 
           for(let step of steps){
-            let v = computeStepUtility(step, planProperties, relaxationSpaces);
+            let v = 0 //TODO computeStepUtility(step, planProperties);
             let t = (new Date(step.createdAt).getTime() - firstStepTime) / 1000 / 60;
             if(v){
               for(let i = 0; i < this.timeBuckets.length; i++){
@@ -179,10 +174,10 @@ export class UserStudyDataService extends ObjectCollectionService<UserStudyData>
   getAverageMaxUtilityOverTime(demoId: string, users: USUser[]): Promise<LineChartData[]> {
     console.log("getUtilityPerIterationStep");
     return new Promise((resolve, reject) => {
-      combineLatest([this.collection$, this.planProperties$, this.relaxationSpaces$]).pipe(
-        filter(([d, pp, rsp]) => !!d && d.length > 0 && !!pp && pp.size > 0  && !!rsp && rsp.length > 0),
+      combineLatest([this.collection$, this.planProperties$]).pipe(
+        filter(([d, pp]) => !!d && d.length > 0 && !!pp && pp.size > 0),
         take(1)
-      ).subscribe(([data, planProperties, relaxationSpaces]) => {
+      ).subscribe(([data, planProperties]) => {
 
           let filteredData = data.filter(d => users.some(u => u._id == d.user._id));
           let overallMaxValues = this.timeBuckets.map(v => []);
@@ -198,7 +193,7 @@ export class UserStudyDataService extends ObjectCollectionService<UserStudyData>
             let maxValues = this.timeBuckets.map(v => 0);
 
             for(let step of steps){
-              let v = computeStepUtility(step, planProperties, relaxationSpaces);
+              let v = 0 //TODO computeStepUtility(step, planProperties);
               let t = (new Date(step.createdAt).getTime() - firstStepTime) / 1000 / 60;
               if(v){
                 for(let i = 0; i < this.timeBuckets.length; i++){

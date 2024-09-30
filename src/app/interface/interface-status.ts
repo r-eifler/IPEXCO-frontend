@@ -1,4 +1,5 @@
-import { PPConflict, PPDependencies } from "./explanations";
+import { PPConflict, PPDependencies } from "../iterative_planning/domain/explanations";
+
 
 export interface FinishedStepInterfaceStatus {
   _id: string;

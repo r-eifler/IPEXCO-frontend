@@ -1,15 +1,10 @@
-import { PlanningTaskRelaxationService } from "../../../service/planning-task/planning-task-relaxations-services";
 import { QUESTION_REDIRECT } from "../../../app.tokens";
 import { PlannerService } from "../../../service/planner-runs/planner.service";
-import { DemosService } from "../../../service/demo/demo-services";
 import { IterationStepsService } from "src/app/service/planner-runs/iteration-steps.service";
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, ParamMap, Router } from "@angular/router";
 import { tap } from "rxjs/operators";
-import { CurrentProjectService, ProjectsService } from "src/app/service/project/project-services";
-import { PlanPropertyMapService } from "src/app/service/plan-properties/plan-property-services";
-import { PLANNER_REDIRECT } from "src/app/app.tokens";
-import { Subject } from "rxjs";
+import { PLANNER_REDIRECT } from "src/app/app.tokens";;
 import { NewIterationStepGenerationService } from "src/app/service/planner-runs/new-iteration-step-generation-service.service";
 import { Project } from "../../domain/project";
 import { Store } from "@ngrx/store";

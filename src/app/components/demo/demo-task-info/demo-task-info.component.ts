@@ -2,7 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { BehaviorSubject, Observable } from "rxjs";
 import { Demo } from "../../../interface/demo";
 import { TaskSchema } from "../../../interface/task-schema";
-import { PlanProperty } from "../../../interface/plan-property/plan-property";
+import { PlanProperty } from "../../../iterative_planning/domain/plan-property/plan-property";
 import { GeneralSettings } from "../../../interface/settings/general-settings";
 import { RunningDemoService } from "../../../service/demo/demo-services";
 import { PlanPropertyMapService } from "../../../service/plan-properties/plan-property-services";

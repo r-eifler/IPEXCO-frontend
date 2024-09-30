@@ -1,5 +1,3 @@
-import { ModIterationStep } from "src/app/interface/run";
-import { IterationStep } from "./../../interface/run";
 import { Injectable } from "@angular/core";
 import { SelectedObjectService } from "../base/selected-object.service";
 import {
@@ -7,6 +5,7 @@ import {
   NewIterationStepStore,
 } from "../../store/stores.store";
 import { LOAD } from "../../store/generic-list.store";
+import { IterationStep, ModIterationStep } from "src/app/iterative_planning/domain/run";
 
 @Injectable({
   providedIn: "root",

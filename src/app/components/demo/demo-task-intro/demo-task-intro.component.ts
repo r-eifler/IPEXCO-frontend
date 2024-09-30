@@ -8,7 +8,7 @@ import {
   Output,
 } from "@angular/core";
 import { PlanPropertyMapService } from "../../../service/plan-properties/plan-property-services";
-import { PlanProperty } from "../../../interface/plan-property/plan-property";
+import { PlanProperty } from "../../../iterative_planning/domain/plan-property/plan-property";
 import { RunningDemoService } from "../../../service/demo/demo-services";
 import { Demo } from "../../../interface/demo";
 import { MatStepper } from "@angular/material/stepper";

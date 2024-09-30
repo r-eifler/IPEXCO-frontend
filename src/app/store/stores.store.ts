@@ -1,25 +1,23 @@
-import { ModIterationStep } from "src/app/interface/run";
-import { IterationStep } from "./../interface/run";
+
 import { MapStore } from "./generic-map.store";
 import { ViewSettings } from "../interface/settings/view-settings";
 import { ListStore } from "./generic-list.store";
 import { DomainSpecificationFile, PDDLFile } from "../interface/files/files";
 import { ItemStore } from "./generic-item.store";
-import { DepExplanationRun, PlanRun } from "../interface/run";
 import { TaskSchema } from "../interface/task-schema";
 import { DomainSpecification } from "../interface/files/domain-specification";
 import { Demo } from "../interface/demo";
 import { User } from "../interface/user";
 import { UserStudy } from "../interface/user-study/user-study";
 import { MetaStudy } from "../interface/user-study/meta-study";
-import { PlanningTaskRelaxationSpace } from "../interface/planning-task-relaxation";
 import {
   FinishedStepInterfaceStatus,
   NewStepInterfaceStatus,
 } from "../interface/interface-status";
 import { UserStudyData } from "../interface/user-study/user-study-store";
 import { Project } from "../project/domain/project";
-import { PlanProperty } from "../interface/plan-property/plan-property";
+import { PlanProperty } from "../iterative_planning/domain/plan-property/plan-property";
+import { DepExplanationRun, IterationStep, ModIterationStep, PlanRun } from "../iterative_planning/domain/run";
 
 // User/Authentication
 export class UserStore extends ItemStore<User> {}
@@ -65,8 +63,6 @@ export class SelectedMetaStudyStore extends ItemStore<MetaStudy> {}
 export class UserStudyCurrentDataStore extends ItemStore<UserStudyData> {}
 export class UserStudyDataStore extends ListStore<UserStudyData> {}
 
-//Relaxations
-export class PlanningTaskRelaxationsStore extends ListStore<PlanningTaskRelaxationSpace> {}
 
 //Interface stati
 export class FinishedStepInterfaceStatiStore extends ListStore<FinishedStepInterfaceStatus> {}

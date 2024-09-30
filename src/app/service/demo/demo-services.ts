@@ -7,10 +7,10 @@ import { HttpClient, HttpParams } from "@angular/common/http";
 import { environment } from "src/environments/environment";
 import { IHTTPData } from "../../interface/http-data.interface";
 import { ADD, EDIT, LOAD, REMOVE } from "../../store/generic-list.store";
-import { RunStatus } from "src/app/interface/run";
-import { BaseProjectService, CurrentProjectService } from "../project/project-services";
 import { PlanPropertyMapService } from "../plan-properties/plan-property-services";
 import { IterationStepsService } from "../planner-runs/iteration-steps.service";
+import { RunStatus } from "src/app/iterative_planning/domain/run";
+import { CurrentProjectService } from "../project/project-services";
 
 
 @Injectable({

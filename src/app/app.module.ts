@@ -68,7 +68,6 @@ import {
   DomainSpecStore,
   IterationStepsStore,
   MetaStudiesStore,
-  PlanningTaskRelaxationsStore,
   PlanPropertyMapStore,
   ProblemFilesStore,
   ProjectsStore,
@@ -106,7 +105,6 @@ import {
   NewIterationStepStoreService,
 } from "./service/planner-runs/selected-iteration-step.service";
 import { IterationStepsService } from "src/app/service/planner-runs/iteration-steps.service";
-import { PlanningTaskRelaxationService } from "./service/planning-task/planning-task-relaxations-services";
 import { AuthenticationService } from "./service/authentication/authentication.service";
 import { DemosService, RunningDemoService } from "./service/demo/demo-services";
 
@@ -114,15 +112,13 @@ import { DemosService, RunningDemoService } from "./service/demo/demo-services";
 import { TemplateFileUploadComponent } from "./components/files/file-upload/file-upload.component";
 import { DomainSelectorComponent } from "./components/files/domain-selector/domain-selector.component";
 import { ProblemSelectorComponent } from "./components/files/problem-selector/problem-selector.component";
-import { PropertyCreatorComponent } from "./components/plan_properties/property-creator/property-creator.component";
 import { NavigationComponent } from "./components/navigation/navigation.component";
 import { ProjectCollectionComponent } from "./project-meta/components/project-collection/project-collection.component";
 import { ProjectCreatorComponent } from "./project-meta/components/project-creator/project-creator.component";
 import { PlannerService } from "./service/planner-runs/planner.service";
 import { ProjectBaseComponent } from "./project/components/project-base/project-base.component";
-import { PropertyCollectionComponent } from "./components/plan_properties/property-collection/property-collection.component";
 import { ProjectIterativePlanningBaseComponent } from "./project/components/project-iterative-planning-base/project-iterative-planning-base.component";
-import { PlanViewComponent } from "./components/iter-planning/plan/plan-view/plan-view.component";
+import { PlanViewComponent } from "./iterative_planning/components/plan/plan-view/plan-view.component";
 import { LoginComponent } from "./components/login/login/login.component";
 import { DemoCollectionComponent } from "./components/demo/demo-collection/demo-collection.component";
 import { DemoBaseComponent } from "./components/demo/demo-base/demo-base.component";
@@ -171,24 +167,23 @@ import {
 import { StudySelectionRedirectionComponent } from "./components/user-study/meta-study/study-selection-redirection/study-selection-redirection.component";
 import { UserStudyCollectionBaseComponent } from "./components/user-study/user-study-collection-base/user-study-collection-base.component";
 import { AcceptedTestPersonsComponent } from "./components/user-study/eval/accepted-test-persons/accepted-test-persons.component";
-import { InteractivePlanViewComponent } from "./components/iter-planning/plan/interactive-plan-view/interactive-plan-view.component";
+import { InteractivePlanViewComponent } from "./iterative_planning/components/plan/interactive-plan-view/interactive-plan-view.component";
 import { PlanningTaskViewComponent } from "./components/planning-task/planning-task-view/planning-task-view.component";
 import { SettingsComponent } from "./project/components/settings/settings.component";
 import { CompleteActionComponent } from "./components/planning-task/complete-action/complete-action.component";
-import { IterationStepsListComponent } from "./components/iter-planning/iteration-steps-list/iteration-steps-list.component";
-import { IterationStepOverviewComponent } from "./components/iter-planning/finished-step/iteration-step-overview/iteration-step-overview.component";
-import { IterationStepDetailNavigatorComponent } from "./components/iter-planning/iteration-step-detail-navigator/iteration-step-detail-navigator.component";
-import { HardGoalSelectorComponent } from "./components/iter-planning/goals/hard-goal-selector/hard-goal-selector.component";
-import { SelectedHardGoalsComponent } from "./components/iter-planning/goals/selected-hard-goals/selected-hard-goals.component";
-import { ConflictViewComponent } from "./components/iter-planning/explanations/conflict-view/conflict-view.component";
-import { FinishedStepNavigatorComponent } from "./components/iter-planning/finished-step/finished-step-navigator/finished-step-navigator.component";
-import { ExplanationsViewComponent } from "./components/iter-planning/explanations/explanations-view/explanations-view.component";
-import { ExplanationsSelectPreferenceViewComponent } from "./components/iter-planning/explanations/explanations-select-preference-view/explanations-select-preference-view.component";
-import { ExplanationsRelaxationsViewComponent } from "./components/iter-planning/explanations/explanations-relaxations-view/explanations-relaxations-view.component";
-import { NewStepNavigatorComponent } from "./components/iter-planning/new-step/new-step-navigator/new-step-navigator.component";
+import { IterationStepsListComponent } from "./iterative_planning/components/iteration-steps-list/iteration-steps-list.component";
+import { IterationStepOverviewComponent } from "./iterative_planning/components/finished-step/iteration-step-overview/iteration-step-overview.component";
+import { IterationStepDetailNavigatorComponent } from "./iterative_planning/components/iteration-step-detail-navigator/iteration-step-detail-navigator.component";
+import { HardGoalSelectorComponent } from "./iterative_planning/components/goals/hard-goal-selector/hard-goal-selector.component";
+import { SelectedHardGoalsComponent } from "./iterative_planning/components/goals/selected-hard-goals/selected-hard-goals.component";
+import { ConflictViewComponent } from "./iterative_planning/components/explanations/conflict-view/conflict-view.component";
+import { FinishedStepNavigatorComponent } from "./iterative_planning/components/finished-step/finished-step-navigator/finished-step-navigator.component";
+import { ExplanationsViewComponent } from "./iterative_planning/components/explanations/explanations-view/explanations-view.component";
+import { ExplanationsSelectPreferenceViewComponent } from "./iterative_planning/components/explanations/explanations-select-preference-view/explanations-select-preference-view.component";
+import { NewStepNavigatorComponent } from "./iterative_planning/components/new-step/new-step-navigator/new-step-navigator.component";
 import { ObjectSliderComponent } from "./components/utils/object-slider/object-slider.component";
 import { ObjectProgressBarComponent } from "./components/utils/object-progress-bar/object-progress-bar.component";
-import { ScoreViewComponent } from "./components/iter-planning/finished-step/score-view/score-view.component";
+import { ScoreViewComponent } from "./iterative_planning/components/finished-step/score-view/score-view.component";
 import { ScoreBarComponent } from "./components/utils/score-bar/score-bar.component";
 import {
   FinishedStepInterfaceStatusService,
@@ -213,6 +208,17 @@ import { CreateProjectService } from './project-meta/service/create-project.serv
 import { CreateProjectEffect } from './project-meta/state/effects/create-project.effect';
 import { UpdateProjectEffect } from './project/state/effects/update-project.effect';
 import { DeleteProjectEffect } from './project-meta/state/effects/delete-project.effect';
+import { PropertyCreatorComponent } from './iterative_planning/components/plan_properties/property-creator/property-creator.component';
+import { PropertyCollectionComponent } from './iterative_planning/components/plan_properties/property-collection/property-collection.component';
+import { IterativePlanningBaseComponent } from './iterative_planning/components/iterative-planning-base/iterative-planning-base.component';
+import { iterativePlanningFeature, iterativePlanningReducer } from './iterative_planning/state/iterative-planning.reducer';
+import { LoadIterativePlanningProjectEffect } from './iterative_planning/state/effects/load-project.effect';
+import { CreatePlanPropertyEffect } from './iterative_planning/state/effects/create-plan-property.effect';
+import { IterativePlanningProjectService } from './iterative_planning/service/project.service';
+import { PlanPropertyService } from './iterative_planning/service/plan-properties.service';
+import { LoadPlanPropertiesEffect } from './iterative_planning/state/effects/load-plan-properties.effect';
+import { UpdatePlanPropertyEffect } from './iterative_planning/state/effects/update-plan-property.effect';
+import { DeletePlanPropertyEffect } from './iterative_planning/state/effects/delete-plan-property.effect';
 
 
 
@@ -285,7 +291,6 @@ import { DeleteProjectEffect } from './project-meta/state/effects/delete-project
     FinishedStepNavigatorComponent,
     ExplanationsViewComponent,
     ExplanationsSelectPreferenceViewComponent,
-    ExplanationsRelaxationsViewComponent,
     NewStepNavigatorComponent,
     ObjectSliderComponent,
     ObjectProgressBarComponent,
@@ -297,19 +302,26 @@ import { DeleteProjectEffect } from './project-meta/state/effects/delete-project
     IconSelectorComponent,
     AskDeleteComponent,
     ProjectSettingsContainerComponent,
+    IterativePlanningBaseComponent,
   ],
   imports: [
     StoreModule.forRoot(
       {
         [projectFeature]: projectReducer,
         [projectMetaDataFeature]: projectMetaDataReducer,
+        [iterativePlanningFeature]: iterativePlanningReducer,
       }),
     EffectsModule.forRoot([
       LoadProjectEffect,
       UpdateProjectEffect,
       LoadProjectMetaDataListEffect,
       CreateProjectEffect,
-      DeleteProjectEffect
+      DeleteProjectEffect,
+      LoadIterativePlanningProjectEffect,
+      CreatePlanPropertyEffect,
+      LoadPlanPropertiesEffect,
+      UpdatePlanPropertyEffect,
+      DeletePlanPropertyEffect,
     ]),
     // Instrumentation must be imported after importing StoreModule (config is optional)
     StoreDevtoolsModule.instrument({
@@ -387,8 +399,6 @@ import { DeleteProjectEffect } from './project-meta/state/effects/delete-project
     TaskSchemaStore,
     PlanPropertyMapStore,
     PlanPropertyMapService,
-    PlanningTaskRelaxationService,
-    PlanningTaskRelaxationsStore,
     PlannerService,
     RunsStore,
     CurrentRunStore,
@@ -425,6 +435,8 @@ import { DeleteProjectEffect } from './project-meta/state/effects/delete-project
     ProjectService,
     ProjectMetaDataService,
     CreateProjectService,
+    IterativePlanningProjectService,
+    PlanPropertyService,
     {
       provide: MAT_BOTTOM_SHEET_DEFAULT_OPTIONS,
       useValue: { hasBackdrop: true },

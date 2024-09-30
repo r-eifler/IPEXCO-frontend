@@ -1,13 +1,11 @@
 import { PDDLAction } from "src/app/interface/planning-task";
-import { PPConflict } from "./../../interface/explanations";
 import { PlanningTask } from "../../interface/planning-task";
-import { PlanRun } from "../../interface/run";
 import {
   GoalType,
   PlanProperty,
-} from "../../interface/plan-property/plan-property";
-import { Plan } from "../../interface/plan";
-import { PPDependencies } from "src/app/interface/explanations";
+} from "../../iterative_planning/domain/plan-property/plan-property";
+import { Plan } from "src/app/iterative_planning/domain/plan";
+import { PPDependencies } from "src/app/iterative_planning/domain/explanations";
 
 export function parsePlan(planString: string, task: PlanningTask): Plan {
   const lines = planString.split("\n");

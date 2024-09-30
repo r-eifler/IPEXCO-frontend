@@ -1,18 +1,4 @@
 <div class="main">
-  <!-- <nav mat-tab-nav-bar [tabPanel]="projectBaseTabPanel">
-    <a
-      mat-tab-link
-      *ngFor="let link of links"
-      (click)="activeLink = link.ref"
-      [active]="activeLink === link.ref"
-      [routerLink]="link.ref">
-      {{ link.name }}
-    </a>
-  </nav>
-  <mat-tab-nav-panel #projectBaseTabPanel style="height: 100%; width: 100%; overflow: auto">
-    <router-outlet></router-outlet>
-  </mat-tab-nav-panel> -->
-
   <mat-tab-group  style="height: 100%;">
     <mat-tab label="Overview">
       <app-project-overview></app-project-overview>

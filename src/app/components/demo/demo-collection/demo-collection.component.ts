@@ -7,7 +7,6 @@ import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ResponsiveService } from "src/app/service/responsive/responsive.service";
 import { MatBottomSheet } from "@angular/material/bottom-sheet";
 import { Demo } from "src/app/interface/demo";
-import { RunStatus } from "src/app/interface/run";
 import { AuthenticationService } from "../../../service/authentication/authentication.service";
 import { DemoCreatorComponent } from "../demo-creator/demo-creator.component";
 import { environment } from "../../../../environments/environment";
@@ -16,6 +15,7 @@ import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { FinishedStepInterfaceStatusService } from "src/app/service/user-interface/interface-status-services";
 import { AskDeleteComponent } from "../../utils/ask-delete/ask-delete.component";
+import { RunStatus } from "src/app/iterative_planning/domain/run";
 
 @Component({
   selector: "app-demo-selection",

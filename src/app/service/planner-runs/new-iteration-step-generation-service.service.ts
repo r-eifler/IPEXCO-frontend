@@ -1,27 +1,17 @@
-import { RunningDemoService } from "src/app/service/demo/demo-services";
 import { CurrentProjectService } from "src/app/service/project/project-services";
-import { DemoPlannerService } from "./demo-planner.service";
 import { PlannerService } from "src/app/service/planner-runs/planner.service";
-import { DemoIterationStepsService } from "./demo-iteration-steps.service";
 import { Injectable } from "@angular/core";
 import { combineLatest, Observable } from "rxjs";
 import { filter, take } from "rxjs/operators";
-import { PlanProperty } from "../../interface/plan-property/plan-property";
-import {
-  ModifiedPlanningTask,
-  PlanningTaskRelaxationSpace,
-} from "../../interface/planning-task-relaxation";
-import { IterationStep, ModIterationStep, StepStatus } from "../../interface/run";
+import { PlanProperty } from "../../iterative_planning/domain/plan-property/plan-property";
 import { PlanPropertyMapService } from "../plan-properties/plan-property-services";
 import { IterationStepsService } from "./iteration-steps.service";
 import {
   NewIterationStepStoreService,
   SelectedIterationStepService,
 } from "./selected-iteration-step.service";
-import { PlanningTaskRelaxationService } from "../planning-task/planning-task-relaxations-services";
-import { Demo } from "../../interface/demo";
-import { SelectedObjectService } from "../base/selected-object.service";
 import { Project } from "src/app/project/domain/project";
+import { IterationStep, ModIterationStep, StepStatus } from "src/app/iterative_planning/domain/run";
 
 @Injectable({
   providedIn: "root",

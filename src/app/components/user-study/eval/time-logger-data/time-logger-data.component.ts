@@ -1,11 +1,8 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { BehaviorSubject, combineLatest, Subject } from "rxjs";
 import { takeUntil, filter } from "rxjs/operators";
-import { IterationStep } from "src/app/interface/run";
-import { UserStudyData } from "src/app/interface/user-study/user-study-store";
 import { USUser } from "src/app/interface/user-study/user-study-user";
 import { UserStudyDataService } from "src/app/service/user-study/user-study-data.service";
-import { LogEntry } from "../../../../service/logger/time-logger.service";
 
 @Component({
   selector: "app-time-logger-data",

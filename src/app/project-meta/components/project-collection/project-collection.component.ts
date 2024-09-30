@@ -7,7 +7,6 @@ import { Store } from "@ngrx/store";
 import { ProjectMetaData } from "../../domain/project-meta";
 import { selectProjectCreationError, selectProjectCreationNone, selectProjectCreationPending, selectProjectsMetaData } from "../../state/project-meta.selector";
 import { deleteProject, loadProjectMetaDataList } from "../../state/project-meta.actions";
-import { CreationState } from "src/app/shared/common/creatable.interface";
 
 
 @Component({

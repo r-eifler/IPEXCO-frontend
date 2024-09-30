@@ -1,0 +1,30 @@
+import { factEquals, PDDLAction, PDDLFact } from "src/app/interface/planning-task";
+
+
+export interface Plan {
+  actions: PDDLAction[];
+  cost: number;
+}
+
+export interface State {
+  values: PDDLFact[];
+}
+
+export function nextState(state: State, action: PDDLAction): State {
+  // console.log(action.name);
+  let new_values = [...state.values];
+  for (const eff of action.effect) {
+    if (eff.negated) {
+      const index = new_values.findIndex((e) => factEquals(e, eff));
+      // console.log(index);
+      new_values.splice(index, 1);
+      // console.log("delete: " + eff)
+    } else {
+      new_values.push(eff);
+      // console.log("add: " + eff)
+    }
+    // console.log(new_values.map(v => v.toString()));
+  }
+  new_values.sort();
+  return { values: new_values };
+}
