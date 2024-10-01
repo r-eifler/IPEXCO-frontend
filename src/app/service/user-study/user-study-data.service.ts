@@ -15,7 +15,7 @@ import { IHTTPData } from 'src/app/interface/http-data.interface';
 import { UserStudyData } from 'src/app/interface/user-study/user-study-store';
 import { LogEntry, LogEvent } from '../logger/time-logger.service';
 import { mean, normalci, variance } from 'jstat'
-import { computeStepUtility, IterationStep } from 'src/app/iterative_planning/domain/run';
+import { IterationStep } from 'src/app/iterative_planning/domain/iteration_step';
 
 @Injectable({
   providedIn: 'root'

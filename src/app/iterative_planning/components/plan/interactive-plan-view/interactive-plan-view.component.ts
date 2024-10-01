@@ -1,8 +1,7 @@
 import { parsePlan } from "src/app/service/planner-runs/utils";
-import { SelectedIterationStepService } from "../../../../service/planner-runs/selected-iteration-step.service";
 import { CurrentProjectService } from "src/app/service/project/project-services";
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { BehaviorSubject, Subject, Observable, combineLatest } from "rxjs";
+import { Subject, Observable, combineLatest } from "rxjs";
 import { filter, map, takeUntil } from "rxjs/operators";
 import { TimeLoggerService } from "src/app/service/logger/time-logger.service";
 import {
@@ -13,8 +12,11 @@ import {
   instantiateAction,
 } from "src/app/interface/planning-task";
 import { Project } from "src/app/project/domain/project";
-import { IterationStep, RunStatus } from "src/app/iterative_planning/domain/run";
-import { nextState, Plan, State } from "src/app/iterative_planning/domain/plan";
+import { RunStatus } from "src/app/iterative_planning/domain/run";
+import { nextState, Plan, PlanRunStatus, State } from "src/app/iterative_planning/domain/plan";
+import { Store } from "@ngrx/store";
+import { selectIterativePlanningSelectedStep } from "src/app/iterative_planning/state/iterative-planning.selector";
+import { IterationStep } from "src/app/iterative_planning/domain/iteration_step";
 
 interface ExFact {
   fact: PDDLFact;
@@ -39,7 +41,7 @@ export class InteractivePlanViewComponent implements OnInit, OnDestroy {
 
   runStatus = RunStatus;
 
-  private step$: BehaviorSubject<IterationStep>;
+  private step$: Observable<IterationStep>;
   private project$: Observable<Project>;
 
   plan$: Observable<Plan>;
@@ -50,11 +52,11 @@ export class InteractivePlanViewComponent implements OnInit, OnDestroy {
   states_visible: boolean[] = [];
 
   constructor(
+    private store: Store,
     private timeLogger: TimeLoggerService,
-    private selectIterStepService: SelectedIterationStepService,
     private currentProjectService: CurrentProjectService
   ) {
-    this.step$ = this.selectIterStepService.getSelectedObject();
+    this.step$ = this.store.select(selectIterativePlanningSelectedStep)
     this.project$ = this.currentProjectService.findSelectedObject();
   }
 
@@ -62,9 +64,9 @@ export class InteractivePlanViewComponent implements OnInit, OnDestroy {
 
     this.plan$ = this.step$.pipe(
       filter(
-        (step) => !!step && step.plan && step.plan.status == RunStatus.finished
+        (step) => !!step && step.plan && step.plan.status == PlanRunStatus.plan_found
       ),
-      map((step) => parsePlan(step.plan.result, step.task))
+      map((step) => step.plan)
     );
 
     combineLatest([this.step$, this.plan$])
@@ -80,7 +82,7 @@ export class InteractivePlanViewComponent implements OnInit, OnDestroy {
             return;
           }
 
-          let plan: Plan = parsePlan(step.plan.result, step.task);
+          let plan: Plan = step.plan
 
           let action_map: Map<string, PDDLAction> = new Map();
           for (const action of step.task.model.actions) {
@@ -105,7 +107,7 @@ export class InteractivePlanViewComponent implements OnInit, OnDestroy {
           for (const action of plan.actions) {
             const i_action = instantiateAction(
               action_map.get(action.name),
-              action.parameters.map((o) => o.name)
+              action.arguments
             );
             i_action.effect.forEach((item) =>
               used_predicate_names.add(item.name)

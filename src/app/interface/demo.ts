@@ -1,5 +1,4 @@
-import { PPDependencies } from '../iterative_planning/domain/explanations';
-import { DepExplanationRun, RunStatus } from '../iterative_planning/domain/run';
+import { RunStatus } from '../iterative_planning/domain/run';
 import { Project } from '../project/domain/project';
 
 
@@ -9,13 +8,13 @@ export interface Demo extends Project {
   status?: RunStatus;
   completion: number;
   definition?: string;
-  conflictExplanation?: DepExplanationRun;
+  conflictExplanation?: any;
   explanations: any[];
   taskInfo?: string;
   maxUtility?: { value: number; selectedPlanProperties: string[] };
 }
 
-export function getSimpleConflicts(demo: Demo): PPDependencies {
+export function getSimpleConflicts(demo: Demo): any {
   return demo.explanations[0]?.relaxationExplanations[0]?.dependencies[0]?.dependencies;
 }
 

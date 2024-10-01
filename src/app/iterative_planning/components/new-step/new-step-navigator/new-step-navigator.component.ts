@@ -1,14 +1,14 @@
-import { NewStepInterfaceStatusService } from "../../../../service/user-interface/interface-status-services";
+
 import { NewStepInterfaceStatus } from "src/app/interface/interface-status";
 import { Observable } from "rxjs";
-import { NewIterationStepStoreService } from "../../../../service/planner-runs/selected-iteration-step.service";
 import { Component, OnInit } from "@angular/core";
 import { StepperSelectionEvent } from "@angular/cdk/stepper";
-import { NewIterationStepGenerationService } from "../../../../service/planner-runs/new-iteration-step-generation-service.service";
-import { CurrentProjectService } from "src/app/service/project/project-services";
 import { GeneralSettings } from "src/app/interface/settings/general-settings";
-import { filter, map } from "rxjs/operators";
-import { IterationStep } from "src/app/iterative_planning/domain/run";
+import { map, take } from "rxjs/operators";
+import { IterationStep } from "src/app/iterative_planning/domain/iteration_step";
+import { Store } from "@ngrx/store";
+import { selectIterativePlanningNewStep, selectIterativePlanningProject, selectIterativePlanningSelectedStep } from "src/app/iterative_planning/state/iterative-planning.selector";
+import { createIterationStep } from "src/app/iterative_planning/state/iterative-planning.actions";
 
 @Component({
   selector: "app-new-step-navigator",
@@ -21,40 +21,38 @@ export class NewStepNavigatorComponent implements OnInit {
   settings$: Observable<GeneralSettings>;
 
   constructor(
-    private newIterationStepService: NewIterationStepStoreService,
-    private newStepInterfaceStatusService: NewStepInterfaceStatusService,
-    private newIterationStepGenerationService: NewIterationStepGenerationService,
-    private selectedProject: CurrentProjectService,
+    private store: Store,
   ) {
-    this.step$ = this.newIterationStepService.getSelectedObject();
+    this.step$ = this.store.select(selectIterativePlanningNewStep)
 
-    this.settings$ = selectedProject.getSelectedObject().pipe(
-      filter(p => !!p),
-      map(p => p.settings)
-    );
+    this.settings$ = this.store.select(selectIterativePlanningProject).pipe(
+      map(p => p?.settings)
+    )
 
-    this.interfaceStatus$ = this.newStepInterfaceStatusService
-      .getSelectedObject()
-      .pipe((status) => {
-        if (status) {
-          return status;
-        }
-        let newStatus: NewStepInterfaceStatus = { _id: "0", stepperStep: 0 };
-        this.newStepInterfaceStatusService.saveObject(newStatus);
-      });
+    // this.interfaceStatus$ = this.newStepInterfaceStatusService
+    //   .getSelectedObject()
+    //   .pipe((status) => {
+    //     if (status) {
+    //       return status;
+    //     }
+    //     let newStatus: NewStepInterfaceStatus = { _id: "0", stepperStep: 0 };
+    //     this.newStepInterfaceStatusService.saveObject(newStatus);
+    //   });
   }
 
   ngOnInit(): void {}
 
   addNewStep(): void {
-    this.newIterationStepGenerationService.finishNewStep();
-    this.newStepInterfaceStatusService.removeCurrentObject();
+    this.step$.pipe(take(1)).subscribe( step =>
+      this.store.dispatch(createIterationStep({iterationStep: step}))
+    );
+    
   }
 
   stepperChanged(event: StepperSelectionEvent): void {
-    this.newStepInterfaceStatusService.saveObject({
-      _id: "0",
-      stepperStep: event.selectedIndex,
-    });
+    // this.newStepInterfaceStatusService.saveObject({
+    //   _id: "0",
+    //   stepperStep: event.selectedIndex,
+    // });
   }
 }

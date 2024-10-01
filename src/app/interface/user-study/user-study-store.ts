@@ -1,4 +1,5 @@
-import { IterationStep } from 'src/app/iterative_planning/domain/run';
+
+import { IterationStep } from 'src/app/iterative_planning/domain/iteration_step';
 import { USUser } from './user-study-user';
 
 export interface UserStudyDemoData {

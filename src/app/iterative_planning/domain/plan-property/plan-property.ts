@@ -39,10 +39,10 @@ export interface PlanProperty {
 }
 
 export function getMaximalPlanValue(
-  planProperties: Map<string, PlanProperty>
+  planProperties: Record<string, PlanProperty>
 ): number {
   let sum = 0;
-  planProperties.forEach((pp, key) => {
+  Object.values(planProperties).forEach((pp, key) => {
     sum += pp.utility;
   });
   return sum;

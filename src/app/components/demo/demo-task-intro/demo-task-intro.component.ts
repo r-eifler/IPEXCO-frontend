@@ -16,6 +16,8 @@ import { environment } from "../../../../environments/environment";
 import {MatButton} from '@angular/material/button';
 import { TimeLoggerService } from "../../../service/logger/time-logger.service";
 import { BehaviorSubject, Observable } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { selectIterativePlanningProperties } from 'src/app/iterative_planning/state/iterative-planning.selector';
 
 @Component({
   selector: "app-demo-task-intro",
@@ -30,15 +32,15 @@ export class DemoTaskIntroComponent implements OnInit, OnDestroy {
   srcUrl = environment.srcURL;
 
   demo$: Observable<Demo>;
-  planPropertiesMap$: Observable<Map<string, PlanProperty>>;
+  planPropertiesMap$: Observable<Record<string, PlanProperty>>;
 
   constructor(
     private timeLogger: TimeLoggerService,
     runningDemoService: RunningDemoService,
-    planPropertiesService: PlanPropertyMapService
+    private store: Store,
   ) {
     this.demo$ = runningDemoService.getSelectedObject() as BehaviorSubject<Demo>;
-    this.planPropertiesMap$ = planPropertiesService.getMap();
+    this.planPropertiesMap$ = this.store.select(selectIterativePlanningProperties)
   }
 
   ngOnInit(): void {

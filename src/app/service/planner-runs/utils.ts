@@ -4,8 +4,8 @@ import {
   GoalType,
   PlanProperty,
 } from "../../iterative_planning/domain/plan-property/plan-property";
-import { Plan } from "src/app/iterative_planning/domain/plan";
-import { PPDependencies } from "src/app/iterative_planning/domain/explanations";
+import { Plan, PlanRunStatus } from "src/app/iterative_planning/domain/plan";
+
 
 export function parsePlan(planString: string, task: PlanningTask): Plan {
   const lines = planString.split("\n");
@@ -17,18 +17,16 @@ export function parsePlan(planString: string, task: PlanningTask): Plan {
 }
 
 function parseActions(actionStrings: string[], task: PlanningTask): Plan {
-  const res: Plan = { actions: [], cost: null };
+  const res: Plan = { actions: [], cost: null, status: PlanRunStatus.plan_found };
   for (const a of actionStrings) {
     const action = a.replace("(", "").replace(")", "");
     const [name, ...args] = action.split(" ");
     if (task.model.actions.some((ac) => ac.name === name)) {
       res.actions.push({
         name: name,
-        parameters: args.map((a) => {
-          return { name: a, type: "" };
+        arguments: args.map((a) => {
+          return a;
         }),
-        precondition: [],
-        effect: [],
       });
     }
   }
@@ -38,7 +36,7 @@ function parseActions(actionStrings: string[], task: PlanningTask): Plan {
 
 export function updateMUGSPropsNames(
   oldMugs: string[][],
-  planProperties: Map<string, PlanProperty>
+  planProperties: Record<string, PlanProperty>
 ): string[][] {
   const newMUGS = [];
   for (const mugs of oldMugs) {
@@ -46,7 +44,7 @@ export function updateMUGSPropsNames(
     for (const elem of mugs) {
       if (elem.startsWith("Atom")) {
         const fact = elem.replace("Atom ", "").replace(" ", "");
-        for (const p of planProperties.values()) {
+        for (const p of Object.values(planProperties)) {
           if (p.type === GoalType.goalFact && fact === p.formula) {
             list.push(p.name);
             break;
@@ -66,20 +64,20 @@ export function updateMUGSPropsNames(
   return newMUGS;
 }
 
-export function toPPDependencies(
-  oldMugs: string[][],
-  planProperties: Map<string, PlanProperty>
-): PPDependencies {
-  const newMUGS = updateMUGSPropsNames(oldMugs, planProperties);
-  const ppList = Array.from(planProperties.values());
+// export function toPPDependencies(
+//   oldMugs: string[][],
+//   planProperties: Record<string, PlanProperty>
+// ): PPDependencies {
+//   const newMUGS = updateMUGSPropsNames(oldMugs, planProperties);
+//   const ppList = Array.from(planProperties.values());
 
-  let dep: PPDependencies = { conflicts: [] };
+//   let dep: PPDependencies = { conflicts: [] };
 
-  for (const mugs of newMUGS) {
-    dep.conflicts.push({
-      elems: mugs.map((e) => ppList.find((pp) => pp.name == e)._id),
-    });
-  }
+//   for (const mugs of newMUGS) {
+//     dep.conflicts.push({
+//       elems: mugs.map((e) => ppList.find((pp) => pp.name == e)._id),
+//     });
+//   }
 
-  return dep;
-}
+//   return dep;
+// }

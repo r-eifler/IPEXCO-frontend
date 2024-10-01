@@ -1,5 +1,4 @@
 import { GeneralSettings } from 'src/app/interface/settings/general-settings';
-import { SelectedIterationStepService } from 'src/app/service/planner-runs/selected-iteration-step.service';
 import { OnDestroy } from '@angular/core';
 import { PlanProperty } from 'src/app/iterative_planning/domain/plan-property/plan-property';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
@@ -11,8 +10,9 @@ import { filter, map, takeUntil, take } from 'rxjs/operators';
 import * as d3 from 'd3';
 import { combineLatest } from "rxjs/internal/observable/combineLatest";
 import { CurrentProjectService } from 'src/app/service/project/project-services';
-import { getAllDependencies, getAllReleventDependencies, IterationStep } from 'src/app/iterative_planning/domain/run';
-import { PPDependencies } from 'src/app/iterative_planning/domain/explanations';
+import { IterationStep } from 'src/app/iterative_planning/domain/iteration_step';
+import { Store } from '@ngrx/store';
+import { selectIterativePlanningProject, selectIterativePlanningProperties, selectIterativePlanningPropertiesList, selectIterativePlanningSelectedStep } from 'src/app/iterative_planning/state/iterative-planning.selector';
 
 @Component({
   selector: 'app-mugs-visu-main',
@@ -42,7 +42,7 @@ export class MUGSVisuMainComponent implements OnInit, OnDestroy {
     MUGS/goal conflicts
     Given by lists of planProperty ids
   */
-  conflicts$:  Observable<PPDependencies>;
+  conflicts$:  Observable<any>;
 
   /*
     Map of planproperty id to plan property objects
@@ -60,7 +60,7 @@ export class MUGSVisuMainComponent implements OnInit, OnDestroy {
     property. The only possibility is to parse the formula itself.
     TODO: add fieled storing all objects selected during the creation of the plan property.
   */
-  planProperties$: Observable<Map<string, PlanProperty>>;
+  planProperties$: Observable<PlanProperty[]>;
 
   settings$: Observable<GeneralSettings>;
 
@@ -91,28 +91,25 @@ export class MUGSVisuMainComponent implements OnInit, OnDestroy {
   plantip: d3.Selection<HTMLDivElement, unknown, HTMLElement, any>;
 
   constructor(
-    demoService: RunningDemoService,
-    planPropertiesService: PlanPropertyMapService,
-    stepService: SelectedIterationStepService,
-    private currentProjectService: CurrentProjectService
+    private store: Store,
+    demoService: RunningDemoService
   ) {
 
     // Access the data over these observables
     // If you subscribe to one, please add takeUntil(this.unsubscribe$) in the pipe
-    this.settings$ = this.currentProjectService.getSelectedObject().pipe(
-      filter((p) => !!p),
-      map((project) => project.settings)
+    this.settings$ = this.store.select(selectIterativePlanningProject).pipe(
+      map(p => p?.settings)
     );
-
     this.demo$ = demoService.getSelectedObject() as BehaviorSubject<Demo>;
-    this.selectedStep$ = stepService.getSelectedObject();
+    this.selectedStep$ = this.store.select(selectIterativePlanningSelectedStep)
 
     this.conflicts$ = combineLatest([this.selectedStep$, this.settings$]).pipe(
       takeUntil(this.unsubscribe$),
       filter(([step, settings]) => !!step && !!settings),
-      map(([step, settings]) => settings.globalExplanation ? getAllDependencies(step) : getAllReleventDependencies(step))
+      // map(([step, settings]) => settings.globalExplanation ? getAllDependencies(step) : getAllReleventDependencies(step))
     );
-    this.planProperties$ = planPropertiesService.getMap();
+    this.planProperties$ = this.store.select(selectIterativePlanningPropertiesList)
+
   }
 
   generateD3Components(): void {

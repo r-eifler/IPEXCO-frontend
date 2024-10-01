@@ -1,10 +1,10 @@
 <div class="main">
-    <mat-tab-group  style="height: 100%;">
+    <mat-tab-group  style="height: 100%;" [selectedIndex]="2">
       <mat-tab label="Plan Properties">
         <app-property-collection></app-property-collection>
       </mat-tab>
-      <mat-tab label="Iterative Planning">
-        TEST
+      <mat-tab label="Iteration Steps">
+        <app-iteration-steps-base></app-iteration-steps-base>
       </mat-tab>
     </mat-tab-group>
   </div>

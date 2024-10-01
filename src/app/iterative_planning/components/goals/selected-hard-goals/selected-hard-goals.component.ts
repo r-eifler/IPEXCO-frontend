@@ -3,8 +3,10 @@ import { Component, Input, OnInit } from "@angular/core";
 import { BehaviorSubject, Observable, combineLatest } from "rxjs";
 import { PlanProperty } from "src/app/iterative_planning/domain/plan-property/plan-property";
 import { GeneralSettings } from "src/app/interface/settings/general-settings";
-import { IterationStep } from "src/app/iterative_planning/domain/run";
 import { filter, map } from "rxjs/operators";
+import { IterationStep } from "src/app/iterative_planning/domain/iteration_step";
+import { Store } from "@ngrx/store";
+import { selectIterativePlanningProperties } from "src/app/iterative_planning/state/iterative-planning.selector";
 
 @Component({
   selector: "app-selected-hard-goals",
@@ -12,6 +14,7 @@ import { filter, map } from "rxjs/operators";
   styleUrls: ["./selected-hard-goals.component.scss"],
 })
 export class SelectedHardGoalsComponent implements OnInit {
+
   @Input()
   set step(step: IterationStep) {
     this.step$.next(step);
@@ -22,27 +25,24 @@ export class SelectedHardGoalsComponent implements OnInit {
     this.settings$.next(settings);
   }
 
-  planProperties$: BehaviorSubject<Map<string, PlanProperty>>;
+  planProperties$: Observable<Record<string, PlanProperty>>;
   private step$ = new BehaviorSubject<IterationStep>(null);
   protected  settings$ = new BehaviorSubject<GeneralSettings>(null);
 
   hardGoals$: Observable<PlanProperty[]>;
 
-  constructor(private planPropertiesMapService: PlanPropertyMapService) {
+  constructor(private store: Store) {
 
-    this.planProperties$ = this.planPropertiesMapService.getMap();
+    this.planProperties$ = this.store.select(selectIterativePlanningProperties)
 
     this.hardGoals$ = combineLatest([this.step$, this.planProperties$]).pipe(
-      filter(
-        ([step, planProperties]) =>
-          !!step && planProperties && planProperties.size > 0
-      ),
+      filter(([step, planProperties]) => !!step && !!planProperties),
       map(([step, planProperties]) =>
-        step.hardGoals.map((pp_id) => planProperties.get(pp_id))
+        step.hardGoals.map((pp_id) => planProperties[pp_id])
       ),
       filter(hardGoals => ! hardGoals.some(hg => hg === undefined)),
       map((hardGoals) => hardGoals.sort((a, b) => (a.globalHardGoal ? -1 : 0))),
-    );
+  );
   }
 
   ngOnInit(): void {}

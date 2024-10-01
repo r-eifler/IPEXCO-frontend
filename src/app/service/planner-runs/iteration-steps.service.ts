@@ -1,4 +1,3 @@
-import { SelectedIterationStepService } from "./selected-iteration-step.service";
 import { IterationStepsStore } from "./../../store/stores.store";
 import { ADD, EDIT, LOAD, REMOVE } from "../../store/generic-list.store";
 import { Injectable } from "@angular/core";
@@ -7,7 +6,8 @@ import { ObjectCollectionService } from "../base/object-collection.service";
 import { environment } from "../../../environments/environment";
 import { IHTTPData } from "../../interface/http-data.interface";
 import { PlanProperty } from "src/app/iterative_planning/domain/plan-property/plan-property";
-import { computePlanValue, IterationStep, PlanRun } from "src/app/iterative_planning/domain/run";
+import { computePlanValue, PlanRun } from "src/app/iterative_planning/domain/run";
+import { IterationStep } from "src/app/iterative_planning/domain/iteration_step";
 
 interface QueryParam {
   param: string;
@@ -21,7 +21,6 @@ export class IterationStepsService extends ObjectCollectionService<IterationStep
   constructor(
     http: HttpClient,
     store: IterationStepsStore,
-    protected selectedIterationStepService: SelectedIterationStepService
   ) {
     super(http, store);
     this.BASE_URL = environment.apiURL + "run/iter-step/";
@@ -45,7 +44,7 @@ export class IterationStepsService extends ObjectCollectionService<IterationStep
           .post<IHTTPData<IterationStep>>(this.BASE_URL, { data: step })
           .subscribe((httpData) => {
             let rStep = httpData.data;
-            this.selectedIterationStepService.saveObject(rStep);
+            // this.selectedIterationStepService.saveObject(rStep);
             const action = { type: ADD, data: rStep };
             this.listStore.dispatch(action);
             resolve(httpData.data)
@@ -68,7 +67,7 @@ export class IterationStepsService extends ObjectCollectionService<IterationStep
       .subscribe((steps) => {
         console.log(steps);
         if (steps.length > 0) {
-          this.selectedIterationStepService.saveObject(steps[steps.length - 1]);
+          // this.selectedIterationStepService.saveObject(steps[steps.length - 1]);
         }
 
         this.listStore.dispatch({ type: LOAD, data: steps });
@@ -96,7 +95,7 @@ export class IterationStepsService extends ObjectCollectionService<IterationStep
     }
   }
 
-  getBestRun(planProperties: Map<string, PlanProperty>): IterationStep {
+  getBestRun(planProperties: Record<string, PlanProperty>): IterationStep {
     if (this.collection$.value.length == 0) {
       return null;
     }
@@ -129,14 +128,14 @@ export class IterationStepsService extends ObjectCollectionService<IterationStep
     this.http.delete(this.BASE_URL + object._id).subscribe((response) => {
       this.listStore.dispatch({ type: REMOVE, data: object });
       if (index < this.collection$.getValue().length) {
-        this.selectedIterationStepService.saveObject(
-          this.collection$.getValue()[index]
-        );
+        // this.selectedIterationStepService.saveObject(
+        //   this.collection$.getValue()[index]
+        // );
         return;
       }
-      this.selectedIterationStepService.saveObject(
-        this.collection$.getValue()[this.collection$.getValue().length - 1]
-      );
+      // this.selectedIterationStepService.saveObject(
+      //   this.collection$.getValue()[this.collection$.getValue().length - 1]
+      // );
     });
   }
 }

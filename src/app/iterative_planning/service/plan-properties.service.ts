@@ -13,13 +13,14 @@ export class PlanPropertyService{
     private http = inject(HttpClient)
     private BASE_URL = environment.apiURL + "plan-property/";
 
-    getPlanProperties$(id: string): Observable<PlanProperty[]> {
+    getPlanProperties$(id: string): Observable<Record<string,PlanProperty>> {
 
         let httpParams = new HttpParams();
         httpParams = httpParams.set('projectId', id);
         
         return this.http.get<IHTTPData<PlanProperty[]>>(this.BASE_URL,  { params: httpParams }).pipe(
-            map(({data}) => data)
+            map(({data}) => data),
+            map(props => props.reduce((acc, cv) => ({...acc,[cv._id]: cv}), {}))
         )
     }
 

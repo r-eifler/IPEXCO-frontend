@@ -1,13 +1,31 @@
+
 import { factEquals, PDDLAction, PDDLFact } from "src/app/interface/planning-task";
 
 
-export interface Plan {
-  actions: PDDLAction[];
+export enum PlanRunStatus {
+  pending,
+  running,
+  failed,
+  plan_found,
+  not_solvable
+}
+
+export interface PlanAction {
+  name: string,
+  arguments: string[]
+}
+
+
+export interface Plan{
+  createdAt?: Date;
+  status: PlanRunStatus;
+  actions?: PlanAction[];
+  satisfied_properties?: string[];
   cost: number;
 }
 
 export interface State {
-  values: PDDLFact[];
+  values: PDDLFact[]
 }
 
 export function nextState(state: State, action: PDDLAction): State {

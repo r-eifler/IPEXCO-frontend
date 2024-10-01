@@ -5,7 +5,6 @@ import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, ParamMap, Router } from "@angular/router";
 import { tap } from "rxjs/operators";
 import { PLANNER_REDIRECT } from "src/app/app.tokens";;
-import { NewIterationStepGenerationService } from "src/app/service/planner-runs/new-iteration-step-generation-service.service";
 import { Project } from "../../domain/project";
 import { Store } from "@ngrx/store";
 import { loadProject } from "../../state/project.actions";
@@ -18,10 +17,6 @@ import { takeUntilDestroyed } from "@angular/core/rxjs-interop"
   providers: [
     { provide: IterationStepsService, useClass: IterationStepsService },
     { provide: PlannerService, useClass: PlannerService },
-    {
-      provide: NewIterationStepGenerationService,
-      useClass: NewIterationStepGenerationService,
-    },
     { provide: PLANNER_REDIRECT, useValue: "../run-overview-mobile" },
     { provide: QUESTION_REDIRECT, useValue: "../../../run-overview-mobile" },
   ],

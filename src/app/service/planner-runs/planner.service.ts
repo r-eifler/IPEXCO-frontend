@@ -1,13 +1,11 @@
 import { IterationStepsService } from "src/app/service/planner-runs/iteration-steps.service";
-import { SelectedIterationStepService } from "./selected-iteration-step.service";
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { environment } from "../../../environments/environment";
 import { IHTTPData } from "../../interface/http-data.interface";
 import { BehaviorSubject } from "rxjs";
-import { Demo } from "src/app/interface/demo";
-import { DepExplanationRun, IterationStep, PlanRun, RunStatus } from "src/app/iterative_planning/domain/run";
-
+import { IterationStep } from "src/app/iterative_planning/domain/iteration_step";
+import { PlanRun, RunStatus } from "src/app/iterative_planning/domain/run";
 @Injectable({
   providedIn: "root",
 })
@@ -20,7 +18,6 @@ export class PlannerService {
 
   constructor(
     protected http: HttpClient,
-    protected selectedStepService: SelectedIterationStepService,
     protected iterationStepsService: IterationStepsService
   ) {
     this.BASE_URL = environment.apiURL + "planner/";
@@ -38,8 +35,8 @@ export class PlannerService {
     httpParams = httpParams.set("save", String(save));
 
     const planRun: PlanRun = { name: "Plan ", status: RunStatus.pending };
-    step.plan = planRun;
-    this.selectedStepService.saveObject(step);
+    // step.plan = planRun;
+    // this.selectedStepService.saveObject(step);
 
     this.BASE_URL = this.myBaseURL + "plan";
     this.http
@@ -54,78 +51,63 @@ export class PlannerService {
         console.log("Plan Computed");
         console.log(step);
         this.iterationStepsService.saveObject(stepBack);
-        this.selectedStepService.updateIfSame(stepBack);
+        // this.selectedStepService.updateIfSame(stepBack);
         this.plannerBusy.next(false);
       });
   }
 
-  computeMUGSfromQuestion(
-    step: IterationStep,
-    question: string[]
-  ): DepExplanationRun {
-    this.plannerBusy.next(true);
-    const url = this.myBaseURL + "mugs/" + step._id;
+  // computeMUGSfromQuestion(
+  //   step: IterationStep,
+  //   question: string[]
+  // ): DepExplanationRun {
+  //   this.plannerBusy.next(true);
+  //   const url = this.myBaseURL + "mugs/" + step._id;
 
-    let softGoals: string[] = step.hardGoals.filter(
-      (pp) => !question.some((h) => h == pp)
-    );
+  //   let softGoals: string[] = step.hardGoals.filter(
+  //     (pp) => !question.some((h) => h == pp)
+  //   );
 
-    let expRun: DepExplanationRun = {
-      name: "DExpQ",
-      status: RunStatus.pending,
-      hardGoals: question,
-      softGoals,
-    };
+  //   let expRun: DepExplanationRun = {
+  //     name: "DExpQ",
+  //     status: RunStatus.pending,
+  //     hardGoals: question,
+  //     softGoals,
+  //   };
 
-    this.http
-      .post<IHTTPData<IterationStep>>(url, expRun)
-      .subscribe((httpData) => {
-        let step = httpData.data;
-        this.iterationStepsService.saveObject(step);
-        this.selectedStepService.updateIfSame(step);
-        this.plannerBusy.next(false);
-      });
+  //   this.http
+  //     .post<IHTTPData<IterationStep>>(url, expRun)
+  //     .subscribe((httpData) => {
+  //       let step = httpData.data;
+  //       this.iterationStepsService.saveObject(step);
+  //       this.selectedStepService.updateIfSame(step);
+  //       this.plannerBusy.next(false);
+  //     });
 
-    return expRun;
-  }
+  //   return expRun;
+  // }
 
-  computeMUGS(step: IterationStep): DepExplanationRun {
-    this.plannerBusy.next(true);
-    const url = this.myBaseURL + "mugs/" + step._id;
+  // computeMUGS(step: IterationStep): DepExplanationRun {
+  //   this.plannerBusy.next(true);
+  //   const url = this.myBaseURL + "mugs/" + step._id;
 
-    let expRun: DepExplanationRun = {
-      name: "DExp",
-      status: RunStatus.pending,
-      hardGoals: [],
-      softGoals: [...step.hardGoals, ...step.softGoals],
-    };
-    console.log(expRun);
+  //   let expRun: DepExplanationRun = {
+  //     name: "DExp",
+  //     status: RunStatus.pending,
+  //     hardGoals: [],
+  //     softGoals: [...step.hardGoals, ...step.softGoals],
+  //   };
+  //   console.log(expRun);
 
-    this.http
-      .post<IHTTPData<IterationStep>>(url, expRun)
-      .subscribe((httpData) => {
-        let step = httpData.data;
-        this.iterationStepsService.saveObject(step);
-        this.selectedStepService.updateIfSame(step);
-        this.plannerBusy.next(false);
-      });
+  //   this.http
+  //     .post<IHTTPData<IterationStep>>(url, expRun)
+  //     .subscribe((httpData) => {
+  //       let step = httpData.data;
+  //       this.iterationStepsService.saveObject(step);
+  //       this.selectedStepService.updateIfSame(step);
+  //       this.plannerBusy.next(false);
+  //     });
 
-    return expRun;
-  }
+  //   return expRun;
+  // }
 
-  computeRelaxExplanations(step: IterationStep, demo: Demo = null): Promise<IterationStep> {
-    this.plannerBusy.next(true);
-    const url = this.myBaseURL + "relax_exp/" + step._id;
-
-    return new Promise((resolve, reject) => {
-      this.http.post<IHTTPData<IterationStep>>(url, {}).subscribe((httpData) => {
-        let step = httpData.data;
-        this.iterationStepsService.saveObject(step);
-        this.selectedStepService.updateIfSame(step);
-        this.plannerBusy.next(false);
-        resolve(httpData.data);
-      });
-    })
-
-  }
 }

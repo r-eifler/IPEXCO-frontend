@@ -15,7 +15,7 @@ import { MatCheckboxChange } from '@angular/material/checkbox';
 import { AskDeleteComponent } from 'src/app/components/utils/ask-delete/ask-delete.component';
 import { IconSelectorComponent } from "src/app/components/utils/icon-selector/icon-selector.component";
 import { Store } from "@ngrx/store";
-import { selectIterativePlanningProperties } from "src/app/iterative_planning/state/iterative-planning.selector";
+import { selectIterativePlanningProperties, selectIterativePlanningPropertiesList } from "src/app/iterative_planning/state/iterative-planning.selector";
 import { deletePlanProperty, updatePlanProperty } from "src/app/iterative_planning/state/iterative-planning.actions";
 
 
@@ -49,7 +49,7 @@ export class PropertyCollectionComponent
     public dialog: MatDialog,
   ) {
 
-    this.dataSource$ = this.store.select(selectIterativePlanningProperties).pipe(
+    this.dataSource$ = this.store.select(selectIterativePlanningPropertiesList).pipe(
       map(pp => {
         const dataSource = this.dataSource;
         dataSource.data = pp;
@@ -57,7 +57,7 @@ export class PropertyCollectionComponent
       })
     );
 
-    this.planProperties$ = this.store.select(selectIterativePlanningProperties)
+    this.planProperties$ = this.store.select(selectIterativePlanningPropertiesList)
 
   }
 

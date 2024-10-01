@@ -6,7 +6,7 @@ import { filter, map, take, takeUntil, tap } from "rxjs/operators";
 import { LogEvent, TimeLoggerService } from "src/app/service/logger/time-logger.service";
 import { CurrentProjectService } from "src/app/service/project/project-services";
 import { GeneralSettings } from "src/app/interface/settings/general-settings";
-import { IterationStep } from "src/app/iterative_planning/domain/run";
+import { IterationStep } from "src/app/iterative_planning/domain/iteration_step";
 
 @Component({
   selector: "app-explanations-select-preference-view",

@@ -1,6 +1,4 @@
-<div
-  [class.main-container-goals]="( settings$ | async).useConstraints === false"
-  [class.main-container-constraints]="( settings$ | async).useConstraints">
+<div class="'main-container">
     <app-score-view *ngIf="( settings$ | async).usePlanPropertyValues"
       class="sub-content"
       [step]="step$ | async">

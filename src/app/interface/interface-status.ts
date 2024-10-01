@@ -1,4 +1,3 @@
-import { PPConflict, PPDependencies } from "../iterative_planning/domain/explanations";
 
 
 export interface FinishedStepInterfaceStatus {
@@ -6,8 +5,8 @@ export interface FinishedStepInterfaceStatus {
   tab: number;
   viewPos: number;
   question: string;
-  conflict: PPConflict;
-  dependencies: PPDependencies;
+  conflict: any;
+  dependencies: any;
 }
 
 export interface NewStepInterfaceStatus {

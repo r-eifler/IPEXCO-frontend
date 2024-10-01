@@ -60,7 +60,6 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import {
   SelectedIterationStepStore,
   CurrentProjectStore,
-  CurrentQuestionStore,
   CurrentRunStore,
   DemosStore,
   DomainFilesStore,
@@ -100,10 +99,6 @@ import {
   UserStudiesService,
 } from "./service/user-study/user-study-services";
 import { PddlFileUtilsService } from "./service/files/pddl-file-utils.service";
-import {
-  SelectedIterationStepService,
-  NewIterationStepStoreService,
-} from "./service/planner-runs/selected-iteration-step.service";
 import { IterationStepsService } from "src/app/service/planner-runs/iteration-steps.service";
 import { AuthenticationService } from "./service/authentication/authentication.service";
 import { DemosService, RunningDemoService } from "./service/demo/demo-services";
@@ -117,7 +112,7 @@ import { ProjectCollectionComponent } from "./project-meta/components/project-co
 import { ProjectCreatorComponent } from "./project-meta/components/project-creator/project-creator.component";
 import { PlannerService } from "./service/planner-runs/planner.service";
 import { ProjectBaseComponent } from "./project/components/project-base/project-base.component";
-import { ProjectIterativePlanningBaseComponent } from "./project/components/project-iterative-planning-base/project-iterative-planning-base.component";
+import { ProjectIterativePlanningBaseComponent } from "./iterative_planning/components/iteration-steps-base/iteration-steps-base.component";
 import { PlanViewComponent } from "./iterative_planning/components/plan/plan-view/plan-view.component";
 import { LoginComponent } from "./components/login/login/login.component";
 import { DemoCollectionComponent } from "./components/demo/demo-collection/demo-collection.component";
@@ -146,7 +141,6 @@ import { UserStudyDemoViewComponent } from "./components/user-study/user-study-d
 import { UserStudyStartComponent } from "./components/user-study/user-study-start/user-study-start.component";
 import { UserStudyExecuteComponent } from "./components/user-study/user-study-execute/user-study-execute.component";
 import { UserStudyEndComponent } from "./components/user-study/user-study-end/user-study-end.component";
-import { SelectedQuestionService } from "./service/planner-runs/selected-question.service";
 import { MarkedPipe } from "./pipes/marked.pipe";
 import { DemoHelpDialogComponent } from "./components/demo/demo-help-dialog/demo-help-dialog.component";
 import { ScalableListComponent } from "./components/utils/scalable-list/scalable-list.component";
@@ -219,7 +213,9 @@ import { PlanPropertyService } from './iterative_planning/service/plan-propertie
 import { LoadPlanPropertiesEffect } from './iterative_planning/state/effects/load-plan-properties.effect';
 import { UpdatePlanPropertyEffect } from './iterative_planning/state/effects/update-plan-property.effect';
 import { DeletePlanPropertyEffect } from './iterative_planning/state/effects/delete-plan-property.effect';
-
+import { CreateIterationStepEffect } from './iterative_planning/state/effects/create-iteration-step.effect';
+import { IterationStepService } from './iterative_planning/service/iteration-step.service';
+import { LoadIterationStepsEffect } from './iterative_planning/state/effects/load-iteration-steps.effect';
 
 
 @NgModule({
@@ -322,6 +318,8 @@ import { DeletePlanPropertyEffect } from './iterative_planning/state/effects/del
       LoadPlanPropertiesEffect,
       UpdatePlanPropertyEffect,
       DeletePlanPropertyEffect,
+      LoadIterationStepsEffect,
+      CreateIterationStepEffect,
     ]),
     // Instrumentation must be imported after importing StoreModule (config is optional)
     StoreDevtoolsModule.instrument({
@@ -402,14 +400,10 @@ import { DeletePlanPropertyEffect } from './iterative_planning/state/effects/del
     PlannerService,
     RunsStore,
     CurrentRunStore,
-    CurrentQuestionStore,
-    SelectedQuestionService,
     IterationStepsService,
     IterationStepsStore,
     SelectedIterationStepStore,
-    SelectedIterationStepService,
     NewIterationStepStore,
-    NewIterationStepStoreService,
     DomainSpecStore,
     DemosStore,
     DemosService,
@@ -437,6 +431,7 @@ import { DeletePlanPropertyEffect } from './iterative_planning/state/effects/del
     CreateProjectService,
     IterativePlanningProjectService,
     PlanPropertyService,
+    IterationStepService,
     {
       provide: MAT_BOTTOM_SHEET_DEFAULT_OPTIONS,
       useValue: { hasBackdrop: true },

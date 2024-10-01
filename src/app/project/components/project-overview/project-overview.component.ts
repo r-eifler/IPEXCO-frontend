@@ -16,7 +16,7 @@ import { selectProject } from "../../state/project.selector";
 export class ProjectOverviewComponent implements OnInit {
 
   project$: Observable<Project>;
-  properties$: Observable<Map<string, PlanProperty>>;
+  properties$: Observable<Record<string, PlanProperty>>;
 
   constructor(
     store: Store,

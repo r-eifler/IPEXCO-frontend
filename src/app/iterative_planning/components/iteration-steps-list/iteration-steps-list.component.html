@@ -1,4 +1,11 @@
 <div class="main-container">
+  <button
+    mat-flat-button
+    color="primary"
+    [disabled]="hasPendingStepCreation$ | async"
+    (click)="newStep()">
+    New Step
+  </button>
   <div>
     <mat-selection-list
       [multiple]="false"
@@ -38,11 +45,4 @@
       <p class="new-step-name">{{ (newStep$ | async).name }}</p>
     </div>
   </div>
-  <button
-    mat-flat-button
-    color="primary"
-    [disabled]="newStep$ | async"
-    (click)="newStep()">
-    New Step
-  </button>
 </div>

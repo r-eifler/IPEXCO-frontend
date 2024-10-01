@@ -1,25 +1,23 @@
-import { NewIterationStepStoreService } from "../../../../service/planner-runs/selected-iteration-step.service";
-import { PlannerService } from "src/app/service/planner-runs/planner.service";
 import { PlanProperty } from "src/app/iterative_planning/domain/plan-property/plan-property";
-import { BehaviorSubject, combineLatest, Observable, Subject } from "rxjs";
-import { PlanPropertyMapService } from "src/app/service/plan-properties/plan-property-services";
-import { SelectedIterationStepService } from "../../../../service/planner-runs/selected-iteration-step.service";
-import { Component, OnInit, OnDestroy, Input } from "@angular/core";
-import { filter, map, take, takeUntil, } from "rxjs/operators";
-import { CurrentProjectService } from "src/app/service/project/project-services";
+import { combineLatest, Observable } from "rxjs";
+import { Component, OnInit } from "@angular/core";
+import { filter, map, take,} from "rxjs/operators";
 import { GeneralSettings } from "src/app/interface/settings/general-settings";
-import { ModIterationStep } from "src/app/iterative_planning/domain/run";
+import { ModIterationStep } from "src/app/iterative_planning/domain/iteration_step";
+import { Store } from "@ngrx/store";
+import { selectIterativePlanningNewStep, selectIterativePlanningProject, selectIterativePlanningProperties } from "src/app/iterative_planning/state/iterative-planning.selector";
+import { updateNewIterationStep } from "src/app/iterative_planning/state/iterative-planning.actions";
+
 
 @Component({
   selector: "app-hard-goal-selector",
   templateUrl: "./hard-goal-selector.component.html",
   styleUrls: ["./hard-goal-selector.component.css"],
 })
-export class HardGoalSelectorComponent implements OnInit, OnDestroy {
-  private unsubscribe$: Subject<any> = new Subject();
+export class HardGoalSelectorComponent implements OnInit {
 
-  step$: BehaviorSubject<ModIterationStep>;
-  planPropertiesMap$: BehaviorSubject<Map<string, PlanProperty>>;
+  newStep$: Observable<ModIterationStep>;
+  planProperties$: Observable<Record<string,PlanProperty>>;
   settings$: Observable<GeneralSettings>;
 
 
@@ -27,43 +25,31 @@ export class HardGoalSelectorComponent implements OnInit, OnDestroy {
   hardGoals$: Observable<PlanProperty[]>;
 
   constructor(
-    private newIterationStepService: NewIterationStepStoreService,
-    private planpropertiesService: PlanPropertyMapService,
-    private plannerService: PlannerService,
-    private selectedProject: CurrentProjectService,
+    private store: Store,
   ) {
-    this.step$ = newIterationStepService.getSelectedObject();
-    this.planPropertiesMap$ = planpropertiesService.getMap();
+    this.newStep$ = this.store.select(selectIterativePlanningNewStep)
+    this.planProperties$ = this.store.select(selectIterativePlanningProperties)
 
-    this.settings$ = selectedProject.getSelectedObject().pipe(
-      filter(p => !!p),
-      map(p => p.settings)
+    this.settings$ = this.store.select(selectIterativePlanningProject).pipe(
+      map(p => p?.settings)
     );
 
-    this.possiblePP$ = combineLatest([this.step$, this.planPropertiesMap$])
+    this.possiblePP$ = combineLatest([this.newStep$, this.planProperties$])
       .pipe(
-        filter(
-          ([step, properties]) => !!step && properties && properties.size > 0
-        ),
         map(([step, properties]) => {
           const props = [];
-          for (let property of properties.values()) {
+          for (let property of Object.values(properties)) {
             if (property.isUsed && !step.hardGoals.includes(property._id))
               props.push(property);
           }
 
           return props;
         })
-      )
-      .pipe(takeUntil(this.unsubscribe$));
+      );
 
-    this.hardGoals$ = combineLatest([this.step$, this.planPropertiesMap$]).pipe(
-      filter(
-        ([step, planProperties]) =>
-          !!step && planProperties && planProperties.size > 0
-      ),
+    this.hardGoals$ = combineLatest([this.newStep$, this.planProperties$]).pipe(
       map(([step, planProperties]) =>
-        step.hardGoals.map((pp_id) => planProperties.get(pp_id))
+        step.hardGoals.map((pp_id) => planProperties[pp_id])
       ),
       map((hardGoals) => hardGoals.sort((a, b) => (a.globalHardGoal ? -1 : 0)))
     );
@@ -71,24 +57,24 @@ export class HardGoalSelectorComponent implements OnInit, OnDestroy {
 
   ngOnInit() {}
 
-  ngOnDestroy(): void {
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
-  }
 
   selectPP(pp: PlanProperty) {
-    this.step$.pipe(take(1)).subscribe((step) => {
-      step.hardGoals.push(pp._id);
-      this.newIterationStepService.saveObject(step);
-      console.log("new PP added");
+    this.newStep$.pipe(take(1)).subscribe((step) => {
+      let updatedStep = {
+        ...step,
+        hardGoals: [...step.hardGoals, pp._id],
+      }
+      this.store.dispatch(updateNewIterationStep({iterationStep: updatedStep}))
     });
   }
 
   deselectPP(pp: PlanProperty) {
-    this.step$.pipe(take(1)).subscribe((step) => {
-      step.hardGoals = step.hardGoals.filter((hg) => hg != pp._id);
-      this.newIterationStepService.saveObject(step);
-      console.log("PP removed");
+    this.newStep$.pipe(take(1)).subscribe((step) => {
+      let updatedStep = {
+        ...step,
+        hardGoals: step.hardGoals.filter((hg) => hg != pp._id),
+      }
+      this.store.dispatch(updateNewIterationStep({iterationStep: updatedStep}))
     });
   }
 }

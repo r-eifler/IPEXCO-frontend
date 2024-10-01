@@ -6,8 +6,9 @@ import { map, tap, filter, take } from "rxjs/operators";
 import { CurrentProjectService } from "src/app/service/project/project-services";
 import { LogEvent, TimeLoggerService } from "src/app/service/logger/time-logger.service";
 import { GeneralSettings } from "src/app/interface/settings/general-settings";
-import { PPConflict, PPDependencies } from "src/app/iterative_planning/domain/explanations";
 import { RunStatus } from "src/app/iterative_planning/domain/run";
+import { Store } from "@ngrx/store";
+import { selectIterativePlanningProject, selectIterativePlanningProperties } from "src/app/iterative_planning/state/iterative-planning.selector";
 
 @Component({
   selector: "app-conflict-view",
@@ -28,20 +29,20 @@ export class ConflictViewComponent implements OnInit, OnDestroy {
     this.question$.next(question);
   }
   @Input()
-  set explanation(explanation: PPDependencies) {
+  set explanation(explanation: any) {
     console.log(explanation);
     this.selectedConflictIndex = null;
     this.explanation$.next(explanation);
   }
 
-  @Output() selectedConflict = new EventEmitter<PPConflict>();
+  @Output() selectedConflict = new EventEmitter<any>();
 
-  explanation$ = new BehaviorSubject<PPDependencies>(null);
+  explanation$ = new BehaviorSubject<any>(null);
   question$ = new BehaviorSubject<PlanProperty>(null);
   solvable$ = new BehaviorSubject<boolean>(null);
 
   dependencies$: Observable<PlanProperty[][]>;
-  planProperties$: Observable<Map<string, PlanProperty>>;
+  planProperties$: Observable<Record<string, PlanProperty>>;
   solvableAtAll$: Observable<boolean>;
   provideRelaxationExplanations$: Observable<boolean>;
   settings$: Observable<GeneralSettings>;
@@ -49,23 +50,14 @@ export class ConflictViewComponent implements OnInit, OnDestroy {
   selectedConflictIndex: number = null;
 
   constructor(
+    private store: Store,
     private timeLogger: TimeLoggerService,
-    planPropertiesService: PlanPropertyMapService,
-    private currentProjectService: CurrentProjectService
   ) {
-    this.planProperties$ = planPropertiesService.getMap();
+    this.planProperties$ = this.store.select(selectIterativePlanningProperties);
 
-    this.settings$ = currentProjectService.getSelectedObject().pipe(
-      filter(p => !!p),
-      map(p => p.settings)
+    this.settings$ = this.store.select(selectIterativePlanningProject).pipe(
+      map(p => p?.settings)
     );
-
-    this.provideRelaxationExplanations$ = this.currentProjectService
-      .getSelectedObject()
-      .pipe(
-        filter((p) => !!p),
-        map((project) => project.settings.provideRelaxationExplanations)
-      );
 
     this.dependencies$ = combineLatest([
       this.explanation$,
@@ -73,7 +65,7 @@ export class ConflictViewComponent implements OnInit, OnDestroy {
     ]).pipe(
       filter(([exp, planProperties]) => !!exp && !!planProperties),
       map(([exp, planProperties]) =>
-        exp.conflicts.map((con) => con.elems.map((e) => planProperties.get(e)))
+        exp.conflicts.map((con) => con.elems.map((e) => planProperties[e]))
       )
     );
 

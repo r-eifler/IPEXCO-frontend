@@ -17,7 +17,8 @@ import {
 import { UserStudyData } from "../interface/user-study/user-study-store";
 import { Project } from "../project/domain/project";
 import { PlanProperty } from "../iterative_planning/domain/plan-property/plan-property";
-import { DepExplanationRun, IterationStep, ModIterationStep, PlanRun } from "../iterative_planning/domain/run";
+import { PlanRun } from "../iterative_planning/domain/run";
+import { IterationStep, ModIterationStep } from "../iterative_planning/domain/iteration_step";
 
 // User/Authentication
 export class UserStore extends ItemStore<User> {}
@@ -40,7 +41,7 @@ export class NewIterationStepStore extends ItemStore<ModIterationStep> {}
 export class IterationStepsStore extends ListStore<IterationStep> {}
 export class RunsStore extends ListStore<PlanRun> {}
 export class CurrentRunStore extends ItemStore<PlanRun> {}
-export class CurrentQuestionStore extends ItemStore<DepExplanationRun> {}
+// export class CurrentQuestionStore extends ItemStore<DepExplanationRun> {}
 
 // Additional Task Info
 export class TaskSchemaStore extends ItemStore<TaskSchema> {}

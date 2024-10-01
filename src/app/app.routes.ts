@@ -5,7 +5,7 @@ import { MainPageComponent } from "./components/login/main-page/main-page.compon
 import { UserMainPageComponent } from "./components/user/user-main-page/user-main-page.component";
 import { ProjectCollectionComponent } from "./project-meta/components/project-collection/project-collection.component";
 import { ProjectBaseComponent } from "./project/components/project-base/project-base.component";
-import { ProjectIterativePlanningBaseComponent } from "./project/components/project-iterative-planning-base/project-iterative-planning-base.component";
+import { ProjectIterativePlanningBaseComponent } from "./iterative_planning/components/iteration-steps-base/iteration-steps-base.component";
 import { DemoCollectionComponent } from "./components/demo/demo-collection/demo-collection.component";
 import { DemoBaseComponent } from "./components/demo/demo-base/demo-base.component";
 import { FilesCollectionComponent } from "./components/files/files-collection/files-collection.component";

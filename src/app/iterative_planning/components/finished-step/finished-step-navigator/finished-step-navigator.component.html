@@ -26,7 +26,7 @@
       <app-interactive-plan-view  class="content-container"></app-interactive-plan-view>
     </mat-tab>
 
-    <mat-tab *ngIf="(settings$ | async).allowQuestions && ((settings$ | async).explanationInterface) === ExplanationType.QUETSIONANSWER.toString()"> 
+    <!-- <mat-tab *ngIf="(settings$ | async).allowQuestions && ((settings$ | async).explanationInterface) === ExplanationType.QUETSIONANSWER.toString()"> 
       <ng-template mat-tab-label>
         <mat-icon class="tab-icon">error</mat-icon>
         Explanations
@@ -40,7 +40,7 @@
         Explanations
       </ng-template>
       <app-conflict-visu-container  class="content-container"></app-conflict-visu-container>
-    </mat-tab>
+    </mat-tab> -->
 
   </mat-tab-group>
 </div>

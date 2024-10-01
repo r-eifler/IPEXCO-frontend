@@ -5,7 +5,10 @@ import { BehaviorSubject, Observable, combineLatest } from "rxjs";
 import { filter, map } from "rxjs/operators";
 import { getMaximalPlanValue, PlanProperty } from "src/app/iterative_planning/domain/plan-property/plan-property";
 import { PlanPropertyMapService } from "src/app/service/plan-properties/plan-property-services";
-import { computePlanValue, IterationStep, StepStatus } from 'src/app/iterative_planning/domain/run';
+import { computePlanValue } from 'src/app/iterative_planning/domain/run';
+import { IterationStep, StepStatus } from 'src/app/iterative_planning/domain/iteration_step';
+import { Store } from '@ngrx/store';
+import { selectIterativePlanningProject, selectIterativePlanningProperties } from 'src/app/iterative_planning/state/iterative-planning.selector';
 
 @Component({
   selector: "app-score-view",
@@ -19,7 +22,7 @@ export class ScoreViewComponent implements OnInit {
   }
 
   private step$ = new BehaviorSubject<IterationStep>(null);
-  private planProperties$: BehaviorSubject<Map<string, PlanProperty>>;
+  private planProperties$: Observable<Record<string, PlanProperty>>;
 
   isSolvable$: Observable<boolean>;
   isUnSolvable$: Observable<boolean>;
@@ -31,11 +34,9 @@ export class ScoreViewComponent implements OnInit {
   settings$: Observable<GeneralSettings>;
 
   constructor(
-    private planPropertiesMapService: PlanPropertyMapService,
-    private selectedProjectService: CurrentProjectService
+    private store: Store,
   ) {
-    this.planProperties$ = planPropertiesMapService.getMap();
-
+    this.planProperties$ = this.store.select(selectIterativePlanningProperties);
     this.isSolvable$ = this.step$.pipe(
       filter((step) => !!step),
       map((step) => step.status == StepStatus.solvable)
@@ -48,7 +49,7 @@ export class ScoreViewComponent implements OnInit {
 
     this.planValue$ = combineLatest([this.step$, this.planProperties$]).pipe(
       map(([step, planProperties]) => {
-        if (!!step && !!planProperties && planProperties.size > 0) {
+        if (!!step && !!planProperties) {
           return computePlanValue(step, planProperties);
         } else {
           return 0;
@@ -58,7 +59,7 @@ export class ScoreViewComponent implements OnInit {
 
     this.maxPlanValue$ = this.planProperties$.pipe(
       map((planProperties) => {
-        if (!!planProperties && planProperties.size > 0) {
+        if (!!planProperties) {
           return getMaximalPlanValue(planProperties);
         } else {
           return 0;
@@ -69,10 +70,9 @@ export class ScoreViewComponent implements OnInit {
    
     this.overallScore$ = this.planValue$;
 
-    this.settings$ = this.selectedProjectService.getSelectedObject().pipe(
-      filter(p => !!p),
-      map(p => p.settings)
-    );
+    this.settings$ = this.store.select(selectIterativePlanningProject).pipe(
+      map(p => p?.settings)
+    )
   }
 
   ngOnInit(): void {}

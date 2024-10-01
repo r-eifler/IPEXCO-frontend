@@ -6,12 +6,12 @@ import { FinishedStepInterfaceStatusService } from "../../../../service/user-int
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Subject, BehaviorSubject, Observable } from "rxjs";
 import { filter, map, takeUntil, find, take, tap } from "rxjs/operators";
-import { SelectedIterationStepService } from "src/app/service/planner-runs/selected-iteration-step.service";
 import {
   FinishedStepInterfaceStatus,
-  NewStepInterfaceStatus,
 } from "src/app/interface/interface-status";
-import { IterationStep } from 'src/app/iterative_planning/domain/run';
+import { IterationStep } from 'src/app/iterative_planning/domain/iteration_step';
+import { Store } from '@ngrx/store';
+import { selectIterativePlanningProject, selectIterativePlanningSelectedStep } from 'src/app/iterative_planning/state/iterative-planning.selector';
 
 @Component({
   selector: "app-finished-step-navigator",
@@ -21,7 +21,7 @@ import { IterationStep } from 'src/app/iterative_planning/domain/run';
 export class FinishedStepNavigatorComponent implements OnInit, OnDestroy {
   private unsubscribe$: Subject<any> = new Subject();
 
-  step$: BehaviorSubject<IterationStep>;
+  step$: Observable<IterationStep>;
   showTab$: Observable<number>;
   iterfaceStatus$: Observable<FinishedStepInterfaceStatus[]>;
   settings$: Observable<GeneralSettings>;
@@ -29,17 +29,15 @@ export class FinishedStepNavigatorComponent implements OnInit, OnDestroy {
   ExplanationType = ExplanationInterfaceType;
 
   constructor(
-    private selectedIterationStepService: SelectedIterationStepService,
+    private store: Store,
     private finishedStepInterfaceStatusService: FinishedStepInterfaceStatusService,
-    private currentProjectService: CurrentProjectService
   ) {
 
-    this.step$ = this.selectedIterationStepService.getSelectedObject();
+    this.step$ = this.store.select(selectIterativePlanningSelectedStep)
     this.iterfaceStatus$ = this.finishedStepInterfaceStatusService.getList();
 
-    this.settings$ = this.currentProjectService.getSelectedObject().pipe(
-      filter((p) => !!p),
-      map((project) => project.settings)
+    this.settings$ = this.store.select(selectIterativePlanningProject).pipe(
+      map(p => p?.settings)
     );
 
     this.showTab$ = combineLatest([this.step$, this.iterfaceStatus$]).pipe(

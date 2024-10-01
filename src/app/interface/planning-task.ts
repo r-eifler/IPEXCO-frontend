@@ -58,6 +58,14 @@ export interface PlanningTask {
 }
 
 
+export interface UpdatedPlanningTask{
+  _id?: string;
+  name: string;
+  parent_task: PlanningTask;
+  task: PlanningTask;
+}
+
+
 export function predicateToFact(pred: PDDLPredicate): PDDLFact {
   return {
     name: pred.name,

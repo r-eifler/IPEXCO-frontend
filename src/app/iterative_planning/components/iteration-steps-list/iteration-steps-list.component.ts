@@ -1,78 +1,72 @@
-import { NewIterationStepGenerationService } from "../../../service/planner-runs/new-iteration-step-generation-service.service";
 import { MatSelectionListChange } from "@angular/material/list";
-import {
-  SelectedIterationStepService,
-  NewIterationStepStoreService,
-} from "../../../service/planner-runs/selected-iteration-step.service";
-import { Component, OnInit, OnDestroy } from "@angular/core";
-import { IterationStepsService } from "src/app/service/planner-runs/iteration-steps.service";
-import { Observable, BehaviorSubject, Subject } from "rxjs";
-import { IterationStep, RunStatus, StepStatus } from "../../domain/run";
+import { Component, OnInit } from "@angular/core";
+import { Observable, Subject } from "rxjs";
+import { Store } from "@ngrx/store";
+import { selectIterativePlanningIterationSteps, selectIterativePlanningNewStep, selectIterativePlanningSelectedStep } from "../../state/iterative-planning.selector";
+import { deselectIterationStep, initNewIterationStep, selectIterationStep, selectNewIterationStep } from "../../state/iterative-planning.actions";
+import { IterationStep, StepStatus } from "../../domain/iteration_step";
+import { PlanRunStatus } from "../../domain/plan";
+import { map } from "rxjs/operators";
 
 @Component({
   selector: "app-iteration-steps-list",
   templateUrl: "./iteration-steps-list.component.html",
   styleUrls: ["./iteration-steps-list.component.scss"],
 })
-export class IterationStepsListComponent implements OnInit, OnDestroy {
+export class IterationStepsListComponent implements OnInit {
   private unsubscribe$: Subject<any> = new Subject();
 
-  steps$: BehaviorSubject<IterationStep[]>;
-  newStep$: BehaviorSubject<IterationStep>;
-  selected$: BehaviorSubject<IterationStep>;
+  steps$: Observable<IterationStep[]>;
+  newStep$: Observable<IterationStep>;
+  hasPendingStepCreation$: Observable<boolean>;
+  selected$: Observable<IterationStep>;
   hasPlan$: Observable<boolean>;
 
   constructor(
-    private iterationStepsService: IterationStepsService,
-    private selectedIterationStepService: SelectedIterationStepService,
-    private newIterationStepStoreService: NewIterationStepStoreService,
-    private newIterationStepGenerationService: NewIterationStepGenerationService
+    private store: Store,
   ) {
-    this.steps$ = iterationStepsService.getList();
-    this.newStep$ = newIterationStepStoreService.getSelectedObject();
-    this.selected$ = selectedIterationStepService.getSelectedObject();
+    this.steps$ = store.select(selectIterativePlanningIterationSteps)
+    this.newStep$ = store.select(selectIterativePlanningNewStep);
+    this.hasPendingStepCreation$ = this.newStep$.pipe(map(step => !!step))
+    this.selected$ = store.select(selectIterativePlanningSelectedStep)
   }
 
   ngOnInit(): void {}
 
-  ngOnDestroy(): void {
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
-  }
 
   selectStep(event: MatSelectionListChange): void {
     let step = event.options[0].value as IterationStep;
-    this.selectedIterationStepService.saveObject(step);
+    this.store.dispatch(selectIterationStep({iterationStep: step}))
   }
 
   selectNewStep() {
-    this.selectedIterationStepService.removeCurrentObject();
+    this.store.dispatch(selectNewIterationStep())
   }
 
   newStep() {
-    this.newIterationStepGenerationService.initNewStep();
+    this.store.dispatch(initNewIterationStep())
   }
 
   deleteStep(step: IterationStep): void {
-    this.iterationStepsService.deleteObject(step);
+    // this.iterationStepsService.deleteObject(step);
   }
 
   hasPlan(step: IterationStep): boolean {
-    return !!step.plan && step.plan.status == RunStatus.finished;
+    return !!step.plan && step.plan.status == PlanRunStatus.plan_found;
   }
 
   notSolvable(step: IterationStep): boolean {
     return (
       step.status == StepStatus.unsolvable ||
-      (step.plan && step.plan.status == RunStatus.noSolution)
+      (step.plan && step.plan.status == PlanRunStatus.not_solvable)
     );
   }
 
   hasError(step: IterationStep): boolean {
-    return step.plan && step.plan.status == RunStatus.failed;
+    return step.plan && step.plan.status == PlanRunStatus.failed;
   }
 
   isPending(step: IterationStep): boolean {
-    return step.plan && step.plan.status == RunStatus.pending;
+    return step.plan && step.plan.status == PlanRunStatus.pending;
   }
 }

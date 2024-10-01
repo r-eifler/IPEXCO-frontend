@@ -1,13 +1,8 @@
 import { PlanningTask } from "src/app/interface/planning-task";
-import { PPConflict, PPDependencies, RelaxationExplanationNode } from "./explanations";
 import { PlanProperty } from "./plan-property/plan-property";
+import { IterationStep, StepStatus } from "./iteration_step";
 
 
-export enum StepStatus {
-  unknown,
-  solvable,
-  unsolvable,
-}
 
 export enum RunStatus {
   pending,
@@ -28,60 +23,20 @@ export interface PlanRun {
   satPlanProperties?: string[];
 }
 
-export interface RelaxationExplanationRun {
-  _id: string;
-  createdAt?: Date;
-  name: string;
-  status: RunStatus;
-  relaxationSpace: string;
-  log: string;
-  result: string;
-  dependencies?: RelaxationExplanationNode[];
-}
 
-export interface DepExplanationRun {
-  _id?: string;
-  createdAt?: Date;
-  name: string;
-  status: RunStatus;
-  hardGoals: string[];
-  softGoals: string[];
-  log?: string;
-  result?: string;
-  dependencies?: PPDependencies;
-  relaxationExplanations?: RelaxationExplanationRun[];
-}
-
-export interface IterationStep {
-  _id?: string;
-  name: string;
-  createdAt?: Date;
-  project: string;
-  status: StepStatus;
-  hardGoals: string[];
-  softGoals: string[];
-  task: PlanningTask;
-  plan?: PlanRun;
-  depExplanation?: DepExplanationRun;
-  relaxationExplanations?: RelaxationExplanationRun[];
-}
-
-export interface ModIterationStep extends IterationStep {
-  baseStep: IterationStep;
-}
 
 export function computePlanValue(
   step: IterationStep,
-  planProperties: Map<string, PlanProperty>
+  planProperties: Record<string, PlanProperty>
 ): number {
   // console.log("Compute plan value ...");
   if (step.status == StepStatus.solvable) {
     let sum = 0;
     // console.log(step);
     step.hardGoals.forEach((ppID) => {
-      let pp = planProperties.get(ppID);
+      let pp = ppID; //planProperties.get(ppID);
       if (pp){
-        sum += pp.utility;
+        sum += planProperties.pp.utility;
         // console.log(ppID + ": " + pp.value )
       }
       else console.log(ppID);
@@ -99,154 +54,103 @@ export function computePlanValue(
 
 
 
-export function computeStepUtility(step, planProperties: Map<string, PlanProperty>): number {
+export function computeStepUtility(step, planProperties: Record<string, PlanProperty>): number {
   return computePlanValue(step, planProperties);
 }
 
-function filterDependencies(
-  question: string,
-  hardGoals: string[],
-  allDependencies: PPDependencies
-): PPDependencies {
-  let g = [question, ...hardGoals];
-  let filteredDependencies: PPDependencies = { conflicts: [] };
-  for (let conflict of allDependencies.conflicts) {
-    if (
-      g.filter((f) => conflict.elems.includes(f)).length ==
-      conflict.elems.length
-    ) {
-      filteredDependencies.conflicts.push({
-        elems: conflict.elems.filter((e) => e != question),
-      });
-    }
-  }
-  return filteredDependencies;
-}
+// function filterDependencies(
+//   question: string,
+//   hardGoals: string[],
+//   allDependencies: PPDependencies
+// ): PPDependencies {
+//   let g = [question, ...hardGoals];
+//   let filteredDependencies: PPDependencies = { conflicts: [] };
+//   for (let conflict of allDependencies.conflicts) {
+//     if (
+//       g.filter((f) => conflict.elems.includes(f)).length ==
+//       conflict.elems.length
+//     ) {
+//       filteredDependencies.conflicts.push({
+//         elems: conflict.elems.filter((e) => e != question),
+//       });
+//     }
+//   }
+//   return filteredDependencies;
+// }
 
-export function getAllDependencies(step: IterationStep): PPDependencies {
-  if (step.relaxationExplanations && step.relaxationExplanations.length > 0) {
-    return step.relaxationExplanations[0].dependencies[0].dependencies;
-  }
-  if (step.depExplanation) {
-    return step.depExplanation.dependencies;
-  }
+// export function getAllDependencies(step: IterationStep): PPDependencies {
+//   if (step.relaxationExplanations && step.relaxationExplanations.length > 0) {
+//     return step.relaxationExplanations[0].dependencies[0].dependencies;
+//   }
+//   if (step.depExplanation) {
+//     return step.depExplanation.dependencies;
+//   }
 
-  return null;
-}
+//   return null;
+// }
 
-export function getAllReleventDependencies(step: IterationStep): PPDependencies {
-  let dependencies : PPDependencies;
-  if (step.relaxationExplanations && step.relaxationExplanations.length > 0) {
-    dependencies = step.relaxationExplanations[0].dependencies[0].dependencies;
-  }
-  if (step.depExplanation) {
-    dependencies = step.depExplanation.dependencies;
-  }
-  let filteredDependencies: PPDependencies = { conflicts: [] };
-  filteredDependencies.conflicts = dependencies.conflicts.filter((c : PPConflict) => step.plan.satPlanProperties.some(p => c.elems.find(e => e === p)))
-  return filteredDependencies;
-}
+// export function getAllReleventDependencies(step: IterationStep): PPDependencies {
+//   let dependencies : PPDependencies;
+//   if (step.relaxationExplanations && step.relaxationExplanations.length > 0) {
+//     dependencies = step.relaxationExplanations[0].dependencies[0].dependencies;
+//   }
+//   if (step.depExplanation) {
+//     dependencies = step.depExplanation.dependencies;
+//   }
+//   let filteredDependencies: PPDependencies = { conflicts: [] };
+//   filteredDependencies.conflicts = dependencies.conflicts.filter((c : PPConflict) => step.plan.satPlanProperties.some(p => c.elems.find(e => e === p)))
+//   return filteredDependencies;
+// }
 
-export function getDependencies(step: IterationStep, question: string): PPDependencies {
-  console.log("getDependencies");
-  if (step.relaxationExplanations && step.relaxationExplanations.length > 0) {
-    return filterDependencies(
-      question,
-      step.hardGoals,
-      step.relaxationExplanations[0].dependencies[0].dependencies
-    );
-  }
-  if (step.depExplanation) {
-    return filterDependencies(
-      question,
-      step.hardGoals,
-      step.depExplanation.dependencies
-    );
-  }
+// export function getDependencies(step: IterationStep, question: string): PPDependencies {
+//   console.log("getDependencies");
+//   if (step.relaxationExplanations && step.relaxationExplanations.length > 0) {
+//     return filterDependencies(
+//       question,
+//       step.hardGoals,
+//       step.relaxationExplanations[0].dependencies[0].dependencies
+//     );
+//   }
+//   if (step.depExplanation) {
+//     return filterDependencies(
+//       question,
+//       step.hardGoals,
+//       step.depExplanation.dependencies
+//     );
+//   }
 
-  return null;
-}
+//   return null;
+// }
 
-function filterDependenciesForUnsolvability(hardGoals: string[], allDependencies: PPDependencies): PPDependencies {
-  let filteredDependencies: PPDependencies = { conflicts: [] };
-  for (let conflict of allDependencies.conflicts) {
-    if (conflict.elems.every((ce) => hardGoals.some((hg) => ce == hg))) {
-      filteredDependencies.conflicts.push({ elems: conflict.elems });
-    }
-  }
-  return filteredDependencies;
-}
+// function filterDependenciesForUnsolvability(hardGoals: string[], allDependencies: PPDependencies): PPDependencies {
+//   let filteredDependencies: PPDependencies = { conflicts: [] };
+//   for (let conflict of allDependencies.conflicts) {
+//     if (conflict.elems.every((ce) => hardGoals.some((hg) => ce == hg))) {
+//       filteredDependencies.conflicts.push({ elems: conflict.elems });
+//     }
+//   }
+//   return filteredDependencies;
+// }
 
-export function getDependenciesForUnsolvability(
-  step: IterationStep
-): PPDependencies {
-  console.log("getDependenciesForUnsolvability");
-  if (step.relaxationExplanations && step.relaxationExplanations.length > 0) {
-    return filterDependenciesForUnsolvability(
-      step.hardGoals,
-      step.relaxationExplanations[0].dependencies[0].dependencies
-    );
-  }
-  if (step.depExplanation) {
-    return filterDependenciesForUnsolvability(
-      step.hardGoals,
-      step.depExplanation.dependencies
-    );
-  }
+// export function getDependenciesForUnsolvability(
+//   step: IterationStep
+// ): PPDependencies {
+//   console.log("getDependenciesForUnsolvability");
+//   if (step.relaxationExplanations && step.relaxationExplanations.length > 0) {
+//     return filterDependenciesForUnsolvability(
+//       step.hardGoals,
+//       step.relaxationExplanations[0].dependencies[0].dependencies
+//     );
+//   }
+//   if (step.depExplanation) {
+//     return filterDependenciesForUnsolvability(
+//       step.hardGoals,
+//       step.depExplanation.dependencies
+//     );
+//   }
 
-  return null;
-}
+//   return null;
+// }
 
-export function isStepSolvable(step: IterationStep): boolean {
-  if (step.relaxationExplanations && step.relaxationExplanations.length > 0) {
-    return (
-      filterDependenciesForUnsolvability(
-        step.hardGoals,
-        step.relaxationExplanations[0].dependencies[0].dependencies
-      ).conflicts.length == 0
-    );
-  }
-  if (step.depExplanation) {
-    return (
-      filterDependenciesForUnsolvability(
-        step.hardGoals,
-        step.depExplanation.dependencies
-      ).conflicts.length == 0
-    );
-  }
 
-  return null;
-}
-
-function findRelaxationNodes(
-  conflict: PPConflict,
-  explanationTree: RelaxationExplanationNode[]
-): RelaxationExplanationNode[] {
-  //TODO fix finding the real minimal
-  let minimalNodes: RelaxationExplanationNode[] = [];
-  let todo: number[] = [0];
-  let done: Set<number> = new Set();
-  while (todo.length > 0) {
-    let index = todo.shift();
-    done.add(index);
-    let node = explanationTree[index];
-    let found = false;
-    for (let c of node.dependencies.conflicts) {
-      if (conflict.elems.every((e) => c.elems.includes(e))) {
-        found = true;
-        break;
-      }
-    }
-    if (found) {
-      node.upper_cover.forEach((i) => {
-        if (!done.has(i)) todo.push(i);
-      });
-    }
-    if (!found) {
-      minimalNodes.push(node);
-    }
-    index++;
-  }
-  return minimalNodes;
-}
 

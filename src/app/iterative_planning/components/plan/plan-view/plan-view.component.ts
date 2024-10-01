@@ -1,12 +1,14 @@
 import { PlannerService } from "src/app/service/planner-runs/planner.service";
-import { SelectedIterationStepService } from "../../../../service/planner-runs/selected-iteration-step.service";
 import { filter, map, take, takeUntil, tap } from "rxjs/operators";
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { BehaviorSubject, Observable, Subject } from "rxjs";
 import { LogEvent, TimeLoggerService } from "../../../../service/logger/time-logger.service";
 import { parsePlan } from "src/app/service/planner-runs/utils";
 import { PDDLAction } from "src/app/interface/planning-task";
-import { IterationStep, RunStatus, StepStatus } from "src/app/iterative_planning/domain/run";
+import { IterationStep, StepStatus } from "src/app/iterative_planning/domain/iteration_step";
+import { PlanAction, PlanRunStatus } from "src/app/iterative_planning/domain/plan";
+import { Store } from "@ngrx/store";
+import { selectIterativePlanningSelectedStep } from "src/app/iterative_planning/state/iterative-planning.selector";
 
 
 @Component({
@@ -17,8 +19,8 @@ import { IterationStep, RunStatus, StepStatus } from "src/app/iterative_planning
 export class PlanViewComponent implements OnInit, OnDestroy {
   private unsubscribe$: Subject<any> = new Subject();
 
-  step$: BehaviorSubject<IterationStep>;
-  actions$: Observable<PDDLAction[]>;
+  step$: Observable<IterationStep>;
+  actions$: Observable<PlanAction[]>;
   solved$: Observable<boolean>;
   notSolvable$: Observable<boolean>;
   isRunning$: Observable<boolean>;
@@ -26,11 +28,11 @@ export class PlanViewComponent implements OnInit, OnDestroy {
   plannerBusy$: Observable<boolean>;
 
   constructor(
+    private store: Store,
     private timeLogger: TimeLoggerService,
-    private currentIterationStepService: SelectedIterationStepService,
     private plannerService: PlannerService
   ) {
-    this.step$ = this.currentIterationStepService.getSelectedObject();
+    this.step$ = this.store.select(selectIterativePlanningSelectedStep);
     this.plannerBusy$ = this.plannerService.isPlannerBusy();
   }
 
@@ -39,19 +41,19 @@ export class PlanViewComponent implements OnInit, OnDestroy {
     this.actions$ = this.step$.pipe(takeUntil(this.unsubscribe$)).pipe(
       filter(
         (step) =>
-          !!step && !!step.plan && step.plan.status == RunStatus.finished
+          !!step && !!step.plan && step.plan.status == PlanRunStatus.plan_found
       ),
       map((step) => {
         this.timeLogger.log(LogEvent.START_CHECK_PLAN, {stepId: step._id});
         let actions = [];
-        let plan = parsePlan(step.plan.result, step.task);
+        let plan = step.plan
         return plan.actions;
       })
     );
 
     this.solved$ = this.step$.pipe(takeUntil(this.unsubscribe$)).pipe(
       filter((step) => !!step && !!step.plan),
-      map((step) => step.plan.status == RunStatus.finished),
+      map((step) => step.plan.status == PlanRunStatus.plan_found),
       tap((a) => console.log(a))
     );
 
@@ -63,7 +65,7 @@ export class PlanViewComponent implements OnInit, OnDestroy {
 
     this.isRunning$ = this.step$.pipe(takeUntil(this.unsubscribe$)).pipe(
       filter((step) => !!step && !!step.plan),
-      map((step) => step.plan.status == RunStatus.pending),
+      map((step) => step.plan.status == PlanRunStatus.pending),
       tap((a) => console.log(a))
     );
 

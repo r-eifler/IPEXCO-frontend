@@ -23,7 +23,7 @@
   width: 100%;
   display: grid;
   overflow: auto;
-  grid-template-columns: 1fr 6fr;
+  grid-template-columns: 300px 1fr;
 }
 
 .center-container {
