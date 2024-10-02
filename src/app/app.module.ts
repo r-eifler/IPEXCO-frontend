@@ -110,7 +110,6 @@ import { ProblemSelectorComponent } from "./components/files/problem-selector/pr
 import { NavigationComponent } from "./components/navigation/navigation.component";
 import { ProjectCollectionComponent } from "./project-meta/components/project-collection/project-collection.component";
 import { ProjectCreatorComponent } from "./project-meta/components/project-creator/project-creator.component";
-import { PlannerService } from "./service/planner-runs/planner.service";
 import { ProjectBaseComponent } from "./project/components/project-base/project-base.component";
 import { ProjectIterativePlanningBaseComponent } from "./iterative_planning/components/iteration-steps-base/iteration-steps-base.component";
 import { PlanViewComponent } from "./iterative_planning/components/plan/plan-view/plan-view.component";
@@ -216,6 +215,8 @@ import { DeletePlanPropertyEffect } from './iterative_planning/state/effects/del
 import { CreateIterationStepEffect } from './iterative_planning/state/effects/create-iteration-step.effect';
 import { IterationStepService } from './iterative_planning/service/iteration-step.service';
 import { LoadIterationStepsEffect } from './iterative_planning/state/effects/load-iteration-steps.effect';
+import { ComputePlanEffect } from './iterative_planning/state/effects/compute-plan.effect';
+import { PlannerService } from './iterative_planning/service/planner.service';
 
 
 @NgModule({
@@ -320,6 +321,7 @@ import { LoadIterationStepsEffect } from './iterative_planning/state/effects/loa
       DeletePlanPropertyEffect,
       LoadIterationStepsEffect,
       CreateIterationStepEffect,
+      ComputePlanEffect,
     ]),
     // Instrumentation must be imported after importing StoreModule (config is optional)
     StoreDevtoolsModule.instrument({
@@ -432,6 +434,7 @@ import { LoadIterationStepsEffect } from './iterative_planning/state/effects/loa
     IterativePlanningProjectService,
     PlanPropertyService,
     IterationStepService,
+    PlannerService,
     {
       provide: MAT_BOTTOM_SHEET_DEFAULT_OPTIONS,
       useValue: { hasBackdrop: true },

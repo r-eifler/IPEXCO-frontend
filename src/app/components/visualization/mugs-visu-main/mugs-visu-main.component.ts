@@ -20,7 +20,7 @@ import { selectIterativePlanningProject, selectIterativePlanningProperties, sele
   styleUrls: ['./mugs-visu-main.component.scss']
 })
 
-export class MUGSVisuMainComponent implements OnInit, OnDestroy {
+export class MUGSVisuMainComponent implements OnInit {
 
   private unsubscribe$: Subject<any> = new Subject();
 
@@ -1198,10 +1198,6 @@ export class MUGSVisuMainComponent implements OnInit, OnDestroy {
 */
   }
 
-  ngOnDestroy(): void {
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
-  }
 
 
 }

@@ -4,6 +4,7 @@ import { takeUntil } from "rxjs/operators";
 import { IterationStep } from "../../domain/iteration_step";
 import { Store } from "@ngrx/store";
 import { selectIterativePlanningSelectedStep } from "../../state/iterative-planning.selector";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 @Component({
   selector: "app-iteration-step-detail-navigator",
@@ -11,9 +12,8 @@ import { selectIterativePlanningSelectedStep } from "../../state/iterative-plann
   styleUrls: ["./iteration-step-detail-navigator.component.scss"],
 })
 export class IterationStepDetailNavigatorComponent
-  implements OnInit, OnDestroy
+  implements OnInit
 {
-  private unsubscribe$: Subject<any> = new Subject();
 
   step$: Observable<IterationStep>;
   showTab = 1;
@@ -23,7 +23,7 @@ export class IterationStepDetailNavigatorComponent
   ) {
     this.step$ = this.store.select(selectIterativePlanningSelectedStep);
 
-    this.step$.pipe(takeUntil(this.unsubscribe$)).subscribe((step) => {
+    this.step$.pipe(takeUntilDestroyed()).subscribe((step) => {
       if (step) {
         this.showTab = 1;
         return;
@@ -33,8 +33,4 @@ export class IterationStepDetailNavigatorComponent
 
   ngOnInit(): void {}
 
-  ngOnDestroy(): void {
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
-  }
 }

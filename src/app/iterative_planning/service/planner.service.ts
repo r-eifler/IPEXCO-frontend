@@ -4,7 +4,7 @@ import { HttpClient } from "@angular/common/http";
 import { environment } from "src/environments/environment";
 import { map } from "rxjs/operators";
 import { IHTTPData } from "src/app/interface/http-data.interface";
-// import { Socket } from 'ngx-socket-io';
+import { webSocket }  from 'rxjs/webSocket';
 
 
 
@@ -12,19 +12,11 @@ import { IHTTPData } from "src/app/interface/http-data.interface";
 export class PlannerService{
 
     private http = inject(HttpClient)
-    private BASE_URL = environment.apiURL + "planner/";
+    private BASE_URL = environment.apiURL + "runner/planner/";
 
     postComputePlan$(stepId: string): Observable<boolean> {
 
-        return this.http.put<IHTTPData<boolean>>(this.BASE_URL + stepId, {data: stepId}).pipe(
-            map(({data}) => data)
-        )
-
-    }
-
-    listenPlanComputationFinished$(stepId: string): Observable<boolean> {
-
-        return this.http.put<IHTTPData<boolean>>(this.BASE_URL + stepId, {data: stepId}).pipe(
+        return this.http.post<IHTTPData<boolean>>(this.BASE_URL + stepId, {data: stepId}).pipe(
             map(({data}) => data)
         )
 

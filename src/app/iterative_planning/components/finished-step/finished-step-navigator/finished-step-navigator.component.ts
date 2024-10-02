@@ -12,14 +12,14 @@ import {
 import { IterationStep } from 'src/app/iterative_planning/domain/iteration_step';
 import { Store } from '@ngrx/store';
 import { selectIterativePlanningProject, selectIterativePlanningSelectedStep } from 'src/app/iterative_planning/state/iterative-planning.selector';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: "app-finished-step-navigator",
   templateUrl: "./finished-step-navigator.component.html",
   styleUrls: ["./finished-step-navigator.component.scss"],
 })
-export class FinishedStepNavigatorComponent implements OnInit, OnDestroy {
-  private unsubscribe$: Subject<any> = new Subject();
+export class FinishedStepNavigatorComponent implements OnInit {
 
   step$: Observable<IterationStep>;
   showTab$: Observable<number>;
@@ -41,7 +41,7 @@ export class FinishedStepNavigatorComponent implements OnInit, OnDestroy {
     );
 
     this.showTab$ = combineLatest([this.step$, this.iterfaceStatus$]).pipe(
-      takeUntil(this.unsubscribe$),
+      takeUntilDestroyed(),
       filter(([step, stati]) => !!step && !!stati),
       map(([step, stati]) => {
         let status: FinishedStepInterfaceStatus = stati.find(
@@ -84,8 +84,4 @@ export class FinishedStepNavigatorComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {}
 
-  ngOnDestroy(): void {
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
-  }
 }

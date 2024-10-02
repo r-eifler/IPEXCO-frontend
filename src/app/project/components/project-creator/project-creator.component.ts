@@ -12,16 +12,16 @@ import { defaultDomainSpecification, DomainSpecification } from "src/app/interfa
 import { PDDLService } from "src/app/service/pddl/pddl.service";
 import { take, tap, map} from "rxjs/operators";
 import { PlanningDomain, PlanningProblem } from "src/app/interface/planning-task";
-import { Project } from "../../../project/domain/project";
-import { Store } from "@ngrx/store";
-import { createProject } from "../../state/project-meta.actions";
+import { Project } from "../../domain/project";
 
 @Component({
   selector: "app-project-creator",
   templateUrl: "./project-creator.component.html",
   styleUrls: ["./project-creator.component.scss"],
 })
-export class ProjectCreatorComponent implements OnInit {
+export class ProjectCreatorComponent implements OnInit, OnDestroy {
+
+  private ngUnsubscribe: Subject<any> = new Subject();
 
   private formBuilder = inject(FormBuilder);
 
@@ -47,13 +47,14 @@ export class ProjectCreatorComponent implements OnInit {
   problemValid$: Observable<boolean>;
 
   constructor(
-    private store: Store,
+    private projectService: ProjectsService,
     private userService: AuthenticationService,
     private pddlService: PDDLService,
     public dialogRef: MatDialogRef<ProjectCreatorComponent>,
     @Inject(MAT_DIALOG_DATA) data
   ) {
 
+    this.projects$ = this.projectService.getList();
     this.editedProject = data.project;
 
     this.translatedDomain$ = this.pddlService.getDomain();
@@ -71,6 +72,10 @@ export class ProjectCreatorComponent implements OnInit {
     )
   }
 
+  ngOnDestroy(): void {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
+  }
 
   onDomainSelected(domain: string){
     this.selectedDomain = domain
@@ -99,7 +104,7 @@ export class ProjectCreatorComponent implements OnInit {
         console.log("Save new project")
 
         const newProject: Project = {
-          _id: this.editedProject ? this.editedProject._id : null,
+          projectId: this.editedProject ? this.editedProject.projectId : null,
           updated: new Date().toLocaleString(),
           name: this.projectBasic.controls.name.value,
           user: this.userService.getUser()._id,
@@ -115,7 +120,7 @@ export class ProjectCreatorComponent implements OnInit {
           public: false,
         };
     
-        this.store.dispatch(createProject({project: newProject}))
+        this.projectService.saveObject(newProject);
     
         this.dialogRef.close();
       }

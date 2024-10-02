@@ -1,12 +1,13 @@
 import { takeUntil } from "rxjs/operators";
 import { AuthenticationService } from "src/app/service/authentication/authentication.service";
 import { LoginComponent } from "./../login/login/login.component";
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, DestroyRef, OnDestroy, OnInit } from "@angular/core";
 import { ResponsiveService } from "../../service/responsive/responsive.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Subject } from "rxjs";
 import { MatDialog, MatDialogConfig, MatDialogRef } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 
 @Component({
@@ -14,8 +15,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
   templateUrl: "./navigation.component.html",
   styleUrls: ["./navigation.component.scss"],
 })
-export class NavigationComponent implements OnInit, OnDestroy {
-  private ngUnsubscribe: Subject<any> = new Subject();
+export class NavigationComponent implements OnInit {
 
   isMobile: boolean;
 
@@ -25,22 +25,18 @@ export class NavigationComponent implements OnInit, OnDestroy {
     public userService: AuthenticationService,
     private responsiveService: ResponsiveService,
     public dialog: MatDialog,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private destroyRef: DestroyRef
   ) {}
 
   ngOnInit() {
     this.responsiveService
       .getMobileStatus()
-      .pipe(takeUntil(this.ngUnsubscribe))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((isMobile) => {
         this.isMobile = isMobile;
       });
     this.responsiveService.checkWidth();
-  }
-
-  ngOnDestroy(): void {
-    this.ngUnsubscribe.next();
-    this.ngUnsubscribe.complete();
   }
 
   newLoginForm(): void {
@@ -54,7 +50,7 @@ export class NavigationComponent implements OnInit, OnDestroy {
 
     dialog
       .afterClosed()
-      .pipe(takeUntil(this.ngUnsubscribe))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((res) => {
         if (!res) {
           this.snackBar.open("Login failed.", "OK", {

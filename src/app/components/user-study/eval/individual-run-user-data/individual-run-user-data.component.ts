@@ -6,13 +6,14 @@ import { UserStudyData } from "src/app/interface/user-study/user-study-store";
 import { USUser } from "src/app/interface/user-study/user-study-user";
 import { DataPoint, UserStudyDataService } from "src/app/service/user-study/user-study-data.service";
 import { IterationStepsService } from "../../../../service/planner-runs/iteration-steps.service";
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: "app-individual-run-user-data",
   templateUrl: "./individual-run-user-data.component.html",
   styleUrls: ["./individual-run-user-data.component.css"],
 })
-export class IndividualRunUserDataComponent implements OnInit, OnDestroy {
+export class IndividualRunUserDataComponent implements OnInit {
 
   private ngUnsubscribe$: Subject<any> = new Subject();
 
@@ -48,15 +49,10 @@ export class IndividualRunUserDataComponent implements OnInit, OnDestroy {
   constructor(private userStudyDataService: UserStudyDataService) {}
 
 
-  ngOnDestroy(): void {
-    this.ngUnsubscribe$.next();
-    this.ngUnsubscribe$.complete();
-  }
-
   ngOnInit(): void {
 
     combineLatest(([this.selectedDemoId$, this.users$])).pipe(
-      takeUntil(this.ngUnsubscribe$),
+      takeUntilDestroyed(),
       filter(([id, users]) => !!id && !!users)
     ).subscribe(async ([id, users]) => {
       this.iterationStepsData = await this.userStudyDataService.getUtilityPerIterationStep(id, users[0]);

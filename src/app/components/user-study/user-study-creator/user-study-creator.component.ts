@@ -16,6 +16,7 @@ import {
   UserStudiesService,
 } from "../../../service/user-study/user-study-services";
 import { ActivatedRoute, Router } from "@angular/router";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 interface Part {
   index: number;
@@ -31,8 +32,7 @@ interface Part {
   templateUrl: "./user-study-creator.component.html",
   styleUrls: ["./user-study-creator.component.css"],
 })
-export class UserStudyCreatorComponent implements OnInit, OnDestroy {
-  private ngUnsubscribe: Subject<any> = new Subject();
+export class UserStudyCreatorComponent implements OnInit {
   isMobile: boolean;
 
   userStudyStepType = UserStudyStepType;
@@ -69,7 +69,7 @@ export class UserStudyCreatorComponent implements OnInit, OnDestroy {
     this.selectedUserStudyService
       .getSelectedObject()
       .pipe(
-        takeUntil(this.ngUnsubscribe))
+        takeUntilDestroyed())
       .subscribe((study) => {
         if (study) {
           this.userStudy = study;
@@ -131,16 +131,11 @@ export class UserStudyCreatorComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.responsiveService
       .getMobileStatus()
-      .pipe(takeUntil(this.ngUnsubscribe))
+      .pipe(takeUntilDestroyed())
       .subscribe((isMobile) => {
         this.isMobile = isMobile;
       });
     this.responsiveService.checkWidth();
-  }
-
-  ngOnDestroy(): void {
-    this.ngUnsubscribe.next();
-    this.ngUnsubscribe.complete();
   }
 
   editUserStudy() {

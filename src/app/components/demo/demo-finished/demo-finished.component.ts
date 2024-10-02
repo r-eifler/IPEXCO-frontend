@@ -13,8 +13,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
   templateUrl: "./demo-finished.component.html",
   styleUrls: ["./demo-finished.component.css"],
 })
-export class DemoFinishedComponent implements OnInit, OnDestroy {
-  private ngUnsubscribe: Subject<any> = new Subject();
+export class DemoFinishedComponent implements OnInit {
 
   demo: Demo;
   timesUp = false;
@@ -50,10 +49,6 @@ export class DemoFinishedComponent implements OnInit, OnDestroy {
       })
   }
 
-  ngOnDestroy(): void {
-    this.ngUnsubscribe.next();
-    this.ngUnsubscribe.complete();
-  }
 
   continueDemo(){
     this.dialogRef.close(false)

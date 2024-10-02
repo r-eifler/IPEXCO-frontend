@@ -4,14 +4,14 @@ import { filter } from 'rxjs/operators';
 import { takeUntil } from 'rxjs/operators';
 import { Component, Input, OnDestroy, OnInit } from "@angular/core";
 import { BehaviorSubject, combineLatest, Subject } from "rxjs";
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: "app-overview-data",
   templateUrl: "./overview-data.component.html",
   styleUrls: ["./overview-data.component.css"],
 })
-export class OverviewDataComponent implements OnInit, OnDestroy {
-  private ngUnsubscribe$: Subject<any> = new Subject();
+export class OverviewDataComponent implements OnInit {
   showPlots = true;
 
   view: any[] = [700, 400];
@@ -52,7 +52,7 @@ export class OverviewDataComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
 
     combineLatest(([this.selectedDemoId$, this.users$])).pipe(
-      takeUntil(this.ngUnsubscribe$),
+      takeUntilDestroyed(),
       filter(([id, users]) => !!id && !!users && users.length > 0)
     ).subscribe(async ([id, users]) => {
       this.iterationStepsData = await this.userStudyDataService.getIterationStepsPerUser(id, users);
@@ -63,9 +63,5 @@ export class OverviewDataComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnDestroy(): void {
-    this.ngUnsubscribe$.next();
-    this.ngUnsubscribe$.complete();
-  }
 
 }

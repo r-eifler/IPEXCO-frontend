@@ -10,8 +10,7 @@ import { Subject } from "rxjs";
   templateUrl: "./demo-settings.component.html",
   styleUrls: ["./demo-settings.component.css"],
 })
-export class DemoSettingsComponent implements OnInit, OnDestroy {
-  private ngUnsubscribe: Subject<any> = new Subject();
+export class DemoSettingsComponent implements OnInit {
 
   name: string;
   settings: GeneralSettings;
@@ -28,11 +27,6 @@ export class DemoSettingsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {}
-
-  ngOnDestroy(): void {
-    this.ngUnsubscribe.next();
-    this.ngUnsubscribe.complete();
-  }
 
   onSave(settings: GeneralSettings) {
     console.log("Save Settings ...")

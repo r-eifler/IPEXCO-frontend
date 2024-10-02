@@ -8,7 +8,7 @@ import { PaymentInfo } from "src/app/interface/settings/general-settings";
   templateUrl: "./score-bar.component.html",
   styleUrls: ["./score-bar.component.scss"],
 })
-export class ScoreBarComponent implements OnInit, OnDestroy {
+export class ScoreBarComponent implements OnInit {
   @Input()
   set min(min: number) {
     this.min$.next(min);
@@ -102,8 +102,4 @@ export class ScoreBarComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {}
 
-  ngOnDestroy(): void {
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
-  }
 }

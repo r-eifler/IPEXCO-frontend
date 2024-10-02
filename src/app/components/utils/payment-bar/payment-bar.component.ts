@@ -1,5 +1,6 @@
 import { OnDestroy } from '@angular/core';
 import { Component, Input, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Subject, BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { takeUntil, filter, map, tap } from 'rxjs/operators';
 import { PaymentInfo } from 'src/app/interface/settings/general-settings';
@@ -9,7 +10,7 @@ import { PaymentInfo } from 'src/app/interface/settings/general-settings';
   templateUrl: './payment-bar.component.html',
   styleUrls: ['./payment-bar.component.scss']
 })
-export class PaymentBarComponent implements OnInit, OnDestroy {
+export class PaymentBarComponent implements OnInit {
   @Input()
   set min(min: number) {
     this.min$.next(min);
@@ -31,7 +32,6 @@ export class PaymentBarComponent implements OnInit, OnDestroy {
     this.paymentInfo$.next(info);
   }
 
-  private unsubscribe$: Subject<any> = new Subject();
 
   min$ = new BehaviorSubject<number>(null);
   max$ = new BehaviorSubject<number>(null);
@@ -54,14 +54,14 @@ export class PaymentBarComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.v_small$ = combineLatest([this.value1$, this.value2$]).pipe(
-      takeUntil(this.unsubscribe$),
+      takeUntilDestroyed(),
       filter(([value1, value2]) => value1 != null && value2 != null),
       map(([value1, value2]) => (value1 > value2 ? value2 : value1)),
       map(v => v < 0  ? 0 : v)
     );
 
     this.v_large$ = combineLatest([this.value1$, this.value2$]).pipe(
-      takeUntil(this.unsubscribe$),
+      takeUntilDestroyed(),
       filter(([value1, value2]) => value1 != null && value2 != null),
       map(([value1, value2]) => (value1 < value2 ? value2 : value1))
     );
@@ -72,7 +72,7 @@ export class PaymentBarComponent implements OnInit, OnDestroy {
       this.v_small$,
       this.v_large$,
     ]).pipe(
-      takeUntil(this.unsubscribe$),
+      takeUntilDestroyed(),
       filter(
         ([min, max, v_small, v_large]) =>
           min != null && max != null && v_small != null && v_large != null
@@ -89,7 +89,7 @@ export class PaymentBarComponent implements OnInit, OnDestroy {
       this.v_small$,
       this.v_large$,
     ]).pipe(
-      takeUntil(this.unsubscribe$),
+      takeUntilDestroyed(),
       filter(
         ([min, max, v_small, v_large]) =>
           min != null && max != null && v_small != null && v_large != null
@@ -101,7 +101,7 @@ export class PaymentBarComponent implements OnInit, OnDestroy {
     );
 
     this.null_pos$ = combineLatest([this.min$, this.max$]).pipe(
-      takeUntil(this.unsubscribe$),
+      takeUntilDestroyed(),
       filter(([min, max]) => min != null && max != null),
       map(([min, max]) => {
         let div = max - min;
@@ -112,7 +112,7 @@ export class PaymentBarComponent implements OnInit, OnDestroy {
     );
 
     this.showPayment$ = this.paymentInfo$.pipe(
-      takeUntil(this.unsubscribe$),
+      takeUntilDestroyed(),
       map(info => !!info)
     );
 
@@ -121,7 +121,7 @@ export class PaymentBarComponent implements OnInit, OnDestroy {
       this.max$,
       this.paymentInfo$
     ]).pipe(
-      takeUntil(this.unsubscribe$),
+      takeUntilDestroyed(),
       filter(
         ([min, max, info]) =>
           min != null && max != null && info != null
@@ -137,8 +137,4 @@ export class PaymentBarComponent implements OnInit, OnDestroy {
 
   }
 
-  ngOnDestroy(): void {
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
-  }
 }

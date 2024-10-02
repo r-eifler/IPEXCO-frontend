@@ -6,14 +6,14 @@ import { takeUntil } from "rxjs/operators";
 import { DOCUMENT } from "@angular/common";
 import { UserStudyUserService } from "../../../service/user-study/user-study-user.service";
 import { TimeLoggerService } from "../../../service/logger/time-logger.service";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 @Component({
   selector: "app-user-study-end",
   templateUrl: "./user-study-end.component.html",
   styleUrls: ["./user-study-end.component.css"],
 })
-export class UserStudyEndComponent implements OnInit, OnDestroy {
-  private ngUnsubscribe: Subject<any> = new Subject();
+export class UserStudyEndComponent implements OnInit {
 
   userStudy: UserStudy;
 
@@ -25,7 +25,7 @@ export class UserStudyEndComponent implements OnInit, OnDestroy {
   ) {
     userStudyService
       .getSelectedObject()
-      .pipe(takeUntil(this.ngUnsubscribe))
+      .pipe(takeUntilDestroyed())
       .subscribe((study) => {
         this.userStudy = study;
       });
@@ -38,10 +38,6 @@ export class UserStudyEndComponent implements OnInit, OnDestroy {
     // console.log('Logout completed.');
   }
 
-  ngOnDestroy(): void {
-    this.ngUnsubscribe.next();
-    this.ngUnsubscribe.complete();
-  }
 
   redirectTo() {
     this.document.location.href = this.userStudy?.redirectUrl;

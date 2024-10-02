@@ -4,7 +4,6 @@ import { HttpClient, HttpParams } from "@angular/common/http";
 import { environment } from "src/environments/environment";
 import { map } from "rxjs/operators";
 import { IHTTPData } from "src/app/interface/http-data.interface";
-import { PlanProperty } from "../domain/plan-property/plan-property";
 import { IterationStep } from "../domain/iteration_step";
 
 

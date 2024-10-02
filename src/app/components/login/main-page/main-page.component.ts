@@ -7,14 +7,14 @@ import { RegisterComponent } from "../register/register.component";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Subject } from "rxjs";
 import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 @Component({
   selector: "app-main-page",
   templateUrl: "./main-page.component.html",
   styleUrls: ["./main-page.component.scss"],
 })
-export class MainPageComponent implements OnInit, AfterViewChecked, OnDestroy {
-  private ngUnsubscribe: Subject<any> = new Subject();
+export class MainPageComponent implements OnInit, AfterViewChecked {
 
   isMobile: boolean;
 
@@ -29,7 +29,7 @@ export class MainPageComponent implements OnInit, AfterViewChecked, OnDestroy {
   async ngOnInit(): Promise<void> {
     this.responsiveService
       .getMobileStatus()
-      .pipe(takeUntil(this.ngUnsubscribe))
+      .pipe(takeUntilDestroyed())
       .subscribe((isMobile) => {
         this.isMobile = isMobile;
       });
@@ -42,11 +42,6 @@ export class MainPageComponent implements OnInit, AfterViewChecked, OnDestroy {
 
   ngAfterViewChecked(): void {
     // this.animateLogo();
-  }
-
-  ngOnDestroy(): void {
-    this.ngUnsubscribe.next();
-    this.ngUnsubscribe.complete();
   }
 
   animateLogo() {

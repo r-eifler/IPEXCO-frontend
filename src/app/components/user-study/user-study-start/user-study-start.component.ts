@@ -16,7 +16,7 @@ import { AuthenticationService } from "../../../service/authentication/authentic
   templateUrl: "./user-study-start.component.html",
   styleUrls: ["./user-study-start.component.css"],
 })
-export class UserStudyStartComponent implements OnInit, OnDestroy {
+export class UserStudyStartComponent implements OnInit {
   private ngUnsubscribe: Subject<any> = new Subject();
 
   continue = false;
@@ -39,11 +39,6 @@ export class UserStudyStartComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.userStudyUserService.removeToken(); // TODO only for testing
     this.getUserStudyId();
-  }
-
-  ngOnDestroy(): void {
-    this.ngUnsubscribe.next();
-    this.ngUnsubscribe.complete();
   }
 
   getUserStudyId() {

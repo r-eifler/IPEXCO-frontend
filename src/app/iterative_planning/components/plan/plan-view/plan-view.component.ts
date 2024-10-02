@@ -1,6 +1,6 @@
 import { PlannerService } from "src/app/service/planner-runs/planner.service";
 import { filter, map, take, takeUntil, tap } from "rxjs/operators";
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, DestroyRef, OnDestroy, OnInit } from "@angular/core";
 import { BehaviorSubject, Observable, Subject } from "rxjs";
 import { LogEvent, TimeLoggerService } from "../../../../service/logger/time-logger.service";
 import { parsePlan } from "src/app/service/planner-runs/utils";
@@ -9,6 +9,7 @@ import { IterationStep, StepStatus } from "src/app/iterative_planning/domain/ite
 import { PlanAction, PlanRunStatus } from "src/app/iterative_planning/domain/plan";
 import { Store } from "@ngrx/store";
 import { selectIterativePlanningSelectedStep } from "src/app/iterative_planning/state/iterative-planning.selector";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 
 @Component({
@@ -17,7 +18,6 @@ import { selectIterativePlanningSelectedStep } from "src/app/iterative_planning/
   styleUrls: ["./plan-view.component.scss"],
 })
 export class PlanViewComponent implements OnInit, OnDestroy {
-  private unsubscribe$: Subject<any> = new Subject();
 
   step$: Observable<IterationStep>;
   actions$: Observable<PlanAction[]>;
@@ -30,7 +30,8 @@ export class PlanViewComponent implements OnInit, OnDestroy {
   constructor(
     private store: Store,
     private timeLogger: TimeLoggerService,
-    private plannerService: PlannerService
+    private plannerService: PlannerService,
+    private destroyRef: DestroyRef
   ) {
     this.step$ = this.store.select(selectIterativePlanningSelectedStep);
     this.plannerBusy$ = this.plannerService.isPlannerBusy();
@@ -38,7 +39,7 @@ export class PlanViewComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
 
-    this.actions$ = this.step$.pipe(takeUntil(this.unsubscribe$)).pipe(
+    this.actions$ = this.step$.pipe(takeUntilDestroyed(this.destroyRef)).pipe(
       filter(
         (step) =>
           !!step && !!step.plan && step.plan.status == PlanRunStatus.plan_found
@@ -51,25 +52,25 @@ export class PlanViewComponent implements OnInit, OnDestroy {
       })
     );
 
-    this.solved$ = this.step$.pipe(takeUntil(this.unsubscribe$)).pipe(
+    this.solved$ = this.step$.pipe(takeUntilDestroyed(this.destroyRef)).pipe(
       filter((step) => !!step && !!step.plan),
       map((step) => step.plan.status == PlanRunStatus.plan_found),
       tap((a) => console.log(a))
     );
 
-    this.notSolvable$ = this.step$.pipe(takeUntil(this.unsubscribe$)).pipe(
+    this.notSolvable$ = this.step$.pipe(takeUntilDestroyed(this.destroyRef)).pipe(
       filter((step) => !!step),
       map((step) => step.status == StepStatus.unsolvable),
       tap((a) => console.log(a))
     );
 
-    this.isRunning$ = this.step$.pipe(takeUntil(this.unsubscribe$)).pipe(
+    this.isRunning$ = this.step$.pipe(takeUntilDestroyed(this.destroyRef)).pipe(
       filter((step) => !!step && !!step.plan),
       map((step) => step.plan.status == PlanRunStatus.pending),
       tap((a) => console.log(a))
     );
 
-    this.hasPlan$ = this.step$.pipe(takeUntil(this.unsubscribe$)).pipe(
+    this.hasPlan$ = this.step$.pipe(takeUntilDestroyed(this.destroyRef)).pipe(
       filter((step) => !!step),
       map((step) => !!step.plan),
       tap((a) => console.log(a))
@@ -77,8 +78,6 @@ export class PlanViewComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
     this.step$.pipe(
       filter(s => !!s),
       take(1)

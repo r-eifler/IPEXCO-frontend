@@ -8,14 +8,14 @@ import { UserStudyUserService } from "../../../service/user-study/user-study-use
 import { ActivatedRoute, ParamMap, Router } from "@angular/router";
 import { filter, switchMap, takeUntil } from "rxjs/operators";
 import { Subject } from "rxjs";
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: "app-user-study-navigation",
   templateUrl: "./user-study-navigation.component.html",
   styleUrls: ["./user-study-navigation.component.css"],
 })
-export class UserStudyNavigationComponent implements OnInit, OnDestroy {
-  private ngUnsubscribe: Subject<any> = new Subject();
+export class UserStudyNavigationComponent implements OnInit {
 
   step = 2;
 
@@ -32,7 +32,7 @@ export class UserStudyNavigationComponent implements OnInit, OnDestroy {
           this.userStudiesService.getObject(params.get("userStudyId"))
         )
       )
-      .pipe(filter(us => !!us), takeUntil(this.ngUnsubscribe))
+      .pipe(filter(us => !!us), takeUntilDestroyed())
       .subscribe(async (us) => {
           this.userStudyService.saveObject(us);
           console.log("Load data od study: " + us._id);
@@ -42,8 +42,4 @@ export class UserStudyNavigationComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {}
 
-  ngOnDestroy(): void {
-    this.ngUnsubscribe.next();
-    this.ngUnsubscribe.complete();
-  }
 }

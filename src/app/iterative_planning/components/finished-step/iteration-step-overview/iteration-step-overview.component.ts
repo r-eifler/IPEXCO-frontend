@@ -7,6 +7,7 @@ import { Store } from '@ngrx/store';
 import { selectIterativePlanningProject, selectIterativePlanningSelectedStep } from 'src/app/iterative_planning/state/iterative-planning.selector';
 import { boolean } from 'zod';
 import { PlanRunStatus } from 'src/app/iterative_planning/domain/plan';
+import { registerPlanComputation } from 'src/app/iterative_planning/state/iterative-planning.actions';
 
 @Component({
   selector: "app-iteration-step-overview",
@@ -37,6 +38,7 @@ export class IterationStepOverviewComponent implements OnInit {
 
   computePlan() {
     console.log('Compute plan!')
+    this.store.dispatch(registerPlanComputation())
   }
 
 }

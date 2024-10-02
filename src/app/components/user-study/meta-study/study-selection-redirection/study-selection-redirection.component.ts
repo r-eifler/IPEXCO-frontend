@@ -6,14 +6,14 @@ import { UserStudiesService } from "../../../../service/user-study/user-study-se
 import { MetaStudiesService } from "../../../../service/user-study/meta-study-services";
 import { MetaStudy } from "../../../../interface/user-study/meta-study";
 import { combineLatest } from "rxjs/internal/observable/combineLatest";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 @Component({
   selector: "app-study-selection-redirection",
   templateUrl: "./study-selection-redirection.component.html",
   styleUrls: ["./study-selection-redirection.component.css"],
 })
-export class StudySelectionRedirectionComponent implements OnInit, OnDestroy {
-  private ngUnsubscribe: Subject<any> = new Subject();
+export class StudySelectionRedirectionComponent implements OnInit {
 
   metaStudy: MetaStudy;
   private prolificPID: string;
@@ -28,7 +28,7 @@ export class StudySelectionRedirectionComponent implements OnInit, OnDestroy {
     private userStudiesService: UserStudiesService
   ) {
     combineLatest([this.route.paramMap, this.route.queryParams])
-      .pipe(takeUntil(this.ngUnsubscribe))
+      .pipe(takeUntilDestroyed())
       .subscribe(([params, queryParams]) => {
         const metaStudyId = params.get("metaStudyId");
 
@@ -42,7 +42,7 @@ export class StudySelectionRedirectionComponent implements OnInit, OnDestroy {
 
         this.metaStudiesService
           .getObject(metaStudyId)
-          .pipe(takeUntil(this.ngUnsubscribe))
+          .pipe(takeUntilDestroyed())
           .subscribe(async (study) => {
             if (study) {
               this.metaStudy = study;
@@ -90,10 +90,6 @@ export class StudySelectionRedirectionComponent implements OnInit, OnDestroy {
     return Math.floor(Math.random() * (max - min)) + min;
   }
 
-  ngOnDestroy(): void {
-    this.ngUnsubscribe.next();
-    this.ngUnsubscribe.complete();
-  }
 
   ngOnInit(): void {}
 }

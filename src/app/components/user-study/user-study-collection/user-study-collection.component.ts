@@ -9,15 +9,15 @@ import {
 import { UserStudy } from "../../../interface/user-study/user-study";
 import { ActivatedRoute, Router } from "@angular/router";
 import { environment } from "../../../../environments/environment";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 @Component({
   selector: "app-user-study-selection",
   templateUrl: "./user-study-collection.component.html",
   styleUrls: ["./user-study-collection.component.css"],
 })
-export class UserStudyCollectionComponent implements OnInit, OnDestroy {
+export class UserStudyCollectionComponent implements OnInit {
   urlBase = environment.localURL + "/user-studies";
-  private ngUnsubscribe: Subject<any> = new Subject();
 
   isMobile: boolean;
 
@@ -36,18 +36,13 @@ export class UserStudyCollectionComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.responsiveService
       .getMobileStatus()
-      .pipe(takeUntil(this.ngUnsubscribe))
+      .pipe(takeUntilDestroyed())
       .subscribe((isMobile) => {
         this.isMobile = isMobile;
       });
     this.responsiveService.checkWidth();
 
     this.userStudies$ = this.userStudiesService.getList();
-  }
-
-  ngOnDestroy(): void {
-    this.ngUnsubscribe.next();
-    this.ngUnsubscribe.complete();
   }
 
   async openInfo(study: UserStudy) {

@@ -17,8 +17,7 @@ import { selectProjectPlanningTask } from "src/app/project/state/project.selecto
   templateUrl: "./planning-task-view.component.html",
   styleUrls: ["./planning-task-view.component.scss"],
 })
-export class PlanningTaskViewComponent implements OnInit, OnDestroy {
-  private ngUnsubscribe: Subject<any> = new Subject();
+export class PlanningTaskViewComponent implements OnInit {
 
   domain_name$: Observable<string>
   planning_model$: Observable<PlanningModel>
@@ -31,11 +30,6 @@ export class PlanningTaskViewComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {}
-
-  ngOnDestroy(): void {
-    this.ngUnsubscribe.next();
-    this.ngUnsubscribe.complete();
-  }
 
   predicatOut = predicateToString;
   factOut = FactToString;

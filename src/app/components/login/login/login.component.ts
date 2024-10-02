@@ -7,14 +7,14 @@ import { User } from "src/app/interface/user";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Subject } from "rxjs";
 import { MatDialogRef } from "@angular/material/dialog";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 @Component({
   selector: "app-login",
   templateUrl: "./login.component.html",
   styleUrls: ["./login.component.scss"],
 })
-export class LoginComponent implements OnInit, OnDestroy {
-  private ngUnsubscribe: Subject<any> = new Subject();
+export class LoginComponent implements OnInit {
 
   isMobile: boolean;
 
@@ -34,16 +34,11 @@ export class LoginComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.responsiveService
       .getMobileStatus()
-      .pipe(takeUntil(this.ngUnsubscribe))
+      .pipe(takeUntilDestroyed())
       .subscribe((isMobile) => {
         this.isMobile = isMobile;
       });
     this.responsiveService.checkWidth();
-  }
-
-  ngOnDestroy(): void {
-    this.ngUnsubscribe.next();
-    this.ngUnsubscribe.complete();
   }
 
   onLogin(): void {

@@ -17,6 +17,7 @@ import {
 import { Subject } from "rxjs";
 import { PlanPropertyMapService } from "../../../service/plan-properties/plan-property-services";
 import { TimeLoggerService } from "../../../service/logger/time-logger.service";
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: "app-demo-base",
@@ -29,7 +30,6 @@ import { TimeLoggerService } from "../../../service/logger/time-logger.service";
   ],
 })
 export class DemoBaseComponent implements OnInit, OnDestroy {
-  private ngUnsubscribe: Subject<any> = new Subject();
 
   // Steps are help, task info and then the demo itself.
   step = 2;
@@ -49,7 +49,7 @@ export class DemoBaseComponent implements OnInit, OnDestroy {
     this.route.params.subscribe((params) => {
       this.demosService
         .getObject(params.demoid)
-        .pipe(takeUntil(this.ngUnsubscribe))
+        .pipe(takeUntilDestroyed())
         .subscribe((demo: Demo) => {
           if (demo) {
             this.timeLogger.log(LogEvent.START_DEMO, {demoId:  demo._id});
@@ -70,8 +70,6 @@ export class DemoBaseComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.ngUnsubscribe.next();
-    this.ngUnsubscribe.complete();
     this.iterationStepsService.reset();
   }
 

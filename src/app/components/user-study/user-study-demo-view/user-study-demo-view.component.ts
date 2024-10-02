@@ -17,6 +17,7 @@ import { PLANNER_REDIRECT, QUESTION_REDIRECT } from "../../../app.tokens";
 import { IterationStepsService } from "../../../service/planner-runs/iteration-steps.service";
 import { PlannerService } from "../../../service/planner-runs/planner.service";
 import { LogEvent, TimeLoggerService } from "../../../service/logger/time-logger.service";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 
 
@@ -29,8 +30,7 @@ import { LogEvent, TimeLoggerService } from "../../../service/logger/time-logger
     { provide: QUESTION_REDIRECT, useValue: "../../../" },
   ],
 })
-export class UserStudyDemoViewComponent implements OnInit, OnDestroy {
-  private ngUnsubscribe$: Subject<any> = new Subject();
+export class UserStudyDemoViewComponent implements OnInit {
 
   @Input() demoId: string;
   @Output() next = new EventEmitter<void>();
@@ -51,7 +51,7 @@ export class UserStudyDemoViewComponent implements OnInit, OnDestroy {
 
     this.demosService
       .getObject(this.demoId)
-      .pipe(takeUntil(this.ngUnsubscribe$))
+      .pipe(takeUntilDestroyed())
       .subscribe((demo) => {
         if (demo) {
 
@@ -77,9 +77,4 @@ export class UserStudyDemoViewComponent implements OnInit, OnDestroy {
     this.next.emit();
   }
 
-  ngOnDestroy(): void {
-    this.timeLogger.store();
-    this.ngUnsubscribe$.next();
-    this.ngUnsubscribe$.complete();
-  }
 }

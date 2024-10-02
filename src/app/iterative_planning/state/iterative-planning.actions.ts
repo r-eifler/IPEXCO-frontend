@@ -56,7 +56,7 @@ export const createIterationStepFailure = createAction('[iterative-planning] cre
 
 // Planner
 
-export const registerPlanComputation = createAction('[iterative-planning] register plan computation', props<{iterationStepId: string}>());
+export const registerPlanComputation = createAction('[iterative-planning] register plan computation');
 export const registerPlanComputationSuccess = createAction('[iterative-planning] register plan computation success', props<{iterationStepId: string}>());
 export const registerPlanComputationFailure = createAction('[iterative-planning] register plan computation failure');
 

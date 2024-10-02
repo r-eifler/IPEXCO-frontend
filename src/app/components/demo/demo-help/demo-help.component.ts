@@ -6,6 +6,7 @@ import { ResponsiveService } from "src/app/service/responsive/responsive.service
 import { Observable, Subject } from "rxjs";
 import { MatStepper } from "@angular/material/stepper";
 import { LogEvent, TimeLoggerService } from "../../../service/logger/time-logger.service";
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: "app-demo-help",
@@ -19,7 +20,6 @@ export class DemoHelpComponent implements OnInit, OnDestroy {
   numSteps = 0;
   seenEverything = false;
 
-  private ngUnsubscribe$: Subject<any> = new Subject();
   settings$: Observable<GeneralSettings>;
 
   @Output() next = new EventEmitter<void>();
@@ -42,7 +42,7 @@ export class DemoHelpComponent implements OnInit, OnDestroy {
 
     this.responsiveService
       .getMobileStatus()
-      .pipe(takeUntil(this.ngUnsubscribe$))
+      .pipe(takeUntilDestroyed())
       .subscribe((isMobile) => {
         this.isMobile = isMobile;
       });
@@ -51,7 +51,7 @@ export class DemoHelpComponent implements OnInit, OnDestroy {
     this.settings$
       .pipe(
         filter(s => !!s),
-        takeUntil(this.ngUnsubscribe$)
+        takeUntilDestroyed()
         ).subscribe((settings) => {
           console.log(settings);
           this.canUseQuestions = settings.allowQuestions;
@@ -59,9 +59,7 @@ export class DemoHelpComponent implements OnInit, OnDestroy {
       });
   }
 
-  ngOnDestroy(): void {
-    this.ngUnsubscribe$.next();
-    this.ngUnsubscribe$.complete();
+  ngOnDestroy(): void {;
     this.timeLogger.log(LogEvent.END_USE_HELP);
   }
 

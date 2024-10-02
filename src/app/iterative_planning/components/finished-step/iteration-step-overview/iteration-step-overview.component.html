@@ -11,5 +11,6 @@
     </app-goals-list>
     <div class="action-container">
       <button *ngIf='!(hasPlan$ | async)' mat-stroked-button (click)="computePlan()">Compute plan</button>
+      <button mat-stroked-button (click)="computePlan()">Test</button>
     </div>
 </div>

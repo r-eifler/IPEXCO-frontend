@@ -22,7 +22,7 @@ import { RunStatus } from "src/app/iterative_planning/domain/run";
   templateUrl: "./demo-collection.component.html",
   styleUrls: ["./demo-collection.component.scss"],
 })
-export class DemoCollectionComponent implements OnInit, OnDestroy {
+export class DemoCollectionComponent implements OnInit {
   isMobile: boolean;
   private ngUnsubscribe: Subject<any> = new Subject();
   srcUrl = environment.srcURL;
@@ -55,10 +55,6 @@ export class DemoCollectionComponent implements OnInit, OnDestroy {
     this.demosService.findCollection();
   }
 
-  ngOnDestroy(): void {
-    this.ngUnsubscribe.next();
-    this.ngUnsubscribe.complete();
-  }
 
 
   openDeleteDialog(demo: Demo): void {

@@ -12,14 +12,14 @@ import { takeUntil } from "rxjs/operators";
 import { Subject } from "rxjs";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { RunStatus } from "src/app/iterative_planning/domain/run";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 @Component({
   selector: "app-demo-info",
   templateUrl: "./demo-info.component.html",
   styleUrls: ["./demo-info.component.css"],
 })
-export class DemoInfoComponent implements OnInit, OnDestroy, AfterViewInit {
-  private ngUnsubscribe: Subject<any> = new Subject();
+export class DemoInfoComponent implements OnInit, AfterViewInit {
 
   runStatus = RunStatus;
   demo: Demo;
@@ -42,17 +42,13 @@ export class DemoInfoComponent implements OnInit, OnDestroy, AfterViewInit {
   ngOnInit(): void {
     this.propertiesService
       .getMap()
-      .pipe(takeUntil(this.ngUnsubscribe))
+      .pipe(takeUntilDestroyed())
       .subscribe((props) => {
         const propsList = [...props.values()];
         this.planProperties = propsList.filter((p: PlanProperty) => p.isUsed);
       });
   }
 
-  ngOnDestroy(): void {
-    this.ngUnsubscribe.next();
-    this.ngUnsubscribe.complete();
-  }
 
   downloadDemoData() {
     const jsonDemoData = "" // TODO JSON.stringify(this.demo.data);

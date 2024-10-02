@@ -1,6 +1,6 @@
 import { parsePlan } from "src/app/service/planner-runs/utils";
 import { CurrentProjectService } from "src/app/service/project/project-services";
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, DestroyRef, OnDestroy, OnInit } from "@angular/core";
 import { Subject, Observable, combineLatest } from "rxjs";
 import { filter, map, takeUntil } from "rxjs/operators";
 import { TimeLoggerService } from "src/app/service/logger/time-logger.service";
@@ -17,6 +17,7 @@ import { nextState, Plan, PlanRunStatus, State } from "src/app/iterative_plannin
 import { Store } from "@ngrx/store";
 import { selectIterativePlanningSelectedStep } from "src/app/iterative_planning/state/iterative-planning.selector";
 import { IterationStep } from "src/app/iterative_planning/domain/iteration_step";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 interface ExFact {
   fact: PDDLFact;
@@ -34,10 +35,8 @@ interface ExState {
   templateUrl: "./interactive-plan-view.component.html",
   styleUrls: ["./interactive-plan-view.component.scss"],
 })
-export class InteractivePlanViewComponent implements OnInit, OnDestroy {
+export class InteractivePlanViewComponent implements OnInit {
   toString = FactToString;
-
-  private ngUnsubscribe: Subject<any> = new Subject();
 
   runStatus = RunStatus;
 
@@ -54,7 +53,8 @@ export class InteractivePlanViewComponent implements OnInit, OnDestroy {
   constructor(
     private store: Store,
     private timeLogger: TimeLoggerService,
-    private currentProjectService: CurrentProjectService
+    private currentProjectService: CurrentProjectService,
+    private destroyRef: DestroyRef
   ) {
     this.step$ = this.store.select(selectIterativePlanningSelectedStep)
     this.project$ = this.currentProjectService.findSelectedObject();
@@ -70,7 +70,7 @@ export class InteractivePlanViewComponent implements OnInit, OnDestroy {
     );
 
     combineLatest([this.step$, this.plan$])
-      .pipe(takeUntil(this.ngUnsubscribe))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(([step, plan]) => {
         if (step && plan) {
           this.action_trace = [];
@@ -171,8 +171,4 @@ export class InteractivePlanViewComponent implements OnInit, OnDestroy {
       });
   }
 
-  ngOnDestroy(): void {
-    this.ngUnsubscribe.next();
-    this.ngUnsubscribe.complete();
-  }
 }

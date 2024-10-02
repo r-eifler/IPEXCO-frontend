@@ -13,9 +13,8 @@ import { map } from "rxjs/operators";
   styleUrls: ["./iteration-steps-base.component.css"],
 })
 export class ProjectIterativePlanningBaseComponent
-  implements OnInit, OnDestroy
+  implements OnInit
 {
-  private ngUnsubscribe$: Subject<any> = new Subject();
 
   step$: Observable<IterationStep>;
   stepSelected$: Observable<boolean>;
@@ -31,12 +30,6 @@ export class ProjectIterativePlanningBaseComponent
   }
 
   ngOnInit(): void {}
-
-  ngOnDestroy(): void {
-    this.ngUnsubscribe$.next();
-    this.ngUnsubscribe$.complete();
-    // clearInterval(this.timerIntervall);
-  }
 
   showHelp() {
     const dialogConfig = new MatDialogConfig();

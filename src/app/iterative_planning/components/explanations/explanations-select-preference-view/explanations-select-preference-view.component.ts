@@ -7,6 +7,7 @@ import { LogEvent, TimeLoggerService } from "src/app/service/logger/time-logger.
 import { CurrentProjectService } from "src/app/service/project/project-services";
 import { GeneralSettings } from "src/app/interface/settings/general-settings";
 import { IterationStep } from "src/app/iterative_planning/domain/iteration_step";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 @Component({
   selector: "app-explanations-select-preference-view",
@@ -14,7 +15,6 @@ import { IterationStep } from "src/app/iterative_planning/domain/iteration_step"
   styleUrls: ["./explanations-select-preference-view.component.scss"],
 })
 export class ExplanationsSelectPreferenceViewComponent implements OnInit {
-  private unsubscribe$: Subject<any> = new Subject();
 
   @Input()
   set step(step: IterationStep) {
@@ -56,15 +56,11 @@ export class ExplanationsSelectPreferenceViewComponent implements OnInit {
           return props;
         })
       )
-      .pipe(takeUntil(this.unsubscribe$));
+      .pipe(takeUntilDestroyed());
   }
 
   ngOnInit(): void {}
 
-  ngOnDestroy(): void {
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
-  }
 
   selectPP(pp: PlanProperty): void {
     this.selectedPPId = pp._id;

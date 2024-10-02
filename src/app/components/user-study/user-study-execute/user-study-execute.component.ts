@@ -9,14 +9,14 @@ import {
   UserStudyStepType,
 } from "../../../interface/user-study/user-study";
 import { ActivatedRoute, Router } from "@angular/router";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 @Component({
   selector: "app-user-study-executer",
   templateUrl: "./user-study-execute.component.html",
   styleUrls: ["./user-study-execute.component.css"],
 })
-export class UserStudyExecuteComponent implements OnInit, OnDestroy {
-  private ngUnsubscribe: Subject<any> = new Subject();
+export class UserStudyExecuteComponent implements OnInit {
   isMobile: boolean;
 
   stepType = UserStudyStepType;
@@ -33,7 +33,7 @@ export class UserStudyExecuteComponent implements OnInit, OnDestroy {
   ) {
     this.selectedUserStudyService
       .getSelectedObject()
-      .pipe(takeUntil(this.ngUnsubscribe))
+      .pipe(takeUntilDestroyed())
       .subscribe((study) => {
         this.userStudy = study;
         this.currentStep = study?.steps[0];
@@ -43,16 +43,13 @@ export class UserStudyExecuteComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.responsiveService
       .getMobileStatus()
-      .pipe(takeUntil(this.ngUnsubscribe))
+      .pipe(takeUntilDestroyed())
       .subscribe((isMobile) => {
         this.isMobile = isMobile;
       });
     this.responsiveService.checkWidth();
   }
-  ngOnDestroy(): void {
-    this.ngUnsubscribe.next();
-    this.ngUnsubscribe.complete();
-  }
+
 
   async nextStep() {
     if (this.hasNextStep()) {

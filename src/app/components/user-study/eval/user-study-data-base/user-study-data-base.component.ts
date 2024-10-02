@@ -19,14 +19,14 @@ import {
 import { PlanPropertyMapService } from "../../../../service/plan-properties/plan-property-services";
 import { UserStudyData } from "src/app/interface/user-study/user-study-store";
 import { CurrentProjectService } from 'src/app/service/project/project-services';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: "app-user-study-data-base",
   templateUrl: "./user-study-data-base.component.html",
   styleUrls: ["./user-study-data-base.component.css"],
 })
-export class UserStudyDataBaseComponent implements OnInit, OnDestroy {
-  private ngUnsubscribe$: Subject<any> = new Subject();
+export class UserStudyDataBaseComponent implements OnInit {
 
 
   tabId = 1;
@@ -60,7 +60,7 @@ export class UserStudyDataBaseComponent implements OnInit, OnDestroy {
     this.userStudy$ = this.selectedUserStudy.getSelectedObject()
     .pipe(
       tap(us => console.log(us)),
-      takeUntil(this.ngUnsubscribe$)
+      takeUntilDestroyed()
       );
 
     this.data$ = userStudyDataService.getList();
@@ -68,13 +68,13 @@ export class UserStudyDataBaseComponent implements OnInit, OnDestroy {
     this.allUsers$ = this.data$.pipe(
       tap(data => console.log("Test")),
       tap(data => console.log(data)),
-      takeUntil(this.ngUnsubscribe$),
+      takeUntilDestroyed(),
       filter(data => !!data && data.length > 0),
       map(data => data.map(e => e.user))
     );
 
     this.demoIds$ = this.userStudy$.pipe(
-      takeUntil(this.ngUnsubscribe$),
+      takeUntilDestroyed(),
       filter(s => !!s),
       map(s => {
         let demoIds = [];
@@ -89,13 +89,13 @@ export class UserStudyDataBaseComponent implements OnInit, OnDestroy {
       }));
 
     this.demos$ = combineLatest(([this.demoIds$, this.demosService.getList()])).pipe(
-      takeUntil(this.ngUnsubscribe$),
+      takeUntilDestroyed(),
       filter(([dids, demos]) => !!dids && !!demos),
       map(([dids, demos]) => demos.filter(d => dids.some(id => id == d._id)))
     )
 
     this.selectedDemoId$.pipe(
-      takeUntil(this.ngUnsubscribe$),
+      takeUntilDestroyed(),
       filter(id => !!id)
       ).subscribe(id => {
         this.demosService.getObject(id).pipe(
@@ -113,10 +113,6 @@ export class UserStudyDataBaseComponent implements OnInit, OnDestroy {
     this.selectAllAccepted();
   }
 
-  ngOnDestroy(): void {
-    this.ngUnsubscribe$.next();
-    this.ngUnsubscribe$.complete();
-  }
 
   userSelectionChanged(): void {
     this.selectedUsers$.next(this.selectedUsers);
@@ -134,7 +130,7 @@ export class UserStudyDataBaseComponent implements OnInit, OnDestroy {
     }
     else {
       this.data$.pipe(
-        takeUntil(this.ngUnsubscribe$),
+        takeUntilDestroyed(),
         filter(data => !!data && data.length > 0))
         .subscribe(data => {
           this.selectedUsers = data.filter(d => d.accepted).map(d => d.user);

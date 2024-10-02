@@ -16,6 +16,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { IterationStep } from 'src/app/iterative_planning/domain/iteration_step';
 import { Store } from '@ngrx/store';
 import { selectIterativePlanningIterationSteps, selectIterativePlanningNewStep, selectIterativePlanningProperties, selectIterativePlanningSelectedStep } from 'src/app/iterative_planning/state/iterative-planning.selector';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 
 @Component({
@@ -80,7 +81,7 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
     this.initTimer();
 
     this.selectedStep$.pipe(
-      takeUntil(this.ngUnsubscribe$),
+      takeUntilDestroyed(),
       filter(step => !!step)
     ).subscribe(step => {
       this.showTaskInfo = false;
@@ -89,14 +90,14 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
 
 
     this.paymentInfo$ = this.settings$.pipe(
-      takeUntil(this.ngUnsubscribe$),
+      takeUntilDestroyed(),
       filter(settings => !!settings && !!settings.paymentInfo),
       map(settings => settings.paymentInfo),
       tap(s => console.log("Payment info loaded"))
     )
 
     this.maxPlanValue$ = this.planProperties$.pipe(
-      takeUntil(this.ngUnsubscribe$),
+      takeUntilDestroyed(),
       map((planProperties) => {
         if (!!planProperties) {
           return getMaximalPlanValue(planProperties);
@@ -110,7 +111,7 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
       this.steps$,
       this.planProperties$,
     ]).pipe(
-      takeUntil(this.ngUnsubscribe$),
+      takeUntilDestroyed(),
       filter(([steps, planProperties]) => !!steps && !!planProperties),
       map(([steps, planProperties]) => {
         let max = 0;
@@ -124,7 +125,7 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
 
     this.settings$
       .pipe(
-        takeUntil(this.ngUnsubscribe$),
+        takeUntilDestroyed(),
         filter((s) => !!s)
       )
       .subscribe((settings) => {
@@ -152,8 +153,6 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.ngUnsubscribe$.next();
-    this.ngUnsubscribe$.complete();
     clearInterval(this.timerIntervall);
     for (const t of this.notificationTimer) {
       clearTimeout(t);
@@ -208,7 +207,7 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
   }
 
   initTimer() {
-    this.settings$.pipe(takeUntil(this.ngUnsubscribe$)).subscribe((settings) => {
+    this.settings$.pipe(takeUntilDestroyed()).subscribe((settings) => {
       if (settings && (settings.measureTime || settings.useTimer)) {
         console.log("init Timer")
         this.maxTime = settings.maxTime ? settings.maxTime : 50000;

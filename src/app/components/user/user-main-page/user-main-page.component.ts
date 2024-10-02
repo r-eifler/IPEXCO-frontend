@@ -13,14 +13,14 @@ import { Subject } from "rxjs";
 import { UserStudiesService } from "../../../service/user-study/user-study-services";
 import { UserStudy } from "../../../interface/user-study/user-study";
 import { Project } from "src/app/project/domain/project";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 @Component({
   selector: "app-user-main-page",
   templateUrl: "./user-main-page.component.html",
   styleUrls: ["./user-main-page.component.scss"],
 })
-export class UserMainPageComponent implements OnInit, OnDestroy {
-  private ngUnsubscribe: Subject<any> = new Subject();
+export class UserMainPageComponent implements OnInit {
 
   isMobile: boolean;
 
@@ -36,7 +36,7 @@ export class UserMainPageComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.responsiveService
       .getMobileStatus()
-      .pipe(takeUntil(this.ngUnsubscribe))
+      .pipe(takeUntilDestroyed())
       .subscribe((isMobile) => {
         this.isMobile = isMobile;
       });
@@ -47,10 +47,6 @@ export class UserMainPageComponent implements OnInit, OnDestroy {
     this.userStudiesService.findCollection();
   }
 
-  ngOnDestroy(): void {
-    this.ngUnsubscribe.next();
-    this.ngUnsubscribe.complete();
-  }
 
   async openProject(project: Project) {
     // console.log(''.concat(...['/projects/', project._id, '/overview']));

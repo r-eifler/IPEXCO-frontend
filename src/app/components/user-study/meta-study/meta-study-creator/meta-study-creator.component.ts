@@ -13,14 +13,14 @@ import {
 } from "../../../../service/user-study/meta-study-services";
 import { switchMap, takeUntil } from "rxjs/operators";
 import { ActivatedRoute, ParamMap } from "@angular/router";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 @Component({
   selector: "app-meta-study-creator",
   templateUrl: "./meta-study-creator.component.html",
   styleUrls: ["./meta-study-creator.component.css"],
 })
-export class MetaStudyCreatorComponent implements OnInit, OnDestroy {
-  private ngUnsubscribe: Subject<any> = new Subject();
+export class MetaStudyCreatorComponent implements OnInit {
 
   userStudies$: BehaviorSubject<UserStudy[]>;
   metaForm: UntypedFormGroup;
@@ -42,7 +42,7 @@ export class MetaStudyCreatorComponent implements OnInit, OnDestroy {
           this.metaStudiesService.getObject(params.get("metaStudyId"))
         )
       )
-      .pipe(takeUntil(this.ngUnsubscribe))
+      .pipe(takeUntilDestroyed())
       .subscribe(async (value) => {
         if (value != null) {
           this.selectedMetaStudyService.saveObject(value);
@@ -54,7 +54,7 @@ export class MetaStudyCreatorComponent implements OnInit, OnDestroy {
 
     this.selectedMetaStudyService
       .getSelectedObject()
-      .pipe(takeUntil(this.ngUnsubscribe))
+      .pipe(takeUntilDestroyed())
       .subscribe(async (study) => {
         if (study) {
           this.created = true;
@@ -79,11 +79,6 @@ export class MetaStudyCreatorComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {}
-
-  ngOnDestroy(): void {
-    this.ngUnsubscribe.next();
-    this.ngUnsubscribe.complete();
-  }
 
   addUserStudy() {
     this.metaStudy.userStudies.push({ userStudy: null, numberTestPersons: 0 });
