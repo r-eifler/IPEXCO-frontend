@@ -9,15 +9,20 @@ import { Store } from "@ngrx/store";
 import { selectIterativePlanningProperties } from "src/app/iterative_planning/state/iterative-planning.selector";
 
 @Component({
-  selector: "app-selected-hard-goals",
-  templateUrl: "./selected-hard-goals.component.html",
-  styleUrls: ["./selected-hard-goals.component.scss"],
+  selector: "app-goals-list",
+  templateUrl: "./goals-list.component.html",
+  styleUrls: ["./goals-list.component.scss"],
 })
 export class SelectedHardGoalsComponent implements OnInit {
 
   @Input()
-  set step(step: IterationStep) {
-    this.step$.next(step);
+  set heading(h: string) {
+    this.headingText = h;
+  }
+
+  @Input()
+  set goalIds(goalIds: string[]) {
+    this.goalIds$.next(goalIds);
   }
 
   @Input()
@@ -26,22 +31,23 @@ export class SelectedHardGoalsComponent implements OnInit {
   }
 
   planProperties$: Observable<Record<string, PlanProperty>>;
-  private step$ = new BehaviorSubject<IterationStep>(null);
+  private goalIds$ = new BehaviorSubject<string[]>([]);
   protected  settings$ = new BehaviorSubject<GeneralSettings>(null);
 
-  hardGoals$: Observable<PlanProperty[]>;
+  headingText: string
+  goals$: Observable<PlanProperty[]>;
 
   constructor(private store: Store) {
 
     this.planProperties$ = this.store.select(selectIterativePlanningProperties)
 
-    this.hardGoals$ = combineLatest([this.step$, this.planProperties$]).pipe(
-      filter(([step, planProperties]) => !!step && !!planProperties),
-      map(([step, planProperties]) =>
-        step.hardGoals.map((pp_id) => planProperties[pp_id])
+    this.goals$ = combineLatest([this.goalIds$, this.planProperties$]).pipe(
+      filter(([goalIds, planProperties]) => !!goalIds && !!planProperties),
+      map(([goalIds, planProperties]) =>
+        goalIds.map((pp_id) => planProperties[pp_id])
       ),
-      filter(hardGoals => ! hardGoals.some(hg => hg === undefined)),
-      map((hardGoals) => hardGoals.sort((a, b) => (a.globalHardGoal ? -1 : 0))),
+      filter(goals => ! goals.some(hg => hg === undefined)),
+      map((goals) => goals.sort((a, b) => (a.globalHardGoal ? -1 : 0))),
   );
   }
 

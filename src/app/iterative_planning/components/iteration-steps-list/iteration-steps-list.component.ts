@@ -36,7 +36,7 @@ export class IterationStepsListComponent implements OnInit {
 
   selectStep(event: MatSelectionListChange): void {
     let step = event.options[0].value as IterationStep;
-    this.store.dispatch(selectIterationStep({iterationStep: step}))
+    this.store.dispatch(selectIterationStep({iterationStepId: step._id}))
   }
 
   selectNewStep() {

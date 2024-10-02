@@ -25,5 +25,5 @@ export enum StepStatus {
 }
   
   export interface ModIterationStep extends IterationStep {
-    baseStep: IterationStep;
+    baseStep: string;
   }

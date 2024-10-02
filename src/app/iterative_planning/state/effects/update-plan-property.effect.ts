@@ -1,7 +1,7 @@
 import { inject, Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { createPlanProperty, createPlanPropertyFailure, createPlanPropertySuccess, loadPlanProperties, updatePlanProperty, updatePlanPropertyFailure, updatePlanPropertySuccess} from "../iterative-planning.actions";
-import { catchError, map, switchMap } from "rxjs/operators";
+import { loadPlanProperties, updatePlanProperty, updatePlanPropertyFailure, updatePlanPropertySuccess} from "../iterative-planning.actions";
+import { catchError, switchMap } from "rxjs/operators";
 import { of } from "rxjs";
 import { PlanPropertyService } from "../../service/plan-properties.service";
 import { Store } from "@ngrx/store";

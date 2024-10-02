@@ -169,7 +169,7 @@ import { IterationStepsListComponent } from "./iterative_planning/components/ite
 import { IterationStepOverviewComponent } from "./iterative_planning/components/finished-step/iteration-step-overview/iteration-step-overview.component";
 import { IterationStepDetailNavigatorComponent } from "./iterative_planning/components/iteration-step-detail-navigator/iteration-step-detail-navigator.component";
 import { HardGoalSelectorComponent } from "./iterative_planning/components/goals/hard-goal-selector/hard-goal-selector.component";
-import { SelectedHardGoalsComponent } from "./iterative_planning/components/goals/selected-hard-goals/selected-hard-goals.component";
+import { SelectedHardGoalsComponent } from "./iterative_planning/components/goals/goals-list/goals-list.component";
 import { ConflictViewComponent } from "./iterative_planning/components/explanations/conflict-view/conflict-view.component";
 import { FinishedStepNavigatorComponent } from "./iterative_planning/components/finished-step/finished-step-navigator/finished-step-navigator.component";
 import { ExplanationsViewComponent } from "./iterative_planning/components/explanations/explanations-view/explanations-view.component";

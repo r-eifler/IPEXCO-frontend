@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { SelectedHardGoalsComponent } from "./selected-hard-goals.component";
+import { SelectedHardGoalsComponent } from "./goals-list.component";
 
 describe("SelectedHardGoalsComponent", () => {
   let component: SelectedHardGoalsComponent;

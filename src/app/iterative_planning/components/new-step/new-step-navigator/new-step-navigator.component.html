@@ -16,11 +16,12 @@
   <mat-step label="Finish">
     <div class="step">
       <div class="finish-container">
-        <app-selected-hard-goals
-          [step]="step$ | async"
+        <app-goals-list
+          [goalIds]="hardGoals$ | async"
           [settings]="settings$ | async"
+          heading="Enforced Goals"
           class="componenets"
-        ></app-selected-hard-goals>
+        ></app-goals-list>
       </div>
       <div class="button-container">
         <button mat-button matStepperPrevious>Back</button>

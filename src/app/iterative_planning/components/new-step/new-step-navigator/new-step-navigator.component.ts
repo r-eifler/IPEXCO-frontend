@@ -17,6 +17,7 @@ import { createIterationStep } from "src/app/iterative_planning/state/iterative-
 })
 export class NewStepNavigatorComponent implements OnInit {
   step$: Observable<IterationStep>;
+  hardGoals$: Observable<string[]>;
   interfaceStatus$: Observable<NewStepInterfaceStatus>;
   settings$: Observable<GeneralSettings>;
 
@@ -24,6 +25,7 @@ export class NewStepNavigatorComponent implements OnInit {
     private store: Store,
   ) {
     this.step$ = this.store.select(selectIterativePlanningNewStep)
+    this.hardGoals$ = this.step$.pipe(map(step => step?.hardGoals))
 
     this.settings$ = this.store.select(selectIterativePlanningProject).pipe(
       map(p => p?.settings)

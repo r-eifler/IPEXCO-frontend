@@ -36,6 +36,7 @@ export class HardGoalSelectorComponent implements OnInit {
 
     this.possiblePP$ = combineLatest([this.newStep$, this.planProperties$])
       .pipe(
+        filter(([step, planProperties]) => !!step && !!planProperties),
         map(([step, properties]) => {
           const props = [];
           for (let property of Object.values(properties)) {
@@ -48,6 +49,7 @@ export class HardGoalSelectorComponent implements OnInit {
       );
 
     this.hardGoals$ = combineLatest([this.newStep$, this.planProperties$]).pipe(
+      filter(([step, planProperties]) => !!step && !!planProperties),
       map(([step, planProperties]) =>
         step.hardGoals.map((pp_id) => planProperties[pp_id])
       ),
