@@ -1,7 +1,8 @@
 <div class="tab-container">
-  <mat-tab-group style="height: 100%;" 
+  <mat-tab-group style="height: 100%;" dynamicHeight
     (selectedTabChange)="setTab($event.index)"
     [selectedIndex]="showTab$ | async">
+
     <mat-tab> 
       <ng-template mat-tab-label>
         <mat-icon class="tab-icon">home</mat-icon>
@@ -10,7 +11,7 @@
       <app-iteration-step-overview class="content-container"></app-iteration-step-overview>
     </mat-tab>
 
-    <mat-tab *ngIf="(step$ | async)?.plan"> 
+    <mat-tab> 
       <ng-template mat-tab-label>
         <mat-icon class="tab-icon">sort</mat-icon>
         Plan
@@ -18,7 +19,7 @@
       <app-plan-view  class="content-container"></app-plan-view>
     </mat-tab>
 
-    <mat-tab *ngIf="(step$ | async)?.plan"> 
+    <mat-tab> 
       <ng-template mat-tab-label>
         <mat-icon class="tab-icon">sort</mat-icon>
         Advanced Plan

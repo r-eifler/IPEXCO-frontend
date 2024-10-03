@@ -166,7 +166,6 @@ import { SettingsComponent } from "./project/components/settings/settings.compon
 import { CompleteActionComponent } from "./components/planning-task/complete-action/complete-action.component";
 import { IterationStepsListComponent } from "./iterative_planning/components/iteration-steps-list/iteration-steps-list.component";
 import { IterationStepOverviewComponent } from "./iterative_planning/components/finished-step/iteration-step-overview/iteration-step-overview.component";
-import { IterationStepDetailNavigatorComponent } from "./iterative_planning/components/iteration-step-detail-navigator/iteration-step-detail-navigator.component";
 import { HardGoalSelectorComponent } from "./iterative_planning/components/goals/hard-goal-selector/hard-goal-selector.component";
 import { SelectedHardGoalsComponent } from "./iterative_planning/components/goals/goals-list/goals-list.component";
 import { ConflictViewComponent } from "./iterative_planning/components/explanations/conflict-view/conflict-view.component";
@@ -281,7 +280,6 @@ import { PlannerService } from './iterative_planning/service/planner.service';
     CompleteActionComponent,
     IterationStepsListComponent,
     IterationStepOverviewComponent,
-    IterationStepDetailNavigatorComponent,
     HardGoalSelectorComponent,
     SelectedHardGoalsComponent,
     ConflictViewComponent,

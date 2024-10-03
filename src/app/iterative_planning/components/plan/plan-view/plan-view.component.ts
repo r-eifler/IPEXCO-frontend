@@ -10,6 +10,7 @@ import { PlanAction, PlanRunStatus } from "src/app/iterative_planning/domain/pla
 import { Store } from "@ngrx/store";
 import { selectIterativePlanningSelectedStep } from "src/app/iterative_planning/state/iterative-planning.selector";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { registerPlanComputation } from "src/app/iterative_planning/state/iterative-planning.actions";
 
 
 @Component({
@@ -39,17 +40,12 @@ export class PlanViewComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
 
-    this.actions$ = this.step$.pipe(takeUntilDestroyed(this.destroyRef)).pipe(
-      filter(
-        (step) =>
-          !!step && !!step.plan && step.plan.status == PlanRunStatus.plan_found
-      ),
-      map((step) => {
-        this.timeLogger.log(LogEvent.START_CHECK_PLAN, {stepId: step._id});
-        let actions = [];
-        let plan = step.plan
-        return plan.actions;
-      })
+    // this.timeLogger.log(LogEvent.START_CHECK_PLAN, {stepId: step._id});
+
+    this.actions$ = this.step$.pipe(
+      filter((step) => !!step && !!step.plan && step.plan.status == PlanRunStatus.plan_found),
+      tap((step => console.log(step))),
+      map((step) => step?.plan?.actions)
     );
 
     this.solved$ = this.step$.pipe(takeUntilDestroyed(this.destroyRef)).pipe(
@@ -85,14 +81,7 @@ export class PlanViewComponent implements OnInit, OnDestroy {
   }
 
   computePlan(): void {
-    this.step$
-      .pipe(
-        filter((step) => !!step),
-        take(1)
-      )
-      .subscribe((step) => {
-        this.plannerService.computePlan(step)
-        this.timeLogger.log(LogEvent.COMPUTE_PLAN, {stepId: step._id});
-      });
+    this.store.dispatch(registerPlanComputation())
+    // this.timeLogger.log(LogEvent.COMPUTE_PLAN, {stepId: step._id});
   }
 }
