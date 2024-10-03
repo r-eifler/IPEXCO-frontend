@@ -1,6 +1,6 @@
 import { inject, Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { createIterationStep, createIterationStepFailure, createIterationStepSuccess, loadIterationSteps, planComputationRunningFailure, planComputationRunningSuccess, registerPlanComputation, registerPlanComputationSuccess} from "../iterative-planning.actions";
+import { createIterationStep, createIterationStepFailure, createIterationStepSuccess, loadIterationSteps, planComputationRunningFailure, planComputationRunningSuccess, registerPlanComputation, registerPlanComputationSuccess, registerTempGoalPlanComputation} from "../iterative-planning.actions";
 import { catchError, map, switchMap } from "rxjs/operators";
 import { of } from "rxjs";
 import { Store } from "@ngrx/store";
@@ -21,6 +21,16 @@ export class ComputePlanEffect{
         ofType(registerPlanComputation),
         concatLatestFrom(() => this.store.select(selectIterativePlanningSelectedStepId)),
         switchMap(([_,iterationStepId]) => this.plannerService.postComputePlan$(iterationStepId).pipe(
+            concatLatestFrom(() => this.store.select(selectIterativePlanningProject)),
+            switchMap(([res, project]) => [registerPlanComputationSuccess({iterationStepId}), loadIterationSteps({id: project._id})]),
+            catchError(() => of(createIterationStepFailure()))
+        ))
+    ))
+
+    public registerTempGoalPlanComputation$ = createEffect(() => this.actions$.pipe(
+        ofType(registerTempGoalPlanComputation),
+        concatLatestFrom(() => this.store.select(selectIterativePlanningSelectedStepId)),
+        switchMap(([_,iterationStepId]) => this.plannerService.postComputePlanTempGoals$(iterationStepId).pipe(
             concatLatestFrom(() => this.store.select(selectIterativePlanningProject)),
             switchMap(([res, project]) => [registerPlanComputationSuccess({iterationStepId}), loadIterationSteps({id: project._id})]),
             catchError(() => of(createIterationStepFailure()))

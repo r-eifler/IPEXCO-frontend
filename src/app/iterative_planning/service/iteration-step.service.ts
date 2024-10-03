@@ -5,7 +5,6 @@ import { environment } from "src/environments/environment";
 import { map, tap } from "rxjs/operators";
 import { IHTTPData } from "src/app/interface/http-data.interface";
 import { IterationStep } from "../domain/iteration_step";
-import { PlanRunStatus } from "../domain/plan";
 
 
 @Injectable()
@@ -21,6 +20,7 @@ export class IterationStepService{
         
         return this.http.get<IHTTPData<IterationStep[]>>(this.BASE_URL,  { params: httpParams }).pipe(
             map(({data}) => data),
+            tap(steps => console.log(steps)),
             map(steps => 
                 steps.map( step => (
                 {
@@ -28,7 +28,7 @@ export class IterationStepService{
                     plan: step?.plan ? {
                             ...step.plan, 
                             cost: undefined,
-                            actions: JSON.parse(step.plan.actions as unknown as string),
+                            actions: step.plan.actions ? JSON.parse(step.plan.actions as unknown as string) : undefined,
                         } : undefined,
                     task : {
                         ...step.task,
@@ -37,7 +37,7 @@ export class IterationStepService{
                 }
                 ))
             ),
-            tap(steps => console.log(steps)))
+          )
             
     }
 

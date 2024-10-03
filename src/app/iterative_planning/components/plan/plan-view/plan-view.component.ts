@@ -10,7 +10,7 @@ import { PlanAction, PlanRunStatus } from "src/app/iterative_planning/domain/pla
 import { Store } from "@ngrx/store";
 import { selectIterativePlanningSelectedStep } from "src/app/iterative_planning/state/iterative-planning.selector";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-import { registerPlanComputation } from "src/app/iterative_planning/state/iterative-planning.actions";
+import { registerPlanComputation, registerTempGoalPlanComputation } from "src/app/iterative_planning/state/iterative-planning.actions";
 
 
 @Component({
@@ -81,7 +81,8 @@ export class PlanViewComponent implements OnInit, OnDestroy {
   }
 
   computePlan(): void {
-    this.store.dispatch(registerPlanComputation())
+    // this.store.dispatch(registerPlanComputation())
+    this.store.dispatch(registerTempGoalPlanComputation())
     // this.timeLogger.log(LogEvent.COMPUTE_PLAN, {stepId: step._id});
   }
 }

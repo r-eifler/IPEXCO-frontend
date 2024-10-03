@@ -21,4 +21,12 @@ export class PlannerService{
         )
 
     }
+
+    postComputePlanTempGoals$(stepId: string): Observable<boolean> {
+
+        return this.http.post<IHTTPData<boolean>>(this.BASE_URL + "temp-goals/" + stepId, {data: stepId}).pipe(
+            map(({data}) => data)
+        )
+
+    }
 }

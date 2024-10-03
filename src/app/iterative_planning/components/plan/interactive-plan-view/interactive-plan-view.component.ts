@@ -67,7 +67,9 @@ export class InteractivePlanViewComponent implements OnInit {
       map((step) => step.plan)
     );
 
-    this.trace$ = this.step$.pipe(map(step => {
+    this.trace$ = this.step$.pipe(
+      filter(step => !!step?.plan && step.plan.status == PlanRunStatus.plan_found),
+      map(step => {
         let action_trace: PDDLAction[] = [];
         let state_trace: State[] = [];
         let state_trace_ex: ExState[] = [];
