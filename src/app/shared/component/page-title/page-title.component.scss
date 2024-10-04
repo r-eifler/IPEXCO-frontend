@@ -1,0 +1,6 @@
+@use '../../../../variables.scss' as variables;
+
+h1 {
+  all: unset;
+  @include variables.typography(headline-large);
+}

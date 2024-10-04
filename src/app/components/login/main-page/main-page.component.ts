@@ -1,32 +1,23 @@
-import { takeUntil } from "rxjs/operators";
-import { AuthenticationService } from "../../../service/authentication/authentication.service";
-import { AfterViewChecked, Component, OnDestroy, OnInit } from "@angular/core";
-import { ResponsiveService } from "src/app/service/responsive/responsive.service";
-import { gsap } from "gsap";
-import { RegisterComponent } from "../register/register.component";
-import { ActivatedRoute, Router } from "@angular/router";
-import { Subject } from "rxjs";
-import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
+import { Component } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
+import { gsap } from "gsap";
+import { ResponsiveService } from "src/app/service/responsive/responsive.service";
+import { RegisterComponent } from "../register/register.component";
 
 @Component({
   selector: "app-main-page",
   templateUrl: "./main-page.component.html",
   styleUrls: ["./main-page.component.scss"],
 })
-export class MainPageComponent implements OnInit, AfterViewChecked {
+export class MainPageComponent {
 
   isMobile: boolean;
 
   constructor(
     private responsiveService: ResponsiveService,
-    private userService: AuthenticationService,
-    private router: Router,
-    private route: ActivatedRoute,
     public dialog: MatDialog
-  ) {}
-
-  async ngOnInit(): Promise<void> {
+  ) {
     this.responsiveService
       .getMobileStatus()
       .pipe(takeUntilDestroyed())
@@ -34,14 +25,6 @@ export class MainPageComponent implements OnInit, AfterViewChecked {
         this.isMobile = isMobile;
       });
     this.responsiveService.checkWidth();
-
-    // if (this.userService.loggedIn()) {
-    //   await this.router.navigate(['/overview'], { relativeTo: this.route });
-    // }
-  }
-
-  ngAfterViewChecked(): void {
-    // this.animateLogo();
   }
 
   animateLogo() {

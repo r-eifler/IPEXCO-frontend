@@ -1,43 +1,71 @@
-<div style="width: 100%">
-  <div class="header-container">
-    <h1>Projects</h1>
-  </div>
-  <div class="project-container">
-    <mat-card
-      appearance="outlined"
-      *ngFor="let projectMetaData of projectsMetaData$ | async"
-      class="project-card">
-      <mat-card-header>
-        <div mat-card-avatar>
-          <span class="material-icons"> games </span>
-        </div>
-        <mat-card-title>{{ projectMetaData.name }}</mat-card-title>
-        <mat-card-subtitle>Project</mat-card-subtitle>         
-      </mat-card-header>
-      <mat-card-content>
-        <p>
-          {{ projectMetaData.description }}
-        </p>
-      </mat-card-content>
-      
-      <mat-card-actions style="display: flex; flex-direction: row; justify-content: flex-end;">
-        <button mat-icon-button [matMenuTriggerFor]="menu">
-          <mat-icon>more_vert</mat-icon>
-        </button>
-        <button mat-icon-button [routerLink]="['/projects', projectMetaData._id]">
-          <mat-icon>play_arrow</mat-icon>
-        </button>
-      </mat-card-actions>
-      <mat-menu #menu="matMenu" yPosition="below">
-        <button mat-menu-item (click)="openDeleteDialog(projectMetaData)">
-          <mat-icon>delete</mat-icon>
-          <span>delete</span>
-        </button>
-      </mat-menu>
-    </mat-card>
+<app-page>
+  <app-page-title>Projects</app-page-title>
+  <app-page-content>
+    <div class="project-container">
+      <mat-card
+        appearance="outlined"
+        *ngFor="let projectMetaData of projectsMetaData$ | async"
+        class="project-card">
+        <mat-card-header>
+          <div mat-card-avatar>
+            <span class="material-icons"> games </span>
+          </div>
+          <mat-card-title>{{ projectMetaData.name }}</mat-card-title>
+          <mat-card-subtitle>Project</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <p>
+            {{ projectMetaData.description }}
+          </p>
+        </mat-card-content>
+
+        <mat-card-actions style="display: flex; flex-direction: row; justify-content: flex-end;">
+          <button mat-icon-button [matMenuTriggerFor]="menu">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <button mat-icon-button [routerLink]="['/projects', projectMetaData._id]">
+            <mat-icon>play_arrow</mat-icon>
+          </button>
+        </mat-card-actions>
+        <mat-menu #menu="matMenu" yPosition="below">
+          <button mat-menu-item (click)="openDeleteDialog(projectMetaData)">
+            <mat-icon>delete</mat-icon>
+            <span>delete</span>
+          </button>
+        </mat-menu>
+      </mat-card>
 
 
-    <mat-card *ngIf="(projectCreationNone$ | async)"
+      <button class="new-project" (click)="new_project_form()">
+        <mat-card *ngIf="(projectCreationNone$ | async)"
+          appearance="outlined"
+          class="project-card">
+            <div class="new-project__content">
+              <span>New Project</span>
+              <mat-icon>add</mat-icon>
+            </div>
+        </mat-card>
+      </button>
+
+      <mat-card *ngIf="(projectCreationPending$ | async)"
+        appearance="outlined"
+        class="project-card">
+        <mat-card-header>
+          <div mat-card-avatar>
+            <span class="material-icons"> games </span>
+          </div>
+          <mat-card-title>New Project</mat-card-title>
+          <mat-card-subtitle>Project</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+        </mat-card-content>
+
+        <mat-card-actions style="display: flex; flex-direction: row; justify-content: flex-end;">
+          <mat-spinner></mat-spinner>
+        </mat-card-actions>
+      </mat-card>
+
+      <mat-card *ngIf="(projectCreationError$ | async)"
       appearance="outlined"
       class="project-card">
       <mat-card-header>
@@ -45,56 +73,16 @@
           <span class="material-icons"> games </span>
         </div>
         <mat-card-title>New Project</mat-card-title>
-        <mat-card-subtitle>Project</mat-card-subtitle>         
+        <mat-card-subtitle>Project</mat-card-subtitle>
       </mat-card-header>
       <mat-card-content>
       </mat-card-content>
-      
+
       <mat-card-actions style="display: flex; flex-direction: row; justify-content: flex-end;">
-        <button
-          mat-mini-fab
-          color="accent" 
-          (click)="new_project_form()">
-          <mat-icon>add</mat-icon>
-        </button>
+        <mat-icon fontIcon="error"></mat-icon>
       </mat-card-actions>
     </mat-card>
 
-    <mat-card *ngIf="(projectCreationPending$ | async)"
-      appearance="outlined"
-      class="project-card">
-      <mat-card-header>
-        <div mat-card-avatar>
-          <span class="material-icons"> games </span>
-        </div>
-        <mat-card-title>New Project</mat-card-title>
-        <mat-card-subtitle>Project</mat-card-subtitle>         
-      </mat-card-header>
-      <mat-card-content>
-      </mat-card-content>
-      
-      <mat-card-actions style="display: flex; flex-direction: row; justify-content: flex-end;">
-        <mat-spinner></mat-spinner>
-      </mat-card-actions>
-    </mat-card>
-
-    <mat-card *ngIf="(projectCreationError$ | async)"
-    appearance="outlined"
-    class="project-card">
-    <mat-card-header>
-      <div mat-card-avatar>
-        <span class="material-icons"> games </span>
-      </div>
-      <mat-card-title>New Project</mat-card-title>
-      <mat-card-subtitle>Project</mat-card-subtitle>         
-    </mat-card-header>
-    <mat-card-content>
-    </mat-card-content>
-    
-    <mat-card-actions style="display: flex; flex-direction: row; justify-content: flex-end;">
-      <mat-icon fontIcon="error"></mat-icon>
-    </mat-card-actions>
-  </mat-card>
-
-  </div>
-</div>
+    </div>
+  </app-page-content>
+</app-page>

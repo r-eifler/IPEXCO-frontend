@@ -9,6 +9,20 @@ $primary-darker: mat.get-theme-color(ipexco-theme.$light-theme, primary, 40);
 $accent: mat.get-theme-color(ipexco-theme.$light-theme, secondary, 80);
 $warn: mat.get-theme-color(ipexco-theme.$light-theme, error, 50);
 
+
+@mixin typography($level) {
+  font: mat.get-theme-typography(ipexco-theme.$light-theme, $level, font);
+  font-family: mat.get-theme-typography(ipexco-theme.$light-theme, $level, font-family);
+  font-size: mat.get-theme-typography(ipexco-theme.$light-theme, $level, font-size);
+  font-weight: mat.get-theme-typography(ipexco-theme.$light-theme, $level, font-weight);
+  line-height: mat.get-theme-typography(ipexco-theme.$light-theme, $level, line-height);
+  letter-spacing: mat.get-theme-typography(ipexco-theme.$light-theme, $level, letter-spacing);
+}
+
+@mixin background-color($role) {
+  background-color: mat.get-theme-color(ipexco-theme.$light-theme, $role);
+}
+
 :root {
   @include mat.all-component-themes(ipexco-theme.$light-theme);
 }
