@@ -12,14 +12,14 @@
           <span class="material-icons"> games </span>
         </div>
         <mat-card-title>{{ projectMetaData.name }}</mat-card-title>
-        <mat-card-subtitle>Project</mat-card-subtitle>         
+        <mat-card-subtitle>Project</mat-card-subtitle>
       </mat-card-header>
       <mat-card-content>
         <p>
           {{ projectMetaData.description }}
         </p>
       </mat-card-content>
-      
+
       <mat-card-actions style="display: flex; flex-direction: row; justify-content: flex-end;">
         <button mat-icon-button [matMenuTriggerFor]="menu">
           <mat-icon>more_vert</mat-icon>
@@ -37,28 +37,16 @@
     </mat-card>
 
 
-    <mat-card *ngIf="(projectCreationNone$ | async)"
-      appearance="outlined"
-      class="project-card">
-      <mat-card-header>
-        <div mat-card-avatar>
-          <span class="material-icons"> games </span>
-        </div>
-        <mat-card-title>New Project</mat-card-title>
-        <mat-card-subtitle>Project</mat-card-subtitle>         
-      </mat-card-header>
-      <mat-card-content>
-      </mat-card-content>
-      
-      <mat-card-actions style="display: flex; flex-direction: row; justify-content: flex-end;">
-        <button
-          mat-mini-fab
-          color="accent" 
-          (click)="new_project_form()">
-          <mat-icon>add</mat-icon>
-        </button>
-      </mat-card-actions>
-    </mat-card>
+    <button class="new-project" (click)="new_project_form()">
+      <mat-card *ngIf="(projectCreationNone$ | async)"
+        appearance="outlined"
+        class="project-card">
+          <div class="new-project__content">
+            <span>New Project</span>
+            <mat-icon>add</mat-icon>
+          </div>
+      </mat-card>
+    </button>
 
     <mat-card *ngIf="(projectCreationPending$ | async)"
       appearance="outlined"
@@ -68,11 +56,11 @@
           <span class="material-icons"> games </span>
         </div>
         <mat-card-title>New Project</mat-card-title>
-        <mat-card-subtitle>Project</mat-card-subtitle>         
+        <mat-card-subtitle>Project</mat-card-subtitle>
       </mat-card-header>
       <mat-card-content>
       </mat-card-content>
-      
+
       <mat-card-actions style="display: flex; flex-direction: row; justify-content: flex-end;">
         <mat-spinner></mat-spinner>
       </mat-card-actions>
@@ -86,11 +74,11 @@
         <span class="material-icons"> games </span>
       </div>
       <mat-card-title>New Project</mat-card-title>
-      <mat-card-subtitle>Project</mat-card-subtitle>         
+      <mat-card-subtitle>Project</mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
     </mat-card-content>
-    
+
     <mat-card-actions style="display: flex; flex-direction: row; justify-content: flex-end;">
       <mat-icon fontIcon="error"></mat-icon>
     </mat-card-actions>

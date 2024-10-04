@@ -1,31 +1,56 @@
-@import "../../../../variables.scss";
+@use "../../../../variables.scss" as variables;
 
 .project-card {
-  width: 20%;
-  min-width: 300px;
-  margin: 1%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  display: grid;
 }
 
 .project-container {
   box-sizing: border-box;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  row-gap: 10px;
-  padding: 10px;
-}
-
-.add-button {
-  position: fixed;
-  right: 25px;
-  bottom: 25px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));;
+  gap: var(--spacing-200);
 }
 
 .header-container {
   box-sizing: border-box;
   width: 100%;
   padding: 0px 25px 0px 25px;
+}
+
+.new-project {
+  all: unset;
+  cursor: pointer;
+
+  @include variables.typography(title-large);
+
+  transition: all 200ms;
+  opacity: 0.5;
+
+  &:hover {
+    opacity: 0.7;
+
+    &__content {
+      @include variables.background-color(surface-container);
+    }
+  }
+
+  &:active {
+    opacity: 0.9;
+  }
+
+  mat-card {
+    overflow: hidden;
+  }
+
+  &__content {
+    padding: var(--spacing-400);
+
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-300);
+    justify-content: center;
+    align-items: center;
+
+    @include variables.background-color(surface-container-low);
+  }
 }
