@@ -2,10 +2,9 @@
   box-sizing: border-box;
   width: 100%;
   height: fit-content;
-  display: grid;
-  grid-template-columns: 5fr 1fr;
-  row-gap: 10px;
-  column-gap: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .sub-container {

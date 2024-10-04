@@ -39,48 +39,48 @@ export class FinishedStepNavigatorComponent implements OnInit {
     this.settings$ = this.store.select(selectIterativePlanningProject).pipe(
       map(p => p?.settings)
     );
-
-    this.showTab$ = combineLatest([this.step$, this.iterfaceStatus$]).pipe(
-      takeUntilDestroyed(),
-      filter(([step, stati]) => !!step && !!stati),
-      map(([step, stati]) => {
-        let status: FinishedStepInterfaceStatus = stati.find(
-          (s) => s._id == step._id
-        );
-        if (status) {
-          return status.tab;
-        }
-        status = {
-          _id: step._id,
-          tab: 0,
-          question: null,
-          conflict: null,
-          dependencies: null,
-          viewPos: 0,
-        };
-        this.finishedStepInterfaceStatusService.saveObject(status);
-        return 1;
-      })
-    );
   }
+  //   this.showTab$ = combineLatest([this.step$, this.iterfaceStatus$]).pipe(
+  //     takeUntilDestroyed(),
+  //     filter(([step, stati]) => !!step && !!stati),
+  //     map(([step, stati]) => {
+  //       let status: FinishedStepInterfaceStatus = stati.find(
+  //         (s) => s._id == step._id
+  //       );
+  //       if (status) {
+  //         return status.tab;
+  //       }
+  //       status = {
+  //         _id: step._id,
+  //         tab: 0,
+  //         question: null,
+  //         conflict: null,
+  //         dependencies: null,
+  //         viewPos: 0,
+  //       };
+  //       this.finishedStepInterfaceStatusService.saveObject(status);
+  //       return 1;
+  //     })
+  //   );
+  // }
 
-  setTab(tab: number) {
-    combineLatest([this.step$, this.iterfaceStatus$])
-      .pipe(
-        filter(([step, stati]) => !!step && !!stati),
-        take(1)
-      )
-      .subscribe(([step, stati]) => {
-        let status: FinishedStepInterfaceStatus = stati.find(
-          (s) => s._id == step._id
-        );
-        if (status) {
-          let newStatus = { ...status, tab };
-          console.log(newStatus);
-          this.finishedStepInterfaceStatusService.saveObject(newStatus);
-        }
-      });
-  }
+  // setTab(tab: number) {
+  //   combineLatest([this.step$, this.iterfaceStatus$])
+  //     .pipe(
+  //       filter(([step, stati]) => !!step && !!stati),
+  //       take(1)
+  //     )
+  //     .subscribe(([step, stati]) => {
+  //       let status: FinishedStepInterfaceStatus = stati.find(
+  //         (s) => s._id == step._id
+  //       );
+  //       if (status) {
+  //         let newStatus = { ...status, tab };
+  //         console.log(newStatus);
+  //         this.finishedStepInterfaceStatusService.saveObject(newStatus);
+  //       }
+  //     });
+  // }
 
   ngOnInit(): void {}
 

@@ -29,7 +29,7 @@ export interface State {
 }
 
 export function nextState(state: State, action: PDDLAction): State {
-  console.log('Compute Next State: ' + action.name);
+  // console.log('Compute Next State: ' + action.name);
   let new_values = [...state.values];
   for (const eff of action.effect) {
     if (eff.negated) {

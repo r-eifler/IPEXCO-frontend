@@ -9,4 +9,12 @@
       [settings]="settings$ | async"
       heading="Enforced Goals">
     </app-goals-list>
+    <app-goal-list-highlighted
+      class="sub-content"
+      [baseGoals]="baseGoals$ | async"
+      [goalIds]="satisfiedGoals$ | async"
+      [highlighted]="enforcedGoals$ | async"
+      [settings]="settings$ | async"
+      heading="Satisfied Goals">
+    </app-goal-list-highlighted>
 </div>

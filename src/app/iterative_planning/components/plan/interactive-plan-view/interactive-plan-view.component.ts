@@ -95,7 +95,7 @@ export class InteractivePlanViewComponent implements OnInit {
           }),
         });
 
-        console.log(state_trace_ex[0])
+        // console.log(state_trace_ex[0])
 
         let used_predicate_names: Set<string> = new Set();
 
@@ -149,7 +149,7 @@ export class InteractivePlanViewComponent implements OnInit {
           // console.log(state_trace_ex)
         }
 
-        console.log(used_predicate_names)
+        // console.log(used_predicate_names)
         state_trace_ex.forEach((state) => {
           state.facts = state.facts.filter((f) =>
             used_predicate_names.has(f.fact.name)

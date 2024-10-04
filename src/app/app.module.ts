@@ -216,6 +216,7 @@ import { IterationStepService } from './iterative_planning/service/iteration-ste
 import { LoadIterationStepsEffect } from './iterative_planning/state/effects/load-iteration-steps.effect';
 import { ComputePlanEffect } from './iterative_planning/state/effects/compute-plan.effect';
 import { PlannerService } from './iterative_planning/service/planner.service';
+import { GoalListHighlightedComponent } from './iterative_planning/components/goals/goal-list-highlighted/goal-list-highlighted.component';
 
 
 @NgModule({
@@ -298,6 +299,7 @@ import { PlannerService } from './iterative_planning/service/planner.service';
     AskDeleteComponent,
     ProjectSettingsContainerComponent,
     IterativePlanningBaseComponent,
+    GoalListHighlightedComponent,
   ],
   imports: [
     StoreModule.forRoot(
