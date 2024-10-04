@@ -1,0 +1,26 @@
+@use '../../../../../styles/devices' as devices;
+
+.page {
+  padding-top: var(--spacing-600);
+
+  margin-inline: var(--spacing-200);
+  width: auto;
+
+  display: grid;
+  gap: var(--spacing-500);
+
+  @include devices.md {
+    margin-inline: var(--spacing-800);
+    width: auto;
+  }
+
+  @include devices.lg {
+    margin-inline: auto;
+    width: 832px;
+  }
+
+  @include devices.xl {
+    margin-inline: auto;
+    width: 1040;
+  }
+}
