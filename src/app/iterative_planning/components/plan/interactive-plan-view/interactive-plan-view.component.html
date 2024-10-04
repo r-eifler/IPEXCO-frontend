@@ -1,12 +1,13 @@
+@let trace = (trace$ | async);
 <div class="action-container">
-  <mat-card appearance="outlined" class="state-card" *ngIf=" (trace$ | async)?.states_visible[0]">
+  <mat-card appearance="outlined" class="state-card" *ngIf=" trace?.states_visible[0]">
     <mat-card-header>
       <mat-card-title>Initial State</mat-card-title>
     </mat-card-header>
     <mat-card-content class="state-card-content">
       <div class="state-list">
         <div class="fact"
-          *ngFor="let item of (trace$ | async)?.state_trace_ex[0].facts"
+          *ngFor="let item of trace?.state_trace_ex[0].facts"
           [class.precondition]="item.precon"
           [class.effect_pos]="item.effect_pos && !item.effect_neg"
           [class.effect_neg]="!item.effect_pos && item.effect_neg"
@@ -18,7 +19,7 @@
     </mat-card-content>
   </mat-card>
 
-  <ng-container *ngFor="let action of  (trace$ | async)?.action_trace; let i = index">
+  <ng-container *ngFor="let action of  trace?.action_trace; let i = index">
     <mat-card appearance="outlined" class="action-card">
       <!-- <button mat-icon-button
         (click)="states_visible[i] = ! states_visible[i]">
@@ -34,7 +35,7 @@
     <mat-card
       appearance="outlined"
       class="state-card"
-      *ngIf="i < (plan$ | async).actions.length - 1 &&  (trace$ | async)?.states_visible[i + 1]"
+      *ngIf="i < (plan$ | async).actions.length - 1 &&  trace?.states_visible[i + 1]"
     >
       <!-- <mat-card-header>
         <mat-card-title>State {{i+1}}</mat-card-title>
@@ -42,7 +43,7 @@
       <mat-card-content class="state-card-content">
         <div class="state-list">
           <div class="fact"
-            *ngFor="let item of  (trace$ | async)?.state_trace_ex[i + 1].facts"
+            *ngFor="let item of  trace?.state_trace_ex[i + 1].facts"
             [class.precondition]="item.precon"
             [class.effect_pos]="item.effect_pos && !item.effect_neg"
             [class.effect_neg]="!item.effect_pos && item.effect_neg"
@@ -56,14 +57,14 @@
   </ng-container>
 
   <mat-card appearance="outlined" class="state-card" 
-    *ngIf=" (trace$ | async)?.states_visible[ (trace$ | async)?.state_trace.length - 1]">
+    *ngIf=" trace?.states_visible[ trace?.state_trace.length - 1]">
     <mat-card-header>
       <mat-card-title>Goal State</mat-card-title>
     </mat-card-header>
     <mat-card-content class="state-card-content">
       <div class="state-list">
         <div class="fact"
-          *ngFor="let item of  (trace$ | async)?.state_trace_ex[ (trace$ | async)?.state_trace_ex.length - 1].facts"
+          *ngFor="let item of  trace?.state_trace_ex[ trace?.state_trace_ex.length - 1].facts"
           [class.precondition]="item.precon"
           [class.effect_pos]="item.effect_pos && !item.effect_neg"
           [class.effect_neg]="!item.effect_pos && item.effect_neg"

@@ -95,7 +95,7 @@ export class InteractivePlanViewComponent implements OnInit {
           }),
         });
 
-        // console.log(state_trace_ex[0])
+        console.log(state_trace_ex[0])
 
         let used_predicate_names: Set<string> = new Set();
 

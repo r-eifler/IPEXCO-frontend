@@ -9,14 +9,13 @@
   <div>
     <mat-selection-list
       [multiple]="false"
-      (selectionChange)="selectStep($event)"
-    >
+      (selectionChange)="selectStep($event)">
+
       <mat-list-option
         *ngFor="let step of steps$ | async"
         [value]="step"
-        [selected]="step._id == (selected$ | async)?._id"
-      >
-        <!-- <mat-icon matListIcon>label</mat-icon> -->
+        [selected]="step._id == (selected$ | async)?._id">
+
         <div class="step-item">
           <mat-icon class="step-icon" *ngIf="hasPlan(step)">check</mat-icon>
           <mat-icon
@@ -31,18 +30,28 @@
             diameter="25"
           ></mat-spinner>
           <p class="step-name">{{ step.name }}</p>
-          <!-- <button
-            mat-icon-button
-            class="delete-button"
-            (click)="deleteStep(step)">
-            <mat-icon>delete</mat-icon>
-          </button> -->
         </div>
+
       </mat-list-option>
+
+      @let new = newStep$ | async;
+      <mat-list-option
+        *ngIf="new"
+        [value]="new"
+        [selected]="new._id == (selected$ | async)?._id">
+
+        <div class="step-item">
+          <mat-icon class="step-icon">edit</mat-icon>
+          <p class="step-name">{{ new.name }}</p>
+        </div>
+
+      </mat-list-option>
+
+
     </mat-selection-list>
-    <mat-divider inset="true"></mat-divider>
+    <!-- <mat-divider inset="true"></mat-divider>
     <div class="new-step" *ngIf="newStep$ | async" (click)="selectNewStep()">
       <p class="new-step-name">{{ (newStep$ | async).name }}</p>
-    </div>
+    </div> -->
   </div>
 </div>

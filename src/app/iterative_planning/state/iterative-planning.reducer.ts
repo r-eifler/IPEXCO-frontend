@@ -46,7 +46,7 @@ export const iterativePlanningReducer = createReducer(
     })),
     on(loadIterationSteps, (state): IterativePlanningState => ({
         ...state,
-        iterationSteps: {state: LoadingState.Loading, data: undefined}
+        iterationSteps: {state: LoadingState.Loading, data: state.iterationSteps.data}
     })),
     on(loadIterationStepsSuccess, (state, {iterationSteps}): IterativePlanningState => ({
         ...state,

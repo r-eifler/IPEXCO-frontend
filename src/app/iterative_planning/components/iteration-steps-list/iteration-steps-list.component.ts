@@ -67,6 +67,7 @@ export class IterationStepsListComponent implements OnInit {
   }
 
   isPending(step: IterationStep): boolean {
-    return step.plan && step.plan.status == PlanRunStatus.pending;
+    return step.plan && (step.plan.status == PlanRunStatus.pending || 
+      step.plan.status == PlanRunStatus.running);
   }
 }
