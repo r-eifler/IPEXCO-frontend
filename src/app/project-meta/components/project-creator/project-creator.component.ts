@@ -31,9 +31,9 @@ export class ProjectCreatorComponent implements OnInit {
     description: ['', Validators.required],
   });
 
-  selectedDomain: any 
-  selectedProblem: any 
-  selectedSpecification: any 
+  selectedDomain: any
+  selectedProblem: any
+  selectedSpecification: any
 
   projects$: Observable<Project[]>;
 
@@ -114,15 +114,11 @@ export class ProjectCreatorComponent implements OnInit {
           },
           public: false,
         };
-    
+
         this.store.dispatch(createProject({project: newProject}))
-    
+
         this.dialogRef.close();
       }
     )
-  }
-
-  onBack(): void {
-    this.dialogRef.close();
   }
 }

@@ -11,7 +11,6 @@
       </mat-card-header>
       <mat-accordion multi>
         <mat-expansion-panel
-          hideToggle
           *ngFor="let conflict of dependencies$ | async; let i = index"
           expanded="true"
           [class.selected]="selectedConflictIndex == i">
@@ -43,7 +42,7 @@
     <mat-card-header *ngIf="(question$ | async)">
 
       <mat-card-title *ngIf="(dependencies$ | async).length > 0 && (solvableAtAll$ | async)">
-        ... because to satisfy soft goal 
+        ... because to satisfy soft goal
       </mat-card-title>
       <mat-card-title *ngIf="(dependencies$ | async).length == 0 && (solvableAtAll$ | async)">
         The selected soft goal has no conflicts.
@@ -72,7 +71,6 @@
         </mat-card-header>
         <mat-accordion multi style="margin: 20px;">
           <mat-expansion-panel
-            hideToggle
             *ngFor="let conflict of dependencies$ | async; let i = index"
             expanded="true"
             [class.selected]="selectedConflictIndex == i">

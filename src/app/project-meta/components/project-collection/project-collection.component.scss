@@ -20,6 +20,7 @@
 .new-project {
   all: unset;
   cursor: pointer;
+  display: grid;
 
   @include variables.typography(title-large);
 
