@@ -1,6 +1,7 @@
 <div class="container">
-    <button type="button" mat-icon-button (click)="fileInput.click()">
+    <button type="button" mat-button (click)="fileInput.click()">
       <mat-icon>note_add</mat-icon>
+      <ng-content></ng-content>
     </button>
     <input
       hidden
