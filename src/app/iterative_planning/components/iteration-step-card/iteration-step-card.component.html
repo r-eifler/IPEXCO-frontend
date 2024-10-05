@@ -28,8 +28,10 @@
 
   <mat-card-actions>
     <div class="action-container">
-      <a class="details" mat-stroked-button [routerLink]="[step()?._id]">Details</a>
-      <button mat-icon-button><mat-icon>call_split</mat-icon></button>
+      <a class="details" mat-stroked-button [routerLink]="[step()?._id ]">Details</a>
+      <button mat-icon-button
+        matTooltip="Creates a new iteration based on the properties selected in this iteration."
+      ><mat-icon>call_split</mat-icon></button>
     </div>
   </mat-card-actions>
 </mat-card>
