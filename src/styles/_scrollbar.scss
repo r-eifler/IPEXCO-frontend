@@ -1,0 +1,26 @@
+@use '../variables' as variables;
+
+* {
+  scrollbar-color: red;
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+
+  &:hover {
+    width: 8px;
+  }
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  @include variables.background-color(on-surface-variant);
+  border-radius: var(--radius-full);
+
+  cursor: pointer;
+
+  margin: var(--spacing-050);
+}

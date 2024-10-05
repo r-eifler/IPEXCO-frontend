@@ -1,0 +1,11 @@
+<div class="chat-container">
+  <div class="message-container">
+    <ng-content select="app-chat-message,[app-chat-action]"></ng-content>
+    @if(isSenderTyping()) {
+      <app-chat-typing></app-chat-typing>
+    }
+  </div>
+  <div class="input-container">
+    <ng-content select="app-chat-input"></ng-content>
+  </div>
+</div>

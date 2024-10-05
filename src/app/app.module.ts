@@ -218,6 +218,7 @@ import {
 } from "./service/user-study/meta-study-services";
 import { UserStudyCurrentDataService, UserStudyDataService } from "./service/user-study/user-study-data.service";
 import { ActionCardModule } from './shared/component/action-card/action-card.module';
+import { ChatModule } from './shared/component/chat/chat.module';
 import { PageModule } from './shared/component/page/page.module';
 
 
@@ -380,6 +381,7 @@ import { PageModule } from './shared/component/page/page.module';
     ColorPickerModule,
     PageModule,
     ActionCardModule,
+    ChatModule,
   ],
   providers: [
     UserStore,
