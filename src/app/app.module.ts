@@ -217,9 +217,7 @@ import {
     SelectedMetaStudyService,
 } from "./service/user-study/meta-study-services";
 import { UserStudyCurrentDataService, UserStudyDataService } from "./service/user-study/user-study-data.service";
-import { PageContentComponent } from './shared/component/page-content/page-content.component';
-import { PageTitleComponent } from './shared/component/page-title/page-title.component';
-import { PageComponent } from './shared/component/page/page/page.component';
+import { PageModule } from './shared/component/page/page.module';
 
 
 @NgModule({
@@ -303,9 +301,6 @@ import { PageComponent } from './shared/component/page/page/page.component';
     ProjectSettingsContainerComponent,
     IterativePlanningBaseComponent,
     GoalListHighlightedComponent,
-    PageComponent,
-    PageTitleComponent,
-    PageContentComponent,
   ],
   imports: [
     StoreModule.forRoot(
@@ -382,6 +377,7 @@ import { PageComponent } from './shared/component/page/page/page.component';
     NgxChartsModule,
     MatTooltipModule,
     ColorPickerModule,
+    PageModule,
   ],
   providers: [
     UserStore,
