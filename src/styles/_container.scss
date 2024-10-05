@@ -1,0 +1,49 @@
+
+// Small devices
+@mixin sm {
+    @container (min-width: #{$container-sm-min}) {
+        @content;
+    }
+ }
+
+ // Medium devices
+ @mixin md {
+    @container (min-width: #{$container-md-min}) {
+        @content;
+    }
+ }
+
+ // Large devices
+ @mixin lg {
+    @container (min-width: #{$container-lg-min}) {
+        @content;
+    }
+ }
+
+ // Extra large devices
+ @mixin xl {
+    @container (min-width: #{$container-xl-min}) {
+        @content;
+    }
+ }
+
+ @mixin xxl {
+    @container (min-width: #{$container-xxl-min}) {
+        @content;
+    }
+ }
+
+ // Small tablets and large smartphones (landscape view)
+$container-sm-min: 576px;
+
+// Small tablets (portrait view)
+$container-md-min: 768px;
+
+// Tablets and small desktops
+$container-lg-min: 992px;
+
+// Large tablets and desktops
+$container-xl-min: 1200px;
+
+// Large desktops
+$container-xxl-min: 1920px;

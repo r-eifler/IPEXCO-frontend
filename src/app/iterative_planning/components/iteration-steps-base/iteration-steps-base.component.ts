@@ -1,11 +1,9 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
-import { DemoHelpDialogComponent } from "../../../components/demo/demo-help-dialog/demo-help-dialog.component";
-import { Subject, Observable } from "rxjs";
-import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
-import { IterationStep } from "../../domain/iteration_step";
+import { Component, OnInit } from "@angular/core";
 import { Store } from "@ngrx/store";
-import { selectIterativePlanningNewStep, selectIterativePlanningSelectedStep } from "../../state/iterative-planning.selector";
+import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
+import { IterationStep } from "../../domain/iteration_step";
+import { selectIterativePlanningNewStep, selectIterativePlanningSelectedStep } from "../../state/iterative-planning.selector";
 
 @Component({
   selector: "app-iteration-steps-base",
@@ -22,7 +20,6 @@ export class ProjectIterativePlanningBaseComponent
 
   constructor(
     private store: Store,
-    public dialog: MatDialog
   ) {
     this.step$ = this.store.select(selectIterativePlanningSelectedStep);
     this.stepSelected$ = this.step$.pipe(map(s => !!s));
@@ -31,12 +28,4 @@ export class ProjectIterativePlanningBaseComponent
 
   ngOnInit(): void {}
 
-  showHelp() {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.width = "80%";
-    dialogConfig.height = "80%";
-    dialogConfig.data = {};
-
-    const dialogRef = this.dialog.open(DemoHelpDialogComponent, dialogConfig);
-  }
 }

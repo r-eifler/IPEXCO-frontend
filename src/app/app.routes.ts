@@ -1,25 +1,23 @@
+import { Routes } from "@angular/router";
+import { DemoBaseComponent } from "./components/demo/demo-base/demo-base.component";
+import { DemoCollectionComponent } from "./components/demo/demo-collection/demo-collection.component";
+import { FilesCollectionComponent } from "./components/files/files-collection/files-collection.component";
 import { HelpPageComponent } from "./components/login/help-page/help-page.component";
 import { MainInfoComponent } from "./components/login/main-info/main-info.component";
-import { Routes } from "@angular/router";
 import { MainPageComponent } from "./components/login/main-page/main-page.component";
+import { MetaStudyCreatorComponent } from "./components/user-study/meta-study/meta-study-creator/meta-study-creator.component";
+import { StudySelectionRedirectionComponent } from "./components/user-study/meta-study/study-selection-redirection/study-selection-redirection.component";
+import { UserStudyBaseComponent } from "./components/user-study/user-study-base/user-study-base.component";
+import { UserStudyCollectionBaseComponent } from "./components/user-study/user-study-collection-base/user-study-collection-base.component";
+import { UserStudyCreatorComponent } from "./components/user-study/user-study-creator/user-study-creator.component";
+import { UserStudyEndComponent } from "./components/user-study/user-study-end/user-study-end.component";
+import { UserStudyExecuteComponent } from "./components/user-study/user-study-execute/user-study-execute.component";
+import { UserStudyNavigationComponent } from "./components/user-study/user-study-navigation/user-study-navigation.component";
+import { UserStudyStartComponent } from "./components/user-study/user-study-start/user-study-start.component";
 import { UserMainPageComponent } from "./components/user/user-main-page/user-main-page.component";
 import { ProjectCollectionComponent } from "./project-meta/components/project-collection/project-collection.component";
 import { ProjectBaseComponent } from "./project/components/project-base/project-base.component";
-import { ProjectIterativePlanningBaseComponent } from "./iterative_planning/components/iteration-steps-base/iteration-steps-base.component";
-import { DemoCollectionComponent } from "./components/demo/demo-collection/demo-collection.component";
-import { DemoBaseComponent } from "./components/demo/demo-base/demo-base.component";
-import { FilesCollectionComponent } from "./components/files/files-collection/files-collection.component";
-import { UserStudyCreatorComponent } from "./components/user-study/user-study-creator/user-study-creator.component";
-import { UserStudyBaseComponent } from "./components/user-study/user-study-base/user-study-base.component";
-import { UserStudyStartComponent } from "./components/user-study/user-study-start/user-study-start.component";
-import { UserStudyExecuteComponent } from "./components/user-study/user-study-execute/user-study-execute.component";
-import { UserStudyEndComponent } from "./components/user-study/user-study-end/user-study-end.component";
 import { AuthGuard } from "./route-guards/auth-guard.guard";
-import { UserStudyNavigationComponent } from "./components/user-study/user-study-navigation/user-study-navigation.component";
-import { MetaStudyCreatorComponent } from "./components/user-study/meta-study/meta-study-creator/meta-study-creator.component";
-import { StudySelectionRedirectionComponent } from "./components/user-study/meta-study/study-selection-redirection/study-selection-redirection.component";
-import { UserStudyCollectionBaseComponent } from "./components/user-study/user-study-collection-base/user-study-collection-base.component";
-import { IterativePlanningBaseComponent } from "./iterative_planning/components/iterative-planning-base/iterative-planning-base.component";
 
 export const appRoutes: Routes = [
   { path: "", component: MainPageComponent },
@@ -43,8 +41,8 @@ export const appRoutes: Routes = [
     children: [],
   },
   {
-    path: "projects/:projectid/iterative-planning",
-    component: IterativePlanningBaseComponent,
+    path: "iterative-planning",
+    loadChildren: () => import('./iterative_planning/iterative-planning.module').then(m => m.IterativePlanningModule),
     canActivate: [AuthGuard],
   },
 

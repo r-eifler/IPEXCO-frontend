@@ -1,8 +1,11 @@
 import { Component } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
+import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { tap } from 'rxjs/operators';
+
+import { DemoHelpDialogComponent } from 'src/app/components/demo/demo-help-dialog/demo-help-dialog.component';
 import { loadProject } from '../../state/iterative-planning.actions';
 
 @Component({
@@ -16,6 +19,7 @@ export class IterativePlanningBaseComponent {
   constructor(
     store: Store,
     private route: ActivatedRoute,
+    private dialog: MatDialog
   ) {
 
     this.route.paramMap
@@ -26,4 +30,12 @@ export class IterativePlanningBaseComponent {
       ).subscribe();
   }
 
+  showHelp() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = "80%";
+    dialogConfig.height = "80%";
+    dialogConfig.data = {};
+
+     this.dialog.open(DemoHelpDialogComponent, dialogConfig);
+  }
 }

@@ -1,7 +1,4 @@
 <div class="main-container">
-  <div class="action-container">
-    <button mat-stroked-button (click)="showHelp()">Help</button>
-  </div>
 
   <div class="bottom-container">
 
@@ -20,7 +17,7 @@
     <div
       class="center-container"
       *ngIf="!(stepSelected$ | async) && (newStep$ | async)">
-      <app-new-step-navigator 
+      <app-new-step-navigator
         style="height: 100%;overflow: auto;">
       </app-new-step-navigator>
     </div>

@@ -5,8 +5,6 @@ import { PageTitleActionComponent } from './page-title-action/page-title-action.
 import { PageTitleComponent } from './page-title/page-title.component';
 import { PageComponent } from './page/page.component';
 
-
-
 @NgModule({
   imports: [ PageComponent, PageTitleComponent, PageContentComponent, PageTitleActionComponent ],
   exports: [ PageComponent, PageTitleComponent, PageContentComponent, PageTitleActionComponent],

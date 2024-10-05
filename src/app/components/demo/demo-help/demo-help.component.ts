@@ -1,19 +1,20 @@
-import { CurrentProjectService } from 'src/app/service/project/project-services';
-import { GeneralSettings } from 'src/app/interface/settings/general-settings';
-import { filter, map, takeUntil } from "rxjs/operators";
-import { Component, EventEmitter, OnDestroy, OnInit, Output } from "@angular/core";
-import { ResponsiveService } from "src/app/service/responsive/responsive.service";
-import { Observable, Subject } from "rxjs";
-import { MatStepper } from "@angular/material/stepper";
-import { LogEvent, TimeLoggerService } from "../../../service/logger/time-logger.service";
+import { Component, EventEmitter, OnDestroy, Output } from "@angular/core";
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { MatStepper } from "@angular/material/stepper";
+import { Observable } from "rxjs";
+import { filter, map } from "rxjs/operators";
+import { GeneralSettings } from 'src/app/interface/settings/general-settings';
+import { CurrentProjectService } from 'src/app/service/project/project-services';
+import { ResponsiveService } from "src/app/service/responsive/responsive.service";
+
+import { LogEvent, TimeLoggerService } from "../../../service/logger/time-logger.service";
 
 @Component({
   selector: "app-demo-help",
   templateUrl: "./demo-help.component.html",
   styleUrls: ["./demo-help.component.css"],
 })
-export class DemoHelpComponent implements OnInit, OnDestroy {
+export class DemoHelpComponent implements OnDestroy {
 
   isMobile: boolean;
   canUseQuestions = false;
@@ -27,16 +28,13 @@ export class DemoHelpComponent implements OnInit, OnDestroy {
   constructor(
     private timeLogger: TimeLoggerService,
     private responsiveService: ResponsiveService,
-    private currentProjectService: CurrentProjectService
+    currentProjectService: CurrentProjectService
   ) {
     this.settings$ = currentProjectService.getSelectedObject().pipe(
       filter(p => !!p),
       map(p => p.settings)
     );
     console.log("DEMO HELP");
-  }
-
-  ngOnInit(): void {
 
     this.timeLogger.log(LogEvent.START_USE_HELP);
 
