@@ -1,0 +1,26 @@
+@use '../../../../../variables' as vars;
+
+.quote-container {
+  padding: var(--spacing-200);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-100);
+
+  border-radius: var(--radius-100);
+
+  @include vars.background-color(primary-container);
+  @include vars.color(on-primary-container);
+
+  font-style: italic;
+  font-weight: 200;
+
+  .quote {
+    @include vars.typography(headline-large);
+  }
+
+  .content {
+    width: 100%;
+  }
+}

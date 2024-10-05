@@ -1,0 +1,28 @@
+<mat-expansion-panel>
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      <div class="title">
+        <mat-icon>{{ property()?.icon }}</mat-icon>
+        {{ property()?.name }}
+      </div>
+    </mat-panel-title>
+    <mat-panel-description>
+      <div class="description">
+        <div class="utility">
+          <mat-icon>workspace_premium</mat-icon>
+          {{ property()?.utility }}
+        </div>
+      </div>
+    </mat-panel-description>
+  </mat-expansion-panel-header>
+
+  <div class="content-container">
+    <app-quote>
+      {{ property()?.naturalLanguageDescription }}
+    </app-quote>
+    <app-unformatted>
+      {{ property()?.formula }}
+    </app-unformatted>
+  </div>
+
+</mat-expansion-panel>

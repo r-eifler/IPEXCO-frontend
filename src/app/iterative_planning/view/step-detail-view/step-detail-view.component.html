@@ -24,6 +24,11 @@
       <app-page-section>
         <app-page-section-title>Enforced Goals</app-page-section-title>
         <app-page-section-content>
+          <div class="property-list">
+            @for(property of enforcedGoals$ | async; track property) {
+            <app-plan-proeprty-panel [property]="property"></app-plan-proeprty-panel>
+            }
+          </div>
         </app-page-section-content>
       </app-page-section>
     </app-page-section-list>

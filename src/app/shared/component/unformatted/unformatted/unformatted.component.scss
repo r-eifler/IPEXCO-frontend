@@ -1,0 +1,15 @@
+@use '../../../../../variables' as vars;
+
+.unformatted {
+  padding: var(--spacing-200);
+
+  border-radius: var(--radius-100);
+
+  @include vars.background-color(inverse-surface);
+  @include vars.color(inverse-on-surface);
+
+  pre {
+    margin: unset;
+    padding: unset;
+  }
+}
