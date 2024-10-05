@@ -31,7 +31,7 @@ export class ProjectSettingsContainerComponent implements OnInit {
   }
 
   onSaveSetting(settings: GeneralSettings): void {
-
+    console.log(settings)
     this.project$.pipe(take(1)).subscribe(
       project => {
         let newProject: Project = {
@@ -45,7 +45,7 @@ export class ProjectSettingsContainerComponent implements OnInit {
   }
 
   onSaveTemplates(templates: PlanPropertyTemplate[]): void {
-
+    console.log(templates)
     this.project$.pipe(take(1)).subscribe(
       project => {
         let newProject: Project = {

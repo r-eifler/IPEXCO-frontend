@@ -12,7 +12,8 @@
             </mat-form-field>
           </form>
     </mat-card-content>
-    <mat-card-actions>
+    <mat-card-actions class="actions">
+        <button mat-stroked-button [disabled]="!form.valid" (click)="addNewTemplate()">Add new template</button>
         <button mat-flat-button [disabled]="!form.valid" (click)="save()">Save</button>
     </mat-card-actions>
   </mat-card>
