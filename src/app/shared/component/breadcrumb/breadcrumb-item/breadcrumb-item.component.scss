@@ -1,0 +1,38 @@
+
+@use '../../../../../variables' as vars;
+
+:host {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--spacing-050);
+
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: none;
+  }
+
+  @include vars.color(on-surface);
+  @include vars.typography(label-small);
+
+  ::ng-deep {
+    mat-icon {
+      @include vars.typography(label-small);
+      font-family: 'Material Icons';
+      height: 12px;
+      width: 12px;
+    }
+  }
+}
+
+.breadcrumb {
+  display: inline;
+
+  padding-inline: var(--spacing-200);
+  padding-block: var(--spacing-100);
+
+  border-radius: var(--radius-full);
+
+  @include vars.background-color(surface-container);
+}

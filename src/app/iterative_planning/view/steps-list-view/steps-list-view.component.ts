@@ -1,9 +1,11 @@
 import { AsyncPipe, JsonPipe } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { Component, inject } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { Store } from '@ngrx/store';
 import { ActionCardModule } from 'src/app/shared/component/action-card/action-card.module';
 
+import { BreadcrumbModule } from 'src/app/shared/component/breadcrumb/breadcrumb.module';
 import { PageModule } from 'src/app/shared/component/page/page.module';
 
 import { IterationStepCardComponent } from '../../components/iteration-step-card/iteration-step-card.component';
@@ -12,7 +14,7 @@ import { selectIterativePlanningIterationSteps, selectIterativePlanningIteration
 @Component({
   selector: 'app-steps-list-view',
   standalone: true,
-  imports: [PageModule, AsyncPipe, JsonPipe, IterationStepCardComponent, ActionCardModule, MatIconModule],
+  imports: [PageModule, AsyncPipe, JsonPipe, IterationStepCardComponent, ActionCardModule, MatIconModule, RouterLink, BreadcrumbModule],
   templateUrl: './steps-list-view.component.html',
   styleUrl: './steps-list-view.component.scss'
 })
