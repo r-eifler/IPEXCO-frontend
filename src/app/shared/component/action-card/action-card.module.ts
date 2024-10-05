@@ -1,12 +1,10 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule } from "@angular/common";
+import { NgModule } from "@angular/core";
 
-
+import { ActionCardComponent } from "./action-card/action-card.component";
 
 @NgModule({
-  declarations: [],
-  imports: [
-    CommonModule
-  ]
+  imports: [ActionCardComponent, CommonModule],
+  exports: [ActionCardComponent],
 })
 export class ActionCardModule { }

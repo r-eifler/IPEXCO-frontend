@@ -23,6 +23,10 @@ $warn: mat.get-theme-color(ipexco-theme.$light-theme, error, 50);
   background-color: mat.get-theme-color(ipexco-theme.$light-theme, $role);
 }
 
+@mixin border-color() {
+  border-color: mat.get-theme-color(ipexco-theme.$light-theme, outline);
+}
+
 :root {
   @include mat.all-component-themes(ipexco-theme.$light-theme);
 }

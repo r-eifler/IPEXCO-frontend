@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-action-card',
+  selector: 'button[app-action-card]',
   standalone: true,
   imports: [],
   templateUrl: './action-card.component.html',

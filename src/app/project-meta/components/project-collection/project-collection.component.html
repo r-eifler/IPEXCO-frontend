@@ -36,15 +36,9 @@
       </mat-card>
 
 
-      <button class="new-project" (click)="new_project_form()">
-        <mat-card *ngIf="(projectCreationNone$ | async)"
-          appearance="outlined"
-          class="project-card">
-            <div class="new-project__content">
-              <span>New Project</span>
-              <mat-icon>add</mat-icon>
-            </div>
-        </mat-card>
+      <button app-action-card class="project-card" (click)="new_project_form()" *ngIf="(projectCreationNone$ | async)">
+          <span>New Project</span>
+          <mat-icon>add</mat-icon>
       </button>
 
       <mat-card *ngIf="(projectCreationPending$ | async)"

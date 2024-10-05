@@ -19,8 +19,8 @@ import { LayoutModule } from "@angular/cdk/layout";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { MatBadgeModule } from "@angular/material/badge";
 import {
-    MAT_BOTTOM_SHEET_DEFAULT_OPTIONS,
-    MatBottomSheetModule,
+  MAT_BOTTOM_SHEET_DEFAULT_OPTIONS,
+  MatBottomSheetModule,
 } from "@angular/material/bottom-sheet";
 import { MatButtonModule } from "@angular/material/button";
 import { MatButtonToggleModule } from "@angular/material/button-toggle";
@@ -58,30 +58,30 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
 // Store
 import {
-    CurrentProjectStore,
-    CurrentRunStore,
-    DemosStore,
-    DomainFilesStore,
-    DomainSpecStore,
-    DomainSpecificationFilesStore,
-    FinishedStepInterfaceStatiStore,
-    IterationStepsStore,
-    MetaStudiesStore,
-    NewIterationStepStore,
-    NewStepInterfaceStatusStore,
-    PlanPropertyMapStore,
-    ProblemFilesStore,
-    ProjectsStore,
-    RunningDemoStore,
-    RunningUserStudyStore,
-    RunsStore,
-    SelectedIterationStepStore,
-    SelectedMetaStudyStore,
-    TaskSchemaStore,
-    UserStore,
-    UserStudiesStore,
-    UserStudyCurrentDataStore,
-    UserStudyDataStore,
+  CurrentProjectStore,
+  CurrentRunStore,
+  DemosStore,
+  DomainFilesStore,
+  DomainSpecStore,
+  DomainSpecificationFilesStore,
+  FinishedStepInterfaceStatiStore,
+  IterationStepsStore,
+  MetaStudiesStore,
+  NewIterationStepStore,
+  NewStepInterfaceStatusStore,
+  PlanPropertyMapStore,
+  ProblemFilesStore,
+  ProjectsStore,
+  RunningDemoStore,
+  RunningUserStudyStore,
+  RunsStore,
+  SelectedIterationStepStore,
+  SelectedMetaStudyStore,
+  TaskSchemaStore,
+  UserStore,
+  UserStudiesStore,
+  UserStudyCurrentDataStore,
+  UserStudyDataStore,
 } from "./store/stores.store";
 
 // Services
@@ -89,18 +89,18 @@ import { IterationStepsService } from "src/app/service/planner-runs/iteration-st
 import { AuthenticationService } from "./service/authentication/authentication.service";
 import { DemosService, RunningDemoService } from "./service/demo/demo-services";
 import {
-    DomainFilesService,
-    ProblemFilesService,
+  DomainFilesService,
+  ProblemFilesService,
 } from "./service/files/pddl-file-services";
 import { PddlFileUtilsService } from "./service/files/pddl-file-utils.service";
 import { PlanPropertyMapService } from "./service/plan-properties/plan-property-services";
 import {
-    CurrentProjectService,
-    ProjectsService,
+  CurrentProjectService,
+  ProjectsService,
 } from "./service/project/project-services";
 import {
-    RunningUserStudyService,
-    UserStudiesService,
+  RunningUserStudyService,
+  UserStudiesService,
 } from "./service/user-study/user-study-services";
 
 // my components
@@ -209,14 +209,15 @@ import { LoadProjectEffect } from './project/state/effects/load-project.effect';
 import { UpdateProjectEffect } from './project/state/effects/update-project.effect';
 import { projectFeature, projectReducer } from './project/state/project.reducer';
 import {
-    FinishedStepInterfaceStatusService,
-    NewStepInterfaceStatusService,
+  FinishedStepInterfaceStatusService,
+  NewStepInterfaceStatusService,
 } from "./service/user-interface/interface-status-services";
 import {
-    MetaStudiesService,
-    SelectedMetaStudyService,
+  MetaStudiesService,
+  SelectedMetaStudyService,
 } from "./service/user-study/meta-study-services";
 import { UserStudyCurrentDataService, UserStudyDataService } from "./service/user-study/user-study-data.service";
+import { ActionCardModule } from './shared/component/action-card/action-card.module';
 import { PageModule } from './shared/component/page/page.module';
 
 
@@ -378,6 +379,7 @@ import { PageModule } from './shared/component/page/page.module';
     MatTooltipModule,
     ColorPickerModule,
     PageModule,
+    ActionCardModule,
   ],
   providers: [
     UserStore,
