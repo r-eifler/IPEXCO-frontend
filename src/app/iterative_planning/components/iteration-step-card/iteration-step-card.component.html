@@ -1,18 +1,35 @@
 <mat-card appearance="outlined">
   <mat-card-header>
     <mat-card-title>{{ step()?.name }}</mat-card-title>
-    <mat-card-subtitle><mat-chip>{{ step()?.status | stepStatusName }}</mat-chip></mat-card-subtitle>
+    <mat-card-subtitle><app-label>{{ step()?.status | stepStatusName }}</app-label></mat-card-subtitle>
   </mat-card-header>
 
   <mat-card-content>
     <div class="content">
-      <span class="property-label">
-        <mat-icon> </mat-icon>
-        Enforced Goals:</span>
-      <span class="property-value">{{ step()?.hardGoals?.length }}</span>
+      <div class="stats">
+        <mat-icon>emoji_events</mat-icon>
+        <span class="property-label">Enforced Goals:</span>
+        <span class="property-value">{{ step()?.hardGoals?.length }}</span>
 
-      <span class="property-label">Soft Goals:</span>
-      <span class="property-value">{{ step()?.softGoals?.length }}</span>
+        <mat-icon>flag_check</mat-icon>
+        <span class="property-label">Soft Goals:</span>
+        <span class="property-value">{{ step()?.softGoals?.length }}</span>
+      </div>
+
+      <div class="utility">
+        <mat-icon>workspace_premium</mat-icon>
+        <div class="utility-value-container">
+          <span class="value">{{ step() | stepValue : planProperties() | default : '-/-'}}</span>
+          <span class="label">Utility</span>
+        </div>
+      </div>
     </div>
   </mat-card-content>
+
+  <mat-card-actions>
+    <div class="action-container">
+      <a class="details" mat-stroked-button [routerLink]="[step()?._id]">Details</a>
+      <button mat-icon-button><mat-icon>call_split</mat-icon></button>
+    </div>
+  </mat-card-actions>
 </mat-card>

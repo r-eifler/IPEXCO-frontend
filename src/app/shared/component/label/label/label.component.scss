@@ -1,0 +1,32 @@
+@use '../../../../../variables' as vars;
+
+:host {
+  display: inline;
+}
+
+.label {
+  display: inline;
+
+  padding-inline: var(--spacing-200);
+  padding-block: var(--spacing-100);
+
+  border-radius: var(--radius-full);
+
+  @include vars.background-color(surface-container);
+  @include vars.typography(label-small);
+
+  &.primary {
+    @include vars.color(on-primary-container);
+    @include vars.background-color(primary-container);
+  }
+
+  &.secondary {
+    @include vars.color(on-secondary-container);
+    @include vars.background-color(secondary-container);
+  }
+
+  &.error {
+    @include vars.color(on-error-container);
+    @include vars.background-color(error-container);
+  }
+}
