@@ -1,10 +1,12 @@
+@let planProperties = planProperties$ | async;
+
 <app-page>
   <app-page-title>Plan Iterations</app-page-title>
 
   <app-page-content>
     <div class="page-grid">
       @for(step of steps$ | async; track step) {
-        <app-iteration-step-card [step]="step"></app-iteration-step-card>
+        <app-iteration-step-card [step]="step" [planProperties]="planProperties"></app-iteration-step-card>
       }
     </div>
   </app-page-content>
