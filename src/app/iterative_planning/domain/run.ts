@@ -1,6 +1,6 @@
-import { PlanningTask } from "src/app/interface/planning-task";
 import { PlanProperty } from "./plan-property/plan-property";
 import { IterationStep, StepStatus } from "./iteration_step";
+import { PlanRunStatus } from "./plan";
 
 
 
@@ -25,31 +25,23 @@ export interface PlanRun {
 
 
 
-export function computePlanValue(
-  step: IterationStep,
-  planProperties: Record<string, PlanProperty>
-): number {
-  // console.log("Compute plan value ...");
-  if (step.status == StepStatus.solvable) {
-    let sum = 0;
-    // console.log(step);
-    step.hardGoals.forEach((ppID) => {
-      let pp = ppID; //planProperties.get(ppID);
-      if (pp){
-        sum += planProperties.pp.utility;
-        // console.log(ppID + ": " + pp.value )
-      }
-      else console.log(ppID);
-    });
-    // console.log("----> " + sum);
-    return sum;
-  }
-  if (step.status == StepStatus.unsolvable) {
-    return 0;
-  }
-  if (step.status == StepStatus.unknown) {
+export function computePlanValue( step: IterationStep, planProperties: Record<string, PlanProperty>): number | undefined {
+  if (step.plan === undefined || 
+      step.plan.status == PlanRunStatus.failed ||
+      step.plan.status == PlanRunStatus.running ||
+      step.plan.status == PlanRunStatus.pending 
+    ) {
     return null;
   }
+  if (step.plan.status == PlanRunStatus.not_solvable) {
+    return 0;
+  }
+
+  if (step.status == StepStatus.solvable) {
+    return step.plan.satisfied_properties.map(pid => planProperties.pid.utility).reduce((acc, v) => acc + v,0);
+  }
+
+  return null
 }
 
 
