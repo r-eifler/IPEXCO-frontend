@@ -1,6 +1,6 @@
 import { AsyncPipe, JsonPipe } from '@angular/common';
-import { MatIconModule } from '@angular/material/icon';
 import { Component, inject } from '@angular/core';
+import { MatIconModule } from '@angular/material/icon';
 import { Store } from '@ngrx/store';
 import { ActionCardModule } from 'src/app/shared/component/action-card/action-card.module';
 

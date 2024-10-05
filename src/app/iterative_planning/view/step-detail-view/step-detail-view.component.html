@@ -1,0 +1,9 @@
+<app-page>
+  <app-page-title>{{ (step$ | async)?.name }}</app-page-title>
+  <app-page-hero>
+    <app-iteration-step-hero
+      [step]="step$ | async"
+      [planProperties]="planProperties$ | async"
+    ></app-iteration-step-hero>
+  </app-page-hero>
+</app-page>

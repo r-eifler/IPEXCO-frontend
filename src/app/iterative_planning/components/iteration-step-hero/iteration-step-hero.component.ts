@@ -15,13 +15,13 @@ import { StepValuePipe } from '../../domain/pipe/step-value.pipe';
 import { PlanProperty } from '../../domain/plan-property/plan-property';
 
 @Component({
-  selector: 'app-iteration-step-card',
+  selector: 'app-iteration-step-hero',
   standalone: true,
   imports: [MatCardModule, MatChipsModule, StepStatusNamePipe, MatIconModule, LabelModule, StepValuePipe, DefaultPipe, MatButtonModule, RouterLink, MatTooltipModule, StepStatusColorPipe],
-  templateUrl: './iteration-step-card.component.html',
-  styleUrl: './iteration-step-card.component.scss'
+  templateUrl: './iteration-step-hero.component.html',
+  styleUrl: './iteration-step-hero.component.scss'
 })
-export class IterationStepCardComponent {
+export class IterationStepHeroComponent {
   step = input.required<IterationStep | null>();
   planProperties = input.required<Record<string, PlanProperty> | null>();
 }

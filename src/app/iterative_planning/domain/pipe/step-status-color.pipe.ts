@@ -1,29 +1,31 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
+import { Color } from 'src/app/shared/component/label/label/label.component';
+
 import { PlanRunStatus } from '../plan';
 
 @Pipe({
-  name: 'stepStatusName',
+  name: 'stepStatusColor',
   standalone: true
 })
-export class StepStatusNamePipe implements PipeTransform {
+export class StepStatusColorPipe implements PipeTransform {
 
-  transform(value: PlanRunStatus | undefined): string {
+  transform(value: PlanRunStatus | undefined): Color {
     if(value === undefined || value === null) {
-      return 'Unknown';
+      return 'neutral'
     }
 
     switch (value) {
       case PlanRunStatus.pending:
-        return 'Pending';
+        return 'neutral';
       case PlanRunStatus.running:
-        return 'Running';
+        return 'neutral';
       case PlanRunStatus.failed:
-        return 'Failed';
+        return 'error';
       case PlanRunStatus.plan_found:
-        return 'Solved';
+        return 'secondary';
       case PlanRunStatus.not_solvable:
-        return 'Unsolvable';
+        return 'error';
     }
   }
 
