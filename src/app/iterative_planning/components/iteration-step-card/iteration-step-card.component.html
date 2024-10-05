@@ -1,1 +1,18 @@
-<p>iteration-step-card works!</p>
+<mat-card appearance="outlined">
+  <mat-card-header>
+    <mat-card-title>{{ step()?.name }}</mat-card-title>
+    <mat-card-subtitle><mat-chip>{{ step()?.status | stepStatusName }}</mat-chip></mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content>
+    <div class="content">
+      <span class="property-label">
+        <mat-icon> </mat-icon>
+        Enforced Goals:</span>
+      <span class="property-value">{{ step()?.hardGoals?.length }}</span>
+
+      <span class="property-label">Soft Goals:</span>
+      <span class="property-value">{{ step()?.softGoals?.length }}</span>
+    </div>
+  </mat-card-content>
+</mat-card>

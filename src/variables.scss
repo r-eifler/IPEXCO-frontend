@@ -19,6 +19,10 @@ $warn: mat.get-theme-color(ipexco-theme.$light-theme, error, 50);
   letter-spacing: mat.get-theme-typography(ipexco-theme.$light-theme, $level, letter-spacing);
 }
 
+@mixin color($role) {
+  color: mat.get-theme-color(ipexco-theme.$light-theme, $role);
+}
+
 @mixin background-color($role) {
   background-color: mat.get-theme-color(ipexco-theme.$light-theme, $role);
 }

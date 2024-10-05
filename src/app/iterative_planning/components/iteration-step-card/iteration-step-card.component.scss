@@ -1,0 +1,20 @@
+@use '../../../../variables' as vars;
+
+.content {
+  margin-top: var(--spacing-300);
+
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: end;
+
+  column-gap: var(--spacing-100);
+}
+
+.property-label {
+  @include vars.typography(label-small);
+  @include vars.color(on-surface-variant);
+}
+
+.property-value {
+  @include vars.typography(body-large);
+}

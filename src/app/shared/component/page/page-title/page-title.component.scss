@@ -15,5 +15,5 @@
 
 h1 {
   all: unset;
-  @include variables.typography(headline-large);
+  @include variables.typography(headline-medium);
 }
