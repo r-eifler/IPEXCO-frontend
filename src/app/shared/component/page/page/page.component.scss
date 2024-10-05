@@ -15,12 +15,17 @@
   }
 
   @include devices.lg {
-    margin-inline: auto;
-    width: 832px;
+    margin-inline: var(--spacing-1200);
+    width: auto;
   }
 
   @include devices.xl {
+    margin-inline: var(--spacing-1800);
+    width: auto;
+  }
+
+  @include devices.xxl {
     margin-inline: auto;
-    width: 1040;
+    width: 1800px;
   }
 }
