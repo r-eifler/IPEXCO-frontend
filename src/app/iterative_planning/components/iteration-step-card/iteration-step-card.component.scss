@@ -26,7 +26,7 @@
 
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
-  gap: var(--spacing-200);
+  gap: var(--spacing-100);
 
   .details {
     display: grid;

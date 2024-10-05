@@ -1,5 +1,16 @@
+@use '../../../../variables' as vars;
+
 .page-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: var(--page-grid-gap);
+}
+
+.instructions {
+  display: grid;
+  gap: var(--spacing-100);
+
+  .alternative {
+    @include vars.typography(body-large);
+  }
 }

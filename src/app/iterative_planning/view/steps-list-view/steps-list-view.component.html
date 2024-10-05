@@ -8,6 +8,16 @@
       @for(step of steps$ | async; track step) {
         <app-iteration-step-card [step]="step" [planProperties]="planProperties"></app-iteration-step-card>
       }
+
+      <button app-action-card>
+        <div class="instructions">
+          <span>Perform a new plan computation from scratch</span>
+          <span class="alternative">or</span>
+          <span> fork (<mat-icon>call_split</mat-icon>) an existing one.</span>
+        </div>
+        <mat-icon>add</mat-icon>
+      </button>
+
     </div>
   </app-page-content>
 </app-page>

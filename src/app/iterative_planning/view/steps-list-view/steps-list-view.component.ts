@@ -1,6 +1,8 @@
 import { AsyncPipe, JsonPipe } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
 import { Component, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
+import { ActionCardModule } from 'src/app/shared/component/action-card/action-card.module';
 
 import { PageModule } from 'src/app/shared/component/page/page.module';
 
@@ -10,7 +12,7 @@ import { selectIterativePlanningIterationSteps, selectIterativePlanningIteration
 @Component({
   selector: 'app-steps-list-view',
   standalone: true,
-  imports: [PageModule, AsyncPipe, JsonPipe, IterationStepCardComponent],
+  imports: [PageModule, AsyncPipe, JsonPipe, IterationStepCardComponent, ActionCardModule, MatIconModule],
   templateUrl: './steps-list-view.component.html',
   styleUrl: './steps-list-view.component.scss'
 })
