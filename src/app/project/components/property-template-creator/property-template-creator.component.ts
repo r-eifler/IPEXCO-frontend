@@ -1,5 +1,18 @@
-import { Component, computed, EventEmitter, input, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
+import { FormBuilder, ValidatorFn } from '@angular/forms';
 import { PlanPropertyTemplate } from 'src/app/iterative_planning/domain/plan-property/plan-property-template';
+
+const jsonValidator: ValidatorFn = (control) => {
+  const value = control.value;
+
+  try{
+    JSON.parse(value);
+  } catch(e) {
+    return { invalidJson: true };
+  }
+
+  return null;
+}
 
 @Component({
   selector: 'app-property-template-creator',
@@ -7,32 +20,25 @@ import { PlanPropertyTemplate } from 'src/app/iterative_planning/domain/plan-pro
   styleUrl: './property-template-creator.component.scss'
 })
 export class PropertyTemplateCreatorComponent {
+  private fb = inject(FormBuilder);
 
-  templates = input.required<PlanPropertyTemplate[] | null>();
+  form = this.fb.group({
+    planPropertyTemplates: this.fb.control<string>('', [jsonValidator]),
+  });
+
+  @Input({required: true}) set templates(templates: PlanPropertyTemplate[]) {
+    const templateString = JSON.stringify(templates);
+    this.form.controls.planPropertyTemplates.setValue(templateString);
+  }
 
   @Output() updatedTemplates = new EventEmitter<PlanPropertyTemplate[]>();
 
-  templateString = computed( () => JSON.stringify(this.templates()));
-  validInput = false
-
   constructor( ){
-    
   }
 
   save() {
-    this.updatedTemplates.next(JSON.parse(this.templateString()));
-  }
-
-  checkJSON() {
-    try{
-      console.log(this.templateString())
-      const res = JSON.parse(this.templateString());
-      this.validInput = true
-      console.log('CHECK JSON: ' + res)
-    }
-    catch (err){
-      this.validInput=false
-      console.log('CHECK JSON: ' + this.validInput)
-    }
+    this.updatedTemplates.next(JSON.parse(this.form.controls.planPropertyTemplates.value));
   }
 }
+
+

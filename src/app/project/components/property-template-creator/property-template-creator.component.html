@@ -5,15 +5,14 @@
         </mat-card-title>
     </mat-card-header>
     <mat-card-content>
-        <form class="template-form">
+        <form class="template-form" [formGroup]="form">
             <mat-form-field class="template-full-width">
               <!-- <mat-label>Define plan property templates</mat-label> -->
-              <textarea matInput [value]="templateString()"></textarea>
+              <textarea matInput [formControl]="form.controls.planPropertyTemplates"></textarea>
             </mat-form-field>
           </form>
     </mat-card-content>
     <mat-card-actions>
-        <button mat-flat-button (click)="checkJSON()">Check JSON</button>
-        <button mat-flat-button disabled="validInput" (click)="save()">Save</button>
+        <button mat-flat-button [disabled]="!form.valid" (click)="save()">Save</button>
     </mat-card-actions>
   </mat-card>
