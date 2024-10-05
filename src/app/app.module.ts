@@ -220,6 +220,7 @@ import { UserStudyCurrentDataService, UserStudyDataService } from "./service/use
 import { ActionCardModule } from './shared/component/action-card/action-card.module';
 import { ChatModule } from './shared/component/chat/chat.module';
 import { PageModule } from './shared/component/page/page.module';
+import { PropertyTemplateCreatorComponent } from './project/components/property-template-creator/property-template-creator.component';
 
 
 @NgModule({
@@ -303,6 +304,7 @@ import { PageModule } from './shared/component/page/page.module';
     ProjectSettingsContainerComponent,
     IterativePlanningBaseComponent,
     GoalListHighlightedComponent,
+    PropertyTemplateCreatorComponent,
   ],
   imports: [
     StoreModule.forRoot(

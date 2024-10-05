@@ -1,15 +1,12 @@
-import { ProjectsService } from 'src/app/service/project/project-services';
-import { filter, map, take } from 'rxjs/operators';
+import { map, take, tap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
-import { CurrentProjectService } from 'src/app/service/project/project-services';
 import { Component, OnInit } from '@angular/core';
 import { GeneralSettings } from 'src/app/interface/settings/general-settings';
-import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { selectProject, selectProjectSettings } from '../../state/project.selector';
 import { Project } from '../../domain/project';
 import { updateProject } from '../../state/project.actions';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { PlanPropertyTemplate } from 'src/app/iterative_planning/domain/plan-property/plan-property-template';
 
 @Component({
   selector: 'app-project-settings-container',
@@ -20,22 +17,43 @@ export class ProjectSettingsContainerComponent implements OnInit {
 
   settings$: Observable<GeneralSettings>
   project$: Observable<Project>
+  templates$: Observable<PlanPropertyTemplate[]>
 
   constructor(
-    private store: Store,
-    private router: Router
+    private store: Store
   ) {
     this.settings$ = store.select(selectProjectSettings);
     this.project$ = store.select(selectProject);
+    this.templates$ = this.project$.pipe(
+      map(p => p?.domainSpecification?.planPropertyTemplates),
+      tap(console.log)
+    )
   }
 
-  onSave(settings: GeneralSettings): void {
+  onSaveSetting(settings: GeneralSettings): void {
 
     this.project$.pipe(take(1)).subscribe(
       project => {
-        let newProject = {
+        let newProject: Project = {
           ...project,
           settings
+        }
+        this.store.dispatch(updateProject({project: newProject}))
+        // this.router.navigate(['/projects', project._id, 'overview'],);
+      }
+    )
+  }
+
+  onSaveTemplates(templates: PlanPropertyTemplate[]): void {
+
+    this.project$.pipe(take(1)).subscribe(
+      project => {
+        let newProject: Project = {
+          ...project,
+          domainSpecification: {
+            ...project.domainSpecification,
+            planPropertyTemplates: templates
+          }
         }
         this.store.dispatch(updateProject({project: newProject}))
         // this.router.navigate(['/projects', project._id, 'overview'],);

@@ -1,29 +1,31 @@
 import { PDDLFact, FactToString, PlanningTask } from "src/app/interface/planning-task";
-import { Action, ActionSet, GoalType, toAction } from "./plan-property";
-import { PlanProperty } from "src/app/interface/plan-property/plan-property";
-import { TaskSchema } from "../../../interface/task-schema";
+import { Action, ActionSet, GoalType, PlanProperty, toAction } from "src/app/iterative_planning/domain/plan-property/plan-property";
 import { Project } from "src/app/project/domain/project";
 
-export class PlanPropertyTemplate {
-  public class: string;
-  public type: GoalType;
-  public variables: {
+export interface PlanPropertyTemplate {
+  class: string;
+  type: GoalType;
+  variables: {
     name: string;
     type: string | string[];
   }[];
-  public nameTemplate: string;
-  public formulaTemplate: string;
-  public actionSetsTemplates: ActionSetsTemplates[];
-  public sentenceTemplate: string;
-  public initVariableConstraints: string[];
-  public goalVariableConstraints: string[];
-  private constraintDomains: ConstraintDomains = new ConstraintDomains();
-  public numSelectableVariables = 0;
+  nameTemplate: string;
+  formulaTemplate: string;
+  actionSetsTemplates: ActionSetsTemplates[];
+  sentenceTemplate: string;
+  initVariableConstraints: string[];
+  goalVariableConstraints: string[];
+}
 
-  getSentenceTemplateParts(): string[] {
+export interface TemplateProgress {
+  constraintDomains: ConstraintDomains;
+  numSelectableVariables: number;
+}
+
+export function getSentenceTemplateParts(template: PlanPropertyTemplate, progress: TemplateProgress): [string[], TemplateProgress] {
     let numSelectableVariables = 0;
     const parts: string[] = [""];
-    for (const word of this.sentenceTemplate.split(" ")) {
+    for (const word of template.sentenceTemplate.split(" ")) {
       if (word.startsWith("$")) {
         parts.push(word);
         parts.push("");
@@ -33,14 +35,14 @@ export class PlanPropertyTemplate {
       }
     }
     // console.log(parts);
-    this.numSelectableVariables = numSelectableVariables;
-    return parts;
+    progress.numSelectableVariables = numSelectableVariables;
+    return [parts, progress];
   }
 
-  initializeVariableConstraints(task: PlanningTask) {
-    const varValues = this.getPossibleTypeVariableDomains(task);
+export function initializeVariableConstraints(task: PlanningTask, template: PlanPropertyTemplate, progress: TemplateProgress): TemplateProgress {
+    const varValues = getPossibleTypeVariableDomains(template, task);
     for (const entry1 of varValues.entries()) {
-      this.constraintDomains.addNewVar(entry1[0], entry1[1]);
+      progress.constraintDomains.addNewVar(entry1[0], entry1[1]);
       for (const v of entry1[1]) {
         for (const entry2 of varValues.entries()) {
           if (entry2[0] !== entry1[0]) {
@@ -52,18 +54,18 @@ export class PlanPropertyTemplate {
             const constrained = getConstraintSatValues(
               constrainigVar,
               constrainedVar,
-              this.initVariableConstraints,
+              template.initVariableConstraints,
               task.model.initial
             );
             if (constrained) {
-              this.constraintDomains.addVarValuePosibleValues(
+              progress.constraintDomains.addVarValuePosibleValues(
                 constrainigVar.name,
                 constrainigVar.value,
                 constrainedVar.name,
                 constrainedVar.values
               );
             } else {
-              this.constraintDomains.addVarValuePosibleValues(
+              progress.constraintDomains.addVarValuePosibleValues(
                 constrainigVar.name,
                 constrainigVar.value,
                 constrainedVar.name,
@@ -71,7 +73,7 @@ export class PlanPropertyTemplate {
               );
             }
           } else {
-            this.constraintDomains.addVarValuePosibleValues(
+            progress.constraintDomains.addVarValuePosibleValues(
               entry1[0],
               v,
               entry1[0],
@@ -81,18 +83,22 @@ export class PlanPropertyTemplate {
         }
       }
     }
+    return progress
   }
 
-  generatePlanProperty(
+export function generatePlanProperty(
+    template: PlanPropertyTemplate,
+    progress: TemplateProgress,
     varValueMapping: Map<string, string>,
     task: PlanningTask,
     project: Project
   ): PlanProperty {
-    this.completeVarValueMapping(varValueMapping, task);
+    
+    completeVarValueMapping(template, varValueMapping, task);
 
-    let name = this.nameTemplate;
-    let formula = this.formulaTemplate;
-    let naturalLanguageDescription = this.sentenceTemplate;
+    let name = template.nameTemplate;
+    let formula = template.formulaTemplate;
+    let naturalLanguageDescription = template.sentenceTemplate;
 
     for (const pair of varValueMapping.entries()) {
       const regex = new RegExp(pair[0].replace("$", "\\$"), "g");
@@ -105,7 +111,7 @@ export class PlanPropertyTemplate {
     }
 
     const actionSets: ActionSet[] = [];
-    for (const actionSetT of this.actionSetsTemplates) {
+    for (const actionSetT of template.actionSetsTemplates) {
       const actions: Action[] = [];
       for (let actionT of actionSetT.actionTemplates) {
         for (const pair of varValueMapping.entries()) {
@@ -118,40 +124,42 @@ export class PlanPropertyTemplate {
 
     return {
       name,
-      type: this.type,
+      type: template.type,
       formula,
       actionSets,
       naturalLanguageDescription,
       project: project._id,
       isUsed: false,
       globalHardGoal: false,
-      value: 1,
+      utility: 1,
       color: "#696969",
       icon: "star",
-      class: this.class
+      class: template.class
     };
   }
 
-  completeVarValueMapping(
+function completeVarValueMapping(
+    template: PlanPropertyTemplate,
     varValueMapping: Map<string, string>,
     task: PlanningTask
   ) {
-    for (const variable of this.variables) {
+    for (const variable of template.variables) {
       if (!varValueMapping.has(variable.name)) {
         varValueMapping.set(
           variable.name,
-          this.findVarValue(variable.name, varValueMapping, task)
+          findVarValue(template, variable.name, varValueMapping, task)
         );
       }
     }
   }
 
-  findVarValue(
+function findVarValue(
+    template: PlanPropertyTemplate,
     varName: string,
     varValueMapping: Map<string, string>,
     task: PlanningTask
   ): string {
-    for (const constraint of this.goalVariableConstraints) {
+    for (const constraint of template.goalVariableConstraints) {
       if (constraint.includes(varName)) {
         let constraintInstance = constraint.replace("(", "\\(");
         constraintInstance = constraintInstance.replace(")", "\\)");
@@ -171,10 +179,13 @@ export class PlanPropertyTemplate {
     throw Error("Variable " + varName + " has no value.");
   }
 
-  getPossibleTypeVariableDomains(task: PlanningTask): Map<string, Set<string>> {
+function getPossibleTypeVariableDomains(
+    template: PlanPropertyTemplate,
+    task: PlanningTask
+  ): Map<string, Set<string>> {
     // get all values which have the right type
     const map = new Map<string, Set<string>>();
-    for (const variable of this.variables) {
+    for (const variable of template.variables) {
       const matchingObjects: Set<string> = new Set();
       for (const obj of task.model.objects) {
         if (variable.type.length === 1 && obj.type === variable.type) {
@@ -189,20 +200,21 @@ export class PlanPropertyTemplate {
     return map;
   }
 
-  getPossibleVariableValues(
+function getPossibleVariableValues(
+    template: PlanPropertyTemplate,
+    progress: TemplateProgress,
     task: PlanningTask,
     varValueMapping: Map<string, string>
   ): Map<string, Set<string>> {
-    let resMap: Map<string, Set<string>> = this.getPossibleTypeVariableDomains(task);
+    let resMap: Map<string, Set<string>> = getPossibleTypeVariableDomains(template, task);
     for (const variable of varValueMapping.keys()) {
       resMap = domainIntersection(
         resMap,
-        this.constraintDomains.getVarValuePosibleValues(variable, varValueMapping.get(variable))
+        progress.constraintDomains.getVarValuePosibleValues(variable, varValueMapping.get(variable))
       );
     }
     return resMap;
   }
-}
 
 export interface ActionSetsTemplates {
   name: string;

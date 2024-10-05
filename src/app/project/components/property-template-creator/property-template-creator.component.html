@@ -1,0 +1,19 @@
+<mat-card appearance="outlined">
+    <mat-card-header>
+        <mat-card-title>
+            Plan Property Templates
+        </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+        <form class="template-form">
+            <mat-form-field class="template-full-width">
+              <!-- <mat-label>Define plan property templates</mat-label> -->
+              <textarea matInput [value]="templateString()"></textarea>
+            </mat-form-field>
+          </form>
+    </mat-card-content>
+    <mat-card-actions>
+        <button mat-flat-button (click)="checkJSON()">Check JSON</button>
+        <button mat-flat-button disabled="validInput" (click)="save()">Save</button>
+    </mat-card-actions>
+  </mat-card>
