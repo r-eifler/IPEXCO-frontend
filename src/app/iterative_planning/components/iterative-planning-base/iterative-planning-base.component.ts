@@ -16,7 +16,6 @@ export class IterativePlanningBaseComponent {
   constructor(
     store: Store,
     private route: ActivatedRoute,
-    private router: Router,
   ) {
 
     this.route.paramMap

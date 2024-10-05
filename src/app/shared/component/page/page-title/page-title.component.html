@@ -1,3 +1,9 @@
-<h1>
-  <ng-content></ng-content>
-</h1>
+<div class="title-container">
+  <h1>
+    <ng-content></ng-content>
+  </h1>
+
+  <div class="action-container">
+    <ng-content select="app-page-title-action"></ng-content>
+  </div>
+</div>

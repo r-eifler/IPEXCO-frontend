@@ -1,5 +1,18 @@
 @use '../../../../../variables.scss' as variables;
 
+.title-container {
+  display: grid;
+
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--spacing-200);
+}
+
+.action-container {
+  display: flex;
+  flex-direction: row;
+  gap: var(--spacing-200);
+}
+
 h1 {
   all: unset;
   @include variables.typography(headline-large);
