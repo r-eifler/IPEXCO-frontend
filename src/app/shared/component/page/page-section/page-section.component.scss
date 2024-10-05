@@ -1,0 +1,6 @@
+@use '../../../../../styles/devices' as devices;
+
+.page-section {
+  display: grid;
+  gap: var(--spacing-300);
+}
