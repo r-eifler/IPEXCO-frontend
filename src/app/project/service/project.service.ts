@@ -45,12 +45,13 @@ export class ProjectService{
     }
 
     putProject$(project: Project): Observable<Project> {
-
+        console.log(project)
         return this.http.put<IHTTPData<Project>>(this.BASE_URL + project._id, {data: project}).pipe(
             map(({data}) => data),
             map(project => ({
                 ...project, 
-                baseTask: JSON.parse(project.baseTask as unknown as string)
+                baseTask: JSON.parse(project.baseTask as unknown as string),
+                domainSpecification: JSON.parse(project.domainSpecification as unknown as string)
             }))
         )
 

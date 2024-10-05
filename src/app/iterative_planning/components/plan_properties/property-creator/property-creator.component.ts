@@ -5,7 +5,7 @@ import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { UntypedFormArray, UntypedFormControl, UntypedFormGroup, Validators } from "@angular/forms";
 import { MatAutocompleteSelectedEvent } from "@angular/material/autocomplete";
 import { DomainSpecification, getPropertyTemplateClassMap } from "src/app/interface/files/domain-specification";
-import { PlanPropertyTemplate } from "src/app/iterative_planning/domain/plan-property/plan-property-template";
+import { initializeVariableConstraints, PlanPropertyTemplate } from "src/app/iterative_planning/domain/plan-property/plan-property-template";
 import { MatAccordion } from "@angular/material/expansion";
 import { PlanPropertyMapService } from "src/app/service/plan-properties/plan-property-services";
 import { CurrentProjectService } from "src/app/service/project/project-services";
@@ -81,17 +81,17 @@ export class PropertyCreatorComponent implements OnInit {
 
   propTemplateSelect(event: MatSelectionListChange) {
     this.task$.pipe(take(1)).subscribe(task => {
-      this.propertyTemplateAccordion.closeAll();
-      this.selectedPropertyTemplate = event.options[0].value;
-      this.selectedPropertyTemplate.initializeVariableConstraints(task);
-      this.sentenceTemplateParts = this.selectedPropertyTemplate.getSentenceTemplateParts();
-      this.possibleVariableValues =
-        this.selectedPropertyTemplate.getPossibleVariableValues(
-        task,
-        this.selectedVariableValue
-      );
+      // this.propertyTemplateAccordion.closeAll();
+      // this.selectedPropertyTemplate = event.options[0].value;
+      // initializeVariableConstraints(this.selectedPropertyTemplate, task);
+      // this.sentenceTemplateParts = this.selectedPropertyTemplate.getSentenceTemplateParts();
+      // this.possibleVariableValues =
+      //   this.selectedPropertyTemplate.getPossibleVariableValues(
+      //   task,
+      //   this.selectedVariableValue
+      // );
 
-      this.propertyTemplateStepper.selected.completed = true;
+      // this.propertyTemplateStepper.selected.completed = true;
       this.propertyTemplateStepper.next();
     })
   }
@@ -103,22 +103,22 @@ export class PropertyCreatorComponent implements OnInit {
   selectVariableValue(value: string) {
     this.task$.pipe(take(1)).subscribe(task => {
       this.selectedVariableValue.set(this.selectedVariablePlaceholder, value);
-      this.possibleVariableValues =
-        this.selectedPropertyTemplate.getPossibleVariableValues(
-          task,
-          this.selectedVariableValue
-        );
+      // this.possibleVariableValues =
+      //   this.selectedPropertyTemplate.getPossibleVariableValues(
+      //     task,
+      //     this.selectedVariableValue
+      //   );
     })
   }
 
   resetVariableValue(variable: string) {
     this.task$.pipe(take(1)).subscribe(task => {
       this.selectedVariableValue.delete(variable);
-      this.possibleVariableValues =
-        this.selectedPropertyTemplate.getPossibleVariableValues(
-          task,
-          this.selectedVariableValue
-        );
+      // this.possibleVariableValues =
+      //   this.selectedPropertyTemplate.getPossibleVariableValues(
+      //     task,
+      //     this.selectedVariableValue
+      //   );
     })
   }
 
@@ -173,11 +173,11 @@ export class PropertyCreatorComponent implements OnInit {
           class: "main"
         };
       } else {
-        planProperty = this.selectedPropertyTemplate.generatePlanProperty(
-          this.selectedVariableValue,
-          project.baseTask,
-          project
-        );
+        // planProperty = this.selectedPropertyTemplate.generatePlanProperty(
+        //   this.selectedVariableValue,
+        //   project.baseTask,
+        //   project
+        // );
       }
 
       this.store.dispatch(createPlanProperty({planProperty}));
@@ -194,9 +194,9 @@ export class PropertyCreatorComponent implements OnInit {
       return !this.propertyForm.valid;
     } else {
       if (this.selectedPropertyTemplate) {
-        return (
-          this.selectedVariableValue.size !==
-          this.selectedPropertyTemplate.numSelectableVariables
+        return ( true
+          // this.selectedVariableValue.size !==
+          // numSelectableVariables(this.selectedPropertyTemplate)
         );
       }
     }
