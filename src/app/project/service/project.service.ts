@@ -34,7 +34,8 @@ export class ProjectService{
             map(({data}) => data),
             map(project => ({
                 ...project, 
-                baseTask: JSON.parse(project.baseTask as unknown as string)
+                baseTask: JSON.parse(project.baseTask as unknown as string),
+                domainSpecification: JSON.parse(project.domainSpecification as unknown as string)
             }))
         )
 

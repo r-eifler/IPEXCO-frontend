@@ -2,7 +2,11 @@
   <app-settings
     [isProject]="true"
     [settings]="settings$ | async"
-    (updatedSettings)="onSave($event)">
+    (updatedSettings)="onSaveSetting($event)">
   </app-settings>
+  <app-property-template-creator
+    [templates]="templates$ | async"
+    (updateTemplates)="onSaveTemplates($event)">
+  </app-property-template-creator>
 </div>
 
