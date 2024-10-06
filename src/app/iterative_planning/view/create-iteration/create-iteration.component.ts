@@ -47,6 +47,7 @@ export class CreateIterationComponent {
       name: this.fb.control<string>("", Validators.required),
     }),
     enforcedGoalIds: this.fb.array<FormControl<string>>([]),
+    softGoalIds: this.fb.array<FormControl<string>>([]),
   });
 
   enforcedPlanProperties$ = combineLatest([
@@ -61,14 +62,32 @@ export class CreateIterationComponent {
   );
   hasEnforcedPlanProperties$ = this.enforcedPlanProperties$.pipe(map(properties => !!properties.length));
 
+  softPlanProperties$ = combineLatest([
+    this.planProperties$,
+    this.form.controls.softGoalIds.valueChanges.pipe(
+      startWith(this.form.controls.softGoalIds.value),
+      map(() => this.form.controls.softGoalIds.value),
+    ),
+  ]).pipe(
+    filter(([planProperties]) => !!planProperties),
+    map(([planProperties, selectedPropertyIds]) => selectedPropertyIds?.map(id => planProperties?.[id]) ?? []),
+  );
+  hasSoftPlanProperties$ = this.softPlanProperties$.pipe(map(properties => !!properties.length));
+
 
   addEnforcedGoalIds(ids: string[]): void {
     const idControls = ids.map(id => this.fb.control<string>(id));
 
     idControls.forEach(control => this.form.controls.enforcedGoalIds.push(control));
-    this.form.updateValueAndValidity();
   }
 
+  removeEnforcedGoal(index: number): void {
+    this.form.controls.enforcedGoalIds.removeAt(index);
+  }
+
+  removeSoftGoal(index: number): void {
+    this.form.controls.softGoalIds.removeAt(index);
+  }
   constructor() {
     this.addEnforcedGoalIds(['67005f215c5663ed247a6738', '670066055c5663ed247a68f2'])
   }
