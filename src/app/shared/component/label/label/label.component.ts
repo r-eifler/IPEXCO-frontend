@@ -1,11 +1,12 @@
+import { NgClass } from '@angular/common';
 import { Component, input } from '@angular/core';
 
-export type Color = 'primary' | 'secondary' | 'error';
+export type Color = 'primary' | 'secondary' | 'error' | 'neutral';
 
 @Component({
   selector: 'app-label',
   standalone: true,
-  imports: [],
+  imports: [NgClass],
   templateUrl: './label.component.html',
   styleUrl: './label.component.scss'
 })

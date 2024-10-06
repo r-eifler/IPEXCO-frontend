@@ -1,6 +1,10 @@
 @let planProperties = planProperties$ | async;
 
 <app-page>
+  <app-breadcrumb>
+    <a app-breadcrumb-item [routerLink]="['/']"><mat-icon>home</mat-icon></a>
+    <app-breadcrumb-item>All Iterations</app-breadcrumb-item>
+  </app-breadcrumb>
   <app-page-title>Plan Iterations</app-page-title>
 
   <app-page-content>

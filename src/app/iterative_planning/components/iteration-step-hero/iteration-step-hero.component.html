@@ -1,0 +1,38 @@
+<mat-card appearance="outlined">
+  <mat-card-header>
+    <mat-card-title>
+      <app-label
+        [color]="step()?.plan?.status | stepStatusColor"
+      >{{ step()?.plan?.status | stepStatusName }}</app-label>
+    </mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+    <div class="content">
+      <div class="stats">
+        <mat-icon>emoji_events</mat-icon>
+        <span class="property-label">Enforced Goals:</span>
+        <span class="property-value">{{ step()?.hardGoals?.length }}</span>
+
+        <mat-icon>flag_check</mat-icon>
+        <span class="property-label">Soft Goals:</span>
+        <span class="property-value">{{ step()?.softGoals?.length }}</span>
+      </div>
+
+      <div class="plan-link-container">
+        <a mat-button [disabled]="! step()?.plan" [routerLink]="['plan']">
+          <mat-icon>map</mat-icon>
+          Show Plan
+        </a>
+      </div>
+
+      <div class="utility">
+        <mat-icon>workspace_premium</mat-icon>
+        <div class="utility-value-container">
+          <span class="value">{{ step() | stepValue : planProperties() | default : '-/-'}}</span>
+          <span class="label">Utility</span>
+        </div>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-import { StepStatus } from '../iteration_step';
+import { PlanRunStatus } from '../plan';
 
 @Pipe({
   name: 'stepStatusName',
@@ -8,13 +8,21 @@ import { StepStatus } from '../iteration_step';
 })
 export class StepStatusNamePipe implements PipeTransform {
 
-  transform(value: StepStatus): string {
+  transform(value: PlanRunStatus | undefined): string {
+    if(value === undefined || value === null) {
+      return 'Unknown';
+    }
+
     switch (value) {
-      case StepStatus.unknown:
-        return 'Unknown';
-      case StepStatus.solvable:
-        return 'Solvable';
-      case StepStatus.unsolvable:
+      case PlanRunStatus.pending:
+        return 'Pending';
+      case PlanRunStatus.running:
+        return 'Running';
+      case PlanRunStatus.failed:
+        return 'Failed';
+      case PlanRunStatus.plan_found:
+        return 'Solved';
+      case PlanRunStatus.not_solvable:
         return 'Unsolvable';
     }
   }

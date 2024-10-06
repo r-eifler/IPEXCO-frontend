@@ -14,3 +14,7 @@
     @include vars.typography(body-large);
   }
 }
+
+[app-action-card] {
+  display: grid;
+}

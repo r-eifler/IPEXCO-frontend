@@ -1,9 +1,9 @@
 import { createReducer, on } from "@ngrx/store";
 import { Project } from "src/app/project/domain/project";
 import { Loadable, LoadingState } from "src/app/shared/common/loadable.interface";
-import { PlanProperty } from "../domain/plan-property/plan-property";
-import { createIterationStep, createIterationStepSuccess, deselectIterationStep, initNewIterationStep, loadIterationSteps, loadIterationStepsSuccess, loadPlanProperties, loadPlanPropertiesSuccess, loadProject, loadProjectSuccess, registerPlanComputation, registerPlanComputationSuccess, selectIterationStep, selectNewIterationStep, updateNewIterationStep } from "./iterative-planning.actions";
 import { IterationStep, ModIterationStep, StepStatus } from "../domain/iteration_step";
+import { PlanProperty } from "../domain/plan-property/plan-property";
+import { createIterationStep, createIterationStepSuccess, deselectIterationStep, initNewIterationStep, loadIterationSteps, loadIterationStepsSuccess, loadPlanProperties, loadPlanPropertiesSuccess, loadProject, loadProjectSuccess, selectIterationStep, selectNewIterationStep, updateNewIterationStep } from "./iterative-planning.actions";
 
 
 export interface IterativePlanningState {
@@ -52,7 +52,6 @@ export const iterativePlanningReducer = createReducer(
         ...state,
         iterationSteps: {state: LoadingState.Done, data: iterationSteps},
         newStep: iterationSteps.length == 0 && state.planProperties.state == LoadingState.Done ? initFirstNewIterationStep(state) : undefined,
-        selectedIterationStepId: iterationSteps.length > 0 ? iterationSteps[iterationSteps.length - 1]._id : undefined
     })),
     on(createIterationStep, (state): IterativePlanningState => ({
         ...state,

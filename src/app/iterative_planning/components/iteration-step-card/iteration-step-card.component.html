@@ -1,7 +1,11 @@
 <mat-card appearance="outlined">
   <mat-card-header>
     <mat-card-title>{{ step()?.name }}</mat-card-title>
-    <mat-card-subtitle><app-label>{{ step()?.status | stepStatusName }}</app-label></mat-card-subtitle>
+    <mat-card-subtitle>
+      <app-label
+        [color]="step()?.plan?.status | stepStatusColor"
+      >{{ step()?.plan?.status | stepStatusName }}</app-label>
+    </mat-card-subtitle>
   </mat-card-header>
 
   <mat-card-content>

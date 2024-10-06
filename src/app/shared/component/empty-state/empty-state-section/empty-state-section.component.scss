@@ -1,0 +1,18 @@
+@use '../../../../../variables' as vars;
+
+.empty-section {
+  padding-inline: var(--spacing-200);
+  padding-block: var(--spacing-600);
+
+  display: grid;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-200);
+
+  border-radius: var(--radius-100);
+
+  @include vars.background-color(surface-container-low);
+  @include vars.color(on-surface-variant);
+
+  @include vars.typography(body-large);
+}
