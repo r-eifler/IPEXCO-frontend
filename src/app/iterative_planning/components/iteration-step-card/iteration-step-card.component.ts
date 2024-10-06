@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
@@ -24,4 +24,10 @@ import { PlanProperty } from '../../domain/plan-property/plan-property';
 export class IterationStepCardComponent {
   step = input.required<IterationStep | null>();
   planProperties = input.required<Record<string, PlanProperty> | null>();
+
+  fork = output<void>();
+
+  onFork(): void {
+    this.fork.emit();
+  }
 }

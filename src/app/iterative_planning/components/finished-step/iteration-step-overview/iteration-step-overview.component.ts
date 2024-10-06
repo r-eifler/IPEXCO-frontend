@@ -5,9 +5,9 @@ import { filter, map, tap } from "rxjs/operators";
 import { IterationStep } from 'src/app/iterative_planning/domain/iteration_step';
 import { Store } from '@ngrx/store';
 import { selectIterativePlanningProject, selectIterativePlanningProperties, selectIterativePlanningSelectedStep } from 'src/app/iterative_planning/state/iterative-planning.selector';
-import { boolean } from 'zod';
+
 import { PlanRunStatus } from 'src/app/iterative_planning/domain/plan';
-import { registerPlanComputation } from 'src/app/iterative_planning/state/iterative-planning.actions';
+import { initNewIterationStep, registerPlanComputation } from 'src/app/iterative_planning/state/iterative-planning.actions';
 import { PlanProperty } from 'src/app/iterative_planning/domain/plan-property/plan-property';
 
 @Component({
@@ -67,4 +67,7 @@ export class IterationStepOverviewComponent implements OnInit {
     this.store.dispatch(registerPlanComputation())
   }
 
+  createNewStep(baseStepId?: string) {
+    this.store.dispatch(initNewIterationStep({baseStepId}));
+  }
 }

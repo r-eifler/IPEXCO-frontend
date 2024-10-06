@@ -1,12 +1,11 @@
-import { MatSelectionListChange } from "@angular/material/list";
 import { Component, OnInit } from "@angular/core";
-import { Observable, Subject } from "rxjs";
+import { MatSelectionListChange } from "@angular/material/list";
 import { Store } from "@ngrx/store";
-import { selectIterativePlanningIterationSteps, selectIterativePlanningNewStep, selectIterativePlanningSelectedStep } from "../../state/iterative-planning.selector";
-import { deselectIterationStep, initNewIterationStep, selectIterationStep, selectNewIterationStep } from "../../state/iterative-planning.actions";
+import { Observable, Subject } from "rxjs";
+import { map } from "rxjs/operators";
 import { IterationStep, StepStatus } from "../../domain/iteration_step";
 import { PlanRunStatus } from "../../domain/plan";
-import { map } from "rxjs/operators";
+import { selectIterativePlanningIterationSteps, selectIterativePlanningNewStep, selectIterativePlanningSelectedStep } from "../../state/iterative-planning.selector";
 
 @Component({
   selector: "app-iteration-steps-list",
@@ -36,15 +35,12 @@ export class IterationStepsListComponent implements OnInit {
 
   selectStep(event: MatSelectionListChange): void {
     let step = event.options[0].value as IterationStep;
-    this.store.dispatch(selectIterationStep({iterationStepId: step._id}))
   }
 
   selectNewStep() {
-    this.store.dispatch(selectNewIterationStep())
   }
 
   newStep() {
-    this.store.dispatch(initNewIterationStep())
   }
 
   deleteStep(step: IterationStep): void {
@@ -67,7 +63,7 @@ export class IterationStepsListComponent implements OnInit {
   }
 
   isPending(step: IterationStep): boolean {
-    return step.plan && (step.plan.status == PlanRunStatus.pending || 
+    return step.plan && (step.plan.status == PlanRunStatus.pending ||
       step.plan.status == PlanRunStatus.running);
   }
 }

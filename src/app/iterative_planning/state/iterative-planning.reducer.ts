@@ -3,7 +3,7 @@ import { Project } from "src/app/project/domain/project";
 import { Loadable, LoadingState } from "src/app/shared/common/loadable.interface";
 import { IterationStep, ModIterationStep, StepStatus } from "../domain/iteration_step";
 import { PlanProperty } from "../domain/plan-property/plan-property";
-import { createIterationStep, createIterationStepSuccess, deselectIterationStep, initNewIterationStep, loadIterationSteps, loadIterationStepsSuccess, loadPlanProperties, loadPlanPropertiesSuccess, loadProject, loadProjectSuccess, selectIterationStep, selectNewIterationStep, updateNewIterationStep } from "./iterative-planning.actions";
+import { createIterationStep, createIterationStepSuccess, deselectIterationStep, initNewIterationStep, loadIterationSteps, loadIterationStepsSuccess, loadPlanProperties, loadPlanPropertiesSuccess, loadProject, loadProjectSuccess, selectIterationStep, updateNewIterationStep } from "./iterative-planning.actions";
 
 
 export interface IterativePlanningState {
@@ -53,38 +53,29 @@ export const iterativePlanningReducer = createReducer(
         iterationSteps: {state: LoadingState.Done, data: iterationSteps},
         newStep: iterationSteps.length == 0 && state.planProperties.state == LoadingState.Done ? initFirstNewIterationStep(state) : undefined,
     })),
-    on(createIterationStep, (state): IterativePlanningState => ({
-        ...state,
-        selectedIterationStepId: undefined
-    })),
     on(createIterationStepSuccess, (state): IterativePlanningState => ({
         ...state,
         newStep: undefined,
-        selectedIterationStepId: undefined
     })),
-    on(initNewIterationStep, (state, ): IterativePlanningState => {
-        let selectedStep = state.iterationSteps.data.filter(s => s._id == state.selectedIterationStepId)[0]
-        return {
-            ...state,
-            newStep: {
-                _id: undefined,
-                name:"Iteration Step " + (state.iterationSteps.data.length + 1),
-                baseStep: state.selectedIterationStepId,
-                task: selectedStep.task,
-                status: StepStatus.unknown,
-                project: state.project.data._id,
-                hardGoals: [...selectedStep.hardGoals],
-                softGoals: [],
-                predecessorStep: state.selectedIterationStepId,
-                explanations: []
-            },
-            selectedIterationStepId: undefined,
-        }
+    on(initNewIterationStep, (state, {baseStepId}): IterativePlanningState => {
+      const baseStep = state.iterationSteps.data?.find(({_id}) => _id === baseStepId);
+
+      return {
+          ...state,
+          newStep: {
+              _id: undefined,
+              name: undefined,
+              baseStep: baseStepId,
+              task: state.project.data?.baseTask,
+              status: StepStatus.unknown,
+              project: state.project.data._id,
+              hardGoals: [...(baseStep?.hardGoals ?? [])],
+              softGoals: [...(baseStep?.softGoals ?? [])],
+              predecessorStep: baseStepId,
+              explanations: []
+          },
+      }
     }),
-    on(selectNewIterationStep, (state): IterativePlanningState => ({
-        ...state,
-        selectedIterationStepId: undefined,
-    })),
     on(updateNewIterationStep, (state, {iterationStep}): IterativePlanningState => ({
         ...state,
         newStep: iterationStep,

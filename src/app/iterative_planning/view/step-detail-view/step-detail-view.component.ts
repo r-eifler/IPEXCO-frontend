@@ -15,6 +15,7 @@ import { IterationStepHeroComponent } from '../../components/iteration-step-hero
 import { PlanProeprtyPanelComponent } from '../../components/plan-proeprty-panel/plan-proeprty-panel.component';
 import { selectIterativePlanningProperties, selectIterativePlanningSelectedStep } from '../../state/iterative-planning.selector';
 import { selectEnforcedGoals, selectSoftGoals, selectUnsolvableProperties } from './step-detail-view.component.selector';
+import { initNewIterationStep } from '../../state/iterative-planning.actions';
 
 @Component({
   selector: 'app-step-detail-view',
@@ -36,4 +37,8 @@ export class StepDetailViewComponent {
   hasEnforcedGoals$ = this.enforcedGoals$.pipe(map(goals => !!goals?.length));
   hasSoftGoals$ = this.softGoals$.pipe(map(goals => !!goals?.length));
   hasUnsolvedGoals$ = this.unsolvedGoals$.pipe(map(goals => !!goals?.length));
+
+  createNewIteration(baseStepId?: string) {
+    this.store.dispatch(initNewIterationStep({baseStepId}));
+  }
 }

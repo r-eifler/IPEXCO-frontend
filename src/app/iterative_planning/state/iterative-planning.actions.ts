@@ -1,8 +1,7 @@
 import { createAction, props } from "@ngrx/store";
-import { PlanProperty } from "../domain/plan-property/plan-property";
 import { Project } from "src/app/project/domain/project";
 import { IterationStep, ModIterationStep } from "../domain/iteration_step";
-import { Plan } from "../domain/plan";
+import { PlanProperty } from "../domain/plan-property/plan-property";
 
 
 // Project
@@ -39,8 +38,7 @@ export const selectIterationStep = createAction('[iterative-planning] select ite
 export const deselectIterationStep = createAction('[iterative-planning] deselect iteration step');
 
 
-export const initNewIterationStep = createAction('[iterative-planning] init new iteration step');
-export const selectNewIterationStep = createAction('[iterative-planning] select new iteration step');
+export const initNewIterationStep = createAction('[iterative-planning] init new iteration step', props<{ baseStepId?: string }>());
 export const updateNewIterationStep = createAction('[iterative-planning] update new iteration step', props<{iterationStep: ModIterationStep}>());
 
 
