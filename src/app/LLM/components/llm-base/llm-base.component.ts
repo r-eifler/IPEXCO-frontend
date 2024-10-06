@@ -1,9 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
-import { Message } from '../../domain/message';
-import { selectMessages } from '../../state/llm.selector';
 import { sendMessageToLLM } from '../../state/llm.actions';
+import { selectIsLoading, selectMessages } from './llm-base.component.selector';
 
 @Component({
   selector: 'app-llm-base',
@@ -11,21 +9,12 @@ import { sendMessageToLLM } from '../../state/llm.actions';
   styleUrl: './llm-base.component.scss'
 })
 export class LlmBaseComponent {
+  private store = inject(Store);
 
+  messages$ = this.store.select(selectMessages);
+  isLoading$ = this.store.select(selectIsLoading);
 
-  messages$: Observable<Message[]> 
-
-  constructor(
-    private store: Store
-  ){
-    this.messages$ = store.select(selectMessages)
-
-    this.sendMessage('Hallo');
+  onUserMessage(request: string) {
+    this.store.dispatch(sendMessageToLLM({ request }))
   }
-
-
-  sendMessage(m:string){
-    this.store.dispatch(sendMessageToLLM({request: m}))
-  }
-
 }

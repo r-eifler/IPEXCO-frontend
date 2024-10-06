@@ -1,10 +1,10 @@
+import { AsyncPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { sendMessageToLLM } from 'src/app/LLM/state/llm.actions';
 import { ChatModule } from 'src/app/shared/component/chat/chat.module';
 import { DialogModule } from 'src/app/shared/component/dialog/dialog.module';
 import { selectIsLoading, selectMessages } from './property-creation-chat.component.selector';
-import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-property-creation-chat',

@@ -13,13 +13,13 @@ import { MatIconModule } from "@angular/material/icon";
 
 import { FormBuilder, FormControl, ReactiveFormsModule } from "@angular/forms";
 import { MatCheckboxModule } from "@angular/material/checkbox";
+import { MatDialog, MatDialogModule } from "@angular/material/dialog";
 import { DialogModule } from "src/app/shared/component/dialog/dialog.module";
 import { EditableListModule } from "src/app/shared/component/editable-list/editable-list.module";
 import { selectedAtLeastOne } from "src/app/validators/selected-at-least-one.validator";
 import { PlanProperty } from "../../domain/plan-property/plan-property";
-import { PlanProeprtyPanelComponent } from "../plan-proeprty-panel/plan-proeprty-panel.component";
-import { MatDialog, MatDialogModule } from "@angular/material/dialog";
 import { PropertyCreationChatComponent } from "../../view/property-creation-chat/property-creation-chat.component";
+import { PlanProeprtyPanelComponent } from "../plan-proeprty-panel/plan-proeprty-panel.component";
 
 @Component({
   selector: "app-select-property",

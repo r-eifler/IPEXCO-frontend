@@ -1,7 +1,7 @@
 import { createReducer, on } from "@ngrx/store";
+import { LoadingState } from "src/app/shared/common/loadable.interface";
 import { Message } from "../domain/message";
 import { sendMessageToLLM, sendMessageToLLMSuccess } from "./llm.actions";
-import { LoadingState } from "src/app/shared/common/loadable.interface";
 
 export interface LLMChatState {
     loadingState: LoadingState;
