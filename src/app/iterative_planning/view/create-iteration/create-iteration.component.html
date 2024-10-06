@@ -46,7 +46,7 @@
               </app-editable-list-empty-state>
               }
               <app-editable-list-action>
-                <button mat-button><mat-icon>add</mat-icon>Add Property</button>
+                <button mat-button (click)="addPropertyEnforce()"><mat-icon>add</mat-icon>Add Property</button>
               </app-editable-list-action>
             </app-editable-list>
           </app-side-sheet-section-content>
@@ -73,7 +73,7 @@
               </app-editable-list-empty-state>
               }
               <app-editable-list-action>
-                <button mat-button><mat-icon>add</mat-icon>Add Property</button>
+                <button mat-button (click)="addPropertySoftGoal()"><mat-icon>add</mat-icon>Add Property</button>
               </app-editable-list-action>
             </app-editable-list>
           </app-side-sheet-section-content>
@@ -90,3 +90,10 @@
   </app-side-sheet>
 </form>
 
+<ng-template #propertySelector>
+  <app-select-property
+    [properties]="availableProperties$ | async"
+    (cancel)="onCancelPropertySelection()"
+    (select)="handlePropertyIdSelection($event)"
+  ></app-select-property>
+</ng-template>

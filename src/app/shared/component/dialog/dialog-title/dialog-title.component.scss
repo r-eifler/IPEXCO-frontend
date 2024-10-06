@@ -1,0 +1,9 @@
+@use '../../../../../variables' as vars;
+
+.dialog-title {
+  h2 {
+    @include vars.typography(title-medium);
+    margin: unset;
+    padding: unset;
+  }
+}
