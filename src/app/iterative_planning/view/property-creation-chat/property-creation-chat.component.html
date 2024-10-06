@@ -4,11 +4,13 @@
   </app-dialog-header>
 
   <app-dialog-content>
-    <app-chat [isSenderTyping]="true">
-      <app-chat-message role="sender">Hallo</app-chat-message>
-      <app-chat-message role="receiver">Hallo</app-chat-message>
-      <button app-chat-action>Yes, that's it</button>
-      <app-chat-input></app-chat-input>
+    <app-chat [isSenderTyping]="isLoading$ | async">
+
+      @for(message of messages$ | async; track message) {
+      <app-chat-message [role]="message.role">{{ message.content }}</app-chat-message>
+      }
+
+      <app-chat-input (userInput)="onUserMessage($event)"></app-chat-input>
     </app-chat>
   </app-dialog-content>
 
