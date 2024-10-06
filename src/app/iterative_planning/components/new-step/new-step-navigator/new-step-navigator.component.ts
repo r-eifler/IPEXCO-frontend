@@ -1,14 +1,13 @@
 
-import { NewStepInterfaceStatus } from "src/app/interface/interface-status";
-import { Observable } from "rxjs";
-import { Component, OnInit } from "@angular/core";
 import { StepperSelectionEvent } from "@angular/cdk/stepper";
-import { GeneralSettings } from "src/app/interface/settings/general-settings";
-import { map, take } from "rxjs/operators";
-import { IterationStep } from "src/app/iterative_planning/domain/iteration_step";
+import { Component, OnInit } from "@angular/core";
 import { Store } from "@ngrx/store";
-import { selectIterativePlanningNewStep, selectIterativePlanningProject, selectIterativePlanningSelectedStep } from "src/app/iterative_planning/state/iterative-planning.selector";
-import { createIterationStep } from "src/app/iterative_planning/state/iterative-planning.actions";
+import { Observable } from "rxjs";
+import { map } from "rxjs/operators";
+import { NewStepInterfaceStatus } from "src/app/interface/interface-status";
+import { GeneralSettings } from "src/app/interface/settings/general-settings";
+import { IterationStep } from "src/app/iterative_planning/domain/iteration_step";
+import { selectIterativePlanningNewStep, selectIterativePlanningProject } from "src/app/iterative_planning/state/iterative-planning.selector";
 
 @Component({
   selector: "app-new-step-navigator",
@@ -45,10 +44,6 @@ export class NewStepNavigatorComponent implements OnInit {
   ngOnInit(): void {}
 
   addNewStep(): void {
-    this.step$.pipe(take(1)).subscribe( step =>
-      this.store.dispatch(createIterationStep({iterationStep: step}))
-    );
-    
   }
 
   stepperChanged(event: StepperSelectionEvent): void {

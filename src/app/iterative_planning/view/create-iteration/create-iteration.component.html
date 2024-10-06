@@ -34,7 +34,7 @@
               <app-editable-list-entry>
                 <app-plan-proeprty-panel [property]="property"></app-plan-proeprty-panel>
                 <app-editable-list-entry-suffix>
-                  <button mat-icon-button (click)="removeEnforcedGoal(idx)"><mat-icon>delete</mat-icon></button>
+                  <button mat-icon-button (click)="removeEnforcedGoal(idx)" type="button"><mat-icon>delete</mat-icon></button>
                 </app-editable-list-entry-suffix>
               </app-editable-list-entry>
               }
@@ -46,7 +46,7 @@
               </app-editable-list-empty-state>
               }
               <app-editable-list-action>
-                <button mat-button (click)="addPropertyEnforce()"><mat-icon>add</mat-icon>Add Property</button>
+                <button mat-button (click)="addPropertyEnforce()" type="button"><mat-icon>add</mat-icon>Add Property</button>
               </app-editable-list-action>
             </app-editable-list>
           </app-side-sheet-section-content>
@@ -61,7 +61,7 @@
               <app-editable-list-entry>
                 <app-plan-proeprty-panel [property]="property"></app-plan-proeprty-panel>
                 <app-editable-list-entry-suffix>
-                  <button mat-icon-button (click)="removeSoftGoal(idx)"><mat-icon>delete</mat-icon></button>
+                  <button mat-icon-button (click)="removeSoftGoal(idx)" type="button"><mat-icon>delete</mat-icon></button>
                 </app-editable-list-entry-suffix>
               </app-editable-list-entry>
               }
@@ -73,7 +73,7 @@
               </app-editable-list-empty-state>
               }
               <app-editable-list-action>
-                <button mat-button (click)="addPropertySoftGoal()"><mat-icon>add</mat-icon>Add Property</button>
+                <button mat-button (click)="addPropertySoftGoal()" type="button"><mat-icon>add</mat-icon>Add Property</button>
               </app-editable-list-action>
             </app-editable-list>
           </app-side-sheet-section-content>
@@ -84,7 +84,8 @@
     </app-side-sheet-content>
 
     <app-side-sheet-footer>
-      <button mat-button type="button">Cancel</button>
+      <button mat-button type="button" (click)="onCancel()">Cancel</button>
+
       <button mat-flat-button color="primary" [disabled]="form.invalid">Create</button>
     </app-side-sheet-footer>
   </app-side-sheet>

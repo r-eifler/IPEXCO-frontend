@@ -39,15 +39,15 @@ export const deselectIterationStep = createAction('[iterative-planning] deselect
 
 
 export const initNewIterationStep = createAction('[iterative-planning] init new iteration step', props<{ baseStepId?: string }>());
-export const updateNewIterationStep = createAction('[iterative-planning] update new iteration step', props<{iterationStep: ModIterationStep}>());
-
+export const updateNewIterationStep = createAction('[iterative-planning] init new iteration step', props<{ iterationStep: Partial<ModIterationStep> }>());
+export const cancelNewIterationStep = createAction('[iterative-planning] cancel new iteration step');
 
 export const loadIterationSteps = createAction('[iterative-planning] load iteration steps', props<{id: string}>());
 export const loadIterationStepsSuccess = createAction('[iterative-planning] load iteration steps success', props<{iterationSteps: IterationStep[]}>());
 export const loadIterationStepsFailure = createAction('[iterative-planning] load iteration steps failure');
 
 
-export const createIterationStep = createAction('[iterative-planning] create iteration steps', props<{iterationStep: IterationStep}>());
+export const createIterationStep = createAction('[iterative-planning] create iteration steps');
 export const createIterationStepSuccess = createAction('[iterative-planning] create iteration steps success', props<{iterationStep: IterationStep}>());
 export const createIterationStepFailure = createAction('[iterative-planning] create iteration steps failure');
 

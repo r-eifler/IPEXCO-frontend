@@ -8,6 +8,7 @@ import { Store } from "@ngrx/store";
 import { EditableListModule } from "src/app/shared/component/editable-list/editable-list.module";
 
 import { AsyncPipe, JsonPipe, NgFor } from "@angular/common";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { MatDialog, MatDialogModule, MatDialogRef } from "@angular/material/dialog";
 import { combineLatest, filter, map, startWith } from "rxjs";
 import { InfoModule } from "src/app/shared/component/info/info.module";
@@ -15,9 +16,9 @@ import { SideSheetModule } from "src/app/shared/component/side-sheet/side-sheet.
 import { isNonEmptyValidator } from "src/app/validators/non-empty.validator";
 import { PlanProeprtyPanelComponent } from "../../components/plan-proeprty-panel/plan-proeprty-panel.component";
 import { SelectPropertyComponent } from "../../components/select-property/select-property.component";
+import { cancelNewIterationStep, createIterationStep, updateNewIterationStep } from "../../state/iterative-planning.actions";
 import { selectIterativePlanningProperties } from "../../state/iterative-planning.selector";
 import { selectPlanPropertyIds, selectPreselectedEnforcedGoals$, selectPreselectedSoftGoals$ } from "./create-iteration.component.selector";
-import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 @Component({
   selector: "app-create-iteration",
@@ -107,7 +108,7 @@ export class CreateIterationComponent {
       this.addSoftGoalIds(softGoals);
     });
     this.preselectedEnforcedGoals$.pipe(takeUntilDestroyed()).subscribe(enforcedGoals => {
-      this.form.controls.softGoalIds.clear();
+      this.form.controls.enforcedGoalIds.clear();
       this.addEnforcedGoalIds(enforcedGoals);
     });
   }
@@ -155,8 +156,20 @@ export class CreateIterationComponent {
     this.dialogRef?.close();
   }
 
-  onSubmit(): void {
+  onCancel(): void {
+    this.store.dispatch(cancelNewIterationStep());
+  }
 
+  onSubmit(): void {
+    this.store.dispatch(updateNewIterationStep({
+      iterationStep: {
+        name: this.form.controls.general.controls.name.value,
+        hardGoals: this.form.controls.enforcedGoalIds.value,
+        softGoals: this.form.controls.softGoalIds.value,
+      },
+    }));
+
+    this.store.dispatch(createIterationStep())
   }
 }
 

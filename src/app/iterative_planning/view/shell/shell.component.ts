@@ -18,12 +18,11 @@ import { CreateIterationComponent } from '../create-iteration/create-iteration.c
 export class ShellComponent {
   private store = inject(Store);
 
-  sidenav = viewChild.required<MatSidenav>('sidenav');
+  sidenav = viewChild<MatSidenav>('sidenav');
 
   constructor() {
     this.store.select(selectIterativePlanningNewStep).pipe(
       takeUntilDestroyed(),
-    ).subscribe(step => step ? this.sidenav().open() : this.sidenav().close());
-
+    ).subscribe(step => step ? this.sidenav()?.open() : this.sidenav()?.close());
   }
 }
