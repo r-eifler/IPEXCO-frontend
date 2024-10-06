@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, inject, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, computed, effect, inject, input, output } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 
@@ -27,6 +27,7 @@ export class SelectPropertyComponent {
   select = output<string[]>();
 
   properties = input.required<PlanProperty[] | null>();
+  hasProperties = computed(() => !!this.properties()?.length);
 
   form = this.fb.group({
     propertyIds: this.fb.array<FormControl<boolean>>([], [selectedAtLeastOne])

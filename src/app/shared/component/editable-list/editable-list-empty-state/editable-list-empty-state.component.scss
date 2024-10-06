@@ -13,4 +13,5 @@
   text-align: center;
 
   @include vars.typography(body-large);
+  @include vars.color(on-surface-variant);
 }

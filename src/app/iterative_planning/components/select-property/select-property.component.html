@@ -8,6 +8,13 @@
 
     <app-dialog-content>
       <app-editable-list>
+        @if(!hasProperties()) {
+        <app-editable-list-empty-state>
+          There are no (more) plan properties to choose from. Create a new one that you are interested in.
+          <mat-icon>travel_explore</mat-icon>
+        </app-editable-list-empty-state>
+        }
+
         @for(propertyIdControl of form.controls.propertyIds.controls; track propertyIdControl; let idx = $index) {
         <app-editable-list-entry>
           <app-editable-list-entry-prefix>
