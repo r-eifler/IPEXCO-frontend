@@ -37,6 +37,14 @@ export class ComputePlanEffect{
         ))
     ))
 
+    computePlanOnIterationStepSuccess$ = createEffect(() => this.actions$.pipe(
+      ofType(createIterationStepSuccess),
+      switchMap(({iterationStep: { _id: iterationStepId }}) => this.plannerService.postComputePlanTempGoals$(iterationStepId).pipe(
+          concatLatestFrom(() => this.store.select(selectIterativePlanningProject)),
+          switchMap(([res, project]) => [registerPlanComputationSuccess({iterationStepId}), loadIterationSteps({id: project._id})]),
+          catchError(() => of(createIterationStepFailure()))
+      )),
+    ));
 
     public listenPlanComputationFinished$ = createEffect(() => this.actions$.pipe(
         ofType(registerPlanComputationSuccess),

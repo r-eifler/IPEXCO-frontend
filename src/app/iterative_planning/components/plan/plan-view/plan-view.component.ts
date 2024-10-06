@@ -1,16 +1,13 @@
-import { PlannerService } from "src/app/service/planner-runs/planner.service";
-import { filter, map, take, takeUntil, tap } from "rxjs/operators";
 import { Component, DestroyRef, OnDestroy, OnInit } from "@angular/core";
-import { BehaviorSubject, Observable, Subject } from "rxjs";
-import { LogEvent, TimeLoggerService } from "../../../../service/logger/time-logger.service";
-import { parsePlan } from "src/app/service/planner-runs/utils";
-import { PDDLAction } from "src/app/interface/planning-task";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { Store } from "@ngrx/store";
+import { Observable } from "rxjs";
+import { filter, map, take, tap } from "rxjs/operators";
 import { IterationStep, StepStatus } from "src/app/iterative_planning/domain/iteration_step";
 import { PlanAction, PlanRunStatus } from "src/app/iterative_planning/domain/plan";
-import { Store } from "@ngrx/store";
 import { selectIterativePlanningSelectedStep } from "src/app/iterative_planning/state/iterative-planning.selector";
-import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-import { registerPlanComputation, registerTempGoalPlanComputation } from "src/app/iterative_planning/state/iterative-planning.actions";
+import { PlannerService } from "src/app/service/planner-runs/planner.service";
+import { LogEvent, TimeLoggerService } from "../../../../service/logger/time-logger.service";
 
 
 @Component({
@@ -82,7 +79,6 @@ export class PlanViewComponent implements OnInit, OnDestroy {
 
   computePlan(): void {
     // this.store.dispatch(registerPlanComputation())
-    this.store.dispatch(registerTempGoalPlanComputation())
     // this.timeLogger.log(LogEvent.COMPUTE_PLAN, {stepId: step._id});
   }
 }

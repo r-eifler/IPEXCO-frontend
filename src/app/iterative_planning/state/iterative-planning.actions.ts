@@ -54,8 +54,8 @@ export const createIterationStepFailure = createAction('[iterative-planning] cre
 
 // Planner
 
-export const registerPlanComputation = createAction('[iterative-planning] register plan computation');
-export const registerTempGoalPlanComputation = createAction('[iterative-planning] register temp goal plan computation');
+export const registerPlanComputation = createAction('[iterative-planning] register plan computation', props<{ iterationStepId: string }>());
+export const registerTempGoalPlanComputation = createAction('[iterative-planning] register temp goal plan computation', props<{ iterationStepId: string }>());
 export const registerPlanComputationSuccess = createAction('[iterative-planning] register plan computation success', props<{iterationStepId: string}>());
 export const registerPlanComputationFailure = createAction('[iterative-planning] register plan computation failure');
 

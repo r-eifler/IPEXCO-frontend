@@ -8,7 +8,7 @@ import { GeneralSettings } from '../../../../interface/settings/general-settings
 
 import { PlanRunStatus } from 'src/app/iterative_planning/domain/plan';
 import { PlanProperty } from 'src/app/iterative_planning/domain/plan-property/plan-property';
-import { initNewIterationStep, registerPlanComputation } from 'src/app/iterative_planning/state/iterative-planning.actions';
+import { initNewIterationStep } from 'src/app/iterative_planning/state/iterative-planning.actions';
 
 @Component({
   selector: "app-iteration-step-overview",
@@ -64,7 +64,6 @@ export class IterationStepOverviewComponent implements OnInit {
 
   computePlan() {
     console.log('Compute plan!')
-    this.store.dispatch(registerPlanComputation())
   }
 
   createNewStep(baseStepId?: string) {
