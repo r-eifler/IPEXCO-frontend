@@ -24,6 +24,58 @@
 
   <app-page-content>
     <app-page-section-list>
+
+      @if(!step?.plan) {
+      <app-page-section>
+        <app-page-section-content>
+          <app-empty-state-section>
+            <span>There is no plan information available for this step (yet).<br/>
+              Therefore, only a limited set of information is available here.</span>
+            <mat-icon>explore_off</mat-icon>
+          </app-empty-state-section>
+        </app-page-section-content>
+      </app-page-section>
+      }
+
+      @if(step?.plan) {
+      <app-page-section>
+        <app-page-section-title>Unsatisfied Softgoals</app-page-section-title>
+        <app-page-section-content>
+          @if(hasUnsolvedSoftGoals$ | async) {
+          <div class="property-list">
+            @for(property of unsolvedSoftGoals$ | async; track property) {
+            <app-plan-proeprty-panel [property]="property"></app-plan-proeprty-panel>
+            }
+          </div>
+          } @else {
+          <app-empty-state-section>
+            <span>All specified subgoals could be satisfied.</span>
+            <mat-icon>celebration</mat-icon>
+          </app-empty-state-section>
+          }
+        </app-page-section-content>
+      </app-page-section>
+      }
+
+      @if(step?.plan) {
+      <app-page-section>
+        <app-page-section-title>Satisfied Softgoals</app-page-section-title>
+        <app-page-section-content>
+          @if(hasSolvedSoftGoals$ | async) {
+          <div class="property-list">
+            @for(property of solvedSoftGoals$ | async; track property) {
+            <app-plan-proeprty-panel [property]="property"></app-plan-proeprty-panel>
+            }
+          </div>
+          } @else {
+          <app-empty-state-section>
+            <span>No additional goals were satisfied in this iteration.</span>
+          </app-empty-state-section>
+          }
+        </app-page-section-content>
+      </app-page-section>
+      }
+
       <app-page-section>
         <app-page-section-title>Enforced Goals</app-page-section-title>
         <app-page-section-content>
@@ -36,40 +88,6 @@
           } @else {
           <app-empty-state-section>
             <span>No goals were enforced in this iteration.</span>
-          </app-empty-state-section>
-          }
-        </app-page-section-content>
-      </app-page-section>
-
-      <app-page-section>
-        <app-page-section-title>Soft Goals</app-page-section-title>
-        <app-page-section-content>
-          @if(hasSoftGoals$ | async) {
-          <div class="property-list">
-            @for(property of softGoals$ | async; track property) {
-            <app-plan-proeprty-panel [property]="property"></app-plan-proeprty-panel>
-            }
-          </div>
-          } @else {
-          <app-empty-state-section>
-            <span>No additional goals were satisfied in this iteration.</span>
-          </app-empty-state-section>
-          }
-        </app-page-section-content>
-      </app-page-section>
-
-      <app-page-section>
-        <app-page-section-title>Unsatisfied Goals</app-page-section-title>
-        <app-page-section-content>
-          @if(hasUnsolvedGoals$ | async) {
-          <div class="property-list">
-            @for(property of unsolvedGoals$ | async; track property) {
-            <app-plan-proeprty-panel [property]="property"></app-plan-proeprty-panel>
-            }
-          </div>
-          } @else {
-          <app-empty-state-section>
-            <span>No additional goals were satisfied in this iteration.</span>
           </app-empty-state-section>
           }
         </app-page-section-content>
