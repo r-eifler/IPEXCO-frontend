@@ -1,20 +1,62 @@
-<app-side-sheet>
-  <app-side-sheet-header>
-    <app-side-sheet-title>Create Iteration</app-side-sheet-title>
-  </app-side-sheet-header>
+<form [formGroup]="form">
+  <app-side-sheet>
+    <app-side-sheet-header>
+      <app-side-sheet-title>Create Iteration</app-side-sheet-title>
+    </app-side-sheet-header>
 
-  <app-side-sheet-content>
-    <app-side-sheet-section-list>
-      <app-side-sheet-section>
-        <app-side-sheet-section-content>
-          <app-info>
-            <mat-icon>lightbulb_2</mat-icon>
-          </app-info>
-        </app-side-sheet-section-content>
-      </app-side-sheet-section>
-    </app-side-sheet-section-list>
-  </app-side-sheet-content>
+    <app-side-sheet-content>
+      <app-side-sheet-section-list>
+        <app-side-sheet-section>
+          <app-side-sheet-section-content>
+            <app-info>
+              <mat-icon>lightbulb_2</mat-icon>
+              <span>You can navigate around the app while keeping this panel opened.</span>
+            </app-info>
+          </app-side-sheet-section-content>
+        </app-side-sheet-section>
 
-  <app-side-sheet-footer>
-  </app-side-sheet-footer>
-</app-side-sheet>
+        <app-side-sheet-section>
+          <app-side-sheet-section-title>General</app-side-sheet-section-title>
+          <app-side-sheet-section-content>
+            <mat-form-field appearance="outline">
+              <mat-label>Iteration Name</mat-label>
+              <input matInput required [formControl]="form.controls.general.controls.name"/>
+            </mat-form-field>
+          </app-side-sheet-section-content>
+        </app-side-sheet-section>
+
+        <app-side-sheet-section>
+          <app-side-sheet-section-title>Enforced Goals*</app-side-sheet-section-title>
+          <app-side-sheet-section-content>
+            <app-editable-list>
+
+              @for(property of enforcedPlanProperties$ | async; track property._id) {
+              <app-editable-list-entry>
+                <app-plan-proeprty-panel [property]="property"></app-plan-proeprty-panel>
+                <app-editable-list-entry-suffix>
+                  <button mat-icon-button><mat-icon>delete</mat-icon></button>
+                </app-editable-list-entry-suffix>
+              </app-editable-list-entry>
+              }
+
+              @if(!(hasEnforcedPlanProperties$ | async)) {
+              <app-editable-list-empty-state>
+                <span>Add properties that should be fulfilled by the plan.</span>
+                <mat-icon>emoji_events</mat-icon>
+              </app-editable-list-empty-state>
+              }
+              <app-editable-list-action>
+                <button mat-button><mat-icon>add</mat-icon>Add Property</button>
+              </app-editable-list-action>
+            </app-editable-list>
+          </app-side-sheet-section-content>
+        </app-side-sheet-section>
+
+      </app-side-sheet-section-list>
+    </app-side-sheet-content>
+
+    <app-side-sheet-footer>
+    </app-side-sheet-footer>
+  </app-side-sheet>
+</form>
+

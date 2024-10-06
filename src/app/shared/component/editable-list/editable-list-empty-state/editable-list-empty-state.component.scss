@@ -1,0 +1,16 @@
+@use '../../../../../variables' as vars;
+
+.empty-state {
+
+  padding-block: var(--spacing-300);
+  padding-inline: var(--spacing-300);
+
+  display: grid;
+  justify-content: center;
+  justify-items: center;
+  gap: var(--spacing-200);
+
+  text-align: center;
+
+  @include vars.typography(body-large);
+}

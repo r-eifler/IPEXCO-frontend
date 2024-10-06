@@ -2,4 +2,6 @@
 
 h2 {
   @include vars.typography(headline-small);
+  margin: unset;
+  padding: unset;
 }

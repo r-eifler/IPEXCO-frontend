@@ -1,0 +1,5 @@
+@use '../../../../../variables' as vars;
+
+.section-title {
+  @include vars.typography(title-medium);
+}

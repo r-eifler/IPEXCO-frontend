@@ -1,0 +1,13 @@
+.entry {
+  width: 100%;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  gap: var(--spacing-100);
+
+  & > ::ng-deep:not(app-editable-list-entry-prefix):not(app-editable-list-entry-suffix) {
+    flex-grow: 1;
+  }
+}

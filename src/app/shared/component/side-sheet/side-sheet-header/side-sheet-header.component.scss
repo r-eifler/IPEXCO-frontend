@@ -1,4 +1,7 @@
-.header-contaienr {
+.header-container {
+  margin-top: var(--spacing-200);
+  padding: var(--spacing-200);
+
   display: grid;
 
   gap: var(--spacing-100);

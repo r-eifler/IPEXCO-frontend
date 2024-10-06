@@ -1,6 +1,10 @@
+@use '../../../../../variables' as vars;
+
 .container {
   height: 100%;
 
   display: grid;
   grid-template-rows: auto minmax(0, 1fr) auto;
+
+  @include vars.background-color(surface-container-low);
 }

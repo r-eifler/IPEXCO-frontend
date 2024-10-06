@@ -1,0 +1,21 @@
+@use '../../../../../variables' as vars;
+
+.list-container {
+  padding: var(--spacing-200);
+
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-200);
+
+  border-radius: var(--radius-100);
+  @include vars.background-color(surface-container-high);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+
+  gap: var(--spacing-200);
+}

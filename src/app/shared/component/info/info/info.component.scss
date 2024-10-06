@@ -14,4 +14,12 @@
   @include vars.color(on-primary-container);
 
   @include vars.typography(body-medium);
+
+  & > ::ng-deep* {
+    flex-basis: fit-content;
+  }
+
+  & > ::ng-deep mat-icon {
+    flex-basis: auto;
+  }
 }
