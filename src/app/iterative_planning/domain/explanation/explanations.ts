@@ -1,29 +1,29 @@
-import { PDDLFact } from "src/app/interface/planning-task";
-import { PlanProperty } from "./plan-property/plan-property";
-
 
 export enum QuestionType {
-  // TODO
-  why_not,
-  how
+  WHY = 'WHY',
+  HOW = 'HOW',
+  WHY_NOT = 'WHY_NOT',
+  WHAT_IF = 'WHAT_IF',
+  CAN = 'CAN'
 }
 
 export interface Question{
   input: string;
-  type: QuestionType
-  parameters: PlanProperty[];
+  type: QuestionType,
+  forSolvableInstance: boolean,
+  parameters: string[];
 }
 
 export enum AnswerType {
-  MUS,
-  MCS
-}
+  MUGS = 'MUGS',
+  MGCS = 'MGCS',
+ }
 
 export interface Answer{
   type: AnswerType
-  all_possibilities: boolean;
-  computed: PlanProperty[];
-  selected: PlanProperty[];
+  complete: boolean; // all possible answers have been computed
+  computed: string[];
+  selected: string[];
   output: string;
 }
 
