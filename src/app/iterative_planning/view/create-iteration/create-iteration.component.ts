@@ -16,7 +16,8 @@ import { isNonEmptyValidator } from "src/app/validators/non-empty.validator";
 import { PlanProeprtyPanelComponent } from "../../components/plan-proeprty-panel/plan-proeprty-panel.component";
 import { SelectPropertyComponent } from "../../components/select-property/select-property.component";
 import { selectIterativePlanningProperties } from "../../state/iterative-planning.selector";
-import { selectPlanPropertyIds } from "./create-iteration.component.selector";
+import { selectPlanPropertyIds, selectPreselectedEnforcedGoals$, selectPreselectedSoftGoals$ } from "./create-iteration.component.selector";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 @Component({
   selector: "app-create-iteration",
@@ -52,6 +53,9 @@ export class CreateIterationComponent {
 
   planProperties$ = this.store.select(selectIterativePlanningProperties);
   planPropertyIds$ = this.store.select(selectPlanPropertyIds);
+
+  preselectedEnforcedGoals$ = this.store.select(selectPreselectedEnforcedGoals$);
+  preselectedSoftGoals$ = this.store.select(selectPreselectedSoftGoals$);
 
   form = this.fb.group({
     general: this.fb.group({
@@ -96,6 +100,17 @@ export class CreateIterationComponent {
       ({_id}) => !enforcedPlanProperties?.includes(_id) && !softPlanProperties?.includes(_id),
     )),
   );
+
+  constructor() {
+    this.preselectedSoftGoals$.pipe(takeUntilDestroyed()).subscribe(softGoals => {
+      this.form.controls.softGoalIds.clear();
+      this.addSoftGoalIds(softGoals);
+    });
+    this.preselectedEnforcedGoals$.pipe(takeUntilDestroyed()).subscribe(enforcedGoals => {
+      this.form.controls.softGoalIds.clear();
+      this.addEnforcedGoalIds(enforcedGoals);
+    });
+  }
 
   addEnforcedGoalIds(ids: string[]): void {
     const idControls = ids.map(id => this.fb.control<string>(id));

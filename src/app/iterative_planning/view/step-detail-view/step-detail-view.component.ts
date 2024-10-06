@@ -13,9 +13,9 @@ import { PageModule } from 'src/app/shared/component/page/page.module';
 
 import { IterationStepHeroComponent } from '../../components/iteration-step-hero/iteration-step-hero.component';
 import { PlanProeprtyPanelComponent } from '../../components/plan-proeprty-panel/plan-proeprty-panel.component';
+import { initNewIterationStep } from '../../state/iterative-planning.actions';
 import { selectIterativePlanningProperties, selectIterativePlanningSelectedStep } from '../../state/iterative-planning.selector';
 import { selectEnforcedGoals, selectSoftGoals, selectUnsolvableProperties } from './step-detail-view.component.selector';
-import { initNewIterationStep } from '../../state/iterative-planning.actions';
 
 @Component({
   selector: 'app-step-detail-view',

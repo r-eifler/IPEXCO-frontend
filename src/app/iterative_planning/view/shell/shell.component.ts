@@ -3,10 +3,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
 import { RouterOutlet } from '@angular/router';
 
-import { CreateIterationComponent } from '../create-iteration/create-iteration.component';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Store } from '@ngrx/store';
 import { selectIterativePlanningNewStep } from '../../state/iterative-planning.selector';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { CreateIterationComponent } from '../create-iteration/create-iteration.component';
 
 @Component({
   selector: 'app-shell',
@@ -24,5 +24,6 @@ export class ShellComponent {
     this.store.select(selectIterativePlanningNewStep).pipe(
       takeUntilDestroyed(),
     ).subscribe(step => step ? this.sidenav().open() : this.sidenav().close());
+
   }
 }

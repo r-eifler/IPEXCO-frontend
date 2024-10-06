@@ -1,14 +1,14 @@
-import { GeneralSettings } from '../../../../interface/settings/general-settings';
-import { Subject, Observable, combineLatest } from "rxjs";
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
+import { Store } from '@ngrx/store';
+import { Observable, combineLatest } from "rxjs";
 import { filter, map, tap } from "rxjs/operators";
 import { IterationStep } from 'src/app/iterative_planning/domain/iteration_step';
-import { Store } from '@ngrx/store';
 import { selectIterativePlanningProject, selectIterativePlanningProperties, selectIterativePlanningSelectedStep } from 'src/app/iterative_planning/state/iterative-planning.selector';
+import { GeneralSettings } from '../../../../interface/settings/general-settings';
 
 import { PlanRunStatus } from 'src/app/iterative_planning/domain/plan';
-import { initNewIterationStep, registerPlanComputation } from 'src/app/iterative_planning/state/iterative-planning.actions';
 import { PlanProperty } from 'src/app/iterative_planning/domain/plan-property/plan-property';
+import { initNewIterationStep, registerPlanComputation } from 'src/app/iterative_planning/state/iterative-planning.actions';
 
 @Component({
   selector: "app-iteration-step-overview",
