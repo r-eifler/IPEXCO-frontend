@@ -2,15 +2,17 @@
 
 .empty-section {
   padding-inline: var(--spacing-200);
-  padding-block: var(--spacing-800);
+  padding-block: var(--spacing-600);
 
   display: grid;
   align-items: center;
+  justify-content: center;
+  gap: var(--spacing-200);
 
   border-radius: var(--radius-100);
 
-  @include vars.background-color(surface-container);
-  @include vars.color(on-surface-container);
+  @include vars.background-color(surface-container-low);
+  @include vars.color(on-surface-variant);
 
-  @include vars.typography(headline-large);
+  @include vars.typography(body-large);
 }

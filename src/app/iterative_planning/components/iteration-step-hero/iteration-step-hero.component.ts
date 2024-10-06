@@ -17,7 +17,7 @@ import { PlanProperty } from '../../domain/plan-property/plan-property';
 @Component({
   selector: 'app-iteration-step-hero',
   standalone: true,
-  imports: [MatCardModule, MatChipsModule, StepStatusNamePipe, MatIconModule, LabelModule, StepValuePipe, DefaultPipe, MatButtonModule, RouterLink, MatTooltipModule, StepStatusColorPipe],
+  imports: [MatCardModule, MatChipsModule, StepStatusNamePipe, MatIconModule, LabelModule, StepValuePipe, DefaultPipe, MatButtonModule, RouterLink, MatTooltipModule, StepStatusColorPipe, RouterLink],
   templateUrl: './iteration-step-hero.component.html',
   styleUrl: './iteration-step-hero.component.scss'
 })

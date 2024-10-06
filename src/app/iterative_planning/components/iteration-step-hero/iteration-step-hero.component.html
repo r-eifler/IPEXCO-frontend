@@ -19,6 +19,13 @@
         <span class="property-value">{{ step()?.softGoals?.length }}</span>
       </div>
 
+      <div class="plan-link-container">
+        <a mat-button [disabled]="! step()?.plan" [routerLink]="['plan']">
+          <mat-icon>map</mat-icon>
+          Show Plan
+        </a>
+      </div>
+
       <div class="utility">
         <mat-icon>workspace_premium</mat-icon>
         <div class="utility-value-container">

@@ -2,7 +2,9 @@
   <mat-expansion-panel-header>
     <mat-panel-title>
       <div class="title">
-        <mat-icon>{{ property()?.icon }}</mat-icon>
+        <div class="icon-container" [style]="'background-color: ' + property()?.color + ';'">
+          <mat-icon>{{ property()?.icon }}</mat-icon>
+        </div>
         {{ property()?.name }}
       </div>
     </mat-panel-title>
