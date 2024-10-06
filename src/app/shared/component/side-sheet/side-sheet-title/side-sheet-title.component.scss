@@ -1,0 +1,5 @@
+@use '../../../../../variables' as vars;
+
+h2 {
+  @include vars.typography(headline-small);
+}
