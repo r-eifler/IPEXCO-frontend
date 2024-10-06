@@ -76,6 +76,7 @@ export const iterativePlanningReducer = createReducer(
                 hardGoals: [...selectedStep.hardGoals],
                 softGoals: [],
                 predecessorStep: state.selectedIterationStepId,
+                explanations: []
             },
             selectedIterationStepId: undefined,
         }
@@ -110,5 +111,6 @@ function initFirstNewIterationStep(state: IterativePlanningState): ModIterationS
         hardGoals: Object.values(state.planProperties.data).filter(p => p.globalHardGoal).map(p => p._id),
         softGoals: [],
         predecessorStep: undefined,
+        explanations: []
     }
 }

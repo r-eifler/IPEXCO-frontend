@@ -1,6 +1,6 @@
-import { PlanningTask, UpdatedPlanningTask } from "src/app/interface/planning-task";
+import { PlanningTask } from "src/app/interface/planning-task";
 import { Plan } from "./plan";
-import { Explanation } from "./explanations";
+import { Explanation } from "./explanation/explanations";
 
 export enum StepStatus {
     unknown,
@@ -8,8 +8,6 @@ export enum StepStatus {
     unsolvable,
   }
   
-
-
   export interface IterationStep {
     _id: string;
     name: string;
@@ -20,7 +18,7 @@ export enum StepStatus {
     softGoals: string[];
     task: PlanningTask;
     plan?: Plan;
-    explanation?: Explanation;
+    explanations: Explanation[];
     predecessorStep: string | null;
 }
   
