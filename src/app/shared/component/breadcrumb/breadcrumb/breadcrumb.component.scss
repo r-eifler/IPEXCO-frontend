@@ -11,7 +11,7 @@
   &::ng-deep > :not(:last-child) {
     &::after {
       content: 'chevron_right';
-      font-family: 'Material Icons';
+      font-family: 'Material Icons Outlined';
       font-size: 18px;
     }
   }

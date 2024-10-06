@@ -10,8 +10,8 @@
   gap: var(--spacing-200);
 
   border-radius: var(--radius-100);
-  @include vars.background-color(surface-primary);
-  @include vars.color(on-surface-primary);
+  @include vars.background-color(primary-container);
+  @include vars.color(on-primary-container);
 
   @include vars.typography(body-medium);
 }

@@ -19,7 +19,7 @@
   ::ng-deep {
     mat-icon {
       @include vars.typography(label-small);
-      font-family: 'Material Icons';
+      font-family: 'Material Icons Outlined';
       height: 12px;
       width: 12px;
     }
