@@ -18,6 +18,7 @@ import { UserMainPageComponent } from "./components/user/user-main-page/user-mai
 import { ProjectCollectionComponent } from "./project-meta/components/project-collection/project-collection.component";
 import { ProjectBaseComponent } from "./project/components/project-base/project-base.component";
 import { AuthGuard } from "./route-guards/auth-guard.guard";
+import { LlmBaseComponent } from "./LLM/components/llm-base/llm-base.component";
 
 export const appRoutes: Routes = [
   { path: "", component: MainPageComponent },
@@ -28,7 +29,11 @@ export const appRoutes: Routes = [
     component: UserMainPageComponent,
     canActivate: [AuthGuard],
   },
-
+  {
+    path: 'llm',
+    component: LlmBaseComponent,
+    canActivate: [AuthGuard],
+  },
   {
     path: "projects",
     component: ProjectCollectionComponent,

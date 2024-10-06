@@ -222,6 +222,10 @@ import { ActionCardModule } from './shared/component/action-card/action-card.mod
 import { ChatModule } from './shared/component/chat/chat.module';
 import { LabelModule } from './shared/component/label/label.module';
 import { PageModule } from './shared/component/page/page.module';
+import { LlmBaseComponent } from './LLM/components/llm-base/llm-base.component';
+import { LLMChatFeature, llmChatReducer } from './LLM/state/llm.reducer';
+import { LLMService } from './LLM/service/llm.service';
+import { SendMessageToLLMEffect } from './LLM/state/effects/send-message.effect';
 
 
 @NgModule({
@@ -306,6 +310,7 @@ import { PageModule } from './shared/component/page/page.module';
     IterativePlanningBaseComponent,
     GoalListHighlightedComponent,
     PropertyTemplateCreatorComponent,
+    LlmBaseComponent
   ],
   imports: [
     StoreModule.forRoot(
@@ -313,6 +318,7 @@ import { PageModule } from './shared/component/page/page.module';
         [projectFeature]: projectReducer,
         [projectMetaDataFeature]: projectMetaDataReducer,
         [iterativePlanningFeature]: iterativePlanningReducer,
+        [LLMChatFeature]: llmChatReducer
       }),
     EffectsModule.forRoot([
       LoadProjectEffect,
@@ -328,6 +334,7 @@ import { PageModule } from './shared/component/page/page.module';
       LoadIterationStepsEffect,
       CreateIterationStepEffect,
       ComputePlanEffect,
+      SendMessageToLLMEffect,
     ]),
     // Instrumentation must be imported after importing StoreModule (config is optional)
     StoreDevtoolsModule.instrument({
@@ -445,6 +452,7 @@ import { PageModule } from './shared/component/page/page.module';
     PlanPropertyService,
     IterationStepService,
     PlannerService,
+    LLMService,
     {
       provide: MAT_BOTTOM_SHEET_DEFAULT_OPTIONS,
       useValue: { hasBackdrop: true },
