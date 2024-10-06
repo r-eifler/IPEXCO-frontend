@@ -1,12 +1,11 @@
-import { PlanProperty } from "src/app/iterative_planning/domain/plan-property/plan-property";
-import { combineLatest, Observable } from "rxjs";
 import { Component, OnInit } from "@angular/core";
-import { filter, map, take,} from "rxjs/operators";
+import { Store } from "@ngrx/store";
+import { Observable, combineLatest } from "rxjs";
+import { filter, map, take, } from "rxjs/operators";
 import { GeneralSettings } from "src/app/interface/settings/general-settings";
 import { ModIterationStep } from "src/app/iterative_planning/domain/iteration_step";
-import { Store } from "@ngrx/store";
+import { PlanProperty } from "src/app/iterative_planning/domain/plan-property/plan-property";
 import { selectIterativePlanningNewStep, selectIterativePlanningProject, selectIterativePlanningProperties } from "src/app/iterative_planning/state/iterative-planning.selector";
-import { updateNewIterationStep } from "src/app/iterative_planning/state/iterative-planning.actions";
 
 
 @Component({
@@ -66,7 +65,6 @@ export class HardGoalSelectorComponent implements OnInit {
         ...step,
         hardGoals: [...step.hardGoals, pp._id],
       }
-      this.store.dispatch(updateNewIterationStep({iterationStep: updatedStep}))
     });
   }
 
@@ -76,7 +74,6 @@ export class HardGoalSelectorComponent implements OnInit {
         ...step,
         hardGoals: step.hardGoals.filter((hg) => hg != pp._id),
       }
-      this.store.dispatch(updateNewIterationStep({iterationStep: updatedStep}))
     });
   }
 }

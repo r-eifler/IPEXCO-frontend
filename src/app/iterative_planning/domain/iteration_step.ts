@@ -1,13 +1,13 @@
 import { PlanningTask } from "src/app/interface/planning-task";
-import { Plan } from "./plan";
 import { Explanation } from "./explanation/explanations";
+import { Plan } from "./plan";
 
 export enum StepStatus {
     unknown,
     solvable,
     unsolvable,
   }
-  
+
   export interface IterationStep {
     _id: string;
     name: string;
@@ -21,7 +21,8 @@ export enum StepStatus {
     explanations: Explanation[];
     predecessorStep: string | null;
 }
-  
+
   export interface ModIterationStep extends IterationStep {
     baseStep: string;
   }
+

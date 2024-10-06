@@ -1,0 +1,7 @@
+.dialog-container {
+  width: clamp(400px, 80vw, var(--mat-dialog-container-max-width));
+  max-height: 80vh;
+
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+}

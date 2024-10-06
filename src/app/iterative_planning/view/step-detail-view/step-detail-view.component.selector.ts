@@ -1,5 +1,5 @@
 import { createSelector } from "@ngrx/store";
-import { selectIterativePlanningProperties, selectIterativePlanningPropertiesList, selectIterativePlanningSelectedStep } from "../../state/iterative-planning.selector";
+import { selectIterativePlanningProperties, selectIterativePlanningSelectedStep } from "../../state/iterative-planning.selector";
 
 const selectEnforcedGoalIds = createSelector(selectIterativePlanningSelectedStep, (step) => step?.hardGoals ?? []);
 export const selectEnforcedGoals = createSelector(selectEnforcedGoalIds, selectIterativePlanningProperties,
@@ -7,11 +7,12 @@ export const selectEnforcedGoals = createSelector(selectEnforcedGoalIds, selectI
 );
 
 const selectSoftGoalIds = createSelector(selectIterativePlanningSelectedStep, (step) => step?.softGoals ?? []);
-export const selectSoftGoals = createSelector(selectSoftGoalIds, selectIterativePlanningProperties,
-  (goalIds, planningProperties) => goalIds.map(id => planningProperties?.[id]),
-);
 
-const selectAllPropertyIds = createSelector(selectIterativePlanningPropertiesList, (properties) => properties?.map(({_id}) => _id) ?? []);
-const selectSolvedPropertyIds = createSelector(selectEnforcedGoalIds, selectSoftGoalIds, (enforcedGoalIds, softGoalIds) => [...enforcedGoalIds, ...softGoalIds]);
-const selectUnsolvablePropertyIds = createSelector(selectAllPropertyIds, selectSolvedPropertyIds, (allIds, solvedIds) => allIds.filter(id => !solvedIds.includes(id)));
-export const selectUnsolvableProperties = createSelector(selectUnsolvablePropertyIds, selectIterativePlanningProperties, (unsolvableIds, planningProperties) => unsolvableIds.map(id => planningProperties?.[id]));
+export const selectPlan = createSelector(selectIterativePlanningSelectedStep, (step) => step?.plan);
+export const selectSolvedPropertyIds = createSelector(selectPlan, (plan) => plan?.satisfied_properties ?? []);
+
+const selectSatisfiedSoftGoalIds = createSelector(selectSoftGoalIds, selectSolvedPropertyIds, (softGoalIds, solvedIds) => softGoalIds.filter(id => solvedIds.includes(id)));
+const selectUnsatisfiedSoftGoalIds = createSelector(selectSoftGoalIds, selectSolvedPropertyIds, (softGoalIds, solvedIds) => softGoalIds.filter(id => !solvedIds.includes(id)));
+
+export const selectSatisfiedSoftGoals = createSelector(selectSatisfiedSoftGoalIds, selectIterativePlanningProperties, (satisfiedIds, properties) => satisfiedIds.map(id => properties?.[id]));
+export const selectUnsatisfiedSoftGoals = createSelector(selectUnsatisfiedSoftGoalIds, selectIterativePlanningProperties, (unsatisfiedIds, properties) => unsatisfiedIds.map(id => properties?.[id]));
