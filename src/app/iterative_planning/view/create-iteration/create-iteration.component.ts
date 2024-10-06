@@ -1,5 +1,5 @@
 import { Component, inject } from "@angular/core";
-import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from "@angular/forms";
+import { FormBuilder, FormControl, ReactiveFormsModule, ValidatorFn, Validators } from "@angular/forms";
 import { MatButtonModule } from "@angular/material/button";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatIconModule } from "@angular/material/icon";
@@ -14,6 +14,8 @@ import { SideSheetModule } from "src/app/shared/component/side-sheet/side-sheet.
 import { PlanProeprtyPanelComponent } from "../../components/plan-proeprty-panel/plan-proeprty-panel.component";
 import { selectIterativePlanningProperties } from "../../state/iterative-planning.selector";
 import { selectPlanPropertyIds } from "./create-iteration.component.selector";
+
+const isNonEmptyValidator: ValidatorFn = (control) => (control?.value?.length > 0) ? null : { empty: true};
 
 @Component({
   selector: "app-create-iteration",
@@ -46,7 +48,7 @@ export class CreateIterationComponent {
     general: this.fb.group({
       name: this.fb.control<string>("", Validators.required),
     }),
-    enforcedGoalIds: this.fb.array<FormControl<string>>([]),
+    enforcedGoalIds: this.fb.array<FormControl<string>>([], [isNonEmptyValidator]),
     softGoalIds: this.fb.array<FormControl<string>>([]),
   });
 
@@ -83,13 +85,15 @@ export class CreateIterationComponent {
 
   removeEnforcedGoal(index: number): void {
     this.form.controls.enforcedGoalIds.removeAt(index);
+    this.form.updateValueAndValidity();
   }
 
   removeSoftGoal(index: number): void {
     this.form.controls.softGoalIds.removeAt(index);
   }
-  constructor() {
-    this.addEnforcedGoalIds(['67005f215c5663ed247a6738', '670066055c5663ed247a68f2'])
+
+  onSubmit(): void {
+
   }
 }
 

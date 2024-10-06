@@ -1,4 +1,4 @@
-<form [formGroup]="form">
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
   <app-side-sheet>
     <app-side-sheet-header>
       <app-side-sheet-title>Create Iteration</app-side-sheet-title>
@@ -84,6 +84,8 @@
     </app-side-sheet-content>
 
     <app-side-sheet-footer>
+      <button mat-button type="button">Cancel</button>
+      <button mat-flat-button color="primary" [disabled]="form.invalid">Create</button>
     </app-side-sheet-footer>
   </app-side-sheet>
 </form>
