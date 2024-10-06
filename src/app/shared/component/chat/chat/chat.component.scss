@@ -5,10 +5,16 @@
 }
 
 .chat-container{
+  padding: var(--spacing-200);
+
   height: 100%;
 
   display: grid;
   grid-template-rows: minmax(0, 1fr) auto;
+  gap: var(--spacing-200);
+
+  border-radius: var(--radius-100);
+  @include variables.background-color(surface-container-low);
 }
 
 .message-container {
@@ -21,3 +27,4 @@
   overflow: auto;
 
 }
+

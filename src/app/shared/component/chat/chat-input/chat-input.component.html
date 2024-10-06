@@ -1,1 +1,11 @@
-<p>chat-input works!</p>
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <div class="input-container">
+    <mat-form-field appearance="outline" [ariaExpanded]>
+      <textarea matInput [formControl]="form.controls.input" (keyup)="onKeyPress($event)"></textarea>
+    </mat-form-field>
+
+    <button mat-icon-button color="primary" [disabled]="form.invalid">
+      <mat-icon>send</mat-icon>
+    </button>
+  </div>
+</form>

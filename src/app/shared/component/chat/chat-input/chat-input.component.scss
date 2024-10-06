@@ -1,0 +1,10 @@
+mat-form-field {
+  display: flex;
+  flex-grow: 1;
+}
+
+.input-container {
+  display: flex;
+  flex-direction: row;
+  gap: var(--spacing-200);
+}
