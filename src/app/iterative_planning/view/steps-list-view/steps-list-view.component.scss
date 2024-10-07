@@ -1,10 +1,37 @@
 @use '../../../../variables' as vars;
+@use '../../../../styles/container' as container;
+
+app-page-content {
+  @include container.sm {
+    .page-grid {
+      grid-template-columns: repeat(1, minmax(0, 1fr));
+    }
+  }
+
+  @include container.md {
+    .page-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @include container.lg {
+    .page-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @include container.xl {
+    .page-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+}
 
 .page-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: var(--page-grid-gap);
 }
+
 
 .instructions {
   display: grid;
