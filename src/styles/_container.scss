@@ -1,29 +1,39 @@
 
 @mixin sm {
+    container-type: inline-size;
+
     @container (min-width: #{$container-sm-min}) {
         @content;
     }
  }
 
  @mixin md {
+    container-type: inline-size;
+
     @container (min-width: #{$container-md-min}) {
         @content;
     }
  }
 
  @mixin lg {
+    container-type: inline-size;
+
     @container (min-width: #{$container-lg-min}) {
         @content;
     }
  }
 
  @mixin xl {
+    container-type: inline-size;
+
     @container (min-width: #{$container-xl-min}) {
         @content;
     }
  }
 
  @mixin xxl {
+    container-type: inline-size;
+
     @container (min-width: #{$container-xxl-min}) {
         @content;
     }
