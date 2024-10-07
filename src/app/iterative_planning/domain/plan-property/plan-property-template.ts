@@ -34,7 +34,7 @@ export interface TemplateProgress {
   numSelectableVariables: number;
 }
 
-export function getSentenceTemplateParts(template: PlanPropertyTemplate, progress: TemplateProgress): [string[], TemplateProgress] {
+export function getSentenceTemplateParts(template: PlanPropertyTemplate, progress: TemplateProgress): string[] {// [string[], TemplateProgress] {
     let numSelectableVariables = 0;
     const parts: string[] = [""];
     for (const word of template.sentenceTemplate.split(" ")) {
@@ -48,7 +48,8 @@ export function getSentenceTemplateParts(template: PlanPropertyTemplate, progres
     }
     // console.log(parts);
     progress.numSelectableVariables = numSelectableVariables;
-    return [parts, progress];
+    return parts;
+    // return [parts, progress];
   }
 
 export function initializeVariableConstraints(task: PlanningTask, template: PlanPropertyTemplate, progress: TemplateProgress): TemplateProgress {
@@ -61,7 +62,7 @@ export function initializeVariableConstraints(task: PlanningTask, template: Plan
             const constrainigVar = { name: entry1[0], value: v };
             const constrainedVar = {
               name: entry2[0],
-              values: new Set<string>(),
+              values: [],
             };
             const constrained = getConstraintSatValues(
               constrainigVar,
@@ -70,14 +71,14 @@ export function initializeVariableConstraints(task: PlanningTask, template: Plan
               task.model.initial
             );
             if (constrained) {
-              progress.constraintDomains.addVarValuePosibleValues(
+              progress.constraintDomains.addVarValuePossibleValues(
                 constrainigVar.name,
                 constrainigVar.value,
                 constrainedVar.name,
                 constrainedVar.values
               );
             } else {
-              progress.constraintDomains.addVarValuePosibleValues(
+              progress.constraintDomains.addVarValuePossibleValues(
                 constrainigVar.name,
                 constrainigVar.value,
                 constrainedVar.name,
@@ -85,7 +86,7 @@ export function initializeVariableConstraints(task: PlanningTask, template: Plan
               );
             }
           } else {
-            progress.constraintDomains.addVarValuePosibleValues(
+            progress.constraintDomains.addVarValuePossibleValues(
               entry1[0],
               v,
               entry1[0],
@@ -194,17 +195,17 @@ export function findVarValue(
 export function getPossibleTypeVariableDomains(
     template: PlanPropertyTemplate,
     task: PlanningTask
-  ): Map<string, Set<string>> {
+  ): Map<string, string[]> {
     // get all values which have the right type
-    const map = new Map<string, Set<string>>();
+    const map = new Map<string, string[]>();
     for (const variable of template.variables) {
-      const matchingObjects: Set<string> = new Set();
+      const matchingObjects: string[] = [];
       for (const obj of task.model.objects) {
         if (variable.type.length === 1 && obj.type === variable.type) {
-          matchingObjects.add(obj.name);
+          matchingObjects.push(obj.name);
         }
         if (variable.type.length > 1 && variable.type.includes(obj.type)) {
-          matchingObjects.add(obj.name);
+          matchingObjects.push(obj.name);
         }
       }
       map.set(variable.name, matchingObjects);
@@ -217,15 +218,19 @@ export function getPossibleTypeVariableDomains(
     progress: TemplateProgress,
     task: PlanningTask,
     varValueMapping: Map<string, string>
-  ): Map<string, Set<string>> {
-    let resMap: Map<string, Set<string>> = getPossibleTypeVariableDomains(template, task);
+  ): Map<string, string[]> {
+
+    let possibleValues: Map<string, string[]> = getPossibleTypeVariableDomains(template, task);
+
     for (const variable of varValueMapping.keys()) {
-      resMap = domainIntersection(
-        resMap,
-        progress.constraintDomains.getVarValuePosibleValues(variable, varValueMapping.get(variable))
+      const currentValue = varValueMapping.get(variable);
+
+      possibleValues = domainIntersection(
+        possibleValues,
+        progress.constraintDomains.getVarValuePossibleValues(variable, currentValue)
       );
     }
-    return resMap;
+    return possibleValues;
   }
 
 export interface ActionSetsTemplates {
@@ -234,47 +239,50 @@ export interface ActionSetsTemplates {
 }
 
 export class ConstraintDomains {
-  private map: Map<string, Map<string, Map<string, Set<string>>>> = new Map();
+  private map: Map<string, Map<string, Map<string, string[]>>> = new Map();
 
-  addNewVar(name: string, values: Set<string>) {
-    const valueMaps: Map<string, Map<string, Set<string>>> = new Map();
+  addNewVar(name: string, values: string[]) {
+    const valueMaps: Map<string, Map<string, string[]>> = new Map();
     for (const v of values) {
       valueMaps.set(v, new Map());
     }
     this.map.set(name, valueMaps);
   }
 
-  addVarValuePosibleValues(
+  addVarValuePossibleValues(
     name: string,
     value: string,
     constrainedVarName: string,
-    possibleValues: Set<string>
+    possibleValues: string[]
   ) {
     this.map.get(name).get(value).set(constrainedVarName, possibleValues);
   }
 
-  getVarValuePosibleValues(name: string, value: string) {
+  getVarValuePossibleValues(name: string, value: string) {
     return this.map.get(name).get(value);
   }
 }
 
 export function domainIntersection(
-  domains1: Map<string, Set<string>>,
-  domains2: Map<string, Set<string>>
-): Map<string, Set<string>> {
-  const resMap: Map<string, Set<string>> = new Map();
+  domains1: Map<string, string[]>,
+  domains2: Map<string, string[]>
+): Map<string, string[]> {
+
+  const resMap: Map<string,string[]> = new Map();
+
   for (const name of domains1.keys()) {
     const set1 = domains1.get(name);
     const set2 = domains2.get(name);
-    resMap.set(name, new Set([...set1].filter((x) => set2.has(x))));
+    resMap.set(name, [...set1].filter((x) => set2.includes(x)));
   }
+
   return resMap;
 }
 
-//TODO make it more trolerat for different formats of fact srtings (spaces,...)
+//TODO make it more tolerant for different formats of fact strings (spaces,...)
 export function getConstraintSatValues(
   constrainingVar: { name: string; value: string },
-  constrainedVar: { name: string; values: Set<string> },
+  constrainedVar: { name: string; values: string[] },
   constraints: string[],
   truePredicates: PDDLFact[]
 ): boolean {
@@ -299,7 +307,7 @@ export function getConstraintSatValues(
       for (const pre of truePredicates) {
         const m = conRegex.exec(FactToString(pre).replace(/\s+/, ""));
         if (m) {
-          constrainedVar.values.add(m[1]);
+          constrainedVar.values.push(m[1]);
         }
       }
     }

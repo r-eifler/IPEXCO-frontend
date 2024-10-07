@@ -1,0 +1,37 @@
+@if(isSelected){
+    <span
+        aria-hidden="false"
+        class="variable-value"
+        [matBadge]="values.length"
+        matBadgeColor="primary"
+        matBadgeOverlap="false"
+        matBadgeSize="large"
+        [matMenuTriggerFor]="varMenu">
+        {{ selectedValue }}
+    </span>
+}
+@else{
+    <mat-icon
+        aria-hidden="false"
+        class="variable-icon"
+        [matBadge]="values.length"
+        matBadgeColor="primary"
+        matBadgeSize="large"
+        [matMenuTriggerFor]="varMenu">
+        not_listed_location
+    </mat-icon>
+}
+<mat-menu #varMenu="matMenu" yPosition="above">
+    <button
+        mat-menu-item
+        (click)="resetVar()">
+        reset
+    </button>
+    @for(value of values; track value){
+        <button
+        mat-menu-item
+        (click)="selectValue(value)">
+        {{ value }}
+        </button>
+    }
+</mat-menu>
