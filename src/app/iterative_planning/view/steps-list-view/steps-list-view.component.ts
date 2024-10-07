@@ -11,7 +11,6 @@ import { PageModule } from 'src/app/shared/component/page/page.module';
 import { IterationStepCardComponent } from '../../components/iteration-step-card/iteration-step-card.component';
 import { initNewIterationStep } from '../../state/iterative-planning.actions';
 import { selectIterativePlanningIterationSteps, selectIterativePlanningIterationStepsLoadingState, selectIterativePlanningProperties } from '../../state/iterative-planning.selector';
-
 @Component({
   selector: 'app-steps-list-view',
   standalone: true,

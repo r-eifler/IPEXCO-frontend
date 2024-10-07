@@ -1,9 +1,8 @@
 import { DemosService } from "src/app/service/demo/demo-services";
 import { Demo } from "src/app/interface/demo";
-import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
+import { Component, Inject, OnInit } from "@angular/core";
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
-import { GeneralSettings } from "src/app/interface/settings/general-settings";
-import { Subject } from "rxjs";
+import { GeneralSettings } from "src/app/project/domain/general-settings";
 
 @Component({
   selector: "app-demo-settings",

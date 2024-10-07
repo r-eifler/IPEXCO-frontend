@@ -12,6 +12,15 @@
       <div class="part">
         <h3>Features</h3>
 
+        <mat-label matTooltip="Interface used for creation plan properties" *ngIf="settingsForm.controls.allowQuestions.value">
+          Property Creation Interface
+        </mat-label>
+        <mat-button-toggle-group  formControlName="propertyCreationInterfaceType" *ngIf="settingsForm.controls.allowQuestions.value">
+          <mat-button-toggle [value]="PropertyCreationTypes.TEMPLATE_BASED">Templates</mat-button-toggle>
+          <mat-button-toggle [value]="PropertyCreationTypes.LLM_CHAT">LLM Chat</mat-button-toggle>
+        </mat-button-toggle-group>
+
+
         <mat-slide-toggle formControlName="allowQuestions"
           color="primary"
           matTooltip="Allow the user to ask conflict explanations.">
@@ -26,17 +35,11 @@
         <mat-label matTooltip="Interface used for providing explanations" *ngIf="settingsForm.controls.allowQuestions.value">
           Explanation Interface
         </mat-label>
-        <mat-button-toggle-group  formControlName="explanationInterface" *ngIf="settingsForm.controls.allowQuestions.value">
-          <mat-button-toggle [value]="ExplanationTypes.QUETSIONANSWER">Question/Answer</mat-button-toggle>
-          <mat-button-toggle [value]="ExplanationTypes.MUGSVISU">MUGS Visualization</mat-button-toggle>
+        <mat-button-toggle-group  formControlName="explanationInterfaceType" *ngIf="settingsForm.controls.allowQuestions.value">
+          <mat-button-toggle [value]="ExplanationTypes.TEMPLATE_QUESTION_ANSWER">Templates</mat-button-toggle>
+          <mat-button-toggle [value]="ExplanationTypes.MUGS_VISUALIZATION">MUGS Visualization</mat-button-toggle>
+          <mat-button-toggle [value]="ExplanationTypes.LLM_CHAT">LLM Chat</mat-button-toggle>
         </mat-button-toggle-group>
-
-
-        <mat-slide-toggle formControlName="useConstraints"
-          matTooltip="Allow to define relaxations and enable the option of
-          relaxation level selection when definiting the next iteration step.">
-          Use relaxations
-        </mat-slide-toggle>
 
         <mat-slide-toggle formControlName="provideRelaxationExplanations" *ngIf="settingsForm.controls.useConstraints.value"
           matTooltip="Provide the user with relaxation explanations while analysing
@@ -89,7 +92,7 @@
         </mat-form-field>
 
         <!-- TODO -->
-        <!-- <mat-slide-toggle formControlName="useTimer">
+        <mat-slide-toggle formControlName="useTimer">
           Use Timer
         </mat-slide-toggle>
 
@@ -100,7 +103,7 @@
         <mat-form-field style="width: 200px">
           <mat-label>Max processing time (in min)</mat-label>
           <input matInput type="number" formControlName="maxTime" />
-        </mat-form-field> -->
+        </mat-form-field> 
 
         <mat-slide-toggle formControlName="checkMaxUtility"
           matTooltip="The user is notified, when they reached the maximal possible utility.">

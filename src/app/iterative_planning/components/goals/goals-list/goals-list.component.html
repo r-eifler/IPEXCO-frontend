@@ -8,7 +8,7 @@
           <mat-list-item>
               <mat-icon matListItemIcon>{{ pp.icon }}</mat-icon>
               <h3 matListItemTitle>{{ pp.naturalLanguageDescription }}</h3>
-              @if (( settings$ | async).usePlanPropertyValues) {
+              @if (( settings$ | async).usePlanPropertyUtility) {
               <p matListItemLine>
                 <span>Utility: {{ pp.utility }}</span>
               </p>

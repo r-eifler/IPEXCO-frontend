@@ -1,6 +1,5 @@
 import { createAction, props } from "@ngrx/store";
 import { Project } from "../domain/project";
-import { GeneralSettings } from "src/app/interface/settings/general-settings";
 
 export const loadProject = createAction('[project] load project', props<{id: string}>());
 export const loadProjectSuccess = createAction('[project] load project success', props<{project: Project}>());

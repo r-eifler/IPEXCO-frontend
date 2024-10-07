@@ -3,11 +3,11 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatStepper } from "@angular/material/stepper";
 import { Observable } from "rxjs";
 import { filter, map } from "rxjs/operators";
-import { GeneralSettings } from 'src/app/interface/settings/general-settings';
 import { CurrentProjectService } from 'src/app/service/project/project-services';
 import { ResponsiveService } from "src/app/service/responsive/responsive.service";
 
 import { LogEvent, TimeLoggerService } from "../../../service/logger/time-logger.service";
+import { GeneralSettings } from "src/app/project/domain/general-settings";
 
 @Component({
   selector: "app-demo-help",

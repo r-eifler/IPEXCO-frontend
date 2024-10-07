@@ -7,6 +7,14 @@ const selectIterativePlanningFeature = createFeatureSelector<IterativePlanningSt
 
 export const selectIterativePlanningProject = createSelector(selectIterativePlanningFeature,
     (state) => state.project?.data)
+export const selectIterativePlanningPropertyTemplates = createSelector(selectIterativePlanningFeature,
+    (state) => state.project?.data?.domainSpecification?.planPropertyTemplates)
+export const selectIterativePlanningTask = createSelector(selectIterativePlanningFeature,
+        (state) => state.project?.data?.baseTask)
+
+export const selectIterativePlanningProjectCreationInterfaceType = createSelector(selectIterativePlanningFeature,
+    (state) => state.project?.data.settings?.propertyCreationInterfaceType)
+
 export const selectIterativePlanningProperties = createSelector(selectIterativePlanningFeature,
     (state) => state.planProperties?.data)
 export const selectIterativePlanningPropertiesList = createSelector(selectIterativePlanningFeature,

@@ -5,9 +5,9 @@ import { Store } from "@ngrx/store";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { NewStepInterfaceStatus } from "src/app/interface/interface-status";
-import { GeneralSettings } from "src/app/interface/settings/general-settings";
 import { IterationStep } from "src/app/iterative_planning/domain/iteration_step";
 import { selectIterativePlanningNewStep, selectIterativePlanningProject } from "src/app/iterative_planning/state/iterative-planning.selector";
+import { GeneralSettings } from "src/app/project/domain/general-settings";
 
 @Component({
   selector: "app-new-step-navigator",

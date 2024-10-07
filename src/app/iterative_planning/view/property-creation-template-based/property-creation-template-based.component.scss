@@ -1,0 +1,14 @@
+.class-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    box-sizing: border-box;
+    margin-top: 20px;
+}
+
+.template-buttons-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+

@@ -1,11 +1,10 @@
 import { UserStudyCurrentDataService } from './../../../service/user-study/user-study-data.service';
-import { GeneralSettings } from 'src/app/interface/settings/general-settings';
-import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
+import { Component, Inject, OnInit } from "@angular/core";
 import { Demo } from "src/app/interface/demo";
-import { Subject } from "rxjs";
 import { filter, take } from "rxjs/operators";
 import { LogEvent, TimeLoggerService } from "../../../service/logger/time-logger.service";
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { GeneralSettings } from 'src/app/project/domain/general-settings';
 
 
 @Component({

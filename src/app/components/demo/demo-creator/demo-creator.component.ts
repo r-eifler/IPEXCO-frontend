@@ -1,5 +1,5 @@
 import { PlanPropertyMapService } from './../../../service/plan-properties/plan-property-services';
-import { defaultGeneralSetting } from '../../../interface/settings/general-settings';
+import { defaultGeneralSetting } from '../../../project/domain/general-settings';
 import { DemosService } from "../../../service/demo/demo-services";
 import { Component, Inject, OnInit } from "@angular/core";
 import { Demo } from "src/app/interface/demo";

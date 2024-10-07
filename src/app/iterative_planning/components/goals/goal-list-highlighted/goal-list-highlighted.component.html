@@ -9,7 +9,7 @@
             <mat-list-item>
                 <mat-icon matListItemIcon>{{ pp.icon }}</mat-icon>
                 <h3 matListItemTitle>{{ pp.naturalLanguageDescription }}</h3>
-                @if (( settings$ | async).usePlanPropertyValues) {
+                @if (( settings$ | async).usePlanPropertyUtility) {
                 <p matListItemLine>
                     <span>Utility: {{ pp.utility }}</span>
                 </p>
@@ -34,7 +34,7 @@
                 }
                 <mat-icon matListItemIcon>{{ highlG.goal.icon }}</mat-icon>
                 <h3 matListItemTitle>{{ highlG.goal.naturalLanguageDescription }}</h3>
-                @if (( settings$ | async).usePlanPropertyValues) {
+                @if (( settings$ | async).usePlanPropertyUtility) {
                 <p matListItemLine>
                     <span>Utility: {{ highlG.goal.utility }}</span>
                 </p>

@@ -4,9 +4,15 @@ export interface PaymentInfo {
   steps: number[];
 }
 
+export enum PropertyCreationInterfaceType {
+  TEMPLATE_BASED = "TEMPLATE_BASED",
+  LLM_CHAT = "LLM_CHAT",
+}
+
 export enum ExplanationInterfaceType {
-  QUETSIONANSWER = "question_answer",
-  MUGSVISU = "mugs_visualization"
+  TEMPLATE_QUESTION_ANSWER = "TEMPLATE_QUESTION_ANSWER",
+  MUGS_VISUALIZATION = "MUGS_VISUALIZATION",
+  LLM_CHAT = "LLM_CHAT",
 }
 
 export interface GeneralSettings {
@@ -14,20 +20,18 @@ export interface GeneralSettings {
   public: boolean;
   maxRuns: number;
   allowQuestions: boolean;
-  provideRelaxationExplanations: boolean;
-  usePlanPropertyValues: boolean;
-  useConstraints: boolean;
+  usePlanPropertyUtility: boolean;
   useTimer: boolean;
   measureTime: boolean;
   maxTime: number;
   checkMaxUtility: boolean;
   showPaymentInfo: boolean;
   paymentInfo?: PaymentInfo;
-  showAnimation: boolean;
   introTask: boolean;
   computePlanAutomatically: boolean;
   computeDependenciesAutomatically: boolean;
-  explanationInterface: ExplanationInterfaceType;
+  propertyCreationInterfaceType: PropertyCreationInterfaceType;
+  explanationInterfaceType: ExplanationInterfaceType;
   globalExplanation: boolean;
 }
 
@@ -36,16 +40,14 @@ export const defaultGeneralSetting: GeneralSettings = {
   public: false,
   maxRuns: 100,
   allowQuestions: true,
-  provideRelaxationExplanations: true,
-  usePlanPropertyValues: false,
-  useConstraints: false,
-  explanationInterface: ExplanationInterfaceType.QUETSIONANSWER,
+  usePlanPropertyUtility: false,
+  explanationInterfaceType: ExplanationInterfaceType.TEMPLATE_QUESTION_ANSWER,
+  propertyCreationInterfaceType: PropertyCreationInterfaceType.TEMPLATE_BASED,
   globalExplanation: false,
   useTimer: false,
   measureTime: false,
   maxTime: 0,
   checkMaxUtility: false,
-  showAnimation: false,
   introTask: false,
   computePlanAutomatically: false,
   computeDependenciesAutomatically: false,

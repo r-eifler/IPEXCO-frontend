@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
 import { UntypedFormControl, UntypedFormGroup, Validators } from "@angular/forms";
-import { ExplanationInterfaceType, GeneralSettings } from "src/app/interface/settings/general-settings";
+import { ExplanationInterfaceType, GeneralSettings, PropertyCreationInterfaceType } from "../../domain/general-settings";
 
 
 @Component({
@@ -18,6 +18,7 @@ export class SettingsComponent implements OnInit, OnChanges {
   @Output() updatedSettings = new EventEmitter<GeneralSettings>();
 
   ExplanationTypes = ExplanationInterfaceType;
+  PropertyCreationTypes = PropertyCreationInterfaceType;
 
   constructor() {
     this.settingsForm = new UntypedFormGroup({
@@ -32,7 +33,8 @@ export class SettingsComponent implements OnInit, OnChanges {
       public: new UntypedFormControl(),
       usePlanPropertyValues: new UntypedFormControl(),
       useConstraints: new UntypedFormControl(),
-      explanationInterface: new UntypedFormControl(),
+      explanationInterfaceType: new UntypedFormControl(),
+      propertyCreationInterfaceType: new UntypedFormControl(),
       globalExplanation: new UntypedFormControl(),
       useTimer: new UntypedFormControl(),
       measureTime: new UntypedFormControl(),
@@ -68,15 +70,14 @@ export class SettingsComponent implements OnInit, OnChanges {
     this.settingsForm.controls.maxRuns.setValue(settings.maxRuns);
 
     this.settingsForm.controls.allowQuestions.setValue(settings.allowQuestions);
-    this.settingsForm.controls.provideRelaxationExplanations.setValue(settings.provideRelaxationExplanations);
 
     this.settingsForm.controls.introTask.setValue(settings.introTask);
     this.settingsForm.controls.public.setValue(settings.public);
 
-    this.settingsForm.controls.usePlanPropertyValues.setValue(settings.usePlanPropertyValues);
-    this.settingsForm.controls.useConstraints.setValue(settings.useConstraints);
+    this.settingsForm.controls.usePlanPropertyValues.setValue(settings.usePlanPropertyUtility);
 
-    this.settingsForm.controls.explanationInterface.setValue(settings.explanationInterface);
+    this.settingsForm.controls.explanationInterfaceType.setValue(settings.explanationInterfaceType);
+    this.settingsForm.controls.propertyCreationInterfaceType.setValue(settings.propertyCreationInterfaceType);
     this.settingsForm.controls.globalExplanation.setValue(settings.globalExplanation);
 
     this.settingsForm.controls.useTimer.setValue(settings.useTimer);
@@ -104,14 +105,13 @@ export class SettingsComponent implements OnInit, OnChanges {
      
     let newSettings: GeneralSettings = {
       _id: undefined,
-      maxRuns: parseInt(this.settingsForm.controls.maxRuns.value),  
+      maxRuns: parseInt(this.settingsForm.controls.maxRuns.value),
       allowQuestions: this.settingsForm.controls.allowQuestions.value,
-      provideRelaxationExplanations: this.settingsForm.controls.provideRelaxationExplanations.value,
-      introTask:  this.settingsForm.controls.introTask.value,
+      introTask: this.settingsForm.controls.introTask.value,
       public: this.settingsForm.controls.public.value,
-      usePlanPropertyValues: this.settingsForm.controls.usePlanPropertyValues.value,
-      useConstraints: this.settingsForm.controls.useConstraints.value,
-      explanationInterface: this.settingsForm.controls.explanationInterface.value,
+      usePlanPropertyUtility: this.settingsForm.controls.usePlanPropertyValues.value,
+      explanationInterfaceType: this.settingsForm.controls.explanationInterfaceType.value,
+      propertyCreationInterfaceType: this.settingsForm.controls.propertyCreationInterfaceType.value,
       globalExplanation: this.settingsForm.controls.globalExplanation.value,
       useTimer: this.settingsForm.controls.useTimer.value,
       measureTime: this.settingsForm.controls.measureTime.value,
@@ -121,7 +121,6 @@ export class SettingsComponent implements OnInit, OnChanges {
       checkMaxUtility: this.settingsForm.controls.checkMaxUtility.value,
       showPaymentInfo: this.settingsForm.controls.showPaymentScore.value,
       paymentInfo,
-      showAnimation: false
     }
 
     console.log(newSettings);

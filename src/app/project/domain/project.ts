@@ -1,7 +1,7 @@
 import { DomainSpecification } from "src/app/interface/files/domain-specification";
 import { PDDLFile } from "src/app/interface/files/files";
 import { PlanningTask } from "src/app/interface/planning-task";
-import { GeneralSettings } from "src/app/interface/settings/general-settings";
+import { GeneralSettings } from "./general-settings";
 
 
 export interface Project {

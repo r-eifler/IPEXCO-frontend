@@ -1,14 +1,12 @@
-import { CurrentProjectService } from 'src/app/service/project/project-services';
-import { GeneralSettings } from 'src/app/interface/settings/general-settings';
 import { Component, Input, OnInit } from "@angular/core";
 import { BehaviorSubject, Observable, combineLatest } from "rxjs";
 import { filter, map } from "rxjs/operators";
 import { getMaximalPlanValue, PlanProperty } from "src/app/iterative_planning/domain/plan-property/plan-property";
-import { PlanPropertyMapService } from "src/app/service/plan-properties/plan-property-services";
 import { computePlanValue } from 'src/app/iterative_planning/domain/run';
 import { IterationStep, StepStatus } from 'src/app/iterative_planning/domain/iteration_step';
 import { Store } from '@ngrx/store';
 import { selectIterativePlanningProject, selectIterativePlanningProperties } from 'src/app/iterative_planning/state/iterative-planning.selector';
+import { GeneralSettings } from "src/app/project/domain/general-settings";
 
 @Component({
   selector: "app-score-view",

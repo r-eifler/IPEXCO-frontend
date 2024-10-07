@@ -1,4 +1,4 @@
-import { defaultGeneralSetting } from "../../../interface/settings/general-settings";
+import { defaultGeneralSetting } from "../../../project/domain/general-settings";
 import { Component, inject, Inject, OnDestroy, OnInit } from "@angular/core";
 import { FormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from "@angular/forms";
 import { BehaviorSubject, combineLatest, Observable, Subject } from "rxjs";

@@ -1,18 +1,15 @@
-import { GeneralSettings } from 'src/app/interface/settings/general-settings';
-import { OnDestroy } from '@angular/core';
 import { PlanProperty } from 'src/app/iterative_planning/domain/plan-property/plan-property';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { PlanPropertyMapService } from 'src/app/service/plan-properties/plan-property-services';
 import { RunningDemoService } from 'src/app/service/demo/demo-services';
 import { Component, OnInit} from '@angular/core';
 import { Demo } from 'src/app/interface/demo';
 import { filter, map, takeUntil, take } from 'rxjs/operators';
 import * as d3 from 'd3';
 import { combineLatest } from "rxjs/internal/observable/combineLatest";
-import { CurrentProjectService } from 'src/app/service/project/project-services';
 import { IterationStep } from 'src/app/iterative_planning/domain/iteration_step';
 import { Store } from '@ngrx/store';
-import { selectIterativePlanningProject, selectIterativePlanningProperties, selectIterativePlanningPropertiesList, selectIterativePlanningSelectedStep } from 'src/app/iterative_planning/state/iterative-planning.selector';
+import { selectIterativePlanningProject, selectIterativePlanningPropertiesList, selectIterativePlanningSelectedStep } from 'src/app/iterative_planning/state/iterative-planning.selector';
+import { GeneralSettings } from 'src/app/project/domain/general-settings';
 
 @Component({
   selector: 'app-mugs-visu-main',

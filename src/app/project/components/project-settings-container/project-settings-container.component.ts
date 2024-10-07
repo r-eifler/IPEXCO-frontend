@@ -1,12 +1,12 @@
 import { map, take, tap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { Component, OnInit } from '@angular/core';
-import { GeneralSettings } from 'src/app/interface/settings/general-settings';
 import { Store } from '@ngrx/store';
 import { selectProject, selectProjectSettings } from '../../state/project.selector';
 import { Project } from '../../domain/project';
 import { updateProject } from '../../state/project.actions';
 import { PlanPropertyTemplate } from 'src/app/iterative_planning/domain/plan-property/plan-property-template';
+import { GeneralSettings } from '../../domain/general-settings';
 
 @Component({
   selector: 'app-project-settings-container',

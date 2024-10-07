@@ -52,7 +52,7 @@
                   <p matLine>{{ entry.value.naturalLanguageDescription }}</p>
                   <p
                     matLine
-                    *ngIf="(demo$ | async).settings.usePlanPropertyValues"
+                    *ngIf="(demo$ | async).settings.usePlanPropertyUtility"
                   >
                     Utility: {{ entry.value.value }}
                   </p>

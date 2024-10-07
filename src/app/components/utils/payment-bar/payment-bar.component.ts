@@ -1,9 +1,7 @@
-import { OnDestroy } from '@angular/core';
 import { Component, Input, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Subject, BehaviorSubject, Observable, combineLatest } from 'rxjs';
-import { takeUntil, filter, map, tap } from 'rxjs/operators';
-import { PaymentInfo } from 'src/app/interface/settings/general-settings';
+import { BehaviorSubject, Observable, combineLatest, filter, map } from 'rxjs';
+import { PaymentInfo } from 'src/app/project/domain/general-settings';
 
 @Component({
   selector: 'app-payment-bar',
