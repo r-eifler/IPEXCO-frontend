@@ -161,11 +161,6 @@ import { ScoreBarComponent } from "./components/utils/score-bar/score-bar.compon
 import { ConflictVisuContainerComponent } from './components/visualization/conflict-visu-container/conflict-visu-container.component';
 import { MUGSVisuMainComponent } from './components/visualization/mugs-visu-main/mugs-visu-main.component';
 import { AuthenticationInterceptor } from "./interceptor/authentication.interceptor";
-import { ConflictViewComponent } from "./iterative_planning/components/explanations/conflict-view/conflict-view.component";
-import { ExplanationsSelectPreferenceViewComponent } from "./iterative_planning/components/explanations/explanations-select-preference-view/explanations-select-preference-view.component";
-import { ExplanationsViewComponent } from "./iterative_planning/components/explanations/explanations-view/explanations-view.component";
-import { FinishedStepNavigatorComponent } from "./iterative_planning/components/finished-step/finished-step-navigator/finished-step-navigator.component";
-import { IterationStepOverviewComponent } from "./iterative_planning/components/finished-step/iteration-step-overview/iteration-step-overview.component";
 import { ScoreViewComponent } from "./iterative_planning/components/finished-step/score-view/score-view.component";
 import { GoalListHighlightedComponent } from './iterative_planning/components/goals/goal-list-highlighted/goal-list-highlighted.component';
 import { SelectedHardGoalsComponent } from "./iterative_planning/components/goals/goals-list/goals-list.component";
@@ -289,13 +284,8 @@ import { SendMessageToLLMEffect } from './LLM/state/effects/send-message.effect'
     SettingsComponent,
     CompleteActionComponent,
     IterationStepsListComponent,
-    IterationStepOverviewComponent,
     HardGoalSelectorComponent,
     SelectedHardGoalsComponent,
-    ConflictViewComponent,
-    FinishedStepNavigatorComponent,
-    ExplanationsViewComponent,
-    ExplanationsSelectPreferenceViewComponent,
     NewStepNavigatorComponent,
     ObjectSliderComponent,
     ObjectProgressBarComponent,

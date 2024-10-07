@@ -1,7 +1,7 @@
 import { filter, takeUntil, tap, map } from "rxjs/operators";
 import { BehaviorSubject, combineLatest, Observable, Subject } from "rxjs";
 import { Component, Input, OnDestroy, OnInit } from "@angular/core";
-import { PaymentInfo } from "src/app/interface/settings/general-settings";
+import { PaymentInfo } from "src/app/project/domain/general-settings";
 
 @Component({
   selector: "app-score-bar",

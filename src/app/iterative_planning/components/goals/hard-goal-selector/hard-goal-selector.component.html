@@ -11,7 +11,7 @@
               <mat-icon matListIcon>{{pp.icon}}</mat-icon>
               <div class="list-item-text">
                 <span> {{ pp.naturalLanguageDescription }} </span>
-                <span *ngIf="( settings$ | async).usePlanPropertyValues"> Utility: {{ pp.value }} </span>
+                <span *ngIf="( settings$ | async).usePlanPropertyUtility"> Utility: {{ pp.value }} </span>
               </div>
               <div class="list-item-buttons">
                 <button
@@ -44,7 +44,7 @@
               <mat-icon matListIcon>{{pp.icon}}</mat-icon>
               <div class="list-item-text">
                 <span> {{ pp.naturalLanguageDescription }} </span>
-                <span *ngIf="( settings$ | async).usePlanPropertyValues"> Utility: {{ pp.value }} </span>
+                <span *ngIf="( settings$ | async).usePlanPropertyUtility"> Utility: {{ pp.value }} </span>
               </div>
               <div class="list-item-buttons">
                 <button

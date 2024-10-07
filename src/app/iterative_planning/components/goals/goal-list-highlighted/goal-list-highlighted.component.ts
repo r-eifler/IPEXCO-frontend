@@ -1,9 +1,9 @@
 import { Component, Input } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { BehaviorSubject, combineLatest, filter, map, Observable, tap } from 'rxjs';
-import { GeneralSettings } from 'src/app/interface/settings/general-settings';
 import { PlanProperty } from 'src/app/iterative_planning/domain/plan-property/plan-property';
 import { selectIterativePlanningProperties } from 'src/app/iterative_planning/state/iterative-planning.selector';
+import { GeneralSettings } from 'src/app/project/domain/general-settings';
 
 
 interface HighlightedGoals {

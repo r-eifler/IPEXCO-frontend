@@ -41,7 +41,7 @@
     </div>
 
     <div class="center-container" *ngIf="!showTaskInfo && selectedStep$ | async">
-      <app-finished-step-navigator style="height: 100%; overflow: auto"></app-finished-step-navigator>
+
     </div>
 
     <div class="center-container" *ngIf="!showTaskInfo && (selectedStep$ | async) === null && (newStep$ | async)">

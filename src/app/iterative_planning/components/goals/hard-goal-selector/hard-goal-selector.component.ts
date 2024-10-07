@@ -2,10 +2,10 @@ import { Component, OnInit } from "@angular/core";
 import { Store } from "@ngrx/store";
 import { Observable, combineLatest } from "rxjs";
 import { filter, map, take, } from "rxjs/operators";
-import { GeneralSettings } from "src/app/interface/settings/general-settings";
 import { ModIterationStep } from "src/app/iterative_planning/domain/iteration_step";
 import { PlanProperty } from "src/app/iterative_planning/domain/plan-property/plan-property";
 import { selectIterativePlanningNewStep, selectIterativePlanningProject, selectIterativePlanningProperties } from "src/app/iterative_planning/state/iterative-planning.selector";
+import { GeneralSettings } from "src/app/project/domain/general-settings";
 
 
 @Component({

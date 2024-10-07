@@ -1,12 +1,10 @@
-import { PlanPropertyMapService } from "../../../../service/plan-properties/plan-property-services";
 import { Component, Input, OnInit } from "@angular/core";
 import { BehaviorSubject, Observable, combineLatest } from "rxjs";
 import { PlanProperty } from "src/app/iterative_planning/domain/plan-property/plan-property";
-import { GeneralSettings } from "src/app/interface/settings/general-settings";
 import { filter, map } from "rxjs/operators";
-import { IterationStep } from "src/app/iterative_planning/domain/iteration_step";
 import { Store } from "@ngrx/store";
 import { selectIterativePlanningProperties } from "src/app/iterative_planning/state/iterative-planning.selector";
+import { GeneralSettings } from "src/app/project/domain/general-settings";
 
 @Component({
   selector: "app-goals-list",

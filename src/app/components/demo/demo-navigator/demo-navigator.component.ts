@@ -1,5 +1,3 @@
-import { IterationStepsService } from './../../../service/planner-runs/iteration-steps.service';
-import { GeneralSettings } from "src/app/interface/settings/general-settings";
 import { DemoFinishedComponent } from "./../demo-finished/demo-finished.component";
 import { Component, EventEmitter, OnDestroy, OnInit, Output } from "@angular/core";
 import { Demo } from "src/app/interface/demo";
@@ -17,6 +15,7 @@ import { IterationStep } from 'src/app/iterative_planning/domain/iteration_step'
 import { Store } from '@ngrx/store';
 import { selectIterativePlanningIterationSteps, selectIterativePlanningNewStep, selectIterativePlanningProperties, selectIterativePlanningSelectedStep } from 'src/app/iterative_planning/state/iterative-planning.selector';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { GeneralSettings } from "src/app/project/domain/general-settings";
 
 
 @Component({
