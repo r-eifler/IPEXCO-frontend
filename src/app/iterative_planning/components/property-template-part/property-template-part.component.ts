@@ -25,6 +25,11 @@ export class PropertyTemplatePartComponent {
   @Output() reset = new EventEmitter<void>();
 
 
+  displayOrder(values: string[]): string[]{
+    return values.sort();
+  }
+
+
   selectValue(v: string) {
     this.value.emit(v);
   }
