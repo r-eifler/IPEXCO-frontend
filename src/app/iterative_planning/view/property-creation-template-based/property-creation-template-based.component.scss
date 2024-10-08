@@ -6,9 +6,34 @@
     margin-top: 20px;
 }
 
+.step-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    box-sizing: border-box;
+}
+
 .template-buttons-container {
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
 
+.template-card{
+    box-sizing: border-box; 
+    margin-top: 30px; 
+}
+
+.template-container {
+    padding: 20px 0px 20px 0px
+}
+
+.note-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+.note {
+    color: red;
+}

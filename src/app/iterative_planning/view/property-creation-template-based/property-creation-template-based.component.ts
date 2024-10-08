@@ -1,9 +1,9 @@
 import { AsyncPipe, KeyValuePipe, NgFor, NgIf } from '@angular/common';
 import { Component, inject, output } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { filter, first, map, Observable, tap } from 'rxjs';
-import { ConstraintDomains, generatePlanProperty, getPossibleVariableValues, getSentenceTemplateParts, initializeVariableConstraints, PlanPropertyTemplate, TemplateProgress } from '../../domain/plan-property/plan-property-template';
-import { selectIterativePlanningProject, selectIterativePlanningPropertyTemplates, selectIterativePlanningTask } from '../../state/iterative-planning.selector';
+import { filter, first, map, Observable, take, tap } from 'rxjs';
+import { generateDummyPlanProperty, generatePlanProperty, getPossibleValues, getTemplateParts, PlanPropertyTemplate, TemplatePart } from '../../domain/plan-property/plan-property-template';
+import { selectIterativePlanningProject, selectIterativePlanningPropertiesList, selectIterativePlanningPropertyTemplates, selectIterativePlanningTask } from '../../state/iterative-planning.selector';
 import { DialogModule } from 'src/app/shared/component/dialog/dialog.module'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatStepper, MatStepperModule } from '@angular/material/stepper';
@@ -13,21 +13,11 @@ import { MatInputModule } from '@angular/material/input';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatCardModule } from '@angular/material/card';
 import { PropertyTemplatePartComponent } from '../../components/property-template-part/property-template-part.component'
-import { PlanProperty } from '../../domain/plan-property/plan-property';
+import { equalPlanProperties, PlanProperty } from '../../domain/plan-property/plan-property';
 import { MatDialogRef } from '@angular/material/dialog';
 import { Project } from '../../../project/domain/project';
-import { PlanningTask } from '../../../interface/planning-task';
+import { PDDLObject, PlanningTask } from '../../../interface/planning-task';
 import { createPlanProperty } from '../../state/iterative-planning.actions';
-
-
-export interface TemplatePart {
-	isVar: boolean,
-	isSelected: boolean,
-	var: string | undefined,
-	text: string, 
-	possibleValues: string[]
-}
-
 
 @Component({
   selector: 'app-property-creation-template-based',
@@ -61,23 +51,24 @@ export class PropertyCreationTemplateBasedComponent {
 
   project$: Observable<Project>;
   planningTask$: Observable<PlanningTask>;
+  planProperties$: Observable<PlanProperty[]>
   templates$: Observable<PlanPropertyTemplate[]>;
   groupedTemplates$: Observable<Record<string,PlanPropertyTemplate[]>>;
 
   selectedTemplate: PlanPropertyTemplate;
-  initializationProgress: TemplateProgress;
 
-  textParts: string[];
   templateParts: TemplatePart[] = [];
-  selectedVariableValue: Map<string, string> = new Map();
-  possibleVariableValues: Map<string, string[]>;
-  selectedVariablePlaceholder: string;
+  selectedVariableValue: Record<string, PDDLObject> = {};
+  possibleVariableValues: Record<string, PDDLObject[]>;
 
-  allSelected: boolean = false;
+  allSelected = false;
+  propertyAlreadyExists = false;
 
   constructor() {
 
-	this.project$ = this.store.select(selectIterativePlanningProject)
+	  this.project$ = this.store.select(selectIterativePlanningProject);
+    this.planProperties$ = this.store.select(selectIterativePlanningPropertiesList);
+
     this.planningTask$ = this.store.select(selectIterativePlanningTask);
     this.templates$ = this.store.select(selectIterativePlanningPropertyTemplates);
     this.groupedTemplates$ = this.templates$.pipe(
@@ -92,38 +83,29 @@ export class PropertyCreationTemplateBasedComponent {
     );
   }
 
-  private init(task: PlanningTask){
-
-    initializeVariableConstraints(task, this.selectedTemplate, this.initializationProgress);
-    console.log(this.initializationProgress)
-    this.textParts = getSentenceTemplateParts(this.selectedTemplate, this.initializationProgress);
-  }
-
   private updatePossibleVariableValues(){
     this.planningTask$.pipe(
         first(task => !!task),
       ).subscribe(
       task => {
 
-        if(this.textParts.length == 0){
-          this.init(task);
+        if(this.templateParts.length == 0){
+          this.templateParts = getTemplateParts(this.selectedTemplate);
         }
-        
-        this.possibleVariableValues = getPossibleVariableValues(
+
+        this.possibleVariableValues = getPossibleValues(
           this.selectedTemplate,
-          this.initializationProgress,
           task,
           this.selectedVariableValue,
-        );
+        )
 
         console.log(this.possibleVariableValues)
 
-        this.templateParts = this.textParts.map(p => ({
-          isVar: p.startsWith('$'),
-          isSelected: p.startsWith('$') ? this.selectedVariableValue.has(p) : false,
-          var: p.startsWith('$') ? p : undefined,
-          text: (p.startsWith('$') && this.selectedVariableValue.has(p)) ? this.selectedVariableValue.get(p) : p,
-          possibleValues: p.startsWith('$') ? this.possibleVariableValues.get(p) : []
+        this.templateParts = this.templateParts.map(p => ({
+          ...p,
+          isSelected: p.isVar ? this.selectedVariableValue[p.var] !== undefined : false,
+          text: (p.isVar && this.selectedVariableValue[p.var]) ? this.selectedVariableValue[p.var].name: p.text,
+          possibleValues: p.isVar ? this.possibleVariableValues[p.var] : []
         }))
 
         console.log(this.templateParts)
@@ -135,28 +117,41 @@ export class PropertyCreationTemplateBasedComponent {
     this.selectedTemplate = template
     console.log(template)
 
-	  this.initializationProgress = {
-      constraintDomains: new ConstraintDomains(),
-      numSelectableVariables: 0,
-	  }
-
     stepper.selected.completed = true;
     stepper.next();
 
-	  this.textParts = [];
+	  this.templateParts = [];
     this.updatePossibleVariableValues();
   }
 
-  selectVariableValue(variable: string, value: string) {
-    this.selectedVariableValue.set(variable, value);
+  selectVariableValue(variable: string, object: PDDLObject) {
+
+    this.selectedVariableValue[variable] = object;
+    console.log("Selected Variables: " + this.selectedVariableValue)
+
     this.updatePossibleVariableValues()
-	  this.allSelected = this.selectedVariableValue.size === this.possibleVariableValues.size
+
+	  this.allSelected = Object.keys(this.selectedVariableValue).length === Object.keys(this.possibleVariableValues).length
+
+    if(this.allSelected){
+      this.planProperties$.pipe(first(properties => !!properties)).subscribe(
+        properties => this.propertyAlreadyExists = properties.some(
+          p => equalPlanProperties(p, 
+            generateDummyPlanProperty(
+              this.selectedTemplate,
+              this.selectedVariableValue
+            )
+          ))
+        );
+    }
   }
+  
 
   resetVariableValue(variable: string) {
-    this.selectedVariableValue.delete(variable);
+    delete this.selectedVariableValue[variable];
     this.updatePossibleVariableValues();
 	  this.allSelected = false;
+    this.propertyAlreadyExists = false;
   }
 
   onCancel(){
@@ -171,7 +166,6 @@ export class PropertyCreationTemplateBasedComponent {
       project => {
         const newPlanProperty = generatePlanProperty(
           this.selectedTemplate,
-          this.initializationProgress,
           this.selectedVariableValue,
           project.baseTask,
           project
