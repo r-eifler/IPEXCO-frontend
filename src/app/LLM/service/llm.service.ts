@@ -13,12 +13,14 @@ export class LLMService{
     private http = inject(HttpClient)
     private BASE_URL = environment.apiURL + "llm/";
 
-    postMessage$(messages: Message[]): Observable<string> {
-        console.log(messages)
-        return this.http.post<IHTTPData<string>>(this.BASE_URL + 'simple', {data: messages}).pipe(
-            map(({data}) => data),
+    
+    postMessage$(messages: Message[], endpoint: string): Observable<string> {
+        endpoint = endpoint ?? 'simple';
+        endpoint = 'qt'
+        console.log(messages);
+        return this.http.post<IHTTPData<string>>(this.BASE_URL + endpoint, { data: messages }).pipe(
+            map(({ data }) => data),
             tap(console.log)
-        )
-
+        );
     }
 }

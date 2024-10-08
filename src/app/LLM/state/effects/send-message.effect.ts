@@ -18,9 +18,15 @@ export class SendMessageToLLMEffect{
     public sendMessage$ = createEffect(() => this.actions$.pipe(
         ofType(sendMessageToLLM),
         concatLatestFrom(() => this.store.select(selectMessages)),
-        switchMap(([{request}, messages]) => this.service.postMessage$(messages).pipe(
-            map(response => sendMessageToLLMSuccess({response})),
-            catchError(() => of(sendMessageToLLMFailure()))
-        ))
+        switchMap(([action, messages]) => {
+            return this.service.postMessage$(messages, action.endpoint).pipe(
+                map(response => sendMessageToLLMSuccess({response})),
+                catchError(() => of(sendMessageToLLMFailure()))
+            );
+        })
+        // switchMap(([{request}, messages]) => this.service.postMessage$(messages).pipe(
+        //     map(response => sendMessageToLLMSuccess({response})),
+        //     catchError(() => of(sendMessageToLLMFailure()))
+        // ))
     ))
 }

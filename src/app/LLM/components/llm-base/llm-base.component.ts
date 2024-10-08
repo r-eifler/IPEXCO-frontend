@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { sendMessageToLLM } from '../../state/llm.actions';
 import { selectIsLoading, selectMessages } from './llm-base.component.selector';
+import { TranslatorRequest,QuestionTranslationRequest, GoalTranslationRequest, ExplanationTranslationRequest } from '../../translators_interfaces';
 
 @Component({
   selector: 'app-llm-base',
@@ -15,6 +16,13 @@ export class LlmBaseComponent {
   isLoading$ = this.store.select(selectIsLoading);
 
   onUserMessage(request: string) {
-    this.store.dispatch(sendMessageToLLM({ request }))
+    const qt_request: QuestionTranslationRequest = {
+      question: request,
+      enforcedGoals: [],  
+      satisfiedGoals: [],
+      unsatisfiedGoals: [],
+      existingPlanProperties: []
+    }
+    this.store.dispatch(sendMessageToLLM({ request: qt_request, endpoint: 'qt' } as TranslatorRequest))
   }
 }
