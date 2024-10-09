@@ -1,7 +1,7 @@
 import { createReducer, on } from "@ngrx/store";
 import { LoadingState } from "src/app/shared/common/loadable.interface";
 import { Message } from "../domain/message";
-import { sendMessageToLLM, sendMessageToLLMSuccess } from "./llm.actions";
+import { sendMessageToLLM, sendMessageToLLMSuccess, sendMessageToLLMQuestionTranslator, sendMessageToLLMGoalTranslator, sendMessageToLLMExplanationTranslator } from "./llm.actions";
 import { ExplanationTranslationRequest, GoalTranslationRequest, QuestionTranslationRequest } from "../translators_interfaces";
 
 export interface LLMChatState {
@@ -34,5 +34,17 @@ export const llmChatReducer = createReducer(
         ...state,
         loadingState: LoadingState.Done,
         messages: [... state.messages, {role: 'assistant', content: response}]
+    })),
+    on(sendMessageToLLMQuestionTranslator, (state, action): LLMChatState => ({
+        ...state,
+        qt_history: [...state.qt_history, action]
+    })),
+    on(sendMessageToLLMGoalTranslator, (state, action): LLMChatState => ({
+        ...state,
+        gt_history: [...state.gt_history, action]
+    })),
+    on(sendMessageToLLMExplanationTranslator, (state, action): LLMChatState => ({
+        ...state,
+        et_history: [...state.et_history, action]
     })),
 );
