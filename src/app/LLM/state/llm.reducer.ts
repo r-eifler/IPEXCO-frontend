@@ -1,15 +1,15 @@
 import { createReducer, on } from "@ngrx/store";
 import { LoadingState } from "src/app/shared/common/loadable.interface";
 import { Message } from "../domain/message";
-import { sendMessageToLLM, sendMessageToLLMSuccess, sendMessageToLLMQuestionTranslator, sendMessageToLLMGoalTranslator, sendMessageToLLMExplanationTranslator } from "./llm.actions";
-import { ExplanationTranslationRequest, GoalTranslationRequest, QuestionTranslationRequest } from "../translators_interfaces";
+import { sendMessageToLLM, sendMessageToLLMSuccess, sendMessageToLLMQuestionTranslator, sendMessageToLLMGoalTranslator, sendMessageToLLMExplanationTranslator, sendMessageToLLMQuestionTranslatorSuccess, sendMessageToLLMGoalTranslatorSuccess, sendMessageToLLMExplanationTranslatorSuccess } from "./llm.actions";
+import { ExplanationTranslationRequest, ExplanationTranslatorHistory, GoalTranslationRequest, GoalTranslatorHistory, QuestionTranslationRequest, QuestionTranslatorHistory } from "../translators_interfaces";
 
 export interface LLMChatState {
     loadingState: LoadingState;
     messages: Message[]; // actually displayed messages.
-    qt_history: QuestionTranslationRequest[]; 
-    gt_history: GoalTranslationRequest[];
-    et_history: ExplanationTranslationRequest[];        
+    qt_history: QuestionTranslatorHistory;
+    gt_history: GoalTranslatorHistory;
+    et_history: ExplanationTranslatorHistory;
 }
 
 export const LLMChatFeature = 'llm';
@@ -22,29 +22,40 @@ const initialState: LLMChatState = {
     et_history: []
 }
 
-
 export const llmChatReducer = createReducer(
     initialState,
-    on(sendMessageToLLM, (state, {request}): LLMChatState => ({
+    on(sendMessageToLLM, (state, { request }): LLMChatState => ({
         ...state,
         loadingState: LoadingState.Loading,
-        messages: [... state.messages, {role: 'user', content: request}]
+        messages: [...state.messages, { role: 'user', content: request }]
     })),
-    on(sendMessageToLLMSuccess, (state, {response}): LLMChatState => ({
+    on(sendMessageToLLMSuccess, (state, { response }): LLMChatState => ({
         ...state,
         loadingState: LoadingState.Done,
-        messages: [... state.messages, {role: 'assistant', content: response}]
+        messages: [...state.messages, { role: 'assistant', content: response }]
     })),
     on(sendMessageToLLMQuestionTranslator, (state, action): LLMChatState => ({
         ...state,
-        qt_history: [...state.qt_history, action]
+        qt_history: [...state.qt_history, { input: action, output: null }]
+    })),
+    on(sendMessageToLLMQuestionTranslatorSuccess, (state, action): LLMChatState => ({
+        ...state,
+        qt_history: [...state.qt_history.slice(0, -1), { input: state.qt_history[state.qt_history.length - 1].input, output: action.response }]
     })),
     on(sendMessageToLLMGoalTranslator, (state, action): LLMChatState => ({
         ...state,
-        gt_history: [...state.gt_history, action]
+        gt_history: [...state.gt_history, { input: action, output: null }]
+    })),
+    on(sendMessageToLLMGoalTranslatorSuccess, (state, action): LLMChatState => ({
+        ...state,
+        gt_history: [...state.gt_history.slice(0, -1), { input: state.gt_history[state.gt_history.length - 1].input, output: action.response }]
     })),
     on(sendMessageToLLMExplanationTranslator, (state, action): LLMChatState => ({
         ...state,
-        et_history: [...state.et_history, action]
+        et_history: [...state.et_history, { input: action, output: null }]
+    })),
+    on(sendMessageToLLMExplanationTranslatorSuccess, (state, action): LLMChatState => ({
+        ...state,
+        et_history: [...state.et_history.slice(0, -1), { input: state.et_history[state.et_history.length - 1].input, output: action.response }]
     })),
 );
