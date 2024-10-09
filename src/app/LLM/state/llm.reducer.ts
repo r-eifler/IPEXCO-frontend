@@ -1,7 +1,7 @@
 import { createReducer, on } from "@ngrx/store";
 import { LoadingState } from "src/app/shared/common/loadable.interface";
 import { Message } from "../domain/message";
-import { sendMessageToLLM, sendMessageToLLMSuccess, sendMessageToLLMQuestionTranslator, sendMessageToLLMGoalTranslator, sendMessageToLLMExplanationTranslator, sendMessageToLLMQuestionTranslatorSuccess, sendMessageToLLMGoalTranslatorSuccess, sendMessageToLLMExplanationTranslatorSuccess } from "./llm.actions";
+import { sendMessageToLLM, sendMessageToLLMSuccess, sendMessageToLLMQuestionTranslator, sendMessageToLLMGoalTranslator, sendMessageToLLMExplanationTranslator, sendMessageToLLMQuestionTranslatorSuccess, sendMessageToLLMGoalTranslatorSuccess, sendMessageToLLMExplanationTranslatorSuccess, eraseLLMHistory } from "./llm.actions";
 import { ExplanationTranslationRequest, ExplanationTranslatorHistory, GoalTranslationRequest, GoalTranslatorHistory, QuestionTranslationRequest, QuestionTranslatorHistory } from "../translators_interfaces";
 
 export interface LLMChatState {
@@ -33,6 +33,14 @@ export const llmChatReducer = createReducer(
         ...state,
         loadingState: LoadingState.Done,
         messages: [...state.messages, { role: 'assistant', content: response }]
+    })),
+    on(eraseLLMHistory, (state): LLMChatState => ({
+        ...state,
+        loadingState: LoadingState.Initial,
+        messages: [],
+        qt_history: [],
+        gt_history: [],
+        et_history: []
     })),
     on(sendMessageToLLMQuestionTranslator, (state, action): LLMChatState => ({
         ...state,
