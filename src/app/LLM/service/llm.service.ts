@@ -6,6 +6,7 @@ import { map, tap } from "rxjs/operators";
 import { IHTTPData } from "src/app/interface/http-data.interface";
 import { Message } from "../domain/message";
 import { TranslationHistory } from "../translators_interfaces";
+import templates from "../templates.json"
 
 @Injectable()
 export class LLMService{
@@ -24,3 +25,27 @@ export class LLMService{
         );
     }
 }
+
+function prepareGoalTranslatorMessage(input: GoalTranslationRequest): string {
+    const promptTemplate = templates.goal_translator;
+  
+    // Replace placeholders with actual values
+    return promptTemplate
+      .replace('{predicates}', JSON.stringify(input.predicates))
+      .replace('{objects}', JSON.stringify(input.objects));
+  }
+  
+  function prepareQuestionTranslatorMessage(input: QuestionTranslationRequest): string {
+    const promptTemplate = templates.question_translator;
+    return promptTemplate
+      .replace('{question}', input.question)
+  
+  }
+  
+  function prepareExplanationTranslatorMessage(input: ExplanationTranslationRequest): string {
+    const promptTemplate = templates.explanation_translator;
+  
+    return promptTemplate
+      .replace('{question}', input.question)
+      
+  }
