@@ -101,6 +101,25 @@ export interface ExplanationTranslationResponse {
 }
 
 
+export interface QuestionTranslatorHistoryStep {
+    input: QuestionTranslationRequest,
+    output: QuestionTranslationResponse
+}
+
+export interface GoalTranslatorHistoryStep {
+    input: GoalTranslationRequest,
+    output: GoalTranslationResponse
+}
+
+export interface ExplanationTranslatorHistoryStep {
+    input: ExplanationTranslationRequest,
+    output: ExplanationTranslationResponse
+}
+
+export type QuestionTranslatorHistory =  QuestionTranslatorHistoryStep[]
+export type GoalTranslatorHistory = GoalTranslatorHistoryStep[]
+export type ExplanationTranslatorHistory = ExplanationTranslatorHistoryStep[]
+
 
 
 
