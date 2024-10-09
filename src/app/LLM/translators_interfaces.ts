@@ -120,8 +120,6 @@ export type QuestionTranslatorHistory =  QuestionTranslatorHistoryStep[]
 export type GoalTranslatorHistory = GoalTranslatorHistoryStep[]
 export type ExplanationTranslatorHistory = ExplanationTranslatorHistoryStep[]
 
-
-
-
-
-  
+export type TranslationHistory = QuestionTranslatorHistory | GoalTranslatorHistory | ExplanationTranslatorHistory
+export type TranslationHistoryStep = QuestionTranslatorHistoryStep | GoalTranslatorHistoryStep | ExplanationTranslatorHistoryStep
+export type TranslationRequest = QuestionTranslationRequest | GoalTranslationRequest | ExplanationTranslationRequest

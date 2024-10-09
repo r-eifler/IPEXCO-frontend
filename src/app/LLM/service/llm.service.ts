@@ -5,7 +5,7 @@ import { environment } from "src/environments/environment";
 import { map, tap } from "rxjs/operators";
 import { IHTTPData } from "src/app/interface/http-data.interface";
 import { Message } from "../domain/message";
-
+import { TranslationHistory } from "../translators_interfaces";
 
 @Injectable()
 export class LLMService{
@@ -14,7 +14,7 @@ export class LLMService{
     private BASE_URL = environment.apiURL + "llm/";
 
     
-    postMessage$(messages: Message[], endpoint: string): Observable<string> {
+    postMessage$(messages: Message[] | TranslationHistory, endpoint: string): Observable<string> {
         endpoint = endpoint ?? 'simple';
         endpoint = 'qt'
         console.log(messages);
