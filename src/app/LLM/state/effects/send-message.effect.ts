@@ -3,10 +3,10 @@ import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { catchError, map, switchMap } from "rxjs/operators";
 import { of } from "rxjs";
 import { LLMService } from "../../service/llm.service";
-import { sendMessageToLLM, sendMessageToLLMFailure, sendMessageToLLMQuestionTranslator, sendMessageToLLMQuestionTranslatorFailure, sendMessageToLLMQuestionTranslatorSuccess, sendMessageToLLMSuccess } from "../llm.actions";
+import { sendMessageToLLM, sendMessageToLLMFailure, sendMessageToLLMQuestionTranslator, sendMessageToLLMQuestionTranslatorFailure, sendMessageToLLMQuestionTranslatorSuccess, sendMessageToLLMSuccess, sendMessageToLLMGoalTranslator, sendMessageToLLMGoalTranslatorSuccess, sendMessageToLLMGoalTranslatorFailure } from "../llm.actions";
 import { concatLatestFrom } from "@ngrx/operators";
 import { Store } from "@ngrx/store";
-import { selectMessages } from "../llm.selector";
+import { selectMessages, selectQuestionTranslatorThreadId, selectGoalTranslatorThreadId } from "../llm.selector";
 
 @Injectable()
 export class SendMessageToLLMEffect{
@@ -24,11 +24,13 @@ export class SendMessageToLLMEffect{
         ))
     ))
 
-    public sendMessageToQuestionTranslator$ = createEffect(() => this.actions$.pipe(
-        ofType(sendMessageToLLMQuestionTranslator),
-        switchMap((action) => this.service.postMessage$(action,endpoint="qt").pipe(
-            map(response => sendMessageToLLMQuestionTranslatorSuccess({ response })),
-            catchError(() => of(sendMessageToLLMQuestionTranslatorFailure()))
+  
+    public sendMessageToGoalTranslator$ = createEffect(() => this.actions$.pipe(
+        ofType(sendMessageToLLMGoalTranslator),
+        concatLatestFrom(() => this.store.select(selectGoalTranslatorThreadId)),
+        switchMap(([request]) => this.service.postMessageGT$(request).pipe(
+            map(response => sendMessageToLLMGoalTranslatorSuccess(response)),
+            catchError(() => of(sendMessageToLLMGoalTranslatorFailure()))
         ))
-    ))          
+    ))
 }

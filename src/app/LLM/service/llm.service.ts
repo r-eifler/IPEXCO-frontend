@@ -5,7 +5,10 @@ import { environment } from "src/environments/environment";
 import { map, tap } from "rxjs/operators";
 import { IHTTPData } from "src/app/interface/http-data.interface";
 import { Message } from "../domain/message";
-import { ExplanationTranslationRequest, GoalTranslationRequest, QuestionTranslationRequest, GoalTranslationResponse, QuestionTranslationResponse,ExplanationTranslationResponse, QuestionTranslatorHistory, ExplanationTranslatorHistory } from "../translators_interfaces";
+import { ExplanationTranslationRequest, GoalTranslationRequest, QuestionTranslationRequest } from "../interfaces/translators_interfaces";
+import { GoalTranslationResponse, QuestionTranslationResponse, ExplanationTranslationResponse } from "../interfaces/translators_interfaces";
+import { QuestionTranslatorHistory, ExplanationTranslatorHistory, GoalTranslatorHistory,TranslationHistory } from "../interfaces/translators_interfaces";
+import { explanationTranslationRequestToString, goalTranslationRequestToString, questionTranslationRequestToString } from "../interfaces/translators_interfaces_strings";
 import * as templates from "../templates.json"
 import { ofType } from "@ngrx/effects";
 import { isTypeElement } from "typescript";
@@ -17,76 +20,35 @@ export class LLMService{
     private BASE_URL = environment.apiURL + "llm/";
 
     
-    postMessage$(messages: Message[] | TranslationHistory, endpoint: string): Observable<string> {
-        endpoint = endpoint ?? 'simple';
-
-        if(endpoint === 'gt'){
-            messages = prepareGoalTranslatorMessage(messages as GoalTranslationHistory);
-        }
-        else if(endpoint === 'qt'){
-            messages = prepareQuestionTranslatorMessage(messages as QuestionTranslationRequest);
-        }
-        else if(endpoint === 'et'){
-            messages = prepareExplanationTranslatorMessage(messages as ExplanationTranslationRequest);
-        }
+    postMessage$(messages: Message[] | TranslationHistory): Observable<string> {
         console.log(messages);
-        return this.http.post<IHTTPData<string>>(this.BASE_URL + endpoint, { data: messages }).pipe(
+        return this.http.post<IHTTPData<string>>(this.BASE_URL + "simple", { data: messages }).pipe(
             map(({ data }) => data),
             tap(console.log)
         );
     }
-}
-
-function prepareGoalTranslatorMessage(input: GoalTranslationRequest): string {
-    const promptTemplate = templates.goal_translator;
-  
-    // Replace placeholders with actual values
-    return promptTemplate
-      .replace('{goal}', input.goalDescription)
-      .replace('{predicates}', JSON.stringify(input.predicates))
-      .replace('{objects}', JSON.stringify(input.objects))
-      .replace('{existing_plan_properties}', JSON.stringify(input.existingPlanProperties));
-}
-  
-function prepareGoalTranslatorResponse(response: GoalTranslatorResponse): string {
-    const formula = 
-
-}
-  
-  function prepareQuestionTranslatorMessage(input: QuestionTranslationRequest): string {
-    const promptTemplate = templates.question_translator;
-    return promptTemplate
-      .replace('{question}', input.question)
-      .replace('{enforced_goals}', JSON.stringify(input.enforcedGoals))
-      .replace('{satisfied_goals}', JSON.stringify(input.satisfiedGoals))
-      .replace('{unsatisfied_goals}', JSON.stringify(input.unsatisfiedGoals))
-      .replace('{existing_plan_properties}', JSON.stringify(input.existingPlanProperties));
-  }
-  
-  function prepareExplanationTranslatorMessage(input: ExplanationTranslationRequest): string {
-    const promptTemplate = templates.explanation_translator;
-  
-    return promptTemplate
-      .replace('{question}', input.question)
-      .replace('{question_type}', input.question_type)
-      .replace('{question_arguments}', JSON.stringify(input.questionArguments))
-      .replace('{MUGS}', JSON.stringify(input.MUGS))
-      .replace('{MGCS}', JSON.stringify(input.MGCS))
-      .replace('{enforced_goals}', JSON.stringify(input.enforcedGoals))
-      .replace('{satisfied_goals}', JSON.stringify(input.satisfiedGoals))
-      .replace('{unsatisfied_goals}', JSON.stringify(input.unsatisfiedGoals))
-      .replace('{existing_plan_properties}', JSON.stringify(input.existingPlanProperties));
-  }
-
-function prepareQuestionTranslatorHistory(history: QuestionTranslatorHistory): Message[] {
-    let messages: Message[] ;
-    for (const step of history) {
-        const input = step.input;
-        const output = step.output;
-        const input_message = prepareQuestionTranslatorMessage(input);
-
-        messages.push({role: "user", content: input_message});
-        messages.push({role: "assistant", content: output});
+    
+    postMessageGT$(request: string): Observable<string> {
+        console.log(request);
+        return this.http.post<IHTTPData<string>>(this.BASE_URL + 'gt', { data: request }).pipe(
+            map(({ data }) => data),
+            tap(console.log)
+        );
     }
-    return messages
+
+    postMessageQT$(request: string): Observable<string> {
+        console.log(request);
+        return this.http.post<IHTTPData<string>>(this.BASE_URL + 'qt', { data: request }).pipe(
+            map(({ data }) => data),
+            tap(console.log)
+        );
+    }
+
+    postMessageET$(request: string): Observable<string> {
+        console.log(request);
+        return this.http.post<IHTTPData<string>>(this.BASE_URL + 'et', { data: request }).pipe(
+            map(({ data }) => data),
+            tap(console.log)
+        );
+    }
 }
