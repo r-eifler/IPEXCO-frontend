@@ -5,7 +5,7 @@ import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { UntypedFormArray, UntypedFormControl, UntypedFormGroup, Validators } from "@angular/forms";
 import { MatAutocompleteSelectedEvent } from "@angular/material/autocomplete";
 import { DomainSpecification, getPropertyTemplateClassMap } from "src/app/interface/files/domain-specification";
-import { initializeVariableConstraints, PlanPropertyTemplate } from "src/app/iterative_planning/domain/plan-property/plan-property-template";
+import { PlanPropertyTemplate } from "src/app/iterative_planning/domain/plan-property/plan-property-template";
 import { MatAccordion } from "@angular/material/expansion";
 import { PlanPropertyMapService } from "src/app/service/plan-properties/plan-property-services";
 import { CurrentProjectService } from "src/app/service/project/project-services";

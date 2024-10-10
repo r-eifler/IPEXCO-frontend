@@ -22,16 +22,18 @@
     </mat-icon>
 }
 <mat-menu #varMenu="matMenu" yPosition="above">
-    <button
-        mat-menu-item
-        (click)="resetVar()">
-        reset
-    </button>
-    @for(value of values; track value){
+    @if(isSelected){
+        <button
+            mat-menu-item
+            (click)="resetVar()">
+            reset
+        </button>
+    }
+    @for(value of displayOrder(values); track value){
         <button
         mat-menu-item
         (click)="selectValue(value)">
-        {{ value }}
+        {{value.name}}: {{value.type}}
         </button>
     }
 </mat-menu>

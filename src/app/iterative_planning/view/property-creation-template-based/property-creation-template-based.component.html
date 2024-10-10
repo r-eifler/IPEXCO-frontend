@@ -23,10 +23,10 @@
             </mat-step>
 
             <mat-step label="Select Objects">
-                <div style="box-sizing: border-box; margin-top: 20px; margin-bottom: 20px;">
-                    <mat-card class="template-card">
+                <div class="step-container">
+                    <mat-card class="template-card" appearance="outlined">
                         <mat-card-content>
-                        <div style="padding: 20px 0px 20px 0px">
+                        <div class='template-conatiner'>
                             @for(part of templateParts; track part){
                                 @if(part.isVar){
                                     <app-property-template-part 
@@ -43,19 +43,21 @@
                                     </span>
                                 }
                             }
-                        </div>
+                        </div>            
                         </mat-card-content>
                     </mat-card>
+                    @if(propertyAlreadyExists){
+                        <div class="note-container">
+                            <span class="note">Property already exists.</span>
+                        </div>
+                    }
                 </div>
-                <!-- <div>
-                    <button mat-button matStepperPrevious>Back</button>
-                </div> -->
             </mat-step>
 
         </mat-stepper>
     </app-dialog-content>
     <app-dialog-footer>
         <button mat-button (click)="onCancel()">Cancel</button>
-        <button mat-flat-button (click)="onCreateProperty()" [disabled]="!allSelected">Create</button>
+        <button mat-flat-button (click)="onCreateProperty()" [disabled]="!allSelected || propertyAlreadyExists">Create</button>
     </app-dialog-footer>
 </app-dialog>

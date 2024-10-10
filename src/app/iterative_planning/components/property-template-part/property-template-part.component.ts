@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatIcon } from '@angular/material/icon';
+import { PDDLObject } from 'src/app/interface/planning-task';
 
 @Component({
   selector: 'app-property-template-part',
@@ -16,16 +17,21 @@ import { MatIcon } from '@angular/material/icon';
 })
 export class PropertyTemplatePartComponent {
 
-  @Input({required: true}) values: string[];
+  @Input({required: true}) values: PDDLObject[];
   @Input({required: true}) isSelected: boolean;
   @Input({required: true}) selectedValue: string | undefined;
 
-  @Output() value = new EventEmitter<string>();
+  @Output() value = new EventEmitter<PDDLObject>();
 
   @Output() reset = new EventEmitter<void>();
 
 
-  selectValue(v: string) {
+  displayOrder(values: PDDLObject[]): PDDLObject[]{
+    return values.sort((a, b) => a.name.localeCompare(b.name));
+  }
+
+
+  selectValue(v: PDDLObject) {
     this.value.emit(v);
   }
 
