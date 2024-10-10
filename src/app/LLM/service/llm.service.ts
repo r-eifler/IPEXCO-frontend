@@ -5,13 +5,6 @@ import { environment } from "src/environments/environment";
 import { map, tap } from "rxjs/operators";
 import { IHTTPData } from "src/app/interface/http-data.interface";
 import { Message } from "../domain/message";
-import { ExplanationTranslationRequest, GoalTranslationRequest, QuestionTranslationRequest } from "../interfaces/translators_interfaces";
-import { GoalTranslationResponse, QuestionTranslationResponse, ExplanationTranslationResponse } from "../interfaces/translators_interfaces";
-import { QuestionTranslatorHistory, ExplanationTranslatorHistory, GoalTranslatorHistory,TranslationHistory } from "../interfaces/translators_interfaces";
-import { explanationTranslationRequestToString, goalTranslationRequestToString, questionTranslationRequestToString } from "../interfaces/translators_interfaces_strings";
-import * as templates from "../templates.json"
-import { ofType } from "@ngrx/effects";
-import { isTypeElement } from "typescript";
 
 @Injectable()
 export class LLMService{
@@ -20,7 +13,7 @@ export class LLMService{
     private BASE_URL = environment.apiURL + "llm/";
 
     
-    postMessage$(messages: Message[] | TranslationHistory): Observable<string> {
+    postMessage$(messages: Message[] ): Observable<string> {
         console.log(messages);
         return this.http.post<IHTTPData<string>>(this.BASE_URL + "simple", { data: messages }).pipe(
             map(({ data }) => data),
