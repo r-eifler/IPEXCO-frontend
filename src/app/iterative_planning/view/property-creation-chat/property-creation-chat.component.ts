@@ -1,10 +1,12 @@
 import { AsyncPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { sendMessageToLLM, sendMessageToLLMGoalTranslator } from 'src/app/LLM/state/llm.actions';
 import { ChatModule } from 'src/app/shared/component/chat/chat.module';
 import { DialogModule } from 'src/app/shared/component/dialog/dialog.module';
 import { selectIsLoading, selectMessages } from './property-creation-chat.component.selector';
+import { selectThreadIdGT } from 'src/app/LLM/state/llm.selector';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-property-creation-chat',
@@ -26,6 +28,8 @@ export class PropertyCreationChatComponent {
   // }
 
   onUserMessage(request: string) {
-    this.store.dispatch(sendMessageToLLMGoalTranslator({"request": request }))
+    this.threadIdGT.subscribe(threadId => {
+      this.store.dispatch(sendMessageToLLMGoalTranslator({request, threadId}));
+    });
   }
 }
