@@ -26,7 +26,7 @@ export class SendMessageToLLMEffect{
   
     public sendMessageToGoalTranslator$ = createEffect(() => this.actions$.pipe(
         ofType(sendMessageToLLMGoalTranslator),
-        switchMap(({request,threadId}) => this.service.postMessageGT$(request).pipe(
+        switchMap(({request,threadId}) => this.service.postMessageGT$(request, threadId).pipe(
             map(response => sendMessageToLLMGoalTranslatorSuccess({response: response, threadId: threadId})),
             catchError(() => of(sendMessageToLLMGoalTranslatorFailure()))
         ))

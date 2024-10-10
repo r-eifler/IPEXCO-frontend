@@ -21,9 +21,9 @@ export class LLMService{
         );
     }
     
-    postMessageGT$(request: string): Observable<string> {
+    postMessageGT$(request: string, threadId: string): Observable<string> {
         console.log(request);
-        return this.http.post<IHTTPData<string>>(this.BASE_URL + 'gt', { data: request }).pipe(
+        return this.http.post<IHTTPData<string>>(this.BASE_URL + 'gt', { data: request, threadId: threadId }).pipe(
             map(({ data }) => data),
             tap(console.log)
         );
