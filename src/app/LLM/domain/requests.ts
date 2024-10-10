@@ -2,7 +2,7 @@
 
 
 import { PlanProperty } from "src/app/iterative_planning/domain/plan-property/plan-property";
-import { PDDLObject, PDDLPredicate } from "../planning-task";
+import { PDDLObject, PDDLPredicate } from "src/app/interface/planning-task";
 import { IterationStep } from "src/app/iterative_planning/domain/iteration_step";
 
 

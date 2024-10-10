@@ -9,6 +9,6 @@ const selectIterativePlanningFeature = createFeatureSelector<IterativePlanningSt
 export const selectMessages = createSelector(selectLLMChatFeature, (state) => state.messages)
 export const selectLoadingState = createSelector(selectLLMChatFeature, ({ loadingState }) => loadingState);
 
-export const selectQuestionTranslatorThreadId = createSelector(selectLLMChatFeature, ({ threadIdQT }) => threadIdQT);
-export const selectGoalTranslatorThreadId = createSelector(selectLLMChatFeature, ({ threadIdGT }) => threadIdGT);
-export const selectExplanationTranslatorThreadId = createSelector(selectLLMChatFeature, ({ threadIdET }) => threadIdET);
+export const selectThreadIdQT = createSelector(selectLLMChatFeature, ({ threadIdQT }) => threadIdQT);
+export const selectThreadIdGT = createSelector(selectLLMChatFeature, ({ threadIdGT }) => threadIdGT);
+export const selectThreadIdET = createSelector(selectLLMChatFeature, ({ threadIdET }) => threadIdET);

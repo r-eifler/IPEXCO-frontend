@@ -1,7 +1,7 @@
 import { AsyncPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { sendMessageToLLM } from 'src/app/LLM/state/llm.actions';
+import { sendMessageToLLM, sendMessageToLLMGoalTranslator } from 'src/app/LLM/state/llm.actions';
 import { ChatModule } from 'src/app/shared/component/chat/chat.module';
 import { DialogModule } from 'src/app/shared/component/dialog/dialog.module';
 import { selectIsLoading, selectMessages } from './property-creation-chat.component.selector';
@@ -19,8 +19,13 @@ export class PropertyCreationChatComponent {
 
   messages$ = this.store.select(selectMessages);
   isLoading$ = this.store.select(selectIsLoading);
+  threadIdGT = this.store.select(selectThreadIdGT);
+
+  // onUserMessage(request: string) {
+  //   this.store.dispatch(sendMessageToLLM({ request }))
+  // }
 
   onUserMessage(request: string) {
-    this.store.dispatch(sendMessageToLLM({ request }))
+    this.store.dispatch(sendMessageToLLMGoalTranslator({"request": request }))
   }
 }

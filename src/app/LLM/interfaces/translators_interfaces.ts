@@ -74,7 +74,7 @@ export interface ExplanationTranslationRequest {
 
 
 export interface ExplanationTranslationResponse {
-    status: ExplanationTranslationStatus,
+    // status: ExplanationTranslationStatus,
     userInfo: string,
     answer: string,
     interactionHistory: string,
@@ -114,7 +114,7 @@ export type TranslationRequest = QuestionTranslationRequest | GoalTranslationReq
 export type TranslationResponse = QuestionTranslationResponse | GoalTranslationResponse | ExplanationTranslationResponse
 
 export interface BackendLLMRequest {
-    input: string,
+    request: string,
     threadId?: string
 }
 
