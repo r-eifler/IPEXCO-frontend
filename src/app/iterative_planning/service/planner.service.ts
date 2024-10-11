@@ -12,7 +12,7 @@ import { webSocket }  from 'rxjs/webSocket';
 export class PlannerService{
 
     private http = inject(HttpClient)
-    private BASE_URL = environment.apiURL + "runner/planner/";
+    private BASE_URL = environment.apiURL + "planner/plan-step/";
 
     postComputePlan$(stepId: string): Observable<boolean> {
 
