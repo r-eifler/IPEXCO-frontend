@@ -53,10 +53,13 @@ export const llmChatReducer = createReducer(
     on(sendMessageToLLMGoalTranslator, (state, action): LLMChatState => ({
         ...state,
         loadingState: LoadingState.Loading,
+        messages: [...state.messages, {role: 'user', content: action.request}]
     })),
     on(sendMessageToLLMGoalTranslatorSuccess, (state, action): LLMChatState => ({
         ...state,
-        threadIdGT: action.threadId
+        loadingState: LoadingState.Done,
+        threadIdGT: action.threadId,
+        messages: [...state.messages, {role: 'assistant', content: action.response}]
     })),
     on(sendMessageToLLMExplanationTranslator, (state, action): LLMChatState => ({
         ...state,

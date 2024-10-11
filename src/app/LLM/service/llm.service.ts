@@ -5,7 +5,7 @@ import { environment } from "src/environments/environment";
 import { map, tap } from "rxjs/operators";
 import { IHTTPData } from "src/app/interface/http-data.interface";
 import { Message } from "../domain/message";
-
+import { BackendLLMResponse } from "../interfaces/translators_interfaces";
 @Injectable()
 export class LLMService{
 
@@ -21,9 +21,9 @@ export class LLMService{
         );
     }
     
-    postMessageGT$(request: string, threadId: string): Observable<string> {
+    postMessageGT$(request: string, threadId: string): Observable<BackendLLMResponse> {
         console.log(request);
-        return this.http.post<IHTTPData<string>>(this.BASE_URL + 'gt', { data: request, threadId: threadId }).pipe(
+        return this.http.post<IHTTPData<BackendLLMResponse>>(this.BASE_URL + 'gt', { data: request, threadId: threadId }).pipe(
             map(({ data }) => data),
             tap(console.log)
         );

@@ -6,8 +6,7 @@ import { ChatModule } from 'src/app/shared/component/chat/chat.module';
 import { DialogModule } from 'src/app/shared/component/dialog/dialog.module';
 import { selectIsLoading, selectMessages } from './property-creation-chat.component.selector';
 import { selectThreadIdGT } from 'src/app/LLM/state/llm.selector';
-import { Subject, takeUntil } from 'rxjs';
-
+import { take } from 'rxjs';
 @Component({
   selector: 'app-property-creation-chat',
   standalone: true,
@@ -21,14 +20,14 @@ export class PropertyCreationChatComponent {
 
   messages$ = this.store.select(selectMessages);
   isLoading$ = this.store.select(selectIsLoading);
-  threadIdGT = this.store.select(selectThreadIdGT);
+  threadIdGT$ = this.store.select(selectThreadIdGT);
 
   // onUserMessage(request: string) {
   //   this.store.dispatch(sendMessageToLLM({ request }))
   // }
 
   onUserMessage(request: string) {
-    this.threadIdGT.subscribe(threadId => {
+    this.threadIdGT$.pipe(take(1)).subscribe(threadId => {
       this.store.dispatch(sendMessageToLLMGoalTranslator({request, threadId}));
     });
   }
