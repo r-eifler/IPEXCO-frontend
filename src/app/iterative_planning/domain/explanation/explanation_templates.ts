@@ -1,11 +1,12 @@
+import { Question } from "../interface/question";
 import { IterationStep } from "../iteration_step";
-import { AnswerType, Question, QuestionType } from "./explanations";
+import { AnswerType, QuestionType } from "./explanations";
 
 type Validator = (step: IterationStep, ppId: string) => boolean;
 type AnswerComputer = (
-    step: IterationStep, 
-    question: Question, 
-    computed: string[][], 
+    step: IterationStep,
+    question: Question,
+    computed: string[][],
     complete: boolean) => [string, string[][]];
 
 export interface ExplanationTemplate {
@@ -19,37 +20,32 @@ export interface ExplanationTemplate {
 }
 
 function whyAnswerComputer(step: IterationStep, question: Question, computed: string[][]): string[][] {
-        return computed.filter(
-            MUGS => {
-                MUGS.every(id => 
-                    ((step.plan !== undefined) && 
+  return computed
+    .filter( MUGS => MUGS.every(id =>
+                    ((step.plan !== undefined) &&
                     (step.plan.satisfied_properties !== undefined) &&
                     step.plan.satisfied_properties.includes(id)) ||
-                    question.parameters.includes(id)
+                    question.propertyId === id
                 )
-            }
-        ).map(MUGS => MUGS.filter(id =>  ! question.parameters.includes(id)))
-    }
+        )
+    .map(MUGS => MUGS.filter(id =>  ! (question.propertyId === id)));
+}
 
 
 function howAnswerComputer(step: IterationStep, question: Question, computed: string[][]): string[][] {
-    return computed.filter(
-        MCGS => {
-            MCGS.every(id => 
-                ! question.parameters.includes(id)
-            )
-        }
-    ).map(MUGS => MUGS.filter(id =>  step.plan?.satisfied_properties.includes(id)))
+    return computed
+      .filter( MCGS => MCGS.every(id => !(question.propertyId === id)))
+      .map(MUGS => MUGS.filter(id =>  step.plan?.satisfied_properties.includes(id)))
 }
 
 export const explanationTemplates: ExplanationTemplate[] = [
     {
-        questionType: QuestionType.WHY,
+        questionType: QuestionType.WHY_PLAN,
         forSolvableInstance: false,
         questionParameters: [],
         questionPhrase: "Why is the selection of enforced goals unsolvable?",
         answerType: AnswerType.MUGS,
-        answerComputer: (step: IterationStep, q, computed: string[][], c) => 
+        answerComputer: (step: IterationStep, q, computed: string[][], c) =>
             [
                 "The selection is unsolvable because of the following conflicts",
                 computed.filter(
@@ -58,21 +54,21 @@ export const explanationTemplates: ExplanationTemplate[] = [
             ]
     },
     {
-        questionType: QuestionType.HOW,
+        questionType: QuestionType.HOW_PLAN,
         forSolvableInstance: false,
         questionParameters: [],
         questionPhrase: "How can I make it solvable?",
         answerType: AnswerType.MGCS,
-        answerComputer: (step: IterationStep, q, computed: string[][], c) => 
+        answerComputer: (step: IterationStep, q, computed: string[][], c) =>
             [
-                "To make it solvable you have to forego one of the following sets",  
+                "To make it solvable you have to forego one of the following sets",
                 computed.filter(
                     MGCS => MGCS.some(id => step.hardGoals.includes(id))
                 ).map(MGCS => MGCS.filter(id => step.hardGoals.includes(id)))
                 ]
     },
     {
-        questionType: QuestionType.WHY_NOT,
+        questionType: QuestionType.WHY_NOT_PROPERTY,
         forSolvableInstance: true,
         questionParameters: ['$P1'],
         parameterValidator:  (step: IterationStep, ppId: string) => ! step.plan?.satisfied_properties?.includes(ppId),
@@ -83,25 +79,25 @@ export const explanationTemplates: ExplanationTemplate[] = [
             // TODO check which role complete plays
             if (answers.length == 0){
                 return [
-                    "The goal can be satisfied without impacting any of the already satisfied goals.",  
+                    "The goal can be satisfied without impacting any of the already satisfied goals.",
                     []
                 ]
             }
             if (answers.some(s => s.length == 0)){
                 return [
-                    "The goal itself cannot be satisfied.",  
-                    []  
+                    "The goal itself cannot be satisfied.",
+                    []
                 ]
             }
 
             return [
-                "Because there is a conflict with each of the following sets: ",  
-                answers  
-            ]        
+                "Because there is a conflict with each of the following sets: ",
+                answers
+            ]
         }
     },
     {
-        questionType: QuestionType.WHAT_IF,
+        questionType: QuestionType.WHAT_IF_PROPERTY,
         forSolvableInstance: true,
         questionParameters: ['$P1'],
         parameterValidator:  (step: IterationStep, ppId: string) => ! step.plan?.satisfied_properties?.includes(ppId),
@@ -112,25 +108,25 @@ export const explanationTemplates: ExplanationTemplate[] = [
             // TODO check which role complete plays
             if (answers.length == 0){
                 return [
-                    "The goal can be satisfied without impacting any of the already satisfied goals.",  
+                    "The goal can be satisfied without impacting any of the already satisfied goals.",
                     []
                 ]
             }
             if (answers.some(s => s.length == 0)){
                 return [
-                    "Then the problem would be unsolvable.",  
-                    []  
+                    "Then the problem would be unsolvable.",
+                    []
                 ]
             }
 
             return [
-                "You could no longer satisfy any of the goal sets: ",  
-                answers  
-            ]  
+                "You could no longer satisfy any of the goal sets: ",
+                answers
+            ]
         }
     },
     {
-        questionType: QuestionType.CAN,
+        questionType: QuestionType.CAN_PROPERTY,
         forSolvableInstance: true,
         questionParameters: ['$P1'],
         parameterValidator:  (step: IterationStep, ppId: string) => ! step.plan?.satisfied_properties?.includes(ppId),
@@ -141,19 +137,19 @@ export const explanationTemplates: ExplanationTemplate[] = [
             // TODO check which role complete plays
             if (answers.length == 0){
                 return [
-                    "Yes, it can be enforced",  
+                    "Yes, it can be enforced",
                     []
                 ]
             }
 
             return [
-                "It is not possible.",  
-                [] 
-            ]  
+                "It is not possible.",
+                []
+            ]
         }
     },
     {
-        questionType: QuestionType.HOW,
+        questionType: QuestionType.HOW_PROPERTY,
         forSolvableInstance: true,
         questionParameters: ['$P1'],
         parameterValidator:  (step: IterationStep, ppId: string) => ! step.plan?.satisfied_properties?.includes(ppId),
@@ -165,7 +161,7 @@ export const explanationTemplates: ExplanationTemplate[] = [
             if (answers.some(s => s.length == 0)){
                 return [
                     "The goal can be satisfied without impacting any of the already satisfied goals.",
-                    []  
+                    []
                 ]
             }
 
@@ -177,9 +173,9 @@ export const explanationTemplates: ExplanationTemplate[] = [
             }
 
             return [
-                "You have to forgo one of the goal sets in: ",  
-                answers  
-            ]        
+                "You have to forgo one of the goal sets in: ",
+                answers
+            ]
         }
     },
 ]

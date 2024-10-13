@@ -107,6 +107,10 @@ import {
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { NgxChartsModule } from "@swimlane/ngx-charts";
+import { LlmBaseComponent } from './LLM/components/llm-base/llm-base.component';
+import { LLMService } from './LLM/service/llm.service';
+import { SendMessageToLLMEffect } from './LLM/state/effects/send-message.effect';
+import { LLMChatFeature, llmChatReducer } from './LLM/state/llm.reducer';
 import { appRoutes } from "./app.routes";
 import { DemoBaseComponent } from "./components/demo/demo-base/demo-base.component";
 import { DemoCollectionComponent } from "./components/demo/demo-collection/demo-collection.component";
@@ -173,18 +177,21 @@ import { InteractivePlanViewComponent } from "./iterative_planning/components/pl
 import { PlanViewComponent } from "./iterative_planning/components/plan/plan-view/plan-view.component";
 import { PropertyCollectionComponent } from './iterative_planning/components/plan_properties/property-collection/property-collection.component';
 import { PropertyCreatorComponent } from './iterative_planning/components/plan_properties/property-creator/property-creator.component';
+import { ExplainerMonitoringService } from './iterative_planning/service/explainer-monitoring.service';
+import { ExplainerService } from './iterative_planning/service/explainer.service';
 import { IterationStepService } from './iterative_planning/service/iteration-step.service';
 import { PlanPropertyService } from './iterative_planning/service/plan-properties.service';
 import { PlannerService } from './iterative_planning/service/planner.service';
 import { IterativePlanningProjectService } from './iterative_planning/service/project.service';
+import { ComputeExplanationEffect } from './iterative_planning/state/effects/compute-explanation.effect';
 import { ComputePlanEffect } from './iterative_planning/state/effects/compute-plan.effect';
 import { CreateIterationStepEffect } from './iterative_planning/state/effects/create-iteration-step.effect';
 import { CreatePlanPropertyEffect } from './iterative_planning/state/effects/create-plan-property.effect';
 import { DeletePlanPropertyEffect } from './iterative_planning/state/effects/delete-plan-property.effect';
 import { LoadIterationStepsEffect } from './iterative_planning/state/effects/load-iteration-steps.effect';
 import { LoadPlanPropertiesEffect } from './iterative_planning/state/effects/load-plan-properties.effect';
-import { ComputeExplanationEffect } from './iterative_planning/state/effects/compute-explanation.effect';
 import { LoadIterativePlanningProjectEffect } from './iterative_planning/state/effects/load-project.effect';
+import { QuestionQueueEffect } from './iterative_planning/state/effects/question-queue.effect';
 import { UpdatePlanPropertyEffect } from './iterative_planning/state/effects/update-plan-property.effect';
 import { iterativePlanningFeature, iterativePlanningReducer } from './iterative_planning/state/iterative-planning.reducer';
 import { MarkedPipe } from "./pipes/marked.pipe";
@@ -218,12 +225,6 @@ import { ActionCardModule } from './shared/component/action-card/action-card.mod
 import { ChatModule } from './shared/component/chat/chat.module';
 import { LabelModule } from './shared/component/label/label.module';
 import { PageModule } from './shared/component/page/page.module';
-import { LlmBaseComponent } from './LLM/components/llm-base/llm-base.component';
-import { LLMChatFeature, llmChatReducer } from './LLM/state/llm.reducer';
-import { LLMService } from './LLM/service/llm.service';
-import { SendMessageToLLMEffect } from './LLM/state/effects/send-message.effect';
-import { ExplainerService } from './iterative_planning/service/explainer.service';
-import { ExplainerMonitoringService } from './iterative_planning/service/explainer-monitoring.service';
 
 
 @NgModule({
@@ -328,7 +329,8 @@ import { ExplainerMonitoringService } from './iterative_planning/service/explain
       CreateIterationStepEffect,
       ComputePlanEffect,
       SendMessageToLLMEffect,
-      ComputeExplanationEffect
+      ComputeExplanationEffect,
+      QuestionQueueEffect,
     ]),
     // Instrumentation must be imported after importing StoreModule (config is optional)
     StoreDevtoolsModule.instrument({

@@ -1,17 +1,11 @@
 
 export enum QuestionType {
-  WHY = 'WHY',
-  HOW = 'HOW',
-  WHY_NOT = 'WHY_NOT',
-  WHAT_IF = 'WHAT_IF',
-  CAN = 'CAN'
-}
-
-export interface Question{
-  input: string;
-  type: QuestionType,
-  forSolvableInstance: boolean,
-  parameters: string[];
+  WHY_PLAN = 'WHY_PLAN',
+  HOW_PLAN = 'HOW_PLAN',
+  WHY_NOT_PROPERTY = 'WHY_NOT_PROPERTY',
+  WHAT_IF_PROPERTY = 'WHAT_IF_PROPERTY',
+  CAN_PROPERTY = 'CAN_PROPERTY',
+  HOW_PROPERTY = 'HOW_PROPERTY',
 }
 
 export enum AnswerType {
@@ -32,13 +26,6 @@ export enum ExplanationRunStatus {
   running,
   failed,
   finished
-}
-
-export interface Explanation{
-  createdAt?: Date;
-  question: Question;
-  answer?: Answer;
-  status: ExplanationRunStatus;
 }
 
 export interface GlobalExplanation{

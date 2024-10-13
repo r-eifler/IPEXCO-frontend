@@ -1,0 +1,18 @@
+<app-chat [isSenderTyping]="isLoading()">
+  <app-chat-message role="sender">Here are some question, that I could help you with:</app-chat-message>
+
+  @for(message of messages(); track message) {
+  <app-chat-message [role]="message.role === 'system' ? 'sender' : 'receiver'">
+    <app-structured-text
+      [message]="message"
+      [properties]="properties()"
+    ></app-structured-text>
+  </app-chat-message>
+  }
+
+  @for(question of availableQuestions(); track question) {
+  <button app-chat-action (click)="onQuestionSelected(question)">{{ question.message.mainText }}</button>
+  }
+
+  <app-chat-input [disabled]="true"></app-chat-input>
+</app-chat>

@@ -22,9 +22,13 @@
     <app-quote>
       {{ property()?.naturalLanguageDescription }}
     </app-quote>
+
+    <ng-content></ng-content>
+
     <app-unformatted>
       {{ property()?.formula }}
     </app-unformatted>
   </div>
 
 </mat-expansion-panel>
+

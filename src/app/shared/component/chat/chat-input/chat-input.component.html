@@ -4,7 +4,7 @@
       <textarea matInput [formControl]="form.controls.input" (keyup)="onKeyPress($event)"></textarea>
     </mat-form-field>
 
-    <button mat-icon-button color="primary" [disabled]="form.invalid">
+    <button mat-icon-button color="primary" [disabled]="form.invalid || disabled()">
       <mat-icon>send</mat-icon>
     </button>
   </div>
