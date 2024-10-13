@@ -183,6 +183,7 @@ import { CreatePlanPropertyEffect } from './iterative_planning/state/effects/cre
 import { DeletePlanPropertyEffect } from './iterative_planning/state/effects/delete-plan-property.effect';
 import { LoadIterationStepsEffect } from './iterative_planning/state/effects/load-iteration-steps.effect';
 import { LoadPlanPropertiesEffect } from './iterative_planning/state/effects/load-plan-properties.effect';
+import { ComputeExplanationEffect } from './iterative_planning/state/effects/compute-explanation.effect';
 import { LoadIterativePlanningProjectEffect } from './iterative_planning/state/effects/load-project.effect';
 import { UpdatePlanPropertyEffect } from './iterative_planning/state/effects/update-plan-property.effect';
 import { iterativePlanningFeature, iterativePlanningReducer } from './iterative_planning/state/iterative-planning.reducer';
@@ -221,6 +222,8 @@ import { LlmBaseComponent } from './LLM/components/llm-base/llm-base.component';
 import { LLMChatFeature, llmChatReducer } from './LLM/state/llm.reducer';
 import { LLMService } from './LLM/service/llm.service';
 import { SendMessageToLLMEffect } from './LLM/state/effects/send-message.effect';
+import { ExplainerService } from './iterative_planning/service/explainer.service';
+import { ExplainerMonitoringService } from './iterative_planning/service/explainer-monitoring.service';
 
 
 @NgModule({
@@ -325,6 +328,7 @@ import { SendMessageToLLMEffect } from './LLM/state/effects/send-message.effect'
       CreateIterationStepEffect,
       ComputePlanEffect,
       SendMessageToLLMEffect,
+      ComputeExplanationEffect
     ]),
     // Instrumentation must be imported after importing StoreModule (config is optional)
     StoreDevtoolsModule.instrument({
@@ -443,6 +447,8 @@ import { SendMessageToLLMEffect } from './LLM/state/effects/send-message.effect'
     IterationStepService,
     PlannerService,
     LLMService,
+    ExplainerService,
+    ExplainerMonitoringService,
     {
       provide: MAT_BOTTOM_SHEET_DEFAULT_OPTIONS,
       useValue: { hasBackdrop: true },

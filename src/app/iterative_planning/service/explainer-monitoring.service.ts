@@ -25,9 +25,21 @@ export class ExplainerMonitoringService {
         );        
     }
 
+    globalExplanationComputationFinished$(projectId: string): Observable<void> {
+        return interval(5000).pipe(
+            exhaustMap(() => this.iterationStepService.getIterationSteps$(projectId).pipe(
+                map((iterationStepList) => iterationStepList.every(explanationFinished)),
+            )),
+            tap(console.log),
+            filter(allFinished => allFinished),
+            take(1),
+            map(() => void undefined),
+        );        
+    }
+
 }
 
 function explanationFinished(iterationStep: IterationStep): boolean {
-    return iterationStep.explanations.reduce((acc, exp) => 
-        (acc &&  exp?.status !== ExplanationRunStatus.running), true);
+    return (iterationStep.globalExplanation?.status != ExplanationRunStatus.pending) &&
+    (iterationStep.globalExplanation?.status != ExplanationRunStatus.running);
 }

@@ -1,5 +1,5 @@
 import { PlanningTask } from "src/app/interface/planning-task";
-import { Explanation } from "./explanation/explanations";
+import { Explanation, GlobalExplanation } from "./explanation/explanations";
 import { Plan } from "./plan";
 
 export enum StepStatus {
@@ -18,6 +18,7 @@ export enum StepStatus {
     softGoals: string[];
     task: PlanningTask;
     plan?: Plan;
+    globalExplanation?: GlobalExplanation,
     explanations: Explanation[];
     predecessorStep: string | null;
 }

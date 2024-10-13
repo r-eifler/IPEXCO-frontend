@@ -1,4 +1,5 @@
 @let step = step$ | async;
+@let isUnsolvable = isUnsolvable$ | async;
 
 <app-page>
   <app-breadcrumb>
@@ -25,7 +26,24 @@
   <app-page-content>
     <app-page-section-list>
 
-      @if(!step?.plan) {
+      @if(isUnsolvable) {
+        <app-page-section>
+          <app-page-section-title>Explanations</app-page-section-title>
+          <app-page-section-content>
+            <div class="property-list">
+            @for(template of explanationTemplatesUnsolvable; track template){
+              <app-question-panel 
+                [step]="step" 
+                [planProperties]="planProperties$ | async"
+                [template]="template"
+              ></app-question-panel>
+            }
+            </div>
+          </app-page-section-content>
+        </app-page-section>
+      }
+
+      @if(!step?.plan && !isUnsolvable) {
       <app-page-section>
         <app-page-section-content>
           <app-empty-state-section>
@@ -37,7 +55,7 @@
       </app-page-section>
       }
 
-      @if(step?.plan) {
+      @if(step?.plan && !isUnsolvable) {
       <app-page-section>
         <app-page-section-title>Unsatisfied Softgoals</app-page-section-title>
         <app-page-section-content>
@@ -57,7 +75,7 @@
       </app-page-section>
       }
 
-      @if(step?.plan) {
+      @if(step?.plan && !isUnsolvable) {
       <app-page-section>
         <app-page-section-title>Satisfied Softgoals</app-page-section-title>
         <app-page-section-content>
@@ -75,6 +93,7 @@
         </app-page-section-content>
       </app-page-section>
       }
+      
 
       <app-page-section>
         <app-page-section-title>Enforced Goals</app-page-section-title>

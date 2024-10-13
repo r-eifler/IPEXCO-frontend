@@ -67,6 +67,16 @@ export const planComputationRunningFailure = createAction('[iterative-planning] 
 
 // Explainer
 
+// Global
+export const registerGlobalExplanationComputation = createAction('[iterative-planning] register global explanation computation', props<{ iterationStepId: string}>());
+export const registerGlobalExplanationComputationSuccess = createAction('[iterative-planning] register global explanation computation success', props<{iterationStepId: string}>());
+export const registerGlobalExplanationComputationFailure = createAction('[iterative-planning] register global explanation computation failure');
+
+export const globalExplanationComputationRunning = createAction('[iterative-planning] global explanation computation running');
+export const globalExplanationComputationRunningSuccess = createAction('[iterative-planning] global explanation computation running success');
+export const globalExplanationComputationRunningFailure = createAction('[iterative-planning] global explanation computation running failure');
+
+// Question based
 export const registerExplanationComputation = createAction('[iterative-planning] register explanation computation', props<{ iterationStepId: string, question: Question }>());
 export const registerExplanationComputationSuccess = createAction('[iterative-planning] register explanation computation success', props<{iterationStepId: string}>());
 export const registerExplanationComputationFailure = createAction('[iterative-planning] register explanation computation failure');

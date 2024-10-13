@@ -22,8 +22,8 @@ export enum AnswerType {
 export interface Answer{
   type: AnswerType
   complete: boolean; // all possible answers have been computed
-  computed: string[];
-  selected: string[];
+  computed: string[][];
+  selected: string[][];
   output: string;
 }
 
@@ -38,5 +38,12 @@ export interface Explanation{
   createdAt?: Date;
   question: Question;
   answer?: Answer;
+  status: ExplanationRunStatus;
+}
+
+export interface GlobalExplanation{
+  createdAt?: Date;
+  MUGS?: string[][];
+  MGCS?: string[][];
   status: ExplanationRunStatus;
 }

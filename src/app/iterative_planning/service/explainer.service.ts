@@ -22,4 +22,12 @@ export class ExplainerService{
 
     }
 
+    postComputeGlobalExplanation$(stepId: string): Observable<boolean> {
+
+        return this.http.post<IHTTPData<boolean>>(this.BASE_URL + stepId, {}).pipe(
+            map(({data}) => data)
+        )
+
+    }
+
 }

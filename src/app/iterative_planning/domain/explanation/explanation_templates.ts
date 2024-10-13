@@ -1,4 +1,3 @@
-import { strict } from "assert";
 import { IterationStep } from "../iteration_step";
 import { AnswerType, Question, QuestionType } from "./explanations";
 
@@ -66,7 +65,7 @@ export const explanationTemplates: ExplanationTemplate[] = [
         answerType: AnswerType.MGCS,
         answerComputer: (step: IterationStep, q, computed: string[][], c) => 
             [
-                "To make the is solvable you have to forego one of the following sets",  
+                "To make it solvable you have to forego one of the following sets",  
                 computed.filter(
                     MGCS => MGCS.some(id => step.hardGoals.includes(id))
                 ).map(MGCS => MGCS.filter(id => step.hardGoals.includes(id)))
