@@ -1,4 +1,4 @@
-import { Component, inject, output } from '@angular/core';
+import { Component, effect, inject, input, output } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -15,11 +15,17 @@ import { MatInputModule } from '@angular/material/input';
 export class ChatInputComponent {
   private fb = inject(FormBuilder);
 
+  disabled = input<boolean>();
+
   userInput = output<string>();
 
   form = this.fb.group({
     input: this.fb.control<string>('', Validators.required),
   });
+
+  constructor() {
+    effect(() => this.disabled() ? this.form.disable() : this.form.enable());
+  }
 
   onSubmit(): void {
     if(this.form.invalid) {

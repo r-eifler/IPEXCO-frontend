@@ -27,20 +27,17 @@
     <app-page-section-list>
 
       @if(isUnsolvable) {
-        <app-page-section>
-          <app-page-section-title>Explanations</app-page-section-title>
-          <app-page-section-content>
-            <div class="property-list">
-            @for(template of explanationTemplatesUnsolvable; track template){
-              <app-question-panel 
-                [step]="step" 
-                [planProperties]="planProperties$ | async"
-                [template]="template"
-              ></app-question-panel>
-            }
-            </div>
-          </app-page-section-content>
-        </app-page-section>
+      <app-page-section>
+        <app-page-section-title>
+          <mat-icon>lightbulb_2</mat-icon>
+          Plan Insights
+        </app-page-section-title>
+        <app-page-section-content>
+          <app-explanation-chat
+            [availableQuestions]="globalAvalableQuestionTypes$ | async"
+          ></app-explanation-chat>
+        </app-page-section-content>
+      </app-page-section>
       }
 
       @if(!step?.plan && !isUnsolvable) {
@@ -93,7 +90,7 @@
         </app-page-section-content>
       </app-page-section>
       }
-      
+
 
       <app-page-section>
         <app-page-section-title>Enforced Goals</app-page-section-title>

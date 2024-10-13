@@ -1,5 +1,7 @@
 import { createFeatureSelector, createSelector } from "@ngrx/store";
+import { filter, map, memoizeWith } from "ramda";
 import { LoadingState } from "src/app/shared/common/loadable.interface";
+import { ExplanationMessage } from "../domain/interface/explanation-message";
 import { IterativePlanningState, iterativePlanningFeature } from "./iterative-planning.reducer";
 
 
@@ -37,3 +39,18 @@ export const selectIterativePlanningSelectedStep = createSelector(selectIterativ
 
 export const selectIterativePlanningNumStep = createSelector(selectIterativePlanningFeature,
     (state) => state.iterationSteps?.data.length)
+
+const selectAllMessages = createSelector(selectIterativePlanningFeature, ({messages}) => messages);
+export const selectMessages = memoizeWith(
+  (stepId: string, propertyId?: string) => stepId + propertyId,
+  (stepId: string, propertyId?: string) => createSelector(selectAllMessages, filter<ExplanationMessage>(
+    ({iterationStepId, planPropertyId}) => iterationStepId === stepId && propertyId === planPropertyId,
+  )),
+);
+export const selectMessageTypes = memoizeWith(
+  (stepId: string, propertyId?: string) => stepId + propertyId,
+  (stepId: string, propertyId?: string) => createSelector(selectMessages(stepId, propertyId), map(({questionType}) => questionType)),
+)
+
+export const selectStepAvailableQuestions = createSelector(selectIterativePlanningFeature, ({stepAvailableQuestionTypes}) => stepAvailableQuestionTypes);
+export const selectPropertyAvailableQuestions = createSelector(selectIterativePlanningFeature, ({propertyAvailableQuestionTypes}) => propertyAvailableQuestionTypes);

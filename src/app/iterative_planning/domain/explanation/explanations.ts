@@ -1,10 +1,11 @@
 
 export enum QuestionType {
-  WHY = 'WHY',
-  HOW = 'HOW',
-  WHY_NOT = 'WHY_NOT',
-  WHAT_IF = 'WHAT_IF',
-  CAN = 'CAN'
+  WHY_PLAN = 'WHY_PLAN',
+  HOW_PLAN = 'HOW_PLAN',
+  WHY_NOT_PROPERTY = 'WHY_NOT_PROPERTY',
+  WHAT_IF_PROPERTY = 'WHAT_IF_PROPERTY',
+  CAN_PROPERTY = 'CAN_PROPERTY',
+  HOW_PROPERTY = 'HOW_PROPERTY',
 }
 
 export interface Question{

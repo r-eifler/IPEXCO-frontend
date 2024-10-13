@@ -1,0 +1,9 @@
+<app-chat>
+  <app-chat-message role="sender">Here are some question, that I could help you with:</app-chat-message>
+
+  @for(question of availableQuestions(); track question) {
+  <button app-chat-action>{{ question.message }}</button>
+  }
+
+  <app-chat-input [disabled]="true"></app-chat-input>
+</app-chat>
