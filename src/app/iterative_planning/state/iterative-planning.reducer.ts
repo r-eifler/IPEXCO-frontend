@@ -191,7 +191,7 @@ export const iterativePlanningReducer = createReducer(
     ...state,
     messages: [
       ...state.messages,
-      { questionType, iterationStepId, role: 'user', message: questionFactory(questionType)(undefined), propertyId },
+      { questionType, iterationStepId, role: 'user', message: questionFactory(questionType)(state.planProperties?.data?.[propertyId].name), propertyId },
     ],
   })),
 

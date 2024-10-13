@@ -5,7 +5,7 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { RouterLink } from "@angular/router";
 import { Store } from "@ngrx/store";
-import { Observable, combineLatest, filter, map, switchMap, take } from "rxjs";
+import { Observable, combineLatest, filter, map, switchMap, take, tap } from "rxjs";
 
 import { BreadcrumbModule } from "src/app/shared/component/breadcrumb/breadcrumb.module";
 import { EmptyStateModule } from "src/app/shared/component/empty-state/empty-state.module";
@@ -126,7 +126,8 @@ export class StepDetailViewComponent {
             const notAlreadyAskedFn = (type: QuestionType) => rNot(rIncludes(type, alreadyAskedQuestionTypes));
             return rFilter(notAlreadyAskedFn, allQuestionTypes);
           }),
-          map(rMap((questionType) => ({ questionType, message: questionFactory(questionType)(property.name)}))),
+          tap(() => console.log(property, questionFactory(QuestionType.CAN_PROPERTY)(property.name))),
+          map(questionTypes => rMap((questionType) => ({ questionType, message: questionFactory(questionType)(property.name)}), questionTypes)),
         )
       )
     );
