@@ -36,8 +36,8 @@ export class IterationStepService{
                     },
                     globalExplanation : step.globalExplanation ? {
                         ...step.globalExplanation,
-                        MUGS: JSON.parse(step.globalExplanation.MUGS as unknown as string),
-                        MGCS: JSON.parse(step.globalExplanation.MGCS as unknown as string),
+                        MUGS: step.globalExplanation.MUGS ? JSON.parse(step.globalExplanation.MUGS as unknown as string) : undefined,
+                        MGCS: step.globalExplanation.MGCS ? JSON.parse(step.globalExplanation.MGCS as unknown as string) : undefined,
                     } : undefined
                 }
                 ))
