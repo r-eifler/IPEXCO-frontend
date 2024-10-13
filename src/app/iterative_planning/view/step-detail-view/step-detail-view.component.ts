@@ -126,7 +126,6 @@ export class StepDetailViewComponent {
             const notAlreadyAskedFn = (type: QuestionType) => rNot(rIncludes(type, alreadyAskedQuestionTypes));
             return rFilter(notAlreadyAskedFn, allQuestionTypes);
           }),
-          tap(() => console.log(property, questionFactory(QuestionType.CAN_PROPERTY)(property.name))),
           map(questionTypes => rMap((questionType) => ({ questionType, message: questionFactory(questionType)(property.name)}), questionTypes)),
         )
       )
