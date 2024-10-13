@@ -5,7 +5,7 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { RouterLink } from "@angular/router";
 import { Store } from "@ngrx/store";
-import { Observable, combineLatest, filter, map, switchMap, take, tap } from "rxjs";
+import { Observable, combineLatest, filter, map, switchMap, take } from "rxjs";
 
 import { BreadcrumbModule } from "src/app/shared/component/breadcrumb/breadcrumb.module";
 import { EmptyStateModule } from "src/app/shared/component/empty-state/empty-state.module";
@@ -144,7 +144,6 @@ export class StepDetailViewComponent {
   }
 
   onPropertyQuestionSelected(question: AvailableQuestion, property: PlanProperty): void {
-    console.log('property question')
     this.stepId$.pipe(take(1)).subscribe((iterationStepId) =>
       this.store.dispatch(questionPosed({ question: { questionType: question.questionType, iterationStepId, propertyId: property._id }}))
     );

@@ -28,7 +28,6 @@ export class ExplanationChatComponent {
   questionSelected = output<AvailableQuestion>();
 
   onQuestionSelected(question: AvailableQuestion): void {
-    console.log('question selected')
     this.questionSelected.emit(question);
   }
 }
