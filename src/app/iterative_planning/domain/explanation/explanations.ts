@@ -8,13 +8,6 @@ export enum QuestionType {
   HOW_PROPERTY = 'HOW_PROPERTY',
 }
 
-export interface Question{
-  input: string;
-  type: QuestionType,
-  forSolvableInstance: boolean,
-  parameters: string[];
-}
-
 export enum AnswerType {
   MUGS = 'MUGS',
   MGCS = 'MGCS',
@@ -33,13 +26,6 @@ export enum ExplanationRunStatus {
   running,
   failed,
   finished
-}
-
-export interface Explanation{
-  createdAt?: Date;
-  question: Question;
-  answer?: Answer;
-  status: ExplanationRunStatus;
 }
 
 export interface GlobalExplanation{

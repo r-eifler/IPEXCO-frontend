@@ -32,7 +32,8 @@ import {
     updateNewIterationStep,
 } from "./iterative-planning.actions";
 
-export type Message = (Omit<ExplanationMessage, 'message'> & {message?: string});
+type messageType = ExplanationMessage['message'];
+export type Message = (Omit<ExplanationMessage, 'message'> & {message?: messageType});
 
 export interface IterativePlanningState {
   explanations: {hash: string, explanation: GlobalExplanation | undefined}[];
@@ -145,7 +146,6 @@ export const iterativePlanningReducer = createReducer(
         hardGoals: [...(baseStep?.hardGoals ?? [])],
         softGoals: [...(baseStep?.softGoals ?? [])],
         predecessorStep: baseStepId,
-        explanations: [],
       },
     };
   }),
@@ -187,7 +187,7 @@ export const iterativePlanningReducer = createReducer(
     })
   ),
 
-  on(questionPosed, (state, {iterationStepId, questionType, propertyId}): IterativePlanningState => ({
+  on(questionPosed, (state, { question: {iterationStepId, questionType, propertyId } }): IterativePlanningState => ({
     ...state,
     messages: [
       ...state.messages,
@@ -195,11 +195,11 @@ export const iterativePlanningReducer = createReducer(
     ],
   })),
 
-  on(poseAnswer, (state, { iterationStepId, questionType, propertyId, }): IterativePlanningState => ({
+  on(poseAnswer, (state, { answer }): IterativePlanningState => ({
     ...state,
     messages: [
       ...state.messages,
-      { questionType, iterationStepId, role: 'system', message: questionFactory(questionType)(undefined), propertyId },
+      answer,
     ],
   }))
 );
@@ -219,7 +219,6 @@ function initFirstNewIterationStep(
       .map((p) => p._id),
     softGoals: [],
     predecessorStep: undefined,
-    explanations: [],
   };
 }
 

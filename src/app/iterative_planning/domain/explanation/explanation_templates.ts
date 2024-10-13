@@ -1,5 +1,6 @@
+import { Question } from "../interface/question";
 import { IterationStep } from "../iteration_step";
-import { AnswerType, Question, QuestionType } from "./explanations";
+import { AnswerType, QuestionType } from "./explanations";
 
 type Validator = (step: IterationStep, ppId: string) => boolean;
 type AnswerComputer = (
@@ -19,27 +20,22 @@ export interface ExplanationTemplate {
 }
 
 function whyAnswerComputer(step: IterationStep, question: Question, computed: string[][]): string[][] {
-        return computed.filter(
-            MUGS => {
-                MUGS.every(id =>
+  return computed
+    .filter( MUGS => MUGS.every(id =>
                     ((step.plan !== undefined) &&
                     (step.plan.satisfied_properties !== undefined) &&
                     step.plan.satisfied_properties.includes(id)) ||
-                    question.parameters.includes(id)
+                    question.propertyId === id
                 )
-            }
-        ).map(MUGS => MUGS.filter(id =>  ! question.parameters.includes(id)))
-    }
+        )
+    .map(MUGS => MUGS.filter(id =>  ! (question.propertyId === id)));
+}
 
 
 function howAnswerComputer(step: IterationStep, question: Question, computed: string[][]): string[][] {
-    return computed.filter(
-        MCGS => {
-            MCGS.every(id =>
-                ! question.parameters.includes(id)
-            )
-        }
-    ).map(MUGS => MUGS.filter(id =>  step.plan?.satisfied_properties.includes(id)))
+    return computed
+      .filter( MCGS => MCGS.every(id => !(question.propertyId === id)))
+      .map(MUGS => MUGS.filter(id =>  step.plan?.satisfied_properties.includes(id)))
 }
 
 export const explanationTemplates: ExplanationTemplate[] = [

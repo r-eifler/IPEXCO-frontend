@@ -21,11 +21,13 @@ import { AvailableQuestion, ExplanationChatComponent } from "../../components/ex
 import { IterationStepHeroComponent } from "../../components/iteration-step-hero/iteration-step-hero.component";
 import { PlanProeprtyPanelComponent } from "../../components/plan-proeprty-panel/plan-proeprty-panel.component";
 import { QuestionPanelComponent } from "../../components/question-panel/question-panel.component";
+import { explanationHash } from "../../domain/explanation/explanation-hash";
 import { QuestionType } from "../../domain/explanation/explanations";
 import { questionFactory } from "../../domain/explanation/question-factory";
 import { PlanRunStatus } from "../../domain/plan";
 import { initNewIterationStep, questionPosed } from "../../state/iterative-planning.actions";
 import {
+    selectIsExplanationLoading,
     selectIterativePlanningProperties,
     selectIterativePlanningSelectedStep,
     selectMessageTypes,
@@ -81,6 +83,11 @@ export class StepDetailViewComponent {
     map((goals) => !!goals?.length)
   );
 
+  isExplanationLoading$ = this.step$.pipe(
+    map(explanationHash),
+    switchMap(hash => this.store.select(selectIsExplanationLoading(hash)))
+  );
+
   globalAvalableQuestionTypes$ = this.step$.pipe(
     map((step) => step?._id),
     filter((id) => !!id),
@@ -108,7 +115,7 @@ export class StepDetailViewComponent {
 
   onQuestionSelected(question: AvailableQuestion): void {
     this.stepId$.pipe(take(1)).subscribe((iterationStepId) =>
-      this.store.dispatch(questionPosed({questionType: question.questionType, iterationStepId }))
+      this.store.dispatch(questionPosed({ question: { questionType: question.questionType, iterationStepId }}))
     );
   }
 }

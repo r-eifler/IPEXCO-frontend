@@ -1,6 +1,7 @@
 import { createAction, props } from "@ngrx/store";
 import { Project } from "src/app/project/domain/project";
-import { Question, QuestionType } from "../domain/explanation/explanations";
+import { ExplanationMessage } from "../domain/interface/explanation-message";
+import { Question } from "../domain/interface/question";
 import { IterationStep, ModIterationStep } from "../domain/iteration_step";
 import { PlanProperty } from "../domain/plan-property/plan-property";
 
@@ -77,14 +78,10 @@ export const globalExplanationComputationRunningSuccess = createAction('[iterati
 export const globalExplanationComputationRunningFailure = createAction('[iterative-planning] global explanation computation running failure');
 
 // Question based
-export const registerExplanationComputation = createAction('[iterative-planning] register explanation computation', props<{ iterationStepId: string, question: Question }>());
-export const registerExplanationComputationSuccess = createAction('[iterative-planning] register explanation computation success', props<{iterationStepId: string}>());
-export const registerExplanationComputationFailure = createAction('[iterative-planning] register explanation computation failure');
-
 export const explanationComputationRunning = createAction('[iterative-planning] explanation computation running');
 export const explanationComputationRunningSuccess = createAction('[iterative-planning] explanation computation running success');
 export const explanationComputationRunningFailure = createAction('[iterative-planning] explanation computation running failure');
 
-export const questionPosed = createAction('[iterative-planning] question posed', props<{iterationStepId: string, propertyId?: string, questionType: QuestionType}>());
-export const poseAnswer = createAction('[iterative-planning] pose answer', props<{ iterationStepId: string, propertyId?: string, questionType: QuestionType }>());
+export const questionPosed = createAction('[iterative-planning] question posed', props<{ question: Question }>());
+export const poseAnswer = createAction('[iterative-planning] pose answer', props<{ answer: ExplanationMessage }>());
 

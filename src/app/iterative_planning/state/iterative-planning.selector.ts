@@ -2,6 +2,7 @@ import { createFeatureSelector, createSelector } from "@ngrx/store";
 import { KeyValuePair, filter, find, includes, join, map, memoizeWith, pipe, zip } from "ramda";
 import { LoadingState } from "src/app/shared/common/loadable.interface";
 import { explanationHash } from "../domain/explanation/explanation-hash";
+import { ExplanationRunStatus } from "../domain/explanation/explanations";
 import { IterativePlanningState, Message, iterativePlanningFeature } from "./iterative-planning.reducer";
 
 const selectIterativePlanningFeature = createFeatureSelector<IterativePlanningState>(iterativePlanningFeature);
@@ -67,6 +68,11 @@ export const selectExplanations = memoizeWith(
 export const selectExplanation = memoizeWith(
   (explanationHash: string) => explanationHash,
   (explanationHash: string) => createSelector(selectAllExplanations, find(({hash}) => hash === explanationHash)),
+);
+
+export const selectIsExplanationLoading = memoizeWith(
+  (explanationHash: string) => explanationHash,
+  (explanationHash: string) => createSelector(selectExplanation(explanationHash), (explanation) => explanation?.explanation?.status === ExplanationRunStatus.pending || explanation?.explanation?.status === ExplanationRunStatus.running),
 );
 
 export const selectIterationStepIdsWithoutExplanations = createSelector(selectIterativePlanningIterationSteps, selectAllExplanations, (iterationSteps, allExplanations) => {
