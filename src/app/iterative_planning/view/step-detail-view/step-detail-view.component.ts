@@ -5,7 +5,7 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { RouterLink } from "@angular/router";
 import { Store } from "@ngrx/store";
-import { combineLatest, filter, map, switchMap, take } from "rxjs";
+import { Observable, combineLatest, filter, map, switchMap, take } from "rxjs";
 
 import { BreadcrumbModule } from "src/app/shared/component/breadcrumb/breadcrumb.module";
 import { EmptyStateModule } from "src/app/shared/component/empty-state/empty-state.module";
@@ -24,14 +24,18 @@ import { QuestionPanelComponent } from "../../components/question-panel/question
 import { explanationHash } from "../../domain/explanation/explanation-hash";
 import { QuestionType } from "../../domain/explanation/explanations";
 import { questionFactory } from "../../domain/explanation/question-factory";
+import { StructuredText } from "../../domain/interface/explanation-message";
 import { PlanRunStatus } from "../../domain/plan";
+import { PlanProperty } from "../../domain/plan-property/plan-property";
 import { initNewIterationStep, questionPosed } from "../../state/iterative-planning.actions";
+import { Message } from "../../state/iterative-planning.reducer";
 import {
     selectIsExplanationLoading,
     selectIterativePlanningProperties,
     selectIterativePlanningSelectedStep,
     selectMessageTypes,
     selectMessages,
+    selectPropertyAvailableQuestions,
     selectStepAvailableQuestions,
 } from "../../state/iterative-planning.selector";
 import {
@@ -109,8 +113,41 @@ export class StepDetailViewComponent {
     switchMap(stepId => this.store.select(selectMessages(stepId))),
   );
 
+  propertyAvailableQuestionTypes$(property: PlanProperty): Observable<{questionType: QuestionType, message: StructuredText}[]> {
+    return this.step$.pipe(
+      map((step) => step?._id),
+      filter((id) => !!id),
+      switchMap((stepId) =>
+        combineLatest([
+          this.store.select(selectPropertyAvailableQuestions),
+          this.store.select(selectMessageTypes(stepId, property._id)),
+        ]).pipe(
+          map(([allQuestionTypes, alreadyAskedQuestionTypes]) => {
+            const notAlreadyAskedFn = (type: QuestionType) => rNot(rIncludes(type, alreadyAskedQuestionTypes));
+            return rFilter(notAlreadyAskedFn, allQuestionTypes);
+          }),
+          map(rMap((questionType) => ({ questionType, message: questionFactory(questionType)(property.name)}))),
+        )
+      )
+    );
+  }
+
+  propertyMessages$(property: PlanProperty): Observable<Message[]> {
+    return this.stepId$.pipe(
+      switchMap(stepId => this.store.select(selectMessages(stepId, property._id))),
+    );
+  }
+
+
   createNewIteration(baseStepId?: string) {
     this.store.dispatch(initNewIterationStep({ baseStepId }));
+  }
+
+  onPropertyQuestionSelected(question: AvailableQuestion, property: PlanProperty): void {
+    console.log('property question')
+    this.stepId$.pipe(take(1)).subscribe((iterationStepId) =>
+      this.store.dispatch(questionPosed({ question: { questionType: question.questionType, iterationStepId, propertyId: property._id }}))
+    );
   }
 
   onQuestionSelected(question: AvailableQuestion): void {

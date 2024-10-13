@@ -58,12 +58,20 @@
 
       @if(step?.plan && !isUnsolvable) {
       <app-page-section>
-        <app-page-section-title>Unsatisfied Softgoals</app-page-section-title>
+        <app-page-section-title>Unsatisfied Softgoals <mat-icon matTooltip="Expand the individual goals to gather more information as of why they are unsolvable.">info</mat-icon></app-page-section-title>
         <app-page-section-content>
           @if(hasUnsolvedSoftGoals$ | async) {
           <div class="property-list">
             @for(property of unsolvedSoftGoals$ | async; track property) {
-            <app-plan-proeprty-panel [property]="property"></app-plan-proeprty-panel>
+            <app-plan-proeprty-panel [property]="property">
+              <app-explanation-chat
+                [isLoading]="isExplanationLoading$ | async"
+                [availableQuestions]="propertyAvailableQuestionTypes$(property) | async"
+                (questionSelected)="onPropertyQuestionSelected($event, property)"
+                [messages]="propertyMessages$(property) | async"
+                [properties]="planProperties$ | async"
+              ></app-explanation-chat>
+            </app-plan-proeprty-panel>
             }
           </div>
           } @else {

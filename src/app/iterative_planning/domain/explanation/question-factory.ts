@@ -17,12 +17,12 @@ export function questionFactory<T extends QuestionType, R extends Factory<T> = F
     case QuestionType.HOW_PLAN:
       return (() => ({ mainText: 'How can I make it solvable?' })) as R;
     case QuestionType.WHY_NOT_PROPERTY:
-      return ((p: string) => ({ mainText: `Why is ${p} not satisfied?` })) as R;
+      return ((p: string) => ({ mainText: `Why is "${p}" not satisfied?` })) as R;
     case QuestionType.WHAT_IF_PROPERTY:
-      return ((p: string) => ({ mainText: `What happens if I enforce ${p}?` })) as R;
+      return ((p: string) => ({ mainText: `What happens if I enforce "${p}"?` })) as R;
     case QuestionType.CAN_PROPERTY:
-      return ((p: string) => ({ mainText: `Can ${p} be enforced?` })) as R;
+      return ((p: string) => ({ mainText: `Can "${p}" be enforced?` })) as R;
     case QuestionType.HOW_PROPERTY:
-      return ((p: string) => ({ mainText: `How can ${p} be satisfied?` })) as R;
+      return ((p: string) => ({ mainText: `How can "${p}" be satisfied?` })) as R;
   }
 }
