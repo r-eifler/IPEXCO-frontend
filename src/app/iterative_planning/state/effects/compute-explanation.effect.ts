@@ -1,13 +1,13 @@
 import { inject, Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { createIterationStepFailure, createIterationStepSuccess, explanationComputationRunningFailure, explanationComputationRunningSuccess, globalExplanationComputationRunningFailure, globalExplanationComputationRunningSuccess, loadIterationSteps, planComputationRunningFailure, planComputationRunningSuccess, registerExplanationComputation, registerExplanationComputationFailure, registerExplanationComputationSuccess, registerGlobalExplanationComputation, registerGlobalExplanationComputationFailure, registerGlobalExplanationComputationSuccess, registerPlanComputation, registerPlanComputationSuccess, registerTempGoalPlanComputation} from "../iterative-planning.actions";
-import { catchError, switchMap } from "rxjs/operators";
-import { of } from "rxjs";
-import { Store } from "@ngrx/store";
 import { concatLatestFrom } from "@ngrx/operators";
-import { selectIterativePlanningProject, selectIterativePlanningSelectedStepId } from "../iterative-planning.selector";
-import { ExplainerService } from "../../service/explainer.service";
+import { Store } from "@ngrx/store";
+import { of } from "rxjs";
+import { catchError, switchMap } from "rxjs/operators";
 import { ExplainerMonitoringService } from "../../service/explainer-monitoring.service";
+import { ExplainerService } from "../../service/explainer.service";
+import { explanationComputationRunningFailure, explanationComputationRunningSuccess, globalExplanationComputationRunningFailure, globalExplanationComputationRunningSuccess, loadIterationSteps, registerExplanationComputation, registerExplanationComputationFailure, registerExplanationComputationSuccess, registerGlobalExplanationComputation, registerGlobalExplanationComputationFailure, registerGlobalExplanationComputationSuccess } from "../iterative-planning.actions";
+import { selectIterativePlanningProject, selectIterativePlanningSelectedStepId } from "../iterative-planning.selector";
 
 @Injectable()
 export class ComputeExplanationEffect{
@@ -42,10 +42,9 @@ export class ComputeExplanationEffect{
 
     public registerGlobalExplanationComputation$ = createEffect(() => this.actions$.pipe(
         ofType(registerGlobalExplanationComputation),
-        concatLatestFrom(() => this.store.select(selectIterativePlanningSelectedStepId)),
-        switchMap(([{iterationStepId: id},iterationStepId]) => this.explainerService.postComputeGlobalExplanation$(iterationStepId).pipe(
+        switchMap(({ iterationStepId }) => this.explainerService.postComputeGlobalExplanation$(iterationStepId).pipe(
             concatLatestFrom(() => this.store.select(selectIterativePlanningProject)),
-            switchMap(([res, project]) => [registerGlobalExplanationComputationSuccess({iterationStepId}), loadIterationSteps({id: project._id})]),
+            switchMap(([_, project]) => [registerGlobalExplanationComputationSuccess({iterationStepId}), loadIterationSteps({id: project._id})]),
             catchError(() => of(registerGlobalExplanationComputationFailure()))
         ))
     ))

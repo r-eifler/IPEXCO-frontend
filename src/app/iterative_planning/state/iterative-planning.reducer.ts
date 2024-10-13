@@ -1,13 +1,15 @@
 import { createReducer, on } from "@ngrx/store";
+import { map } from "ramda";
 import { Project } from "src/app/project/domain/project";
 import {
     Loadable,
     LoadingState,
 } from "src/app/shared/common/loadable.interface";
-import { QuestionType } from "../domain/explanation/explanations";
+import { explanationHash } from "../domain/explanation/explanation-hash";
+import { GlobalExplanation, QuestionType } from "../domain/explanation/explanations";
 import { questionFactory } from "../domain/explanation/question-factory";
-import { Explanation } from "../domain/interface/explanation";
 import { ExplanationMessage } from "../domain/interface/explanation-message";
+import { Question } from "../domain/interface/question";
 import {
     IterationStep,
     ModIterationStep,
@@ -30,16 +32,19 @@ import {
     updateNewIterationStep,
 } from "./iterative-planning.actions";
 
+export type Message = (Omit<ExplanationMessage, 'message'> & {message?: string});
+
 export interface IterativePlanningState {
-  explanations: Explanation[];
+  explanations: {hash: string, explanation: GlobalExplanation | undefined}[];
   iterationSteps: Loadable<IterationStep[]>;
-  messages: ExplanationMessage[];
+  messages: Message[];
   newStep: undefined | ModIterationStep;
   planProperties: Loadable<Record<string, PlanProperty>>;
   project: Loadable<Project>;
   propertyAvailableQuestionTypes: QuestionType[];
   selectedIterationStepId: undefined | string;
   stepAvailableQuestionTypes: QuestionType[];
+  questionQueue: Question[];
 }
 
 export const iterativePlanningFeature = "iterative-planning";
@@ -54,6 +59,7 @@ const initialState: IterativePlanningState = {
   propertyAvailableQuestionTypes: [QuestionType.CAN_PROPERTY, QuestionType.WHAT_IF_PROPERTY, QuestionType.WHY_NOT_PROPERTY, QuestionType.HOW_PROPERTY],
   selectedIterationStepId: undefined,
   stepAvailableQuestionTypes: [QuestionType.HOW_PLAN, QuestionType.WHY_PLAN],
+  questionQueue: [],
 };
 
 export const iterativePlanningReducer = createReducer(
@@ -114,6 +120,7 @@ export const iterativePlanningReducer = createReducer(
           state.planProperties.state == LoadingState.Done
           ? initFirstNewIterationStep(state)
           : undefined,
+      explanations: extractExplanations(iterationSteps),
     })
   ),
   on(
@@ -186,8 +193,12 @@ export const iterativePlanningReducer = createReducer(
     ...state,
     messages: [
       ...state.messages,
-      { questionType, iterationStepId, role: 'user', message: questionFactory(questionType)(undefined)}
+      { questionType, iterationStepId, role: 'user', message: questionFactory(questionType)(undefined)},
     ],
+    questionQueue: [
+      ...state.questionQueue,
+      { questionType, iterationStepId },
+    ]
   }))
 );
 
@@ -208,4 +219,17 @@ function initFirstNewIterationStep(
     predecessorStep: undefined,
     explanations: [],
   };
+}
+
+function extractExplanations(iterationSteps: IterationStep[]): {hash: string, explanation: GlobalExplanation | undefined}[] {
+  return map(extractExplanation, iterationSteps);
+}
+
+function extractExplanation(iterationStep: IterationStep): {hash: string, explanation: GlobalExplanation | undefined} {
+  const hash = explanationHash(iterationStep);
+
+  return {
+    hash,
+    explanation: iterationStep.globalExplanation,
+  }
 }
