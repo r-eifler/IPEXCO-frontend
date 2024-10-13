@@ -188,7 +188,7 @@ export function generatePlanProperty(
     let possibleObjects: Record<string, PDDLObject[]> = {}
     variables.forEach(v => possibleObjects[v] = getPossibleObjectsBasedOnType(template.variables[v], task));
 
-    //for already selected variables possible values is []
+    // for already selected variables possible values is []
     variables.forEach(v => selectedValues[v] ? possibleObjects[v] = [selectedValues[v]] : possibleObjects[v] = possibleObjects[v])
 
     //remove all already selected options
@@ -197,12 +197,12 @@ export function generatePlanProperty(
     ))
 
     //check assignment based on init and goal constraints
-    for(let constraint in template.initVariableConstraints){
+    for(let constraint of template.initVariableConstraints){
         const constraintPossibleValues = 
           getObjectsSatisfyingConstraint(variables,selectedValues, constraint, task.model.initial);
         
         variables.forEach( v => possibleObjects[v] = possibleObjects[v].filter(
-          o => constraintPossibleValues[v].map(so => so.name).includes(o.name)
+          o => constraintPossibleValues[v].includes(o.name)
         ))
     }
 
@@ -214,37 +214,50 @@ function getObjectsSatisfyingConstraint(
   selectedObjects: Record<string,PDDLObject>,
   constraint: string,
   knowledgeBase: PDDLFact[]
-): Record<string,PDDLObject[]> {
+): Record<string,string[]> {
 
-  let res = {}
+  let collection: Record<string,Set<string>> = {}
 
-  variables.forEach(v => selectedObjects[v] ? res[v] = [selectedObjects[v]] : [])
+  for(const v of variables){
+    if(selectedObjects[v]){
+      collection[v] = new Set([selectedObjects[v].name]);
+    }
+    else{
+      collection[v] = new Set()
+    }
+  }
 
   const selectedVariables = variables.filter(v => selectedObjects[v] && constraint.includes(v))
   const freeVariables = variables.filter(v => ! selectedObjects[v] && constraint.includes(v))
 
-  let conRegexString  = constraint.replace(/\s+/, "") 
+  let conRegexString  = constraint.replace(/\\s+/g, "").replace('\)', '\\)').replace('\(', '\\(') 
 
   // already selected variables
-  selectedVariables.reduce(
-    (conRegexString, v) => conRegexString.replace(v, selectedObjects[v].name)
+  conRegexString = selectedVariables.reduce(
+    (conRegexString, v) => conRegexString.replace(v, selectedObjects[v].name),
+    conRegexString
   )
   
   // still free variables
-  freeVariables.reduce(
-    (conRegexString, free) => conRegexString.replace(free, "(\\w+)")
+  conRegexString = freeVariables.reduce(
+    (conRegexString, free) => conRegexString.replace(free, "(?<" + free + ">\[\\w\-_\]+)"),
+    conRegexString
   )
 
+  // wildcards *
+  conRegexString = conRegexString.replace('\*', '\[\\w\-_\]+')
 
   const conRegex = new RegExp(conRegexString);
   for (const pre of knowledgeBase) {
-    const m = conRegex.exec(FactToString(pre).replace(/\s+/, ""));
+    const m = conRegex.exec(FactToString(pre).replace(/\\s+/g, ""));
     if (m) {
-      freeVariables.map((v, i) => res[v].push(m[i]))
+      freeVariables.map(v => collection[v].add(m.groups[v]))
     }
   }
 
-  return res;
+  let res = {}
+  Object.keys(collection).forEach(k => res[k] = [...collection[k]]);
+  return res
 
 }
 
