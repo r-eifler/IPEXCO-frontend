@@ -1,31 +1,33 @@
 import { createReducer, on } from "@ngrx/store";
 import { Project } from "src/app/project/domain/project";
 import {
-  Loadable,
-  LoadingState,
+    Loadable,
+    LoadingState,
 } from "src/app/shared/common/loadable.interface";
 import { QuestionType } from "../domain/explanation/explanations";
+import { questionFactory } from "../domain/explanation/question-factory";
 import { Explanation } from "../domain/interface/explanation";
 import { ExplanationMessage } from "../domain/interface/explanation-message";
 import {
-  IterationStep,
-  ModIterationStep,
-  StepStatus,
+    IterationStep,
+    ModIterationStep,
+    StepStatus,
 } from "../domain/iteration_step";
 import { PlanProperty } from "../domain/plan-property/plan-property";
 import {
-  cancelNewIterationStep,
-  createIterationStepSuccess,
-  deselectIterationStep,
-  initNewIterationStep,
-  loadIterationSteps,
-  loadIterationStepsSuccess,
-  loadPlanProperties,
-  loadPlanPropertiesSuccess,
-  loadProject,
-  loadProjectSuccess,
-  selectIterationStep,
-  updateNewIterationStep,
+    cancelNewIterationStep,
+    createIterationStepSuccess,
+    deselectIterationStep,
+    initNewIterationStep,
+    loadIterationSteps,
+    loadIterationStepsSuccess,
+    loadPlanProperties,
+    loadPlanPropertiesSuccess,
+    loadProject,
+    loadProjectSuccess,
+    questionPosed,
+    selectIterationStep,
+    updateNewIterationStep,
 } from "./iterative-planning.actions";
 
 export interface IterativePlanningState {
@@ -178,7 +180,15 @@ export const iterativePlanningReducer = createReducer(
       ...state,
       selectedIterationStepId: undefined,
     })
-  )
+  ),
+
+  on(questionPosed, (state, {iterationStepId, questionType}): IterativePlanningState => ({
+    ...state,
+    messages: [
+      ...state.messages,
+      { questionType, iterationStepId, role: 'user', message: questionFactory(questionType)(undefined)}
+    ],
+  }))
 );
 
 function initFirstNewIterationStep(

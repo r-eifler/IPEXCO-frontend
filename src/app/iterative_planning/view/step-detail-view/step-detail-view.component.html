@@ -30,11 +30,13 @@
       <app-page-section>
         <app-page-section-title>
           <mat-icon>lightbulb_2</mat-icon>
-          Plan Insights
+          Insights
         </app-page-section-title>
         <app-page-section-content>
           <app-explanation-chat
             [availableQuestions]="globalAvalableQuestionTypes$ | async"
+            (questionSelected)="onQuestionSelected($event)"
+            [messages]="globalMessages$ | async"
           ></app-explanation-chat>
         </app-page-section-content>
       </app-page-section>

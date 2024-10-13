@@ -1,8 +1,14 @@
 <app-chat>
   <app-chat-message role="sender">Here are some question, that I could help you with:</app-chat-message>
 
+  @for(message of messages(); track message) {
+  <app-chat-message [role]="message.role === 'system' ? 'sender' : 'receiver'">
+    {{ message.message }}
+  </app-chat-message>
+  }
+
   @for(question of availableQuestions(); track question) {
-  <button app-chat-action>{{ question.message }}</button>
+  <button app-chat-action (click)="onQuestionSelected(question)">{{ question.message }}</button>
   }
 
   <app-chat-input [disabled]="true"></app-chat-input>

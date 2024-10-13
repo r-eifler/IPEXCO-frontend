@@ -5,38 +5,38 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { RouterLink } from "@angular/router";
 import { Store } from "@ngrx/store";
-import { combineLatest, filter, map, switchMap } from "rxjs";
+import { combineLatest, filter, map, switchMap, take } from "rxjs";
 
 import { BreadcrumbModule } from "src/app/shared/component/breadcrumb/breadcrumb.module";
 import { EmptyStateModule } from "src/app/shared/component/empty-state/empty-state.module";
 import { PageModule } from "src/app/shared/component/page/page.module";
 
 import {
-  filter as rFilter,
-  includes as rIncludes,
-  map as rMap,
-  not as rNot,
+    filter as rFilter,
+    includes as rIncludes,
+    map as rMap,
+    not as rNot,
 } from "ramda";
-import { ExplanationChatComponent } from "../../components/explanation-chat/explanation-chat.component";
+import { AvailableQuestion, ExplanationChatComponent } from "../../components/explanation-chat/explanation-chat.component";
 import { IterationStepHeroComponent } from "../../components/iteration-step-hero/iteration-step-hero.component";
 import { PlanProeprtyPanelComponent } from "../../components/plan-proeprty-panel/plan-proeprty-panel.component";
 import { QuestionPanelComponent } from "../../components/question-panel/question-panel.component";
-import { explanationTemplates } from "../../domain/explanation/explanation_templates";
 import { QuestionType } from "../../domain/explanation/explanations";
+import { questionFactory } from "../../domain/explanation/question-factory";
 import { PlanRunStatus } from "../../domain/plan";
-import { initNewIterationStep } from "../../state/iterative-planning.actions";
+import { initNewIterationStep, questionPosed } from "../../state/iterative-planning.actions";
 import {
-  selectIterativePlanningProperties,
-  selectIterativePlanningSelectedStep,
-  selectMessageTypes,
-  selectStepAvailableQuestions,
+    selectIterativePlanningProperties,
+    selectIterativePlanningSelectedStep,
+    selectMessageTypes,
+    selectMessages,
+    selectStepAvailableQuestions,
 } from "../../state/iterative-planning.selector";
 import {
-  selectEnforcedGoals,
-  selectSatisfiedSoftGoals,
-  selectUnsatisfiedSoftGoals,
+    selectEnforcedGoals,
+    selectSatisfiedSoftGoals,
+    selectUnsatisfiedSoftGoals,
 } from "./step-detail-view.component.selector";
-import { questionFactory } from "../../domain/explanation/question-factory";
 
 @Component({
   selector: "app-step-detail-view",
@@ -62,6 +62,7 @@ export class StepDetailViewComponent {
   private store = inject(Store);
 
   step$ = this.store.select(selectIterativePlanningSelectedStep);
+  stepId$ = this.step$.pipe(map(step => step?._id));
   isUnsolvable$ = this.step$.pipe(
     filter((step) => !!step),
     map((step) => step.plan?.status == PlanRunStatus.not_solvable)
@@ -89,29 +90,25 @@ export class StepDetailViewComponent {
         this.store.select(selectMessageTypes(stepId)),
       ]).pipe(
         map(([allQuestionTypes, alreadyAskedQuestionTypes]) => {
-          console.log(allQuestionTypes, alreadyAskedQuestionTypes);
-          const notAlreadyAskedFn = (type: QuestionType) =>
-            rNot(rIncludes(type, alreadyAskedQuestionTypes));
+          const notAlreadyAskedFn = (type: QuestionType) => rNot(rIncludes(type, alreadyAskedQuestionTypes));
           return rFilter(notAlreadyAskedFn, allQuestionTypes);
         }),
-        map(
-          rMap((questionType) => {
-            if(!(questionType === QuestionType.HOW_PLAN || questionType === QuestionType.WHY_PLAN)) {
-              return { questionType, message: '' };
-            }
-
-            return { questionType, message: questionFactory(questionType)() };
-          })
-        )
+        map( rMap((questionType) => ({ questionType, message: questionFactory(questionType)(undefined)  }))),
       )
     )
   );
 
-  explanationTemplatesUnsolvable = explanationTemplates.filter(
-    (t) => !t.forSolvableInstance
+  globalMessages$ = this.stepId$.pipe(
+    switchMap(stepId => this.store.select(selectMessages(stepId))),
   );
 
   createNewIteration(baseStepId?: string) {
     this.store.dispatch(initNewIterationStep({ baseStepId }));
+  }
+
+  onQuestionSelected(question: AvailableQuestion): void {
+    this.stepId$.pipe(take(1)).subscribe((iterationStepId) =>
+      this.store.dispatch(questionPosed({questionType: question.questionType, iterationStepId }))
+    );
   }
 }

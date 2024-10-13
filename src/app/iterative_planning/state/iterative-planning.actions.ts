@@ -1,8 +1,8 @@
 import { createAction, props } from "@ngrx/store";
 import { Project } from "src/app/project/domain/project";
+import { Question, QuestionType } from "../domain/explanation/explanations";
 import { IterationStep, ModIterationStep } from "../domain/iteration_step";
 import { PlanProperty } from "../domain/plan-property/plan-property";
-import { Question } from "../domain/explanation/explanations";
 
 
 // Project
@@ -85,4 +85,5 @@ export const explanationComputationRunning = createAction('[iterative-planning] 
 export const explanationComputationRunningSuccess = createAction('[iterative-planning] explanation computation running success');
 export const explanationComputationRunningFailure = createAction('[iterative-planning] explanation computation running failure');
 
+export const questionPosed = createAction('[iterative-planning] question posed', props<{iterationStepId: string, questionType: QuestionType}>());
 
