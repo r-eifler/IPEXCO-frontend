@@ -39,33 +39,21 @@
       <mat-step label="Domain">
         <div class="stepper-content">
           <app-template-file-upload type="pddl_domain" (fileSelected)="onDomainSelected($event)">Upload Domain File</app-template-file-upload>
+          <app-template-file-upload type="pddl_problem" (fileSelected)="onProblemSelected($event)">Upload Problem File</app-template-file-upload>
           <!-- <div>
             {{translatedDomainJSON$ | async}}
           </div> -->
-          @if (domainValid$ | async) {
+          @if (modelValid$ | async) {
             <mat-icon fontIcon="done_outline"></mat-icon>
           }
 
           <div class="button-container">
             <button mat-button matStepperPrevious>Back</button>
-            <button mat-flat-button matStepperNext>Next</button>
+            <button mat-flat-button color="primary" (click)="onSave()" [disabled]="!((modelValid$ | async))">Save</button>
           </div>
         </div>
       </mat-step>
 
-      <mat-step label="Problem Instance">
-        <div class="stepper-content">
-          <app-template-file-upload type="pddl_problem" (fileSelected)="onProblemSelected($event)">Upload Problem File</app-template-file-upload>
-          @if (problemValid$ | async) {
-            <mat-icon fontIcon="done_outline"></mat-icon>
-          }
-
-          <div class="button-container">
-            <button mat-button matStepperPrevious>Back</button>
-            <button mat-flat-button color="primary" (click)="onSave()" [disabled]="!((domainValid$ | async) && (problemValid$ | async))">Save</button>
-          </div>
-        </div>
-      </mat-step>
     </mat-stepper>
   </mat-card-content>
 </mat-card>

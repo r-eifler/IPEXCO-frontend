@@ -43,6 +43,17 @@
   </mat-list>
 </mat-expansion-panel>
 
+<mat-expansion-panel class="expansion-panel"></mat-expansion-panel>
+  <mat-expansion-panel-header>
+    <mat-panel-title> Constants </mat-panel-title>
+  </mat-expansion-panel-header>
+  <mat-list>
+    <mat-list-item *ngFor="let object of (planning_model$ | async)?.constants">
+      {{ object.name }} {{ object.type }}
+    </mat-list-item>
+  </mat-list>
+</mat-expansion-panel>
+
 <mat-expansion-panel class="expansion-panel">
   <mat-expansion-panel-header>
     <mat-panel-title> Initial </mat-panel-title>

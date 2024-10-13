@@ -186,7 +186,7 @@ export function FactToString(fact: PDDLFact): string {
   //   return "error";
   // }
   if (fact.negated) {
-    return "! " + fact.name + "(" + fact.arguments.join(",") + ")";
+    return "! " + fact.name + "(" + fact.arguments.map(f => f).join(",") + ")";
   }
   return fact.name + "(" + fact.arguments.join(",") + ")";
 }
