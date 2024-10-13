@@ -9,7 +9,6 @@ import { explanationHash } from "../domain/explanation/explanation-hash";
 import { GlobalExplanation, QuestionType } from "../domain/explanation/explanations";
 import { questionFactory } from "../domain/explanation/question-factory";
 import { ExplanationMessage } from "../domain/interface/explanation-message";
-import { Question } from "../domain/interface/question";
 import {
     IterationStep,
     ModIterationStep,
@@ -27,6 +26,7 @@ import {
     loadPlanPropertiesSuccess,
     loadProject,
     loadProjectSuccess,
+    poseAnswer,
     questionPosed,
     selectIterationStep,
     updateNewIterationStep,
@@ -44,7 +44,6 @@ export interface IterativePlanningState {
   propertyAvailableQuestionTypes: QuestionType[];
   selectedIterationStepId: undefined | string;
   stepAvailableQuestionTypes: QuestionType[];
-  questionQueue: Question[];
 }
 
 export const iterativePlanningFeature = "iterative-planning";
@@ -59,7 +58,6 @@ const initialState: IterativePlanningState = {
   propertyAvailableQuestionTypes: [QuestionType.CAN_PROPERTY, QuestionType.WHAT_IF_PROPERTY, QuestionType.WHY_NOT_PROPERTY, QuestionType.HOW_PROPERTY],
   selectedIterationStepId: undefined,
   stepAvailableQuestionTypes: [QuestionType.HOW_PLAN, QuestionType.WHY_PLAN],
-  questionQueue: [],
 };
 
 export const iterativePlanningReducer = createReducer(
@@ -189,16 +187,20 @@ export const iterativePlanningReducer = createReducer(
     })
   ),
 
-  on(questionPosed, (state, {iterationStepId, questionType}): IterativePlanningState => ({
+  on(questionPosed, (state, {iterationStepId, questionType, propertyId}): IterativePlanningState => ({
     ...state,
     messages: [
       ...state.messages,
-      { questionType, iterationStepId, role: 'user', message: questionFactory(questionType)(undefined)},
+      { questionType, iterationStepId, role: 'user', message: questionFactory(questionType)(undefined), propertyId },
     ],
-    questionQueue: [
-      ...state.questionQueue,
-      { questionType, iterationStepId },
-    ]
+  })),
+
+  on(poseAnswer, (state, { iterationStepId, questionType, propertyId, }): IterativePlanningState => ({
+    ...state,
+    messages: [
+      ...state.messages,
+      { questionType, iterationStepId, role: 'system', message: questionFactory(questionType)(undefined), propertyId },
+    ],
   }))
 );
 

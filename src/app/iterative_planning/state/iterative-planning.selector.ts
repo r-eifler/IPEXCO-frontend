@@ -47,8 +47,8 @@ export const selectIterativePlanningNumStep = createSelector(selectIterativePlan
 const selectAllMessages = createSelector(selectIterativePlanningFeature, ({messages}) => messages);
 export const selectMessages = memoizeWith(
   (stepId: string, propertyId?: string) => stepId + propertyId,
-  (stepId: string, propertyId?: string) => createSelector(selectAllMessages, filter<Message>(
-    ({iterationStepId, planPropertyId}) => iterationStepId === stepId && propertyId === planPropertyId,
+  (stepId: string, planPropertyId?: string) => createSelector(selectAllMessages, filter<Message>(
+    ({iterationStepId, propertyId}) => iterationStepId === stepId && propertyId === planPropertyId,
   )),
 );
 export const selectMessageTypes = memoizeWith(
@@ -58,8 +58,6 @@ export const selectMessageTypes = memoizeWith(
 
 export const selectStepAvailableQuestions = createSelector(selectIterativePlanningFeature, ({stepAvailableQuestionTypes}) => stepAvailableQuestionTypes);
 export const selectPropertyAvailableQuestions = createSelector(selectIterativePlanningFeature, ({propertyAvailableQuestionTypes}) => propertyAvailableQuestionTypes);
-
-export const selectQuestionQueue = createSelector(selectIterativePlanningFeature, ({questionQueue}) => questionQueue);
 
 const selectAllExplanations = createSelector(selectIterativePlanningFeature, ({explanations}) => explanations);
 export const selectExplanations = memoizeWith(

@@ -85,5 +85,6 @@ export const explanationComputationRunning = createAction('[iterative-planning] 
 export const explanationComputationRunningSuccess = createAction('[iterative-planning] explanation computation running success');
 export const explanationComputationRunningFailure = createAction('[iterative-planning] explanation computation running failure');
 
-export const questionPosed = createAction('[iterative-planning] question posed', props<{iterationStepId: string, questionType: QuestionType}>());
+export const questionPosed = createAction('[iterative-planning] question posed', props<{iterationStepId: string, propertyId?: string, questionType: QuestionType}>());
+export const poseAnswer = createAction('[iterative-planning] pose answer', props<{ iterationStepId: string, propertyId?: string, questionType: QuestionType }>());
 
