@@ -24,9 +24,8 @@ export class QuestionQueueEffect {
       const hash = explanationHash(iterationStep);
 
       return this.store.select(selectExplanation(hash)).pipe(
-        tap(console.log),
         take(1),
-        map(({explanation}) => !explanation),
+        map((explanation) => !explanation),
         tap( needsComputation => console.log('registerGlobalExplanationComputation: ' + needsComputation)),
         switchMap(needsComputation => needsComputation ? [registerGlobalExplanationComputation({ iterationStepId })] : []),
       );
