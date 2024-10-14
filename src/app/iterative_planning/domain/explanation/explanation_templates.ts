@@ -154,7 +154,7 @@ export const explanationTemplates: ExplanationTemplate[] = [
         questionParameters: ['$P1'],
         parameterValidator:  (step: IterationStep, ppId: string) => ! step.plan?.satisfied_properties?.includes(ppId),
         questionPhrase: "How can $P1 be satisfied?",
-        answerType: AnswerType.MUGS,
+        answerType: AnswerType.MGCS,
         answerComputer: (step: IterationStep, question, computed: string[][], complete) => {
             const answers = howAnswerComputer(step, question, computed);
             // TODO check which role complete plays

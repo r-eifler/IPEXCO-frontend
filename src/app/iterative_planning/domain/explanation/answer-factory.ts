@@ -17,7 +17,7 @@ export function getComputedBase(questionType: QuestionType, explanation: GlobalE
     case QuestionType.CAN_PROPERTY:
       return explanation?.MUGS;
     case QuestionType.HOW_PROPERTY:
-      return explanation?.MUGS;
+      return explanation?.MGCS;
   }
 }
 
