@@ -15,7 +15,10 @@ export const selectIterativePlanningTask = createSelector(selectIterativePlannin
         (state) => state.project?.data?.baseTask)
 
 export const selectIterativePlanningProjectCreationInterfaceType = createSelector(selectIterativePlanningFeature,
-    (state) => state.project?.data.settings?.propertyCreationInterfaceType)
+    (state) => state.project?.data?.settings?.propertyCreationInterfaceType)
+
+export const selectIterativePlanningProjectExplanationInterfaceType = createSelector(selectIterativePlanningFeature,
+  (state) => state.project?.data?.settings?.explanationInterfaceType)
 
 export const selectIterativePlanningProperties = createSelector(selectIterativePlanningFeature,
     (state) => state.planProperties?.data)
@@ -61,13 +64,9 @@ export const selectStepAvailableQuestions = createSelector(selectIterativePlanni
 export const selectPropertyAvailableQuestions = createSelector(selectIterativePlanningFeature, ({propertyAvailableQuestionTypes}) => propertyAvailableQuestionTypes);
 
 const selectAllExplanations = createSelector(selectIterativePlanningFeature, ({explanations}) => explanations);
-export const selectExplanations = memoizeWith(
-  (explanationHashes: string[]) => join('', explanationHashes),
-  (explanationHashes: string[]) => createSelector(selectAllExplanations, filter(({hash}) => includes(hash, explanationHashes))),
-);
 export const selectExplanation = memoizeWith(
   (explanationHash: string) => explanationHash,
-  (explanationHash: string) => createSelector(selectAllExplanations, find(({hash}) => hash === explanationHash)),
+  (explanationHash: string) => createSelector(selectAllExplanations, explanations => explanations[explanationHash]),
 );
 
 export const selectIsExplanationLoading = memoizeWith(

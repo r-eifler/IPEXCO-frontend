@@ -51,6 +51,7 @@ export class QuestionPanelComponent implements OnInit{
   }
 
   computeAnswer() {
+    console.log('registerGlobalExplanationComputation')
     this.store.dispatch(registerGlobalExplanationComputation({iterationStepId: this.step()._id}))
   }
   

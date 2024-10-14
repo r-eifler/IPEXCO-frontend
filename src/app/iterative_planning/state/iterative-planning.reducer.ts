@@ -1,5 +1,5 @@
 import { createReducer, on } from "@ngrx/store";
-import { map } from "ramda";
+import { map, pipe, reduce } from "ramda";
 import { Project } from "src/app/project/domain/project";
 import {
     Loadable,
@@ -36,7 +36,7 @@ type messageType = ExplanationMessage['message'];
 export type Message = (Omit<ExplanationMessage, 'message'> & {message?: messageType});
 
 export interface IterativePlanningState {
-  explanations: {hash: string, explanation: GlobalExplanation | undefined}[];
+  explanations: Record<string,GlobalExplanation | undefined>;
   iterationSteps: Loadable<IterationStep[]>;
   messages: Message[];
   newStep: undefined | ModIterationStep;
@@ -50,7 +50,7 @@ export interface IterativePlanningState {
 export const iterativePlanningFeature = "iterative-planning";
 
 const initialState: IterativePlanningState = {
-  explanations: [],
+  explanations: {},
   iterationSteps: { state: LoadingState.Initial, data: undefined },
   messages: [],
   newStep: undefined,
@@ -222,15 +222,17 @@ function initFirstNewIterationStep(
   };
 }
 
-function extractExplanations(iterationSteps: IterationStep[]): {hash: string, explanation: GlobalExplanation | undefined}[] {
-  return map(extractExplanation, iterationSteps);
+function extractExplanations(iterationSteps: IterationStep[]): Record<string,GlobalExplanation | undefined> {
+  return pipe(
+    map(extractExplanation),
+    reduce((acc, curr) => ({ ...acc, ...curr}), {}),
+  )(iterationSteps);
 }
 
-function extractExplanation(iterationStep: IterationStep): {hash: string, explanation: GlobalExplanation | undefined} {
+function extractExplanation(iterationStep: IterationStep): Record<string,GlobalExplanation | undefined> {
   const hash = explanationHash(iterationStep);
 
   return {
-    hash,
-    explanation: iterationStep.globalExplanation,
+    [hash]: iterationStep.globalExplanation,
   }
 }

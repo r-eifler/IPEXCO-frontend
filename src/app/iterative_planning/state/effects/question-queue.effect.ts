@@ -2,7 +2,7 @@ import { Injectable, inject } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { concatLatestFrom } from "@ngrx/operators";
 import { Store } from "@ngrx/store";
-import { filter, map, mergeMap, switchMap, take } from "rxjs";
+import { filter, map, mergeMap, switchMap, take, tap } from "rxjs";
 import { getAnswer, getComputedBase, mapComputeBase } from "../../domain/explanation/answer-factory";
 import { explanationHash } from "../../domain/explanation/explanation-hash";
 import { ExplanationRunStatus, GlobalExplanation } from "../../domain/explanation/explanations";
@@ -24,7 +24,10 @@ export class QuestionQueueEffect {
       const hash = explanationHash(iterationStep);
 
       return this.store.select(selectExplanation(hash)).pipe(
+        tap(console.log),
+        take(1),
         map(({explanation}) => !explanation),
+        tap( needsComputation => console.log('registerGlobalExplanationComputation: ' + needsComputation)),
         switchMap(needsComputation => needsComputation ? [registerGlobalExplanationComputation({ iterationStepId })] : []),
       );
     }),

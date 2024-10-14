@@ -31,6 +31,7 @@ import { initNewIterationStep, questionPosed } from "../../state/iterative-plann
 import { Message } from "../../state/iterative-planning.reducer";
 import {
     selectIsExplanationLoading,
+    selectIterativePlanningProjectExplanationInterfaceType,
     selectIterativePlanningProperties,
     selectIterativePlanningSelectedStep,
     selectMessageTypes,
@@ -43,6 +44,8 @@ import {
     selectSatisfiedSoftGoals,
     selectUnsatisfiedSoftGoals,
 } from "./step-detail-view.component.selector";
+import { ExplanationInterfaceType } from "src/app/project/domain/general-settings";
+import { MugsVisualizationBaseComponent } from "../visualization/mugs-visualization-base/mugs-visualization-base.component";
 
 @Component({
   selector: "app-step-detail-view",
@@ -60,12 +63,16 @@ import {
     PlanProeprtyPanelComponent,
     QuestionPanelComponent,
     RouterLink,
+    MugsVisualizationBaseComponent
   ],
   templateUrl: "./step-detail-view.component.html",
   styleUrl: "./step-detail-view.component.scss",
 })
 export class StepDetailViewComponent {
   private store = inject(Store);
+
+  explanationInterfaceType$ = this.store.select(selectIterativePlanningProjectExplanationInterfaceType);
+  expInterfaceType = ExplanationInterfaceType
 
   step$ = this.store.select(selectIterativePlanningSelectedStep);
   stepId$ = this.step$.pipe(map(step => step?._id));
@@ -144,14 +151,16 @@ export class StepDetailViewComponent {
   }
 
   onPropertyQuestionSelected(question: AvailableQuestion, property: PlanProperty): void {
-    this.stepId$.pipe(take(1)).subscribe((iterationStepId) =>
-      this.store.dispatch(questionPosed({ question: { questionType: question.questionType, iterationStepId, propertyId: property._id }}))
-    );
+    this.stepId$.pipe(take(1)).subscribe((iterationStepId) =>{
+      console.log('onPropertyQuestionSelected');
+      return this.store.dispatch(questionPosed({ question: { questionType: question.questionType, iterationStepId, propertyId: property._id }}))
+    });
   }
 
   onQuestionSelected(question: AvailableQuestion): void {
-    this.stepId$.pipe(take(1)).subscribe((iterationStepId) =>
-      this.store.dispatch(questionPosed({ question: { questionType: question.questionType, iterationStepId }}))
-    );
+    this.stepId$.pipe(take(1)).subscribe((iterationStepId) =>{
+      console.log('onPropertyQuestionSelected');
+      return this.store.dispatch(questionPosed({ question: { questionType: question.questionType, iterationStepId }}))
+    });
   }
 }
