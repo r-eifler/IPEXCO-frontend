@@ -40,10 +40,10 @@ export class QuestionQueueEffect {
       const hash = explanationHash(iterationStep);
 
       return this.store.select(selectExplanation(hash)).pipe(
-        filter(explanation => explanation?.explanation?.status === ExplanationRunStatus.failed || explanation?.explanation?.status === ExplanationRunStatus.finished),
+        filter(explanation => explanation?.status === ExplanationRunStatus.failed || explanation?.status === ExplanationRunStatus.finished),
         take(1),
         concatLatestFrom(() => [this.store.select(selectIterativePlanningProperties)]),
-        map(([{ explanation }, properties]) => composeAnswer(iterationStep, question, explanation, properties[question.propertyId]?.name)),
+        map(([explanation, properties]) => composeAnswer(iterationStep, question, explanation, properties[question.propertyId]?.name)),
         map(answer => poseAnswer({ answer })),
       )
     })

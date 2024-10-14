@@ -1,5 +1,5 @@
 import { createFeatureSelector, createSelector } from "@ngrx/store";
-import { KeyValuePair, filter, find, includes, join, map, memoizeWith, pipe, zip } from "ramda";
+import { KeyValuePair, filter, find, map, memoizeWith, pipe, zip } from "ramda";
 import { LoadingState } from "src/app/shared/common/loadable.interface";
 import { explanationHash } from "../domain/explanation/explanation-hash";
 import { ExplanationRunStatus } from "../domain/explanation/explanations";
@@ -71,15 +71,15 @@ export const selectExplanation = memoizeWith(
 
 export const selectIsExplanationLoading = memoizeWith(
   (explanationHash: string) => explanationHash,
-  (explanationHash: string) => createSelector(selectExplanation(explanationHash), (explanation) => explanation?.explanation?.status === ExplanationRunStatus.pending || explanation?.explanation?.status === ExplanationRunStatus.running),
+  (explanationHash: string) => createSelector(selectExplanation(explanationHash), (explanation) => explanation?.status === ExplanationRunStatus.pending || explanation?.status === ExplanationRunStatus.running),
 );
 
 export const selectIterationStepIdsWithoutExplanations = createSelector(selectIterativePlanningIterationSteps, selectAllExplanations, (iterationSteps, allExplanations) => {
   iterationSteps = iterationSteps ?? [];
-  const hashes = map(explanationHash, iterationSteps );
+  const hashes = map(explanationHash, iterationSteps);
 
-  const explanations = map((iterationHash => find(({ hash }) => hash === iterationHash, allExplanations)), hashes);
-  const isExplanationMissing = map(({explanation}) => !explanation, explanations);
+  const explanations = map(iterationHash => allExplanations[iterationHash], hashes);
+  const isExplanationMissing = map((explanation) => !explanation, explanations);
 
   const iterationStepIds = map(({_id}) => _id, iterationSteps);
 
