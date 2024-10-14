@@ -5,7 +5,7 @@
         <div class="icon-container" [style]="'background-color: ' + property()?.color + ';'">
           <mat-icon>{{ property()?.icon }}</mat-icon>
         </div>
-        {{ property()?.name }}
+        <span class="property-name">{{ property()?.name }}</span>
       </div>
     </mat-panel-title>
     <mat-panel-description>

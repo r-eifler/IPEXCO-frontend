@@ -1,4 +1,10 @@
+:host {
+  display: grid;
+}
+
 .title {
+  width: 100%;
+
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -6,8 +12,21 @@
   gap: var(--spacing-100);
 }
 
+.property-name {
+  text-wrap: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
 mat-panel-description {
   justify-content: flex-end;
+  flex-grow: 1;
+}
+
+mat-panel-title {
+  min-width: 0;
+  flex-grow: 4;
+  overflow: hidden;
 }
 
 .description {
