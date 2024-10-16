@@ -1,5 +1,10 @@
+:host {
+  --mat-sidenav-container-width: 520px;
+}
+
 .content-container {
   height: 100%;
 
   overflow: auto;
 }
+

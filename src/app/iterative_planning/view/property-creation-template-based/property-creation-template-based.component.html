@@ -12,9 +12,19 @@
                         <mat-expansion-panel-header>
                             <mat-panel-title> {{ class.key }} </mat-panel-title>
                         </mat-expansion-panel-header>
-                        <div class="template-buttons-container">
+                        <div class="templates-container">
                             @for(template of class.value; track template){
-                                <button mat-stroked-button (click)="selectTemplate(template, stepper)"> {{ template.nameTemplate }} </button>
+                                <div class="template-list-container">
+                                    <div class="icon-name-container">
+                                        <div class="icon-container" [style]="'background-color: ' + template?.color + ';'">
+                                            <mat-icon>{{ template?.icon }}</mat-icon>
+                                        </div>
+                                        <span class="template-name">{{ template.nameTemplate }}</span>
+                                    </div>
+                                    <button mat-icon-button (click)="selectTemplate(template, stepper)">
+                                        <mat-icon>add</mat-icon>
+                                      </button>
+                                </div>
                             }
                         </div>
                     </mat-expansion-panel>
@@ -26,7 +36,7 @@
                 <div class="step-container">
                     <mat-card class="template-card" appearance="outlined">
                         <mat-card-content>
-                        <div class='template-conatiner'>
+                        <div class='template-container'>
                             @for(part of templateParts; track part){
                                 @if(part.isVar){
                                     <app-property-template-part 

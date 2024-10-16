@@ -1,4 +1,5 @@
 @let step = step$ | async;
+@let isUnsolvable = isUnsolvable$ | async;
 
 <app-page>
   <app-breadcrumb>
@@ -25,7 +26,42 @@
   <app-page-content>
     <app-page-section-list>
 
-      @if(!step?.plan) {
+      @if(!isUnsolvable && (explanationInterfaceType$ | async) == expInterfaceType.MUGS_VISUALIZATION) {
+        <app-page-section>
+          <app-page-section-title>
+            <mat-icon>lightbulb_2</mat-icon>
+            Insights
+          </app-page-section-title>
+          <app-page-section-content>
+              <app-mugs-visualization-base></app-mugs-visualization-base>
+          </app-page-section-content>
+        </app-page-section>
+        }
+
+      @if(isUnsolvable) {
+      <app-page-section>
+        <app-page-section-title>
+          <mat-icon>lightbulb_2</mat-icon>
+          Insights
+        </app-page-section-title>
+        <app-page-section-content>
+          @if((explanationInterfaceType$ | async) == expInterfaceType.TEMPLATE_QUESTION_ANSWER){
+            <app-explanation-chat
+              [isLoading]="isExplanationLoading$ | async"
+              [availableQuestions]="globalAvalableQuestionTypes$ | async"
+              (questionSelected)="onQuestionSelected($event)"
+              [messages]="globalMessages$ | async"
+              [properties]="planProperties$ | async"
+            ></app-explanation-chat>
+          }
+          @if((explanationInterfaceType$ | async) == expInterfaceType.MUGS_VISUALIZATION){
+            <app-mugs-visualization-base></app-mugs-visualization-base>
+          }
+        </app-page-section-content>
+      </app-page-section>
+      }
+
+      @if(!step?.plan && !isUnsolvable) {
       <app-page-section>
         <app-page-section-content>
           <app-empty-state-section>
@@ -37,14 +73,22 @@
       </app-page-section>
       }
 
-      @if(step?.plan) {
+      @if(step?.plan && !isUnsolvable) {
       <app-page-section>
-        <app-page-section-title>Unsatisfied Softgoals</app-page-section-title>
+        <app-page-section-title>Unsatisfied Softgoals <mat-icon matTooltip="Expand the individual goals to gather more information as of why they are unsolvable.">info</mat-icon></app-page-section-title>
         <app-page-section-content>
           @if(hasUnsolvedSoftGoals$ | async) {
           <div class="property-list">
             @for(property of unsolvedSoftGoals$ | async; track property) {
-            <app-plan-proeprty-panel [property]="property"></app-plan-proeprty-panel>
+            <app-plan-proeprty-panel [property]="property">
+              <app-explanation-chat
+                [isLoading]="isExplanationLoading$ | async"
+                [availableQuestions]="propertyAvailableQuestionTypes$(property) | async"
+                (questionSelected)="onPropertyQuestionSelected($event, property)"
+                [messages]="propertyMessages$(property) | async"
+                [properties]="planProperties$ | async"
+              ></app-explanation-chat>
+            </app-plan-proeprty-panel>
             }
           </div>
           } @else {
@@ -57,7 +101,7 @@
       </app-page-section>
       }
 
-      @if(step?.plan) {
+      @if(step?.plan && !isUnsolvable) {
       <app-page-section>
         <app-page-section-title>Satisfied Softgoals</app-page-section-title>
         <app-page-section-content>
@@ -75,6 +119,7 @@
         </app-page-section-content>
       </app-page-section>
       }
+
 
       <app-page-section>
         <app-page-section-title>Enforced Goals</app-page-section-title>

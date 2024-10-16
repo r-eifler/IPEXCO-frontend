@@ -1,0 +1,32 @@
+<mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        <div class="title">
+          <div class="icon-container">
+            <mat-icon>live_help</mat-icon>
+          </div>
+          {{ template()?.questionPhrase }}
+        </div>
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+  
+    <div class="content-container">
+      @if(explanationAvailable){
+        <p>{{ answerPhrase }}</p>
+        @for(set of answerSets; track set){
+            <mat-card>
+                <mat-card-content>
+                    <mat-list>
+                    @for(p of set; track p){
+                        <mat-list-item> {{ p.name }}</mat-list-item>
+                    }
+                </mat-list>
+                </mat-card-content>
+            </mat-card>
+        }
+      }
+      <button mat-button (click)="computeAnswer()">Compute Answer</button>
+    </div>
+  
+  </mat-expansion-panel>
+  

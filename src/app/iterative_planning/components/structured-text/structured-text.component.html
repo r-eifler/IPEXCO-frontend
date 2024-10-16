@@ -1,0 +1,21 @@
+<span>{{ message().message.mainText }}</span>
+@if (message().message.includeComputation) {
+<ul>
+  @for(set of message().conflictSets; track set) {
+  <li>
+    @if(message().message.setPrefix) {
+    <span>{{message().message.setPrefix}}&nbsp;</span>
+    }
+    @for (conflict of set; track conflict; let last = $last) {
+    <i>"{{ properties()[conflict]?.name }}"</i>
+    @if(!last) {
+    <span>&nbsp;{{ message().message.setConnector }}&nbsp;</span>
+    }
+    }
+    @if(message().message.setSuffix) {
+    <span>&nbsp;{{message().message.setSuffix}}</span>
+    }
+  </li>
+  }
+</ul>
+}

@@ -3,7 +3,7 @@ import { HttpClient, HttpParams } from "@angular/common/http";
 import { environment } from "../../../environments/environment";
 import { IHTTPData } from "src/app/interface/http-data.interface";
 import { BehaviorSubject } from "rxjs";
-import { PlanningDomain, PlanningProblem } from "src/app/interface/planning-task";
+import { PlanningDomain, PlanningModel, PlanningProblem } from "src/app/interface/planning-task";
 
 @Injectable({
   providedIn: "root",
@@ -15,11 +15,13 @@ export class PDDLService {
 
   private domain$: BehaviorSubject<PlanningDomain>;
   private problem$: BehaviorSubject<PlanningProblem>;
+  private model$: BehaviorSubject<PlanningModel>;
 
   constructor(http: HttpClient) {
     this.http = http;
     this.domain$ = new BehaviorSubject<PlanningDomain>(null);
     this.problem$ = new BehaviorSubject<PlanningProblem>(null);
+    this.model$ = new BehaviorSubject<PlanningModel>(null);
   }
 
   getDomain(){
@@ -28,6 +30,10 @@ export class PDDLService {
 
   getProblem(){
     return this.problem$;
+  }
+
+  getModel(){
+    return this.model$;
   }
 
   translateDomain(domainText: string) {
@@ -45,6 +51,15 @@ export class PDDLService {
       .subscribe((httpData) => {
         console.log(httpData.data)
         this.problem$.next(httpData.data)
+      });
+  }
+
+  translateModel(domainText: string, problemText: string) {
+
+    return this.http.post<IHTTPData<any>>(this.BASE_URL + "model", {data: {problem: problemText, domain: domainText}})
+      .subscribe((httpData) => {
+        console.log(httpData.data)
+        this.model$.next(httpData.data)
       });
   }
 }

@@ -1,5 +1,7 @@
-.section-container {
+:host {
   display: grid;
-
   gap: var(--spacing-200);
+
+  min-width: 0;
+  width: 100%;
 }

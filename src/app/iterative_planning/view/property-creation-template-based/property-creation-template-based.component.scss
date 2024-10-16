@@ -13,10 +13,36 @@
     box-sizing: border-box;
 }
 
-.template-buttons-container {
+.templates-container {
     display: flex;
     flex-direction: column;
     gap: 10px;
+}
+
+.template-list-container {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.template-name{
+    font-weight: bold;
+}
+
+.icon-container {
+    border-radius: var(--radius-full);
+    padding: var(--spacing-050);
+  
+    display: grid;
+}
+
+.icon-name-container {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
 }
 
 .template-card{
@@ -25,7 +51,12 @@
 }
 
 .template-container {
-    padding: 20px 0px 20px 0px
+    padding: 20px 0px 20px 0px;
+    display: flex;
+    flex-direction: row;
+    row-gap: 50px;
+    align-items: center;
+    flex-wrap: wrap;
 }
 
 .note-container {

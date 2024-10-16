@@ -1,8 +1,9 @@
 import { createAction, props } from "@ngrx/store";
 import { Project } from "src/app/project/domain/project";
+import { ExplanationMessage } from "../domain/interface/explanation-message";
+import { Question } from "../domain/interface/question";
 import { IterationStep, ModIterationStep } from "../domain/iteration_step";
 import { PlanProperty } from "../domain/plan-property/plan-property";
-import { Question } from "../domain/explanation/explanations";
 
 
 // Project
@@ -67,12 +68,20 @@ export const planComputationRunningFailure = createAction('[iterative-planning] 
 
 // Explainer
 
-export const registerExplanationComputation = createAction('[iterative-planning] register explanation computation', props<{ iterationStepId: string, question: Question }>());
-export const registerExplanationComputationSuccess = createAction('[iterative-planning] register explanation computation success', props<{iterationStepId: string}>());
-export const registerExplanationComputationFailure = createAction('[iterative-planning] register explanation computation failure');
+// Global
+export const registerGlobalExplanationComputation = createAction('[iterative-planning] register global explanation computation', props<{ iterationStepId: string}>());
+export const registerGlobalExplanationComputationSuccess = createAction('[iterative-planning] register global explanation computation success', props<{iterationStepId: string}>());
+export const registerGlobalExplanationComputationFailure = createAction('[iterative-planning] register global explanation computation failure');
 
+export const globalExplanationComputationRunning = createAction('[iterative-planning] global explanation computation running');
+export const globalExplanationComputationRunningSuccess = createAction('[iterative-planning] global explanation computation running success');
+export const globalExplanationComputationRunningFailure = createAction('[iterative-planning] global explanation computation running failure');
+
+// Question based
 export const explanationComputationRunning = createAction('[iterative-planning] explanation computation running');
 export const explanationComputationRunningSuccess = createAction('[iterative-planning] explanation computation running success');
 export const explanationComputationRunningFailure = createAction('[iterative-planning] explanation computation running failure');
 
+export const questionPosed = createAction('[iterative-planning] question posed', props<{ question: Question }>());
+export const poseAnswer = createAction('[iterative-planning] pose answer', props<{ answer: ExplanationMessage }>());
 

@@ -11,7 +11,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { defaultDomainSpecification, DomainSpecification } from "src/app/interface/files/domain-specification";
 import { PDDLService } from "src/app/service/pddl/pddl.service";
 import { take, tap, map} from "rxjs/operators";
-import { PlanningDomain, PlanningProblem } from "src/app/interface/planning-task";
+import { PlanningDomain, PlanningModel, PlanningProblem } from "src/app/interface/planning-task";
 import { Project } from "../../../project/domain/project";
 import { Store } from "@ngrx/store";
 import { createProject } from "../../state/project-meta.actions";
@@ -46,6 +46,9 @@ export class ProjectCreatorComponent implements OnInit {
   translatedProblem$: BehaviorSubject<PlanningProblem>;
   problemValid$: Observable<boolean>;
 
+  translatedModel$: BehaviorSubject<PlanningModel>;
+  modelValid$: Observable<boolean>;
+
   constructor(
     private store: Store,
     private userService: AuthenticationService,
@@ -58,6 +61,7 @@ export class ProjectCreatorComponent implements OnInit {
 
     this.translatedDomain$ = this.pddlService.getDomain();
     this.translatedProblem$ = this.pddlService.getProblem()
+    this.translatedModel$ = this.pddlService.getModel()
   }
 
   ngOnInit(): void {
@@ -69,18 +73,24 @@ export class ProjectCreatorComponent implements OnInit {
     this.problemValid$ = this.translatedProblem$.pipe(
       map(p => !!this.selectedProblem && !!p)
     )
+
+    this.modelValid$ = this.translatedModel$.pipe(
+      map(m => !!this.selectedProblem && !!this.selectedDomain && !!m)
+    )
   }
 
 
   onDomainSelected(domain: string){
     this.selectedDomain = domain
-    this.pddlService.translateDomain(this.selectedDomain)
+    if(!!this.selectedDomain && !!this.selectedProblem)
+      this.pddlService.translateModel(this.selectedDomain, this.selectedProblem)
     // console.log(this.selectedDomain)
   }
 
   onProblemSelected(problem: string){
     this.selectedProblem = problem
-    this.pddlService.translateProblem(this.selectedProblem)
+    if(!!this.selectedDomain && !!this.selectedProblem)
+      this.pddlService.translateModel(this.selectedDomain, this.selectedProblem)
     // console.log(this.selectedDomain)
   }
 
@@ -91,10 +101,10 @@ export class ProjectCreatorComponent implements OnInit {
 
   onSave(): void {
     // console.log('Save project');
-    combineLatest([this.translatedDomain$, this.translatedProblem$]).pipe(
+   this.translatedModel$.pipe(
       // take(1),
     ).subscribe(
-      ([domain, problem]) => {
+      (model) => {
 
         console.log("Save new project")
 
@@ -110,7 +120,7 @@ export class ProjectCreatorComponent implements OnInit {
             name: this.projectBasic.controls.name.value,
             domain_name: this.projectBasic.controls.domain_name.value,
             encoding: "classic",
-            model: {...domain,...problem}
+            model: model
           },
           public: false,
         };

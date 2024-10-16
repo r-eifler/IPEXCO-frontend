@@ -97,6 +97,8 @@ export class SettingsComponent implements OnInit, OnChanges {
 
   onSave() {
 
+    console.log(this.settingsForm.controls.explanationInterfaceType.value)
+
     let paymentInfo = {
       max: this.settingsForm.controls.maxPayment.value,
       min: this.settingsForm.controls.minPayment.value,

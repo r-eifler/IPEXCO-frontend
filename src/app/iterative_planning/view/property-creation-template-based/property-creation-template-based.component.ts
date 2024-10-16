@@ -7,7 +7,7 @@ import { selectIterativePlanningProject, selectIterativePlanningPropertiesList, 
 import { DialogModule } from 'src/app/shared/component/dialog/dialog.module'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatStepper, MatStepperModule } from '@angular/material/stepper';
-import { MatButton } from '@angular/material/button';
+import { MatButton, MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -18,6 +18,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { Project } from '../../../project/domain/project';
 import { PDDLObject, PlanningTask } from '../../../interface/planning-task';
 import { createPlanProperty } from '../../state/iterative-planning.actions';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-property-creation-template-based',
@@ -29,14 +30,15 @@ import { createPlanProperty } from '../../state/iterative-planning.actions';
     KeyValuePipe,
     DialogModule, 
     MatStepperModule, 
-    MatButton, 
+    MatButtonModule, 
     FormsModule,
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
     MatExpansionModule,
-	MatCardModule,
-	PropertyTemplatePartComponent
+    MatCardModule,
+    PropertyTemplatePartComponent,
+    MatIcon
   ],
   templateUrl: './property-creation-template-based.component.html',
   styleUrl: './property-creation-template-based.component.scss'
@@ -115,6 +117,7 @@ export class PropertyCreationTemplateBasedComponent {
 
   selectTemplate(template: PlanPropertyTemplate, stepper: MatStepper){
     this.selectedTemplate = template
+    this.selectedVariableValue = {};
     console.log(template)
 
     stepper.selected.completed = true;
