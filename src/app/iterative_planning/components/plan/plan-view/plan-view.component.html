@@ -30,7 +30,7 @@
     </mat-card-content>
   </ng-container>
 
-  <ng-container *ngIf="!(notSolvable$ | async) && !(solved$ | async)">
+  <!-- <ng-container *ngIf="!(notSolvable$ | async) && !(solved$ | async)">
     <button mat-flat-button color="primary" (click)="computePlan()">
       Compute Plan
     </button>
@@ -40,11 +40,11 @@
     <button mat-flat-button (click)="computePlan()">
       Replan
     </button>
-  </ng-container>
+  </ng-container> -->
 
-  <div
+  <!-- <div
     class="compute-container"
     *ngIf="(plannerBusy$ | async) && (isRunning$ | async)">
     <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-  </div>
+  </div> -->
 </mat-card>

@@ -1,0 +1,30 @@
+@let step = step$ | async;
+@let isUnsolvable = isUnsolvable$ | async;
+
+<app-page>
+  <app-breadcrumb>
+    <a app-breadcrumb-item [routerLink]="['/projects/' + (step$ | async)?.project]"><mat-icon>home</mat-icon></a>
+    <a app-breadcrumb-item [routerLink]="['../..']">All Iterations</a>
+    <a app-breadcrumb-item [routerLink]="['..']">{{ (step$ | async)?.name }}</a>
+    <app-breadcrumb-item>Plan</app-breadcrumb-item>
+  </app-breadcrumb>
+  <app-page-title>
+    {{ step?.name }}
+    <app-page-title-action>
+      <button mat-icon-button
+        matTooltip="Creates a new iteration based on the properties selected in this iteration."
+        (click)="createNewIteration(step?._id)"
+      ><mat-icon>call_split</mat-icon></button>
+    </app-page-title-action>
+  </app-page-title>
+  <!-- <app-page-hero> -->
+    <!-- <app-iteration-step-hero
+      [step]="step$ | async"
+      [planProperties]="planProperties$ | async"
+    ></app-iteration-step-hero> -->
+  <!-- </app-page-hero> -->
+
+  <app-page-content>
+    <app-plan-view></app-plan-view>
+  </app-page-content>
+</app-page>

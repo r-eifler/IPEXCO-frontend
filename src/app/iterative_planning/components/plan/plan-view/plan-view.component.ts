@@ -8,10 +8,21 @@ import { PlanAction, PlanRunStatus } from "src/app/iterative_planning/domain/pla
 import { selectIterativePlanningSelectedStep } from "src/app/iterative_planning/state/iterative-planning.selector";
 import { PlannerService } from "src/app/service/planner-runs/planner.service";
 import { LogEvent, TimeLoggerService } from "../../../../service/logger/time-logger.service";
+import { MatCardModule } from "@angular/material/card";
+import { AsyncPipe, NgFor, NgIf } from "@angular/common";
+import { MatButtonModule } from "@angular/material/button";
 
 
 @Component({
   selector: "app-plan-view",
+  standalone: true,
+  imports: [
+    MatCardModule,
+    AsyncPipe,
+    NgIf,
+    MatButtonModule,
+    NgFor
+  ],
   templateUrl: "./plan-view.component.html",
   styleUrls: ["./plan-view.component.scss"],
 })
