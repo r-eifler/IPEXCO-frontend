@@ -17,3 +17,7 @@ export const sendMessageToLLMGoalTranslatorFailure = createAction('[llm] send me
 export const sendMessageToLLMExplanationTranslator = createAction('[llm] send message to explanation translator', props<BackendLLMRequest>());
 export const sendMessageToLLMExplanationTranslatorSuccess = createAction('[llm] send message to explanation translator success', props<BackendLLMResponse>());
 export const sendMessageToLLMExplanationTranslatorFailure = createAction('[llm] send message to explanation translator failure');
+
+export const addContextToThread = createAction('[llm] add context to thread', props<{ threadId: string, context: string }>());
+export const addContextToThreadSuccess = createAction('[llm] add context to thread success', props<{ threadId: string, context: string }>());
+export const addContextToThreadFailure = createAction('[llm] add context to thread failure');

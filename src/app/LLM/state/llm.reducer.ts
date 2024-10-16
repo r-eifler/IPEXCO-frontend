@@ -2,7 +2,7 @@ import { createReducer, on } from "@ngrx/store";
 import { LoadingState } from "src/app/shared/common/loadable.interface";
 import { Message } from "../domain/message";
 import { sendMessageToLLM, sendMessageToLLMSuccess, sendMessageToLLMQuestionTranslator, sendMessageToLLMGoalTranslator, sendMessageToLLMExplanationTranslator, sendMessageToLLMQuestionTranslatorSuccess, sendMessageToLLMGoalTranslatorSuccess, sendMessageToLLMExplanationTranslatorSuccess, eraseLLMHistory } from "./llm.actions";
-
+import { addContextToThread, addContextToThreadSuccess, addContextToThreadFailure } from "./llm.actions";
 export interface LLMChatState {
     loadingState: LoadingState;
     messages: Message[]; // actually displayed messages.
@@ -69,4 +69,5 @@ export const llmChatReducer = createReducer(
         ...state,
         threadIdET: action.threadId
     })),
+    // on(addContextToThread, (state, action): LLMChatState => ({
 );
