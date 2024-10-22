@@ -6,6 +6,7 @@ import { setCurrentStepResolver } from './resolver/set-current-step.resolver';
 import { ShellComponent } from './view/shell/shell.component';
 import { StepDetailViewComponent } from './view/step-detail-view/step-detail-view.component';
 import { StepsListViewComponent } from './view/steps-list-view/steps-list-view.component';
+import { PlanDetailViewComponent } from './view/plan-detail-view/plan-detail-view.component';
 
 
 const routes: Routes = [
@@ -20,10 +21,14 @@ const routes: Routes = [
         path: 'steps',
         component: StepsListViewComponent,
       },
-
       {
         path: 'steps/:stepId',
         component: StepDetailViewComponent,
+        resolve: { setCurrentStepResolver },
+      },
+      {
+        path: 'steps/:stepId/plan',
+        component: PlanDetailViewComponent,
         resolve: { setCurrentStepResolver },
       },
     ]

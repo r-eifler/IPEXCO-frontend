@@ -174,7 +174,6 @@ import { IterationStepsListComponent } from "./iterative_planning/components/ite
 import { IterativePlanningBaseComponent } from './iterative_planning/components/iterative-planning-base/iterative-planning-base.component';
 import { NewStepNavigatorComponent } from "./iterative_planning/components/new-step/new-step-navigator/new-step-navigator.component";
 import { InteractivePlanViewComponent } from "./iterative_planning/components/plan/interactive-plan-view/interactive-plan-view.component";
-import { PlanViewComponent } from "./iterative_planning/components/plan/plan-view/plan-view.component";
 import { PropertyCollectionComponent } from './iterative_planning/components/plan_properties/property-collection/property-collection.component';
 import { PropertyCreatorComponent } from './iterative_planning/components/plan_properties/property-creator/property-creator.component';
 import { ExplainerMonitoringService } from './iterative_planning/service/explainer-monitoring.service';
@@ -241,13 +240,11 @@ import { PageModule } from './shared/component/page/page.module';
     ProjectBaseComponent,
     PropertyCollectionComponent,
     ProjectIterativePlanningBaseComponent,
-    PlanViewComponent,
     LoginComponent,
     DemoCollectionComponent,
     DemoBaseComponent,
     DemoSettingsComponent,
     ProjectOverviewComponent,
-    PlanViewComponent,
     DemoCreatorComponent,
     DemoHelpComponent,
     DemoNavigatorComponent,
