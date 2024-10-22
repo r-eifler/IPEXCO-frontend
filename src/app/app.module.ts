@@ -108,6 +108,9 @@ import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { NgxChartsModule } from "@swimlane/ngx-charts";
 import { LlmBaseComponent } from './LLM/components/llm-base/llm-base.component';
+import { LlmEtChatComponent } from './LLM/translators/llm-et/llm-chat-component.component';
+import { LlmGtChatComponent } from './LLM/translators/llm-gt/llm-chat-component.component';
+import { LlmQtChatComponent } from './LLM/translators/llm-qt/llm-chat-component.component';
 import { LLMService } from './LLM/service/llm.service';
 import { SendMessageToLLMEffect } from './LLM/state/effects/send-message.effect';
 import { LLMChatFeature, llmChatReducer } from './LLM/state/llm.reducer';
@@ -301,7 +304,10 @@ import { PageModule } from './shared/component/page/page.module';
     IterativePlanningBaseComponent,
     GoalListHighlightedComponent,
     PropertyTemplateCreatorComponent,
-    LlmBaseComponent
+    LlmBaseComponent,
+    LlmEtChatComponent,
+    LlmGtChatComponent,
+    LlmQtChatComponent
   ],
   imports: [
     StoreModule.forRoot(

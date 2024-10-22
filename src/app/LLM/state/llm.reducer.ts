@@ -12,7 +12,7 @@ export interface LLMChatState {
 }
 
 export const LLMChatFeature = 'llm';
-export const LLMQTFreature = 'llm-qt';
+export const LLMQTFeature = 'llm-qt';
 export const LLMGTFeature = 'llm-gt';
 export const LLMETFeature = 'llm-et';
 
