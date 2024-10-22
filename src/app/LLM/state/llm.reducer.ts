@@ -12,6 +12,9 @@ export interface LLMChatState {
 }
 
 export const LLMChatFeature = 'llm';
+export const LLMQTFreature = 'llm-qt';
+export const LLMGTFeature = 'llm-gt';
+export const LLMETFeature = 'llm-et';
 
 const initialState: LLMChatState = {
     loadingState: LoadingState.Initial,

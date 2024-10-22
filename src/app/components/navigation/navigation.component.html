@@ -107,7 +107,37 @@
           (click)="sideNav.toggle()">
           <span class="entry">
             <mat-icon>chat</mat-icon>
-            <span>LLM</span>
+            <span>LLM (Simple)</span>
+          </span>
+        </a>
+        <a
+          mat-list-item
+          routerLink="/llm-qt"
+          routerLinkActive="mat-list-single-selected-option"
+          (click)="sideNav.toggle()">
+          <span class="entry">
+            <mat-icon>chat</mat-icon>
+            <span>LLM (QT)</span>
+          </span>
+        </a>
+        <a
+          mat-list-item
+          routerLink="/llm-gt"
+          routerLinkActive="mat-list-single-selected-option"
+          (click)="sideNav.toggle()">
+          <span class="entry">
+            <mat-icon>chat</mat-icon>
+            <span>LLM (GT)</span>
+          </span>
+        </a>
+        <a
+          mat-list-item
+          routerLink="/llm-et"
+          routerLinkActive="mat-list-single-selected-option"
+          (click)="sideNav.toggle()">
+          <span class="entry">
+            <mat-icon>chat</mat-icon>
+            <span>LLM (ET)</span>
           </span>
         </a>
       </mat-nav-list>

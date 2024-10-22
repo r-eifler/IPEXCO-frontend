@@ -35,6 +35,21 @@ export const appRoutes: Routes = [
     canActivate: [AuthGuard],
   },
   {
+    path: 'llm-qt',
+    component: LlmBaseComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'llm-gt',
+    component: LlmBaseComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'llm-et',
+    component: LlmBaseComponent,
+    canActivate: [AuthGuard],
+  },
+  {
     path: "projects",
     component: ProjectCollectionComponent,
     canActivate: [AuthGuard],
