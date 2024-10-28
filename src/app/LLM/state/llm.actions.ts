@@ -1,5 +1,6 @@
 import { createAction, props } from "@ngrx/store";
-import { BackendLLMRequest, BackendLLMResponse } from "../interfaces/translators_interfaces";
+import { BackendLLMRequest, BackendLLMResponse, AllTranslatorsRequest, AllTranslatorsResponse } from "../interfaces/translators_interfaces";
+
 export const sendMessageToLLM = createAction('[llm] send message', props<{request: string}>());
 export const sendMessageToLLMSuccess = createAction('[llm] send message success',  props<{response: string}>());
 export const sendMessageToLLMFailure = createAction('[llm] send message failure');
@@ -21,3 +22,7 @@ export const sendMessageToLLMExplanationTranslatorFailure = createAction('[llm] 
 export const addContextToThread = createAction('[llm] add context to thread', props<{ threadId: string, context: string }>());
 export const addContextToThreadSuccess = createAction('[llm] add context to thread success', props<{ threadId: string, context: string }>());
 export const addContextToThreadFailure = createAction('[llm] add context to thread failure');
+
+export const sendMessageToLLMAllTranslators = createAction('[llm] send message to all translators', props<AllTranslatorsRequest>());
+export const sendMessageToLLMAllTranslatorsSuccess = createAction('[llm] send message to all translators success', props<AllTranslatorsResponse>());
+export const sendMessageToLLMAllTranslatorsFailure = createAction('[llm] send message to all translators failure');

@@ -1,0 +1,25 @@
+<app-dialog>
+  <app-dialog-header>
+    <app-dialog-title>Create Plan Property</app-dialog-title>
+  </app-dialog-header>
+
+  <app-dialog-content>
+    <app-chat [isSenderTyping]="isLoading$ | async">
+
+      @for(message of messages$ | async; track message) {
+      <app-chat-message [role]="message.role">{{ message.content }}</app-chat-message>
+      }
+      @if((messages$ | async).length > 1){
+      <ng-container app-chat-action>
+        <div class="button-group">
+          <button app-chat-action (click)="onSaveProperty()">Save this property</button>
+          <button app-chat-action (click)="onEraseHistory()">Erase history</button>
+        </div>
+      </ng-container>
+      }
+      <app-chat-input (userInput)="onUserMessage($event)"></app-chat-input>
+    </app-chat>
+  </app-dialog-content>
+
+  <app-dialog-footer></app-dialog-footer>
+</app-dialog>

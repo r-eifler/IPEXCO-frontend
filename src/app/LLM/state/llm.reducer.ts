@@ -1,7 +1,7 @@
 import { createReducer, on } from "@ngrx/store";
 import { LoadingState } from "src/app/shared/common/loadable.interface";
 import { Message } from "../domain/message";
-import { sendMessageToLLM, sendMessageToLLMSuccess, sendMessageToLLMQuestionTranslator, sendMessageToLLMGoalTranslator, sendMessageToLLMExplanationTranslator, sendMessageToLLMQuestionTranslatorSuccess, sendMessageToLLMGoalTranslatorSuccess, sendMessageToLLMExplanationTranslatorSuccess, eraseLLMHistory } from "./llm.actions";
+import { sendMessageToLLM, sendMessageToLLMSuccess, sendMessageToLLMQuestionTranslator, sendMessageToLLMGoalTranslator, sendMessageToLLMExplanationTranslator, sendMessageToLLMQuestionTranslatorSuccess, sendMessageToLLMGoalTranslatorSuccess, sendMessageToLLMExplanationTranslatorSuccess, eraseLLMHistory, sendMessageToLLMAllTranslators, sendMessageToLLMAllTranslatorsSuccess } from "./llm.actions";
 import { addContextToThread, addContextToThreadSuccess, addContextToThreadFailure } from "./llm.actions";
 export interface LLMChatState {
     loadingState: LoadingState;
@@ -67,10 +67,25 @@ export const llmChatReducer = createReducer(
     on(sendMessageToLLMExplanationTranslator, (state, action): LLMChatState => ({
         ...state,
         loadingState: LoadingState.Loading,
+        threadIdET: action.threadId
     })),
     on(sendMessageToLLMExplanationTranslatorSuccess, (state, action): LLMChatState => ({
         ...state,
-        threadIdET: action.threadId
+        threadIdET: action.threadId,
+        loadingState: LoadingState.Done
     })),
-    // on(addContextToThread, (state, action): LLMChatState => ({
+    on(sendMessageToLLMAllTranslators, (state, action): LLMChatState => ({
+        ...state,
+        loadingState: LoadingState.Loading,
+        messages: [...state.messages, {role: 'user', content: action.qtRequest}]
+    })),
+    on(sendMessageToLLMAllTranslatorsSuccess, (state, action): LLMChatState => ({
+        ...state,
+        loadingState: LoadingState.Done,
+        threadIdQT: action.threadIdQt,
+        threadIdGT: action.threadIdGt,
+        threadIdET: action.threadIdEt,
+        messages: [...state.messages, {role: 'assistant', content: action.explanationTranslation}]
+    })),
+
 );

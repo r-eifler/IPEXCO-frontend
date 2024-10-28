@@ -122,3 +122,22 @@ export interface BackendLLMResponse {
     response: string,
     threadId: string
 }
+
+export interface AllTranslatorsRequest {
+    qtRequest: string,
+    gtRequest: string,
+    etRequest: string,
+    threadIdQt: string,
+    threadIdGt: string,
+    threadIdEt: string
+}
+
+export interface AllTranslatorsResponse {
+    questionTranslation: string,
+    goalTranslation: string,
+    explainerResponse: string,
+    explanationTranslation: string,
+    threadIdQt: string,
+    threadIdGt: string,
+    threadIdEt: string
+}
