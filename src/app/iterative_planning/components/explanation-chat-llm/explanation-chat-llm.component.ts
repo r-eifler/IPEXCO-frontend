@@ -1,36 +1,37 @@
 import { AsyncPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject, OnDestroy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { sendMessageToLLM, sendMessageToLLMAllTranslators, sendMessageToLLMGoalTranslator } from 'src/app/LLM/state/llm.actions';
 import { ChatModule } from 'src/app/shared/component/chat/chat.module';
-import { DialogModule } from 'src/app/shared/component/dialog/dialog.module';
 import { selectMessages, selectLoadingState, selectThreadIdET, selectThreadIdGT, selectThreadIdQT } from 'src/app/LLM/state/llm.selector';
 import { createPlanProperty } from '../../state/iterative-planning.actions';
-import { MatDialogRef } from '@angular/material/dialog';
 import { GoalType, PlanProperty } from '../../domain/plan-property/plan-property';
 import { take, filter, map, mergeMap, combineLatestWith } from 'rxjs/operators';
 import { selectIterativePlanningProject } from '../../state/iterative-planning.selector';
 import { eraseLLMHistory } from 'src/app/LLM/state/llm.actions';
+import { selectIsLoading } from 'src/app/LLM/components/llm-base/llm-base.component.selector';
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-explanation-chat-llm',
   standalone: true,
-  imports: [AsyncPipe, DialogModule, ChatModule],
+  imports: [AsyncPipe, ChatModule],
   templateUrl: './explanation-chat-llm.component.html',
   styleUrl: './explanation-chat-llm.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ExplanationChatLlmComponent {
+export class ExplanationChatLlmComponent implements OnInit, OnDestroy {
   private store = inject(Store);
-  private dialogRef = inject(MatDialogRef)
 
   messages$ = this.store.select(selectMessages);
   loadingState$ = this.store.select(selectLoadingState);
+  isLoading$ = this.store.select(selectIsLoading);
   threadIdGT$ = this.store.select(selectThreadIdGT);
   threadIdQT$ = this.store.select(selectThreadIdQT);
   threadIdET$ = this.store.select(selectThreadIdET);
   project$ = this.store.select(selectIterativePlanningProject);
 
-  
+  // Add subscription management
+  private subscriptions: Subscription[] = [];
 
   onUserMessage(request: string) {
     // Combine all thread IDs and take the first emission from each
@@ -87,11 +88,31 @@ export class ExplanationChatLlmComponent {
         class: 'Defined using Natural Language',
       }
       this.store.dispatch(createPlanProperty({ planProperty }));
-      this.dialogRef.close();
     });
   }
 
   onEraseHistory() {
     this.store.dispatch(eraseLLMHistory());
+  }
+
+  ngOnInit() {
+    console.log('ExplanationChatLlmComponent initialized');  // Updated log message
+    
+    // Store subscriptions for cleanup
+    this.subscriptions.push(
+      this.messages$.subscribe(messages => {
+        console.log('Messages:', messages);
+      }),
+      
+      this.isLoading$.subscribe(loading => {
+        console.log('Loading state:', loading);
+      })
+    );
+  }
+
+  // Add ngOnDestroy
+  ngOnDestroy() {
+    this.subscriptions.forEach(sub => sub.unsubscribe());
+    console.log('ExplanationChatLlmComponent destroyed');  // Debug cleanup
   }
 }
