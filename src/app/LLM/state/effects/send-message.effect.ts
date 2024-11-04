@@ -94,9 +94,58 @@ export class SendMessageToLLMEffect{
 
     public sendMessageToAllTranslators$ = createEffect(() => this.actions$.pipe(
         ofType(sendMessageToLLMAllTranslators),
-        switchMap(({qtRequest, gtRequest, etRequest, threadIdQt, threadIdGt, threadIdEt}) => this.service.postMessageAllTranslators$(qtRequest, gtRequest, etRequest, threadIdQt, threadIdGt, threadIdEt).pipe(
-            map(response => sendMessageToLLMAllTranslatorsSuccess(response)),
-            catchError(() => of(sendMessageToLLMAllTranslatorsFailure()))
-        ))
+        concatLatestFrom(() => [
+            this.store.select(selectIterativePlanningProject),
+            this.store.select(selectIterativePlanningProperties)
+        ]),
+        switchMap(([{request, threadIdQt, threadIdGt, threadIdEt}, project, properties]) => {
+            // Create and stringify Question Translator request
+            const questionTranslationRequest: QuestionTranslationRequest = {
+                question: request,
+                enforcedGoals: [], // TODO: Get from store
+                satisfiedGoals: [], // TODO: Get from store
+                unsatisfiedGoals: [], // TODO: Get from store
+                existingPlanProperties: Object.values(properties)
+            };
+            const qtRequestString = questionTranslationRequestToString(questionTranslationRequest);
+
+            // Create and stringify Goal Translator request
+            const goalTranslationRequest: GoalTranslationRequest = {
+                goalDescription: "{goal_description}",
+                predicates: project.baseTask.model.predicates,
+                objects: project.baseTask.model.objects,
+                existingPlanProperties: Object.values(properties)
+            };
+            const gtRequestString = goalTranslationRequestToString(goalTranslationRequest);
+
+            // Create and stringify Explanation Translator request
+            const explanationTranslationRequest: ExplanationTranslationRequest = {
+                question: request,
+                question_type: "{question_type}", // TODO: Get from store
+                questionArguments: [], // TODO: Get from store
+                MUGS: [], // TODO: Get from store
+                MGCS: [], // TODO: Get from store
+                predicates: project.baseTask.model.predicates,
+                objects: project.baseTask.model.objects,
+                enforcedGoals: [], // TODO: Get from store
+                satisfiedGoals: [], // TODO: Get from store
+                unsatisfiedGoals: [], // TODO: Get from store
+                existingPlanProperties: Object.values(properties),
+                history: [] // TODO: Get from store
+            };
+            const etRequestString = explanationTranslationRequestToString(explanationTranslationRequest);
+
+            return this.service.postMessageAllTranslators$(
+                qtRequestString, 
+                gtRequestString, 
+                etRequestString, 
+                threadIdQt, 
+                threadIdGt, 
+                threadIdEt
+            ).pipe(
+                map(response => sendMessageToLLMAllTranslatorsSuccess(response)),
+                catchError(() => of(sendMessageToLLMAllTranslatorsFailure()))
+            );
+        })
     ))
 }

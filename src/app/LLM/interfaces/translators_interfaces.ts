@@ -124,9 +124,7 @@ export interface BackendLLMResponse {
 }
 
 export interface AllTranslatorsRequest {
-    qtRequest: string,
-    gtRequest: string,
-    etRequest: string,
+    request: string,
     threadIdQt: string,
     threadIdGt: string,
     threadIdEt: string

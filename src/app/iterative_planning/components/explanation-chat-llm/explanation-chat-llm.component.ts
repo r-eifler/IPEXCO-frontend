@@ -44,9 +44,7 @@ export class ExplanationChatLlmComponent implements OnInit, OnDestroy {
     ).subscribe({
       next: ([threadIdGt, threadIdQt, threadIdEt]) => {
         this.store.dispatch(sendMessageToLLMAllTranslators({
-          qtRequest: request,
-          gtRequest: request,
-          etRequest: request,
+          request: request,
           threadIdQt,
           threadIdGt,
           threadIdEt

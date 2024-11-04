@@ -77,7 +77,7 @@ export const llmChatReducer = createReducer(
     on(sendMessageToLLMAllTranslators, (state, action): LLMChatState => ({
         ...state,
         loadingState: LoadingState.Loading,
-        messages: [...state.messages, {role: 'user', content: action.qtRequest}]
+        messages: [...state.messages, {role: 'user', content: action.request}]
     })),
     on(sendMessageToLLMAllTranslatorsSuccess, (state, action): LLMChatState => ({
         ...state,
