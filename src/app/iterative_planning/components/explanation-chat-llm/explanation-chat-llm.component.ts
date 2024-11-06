@@ -1,7 +1,7 @@
 import { AsyncPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { sendMessageToLLM, sendMessageToLLMAllTranslators, sendMessageToLLMGoalTranslator } from 'src/app/LLM/state/llm.actions';
+import { sendMessageToLLM, sendMessageToLLMQTthenGTTranslators, sendMessageToLLMGoalTranslator } from 'src/app/LLM/state/llm.actions';
 import { ChatModule } from 'src/app/shared/component/chat/chat.module';
 import { selectMessages, selectLoadingState, selectThreadIdET, selectThreadIdGT, selectThreadIdQT } from 'src/app/LLM/state/llm.selector';
 import { createPlanProperty } from '../../state/iterative-planning.actions';
@@ -43,11 +43,10 @@ export class ExplanationChatLlmComponent implements OnInit, OnDestroy {
       )  // Remove array syntax, use direct parameters
     ).subscribe({
       next: ([threadIdGt, threadIdQt, threadIdEt]) => {
-        this.store.dispatch(sendMessageToLLMAllTranslators({
+        this.store.dispatch(sendMessageToLLMQTthenGTTranslators({
           request: request,
           threadIdQt,
           threadIdGt,
-          threadIdEt
         }));
       },
       error: (error) => console.error('Error sending message:', error)

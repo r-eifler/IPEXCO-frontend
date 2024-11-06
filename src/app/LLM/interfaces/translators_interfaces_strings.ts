@@ -12,21 +12,22 @@ export function goalTranslationRequestToString(request: GoalTranslationRequest):
 export function questionTranslationRequestToString(request: QuestionTranslationRequest): string {
     return templates.question_translator
         .replace('{question}', request.question)
-        .replace('{enforced_goals}', JSON.stringify(request.enforcedGoals))
-        .replace('{satisfied_goals}', JSON.stringify(request.satisfiedGoals))
-        .replace('{unsatisfied_goals}', JSON.stringify(request.unsatisfiedGoals))
-        .replace('{existing_plan_properties}', JSON.stringify(request.existingPlanProperties));
+        .replace('{enforced_goals}', `[${request.enforcedGoals.map(goal => goal.name).join(', ')}]`)
+        .replace('{satisfied_goals}', `[${request.satisfiedGoals.map(goal => goal.name).join(', ')}]`)
+        .replace('{unsatisfied_goals}', `[${request.unsatisfiedGoals.map(goal => goal.name).join(', ')}]`)
+        .replace('{existing_plan_properties}', `[${request.existingPlanProperties.map(property => property.name).join(', ')}]`)
+        .replace('{solvable}', request.solvable);
 }
 
 export function explanationTranslationRequestToString(request: ExplanationTranslationRequest): string {
     return templates.explanation_translator
         .replace('{question}', request.question)
         .replace('{question_type}', request.question_type)
-        .replace('{question_arguments}', JSON.stringify(request.questionArguments))
+        .replace('{question_arguments}', `[${request.questionArguments.map(argument => argument.name).join(', ')}]`)
         .replace('{mugs}', JSON.stringify(request.MUGS))
         .replace('{mgcs}', JSON.stringify(request.MGCS))
-        .replace('{enforced_goals}', JSON.stringify(request.enforcedGoals))
-        .replace('{satisfied_goals}', JSON.stringify(request.satisfiedGoals))
-        .replace('{unsatisfied_goals}', JSON.stringify(request.unsatisfiedGoals))
-        .replace('{existing_plan_properties}', JSON.stringify(request.existingPlanProperties));
+        .replace('{enforced_goals}', `[${request.enforcedGoals.map(goal => goal.name).join(', ')}]`)
+        .replace('{satisfied_goals}', `[${request.satisfiedGoals.map(goal => goal.name).join(', ')}]`)
+        .replace('{unsatisfied_goals}', `[${request.unsatisfiedGoals.map(goal => goal.name).join(', ')}]`)
+        .replace('{existing_plan_properties}', `[${request.existingPlanProperties.map(property => property.name).join(', ')}]`);
 }

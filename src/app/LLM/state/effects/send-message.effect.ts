@@ -1,15 +1,22 @@
 import { inject, Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { catchError, map, switchMap } from "rxjs/operators";
+import { catchError, filter, first, map, switchMap } from "rxjs/operators";
 import { of } from "rxjs";
 import { LLMService } from "../../service/llm.service";
-import { sendMessageToLLM, sendMessageToLLMFailure, sendMessageToLLMQuestionTranslator, sendMessageToLLMQuestionTranslatorFailure, sendMessageToLLMQuestionTranslatorSuccess, sendMessageToLLMSuccess, sendMessageToLLMGoalTranslator, sendMessageToLLMGoalTranslatorSuccess, sendMessageToLLMGoalTranslatorFailure, sendMessageToLLMExplanationTranslator, sendMessageToLLMExplanationTranslatorSuccess, sendMessageToLLMExplanationTranslatorFailure, sendMessageToLLMAllTranslatorsSuccess, sendMessageToLLMAllTranslatorsFailure, sendMessageToLLMAllTranslators } from "../llm.actions";
+import { sendMessageToLLM, sendMessageToLLMFailure, sendMessageToLLMQuestionTranslator, sendMessageToLLMQuestionTranslatorFailure, sendMessageToLLMQuestionTranslatorSuccess, sendMessageToLLMSuccess, sendMessageToLLMGoalTranslator, sendMessageToLLMGoalTranslatorSuccess, sendMessageToLLMGoalTranslatorFailure, sendMessageToLLMExplanationTranslator, sendMessageToLLMExplanationTranslatorSuccess, sendMessageToLLMExplanationTranslatorFailure, sendMessageToLLMAllTranslatorsSuccess, sendMessageToLLMAllTranslatorsFailure, sendMessageToLLMAllTranslators, sendMessageToLLMQTthenGTTranslators, sendMessageToLLMQTthenGTTranslatorsSuccess, sendMessageToLLMQTthenGTTranslatorsFailure } from "../llm.actions";
 import { concatLatestFrom } from "@ngrx/operators";
 import { Store } from "@ngrx/store";
 import { selectMessages, selectThreadIdQT, selectThreadIdGT, selectThreadIdET } from "../llm.selector";
 import { goalTranslationRequestToString, questionTranslationRequestToString, explanationTranslationRequestToString } from "../../interfaces/translators_interfaces_strings";
 import { GoalTranslationRequest, QuestionTranslationRequest, ExplanationTranslationRequest } from "../../interfaces/translators_interfaces";
-import { selectIterativePlanningProject, selectIterativePlanningProperties } from "src/app/iterative_planning/state/iterative-planning.selector";
+import { selectIterativePlanningProject, selectIterativePlanningProjectExplanationInterfaceType, selectIterativePlanningProperties, selectIterativePlanningSelectedStep } from "../../../iterative_planning/state/iterative-planning.selector";
+import { selectUnsatisfiedSoftGoals } from "src/app/iterative_planning/view/step-detail-view/step-detail-view.component.selector";
+import { selectSatisfiedSoftGoals } from "src/app/iterative_planning/view/step-detail-view/step-detail-view.component.selector";
+import { selectEnforcedGoals } from "src/app/iterative_planning/view/step-detail-view/step-detail-view.component.selector";
+import { ExplanationInterfaceType } from "src/app/project/domain/general-settings";
+import { PlanRunStatus } from "src/app/iterative_planning/domain/plan";
+import { questionPosed } from "src/app/iterative_planning/state/iterative-planning.actions";
+import { Question } from "src/app/iterative_planning/domain/interface/question";
 @Injectable()
 export class SendMessageToLLMEffect{
 
@@ -17,14 +24,38 @@ export class SendMessageToLLMEffect{
     private service = inject(LLMService)
     private store = inject(Store);
 
-    public sendMessage$ = createEffect(() => this.actions$.pipe(
-        ofType(sendMessageToLLM),
-        concatLatestFrom(() => this.store.select(selectMessages)),
-        switchMap(([{request}, messages]) => this.service.postMessage$(messages).pipe(
-            map(response => sendMessageToLLMSuccess({response})),
-            catchError(() => of(sendMessageToLLMFailure()))
-        ))
-    ))
+    explanationInterfaceType$ = this.store.select(selectIterativePlanningProjectExplanationInterfaceType);
+    expInterfaceType = ExplanationInterfaceType;
+
+    step$ = this.store.select(selectIterativePlanningSelectedStep);
+    stepId$ = this.step$.pipe(map(step => step?._id));
+    isUnsolvable$ = this.step$.pipe(
+        filter((step) => !!step),
+        map((step) => step.plan?.status == PlanRunStatus.not_solvable)
+    );
+    planProperties$ = this.store.select(selectIterativePlanningProperties);
+
+    enforcedGoals$ = this.store.select(selectEnforcedGoals);
+    solvedSoftGoals$ = this.store.select(selectSatisfiedSoftGoals);
+    unsolvedSoftGoals$ = this.store.select(selectUnsatisfiedSoftGoals);
+
+    hasEnforcedGoals$ = this.enforcedGoals$.pipe(map((goals) => !!goals?.length));
+    hasSolvedSoftGoals$ = this.solvedSoftGoals$.pipe(
+        map((goals) => !!goals?.length)
+    );
+    hasUnsolvedSoftGoals$ = this.unsolvedSoftGoals$.pipe(
+        map((goals) => !!goals?.length)
+    );
+
+
+    // public sendMessage$ = createEffect(() => this.actions$.pipe(
+    //     ofType(sendMessageToLLM),
+    //     concatLatestFrom(() => this.store.select(selectMessages)),
+    //     switchMap(([{request}, messages]) => this.service.postMessage$(messages).pipe(
+    //         map(response => sendMessageToLLMSuccess({response})),
+    //         catchError(() => of(sendMessageToLLMFailure()))
+    //     ))
+    // ))
   
     public sendMessageToGoalTranslator$ = createEffect(() => this.actions$.pipe(
         ofType(sendMessageToLLMGoalTranslator),
@@ -46,14 +77,22 @@ export class SendMessageToLLMEffect{
 
     public sendMessageToQuestionTranslator$ = createEffect(() => this.actions$.pipe(
         ofType(sendMessageToLLMQuestionTranslator),
-        concatLatestFrom(() => [this.store.select(selectIterativePlanningProject),this.store.select(selectIterativePlanningProperties)]),
-        switchMap(([{request, threadId}, project, properties]) => {
+        concatLatestFrom(() => [
+            this.store.select(selectIterativePlanningProject),
+            this.store.select(selectIterativePlanningProperties),
+            this.enforcedGoals$,
+            this.solvedSoftGoals$,
+            this.unsolvedSoftGoals$,
+            this.isUnsolvable$  
+        ]),
+        switchMap(([{request, threadId}, project, properties, enforcedGoals, satisfiedGoals, unsatisfiedGoals, isUnsolvable]) => {
             const questionTranslationRequest: QuestionTranslationRequest = {
                 question: request,
-                enforcedGoals: [], // TODO: Get from store
-                satisfiedGoals: [], // TODO: Get from store
-                unsatisfiedGoals: [], // TODO: Get from store
-                existingPlanProperties: Object.values(properties)
+                enforcedGoals: enforcedGoals,
+                satisfiedGoals: satisfiedGoals,
+                unsatisfiedGoals: unsatisfiedGoals,
+                existingPlanProperties: Object.values(properties),
+                solvable: isUnsolvable ? "false" : "true"
             };
             const requestString = questionTranslationRequestToString(questionTranslationRequest);
             return this.service.postMessageQT$(requestString, threadId).pipe(
@@ -63,24 +102,74 @@ export class SendMessageToLLMEffect{
         })
     ))
 
+    public sendMessageToQuestionAndGoalTranslator$ = createEffect(() => this.actions$.pipe(
+        ofType(sendMessageToLLMQTthenGTTranslators),
+        concatLatestFrom(() => [
+            this.store.select(selectIterativePlanningProject),
+            this.store.select(selectIterativePlanningProperties),
+            this.enforcedGoals$,
+            this.solvedSoftGoals$,
+            this.unsolvedSoftGoals$,
+            this.isUnsolvable$
+        ]),
+        switchMap(([{request, threadIdQt, threadIdGt}, project, properties, enforcedGoals, satisfiedGoals, unsatisfiedGoals, isUnsolvable]) => {
+            // Create and stringify Question Translator request
+            const questionTranslationRequest: QuestionTranslationRequest = {
+                question: request,
+                enforcedGoals: enforcedGoals,
+                satisfiedGoals: satisfiedGoals,
+                unsatisfiedGoals: unsatisfiedGoals,
+                existingPlanProperties: Object.values(properties),
+                solvable: isUnsolvable ? "false" : "true"
+            };
+            const qtRequestString = questionTranslationRequestToString(questionTranslationRequest);
+
+            // Create and stringify Goal Translator request
+            const goalTranslationRequest: GoalTranslationRequest = {
+                goalDescription: "{goal_description}",
+                predicates: project.baseTask.model.predicates,
+                objects: project.baseTask.model.objects,
+                existingPlanProperties: Object.values(properties)
+            };
+            const gtRequestString = goalTranslationRequestToString(goalTranslationRequest);
+
+
+            return this.service.postMessageQTthenGT$(
+                qtRequestString,
+                gtRequestString,
+                threadIdQt,
+                threadIdGt,
+            ).pipe(
+                switchMap(response => [sendMessageToLLMQTthenGTTranslatorsSuccess(response), questionPosed({question: response})]),
+                catchError(() => of(sendMessageToLLMQTthenGTTranslatorsFailure()))
+            );
+        })
+    ))        
+
     public sendMessageToExplanationTranslator$ = createEffect(() => this.actions$.pipe(
         ofType(sendMessageToLLMExplanationTranslator),
         concatLatestFrom(() => [
             this.store.select(selectIterativePlanningProject),
-            this.store.select(selectIterativePlanningProperties)
+            this.store.select(selectIterativePlanningProperties),
+            this.enforcedGoals$,
+            this.solvedSoftGoals$,
+            this.unsolvedSoftGoals$
         ]),
-        switchMap(([{request, threadId}, project, properties]) => {
+        switchMap(([{request, threadId}, project, properties, enforcedGoals, satisfiedGoals, unsatisfiedGoals]) => {
             const explanationTranslationRequest: ExplanationTranslationRequest = {
                 question: request,
-                question_type: "", // TODO: Get from store
-                questionArguments: [], // TODO: Get from store
-                MUGS: [], // TODO: Get from store
-                MGCS: [], // TODO: Get from store
+                question_type: "", 
+                questionArguments: [], 
+                MUGS: [], 
+                MGCS: [], 
+
+                // All up to be passed in request
+
                 predicates: project.baseTask.model.predicates,
                 objects: project.baseTask.model.objects,
-                enforcedGoals: [], // TODO: Get from store
-                satisfiedGoals: [], // TODO: Get from store
-                unsatisfiedGoals: [], // TODO: Get from store
+                enforcedGoals: enforcedGoals,
+                satisfiedGoals: satisfiedGoals,
+                unsatisfiedGoals: unsatisfiedGoals,
                 existingPlanProperties: Object.values(properties),
                 history: [] // TODO: Get from store
             };
@@ -96,16 +185,21 @@ export class SendMessageToLLMEffect{
         ofType(sendMessageToLLMAllTranslators),
         concatLatestFrom(() => [
             this.store.select(selectIterativePlanningProject),
-            this.store.select(selectIterativePlanningProperties)
+            this.store.select(selectIterativePlanningProperties),
+            this.enforcedGoals$,
+            this.solvedSoftGoals$,
+            this.unsolvedSoftGoals$,
+            this.isUnsolvable$
         ]),
-        switchMap(([{request, threadIdQt, threadIdGt, threadIdEt}, project, properties]) => {
+        switchMap(([{request, threadIdQt, threadIdGt, threadIdEt}, project, properties, enforcedGoals, satisfiedGoals, unsatisfiedGoals, isUnsolvable]) => {
             // Create and stringify Question Translator request
             const questionTranslationRequest: QuestionTranslationRequest = {
                 question: request,
-                enforcedGoals: [], // TODO: Get from store
-                satisfiedGoals: [], // TODO: Get from store
-                unsatisfiedGoals: [], // TODO: Get from store
-                existingPlanProperties: Object.values(properties)
+                enforcedGoals: enforcedGoals,
+                satisfiedGoals: satisfiedGoals,
+                unsatisfiedGoals: unsatisfiedGoals,
+                existingPlanProperties: Object.values(properties),
+                solvable: isUnsolvable ? "false" : "true"
             };
             const qtRequestString = questionTranslationRequestToString(questionTranslationRequest);
 
@@ -121,15 +215,15 @@ export class SendMessageToLLMEffect{
             // Create and stringify Explanation Translator request
             const explanationTranslationRequest: ExplanationTranslationRequest = {
                 question: request,
-                question_type: "{question_type}", // TODO: Get from store
-                questionArguments: [], // TODO: Get from store
-                MUGS: [], // TODO: Get from store
-                MGCS: [], // TODO: Get from store
+                question_type: "{question_type}", 
+                questionArguments: [], 
+                MUGS: [], 
+                MGCS: [], 
                 predicates: project.baseTask.model.predicates,
                 objects: project.baseTask.model.objects,
-                enforcedGoals: [], // TODO: Get from store
-                satisfiedGoals: [], // TODO: Get from store
-                unsatisfiedGoals: [], // TODO: Get from store
+                enforcedGoals: enforcedGoals,
+                satisfiedGoals: satisfiedGoals,
+                unsatisfiedGoals: unsatisfiedGoals,
                 existingPlanProperties: Object.values(properties),
                 history: [] // TODO: Get from store
             };

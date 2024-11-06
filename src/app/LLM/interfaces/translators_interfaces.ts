@@ -2,6 +2,7 @@ import { IterationStep } from "../../iterative_planning/domain/iteration_step";
 import { PlanProperty } from "../../iterative_planning/domain/plan-property/plan-property";
 import { PDDLPredicate, PDDLObject } from "../../interface/planning-task";
 import { Message } from "../domain/message";
+import { Question } from "src/app/iterative_planning/domain/interface/question";
 
 
 
@@ -34,7 +35,8 @@ export interface QuestionTranslationRequest {
     enforcedGoals: PlanProperty[],
     satisfiedGoals: PlanProperty[],
     unsatisfiedGoals: PlanProperty[],
-    existingPlanProperties: PlanProperty[]
+    existingPlanProperties: PlanProperty[],
+    solvable: string
 }
 export interface QuestionTranslationResponse {
     newProperties: { naturalLanguage: string, formula: string }[],
@@ -138,4 +140,19 @@ export interface AllTranslatorsResponse {
     threadIdQt: string,
     threadIdGt: string,
     threadIdEt: string
+}
+
+export interface QTthenGTRequest {
+    request: string,
+    threadIdQt: string,
+    threadIdGt: string,
+}
+
+export interface QTthenGTResponse {
+    questionTranslation: string,
+    goalTranslation: string,
+    threadIdQt: string,
+    threadIdGt: string,
+    questionType: string,
+    goal: string
 }
