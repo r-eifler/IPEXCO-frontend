@@ -5,68 +5,91 @@
     <mat-card-subtitle *ngIf="!isProject">Demo</mat-card-subtitle>
     <mat-card-subtitle *ngIf="isProject">Project</mat-card-subtitle>
   </mat-card-header>
+  <mat-card-content *ngIf="settings">
+
   <form class="settings-form"
     [formGroup]="settingsForm"
     (ngSubmit)="onSave()">
-  <mat-card-content *ngIf="settings">
-      <div class="part">
-        <h3>Features</h3>
 
-        <mat-label matTooltip="Interface used for creation plan properties" *ngIf="settingsForm.controls.allowQuestions.value">
-          Property Creation Interface
-        </mat-label>
-        <mat-button-toggle-group  formControlName="propertyCreationInterfaceType" *ngIf="settingsForm.controls.allowQuestions.value">
-          <mat-button-toggle [value]="PropertyCreationTypes.TEMPLATE_BASED">Templates</mat-button-toggle>
-          <mat-button-toggle [value]="PropertyCreationTypes.LLM_CHAT">LLM Chat</mat-button-toggle>
-        </mat-button-toggle-group>
+      <mat-card appearance="outlined">
+        <mat-card-header>
+          <mat-card-title>
+            Plan Properties
+          </mat-card-title>
+        </mat-card-header>
+        
+        <mat-card-content class="sub-card-content">
+          <mat-label matTooltip="Interface used for creating plan properties.">
+            Property Creation Interface
+          </mat-label>
+          <mat-button-toggle-group  formControlName="propertyCreationInterfaceType">
+            <mat-button-toggle [value]="PropertyCreationTypes.TEMPLATE_BASED">Templates</mat-button-toggle>
+            <mat-button-toggle [value]="PropertyCreationTypes.LLM_CHAT">LLM Chat</mat-button-toggle>
+          </mat-button-toggle-group>
 
+          <mat-slide-toggle formControlName="usePlanPropertyValues">
+            use utility
+          </mat-slide-toggle>
+        </mat-card-content>
+      </mat-card>
 
-        <mat-slide-toggle formControlName="allowQuestions"
-          color="primary"
-          matTooltip="Allow the user to ask conflict explanations.">
-          Provide Conflict Explanations
-        </mat-slide-toggle>
+      <mat-card appearance="outlined">
+        <mat-card-header>
+          <mat-card-title>
+            Explanations
+          </mat-card-title>
+        </mat-card-header>
 
-        <mat-slide-toggle formControlName="globalExplanation" *ngIf="settingsForm.controls.allowQuestions.value"
-          matTooltip="Global conflict explanation independent of the iteration step.">
-          Global Explanation
-        </mat-slide-toggle>
+        <mat-card-content class="sub-card-content">
+          <mat-slide-toggle formControlName="allowQuestions"
+            color="primary"
+            matTooltip="Allow the user to ask conflict explanations.">
+            Provide Conflict Explanations
+          </mat-slide-toggle>
 
-        <mat-label matTooltip="Interface used for providing explanations" *ngIf="settingsForm.controls.allowQuestions.value">
-          Explanation Interface
-        </mat-label>
-        <mat-button-toggle-group  formControlName="explanationInterfaceType" *ngIf="settingsForm.controls.allowQuestions.value">
-          <mat-button-toggle [value]="ExplanationTypes.TEMPLATE_QUESTION_ANSWER">Templates</mat-button-toggle>
-          <mat-button-toggle [value]="ExplanationTypes.MUGS_VISUALIZATION">MUGS Visualization</mat-button-toggle>
-          <mat-button-toggle [value]="ExplanationTypes.LLM_CHAT">LLM Chat</mat-button-toggle>
-        </mat-button-toggle-group>
+          <mat-slide-toggle formControlName="globalExplanation" *ngIf="settingsForm.controls.allowQuestions.value"
+            matTooltip="Global conflict explanation independent of the iteration step.">
+            Global Explanation
+          </mat-slide-toggle>
 
-        <mat-slide-toggle formControlName="provideRelaxationExplanations" *ngIf="settingsForm.controls.useConstraints.value"
-          matTooltip="Provide the user with relaxation explanations while analysing
-          the conflicts.">
-          Provide Relaxation Explanations
-        </mat-slide-toggle>
+          <mat-label matTooltip="Interface used for providing explanations" *ngIf="settingsForm.controls.allowQuestions.value">
+            Explanation Interface
+          </mat-label>
+          <mat-button-toggle-group  formControlName="explanationInterfaceType" *ngIf="settingsForm.controls.allowQuestions.value">
+            <mat-button-toggle [value]="ExplanationTypes.TEMPLATE_QUESTION_ANSWER">Templates</mat-button-toggle>
+            <mat-button-toggle [value]="ExplanationTypes.MUGS_VISUALIZATION">MUGS Visualization</mat-button-toggle>
+            <mat-button-toggle [value]="ExplanationTypes.LLM_CHAT">LLM Chat</mat-button-toggle>
+          </mat-button-toggle-group>
 
-        <mat-slide-toggle formControlName="usePlanPropertyValues">
-          Use utility for soft-goals
-        </mat-slide-toggle>
-      </div>
+          <mat-slide-toggle formControlName="provideRelaxationExplanations" *ngIf="settingsForm.controls.useConstraints.value"
+            matTooltip="Provide the user with relaxation explanations while analysing
+            the conflicts.">
+            Provide Relaxation Explanations
+          </mat-slide-toggle>
+        </mat-card-content>
+      </mat-card>
 
-      <div class="part">
-        <h3>Automatic Computation</h3>
+      <mat-card appearance="outlined">
+        <mat-card-header>
+          <mat-card-title>
+            Automatic Computation
+          </mat-card-title>
+        </mat-card-header>
+        
+        <mat-card-content class="sub-card-content">
 
-        <mat-slide-toggle formControlName="computePlanAutomatically"
-          matTooltip="When a new iteration step is ceated, a plan is automatically computed.">
-          Plans
-        </mat-slide-toggle>
+          <mat-slide-toggle formControlName="computePlanAutomatically"
+            matTooltip="When a new iteration step is created, a plan is automatically computed.">
+            Plans
+          </mat-slide-toggle>
 
-        <mat-slide-toggle formControlName="computeDependenciesAutomatically"
-          matTooltip="When a new iteration step is created, the conflicts for
-          all relaxation levels are automatically computed. For a demo this
-          should be set to true.">
-          Explanations
-        </mat-slide-toggle>
-      </div>
+          <mat-slide-toggle formControlName="computeDependenciesAutomatically"
+            matTooltip="When a new iteration step is created, the explanations
+              are computed without asking a question.">
+            Explanations
+          </mat-slide-toggle>
+      </mat-card-content>
+    </mat-card>
 
       <div class="part" *ngIf="!isProject">
         <h3>Demo</h3>
@@ -143,9 +166,6 @@
         </div>
 
       </div>
-  </mat-card-content>
-  <mat-card-actions>
-    <button mat-flat-button color="accent" class="save-button">Save</button>
-  </mat-card-actions>
   </form>
+  </mat-card-content>
 </mat-card>

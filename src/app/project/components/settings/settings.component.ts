@@ -1,6 +1,8 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
-import { UntypedFormControl, UntypedFormGroup, Validators } from "@angular/forms";
+import { Component, DestroyRef, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
+import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { ExplanationInterfaceType, GeneralSettings, PropertyCreationInterfaceType } from "../../domain/general-settings";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { concatMap, switchMap } from "rxjs/operators";
 
 
 @Component({
@@ -8,9 +10,11 @@ import { ExplanationInterfaceType, GeneralSettings, PropertyCreationInterfaceTyp
   templateUrl: "./settings.component.html",
   styleUrls: ["./settings.component.scss"],
 })
-export class SettingsComponent implements OnInit, OnChanges {
+export class SettingsComponent implements OnInit {
 
-  settingsForm: UntypedFormGroup;
+  destroyRef = inject(DestroyRef)
+  
+  settingsForm: FormGroup;
 
   @Input() isProject: boolean;
   @Input() settings: GeneralSettings;
@@ -20,50 +24,51 @@ export class SettingsComponent implements OnInit, OnChanges {
   ExplanationTypes = ExplanationInterfaceType;
   PropertyCreationTypes = PropertyCreationInterfaceType;
 
+  initialized = false;
+
   constructor() {
-    this.settingsForm = new UntypedFormGroup({
-      maxRuns: new UntypedFormControl([
+    this.settingsForm = new FormGroup({
+      maxRuns: new FormControl([
         Validators.required,
         Validators.min(1),
         Validators.max(100),
       ]),
-      allowQuestions: new UntypedFormControl(),
-      provideRelaxationExplanations: new UntypedFormControl(),
-      introTask: new UntypedFormControl(),
-      public: new UntypedFormControl(),
-      usePlanPropertyValues: new UntypedFormControl(),
-      useConstraints: new UntypedFormControl(),
-      explanationInterfaceType: new UntypedFormControl(),
-      propertyCreationInterfaceType: new UntypedFormControl(),
-      globalExplanation: new UntypedFormControl(),
-      useTimer: new UntypedFormControl(),
-      measureTime: new UntypedFormControl(),
-      maxTime: new UntypedFormControl([
+      allowQuestions: new FormControl(),
+      provideRelaxationExplanations: new FormControl(),
+      introTask: new FormControl(),
+      public: new FormControl(),
+      usePlanPropertyValues: new FormControl(),
+      useConstraints: new FormControl(),
+      explanationInterfaceType: new FormControl(),
+      propertyCreationInterfaceType: new FormControl(),
+      globalExplanation: new FormControl(),
+      useTimer: new FormControl(),
+      measureTime: new FormControl(),
+      maxTime: new FormControl([
         Validators.required,
         Validators.min(0.05),
         Validators.max(60),
       ]),
-      checkMaxUtility: new UntypedFormControl(),
-      computePlanAutomatically: new UntypedFormControl(),
-      computeDependenciesAutomatically: new UntypedFormControl(),
-      showPaymentScore: new UntypedFormControl(),
-      minPayment: new UntypedFormControl(),
-      maxPayment: new UntypedFormControl(),
-      paymentSteps: new UntypedFormControl(),
+      checkMaxUtility: new FormControl(),
+      computePlanAutomatically: new FormControl(),
+      computeDependenciesAutomatically: new FormControl(),
+      showPaymentScore: new FormControl(),
+      minPayment: new FormControl(),
+      maxPayment: new FormControl(),
+      paymentSteps: new FormControl(),
     });
   }
 
 
   ngOnChanges(changes: SimpleChanges): void {
     console.log(this.settings);
-    if(this.settings)
+    if(this.settings && ! this.initialized)
       this.initForm(this.settings);
   }
 
   ngOnInit(): void {
-    console.log(this.settings);
-    if(this.settings)
-      this.initForm(this.settings);
+    if(this.settings && ! this.initialized)
+      this.initForm(this.settings);    
   }
 
   initForm(settings: GeneralSettings): void {
@@ -93,11 +98,20 @@ export class SettingsComponent implements OnInit, OnChanges {
     this.settingsForm.controls.minPayment.setValue(settings.paymentInfo.min);
     this.settingsForm.controls.maxPayment.setValue(settings.paymentInfo.max);
     this.settingsForm.controls.paymentSteps.setValue(settings.paymentInfo.steps);
+
+    this.settingsForm.valueChanges.pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(() => {
+      this.onSave();
+      console.log('Saved')
+    });
+
+    this.initialized = true
   }
 
   onSave() {
 
-    console.log(this.settingsForm.controls.explanationInterfaceType.value)
+    // console.log(this.settingsForm.controls.explanationInterfaceType.value)
 
     let paymentInfo = {
       max: this.settingsForm.controls.maxPayment.value,
@@ -125,7 +139,7 @@ export class SettingsComponent implements OnInit, OnChanges {
       paymentInfo,
     }
 
-    console.log(newSettings);
+    // console.log(newSettings);
     this.updatedSettings.next(newSettings);
   }
 }

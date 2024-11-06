@@ -1,17 +1,19 @@
 import { AuthenticationService } from "../../../service/authentication/authentication.service";
-import { Component, OnInit } from "@angular/core";
+import { Component, inject, OnInit } from "@angular/core";
 import { UntypedFormControl, UntypedFormGroup, Validators } from "@angular/forms";
 import { User } from "src/app/interface/user";
 import { passwordValidator } from "src/app/validators/user.validators";
 import { ActivatedRoute, Router } from "@angular/router";
 import { MatDialogRef } from "@angular/material/dialog";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 @Component({
   selector: "app-register",
   templateUrl: "./register.component.html",
-  styleUrls: ["./register.component.css"],
+  styleUrls: ["./register.component.scss"],
 })
 export class RegisterComponent implements OnInit {
+
   registerForm = new UntypedFormGroup(
     {
       name: new UntypedFormControl("", [
@@ -33,6 +35,8 @@ export class RegisterComponent implements OnInit {
     [passwordValidator]
   );
 
+  snackBar = inject(MatSnackBar);
+
   constructor(
     public dialogRef: MatDialogRef<RegisterComponent>,
     private userService: AuthenticationService,
@@ -51,10 +55,12 @@ export class RegisterComponent implements OnInit {
 
     this.userService.register(newUser).then(
       async () => {
-        await this.router.navigate(["/overview"], { relativeTo: this.route });
+        // await this.router.navigate(["/overview"], { relativeTo: this.route });
+        this.snackBar.open('Register successful. YOu can now login.', 'OK');
       },
       () => {
         // console.log('Register failed.');
+        this.snackBar.open('Register failed.', 'OK');
       }
     );
 
