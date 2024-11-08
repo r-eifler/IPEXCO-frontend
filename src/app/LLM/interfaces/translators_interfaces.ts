@@ -4,31 +4,13 @@ import { PDDLPredicate, PDDLObject } from "../../interface/planning-task";
 import { Message } from "../domain/message";
 import { Question } from "src/app/iterative_planning/domain/interface/question";
 
-
-
-// goal-translator
-
 export interface GoalTranslationRequest {
     goalDescription: string,
     predicates: PDDLPredicate[],
     objects: PDDLObject[],
     existingPlanProperties: PlanProperty[],
-
-}
-// TODO : add more features
-export interface GoalTranslationResponse {
-    formula: string 
 }
 
-// enum GoalTranslationStatus {
-//     success,
-//     error,
-//     unsupported,
-//     unconfident, // Please check result,
-//     alreadyExists
-// }
-
-// question-translator
 
 export interface QuestionTranslationRequest {
     question: string,
@@ -38,121 +20,26 @@ export interface QuestionTranslationRequest {
     existingPlanProperties: PlanProperty[],
     solvable: string
 }
-export interface QuestionTranslationResponse {
-    newProperties: { naturalLanguage: string, formula: string }[],
-    // status: QuestionTranslationStatus,
-    userInfo: string,
-    answer: string,
-    question_type: string,
-    questionArguments: PlanProperty[],
-    interactionHistory: string,
-}
-
-// enum QuestionTranslationStatus {
-//     success,
-//     error,
-//     unsupported,
-//     unconfident, // Please check result,
-//     directAnswer
-// }
-
-// explanation-translator
 
 export interface ExplanationTranslationRequest {
     question: string,
     question_type: string,
-    questionArguments: PlanProperty[]
-    MUGS: PlanProperty[][],
-    MGCS: PlanProperty[][],
+    questionArguments: PlanProperty[],
+    MUGS?: PlanProperty[][],
+    MGCS?: PlanProperty[][], // todo call it explanation then change it in string method
     predicates: PDDLPredicate[],
     objects: PDDLObject[],
     enforcedGoals: PlanProperty[],
     satisfiedGoals: PlanProperty[],
     unsatisfiedGoals: PlanProperty[],
     existingPlanProperties: PlanProperty[],
-    history: IterationStep[]
-
 }
 
-
-export interface ExplanationTranslationResponse {
-    // status: ExplanationTranslationStatus,
-    userInfo: string,
-    answer: string,
-    interactionHistory: string,
-}
-
-// enum ExplanationTranslationStatus {
-//     success,
-//     error,
-//     unsupported,
-//     unconfident, // Please check result,
-//     directAnswer
-// }
-
-
-export interface QuestionTranslationHistoryStep {
-    input: QuestionTranslationRequest,
-    output: QuestionTranslationResponse
-}
-
-export interface GoalTranslationHistoryStep {
-    input: GoalTranslationRequest,
-    output: GoalTranslationResponse
-}
-
-export interface ExplanationTranslationHistoryStep {
-    input: ExplanationTranslationRequest,
-    output: ExplanationTranslationResponse
-}
-
-export type QuestionTranslationHistory = QuestionTranslationHistoryStep[]
-export type GoalTranslationHistory = GoalTranslationHistoryStep[]
-export type ExplanationTranslationHistory = ExplanationTranslationHistoryStep[]
-
-export type TranslationHistory = QuestionTranslationHistory | GoalTranslationHistory | ExplanationTranslationHistory
-export type TranslationHistoryStep = QuestionTranslationHistoryStep | GoalTranslationHistoryStep | ExplanationTranslationHistoryStep
-export type TranslationRequest = QuestionTranslationRequest | GoalTranslationRequest | ExplanationTranslationRequest
-export type TranslationResponse = QuestionTranslationResponse | GoalTranslationResponse | ExplanationTranslationResponse
-
-export interface BackendLLMRequest {
-    request: string,
-    threadId?: string
-}
-
-export interface BackendLLMResponse {
-    response: string,
-    threadId: string
-}
-
-export interface AllTranslatorsRequest {
-    request: string,
-    threadIdQt: string,
-    threadIdGt: string,
-    threadIdEt: string
-}
-
-export interface AllTranslatorsResponse {
-    questionTranslation: string,
-    goalTranslation: string,
-    explainerResponse: string,
-    explanationTranslation: string,
-    threadIdQt: string,
-    threadIdGt: string,
-    threadIdEt: string
-}
-
-export interface QTthenGTRequest {
-    request: string,
-    threadIdQt: string,
-    threadIdGt: string,
-}
 
 export interface QTthenGTResponse {
     questionTranslation: string,
     goalTranslation: string,
-    threadIdQt: string,
-    threadIdGt: string,
     questionType: string,
-    goal: string
+    goal: string,
+    initialQuestion: string
 }

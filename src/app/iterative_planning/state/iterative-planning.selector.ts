@@ -29,7 +29,9 @@ export const selectIterativePlanningPropertiesList = createSelector(selectIterat
 
 export const selectIterativePlanningIterationSteps = createSelector(selectIterativePlanningFeature,
     (state) => state.iterationSteps.data)
-export const selectIterationStepIds = createSelector(selectIterativePlanningIterationSteps, map(({_id}) => _id));
+export const selectIterationStepIds = createSelector(selectIterativePlanningIterationSteps, map(({ _id }) => _id));
+export const selectIterationStepbyId = (id: string) => createSelector(selectIterativePlanningIterationSteps, (iteration_steps) => iteration_steps?.filter(s => s._id == id)[0]);
+
 export const selectIterationStep = memoizeWith(
   (stepId: string) => stepId,
   (stepId: string) => createSelector(selectIterativePlanningIterationSteps, find(({_id}) => _id === stepId)
@@ -91,3 +93,10 @@ export const selectIterationStepIdsWithoutExplanations = createSelector(selectIt
 
   return stepExplanationMissing;
 })
+
+export const selectLLMChatMessages = createSelector(selectIterativePlanningFeature, (state) => state.LLMMessages)
+export const selectLLMChatLoadingState = createSelector(selectIterativePlanningFeature, ({ LLMChatLoadingState }) => LLMChatLoadingState);
+
+export const selectLLMThreadIdQT = createSelector(selectIterativePlanningFeature, ({ LLMThreadIdQT }) => LLMThreadIdQT);
+export const selectLLMThreadIdGT = createSelector(selectIterativePlanningFeature, ({ LLMThreadIdGT }) => LLMThreadIdGT);
+export const selectLLMThreadIdET = createSelector(selectIterativePlanningFeature, ({ LLMThreadIdET }) => LLMThreadIdET);

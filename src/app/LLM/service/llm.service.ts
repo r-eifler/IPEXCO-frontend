@@ -5,8 +5,15 @@ import { environment } from "src/environments/environment";
 import { catchError, concatMap, map, tap } from "rxjs/operators";
 import { IHTTPData } from "src/app/interface/http-data.interface";
 import { Message } from "../domain/message";
-import { AllTranslatorsResponse, BackendLLMResponse, QTthenGTResponse } from "../interfaces/translators_interfaces";
+import { ExplanationTranslationRequest, GoalTranslationRequest, QTthenGTResponse, QuestionTranslationRequest } from "../interfaces/translators_interfaces";
 import { Question } from "src/app/iterative_planning/domain/interface/question";
+import { PlanProperty } from "src/app/iterative_planning/domain/plan-property/plan-property";
+import { Project } from "src/app/project/domain/project";
+import { goalTranslationRequestToString, questionTranslationRequestToString } from "../interfaces/translators_interfaces_strings";
+import { IterationStep, StepStatus } from "src/app/iterative_planning/domain/iteration_step";
+import { PlanRunStatus } from "src/app/iterative_planning/domain/plan";
+import { QuestionType } from "src/app/iterative_planning/domain/explanation/explanations";
+import { Store } from "@ngrx/store";
 @Injectable()
 export class LLMService{
 
@@ -22,10 +29,17 @@ export class LLMService{
     //     );
     // }
     
-    postMessageGT$(request: string, threadId: string): Observable<BackendLLMResponse> {
-        console.log(request);
-        return this.http.post<IHTTPData<BackendLLMResponse>>(this.BASE_URL + 'gt', { data: request, threadId: threadId }).pipe(
-            map(({ data }) => data),
+    postMessageGT$(request: string, project: Project, properties: PlanProperty[], threadId: string): Observable<{response: string, threadId: string}> {
+        const goalTranslationRequest: GoalTranslationRequest = {
+            goalDescription: request,
+            predicates: project.baseTask.model.predicates,
+            objects: project.baseTask.model.objects,
+            existingPlanProperties: Object.values(properties)
+        };
+        const requestString = goalTranslationRequestToString(goalTranslationRequest);
+        console.log(requestString);
+        return this.http.post<IHTTPData<BackendLLMResponse>>(this.BASE_URL + 'gt', { data: requestString, threadId: threadId }).pipe(
+            map(({ data }) => ({response: data.response, threadId: data.threadId})),
             tap(console.log)
         );
     }
@@ -38,65 +52,75 @@ export class LLMService{
         );
     }
 
-    postMessageET$(request: string, threadId: string): Observable<BackendLLMResponse> {
-        console.log(request);
+    postMessageET$(question: string, explanation:string[][],question_type: QuestionType, questionArguments: PlanProperty[], iterationStep: IterationStep, project: Project, properties: PlanProperty[], threadId: string): Observable<BackendLLMResponse> {
+        console.log(question, question_type, questionArguments, iterationStep, project, properties, threadId);
+        const request: ExplanationTranslationRequest = {
+            question: question,
+            question_type: question_type,
+            MUGS: explanation.map(e => e.map(p => properties[p])), if question_type is not HOW
+            questionArguments: questionArguments,
+            predicates: project.baseTask.model.predicates,
+            objects: project.baseTask.model.objects,
+            enforcedGoals: iterationStep.hardGoals.map(p => properties[p]),
+            satisfiedGoals: iterationStep.plan.satisfied_properties.map(p => properties[p]),
+            unsatisfiedGoals: iterationStep.softGoals
+                .filter(id => !iterationStep.plan.satisfied_properties.includes(id))
+                .map(p => properties[p]),
+            existingPlanProperties: Object.values(properties)
+          };
         return this.http.post<IHTTPData<BackendLLMResponse>>(this.BASE_URL + 'et', { data: request, threadId: threadId }).pipe(
             map(({ data }) => data),
             tap(console.log)
         );
     }
 
-    // postMessageAllTranslators$(qtRequest: string, gtRequest: string, etRequest: string, threadIdQt: string, threadIdGt: string, threadIdEt: string): Observable<AllTranslatorsResponse> {
-    //     console.log(qtRequest, gtRequest, etRequest);
-    //     return this.http.post<IHTTPData<AllTranslatorsResponse>>(this.BASE_URL + 'translate-all', { qtRequest, gtRequest, etRequest, threadIdQt, threadIdGt, threadIdEt }).pipe(
-    //         map(({ data }) => data),
-    //         tap(console.log)
-    //     );
-    // }
-    // pass IterationStepId as argument
-    postMessageQTthenGT$(qtRequest: string, gtRequest: string, threadIdQt: string, threadIdGt: string): Observable<Question> {
-        console.log(qtRequest, gtRequest);
-        return this.http.post<IHTTPData<QTthenGTResponse>>(this.BASE_URL + 'qt-then-gt', { qtRequest, gtRequest, threadIdQt, threadIdGt }).pipe(
+    postMessageQTthenGT$(question: string, iterationStep: IterationStep, project: Project, properties: PlanProperty[], threadIdQt: string, threadIdGt: string): Observable<{ question: Question, threadIdQt: string, threadIdGt: string }> {
+        
+        const questionTranslationRequest: QuestionTranslationRequest = {
+            question: question,
+            enforcedGoals: iterationStep.hardGoals.map(p => properties[p]),
+            satisfiedGoals: iterationStep.plan.satisfied_properties.map(p => properties[p]),
+            unsatisfiedGoals: iterationStep.softGoals
+                .filter(id => !iterationStep.plan.satisfied_properties.includes(id))
+                .map(p => properties[p]),
+            existingPlanProperties: Object.values(properties),
+            solvable: iterationStep.plan.status == PlanRunStatus.not_solvable ? "false" : "true"
+        };
+        const qtRequestString = questionTranslationRequestToString(questionTranslationRequest);
+
+        // Create and stringify Goal Translator request
+        const goalTranslationRequest: GoalTranslationRequest = {
+            goalDescription: "{goal_description}",
+            predicates: project.baseTask.model.predicates,
+            objects: project.baseTask.model.objects,
+            existingPlanProperties: Object.values(properties)
+        };
+        const gtRequestString = goalTranslationRequestToString(goalTranslationRequest);
+
+        console.log(qtRequestString, gtRequestString);
+        return this.http.post<IHTTPData<QTthenGTResponse>>(this.BASE_URL + 'qt-then-gt', { qtRequest: qtRequestString, gtRequest: gtRequestString, projectId: project._id, threadIdQt, threadIdGt }).pipe(
             // First identify if the goal already exists then builds the correct plan property the save if then return it 
-            map(({ data }) => ({iterationStepId: "TODO", questionType: data.questionType, propertyId: data.goal})), // TODO :  goal is not the proper output
+            map(({ data }) => ({ question: { iterationStepId: iterationStep._id, questionType: data.questionType, propertyId: data.goal }, threadIdQt, threadIdGt })), 
             tap(console.log)
         );
     }
-
-    // postMessageAllTranslators$(qtRequest: string, gtRequest: string, etRequest: string, threadIdQt: string, threadIdGt: string, threadIdEt: string): Observable<AllTranslatorsResponse> {
-    //     console.log(qtRequest, gtRequest, etRequest);
-    //     return this.postMessageQT$(qtRequest, threadIdQt).pipe(
-    //         catchError(error => {
-    //             console.error('QT Request failed', error);
-    //             return of(null);
-    //         }),
-    //         concatMap(qtResponse => {
-    //             // Modify gtRequest with qtResponse if available
-    //             const modifiedGtRequest = 
-                
-    //             return this.postMessageGT$(modifiedGtRequest, threadIdGt).pipe(
-    //                 catchError(error => {
-    //                     console.error('GT Request failed', error);
-    //                     return of(null);
-    //                 }),
-    //                 concatMap(gtResponse =>
-
-
-    //                     this.postMessageET$(etRequest, threadIdEt).pipe(
-    //                         catchError(error => {
-    //                             console.error('ET Request failed', error);
-    //                             return of(null);
-    //                         }),
-    //                         map(etResponse => ({
-    //                             qtResponse,
-    //                             gtResponse,
-    //                             etResponse
-    //                         }))
-    //                     )
-    //                 )
-    //             );
-    //         }),
-    //         tap(console.log)
-    //     );
-    // }
 }
+
+
+function baseExplanationTransatorRequest(question: string, questionType: QuestionType): ExplanationTranslationRequest {
+    let store = inject(Store);
+    let request: ExplanationTranslationRequest;
+    
+    combineLatest([
+      store.select(selectIterativePlanningProject),
+      store.select(selectIterativePlanningProperties),
+      store.select(selectThreadIdET),
+      store.select(selectEnforcedGoals),
+      store.select(selectSatisfiedSoftGoals),
+      store.select(selectUnsatisfiedSoftGoals)
+    ]).subscribe(([projectData, properties, threadIdET, enforcedGoals, solvedSoftGoals, unsolvedSoftGoals]) => {
+      
+    });
+    
+    return request!;
+  }

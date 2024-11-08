@@ -315,7 +315,6 @@ import { PageModule } from './shared/component/page/page.module';
         [projectFeature]: projectReducer,
         [projectMetaDataFeature]: projectMetaDataReducer,
         [iterativePlanningFeature]: iterativePlanningReducer,
-        [LLMChatFeature]: llmChatReducer
       }),
     EffectsModule.forRoot([
       LoadProjectEffect,

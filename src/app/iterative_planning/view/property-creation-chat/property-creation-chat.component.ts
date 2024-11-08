@@ -57,7 +57,7 @@ export class PropertyCreationChatComponent {
       )
     ).subscribe(({ formula, naturalLanguage, project }) => {
       const planProperty: PlanProperty = {
-        name: 'New Property',
+        name: 'New Property', 
         type: GoalType.LTL,
         naturalLanguage: naturalLanguage,
         naturalLanguageDescription: naturalLanguage,

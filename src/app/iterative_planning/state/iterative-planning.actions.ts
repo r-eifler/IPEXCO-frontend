@@ -4,6 +4,7 @@ import { ExplanationMessage } from "../domain/interface/explanation-message";
 import { Question } from "../domain/interface/question";
 import { IterationStep, ModIterationStep } from "../domain/iteration_step";
 import { PlanProperty } from "../domain/plan-property/plan-property";
+import { QTthenGTRequest, QTthenGTResponse } from "src/app/LLM/interfaces/translators_interfaces";
 
 
 // Project
@@ -85,3 +86,21 @@ export const explanationComputationRunningFailure = createAction('[iterative-pla
 export const questionPosed = createAction('[iterative-planning] question posed', props<{ question: Question }>());
 export const poseAnswer = createAction('[iterative-planning] pose answer', props<{ answer: ExplanationMessage }>());
 
+export const questionPosedLLM = createAction('[iterative-planning] question posed LLM', props<{ question: Question, naturalLanguageQuestion: string }>());
+export const poseAnswerLLM = createAction('[iterative-planning] pose answer LLM', props<{ answer: ExplanationMessage }>());
+
+// LLM
+
+export const eraseLLMHistory = createAction('[llm] erase history');
+
+export const sendMessageToLLMGoalTranslator = createAction('[llm] send message to goal translator', props<{goalDescription: string}>());
+export const sendMessageToLLMGoalTranslatorSuccess = createAction('[llm] send message to goal translator success', props<{response: string, threadId: string}>()); // QTYPE ; GOAL ; EXISTING
+export const sendMessageToLLMGoalTranslatorFailure = createAction('[llm] send message to goal translator failure');
+
+export const sendMessageToLLMExplanationTranslator = createAction('[llm] send message to explanation translator', props<{question: string, explanation: string[][], question_type: string, questionArguments: PlanProperty[], iterationStepId: string}>());
+export const sendMessageToLLMExplanationTranslatorSuccess = createAction('[llm] send message to explanation translator success', props<{response: string, threadId: string}>()); 
+export const sendMessageToLLMExplanationTranslatorFailure = createAction('[llm] send message to explanation translator failure');
+
+export const sendMessageToLLMQTthenGTTranslators = createAction('[llm] send message to QTthenGT translators', props<{question: string, iterationStepId: string}>());
+export const sendMessageToLLMQTthenGTTranslatorsSuccess = createAction('[llm] send message to QTthenGT translators success', props<{threadIdQt: string, threadIdGt: string}>());
+export const sendMessageToLLMQTthenGTTranslatorsFailure = createAction('[llm] send message to QTthenGT translators failure');
