@@ -4,7 +4,6 @@ import { ExplanationMessage } from "../domain/interface/explanation-message";
 import { Question } from "../domain/interface/question";
 import { IterationStep, ModIterationStep } from "../domain/iteration_step";
 import { PlanProperty } from "../domain/plan-property/plan-property";
-import { QTthenGTRequest, QTthenGTResponse } from "src/app/LLM/interfaces/translators_interfaces";
 
 
 // Project

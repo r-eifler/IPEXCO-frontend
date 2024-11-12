@@ -1,6 +1,6 @@
 import { createSelector } from "@ngrx/store";
 import { Message } from "src/app/LLM/domain/message";
-import { selectMessages as selectLlmMessages, selectLoadingState } from "src/app/LLM/state/llm.selector";
+import { selectLLMChatMessages as selectLlmMessages, selectLLMChatLoadingState } from "src/app/iterative_planning/state/iterative-planning.selector";
 import { LoadingState } from "src/app/shared/common/loadable.interface";
 import { Role } from "src/app/shared/component/chat/chat-message/chat-message.component";
 
@@ -11,4 +11,4 @@ export const selectMessages = createSelector(selectLlmMessages, (messages) => me
   role: message.role === 'user' ? 'receiver' : 'sender',
 })));
 
-export const selectIsLoading = createSelector(selectLoadingState, (state) => state === LoadingState.Loading);
+export const selectIsLoading = createSelector(selectLLMChatLoadingState, (state) => state === LoadingState.Loading);

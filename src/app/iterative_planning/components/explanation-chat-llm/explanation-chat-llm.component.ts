@@ -1,15 +1,15 @@
 import { AsyncPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { sendMessageToLLM, sendMessageToLLMQTthenGTTranslators, sendMessageToLLMGoalTranslator } from 'src/app/LLM/state/llm.actions';
+import { sendMessageToLLMQTthenGTTranslators } from '../../state/iterative-planning.actions';
 import { ChatModule } from 'src/app/shared/component/chat/chat.module';
-import { selectMessages, selectLoadingState, selectThreadIdET, selectThreadIdGT, selectThreadIdQT } from 'src/app/LLM/state/llm.selector';
+import { selectMessages, selectLLMThreadIdET, selectLLMThreadIdGT, selectLLMThreadIdQT, selectIterativePlanningSelectedStep, selectLLMChatMessages } from '../../state/iterative-planning.selector';
 import { createPlanProperty } from '../../state/iterative-planning.actions';
 import { GoalType, PlanProperty } from '../../domain/plan-property/plan-property';
 import { take, filter, map, mergeMap, combineLatestWith } from 'rxjs/operators';
 import { selectIterativePlanningProject } from '../../state/iterative-planning.selector';
-import { eraseLLMHistory } from 'src/app/LLM/state/llm.actions';
-import { selectIsLoading } from 'src/app/LLM/components/llm-base/llm-base.component.selector';
+import { eraseLLMHistory } from '../../state/iterative-planning.actions';
+import { selectIsLLMChatLoading } from '../../state/iterative-planning.selector';
 import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-explanation-chat-llm',
@@ -22,31 +22,26 @@ import { Subscription } from 'rxjs';
 export class ExplanationChatLlmComponent implements OnInit, OnDestroy {
   private store = inject(Store);
 
-  messages$ = this.store.select(selectMessages);
-  loadingState$ = this.store.select(selectLoadingState);
-  isLoading$ = this.store.select(selectIsLoading);
-  threadIdGT$ = this.store.select(selectThreadIdGT);
-  threadIdQT$ = this.store.select(selectThreadIdQT);
-  threadIdET$ = this.store.select(selectThreadIdET);
+  messages$ = this.store.select(selectLLMChatMessages);
+  loadingState$ = this.store.select(selectIsLLMChatLoading);
+  isLoading$ = this.store.select(selectIsLLMChatLoading);
+  threadIdGT$ = this.store.select(selectLLMThreadIdGT);
+  threadIdQT$ = this.store.select(selectLLMThreadIdQT);
+  threadIdET$ = this.store.select(selectLLMThreadIdET);
   project$ = this.store.select(selectIterativePlanningProject);
-
+  step$ = this.store.select(selectIterativePlanningSelectedStep);
+  stepId$ = this.step$.pipe(map(step => step?._id));
   // Add subscription management
   private subscriptions: Subscription[] = [];
 
   onUserMessage(request: string) {
-    // Combine all thread IDs and take the first emission from each
-    this.threadIdGT$.pipe(
+    this.stepId$.pipe(
       take(1),
-      combineLatestWith(
-        this.threadIdQT$.pipe(take(1)),
-        this.threadIdET$.pipe(take(1))
-      )  // Remove array syntax, use direct parameters
     ).subscribe({
-      next: ([threadIdGt, threadIdQt, threadIdEt]) => {
+      next: (iterationStepId) => {
         this.store.dispatch(sendMessageToLLMQTthenGTTranslators({
-          request: request,
-          threadIdQt,
-          threadIdGt,
+          question: request,
+          iterationStepId: iterationStepId,
         }));
       },
       error: (error) => console.error('Error sending message:', error)

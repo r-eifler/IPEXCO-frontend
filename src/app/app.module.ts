@@ -107,13 +107,8 @@ import {
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { NgxChartsModule } from "@swimlane/ngx-charts";
-import { LlmBaseComponent } from './LLM/components/llm-base/llm-base.component';
-import { LlmEtChatComponent } from './LLM/translators/llm-et/llm-chat-component.component';
-import { LlmGtChatComponent } from './LLM/translators/llm-gt/llm-chat-component.component';
-import { LlmQtChatComponent } from './LLM/translators/llm-qt/llm-chat-component.component';
 import { LLMService } from './LLM/service/llm.service';
-import { SendMessageToLLMEffect } from './LLM/state/effects/send-message.effect';
-import { LLMChatFeature, llmChatReducer } from './LLM/state/llm.reducer';
+import { SendMessageToLLMEffect } from './iterative_planning/state/effects/send-message.effect';
 import { appRoutes } from "./app.routes";
 import { DemoBaseComponent } from "./components/demo/demo-base/demo-base.component";
 import { DemoCollectionComponent } from "./components/demo/demo-collection/demo-collection.component";
@@ -303,11 +298,7 @@ import { PageModule } from './shared/component/page/page.module';
     ProjectSettingsContainerComponent,
     IterativePlanningBaseComponent,
     GoalListHighlightedComponent,
-    PropertyTemplateCreatorComponent,
-    LlmBaseComponent,
-    LlmEtChatComponent,
-    LlmGtChatComponent,
-    LlmQtChatComponent
+    PropertyTemplateCreatorComponent
   ],
   imports: [
     StoreModule.forRoot(

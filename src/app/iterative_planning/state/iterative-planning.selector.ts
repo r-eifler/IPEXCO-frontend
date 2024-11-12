@@ -96,6 +96,7 @@ export const selectIterationStepIdsWithoutExplanations = createSelector(selectIt
 
 export const selectLLMChatMessages = createSelector(selectIterativePlanningFeature, (state) => state.LLMMessages)
 export const selectLLMChatLoadingState = createSelector(selectIterativePlanningFeature, ({ LLMChatLoadingState }) => LLMChatLoadingState);
+export const selectIsLLMChatLoading = createSelector(selectLLMChatLoadingState, (state) => state === LoadingState.Loading);
 
 export const selectLLMThreadIdQT = createSelector(selectIterativePlanningFeature, ({ LLMThreadIdQT }) => LLMThreadIdQT);
 export const selectLLMThreadIdGT = createSelector(selectIterativePlanningFeature, ({ LLMThreadIdGT }) => LLMThreadIdGT);

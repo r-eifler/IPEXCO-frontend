@@ -18,10 +18,6 @@ import { UserMainPageComponent } from "./components/user/user-main-page/user-mai
 import { ProjectCollectionComponent } from "./project-meta/components/project-collection/project-collection.component";
 import { ProjectBaseComponent } from "./project/components/project-base/project-base.component";
 import { AuthGuard } from "./route-guards/auth-guard.guard";
-import { LlmBaseComponent } from "./LLM/components/llm-base/llm-base.component";
-import { LlmQtChatComponent } from "src/app/LLM/translators/llm-qt/llm-chat-component.component";
-import { LlmGtChatComponent } from "src/app/LLM/translators/llm-gt/llm-chat-component.component";
-import { LlmEtChatComponent } from "src/app/LLM/translators/llm-et/llm-chat-component.component";
 
 export const appRoutes: Routes = [
   { path: "", component: MainPageComponent },
@@ -32,26 +28,26 @@ export const appRoutes: Routes = [
     component: UserMainPageComponent,
     canActivate: [AuthGuard],
   },
-  {
-    path: 'llm',
-    component: LlmBaseComponent,
-    canActivate: [AuthGuard],
-  },
-  {
-    path: 'llm-qt',
-    component: LlmQtChatComponent,
-    canActivate: [AuthGuard],
-  },
-  {
-    path: 'llm-gt',
-    component: LlmGtChatComponent,
-    canActivate: [AuthGuard],
-  },
-  {
-    path: 'llm-et',
-    component: LlmEtChatComponent,
-    canActivate: [AuthGuard],
-  },
+  // {
+  //   path: 'llm',
+  //   component: LlmBaseComponent,
+  //   canActivate: [AuthGuard],
+  // },
+  // {
+  //   path: 'llm-qt',
+  //   component: LlmQtChatComponent,
+  //   canActivate: [AuthGuard],
+  // },
+  // {
+  //   path: 'llm-gt',
+  //   component: LlmGtChatComponent,
+  //   canActivate: [AuthGuard],
+  // },
+  // {
+  //   path: 'llm-et',
+  //   component: LlmEtChatComponent,
+  //   canActivate: [AuthGuard],
+  // },
   {
     path: "projects",
     component: ProjectCollectionComponent,

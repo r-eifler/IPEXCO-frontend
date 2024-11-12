@@ -13,7 +13,6 @@ import { poseAnswer, questionPosed, questionPosedLLM, registerGlobalExplanationC
 import { selectExplanation, selectIterationStep, selectIterativePlanningProject, selectIterativePlanningProjectExplanationInterfaceType, selectIterativePlanningProperties, selectLLMThreadIdET } from "../iterative-planning.selector";
 import { selectIterationStepbyId } from "../../../iterative_planning/state/iterative-planning.selector";
 import { ExplanationInterfaceType } from "src/app/project/domain/general-settings";
-import { getAnswerLLM } from "../../domain/explanation/answer-factory-llm";
 import { LLMService } from "src/app/LLM/service/llm.service";
 import { catchError } from "rxjs/operators";
 import { of } from "rxjs";
@@ -68,7 +67,8 @@ export class QuestionQueueEffect {
       return this.store.select(selectExplanation(hash)).pipe(
         filter(explanation => explanation?.status === ExplanationRunStatus.failed || explanation?.status === ExplanationRunStatus.finished),
         take(1),
-        map((explanation) => 
+        concatLatestFrom(() => [this.store.select(selectIterativePlanningProperties)]),
+        map(([explanation, properties]) => 
           ({question, explanation: mapComputeBase(iterationStep, question, getComputedBase(question.questionType, explanation)), question_type: question.questionType, questionArguments: [properties[question.propertyId]], iterationStepId: iterationStep._id})
         ),
         concatLatestFrom(({question, explanation, question_type, questionArguments,iterationStepId}) => [
@@ -77,7 +77,7 @@ export class QuestionQueueEffect {
           this.store.select(selectIterativePlanningProperties),
           this.store.select(selectIterationStepbyId(iterationStepId))]),
         switchMap(([{question, explanation, question_type, questionArguments, iterationStepId}, threadIdET, project, properties, iterationStep]) => {
-            return this.LLMService.postMessageET$(question, explanation,question_type, questionArguments, iterationStep, project, Object.values(properties), threadIdET).pipe(
+            return this.LLMService.postMessageET$(naturalLanguageQuestion, explanation,question_type, questionArguments, iterationStep, project, Object.values(properties), threadIdET).pipe(
                 switchMap(response => [sendMessageToLLMExplanationTranslatorSuccess({ response: response.response, threadId: response.threadId })]),
                 catchError(() => of(sendMessageToLLMExplanationTranslatorFailure()))
             );

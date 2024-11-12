@@ -3,7 +3,6 @@ import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { catchError, filter, first, map, switchMap } from "rxjs/operators";
 import { of } from "rxjs";
 import { LLMService } from "../../../LLM/service/llm.service";
-import { sendMessageToLLM, sendMessageToLLMFailure, sendMessageToLLMQuestionTranslator, sendMessageToLLMQuestionTranslatorFailure, sendMessageToLLMQuestionTranslatorSuccess, sendMessageToLLMSuccess, sendMessageToLLMGoalTranslator, sendMessageToLLMGoalTranslatorSuccess, sendMessageToLLMGoalTranslatorFailure, sendMessageToLLMExplanationTranslator, sendMessageToLLMExplanationTranslatorSuccess, sendMessageToLLMExplanationTranslatorFailure, sendMessageToLLMAllTranslatorsSuccess, sendMessageToLLMAllTranslatorsFailure, sendMessageToLLMAllTranslators, sendMessageToLLMQTthenGTTranslators, sendMessageToLLMQTthenGTTranslatorsSuccess, sendMessageToLLMQTthenGTTranslatorsFailure } from "../llm.actions";
 import { concatLatestFrom } from "@ngrx/operators";
 import { Store } from "@ngrx/store";
 import { selectLLMChatMessages, selectLLMThreadIdQT, selectLLMThreadIdGT, selectLLMThreadIdET } from "../iterative-planning.selector";
@@ -15,10 +14,11 @@ import { selectSatisfiedSoftGoals } from "src/app/iterative_planning/view/step-d
 import { selectEnforcedGoals } from "src/app/iterative_planning/view/step-detail-view/step-detail-view.component.selector";
 import { ExplanationInterfaceType } from "src/app/project/domain/general-settings";
 import { PlanRunStatus } from "src/app/iterative_planning/domain/plan";
-import { poseAnswer, poseAnswerLLM, questionPosed, questionPosedLLM } from "src/app/iterative_planning/state/iterative-planning.actions";
+import { poseAnswer, poseAnswerLLM, questionPosed, questionPosedLLM, sendMessageToLLMExplanationTranslator, sendMessageToLLMExplanationTranslatorFailure, sendMessageToLLMExplanationTranslatorSuccess, sendMessageToLLMGoalTranslator, sendMessageToLLMGoalTranslatorFailure, sendMessageToLLMGoalTranslatorSuccess, sendMessageToLLMQTthenGTTranslators, sendMessageToLLMQTthenGTTranslatorsFailure, sendMessageToLLMQTthenGTTranslatorsSuccess } from "src/app/iterative_planning/state/iterative-planning.actions";
 import { Question } from "src/app/iterative_planning/domain/interface/question";
 import { getComputedBase } from "../../domain/explanation/answer-factory";
 import { mapComputeBase } from "../../domain/explanation/answer-factory";
+import { QuestionType } from "src/app/iterative_planning/domain/explanation/explanations";
 @Injectable()
 export class SendMessageToLLMEffect{
 
@@ -58,9 +58,8 @@ export class SendMessageToLLMEffect{
             this.store.select(selectIterativePlanningProperties), 
             this.store.select(selectLLMThreadIdGT)
         ]),
-        switchMap(([goalDescription, project, properties, threadIdGT]) => {
-           
-            return this.service.postMessageGT$(goalDescription, project, Object.values(properties), threadIdGT).pipe(
+        switchMap(([action, project, properties, threadIdGT]) => {
+            return this.service.postMessageGT$(action.goalDescription, project, Object.values(properties), threadIdGT).pipe(
                 map(response => sendMessageToLLMGoalTranslatorSuccess({response: response.response, threadId: response.threadId})),
                 catchError(() => of(sendMessageToLLMGoalTranslatorFailure()))
             );
@@ -96,19 +95,17 @@ export class SendMessageToLLMEffect{
 
     public sendMessageToQuestionAndGoalTranslator$ = createEffect(() => this.actions$.pipe(
         ofType(sendMessageToLLMQTthenGTTranslators),
-        concatLatestFrom(({_, iterationStepId}) => [
+        concatLatestFrom(({question, iterationStepId}) => [
             this.store.select(selectIterativePlanningProject),
             this.store.select(selectIterativePlanningProperties),
             this.store.select(selectIterationStepbyId(iterationStepId)),
             this.store.select(selectLLMThreadIdGT),
             this.store.select(selectLLMThreadIdQT)
         ]),
-        switchMap(([{question, iterationStepId}, project, properties, iterationStep, threadIdGT, threadIdQT]) => {
-            // Create and stringify Question Translator request
-            
+        switchMap(([{question, iterationStepId}, project, properties, iterationStep, threadIdGT, threadIdQT]) => {            
             return this.service.postMessageQTthenGT$(question, iterationStep, project, Object.values(properties), threadIdQT, threadIdGT).pipe(
             ).pipe(
-                switchMap(response => [sendMessageToLLMQTthenGTTranslatorsSuccess(response.threadIdQt, response.threadIdGt), questionPosedLLM({question: response.question, naturalLanguageQuestion: question})]),
+                switchMap(response => [sendMessageToLLMQTthenGTTranslatorsSuccess({threadIdQt: response.threadIdQt, threadIdGt: response.threadIdGt}), questionPosedLLM({question: response.question, naturalLanguageQuestion: question})]),
                 catchError(() => of(sendMessageToLLMQTthenGTTranslatorsFailure()))
             );
         })
@@ -122,7 +119,7 @@ export class SendMessageToLLMEffect{
             this.store.select(selectIterativePlanningProperties),
             this.store.select(selectIterationStepbyId(iterationStepId))]),
         switchMap(([{question, explanation, question_type, questionArguments, iterationStepId}, threadIdET, project, properties, iterationStep]) => {
-            return this.service.postMessageET$(question, explanation question_type, questionArguments, iterationStep, project, Object.values(properties), threadIdET).pipe(
+            return this.service.postMessageET$(question, explanation, question_type as QuestionType, questionArguments, iterationStep, project, Object.values(properties), threadIdET).pipe(
                 switchMap(response => [sendMessageToLLMExplanationTranslatorSuccess({ response: response.response, threadId: response.threadId })]),
                 catchError(() => of(sendMessageToLLMExplanationTranslatorFailure()))
             );

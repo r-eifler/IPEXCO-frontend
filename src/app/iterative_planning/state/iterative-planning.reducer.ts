@@ -19,6 +19,7 @@ import {
     cancelNewIterationStep,
     createIterationStepSuccess,
     deselectIterationStep,
+    eraseLLMHistory,
     initNewIterationStep,
     loadIterationSteps,
     loadIterationStepsSuccess,
@@ -30,23 +31,18 @@ import {
     questionPosed,
     questionPosedLLM,
     selectIterationStep,
+    sendMessageToLLMExplanationTranslator,
     updateNewIterationStep,
 } from "./iterative-planning.actions";
 import {
-  sendMessageToLLM,
-  sendMessageToLLMSuccess,
-  eraseLLMHistory,
-  sendMessageToLLMQuestionTranslator,
   sendMessageToLLMGoalTranslator,
-  sendMessageToLLMExplanationTranslator,
-  sendMessageToLLMQuestionTranslatorSuccess,
   sendMessageToLLMGoalTranslatorSuccess,
   sendMessageToLLMExplanationTranslatorSuccess,
   sendMessageToLLMExplanationTranslatorFailure,
   sendMessageToLLMQTthenGTTranslators,
   sendMessageToLLMQTthenGTTranslatorsSuccess,
   sendMessageToLLMQTthenGTTranslatorsFailure,
-} from "src/app/LLM/state/llm.actions";
+} from "./iterative-planning.actions";
 
 
 type messageType = ExplanationMessage['message'];
@@ -240,18 +236,18 @@ export const iterativePlanningReducer = createReducer(
     ],
   })),
 
-  // LLM STUFF TO BE UPDATED
+//   // LLM STUFF TO BE UPDATED
 
-  on(sendMessageToLLM, (state, { request }): IterativePlanningState => ({
-    ...state,
-    LLMChatLoadingState: LoadingState.Loading,
-    LLMMessages: [...state.LLMMessages, { role: 'user', content: request }]
-})),
-on(sendMessageToLLMSuccess, (state, { response }): IterativePlanningState => ({
-    ...state,
-    LLMChatLoadingState: LoadingState.Done,
-    LLMMessages: [...state.LLMMessages, { role: 'assistant', content: response }]
-})),
+//   on(sendMessageToLLM, (state, { request }): IterativePlanningState => ({
+//     ...state,
+//     LLMChatLoadingState: LoadingState.Loading,
+//     LLMMessages: [...state.LLMMessages, { role: 'user', content: request }]
+// })),
+// on(sendMessageToLLMSuccess, (state, { response }): IterativePlanningState => ({
+//     ...state,
+//     LLMChatLoadingState: LoadingState.Done,
+//     LLMMessages: [...state.LLMMessages, { role: 'assistant', content: response }]
+// })),
 on(eraseLLMHistory, (state): IterativePlanningState => ({
     ...state,
     LLMChatLoadingState: LoadingState.Initial,
@@ -260,19 +256,19 @@ on(eraseLLMHistory, (state): IterativePlanningState => ({
     LLMThreadIdGT: '',
     LLMThreadIdET: ''
 })),
-on(sendMessageToLLMQuestionTranslator, (state, action): IterativePlanningState => ({
-    ...state,
-    LLMChatLoadingState: LoadingState.Loading,
-})),
-on(sendMessageToLLMQuestionTranslatorSuccess, (state, action): IterativePlanningState => ({
-    ...state,
-    LLMChatLoadingState: LoadingState.Done,
-    LLMThreadIdQT: action.threadId
-})),
+// on(sendMessageToLLMQuestionTranslator, (state, action): IterativePlanningState => ({
+//     ...state,
+//     LLMChatLoadingState: LoadingState.Loading,
+// })),
+// on(sendMessageToLLMQuestionTranslatorSuccess, (state, action): IterativePlanningState => ({
+//     ...state,
+//     LLMChatLoadingState: LoadingState.Done,
+//     LLMThreadIdQT: action.threadId
+// })),
 on(sendMessageToLLMGoalTranslator, (state, action): IterativePlanningState => ({
     ...state,
     LLMChatLoadingState: LoadingState.Loading,
-    LLMMessages: [...state.LLMMessages, {role: 'user', content: action.request}]
+    LLMMessages: [...state.LLMMessages, {role: 'user', content: action.goalDescription}]
 })),
 on(sendMessageToLLMGoalTranslatorSuccess, (state, action): IterativePlanningState => ({
     ...state,
@@ -283,7 +279,6 @@ on(sendMessageToLLMGoalTranslatorSuccess, (state, action): IterativePlanningStat
 on(sendMessageToLLMExplanationTranslator, (state, action): IterativePlanningState => ({
     ...state,
     LLMChatLoadingState: LoadingState.Loading,
-    LLMThreadIdET: action.threadId
 })),
 on(sendMessageToLLMExplanationTranslatorSuccess, (state, action): IterativePlanningState => ({
     ...state,
@@ -298,7 +293,7 @@ on(sendMessageToLLMExplanationTranslatorFailure, (state): IterativePlanningState
 on(sendMessageToLLMQTthenGTTranslators, (state, action): IterativePlanningState => ({
     ...state,
     LLMChatLoadingState: LoadingState.Loading,
-    LLMMessages: [...state.LLMMessages, {role: 'user', content: action.request}]
+    LLMMessages: [...state.LLMMessages, {role: 'user', content: action.question}]
 })),
 on(sendMessageToLLMQTthenGTTranslatorsSuccess, (state, action): IterativePlanningState => ({
     ...state,

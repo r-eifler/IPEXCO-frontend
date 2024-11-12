@@ -1,17 +1,18 @@
 import { AsyncPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { sendMessageToLLM, sendMessageToLLMGoalTranslator } from 'src/app/LLM/state/llm.actions';
+import { sendMessageToLLMGoalTranslator } from '../../state/iterative-planning.actions';
 import { ChatModule } from 'src/app/shared/component/chat/chat.module';
 import { DialogModule } from 'src/app/shared/component/dialog/dialog.module';
 import { selectIsLoading, selectMessages } from './property-creation-chat.component.selector';
-import { selectThreadIdGT } from 'src/app/LLM/state/llm.selector';
+import { selectLLMThreadIdGT } from '../../state/iterative-planning.selector';
 import { createPlanProperty } from '../../state/iterative-planning.actions';
 import { MatDialogRef } from '@angular/material/dialog';
 import { GoalType, PlanProperty } from '../../domain/plan-property/plan-property';
 import { take, filter, map, mergeMap } from 'rxjs/operators';
 import { selectIterativePlanningProject } from '../../state/iterative-planning.selector';
-import { eraseLLMHistory } from 'src/app/LLM/state/llm.actions';
+import { eraseLLMHistory } from '../../state/iterative-planning.actions';
+import { selectLLMChatMessages } from '../../state/iterative-planning.selector';
 @Component({
   selector: 'app-property-creation-chat',
   standalone: true,
@@ -24,9 +25,9 @@ export class PropertyCreationChatComponent {
   private store = inject(Store);
   private dialogRef = inject(MatDialogRef)
 
-  messages$ = this.store.select(selectMessages);
+  messages$ = this.store.select(selectLLMChatMessages);
   isLoading$ = this.store.select(selectIsLoading);
-  threadIdGT$ = this.store.select(selectThreadIdGT);
+  threadIdGT$ = this.store.select(selectLLMThreadIdGT);
   project$ = this.store.select(selectIterativePlanningProject);
 
   // onUserMessage(request: string) {
@@ -35,7 +36,7 @@ export class PropertyCreationChatComponent {
 
   onUserMessage(request: string) {
     this.threadIdGT$.pipe(take(1)).subscribe(threadId => {
-      this.store.dispatch(sendMessageToLLMGoalTranslator({request, threadId}));
+      this.store.dispatch(sendMessageToLLMGoalTranslator({goalDescription: request}));
     });
   }
 
