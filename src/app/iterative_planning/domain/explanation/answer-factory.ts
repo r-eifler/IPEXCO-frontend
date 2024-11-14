@@ -5,6 +5,7 @@ import { GlobalExplanation, QuestionType } from "./explanations";
 
 
 export function getComputedBase(questionType: QuestionType, explanation: GlobalExplanation): string[][] {
+  console.log("Explanation: ", explanation.MGCS, explanation.MUGS, explanation.status);
   switch(questionType) {
     case QuestionType.WHY_PLAN:
       return explanation?.MUGS;
@@ -168,6 +169,7 @@ function filterHowPlan(iterationStep: IterationStep, computed: string[][]): stri
 }
 
 function whyAnswerComputer(step: IterationStep, question: Question, computed: string[][]): string[][] {
+  console.log("Computed: " + computed);
   return computed
     .filter( MUGS => MUGS.every(id =>
                     ((step.plan !== undefined) &&

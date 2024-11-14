@@ -8,7 +8,7 @@ type ChatMessage = Omit<Message, 'role'> & { role: Role };
 
 export const selectMessages = createSelector(selectLlmMessages, (messages) => messages?.map((message): ChatMessage => ({
   ...message,
-  role: message.role === 'user' ? 'receiver' : 'sender',
+  role: message.role
 })));
 
 export const selectIsLoading = createSelector(selectLLMChatLoadingState, (state) => state === LoadingState.Loading);

@@ -94,10 +94,10 @@ export const selectIterationStepIdsWithoutExplanations = createSelector(selectIt
   return stepExplanationMissing;
 })
 
-export const selectLLMChatMessages = createSelector(selectIterativePlanningFeature, (state) => state.LLMMessages)
+export const selectLLMChatMessages = createSelector(selectIterativePlanningFeature, (state) => state.LLMContext.visibleMessages)
 export const selectLLMChatLoadingState = createSelector(selectIterativePlanningFeature, ({ LLMChatLoadingState }) => LLMChatLoadingState);
 export const selectIsLLMChatLoading = createSelector(selectLLMChatLoadingState, (state) => state === LoadingState.Loading);
-
-export const selectLLMThreadIdQT = createSelector(selectIterativePlanningFeature, ({ LLMThreadIdQT }) => LLMThreadIdQT);
-export const selectLLMThreadIdGT = createSelector(selectIterativePlanningFeature, ({ LLMThreadIdGT }) => LLMThreadIdGT);
-export const selectLLMThreadIdET = createSelector(selectIterativePlanningFeature, ({ LLMThreadIdET }) => LLMThreadIdET);
+export const selectVisibleMessagesbyId = (id: string) => createSelector(selectLLMChatMessages, (messages) => messages?.filter(m => m.iterationStepId == id));
+export const selectLLMThreadIdQT = createSelector(selectIterativePlanningFeature, ({ LLMContext }) => LLMContext.threadIdQT);
+export const selectLLMThreadIdGT = createSelector(selectIterativePlanningFeature, ({ LLMContext }) => LLMContext.threadIdGT);
+export const selectLLMThreadIdET = createSelector(selectIterativePlanningFeature, ({ LLMContext }) => LLMContext.threadIdET);

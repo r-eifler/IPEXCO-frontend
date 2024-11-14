@@ -4,6 +4,7 @@ import { ExplanationMessage } from "../domain/interface/explanation-message";
 import { Question } from "../domain/interface/question";
 import { IterationStep, ModIterationStep } from "../domain/iteration_step";
 import { PlanProperty } from "../domain/plan-property/plan-property";
+import { LLMContext } from "src/app/LLM/domain/context";
 
 
 // Project
@@ -93,7 +94,7 @@ export const poseAnswerLLM = createAction('[iterative-planning] pose answer LLM'
 export const eraseLLMHistory = createAction('[llm] erase history');
 
 export const sendMessageToLLMGoalTranslator = createAction('[llm] send message to goal translator', props<{goalDescription: string}>());
-export const sendMessageToLLMGoalTranslatorSuccess = createAction('[llm] send message to goal translator success', props<{response: string, threadId: string}>()); // QTYPE ; GOAL ; EXISTING
+export const sendMessageToLLMGoalTranslatorSuccess = createAction('[llm] send message to goal translator success', props<{response: {formula: string, shortName: string}, threadId: string}>());
 export const sendMessageToLLMGoalTranslatorFailure = createAction('[llm] send message to goal translator failure');
 
 export const sendMessageToLLMExplanationTranslator = createAction('[llm] send message to explanation translator', props<{question: string, explanation: string[][], question_type: string, questionArguments: PlanProperty[], iterationStepId: string}>());
@@ -103,3 +104,7 @@ export const sendMessageToLLMExplanationTranslatorFailure = createAction('[llm] 
 export const sendMessageToLLMQTthenGTTranslators = createAction('[llm] send message to QTthenGT translators', props<{question: string, iterationStepId: string}>());
 export const sendMessageToLLMQTthenGTTranslatorsSuccess = createAction('[llm] send message to QTthenGT translators success', props<{threadIdQt: string, threadIdGt: string}>());
 export const sendMessageToLLMQTthenGTTranslatorsFailure = createAction('[llm] send message to QTthenGT translators failure');
+
+export const loadLLMContext = createAction('[llm] load LLM context', props<{projectId: string}>());
+export const loadLLMContextSuccess = createAction('[llm] load LLM context success', props<{LLMContext: LLMContext}>());
+export const loadLLMContextFailure = createAction('[llm] load LLM context failure');

@@ -3,7 +3,7 @@ import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { catchError, switchMap } from "rxjs/operators";
 import { of } from "rxjs";
 import { IterativePlanningProjectService } from "../../service/project.service";
-import { loadIterationSteps, loadPlanProperties, loadProject, loadProjectFailure, loadProjectSuccess } from "../iterative-planning.actions";
+import { loadIterationSteps, loadLLMContext, loadPlanProperties, loadProject, loadProjectFailure, loadProjectSuccess } from "../iterative-planning.actions";
 import { Store } from "@ngrx/store";
 
 @Injectable()
@@ -20,7 +20,8 @@ export class LoadIterativePlanningProjectEffect{
             switchMap(project => [
                 loadProjectSuccess({project}), 
                 loadPlanProperties({id}), 
-                loadIterationSteps({id})
+                loadIterationSteps({ id }),
+                loadLLMContext({projectId: id})
             ]),
             catchError(() => of(loadProjectFailure())),
         ))

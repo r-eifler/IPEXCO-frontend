@@ -1,6 +1,6 @@
 import { inject, Injectable } from "@angular/core";
 import { Observable, of } from "rxjs";
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpParams } from "@angular/common/http";
 import { environment } from "src/environments/environment";
 import { catchError, concatMap, map, tap } from "rxjs/operators";
 import { IHTTPData } from "src/app/interface/http-data.interface";
@@ -14,6 +14,7 @@ import { IterationStep, StepStatus } from "src/app/iterative_planning/domain/ite
 import { PlanRunStatus } from "src/app/iterative_planning/domain/plan";
 import { QuestionType } from "src/app/iterative_planning/domain/explanation/explanations";
 import { Store } from "@ngrx/store";
+import { LLMContext } from "../domain/context";
 @Injectable()
 export class LLMService{
 
@@ -29,7 +30,7 @@ export class LLMService{
     //     );
     // }
     
-    postMessageGT$(request: string, project: Project, properties: PlanProperty[], threadId: string): Observable<{response: string, threadId: string}> {
+    postMessageGT$(request: string, project: Project, properties: PlanProperty[], threadId: string): Observable<{response:{ formula: string, shortName: string }, threadId: string}> {
         const goalTranslationRequest: GoalTranslationRequest = {
             goalDescription: request,
             predicates: project.baseTask.model.predicates,
@@ -38,7 +39,7 @@ export class LLMService{
         };
         const requestString = goalTranslationRequestToString(goalTranslationRequest);
         console.log(requestString);
-        return this.http.post<IHTTPData<{response: string, threadId: string}>>(this.BASE_URL + 'gt', { data: requestString, threadId: threadId }).pipe(
+        return this.http.post<IHTTPData<{response:{ formula: string, shortName: string }, threadId: string}>>(this.BASE_URL + 'gt', { data: requestString, threadId: threadId, originalRequest: request, projectId: project._id}).pipe(
             map(({ data }) => data),
             tap(console.log)
         );
@@ -65,7 +66,7 @@ export class LLMService{
             unsatisfiedGoals: properties.filter(p => !iterationStep.plan.satisfied_properties.includes(p._id)),
             existingPlanProperties: Object.values(properties)
           };
-        return this.http.post<IHTTPData<{response: string, threadId: string}>>(this.BASE_URL + 'et', { data: request, threadId: threadId }).pipe(
+        return this.http.post<IHTTPData<{response: string, threadId: string}>>(this.BASE_URL + 'et', { data: request, threadId: threadId, iterationStepId: iterationStep._id, projectId: project._id, originalRequest: question}).pipe(
             map(({ data }) => data),
             tap(console.log)
         );
@@ -98,11 +99,23 @@ export class LLMService{
         const gtRequestString = goalTranslationRequestToString(goalTranslationRequest);
 
         console.log(qtRequestString, gtRequestString);
-        return this.http.post<IHTTPData<{ gtResponse: string, qtResponse: string, threadIdQt: string, threadIdGt: string, questionType: QuestionType, goal: string, question:Question}>>(this.BASE_URL + 'qt-then-gt', { qtRequest: qtRequestString, gtRequest: gtRequestString, projectId: project._id, threadIdQt, threadIdGt, iterationStepId: iterationStep._id }).pipe(
+        return this.http.post<IHTTPData<{ gtResponse: string, qtResponse: string, threadIdQt: string, threadIdGt: string, questionType: QuestionType, goal: string, question:Question}>>(this.BASE_URL + 'qt-then-gt', { qtRequest: qtRequestString, gtRequest: gtRequestString, projectId: project._id, threadIdQt, threadIdGt, iterationStepId: iterationStep._id, originalQuestion: question }).pipe(
             map(({ data }) => data),
             tap(console.log)
         );
     }
+
+    getLLMContext$(id: string): Observable<LLMContext> {
+
+        let httpParams = new HttpParams();
+        httpParams = httpParams.set('projectId', id);
+        
+        return this.http.get<IHTTPData<LLMContext>>(this.BASE_URL,  { params: httpParams }).pipe(
+            map(({data}) => data)
+        )
+    }
 }
+
+
 
 

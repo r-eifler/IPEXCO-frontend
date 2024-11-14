@@ -63,6 +63,8 @@ export class QuestionQueueEffect {
     concatLatestFrom(({ question: { iterationStepId }}) => this.store.select(selectIterationStep(iterationStepId))),
     mergeMap(([{ question, naturalLanguageQuestion }, iterationStep]) => {
       const hash = explanationHash(iterationStep);
+      console.log("Submitted question: " + naturalLanguageQuestion);
+      console.log("Provided as: " + question);
 
       return this.store.select(selectExplanation(hash)).pipe(
         filter(explanation => explanation?.status === ExplanationRunStatus.failed || explanation?.status === ExplanationRunStatus.finished),
@@ -103,6 +105,6 @@ function composeAnswer(iterationStep: IterationStep, question: Question, explana
     iterationStepId: iterationStep._id,
     message,
     conflictSets,
-    role: 'system',
+    role: 'sender',
   }
 }

@@ -9,7 +9,7 @@ import { selectLLMThreadIdGT } from '../../state/iterative-planning.selector';
 import { createPlanProperty } from '../../state/iterative-planning.actions';
 import { MatDialogRef } from '@angular/material/dialog';
 import { GoalType, PlanProperty } from '../../domain/plan-property/plan-property';
-import { take, filter, map, mergeMap } from 'rxjs/operators';
+import { take, filter, map, mergeMap, switchMap } from 'rxjs/operators';
 import { selectIterativePlanningProject } from '../../state/iterative-planning.selector';
 import { eraseLLMHistory } from '../../state/iterative-planning.actions';
 import { selectLLMChatMessages } from '../../state/iterative-planning.selector';
@@ -25,10 +25,11 @@ export class PropertyCreationChatComponent {
   private store = inject(Store);
   private dialogRef = inject(MatDialogRef)
 
-  messages$ = this.store.select(selectLLMChatMessages);
+  messages$ = this.store.select(selectVisiblePPCreationMessages);
   isLoading$ = this.store.select(selectIsLoading);
   threadIdGT$ = this.store.select(selectLLMThreadIdGT);
   project$ = this.store.select(selectIterativePlanningProject);
+
 
   // onUserMessage(request: string) {
   //   this.store.dispatch(sendMessageToLLM({ request }))
@@ -46,19 +47,20 @@ export class PropertyCreationChatComponent {
       filter(messages => messages.length > 0),
       map(messages => {
         const lastAIMessage = messages[messages.length - 1];
+        const [formula, shortName] = lastAIMessage.content.split(';').map(s => s.trim());
         const lastUserMessage = messages[messages.length - 2];
-        return { formula: lastAIMessage.content, naturalLanguage: lastUserMessage?.content };
+        return { formula, shortName, naturalLanguage: lastUserMessage?.content };
       }),
       // Combine with the project$ observable
-      mergeMap(({ formula, naturalLanguage }) => 
+      mergeMap(({ formula, shortName, naturalLanguage }) => 
         this.project$.pipe(
           take(1),
-          map(project => ({ formula, naturalLanguage, project }))
+          map(project => ({ formula, shortName, naturalLanguage, project }))
         )
       )
-    ).subscribe(({ formula, naturalLanguage, project }) => {
+    ).subscribe(({ formula, shortName, naturalLanguage, project }) => {
       const planProperty: PlanProperty = {
-        name: 'New Property', 
+        name: shortName, 
         type: GoalType.LTL,
         naturalLanguage: naturalLanguage,
         naturalLanguageDescription: naturalLanguage,

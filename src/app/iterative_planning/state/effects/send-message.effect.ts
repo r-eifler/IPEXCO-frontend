@@ -14,7 +14,7 @@ import { selectSatisfiedSoftGoals } from "src/app/iterative_planning/view/step-d
 import { selectEnforcedGoals } from "src/app/iterative_planning/view/step-detail-view/step-detail-view.component.selector";
 import { ExplanationInterfaceType } from "src/app/project/domain/general-settings";
 import { PlanRunStatus } from "src/app/iterative_planning/domain/plan";
-import { poseAnswer, poseAnswerLLM, questionPosed, questionPosedLLM, sendMessageToLLMExplanationTranslator, sendMessageToLLMExplanationTranslatorFailure, sendMessageToLLMExplanationTranslatorSuccess, sendMessageToLLMGoalTranslator, sendMessageToLLMGoalTranslatorFailure, sendMessageToLLMGoalTranslatorSuccess, sendMessageToLLMQTthenGTTranslators, sendMessageToLLMQTthenGTTranslatorsFailure, sendMessageToLLMQTthenGTTranslatorsSuccess } from "src/app/iterative_planning/state/iterative-planning.actions";
+import { loadLLMContext, loadLLMContextFailure, loadLLMContextSuccess, poseAnswer, poseAnswerLLM, questionPosed, questionPosedLLM, sendMessageToLLMExplanationTranslator, sendMessageToLLMExplanationTranslatorFailure, sendMessageToLLMExplanationTranslatorSuccess, sendMessageToLLMGoalTranslator, sendMessageToLLMGoalTranslatorFailure, sendMessageToLLMGoalTranslatorSuccess, sendMessageToLLMQTthenGTTranslators, sendMessageToLLMQTthenGTTranslatorsFailure, sendMessageToLLMQTthenGTTranslatorsSuccess } from "src/app/iterative_planning/state/iterative-planning.actions";
 import { Question } from "src/app/iterative_planning/domain/interface/question";
 import { getComputedBase } from "../../domain/explanation/answer-factory";
 import { mapComputeBase } from "../../domain/explanation/answer-factory";
@@ -60,7 +60,7 @@ export class SendMessageToLLMEffect{
         ]),
         switchMap(([action, project, properties, threadIdGT]) => {
             return this.service.postMessageGT$(action.goalDescription, project, Object.values(properties), threadIdGT).pipe(
-                map(response => sendMessageToLLMGoalTranslatorSuccess({response: response.response, threadId: response.threadId})),
+                map(({ response: { formula, shortName }, threadId }) => sendMessageToLLMGoalTranslatorSuccess({response: {formula, shortName}, threadId})),
                 catchError(() => of(sendMessageToLLMGoalTranslatorFailure()))
             );
         })
@@ -124,5 +124,13 @@ export class SendMessageToLLMEffect{
                 catchError(() => of(sendMessageToLLMExplanationTranslatorFailure()))
             );
         })
+    ))
+
+    public loadLLMContext$ = createEffect(() => this.actions$.pipe(
+        ofType(loadLLMContext),
+        switchMap(({projectId}) => this.service.getLLMContext$(projectId).pipe(
+            map(LLMContext => loadLLMContextSuccess({LLMContext})),
+            catchError(() => of(loadLLMContextFailure())),
+        ))
     ))
 }
