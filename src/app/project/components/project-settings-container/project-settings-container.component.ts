@@ -7,6 +7,7 @@ import { Project } from '../../domain/project';
 import { updateProject } from '../../state/project.actions';
 import { PlanPropertyTemplate } from 'src/app/iterative_planning/domain/plan-property/plan-property-template';
 import { GeneralSettings } from '../../domain/general-settings';
+import { PlanningModel } from 'src/app/interface/planning-task';
 
 @Component({
   selector: 'app-project-settings-container',
@@ -17,6 +18,7 @@ export class ProjectSettingsContainerComponent implements OnInit {
 
   settings$: Observable<GeneralSettings>
   project$: Observable<Project>
+  model$: Observable<PlanningModel>
   templates$: Observable<PlanPropertyTemplate[]>
 
   constructor(
@@ -27,6 +29,9 @@ export class ProjectSettingsContainerComponent implements OnInit {
     this.templates$ = this.project$.pipe(
       map(p => p?.domainSpecification?.planPropertyTemplates),
       tap(console.log)
+    )
+    this.model$ = this.project$.pipe(
+      map(p => p?.baseTask?.model)
     )
   }
 

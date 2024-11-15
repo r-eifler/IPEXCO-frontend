@@ -300,7 +300,6 @@ import { PageModule } from './shared/component/page/page.module';
     ProjectSettingsContainerComponent,
     IterativePlanningBaseComponent,
     GoalListHighlightedComponent,
-    PropertyTemplateCreatorComponent,
     LlmBaseComponent
   ],
   imports: [
@@ -386,6 +385,7 @@ import { PageModule } from './shared/component/page/page.module';
     ActionCardModule,
     ChatModule,
     LabelModule,
+    PropertyTemplateCreatorComponent
   ],
   providers: [
     UserStore,
