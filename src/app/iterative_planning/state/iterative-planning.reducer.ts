@@ -244,13 +244,17 @@ export const iterativePlanningReducer = createReducer(
 //     LLMChatLoadingState: LoadingState.Done,
 //     LLMMessages: [...state.LLMMessages, { role: 'receiver', content: response }]
 // })),
-on(eraseLLMHistory, (state): IterativePlanningState => ({
+  on(eraseLLMHistory, (state): IterativePlanningState => ({
     ...state,
     LLMChatLoadingState: LoadingState.Initial,
-    LLMMessages: [],
-    LLMThreadIdQT: '',
-    LLMThreadIdGT: '',
-    LLMThreadIdET: ''
+    LLMContext: {
+      ...state.LLMContext,
+      visiblePPCreationMessages: [],
+      visibleMessages: [],
+      threadIdGT: '',
+      threadIdQT: '',
+      threadIdET: ''
+    }
 })),
 // on(sendMessageToLLMQuestionTranslator, (state, action): IterativePlanningState => ({
 //     ...state,
@@ -264,23 +268,34 @@ on(eraseLLMHistory, (state): IterativePlanningState => ({
 on(sendMessageToLLMGoalTranslator, (state, action): IterativePlanningState => ({
     ...state,
     LLMChatLoadingState: LoadingState.Loading,
-    LLMMessages: [...state.LLMMessages, {role: 'receiver', content: action.goalDescription}]
+    LLMContext: {
+      ...state.LLMContext,
+      visiblePPCreationMessages: [...state.LLMContext.visiblePPCreationMessages, {role: 'receiver', content: action.goalDescription, iterationStepId: state.selectedIterationStepId}]
+    }
 })),
 on(sendMessageToLLMGoalTranslatorSuccess, (state, action): IterativePlanningState => ({
     ...state,
     LLMChatLoadingState: LoadingState.Done,
-    LLMThreadIdGT: action.threadId,
-    LLMMessages: [...state.LLMMessages, {role: 'sender', content: `${action.response.formula} ; ${action.response.shortName}`}]
+    LLMContext: {
+      ...state.LLMContext,
+      threadIdGT: action.threadId,
+      visiblePPCreationMessages: [...state.LLMContext.visiblePPCreationMessages, { role: 'sender', content: `${action.response.formula} ; ${action.response.shortName}`, iterationStepId: state.selectedIterationStepId }]
+      
+    }
 })),
 on(sendMessageToLLMExplanationTranslator, (state, action): IterativePlanningState => ({
     ...state,
-    LLMChatLoadingState: LoadingState.Loading,
+  LLMChatLoadingState: LoadingState.Loading,
+    
 })),
 on(sendMessageToLLMExplanationTranslatorSuccess, (state, action): IterativePlanningState => ({
     ...state,
-    LLMThreadIdET: action.threadId,
+    LLMContext: {
+      ...state.LLMContext,
+      threadIdET: action.threadId,
+      visibleMessages: [...state.LLMContext.visibleMessages, {role: 'sender', content: action.response, iterationStepId: state.selectedIterationStepId}]
+    },
     LLMChatLoadingState: LoadingState.Done,
-    LLMMessages: [...state.LLMMessages, {role: 'sender', content: action.response}]
 })),
 on(sendMessageToLLMExplanationTranslatorFailure, (state): IterativePlanningState => ({
     ...state,
@@ -289,13 +304,19 @@ on(sendMessageToLLMExplanationTranslatorFailure, (state): IterativePlanningState
 on(sendMessageToLLMQTthenGTTranslators, (state, action): IterativePlanningState => ({
     ...state,
     LLMChatLoadingState: LoadingState.Loading,
-    LLMMessages: [...state.LLMMessages, {role: 'receiver', content: action.question}]
+    LLMContext: {
+      ...state.LLMContext,
+      visiblePPCreationMessages: [...state.LLMContext.visiblePPCreationMessages, {role: 'receiver', content: action.question, iterationStepId: state.selectedIterationStepId}]
+    }
 })),
 on(sendMessageToLLMQTthenGTTranslatorsSuccess, (state, action): IterativePlanningState => ({
     ...state,
     LLMChatLoadingState: LoadingState.Done,
-    LLMThreadIdQT: action.threadIdQt,
-    LLMThreadIdGT: action.threadIdGt,
+    LLMContext: {
+      ...state.LLMContext,
+      threadIdQT: action.threadIdQt,
+      threadIdGT: action.threadIdGt,
+    }
 })),
 on(sendMessageToLLMQTthenGTTranslatorsFailure, (state): IterativePlanningState => ({
     ...state,

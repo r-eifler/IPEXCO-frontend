@@ -101,3 +101,4 @@ export const selectVisibleMessagesbyId = (id: string) => createSelector(selectLL
 export const selectLLMThreadIdQT = createSelector(selectIterativePlanningFeature, ({ LLMContext }) => LLMContext.threadIdQT);
 export const selectLLMThreadIdGT = createSelector(selectIterativePlanningFeature, ({ LLMContext }) => LLMContext.threadIdGT);
 export const selectLLMThreadIdET = createSelector(selectIterativePlanningFeature, ({ LLMContext }) => LLMContext.threadIdET);
+export const selectVisiblePPCreationMessages = createSelector(selectIterativePlanningFeature, (state) => state.LLMContext.visiblePPCreationMessages);

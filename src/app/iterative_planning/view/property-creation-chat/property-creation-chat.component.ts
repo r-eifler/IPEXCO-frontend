@@ -5,7 +5,7 @@ import { sendMessageToLLMGoalTranslator } from '../../state/iterative-planning.a
 import { ChatModule } from 'src/app/shared/component/chat/chat.module';
 import { DialogModule } from 'src/app/shared/component/dialog/dialog.module';
 import { selectIsLoading, selectMessages } from './property-creation-chat.component.selector';
-import { selectLLMThreadIdGT } from '../../state/iterative-planning.selector';
+import { selectLLMThreadIdGT, selectVisiblePPCreationMessages } from '../../state/iterative-planning.selector';
 import { createPlanProperty } from '../../state/iterative-planning.actions';
 import { MatDialogRef } from '@angular/material/dialog';
 import { GoalType, PlanProperty } from '../../domain/plan-property/plan-property';
