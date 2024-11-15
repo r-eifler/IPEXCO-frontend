@@ -83,7 +83,17 @@ const initialState: IterativePlanningState = {
   selectedIterationStepId: undefined,
   stepAvailableQuestionTypes: [QuestionType.HOW_PLAN, QuestionType.WHY_PLAN],
   LLMChatLoadingState: LoadingState.Initial,
-  LLMContext: undefined,
+  LLMContext: {
+    threadIdQT: '',
+    threadIdGT: '',
+    threadIdET: '',
+    visibleMessages: [],
+    visiblePPCreationMessages: [],
+    seenByGTMessages: [],
+    seenByETMessages: [],
+    seenByQTMessages: [],
+    project: undefined
+  },
 
 };
 
@@ -95,7 +105,10 @@ export const iterativePlanningReducer = createReducer(
       ...state,
       project: { state: LoadingState.Loading, data: undefined },
       LLMChatLoadingState: LoadingState.Initial,
-      LLMContext: undefined
+      LLMContext: {
+        ...initialState.LLMContext,
+        project: state.project.data?._id
+      }
     })
   ),
   on(
@@ -306,7 +319,7 @@ on(sendMessageToLLMQTthenGTTranslators, (state, action): IterativePlanningState 
     LLMChatLoadingState: LoadingState.Loading,
     LLMContext: {
       ...state.LLMContext,
-      visiblePPCreationMessages: [...state.LLMContext.visiblePPCreationMessages, {role: 'receiver', content: action.question, iterationStepId: state.selectedIterationStepId}]
+      visibleMessages: [...state.LLMContext.visibleMessages, {role: 'receiver', content: action.question, iterationStepId: state.selectedIterationStepId}]
     }
 })),
 on(sendMessageToLLMQTthenGTTranslatorsSuccess, (state, action): IterativePlanningState => ({

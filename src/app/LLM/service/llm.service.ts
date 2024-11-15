@@ -9,7 +9,7 @@ import { ExplanationTranslationRequest, GoalTranslationRequest, QTthenGTResponse
 import { Question } from "src/app/iterative_planning/domain/interface/question";
 import { PlanProperty } from "src/app/iterative_planning/domain/plan-property/plan-property";
 import { Project } from "src/app/project/domain/project";
-import { goalTranslationRequestToString, questionTranslationRequestToString } from "../interfaces/translators_interfaces_strings";
+import { explanationTranslationRequestToString, goalTranslationRequestToString, questionTranslationRequestToString } from "../interfaces/translators_interfaces_strings";
 import { IterationStep, StepStatus } from "src/app/iterative_planning/domain/iteration_step";
 import { PlanRunStatus } from "src/app/iterative_planning/domain/plan";
 import { QuestionType } from "src/app/iterative_planning/domain/explanation/explanations";
@@ -57,7 +57,8 @@ export class LLMService{
         const request: ExplanationTranslationRequest = {
             question: question,
             question_type: question_type,
-            MUGS: explanation.map(e => e.map(p => properties[p])), // if question_type is not HOW
+            MUGS: (question_type != QuestionType.HOW_PLAN && question_type != QuestionType.WHY_PLAN) ? explanation.map(e => e.map(pid => properties.find(p => p._id == pid))) : [], // if question_type is not HOW or WHY
+            MGCS: (question_type == QuestionType.HOW_PLAN || question_type == QuestionType.HOW_PROPERTY) ? explanation.map(e => e.map(pid => properties.find(p => p._id == pid))) : [], // if question_type is HOW or HOW_PROPERTY
             questionArguments: questionArguments,
             predicates: project.baseTask.model.predicates,
             objects: project.baseTask.model.objects,
@@ -65,8 +66,9 @@ export class LLMService{
             satisfiedGoals: properties.filter(p => iterationStep.plan.satisfied_properties.includes(p._id)),
             unsatisfiedGoals: properties.filter(p => !iterationStep.plan.satisfied_properties.includes(p._id)),
             existingPlanProperties: Object.values(properties)
-          };
-        return this.http.post<IHTTPData<{response: string, threadId: string}>>(this.BASE_URL + 'et', { data: request, threadId: threadId, iterationStepId: iterationStep._id, projectId: project._id, originalRequest: question}).pipe(
+        };
+        const requestString = explanationTranslationRequestToString(request);
+        return this.http.post<IHTTPData<{response: string, threadId: string}>>(this.BASE_URL + 'et', { data: requestString, threadId: threadId, iterationStepId: iterationStep._id, projectId: project._id, originalRequest: question}).pipe(
             map(({ data }) => data),
             tap(console.log)
         );
