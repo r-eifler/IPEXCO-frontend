@@ -203,7 +203,6 @@ import { DeleteProjectEffect } from './project-meta/state/effects/delete-project
 import { LoadProjectMetaDataListEffect } from './project-meta/state/effects/load-project-meta-list.effect';
 import { projectMetaDataFeature, projectMetaDataReducer } from './project-meta/state/project-meta.reducer';
 import { ProjectBaseComponent } from "./project/components/project-base/project-base.component";
-import { ProjectOverviewComponent } from "./project/components/project-overview/project-overview.component";
 import { ProjectSettingsContainerComponent } from './project/components/project-settings-container/project-settings-container.component';
 import { PropertyTemplateCreatorComponent } from './project/components/property-template-creator/property-template-creator.component';
 import { SettingsComponent } from "./project/components/settings/settings.component";
@@ -224,6 +223,7 @@ import { ActionCardModule } from './shared/component/action-card/action-card.mod
 import { ChatModule } from './shared/component/chat/chat.module';
 import { LabelModule } from './shared/component/label/label.module';
 import { PageModule } from './shared/component/page/page.module';
+import { ProjectOverviewComponent } from './project/components/project-overview/project-overview.component';
 
 
 @NgModule({
@@ -244,7 +244,6 @@ import { PageModule } from './shared/component/page/page.module';
     DemoCollectionComponent,
     DemoBaseComponent,
     DemoSettingsComponent,
-    ProjectOverviewComponent,
     DemoCreatorComponent,
     DemoHelpComponent,
     DemoNavigatorComponent,
@@ -385,7 +384,8 @@ import { PageModule } from './shared/component/page/page.module';
     ActionCardModule,
     ChatModule,
     LabelModule,
-    PropertyTemplateCreatorComponent
+    PropertyTemplateCreatorComponent,
+    ProjectOverviewComponent,
   ],
   providers: [
     UserStore,

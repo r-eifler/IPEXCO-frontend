@@ -7,11 +7,26 @@ import { Project } from "../../domain/project";
 import { Router } from "@angular/router";
 import { Store } from "@ngrx/store";
 import { selectProject } from "../../state/project.selector";
+import { MatCardModule } from "@angular/material/card";
+import { AsyncPipe } from "@angular/common";
+import { MatIcon } from "@angular/material/icon";
+import { ProjectActionCardComponent } from "../project-action-card/project-action-card.component";
+import { AppRoutingModule } from "src/app-routing/app-routing.module";
+import { MatButtonModule } from "@angular/material/button";
 
 @Component({
   selector: "app-project-overview",
+  standalone: true,
+  imports: [
+    MatCardModule,
+    MatIcon,
+    AsyncPipe,
+    ProjectActionCardComponent,
+    AppRoutingModule,
+    MatButtonModule
+],
   templateUrl: "./project-overview.component.html",
-  styleUrls: ["./project-overview.component.css"],
+  styleUrls: ["./project-overview.component.scss"],
 })
 export class ProjectOverviewComponent implements OnInit {
 

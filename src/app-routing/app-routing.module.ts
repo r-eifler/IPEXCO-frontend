@@ -1,8 +1,9 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { RouterModule, Routes } from "@angular/router";
+import { TemplateFileUploadComponent } from "src/app/components/files/file-upload/file-upload.component";
 
-import { TemplateFileUploadComponent } from "../app/components/files/template-file-upload/template-file-upload.component";
+
 
 const routes: Routes = [
   { path: "domain-file", component: TemplateFileUploadComponent },
