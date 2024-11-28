@@ -288,7 +288,6 @@ on(sendMessageToLLMGoalTranslator, (state, action): IterativePlanningState => ({
 })),
 on(sendMessageToLLMGoalTranslatorSuccess, (state, action): IterativePlanningState => ({
     ...state,
-    LLMChatLoadingState: LoadingState.Done,
     LLMContext: {
       ...state.LLMContext,
       threadIdGT: action.threadId,
