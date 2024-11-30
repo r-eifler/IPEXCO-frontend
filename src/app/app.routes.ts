@@ -16,7 +16,7 @@ import { UserStudyNavigationComponent } from "./components/user-study/user-study
 import { UserStudyStartComponent } from "./components/user-study/user-study-start/user-study-start.component";
 import { UserMainPageComponent } from "./components/user/user-main-page/user-main-page.component";
 import { ProjectCollectionComponent } from "./project-meta/components/project-collection/project-collection.component";
-import { ProjectBaseComponent } from "./project/components/project-base/project-base.component";
+import { ProjectBaseComponent } from "./project/view/project-base/project-base.component";
 import { AuthGuard } from "./route-guards/auth-guard.guard";
 import { LlmBaseComponent } from "./LLM/components/llm-base/llm-base.component";
 
@@ -40,11 +40,9 @@ export const appRoutes: Routes = [
     canActivate: [AuthGuard],
   },
   {
-    path: "projects/:projectid",
-    // loadChildren: () => import('./project/project.module').then(m => m.ProjectModule),
-    component: ProjectBaseComponent,
+    path: "project",
+    loadChildren: () => import('./project/project.module').then(m => m.ProjectModule),
     canActivate: [AuthGuard],
-    children: [],
   },
   {
     path: "iterative-planning",

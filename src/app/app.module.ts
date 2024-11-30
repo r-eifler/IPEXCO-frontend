@@ -201,7 +201,7 @@ import { CreateProjectEffect } from './project-meta/state/effects/create-project
 import { DeleteProjectEffect } from './project-meta/state/effects/delete-project.effect';
 import { LoadProjectMetaDataListEffect } from './project-meta/state/effects/load-project-meta-list.effect';
 import { projectMetaDataFeature, projectMetaDataReducer } from './project-meta/state/project-meta.reducer';
-import { ProjectBaseComponent } from "./project/components/project-base/project-base.component";
+import { ProjectBaseComponent } from "./project/view/project-base/project-base.component";
 import { ProjectSettingsContainerComponent } from './project/components/project-settings-container/project-settings-container.component';
 import { PropertyTemplateCreatorComponent } from './project/components/property-template-creator/property-template-creator.component';
 import { SettingsComponent } from "./project/components/settings/settings.component";
