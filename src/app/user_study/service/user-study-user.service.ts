@@ -30,7 +30,7 @@ export class UserStudyUserService {
             (httpData) => {
               localStorage.setItem(this.tokenName, httpData.token);
               this.user = httpData.user;
-              this.userStudyCurrentDataService.saveObject(httpData.metaData);
+              // this.userStudyCurrentDataService.saveObject(httpData.metaData);
               resolve(true);
             },
             (err) => {

@@ -1,11 +1,7 @@
 import { defaultGeneralSetting } from "../../../project/domain/general-settings";
-import { Component, inject, Inject, OnDestroy, OnInit } from "@angular/core";
-import { FormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from "@angular/forms";
+import { Component, inject, Inject, OnInit } from "@angular/core";
+import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
 import { BehaviorSubject, combineLatest, Observable, Subject } from "rxjs";
-import {
-  PDDLFile,
-} from "../../../interface/files/files";
-import { ProjectsService } from "src/app/service/project/project-services";
 import { AuthenticationService } from "../../../service/authentication/authentication.service";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { defaultDomainSpecification, DomainSpecification } from "src/app/interface/files/domain-specification";
@@ -15,9 +11,28 @@ import { PlanningDomain, PlanningModel, PlanningProblem } from "src/app/interfac
 import { Project } from "../../../project/domain/project";
 import { Store } from "@ngrx/store";
 import { createProject } from "../../state/project-meta.actions";
+import { AsyncPipe } from "@angular/common";
+import { MatIconModule } from "@angular/material/icon";
+import { TemplateFileUploadComponent } from "src/app/components/files/file-upload/file-upload.component";
+import { MatStepperModule } from "@angular/material/stepper";
+import { MatFormFieldModule, MatLabel } from "@angular/material/form-field";
+import { MatCardModule } from "@angular/material/card";
 
 @Component({
   selector: "app-project-creator",
+  standalone: true,
+  imports: [
+    AsyncPipe,
+    MatIconModule,
+    TemplateFileUploadComponent,
+    MatStepperModule,
+    MatLabel,
+    MatFormFieldModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatCardModule,
+    MatIconModule,
+  ],
   templateUrl: "./project-creator.component.html",
   styleUrls: ["./project-creator.component.scss"],
 })

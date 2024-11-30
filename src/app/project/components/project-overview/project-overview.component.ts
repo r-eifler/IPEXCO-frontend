@@ -4,14 +4,13 @@ import { PlanProperty } from "src/app/iterative_planning/domain/plan-property/pl
 import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Project } from "../../domain/project";
-import { Router } from "@angular/router";
+import { Router, RouterModule } from "@angular/router";
 import { Store } from "@ngrx/store";
 import { selectProject } from "../../state/project.selector";
 import { MatCardModule } from "@angular/material/card";
 import { AsyncPipe } from "@angular/common";
 import { MatIcon } from "@angular/material/icon";
 import { ProjectActionCardComponent } from "../project-action-card/project-action-card.component";
-import { AppRoutingModule } from "src/app-routing/app-routing.module";
 import { MatButtonModule } from "@angular/material/button";
 import { DemoCreatorComponent } from "src/app/project/components/demo-creator/demo-creator.component";
 import { ProjectPlanPropertyService } from "../../service/plan-properties.service";
@@ -24,8 +23,8 @@ import { ProjectPlanPropertyService } from "../../service/plan-properties.servic
     MatIcon,
     AsyncPipe,
     ProjectActionCardComponent,
-    AppRoutingModule,
-    MatButtonModule
+    MatButtonModule,
+    RouterModule,
   ],
   templateUrl: "./project-overview.component.html",
   styleUrls: ["./project-overview.component.scss"],

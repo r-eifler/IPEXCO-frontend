@@ -1,16 +1,24 @@
 import { Component, EventEmitter, OnDestroy, Output } from "@angular/core";
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { MatStepper } from "@angular/material/stepper";
+import { MatStepper, MatStepperModule } from "@angular/material/stepper";
 import { Observable } from "rxjs";
 import { filter, map } from "rxjs/operators";
-import { CurrentProjectService } from 'src/app/service/project/project-services';
-import { ResponsiveService } from "src/app/service/responsive/responsive.service";
 
 import { LogEvent, TimeLoggerService } from "../../../service/logger/time-logger.service";
 import { GeneralSettings } from "src/app/project/domain/general-settings";
+import { MatIconModule } from "@angular/material/icon";
+import { MatCardModule } from "@angular/material/card";
+import { MatListModule } from "@angular/material/list";
 
 @Component({
   selector: "app-demo-help",
+  standalone: true,
+  imports: [
+    MatIconModule,
+    MatCardModule,
+    MatStepperModule,
+    MatListModule,
+  ],
   templateUrl: "./demo-help.component.html",
   styleUrls: ["./demo-help.component.css"],
 })
@@ -27,24 +35,14 @@ export class DemoHelpComponent implements OnDestroy {
 
   constructor(
     private timeLogger: TimeLoggerService,
-    private responsiveService: ResponsiveService,
-    currentProjectService: CurrentProjectService
   ) {
-    this.settings$ = currentProjectService.getSelectedObject().pipe(
-      filter(p => !!p),
-      map(p => p.settings)
-    );
+    // this.settings$ = currentProjectService.getSelectedObject().pipe(
+    //   filter(p => !!p),
+    //   map(p => p.settings)
+    // );
     console.log("DEMO HELP");
 
     this.timeLogger.log(LogEvent.START_USE_HELP);
-
-    this.responsiveService
-      .getMobileStatus()
-      .pipe(takeUntilDestroyed())
-      .subscribe((isMobile) => {
-        this.isMobile = isMobile;
-      });
-    this.responsiveService.checkWidth();
 
     this.settings$
       .pipe(

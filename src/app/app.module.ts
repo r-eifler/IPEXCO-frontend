@@ -56,51 +56,13 @@ import { ResizableModule } from "angular-resizable-element";
 // forms
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
-// Store
-import {
-    CurrentProjectStore,
-    CurrentRunStore,
-    DemosStore,
-    DomainFilesStore,
-    DomainSpecStore,
-    DomainSpecificationFilesStore,
-    FinishedStepInterfaceStatiStore,
-    IterationStepsStore,
-    MetaStudiesStore,
-    NewIterationStepStore,
-    NewStepInterfaceStatusStore,
-    PlanPropertyMapStore,
-    ProblemFilesStore,
-    ProjectsStore,
-    RunningDemoStore,
-    RunningUserStudyStore,
-    RunsStore,
-    SelectedIterationStepStore,
-    SelectedMetaStudyStore,
-    TaskSchemaStore,
-    UserStore,
-    UserStudiesStore,
-    UserStudyCurrentDataStore,
-    UserStudyDataStore,
-} from "./store/stores.store";
-
 // Services
-import { IterationStepsService } from "src/app/service/planner-runs/iteration-steps.service";
 import { AuthenticationService } from "./service/authentication/authentication.service";
 import {
     DomainFilesService,
     ProblemFilesService,
 } from "./service/files/pddl-file-services";
 import { PddlFileUtilsService } from "./service/files/pddl-file-utils.service";
-import { PlanPropertyMapService } from "./service/plan-properties/plan-property-services";
-import {
-    CurrentProjectService,
-    ProjectsService,
-} from "./service/project/project-services";
-import {
-    RunningUserStudyService,
-    UserStudiesService,
-} from "./service/user-study/user-study-services";
 
 // my components
 import { EffectsModule } from '@ngrx/effects';
@@ -124,7 +86,6 @@ import { DemoTaskInfoComponent } from "./components/demo/demo-task-info/demo-tas
 import { DemoTaskIntroComponent } from "./components/demo/demo-task-intro/demo-task-intro.component";
 import { DomainSelectorComponent } from "./components/files/domain-selector/domain-selector.component";
 import { TemplateFileUploadComponent } from "./components/files/file-upload/file-upload.component";
-import { FilesCollectionComponent } from "./components/files/files-collection/files-collection.component";
 import { ProblemSelectorComponent } from "./components/files/problem-selector/problem-selector.component";
 import { HelpPageComponent } from "./components/login/help-page/help-page.component";
 import { LoginComponent } from "./components/login/login/login.component";
@@ -165,15 +126,7 @@ import { ConflictVisuContainerComponent } from './components/visualization/confl
 import { MUGSVisuMainComponent } from './components/visualization/mugs-visu-main/mugs-visu-main.component';
 import { AuthenticationInterceptor } from "./interceptor/authentication.interceptor";
 import { ScoreViewComponent } from "./iterative_planning/components/finished-step/score-view/score-view.component";
-import { GoalListHighlightedComponent } from './iterative_planning/components/goals/goal-list-highlighted/goal-list-highlighted.component';
-import { SelectedHardGoalsComponent } from "./iterative_planning/components/goals/goals-list/goals-list.component";
-import { HardGoalSelectorComponent } from "./iterative_planning/components/goals/hard-goal-selector/hard-goal-selector.component";
-import { ProjectIterativePlanningBaseComponent } from "./iterative_planning/components/iteration-steps-base/iteration-steps-base.component";
-import { IterationStepsListComponent } from "./iterative_planning/components/iteration-steps-list/iteration-steps-list.component";
-import { IterativePlanningBaseComponent } from './iterative_planning/components/iterative-planning-base/iterative-planning-base.component';
-import { NewStepNavigatorComponent } from "./iterative_planning/components/new-step/new-step-navigator/new-step-navigator.component";
 import { InteractivePlanViewComponent } from "./iterative_planning/components/plan/interactive-plan-view/interactive-plan-view.component";
-import { PropertyCollectionComponent } from './iterative_planning/components/plan_properties/property-collection/property-collection.component';
 import { PropertyCreatorComponent } from './iterative_planning/components/plan_properties/property-creator/property-creator.component';
 import { ExplainerMonitoringService } from './iterative_planning/service/explainer-monitoring.service';
 import { ExplainerService } from './iterative_planning/service/explainer.service';
@@ -209,15 +162,7 @@ import { ProjectService } from './project/service/project.service';
 import { LoadProjectEffect } from './project/state/effects/load-project.effect';
 import { UpdateProjectEffect } from './project/state/effects/update-project.effect';
 import { projectFeature, projectReducer } from './project/state/project.reducer';
-import {
-    FinishedStepInterfaceStatusService,
-    NewStepInterfaceStatusService,
-} from "./service/user-interface/interface-status-services";
-import {
-    MetaStudiesService,
-    SelectedMetaStudyService,
-} from "./service/user-study/meta-study-services";
-import { UserStudyCurrentDataService, UserStudyDataService } from "./service/user-study/user-study-data.service";
+import { UserStudyCurrentDataService, UserStudyDataService } from "./user_study/service/user-study-data.service";
 import { ActionCardModule } from './shared/component/action-card/action-card.module';
 import { ChatModule } from './shared/component/chat/chat.module';
 import { LabelModule } from './shared/component/label/label.module';
@@ -228,81 +173,12 @@ import { DialogComponent } from "./shared/component/dialog/dialog/dialog.compone
 import { DialogModule } from './shared/component/dialog/dialog.module';
 import { LoadProjectPlanPropertiesEffect } from './project/state/effects/load-plan-properties.effect';
 import { ProjectPlanPropertyService } from './project/service/plan-properties.service';
+import { UserStore } from './store/stores.store';
 
 
 @NgModule({
   declarations: [
-    AppComponent,
-    FooterComponent,
-    TemplateFileUploadComponent,
-    DomainSelectorComponent,
-    ProblemSelectorComponent,
-    PropertyCreatorComponent,
-    NavigationComponent,
-    ProjectCollectionComponent,
-    ProjectCreatorComponent,
-    ProjectBaseComponent,
-    PropertyCollectionComponent,
-    ProjectIterativePlanningBaseComponent,
-    LoginComponent,
-    DemoCollectionComponent,
-    DemoBaseComponent,
-    DemoSettingsComponent,
-    DemoHelpComponent,
-    DemoNavigatorComponent,
-    MainPageComponent,
-    RegisterComponent,
-    UserMainPageComponent,
-    FilesCollectionComponent,
-    MainInfoComponent,
-    HelpPageComponent,
-    DemoFinishedComponent,
-    DemoTaskIntroComponent,
-    UserStudyCollectionComponent,
-    UserStudyCreatorComponent,
-    UserStudyBaseComponent,
-    UserStudyDescriptionViewComponent,
-    UserStudyFormViewComponent,
-    UserStudyDemoViewComponent,
-    UserStudyStartComponent,
-    UserStudyExecuteComponent,
-    UserStudyEndComponent,
-    MarkedPipe,
-    DemoHelpDialogComponent,
-    ScalableListComponent,
-    UserStudyNavigationComponent,
-    UserStudyDataBaseComponent,
-    OverviewDataComponent,
-    TimeLoggerDataComponent,
-    IndividualRunUserDataComponent,
-    DemoInfoComponent,
-    DemoTaskInfoComponent,
-    MetaStudyCollectionComponent,
-    MetaStudyCreatorComponent,
-    StudySelectionRedirectionComponent,
-    UserStudyCollectionBaseComponent,
-    AcceptedTestPersonsComponent,
-    InteractivePlanViewComponent,
-    PlanningTaskViewComponent,
-    SettingsComponent,
-    CompleteActionComponent,
-    IterationStepsListComponent,
-    HardGoalSelectorComponent,
-    SelectedHardGoalsComponent,
-    NewStepNavigatorComponent,
-    ObjectSliderComponent,
-    ObjectProgressBarComponent,
-    ScoreViewComponent,
-    ScoreBarComponent,
-    PaymentBarComponent,
-    ConflictVisuContainerComponent,
-    MUGSVisuMainComponent,
-    IconSelectorComponent,
-    AskDeleteComponent,
-    ProjectSettingsContainerComponent,
-    IterativePlanningBaseComponent,
-    GoalListHighlightedComponent,
-    LlmBaseComponent
+    AppComponent
   ],
   imports: [
     StoreModule.forRoot({
@@ -389,57 +265,25 @@ import { ProjectPlanPropertyService } from './project/service/plan-properties.se
     LabelModule,
     PropertyTemplateCreatorComponent,
     ProjectOverviewComponent,
-    DialogModule
+    DialogModule,
+    NavigationComponent,
 ],
   providers: [
-    UserStore,
     AuthenticationService,
+    UserStore,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthenticationInterceptor,
       multi: true,
     },
     AuthenticationInterceptor,
-    DomainFilesStore,
-    ProblemFilesStore,
     PddlFileUtilsService,
     DomainFilesService,
     ProblemFilesService,
-    DomainSpecificationFilesStore,
-    ProjectsStore,
-    ProjectsService,
-    CurrentProjectStore,
-    CurrentProjectService,
-    TaskSchemaStore,
-    PlanPropertyMapStore,
-    PlanPropertyMapService,
     PlannerService,
-    RunsStore,
-    CurrentRunStore,
-    IterationStepsService,
-    IterationStepsStore,
-    SelectedIterationStepStore,
-    NewIterationStepStore,
-    DomainSpecStore,
-    DemosStore,
     DemoService,
-    RunningDemoStore,
-    UserStudiesStore,
-    UserStudiesService,
-    RunningUserStudyStore,
-    RunningUserStudyService,
-    MetaStudiesService,
-    MetaStudiesStore,
-    SelectedMetaStudyService,
-    SelectedMetaStudyStore,
-    FinishedStepInterfaceStatiStore,
-    FinishedStepInterfaceStatusService,
-    NewStepInterfaceStatusStore,
-    NewStepInterfaceStatusService,
     UserStudyCurrentDataService,
-    UserStudyCurrentDataStore,
     UserStudyDataService,
-    UserStudyDataStore,
     // new ngrx
     ProjectService,
     ProjectMetaDataService,

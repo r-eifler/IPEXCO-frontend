@@ -2,16 +2,33 @@ import { takeUntil } from "rxjs/operators";
 import { AuthenticationService } from "src/app/service/authentication/authentication.service";
 import { LoginComponent } from "./../login/login/login.component";
 import { Component, DestroyRef, OnDestroy, OnInit } from "@angular/core";
-import { ResponsiveService } from "../../service/responsive/responsive.service";
-import { ActivatedRoute, Router } from "@angular/router";
+import { ActivatedRoute, Router, RouterModule } from "@angular/router";
 import { Subject } from "rxjs";
 import { MatDialog, MatDialogConfig, MatDialogRef } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { MatSidenav, MatSidenavModule } from "@angular/material/sidenav";
+import { MatIconModule } from "@angular/material/icon";
+import { MatListModule } from "@angular/material/list";
+import { MatMenuModule } from "@angular/material/menu";
+import { MatToolbarModule } from "@angular/material/toolbar";
+import { NgIf } from "@angular/common";
+import { MatButtonModule } from "@angular/material/button";
 
 
 @Component({
   selector: "app-navigation",
+  standalone: true,
+  imports: [
+    RouterModule,
+    MatSidenavModule,
+    MatIconModule,
+    MatListModule,
+    MatMenuModule,
+    MatToolbarModule,
+    NgIf,
+    MatButtonModule,
+  ],
   templateUrl: "./navigation.component.html",
   styleUrls: ["./navigation.component.scss"],
 })
@@ -23,20 +40,12 @@ export class NavigationComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     public userService: AuthenticationService,
-    private responsiveService: ResponsiveService,
     public dialog: MatDialog,
     private snackBar: MatSnackBar,
     private destroyRef: DestroyRef
   ) {}
 
   ngOnInit() {
-    this.responsiveService
-      .getMobileStatus()
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((isMobile) => {
-        this.isMobile = isMobile;
-      });
-    this.responsiveService.checkWidth();
   }
 
   newLoginForm(): void {

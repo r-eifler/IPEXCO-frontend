@@ -8,9 +8,18 @@ import { updateProject } from '../../state/project.actions';
 import { PlanPropertyTemplate } from 'src/app/iterative_planning/domain/plan-property/plan-property-template';
 import { GeneralSettings } from '../../domain/general-settings';
 import { PlanningModel } from 'src/app/interface/planning-task';
+import { AsyncPipe } from '@angular/common';
+import { PropertyTemplateCreatorComponent } from '../property-template-creator/property-template-creator.component';
+import { SettingsComponent } from '../settings/settings.component';
 
 @Component({
   selector: 'app-project-settings-container',
+  standalone: true,
+  imports: [
+    AsyncPipe,
+    PropertyTemplateCreatorComponent,
+    SettingsComponent,
+  ],
   templateUrl: './project-settings-container.component.html',
   styleUrls: ['./project-settings-container.component.scss']
 })

@@ -1,15 +1,26 @@
 import { Component, inject, OnInit } from "@angular/core";
-import { ResponsiveService } from "src/app/service/responsive/responsive.service";
-import { UntypedFormControl, UntypedFormGroup, Validators } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule, UntypedFormControl, UntypedFormGroup, Validators } from "@angular/forms";
 import { AuthenticationService } from "src/app/service/authentication/authentication.service";
 import { User } from "src/app/interface/user";
 import { ActivatedRoute, Router } from "@angular/router";
 import { MatDialogRef } from "@angular/material/dialog";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import {MatSnackBar} from '@angular/material/snack-bar';
+import { MatIconModule } from "@angular/material/icon";
+import { MatFormField, MatFormFieldModule, MatLabel } from "@angular/material/form-field";
+import { MatCardModule } from "@angular/material/card";
 
 @Component({
   selector: "app-login",
+  standalone: true,
+  imports: [
+    MatIconModule,
+    MatLabel,
+    MatFormFieldModule,
+    ReactiveFormsModule,
+    FormsModule,
+    MatCardModule,
+  ],
   templateUrl: "./login.component.html",
   styleUrls: ["./login.component.scss"],
 })
@@ -33,7 +44,6 @@ export class LoginComponent implements OnInit {
   snackBar = inject(MatSnackBar);
 
   constructor(
-    private responsiveService: ResponsiveService,
     private userService: AuthenticationService,
     public dialogRef: MatDialogRef<LoginComponent>,
     private router: Router,
@@ -41,13 +51,6 @@ export class LoginComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.responsiveService
-      .getMobileStatus()
-      .pipe(takeUntilDestroyed())
-      .subscribe((isMobile) => {
-        this.isMobile = isMobile;
-      });
-    this.responsiveService.checkWidth();
   }
 
   onLogin(): void {

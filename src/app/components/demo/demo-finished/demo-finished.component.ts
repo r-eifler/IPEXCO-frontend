@@ -1,14 +1,19 @@
-import { UserStudyCurrentDataService } from './../../../service/user-study/user-study-data.service';
+import { UserStudyCurrentDataService } from '../../../user_study/service/user-study-data.service';
 import { Component, Inject, OnInit } from "@angular/core";
 import { Demo } from "src/app/interface/demo";
 import { filter, take } from "rxjs/operators";
 import { LogEvent, TimeLoggerService } from "../../../service/logger/time-logger.service";
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { GeneralSettings } from 'src/app/project/domain/general-settings';
+import { CurrencyPipe } from '@angular/common';
 
 
 @Component({
   selector: "app-demo-finished",
+  standalone: true,
+  imports: [
+    CurrencyPipe,
+  ],
   templateUrl: "./demo-finished.component.html",
   styleUrls: ["./demo-finished.component.css"],
 })
@@ -40,12 +45,12 @@ export class DemoFinishedComponent implements OnInit {
   async ngOnInit() {
     console.log("Init demo finished ...")
 
-    this.userStudyCurrentDataService.getSelectedObject()
-      .pipe(filter(d => !!d), take(1))
-      .subscribe(d => {
-        d.payment = this.payment;
-        this.userStudyCurrentDataService.updateObject(d);
-      })
+    // this.userStudyCurrentDataService.getSelectedObject()
+    //   .pipe(filter(d => !!d), take(1))
+    //   .subscribe(d => {
+    //     d.payment = this.payment;
+    //     this.userStudyCurrentDataService.updateObject(d);
+    //   })
   }
 
 

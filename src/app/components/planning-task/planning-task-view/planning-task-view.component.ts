@@ -6,14 +6,26 @@ import {
   PDDLFact,
 } from "src/app/interface/planning-task";
 import { Component, OnInit, OnDestroy } from "@angular/core";
-import { CurrentProjectService } from "src/app/service/project/project-services";
 import { Subject, BehaviorSubject, Observable } from "rxjs";
 import { filter, map, tap } from "rxjs/operators";
 import { Store } from "@ngrx/store";
 import { selectProjectPlanningTask } from "src/app/project/state/project.selector";
+import { MatListModule } from "@angular/material/list";
+import { MatExpansionModule } from "@angular/material/expansion";
+import { CompleteActionComponent } from "../complete-action/complete-action.component";
+import { AsyncPipe, NgFor, NgIf } from "@angular/common";
 
 @Component({
   selector: "app-planning-task-view",
+  standalone: true,
+  imports: [
+    MatListModule,
+    MatExpansionModule,
+    CompleteActionComponent,
+    AsyncPipe,
+    NgIf,
+    NgFor,
+  ],
   templateUrl: "./planning-task-view.component.html",
   styleUrls: ["./planning-task-view.component.scss"],
 })

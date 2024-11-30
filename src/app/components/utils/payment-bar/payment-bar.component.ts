@@ -1,3 +1,4 @@
+import { AsyncPipe, CurrencyPipe } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { BehaviorSubject, Observable, combineLatest, filter, map } from 'rxjs';
@@ -5,6 +6,11 @@ import { PaymentInfo } from 'src/app/project/domain/general-settings';
 
 @Component({
   selector: 'app-payment-bar',
+  standalone: true,
+  imports: [
+    CurrencyPipe,
+    AsyncPipe,
+  ],
   templateUrl: './payment-bar.component.html',
   styleUrls: ['./payment-bar.component.scss']
 })

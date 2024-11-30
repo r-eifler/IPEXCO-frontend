@@ -1,12 +1,32 @@
 import { Component, DestroyRef, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
-import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
 import { ExplanationInterfaceType, GeneralSettings, PropertyCreationInterfaceType } from "../../domain/general-settings";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { concatMap, switchMap } from "rxjs/operators";
+import { MatFormFieldModule, MatLabel } from "@angular/material/form-field";
+import { MatSlideToggleModule } from "@angular/material/slide-toggle";
+import { MatCardModule } from "@angular/material/card";
+import { MatButtonModule } from "@angular/material/button";
+import { MatButtonToggleModule } from "@angular/material/button-toggle";
+import { MatIcon, MatIconModule } from "@angular/material/icon";
+import { AsyncPipe, NgFor, NgIf } from "@angular/common";
 
 
 @Component({
   selector: "app-settings",
+  standalone: true,
+  imports: [
+    MatLabel,
+    MatFormFieldModule,
+    MatSlideToggleModule,
+    MatCardModule,
+    ReactiveFormsModule,
+    FormsModule,
+    MatButtonModule,
+    MatButtonToggleModule,
+    MatIconModule,
+    NgIf,
+  ],
   templateUrl: "./settings.component.html",
   styleUrls: ["./settings.component.scss"],
 })

@@ -7,18 +7,23 @@ import {
   Output,
 } from "@angular/core";
 import { Demo } from "../../../interface/demo";
-import { Subject } from "rxjs";
-import { takeUntil } from "rxjs/operators";
 import { PLANNER_REDIRECT, QUESTION_REDIRECT } from "../../../app.tokens";
-import { IterationStepsService } from "../../../service/planner-runs/iteration-steps.service";
-import { PlannerService } from "../../../service/planner-runs/planner.service";
 import { LogEvent, TimeLoggerService } from "../../../service/logger/time-logger.service";
-import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { DemoNavigatorComponent } from "../../demo/demo-navigator/demo-navigator.component";
+import { DemoTaskIntroComponent } from "../../demo/demo-task-intro/demo-task-intro.component";
+import { DemoHelpComponent } from "../../demo/demo-help/demo-help.component";
+
 
 
 
 @Component({
   selector: "app-user-study-demo-view",
+  standalone: true,
+  imports: [
+    DemoNavigatorComponent,
+    DemoTaskIntroComponent,
+    DemoHelpComponent,
+  ],
   templateUrl: "./user-study-demo-view.component.html",
   styleUrls: ["./user-study-demo-view.component.css"],
   providers: [

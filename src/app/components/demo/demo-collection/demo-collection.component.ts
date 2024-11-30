@@ -3,7 +3,6 @@ import { takeUntil } from "rxjs/operators";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Observable, Subject } from "rxjs";
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { ResponsiveService } from "src/app/service/responsive/responsive.service";
 import { MatBottomSheet } from "@angular/material/bottom-sheet";
 import { Demo } from "src/app/interface/demo";
 import { AuthenticationService } from "../../../service/authentication/authentication.service";
@@ -12,12 +11,24 @@ import { environment } from "../../../../environments/environment";
 import { DemoInfoComponent } from "../demo-info/demo-info.component";
 import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { FinishedStepInterfaceStatusService } from "src/app/service/user-interface/interface-status-services";
 import { AskDeleteComponent } from "../../utils/ask-delete/ask-delete.component";
 import { RunStatus } from "src/app/iterative_planning/domain/run";
+import { MatIconModule } from "@angular/material/icon";
+import { MatMenu, MatMenuModule } from "@angular/material/menu";
+import { MatCardModule } from "@angular/material/card";
+import { MatProgressBarModule } from "@angular/material/progress-bar";
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 
 @Component({
   selector: "app-demo-selection",
+  standalone: true,
+  imports: [
+    MatIconModule,
+    MatMenuModule,
+    MatCardModule,
+    MatProgressBarModule,
+    MatProgressSpinnerModule,
+  ],
   templateUrl: "./demo-collection.component.html",
   styleUrls: ["./demo-collection.component.scss"],
 })
@@ -30,26 +41,17 @@ export class DemoCollectionComponent implements OnInit {
   public demos$: Observable<Demo[]>;
 
   constructor(
-    private responsiveService: ResponsiveService,
     // private demosService: DemosService,
     public userService: AuthenticationService,
     public dialog: MatDialog,
     private snackBar: MatSnackBar,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private finishedStepInterfaceStatusService: FinishedStepInterfaceStatusService,
   ) {
     // this.demos$ = demosService.getList();
   }
 
   ngOnInit(): void {
-    this.responsiveService
-      .getMobileStatus()
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe((isMobile) => {
-        this.isMobile = isMobile;
-      });
-    this.responsiveService.checkWidth();
 
     // this.demosService.findCollection();
   }
@@ -94,7 +96,6 @@ export class DemoCollectionComponent implements OnInit {
   }
 
   openDemo(demo: Demo): void {
-    this.finishedStepInterfaceStatusService.clear();
 
     this.router.navigate(["../demos/" + demo._id], {
       relativeTo: this.activatedRoute,

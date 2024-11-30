@@ -8,7 +8,7 @@
           <mat-card-title>Projects</mat-card-title>
         </mat-card-header>
         <mat-card-content>
-          <mat-action-list>
+          <!-- <mat-action-list>
             @for (project of projectsService.getList() | async; track project) {
               <mat-list-item (click)="openProject(project)">
                 <h4 matListItemTitle>{{project.name}}</h4>
@@ -21,7 +21,7 @@
           </mat-action-list>
           @if ((projectsService.getList() | async).length == 0){
             <p>No projects available.</p>
-            }
+            } -->
         </mat-card-content>
         <mat-card-actions>
           <button mat-icon-button (click)="toProjectCollection()">
@@ -70,7 +70,7 @@
           <mat-card-title>User Studies</mat-card-title>
         </mat-card-header>
         <mat-card-content>
-          @if ((userStudiesService.getList() | async).length > 0){
+          <!-- @if ((userStudiesService.getList() | async).length > 0){
           <mat-action-list>
             @for (study of userStudiesService.getList() | async; track study) {
               <mat-list-item (click)="openUserStudy(study)">
@@ -81,11 +81,11 @@
                 <mat-divider [inset]="true" ></mat-divider>
               }
             }
-          </mat-action-list>
-          }
-          @if ((userStudiesService.getList() | async).length == 0){
+          </mat-action-list> -->
+          <!-- } -->
+          <!-- @if ((userStudiesService.getList() | async).length == 0){
           <p>No user studies available.</p>
-          }
+          } -->
         </mat-card-content>
         <mat-card-actions>
           <button mat-icon-button (click)="toUserStudyCollection()">

@@ -1,32 +1,25 @@
 import { combineLatest } from 'rxjs';
 import { PlanProperty } from 'src/app/iterative_planning/domain/plan-property/plan-property';
 import { Observable } from 'rxjs';
-import { PlanPropertyMapService } from 'src/app/service/plan-properties/plan-property-services';
 import { filter, map, take } from 'rxjs/operators';
-import { USUser } from './../../interface/user-study/user-study-user';
-import { ObjectCollectionService } from './../base/object-collection.service';
-import { UserStudyCurrentDataStore, UserStudyDataStore } from './../../store/stores.store';
-import { SelectedObjectService } from './../base/selected-object.service';
-import { Injectable } from '@angular/core';
+import { USUser } from '../../interface/user-study/user-study-user';
+import { ObjectCollectionService } from '../../service/base/object-collection.service';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { LOAD } from 'src/app/store/generic-item.store';
 import { environment } from 'src/environments/environment';
 import { IHTTPData } from 'src/app/interface/http-data.interface';
 import { UserStudyData } from 'src/app/interface/user-study/user-study-store';
-import { LogEntry, LogEvent } from '../logger/time-logger.service';
+import { LogEntry, LogEvent } from '../../service/logger/time-logger.service';
 import { mean, normalci, variance } from 'jstat'
 import { IterationStep } from 'src/app/iterative_planning/domain/iteration_step';
 
 @Injectable({
   providedIn: 'root'
 })
-export class UserStudyCurrentDataService extends SelectedObjectService<UserStudyData> {
+export class UserStudyCurrentDataService {
 
+  private http = inject(HttpClient)
   BASE_URL = environment.apiURL + "user-study-data/";
-
-constructor(private http: HttpClient, store: UserStudyCurrentDataStore) {
-  super(store);
-}
 
 
 updateObject(data: UserStudyData) {
@@ -36,7 +29,7 @@ updateObject(data: UserStudyData) {
   this.http
     .put<IHTTPData<UserStudyData>>(this.BASE_URL, {data: data})
     .subscribe((httpData) => {
-      this.selectedObjectStore.dispatch({ type: LOAD, data: httpData.data });
+      // this.selectedObjectStore.dispatch({ type: LOAD, data: httpData.data });
     });
   }
 
@@ -66,14 +59,14 @@ export class UserStudyDataService extends ObjectCollectionService<UserStudyData>
 
   timeBuckets = [0,5,10,15,20,25,30];
 
-  constructor(
-    http: HttpClient,
-    store: UserStudyDataStore,
-    private planPropertiesService: PlanPropertyMapService) {
-    super(http, store);
+  // constructor(
+  //   http: HttpClient,
+  //   // store: UserStudyDataStore,
+  //   private planPropertiesService: PlanPropertyMapService) {
+  //   super(http, store);
 
-    this.planProperties$ = planPropertiesService.getMap();
-  }
+  //   this.planProperties$ = planPropertiesService.getMap();
+  // }
 
   getIterationStepsPerUser(demoId: string, users: USUser[]): Promise<DataPoint[]> {
     return new Promise((resolve, reject) => {

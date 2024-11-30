@@ -1,14 +1,27 @@
 import { AuthenticationService } from "../../../service/authentication/authentication.service";
 import { Component, inject, OnInit } from "@angular/core";
-import { UntypedFormControl, UntypedFormGroup, Validators } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule, UntypedFormControl, UntypedFormGroup, Validators } from "@angular/forms";
 import { User } from "src/app/interface/user";
 import { passwordValidator } from "src/app/validators/user.validators";
 import { ActivatedRoute, Router } from "@angular/router";
 import { MatDialogRef } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { MatIconModule } from "@angular/material/icon";
+import { MatError, MatFormFieldModule, MatLabel } from "@angular/material/form-field";
+import { MatCardModule } from "@angular/material/card";
 
 @Component({
   selector: "app-register",
+  standalone: true,
+  imports: [
+    MatIconModule,
+    MatError,
+    MatLabel,
+    MatFormFieldModule,
+    ReactiveFormsModule,
+    FormsModule,
+    MatCardModule,
+  ],
   templateUrl: "./register.component.html",
   styleUrls: ["./register.component.scss"],
 })

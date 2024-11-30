@@ -7,9 +7,24 @@ import { IterationStep, StepStatus } from 'src/app/iterative_planning/domain/ite
 import { Store } from '@ngrx/store';
 import { selectIterativePlanningProject, selectIterativePlanningProperties } from 'src/app/iterative_planning/state/iterative-planning.selector';
 import { GeneralSettings } from "src/app/project/domain/general-settings";
+import { AsyncPipe } from "@angular/common";
+import { PaymentBarComponent } from "src/app/components/utils/payment-bar/payment-bar.component";
+import { MatIconModule } from "@angular/material/icon";
+import { ScoreBarComponent } from "src/app/components/utils/score-bar/score-bar.component";
+import { MatCardModule } from "@angular/material/card";
+import { MatOptionModule } from "@angular/material/core";
 
 @Component({
   selector: "app-score-view",
+  standalone: true,
+  imports: [
+    AsyncPipe,
+    PaymentBarComponent,
+    MatIconModule,
+    ScoreBarComponent,
+    MatCardModule,
+    MatOptionModule
+  ],
   templateUrl: "./score-view.component.html",
   styleUrls: ["./score-view.component.scss"],
 })

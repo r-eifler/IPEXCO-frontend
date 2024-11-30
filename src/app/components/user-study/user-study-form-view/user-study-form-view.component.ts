@@ -1,9 +1,18 @@
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { DomSanitizer } from "@angular/platform-browser";
-import { UserStudyUserService } from "../../../service/user-study/user-study-user.service";
+import { UserStudyUserService } from "../../../user_study/service/user-study-user.service";
+import { MatCardModule } from "@angular/material/card";
+import { MatLabel } from "@angular/material/form-field";
+import { FormsModule } from "@angular/forms";
 
 @Component({
   selector: "app-user-study-form-view",
+  standalone: true,
+  imports: [
+    MatCardModule,
+    MatLabel,
+    FormsModule,
+  ],
   templateUrl: "./user-study-form-view.component.html",
   styleUrls: ["./user-study-form-view.component.css"],
 })

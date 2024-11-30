@@ -1,16 +1,18 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { Subject } from "rxjs";
-import {
-  RunningUserStudyService,
-  UserStudiesService,
-} from "../../../service/user-study/user-study-services";
-import { ResponsiveService } from "../../../service/responsive/responsive.service";
-import { ActivatedRoute } from "@angular/router";
 import { takeUntil } from "rxjs/operators";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { MetaStudyCollectionComponent } from "../meta-study/meta-study-collection/meta-study-collection.component";
+import { UserStudyCollectionComponent } from "../user-study-collection/user-study-collection.component";
+import { MatTabsModule } from "@angular/material/tabs";
 
 @Component({
   selector: "app-user-study-collection-base",
+  standalone: true,
+  imports: [
+    MetaStudyCollectionComponent,
+    UserStudyCollectionComponent,
+    MatTabsModule,
+  ],
   templateUrl: "./user-study-collection-base.component.html",
   styleUrls: ["./user-study-collection-base.component.css"],
 })
@@ -20,20 +22,10 @@ export class UserStudyCollectionBaseComponent implements OnInit {
   public showTab = 1;
 
   constructor(
-    private userStudiesService: UserStudiesService,
-    private selectedUserStudyService: RunningUserStudyService,
-    private responsiveService: ResponsiveService,
-    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
-    this.responsiveService
-      .getMobileStatus()
-      .pipe(takeUntilDestroyed())
-      .subscribe((isMobile) => {
-        this.isMobile = isMobile;
-      });
-    this.responsiveService.checkWidth();
+    
   }
 
 }
