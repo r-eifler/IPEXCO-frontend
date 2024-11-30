@@ -1,0 +1,38 @@
+.size-group > * {
+  margin-left: 15px;
+}
+
+.example-full-width {
+  width: 100%;
+}
+
+.form {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+textarea {
+  min-height: 100px;
+}
+
+.image-selection-container{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.stepper-button-container{
+  margin-top: var(--spacing-100);
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+  gap: var(--spacing-100);
+}
+
+form{
+  padding-top: 10px;
+}

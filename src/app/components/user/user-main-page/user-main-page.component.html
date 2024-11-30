@@ -38,7 +38,7 @@
           <mat-card-title>Demos</mat-card-title>
         </mat-card-header>
         <mat-card-content>
-          @if ((demosService.getList() | async).length > 0){
+          <!-- @if ((demosService.getList() | async).length > 0){
             <mat-action-list>
                 @for (demo of demosService.getList() | async; track demo) {
                   <mat-list-item (click)="openDemo(demo)">
@@ -50,10 +50,10 @@
                   }
                 }
             </mat-action-list>
-          }
-          @if ((demosService.getList() | async).length == 0){
+          } -->
+          <!-- @if ((demosService.getList() | async).length == 0){
           <p>No demos available.</p>
-          }
+          } -->
         </mat-card-content>
         <mat-card-actions>
           <button mat-icon-button (click)="toDemoCollection()">

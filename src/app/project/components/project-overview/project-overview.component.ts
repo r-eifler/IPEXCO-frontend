@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { Observable } from "rxjs";
 import { PlanProperty } from "src/app/iterative_planning/domain/plan-property/plan-property";
-import { MatDialog } from "@angular/material/dialog";
+import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Project } from "../../domain/project";
 import { Router } from "@angular/router";
@@ -13,6 +13,8 @@ import { MatIcon } from "@angular/material/icon";
 import { ProjectActionCardComponent } from "../project-action-card/project-action-card.component";
 import { AppRoutingModule } from "src/app-routing/app-routing.module";
 import { MatButtonModule } from "@angular/material/button";
+import { DemoCreatorComponent } from "src/app/project/components/demo-creator/demo-creator.component";
+import { ProjectPlanPropertyService } from "../../service/plan-properties.service";
 
 @Component({
   selector: "app-project-overview",
@@ -24,7 +26,7 @@ import { MatButtonModule } from "@angular/material/button";
     ProjectActionCardComponent,
     AppRoutingModule,
     MatButtonModule
-],
+  ],
   templateUrl: "./project-overview.component.html",
   styleUrls: ["./project-overview.component.scss"],
 })
@@ -50,40 +52,9 @@ export class ProjectOverviewComponent implements OnInit {
 
 
   createDemo(): void {
-    // this.properties$.pipe(take(1)).subscribe(
-    //   pp => {
-    //     console.log("Create Demo");
-    //     if(pp.size == 0){
-    //       this.openSnackBar("You need to create at least one plan property before generateing a demo.", "Close")
-    //     } else {
-    //       let used = 0;
-    //       let globalHardGoal = 0
-    //       pp.forEach((value, key) => {
-    //         if (value.isUsed) {
-    //           used++;
-    //           if (value.globalHardGoal)
-    //             globalHardGoal++;
-    //         }
-    //       });
-    //       if (used == 0) {
-    //         this.openSnackBar("You need to select at least one plan property.", "Close")
-    //       }
-    //       else if (globalHardGoal == 0) {
-    //         this.openSnackBar("You need to mark at least one of the selected plan property as global hard-goal.", "Close")
-    //       } else{
-    //         const dialogConfig = new MatDialogConfig();
-    //         dialogConfig.width = "1000px";
-    //         dialogConfig.data = {
-    //           update: false,
-    //           projectId: this.currentProject._id,
-    //         };
-
-    //         this.dialog.open(DemoCreatorComponent, dialogConfig);
-    //       }
-    //     }
-    //   }
-    // )
-
+    const dialogConfig = new MatDialogConfig();
+      dialogConfig.width = "3000px";
+      this.dialog.open(DemoCreatorComponent, dialogConfig);
   }
 
   deleteProject(): void {

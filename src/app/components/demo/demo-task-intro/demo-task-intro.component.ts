@@ -9,7 +9,6 @@ import {
 } from "@angular/core";
 import { PlanPropertyMapService } from "../../../service/plan-properties/plan-property-services";
 import { PlanProperty } from "../../../iterative_planning/domain/plan-property/plan-property";
-import { RunningDemoService } from "../../../service/demo/demo-services";
 import { Demo } from "../../../interface/demo";
 import { MatStepper } from "@angular/material/stepper";
 import { environment } from "../../../../environments/environment";
@@ -36,10 +35,10 @@ export class DemoTaskIntroComponent implements OnInit, OnDestroy {
 
   constructor(
     private timeLogger: TimeLoggerService,
-    runningDemoService: RunningDemoService,
+    // runningDemoService: RunningDemoService,
     private store: Store,
   ) {
-    this.demo$ = runningDemoService.getSelectedObject() as BehaviorSubject<Demo>;
+    // this.demo$ = runningDemoService.getSelectedObject() as BehaviorSubject<Demo>;
     this.planPropertiesMap$ = this.store.select(selectIterativePlanningProperties)
   }
 

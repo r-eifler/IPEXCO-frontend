@@ -2,13 +2,12 @@ import { DemoSettingsComponent } from "./../demo-settings/demo-settings.componen
 import { takeUntil } from "rxjs/operators";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Observable, Subject } from "rxjs";
-import { DemosService } from "../../../service/demo/demo-services";
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ResponsiveService } from "src/app/service/responsive/responsive.service";
 import { MatBottomSheet } from "@angular/material/bottom-sheet";
 import { Demo } from "src/app/interface/demo";
 import { AuthenticationService } from "../../../service/authentication/authentication.service";
-import { DemoCreatorComponent } from "../demo-creator/demo-creator.component";
+import { DemoCreatorComponent } from "../../../project/components/demo-creator/demo-creator.component";
 import { environment } from "../../../../environments/environment";
 import { DemoInfoComponent } from "../demo-info/demo-info.component";
 import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
@@ -32,7 +31,7 @@ export class DemoCollectionComponent implements OnInit {
 
   constructor(
     private responsiveService: ResponsiveService,
-    private demosService: DemosService,
+    // private demosService: DemosService,
     public userService: AuthenticationService,
     public dialog: MatDialog,
     private snackBar: MatSnackBar,
@@ -40,7 +39,7 @@ export class DemoCollectionComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private finishedStepInterfaceStatusService: FinishedStepInterfaceStatusService,
   ) {
-    this.demos$ = demosService.getList();
+    // this.demos$ = demosService.getList();
   }
 
   ngOnInit(): void {
@@ -52,7 +51,7 @@ export class DemoCollectionComponent implements OnInit {
       });
     this.responsiveService.checkWidth();
 
-    this.demosService.findCollection();
+    // this.demosService.findCollection();
   }
 
 
@@ -62,23 +61,23 @@ export class DemoCollectionComponent implements OnInit {
       data: {name: "Delete Demo", text: "Are you sure you want to delete demo: " + demo.name + "?"},
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      if(result){
-        this.demosService.deleteObject(demo)
-      }
-    });
+    // dialogRef.afterClosed().subscribe(result => {
+    //   console.log('The dialog was closed');
+    //   if(result){
+    //     this.demosService.deleteObject(demo)
+    //   }
+    // });
   }
 
   async cancelDemo(demo: Demo): Promise<void> {
-    const canceled = await this.demosService.cancelDemo(demo);
-    if (canceled) {
-      this.snackBar.open("Demo canceled successfully!", "close", {
-        duration: 2000,
-      });
-    } else {
-      this.snackBar.open("Cancel demo failed!", "close", { duration: 2000 });
-    }
+    // const canceled = await this.demosService.cancelDemo(demo);
+    // if (canceled) {
+    //   this.snackBar.open("Demo canceled successfully!", "close", {
+    //     duration: 2000,
+    //   });
+    // } else {
+    //   this.snackBar.open("Cancel demo failed!", "close", { duration: 2000 });
+    // }
   }
 
   update(demo: Demo): void {

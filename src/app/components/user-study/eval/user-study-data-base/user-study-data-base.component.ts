@@ -12,10 +12,6 @@ import {
 import { BehaviorSubject, combineLatest, Observable, Subject } from "rxjs";
 import { filter, map, take, takeUntil, tap } from "rxjs/operators";
 import { Demo } from "../../../../interface/demo";
-import {
-  DemosService,
-  RunningDemoService,
-} from "../../../../service/demo/demo-services";
 import { PlanPropertyMapService } from "../../../../service/plan-properties/plan-property-services";
 import { UserStudyData } from "src/app/interface/user-study/user-study-store";
 import { CurrentProjectService } from 'src/app/service/project/project-services';
@@ -48,14 +44,14 @@ export class UserStudyDataBaseComponent implements OnInit {
   constructor(
     private selectedUserStudy: RunningUserStudyService,
     private userStudyDataService: UserStudyDataService,
-    public demosService: DemosService,
-    private runningDemoService: RunningDemoService,
+    // public demosService: DemosService,
+    // private runningDemoService: RunningDemoService,
     private currentProjectService: CurrentProjectService,
     private propertiesService: PlanPropertyMapService,
   ) {
 
     console.log("User study base");
-    this.demosService.findCollection();
+    // this.demosService.findCollection();
 
     this.userStudy$ = this.selectedUserStudy.getSelectedObject()
     .pipe(
@@ -88,25 +84,25 @@ export class UserStudyDataBaseComponent implements OnInit {
         return demoIds;
       }));
 
-    this.demos$ = combineLatest(([this.demoIds$, this.demosService.getList()])).pipe(
-      takeUntilDestroyed(),
-      filter(([dids, demos]) => !!dids && !!demos),
-      map(([dids, demos]) => demos.filter(d => dids.some(id => id == d._id)))
-    )
+    // this.demos$ = combineLatest(([this.demoIds$, this.demosService.getList()])).pipe(
+    //   takeUntilDestroyed(),
+    //   filter(([dids, demos]) => !!dids && !!demos),
+    //   map(([dids, demos]) => demos.filter(d => dids.some(id => id == d._id)))
+    // )
 
-    this.selectedDemoId$.pipe(
-      takeUntilDestroyed(),
-      filter(id => !!id)
-      ).subscribe(id => {
-        this.demosService.getObject(id).pipe(
-          filter(d => !!d),
-          take(1)
-        ).subscribe(demo => {
-          this.runningDemoService.saveObject(demo);
-          this.currentProjectService.saveObject(demo);
-          this.propertiesService.findCollection([{ param: "projectId", value: demo._id }]);
-        })
-      })
+    // this.selectedDemoId$.pipe(
+    //   takeUntilDestroyed(),
+    //   filter(id => !!id)
+    //   ).subscribe(id => {
+    //     this.demosService.getObject(id).pipe(
+    //       filter(d => !!d),
+    //       take(1)
+    //     ).subscribe(demo => {
+    //       // this.runningDemoService.saveObject(demo);
+    //       this.currentProjectService.saveObject(demo);
+    //       this.propertiesService.findCollection([{ param: "projectId", value: demo._id }]);
+    //     })
+    //   })
   }
 
   ngOnInit(): void {

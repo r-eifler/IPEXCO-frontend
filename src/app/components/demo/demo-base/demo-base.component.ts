@@ -10,10 +10,6 @@ import { PLANNER_REDIRECT } from "src/app/app.tokens";
 import { ActivatedRoute, Router } from "@angular/router";
 import { takeUntil } from "rxjs/operators";
 import { Demo } from "../../../interface/demo";
-import {
-  DemosService,
-  RunningDemoService,
-} from "../../../service/demo/demo-services";
 import { Subject } from "rxjs";
 import { PlanPropertyMapService } from "../../../service/plan-properties/plan-property-services";
 import { TimeLoggerService } from "../../../service/logger/time-logger.service";
@@ -36,8 +32,8 @@ export class DemoBaseComponent implements OnInit, OnDestroy {
 
   constructor(
     private timeLogger: TimeLoggerService,
-    private demosService: DemosService,
-    private runningDemoService: RunningDemoService,
+    // private demosService: DemosService,
+    // private runningDemoService: RunningDemoService,
     private propertiesService: PlanPropertyMapService,
     private currentProjectService: CurrentProjectService,
     private iterationStepsService: IterationStepsService,
@@ -46,20 +42,20 @@ export class DemoBaseComponent implements OnInit, OnDestroy {
   ) {
     this.iterationStepsService.reset();
 
-    this.route.params.subscribe((params) => {
-      this.demosService
-        .getObject(params.demoid)
-        .pipe(takeUntilDestroyed())
-        .subscribe((demo: Demo) => {
-          if (demo) {
-            this.timeLogger.log(LogEvent.START_DEMO, {demoId:  demo._id});
-            this.runningDemoService.saveObject(demo);
-            this.currentProjectService.saveObject(demo);
-            this.propertiesService.findCollection([{ param: "projectId", value: demo._id },]);
-            this.startDemo()
-          }
-        });
-    });
+    // this.route.params.subscribe((params) => {
+    //   this.demosService
+    //     .getObject(params.demoid)
+    //     .pipe(takeUntilDestroyed())
+    //     .subscribe((demo: Demo) => {
+    //       if (demo) {
+    //         this.timeLogger.log(LogEvent.START_DEMO, {demoId:  demo._id});
+    //         this.runningDemoService.saveObject(demo);
+    //         this.currentProjectService.saveObject(demo);
+    //         this.propertiesService.findCollection([{ param: "projectId", value: demo._id },]);
+    //         this.startDemo()
+    //       }
+    //     });
+    // });
   }
 
   ngOnInit(): void {}

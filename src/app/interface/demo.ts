@@ -1,21 +1,17 @@
+import { GlobalExplanation } from '../iterative_planning/domain/explanation/explanations';
 import { RunStatus } from '../iterative_planning/domain/run';
 import { Project } from '../project/domain/project';
 
 
 export interface Demo extends Project {
-  summaryImage?: string;
-  introduction?: string;
+  projectId: string,
   status?: RunStatus;
   completion: number;
-  definition?: string;
-  conflictExplanation?: any;
-  explanations: any[];
-  taskInfo?: string;
+  summaryImage?: string;
+  domainInfo?: string;
+  instanceInfo?: string;
+  globalExplanation?: GlobalExplanation,
   maxUtility?: { value: number; selectedPlanProperties: string[] };
-}
-
-export function getSimpleConflicts(demo: Demo): any {
-  return demo.explanations[0]?.relaxationExplanations[0]?.dependencies[0]?.dependencies;
 }
 
 export interface DemoDefinition {

@@ -2,7 +2,6 @@ import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Observable, Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { ResponsiveService } from "../../../service/responsive/responsive.service";
-import { DemosService } from "../../../service/demo/demo-services";
 import { Demo } from "../../../interface/demo";
 import { DomSanitizer } from "@angular/platform-browser";
 import {
@@ -50,13 +49,13 @@ export class UserStudyCreatorComponent implements OnInit {
     private userStudiesService: UserStudiesService,
     private selectedUserStudyService: RunningUserStudyService,
     private domSanitizer: DomSanitizer,
-    private demosService: DemosService,
+    // private demosService: DemosService,
     private responsiveService: ResponsiveService,
     private route: ActivatedRoute,
     private router: Router
   ) {
-    demosService.findCollection();
-    this.demos$ = demosService.getList();
+    // demosService.findCollection();
+    // this.demos$ = demosService.getList();
 
     this.userStudyForm = new UntypedFormGroup({
       name: new UntypedFormControl(),
@@ -88,9 +87,9 @@ export class UserStudyCreatorComponent implements OnInit {
                 nextStep.url = step.content;
                 break;
               case UserStudyStepType.demo:
-                demosService
-                  .getObject(step.content)
-                  .subscribe((d) => (nextStep.demo = d));
+                // demosService
+                //   .getObject(step.content)
+                //   .subscribe((d) => (nextStep.demo = d));
                 break;
             }
             this.parts.push(nextStep);

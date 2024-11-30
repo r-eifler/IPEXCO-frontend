@@ -7,14 +7,14 @@
         <mat-icon>download</mat-icon>
       </a>
     </mat-tab>
-    <mat-tab label="MUGS" *ngIf="demo.explanations">
+    <!-- <mat-tab label="MUGS" *ngIf="demo.explanations">
       <mat-list>
         <mat-list-item *ngFor="let line of this.mugs">
           <mat-icon matListIcon>bolt</mat-icon>
           <p matLine>({{ line.length }}) {{ line }}</p>
         </mat-list-item>
       </mat-list>
-    </mat-tab>
+    </mat-tab> -->
     <mat-tab label="Max Utility">
       <p style="margin: 20px; font-size: larger">
         Max Utility: {{ demo.maxUtility?.value }}

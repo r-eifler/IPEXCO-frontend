@@ -8,7 +8,6 @@ import { LOAD } from "../../store/generic-list.store";
 import { ItemStore } from 'src/app/store/generic-item.store';
 import { PlanPropertyMapService } from "../plan-properties/plan-property-services";
 import { IterationStepsService } from "../planner-runs/iteration-steps.service";
-import { DemosService } from "../demo/demo-services";
 import { Project } from "src/app/project/domain/project";
 
 @Injectable({

@@ -1,8 +1,3 @@
-import {
-  DomainFilesService,
-  ProblemFilesService,
-} from "../../../service/files/pddl-file-services";
-import { DemosService } from "../../../service/demo/demo-services";
 import { ProjectsService } from "../../../service/project/project-services";
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ResponsiveService } from "src/app/service/responsive/responsive.service";
@@ -27,7 +22,6 @@ export class UserMainPageComponent implements OnInit {
   constructor(
     private responsiveService: ResponsiveService,
     public projectsService: ProjectsService,
-    public demosService: DemosService,
     public userStudiesService: UserStudiesService,
     private router: Router,
     private route: ActivatedRoute
@@ -43,7 +37,7 @@ export class UserMainPageComponent implements OnInit {
     this.responsiveService.checkWidth();
 
     this.projectsService.findCollection();
-    this.demosService.findCollection();
+    // this.demosService.findCollection();
     this.userStudiesService.findCollection();
   }
 

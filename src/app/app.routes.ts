@@ -41,6 +41,7 @@ export const appRoutes: Routes = [
   },
   {
     path: "projects/:projectid",
+    // loadChildren: () => import('./project/project.module').then(m => m.ProjectModule),
     component: ProjectBaseComponent,
     canActivate: [AuthGuard],
     children: [],

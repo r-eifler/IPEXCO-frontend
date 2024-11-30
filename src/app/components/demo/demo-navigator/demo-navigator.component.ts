@@ -2,7 +2,6 @@ import { DemoFinishedComponent } from "./../demo-finished/demo-finished.componen
 import { Component, EventEmitter, OnDestroy, OnInit, Output } from "@angular/core";
 import { Demo } from "src/app/interface/demo";
 import { BehaviorSubject, combineLatest, Observable, Subject } from "rxjs";
-import { RunningDemoService } from "src/app/service/demo/demo-services";
 import { CurrentProjectService } from "src/app/service/project/project-services";
 import { takeUntil, filter, map, take, tap } from "rxjs/operators";
 import { getMaximalPlanValue, PlanProperty } from "../../../iterative_planning/domain/plan-property/plan-property";
@@ -58,12 +57,12 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
 
   constructor(
     private store: Store,
-    private runningDemoService: RunningDemoService,
+    // private runningDemoService: RunningDemoService,
     public currentProjectService: CurrentProjectService,
     public dialog: MatDialog,
     private snackBar: MatSnackBar
   ) {
-    this.demo$ = this.runningDemoService.getSelectedObject()  as BehaviorSubject<Demo>;
+    // this.demo$ = this.runningDemoService.getSelectedObject()  as BehaviorSubject<Demo>;
     this.selectedStep$ = this.store.select(selectIterativePlanningSelectedStep)
     this.steps$ = this.store.select(selectIterativePlanningIterationSteps)
     this.newStep$ = this.store.select(selectIterativePlanningNewStep)

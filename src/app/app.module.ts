@@ -87,7 +87,6 @@ import {
 // Services
 import { IterationStepsService } from "src/app/service/planner-runs/iteration-steps.service";
 import { AuthenticationService } from "./service/authentication/authentication.service";
-import { DemosService, RunningDemoService } from "./service/demo/demo-services";
 import {
     DomainFilesService,
     ProblemFilesService,
@@ -114,7 +113,7 @@ import { LLMChatFeature, llmChatReducer } from './LLM/state/llm.reducer';
 import { appRoutes } from "./app.routes";
 import { DemoBaseComponent } from "./components/demo/demo-base/demo-base.component";
 import { DemoCollectionComponent } from "./components/demo/demo-collection/demo-collection.component";
-import { DemoCreatorComponent } from "./components/demo/demo-creator/demo-creator.component";
+import { DemoCreatorComponent } from "./project/components/demo-creator/demo-creator.component";
 import { DemoFinishedComponent } from "./components/demo/demo-finished/demo-finished.component";
 import { DemoHelpDialogComponent } from "./components/demo/demo-help-dialog/demo-help-dialog.component";
 import { DemoHelpComponent } from "./components/demo/demo-help/demo-help.component";
@@ -224,6 +223,11 @@ import { ChatModule } from './shared/component/chat/chat.module';
 import { LabelModule } from './shared/component/label/label.module';
 import { PageModule } from './shared/component/page/page.module';
 import { ProjectOverviewComponent } from './project/components/project-overview/project-overview.component';
+import { DemoService } from './project/service/demo.service';
+import { DialogComponent } from "./shared/component/dialog/dialog/dialog.component";
+import { DialogModule } from './shared/component/dialog/dialog.module';
+import { LoadProjectPlanPropertiesEffect } from './project/state/effects/load-plan-properties.effect';
+import { ProjectPlanPropertyService } from './project/service/plan-properties.service';
 
 
 @NgModule({
@@ -244,7 +248,6 @@ import { ProjectOverviewComponent } from './project/components/project-overview/
     DemoCollectionComponent,
     DemoBaseComponent,
     DemoSettingsComponent,
-    DemoCreatorComponent,
     DemoHelpComponent,
     DemoNavigatorComponent,
     MainPageComponent,
@@ -302,42 +305,42 @@ import { ProjectOverviewComponent } from './project/components/project-overview/
     LlmBaseComponent
   ],
   imports: [
-    StoreModule.forRoot(
-      {
+    StoreModule.forRoot({
         [projectFeature]: projectReducer,
         [projectMetaDataFeature]: projectMetaDataReducer,
         [iterativePlanningFeature]: iterativePlanningReducer,
         [LLMChatFeature]: llmChatReducer
-      }),
+    }),
     EffectsModule.forRoot([
-      LoadProjectEffect,
-      UpdateProjectEffect,
-      LoadProjectMetaDataListEffect,
-      CreateProjectEffect,
-      DeleteProjectEffect,
-      LoadIterativePlanningProjectEffect,
-      CreatePlanPropertyEffect,
-      LoadPlanPropertiesEffect,
-      UpdatePlanPropertyEffect,
-      DeletePlanPropertyEffect,
-      LoadIterationStepsEffect,
-      CreateIterationStepEffect,
-      ComputePlanEffect,
-      SendMessageToLLMEffect,
-      ComputeExplanationEffect,
-      QuestionQueueEffect,
+        LoadProjectEffect,
+        UpdateProjectEffect,
+        LoadProjectPlanPropertiesEffect,
+        LoadProjectMetaDataListEffect,
+        CreateProjectEffect,
+        DeleteProjectEffect,
+        LoadIterativePlanningProjectEffect,
+        CreatePlanPropertyEffect,
+        LoadPlanPropertiesEffect,
+        UpdatePlanPropertyEffect,
+        DeletePlanPropertyEffect,
+        LoadIterationStepsEffect,
+        CreateIterationStepEffect,
+        ComputePlanEffect,
+        SendMessageToLLMEffect,
+        ComputeExplanationEffect,
+        QuestionQueueEffect,
     ]),
     // Instrumentation must be imported after importing StoreModule (config is optional)
     StoreDevtoolsModule.instrument({
-      maxAge: 25, // Retains last 25 states
-      autoPause: true, // Pauses recording actions and state changes when the extension window is not open
-      trace: false, //  If set to true, will include stack trace for every dispatched action, so you can see it in trace tab jumping directly to that part of code
-      traceLimit: 75, // maximum stack trace frames to be stored (in case trace option was provided as true)
-      connectInZone: true // If set to true, the connection is established within the Angular zone
+        maxAge: 25, // Retains last 25 states
+        autoPause: true, // Pauses recording actions and state changes when the extension window is not open
+        trace: false, //  If set to true, will include stack trace for every dispatched action, so you can see it in trace tab jumping directly to that part of code
+        traceLimit: 75, // maximum stack trace frames to be stored (in case trace option was provided as true)
+        connectInZone: true // If set to true, the connection is established within the Angular zone
     }),
     RouterModule.forRoot(appRoutes, {
-      enableTracing: false,
-      paramsInheritanceStrategy: "always",
+        enableTracing: false,
+        paramsInheritanceStrategy: "always",
     }),
     BrowserModule,
     BrowserAnimationsModule,
@@ -386,7 +389,8 @@ import { ProjectOverviewComponent } from './project/components/project-overview/
     LabelModule,
     PropertyTemplateCreatorComponent,
     ProjectOverviewComponent,
-  ],
+    DialogModule
+],
   providers: [
     UserStore,
     AuthenticationService,
@@ -418,9 +422,8 @@ import { ProjectOverviewComponent } from './project/components/project-overview/
     NewIterationStepStore,
     DomainSpecStore,
     DemosStore,
-    DemosService,
+    DemoService,
     RunningDemoStore,
-    RunningDemoService,
     UserStudiesStore,
     UserStudiesService,
     RunningUserStudyStore,
@@ -448,6 +451,7 @@ import { ProjectOverviewComponent } from './project/components/project-overview/
     LLMService,
     ExplainerService,
     ExplainerMonitoringService,
+    ProjectPlanPropertyService,
     {
       provide: MAT_BOTTOM_SHEET_DEFAULT_OPTIONS,
       useValue: { hasBackdrop: true },
