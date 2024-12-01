@@ -5,7 +5,7 @@ import { Observable, Subject } from "rxjs";
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { MatBottomSheet } from "@angular/material/bottom-sheet";
 import { Demo } from "src/app/interface/demo";
-import { AuthenticationService } from "../../../service/authentication/authentication.service";
+import { AuthenticationService } from "../../../user/services/authentication.service";
 import { DemoCreatorComponent } from "../../../project/components/demo-creator/demo-creator.component";
 import { environment } from "../../../../environments/environment";
 import { DemoInfoComponent } from "../demo-info/demo-info.component";
@@ -126,9 +126,10 @@ export class DemoCollectionComponent implements OnInit {
   }
 
   myDemo(demo: Demo): boolean {
-    if (this.userService.getUser()) {
-      return this.userService.getUser()._id === demo.user;
-    }
+
+    // if (this.userService.getUser()) {
+    //   return this.userService.getUser()._id === demo.user;
+    // }
     return false;
   }
 }

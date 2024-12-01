@@ -7,7 +7,7 @@ import { ItemStore } from "./generic-item.store";
 import { TaskSchema } from "../interface/task-schema";
 import { DomainSpecification } from "../interface/files/domain-specification";
 import { Demo } from "../interface/demo";
-import { User } from "../interface/user";
+import { User } from "../user/domain/user";
 import { UserStudy } from "../interface/user-study/user-study";
 import { MetaStudy } from "../interface/user-study/meta-study";
 import {

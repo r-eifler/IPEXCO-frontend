@@ -6,7 +6,7 @@ import {
   PDDLFile,
 } from "../../../interface/files/files";
 import { ProjectsService } from "src/app/service/project/project-services";
-import { AuthenticationService } from "../../../service/authentication/authentication.service";
+import { AuthenticationService } from "../../../user/services/authentication.service";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { defaultDomainSpecification, DomainSpecification } from "src/app/interface/files/domain-specification";
 import { PDDLService } from "src/app/service/pddl/pddl.service";

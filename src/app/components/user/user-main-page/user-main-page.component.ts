@@ -4,15 +4,15 @@ import { Demo } from "src/app/interface/demo";
 import { UserStudy } from "../../../interface/user-study/user-study";
 import { Project } from "src/app/project/domain/project";
 import { MatIcon } from "@angular/material/icon";
-import { AsyncPipe } from "@angular/common";
 import { MatCardModule } from "@angular/material/card";
+import { MatButtonModule } from "@angular/material/button";
 
 @Component({
   selector: "app-user-main-page",
   standalone: true,
   imports: [
     MatIcon,
-    AsyncPipe,
+    MatButtonModule,
     MatCardModule
   ],
   templateUrl: "./user-main-page.component.html",
@@ -45,7 +45,7 @@ export class UserMainPageComponent implements OnInit {
   async openProject(project: Project) {
     // console.log(''.concat(...['/projects/', project._id, '/overview']));
     await this.router.navigate(
-      ["".concat(...["/projects/", project._id, "/overview"])],
+      ["".concat(...["/project/", project._id, "/overview"])],
       { relativeTo: this.route }
     );
   }

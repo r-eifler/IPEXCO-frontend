@@ -1,14 +1,18 @@
 import { Component, inject, OnInit } from "@angular/core";
 import { FormsModule, ReactiveFormsModule, UntypedFormControl, UntypedFormGroup, Validators } from "@angular/forms";
-import { AuthenticationService } from "src/app/service/authentication/authentication.service";
-import { User } from "src/app/interface/user";
 import { ActivatedRoute, Router } from "@angular/router";
 import { MatDialogRef } from "@angular/material/dialog";
-import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-import {MatSnackBar} from '@angular/material/snack-bar';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatIconModule } from "@angular/material/icon";
-import { MatFormField, MatFormFieldModule, MatLabel } from "@angular/material/form-field";
+import { MatFormFieldModule, MatLabel } from "@angular/material/form-field";
 import { MatCardModule } from "@angular/material/card";
+import { Store } from "@ngrx/store";
+import { login } from "src/app/user/state/user.actions";
+import { selectLoggedIn, selectUserError } from "src/app/user/state/user.selector";
+import { MatButtonModule } from "@angular/material/button";
+import { MatInputModule } from "@angular/material/input";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { filter } from "rxjs";
 
 @Component({
   selector: "app-login",
@@ -17,16 +21,16 @@ import { MatCardModule } from "@angular/material/card";
     MatIconModule,
     MatLabel,
     MatFormFieldModule,
+    MatInputModule,
     ReactiveFormsModule,
     FormsModule,
     MatCardModule,
+    MatButtonModule,
   ],
   templateUrl: "./login.component.html",
   styleUrls: ["./login.component.scss"],
 })
 export class LoginComponent implements OnInit {
-
-  isMobile: boolean;
 
   loginForm = new UntypedFormGroup({
     name: new UntypedFormControl('',[
@@ -43,35 +47,35 @@ export class LoginComponent implements OnInit {
 
   snackBar = inject(MatSnackBar);
 
+  store = inject(Store)
+
   constructor(
-    private userService: AuthenticationService,
     public dialogRef: MatDialogRef<LoginComponent>,
     private router: Router,
     private route: ActivatedRoute
-  ) {}
+  ) {
 
-  ngOnInit(): void {
+    this.loginSuccessful$.pipe(
+      takeUntilDestroyed(),
+      filter(loggedIn => loggedIn)
+    ).subscribe(() =>
+      this.dialogRef.close(false)
+    );
   }
 
-  onLogin(): void {
-    const newUser: User = {
-      name: this.loginForm.controls.name.value,
-      password: this.loginForm.controls.password.value,
-    };
-    // console.log(newUser);
+  ngOnInit(): void {
+    
+  }
 
-    this.userService.login(newUser).then(
-      async () => {
-        // console.log('Login successful.');
-        this.dialogRef.close(true);
-        await this.router.navigate(["/overview"], { relativeTo: this.route });
-      },
-      async () => {
-        // console.log('Login failed.');
-        this.snackBar.open('Login failed!', 'OK');
-        // this.dialogRef.close(false);
-      }
-    );
+  loginFailed$ = this.store.select(selectUserError);
+  loginSuccessful$ = this.store.select(selectLoggedIn);
+
+  onLogin(): void {
+    
+    const name = this.loginForm.controls.name.value;
+    const password = this.loginForm.controls.password.value;
+
+    this.store.dispatch(login({name, password}))
   }
 
   onBack(): void {

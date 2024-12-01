@@ -15,7 +15,6 @@ import { UserStudyNavigationComponent } from "./components/user-study/user-study
 import { UserStudyStartComponent } from "./components/user-study/user-study-start/user-study-start.component";
 import { UserMainPageComponent } from "./components/user/user-main-page/user-main-page.component";
 import { ProjectCollectionComponent } from "./project-meta/components/project-collection/project-collection.component";
-import { ProjectBaseComponent } from "./project/view/project-base/project-base.component";
 import { AuthGuard } from "./route-guards/auth-guard.guard";
 import { LlmBaseComponent } from "./LLM/components/llm-base/llm-base.component";
 

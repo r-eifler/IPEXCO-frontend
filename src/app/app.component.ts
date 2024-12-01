@@ -1,8 +1,8 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, inject, OnInit } from "@angular/core";
 import { MatIconRegistry } from "@angular/material/icon";
 import { DomSanitizer } from "@angular/platform-browser";
-import { AuthenticationService } from "./service/authentication/authentication.service";
-import { NavigationComponent } from "./components/navigation/navigation.component";
+import { Store } from "@ngrx/store";
+import { checkLoggedIn } from "./user/state/user.actions";
 
 @Component({
   selector: "app-root",
@@ -13,8 +13,9 @@ export class AppComponent implements OnInit {
   title = "IPEXCO";
   editorOptions = { theme: "vs-dark", language: "javascript" };
 
+  store = inject(Store)
+
   constructor(
-    private userService: AuthenticationService,
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer
   ) {
@@ -31,6 +32,6 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.userService.loadUser();
+    // this.store.dispatch(checkLoggedIn())
   }
 }

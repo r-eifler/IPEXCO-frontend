@@ -2,7 +2,7 @@ import { defaultGeneralSetting } from "../../../project/domain/general-settings"
 import { Component, inject, Inject, OnInit } from "@angular/core";
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
 import { BehaviorSubject, combineLatest, Observable, Subject } from "rxjs";
-import { AuthenticationService } from "../../../service/authentication/authentication.service";
+import { AuthenticationService } from "../../../user/services/authentication.service";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { defaultDomainSpecification, DomainSpecification } from "src/app/interface/files/domain-specification";
 import { PDDLService } from "src/app/service/pddl/pddl.service";
@@ -17,6 +17,7 @@ import { TemplateFileUploadComponent } from "src/app/components/files/file-uploa
 import { MatStepperModule } from "@angular/material/stepper";
 import { MatFormFieldModule, MatLabel } from "@angular/material/form-field";
 import { MatCardModule } from "@angular/material/card";
+import { selectUser } from "src/app/user/state/user.selector";
 
 @Component({
   selector: "app-project-creator",
@@ -115,11 +116,14 @@ export class ProjectCreatorComponent implements OnInit {
   }
 
   onSave(): void {
-    // console.log('Save project');
-   this.translatedModel$.pipe(
-      // take(1),
+
+    combineLatest([
+      this.translatedModel$,
+      this.store.select(selectUser)
+    ]).pipe(
+      take(1),
     ).subscribe(
-      (model) => {
+      ([model, user]) => {
 
         console.log("Save new project")
 
@@ -127,7 +131,7 @@ export class ProjectCreatorComponent implements OnInit {
           _id: this.editedProject ? this.editedProject._id : null,
           updated: new Date().toLocaleString(),
           name: this.projectBasic.controls.name.value,
-          user: this.userService.getUser()._id,
+          user: user._id,
           description: this.projectBasic.controls.description.value,
           domainSpecification: defaultDomainSpecification,
           settings: defaultGeneralSetting,
