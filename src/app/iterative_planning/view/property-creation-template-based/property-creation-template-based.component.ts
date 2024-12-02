@@ -1,5 +1,5 @@
 import { AsyncPipe, KeyValuePipe, NgFor, NgIf } from '@angular/common';
-import { Component, inject, output } from '@angular/core';
+import { Component, inject, input, output } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { filter, first, map, Observable, take, tap } from 'rxjs';
 import { generateDummyPlanProperty, generatePlanProperty, getPossibleValues, getTemplateParts, PlanPropertyTemplate, TemplatePart } from '../../domain/plan-property/plan-property-template';
@@ -14,7 +14,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatCardModule } from '@angular/material/card';
 import { PropertyTemplatePartComponent } from '../../components/property-template-part/property-template-part.component'
 import { equalPlanProperties, PlanProperty } from '../../domain/plan-property/plan-property';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Project } from '../../../project/domain/project';
 import { PDDLObject, PlanningTask } from '../../../interface/planning-task';
 import { createPlanProperty } from '../../state/iterative-planning.actions';
@@ -65,6 +65,8 @@ export class PropertyCreationTemplateBasedComponent {
 
   allSelected = false;
   propertyAlreadyExists = false;
+
+  data: {createProperty: false} = inject(MAT_DIALOG_DATA)
 
   constructor() {
 
@@ -174,8 +176,10 @@ export class PropertyCreationTemplateBasedComponent {
           project
         )
         this.created.emit(newPlanProperty);
-        this.store.dispatch(createPlanProperty({planProperty: newPlanProperty}));
-        this.dialogRef.close()
+        if(this.data.createProperty){
+          this.store.dispatch(createPlanProperty({planProperty: newPlanProperty}));
+        }
+        this.dialogRef.close(newPlanProperty)
       }
     )
   }

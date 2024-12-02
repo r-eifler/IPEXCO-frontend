@@ -5,7 +5,7 @@ import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dial
 import { Store } from '@ngrx/store';
 import { combineLatest, filter, map, Observable, startWith, take, tap } from 'rxjs';
 import { Project } from '../../domain/project';
-import { selectProject } from '../../state/project.selector';
+import { selectProject, selectProjectProperties } from '../../state/project.selector';
 import { PlanProperty } from 'src/app/iterative_planning/domain/plan-property/plan-property';
 import { registerDemoCreation } from '../../state/project.actions';
 import { selectPlanPropertyIds } from "src/app/iterative_planning/view/create-iteration/create-iteration.component.selector";
@@ -51,7 +51,7 @@ export class DemoCreatorComponent implements OnInit {
   dialogRef: MatDialogRef<unknown> | undefined;
 
   project$ = this.store.select(selectProject)
-  planProperties$ = this.store.select(selectIterativePlanningProperties)
+  planProperties$ = this.store.select(selectProjectProperties)
 
   form = this.fb.group({
     main: this.fb.group({

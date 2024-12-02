@@ -21,12 +21,13 @@
             <mat-checkbox [formControl]="propertyIdControl"></mat-checkbox>
           </app-editable-list-entry-prefix>
 
-          <app-plan-proeprty-panel [property]="properties()?.[idx]"></app-plan-proeprty-panel>
+          <app-plan-proeprty-panel [property]="availableProperties()?.[idx]"></app-plan-proeprty-panel>
         </app-editable-list-entry>
         }
 
         <app-editable-list-action>
-          <button mat-button (click)="createNewProperty()" *[userRole]="['admin', 'creator']">
+          <button mat-button (click)="createNewProperty()">
+            <!-- <button mat-button (click)="createNewProperty()" *[userRole]="['admin', 'creator']"> -->
             <mat-icon>add</mat-icon>
             <span>Create New Property</span>
           </button>

@@ -92,6 +92,7 @@
 
 <ng-template #propertySelector>
   <app-select-property
+    [includeNewNotCreatedProperties]="true"
     [properties]="availableProperties$ | async"
     (cancel)="onCancelPropertySelection()"
     (select)="handlePropertyIdSelection($event)"

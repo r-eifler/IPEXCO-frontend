@@ -1,9 +1,9 @@
 import { NgIf } from "@angular/common";
-import { Directive, effect, inject, input, TemplateRef } from "@angular/core";
-import { takeUntilDestroyed, toSignal } from "@angular/core/rxjs-interop";
+import { Directive, effect, inject, input } from "@angular/core";
+import { toSignal } from "@angular/core/rxjs-interop";
 import { Store } from "@ngrx/store";
-
-type User = 'admin' | 'user';
+import { UserRole } from "src/app/user/domain/user";
+import { selectUserRole } from "src/app/user/state/user.selector";
 
 @Directive({
     selector: '[userRole]',
@@ -11,14 +11,15 @@ type User = 'admin' | 'user';
         directive: NgIf,
     }],
 })
-class UserRoleDirective {
-    showForUser = input.required<User[]>({ alias: 'userRole' });
+export class UserRoleDirective {
+    showForUser = input.required<UserRole[]>({ alias: 'userRole' });
 
     store = inject(Store);
 
-    currentRole = toSignal(this.store.select(selectCurrentRole)); // -> 'admin', ...
+    currentRole = toSignal(this.store.select(selectUserRole)); // -> 'admin', ...
 
     constructor(ngIf: NgIf) {
-      effect(() => ngIf.ngIf = this.showForUser().includes(this.currentRole()));
+        console.log(this.currentRole());
+        effect(() => ngIf.ngIf = this.showForUser().includes(this.currentRole()));
     }
 }
