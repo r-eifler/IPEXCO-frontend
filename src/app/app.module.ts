@@ -73,13 +73,12 @@ import { RegisterEffect } from './user/state/effects/register.effect';
 import { LoggedInEffect } from './user/state/effects/loggedIn.effect';
 import { LoadTokenEffect } from './user/state/effects/loadToken.effect';
 import { LoadUserEffect } from './user/state/effects/loadUser.effect';
-import { UserRoleDirective } from './iterative_planning/components/select-property/user-role.directive';
+import { UserRoleDirective } from './user/directives/user-role.directive';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    UserRoleDirective,
   ],
   imports: [
     StoreModule.forRoot({
