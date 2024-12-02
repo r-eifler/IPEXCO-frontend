@@ -1,0 +1,99 @@
+<app-dialog>
+  <app-dialog-header>
+    <app-dialog-title>
+      New Demo
+    </app-dialog-title>
+  </app-dialog-header>
+  <app-dialog-content>
+  
+    <form [formGroup]="form">
+    <mat-stepper [linear]="false" #stepper>
+  
+      <mat-step [stepControl]="form.controls.main" label="Main Info">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Name</mat-label>
+            <input matInput type="text" [formControl]="form.controls.main.controls.name" />
+          </mat-form-field>
+      
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Description</mat-label>
+            <textarea matInput [formControl]="form.controls.main.controls.description"></textarea>
+          </mat-form-field>
+      </mat-step>
+
+      <mat-step [stepControl]="form.controls.taskInfo" label="Domain & Instance">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Description of the domain</mat-label>
+            <textarea matInput type="text" [formControl]="form.controls.taskInfo.controls.domainInfo"></textarea>
+          </mat-form-field>
+      
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Description of the instance</mat-label>
+            <textarea matInput [formControl]="form.controls.taskInfo.controls.instanceInfo"></textarea>
+          </mat-form-field>
+        <div class="stepper-button-container">
+          <button mat-button matStepperPrevious type="button">Back</button>
+          <button mat-button matStepperNext type="button">Next</button>
+        </div>
+      </mat-step>
+
+      <mat-step [stepControl]="form.controls.image" label="Image">
+        <div class="image-selection-container">
+            <input
+              style="display: none"
+              type="file"
+              (change)="onFileChanged($event); imageSelected=true;"
+              #fileInput
+            />
+            <button mat-icon-button (click)="fileInput.click()" type="button" style="margin-top: 20px">
+              <mat-icon>add_photo_alternate</mat-icon>
+            </button>
+            <p style="margin: 0; align-self: center">{{ imageFileName }}</p>
+        </div>
+      </mat-step>
+
+      <mat-step [stepControl]="form.controls.image" label="Properties">
+        <app-editable-list>
+
+          @for(property of selectedPlanProperties$ | async; track property._id; let idx = $index) {
+          <app-editable-list-entry>
+            <app-plan-proeprty-panel [property]="property"></app-plan-proeprty-panel>
+            <app-editable-list-entry-suffix>
+              <button mat-icon-button (click)="removeSelectedProperty(idx)" type="button">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </app-editable-list-entry-suffix>
+          </app-editable-list-entry>
+          }
+
+          @if(!(hasSelectedPlanProperties$ | async)) {
+          <app-editable-list-empty-state>
+            <span>Add properties that should be included in the demo.</span>
+            <mat-icon>flag_check</mat-icon>
+          </app-editable-list-empty-state>
+          }
+          <app-editable-list-action>
+            <button mat-button (click)="addProperty()" type="button">
+              <mat-icon>add</mat-icon>
+              Add Property
+            </button>
+          </app-editable-list-action>
+        </app-editable-list>
+      </mat-step>
+  
+    </mat-stepper>
+    </form>
+  
+  </app-dialog-content>
+  <app-dialog-footer>
+    <button mat-flat-button color="primary" [disabled]="form.invalid">Save</button>
+  </app-dialog-footer>
+</app-dialog>
+
+<ng-template #propertySelector>
+  <app-select-property
+    [properties]="availableProperties$ | async"
+    (cancel)="onCancelPropertySelection()"
+    (select)="handlePropertyIdSelection($event)"
+  ></app-select-property>
+</ng-template>

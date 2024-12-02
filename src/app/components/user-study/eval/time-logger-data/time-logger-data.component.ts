@@ -1,11 +1,18 @@
 import { Component, Input, OnInit } from "@angular/core";
+import { MatCard, MatCardModule } from "@angular/material/card";
+import { NgxChartsModule } from "@swimlane/ngx-charts";
 import { BehaviorSubject, combineLatest, Subject } from "rxjs";
 import { takeUntil, filter } from "rxjs/operators";
 import { USUser } from "src/app/interface/user-study/user-study-user";
-import { UserStudyDataService } from "src/app/service/user-study/user-study-data.service";
+import { UserStudyDataService } from "src/app/user_study/service/user-study-data.service";
 
 @Component({
   selector: "app-time-logger-data",
+  standalone: true,
+  imports: [
+    NgxChartsModule,
+    MatCardModule,
+  ],
   templateUrl: "./time-logger-data.component.html",
   styleUrls: ["./time-logger-data.component.css"],
 })

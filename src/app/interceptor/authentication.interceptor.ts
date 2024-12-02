@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { inject, Injectable } from "@angular/core";
 import {
   HttpEvent,
   HttpHandler,
@@ -6,30 +6,32 @@ import {
   HttpRequest,
 } from "@angular/common/http";
 
-import { Observable } from "rxjs";
+import { map, Observable, switchMap, take } from "rxjs";
+import { Store } from "@ngrx/store";
+import { selectToken } from "../user/state/user.selector";
 
 /** Pass untouched request through to the next request handler. */
 @Injectable()
 export class AuthenticationInterceptor implements HttpInterceptor {
+
+  store = inject(Store)
+
   intercept(
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    let token = localStorage.getItem("xai-user-study-jwt-token");
-    if (!token) {
-      token = localStorage.getItem("jwt-token");
-      // console.log('ADD User Study Token to request ...');
-    }
-    if (token) {
-      // console.log('authenticated');
-      const cloned = req.clone({
-        headers: req.headers.set("Authorization", "Bearer " + token),
-      });
-
-      return next.handle(cloned);
-    } else {
-      // console.log('not authenticated');
-      return next.handle(req);
-    }
+    return this.store.select(selectToken).pipe(
+      take(1),
+      switchMap(token => {
+        if(!token){
+          return next.handle(req);
+        }
+        else{ 
+          return next.handle(req.clone({
+            setHeaders: {Authorization: "Bearer " + token},
+          }))
+        }
+      }
+    ))
   }
 }

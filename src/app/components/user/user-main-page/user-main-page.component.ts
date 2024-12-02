@@ -1,22 +1,20 @@
-import {
-  DomainFilesService,
-  ProblemFilesService,
-} from "../../../service/files/pddl-file-services";
-import { DemosService } from "../../../service/demo/demo-services";
-import { ProjectsService } from "../../../service/project/project-services";
-import { Component, OnDestroy, OnInit } from "@angular/core";
-import { ResponsiveService } from "src/app/service/responsive/responsive.service";
-import { takeUntil } from "rxjs/operators";
+import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Demo } from "src/app/interface/demo";
-import { Subject } from "rxjs";
-import { UserStudiesService } from "../../../service/user-study/user-study-services";
 import { UserStudy } from "../../../interface/user-study/user-study";
 import { Project } from "src/app/project/domain/project";
-import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { MatIcon } from "@angular/material/icon";
+import { MatCardModule } from "@angular/material/card";
+import { MatButtonModule } from "@angular/material/button";
 
 @Component({
   selector: "app-user-main-page",
+  standalone: true,
+  imports: [
+    MatIcon,
+    MatButtonModule,
+    MatCardModule
+  ],
   templateUrl: "./user-main-page.component.html",
   styleUrls: ["./user-main-page.component.scss"],
 })
@@ -25,33 +23,29 @@ export class UserMainPageComponent implements OnInit {
   isMobile: boolean;
 
   constructor(
-    private responsiveService: ResponsiveService,
-    public projectsService: ProjectsService,
-    public demosService: DemosService,
-    public userStudiesService: UserStudiesService,
     private router: Router,
     private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
-    this.responsiveService
-      .getMobileStatus()
-      .pipe(takeUntilDestroyed())
-      .subscribe((isMobile) => {
-        this.isMobile = isMobile;
-      });
-    this.responsiveService.checkWidth();
+    // this.responsiveService
+    //   .getMobileStatus()
+    //   .pipe(takeUntilDestroyed())
+    //   .subscribe((isMobile) => {
+    //     this.isMobile = isMobile;
+    //   });
+    // this.responsiveService.checkWidth();
 
-    this.projectsService.findCollection();
-    this.demosService.findCollection();
-    this.userStudiesService.findCollection();
+    // this.projectsService.findCollection();
+    // // this.demosService.findCollection();
+    // this.userStudiesService.findCollection();
   }
 
 
   async openProject(project: Project) {
     // console.log(''.concat(...['/projects/', project._id, '/overview']));
     await this.router.navigate(
-      ["".concat(...["/projects/", project._id, "/overview"])],
+      ["".concat(...["/project/", project._id, "/overview"])],
       { relativeTo: this.route }
     );
   }

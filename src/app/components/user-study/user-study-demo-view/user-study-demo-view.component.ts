@@ -7,22 +7,23 @@ import {
   Output,
 } from "@angular/core";
 import { Demo } from "../../../interface/demo";
-import {
-  DemosService,
-  RunningDemoService,
-} from "../../../service/demo/demo-services";
-import { Subject } from "rxjs";
-import { takeUntil } from "rxjs/operators";
 import { PLANNER_REDIRECT, QUESTION_REDIRECT } from "../../../app.tokens";
-import { IterationStepsService } from "../../../service/planner-runs/iteration-steps.service";
-import { PlannerService } from "../../../service/planner-runs/planner.service";
 import { LogEvent, TimeLoggerService } from "../../../service/logger/time-logger.service";
-import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { DemoNavigatorComponent } from "../../demo/demo-navigator/demo-navigator.component";
+import { DemoTaskIntroComponent } from "../../demo/demo-task-intro/demo-task-intro.component";
+import { DemoHelpComponent } from "../../demo/demo-help/demo-help.component";
+
 
 
 
 @Component({
   selector: "app-user-study-demo-view",
+  standalone: true,
+  imports: [
+    DemoNavigatorComponent,
+    DemoTaskIntroComponent,
+    DemoHelpComponent,
+  ],
   templateUrl: "./user-study-demo-view.component.html",
   styleUrls: ["./user-study-demo-view.component.css"],
   providers: [
@@ -41,32 +42,32 @@ export class UserStudyDemoViewComponent implements OnInit {
 
   constructor(
     private timeLogger: TimeLoggerService,
-    private demosService: DemosService,
-    private selectedDemoService: RunningDemoService,
+    // private demosService: DemosService,
+    // private selectedDemoService: RunningDemoService,
   ) {
   }
 
   ngOnInit(): void {
     console.log("USER STUDY DEMO VIEW");
 
-    this.demosService
-      .getObject(this.demoId)
-      .pipe(takeUntilDestroyed())
-      .subscribe((demo) => {
-        if (demo) {
+    // this.demosService
+    //   .getObject(this.demoId)
+    //   .pipe(takeUntilDestroyed())
+    //   .subscribe((demo) => {
+    //     if (demo) {
 
-          this.timeLogger.log(LogEvent.START_DEMO, {demoId: demo._id});
-          this.selectedDemoService.saveObject(demo);
-          // this.currentProjectService.saveObject(demo);
-          // this.propertiesService.findCollection([
-          //   { param: "projectId", value: demo._id },
-          // ]);
+    //       this.timeLogger.log(LogEvent.START_DEMO, {demoId: demo._id});
+    //       this.selectedDemoService.saveObject(demo);
+    //       // this.currentProjectService.saveObject(demo);
+    //       // this.propertiesService.findCollection([
+    //       //   { param: "projectId", value: demo._id },
+    //       // ]);
 
-          // this.newIterationStepGenerationService.createInitialStep();
+    //       // this.newIterationStepGenerationService.createInitialStep();
 
-          this.demo = demo;
-        }
-      });
+    //       this.demo = demo;
+    //     }
+    //   });
   }
 
   nextInternalStep() {

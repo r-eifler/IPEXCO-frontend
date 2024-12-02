@@ -1,13 +1,51 @@
 import { createAction, props } from "@ngrx/store";
 import { Project } from "../domain/project";
+import { Demo } from "src/app/interface/demo";
+import { PlanProperty } from "src/app/iterative_planning/domain/plan-property/plan-property";
+
+// project
 
 export const loadProject = createAction('[project] load project', props<{id: string}>());
 export const loadProjectSuccess = createAction('[project] load project success', props<{project: Project}>());
 export const loadProjectFailure = createAction('[project] load project failure');
 
 
-
 export const updateProject = createAction('[project] update project', props<{project: Project}>());
 export const updateProjectSuccess = createAction('[project] update project success', props<{project: Project}>());
 export const updateProjectFailure = createAction('[project] update project failure');
 
+
+// Plan Properties
+
+export const loadPlanProperties = createAction('[project] load plan properties', props<{id: string}>());
+export const loadPlanPropertiesSuccess = createAction('[project] load plan properties success', props<{planProperties: Record<string,PlanProperty>}>());
+export const loadPlanPropertiesFailure = createAction('[project] load plan properties failure');
+
+
+export const createPlanProperty = createAction('[project] create plan property', props<{planProperty: PlanProperty}>());
+export const createPlanPropertySuccess = createAction('[project] create plan property success', props<{planProperty: PlanProperty}>());
+export const createPlanPropertyFailure = createAction('[project] create plan property failure');
+
+
+export const updatePlanProperty = createAction('[project] update plan property', props<{planProperty: PlanProperty}>());
+export const updatePlanPropertySuccess = createAction('[project] update plan property success', props<{planProperty: PlanProperty}>());
+export const updatePlanPropertyFailure = createAction('[project] update plan property failure');
+
+export const deletePlanProperty = createAction('[project] delete plan property', props<{id: string}>());
+export const deletePlanPropertySuccess = createAction('[project] delete plan property success', props<{res: boolean}>());
+export const deletePlanPropertyFailure = createAction('[project] delete plan property failure');
+
+
+// demos
+
+export const loadProjectDemos = createAction('[project] load project demos', props<{id: string}>());
+export const loadProjectDemosSuccess = createAction('[project] load project demos success', props<{demos: Demo[]}>());
+export const loadProjectDemosFailure = createAction('[project] load project demos failure');
+
+export const registerDemoCreation = createAction('[project] register demo creation', props<{demo: Demo}>());
+export const registerDemoCreationSuccess = createAction('[project] register demo creation success');
+export const registerDemoCreationFailure = createAction('[project] register demo creation failure');
+
+export const demoCreationRunning = createAction('[project] demo creation running', props<{id: string}>());
+export const demoCreationRunningSuccess = createAction('[project] demo creation running');
+export const demoCreationRunningFailure = createAction('[project] demo creation running');

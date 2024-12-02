@@ -1,27 +1,50 @@
 import { PlanningTask } from "src/app/interface/planning-task";
 import { map, take, takeUntil } from "rxjs/operators";
-import { MatStepper } from "@angular/material/stepper";
+import { MatStepper, MatStepperModule } from "@angular/material/stepper";
 import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
-import { UntypedFormArray, UntypedFormControl, UntypedFormGroup, Validators } from "@angular/forms";
-import { MatAutocompleteSelectedEvent } from "@angular/material/autocomplete";
+import { ReactiveFormsModule, UntypedFormArray, UntypedFormControl, UntypedFormGroup, Validators } from "@angular/forms";
+import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from "@angular/material/autocomplete";
 import { DomainSpecification, getPropertyTemplateClassMap } from "src/app/interface/files/domain-specification";
 import { PlanPropertyTemplate } from "src/app/iterative_planning/domain/plan-property/plan-property-template";
-import { MatAccordion } from "@angular/material/expansion";
-import { PlanPropertyMapService } from "src/app/service/plan-properties/plan-property-services";
-import { CurrentProjectService } from "src/app/service/project/project-services";
+import { MatAccordion, MatExpansionModule } from "@angular/material/expansion";
 import { Observable, Subject } from "rxjs";
 import { MatDialogRef } from "@angular/material/dialog";
-import { MatSlideToggleChange } from "@angular/material/slide-toggle";
-import { MatSelectionListChange } from "@angular/material/list";
+import { MatSlideToggleChange, MatSlideToggleModule } from "@angular/material/slide-toggle";
+import { MatList, MatListModule, MatSelectionListChange } from "@angular/material/list";
 import { Project } from "src/app/project/domain/project";
 import { Action, ActionSet, PlanProperty } from "src/app/iterative_planning/domain/plan-property/plan-property";
 import { matchRegexValidator } from "src/app/validators/match-regex-validator";
 import { Store } from "@ngrx/store";
 import { selectIterativePlanningProject } from "src/app/iterative_planning/state/iterative-planning.selector";
 import { createPlanProperty } from "src/app/iterative_planning/state/iterative-planning.actions";
+import { MatIconModule } from "@angular/material/icon";
+import { MatMenuModule } from "@angular/material/menu";
+import { MatBadgeModule } from "@angular/material/badge";
+import { MatCardModule } from "@angular/material/card";
+import { MatOptionModule } from "@angular/material/core";
+import { MatFormFieldModule, MatLabel } from "@angular/material/form-field";
+import { MatRadioButton } from "@angular/material/radio";
+import { MatButtonToggleModule } from "@angular/material/button-toggle";
 
 @Component({
   selector: "app-property-creator",
+  standalone: true,
+  imports: [
+    MatIconModule,
+    MatMenuModule,MatBadgeModule,
+    MatCardModule,
+    MatStepperModule,
+    MatListModule,
+    MatExpansionModule,
+    ReactiveFormsModule,
+    MatOptionModule,
+    MatAutocompleteModule,
+    MatLabel,
+    MatFormFieldModule,
+    MatRadioButton,
+    MatSlideToggleModule,
+    MatButtonToggleModule,
+  ],
   templateUrl: "./property-creator.component.html",
   styleUrls: ["./property-creator.component.css"],
 })

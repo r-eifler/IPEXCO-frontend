@@ -1,13 +1,20 @@
 import { USUser } from './../../../../interface/user-study/user-study-user';
-import { UserStudyDataService, DataPoint, LineChartData } from './../../../../service/user-study/user-study-data.service';
+import { UserStudyDataService, DataPoint, LineChartData } from '../../../../user_study/service/user-study-data.service';
 import { filter } from 'rxjs/operators';
 import { takeUntil } from 'rxjs/operators';
 import { Component, Input, OnDestroy, OnInit } from "@angular/core";
 import { BehaviorSubject, combineLatest, Subject } from "rxjs";
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: "app-overview-data",
+  standalone: true,
+  imports: [
+    NgxChartsModule,
+    MatCardModule,
+  ],
   templateUrl: "./overview-data.component.html",
   styleUrls: ["./overview-data.component.css"],
 })

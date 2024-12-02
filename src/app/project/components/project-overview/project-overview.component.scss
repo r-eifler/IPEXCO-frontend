@@ -1,0 +1,37 @@
+.container {
+  margin: auto;
+  box-sizing: border-box;
+  padding: 10px;
+  padding-top: 30px;
+  width: 80%;
+  height: 100%;
+  display: flexbox;
+  flex-direction: column;
+}
+
+.container > mat-card {
+  margin: 10px auto;
+}
+
+.overview-card {
+  margin: 10px auto;
+}
+
+.action-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.action-list > button {
+  margin: 5px auto;
+  width: 100%;
+}
+
+.actions-container {
+  width: 100%;
+  padding-top: 30px;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 30px 30px
+}

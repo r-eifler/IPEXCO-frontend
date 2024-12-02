@@ -3,6 +3,7 @@ import * as marked from "marked";
 
 @Pipe({
   name: "marked",
+  standalone: true,
 })
 export class MarkedPipe implements PipeTransform {
   transform(value: string, ...args: unknown[]): unknown {

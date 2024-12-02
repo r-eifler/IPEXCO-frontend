@@ -6,7 +6,6 @@ import { filter, map, take, tap } from "rxjs/operators";
 import { IterationStep, StepStatus } from "src/app/iterative_planning/domain/iteration_step";
 import { PlanAction, PlanRunStatus } from "src/app/iterative_planning/domain/plan";
 import { selectIterativePlanningSelectedStep } from "src/app/iterative_planning/state/iterative-planning.selector";
-import { PlannerService } from "src/app/service/planner-runs/planner.service";
 import { LogEvent, TimeLoggerService } from "../../../../service/logger/time-logger.service";
 import { MatCardModule } from "@angular/material/card";
 import { AsyncPipe, NgFor, NgIf } from "@angular/common";
@@ -39,11 +38,10 @@ export class PlanViewComponent implements OnInit, OnDestroy {
   constructor(
     private store: Store,
     private timeLogger: TimeLoggerService,
-    private plannerService: PlannerService,
     private destroyRef: DestroyRef
   ) {
     this.step$ = this.store.select(selectIterativePlanningSelectedStep);
-    this.plannerBusy$ = this.plannerService.isPlannerBusy();
+    // this.plannerBusy$ = this.plannerService.isPlannerBusy();
   }
 
   ngOnInit(): void {

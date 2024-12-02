@@ -1,18 +1,21 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
-import {
-  RunningUserStudyService,
-  UserStudiesService,
-} from "../../../service/user-study/user-study-services";
+import { Component, OnInit } from "@angular/core";
 import { Subject } from "rxjs";
 import { UserStudy } from "../../../interface/user-study/user-study";
 import { takeUntil } from "rxjs/operators";
 import { ActivatedRoute, ParamMap, Router } from "@angular/router";
 import { USUser } from "../../../interface/user-study/user-study-user";
-import { UserStudyUserService } from "../../../service/user-study/user-study-user.service";
-import { AuthenticationService } from "../../../service/authentication/authentication.service";
+import { MatCardModule } from "@angular/material/card";
+import { MatRadioModule } from "@angular/material/radio";
+import { FormsModule, NgModel, ReactiveFormsModule } from "@angular/forms";
 
 @Component({
   selector: "app-user-study-start",
+  standalone: true,
+  imports: [
+    MatCardModule,
+    MatRadioModule,
+    FormsModule
+  ],
   templateUrl: "./user-study-start.component.html",
   styleUrls: ["./user-study-start.component.css"],
 })
@@ -29,15 +32,11 @@ export class UserStudyStartComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router,
-    private authenticationService: AuthenticationService,
-    private userStudyUserService: UserStudyUserService,
-    private userStudiesService: UserStudiesService,
-    private selectedUserStudyService: RunningUserStudyService
+    private router: Router
   ) {}
 
   ngOnInit(): void {
-    this.userStudyUserService.removeToken(); // TODO only for testing
+    // this.userStudyUserService.removeToken(); // TODO only for testing
     this.getUserStudyId();
   }
 
@@ -54,15 +53,15 @@ export class UserStudyStartComponent implements OnInit {
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((params: ParamMap) => {
         const userStudyId = params.get("userStudyId");
-        this.userStudiesService
-          .getObject(userStudyId)
-          .pipe(takeUntil(this.ngUnsubscribe))
-          .subscribe((study) => {
-            if (study) {
-              this.userStudy = study;
-              this.selectedUserStudyService.saveObject(study);
-            }
-          });
+        // this.userStudiesService
+        //   .getObject(userStudyId)
+        //   .pipe(takeUntil(this.ngUnsubscribe))
+        //   .subscribe((study) => {
+        //     if (study) {
+        //       this.userStudy = study;
+        //       this.selectedUserStudyService.saveObject(study);
+        //     }
+        //   });
       });
   }
 
@@ -99,18 +98,18 @@ export class UserStudyStartComponent implements OnInit {
   }
 
   async onAgree() {
-    if (this.authenticationService.loggedIn()) {
-      const prolificUser: USUser = {
-        prolificId: "000000",
-        userStudyExtId: "000000",
-      };
-      console.log("Register user");
-      this.userRegistered = await this.userStudyUserService.register(prolificUser, this.userStudyId);
-      if (this.userRegistered) {
-        this.initUserStudy();
-      }
-      return;
-    }
+    // if (this.authenticationService.loggedIn()) {
+    //   const prolificUser: USUser = {
+    //     prolificId: "000000",
+    //     userStudyExtId: "000000",
+    //   };
+    //   console.log("Register user");
+    //   // this.userRegistered = await this.userStudyUserService.register(prolificUser, this.userStudyId);
+    //   if (this.userRegistered) {
+    //     this.initUserStudy();
+    //   }
+    //   return;
+    // }
 
     this.getProlificIDs().then(
       async (ids) => {
@@ -119,7 +118,7 @@ export class UserStudyStartComponent implements OnInit {
           userStudyExtId: ids[1]
         };
 
-        this.userRegistered = await this.userStudyUserService.register(prolificUser, this.userStudyId);
+        // this.userRegistered = await this.userStudyUserService.register(prolificUser, this.userStudyId);
         if (this.userRegistered) {
           this.initUserStudy();
         }

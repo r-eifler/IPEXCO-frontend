@@ -4,13 +4,107 @@
             Plan Property Templates
         </mat-card-title>
     </mat-card-header>
-    <mat-card-content>
+    <mat-card-content class="main-content">
         <form class="template-form" [formGroup]="form">
-            <mat-form-field class="template-full-width">
-              <!-- <mat-label>Define plan property templates</mat-label>-->
-              <textarea matInput [formControl]="form.controls.planPropertyTemplates"></textarea>
-            </mat-form-field>
-          </form>
+            <mat-tab-group>
+                <mat-tab label="List">
+                    <div class="expansion-panel-container">
+                    @for (templateForm of form.controls.planPropertyTemplates.controls; track templateForm) {
+                        <mat-expansion-panel [formGroup]="templateForm">
+                            <mat-expansion-panel-header>
+                              <mat-panel-title> {{templateForm.controls.nameTemplate.value}} </mat-panel-title>
+                              <mat-panel-description> {{templateForm.controls.sentenceTemplate.value}} </mat-panel-description>
+                            </mat-expansion-panel-header>
+                            <div class="temp-form-content">
+                                <h3>Visual</h3>
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Class</mat-label>
+                                    <input matInput placeholder="Class" formControlName="class">
+                                </mat-form-field>
+                                <div class="color-input">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Color</mat-label>
+                                    <input matInput placeholder="Color" formControlName="color">
+                                </mat-form-field>
+                                <div class=color-box [style]="'background-color: ' + templateForm.controls.color.value + ';'"></div>
+                                </div>
+                                <div class="color-input">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Icon</mat-label>
+                                        <input matInput placeholder="Icon" formControlName="icon">
+                                    </mat-form-field>
+                                    <div class="visu-box">
+                                        <mat-icon aria-hidden="false" [fontIcon]="templateForm.controls.icon.value"></mat-icon>
+                                    </div>
+                                    </div>
+                                <mat-divider></mat-divider>
+
+                                <h3>Variables</h3>
+                                <div>
+                                    @for (variableForm of templateForm.controls.variables.controls; track variableForm) {
+                                        <div [formGroup]="variableForm" class="name-type-input-container">
+                                            <mat-form-field appearance="outline">
+                                                <mat-label>Name</mat-label>
+                                                <input matInput placeholder="name" formControlName="name">
+                                            </mat-form-field>
+                                            <mat-form-field appearance="outline">
+                                            <mat-label>Types</mat-label>
+                                            <mat-select [formControl]="variableForm.controls.types" multiple>
+                                                @for (type of variablesTypes; track type) {
+                                                <mat-option [value]="type.name">{{type.name}}</mat-option>
+                                                }
+                                            </mat-select>
+                                            </mat-form-field>
+                                        </div>
+                                    }
+                                </div>
+                                <mat-divider></mat-divider>
+
+                                <h3>Natural Language Templates</h3>
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Name Template</mat-label>
+                                    <input matInput placeholder="name template" formControlName="nameTemplate">
+                                </mat-form-field>
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Sentence Template</mat-label>
+                                    <input matInput placeholder="name template" formControlName="sentenceTemplate">
+                                </mat-form-field>
+                                <mat-divider></mat-divider>
+
+                                <h3>Formula Templates</h3>
+                                <div style="padding-bottom: 20px;">
+                                <mat-button-toggle-group name="propertyType" aria-label="Property Type" formControlName="type">
+                                    <mat-button-toggle [value]="goalType.goalFact">Goal</mat-button-toggle>
+                                    <mat-button-toggle [value]="goalType.LTL">LTL</mat-button-toggle>
+                                    <mat-button-toggle [value]="goalType.AS">Action Set</mat-button-toggle>
+                                </mat-button-toggle-group>
+                                </div>
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Formula Template</mat-label>
+                                    <input matInput placeholder="formula template" formControlName="formulaTemplate">
+                                </mat-form-field>
+
+                                <div [formGroup]="templateForm.controls.actionSetsTemplates">
+
+                                </div>
+
+                            </div>
+                        </mat-expansion-panel>
+                    }
+                    </div>
+                </mat-tab>
+                <mat-tab label="JSON">
+                    
+                    <mat-form-field class="template-full-width">
+                    <textarea 
+                        class="template-text-input" 
+                        matInput 
+                        [formControl]="form.controls.planPropertyTemplatesJSON">
+                    </textarea>
+                    </mat-form-field>
+                </mat-tab>
+            </mat-tab-group>
+        </form>
     </mat-card-content>
     <mat-card-actions class="actions">
         <button mat-stroked-button [disabled]="!form.valid" (click)="addNewTemplate()">Add new template</button>

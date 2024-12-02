@@ -1,8 +1,6 @@
-import { parsePlan } from "src/app/service/planner-runs/utils";
-import { CurrentProjectService } from "src/app/service/project/project-services";
-import { Component, DestroyRef, OnDestroy, OnInit } from "@angular/core";
-import { Subject, Observable, combineLatest } from "rxjs";
-import { filter, map, takeUntil } from "rxjs/operators";
+import { Component, DestroyRef, OnInit } from "@angular/core";
+import { Subject, Observable } from "rxjs";
+import { filter, map } from "rxjs/operators";
 import { TimeLoggerService } from "src/app/service/logger/time-logger.service";
 import {
   PDDLAction,
@@ -11,12 +9,13 @@ import {
   FactToString,
   instantiateAction,
 } from "src/app/interface/planning-task";
-import { Project } from "src/app/project/domain/project";
 import { RunStatus } from "src/app/iterative_planning/domain/run";
 import { nextState, Plan, PlanRunStatus, State } from "src/app/iterative_planning/domain/plan";
 import { Store } from "@ngrx/store";
-import { selectIterativePlanningProject, selectIterativePlanningSelectedStep } from "src/app/iterative_planning/state/iterative-planning.selector";
+import { selectIterativePlanningSelectedStep } from "src/app/iterative_planning/state/iterative-planning.selector";
 import { IterationStep } from "src/app/iterative_planning/domain/iteration_step";
+import { MatCardModule } from "@angular/material/card";
+import { AsyncPipe } from "@angular/common";
 
 interface ExFact {
   fact: PDDLFact;
@@ -38,6 +37,11 @@ interface Trace {
 
 @Component({
   selector: "app-interactive-plan-view",
+  standalone: true,
+  imports: [
+    MatCardModule,
+    AsyncPipe,
+  ],
   templateUrl: "./interactive-plan-view.component.html",
   styleUrls: ["./interactive-plan-view.component.scss"],
 })
