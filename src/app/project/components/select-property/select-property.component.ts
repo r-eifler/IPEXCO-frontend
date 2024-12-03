@@ -6,7 +6,9 @@ import {
   effect,
   inject,
   input,
+  NO_ERRORS_SCHEMA,
   output,
+  signal,
 } from "@angular/core";
 import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
@@ -17,11 +19,10 @@ import { MatDialog, MatDialogModule } from "@angular/material/dialog";
 import { DialogModule } from "src/app/shared/component/dialog/dialog.module";
 import { EditableListModule } from "src/app/shared/component/editable-list/editable-list.module";
 import { selectedAtLeastOne } from "src/app/validators/selected-at-least-one.validator";
-import { PlanPropertyPanelComponent } from "../../../shared/component/plan-property-panel/plan-property-panel.component";
-import { take } from "rxjs";
+import { take, tap} from "rxjs";
 import { Store } from "@ngrx/store";
-import { UserRoleDirective } from "src/app/user/directives/user-role.directive";
-import { createPlanProperty } from "../../state/iterative-planning.actions";
+import { UserRoleDirective } from "../../../user/directives/user-role.directive"
+import { PlanPropertyPanelComponent } from "src/app/shared/component/plan-property-panel/plan-property-panel.component";
 import { PropertyCreatorComponent } from "../../view/property-creator/property-creator.component";
 import { PlanProperty } from "src/app/shared/domain/plan-property/plan-property";
 
@@ -37,7 +38,10 @@ import { PlanProperty } from "src/app/shared/domain/plan-property/plan-property"
     MatIconModule,
     PlanPropertyPanelComponent,
     ReactiveFormsModule,
-    UserRoleDirective
+    UserRoleDirective,
+  ],
+  schemas:[
+    NO_ERRORS_SCHEMA
   ],
   templateUrl: "./select-property.component.html",
   styleUrl: "./select-property.component.scss",
@@ -48,13 +52,14 @@ export class SelectPropertyComponent {
   private cd = inject(ChangeDetectorRef);
   private dialog = inject(MatDialog);
 
-  private store = inject(Store);
-
   cancel = output<void>();
-  select = output<string[]>();
+  select = output<PlanProperty[]>();
 
   properties = input.required<PlanProperty[] | null>();
-  hasProperties = computed(() => !!this.properties()?.length);
+
+  newProperties = signal([]);
+  availableProperties = computed(() => this.properties().concat(this.newProperties()))
+  hasProperties = computed(() => !!this.availableProperties()?.length);
 
   form = this.fb.group({
     propertyIds: this.fb.array<FormControl<boolean>>([], [selectedAtLeastOne]),
@@ -62,10 +67,11 @@ export class SelectPropertyComponent {
 
   constructor(
   ) {
+
     effect(() => {
       this.form.controls.propertyIds.clear();
 
-      this.properties()?.forEach(() => {
+      this.availableProperties()?.forEach(() => {
         this.form.controls.propertyIds.push(this.fb.control(false));
       });
 
@@ -83,22 +89,24 @@ export class SelectPropertyComponent {
         (acc, selected, idx) => (selected ? [...acc, idx] : acc),
         []
       ) ?? [];
-    const selectedIds = selectedIndecees.map(
-      (index) => this.properties()?.[index]?._id
+    const selectedProperties = selectedIndecees.map(
+      (index) => this.availableProperties()?.[index]
     );
-
-    this.select.emit(selectedIds);
+    console.log(selectedProperties);
+    this.select.emit(selectedProperties);
   }
 
   createNewProperty(): void {
-    const dialogRef = this.dialog.open(PropertyCreatorComponent);
-      dialogRef.afterClosed().pipe(take(1)).subscribe(newP => {
+    const dialogRefTemplates = this.dialog.open(PropertyCreatorComponent);
+    dialogRefTemplates.afterClosed().pipe(
+      take(1),
+    ).subscribe(
+      newP => {
         if(!newP){
-          return
+          return;
         }
-        console.log(newP);
-        this.store.dispatch(createPlanProperty({planProperty: newP}))
+        this.newProperties.update(props => props.concat([newP]))
       }
-      );
+    );
   }
 }

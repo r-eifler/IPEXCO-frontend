@@ -5,12 +5,12 @@ import { Store } from '@ngrx/store';
 import { selectProject, selectProjectSettings } from '../../state/project.selector';
 import { Project } from '../../domain/project';
 import { updateProject } from '../../state/project.actions';
-import { PlanPropertyTemplate } from 'src/app/iterative_planning/domain/plan-property/plan-property-template';
 import { GeneralSettings } from '../../domain/general-settings';
 import { PlanningModel } from 'src/app/interface/planning-task';
 import { AsyncPipe } from '@angular/common';
 import { PropertyTemplateCreatorComponent } from '../property-template-creator/property-template-creator.component';
 import { SettingsComponent } from '../settings/settings.component';
+import { PlanPropertyTemplate } from 'src/app/shared/domain/plan-property/plan-property-template';
 
 @Component({
   selector: 'app-project-settings-container',

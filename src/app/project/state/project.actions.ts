@@ -1,7 +1,7 @@
 import { createAction, props } from "@ngrx/store";
 import { Project } from "../domain/project";
 import { Demo } from "src/app/interface/demo";
-import { PlanProperty } from "src/app/iterative_planning/domain/plan-property/plan-property";
+import { PlanProperty } from "src/app/shared/domain/plan-property/plan-property";
 
 // project
 

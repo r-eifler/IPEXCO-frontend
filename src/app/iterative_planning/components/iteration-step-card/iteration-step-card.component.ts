@@ -12,7 +12,7 @@ import { IterationStep } from '../../domain/iteration_step';
 import { StepStatusColorPipe } from '../../domain/pipe/step-status-color.pipe';
 import { StepStatusNamePipe } from '../../domain/pipe/step-status-name.pipe';
 import { StepValuePipe } from '../../domain/pipe/step-value.pipe';
-import { PlanProperty } from '../../domain/plan-property/plan-property';
+import { PlanProperty } from '../../../shared/domain/plan-property/plan-property';
 
 @Component({
   selector: 'app-iteration-step-card',

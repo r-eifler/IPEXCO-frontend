@@ -3,8 +3,9 @@ import { Project } from "src/app/project/domain/project";
 import { ExplanationMessage } from "../domain/interface/explanation-message";
 import { Question } from "../domain/interface/question";
 import { IterationStep, ModIterationStep } from "../domain/iteration_step";
-import { PlanProperty } from "../domain/plan-property/plan-property";
 import { LLMContext } from "src/app/LLM/domain/context";
+import { PlanProperty } from "src/app/shared/domain/plan-property/plan-property";
+
 
 
 // Project

@@ -1,5 +1,4 @@
 import { combineLatest } from 'rxjs';
-import { PlanProperty } from 'src/app/iterative_planning/domain/plan-property/plan-property';
 import { Observable } from 'rxjs';
 import { filter, map, take } from 'rxjs/operators';
 import { USUser } from '../../interface/user-study/user-study-user';
@@ -12,6 +11,7 @@ import { UserStudyData } from 'src/app/interface/user-study/user-study-store';
 import { LogEntry, LogEvent } from '../../service/logger/time-logger.service';
 import { mean, normalci, variance } from 'jstat'
 import { IterationStep } from 'src/app/iterative_planning/domain/iteration_step';
+import { PlanProperty } from 'src/app/shared/domain/plan-property/plan-property';
 
 @Injectable({
   providedIn: 'root'

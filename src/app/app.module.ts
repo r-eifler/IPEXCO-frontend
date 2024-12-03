@@ -1,6 +1,6 @@
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
-import { NgModule } from "@angular/core";
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule, NO_ERRORS_SCHEMA } from "@angular/core";
 import { BrowserModule } from "@angular/platform-browser";
 import { RouterModule } from "@angular/router";
 import { appRoutes } from "./app.routes";
@@ -73,9 +73,10 @@ import { LoadUserEffect } from './user/state/effects/loadUser.effect';
 import { SendMessageToLLMEffect } from './iterative_planning/state/effects/send-message.effect';
 
 
+
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
   ],
   imports: [
     StoreModule.forRoot({

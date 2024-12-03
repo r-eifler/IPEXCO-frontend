@@ -9,7 +9,7 @@ import { environment } from "../../../environments/environment";
 import {
   GoalType,
   PlanProperty,
-} from "../../iterative_planning/domain/plan-property/plan-property";
+} from "../../shared/domain/plan-property/plan-property";
 
 @Injectable({
   providedIn: "root",

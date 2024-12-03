@@ -16,9 +16,9 @@ import {
 } from "../interface/interface-status";
 import { UserStudyData } from "../interface/user-study/user-study-store";
 import { Project } from "../project/domain/project";
-import { PlanProperty } from "../iterative_planning/domain/plan-property/plan-property";
 import { PlanRun } from "../iterative_planning/domain/run";
 import { IterationStep, ModIterationStep } from "../iterative_planning/domain/iteration_step";
+import { PlanProperty } from "../shared/domain/plan-property/plan-property";
 
 // User/Authentication
 export class UserStore extends ItemStore<User> {}

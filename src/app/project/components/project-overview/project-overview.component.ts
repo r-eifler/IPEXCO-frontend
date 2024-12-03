@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { Observable } from "rxjs";
-import { PlanProperty } from "src/app/iterative_planning/domain/plan-property/plan-property";
+import { PlanProperty } from "src/app/shared/domain/plan-property/plan-property";
 import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Project } from "../../domain/project";

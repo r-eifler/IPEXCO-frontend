@@ -8,12 +8,12 @@ import { selectIsLoading, selectMessages } from './property-creation-chat.compon
 import { selectIsExplanationChatLoading, selectLLMThreadIdGT, selectVisiblePPCreationMessages } from '../../state/iterative-planning.selector';
 import { createPlanProperty } from '../../state/iterative-planning.actions';
 import { MatDialogRef } from '@angular/material/dialog';
-import { GoalType, PlanProperty } from '../../domain/plan-property/plan-property';
 import { take, filter, map, mergeMap, switchMap, combineLatestWith } from 'rxjs/operators';
 import { selectIterativePlanningProject } from '../../state/iterative-planning.selector';
 import { eraseLLMHistory } from '../../state/iterative-planning.actions';
 import { selectLLMChatMessages } from '../../state/iterative-planning.selector';
 import { combineLatest } from 'rxjs';
+import { GoalType, PlanProperty } from 'src/app/shared/domain/plan-property/plan-property';
 @Component({
   selector: 'app-property-creation-chat',
   standalone: true,
