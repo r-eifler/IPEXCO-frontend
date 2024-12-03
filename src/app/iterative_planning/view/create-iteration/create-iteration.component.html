@@ -32,7 +32,7 @@
 
               @for(property of enforcedPlanProperties$ | async; track property._id; let idx = $index) {
               <app-editable-list-entry>
-                <app-plan-proeprty-panel [property]="property"></app-plan-proeprty-panel>
+                <app-plan-property-panel [property]="property"></app-plan-property-panel>
                 <app-editable-list-entry-suffix>
                   <button mat-icon-button (click)="removeEnforcedGoal(idx)" type="button"><mat-icon>delete</mat-icon></button>
                 </app-editable-list-entry-suffix>
@@ -59,7 +59,7 @@
 
               @for(property of softPlanProperties$ | async; track property._id; let idx = $index) {
               <app-editable-list-entry>
-                <app-plan-proeprty-panel [property]="property"></app-plan-proeprty-panel>
+                <app-plan-property-panel [property]="property"></app-plan-property-panel>
                 <app-editable-list-entry-suffix>
                   <button mat-icon-button (click)="removeSoftGoal(idx)" type="button"><mat-icon>delete</mat-icon></button>
                 </app-editable-list-entry-suffix>

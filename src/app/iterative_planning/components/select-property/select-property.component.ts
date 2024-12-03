@@ -19,13 +19,14 @@ import { EditableListModule } from "src/app/shared/component/editable-list/edita
 import { selectedAtLeastOne } from "src/app/validators/selected-at-least-one.validator";
 import { PlanProperty } from "../../domain/plan-property/plan-property";
 import { PropertyCreationChatComponent } from "../../view/property-creation-chat/property-creation-chat.component";
-import { PlanProeprtyPanelComponent } from "../plan-proeprty-panel/plan-proeprty-panel.component";
+import { PlanPropertyPanelComponent } from "../../../shared/component/plan-property-panel/plan-property-panel.component";
 import { Observable, take } from "rxjs";
 import { Store } from "@ngrx/store";
 import { selectIterativePlanningProjectCreationInterfaceType } from "../../state/iterative-planning.selector";
 import { PropertyCreationInterfaceType } from "src/app/project/domain/general-settings";
-import { PropertyCreationTemplateBasedComponent } from "../../view/property-creation-template-based/property-creation-template-based.component";
+import { PropertyCreationTemplateBasedComponent } from "../../../shared/view/property-creation-template-based/property-creation-template-based.component";
 import { UserRoleDirective } from "src/app/user/directives/user-role.directive";
+import { createPlanProperty } from "../../state/iterative-planning.actions";
 
 @Component({
   selector: "app-select-property",
@@ -37,7 +38,7 @@ import { UserRoleDirective } from "src/app/user/directives/user-role.directive";
     MatCheckboxModule,
     MatDialogModule,
     MatIconModule,
-    PlanProeprtyPanelComponent,
+    PlanPropertyPanelComponent,
     ReactiveFormsModule,
     UserRoleDirective
   ],
@@ -50,7 +51,8 @@ export class SelectPropertyComponent {
   private cd = inject(ChangeDetectorRef);
   private dialog = inject(MatDialog);
 
-  interfaceType$: Observable<PropertyCreationInterfaceType>
+  private store = inject(Store);
+  interfaceType$ = this.store.select(selectIterativePlanningProjectCreationInterfaceType);
 
   cancel = output<void>();
   select = output<string[]>();
@@ -63,10 +65,7 @@ export class SelectPropertyComponent {
   });
 
   constructor(
-    store: Store
   ) {
-    this.interfaceType$ = store.select(selectIterativePlanningProjectCreationInterfaceType);
-
     effect(() => {
       this.form.controls.propertyIds.clear();
 
@@ -103,7 +102,10 @@ export class SelectPropertyComponent {
             this.dialog.open(PropertyCreationChatComponent);
             break;
           case PropertyCreationInterfaceType.TEMPLATE_BASED:
-            this.dialog.open(PropertyCreationTemplateBasedComponent);
+            const templateDialogRef = this.dialog.open(PropertyCreationTemplateBasedComponent);
+            templateDialogRef.afterClosed().pipe(take(1)).subscribe(newP => 
+              this.store.dispatch(createPlanProperty(newP))
+            );
             break;
         }
       }

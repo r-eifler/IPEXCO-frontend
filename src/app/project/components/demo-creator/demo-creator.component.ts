@@ -17,7 +17,7 @@ import { MatButtonModule } from "@angular/material/button";
 import { DialogModule } from "src/app/shared/component/dialog/dialog.module";
 import { MatIcon } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
-import { PlanProeprtyPanelComponent } from "src/app/iterative_planning/components/plan-proeprty-panel/plan-proeprty-panel.component";
+import { PlanPropertyPanelComponent } from "src/app/shared/component/plan-property-panel/plan-property-panel.component";
 import { AsyncPipe } from "@angular/common";
 import { SelectPropertyComponent } from "src/app/iterative_planning/components/select-property/select-property.component";
 
@@ -33,7 +33,7 @@ import { SelectPropertyComponent } from "src/app/iterative_planning/components/s
     MatIcon,
     ReactiveFormsModule,
     MatInputModule,
-    PlanProeprtyPanelComponent,
+    PlanPropertyPanelComponent,
     SelectPropertyComponent
   ],
   templateUrl: "./demo-creator.component.html",

@@ -21,7 +21,7 @@ import { EditableListModule } from "src/app/shared/component/editable-list/edita
 import { selectedAtLeastOne } from "src/app/validators/selected-at-least-one.validator";
 import { PlanProperty } from "../../domain/plan-property/plan-property";
 import { PropertyCreationChatComponent } from "../../view/property-creation-chat/property-creation-chat.component";
-import { PlanProeprtyPanelComponent } from "../plan-proeprty-panel/plan-proeprty-panel.component";
+import { PlanPropertyPanelComponent } from "../plan-proeprty-panel/plan-proeprty-panel.component";
 import { BehaviorSubject, combineLatest, map, Observable, of, skipUntil, skipWhile, take, takeUntil, takeWhile } from "rxjs";
 import { Store } from "@ngrx/store";
 import { selectIterativePlanningProjectCreationInterfaceType } from "../../state/iterative-planning.selector";
@@ -41,7 +41,7 @@ import { selectPlanPropertyCreationInterfaceType } from "src/app/project/state/p
     MatCheckboxModule,
     MatDialogModule,
     MatIconModule,
-    PlanProeprtyPanelComponent,
+    PlanPropertyPanelComponent,
     ReactiveFormsModule,
     AsyncPipe,
     UserRoleDirective,

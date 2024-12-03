@@ -80,7 +80,7 @@
           @if(hasUnsolvedSoftGoals$ | async) {
           <div class="property-list">
             @for(property of unsolvedSoftGoals$ | async; track property) {
-            <app-plan-proeprty-panel [property]="property">
+            <app-plan-property-panel [property]="property">
               <app-explanation-chat
                 [isLoading]="isExplanationLoading$ | async"
                 [availableQuestions]="propertyAvailableQuestionTypes$(property) | async"
@@ -88,7 +88,7 @@
                 [messages]="propertyMessages$(property) | async"
                 [properties]="planProperties$ | async"
               ></app-explanation-chat>
-            </app-plan-proeprty-panel>
+            </app-plan-property-panel>
             }
           </div>
           } @else {
@@ -108,7 +108,7 @@
           @if(hasSolvedSoftGoals$ | async) {
           <div class="property-list">
             @for(property of solvedSoftGoals$ | async; track property) {
-            <app-plan-proeprty-panel [property]="property"></app-plan-proeprty-panel>
+            <app-plan-property-panel [property]="property"></app-plan-property-panel>
             }
           </div>
           } @else {
@@ -127,7 +127,7 @@
           @if(hasEnforcedGoals$ | async) {
           <div class="property-list">
             @for(property of enforcedGoals$ | async; track property) {
-            <app-plan-proeprty-panel [property]="property"></app-plan-proeprty-panel>
+            <app-plan-property-panel [property]="property"></app-plan-property-panel>
             }
           </div>
           } @else {

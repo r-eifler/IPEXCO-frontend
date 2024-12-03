@@ -1,31 +1,27 @@
-import { AsyncPipe, KeyValuePipe, NgFor, NgIf } from '@angular/common';
-import { Component, inject, input, output } from '@angular/core';
+import { AsyncPipe, KeyValuePipe} from '@angular/common';
+import { Component, inject, output } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { filter, first, map, Observable, take, tap } from 'rxjs';
-import { generateDummyPlanProperty, generatePlanProperty, getPossibleValues, getTemplateParts, PlanPropertyTemplate, TemplatePart } from '../../domain/plan-property/plan-property-template';
-import { selectIterativePlanningProject, selectIterativePlanningPropertiesList, selectIterativePlanningPropertyTemplates, selectIterativePlanningTask } from '../../state/iterative-planning.selector';
+import { filter, first, map, Observable } from 'rxjs';
+import { generateDummyPlanProperty, generatePlanProperty, getPossibleValues, getTemplateParts, PlanPropertyTemplate, TemplatePart } from '../../../iterative_planning/domain/plan-property/plan-property-template';
+import { selectIterativePlanningProject, selectIterativePlanningPropertiesList, selectIterativePlanningPropertyTemplates, selectIterativePlanningTask } from '../../../iterative_planning/state/iterative-planning.selector';
 import { DialogModule } from 'src/app/shared/component/dialog/dialog.module'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatStepper, MatStepperModule } from '@angular/material/stepper';
-import { MatButton, MatButtonModule } from '@angular/material/button';
+import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatCardModule } from '@angular/material/card';
-import { PropertyTemplatePartComponent } from '../../components/property-template-part/property-template-part.component'
-import { equalPlanProperties, PlanProperty } from '../../domain/plan-property/plan-property';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { Project } from '../../../project/domain/project';
-import { PDDLObject, PlanningTask } from '../../../interface/planning-task';
-import { createPlanProperty } from '../../state/iterative-planning.actions';
+import { PropertyTemplatePartComponent } from '../../../iterative_planning/components/property-template-part/property-template-part.component'
+import { equalPlanProperties, PlanProperty } from '../../../iterative_planning/domain/plan-property/plan-property';
+import { MatDialogRef } from '@angular/material/dialog';
+import { PDDLObject } from '../../../interface/planning-task';
 import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-property-creation-template-based',
   standalone: true,
   imports: [
-	NgIf,
-	NgFor,
     AsyncPipe, 
     KeyValuePipe,
     DialogModule, 
@@ -51,10 +47,10 @@ export class PropertyCreationTemplateBasedComponent {
   cancel = output<void>();
   created = output<PlanProperty>();
 
-  project$: Observable<Project>;
-  planningTask$: Observable<PlanningTask>;
-  planProperties$: Observable<PlanProperty[]>
-  templates$: Observable<PlanPropertyTemplate[]>;
+  project$= this.store.select(selectIterativePlanningProject);
+  planningTask$ = this.store.select(selectIterativePlanningTask);
+  planProperties$ = this.store.select(selectIterativePlanningPropertiesList);
+  templates$ = this.store.select(selectIterativePlanningPropertyTemplates);
   groupedTemplates$: Observable<Record<string,PlanPropertyTemplate[]>>;
 
   selectedTemplate: PlanPropertyTemplate;
@@ -66,15 +62,8 @@ export class PropertyCreationTemplateBasedComponent {
   allSelected = false;
   propertyAlreadyExists = false;
 
-  data: {createProperty: false} = inject(MAT_DIALOG_DATA)
-
   constructor() {
 
-	  this.project$ = this.store.select(selectIterativePlanningProject);
-    this.planProperties$ = this.store.select(selectIterativePlanningPropertiesList);
-
-    this.planningTask$ = this.store.select(selectIterativePlanningTask);
-    this.templates$ = this.store.select(selectIterativePlanningPropertyTemplates);
     this.groupedTemplates$ = this.templates$.pipe(
       filter(templates => !!templates),
       map(templates => {
@@ -83,7 +72,6 @@ export class PropertyCreationTemplateBasedComponent {
          return sorted
       }
       ),
-      tap(console.log)
     );
   }
 
@@ -176,9 +164,6 @@ export class PropertyCreationTemplateBasedComponent {
           project
         )
         this.created.emit(newPlanProperty);
-        if(this.data.createProperty){
-          this.store.dispatch(createPlanProperty({planProperty: newPlanProperty}));
-        }
         this.dialogRef.close(newPlanProperty)
       }
     )
