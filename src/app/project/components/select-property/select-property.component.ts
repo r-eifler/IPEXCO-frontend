@@ -16,13 +16,13 @@ import { MatIconModule } from "@angular/material/icon";
 import { FormBuilder, FormControl, ReactiveFormsModule } from "@angular/forms";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatDialog, MatDialogModule } from "@angular/material/dialog";
-import { DialogModule } from "src/app/shared/component/dialog/dialog.module";
-import { EditableListModule } from "src/app/shared/component/editable-list/editable-list.module";
+import { DialogModule } from "src/app/shared/components/dialog/dialog.module";
+import { EditableListModule } from "src/app/shared/components/editable-list/editable-list.module";
 import { selectedAtLeastOne } from "src/app/validators/selected-at-least-one.validator";
 import { take, tap} from "rxjs";
 import { Store } from "@ngrx/store";
 import { UserRoleDirective } from "../../../user/directives/user-role.directive"
-import { PlanPropertyPanelComponent } from "src/app/shared/component/plan-property-panel/plan-property-panel.component";
+import { PlanPropertyPanelComponent } from "src/app/shared/components/plan-property-panel/plan-property-panel.component";
 import { PropertyCreatorComponent } from "../../view/property-creator/property-creator.component";
 import { PlanProperty } from "src/app/shared/domain/plan-property/plan-property";
 

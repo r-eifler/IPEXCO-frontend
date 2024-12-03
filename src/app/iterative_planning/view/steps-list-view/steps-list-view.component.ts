@@ -3,10 +3,10 @@ import { Component, inject } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { ActionCardModule } from 'src/app/shared/component/action-card/action-card.module';
+import { ActionCardModule } from 'src/app/shared/components/action-card/action-card.module';
 
-import { BreadcrumbModule } from 'src/app/shared/component/breadcrumb/breadcrumb.module';
-import { PageModule } from 'src/app/shared/component/page/page.module';
+import { BreadcrumbModule } from 'src/app/shared/components/breadcrumb/breadcrumb.module';
+import { PageModule } from 'src/app/shared/components/page/page.module';
 
 import { IterationStepCardComponent } from '../../components/iteration-step-card/iteration-step-card.component';
 import { initNewIterationStep } from '../../state/iterative-planning.actions';

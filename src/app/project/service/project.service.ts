@@ -4,7 +4,7 @@ import { Project } from "../domain/project";
 import { HttpClient } from "@angular/common/http";
 import { environment } from "src/environments/environment";
 import { map } from "rxjs/operators";
-import { IHTTPData } from "src/app/interface/http-data.interface";
+import { IHTTPData } from "src/app/shared/domain/http-data.interface";
 import { array, date, object, string, infer as zInfer } from "zod";
 
 // const PlanningTaskUnverifiedSchema = string().transform(s => JSON.parse(s));

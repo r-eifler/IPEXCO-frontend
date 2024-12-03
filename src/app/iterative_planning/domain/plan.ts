@@ -1,5 +1,5 @@
 
-import { factEquals, PDDLAction, PDDLFact } from "src/app/interface/planning-task";
+import { factEquals, PDDLAction, PDDLFact } from "src/app/shared/domain/planning-task";
 
 
 export enum PlanRunStatus {

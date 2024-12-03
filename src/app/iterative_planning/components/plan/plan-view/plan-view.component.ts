@@ -6,7 +6,7 @@ import { filter, map, take, tap } from "rxjs/operators";
 import { IterationStep, StepStatus } from "src/app/iterative_planning/domain/iteration_step";
 import { PlanAction, PlanRunStatus } from "src/app/iterative_planning/domain/plan";
 import { selectIterativePlanningSelectedStep } from "src/app/iterative_planning/state/iterative-planning.selector";
-import { LogEvent, TimeLoggerService } from "../../../../service/logger/time-logger.service";
+import { LogEvent, TimeLoggerService } from "../../../../user_study/service/time-logger.service";
 import { MatCardModule } from "@angular/material/card";
 import { AsyncPipe, NgFor, NgIf } from "@angular/common";
 import { MatButtonModule } from "@angular/material/button";

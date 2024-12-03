@@ -7,7 +7,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterLink } from '@angular/router';
 
 import { DefaultPipe } from 'src/app/shared/common/pipe/default.pipe';
-import { LabelModule } from 'src/app/shared/component/label/label.module';
+import { LabelModule } from 'src/app/shared/components/label/label.module';
 import { IterationStep } from '../../domain/iteration_step';
 import { StepStatusColorPipe } from '../../domain/pipe/step-status-color.pipe';
 import { StepStatusNamePipe } from '../../domain/pipe/step-status-name.pipe';

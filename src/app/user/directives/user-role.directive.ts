@@ -20,7 +20,9 @@ export class UserRoleDirective {
     currentRole = toSignal(this.store.select(selectUserRole)); // -> 'admin', ...
 
     constructor(ngIf: NgIf) {
-        console.log(this.currentRole());
-        effect(() => ngIf.ngIf = this.userRole().includes(this.currentRole()));
+        effect(() => {
+            const role = this.currentRole();
+            ngIf.ngIf = role ? this.userRole().includes(role) : false;
+        });
     }
 }

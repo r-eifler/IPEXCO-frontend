@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatIcon } from '@angular/material/icon';
-import { PDDLObject } from 'src/app/interface/planning-task';
+import { PDDLObject } from 'src/app/shared/domain/planning-task';
 
 @Component({
   selector: 'app-property-template-part',

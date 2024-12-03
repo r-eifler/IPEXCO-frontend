@@ -1,5 +1,5 @@
 import { Component, ElementRef, inject, OnInit, TemplateRef, viewChild } from "@angular/core";
-import { Demo } from "src/app/interface/demo";
+import { Demo } from "src/app/demo/domain/demo";
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { MatDialogRef, MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
@@ -7,13 +7,13 @@ import { BehaviorSubject, combineLatest, map, startWith, take, tap } from 'rxjs'
 import { selectProject, selectProjectProperties } from '../../state/project.selector';
 import { registerDemoCreation } from '../../state/project.actions';
 import { isNonEmptyValidator } from "src/app/validators/non-empty.validator";
-import { EditableListModule } from "src/app/shared/component/editable-list/editable-list.module";
+import { EditableListModule } from "src/app/shared/components/editable-list/editable-list.module";
 import { MatStepperModule } from "@angular/material/stepper";
 import { MatButtonModule } from "@angular/material/button";
-import { DialogModule } from "src/app/shared/component/dialog/dialog.module";
+import { DialogModule } from "src/app/shared/components/dialog/dialog.module";
 import { MatIcon } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
-import { PlanPropertyPanelComponent } from "src/app/shared/component/plan-property-panel/plan-property-panel.component";
+import { PlanPropertyPanelComponent } from "src/app/shared/components/plan-property-panel/plan-property-panel.component";
 import { AsyncPipe } from "@angular/common";
 import { SelectPropertyComponent } from "../select-property/select-property.component";
 import { PlanProperty } from "src/app/shared/domain/plan-property/plan-property";

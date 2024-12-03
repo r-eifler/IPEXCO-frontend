@@ -6,7 +6,7 @@ import { selectProject, selectProjectSettings } from '../../state/project.select
 import { Project } from '../../domain/project';
 import { updateProject } from '../../state/project.actions';
 import { GeneralSettings } from '../../domain/general-settings';
-import { PlanningModel } from 'src/app/interface/planning-task';
+import { PlanningModel } from 'src/app/shared/domain/planning-task';
 import { AsyncPipe } from '@angular/common';
 import { PropertyTemplateCreatorComponent } from '../property-template-creator/property-template-creator.component';
 import { SettingsComponent } from '../settings/settings.component';

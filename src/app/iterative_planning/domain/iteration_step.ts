@@ -1,4 +1,4 @@
-import { PlanningTask } from "src/app/interface/planning-task";
+import { PlanningTask } from "src/app/shared/domain/planning-task";
 import { GlobalExplanation } from "./explanation/explanations";
 import { Plan } from "./plan";
 

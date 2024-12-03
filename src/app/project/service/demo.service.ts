@@ -4,8 +4,8 @@ import { Project } from "../domain/project";
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { environment } from "src/environments/environment";
 import { map } from "rxjs/operators";
-import { IHTTPData } from "src/app/interface/http-data.interface";
-import { Demo } from "src/app/interface/demo";
+import { IHTTPData } from "src/app/shared/domain/http-data.interface";
+import { Demo } from "src/app/demo/domain/demo";
 
 @Injectable()
 export class DemoService{

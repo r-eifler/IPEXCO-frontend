@@ -2,7 +2,7 @@ import { createReducer, on } from "@ngrx/store";
 import { Project } from "../domain/project";
 import { Loadable, LoadingState } from "src/app/shared/common/loadable.interface";
 import { loadPlanProperties, loadPlanPropertiesSuccess, loadProject, loadProjectDemos, loadProjectDemosSuccess, loadProjectSuccess, updateProject, updateProjectSuccess } from "./project.actions";
-import { Demo } from "src/app/interface/demo";
+import { Demo } from "src/app/demo/domain/demo";
 import { PlanProperty } from "src/app/shared/domain/plan-property/plan-property";
 
 export interface ProjectState {

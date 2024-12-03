@@ -10,11 +10,8 @@ import { AppComponent } from "./app.component";
 import { MAT_BOTTOM_SHEET_DEFAULT_OPTIONS } from '@angular/material/bottom-sheet';
 
 // Components
-import { NavigationComponent } from "./components/navigation/navigation.component";
+import { NavigationComponent } from "./base/components/navigation/navigation.component";
 
-// Services
-import { DomainFilesService, ProblemFilesService} from "./service/files/pddl-file-services";
-import { PddlFileUtilsService } from "./service/files/pddl-file-utils.service";
 
 // State 
 import { EffectsModule } from '@ngrx/effects';
@@ -49,7 +46,6 @@ import { UpdatePlanPropertyEffect } from './iterative_planning/state/effects/upd
 
 // Services 
 import { LLMService } from './LLM/service/llm.service';
-import { UserStudyCurrentDataService, UserStudyDataService } from "./user_study/service/user-study-data.service";
 import { ExplainerMonitoringService } from './iterative_planning/service/explainer-monitoring.service';
 import { ExplainerService } from './iterative_planning/service/explainer.service';
 import { IterationStepService } from './iterative_planning/service/iteration-step.service';
@@ -135,13 +131,8 @@ import { SendMessageToLLMEffect } from './iterative_planning/state/effects/send-
       multi: true,
     },
     AuthenticationInterceptor,
-    PddlFileUtilsService,
-    DomainFilesService,
-    ProblemFilesService,
     PlannerService,
     DemoService,
-    UserStudyCurrentDataService,
-    UserStudyDataService,
     ProjectService,
     ProjectMetaDataService,
     CreateProjectService,

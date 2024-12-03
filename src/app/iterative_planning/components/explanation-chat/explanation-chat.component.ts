@@ -1,6 +1,6 @@
 import { JsonPipe, NgFor } from "@angular/common";
 import { ChangeDetectionStrategy, Component, input, output } from "@angular/core";
-import { ChatModule } from "src/app/shared/component/chat/chat.module";
+import { ChatModule } from "src/app/shared/components/chat/chat.module";
 import { QuestionType } from "../../domain/explanation/explanations";
 import { ExplanationMessage, StructuredText } from "../../domain/interface/explanation-message";
 import { PlanProperty } from "../../../shared/domain/plan-property/plan-property";

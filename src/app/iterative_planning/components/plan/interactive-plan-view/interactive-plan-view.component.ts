@@ -1,14 +1,14 @@
 import { Component, DestroyRef, OnInit } from "@angular/core";
 import { Subject, Observable } from "rxjs";
 import { filter, map } from "rxjs/operators";
-import { TimeLoggerService } from "src/app/service/logger/time-logger.service";
+import { TimeLoggerService } from "src/app/user_study/service/time-logger.service";
 import {
   PDDLAction,
   PDDLFact,
   factEquals,
   FactToString,
   instantiateAction,
-} from "src/app/interface/planning-task";
+} from "src/app/shared/domain/planning-task";
 import { RunStatus } from "src/app/iterative_planning/domain/run";
 import { nextState, Plan, PlanRunStatus, State } from "src/app/iterative_planning/domain/plan";
 import { Store } from "@ngrx/store";
