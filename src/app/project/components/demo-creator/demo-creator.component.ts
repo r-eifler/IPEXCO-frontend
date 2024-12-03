@@ -1,15 +1,11 @@
-import { Component, ElementRef, inject, Inject, OnInit, TemplateRef, viewChild } from "@angular/core";
+import { Component, ElementRef, inject, OnInit, TemplateRef, viewChild } from "@angular/core";
 import { Demo } from "src/app/interface/demo";
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
-import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
+import { MatDialogRef, MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
-import { combineLatest, filter, map, Observable, startWith, take, tap } from 'rxjs';
-import { Project } from '../../domain/project';
+import { BehaviorSubject, combineLatest, map, startWith, take, tap } from 'rxjs';
 import { selectProject, selectProjectProperties } from '../../state/project.selector';
-import { PlanProperty } from 'src/app/iterative_planning/domain/plan-property/plan-property';
 import { registerDemoCreation } from '../../state/project.actions';
-import { selectPlanPropertyIds } from "src/app/iterative_planning/view/create-iteration/create-iteration.component.selector";
-import { selectIterativePlanningProperties } from "src/app/iterative_planning/state/iterative-planning.selector";
 import { isNonEmptyValidator } from "src/app/validators/non-empty.validator";
 import { EditableListModule } from "src/app/shared/component/editable-list/editable-list.module";
 import { MatStepperModule } from "@angular/material/stepper";
@@ -19,7 +15,8 @@ import { MatIcon } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
 import { PlanPropertyPanelComponent } from "src/app/shared/component/plan-property-panel/plan-property-panel.component";
 import { AsyncPipe } from "@angular/common";
-import { SelectPropertyComponent } from "src/app/iterative_planning/components/select-property/select-property.component";
+import { SelectPropertyComponent } from "../select-property/select-property.component";
+import { PlanProperty } from "src/app/shared/domain/plan-property/plan-property";
 
 @Component({
   selector: "app-demo-creator",
@@ -47,11 +44,12 @@ export class DemoCreatorComponent implements OnInit {
 
   propertySelector = viewChild.required<TemplateRef<ElementRef>>('propertySelector');
 
-  handlePropertyIdSelection: (ids: string[]) => void;
+  handlePropertySelection: (planProperties: PlanProperty[]) => void;
   dialogRef: MatDialogRef<unknown> | undefined;
 
   project$ = this.store.select(selectProject)
-  planProperties$ = this.store.select(selectProjectProperties)
+  projectPlanProperties$ = this.store.select(selectProjectProperties)
+  planProperties = new BehaviorSubject<PlanProperty[]>([]);
 
   form = this.fb.group({
     main: this.fb.group({
@@ -63,28 +61,21 @@ export class DemoCreatorComponent implements OnInit {
       instanceInfo: this.fb.control<string>("", Validators.required),
     }),
     image: this.fb.control<File>(null),
-    propertyIds: this.fb.array<FormControl<string>>([], [isNonEmptyValidator])
+    properties: this.fb.array<FormControl<PlanProperty>>([], [isNonEmptyValidator])
   });
 
-  selectedPlanPropertyIds$ = this.form.controls.propertyIds.valueChanges.pipe(
-    startWith(this.form.controls.propertyIds.value),
-    map(() => this.form.controls.propertyIds.value),
+  selectedPlanProperties$ = this.form.controls.properties.valueChanges.pipe(
+    startWith(this.form.controls.properties.value),
+    map(() => this.form.controls.properties.value),
   );
-  selectedPlanProperties$ = combineLatest([
-    this.planProperties$,
-    this.selectedPlanPropertyIds$,
-  ]).pipe(
-    filter(([planProperties]) => !!planProperties),
-    map(([planProperties, selectedPropertyIds]) => selectedPropertyIds?.map(id => planProperties?.[id]) ?? []),
-  );
-  hasSelectedPlanProperties$ = this.selectedPlanPropertyIds$.pipe(map(properties => !!properties.length));
+  hasSelectedPlanProperties$ = this.selectedPlanProperties$.pipe(map(properties => !!properties.length));
 
   availableProperties$ = combineLatest([
-    this.planProperties$.pipe(map(properties => Object.values(properties ?? {}))),
-    this.selectedPlanPropertyIds$,
+    this.projectPlanProperties$.pipe(map(properties => Object.values(properties ?? {}))),
+    this.selectedPlanProperties$,
   ]).pipe(
-    map(([allPlanProperties, selectedProperties]) => allPlanProperties?.filter(
-      ({_id}) => !selectedProperties?.includes(_id),
+    map(([projectPlanProperties, selectedProperties]) => projectPlanProperties?.filter(
+      ({_id}) => !selectedProperties?.map(pp => pp._id).includes(_id),
     )),
   );
 
@@ -92,25 +83,16 @@ export class DemoCreatorComponent implements OnInit {
   imageFile;
   imageSelected = false;
 
-  constructor(
-  ) {
-    this.planProperties$.pipe(
-      tap(console.log)
-    ).subscribe()
-    this.availableProperties$.pipe(
-      tap(console.log)
-    ).subscribe()
-  }
+  addSelectedProperty(planProperties: PlanProperty[]): void {
+    const idControls = planProperties.map(pp => this.fb.control<PlanProperty>(pp));
 
-  addSelectedPropertyIds(ids: string[]): void {
-    const idControls = ids.map(id => this.fb.control<string>(id));
-
-    idControls.forEach(control => this.form.controls.propertyIds.push(control));
+    idControls.forEach(control => this.form.controls.properties.push(control));
   }
 
   addProperty(): void {
-    this.handlePropertyIdSelection = (ids: string[]) => {
-      this.addSelectedPropertyIds(ids);
+    this.handlePropertySelection = (planProperties: PlanProperty[]) => {
+      console.log(planProperties)
+      this.addSelectedProperty(planProperties);
       this.dialogRef?.close();
     }
 
@@ -118,7 +100,7 @@ export class DemoCreatorComponent implements OnInit {
   }
 
   removeSelectedProperty(index: number): void {
-    this.form.controls.propertyIds.removeAt(index);
+    this.form.controls.properties.removeAt(index);
   }
 
   ngOnInit(): void {}

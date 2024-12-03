@@ -5,7 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { QuoteModule } from 'src/app/shared/component/quote/quote.module';
 import { UnformattedModule } from 'src/app/shared/component/unformatted/unformatted.module';
 
-import { PlanProperty } from '../../../iterative_planning/domain/plan-property/plan-property';
+import { PlanProperty } from '../../domain/plan-property/plan-property';
 
 @Component({
   selector: 'app-plan-property-panel',

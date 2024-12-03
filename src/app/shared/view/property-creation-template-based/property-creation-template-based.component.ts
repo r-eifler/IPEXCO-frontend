@@ -1,9 +1,5 @@
 import { AsyncPipe, KeyValuePipe} from '@angular/common';
-import { Component, inject, output } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { filter, first, map, Observable } from 'rxjs';
-import { generateDummyPlanProperty, generatePlanProperty, getPossibleValues, getTemplateParts, PlanPropertyTemplate, TemplatePart } from '../../../iterative_planning/domain/plan-property/plan-property-template';
-import { selectIterativePlanningProject, selectIterativePlanningPropertiesList, selectIterativePlanningPropertyTemplates, selectIterativePlanningTask } from '../../../iterative_planning/state/iterative-planning.selector';
+import { Component, computed, input, OnInit, output } from '@angular/core';
 import { DialogModule } from 'src/app/shared/component/dialog/dialog.module'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatStepper, MatStepperModule } from '@angular/material/stepper';
@@ -13,16 +9,15 @@ import { MatInputModule } from '@angular/material/input';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatCardModule } from '@angular/material/card';
 import { PropertyTemplatePartComponent } from '../../../iterative_planning/components/property-template-part/property-template-part.component'
-import { equalPlanProperties, PlanProperty } from '../../../iterative_planning/domain/plan-property/plan-property';
-import { MatDialogRef } from '@angular/material/dialog';
-import { PDDLObject } from '../../../interface/planning-task';
+import { PDDLObject, PlanningTask } from '../../../interface/planning-task';
 import { MatIcon } from '@angular/material/icon';
+import { generateDummyPlanProperty, generatePlanProperty, getPossibleValues, getTemplateParts, PlanPropertyTemplate, TemplatePart } from '../../domain/plan-property/plan-property-template';
+import { equalPlanProperties, PlanProperty } from 'src/app/shared/domain/plan-property/plan-property';
 
 @Component({
   selector: 'app-property-creation-template-based',
   standalone: true,
   imports: [
-    AsyncPipe, 
     KeyValuePipe,
     DialogModule, 
     MatStepperModule, 
@@ -39,19 +34,18 @@ import { MatIcon } from '@angular/material/icon';
   templateUrl: './property-creation-template-based.component.html',
   styleUrl: './property-creation-template-based.component.scss'
 })
-export class PropertyCreationTemplateBasedComponent {
-
-  private store = inject(Store)
-  private dialogRef = inject(MatDialogRef)
+export class PropertyCreationTemplateBasedComponent implements OnInit{
 
   cancel = output<void>();
   created = output<PlanProperty>();
 
-  project$= this.store.select(selectIterativePlanningProject);
-  planningTask$ = this.store.select(selectIterativePlanningTask);
-  planProperties$ = this.store.select(selectIterativePlanningPropertiesList);
-  templates$ = this.store.select(selectIterativePlanningPropertyTemplates);
-  groupedTemplates$: Observable<Record<string,PlanPropertyTemplate[]>>;
+  planningTask = input.required<PlanningTask>();
+  planProperties = input.required<Record<string, PlanProperty> | null>();
+  planPropertiesList = computed(() => 
+      this.planProperties() ? Object.values(this.planProperties()) : [])
+  templates = input.required<PlanPropertyTemplate[]>();
+
+  groupedTemplates:Record<string,PlanPropertyTemplate[]>;
 
   selectedTemplate: PlanPropertyTemplate;
 
@@ -62,47 +56,33 @@ export class PropertyCreationTemplateBasedComponent {
   allSelected = false;
   propertyAlreadyExists = false;
 
-  constructor() {
-
-    this.groupedTemplates$ = this.templates$.pipe(
-      filter(templates => !!templates),
-      map(templates => {
-         let sorted: Record<string, PlanPropertyTemplate[]> = templates.reduce((acc, t) => ({...acc,[t.class]: []}), {})
-         templates.forEach(t => sorted[(t.class)].push(t))
-         return sorted
-      }
-      ),
-    );
+  ngOnInit(): void {
+    let sorted: Record<string, PlanPropertyTemplate[]> = this.templates()?.reduce((acc, t) => ({...acc,[t.class]: []}), {})
+    this.templates().forEach(t => sorted[(t.class)].push(t))
+    this.groupedTemplates = sorted;
   }
 
   private updatePossibleVariableValues(){
-    this.planningTask$.pipe(
-        first(task => !!task),
-      ).subscribe(
-      task => {
+    if(this.templateParts.length == 0){
+      this.templateParts = getTemplateParts(this.selectedTemplate);
+    }
 
-        if(this.templateParts.length == 0){
-          this.templateParts = getTemplateParts(this.selectedTemplate);
-        }
+    this.possibleVariableValues = getPossibleValues(
+      this.selectedTemplate,
+      this.planningTask(),
+      this.selectedVariableValue,
+    )
 
-        this.possibleVariableValues = getPossibleValues(
-          this.selectedTemplate,
-          task,
-          this.selectedVariableValue,
-        )
+    console.log(this.possibleVariableValues)
 
-        console.log(this.possibleVariableValues)
+    this.templateParts = this.templateParts.map(p => ({
+      ...p,
+      isSelected: p.isVar ? this.selectedVariableValue[p.var] !== undefined : false,
+      text: (p.isVar && this.selectedVariableValue[p.var]) ? this.selectedVariableValue[p.var].name: p.text,
+      possibleValues: p.isVar ? this.possibleVariableValues[p.var] : []
+    }))
 
-        this.templateParts = this.templateParts.map(p => ({
-          ...p,
-          isSelected: p.isVar ? this.selectedVariableValue[p.var] !== undefined : false,
-          text: (p.isVar && this.selectedVariableValue[p.var]) ? this.selectedVariableValue[p.var].name: p.text,
-          possibleValues: p.isVar ? this.possibleVariableValues[p.var] : []
-        }))
-
-        console.log(this.templateParts)
-      }
-    );
+    console.log(this.templateParts)
   }
 
   selectTemplate(template: PlanPropertyTemplate, stepper: MatStepper){
@@ -127,15 +107,13 @@ export class PropertyCreationTemplateBasedComponent {
 	  this.allSelected = Object.keys(this.selectedVariableValue).length === Object.keys(this.possibleVariableValues).length
 
     if(this.allSelected){
-      this.planProperties$.pipe(first(properties => !!properties)).subscribe(
-        properties => this.propertyAlreadyExists = properties.some(
-          p => equalPlanProperties(p, 
-            generateDummyPlanProperty(
-              this.selectedTemplate,
-              this.selectedVariableValue
-            )
-          ))
-        );
+      const dummy: PlanProperty = generateDummyPlanProperty(
+        this.selectedTemplate,
+        this.selectedVariableValue
+      )
+      this.propertyAlreadyExists = this.planPropertiesList().some(
+        p => equalPlanProperties(p, dummy)
+      )
     }
   }
   
@@ -149,24 +127,14 @@ export class PropertyCreationTemplateBasedComponent {
 
   onCancel(){
 	  this.cancel.emit()
-    this.dialogRef.close()
   }
 
   onCreateProperty(){
-    this.project$.pipe(
-          first(project => !!project),
-        ).subscribe(
-      project => {
-        const newPlanProperty = generatePlanProperty(
-          this.selectedTemplate,
-          this.selectedVariableValue,
-          project.baseTask,
-          project
-        )
-        this.created.emit(newPlanProperty);
-        this.dialogRef.close(newPlanProperty)
-      }
+    const newPlanProperty = generatePlanProperty(
+      this.selectedTemplate,
+      this.selectedVariableValue,
     )
+    this.created.emit(newPlanProperty);
   }
 
 }

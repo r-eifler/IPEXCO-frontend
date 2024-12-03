@@ -15,21 +15,16 @@ import { MatIconModule } from "@angular/material/icon";
 
 import { FormBuilder, FormControl, ReactiveFormsModule } from "@angular/forms";
 import { MatCheckboxModule } from "@angular/material/checkbox";
-import { MatDialog, MatDialogModule, MatDialogRef } from "@angular/material/dialog";
+import { MatDialog, MatDialogModule } from "@angular/material/dialog";
 import { DialogModule } from "src/app/shared/component/dialog/dialog.module";
 import { EditableListModule } from "src/app/shared/component/editable-list/editable-list.module";
 import { selectedAtLeastOne } from "src/app/validators/selected-at-least-one.validator";
-import { PlanProperty } from "../../domain/plan-property/plan-property";
-import { PropertyCreationChatComponent } from "../../view/property-creation-chat/property-creation-chat.component";
-import { PlanPropertyPanelComponent } from "../plan-proeprty-panel/plan-proeprty-panel.component";
-import { BehaviorSubject, combineLatest, map, Observable, of, skipUntil, skipWhile, take, takeUntil, takeWhile } from "rxjs";
+import { take, tap} from "rxjs";
 import { Store } from "@ngrx/store";
-import { selectIterativePlanningProjectCreationInterfaceType } from "../../state/iterative-planning.selector";
-import { PropertyCreationInterfaceType } from "src/app/project/domain/general-settings";
-import { PropertyCreationTemplateBasedComponent } from "../../view/property-creation-template-based/property-creation-template-based.component";
 import { UserRoleDirective } from "../../../user/directives/user-role.directive"
-import { AsyncPipe } from "@angular/common";
-import { selectPlanPropertyCreationInterfaceType } from "src/app/project/state/project.selector";
+import { PlanPropertyPanelComponent } from "src/app/shared/component/plan-property-panel/plan-property-panel.component";
+import { PropertyCreatorComponent } from "../../view/property-creator/property-creator.component";
+import { PlanProperty } from "src/app/shared/domain/plan-property/plan-property";
 
 @Component({
   selector: "app-select-property",
@@ -43,7 +38,6 @@ import { selectPlanPropertyCreationInterfaceType } from "src/app/project/state/p
     MatIconModule,
     PlanPropertyPanelComponent,
     ReactiveFormsModule,
-    AsyncPipe,
     UserRoleDirective,
   ],
   schemas:[
@@ -58,12 +52,9 @@ export class SelectPropertyComponent {
   private cd = inject(ChangeDetectorRef);
   private dialog = inject(MatDialog);
 
-  interfaceType$: Observable<PropertyCreationInterfaceType>
-
   cancel = output<void>();
-  select = output<string[]>();
+  select = output<PlanProperty[]>();
 
-  includeNewNotCreatedProperties = input<boolean>(false);
   properties = input.required<PlanProperty[] | null>();
 
   newProperties = signal([]);
@@ -75,14 +66,12 @@ export class SelectPropertyComponent {
   });
 
   constructor(
-    store: Store
   ) {
-    this.interfaceType$ = store.select(selectPlanPropertyCreationInterfaceType);
 
     effect(() => {
       this.form.controls.propertyIds.clear();
 
-      this.properties()?.forEach(() => {
+      this.availableProperties()?.forEach(() => {
         this.form.controls.propertyIds.push(this.fb.control(false));
       });
 
@@ -100,37 +89,24 @@ export class SelectPropertyComponent {
         (acc, selected, idx) => (selected ? [...acc, idx] : acc),
         []
       ) ?? [];
-    const selectedIds = selectedIndecees.map(
-      (index) => this.properties()?.[index]?._id
+    const selectedProperties = selectedIndecees.map(
+      (index) => this.availableProperties()?.[index]
     );
-
-    this.select.emit(selectedIds);
+    console.log(selectedProperties);
+    this.select.emit(selectedProperties);
   }
 
   createNewProperty(): void {
-    console.log("Create new Property");
-    this.interfaceType$.pipe(take(1)).subscribe(
-      type => {
-        switch (type) {
-          case PropertyCreationInterfaceType.LLM_CHAT:
-            const dialogRefChat = this.dialog.open(PropertyCreationChatComponent);
-            break;
-          case PropertyCreationInterfaceType.TEMPLATE_BASED:
-            const dialogRefTemplates = this.dialog.open(
-              PropertyCreationTemplateBasedComponent,
-              {data: {createProperty: this.includeNewNotCreatedProperties()}}
-            );
-            dialogRefTemplates.afterClosed().pipe(take(1)).subscribe(
-              newP => {
-                const extendedProperties = this.newProperties()
-                extendedProperties.push(newP)
-                this.newProperties.set(extendedProperties)
-              }
-            )
-            break;
+    const dialogRefTemplates = this.dialog.open(PropertyCreatorComponent);
+    dialogRefTemplates.afterClosed().pipe(
+      take(1),
+    ).subscribe(
+      newP => {
+        if(!newP){
+          return;
         }
+        this.newProperties.update(props => props.concat([newP]))
       }
     );
-    
   }
 }

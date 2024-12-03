@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component, input, output } from "@angular/core
 import { ChatModule } from "src/app/shared/component/chat/chat.module";
 import { QuestionType } from "../../domain/explanation/explanations";
 import { ExplanationMessage, StructuredText } from "../../domain/interface/explanation-message";
-import { PlanProperty } from "../../domain/plan-property/plan-property";
+import { PlanProperty } from "../../../shared/domain/plan-property/plan-property";
 import { StructuredTextComponent } from "../structured-text/structured-text.component";
 
 export type AvailableQuestion = {

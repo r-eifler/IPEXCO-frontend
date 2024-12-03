@@ -3,7 +3,7 @@ import { Component, EventEmitter, OnDestroy, OnInit, Output } from "@angular/cor
 import { Demo } from "src/app/interface/demo";
 import { BehaviorSubject, combineLatest, Observable, Subject } from "rxjs";
 import { takeUntil, filter, map, take, tap } from "rxjs/operators";
-import { getMaximalPlanValue, PlanProperty } from "../../../iterative_planning/domain/plan-property/plan-property";
+import { getMaximalPlanValue, PlanProperty } from "../../../shared/domain/plan-property/plan-property";
 import { DemoHelpDialogComponent } from "../demo-help-dialog/demo-help-dialog.component";
 // @ts-ignore
 import Timeout = NodeJS.Timeout;

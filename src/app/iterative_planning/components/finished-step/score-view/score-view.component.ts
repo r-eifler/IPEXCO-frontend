@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { BehaviorSubject, Observable, combineLatest } from "rxjs";
 import { filter, map } from "rxjs/operators";
-import { getMaximalPlanValue, PlanProperty } from "src/app/iterative_planning/domain/plan-property/plan-property";
+import { getMaximalPlanValue, PlanProperty } from "src/app/shared/domain/plan-property/plan-property";
 import { computePlanValue } from 'src/app/iterative_planning/domain/run';
 import { IterationStep, StepStatus } from 'src/app/iterative_planning/domain/iteration_step';
 import { Store } from '@ngrx/store';

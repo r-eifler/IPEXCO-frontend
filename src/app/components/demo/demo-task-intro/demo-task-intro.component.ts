@@ -7,7 +7,7 @@ import {
   OnInit,
   Output,
 } from "@angular/core";
-import { PlanProperty } from "../../../iterative_planning/domain/plan-property/plan-property";
+import { PlanProperty } from "../../../shared/domain/plan-property/plan-property";
 import { Demo } from "../../../interface/demo";
 import { MatStepper } from "@angular/material/stepper";
 import { environment } from "../../../../environments/environment";

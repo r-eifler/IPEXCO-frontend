@@ -1,0 +1,11 @@
+
+@if ((interfaceType$ | async) == interfaceType.TEMPLATE_BASED){
+    <app-property-creation-template-based
+        [planningTask]="planningTask$ | async"
+        [planProperties]="planProperties$ | async"
+        [templates]="templates$ | async"
+        (created)="handleCreatedProperty($event)"
+        (cancel)="handleCancel()"
+    >
+    </app-property-creation-template-based>
+}

@@ -1,4 +1,4 @@
-import { PlanProperty } from 'src/app/iterative_planning/domain/plan-property/plan-property';
+import { PlanProperty } from 'src/app/shared/domain/plan-property/plan-property';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { Component, OnInit} from '@angular/core';
 import { Demo } from 'src/app/interface/demo';

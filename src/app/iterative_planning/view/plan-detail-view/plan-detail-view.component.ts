@@ -26,7 +26,7 @@ import { QuestionType } from "../../domain/explanation/explanations";
 import { questionFactory } from "../../domain/explanation/question-factory";
 import { StructuredText } from "../../domain/interface/explanation-message";
 import { PlanRunStatus } from "../../domain/plan";
-import { PlanProperty } from "../../domain/plan-property/plan-property";
+import { PlanProperty } from "../../../shared/domain/plan-property/plan-property";
 import { initNewIterationStep, questionPosed } from "../../state/iterative-planning.actions";
 import { Message } from "../../state/iterative-planning.reducer";
 import {
