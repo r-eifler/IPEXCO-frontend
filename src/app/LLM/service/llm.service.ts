@@ -112,7 +112,7 @@ export class LLMService{
         let httpParams = new HttpParams();
         httpParams = httpParams.set('projectId', id);
         
-        return this.http.get<IHTTPData<LLMContext>>(this.BASE_URL,  { params: httpParams }).pipe(
+        return this.http.get<IHTTPData<LLMContext>>(this.BASE_URL+"llm-context",  { params: httpParams }).pipe(
             map(({data}) => data)
         )
     }

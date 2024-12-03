@@ -1,4 +1,4 @@
-<app-chat [isSenderTyping]="isLoading$ | async">
+<app-chat [isSenderTyping]="isAnyLoading$ | async">
 
   @for(message of messages$ | async; track message) {
   <app-chat-message [role]="message.role">{{ message.content }}</app-chat-message>

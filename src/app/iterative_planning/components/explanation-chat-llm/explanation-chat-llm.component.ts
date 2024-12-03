@@ -3,14 +3,14 @@ import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from '@
 import { Store } from '@ngrx/store';
 import { sendMessageToLLMQTthenGTTranslators } from '../../state/iterative-planning.actions';
 import { ChatModule } from 'src/app/shared/component/chat/chat.module';
-import { selectMessages, selectLLMThreadIdET, selectLLMThreadIdGT, selectLLMThreadIdQT, selectIterativePlanningSelectedStep, selectLLMChatMessages, selectIterativePlanningSelectedStepId, selectVisibleMessagesbyId } from '../../state/iterative-planning.selector';
+import { selectMessages, selectLLMThreadIdET, selectLLMThreadIdGT, selectLLMThreadIdQT, selectIterativePlanningSelectedStep, selectLLMChatMessages, selectIterativePlanningSelectedStepId, selectVisibleMessagesbyId, selectIsExplanationChatLoading } from '../../state/iterative-planning.selector';
 import { createPlanProperty } from '../../state/iterative-planning.actions';
 import { GoalType, PlanProperty } from '../../domain/plan-property/plan-property';
 import { take, filter, map, mergeMap, combineLatestWith, switchMap } from 'rxjs/operators';
 import { selectIterativePlanningProject } from '../../state/iterative-planning.selector';
 import { eraseLLMHistory } from '../../state/iterative-planning.actions';
 import { selectIsLLMChatLoading } from '../../state/iterative-planning.selector';
-import { Subscription } from 'rxjs';
+import { combineLatest, Subscription } from 'rxjs';
 @Component({
   selector: 'app-explanation-chat-llm',
   standalone: true,
@@ -25,6 +25,10 @@ export class ExplanationChatLlmComponent implements OnInit, OnDestroy {
   
   loadingState$ = this.store.select(selectIsLLMChatLoading);
   isLoading$ = this.store.select(selectIsLLMChatLoading);
+  isExplanationChatLoading$ = this.store.select(selectIsExplanationChatLoading);
+  isAnyLoading$ = combineLatest([this.isLoading$, this.isExplanationChatLoading$]).pipe(
+    map(([isLoading, isExplanationChatLoading]) => isLoading || isExplanationChatLoading)
+  );
   threadIdGT$ = this.store.select(selectLLMThreadIdGT);
   threadIdQT$ = this.store.select(selectLLMThreadIdQT);
   threadIdET$ = this.store.select(selectLLMThreadIdET);
