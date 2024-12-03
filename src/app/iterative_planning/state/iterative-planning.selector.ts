@@ -9,6 +9,8 @@ const selectIterativePlanningFeature = createFeatureSelector<IterativePlanningSt
 
 export const selectIterativePlanningProject = createSelector(selectIterativePlanningFeature,
     (state) => state.project?.data)
+export const selectIterativePlanningProjectId = createSelector(selectIterativePlanningFeature,
+  (state) => state.project?.data._id)
 export const selectIterativePlanningPropertyTemplates = createSelector(selectIterativePlanningFeature,
     (state) => state.project?.data?.domainSpecification?.planPropertyTemplates)
 export const selectIterativePlanningTask = createSelector(selectIterativePlanningFeature,

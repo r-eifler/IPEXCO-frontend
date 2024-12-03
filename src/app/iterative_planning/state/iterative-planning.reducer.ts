@@ -14,7 +14,7 @@ import {
     ModIterationStep,
     StepStatus,
 } from "../domain/iteration_step";
-import { PlanProperty } from "../domain/plan-property/plan-property";
+import { PlanProperty } from "../../shared/domain/plan-property/plan-property";
 import {
     cancelNewIterationStep,
     createIterationStepSuccess,

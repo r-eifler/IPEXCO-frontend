@@ -14,7 +14,7 @@ import { combineLatest, filter, map, startWith } from "rxjs";
 import { InfoModule } from "src/app/shared/component/info/info.module";
 import { SideSheetModule } from "src/app/shared/component/side-sheet/side-sheet.module";
 import { isNonEmptyValidator } from "src/app/validators/non-empty.validator";
-import { PlanProeprtyPanelComponent } from "../../components/plan-proeprty-panel/plan-proeprty-panel.component";
+import { PlanPropertyPanelComponent } from "../../../shared/component/plan-property-panel/plan-property-panel.component";
 import { SelectPropertyComponent } from "../../components/select-property/select-property.component";
 import { cancelNewIterationStep, createIterationStep, updateNewIterationStep } from "../../state/iterative-planning.actions";
 import { selectIterativePlanningProperties } from "../../state/iterative-planning.selector";
@@ -33,7 +33,7 @@ import { selectPlanPropertyIds, selectPreselectedEnforcedGoals$, selectPreselect
     MatIconModule,
     MatInputModule,
     NgFor,
-    PlanProeprtyPanelComponent,
+    PlanPropertyPanelComponent,
     SelectPropertyComponent,
     ReactiveFormsModule,
     SideSheetModule,

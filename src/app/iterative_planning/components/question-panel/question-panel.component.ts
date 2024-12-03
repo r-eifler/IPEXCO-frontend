@@ -1,5 +1,5 @@
 import { Component, Input, input, OnInit } from '@angular/core';
-import { PlanProperty } from '../../domain/plan-property/plan-property';
+import { PlanProperty } from '../../../shared/domain/plan-property/plan-property';
 import { IterationStep } from '../../domain/iteration_step';
 import { ExplanationTemplate } from '../../domain/explanation/explanation_templates';
 import { MatExpansionModule } from '@angular/material/expansion';

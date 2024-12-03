@@ -1,5 +1,5 @@
 import { PDDLFact, FactToString, PlanningTask, PDDLObject } from "src/app/interface/planning-task";
-import { Action, ActionSet, GoalType, PlanProperty, toAction } from "src/app/iterative_planning/domain/plan-property/plan-property";
+import { Action, ActionSet, GoalType, PlanProperty, toAction } from "src/app/shared/domain/plan-property/plan-property";
 import { Project } from "src/app/project/domain/project";
 
 export interface PlanPropertyTemplate {
@@ -73,8 +73,6 @@ export function getTemplateParts(template: PlanPropertyTemplate): TemplatePart[]
 export function generatePlanProperty(
     template: PlanPropertyTemplate,
     varObjectMapping: Record<string, PDDLObject>,
-    task: PlanningTask,
-    project: Project
   ): PlanProperty {
 
     let name = template.nameTemplate;
@@ -111,7 +109,7 @@ export function generatePlanProperty(
       formula,
       actionSets,
       naturalLanguageDescription,
-      project: project._id,
+      project: null,
       isUsed: false,
       globalHardGoal: false,
       utility: 1,

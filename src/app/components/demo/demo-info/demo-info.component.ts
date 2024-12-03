@@ -6,7 +6,7 @@ import {
   OnInit,
 } from "@angular/core";
 import { Demo } from "../../../interface/demo";
-import { PlanProperty } from "../../../iterative_planning/domain/plan-property/plan-property";
+import { PlanProperty } from "../../../shared/domain/plan-property/plan-property";
 import { takeUntil } from "rxjs/operators";
 import { Subject } from "rxjs";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";

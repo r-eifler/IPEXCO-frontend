@@ -19,14 +19,14 @@ import {
 } from "ramda";
 import { AvailableQuestion, ExplanationChatComponent } from "../../components/explanation-chat/explanation-chat.component";
 import { IterationStepHeroComponent } from "../../components/iteration-step-hero/iteration-step-hero.component";
-import { PlanProeprtyPanelComponent } from "../../components/plan-proeprty-panel/plan-proeprty-panel.component";
+import { PlanPropertyPanelComponent } from "../../../shared/component/plan-property-panel/plan-property-panel.component";
 import { QuestionPanelComponent } from "../../components/question-panel/question-panel.component";
 import { explanationHash } from "../../domain/explanation/explanation-hash";
 import { QuestionType } from "../../domain/explanation/explanations";
 import { questionFactory } from "../../domain/explanation/question-factory";
 import { StructuredText } from "../../domain/interface/explanation-message";
 import { PlanRunStatus } from "../../domain/plan";
-import { PlanProperty } from "../../domain/plan-property/plan-property";
+import { PlanProperty } from "../../../shared/domain/plan-property/plan-property";
 import { initNewIterationStep, questionPosed } from "../../state/iterative-planning.actions";
 import { Message } from "../../state/iterative-planning.reducer";
 import {
@@ -61,7 +61,7 @@ import { PlanViewComponent } from "../../components/plan/plan-view/plan-view.com
     MatIconModule,
     MatTooltipModule,
     PageModule,
-    PlanProeprtyPanelComponent,
+    PlanPropertyPanelComponent,
     QuestionPanelComponent,
     RouterLink,
     MugsVisualizationBaseComponent,

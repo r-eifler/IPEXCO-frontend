@@ -1,7 +1,7 @@
 import {
   GoalType,
   PlanProperty,
-} from "src/app/iterative_planning/domain/plan-property/plan-property";
+} from "src/app/shared/domain/plan-property/plan-property";
 import { PDDLAction } from "./planning-task";
 
 const zip = (a, b) => a.map((k, i) => [k, b[i]]);

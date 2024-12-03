@@ -1,7 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 import { IterationStep } from '../iteration_step';
-import { PlanProperty } from '../plan-property/plan-property';
+import { PlanProperty } from '../../../shared/domain/plan-property/plan-property';
 import { computeStepUtility } from '../run';
 
 @Pipe({

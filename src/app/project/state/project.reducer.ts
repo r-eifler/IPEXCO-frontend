@@ -3,7 +3,7 @@ import { Project } from "../domain/project";
 import { Loadable, LoadingState } from "src/app/shared/common/loadable.interface";
 import { loadPlanProperties, loadPlanPropertiesSuccess, loadProject, loadProjectDemos, loadProjectDemosSuccess, loadProjectSuccess, updateProject, updateProjectSuccess } from "./project.actions";
 import { Demo } from "src/app/interface/demo";
-import { PlanProperty } from "src/app/iterative_planning/domain/plan-property/plan-property";
+import { PlanProperty } from "src/app/shared/domain/plan-property/plan-property";
 
 export interface ProjectState {
     project: Loadable<Project>;

@@ -1,5 +1,5 @@
-import { PlanPropertyTemplate } from "../../iterative_planning/domain/plan-property/plan-property-template";
-import { PlanProperty } from "../../iterative_planning/domain/plan-property/plan-property";
+import { PlanPropertyTemplate } from "../../shared/domain/plan-property/plan-property-template";
+import { PlanProperty } from "../../shared/domain/plan-property/plan-property";
 
 export interface DomainSpecification {
   name: string;

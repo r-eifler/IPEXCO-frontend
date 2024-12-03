@@ -14,8 +14,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTabsModule } from '@angular/material/tabs';
 import { color } from 'd3';
 import { PDDLType, PlanningModel } from 'src/app/interface/planning-task';
-import { GoalType } from 'src/app/iterative_planning/domain/plan-property/plan-property';
-import { defaultPlanPropertyTemplate, PlanPropertyTemplate } from 'src/app/iterative_planning/domain/plan-property/plan-property-template';
+import { GoalType } from 'src/app/shared/domain/plan-property/plan-property';
+import { defaultPlanPropertyTemplate, PlanPropertyTemplate } from 'src/app/shared/domain/plan-property/plan-property-template';
 
 const jsonValidator: ValidatorFn = (control) => {
   const value = control.value;
