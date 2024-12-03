@@ -2,8 +2,8 @@
 
 
 import { PlanProperty } from "src/app/shared/domain/plan-property/plan-property";
-import { PDDLObject, PDDLPredicate } from "../planning-task";
 import { IterationStep } from "src/app/iterative_planning/domain/iteration_step";
+import { PDDLObject, PDDLPredicate } from "src/app/interface/planning-task";
 
 
 // goal-translator

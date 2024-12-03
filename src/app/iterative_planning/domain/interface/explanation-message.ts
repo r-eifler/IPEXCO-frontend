@@ -1,6 +1,6 @@
 import { QuestionType } from "../explanation/explanations";
 
-export type Role = 'system' | 'user';
+export type Role = 'sender' | 'receiver';
 
 export type StructuredText = {
   includeComputation?: boolean;

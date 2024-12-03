@@ -16,7 +16,6 @@ import { UserStudyStartComponent } from "./components/user-study/user-study-star
 import { UserMainPageComponent } from "./components/user/user-main-page/user-main-page.component";
 import { ProjectCollectionComponent } from "./project-meta/components/project-collection/project-collection.component";
 import { AuthGuard } from "./route-guards/auth-guard.guard";
-import { LlmBaseComponent } from "./LLM/components/llm-base/llm-base.component";
 
 export const appRoutes: Routes = [
   { path: "", component: MainPageComponent },
@@ -27,11 +26,26 @@ export const appRoutes: Routes = [
     component: UserMainPageComponent,
     canActivate: [AuthGuard],
   },
-  {
-    path: 'llm',
-    component: LlmBaseComponent,
-    canActivate: [AuthGuard],
-  },
+  // {
+  //   path: 'llm',
+  //   component: LlmBaseComponent,
+  //   canActivate: [AuthGuard],
+  // },
+  // {
+  //   path: 'llm-qt',
+  //   component: LlmQtChatComponent,
+  //   canActivate: [AuthGuard],
+  // },
+  // {
+  //   path: 'llm-gt',
+  //   component: LlmGtChatComponent,
+  //   canActivate: [AuthGuard],
+  // },
+  // {
+  //   path: 'llm-et',
+  //   component: LlmEtChatComponent,
+  //   canActivate: [AuthGuard],
+  // },
   {
     path: "projects",
     component: ProjectCollectionComponent,

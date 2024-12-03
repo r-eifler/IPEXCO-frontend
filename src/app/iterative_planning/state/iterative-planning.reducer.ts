@@ -19,32 +19,56 @@ import {
     cancelNewIterationStep,
     createIterationStepSuccess,
     deselectIterationStep,
+    eraseLLMHistory,
     initNewIterationStep,
     loadIterationSteps,
     loadIterationStepsSuccess,
+    loadLLMContext,
+    loadLLMContextSuccess,
     loadPlanProperties,
     loadPlanPropertiesSuccess,
     loadProject,
     loadProjectSuccess,
     poseAnswer,
     questionPosed,
+    questionPosedLLM,
     selectIterationStep,
+    sendMessageToLLMExplanationTranslator,
     updateNewIterationStep,
 } from "./iterative-planning.actions";
+import {
+  sendMessageToLLMGoalTranslator,
+  sendMessageToLLMGoalTranslatorSuccess,
+  sendMessageToLLMExplanationTranslatorSuccess,
+  sendMessageToLLMExplanationTranslatorFailure,
+  sendMessageToLLMQTthenGTTranslators,
+  sendMessageToLLMQTthenGTTranslatorsSuccess,
+  sendMessageToLLMQTthenGTTranslatorsFailure,
+} from "./iterative-planning.actions";
+import { LLMContext } from "src/app/LLM/domain/context";
 
 type messageType = ExplanationMessage['message'];
-export type Message = (Omit<ExplanationMessage, 'message'> & {message?: messageType});
+export type Message = (Omit<ExplanationMessage, 'message'> & { message?: messageType });
+
+export interface LLMMessage{
+  role: 'sender' | 'receiver',
+  content: string
+}
 
 export interface IterativePlanningState {
   explanations: Record<string,GlobalExplanation | undefined>;
   iterationSteps: Loadable<IterationStep[]>;
-  messages: Message[];
+  messages?: Message[] 
   newStep: undefined | ModIterationStep;
   planProperties: Loadable<Record<string, PlanProperty>>;
   project: Loadable<Project>;
   propertyAvailableQuestionTypes: QuestionType[];
   selectedIterationStepId: undefined | string;
   stepAvailableQuestionTypes: QuestionType[];
+  LLMChatLoadingState: LoadingState;
+  ExplanationLoadingState: LoadingState;
+  LLMContext: LLMContext;
+
 }
 
 export const iterativePlanningFeature = "iterative-planning";
@@ -59,6 +83,20 @@ const initialState: IterativePlanningState = {
   propertyAvailableQuestionTypes: [QuestionType.CAN_PROPERTY, QuestionType.WHAT_IF_PROPERTY, QuestionType.WHY_NOT_PROPERTY, QuestionType.HOW_PROPERTY],
   selectedIterationStepId: undefined,
   stepAvailableQuestionTypes: [QuestionType.HOW_PLAN, QuestionType.WHY_PLAN],
+  LLMChatLoadingState: LoadingState.Initial,
+  ExplanationLoadingState: LoadingState.Initial,
+  LLMContext: {
+    threadIdQT: '',
+    threadIdGT: '',
+    threadIdET: '',
+    visibleMessages: [],
+    visiblePPCreationMessages: [],
+    seenByGTMessages: [],
+    seenByETMessages: [],
+    seenByQTMessages: [],
+    project: undefined
+  },
+
 };
 
 export const iterativePlanningReducer = createReducer(
@@ -68,6 +106,11 @@ export const iterativePlanningReducer = createReducer(
     (state): IterativePlanningState => ({
       ...state,
       project: { state: LoadingState.Loading, data: undefined },
+      LLMChatLoadingState: LoadingState.Initial,
+      LLMContext: {
+        ...initialState.LLMContext,
+        project: state.project.data?._id
+      }
     })
   ),
   on(
@@ -146,7 +189,8 @@ export const iterativePlanningReducer = createReducer(
         hardGoals: [...(baseStep?.hardGoals ?? [])],
         softGoals: [...(baseStep?.softGoals ?? [])],
         predecessorStep: baseStepId,
-      },
+      }
+      
     };
   }),
   on(
@@ -189,20 +233,122 @@ export const iterativePlanningReducer = createReducer(
 
   on(questionPosed, (state, { question: {iterationStepId, questionType, propertyId } }): IterativePlanningState => ({
     ...state,
+    ExplanationLoadingState: LoadingState.Initial,
     messages: [
       ...state.messages,
-      { questionType, iterationStepId, role: 'user', message: questionFactory(questionType)(state.planProperties?.data?.[propertyId]?.name), propertyId },
+      { questionType, iterationStepId, role: 'receiver', message: questionFactory(questionType)(state.planProperties?.data?.[propertyId]?.name), propertyId },
     ],
   })),
 
   on(poseAnswer, (state, { answer }): IterativePlanningState => ({
     ...state,
+    ExplanationLoadingState: LoadingState.Initial,
     messages: [
       ...state.messages,
       answer,
     ],
-  }))
+  })),
+
+//   // LLM STUFF TO BE UPDATED
+
+//   on(sendMessageToLLM, (state, { request }): IterativePlanningState => ({
+//     ...state,
+//     LLMChatLoadingState: LoadingState.Loading,
+//     LLMMessages: [...state.LLMMessages, { role: 'sender', content: request }]
+// })),
+// on(sendMessageToLLMSuccess, (state, { response }): IterativePlanningState => ({
+//     ...state,
+//     LLMChatLoadingState: LoadingState.Done,
+//     LLMMessages: [...state.LLMMessages, { role: 'receiver', content: response }]
+// })),
+  on(eraseLLMHistory, (state): IterativePlanningState => ({
+    ...state,
+    LLMChatLoadingState: LoadingState.Initial,
+    LLMContext: {
+      ...state.LLMContext,
+      visiblePPCreationMessages: [],
+      visibleMessages: [],
+      threadIdGT: '',
+      threadIdQT: '',
+      threadIdET: ''
+    }
+})),
+// on(sendMessageToLLMQuestionTranslator, (state, action): IterativePlanningState => ({
+//     ...state,
+//     LLMChatLoadingState: LoadingState.Loading,
+// })),
+// on(sendMessageToLLMQuestionTranslatorSuccess, (state, action): IterativePlanningState => ({
+//     ...state,
+//     LLMChatLoadingState: LoadingState.Done,
+//     LLMThreadIdQT: action.threadId
+// })),
+on(sendMessageToLLMGoalTranslator, (state, action): IterativePlanningState => ({
+    ...state,
+    LLMChatLoadingState: LoadingState.Loading,
+    LLMContext: {
+      ...state.LLMContext,
+      visiblePPCreationMessages: [...state.LLMContext.visiblePPCreationMessages, {role: 'receiver', content: action.goalDescription, iterationStepId: state.selectedIterationStepId}]
+    }
+})),
+on(sendMessageToLLMGoalTranslatorSuccess, (state, action): IterativePlanningState => ({
+  ...state,
+  LLMChatLoadingState: LoadingState.Done,
+    LLMContext: {
+      ...state.LLMContext,
+      threadIdGT: action.threadId,
+      visiblePPCreationMessages: [...state.LLMContext.visiblePPCreationMessages, { role: 'sender', content: `${action.response.formula} ; ${action.response.shortName}`, iterationStepId: state.selectedIterationStepId }]
+      
+    }
+})),
+on(sendMessageToLLMExplanationTranslator, (state, action): IterativePlanningState => ({
+    ...state,
+  LLMChatLoadingState: LoadingState.Loading,
+  ExplanationLoadingState: LoadingState.Loading
+})),
+on(sendMessageToLLMExplanationTranslatorSuccess, (state, action): IterativePlanningState => ({
+    ...state,
+    LLMContext: {
+      ...state.LLMContext,
+      threadIdET: action.threadId,
+      visibleMessages: [...state.LLMContext.visibleMessages, {role: 'sender', content: action.response, iterationStepId: state.selectedIterationStepId}]
+    },
+    LLMChatLoadingState: LoadingState.Done,
+    ExplanationLoadingState: LoadingState.Done
+})),
+on(sendMessageToLLMExplanationTranslatorFailure, (state): IterativePlanningState => ({
+    ...state,
+    LLMChatLoadingState: LoadingState.Done,
+    ExplanationLoadingState: LoadingState.Done
+})),
+on(sendMessageToLLMQTthenGTTranslators, (state, action): IterativePlanningState => ({
+    ...state,
+  LLMChatLoadingState: LoadingState.Loading,
+  ExplanationLoadingState: LoadingState.Loading,
+    LLMContext: {
+      ...state.LLMContext,
+      visibleMessages: [...state.LLMContext.visibleMessages, {role: 'receiver', content: action.question, iterationStepId: state.selectedIterationStepId}]
+    }
+})),
+on(sendMessageToLLMQTthenGTTranslatorsSuccess, (state, action): IterativePlanningState => ({
+    ...state,
+    LLMChatLoadingState: LoadingState.Done,
+    LLMContext: {
+      ...state.LLMContext,
+      threadIdQT: action.threadIdQt,
+      threadIdGT: action.threadIdGt,
+    }
+})),
+on(sendMessageToLLMQTthenGTTranslatorsFailure, (state): IterativePlanningState => ({
+    ...state,
+    LLMChatLoadingState: LoadingState.Done,
+    ExplanationLoadingState: LoadingState.Done
+})),
+on(loadLLMContextSuccess, (state,action): IterativePlanningState=> ({
+  ...state,
+  LLMContext : action.LLMContext
+})),
 );
+
 
 function initFirstNewIterationStep(
   state: IterativePlanningState

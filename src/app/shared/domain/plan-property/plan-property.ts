@@ -32,7 +32,7 @@ export interface PlanProperty {
   type: GoalType;
   naturalLanguage?: string;
   formula: string;
-  actionSets?: ActionSet[];
+  actionSets?: ActionSet[]; //LtL over actions : unsupported yet for LLM
   naturalLanguageDescription?: string;
   project: string;
   isUsed: boolean;

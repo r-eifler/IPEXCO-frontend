@@ -18,6 +18,7 @@ import {
     not as rNot,
 } from "ramda";
 import { AvailableQuestion, ExplanationChatComponent } from "../../components/explanation-chat/explanation-chat.component";
+import { ExplanationChatLlmComponent } from "../../components/explanation-chat-llm/explanation-chat-llm.component";
 import { IterationStepHeroComponent } from "../../components/iteration-step-hero/iteration-step-hero.component";
 import { PlanPropertyPanelComponent } from "../../../shared/component/plan-property-panel/plan-property-panel.component";
 import { QuestionPanelComponent } from "../../components/question-panel/question-panel.component";
@@ -56,6 +57,7 @@ import { PlanViewComponent } from "../../components/plan/plan-view/plan-view.com
     BreadcrumbModule,
     EmptyStateModule,
     ExplanationChatComponent,
+    ExplanationChatLlmComponent,
     IterationStepHeroComponent,
     MatButtonModule,
     MatIconModule,

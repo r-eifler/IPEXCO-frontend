@@ -24,9 +24,6 @@ import { UserDataFeature, UserDataReducer } from './user/state/user.reducer';
 import { LoginEffect } from './user/state/effects/login.effect';
 import { LogoutEffect } from './user/state/effects/logout.effect';
 
-import { LLMChatFeature, llmChatReducer } from './LLM/state/llm.reducer';
-import { SendMessageToLLMEffect } from './LLM/state/effects/send-message.effect';
-
 import { projectFeature, projectReducer } from './project/state/project.reducer';
 import { LoadProjectEffect } from './project/state/effects/load-project.effect';
 import { UpdateProjectEffect } from './project/state/effects/update-project.effect';
@@ -73,7 +70,8 @@ import { RegisterEffect } from './user/state/effects/register.effect';
 import { LoggedInEffect } from './user/state/effects/loggedIn.effect';
 import { LoadTokenEffect } from './user/state/effects/loadToken.effect';
 import { LoadUserEffect } from './user/state/effects/loadUser.effect';
-import { UserRoleDirective } from './user/directives/user-role.directive';
+import { SendMessageToLLMEffect } from './iterative_planning/state/effects/send-message.effect';
+
 
 
 @NgModule({
@@ -86,7 +84,6 @@ import { UserRoleDirective } from './user/directives/user-role.directive';
         [projectFeature]: projectReducer,
         [projectMetaDataFeature]: projectMetaDataReducer,
         [iterativePlanningFeature]: iterativePlanningReducer,
-        [LLMChatFeature]: llmChatReducer
     }),
     EffectsModule.forRoot([
         LoadTokenEffect,
