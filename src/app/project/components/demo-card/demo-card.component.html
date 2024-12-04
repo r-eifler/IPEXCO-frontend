@@ -1,0 +1,38 @@
+<mat-card appearance="outlined">
+  <mat-card-header>
+    <mat-card-title>{{ demo()?.name }}</mat-card-title>
+    <mat-card-subtitle>
+      <app-label
+        [color]="demo()?.status | demoStatusColor"
+      >{{demo()?.status | demoStatusName}}</app-label>
+    </mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content>
+    <div class="content">
+      <div class="stats">
+        <mat-icon>flag_check</mat-icon>
+        <span class="property-label">Goals:</span>
+        <span class="property-value">{{ planProperties().length }}</span>
+
+        <mat-icon>report</mat-icon>
+        <span class="property-label">Conflicts:</span>
+        <span class="property-value">{{ demo()?.globalExplanation?.MUGS.length }}</span>
+
+        <mat-icon>healing</mat-icon>
+        <span class="property-label">Corrections:</span>
+        <span class="property-value">{{ demo()?.globalExplanation?.MGCS.length }}</span>
+      </div>
+    </div>
+  </mat-card-content>
+
+  <mat-card-actions>
+    <div class="action-container">
+      <a class="details" mat-stroked-button [routerLink]="[demo()?._id ]">Details</a>
+      <button mat-icon-button
+        matTooltip="Perform iterative planning in the demo."
+        (click)="onRun()"
+      ><mat-icon>play_arrow</mat-icon></button>
+    </div>
+  </mat-card-actions>
+</mat-card>

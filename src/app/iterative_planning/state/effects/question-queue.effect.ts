@@ -11,7 +11,7 @@ import { Question } from "../../domain/interface/question";
 import { IterationStep } from "../../domain/iteration_step";
 import { poseAnswer, questionPosed, questionPosedLLM, registerGlobalExplanationComputation, sendMessageToLLMExplanationTranslator, sendMessageToLLMExplanationTranslatorFailure, sendMessageToLLMExplanationTranslatorSuccess } from "../iterative-planning.actions";
 import { selectExplanation, selectIterationStep, selectIterativePlanningProject, selectIterativePlanningProjectExplanationInterfaceType, selectIterativePlanningProperties, selectLLMThreadIdET } from "../iterative-planning.selector";
-import { selectIterationStepbyId } from "../../../iterative_planning/state/iterative-planning.selector";
+import { selectIterationStepById } from "../../../iterative_planning/state/iterative-planning.selector";
 import { ExplanationInterfaceType } from "src/app/project/domain/general-settings";
 import { LLMService } from "src/app/LLM/service/llm.service";
 import { catchError } from "rxjs/operators";
@@ -77,7 +77,7 @@ export class QuestionQueueEffect {
           this.store.select(selectLLMThreadIdET),
           this.store.select(selectIterativePlanningProject),
           this.store.select(selectIterativePlanningProperties),
-          this.store.select(selectIterationStepbyId(iterationStepId))]),
+          this.store.select(selectIterationStepById(iterationStepId))]),
         switchMap(([{question, explanation, question_type, questionArguments, iterationStepId}, threadIdET, project, properties, iterationStep]) => {
             return this.LLMService.postMessageET$(naturalLanguageQuestion, explanation,question_type, questionArguments, iterationStep, project, Object.values(properties), threadIdET).pipe(
                 switchMap(response => [sendMessageToLLMExplanationTranslatorSuccess({ response: response.response, threadId: response.threadId })]),

@@ -11,11 +11,15 @@ import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { AsyncPipe } from "@angular/common";
 import { Store } from "@ngrx/store";
-import { selectProject, selectProjectFinishedDemos, selectProjectRunningDemos } from "src/app/project/state/project.selector";
+import { selectProject, selectProjectDemoComputationPending, selectProjectDemoProperties, selectProjectFinishedDemos, selectProjectRunningDemos } from "src/app/project/state/project.selector";
 import { deleteProjectDemo } from "src/app/project/state/project.actions";
 import { PageModule } from "src/app/shared/components/page/page.module";
 import { BreadcrumbModule } from "src/app/shared/components/breadcrumb/breadcrumb.module";
 import { ActionCardModule } from "src/app/shared/components/action-card/action-card.module";
+import { DemoCardComponent } from "src/app/project/components/demo-card/demo-card.component";
+import { DemoStatusNamePipe } from "src/app/project/pipe/demo-status-name.pipe";
+import { DemoStatusColorPipe } from "src/app/project/pipe/demo-status-color.pipe";
+import { DemoCreatorComponent } from "src/app/project/view/demo-creator/demo-creator.component";
 
 @Component({
   selector: "app-demo-selection",
@@ -32,6 +36,7 @@ import { ActionCardModule } from "src/app/shared/components/action-card/action-c
     MatProgressBarModule,
     MatProgressSpinnerModule,
     AsyncPipe,
+    DemoCardComponent
   ],
   templateUrl: "./demo-collection.component.html",
   styleUrls: ["./demo-collection.component.scss"],
@@ -45,6 +50,8 @@ export class DemoCollectionComponent{
   project$ = this.store.select(selectProject)
   demosFinished$ = this.store.select(selectProjectFinishedDemos);
   demosRunning$ = this.store.select(selectProjectRunningDemos);
+  demoComputationPending$ = this.store.select(selectProjectDemoComputationPending);
+  demoProperties$ = this.store.select(selectProjectDemoProperties);
   router = inject(Router);
   dialog = inject(MatDialog);
 
@@ -61,11 +68,13 @@ export class DemoCollectionComponent{
     });
   }
 
+  
+
   createNewDemo() {
-    
+    this.dialog.open(DemoCreatorComponent);
   }
 
-  openDemo(demo: Demo): void {
+  runDemo(id: string): void {
 
     // this.router.navigate(["../demos/" + demo._id], {
     //   relativeTo: this.activatedRoute,

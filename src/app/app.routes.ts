@@ -6,7 +6,7 @@ import { MainPageComponent } from "./base/components/main-page/main-page.compone
 import { UserMainPageComponent } from "./user/view/user-main-page/user-main-page.component";
 import { ProjectCollectionComponent } from "./project-meta/components/project-collection/project-collection.component";
 import { AuthGuard } from "./route-guards/auth-guard.guard";
-import { DemoCollectionComponent } from "./demo/view/demo-collection/demo-collection.component";
+import { DemoCollectionComponent } from "./project/view/demo-collection/demo-collection.component";
 
 export const appRoutes: Routes = [
   { path: "", component: MainPageComponent },

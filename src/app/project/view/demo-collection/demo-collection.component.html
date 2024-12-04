@@ -8,12 +8,11 @@
 
   <app-page-content>
     <div class="page-grid">
-      @for(step of demosFinished$ | async; track step) {
-        <p>TEST</p>
-        <!-- <app-iteration-step-card [step]="step" [planProperties]="planProperties" (fork)="createNewIteration(step._id)"></app-iteration-step-card> -->
+      @for(demo of demosFinished$ | async; track demo) {
+        <app-demo-card [demo]="demo" [planProperties]="(demoProperties$ | async)?.[demo._id] ?? []" (run)="runDemo(demo._id)"></app-demo-card>
       }
 
-      <button app-action-card (click)="createNewDemo()">
+      <button app-action-card (click)="createNewDemo()" [disabled]="demoComputationPending$  | async">
         <div class="instructions">
           <span>Create a new demo based on the current project.</span>
         </div>

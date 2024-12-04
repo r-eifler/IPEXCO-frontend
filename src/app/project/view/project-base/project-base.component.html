@@ -2,21 +2,17 @@
   <app-breadcrumb>
     <a app-breadcrumb-item [routerLink]="['/project/' + (project$ | async)?._id]"><mat-icon>home</mat-icon></a>
   </app-breadcrumb>
-  <app-page-title>Project</app-page-title>
+  <app-page-title>Project {{(project$ | async)?.name}}
+    <app-page-title-action>
+      <button  mat-icon-button (click)="deleteProject()">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </app-page-title-action>
+  </app-page-title>
 
   <app-page-content>
     <div class="page-grid">
 
-      <app-project-action-card>
-        <span action-title>Planning Task</span>
-        <span action-description>
-          Inspect planning task of the project.
-        </span>
-        <a mat-flat-button (click)="onPlanningTask()" action-button>
-          Show
-        </a>
-      </app-project-action-card>
-     
       <app-project-action-card>
         <span action-title>Iterative Planning</span>
         <span action-description>
@@ -27,12 +23,23 @@
         </a>
       </app-project-action-card>
   
+
+      <app-project-action-card>
+        <span action-title>Planning Task</span>
+        <span action-description>
+          Inspect planning task of the project.
+        </span>
+        <a mat-button (click)="onPlanningTask()" action-button>
+          Show
+        </a>
+      </app-project-action-card>
+     
       <app-project-action-card>
         <span action-title>Demos</span>
         <span action-description>
           Copies of the project with limited features but precomputed explanations. 
         </span>
-        <button mat-flat-button (click)="onDemos()" action-button>
+        <button mat-button (click)="onDemos()" action-button>
           Show
         </button>
       </app-project-action-card>
@@ -43,18 +50,8 @@
         <span action-description>
           Change project settings and update domain dependent information. 
         </span>
-        <button mat-flat-button (click)="onSettings()" action-button>
+        <button mat-button (click)="onSettings()" action-button>
           Show
-        </button>
-      </app-project-action-card>
-  
-      <app-project-action-card>
-        <span action-title>Delete Project</span>
-        <span action-description>
-          Delete the project and all connected data.
-        </span>
-        <button mat-flat-button (click)="deleteProject()" action-button>
-          Delete
         </button>
       </app-project-action-card>
 

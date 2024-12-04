@@ -1,5 +1,5 @@
 import { Component, ElementRef, inject, OnInit, TemplateRef, viewChild } from "@angular/core";
-import { Demo } from "src/app/demo/domain/demo";
+import { Demo, DemoRunStatus } from "src/app/demo/domain/demo";
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { MatDialogRef, MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
@@ -115,6 +115,7 @@ export class DemoCreatorComponent implements OnInit {
     ).subscribe(
       project => {
         const newDemo: Demo = {
+          status: DemoRunStatus.pending,
           projectId: project._id,
           name: this.form.controls.main.controls.name.value,
           summaryImage: this.imageFile,

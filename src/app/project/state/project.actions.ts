@@ -53,3 +53,9 @@ export const demoCreationRunningFailure = createAction('[project] demo creation 
 export const deleteProjectDemo = createAction('[project] delete project demos', props<{id: string}>());
 export const deleteProjectDemoSuccess = createAction('[project] delete project demos success');
 export const deleteProjectDemoFailure = createAction('[project] delete project demos failure');
+
+
+export const loadAllDemosPlanProperties = createAction('[project] load all demo plan properties');
+export const loadDemoPlanProperties = createAction('[project] load demo plan properties', props<{id: string}>());
+export const loadDemoPlanPropertiesSuccess = createAction('[project] load demo plan properties success', props<{demoId: string, planProperties: PlanProperty[]}>());
+export const loadDemoPlanPropertiesFailure = createAction('[project] load demo plan properties failure');

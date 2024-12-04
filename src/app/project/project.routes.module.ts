@@ -5,7 +5,7 @@ import { ProjectBaseComponent } from './view/project-base/project-base.component
 import { ShellComponent } from './view/shell/shell.component';
 import { ProjectSettingsContainerComponent } from './view/project-settings-container/project-settings-container.component';
 import { PlanningTaskViewComponent } from './view/planning-task-view/planning-task-view.component';
-import { DemoCollectionComponent } from '../demo/view/demo-collection/demo-collection.component';
+import { DemoCollectionComponent } from './view/demo-collection/demo-collection.component';
 
 
 const routes: Routes = [
