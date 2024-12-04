@@ -67,6 +67,8 @@ import { LoggedInEffect } from './user/state/effects/loggedIn.effect';
 import { LoadTokenEffect } from './user/state/effects/loadToken.effect';
 import { LoadUserEffect } from './user/state/effects/loadUser.effect';
 import { SendMessageToLLMEffect } from './iterative_planning/state/effects/send-message.effect';
+import { CreateDemoEffect } from './project/state/effects/create-demo.effect';
+import { LoadProjectDemosEffect } from './project/state/effects/load-demos.effect';
 
 
 
@@ -94,6 +96,8 @@ import { SendMessageToLLMEffect } from './iterative_planning/state/effects/send-
         LoadProjectMetaDataListEffect,
         CreateProjectEffect,
         DeleteProjectEffect,
+        CreateDemoEffect,
+        LoadProjectDemosEffect,
         LoadIterativePlanningProjectEffect,
         CreatePlanPropertyEffect,
         LoadPlanPropertiesEffect,

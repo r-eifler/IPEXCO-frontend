@@ -1,12 +1,12 @@
 import { Routes } from "@angular/router";
 import { DemoBaseComponent } from "./demo/components/demo-base/demo-base.component";
-import { DemoCollectionComponent } from "./demo/components/demo-collection/demo-collection.component";
 import { HelpPageComponent } from "./base/components/help-page/help-page.component";
 import { MainInfoComponent } from "./base/components/main-info/main-info.component";
 import { MainPageComponent } from "./base/components/main-page/main-page.component";
 import { UserMainPageComponent } from "./user/view/user-main-page/user-main-page.component";
 import { ProjectCollectionComponent } from "./project-meta/components/project-collection/project-collection.component";
 import { AuthGuard } from "./route-guards/auth-guard.guard";
+import { DemoCollectionComponent } from "./demo/view/demo-collection/demo-collection.component";
 
 export const appRoutes: Routes = [
   { path: "", component: MainPageComponent },
@@ -53,8 +53,8 @@ export const appRoutes: Routes = [
     canActivate: [AuthGuard],
   },
 
-  { path: "demos", component: DemoCollectionComponent },
-  { path: "demos/:demoid", component: DemoBaseComponent },
+  // { path: "demos", component: DemoCollectionComponent },
+  // { path: "demos/:demoid", component: DemoBaseComponent },
 
   // { path: "user-studies", component: UserStudyCollectionBaseComponent },
   // {

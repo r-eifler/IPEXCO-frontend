@@ -18,6 +18,8 @@ import { MatStepperModule } from "@angular/material/stepper";
 import { MatFormFieldModule, MatLabel } from "@angular/material/form-field";
 import { MatCardModule } from "@angular/material/card";
 import { selectUser } from "src/app/user/state/user.selector";
+import { MatInputModule } from "@angular/material/input";
+import { MatButtonModule } from "@angular/material/button";
 
 @Component({
   selector: "app-project-creator",
@@ -29,10 +31,12 @@ import { selectUser } from "src/app/user/state/user.selector";
     MatStepperModule,
     MatLabel,
     MatFormFieldModule,
+    MatInputModule,
     FormsModule,
     ReactiveFormsModule,
     MatCardModule,
     MatIconModule,
+    MatButtonModule,
   ],
   templateUrl: "./project-creator.component.html",
   styleUrls: ["./project-creator.component.scss"],

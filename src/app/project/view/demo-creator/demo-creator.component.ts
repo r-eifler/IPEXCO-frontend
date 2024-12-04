@@ -15,7 +15,7 @@ import { MatIcon } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
 import { PlanPropertyPanelComponent } from "src/app/shared/components/plan-property-panel/plan-property-panel.component";
 import { AsyncPipe } from "@angular/common";
-import { SelectPropertyComponent } from "../select-property/select-property.component";
+import { SelectPropertyComponent } from "../../components/select-property/select-property.component";
 import { PlanProperty } from "src/app/shared/domain/plan-property/plan-property";
 
 @Component({
@@ -47,6 +47,8 @@ export class DemoCreatorComponent implements OnInit {
   handlePropertySelection: (planProperties: PlanProperty[]) => void;
   dialogRef: MatDialogRef<unknown> | undefined;
 
+  ownDialogRef: MatDialogRef<unknown> | undefined = inject(MatDialogRef)
+
   project$ = this.store.select(selectProject)
   projectPlanProperties$ = this.store.select(selectProjectProperties)
   planProperties = new BehaviorSubject<PlanProperty[]>([]);
@@ -54,11 +56,11 @@ export class DemoCreatorComponent implements OnInit {
   form = this.fb.group({
     main: this.fb.group({
       name: this.fb.control<string>("", Validators.required),
-      description: this.fb.control<string>("", Validators.required),
+      description: this.fb.control<string>(""),
     }),
     taskInfo: this.fb.group({
-      domainInfo: this.fb.control<string>("", Validators.required),
-      instanceInfo: this.fb.control<string>("", Validators.required),
+      domainInfo: this.fb.control<string>(""),
+      instanceInfo: this.fb.control<string>(""),
     }),
     image: this.fb.control<File>(null),
     properties: this.fb.array<FormControl<PlanProperty>>([], [isNonEmptyValidator])
@@ -105,9 +107,12 @@ export class DemoCreatorComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  createOrUpdateDemo(): void {
+  createDemo(): void {
 
-    this.project$.pipe(take(1)).subscribe(
+    this.project$.pipe(
+      tap(console.log),
+      take(1)
+    ).subscribe(
       project => {
         const newDemo: Demo = {
           projectId: project._id,
@@ -124,15 +129,31 @@ export class DemoCreatorComponent implements OnInit {
             : "TODO",
           public: false,
           completion:  0.0,
+          baseTask: project.baseTask,
           domainSpecification: project.domainSpecification,
           settings: project.settings
         };
 
-        this.store.dispatch(registerDemoCreation({demo: newDemo}))
+        console.log("New Demo:");
+        console.log(newDemo);
 
-        this.dialogRef?.close();
+        const selectedPlanProperties  = this.form.controls.properties.controls.
+          map(fc => {
+            let pp = {...fc.value};
+            pp._id = null;
+            pp.project = null;
+            return pp;
+          });
+
+        this.store.dispatch(registerDemoCreation({demo: newDemo, properties: selectedPlanProperties}))
+
+        this.ownDialogRef?.close();
       }
     )
+  }
+
+  cancel(){
+    this.ownDialogRef.close();
   }
 
   onFileChanged(event) {

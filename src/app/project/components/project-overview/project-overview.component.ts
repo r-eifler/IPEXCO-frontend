@@ -1,24 +1,28 @@
-import { Component, OnInit } from "@angular/core";
-import { Observable } from "rxjs";
-import { PlanProperty } from "src/app/shared/domain/plan-property/plan-property";
+import { Component, inject } from "@angular/core";
 import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
-import { MatSnackBar } from "@angular/material/snack-bar";
-import { Project } from "../../domain/project";
-import { Router, RouterModule } from "@angular/router";
+import { Router, RouterLink, RouterModule } from "@angular/router";
 import { Store } from "@ngrx/store";
-import { selectProject } from "../../state/project.selector";
+import { selectProject, selectProjectDemoComputationPending } from "../../state/project.selector";
 import { MatCardModule } from "@angular/material/card";
 import { AsyncPipe } from "@angular/common";
-import { MatIcon } from "@angular/material/icon";
+import { MatIcon, MatIconModule } from "@angular/material/icon";
 import { ProjectActionCardComponent } from "../project-action-card/project-action-card.component";
 import { MatButtonModule } from "@angular/material/button";
-import { DemoCreatorComponent } from "src/app/project/components/demo-creator/demo-creator.component";
-import { ProjectPlanPropertyService } from "../../service/plan-properties.service";
+import { DemoCreatorComponent } from "src/app/project/view/demo-creator/demo-creator.component";
+import { PageModule } from "src/app/shared/components/page/page.module";
+import { ActionCardModule } from "src/app/shared/components/action-card/action-card.module";
+import { BreadcrumbModule } from "src/app/shared/components/breadcrumb/breadcrumb.module";
 
 @Component({
   selector: "app-project-overview",
   standalone: true,
   imports: [
+    PageModule, 
+    AsyncPipe, 
+    ActionCardModule, 
+    MatIconModule,
+    RouterLink, 
+    BreadcrumbModule,
     MatCardModule,
     MatIcon,
     AsyncPipe,
@@ -29,31 +33,18 @@ import { ProjectPlanPropertyService } from "../../service/plan-properties.servic
   templateUrl: "./project-overview.component.html",
   styleUrls: ["./project-overview.component.scss"],
 })
-export class ProjectOverviewComponent implements OnInit {
+export class ProjectOverviewComponent {
 
-  project$: Observable<Project>;
-  properties$: Observable<Record<string, PlanProperty>>;
+  store = inject(Store)
 
-  constructor(
-    store: Store,
-    public dialog: MatDialog,
-    private router: Router,
-    private snackBar: MatSnackBar
-  ) {
-    // this.properties$ = this.propertiesService.getMap();
-    this.project$ = store.select(selectProject)
+  router = inject(Router);
+  dialog = inject(MatDialog);
 
-  }
-
-  ngOnInit(): void {
-
-  }
-
+  project$ = this.store.select(selectProject);
+  demoComputationRunning = this.store.select(selectProjectDemoComputationPending);
 
   createDemo(): void {
-    const dialogConfig = new MatDialogConfig();
-      dialogConfig.width = "3000px";
-      this.dialog.open(DemoCreatorComponent, dialogConfig);
+    this.dialog.open(DemoCreatorComponent);
   }
 
   deleteProject(): void {
@@ -61,7 +52,4 @@ export class ProjectOverviewComponent implements OnInit {
     this.router.navigate(['/projects']);
   }
 
-  openSnackBar(message: string, action: string) {
-    this.snackBar.open(message, action);
-  }
 }
