@@ -50,10 +50,15 @@ export class DemoDetailsViewComponent {
   MGCS$ = this.demo$.pipe(map((demo) => demo?.globalExplanation?.MGCS));
 
   onDelete(){
-    console.log("delete");
     this.demo$.pipe(take(1)).subscribe(demo => {
       this.store.dispatch(deleteProjectDemo({id: demo._id}))
       this.router.navigate(["../.."], {relativeTo: this.route});
+    })
+  }
+
+  onRunIterPlanning(){
+    this.demo$.pipe(take(1)).subscribe(demo => {
+      this.router.navigate(['/iterative-planning', demo._id]);
     })
   }
 

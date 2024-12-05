@@ -10,6 +10,10 @@
 	<app-page-title>
 	{{ demo?.name }}
 	<app-page-title-action>
+		<button mat-icon-button matTooltip="Run iterative planning."
+			(click)="onRunIterPlanning()">
+		<mat-icon>play_arrow</mat-icon>
+		</button>
 		<button mat-icon-button matTooltip="Delete demo."
 			(click)="onDelete()">
 		<mat-icon>delete</mat-icon>
