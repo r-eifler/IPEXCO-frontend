@@ -73,5 +73,11 @@ export class DemoService{
       return this.http.put<IHTTPData<Demo>>(this.BASE_URL + demo._id, {demo: demo}).pipe(
           map(({data}) => data)
       )
-  }
+    }
+
+    deleteDemo$(id: string): Observable<boolean> {
+      return this.http.delete<IHTTPData<boolean>>(this.BASE_URL + id).pipe(
+          map(({data}) => data)
+      )
+    }
 }

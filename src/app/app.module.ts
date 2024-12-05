@@ -72,6 +72,7 @@ import { LoadProjectDemosEffect } from './project/state/effects/load-demos.effec
 import { LoadDemoProjectPlanPropertiesEffect } from './project/state/effects/load-demo-plan-properties.effect';
 import { LoadProjectDemoEffect } from './project/state/effects/load-demo.effect';
 import { UpdateDemoEffect } from './project/state/effects/update-demo.effect';
+import { DeleteProjectDemoEffect } from './project/state/effects/delete-demo.effect';
 
 
 
@@ -103,6 +104,7 @@ import { UpdateDemoEffect } from './project/state/effects/update-demo.effect';
         LoadProjectDemosEffect,
         LoadProjectDemoEffect,
         UpdateDemoEffect,
+        DeleteProjectDemoEffect,
         LoadDemoProjectPlanPropertiesEffect,
         LoadIterativePlanningProjectEffect,
         CreatePlanPropertyEffect,

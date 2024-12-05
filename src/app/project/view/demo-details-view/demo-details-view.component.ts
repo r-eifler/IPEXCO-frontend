@@ -5,7 +5,7 @@ import { selectPlanPropertiesOfDemo, selectProjectDemo } from '../../state/proje
 import { map, Observable, take } from 'rxjs';
 import { BreadcrumbModule } from 'src/app/shared/components/breadcrumb/breadcrumb.module';
 import { MatIconModule } from '@angular/material/icon';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AsyncPipe } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { DemoHeroComponent } from '../../components/demo-hero/demo-hero.component';
@@ -14,7 +14,7 @@ import { PlanPropertyBadgeComponent } from 'src/app/shared/components/plan-prope
 import { PlanProperty } from 'src/app/shared/domain/plan-property/plan-property';
 import { SettingsComponent } from "../../components/settings/settings.component";
 import { GeneralSettings } from '../../domain/general-settings';
-import { updateDemo } from '../../state/project.actions';
+import { deleteProjectDemo, updateDemo } from '../../state/project.actions';
 
 @Component({
   selector: 'app-demo-details-view',
@@ -29,7 +29,7 @@ import { updateDemo } from '../../state/project.actions';
     DemoHeroComponent,
     PlanPropertyPanelComponent,
     PlanPropertyBadgeComponent,
-    SettingsComponent
+    SettingsComponent,
 ],
   templateUrl: './demo-details-view.component.html',
   styleUrl: './demo-details-view.component.scss'
@@ -37,6 +37,9 @@ import { updateDemo } from '../../state/project.actions';
 export class DemoDetailsViewComponent {
 
   store = inject(Store);
+  router = inject(Router);
+  route = inject(ActivatedRoute);
+
   demo$ = this.store.select(selectProjectDemo)
   planProperties$: Observable<Record<string, PlanProperty>> = this.store.select(selectPlanPropertiesOfDemo)
   planPropertiesList$ = this.store.select(selectPlanPropertiesOfDemo).pipe(
@@ -47,7 +50,11 @@ export class DemoDetailsViewComponent {
   MGCS$ = this.demo$.pipe(map((demo) => demo?.globalExplanation?.MGCS));
 
   onDelete(){
-
+    console.log("delete");
+    this.demo$.pipe(take(1)).subscribe(demo => {
+      this.store.dispatch(deleteProjectDemo({id: demo._id}))
+      this.router.navigate(["../.."], {relativeTo: this.route});
+    })
   }
 
   updateSettings(settings: GeneralSettings){
