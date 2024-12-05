@@ -9,7 +9,7 @@ import { ExplanationRunStatus, GlobalExplanation } from "../../domain/explanatio
 import { ExplanationMessage } from "../../domain/interface/explanation-message";
 import { Question } from "../../domain/interface/question";
 import { IterationStep } from "../../domain/iteration_step";
-import { poseAnswer, questionPosed, questionPosedLLM, registerGlobalExplanationComputation, sendMessageToLLMExplanationTranslator, sendMessageToLLMExplanationTranslatorFailure, sendMessageToLLMExplanationTranslatorSuccess } from "../iterative-planning.actions";
+import { explanationVisualizationRequested, poseAnswer, questionPosed, questionPosedLLM, registerGlobalExplanationComputation, sendMessageToLLMExplanationTranslator, sendMessageToLLMExplanationTranslatorFailure, sendMessageToLLMExplanationTranslatorSuccess } from "../iterative-planning.actions";
 import { selectExplanation, selectIterationStep, selectIterativePlanningProject, selectIterativePlanningProjectExplanationInterfaceType, selectIterativePlanningProperties, selectLLMThreadIdET } from "../iterative-planning.selector";
 import { selectIterationStepbyId } from "../../../iterative_planning/state/iterative-planning.selector";
 import { ExplanationInterfaceType } from "src/app/project/domain/general-settings";
@@ -24,10 +24,27 @@ export class QuestionQueueEffect {
   private LLMService = inject(LLMService);
 
   explanationInterfaceType$ = this.store.select(selectIterativePlanningProjectExplanationInterfaceType);
-  
+
 
 
   computeExplanation$ = createEffect(() => this.actions$.pipe(
+    ofType(explanationVisualizationRequested),
+    concatLatestFrom(({ iterationStepId }) => this.store.select(selectIterationStep(iterationStepId))),
+    mergeMap(([{iterationStepId}, iterationStep]) => {
+      const hash = explanationHash(iterationStep);
+
+      return this.store.select(selectExplanation(hash)).pipe(
+        take(1),
+        map((explanation) => !explanation),
+        tap( needsComputation => console.log('registerGlobalExplanationComputation: ' + needsComputation)),
+        switchMap(needsComputation => needsComputation ? [registerGlobalExplanationComputation({ iterationStepId })] : []),
+      );
+    }),
+  ));
+  
+
+
+  computeExplanationForQuestion$ = createEffect(() => this.actions$.pipe(
     ofType(questionPosed, questionPosedLLM),
     concatLatestFrom(({ question: { iterationStepId }}) => this.store.select(selectIterationStep(iterationStepId))),
     mergeMap(([{ question: {iterationStepId } }, iterationStep]) => {

@@ -79,11 +79,14 @@ export const globalExplanationComputationRunning = createAction('[iterative-plan
 export const globalExplanationComputationRunningSuccess = createAction('[iterative-planning] global explanation computation running success');
 export const globalExplanationComputationRunningFailure = createAction('[iterative-planning] global explanation computation running failure');
 
-// Question based
 export const explanationComputationRunning = createAction('[iterative-planning] explanation computation running');
 export const explanationComputationRunningSuccess = createAction('[iterative-planning] explanation computation running success');
 export const explanationComputationRunningFailure = createAction('[iterative-planning] explanation computation running failure');
 
+// Visualization based (no direct questions)
+export const explanationVisualizationRequested = createAction('[iterative-planning] explanation Visualization requested', props<{ iterationStepId: string }>());
+
+// Question based
 export const questionPosed = createAction('[iterative-planning] question posed', props<{ question: Question }>());
 export const poseAnswer = createAction('[iterative-planning] pose answer', props<{ answer: ExplanationMessage }>());
 

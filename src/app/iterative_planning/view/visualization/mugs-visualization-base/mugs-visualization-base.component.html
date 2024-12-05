@@ -1,3 +1,12 @@
 <div class="TODO">
-    <p class="TODO-text">MUGS Visualization</p>
+    <button mat-flat-button (click)="computeExplanations()">Basic</button>
+
+    @if(explanationsAvailable()){
+        <div>
+            {{ globalExplanation().MUGS }}
+        </div>
+        <div>
+            {{ globalExplanation().MGCS }}
+        </div>
+    }
 </div>
