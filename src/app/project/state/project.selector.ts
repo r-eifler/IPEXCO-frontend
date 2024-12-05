@@ -28,7 +28,12 @@ export const selectProjectDemoComputationPending = createSelector(selectProjectF
 export const selectProjectDemoProperties = createSelector(selectProjectFeature, (state) => state.demoProperties)
 export const selectProjectDemoIds = createSelector(selectProjectAllDemos, map(({ _id }) => _id));
 
-
+export const selectProjectDemo = createSelector(selectProjectFeature, (state) => state.demo?.data)
+export const selectPlanPropertiesOfDemo = createSelector(selectProjectFeature, (state) => state.demoProperties[state.demo?.data?._id]?.reduce((acc, cv) => ({...acc,[cv._id]: cv}), {}));
+export const selectPlanPropertiesOfDemoById = memoizeWith(
+    (demoId: string) => demoId,
+    (demoId: string) => createSelector(selectProjectDemoProperties, (planProperties) => planProperties[demoId]?.reduce((acc, cv) => ({...acc,[cv._id]: cv}), {}), 
+  ));
 
 function demoFinished(demo: Demo): boolean {
     return demo.status != DemoRunStatus.pending && demo.status != DemoRunStatus.running;

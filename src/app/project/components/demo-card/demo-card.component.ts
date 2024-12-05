@@ -1,10 +1,10 @@
-import { Component, input, output } from '@angular/core';
+import { Component, inject, input, output } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 import { DefaultPipe } from 'src/app/shared/common/pipe/default.pipe';
 import { LabelModule } from 'src/app/shared/components/label/label.module';
@@ -25,7 +25,6 @@ import { DemoStatusNamePipe } from '../../pipe/demo-status-name.pipe';
     MatIconModule, 
     LabelModule, 
     MatButtonModule, 
-    RouterLink, 
     MatTooltipModule, 
     DemoStatusNamePipe,
     DemoStatusColorPipe
@@ -35,6 +34,9 @@ import { DemoStatusNamePipe } from '../../pipe/demo-status-name.pipe';
 })
 export class DemoCardComponent {
 
+  router = inject(Router);
+  route = inject(ActivatedRoute);
+
   demo = input.required<Demo | null>();
   planProperties = input.required<Record<string, PlanProperty> | null>();
 
@@ -42,5 +44,9 @@ export class DemoCardComponent {
 
   onRun(): void {
     this.run.emit();
+  }
+
+  onDetails(): void {
+    this.router.navigate([this.demo()?._id, 'details'], {relativeTo: this.route})
   }
 }

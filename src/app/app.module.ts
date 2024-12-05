@@ -70,6 +70,8 @@ import { SendMessageToLLMEffect } from './iterative_planning/state/effects/send-
 import { CreateDemoEffect } from './project/state/effects/create-demo.effect';
 import { LoadProjectDemosEffect } from './project/state/effects/load-demos.effect';
 import { LoadDemoProjectPlanPropertiesEffect } from './project/state/effects/load-demo-plan-properties.effect';
+import { LoadProjectDemoEffect } from './project/state/effects/load-demo.effect';
+import { UpdateDemoEffect } from './project/state/effects/update-demo.effect';
 
 
 
@@ -99,6 +101,8 @@ import { LoadDemoProjectPlanPropertiesEffect } from './project/state/effects/loa
         DeleteProjectEffect,
         CreateDemoEffect,
         LoadProjectDemosEffect,
+        LoadProjectDemoEffect,
+        UpdateDemoEffect,
         LoadDemoProjectPlanPropertiesEffect,
         LoadIterativePlanningProjectEffect,
         CreatePlanPropertyEffect,

@@ -1,4 +1,4 @@
-import { Component, DestroyRef, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
+import { Component, DestroyRef, effect, EventEmitter, inject, input, Input, OnChanges, OnInit, output, Output, SimpleChanges } from "@angular/core";
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
 import { ExplanationInterfaceType, GeneralSettings, PropertyCreationInterfaceType } from "../../domain/general-settings";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
@@ -30,16 +30,16 @@ import { AsyncPipe, NgFor, NgIf } from "@angular/common";
   templateUrl: "./settings.component.html",
   styleUrls: ["./settings.component.scss"],
 })
-export class SettingsComponent implements OnInit {
+export class SettingsComponent {
 
   destroyRef = inject(DestroyRef)
   
   settingsForm: FormGroup;
 
-  @Input() isProject: boolean;
-  @Input() settings: GeneralSettings;
+  settings = input.required<GeneralSettings>();
+  isProject = input<boolean>(false);
 
-  @Output() updatedSettings = new EventEmitter<GeneralSettings>();
+  update = output<GeneralSettings>();
 
   ExplanationTypes = ExplanationInterfaceType;
   PropertyCreationTypes = PropertyCreationInterfaceType;
@@ -77,21 +77,16 @@ export class SettingsComponent implements OnInit {
       maxPayment: new FormControl(),
       paymentSteps: new FormControl(),
     });
+
+    effect(() => this.initForm(this.settings()))
   }
 
-
-  ngOnChanges(changes: SimpleChanges): void {
-    console.log(this.settings);
-    if(this.settings && ! this.initialized)
-      this.initForm(this.settings);
-  }
-
-  ngOnInit(): void {
-    if(this.settings && ! this.initialized)
-      this.initForm(this.settings);    
-  }
 
   initForm(settings: GeneralSettings): void {
+    if(!settings){
+      return;
+    }
+
     this.settingsForm.controls.maxRuns.setValue(settings.maxRuns);
 
     this.settingsForm.controls.allowQuestions.setValue(settings.allowQuestions);
@@ -160,6 +155,6 @@ export class SettingsComponent implements OnInit {
     }
 
     // console.log(newSettings);
-    this.updatedSettings.next(newSettings);
+    this.update.emit(newSettings);
   }
 }

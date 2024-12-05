@@ -1,7 +1,7 @@
 import { createReducer, on } from "@ngrx/store";
 import { Project } from "../domain/project";
 import { Loadable, LoadingState } from "src/app/shared/common/loadable.interface";
-import { demoCreationRunningFailure, demoCreationRunningSuccess, loadDemoPlanPropertiesSuccess, loadPlanProperties, loadPlanPropertiesSuccess, loadProject, loadProjectDemos, loadProjectDemosSuccess, loadProjectSuccess, registerDemoCreation, registerDemoCreationSuccess, updateProject, updateProjectSuccess } from "./project.actions";
+import { demoCreationRunningFailure, demoCreationRunningSuccess, loadDemoPlanPropertiesSuccess, loadPlanProperties, loadPlanPropertiesSuccess, loadProject, loadProjectDemos, loadProjectDemosSuccess, loadProjectSuccess, registerDemoCreation, registerDemoCreationSuccess, loadProjectDemo, updateProject, updateProjectSuccess, loadProjectDemoSuccess } from "./project.actions";
 import { Demo } from "src/app/demo/domain/demo";
 import { PlanProperty } from "src/app/shared/domain/plan-property/plan-property";
 import { Creatable, CreationState } from "src/app/shared/common/creatable.interface";
@@ -12,6 +12,7 @@ export interface ProjectState {
     demos: Loadable<Demo[]>;
     demoProperties: Record<string, PlanProperty[]>
     demoCreation: Creatable<String>;
+    demo: Loadable<Demo>;
 }
 
 export const projectFeature = 'project';
@@ -22,6 +23,7 @@ const initialState: ProjectState = {
     demos: {state: LoadingState.Initial, data: undefined},
     demoCreation: {state: CreationState.Default, data: undefined},
     demoProperties: {},
+    demo: {state: LoadingState.Initial, data: undefined},
 }
 
 
@@ -29,7 +31,8 @@ export const projectReducer = createReducer(
     initialState,
     on(loadProject, (state): ProjectState => ({
         ...state,
-        project: {state: LoadingState.Loading, data: undefined}
+        project: {state: LoadingState.Loading, data: undefined},
+        demo: null
     })),
     on(loadProjectSuccess, (state, {project}): ProjectState => ({
         ...state,
@@ -62,7 +65,8 @@ export const projectReducer = createReducer(
     ),
     on(loadProjectDemos, (state): ProjectState => ({
         ...state,
-        demos: {state: LoadingState.Loading, data: undefined}
+        demos: {state: LoadingState.Loading, data: undefined},
+        demo: null
     })),
     on(loadProjectDemosSuccess, (state, {demos}): ProjectState => ({
         ...state,
@@ -87,5 +91,13 @@ export const projectReducer = createReducer(
     on(loadDemoPlanPropertiesSuccess, (state,{demoId, planProperties}): ProjectState => ({
         ...state,
         demoProperties: {...state.demoProperties, [demoId]: planProperties}
+    })),
+    on(loadProjectDemo, (state): ProjectState => ({
+        ...state,
+        demo: {state: LoadingState.Loading, data: undefined},
+    })),
+    on(loadProjectDemoSuccess, (state, {demo}): ProjectState => ({
+        ...state,
+        demo: {state: LoadingState.Done, data: demo},
     })),
 );

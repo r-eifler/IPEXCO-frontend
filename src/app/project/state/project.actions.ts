@@ -38,6 +38,10 @@ export const deletePlanPropertyFailure = createAction('[project] delete plan pro
 
 // demos
 
+export const updateDemo = createAction('[project] update demo', props<{demo: Demo}>());
+export const updateDemoSuccess = createAction('[project] update demo success', props<{demo: Demo}>());
+export const updateDemoFailure = createAction('[project] update demo failure');
+
 export const loadProjectDemos = createAction('[project] load project demos', props<{id: string}>());
 export const loadProjectDemosSuccess = createAction('[project] load project demos success', props<{demos: Demo[]}>());
 export const loadProjectDemosFailure = createAction('[project] load project demos failure');
@@ -54,8 +58,11 @@ export const deleteProjectDemo = createAction('[project] delete project demos', 
 export const deleteProjectDemoSuccess = createAction('[project] delete project demos success');
 export const deleteProjectDemoFailure = createAction('[project] delete project demos failure');
 
-
 export const loadAllDemosPlanProperties = createAction('[project] load all demo plan properties');
 export const loadDemoPlanProperties = createAction('[project] load demo plan properties', props<{id: string}>());
 export const loadDemoPlanPropertiesSuccess = createAction('[project] load demo plan properties success', props<{demoId: string, planProperties: PlanProperty[]}>());
 export const loadDemoPlanPropertiesFailure = createAction('[project] load demo plan properties failure');
+
+export const loadProjectDemo = createAction('[project] load project demo', props<{id: string}>());
+export const loadProjectDemoSuccess = createAction('[project] load project demo success', props<{demo: Demo}>());
+export const loadProjectDemoFailure = createAction('[project] load project demo failure');

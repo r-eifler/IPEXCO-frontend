@@ -6,6 +6,8 @@ import { ShellComponent } from './view/shell/shell.component';
 import { ProjectSettingsContainerComponent } from './view/project-settings-container/project-settings-container.component';
 import { PlanningTaskViewComponent } from './view/planning-task-view/planning-task-view.component';
 import { DemoCollectionComponent } from './view/demo-collection/demo-collection.component';
+import { DemoDetailsViewComponent } from './view/demo-details-view/demo-details-view.component';
+import { loadDemoResolver } from './resolver/load-demo.resolver';
 
 
 const routes: Routes = [
@@ -27,6 +29,11 @@ const routes: Routes = [
       {
         path: 'planning-task',
         component: PlanningTaskViewComponent,
+      },
+      {
+        path: 'demos/:demoId/details',
+        resolve: { loadDemoResolver },
+        component: DemoDetailsViewComponent,
       },
       {
         path: 'demos',
