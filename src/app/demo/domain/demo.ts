@@ -2,10 +2,16 @@ import { GlobalExplanation } from '../../iterative_planning/domain/explanation/e
 import { RunStatus } from '../../iterative_planning/domain/run';
 import { Project } from '../../project/domain/project';
 
+export enum DemoRunStatus {
+  pending,
+  running,
+  failed,
+  finished
+}
 
 export interface Demo extends Project {
   projectId: string,
-  status?: RunStatus;
+  status: DemoRunStatus;
   completion: number;
   summaryImage?: string;
   domainInfo?: string;

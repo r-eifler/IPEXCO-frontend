@@ -8,7 +8,7 @@ import { Store } from "@ngrx/store";
 import { selectLLMChatMessages, selectLLMThreadIdQT, selectLLMThreadIdGT, selectLLMThreadIdET } from "../iterative-planning.selector";
 import { goalTranslationRequestToString, questionTranslationRequestToString, explanationTranslationRequestToString } from "../../../LLM/interfaces/translators_interfaces_strings";
 import { GoalTranslationRequest, QuestionTranslationRequest, ExplanationTranslationRequest } from "../../../LLM/interfaces/translators_interfaces";
-import { selectIterativePlanningProject, selectIterativePlanningProjectExplanationInterfaceType, selectIterativePlanningProperties, selectIterativePlanningSelectedStep, selectIterationStepbyId } from "../../../iterative_planning/state/iterative-planning.selector";
+import { selectIterativePlanningProject, selectIterativePlanningProjectExplanationInterfaceType, selectIterativePlanningProperties, selectIterativePlanningSelectedStep, selectIterationStepById } from "../../../iterative_planning/state/iterative-planning.selector";
 import { selectUnsatisfiedSoftGoals } from "src/app/iterative_planning/view/step-detail-view/step-detail-view.component.selector";
 import { selectSatisfiedSoftGoals } from "src/app/iterative_planning/view/step-detail-view/step-detail-view.component.selector";
 import { selectEnforcedGoals } from "src/app/iterative_planning/view/step-detail-view/step-detail-view.component.selector";
@@ -98,7 +98,7 @@ export class SendMessageToLLMEffect{
         concatLatestFrom(({question, iterationStepId}) => [
             this.store.select(selectIterativePlanningProject),
             this.store.select(selectIterativePlanningProperties),
-            this.store.select(selectIterationStepbyId(iterationStepId)),
+            this.store.select(selectIterationStepById(iterationStepId)),
             this.store.select(selectLLMThreadIdGT),
             this.store.select(selectLLMThreadIdQT)
         ]),
@@ -117,7 +117,7 @@ export class SendMessageToLLMEffect{
             this.store.select(selectLLMThreadIdET),
             this.store.select(selectIterativePlanningProject),
             this.store.select(selectIterativePlanningProperties),
-            this.store.select(selectIterationStepbyId(iterationStepId))]),
+            this.store.select(selectIterationStepById(iterationStepId))]),
         switchMap(([{question, explanation, question_type, questionArguments, iterationStepId}, threadIdET, project, properties, iterationStep]) => {
             return this.service.postMessageET$(question, explanation, question_type as QuestionType, questionArguments, iterationStep, project, Object.values(properties), threadIdET).pipe(
                 switchMap(response => [sendMessageToLLMExplanationTranslatorSuccess({ response: response.response, threadId: response.threadId })]),

@@ -8,14 +8,22 @@ import { updateProject } from '../../state/project.actions';
 import { GeneralSettings } from '../../domain/general-settings';
 import { PlanningModel } from 'src/app/shared/domain/planning-task';
 import { AsyncPipe } from '@angular/common';
-import { PropertyTemplateCreatorComponent } from '../property-template-creator/property-template-creator.component';
-import { SettingsComponent } from '../settings/settings.component';
+import { PropertyTemplateCreatorComponent } from '../../components/property-template-creator/property-template-creator.component';
+import { SettingsComponent } from '../../components/settings/settings.component';
 import { PlanPropertyTemplate } from 'src/app/shared/domain/plan-property/plan-property-template';
+import { PageModule } from 'src/app/shared/components/page/page.module';
+import { MatIconModule } from '@angular/material/icon';
+import { RouterLink } from '@angular/router';
+import { BreadcrumbModule } from 'src/app/shared/components/breadcrumb/breadcrumb.module';
 
 @Component({
   selector: 'app-project-settings-container',
   standalone: true,
   imports: [
+    PageModule, 
+    MatIconModule,
+    RouterLink, 
+    BreadcrumbModule,
     AsyncPipe,
     PropertyTemplateCreatorComponent,
     SettingsComponent,

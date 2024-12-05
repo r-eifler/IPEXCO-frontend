@@ -31,10 +31,6 @@
             <mat-label>Description of the instance</mat-label>
             <textarea matInput [formControl]="form.controls.taskInfo.controls.instanceInfo"></textarea>
           </mat-form-field>
-        <div class="stepper-button-container">
-          <button mat-button matStepperPrevious type="button">Back</button>
-          <button mat-button matStepperNext type="button">Next</button>
-        </div>
       </mat-step>
 
       <mat-step [stepControl]="form.controls.image" label="Image">
@@ -86,7 +82,8 @@
   
   </app-dialog-content>
   <app-dialog-footer>
-    <button mat-flat-button color="primary" [disabled]="form.invalid">Save</button>
+    <button mat-button (click)="cancel()">Cancel</button>
+    <button mat-flat-button color="primary" [disabled]="form.invalid" (click)="createDemo()">Save</button>
   </app-dialog-footer>
 </app-dialog>
 

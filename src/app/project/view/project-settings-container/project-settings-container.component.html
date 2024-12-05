@@ -1,0 +1,22 @@
+<app-page>
+  <app-breadcrumb>
+    <a app-breadcrumb-item [routerLink]="['/project/' + (project$ | async)?._id]"><mat-icon>home</mat-icon></a>
+    <app-breadcrumb-item>Settings</app-breadcrumb-item>
+  </app-breadcrumb>
+  <app-page-title>Settings and Domain Dependent Information</app-page-title>
+
+  <app-page-content class="container">
+    <app-settings
+      [isProject]="true"
+      [settings]="settings$ | async"
+      (updatedSettings)="onSaveSetting($event)">
+    </app-settings>
+    <app-property-template-creator
+      [planning_task]="model$ | async"
+      [templates]="templates$ | async"
+      (updatedTemplates)="onSaveTemplates($event)">
+    </app-property-template-creator>
+  </app-page-content>
+</app-page>
+
+

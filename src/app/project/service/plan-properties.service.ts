@@ -27,6 +27,16 @@ export class ProjectPlanPropertyService{
         )
     }
 
+    getPlanPropertiesList$(id: string): Observable<PlanProperty[]> {
+
+        let httpParams = new HttpParams();
+        httpParams = httpParams.set('projectId', id);
+        
+        return this.http.get<IHTTPData<PlanProperty[]>>(this.BASE_URL,  { params: httpParams }).pipe(
+            map(({data}) => data)
+        )
+    }
+
     postPlanProperty$(planProperty: PlanProperty): Observable<PlanProperty> {
 
         return this.http.post<IHTTPData<PlanProperty>>(this.BASE_URL, {data: planProperty}).pipe(

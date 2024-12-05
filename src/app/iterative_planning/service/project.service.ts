@@ -34,7 +34,10 @@ export class IterativePlanningProjectService{
             map(({data}) => data),
             map(project => ({
                 ...project, 
-                baseTask: JSON.parse(project.baseTask as unknown as string),
+                baseTask : {
+                    ...project.baseTask,
+                    model: JSON.parse(project.baseTask.model as unknown as string),
+                },
                 domainSpecification: JSON.parse(project.domainSpecification as unknown as string)
             }))
         )
@@ -50,7 +53,10 @@ export class IterativePlanningProjectService{
             map(({data}) => data),
             map(project => ({
                 ...project, 
-                baseTask: JSON.parse(project.baseTask as unknown as string),
+                baseTask : {
+                    ...project.baseTask,
+                    model: JSON.parse(project.baseTask.model as unknown as string),
+                },
                 domainSpecification: JSON.parse(project.domainSpecification as unknown as string)
             }))
         )

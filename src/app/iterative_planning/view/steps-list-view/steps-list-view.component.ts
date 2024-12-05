@@ -15,7 +15,7 @@ import { selectIterativePlanningIterationSteps, selectIterativePlanningIteration
 @Component({
   selector: 'app-steps-list-view',
   standalone: true,
-  imports: [PageModule, AsyncPipe, JsonPipe, IterationStepCardComponent, ActionCardModule, MatIconModule, RouterLink, BreadcrumbModule],
+  imports: [PageModule, AsyncPipe, IterationStepCardComponent, ActionCardModule, MatIconModule, RouterLink, BreadcrumbModule],
   templateUrl: './steps-list-view.component.html',
   styleUrl: './steps-list-view.component.scss'
 })

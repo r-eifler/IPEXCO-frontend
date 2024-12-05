@@ -1,14 +1,17 @@
 import { createReducer, on } from "@ngrx/store";
 import { Project } from "../domain/project";
 import { Loadable, LoadingState } from "src/app/shared/common/loadable.interface";
-import { loadPlanProperties, loadPlanPropertiesSuccess, loadProject, loadProjectDemos, loadProjectDemosSuccess, loadProjectSuccess, updateProject, updateProjectSuccess } from "./project.actions";
+import { demoCreationRunningFailure, demoCreationRunningSuccess, loadDemoPlanPropertiesSuccess, loadPlanProperties, loadPlanPropertiesSuccess, loadProject, loadProjectDemos, loadProjectDemosSuccess, loadProjectSuccess, registerDemoCreation, registerDemoCreationSuccess, updateProject, updateProjectSuccess } from "./project.actions";
 import { Demo } from "src/app/demo/domain/demo";
 import { PlanProperty } from "src/app/shared/domain/plan-property/plan-property";
+import { Creatable, CreationState } from "src/app/shared/common/creatable.interface";
 
 export interface ProjectState {
     project: Loadable<Project>;
     planProperties: Loadable<Record<string, PlanProperty>>;
-    demos: Loadable<Demo[]>
+    demos: Loadable<Demo[]>;
+    demoProperties: Record<string, PlanProperty[]>
+    demoCreation: Creatable<String>;
 }
 
 export const projectFeature = 'project';
@@ -16,7 +19,9 @@ export const projectFeature = 'project';
 const initialState: ProjectState = {
     project: {state: LoadingState.Initial, data: undefined},
     planProperties: { state: LoadingState.Initial, data: undefined },
-    demos: {state: LoadingState.Initial, data: undefined}
+    demos: {state: LoadingState.Initial, data: undefined},
+    demoCreation: {state: CreationState.Default, data: undefined},
+    demoProperties: {},
 }
 
 
@@ -62,5 +67,25 @@ export const projectReducer = createReducer(
     on(loadProjectDemosSuccess, (state, {demos}): ProjectState => ({
         ...state,
         demos: {state: LoadingState.Done, data: demos}
+    })),
+    on(registerDemoCreation, (state, {demo}): ProjectState => ({
+        ...state,
+        demoCreation: {state: CreationState.Pending, data: undefined}
+    })),
+    on(registerDemoCreationSuccess, (state, {id}): ProjectState => ({
+        ...state,
+        demoCreation: {state: CreationState.Pending, data: id}
+    })),
+    on(demoCreationRunningSuccess, (state): ProjectState => ({
+        ...state,
+        demoCreation: {state: CreationState.Default, data: undefined}
+    })),
+    on(demoCreationRunningFailure, (state): ProjectState => ({
+        ...state,
+        demoCreation: {state: CreationState.Default, data: undefined}
+    })),
+    on(loadDemoPlanPropertiesSuccess, (state,{demoId, planProperties}): ProjectState => ({
+        ...state,
+        demoProperties: {...state.demoProperties, [demoId]: planProperties}
     })),
 );
