@@ -1,26 +1,28 @@
 import { LogEvent } from './../../../service/logger/time-logger.service';
-import { CurrentProjectService } from "src/app/service/project/project-services";
 import {
   DEMO_FINISHED_REDIRECT,
   QUESTION_REDIRECT,
 } from "./../../../app.tokens";
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { IterationStepsService } from "src/app/service/planner-runs/iteration-steps.service";
 import { PLANNER_REDIRECT } from "src/app/app.tokens";
 import { ActivatedRoute, Router } from "@angular/router";
 import { takeUntil } from "rxjs/operators";
 import { Demo } from "../../../interface/demo";
-import {
-  DemosService,
-  RunningDemoService,
-} from "../../../service/demo/demo-services";
 import { Subject } from "rxjs";
-import { PlanPropertyMapService } from "../../../service/plan-properties/plan-property-services";
 import { TimeLoggerService } from "../../../service/logger/time-logger.service";
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { DemoNavigatorComponent } from '../demo-navigator/demo-navigator.component';
+import { DemoTaskIntroComponent } from '../demo-task-intro/demo-task-intro.component';
+import { DemoHelpComponent } from '../demo-help/demo-help.component';
 
 @Component({
   selector: "app-demo-base",
+  standalone: true,
+  imports: [
+    DemoNavigatorComponent,
+    DemoTaskIntroComponent,
+    DemoHelpComponent,
+  ],
   templateUrl: "./demo-base.component.html",
   styleUrls: ["./demo-base.component.scss"],
   providers: [
@@ -36,30 +38,27 @@ export class DemoBaseComponent implements OnInit, OnDestroy {
 
   constructor(
     private timeLogger: TimeLoggerService,
-    private demosService: DemosService,
-    private runningDemoService: RunningDemoService,
-    private propertiesService: PlanPropertyMapService,
-    private currentProjectService: CurrentProjectService,
-    private iterationStepsService: IterationStepsService,
+    // private demosService: DemosService,
+    // private runningDemoService: RunningDemoService,
     private route: ActivatedRoute,
     private router: Router
   ) {
-    this.iterationStepsService.reset();
+    // this.iterationStepsService.reset();
 
-    this.route.params.subscribe((params) => {
-      this.demosService
-        .getObject(params.demoid)
-        .pipe(takeUntilDestroyed())
-        .subscribe((demo: Demo) => {
-          if (demo) {
-            this.timeLogger.log(LogEvent.START_DEMO, {demoId:  demo._id});
-            this.runningDemoService.saveObject(demo);
-            this.currentProjectService.saveObject(demo);
-            this.propertiesService.findCollection([{ param: "projectId", value: demo._id },]);
-            this.startDemo()
-          }
-        });
-    });
+    // this.route.params.subscribe((params) => {
+    //   this.demosService
+    //     .getObject(params.demoid)
+    //     .pipe(takeUntilDestroyed())
+    //     .subscribe((demo: Demo) => {
+    //       if (demo) {
+    //         this.timeLogger.log(LogEvent.START_DEMO, {demoId:  demo._id});
+    //         this.runningDemoService.saveObject(demo);
+    //         this.currentProjectService.saveObject(demo);
+    //         this.propertiesService.findCollection([{ param: "projectId", value: demo._id },]);
+    //         this.startDemo()
+    //       }
+    //     });
+    // });
   }
 
   ngOnInit(): void {}
@@ -70,7 +69,7 @@ export class DemoBaseComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.iterationStepsService.reset();
+    // this.iterationStepsService.reset();
   }
 
   async toDemoCollection() {

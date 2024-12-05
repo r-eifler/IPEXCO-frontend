@@ -1,18 +1,22 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { Subject } from "rxjs";
-import { takeUntil } from "rxjs/operators";
-import { RunningUserStudyService } from "../../../service/user-study/user-study-services";
-import { ResponsiveService } from "../../../service/responsive/responsive.service";
 import {
   UserStudy,
   UserStudyStep,
   UserStudyStepType,
 } from "../../../interface/user-study/user-study";
 import { ActivatedRoute, Router } from "@angular/router";
-import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { UserStudyFormViewComponent } from "../user-study-form-view/user-study-form-view.component";
+import { UserStudyDemoViewComponent } from "../user-study-demo-view/user-study-demo-view.component";
+import { UserStudyDescriptionViewComponent } from "../user-study-description-view/user-study-description-view.component";
 
 @Component({
   selector: "app-user-study-executer",
+  standalone: true,
+  imports: [
+    UserStudyDemoViewComponent,
+    UserStudyFormViewComponent,
+    UserStudyDescriptionViewComponent,
+  ],
   templateUrl: "./user-study-execute.component.html",
   styleUrls: ["./user-study-execute.component.css"],
 })
@@ -26,28 +30,26 @@ export class UserStudyExecuteComponent implements OnInit {
   currentStepIndex = 0;
 
   constructor(
-    private selectedUserStudyService: RunningUserStudyService,
-    private responsiveService: ResponsiveService,
     private router: Router,
     private route: ActivatedRoute
   ) {
-    this.selectedUserStudyService
-      .getSelectedObject()
-      .pipe(takeUntilDestroyed())
-      .subscribe((study) => {
-        this.userStudy = study;
-        this.currentStep = study?.steps[0];
-      });
+    // this.selectedUserStudyService
+    //   .getSelectedObject()
+    //   .pipe(takeUntilDestroyed())
+    //   .subscribe((study) => {
+    //     this.userStudy = study;
+    //     this.currentStep = study?.steps[0];
+    //   });
   }
 
   ngOnInit(): void {
-    this.responsiveService
-      .getMobileStatus()
-      .pipe(takeUntilDestroyed())
-      .subscribe((isMobile) => {
-        this.isMobile = isMobile;
-      });
-    this.responsiveService.checkWidth();
+    // this.responsiveService
+    //   .getMobileStatus()
+    //   .pipe(takeUntilDestroyed())
+    //   .subscribe((isMobile) => {
+    //     this.isMobile = isMobile;
+    //   });
+    // this.responsiveService.checkWidth();
   }
 
 

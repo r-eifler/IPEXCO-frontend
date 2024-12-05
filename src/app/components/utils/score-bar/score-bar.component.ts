@@ -2,9 +2,16 @@ import { filter, takeUntil, tap, map } from "rxjs/operators";
 import { BehaviorSubject, combineLatest, Observable, Subject } from "rxjs";
 import { Component, Input, OnDestroy, OnInit } from "@angular/core";
 import { PaymentInfo } from "src/app/project/domain/general-settings";
+import { AsyncPipe } from "@angular/common";
+import { MatIconModule } from "@angular/material/icon";
 
 @Component({
   selector: "app-score-bar",
+  standalone: true,
+  imports: [
+    AsyncPipe,
+    MatIconModule,
+  ],
   templateUrl: "./score-bar.component.html",
   styleUrls: ["./score-bar.component.scss"],
 })

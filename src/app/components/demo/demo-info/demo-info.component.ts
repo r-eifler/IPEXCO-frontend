@@ -6,16 +6,24 @@ import {
   OnInit,
 } from "@angular/core";
 import { Demo } from "../../../interface/demo";
-import { PlanPropertyMapService } from "../../../service/plan-properties/plan-property-services";
-import { PlanProperty } from "../../../iterative_planning/domain/plan-property/plan-property";
+import { PlanProperty } from "../../../shared/domain/plan-property/plan-property";
 import { takeUntil } from "rxjs/operators";
 import { Subject } from "rxjs";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { RunStatus } from "src/app/iterative_planning/domain/run";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { MatIconModule } from "@angular/material/icon";
+import { MatListModule } from "@angular/material/list";
+import { MatTabsModule } from "@angular/material/tabs";
 
 @Component({
   selector: "app-demo-info",
+  standalone: true,
+  imports: [
+    MatIconModule,
+    MatListModule,
+    MatTabsModule,
+  ],
   templateUrl: "./demo-info.component.html",
   styleUrls: ["./demo-info.component.css"],
 })
@@ -27,26 +35,25 @@ export class DemoInfoComponent implements OnInit, AfterViewInit {
   planProperties: PlanProperty[];
 
   constructor(
-    private propertiesService: PlanPropertyMapService,
     public dialogRef: MatDialogRef<DemoInfoComponent>,
     @Inject(MAT_DIALOG_DATA) data
   ) {
     this.demo = data.demo;
     this.mugs = data.demo.data?.MUGS;
     this.mugs.sort((a, b) => a.length - b.length);
-    this.propertiesService.findCollection([
-      { param: "projectId", value: this.demo._id },
-    ]);
+    // this.propertiesService.findCollection([
+    //   { param: "projectId", value: this.demo._id },
+    // ]);
   }
 
   ngOnInit(): void {
-    this.propertiesService
-      .getMap()
-      .pipe(takeUntilDestroyed())
-      .subscribe((props) => {
-        const propsList = [...props.values()];
-        this.planProperties = propsList.filter((p: PlanProperty) => p.isUsed);
-      });
+    // this.propertiesService
+    //   .getMap()
+    //   .pipe(takeUntilDestroyed())
+    //   .subscribe((props) => {
+    //     const propsList = [...props.values()];
+    //     this.planProperties = propsList.filter((p: PlanProperty) => p.isUsed);
+    //   });
   }
 
 

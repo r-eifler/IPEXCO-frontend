@@ -1,6 +1,8 @@
 import { BehaviorSubject, combineLatest, Observable } from "rxjs";
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { map, filter, take } from "rxjs/operators";
+import { AsyncPipe } from "@angular/common";
+import { MatSliderModule } from "@angular/material/slider";
 
 interface Displayable {
   display: string;
@@ -8,6 +10,11 @@ interface Displayable {
 
 @Component({
   selector: "app-object-slider",
+  standalone: true,
+  imports: [
+    AsyncPipe,
+    MatSliderModule,
+  ],
   templateUrl: "./object-slider.component.html",
   styleUrls: ["./object-slider.component.scss"],
 })

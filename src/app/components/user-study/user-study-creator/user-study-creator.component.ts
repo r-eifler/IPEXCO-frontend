@@ -1,8 +1,5 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Observable, Subject } from "rxjs";
-import { takeUntil } from "rxjs/operators";
-import { ResponsiveService } from "../../../service/responsive/responsive.service";
-import { DemosService } from "../../../service/demo/demo-services";
 import { Demo } from "../../../interface/demo";
 import { DomSanitizer } from "@angular/platform-browser";
 import {
@@ -10,13 +7,17 @@ import {
   UserStudyStep,
   UserStudyStepType,
 } from "../../../interface/user-study/user-study";
-import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
-import {
-  RunningUserStudyService,
-  UserStudiesService,
-} from "../../../service/user-study/user-study-services";
+import { FormControl, FormsModule, ReactiveFormsModule, UntypedFormControl, UntypedFormGroup } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { MatIconModule } from "@angular/material/icon";
+import { MatCardModule } from "@angular/material/card";
+import { MatButtonModule } from "@angular/material/button";
+import { MarkedPipe } from "src/app/pipes/marked.pipe";
+import { MatOptionModule } from "@angular/material/core";
+import { MatSelectModule } from "@angular/material/select";
+import { MatTabsModule } from "@angular/material/tabs";
+import { MatInputModule } from "@angular/material/input";
 
 interface Part {
   index: number;
@@ -29,6 +30,19 @@ interface Part {
 
 @Component({
   selector: "app-user-study-creator",
+  standalone: true,
+  imports: [
+    MatIconModule,
+    MatCardModule,
+    MatButtonModule,
+    MarkedPipe,
+    MatOptionModule,
+    MatSelectModule,
+    FormsModule,
+    MatTabsModule,
+    MatInputModule,
+    ReactiveFormsModule
+  ],
   templateUrl: "./user-study-creator.component.html",
   styleUrls: ["./user-study-creator.component.css"],
 })
@@ -47,16 +61,16 @@ export class UserStudyCreatorComponent implements OnInit {
   edit = false;
 
   constructor(
-    private userStudiesService: UserStudiesService,
-    private selectedUserStudyService: RunningUserStudyService,
-    private domSanitizer: DomSanitizer,
-    private demosService: DemosService,
-    private responsiveService: ResponsiveService,
+    // private userStudiesService: UserStudiesService,
+    // private selectedUserStudyService: RunningUserStudyService,
+    // private domSanitizer: DomSanitizer,
+    // // private demosService: DemosService,
+    // private responsiveService: ResponsiveService,
     private route: ActivatedRoute,
     private router: Router
   ) {
-    demosService.findCollection();
-    this.demos$ = demosService.getList();
+    // demosService.findCollection();
+    // this.demos$ = demosService.getList();
 
     this.userStudyForm = new UntypedFormGroup({
       name: new UntypedFormControl(),
@@ -66,76 +80,76 @@ export class UserStudyCreatorComponent implements OnInit {
       redirectUrl: new UntypedFormControl(),
     });
 
-    this.selectedUserStudyService
-      .getSelectedObject()
-      .pipe(
-        takeUntilDestroyed())
-      .subscribe((study) => {
-        if (study) {
-          this.userStudy = study;
-          let index = 0;
-          for (const step of this.userStudy.steps) {
-            const nextStep: Part = {
-              type: step.type,
-              index: index++,
-              active: false,
-            };
-            switch (step.type) {
-              case UserStudyStepType.description:
-                nextStep.content = step.content;
-                break;
-              case UserStudyStepType.form:
-                nextStep.url = step.content;
-                break;
-              case UserStudyStepType.demo:
-                demosService
-                  .getObject(step.content)
-                  .subscribe((d) => (nextStep.demo = d));
-                break;
-            }
-            this.parts.push(nextStep);
-            this.userStudyForm.disable();
-          }
-          this.userStudyForm.controls.name.setValue(this.userStudy.name);
-          this.userStudyForm.controls.description.setValue(
-            this.userStudy.description
-          );
-          this.userStudyForm.controls.startDate.setValue(
-            this.userStudy.startDate
-          );
-          this.userStudyForm.controls.endDate.setValue(this.userStudy.endDate);
-          this.userStudyForm.controls.redirectUrl.setValue(
-            this.userStudy.redirectUrl
-          );
-        } else {
-          this.userStudy = {
-            updated: new Date().toLocaleString(),
-            name: "",
-            description: "",
-            user: null,
-            available: false,
-            redirectUrl: "",
-          };
-          const firstPart: Part = {
-            index: 0,
-            active: true,
-            type: UserStudyStepType.description,
-          };
-          this.parts.push(firstPart);
-          this.edit = true;
-          this.userStudyForm.enable();
-        }
-      });
+    // this.selectedUserStudyService
+    //   .getSelectedObject()
+    //   .pipe(
+    //     takeUntilDestroyed())
+    //   .subscribe((study) => {
+    //     if (study) {
+    //       this.userStudy = study;
+    //       let index = 0;
+    //       for (const step of this.userStudy.steps) {
+    //         const nextStep: Part = {
+    //           type: step.type,
+    //           index: index++,
+    //           active: false,
+    //         };
+    //         switch (step.type) {
+    //           case UserStudyStepType.description:
+    //             nextStep.content = step.content;
+    //             break;
+    //           case UserStudyStepType.form:
+    //             nextStep.url = step.content;
+    //             break;
+    //           case UserStudyStepType.demo:
+    //             // demosService
+    //             //   .getObject(step.content)
+    //             //   .subscribe((d) => (nextStep.demo = d));
+    //             break;
+    //         }
+    //         this.parts.push(nextStep);
+    //         this.userStudyForm.disable();
+    //       }
+    //       this.userStudyForm.controls.name.setValue(this.userStudy.name);
+    //       this.userStudyForm.controls.description.setValue(
+    //         this.userStudy.description
+    //       );
+    //       this.userStudyForm.controls.startDate.setValue(
+    //         this.userStudy.startDate
+    //       );
+    //       this.userStudyForm.controls.endDate.setValue(this.userStudy.endDate);
+    //       this.userStudyForm.controls.redirectUrl.setValue(
+    //         this.userStudy.redirectUrl
+    //       );
+    //     } else {
+    //       this.userStudy = {
+    //         updated: new Date().toLocaleString(),
+    //         name: "",
+    //         description: "",
+    //         user: null,
+    //         available: false,
+    //         redirectUrl: "",
+    //       };
+    //       const firstPart: Part = {
+    //         index: 0,
+    //         active: true,
+    //         type: UserStudyStepType.description,
+    //       };
+    //       this.parts.push(firstPart);
+    //       this.edit = true;
+    //       this.userStudyForm.enable();
+    //     }
+    //   });
   }
 
   ngOnInit(): void {
-    this.responsiveService
-      .getMobileStatus()
-      .pipe(takeUntilDestroyed())
-      .subscribe((isMobile) => {
-        this.isMobile = isMobile;
-      });
-    this.responsiveService.checkWidth();
+    // this.responsiveService
+    //   .getMobileStatus()
+    //   .pipe(takeUntilDestroyed())
+    //   .subscribe((isMobile) => {
+    //     this.isMobile = isMobile;
+    //   });
+    // this.responsiveService.checkWidth();
   }
 
   editUserStudy() {
@@ -198,9 +212,9 @@ export class UserStudyCreatorComponent implements OnInit {
   }
 
   makeTrustedURL(url: string) {
-    return this.domSanitizer.bypassSecurityTrustResourceUrl(
-      url + "?embedded=true"
-    );
+    // return this.domSanitizer.bypassSecurityTrustResourceUrl(
+    //   url + "?embedded=true"
+    // );
   }
 
   async saveUserStudy() {
@@ -227,7 +241,7 @@ export class UserStudyCreatorComponent implements OnInit {
     this.userStudy.steps.push(nextStep);
     }
 
-    this.userStudiesService.saveObject(this.userStudy);
+    // this.userStudiesService.saveObject(this.userStudy);
 
     await this.router.navigate(["/user-studies"], { relativeTo: this.route });
   }

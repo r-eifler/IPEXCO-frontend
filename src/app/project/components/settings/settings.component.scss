@@ -36,3 +36,10 @@
 mat-button-toggle-group{
   width: fit-content;
 }
+
+.sub-card-content {
+  padding-top: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}

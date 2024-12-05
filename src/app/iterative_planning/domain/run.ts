@@ -1,4 +1,4 @@
-import { PlanProperty } from "./plan-property/plan-property";
+import { PlanProperty } from "../../shared/domain/plan-property/plan-property";
 import { IterationStep, StepStatus } from "./iteration_step";
 import { PlanRunStatus } from "./plan";
 

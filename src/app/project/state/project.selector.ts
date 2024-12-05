@@ -8,3 +8,10 @@ export const selectProject = createSelector(selectProjectFeature, (state) => sta
 
 export const selectProjectSettings = createSelector(selectProjectFeature, (state) => state.project.data?.settings)
 export const selectProjectPlanningTask = createSelector(selectProjectFeature, (state) => state.project.data?.baseTask)
+
+export const selectProjectPlanPropertyCreationInterfaceType = createSelector(selectProjectFeature,
+    (state) => state.project?.data?.settings?.propertyCreationInterfaceType)
+export const selectProjectPlanPropertyTemplates = createSelector(selectProjectFeature,
+    (state) => state.project?.data?.domainSpecification?.planPropertyTemplates)
+
+export const selectProjectProperties = createSelector(selectProjectFeature, (state) => state.planProperties.data)

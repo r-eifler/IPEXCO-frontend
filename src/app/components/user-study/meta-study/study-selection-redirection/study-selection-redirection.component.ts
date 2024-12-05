@@ -1,9 +1,6 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { takeUntil } from "rxjs/operators";
 import { ActivatedRoute, ParamMap, Router } from "@angular/router";
-import { Subject } from "rxjs";
-import { UserStudiesService } from "../../../../service/user-study/user-study-services";
-import { MetaStudiesService } from "../../../../service/user-study/meta-study-services";
 import { MetaStudy } from "../../../../interface/user-study/meta-study";
 import { combineLatest } from "rxjs/internal/observable/combineLatest";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
@@ -24,8 +21,6 @@ export class StudySelectionRedirectionComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private metaStudiesService: MetaStudiesService,
-    private userStudiesService: UserStudiesService
   ) {
     combineLatest([this.route.paramMap, this.route.queryParams])
       .pipe(takeUntilDestroyed())
@@ -40,27 +35,27 @@ export class StudySelectionRedirectionComponent implements OnInit {
           return;
         }
 
-        this.metaStudiesService
-          .getObject(metaStudyId)
-          .pipe(takeUntilDestroyed())
-          .subscribe(async (study) => {
-            if (study) {
-              this.metaStudy = study;
-              await this.selectStudy();
-            }
-          });
+        // this.metaStudiesService
+        //   .getObject(metaStudyId)
+        //   .pipe(takeUntilDestroyed())
+        //   .subscribe(async (study) => {
+        //     if (study) {
+        //       this.metaStudy = study;
+        //       await this.selectStudy();
+        //     }
+        //   });
       });
   }
 
   async selectStudy() {
     const numAcceptedUser: Map<string, number> = new Map<string, number>();
     for (const s of this.metaStudy.userStudies) {
-      numAcceptedUser.set(
-        s.userStudy as string,
-        await this.userStudiesService.getNumberAcceptedUsers(
-          s.userStudy as string
-        )
-      );
+      // numAcceptedUser.set(
+        // s.userStudy as string,
+        // await this.userStudiesService.getNumberAcceptedUsers(
+        //   s.userStudy as string
+        // )
+      // );
     }
 
     const possible: string[] = [];

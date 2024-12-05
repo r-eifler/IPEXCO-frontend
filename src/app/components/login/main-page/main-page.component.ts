@@ -2,11 +2,15 @@ import { Component } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
 import { gsap } from "gsap";
-import { ResponsiveService } from "src/app/service/responsive/responsive.service";
 import { RegisterComponent } from "../register/register.component";
+import { MatButtonModule } from "@angular/material/button";
 
 @Component({
   selector: "app-main-page",
+  standalone: true,
+  imports: [
+    MatButtonModule,
+  ],
   templateUrl: "./main-page.component.html",
   styleUrls: ["./main-page.component.scss"],
 })
@@ -15,16 +19,8 @@ export class MainPageComponent {
   isMobile: boolean;
 
   constructor(
-    private responsiveService: ResponsiveService,
     public dialog: MatDialog
   ) {
-    this.responsiveService
-      .getMobileStatus()
-      .pipe(takeUntilDestroyed())
-      .subscribe((isMobile) => {
-        this.isMobile = isMobile;
-      });
-    this.responsiveService.checkWidth();
   }
 
   animateLogo() {

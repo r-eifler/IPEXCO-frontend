@@ -1,28 +1,36 @@
-import { Injectable } from "@angular/core";
+import { inject, Injectable } from "@angular/core";
 import { ActivatedRouteSnapshot, Router, RouterStateSnapshot, UrlTree } from "@angular/router";
-import { AuthenticationService } from "../service/authentication/authentication.service";
+import { AuthenticationService } from "../user/services/authentication.service";
+import { Store } from "@ngrx/store";
+import { selectLoggedIn } from "../user/state/user.selector";
+import { map, Observable, take } from "rxjs";
 
 @Injectable({
   providedIn: "root",
 })
 export class AuthGuard  {
-  constructor(
-    private authService: AuthenticationService,
-    private router: Router
-  ) {}
+
+  store = inject(Store)
+  router = inject(Router)
 
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
-  ): boolean | UrlTree {
+  ): Observable<boolean | UrlTree> {
     return this.checkLogin();
   }
 
-  checkLogin(): true | UrlTree {
-    if (this.authService.loggedIn()) {
-      return true;
-    }
+  checkLogin(): Observable<boolean | UrlTree> {
 
-    return this.router.parseUrl("/");
+    return this.store.select(selectLoggedIn).pipe(take(1)).pipe(
+      map(isLoggedIn => {
+        if(isLoggedIn){
+          return true;
+        }
+        else {
+          return this.router.parseUrl("/");
+        }
+      })
+    )
   }
 }

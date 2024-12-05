@@ -1,15 +1,22 @@
-import { LineChartData } from './../../../../service/user-study/user-study-data.service';
+import { LineChartData } from '../../../../user_study/service/user-study-data.service';
 import { Component, Input, OnDestroy, OnInit } from "@angular/core";
 import { BehaviorSubject, combineLatest, Subject } from "rxjs";
 import { takeUntil, filter } from "rxjs/operators";
 import { UserStudyData } from "src/app/interface/user-study/user-study-store";
 import { USUser } from "src/app/interface/user-study/user-study-user";
-import { DataPoint, UserStudyDataService } from "src/app/service/user-study/user-study-data.service";
-import { IterationStepsService } from "../../../../service/planner-runs/iteration-steps.service";
+import { DataPoint, UserStudyDataService } from "src/app/user_study/service/user-study-data.service";
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { TimeLoggerDataComponent } from '../time-logger-data/time-logger-data.component';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: "app-individual-run-user-data",
+  standalone: true,
+  imports: [
+    MatCardModule,
+    NgxChartsModule,
+  ],
   templateUrl: "./individual-run-user-data.component.html",
   styleUrls: ["./individual-run-user-data.component.css"],
 })

@@ -1,4 +1,6 @@
+import { AsyncPipe } from "@angular/common";
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { MatIconModule } from "@angular/material/icon";
 import { Observable, BehaviorSubject, combineLatest } from "rxjs";
 import { filter, map } from "rxjs/operators";
 
@@ -9,6 +11,11 @@ interface Displayable {
 
 @Component({
   selector: "app-object-progress-bar",
+  standalone: true,
+  imports: [
+    AsyncPipe,
+    MatIconModule,
+  ],
   templateUrl: "./object-progress-bar.component.html",
   styleUrls: ["./object-progress-bar.component.scss"],
 })

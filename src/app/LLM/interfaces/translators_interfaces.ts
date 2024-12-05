@@ -1,8 +1,8 @@
 import { IterationStep } from "../../iterative_planning/domain/iteration_step";
-import { PlanProperty } from "../../iterative_planning/domain/plan-property/plan-property";
 import { PDDLPredicate, PDDLObject } from "../../interface/planning-task";
 import { Message } from "../domain/message";
 import { Question } from "src/app/iterative_planning/domain/interface/question";
+import { PlanProperty } from "src/app/shared/domain/plan-property/plan-property";
 
 export interface GoalTranslationRequest {
     goalDescription: string,

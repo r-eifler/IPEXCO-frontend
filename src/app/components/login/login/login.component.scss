@@ -1,69 +1,12 @@
 @import "../../../../variables.scss";
 
-.main-container {
-  height: 100%;
-  width: 100%;
-  background-color: rgba($color: $primary, $alpha: 0.3);
-  display: inline-block;
-}
-
-.control-container-desktop {
-  width: 20%;
-  margin: 0;
-  position: absolute;
-  top: 20%;
-  left: 10%;
+.main-form {
   display: flex;
   flex-direction: column;
+  gap: 20px;
+  padding-top: 30px;
 }
 
-.control-container-desktop > button {
+.form-inputs {
   width: 100%;
-  height: 50px;
-  margin: 5px 0px;
-}
-
-.logo-desktop {
-  width: 40%;
-  height: auto;
-  position: absolute;
-  right: 10%;
-  bottom: 10%;
-}
-
-.control-container-mobile {
-  width: 80%;
-  margin: 0;
-  position: absolute;
-  top: 20%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  display: flex;
-  flex-direction: column;
-}
-
-.control-container-mobile > button {
-  width: 100%;
-  margin: 5px 0px;
-}
-
-.logo-mobile {
-  width: 80%;
-  height: auto;
-  position: absolute;
-  right: 5%;
-  bottom: 5%;
-}
-
-.logo-mobile > svg {
-  width: 80%;
-  height: auto;
-  position: absolute;
-  right: 5%;
-  bottom: 5%;
-}
-
-svg:not(:root) {
-  width: 100%;
-  height: auto;
 }

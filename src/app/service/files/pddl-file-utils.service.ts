@@ -1,7 +1,7 @@
 import {
   GoalType,
   PlanProperty,
-} from "src/app/iterative_planning/domain/plan-property/plan-property";
+} from "src/app/shared/domain/plan-property/plan-property";
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 

@@ -7,7 +7,7 @@ import { ItemStore } from "./generic-item.store";
 import { TaskSchema } from "../interface/task-schema";
 import { DomainSpecification } from "../interface/files/domain-specification";
 import { Demo } from "../interface/demo";
-import { User } from "../interface/user";
+import { User } from "../user/domain/user";
 import { UserStudy } from "../interface/user-study/user-study";
 import { MetaStudy } from "../interface/user-study/meta-study";
 import {
@@ -16,9 +16,9 @@ import {
 } from "../interface/interface-status";
 import { UserStudyData } from "../interface/user-study/user-study-store";
 import { Project } from "../project/domain/project";
-import { PlanProperty } from "../iterative_planning/domain/plan-property/plan-property";
 import { PlanRun } from "../iterative_planning/domain/run";
 import { IterationStep, ModIterationStep } from "../iterative_planning/domain/iteration_step";
+import { PlanProperty } from "../shared/domain/plan-property/plan-property";
 
 // User/Authentication
 export class UserStore extends ItemStore<User> {}

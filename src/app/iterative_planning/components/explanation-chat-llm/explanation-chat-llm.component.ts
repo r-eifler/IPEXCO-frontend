@@ -5,7 +5,6 @@ import { sendMessageToLLMQTthenGTTranslators } from '../../state/iterative-plann
 import { ChatModule } from 'src/app/shared/component/chat/chat.module';
 import { selectMessages, selectLLMThreadIdET, selectLLMThreadIdGT, selectLLMThreadIdQT, selectIterativePlanningSelectedStep, selectLLMChatMessages, selectIterativePlanningSelectedStepId, selectVisibleMessagesbyId, selectIsExplanationChatLoading } from '../../state/iterative-planning.selector';
 import { createPlanProperty } from '../../state/iterative-planning.actions';
-import { GoalType, PlanProperty } from '../../domain/plan-property/plan-property';
 import { take, filter, map, mergeMap, combineLatestWith, switchMap } from 'rxjs/operators';
 import { selectIterativePlanningProject } from '../../state/iterative-planning.selector';
 import { eraseLLMHistory } from '../../state/iterative-planning.actions';

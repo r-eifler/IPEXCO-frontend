@@ -1,15 +1,30 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { BehaviorSubject, Observable, combineLatest } from "rxjs";
 import { filter, map } from "rxjs/operators";
-import { getMaximalPlanValue, PlanProperty } from "src/app/iterative_planning/domain/plan-property/plan-property";
+import { getMaximalPlanValue, PlanProperty } from "src/app/shared/domain/plan-property/plan-property";
 import { computePlanValue } from 'src/app/iterative_planning/domain/run';
 import { IterationStep, StepStatus } from 'src/app/iterative_planning/domain/iteration_step';
 import { Store } from '@ngrx/store';
 import { selectIterativePlanningProject, selectIterativePlanningProperties } from 'src/app/iterative_planning/state/iterative-planning.selector';
 import { GeneralSettings } from "src/app/project/domain/general-settings";
+import { AsyncPipe } from "@angular/common";
+import { PaymentBarComponent } from "src/app/components/utils/payment-bar/payment-bar.component";
+import { MatIconModule } from "@angular/material/icon";
+import { ScoreBarComponent } from "src/app/components/utils/score-bar/score-bar.component";
+import { MatCardModule } from "@angular/material/card";
+import { MatOptionModule } from "@angular/material/core";
 
 @Component({
   selector: "app-score-view",
+  standalone: true,
+  imports: [
+    AsyncPipe,
+    PaymentBarComponent,
+    MatIconModule,
+    ScoreBarComponent,
+    MatCardModule,
+    MatOptionModule
+  ],
   templateUrl: "./score-view.component.html",
   styleUrls: ["./score-view.component.scss"],
 })

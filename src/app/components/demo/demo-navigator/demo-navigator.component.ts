@@ -2,10 +2,8 @@ import { DemoFinishedComponent } from "./../demo-finished/demo-finished.componen
 import { Component, EventEmitter, OnDestroy, OnInit, Output } from "@angular/core";
 import { Demo } from "src/app/interface/demo";
 import { BehaviorSubject, combineLatest, Observable, Subject } from "rxjs";
-import { RunningDemoService } from "src/app/service/demo/demo-services";
-import { CurrentProjectService } from "src/app/service/project/project-services";
 import { takeUntil, filter, map, take, tap } from "rxjs/operators";
-import { getMaximalPlanValue, PlanProperty } from "../../../iterative_planning/domain/plan-property/plan-property";
+import { getMaximalPlanValue, PlanProperty } from "../../../shared/domain/plan-property/plan-property";
 import { DemoHelpDialogComponent } from "../demo-help-dialog/demo-help-dialog.component";
 // @ts-ignore
 import Timeout = NodeJS.Timeout;
@@ -16,10 +14,22 @@ import { Store } from '@ngrx/store';
 import { selectIterativePlanningIterationSteps, selectIterativePlanningNewStep, selectIterativePlanningProperties, selectIterativePlanningSelectedStep } from 'src/app/iterative_planning/state/iterative-planning.selector';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { GeneralSettings } from "src/app/project/domain/general-settings";
+import { DemoTaskInfoComponent } from "../demo-task-info/demo-task-info.component";
+import { MatIconModule } from "@angular/material/icon";
+import { AsyncPipe, DatePipe } from "@angular/common";
+import { PaymentBarComponent } from "../../utils/payment-bar/payment-bar.component";
 
 
 @Component({
   selector: "app-demo-navigator",
+  standalone: true,
+  imports: [
+    DemoTaskInfoComponent,
+    MatIconModule,
+    AsyncPipe,
+    PaymentBarComponent,
+    DatePipe,
+  ],
   templateUrl: "./demo-navigator.component.html",
   styleUrls: ["./demo-navigator.component.scss"],
 })
@@ -58,21 +68,21 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
 
   constructor(
     private store: Store,
-    private runningDemoService: RunningDemoService,
-    public currentProjectService: CurrentProjectService,
+    // private runningDemoService: RunningDemoService,
+    // public currentProjectService: CurrentProjectService,
     public dialog: MatDialog,
     private snackBar: MatSnackBar
   ) {
-    this.demo$ = this.runningDemoService.getSelectedObject()  as BehaviorSubject<Demo>;
+    // this.demo$ = this.runningDemoService.getSelectedObject()  as BehaviorSubject<Demo>;
     this.selectedStep$ = this.store.select(selectIterativePlanningSelectedStep)
     this.steps$ = this.store.select(selectIterativePlanningIterationSteps)
     this.newStep$ = this.store.select(selectIterativePlanningNewStep)
     this.planProperties$ = this.store.select(selectIterativePlanningProperties)
 
-    this.settings$ = currentProjectService.getSelectedObject().pipe(
-      filter(p => !!p),
-      map(p => p.settings)
-    );
+    // this.settings$ = currentProjectService.getSelectedObject().pipe(
+    //   filter(p => !!p),
+    //   map(p => p.settings)
+    // );
 
   }
 
@@ -197,7 +207,7 @@ export class DemoNavigatorComponent implements OnInit, OnDestroy {
       .subscribe((result) => {
         if (result) {
           this.snackBar.dismiss();
-          this.currentProjectService.removeCurrentObject();
+          // this.currentProjectService.removeCurrentObject();
           this.finishedDemo.emit();
         }
       });

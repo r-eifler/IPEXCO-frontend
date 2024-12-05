@@ -1,6 +1,5 @@
-import { PlanProperty } from 'src/app/iterative_planning/domain/plan-property/plan-property';
+import { PlanProperty } from 'src/app/shared/domain/plan-property/plan-property';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { RunningDemoService } from 'src/app/service/demo/demo-services';
 import { Component, OnInit} from '@angular/core';
 import { Demo } from 'src/app/interface/demo';
 import { filter, map, takeUntil, take } from 'rxjs/operators';
@@ -10,9 +9,16 @@ import { IterationStep } from 'src/app/iterative_planning/domain/iteration_step'
 import { Store } from '@ngrx/store';
 import { selectIterativePlanningProject, selectIterativePlanningPropertiesList, selectIterativePlanningSelectedStep } from 'src/app/iterative_planning/state/iterative-planning.selector';
 import { GeneralSettings } from 'src/app/project/domain/general-settings';
+import { MatOptionModule } from '@angular/material/core';
+import { MatSelectModule } from '@angular/material/select';
 
 @Component({
   selector: 'app-mugs-visu-main',
+  standalone: true,
+  imports: [
+    MatOptionModule,
+    MatSelectModule,
+  ],
   templateUrl: './mugs-visu-main.component.html',
   styleUrls: ['./mugs-visu-main.component.scss']
 })
@@ -89,7 +95,7 @@ export class MUGSVisuMainComponent implements OnInit {
 
   constructor(
     private store: Store,
-    demoService: RunningDemoService
+    // demoService: RunningDemoService
   ) {
 
     // Access the data over these observables
@@ -97,7 +103,7 @@ export class MUGSVisuMainComponent implements OnInit {
     this.settings$ = this.store.select(selectIterativePlanningProject).pipe(
       map(p => p?.settings)
     );
-    this.demo$ = demoService.getSelectedObject() as BehaviorSubject<Demo>;
+    // this.demo$ = demoService.getSelectedObject() as BehaviorSubject<Demo>;
     this.selectedStep$ = this.store.select(selectIterativePlanningSelectedStep)
 
     this.conflicts$ = combineLatest([this.selectedStep$, this.settings$]).pipe(

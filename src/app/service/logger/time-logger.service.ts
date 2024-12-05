@@ -1,4 +1,4 @@
-import { UserStudyCurrentDataService } from './../user-study/user-study-data.service';
+import { UserStudyCurrentDataService } from '../../user_study/service/user-study-data.service';
 import { Injectable } from "@angular/core";
 import { filter, take } from 'rxjs/operators';
 
@@ -44,13 +44,13 @@ export class TimeLoggerService {
   store(): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       const timeLog = JSON.stringify(Array.from(this.logEntries));
-      this.userStudyCurrentDataService.getSelectedObject()
-      .pipe(filter(d => !!d), take(1))
-      .subscribe(async d => {
-        d.timeLog = timeLog;
-        await this.userStudyCurrentDataService.updateObject(d);
-        resolve()
-      })
+      // this.userStudyCurrentDataService.getSelectedObject()
+      // .pipe(filter(d => !!d), take(1))
+      // .subscribe(async d => {
+      //   d.timeLog = timeLog;
+      //   await this.userStudyCurrentDataService.updateObject(d);
+      //   resolve()
+      // })
     });
   }
 

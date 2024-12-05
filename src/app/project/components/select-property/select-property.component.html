@@ -1,0 +1,42 @@
+<form [formGroup]="form">
+  <app-dialog>
+    <app-dialog-header>
+      <app-dialog-title>
+        Select Properties
+      </app-dialog-title>
+    </app-dialog-header>
+
+    <app-dialog-content>
+      <app-editable-list>
+        @if(!hasProperties()) {
+        <app-editable-list-empty-state>
+          There are no (more) plan properties to choose from. Create a new one that you are interested in.
+          <mat-icon>travel_explore</mat-icon>
+        </app-editable-list-empty-state>
+        }
+
+        @for(propertyIdControl of form.controls.propertyIds.controls; track propertyIdControl; let idx = $index) {
+        <app-editable-list-entry>
+          <app-editable-list-entry-prefix>
+            <mat-checkbox [formControl]="propertyIdControl"></mat-checkbox>
+          </app-editable-list-entry-prefix>
+
+          <app-plan-property-panel [property]="availableProperties()?.[idx]"></app-plan-property-panel>
+        </app-editable-list-entry>
+        }
+
+        <app-editable-list-action>
+          <button mat-button (click)="createNewProperty()" *userRole="['admin', 'creator']">
+            <mat-icon>add</mat-icon>
+            <span>Create New Property</span>
+          </button>
+        </app-editable-list-action>
+      </app-editable-list>
+    </app-dialog-content>
+
+    <app-dialog-footer>
+      <button mat-button (click)="onCancel()">Cancel</button>
+      <button mat-flat-button [disabled]="form.invalid" (click)="onSelect()">Select</button>
+    </app-dialog-footer>
+  </app-dialog>
+</form>

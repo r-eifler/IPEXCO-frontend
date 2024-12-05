@@ -5,8 +5,8 @@ import { GeneralSettings } from "./general-settings";
 
 
 export interface Project {
-  _id: string;
-  updated: string;
+  _id?: string;
+  updated?: string;
   name: string;
   public: boolean;
   user?: string;

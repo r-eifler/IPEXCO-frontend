@@ -1,0 +1,12 @@
+.main{
+    gap: 20px;
+    height: 100%;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.action-button-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}

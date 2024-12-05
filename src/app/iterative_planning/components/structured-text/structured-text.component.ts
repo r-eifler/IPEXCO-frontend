@@ -1,7 +1,7 @@
 import { NgFor, NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { ExplanationMessage } from '../../domain/interface/explanation-message';
-import { PlanProperty } from '../../domain/plan-property/plan-property';
+import { PlanProperty } from '../../../shared/domain/plan-property/plan-property';
 
 @Component({
   selector: 'app-structured-text',
