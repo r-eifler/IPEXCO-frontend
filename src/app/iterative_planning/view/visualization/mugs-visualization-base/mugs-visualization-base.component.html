@@ -1,6 +1,5 @@
 <div class="TODO">
-    <button mat-flat-button (click)="computeExplanations()">Basic</button>
-
+    
     @if(explanationsAvailable()){
         <div>
             {{ globalExplanation().MUGS }}
@@ -8,5 +7,11 @@
         <div>
             {{ globalExplanation().MGCS }}
         </div>
+    }
+    @else{
+        <div>
+            <p>There are no explanations available yet.</p>
+        </div>
+        <button mat-flat-button (click)="computeExplanations()">Compute Explanations</button>
     }
 </div>

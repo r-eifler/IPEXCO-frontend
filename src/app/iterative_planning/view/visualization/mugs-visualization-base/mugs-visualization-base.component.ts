@@ -1,4 +1,5 @@
 import { Component, computed, inject, input } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
 import { Store } from '@ngrx/store';
 import { IterationStep } from 'src/app/iterative_planning/domain/iteration_step';
 import { explanationVisualizationRequested } from 'src/app/iterative_planning/state/iterative-planning.actions';
@@ -6,7 +7,9 @@ import { explanationVisualizationRequested } from 'src/app/iterative_planning/st
 @Component({
   selector: 'app-mugs-visualization-base',
   standalone: true,
-  imports: [],
+  imports: [
+    MatButtonModule
+  ],
   templateUrl: './mugs-visualization-base.component.html',
   styleUrl: './mugs-visualization-base.component.scss'
 })
@@ -14,10 +17,10 @@ export class MugsVisualizationBaseComponent {
 
   store = inject(Store);
 
-  step = input.required<IterationStep>();
+  step = input.required<IterationStep | null>();
 
-  explanationsAvailable = computed(() => !!this.step().globalExplanation)
-  globalExplanation = computed(() => this.step().globalExplanation)
+  explanationsAvailable = computed(() => !!this.step()?.globalExplanation)
+  globalExplanation = computed(() => this.step()?.globalExplanation)
 
 
   computeExplanations(){
