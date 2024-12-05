@@ -16,12 +16,12 @@ import { QuestionType } from "src/app/iterative_planning/domain/explanation/expl
 import { Store } from "@ngrx/store";
 import { LLMContext } from "../domain/context";
 @Injectable()
-export class LLMService{
+export class LLMService {
 
     private http = inject(HttpClient)
     private BASE_URL = environment.apiURL + "llm/";
 
-    
+
     // postMessage$(messages: Message[] ): Observable<string> {
     //     console.log(messages);
     //     return this.http.post<IHTTPData<string>>(this.BASE_URL + "simple", { data: messages }).pipe(
@@ -29,8 +29,8 @@ export class LLMService{
     //         tap(console.log)
     //     );
     // }
-    
-    postMessageGT$(request: string, project: Project, properties: PlanProperty[], threadId: string): Observable<{response:{ formula: string, shortName: string }, threadId: string}> {
+
+    postMessageGT$(request: string, project: Project, properties: PlanProperty[], threadId: string): Observable<{ response: { formula: string, shortName: string }, threadId: string }> {
         const goalTranslationRequest: GoalTranslationRequest = {
             goalDescription: request,
             predicates: project.baseTask.model.predicates,
@@ -39,20 +39,20 @@ export class LLMService{
         };
         const requestString = goalTranslationRequestToString(goalTranslationRequest);
         console.log(requestString);
-        return this.http.post<IHTTPData<{response:{ formula: string, shortName: string }, threadId: string}>>(this.BASE_URL + 'gt', { data: requestString, threadId: threadId, originalRequest: request, projectId: project._id}).pipe(
+        return this.http.post<IHTTPData<{ response: { formula: string, shortName: string }, threadId: string }>>(this.BASE_URL + 'gt', { data: requestString, threadId: threadId, originalRequest: request, projectId: project._id }).pipe(
             map(({ data }) => data),
             tap(console.log)
         );
     }
 
-    postMessageQT$(request: string, threadId: string): Observable<{response: string, threadId: string}> {
-        return this.http.post<IHTTPData<{response: string, threadId: string}>>(this.BASE_URL + 'qt', { data: request, threadId: threadId }).pipe(
+    postMessageQT$(request: string, threadId: string): Observable<{ response: string, threadId: string }> {
+        return this.http.post<IHTTPData<{ response: string, threadId: string }>>(this.BASE_URL + 'qt', { data: request, threadId: threadId }).pipe(
             map(({ data }) => data),
             tap(console.log)
         );
     }
 
-    postMessageET$(question: string, explanation:string[][],question_type: QuestionType, questionArguments: PlanProperty[], iterationStep: IterationStep, project: Project, properties: PlanProperty[], threadId: string): Observable<{response: string, threadId: string}> {
+    postMessageET$(question: string, explanation: string[][], question_type: QuestionType, questionArguments: PlanProperty[], iterationStep: IterationStep, project: Project, properties: PlanProperty[], threadId: string): Observable<{ response: string, threadId: string }> {
         console.log(question, question_type, questionArguments, iterationStep, project, properties, threadId);
         const request: ExplanationTranslationRequest = {
             question: question,
@@ -68,13 +68,13 @@ export class LLMService{
             existingPlanProperties: Object.values(properties)
         };
         const requestString = explanationTranslationRequestToString(request);
-        return this.http.post<IHTTPData<{response: string, threadId: string}>>(this.BASE_URL + 'et', { data: requestString, threadId: threadId, iterationStepId: iterationStep._id, projectId: project._id, originalRequest: question}).pipe(
+        return this.http.post<IHTTPData<{ response: string, threadId: string }>>(this.BASE_URL + 'et', { data: requestString, threadId: threadId, iterationStepId: iterationStep._id, projectId: project._id, originalRequest: question }).pipe(
             map(({ data }) => data),
             tap(console.log)
         );
     }
 
-    postMessageQTthenGT$(question: string, iterationStep: IterationStep, project: Project, properties: PlanProperty[], threadIdQt: string, threadIdGt: string): Observable<{gtResponse: string, qtResponse: string, threadIdQt: string, threadIdGt: string, questionType: QuestionType, goal: string, question:Question }> {
+    postMessageQTthenGT$(question: string, iterationStep: IterationStep, project: Project, properties: PlanProperty[], threadIdQt: string, threadIdGt: string): Observable<{ gtResponse: string, qtResponse: string, threadIdQt: string, threadIdGt: string, questionType: QuestionType, goal: string, question: Question }> {
         console.log("Properties", properties);
         console.log("IterationStep", iterationStep);
         console.log("Enforced Goals", iterationStep.hardGoals.map(p => properties[p]));
@@ -101,7 +101,7 @@ export class LLMService{
         const gtRequestString = goalTranslationRequestToString(goalTranslationRequest);
 
         console.log(qtRequestString, gtRequestString);
-        return this.http.post<IHTTPData<{ gtResponse: string, qtResponse: string, threadIdQt: string, threadIdGt: string, questionType: QuestionType, goal: string, question:Question}>>(this.BASE_URL + 'qt-then-gt', { qtRequest: qtRequestString, gtRequest: gtRequestString, projectId: project._id, threadIdQt, threadIdGt, iterationStepId: iterationStep._id, originalQuestion: question }).pipe(
+        return this.http.post<IHTTPData<{ gtResponse: string, qtResponse: string, threadIdQt: string, threadIdGt: string, questionType: QuestionType, goal: string, question: Question }>>(this.BASE_URL + 'qt-then-gt', { qtRequest: qtRequestString, gtRequest: gtRequestString, projectId: project._id, threadIdQt, threadIdGt, iterationStepId: iterationStep._id, originalQuestion: question }).pipe(
             map(({ data }) => data),
             tap(console.log)
         );
@@ -111,9 +111,9 @@ export class LLMService{
 
         let httpParams = new HttpParams();
         httpParams = httpParams.set('projectId', id);
-        
-        return this.http.get<IHTTPData<LLMContext>>(this.BASE_URL+"llm-context",  { params: httpParams }).pipe(
-            map(({data}) => data)
+
+        return this.http.get<IHTTPData<LLMContext>>(this.BASE_URL + "llm-context", { params: httpParams }).pipe(
+            map(({ data }) => data)
         )
     }
 }
