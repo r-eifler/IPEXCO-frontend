@@ -52,14 +52,14 @@ export class LLMService {
         );
     }
 
-    postMessageET$(question: string, explanation: string[][], question_type: QuestionType, questionArguments: PlanProperty[], iterationStep: IterationStep, project: Project, properties: PlanProperty[], threadId: string): Observable<{ response: string, threadId: string }> {
-        console.log(question, question_type, questionArguments, iterationStep, project, properties, threadId);
+    postMessageET$(question: string, explanation: string[][], question_type: QuestionType, questionArgument: PlanProperty[], iterationStep: IterationStep, project: Project, properties: PlanProperty[], threadId: string): Observable<{ response: string, threadId: string }> {
+        console.log(question, question_type, questionArgument, iterationStep, project, properties, threadId);
         const request: ExplanationTranslationRequest = {
             question: question,
             question_type: question_type,
             MUGS: (question_type != QuestionType.HOW_PLAN && question_type != QuestionType.WHY_PLAN) ? explanation.map(e => e.map(pid => properties.find(p => p._id == pid))) : [], // if question_type is not HOW or WHY
             MGCS: (question_type == QuestionType.HOW_PLAN || question_type == QuestionType.HOW_PROPERTY) ? explanation.map(e => e.map(pid => properties.find(p => p._id == pid))) : [], // if question_type is HOW or HOW_PROPERTY
-            questionArguments: questionArguments,
+            questionArgument: questionArgument,
             predicates: project.baseTask.model.predicates,
             objects: project.baseTask.model.objects,
             enforcedGoals: properties.filter(p => iterationStep.hardGoals.includes(p._id)),

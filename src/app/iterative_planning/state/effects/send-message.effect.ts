@@ -113,13 +113,13 @@ export class SendMessageToLLMEffect{
 
     public sendMessageToExplanationTranslator$ = createEffect(() => this.actions$.pipe(
         ofType(sendMessageToLLMExplanationTranslator),
-        concatLatestFrom(({question, explanation, question_type, questionArguments,iterationStepId}) => [
+        concatLatestFrom(({question, explanation, question_type, questionArgument,iterationStepId}) => [
             this.store.select(selectLLMThreadIdET),
             this.store.select(selectIterativePlanningProject),
             this.store.select(selectIterativePlanningProperties),
             this.store.select(selectIterationStepbyId(iterationStepId))]),
-        switchMap(([{question, explanation, question_type, questionArguments, iterationStepId}, threadIdET, project, properties, iterationStep]) => {
-            return this.service.postMessageET$(question, explanation, question_type as QuestionType, questionArguments, iterationStep, project, Object.values(properties), threadIdET).pipe(
+        switchMap(([{question, explanation, question_type, questionArgument, iterationStepId}, threadIdET, project, properties, iterationStep]) => {
+            return this.service.postMessageET$(question, explanation, question_type as QuestionType, questionArgument, iterationStep, project, Object.values(properties), threadIdET).pipe(
                 switchMap(response => [sendMessageToLLMExplanationTranslatorSuccess({ response: response.response, threadId: response.threadId })]),
                 catchError(() => of(sendMessageToLLMExplanationTranslatorFailure()))
             );

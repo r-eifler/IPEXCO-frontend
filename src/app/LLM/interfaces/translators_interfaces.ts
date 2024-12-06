@@ -24,7 +24,7 @@ export interface QuestionTranslationRequest {
 export interface ExplanationTranslationRequest {
     question: string,
     question_type: string,
-    questionArguments: PlanProperty[],
+    questionArgument: PlanProperty[],
     MUGS?: PlanProperty[][],
     MGCS?: PlanProperty[][], // todo call it explanation then change it in string method
     predicates: PDDLPredicate[],
