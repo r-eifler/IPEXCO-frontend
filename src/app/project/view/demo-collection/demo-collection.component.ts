@@ -72,12 +72,8 @@ export class DemoCollectionComponent{
     this.dialog.open(DemoCreatorComponent);
   }
 
-
-  runDemo(id: string): void {
-
-    // this.router.navigate(["../demos/" + demo._id], {
-    //   relativeTo: this.activatedRoute,
-    // });
+  onRunIterPlanning(id: string){
+    this.router.navigate(['/iterative-planning', id]);
   }
 
 

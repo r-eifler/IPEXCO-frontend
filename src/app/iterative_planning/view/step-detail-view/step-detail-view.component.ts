@@ -3,7 +3,7 @@ import { Component, inject } from "@angular/core";
 import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
 import { MatTooltipModule } from "@angular/material/tooltip";
-import { RouterLink } from "@angular/router";
+import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { Store } from "@ngrx/store";
 import { Observable, combineLatest, filter, map, switchMap, take } from "rxjs";
 
@@ -28,7 +28,7 @@ import { questionFactory } from "../../domain/explanation/question-factory";
 import { StructuredText } from "../../domain/interface/explanation-message";
 import { PlanRunStatus } from "../../domain/plan";
 import { PlanProperty } from "../../../shared/domain/plan-property/plan-property";
-import { initNewIterationStep, questionPosed } from "../../state/iterative-planning.actions";
+import { deleteIterationStep, initNewIterationStep, questionPosed } from "../../state/iterative-planning.actions";
 import { Message } from "../../state/iterative-planning.reducer";
 import {
     selectIsExplanationLoading,
@@ -47,6 +47,8 @@ import {
 } from "./step-detail-view.component.selector";
 import { ExplanationInterfaceType } from "src/app/project/domain/general-settings";
 import { MugsVisualizationBaseComponent } from "../visualization/mugs-visualization-base/mugs-visualization-base.component";
+import { MatDialog } from "@angular/material/dialog";
+import { AskDeleteComponent } from "src/app/shared/components/ask-delete/ask-delete.component";
 
 @Component({
   selector: "app-step-detail-view",
@@ -72,6 +74,10 @@ import { MugsVisualizationBaseComponent } from "../visualization/mugs-visualizat
 })
 export class StepDetailViewComponent {
   private store = inject(Store);
+
+  router = inject(Router);
+  route = inject(ActivatedRoute);
+  dialog = inject(MatDialog);
 
   explanationInterfaceType$ = this.store.select(selectIterativePlanningProjectExplanationInterfaceType);
   expInterfaceType = ExplanationInterfaceType;
@@ -150,6 +156,20 @@ export class StepDetailViewComponent {
 
   createNewIteration(baseStepId?: string) {
     this.store.dispatch(initNewIterationStep({ baseStepId }));
+  }
+
+  deleteIteration(id?: string) {
+    const dialogRef = this.dialog.open(AskDeleteComponent, {
+      data: {name: "Delete Iteration", text: "Are you sure you want to delete the current iteration?"},
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      if(result){
+        this.store.dispatch(deleteIterationStep({ id }));
+        this.router.navigate([".."], {relativeTo: this.route});
+      }
+    });
+
   }
 
   onPropertyQuestionSelected(question: AvailableQuestion, property: PlanProperty): void {

@@ -10,6 +10,10 @@
 	<app-page-title>
 	{{ demo?.name }}
 	<app-page-title-action>
+		<button mat-icon-button matTooltip="Run iterative planning."
+			(click)="onRunIterPlanning()">
+		<mat-icon>play_arrow</mat-icon>
+		</button>
 		<button mat-icon-button matTooltip="Delete demo."
 			(click)="onDelete()">
 		<mat-icon>delete</mat-icon>
@@ -30,7 +34,7 @@
 				<app-page-section-title>Goals</app-page-section-title>
 				<app-page-section-content>				
 					<div class="property-list">
-						@for(property of (planPropertiesList$ | async); track property) {
+						@for(property of (planPropertiesList$ | async); track property._id) {
 							<app-plan-property-panel [property]="property"></app-plan-property-panel>
 						}
 					</div>
@@ -41,7 +45,7 @@
 				<app-page-section-title>Conflicts</app-page-section-title>
 				<app-page-section-content>
 					<div class="list-list">
-						@for(MUGS of (MUGS$ | async); track MUGS) {
+						@for(MUGS of (MUGS$ | async); track $index) {
 						<div class="property-badge-list">
 							<mat-icon>report</mat-icon>
 							@for(id of MUGS; track id) {
@@ -57,7 +61,7 @@
 				<app-page-section-title>Corrections</app-page-section-title>
 				<app-page-section-content>
 					<div class="list-list">
-						@for(MGCS of (MGCS$ | async); track MGCS) {
+						@for(MGCS of (MGCS$ | async); track $index) {
 						<div class="property-badge-list">
 							<mat-icon>healing</mat-icon>
 							@for(id of MGCS; track id) {
@@ -72,7 +76,7 @@
 			<app-page-section>
 				<app-page-section-title>Settings</app-page-section-title>
 				<app-page-section-content>
-					<app-settings [settings]="demo?.settings" (update)="updateSettings($event)"></app-settings>
+					<app-settings [settings]="demo?.settings" (update)="updateSettings($event)" [isDemo]="true"></app-settings>
 				</app-page-section-content>
 			</app-page-section>
 		</app-page-section-list> 

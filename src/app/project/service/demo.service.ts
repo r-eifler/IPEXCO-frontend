@@ -1,6 +1,5 @@
 import { inject, Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { Project } from "../domain/project";
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { environment } from "src/environments/environment";
 import { map, tap } from "rxjs/operators";
@@ -73,5 +72,11 @@ export class DemoService{
       return this.http.put<IHTTPData<Demo>>(this.BASE_URL + demo._id, {demo: demo}).pipe(
           map(({data}) => data)
       )
-  }
+    }
+
+    deleteDemo$(id: string): Observable<boolean> {
+      return this.http.delete<IHTTPData<boolean>>(this.BASE_URL + id).pipe(
+          map(({data}) => data)
+      )
+    }
 }

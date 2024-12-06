@@ -1,6 +1,5 @@
 import { PDDLFact, FactToString, PlanningTask, PDDLObject } from "src/app/shared/domain/planning-task";
 import { Action, ActionSet, GoalType, PlanProperty, toAction } from "src/app/shared/domain/plan-property/plan-property";
-import { Project } from "src/app/project/domain/project";
 
 export interface PlanPropertyTemplate {
   class: string;

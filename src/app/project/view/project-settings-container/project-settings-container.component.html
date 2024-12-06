@@ -7,9 +7,8 @@
 
   <app-page-content class="container">
     <app-settings
-      [isProject]="true"
       [settings]="settings$ | async"
-      (updatedSettings)="onSaveSetting($event)">
+      (update)="onSaveSetting($event)">
     </app-settings>
     <app-property-template-creator
       [planning_task]="model$ | async"

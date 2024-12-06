@@ -1,12 +1,12 @@
 import { inject, Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { Project } from "../domain/project";
 import { HttpClient } from "@angular/common/http";
 import { environment } from "src/environments/environment";
 import { map, tap } from "rxjs/operators";
 import { IHTTPData } from "src/app/shared/domain/http-data.interface";
 import { array, date, object, string, infer as zInfer } from "zod";
 import { Demo } from "src/app/demo/domain/demo";
+import { Project } from "src/app/shared/domain/project";
 
 // const PlanningTaskUnverifiedSchema = string().transform(s => JSON.parse(s));
 

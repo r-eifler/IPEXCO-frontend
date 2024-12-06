@@ -2,7 +2,7 @@ import { Component, DestroyRef, effect, EventEmitter, inject, input, Input, OnCh
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
 import { ExplanationInterfaceType, GeneralSettings, PropertyCreationInterfaceType } from "../../domain/general-settings";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-import { concatMap, switchMap } from "rxjs/operators";
+import { concatMap, debounceTime, distinctUntilChanged, switchMap } from "rxjs/operators";
 import { MatFormFieldModule, MatLabel } from "@angular/material/form-field";
 import { MatSlideToggleModule } from "@angular/material/slide-toggle";
 import { MatCardModule } from "@angular/material/card";
@@ -10,6 +10,7 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatButtonToggleModule } from "@angular/material/button-toggle";
 import { MatIcon, MatIconModule } from "@angular/material/icon";
 import { AsyncPipe, NgFor, NgIf } from "@angular/common";
+import { MatInputModule } from "@angular/material/input";
 
 
 @Component({
@@ -26,6 +27,7 @@ import { AsyncPipe, NgFor, NgIf } from "@angular/common";
     MatButtonToggleModule,
     MatIconModule,
     NgIf,
+    MatInputModule,
   ],
   templateUrl: "./settings.component.html",
   styleUrls: ["./settings.component.scss"],
@@ -37,7 +39,7 @@ export class SettingsComponent {
   settingsForm: FormGroup;
 
   settings = input.required<GeneralSettings>();
-  isProject = input<boolean>(false);
+  isDemo = input<boolean>(false);
 
   update = output<GeneralSettings>();
 
@@ -79,6 +81,16 @@ export class SettingsComponent {
     });
 
     effect(() => this.initForm(this.settings()))
+
+    // this.settingsForm.valueChanges.pipe(
+    //   takeUntilDestroyed(this.destroyRef),
+    //   debounceTime(3000), // one event every 3000 milliseconds
+    //   distinctUntilChanged(), 
+    // ).subscribe(() => {
+    //   this.onSave();
+    //   console.log('Saved')
+    // });
+
   }
 
 
@@ -114,14 +126,6 @@ export class SettingsComponent {
     this.settingsForm.controls.maxPayment.setValue(settings.paymentInfo.max);
     this.settingsForm.controls.paymentSteps.setValue(settings.paymentInfo.steps);
 
-    this.settingsForm.valueChanges.pipe(
-      takeUntilDestroyed(this.destroyRef)
-    ).subscribe(() => {
-      this.onSave();
-      console.log('Saved')
-    });
-
-    this.initialized = true
   }
 
   onSave() {

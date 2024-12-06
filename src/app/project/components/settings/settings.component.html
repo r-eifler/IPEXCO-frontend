@@ -85,21 +85,35 @@
       </mat-card-content>
     </mat-card>
 
-      <div class="part" *ngIf="!isProject">
-        <h3>Demo</h3>
+    @if(isDemo()){
+    <mat-card appearance="outlined">
+      <mat-card-header>
+        <mat-card-title>
+          Demo
+        </mat-card-title>
+      </mat-card-header>
+      
+      <mat-card-content class="sub-card-content">
 
         <mat-slide-toggle formControlName="public"
           matTooltip="Makes the demo publicly available. Neets to be set to true, when the
           demo is used in a user study.">
           public
         </mat-slide-toggle>
-      </div>
+      </mat-card-content>
+    </mat-card>
 
-      <div class="part" *ngIf="!isProject">
-        <h3>Features for User Study</h3>
+    <mat-card appearance="outlined">
+      <mat-card-header>
+        <mat-card-title>
+          Features for a User Study
+        </mat-card-title>
+      </mat-card-header>
+      
+      <mat-card-content class="sub-card-content">
 
         <mat-slide-toggle formControlName="introTask"
-          matTooltip="If a demo is an intro task, additionall insturtcions are displayed.">
+          matTooltip="If a demo is an intro task, additional instructions are displayed.">
           Intro Task
         </mat-slide-toggle>
 
@@ -108,25 +122,33 @@
           <input matInput type="number" formControlName="maxRuns" />
         </mat-form-field>
 
-        <!-- TODO -->
         <mat-slide-toggle formControlName="useTimer">
           Use Timer
         </mat-slide-toggle>
+
+        @if(settingsForm.controls.useTimer.value){
+        <mat-form-field style="width: 200px">
+          <mat-label>Max processing time (in min)</mat-label>
+          <input matInput type="number" formControlName="maxTime" />
+        </mat-form-field> 
+        }
 
         <mat-slide-toggle formControlName="measureTime">
           Measure Time
         </mat-slide-toggle>
 
-        <mat-form-field style="width: 200px">
-          <mat-label>Max processing time (in min)</mat-label>
-          <input matInput type="number" formControlName="maxTime" />
-        </mat-form-field> 
-
         <mat-slide-toggle formControlName="checkMaxUtility"
           matTooltip="The user is notified, when they reached the maximal possible utility.">
           Stop demo if max utility achieved
         </mat-slide-toggle>
+      </mat-card-content>
+    </mat-card>
 
+    
+  }
+  <button mat-stroked-button>Save</button>
+
+<!-- 
         <div class="part">
           <h4>Payment Score</h4>
 
@@ -157,8 +179,8 @@
             </mat-label>
             <input matInput type="string" formControlName="paymentSteps" />
           </mat-form-field>
-        </div>
+        </div> -->
 
-      </div>
+
   </form>
 </div>

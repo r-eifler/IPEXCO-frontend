@@ -1,6 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { DialogModule } from '../dialog/dialog.module';
 
 export interface AskDeleteDialogData {
   name: string;
@@ -12,7 +13,7 @@ export interface AskDeleteDialogData {
   standalone: true,
   imports: [
     MatButtonModule,
-    MatDialogModule,
+    DialogModule,
   ],
   templateUrl: './ask-delete.component.html',
   styleUrl: './ask-delete.component.scss'
@@ -24,8 +25,12 @@ export class AskDeleteComponent {
     @Inject(MAT_DIALOG_DATA) public data: AskDeleteDialogData,
   ) {}
 
-  onNoClick(): void {
-    this.dialogRef.close();
+  onCancel(): void {
+    this.dialogRef.close(false);
+  }
+
+  onDelete(): void {
+    this.dialogRef.close(true);
   }
 
 }

@@ -4,7 +4,6 @@ import { ActivatedRoute, Router, RouterLink, RouterModule } from "@angular/route
 import { MatDialog } from "@angular/material/dialog";
 import { Store } from "@ngrx/store";
 import { selectProject, selectProjectDemoComputationPending } from "../../state/project.selector";
-import { DemoCreatorComponent } from "../demo-creator/demo-creator.component";
 import { PageModule } from "src/app/shared/components/page/page.module";
 import { ActionCardModule } from "src/app/shared/components/action-card/action-card.module";
 import { MatIcon, MatIconModule } from "@angular/material/icon";
@@ -46,10 +45,6 @@ export class ProjectBaseComponent {
 
   project$ = this.store.select(selectProject);
   demoComputationRunning = this.store.select(selectProjectDemoComputationPending);
-
-  createDemo(): void {
-    this.dialog.open(DemoCreatorComponent);
-  }
 
   onPlanningTask(): void {
     this.router.navigate(['planning-task'], {relativeTo: this.route.parent});
