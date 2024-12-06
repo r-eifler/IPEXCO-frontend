@@ -1,8 +1,14 @@
-<h2 mat-dialog-title>{{data.name}}</h2>
-<mat-dialog-content>
-  <p>{{data.text}}</p>
-</mat-dialog-content>
-<mat-dialog-actions>
-  <button mat-button (click)="onNoClick()">Cancel</button>
-  <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Delete</button>
-</mat-dialog-actions>
+<app-dialog>
+  <app-dialog-header>
+    <app-dialog-title>
+      {{data.name}}
+    </app-dialog-title>
+  </app-dialog-header>
+  <app-dialog-content>
+    <p>{{data.text}}</p>
+  </app-dialog-content>
+  <app-dialog-footer>
+    <button mat-button (click)="onCancel()">Cancel</button>
+    <button mat-flat-button (click)="onDelete()" cdkFocusInitial>Delete</button>
+  </app-dialog-footer>
+</app-dialog>

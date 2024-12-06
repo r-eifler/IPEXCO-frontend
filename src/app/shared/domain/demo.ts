@@ -1,6 +1,6 @@
-import { Project } from 'src/app/shared/domain/project';
 import { GlobalExplanation } from '../../iterative_planning/domain/explanation/explanations';
 import { RunStatus } from '../../iterative_planning/domain/run';
+import { Project } from './project';
 
 
 export enum DemoRunStatus {
@@ -17,7 +17,6 @@ export interface Demo extends Project {
   summaryImage?: string;
   domainInfo?: string;
   instanceInfo?: string;
-  globalExplanation?: GlobalExplanation,
   maxUtility?: { value: number; selectedPlanProperties: string[] };
 }
 

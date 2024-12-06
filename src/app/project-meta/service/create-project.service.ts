@@ -4,7 +4,7 @@ import { HttpClient } from "@angular/common/http";
 import { environment } from "src/environments/environment";
 import { map } from "rxjs/operators";
 import { IHTTPData } from "src/app/shared/domain/http-data.interface";
-import { Project } from "src/app/project/domain/project";
+import { Project } from "src/app/shared/domain/project";
 
 
 @Injectable()

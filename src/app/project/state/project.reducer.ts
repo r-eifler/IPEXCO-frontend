@@ -1,10 +1,10 @@
 import { createReducer, on } from "@ngrx/store";
-import { Project } from "../domain/project";
 import { Loadable, LoadingState } from "src/app/shared/common/loadable.interface";
 import { demoCreationRunningFailure, demoCreationRunningSuccess, loadDemoPlanPropertiesSuccess, loadPlanProperties, loadPlanPropertiesSuccess, loadProject, loadProjectDemos, loadProjectDemosSuccess, loadProjectSuccess, registerDemoCreation, registerDemoCreationSuccess, loadProjectDemo, updateProject, updateProjectSuccess, loadProjectDemoSuccess, updateDemoSuccess } from "./project.actions";
 import { Demo } from "src/app/demo/domain/demo";
 import { PlanProperty } from "src/app/shared/domain/plan-property/plan-property";
 import { Creatable, CreationState } from "src/app/shared/common/creatable.interface";
+import { Project } from "src/app/shared/domain/project";
 
 export interface ProjectState {
     project: Loadable<Project>;

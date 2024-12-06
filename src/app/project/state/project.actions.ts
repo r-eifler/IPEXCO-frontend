@@ -1,7 +1,7 @@
 import { createAction, props } from "@ngrx/store";
-import { Project } from "../domain/project";
 import { Demo } from "src/app/demo/domain/demo";
 import { PlanProperty } from "src/app/shared/domain/plan-property/plan-property";
+import { Project } from "src/app/shared/domain/project";
 
 // project
 

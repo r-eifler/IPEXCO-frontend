@@ -1,6 +1,5 @@
 import { inject, Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { Project } from "../domain/project";
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { environment } from "src/environments/environment";
 import { map, tap } from "rxjs/operators";
