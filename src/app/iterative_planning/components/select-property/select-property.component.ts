@@ -24,6 +24,8 @@ import { UserRoleDirective } from "src/app/user/directives/user-role.directive";
 import { createPlanProperty } from "../../state/iterative-planning.actions";
 import { PropertyCreatorComponent } from "../../view/property-creator/property-creator.component";
 import { PlanProperty } from "src/app/shared/domain/plan-property/plan-property";
+import { AsyncPipe } from "@angular/common";
+import { ProjectDirective } from "../../derectives/isProject.directive";
 
 @Component({
   selector: "app-select-property",
@@ -37,7 +39,8 @@ import { PlanProperty } from "src/app/shared/domain/plan-property/plan-property"
     MatIconModule,
     PlanPropertyPanelComponent,
     ReactiveFormsModule,
-    UserRoleDirective
+    UserRoleDirective,
+    ProjectDirective,
   ],
   templateUrl: "./select-property.component.html",
   styleUrl: "./select-property.component.scss",
