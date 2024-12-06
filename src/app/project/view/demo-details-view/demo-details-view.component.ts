@@ -15,6 +15,8 @@ import { PlanProperty } from 'src/app/shared/domain/plan-property/plan-property'
 import { SettingsComponent } from "../../components/settings/settings.component";
 import { GeneralSettings } from '../../domain/general-settings';
 import { deleteProjectDemo, updateDemo } from '../../state/project.actions';
+import { AskDeleteComponent } from 'src/app/shared/components/ask-delete/ask-delete.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-demo-details-view',
@@ -39,6 +41,7 @@ export class DemoDetailsViewComponent {
   store = inject(Store);
   router = inject(Router);
   route = inject(ActivatedRoute);
+  dialog = inject(MatDialog);
 
   demo$ = this.store.select(selectProjectDemo)
   planProperties$: Observable<Record<string, PlanProperty>> = this.store.select(selectPlanPropertiesOfDemo)
@@ -54,11 +57,17 @@ export class DemoDetailsViewComponent {
   }
 
 
-  onDelete(){
-    this.demo$.pipe(take(1)).subscribe(demo => {
-      this.store.dispatch(deleteProjectDemo({id: demo._id}))
-      this.router.navigate(["../.."], {relativeTo: this.route});
-    })
+  onDelete(id: string){
+    const dialogRef = this.dialog.open(AskDeleteComponent, {
+      data: {name: "Delete Demo", text: "Are you sure you want to delete the demo?"},
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      if(result){
+        this.store.dispatch(deleteProjectDemo({id}))
+        this.router.navigate(["../.."], {relativeTo: this.route});
+      }
+    });
   }
 
   onRunIterPlanning(){
