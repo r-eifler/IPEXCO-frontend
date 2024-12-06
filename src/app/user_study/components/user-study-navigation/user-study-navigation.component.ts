@@ -7,7 +7,7 @@ import { Subject } from "rxjs";
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AcceptedTestPersonsComponent } from '../../eval/accepted-test-persons/accepted-test-persons.component';
 import { UserStudyDataBaseComponent } from '../../eval/user-study-data-base/user-study-data-base.component';
-import { UserStudyCreatorComponent } from '../user-study-creator/user-study-creator.component';
+import { UserStudyCreatorComponent } from '../../view/user-study-creator/user-study-creator.component';
 import { MatTabLink } from '@angular/material/tabs';
 import { FormsModule } from '@angular/forms';
 

@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from "@angular/core";
 import { takeUntil } from "rxjs/operators";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { MetaStudyCollectionComponent } from "../../meta-study/meta-study-collection/meta-study-collection.component";
-import { UserStudyCollectionComponent } from "../user-study-collection/user-study-collection.component";
+import { UserStudyCollectionComponent } from "../../view/user-study-collection/user-study-collection.component";
 import { MatTabsModule } from "@angular/material/tabs";
 
 @Component({
@@ -25,7 +25,7 @@ export class UserStudyCollectionBaseComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    
+
   }
 
 }

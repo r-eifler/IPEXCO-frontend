@@ -13,7 +13,7 @@ import { MAT_BOTTOM_SHEET_DEFAULT_OPTIONS } from '@angular/material/bottom-sheet
 import { NavigationComponent } from "./base/components/navigation/navigation.component";
 
 
-// State 
+// State
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 
@@ -44,7 +44,7 @@ import { LoadIterativePlanningProjectEffect } from './iterative_planning/state/e
 import { QuestionQueueEffect } from './iterative_planning/state/effects/question-queue.effect';
 import { UpdatePlanPropertyEffect } from './iterative_planning/state/effects/update-plan-property.effect'
 
-// Services 
+// Services
 import { LLMService } from './LLM/service/llm.service';
 import { ExplainerMonitoringService } from './iterative_planning/service/explainer-monitoring.service';
 import { ExplainerService } from './iterative_planning/service/explainer.service';
@@ -74,6 +74,10 @@ import { LoadProjectDemoEffect } from './project/state/effects/load-demo.effect'
 import { UpdateDemoEffect } from './project/state/effects/update-demo.effect';
 import { DeleteProjectDemoEffect } from './project/state/effects/delete-demo.effect';
 import { DeleteIterationEffect } from './iterative_planning/state/effects/delete-iteration-step.effect';
+import {LoadUserStudiesEffect} from './user_study/state/effects/load-user-studies.effect';
+import {UserStudyService} from './user_study/service/user-study.service';
+import {userStudyFeature, userStudyReducer} from './user_study/state/user-study.reducer';
+import {MatDatepicker} from '@angular/material/datepicker';
 
 
 
@@ -87,6 +91,7 @@ import { DeleteIterationEffect } from './iterative_planning/state/effects/delete
         [projectFeature]: projectReducer,
         [projectMetaDataFeature]: projectMetaDataReducer,
         [iterativePlanningFeature]: iterativePlanningReducer,
+        [userStudyFeature]: userStudyReducer,
     }),
     EffectsModule.forRoot([
         LoadTokenEffect,
@@ -119,6 +124,7 @@ import { DeleteIterationEffect } from './iterative_planning/state/effects/delete
         SendMessageToLLMEffect,
         ComputeExplanationEffect,
         QuestionQueueEffect,
+        LoadUserStudiesEffect,
     ]),
     // Instrumentation must be imported after importing StoreModule (config is optional)
     StoreDevtoolsModule.instrument({
@@ -158,6 +164,7 @@ import { DeleteIterationEffect } from './iterative_planning/state/effects/delete
     ExplainerService,
     ExplainerMonitoringService,
     ProjectPlanPropertyService,
+    UserStudyService,
     {
       provide: MAT_BOTTOM_SHEET_DEFAULT_OPTIONS,
       useValue: { hasBackdrop: true },

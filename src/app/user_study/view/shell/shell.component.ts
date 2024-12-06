@@ -5,7 +5,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Store } from '@ngrx/store';
 
 @Component({
-  selector: 'app-user-study-shell',
+  selector: 'app-shell',
   standalone: true,
   imports: [RouterOutlet],
   templateUrl: './shell.component.html',

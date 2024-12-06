@@ -1,0 +1,183 @@
+<app-page>
+  <app-breadcrumb>
+    <a app-breadcrumb-item [routerLink]="['/user-studies/']"><mat-icon>home</mat-icon></a>
+    <app-breadcrumb-item>new</app-breadcrumb-item>
+  </app-breadcrumb>
+  <app-page-title>New User Study</app-page-title>
+
+  <app-page-content>
+    <form [formGroup]="form">
+    <app-page-section-list>
+      <app-page-section>
+        <app-page-section-content class="input-list">
+          <mat-form-field class="full-line-input" appearance="outline">
+            <mat-label>Name</mat-label>
+            <input matInput type="text" formControlName="name" />
+          </mat-form-field>
+
+          <mat-form-field class="full-line-input" appearance="outline">
+            <mat-label>Description</mat-label>
+            <textarea matInput formControlName="description"></textarea>
+          </mat-form-field>
+
+          <mat-form-field class="full-line-input" appearance="outline">
+            <mat-label>Enter a date range</mat-label>
+            <mat-date-range-input [rangePicker]="picker" [formGroup]="form.controls.validTimeRange">
+              <input matStartDate placeholder="Start date" formControlName="start">
+              <input matEndDate placeholder="End date" formControlName="end">
+            </mat-date-range-input>
+            <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-date-range-picker #picker></mat-date-range-picker>
+          </mat-form-field>
+
+
+          <mat-form-field class="full-line-input" appearance="outline">
+            <mat-label>Prolific redirect URL</mat-label>
+            <input matInput type="text" formControlName="redirectUrl" />
+          </mat-form-field>
+
+        </app-page-section-content>
+      </app-page-section>
+    </app-page-section-list>
+    </form>
+  </app-page-content>
+</app-page>
+
+
+
+<!--<div class="main-container" (click)="deactivateAll()">-->
+
+<!--  <mat-card-->
+<!--    [class.base-card-desktop]="!isMobile"-->
+<!--    [class.base-card-mobile]="isMobile"-->
+<!--    *ngFor="let part of parts"-->
+<!--    (click)="activate($event, part.index)"-->
+<!--  >-->
+<!--    <mat-card-header>-->
+<!--      <mat-card-title *ngIf="part.type === userStudyStepType.description"-->
+<!--        >Description</mat-card-title-->
+<!--      >-->
+<!--      <mat-card-title *ngIf="part.type === userStudyStepType.form"-->
+<!--        >Google Form</mat-card-title-->
+<!--      >-->
+<!--      <mat-card-title *ngIf="part.type === userStudyStepType.demo"-->
+<!--        >Demo</mat-card-title-->
+<!--      >-->
+<!--    </mat-card-header>-->
+<!--    <mat-card-content>-->
+<!--      <div style="width: 100%; display: flex; justify-content: flex-end">-->
+<!--        <mat-form-field appearance="fill" *ngIf="part.active">-->
+<!--          <mat-label>Type</mat-label>-->
+<!--          <mat-select [(value)]="part.type">-->
+<!--            <mat-option [value]="userStudyStepType.description"-->
+<!--              >Description</mat-option-->
+<!--            >-->
+<!--            <mat-option [value]="userStudyStepType.form">Form</mat-option>-->
+<!--            <mat-option [value]="userStudyStepType.demo">Demo</mat-option>-->
+<!--          </mat-select>-->
+<!--        </mat-form-field>-->
+<!--      </div>-->
+
+<!--      <ng-container *ngIf="part.active">-->
+<!--        <ng-container *ngIf="part.type === userStudyStepType.description">-->
+<!--          <mat-tab-group>-->
+<!--            <mat-tab label="Markdown">-->
+<!--              <mat-form-field class="full-line-input">-->
+<!--                <textarea-->
+<!--                  matInput-->
+<!--                  [value]="part.content"-->
+<!--                  [(ngModel)]="part.content"-->
+<!--                >-->
+<!--                </textarea>-->
+<!--              </mat-form-field>-->
+<!--            </mat-tab>-->
+<!--            <mat-tab label="Preview">-->
+<!--              <div [innerHTML]="part.content | marked"></div>-->
+<!--            </mat-tab>-->
+<!--          </mat-tab-group>-->
+<!--        </ng-container>-->
+
+<!--        <ng-container *ngIf="part.type === userStudyStepType.form">-->
+<!--          <mat-form-field class="full-line-input">-->
+<!--            <mat-label>Form Link</mat-label>-->
+<!--            <input matInput type="url" [(ngModel)]="part.url" />-->
+<!--          </mat-form-field>-->
+<!--        </ng-container>-->
+
+<!--        <ng-container *ngIf="part.type === userStudyStepType.demo">-->
+<!--          <mat-form-field appearance="fill">-->
+<!--            <mat-label>Demo</mat-label>-->
+<!--            <mat-select [(value)]="part.demo">-->
+<!--              <mat-option *ngFor="let d of demos$ | async" [value]="d">{{-->
+<!--                d.name-->
+<!--              }}</mat-option>-->
+<!--            </mat-select>-->
+<!--          </mat-form-field>-->
+<!--        </ng-container>-->
+<!--      </ng-container>-->
+
+<!--      <ng-container *ngIf="!part.active">-->
+<!--        <ng-container *ngIf="part.type === userStudyStepType.description">-->
+<!--          <div [innerHTML]="part.content | marked"></div>-->
+<!--        </ng-container>-->
+
+<!--        <ng-container *ngIf="part.type === userStudyStepType.form">-->
+<!--          <div-->
+<!--            style="-->
+<!--              display: flex;-->
+<!--              flex-direction: column;-->
+<!--              justify-content: center;-->
+<!--            "-->
+<!--          >-->
+<!--            <a mat-flat-button color="primary" href="{{ part.url }}">-->
+<!--              Google Form Link-->
+<!--            </a>-->
+<!--          </div>-->
+<!--        </ng-container>-->
+
+<!--        <ng-container *ngIf="part.type === userStudyStepType.demo">-->
+<!--          {{ part.demo?.name }}-->
+<!--        </ng-container>-->
+<!--      </ng-container>-->
+<!--    </mat-card-content>-->
+<!--    <mat-card-actions align="end">-->
+<!--      <button-->
+<!--        mat-icon-button-->
+<!--        (click)="moveUp(part)"-->
+<!--        [disabled]="part.index == 0"-->
+<!--      >-->
+<!--        <mat-icon>keyboard_arrow_up</mat-icon>-->
+<!--      </button>-->
+<!--      <button-->
+<!--        mat-icon-button-->
+<!--        (click)="moveDown(part)"-->
+<!--        [disabled]="part.index == this.parts.length - 1"-->
+<!--      >-->
+<!--        <mat-icon>keyboard_arrow_down</mat-icon>-->
+<!--      </button>-->
+<!--      <button-->
+<!--        mat-icon-button-->
+<!--        (click)="deletePart(part)"-->
+<!--        [disabled]="this.parts.length == 1"-->
+<!--      >-->
+<!--        <mat-icon>delete</mat-icon>-->
+<!--      </button>-->
+<!--    </mat-card-actions>-->
+<!--  </mat-card>-->
+
+<!--  <mat-card-->
+<!--    [class.button-container-desktop]="!isMobile"-->
+<!--    [class.button-container-mobile]="isMobile"-->
+<!--  >-->
+<!--    <button mat-icon-button (click)="editUserStudy()" *ngIf="!edit">-->
+<!--      <mat-icon>create</mat-icon>-->
+<!--    </button>-->
+<!--    <button mat-icon-button (click)="addNewPart()" *ngIf="edit">-->
+<!--      <mat-icon>add</mat-icon>-->
+<!--    </button>-->
+<!--    <button mat-icon-button (click)="saveUserStudy()" *ngIf="edit">-->
+<!--      <mat-icon>save</mat-icon>-->
+<!--    </button>-->
+<!--  </mat-card>-->
+<!--</div>-->

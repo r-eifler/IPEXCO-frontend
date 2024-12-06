@@ -1,23 +1,43 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
-import { Observable, Subject } from "rxjs";
-import { Demo } from "../../../demo/domain/demo";
-import { DomSanitizer } from "@angular/platform-browser";
+import {Component, inject, OnDestroy, OnInit} from '@angular/core';
+import { Observable, Subject } from 'rxjs';
+import { Demo } from '../../../demo/domain/demo';
+import { DomSanitizer } from '@angular/platform-browser';
 import {
   UserStudy,
   UserStudyStep,
   UserStudyStepType,
-} from "../../domain/user-study";
-import { FormControl, FormsModule, ReactiveFormsModule, UntypedFormControl, UntypedFormGroup } from "@angular/forms";
-import { ActivatedRoute, Router } from "@angular/router";
-import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-import { MatIconModule } from "@angular/material/icon";
-import { MatCardModule } from "@angular/material/card";
-import { MatButtonModule } from "@angular/material/button";
-import { MarkedPipe } from "src/app/pipes/marked.pipe";
-import { MatOptionModule } from "@angular/material/core";
-import { MatSelectModule } from "@angular/material/select";
-import { MatTabsModule } from "@angular/material/tabs";
-import { MatInputModule } from "@angular/material/input";
+} from '../../domain/user-study';
+import {FormBuilder, FormControl, FormsModule, ReactiveFormsModule, UntypedFormControl, UntypedFormGroup, Validators} from '@angular/forms';
+import {ActivatedRoute, Router, RouterLink} from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { MatIconModule } from '@angular/material/icon';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { MarkedPipe } from 'src/app/pipes/marked.pipe';
+import {MatOptionModule, provideNativeDateAdapter} from '@angular/material/core';
+import { MatSelectModule } from '@angular/material/select';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatInputModule } from '@angular/material/input';
+import {ActionCardComponent} from '../../../shared/components/action-card/action-card/action-card.component';
+import {AsyncPipe} from '@angular/common';
+import {BreadcrumbComponent} from '../../../shared/components/breadcrumb/breadcrumb/breadcrumb.component';
+import {BreadcrumbItemComponent} from '../../../shared/components/breadcrumb/breadcrumb-item/breadcrumb-item.component';
+import {PageComponent} from '../../../shared/components/page/page/page.component';
+import {PageContentComponent} from '../../../shared/components/page/page-content/page-content.component';
+import {PageTitleComponent} from '../../../shared/components/page/page-title/page-title.component';
+import {PageSectionListComponent} from '../../../shared/components/page/page-section-list/page-section-list.component';
+import {PageModule} from '../../../shared/components/page/page.module';
+import {
+  MatDatepicker,
+  MatDatepickerInput,
+  MatDatepickerModule,
+  MatDatepickerToggle,
+  MatDateRangeInput,
+  MatDateRangePicker
+} from '@angular/material/datepicker';
+import {BreadcrumbModule} from '../../../shared/components/breadcrumb/breadcrumb.module';
+import {Store} from '@ngrx/store';
+import {selectUserStudyDemos} from '../../state/user-study.selector';
 
 interface Part {
   index: number;
@@ -29,9 +49,11 @@ interface Part {
 }
 
 @Component({
-  selector: "app-user-study-creator",
+  selector: 'app-user-study-creator',
   standalone: true,
+  providers: [provideNativeDateAdapter()],
   imports: [
+    PageModule,
     MatIconModule,
     MatCardModule,
     MatButtonModule,
@@ -41,22 +63,35 @@ interface Part {
     FormsModule,
     MatTabsModule,
     MatInputModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    BreadcrumbModule,
+    RouterLink,
+    MatDatepickerModule
   ],
-  templateUrl: "./user-study-creator.component.html",
-  styleUrls: ["./user-study-creator.component.css"],
+  templateUrl: './user-study-creator.component.html',
+  styleUrls: ['./user-study-creator.component.scss'],
 })
 export class UserStudyCreatorComponent implements OnInit {
-  isMobile: boolean;
 
   userStudyStepType = UserStudyStepType;
+  store = inject(Store)
+  fb = inject(FormBuilder);
 
-  demos$: Observable<Demo[]>;
+  demos$ = this.store.select(selectUserStudyDemos)
 
   userStudy: UserStudy;
   parts: Part[] = [];
 
-  userStudyForm: UntypedFormGroup;
+  form = this.fb.group({
+    name: this.fb.control<string>('', [Validators.required]),
+    description: this.fb.control<string>('', [Validators.required]),
+    validTimeRange: this.fb.group({
+      start: this.fb.control<Date | null>(null, [Validators.required]),
+      end: this.fb.control<Date | null>(null, [Validators.required]),
+    }),
+    redirectUrl: this.fb.control('', []),
+  });
+
 
   edit = false;
 
@@ -69,16 +104,7 @@ export class UserStudyCreatorComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router
   ) {
-    // demosService.findCollection();
-    // this.demos$ = demosService.getList();
 
-    this.userStudyForm = new UntypedFormGroup({
-      name: new UntypedFormControl(),
-      description: new UntypedFormControl(),
-      startDate: new UntypedFormControl(),
-      endDate: new UntypedFormControl(),
-      redirectUrl: new UntypedFormControl(),
-    });
 
     // this.selectedUserStudyService
     //   .getSelectedObject()
@@ -108,17 +134,17 @@ export class UserStudyCreatorComponent implements OnInit {
     //             break;
     //         }
     //         this.parts.push(nextStep);
-    //         this.userStudyForm.disable();
+    //         this.form.disable();
     //       }
-    //       this.userStudyForm.controls.name.setValue(this.userStudy.name);
-    //       this.userStudyForm.controls.description.setValue(
+    //       this.form.controls.name.setValue(this.userStudy.name);
+    //       this.form.controls.description.setValue(
     //         this.userStudy.description
     //       );
-    //       this.userStudyForm.controls.startDate.setValue(
+    //       this.form.controls.startDate.setValue(
     //         this.userStudy.startDate
     //       );
-    //       this.userStudyForm.controls.endDate.setValue(this.userStudy.endDate);
-    //       this.userStudyForm.controls.redirectUrl.setValue(
+    //       this.form.controls.endDate.setValue(this.userStudy.endDate);
+    //       this.form.controls.redirectUrl.setValue(
     //         this.userStudy.redirectUrl
     //       );
     //     } else {
@@ -137,7 +163,7 @@ export class UserStudyCreatorComponent implements OnInit {
     //       };
     //       this.parts.push(firstPart);
     //       this.edit = true;
-    //       this.userStudyForm.enable();
+    //       this.form.enable();
     //     }
     //   });
   }
@@ -154,7 +180,7 @@ export class UserStudyCreatorComponent implements OnInit {
 
   editUserStudy() {
     this.edit = true;
-    this.userStudyForm.enable();
+    this.form.enable();
   }
 
   addNewPart() {
@@ -218,11 +244,11 @@ export class UserStudyCreatorComponent implements OnInit {
   }
 
   async saveUserStudy() {
-    this.userStudy.name = this.userStudyForm.controls.name.value;
-    this.userStudy.description = this.userStudyForm.controls.description.value;
-    this.userStudy.startDate = this.userStudyForm.controls.startDate.value;
-    this.userStudy.endDate = this.userStudyForm.controls.endDate.value;
-    this.userStudy.redirectUrl = this.userStudyForm.controls.redirectUrl.value;
+    this.userStudy.name = this.form.controls.name.value;
+    this.userStudy.description = this.form.controls.description.value;
+    this.userStudy.startDate = this.form.controls.validTimeRange.controls.start.value;
+    this.userStudy.endDate = this.form.controls.validTimeRange.controls.end.value;
+    this.userStudy.redirectUrl = this.form.controls.redirectUrl.value;
 
     this.userStudy.steps = [];
     for (const part of this.parts) {
@@ -243,6 +269,6 @@ export class UserStudyCreatorComponent implements OnInit {
 
     // this.userStudiesService.saveObject(this.userStudy);
 
-    await this.router.navigate(["/user-studies"], { relativeTo: this.route });
+    await this.router.navigate(['/user-studies'], { relativeTo: this.route });
   }
 }

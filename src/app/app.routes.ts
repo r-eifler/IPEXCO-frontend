@@ -52,6 +52,11 @@ export const appRoutes: Routes = [
     loadChildren: () => import('./iterative_planning/iterative-planning.module').then(m => m.IterativePlanningModule),
     canActivate: [AuthGuard],
   },
+  {
+    path: "user-study",
+    loadChildren: () => import('./user_study/user-study.module').then(m => m.UserStudyModule),
+    canActivate: [AuthGuard],
+  },
 
   // { path: "demos", component: DemoCollectionComponent },
   // { path: "demos/:demoid", component: DemoBaseComponent },
