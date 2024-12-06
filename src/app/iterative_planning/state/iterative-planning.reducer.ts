@@ -361,14 +361,14 @@ on(directResponseQT, (state, action): IterativePlanningState => ({
     visibleMessages: [...state.LLMContext.visibleMessages, {role: 'sender', content: action.directResponse, iterationStepId: state.selectedIterationStepId}]
   }
 })),
-on(showReverseTranslationGT, (state, action): IterativePlanningState => ({
+on(showReverseTranslationGT, (state, action): IterativePlanningState => ({ //TODO make it possible to disable it
   ...state,
   LLMContext: {
     ...state.LLMContext,
     visibleMessages: [...state.LLMContext.visibleMessages, {role: 'sender', content: "I understood the goal you described as : " + action.reverseTranslation, iterationStepId: state.selectedIterationStepId}]
   }
 })),
-on(showReverseTranslationQT, (state, action): IterativePlanningState => ({
+on(showReverseTranslationQT, (state, action): IterativePlanningState => ({ //TODO make it possible to disable it
   ...state,
   LLMContext: {
     ...state.LLMContext,

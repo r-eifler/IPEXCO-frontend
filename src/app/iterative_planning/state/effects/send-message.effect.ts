@@ -14,13 +14,13 @@ import { selectSatisfiedSoftGoals } from "src/app/iterative_planning/view/step-d
 import { selectEnforcedGoals } from "src/app/iterative_planning/view/step-detail-view/step-detail-view.component.selector";
 import { ExplanationInterfaceType } from "src/app/project/domain/general-settings";
 import { PlanRunStatus } from "src/app/iterative_planning/domain/plan";
-import { directResponseQT, loadLLMContext, loadLLMContextFailure, loadLLMContextSuccess, poseAnswer, poseAnswerLLM, questionPosed, questionPosedLLM, sendMessageToLLMExplanationTranslator, sendMessageToLLMExplanationTranslatorFailure, sendMessageToLLMExplanationTranslatorSuccess, sendMessageToLLMGoalTranslator, sendMessageToLLMGoalTranslatorFailure, sendMessageToLLMGoalTranslatorSuccess, sendMessageToLLMQTthenGTTranslators, sendMessageToLLMQTthenGTTranslatorsFailure, sendMessageToLLMQTthenGTTranslatorsSuccess } from "src/app/iterative_planning/state/iterative-planning.actions";
+import { directResponseQT, loadLLMContext, loadLLMContextFailure, loadLLMContextSuccess, poseAnswer, poseAnswerLLM, questionPosed, questionPosedLLM, sendMessageToLLMExplanationTranslator, sendMessageToLLMExplanationTranslatorFailure, sendMessageToLLMExplanationTranslatorSuccess, sendMessageToLLMGoalTranslator, sendMessageToLLMGoalTranslatorFailure, sendMessageToLLMGoalTranslatorSuccess, sendMessageToLLMQTthenGTTranslators, sendMessageToLLMQTthenGTTranslatorsFailure, sendMessageToLLMQTthenGTTranslatorsSuccess, showReverseTranslationGT, showReverseTranslationQT } from "src/app/iterative_planning/state/iterative-planning.actions";
 import { Question } from "src/app/iterative_planning/domain/interface/question";
 import { getComputedBase } from "../../domain/explanation/answer-factory";
 import { mapComputeBase } from "../../domain/explanation/answer-factory";
 import { QuestionType } from "src/app/iterative_planning/domain/explanation/explanations";
 @Injectable()
-export class SendMessageToLLMEffect{
+export class SendMessageToLLMEffect {
 
     private actions$ = inject(Actions)
     private service = inject(LLMService)
@@ -49,18 +49,18 @@ export class SendMessageToLLMEffect{
         map((goals) => !!goals?.length)
     );
 
-    
-  
+
+
     public sendMessageToGoalTranslator$ = createEffect(() => this.actions$.pipe(
         ofType(sendMessageToLLMGoalTranslator),
         concatLatestFrom(() => [
-            this.store.select(selectIterativePlanningProject), 
-            this.store.select(selectIterativePlanningProperties), 
+            this.store.select(selectIterativePlanningProject),
+            this.store.select(selectIterativePlanningProperties),
             this.store.select(selectLLMThreadIdGT)
         ]),
         switchMap(([action, project, properties, threadIdGT]) => {
             return this.service.postMessageGT$(action.goalDescription, project, Object.values(properties), threadIdGT).pipe(
-                map(({ response: { formula, shortName }, threadId }) => sendMessageToLLMGoalTranslatorSuccess({response: {formula, shortName}, threadId})),
+                map(({ response: { formula, shortName, reverseTranslation, feedback }, threadId }) => sendMessageToLLMGoalTranslatorSuccess({ response: { formula, shortName}, threadId })),
                 catchError(() => of(sendMessageToLLMGoalTranslatorFailure()))
             );
         })
@@ -95,32 +95,40 @@ export class SendMessageToLLMEffect{
 
     public sendMessageToQuestionAndGoalTranslator$ = createEffect(() => this.actions$.pipe(
         ofType(sendMessageToLLMQTthenGTTranslators),
-        concatLatestFrom(({question, iterationStepId}) => [
+        concatLatestFrom(({ question, iterationStepId }) => [
             this.store.select(selectIterativePlanningProject),
             this.store.select(selectIterativePlanningProperties),
             this.store.select(selectIterationStepbyId(iterationStepId)),
             this.store.select(selectLLMThreadIdGT),
             this.store.select(selectLLMThreadIdQT)
         ]),
-        switchMap(([{question, iterationStepId}, project, properties, iterationStep, threadIdGT, threadIdQT]) => {            
+        switchMap(([{ question, iterationStepId }, project, properties, iterationStep, threadIdGT, threadIdQT]) => {
             return this.service.postMessageQTthenGT$(question, iterationStep, project, Object.values(properties), threadIdQT, threadIdGT).pipe(
             ).pipe(
                 switchMap(response => 'directResponse' in response
-                    ? [sendMessageToLLMQTthenGTTranslatorsSuccess({threadIdQt: response.threadIdQt, threadIdGt: response.threadIdGt}), directResponseQT({directResponse: response.directResponse, threadIdQt: response.threadIdQt, threadIdGt: response.threadIdGt})]
-                    : [sendMessageToLLMQTthenGTTranslatorsSuccess({threadIdQt: response.threadIdQt, threadIdGt: response.threadIdGt}), questionPosedLLM({question: response.question, naturalLanguageQuestion: question})]),
+                    ? [
+                        sendMessageToLLMQTthenGTTranslatorsSuccess({ threadIdQt: response.threadIdQt, threadIdGt: response.threadIdGt }),
+                        directResponseQT({ directResponse: response.directResponse, threadIdQt: response.threadIdQt, threadIdGt: response.threadIdGt })
+                    ]
+                    : [
+                        sendMessageToLLMQTthenGTTranslatorsSuccess({ threadIdQt: response.threadIdQt, threadIdGt: response.threadIdGt }), 
+                        showReverseTranslationQT({ reverseTranslation: response.reverseTranslationQT, threadIdQt: response.threadIdQt }), 
+                        showReverseTranslationGT({ reverseTranslation: response.reverseTranslationGT, threadIdGt: response.threadIdGt }), 
+                        questionPosedLLM({ question: response.question, naturalLanguageQuestion: question })
+                    ]),
                 catchError(() => of(sendMessageToLLMQTthenGTTranslatorsFailure()))
             );
         })
-    ))        
+    ))
 
     public sendMessageToExplanationTranslator$ = createEffect(() => this.actions$.pipe(
         ofType(sendMessageToLLMExplanationTranslator),
-        concatLatestFrom(({question, explanation, question_type, questionArgument,iterationStepId}) => [
+        concatLatestFrom(({ question, explanation, question_type, questionArgument, iterationStepId }) => [
             this.store.select(selectLLMThreadIdET),
             this.store.select(selectIterativePlanningProject),
             this.store.select(selectIterativePlanningProperties),
             this.store.select(selectIterationStepbyId(iterationStepId))]),
-        switchMap(([{question, explanation, question_type, questionArgument, iterationStepId}, threadIdET, project, properties, iterationStep]) => {
+        switchMap(([{ question, explanation, question_type, questionArgument, iterationStepId }, threadIdET, project, properties, iterationStep]) => {
             return this.service.postMessageET$(question, explanation, question_type as QuestionType, questionArgument, iterationStep, project, Object.values(properties), threadIdET).pipe(
                 switchMap(response => [sendMessageToLLMExplanationTranslatorSuccess({ response: response.response, threadId: response.threadId })]),
                 catchError(() => of(sendMessageToLLMExplanationTranslatorFailure()))
@@ -130,8 +138,8 @@ export class SendMessageToLLMEffect{
 
     public loadLLMContext$ = createEffect(() => this.actions$.pipe(
         ofType(loadLLMContext),
-        switchMap(({projectId}) => this.service.getLLMContext$(projectId).pipe(
-            map(LLMContext => loadLLMContextSuccess({LLMContext})),
+        switchMap(({ projectId }) => this.service.getLLMContext$(projectId).pipe(
+            map(LLMContext => loadLLMContextSuccess({ LLMContext })),
             catchError(() => of(loadLLMContextFailure())),
         ))
     ))

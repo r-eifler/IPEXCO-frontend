@@ -30,7 +30,7 @@ export class LLMService {
     //     );
     // }
 
-    postMessageGT$(request: string, project: Project, properties: PlanProperty[], threadId: string): Observable<{ response: { formula: string, shortName: string }, threadId: string }> {
+    postMessageGT$(request: string, project: Project, properties: PlanProperty[], threadId: string): Observable<{ response: { formula: string, shortName: string, reverseTranslation: string, feedback: string }, threadId: string }> {
         const goalTranslationRequest: GoalTranslationRequest = {
             goalDescription: request,
             predicates: project.baseTask.model.predicates,
@@ -39,7 +39,7 @@ export class LLMService {
         };
         const requestString = goalTranslationRequestToString(goalTranslationRequest);
         console.log(requestString);
-        return this.http.post<IHTTPData<{ response: { formula: string, shortName: string }, threadId: string }>>(this.BASE_URL + 'gt', { data: requestString, threadId: threadId, originalRequest: request, projectId: project._id }).pipe(
+        return this.http.post<IHTTPData<{ response: { formula: string, shortName: string, reverseTranslation: string, feedback: string }, threadId: string }>>(this.BASE_URL + 'gt', { data: requestString, threadId: threadId, originalRequest: request, projectId: project._id }).pipe(
             map(({ data }) => data),
             tap(console.log)
         );
@@ -75,7 +75,7 @@ export class LLMService {
     }
 
     postMessageQTthenGT$(question: string, iterationStep: IterationStep, project: Project, properties: PlanProperty[], threadIdQt: string, threadIdGt: string): Observable<
-        | { gtResponse: string, qtResponse: string, threadIdQt: string, threadIdGt: string, questionType: QuestionType, goal: string, question: Question }
+        | { gtResponse: string, qtResponse: string, threadIdQt: string, threadIdGt: string, questionType: QuestionType, goal: string, question: Question, reverseTranslationQT: string, reverseTranslationGT: string }
         | { directResponse: string, threadIdQt: string, threadIdGt: string }
     > {
         console.log("Properties", properties);
@@ -105,7 +105,7 @@ export class LLMService {
 
         console.log(qtRequestString, gtRequestString);
         return this.http.post<IHTTPData<
-            | { gtResponse: string, qtResponse: string, threadIdQt: string, threadIdGt: string, questionType: QuestionType, goal: string, question: Question }
+            | { gtResponse: string, qtResponse: string, threadIdQt: string, threadIdGt: string, questionType: QuestionType, goal: string, question: Question, reverseTranslationQT: string, reverseTranslationGT: string }
             | { directResponse: string , threadIdQt: string, threadIdGt: string}
         >>(this.BASE_URL + 'qt-then-gt', { 
             qtRequest: qtRequestString, 
@@ -114,7 +114,7 @@ export class LLMService {
             threadIdQt, 
             threadIdGt, 
             iterationStepId: iterationStep._id, 
-            originalQuestion: question 
+            originalQuestion: question
         }).pipe(
             map(({ data }) => data),
             tap(console.log)
