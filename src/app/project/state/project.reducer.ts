@@ -32,7 +32,7 @@ export const projectReducer = createReducer(
     on(loadProject, (state): ProjectState => ({
         ...state,
         project: {state: LoadingState.Loading, data: undefined},
-        demo: null
+        demo: {state: LoadingState.Initial, data: undefined},
     })),
     on(loadProjectSuccess, (state, {project}): ProjectState => ({
         ...state,
@@ -70,7 +70,7 @@ export const projectReducer = createReducer(
     on(loadProjectDemosSuccess, (state, {demos}): ProjectState => ({
         ...state,
         demos: {state: LoadingState.Done, data: demos},
-        demo: state.demo.state == LoadingState.Done ?
+        demo: state?.demo.state == LoadingState.Done ?
             {state: LoadingState.Done, data: demos.find(demo => demo._id == state.demo.data._id)} :
             {state: LoadingState.Initial, data: undefined}
     })),

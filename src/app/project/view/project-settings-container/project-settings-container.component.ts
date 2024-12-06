@@ -58,10 +58,9 @@ export class ProjectSettingsContainerComponent implements OnInit {
       project => {
         let newProject: Project = {
           ...project,
-          settings
         }
+        newProject.settings = settings;
         this.store.dispatch(updateProject({project: newProject}))
-        // this.router.navigate(['/projects', project._id, 'overview'],);
       }
     )
   }
