@@ -78,6 +78,8 @@ import {LoadUserStudiesEffect} from './user_study/state/effects/load-user-studie
 import {UserStudyService} from './user_study/service/user-study.service';
 import {userStudyFeature, userStudyReducer} from './user_study/state/user-study.reducer';
 import {MatDatepicker} from '@angular/material/datepicker';
+import {LoadUserStudyDemosEffect} from './user_study/state/effects/load-demos.effect';
+import {UserStudyDemoService} from './user_study/service/user-study-demo.service';
 
 
 
@@ -125,6 +127,7 @@ import {MatDatepicker} from '@angular/material/datepicker';
         ComputeExplanationEffect,
         QuestionQueueEffect,
         LoadUserStudiesEffect,
+        LoadUserStudyDemosEffect,
     ]),
     // Instrumentation must be imported after importing StoreModule (config is optional)
     StoreDevtoolsModule.instrument({
@@ -165,6 +168,7 @@ import {MatDatepicker} from '@angular/material/datepicker';
     ExplainerMonitoringService,
     ProjectPlanPropertyService,
     UserStudyService,
+    UserStudyDemoService,
     {
       provide: MAT_BOTTOM_SHEET_DEFAULT_OPTIONS,
       useValue: { hasBackdrop: true },

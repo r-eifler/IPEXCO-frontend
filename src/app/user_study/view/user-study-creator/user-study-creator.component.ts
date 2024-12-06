@@ -38,6 +38,7 @@ import {
 import {BreadcrumbModule} from '../../../shared/components/breadcrumb/breadcrumb.module';
 import {Store} from '@ngrx/store';
 import {selectUserStudyDemos} from '../../state/user-study.selector';
+import {loadUserStudyDemos} from '../../state/user-study.actions';
 
 interface Part {
   index: number;
@@ -95,16 +96,9 @@ export class UserStudyCreatorComponent implements OnInit {
 
   edit = false;
 
-  constructor(
-    // private userStudiesService: UserStudiesService,
-    // private selectedUserStudyService: RunningUserStudyService,
-    // private domSanitizer: DomSanitizer,
-    // // private demosService: DemosService,
-    // private responsiveService: ResponsiveService,
-    private route: ActivatedRoute,
-    private router: Router
-  ) {
+  constructor() {
 
+    this.store.dispatch(loadUserStudyDemos());
 
     // this.selectedUserStudyService
     //   .getSelectedObject()
@@ -269,6 +263,6 @@ export class UserStudyCreatorComponent implements OnInit {
 
     // this.userStudiesService.saveObject(this.userStudy);
 
-    await this.router.navigate(['/user-studies'], { relativeTo: this.route });
+    // await this.router.navigate(['/user-studies'], { relativeTo: this.route });
   }
 }

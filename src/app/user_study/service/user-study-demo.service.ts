@@ -8,7 +8,7 @@ import { Demo } from "src/app/demo/domain/demo";
 import { PlanProperty } from "src/app/shared/domain/plan-property/plan-property";
 
 @Injectable()
-export class DemoService{
+export class UserStudyDemoService {
 
     private http = inject(HttpClient)
     private BASE_URL = environment.apiURL + "demo/";
@@ -18,7 +18,7 @@ export class DemoService{
       return this.http.get<IHTTPData<Demo>>(this.BASE_URL + id).pipe(
           map(({data}) => data),
           map(demo => ({
-              ...demo, 
+              ...demo,
               baseTask : {
                 ...demo.baseTask,
                 model: JSON.parse(demo.baseTask.model as unknown as string),
@@ -33,6 +33,29 @@ export class DemoService{
       )
     }
 
+
+  getAllDemos$(): Observable<Demo[]> {
+
+    return this.http.get<IHTTPData<Demo[]>>(this.BASE_URL + 'user-study/').pipe(
+      map(({data}) => data),
+      map(demos => (
+        demos.map( demo => ({
+            ...demo,
+            baseTask : {
+              ...demo.baseTask,
+              model: JSON.parse(demo.baseTask.model as unknown as string),
+            },
+            domainSpecification: JSON.parse(demo.domainSpecification as unknown as string),
+            globalExplanation : demo.globalExplanation ? {
+              ...demo.globalExplanation,
+              MUGS: demo.globalExplanation.MUGS ? JSON.parse(demo.globalExplanation.MUGS as unknown as string) : undefined,
+              MGCS: demo.globalExplanation.MGCS ? JSON.parse(demo.globalExplanation.MGCS as unknown as string) : undefined,
+            } : undefined
+          })
+        )),
+      ))
+  }
+
     getDemos$(projectId: string): Observable<Demo[]> {
 
         console.log("Demo service: getDemos");
@@ -44,7 +67,7 @@ export class DemoService{
             tap(console.log),
             map(demos => (
               demos.map( demo => ({
-                ...demo, 
+                ...demo,
                 baseTask : {
                     ...demo.baseTask,
                     model: JSON.parse(demo.baseTask.model as unknown as string),

@@ -3,7 +3,7 @@ import { Loadable, LoadingState } from 'src/app/shared/common/loadable.interface
 import { Creatable, CreationState } from 'src/app/shared/common/creatable.interface';
 import { UserStudy } from '../domain/user-study';
 import { Demo } from 'src/app/demo/domain/demo';
-import {loadUserStudies, loadUserStudiesSuccess} from './user-study.actions';
+import {loadUserStudies, loadUserStudiesSuccess, loadUserStudyDemos, loadUserStudyDemosSuccess} from './user-study.actions';
 
 export interface UserStudyState {
     userStudies: Loadable<UserStudy[]>;
@@ -29,5 +29,13 @@ export const userStudyReducer = createReducer(
     on(loadUserStudiesSuccess, (state, {userStudies}): UserStudyState => ({
         ...state,
         userStudies: {state: LoadingState.Done, data: userStudies},
+    })),
+    on(loadUserStudyDemos, (state): UserStudyState => ({
+      ...state,
+      demos: {state: LoadingState.Loading, data: undefined},
+    })),
+    on(loadUserStudyDemosSuccess, (state, {demos}): UserStudyState => ({
+      ...state,
+      demos: {state: LoadingState.Done, data: demos},
     })),
 );
