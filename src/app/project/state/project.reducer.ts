@@ -1,7 +1,7 @@
 import { createReducer, on } from "@ngrx/store";
 import { Project } from "../domain/project";
 import { Loadable, LoadingState } from "src/app/shared/common/loadable.interface";
-import { demoCreationRunningFailure, demoCreationRunningSuccess, loadDemoPlanPropertiesSuccess, loadPlanProperties, loadPlanPropertiesSuccess, loadProject, loadProjectDemos, loadProjectDemosSuccess, loadProjectSuccess, registerDemoCreation, registerDemoCreationSuccess, loadProjectDemo, updateProject, updateProjectSuccess, loadProjectDemoSuccess } from "./project.actions";
+import { demoCreationRunningFailure, demoCreationRunningSuccess, loadDemoPlanPropertiesSuccess, loadPlanProperties, loadPlanPropertiesSuccess, loadProject, loadProjectDemos, loadProjectDemosSuccess, loadProjectSuccess, registerDemoCreation, registerDemoCreationSuccess, loadProjectDemo, updateProject, updateProjectSuccess, loadProjectDemoSuccess, updateDemoSuccess } from "./project.actions";
 import { Demo } from "src/app/demo/domain/demo";
 import { PlanProperty } from "src/app/shared/domain/plan-property/plan-property";
 import { Creatable, CreationState } from "src/app/shared/common/creatable.interface";
@@ -66,11 +66,13 @@ export const projectReducer = createReducer(
     on(loadProjectDemos, (state): ProjectState => ({
         ...state,
         demos: {state: LoadingState.Loading, data: undefined},
-        demo: null
     })),
     on(loadProjectDemosSuccess, (state, {demos}): ProjectState => ({
         ...state,
-        demos: {state: LoadingState.Done, data: demos}
+        demos: {state: LoadingState.Done, data: demos},
+        demo: state.demo.state == LoadingState.Done ?
+            {state: LoadingState.Done, data: demos.find(demo => demo._id == state.demo.data._id)} :
+            {state: LoadingState.Initial, data: undefined}
     })),
     on(registerDemoCreation, (state, {demo}): ProjectState => ({
         ...state,
@@ -97,6 +99,10 @@ export const projectReducer = createReducer(
         demo: {state: LoadingState.Loading, data: undefined},
     })),
     on(loadProjectDemoSuccess, (state, {demo}): ProjectState => ({
+        ...state,
+        demo: {state: LoadingState.Done, data: demo},
+    })),
+    on(updateDemoSuccess, (state, {demo}): ProjectState => ({
         ...state,
         demo: {state: LoadingState.Done, data: demo},
     })),

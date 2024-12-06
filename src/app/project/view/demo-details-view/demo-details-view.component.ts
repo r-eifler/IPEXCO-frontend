@@ -42,12 +42,17 @@ export class DemoDetailsViewComponent {
 
   demo$ = this.store.select(selectProjectDemo)
   planProperties$: Observable<Record<string, PlanProperty>> = this.store.select(selectPlanPropertiesOfDemo)
-  planPropertiesList$ = this.store.select(selectPlanPropertiesOfDemo).pipe(
+  planPropertiesList$: Observable<PlanProperty[]> = this.store.select(selectPlanPropertiesOfDemo).pipe(
     map((planProperties) => Object.values(planProperties ?? {}))
   );
 
-  MUGS$ = this.demo$.pipe(map((demo) => demo?.globalExplanation?.MUGS));
-  MGCS$ = this.demo$.pipe(map((demo) => demo?.globalExplanation?.MGCS));
+  MUGS$: Observable<string[][]> = this.demo$.pipe(map((demo) => demo?.globalExplanation?.MUGS));
+  MGCS$: Observable<string[][]> = this.demo$.pipe(map((demo) => demo?.globalExplanation?.MGCS));
+
+  constructor(){
+    this.MUGS$.subscribe(MUGS => console.log(MUGS));
+  }
+
 
   onDelete(){
     this.demo$.pipe(take(1)).subscribe(demo => {

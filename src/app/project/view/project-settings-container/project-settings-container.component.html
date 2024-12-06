@@ -7,7 +7,6 @@
 
   <app-page-content class="container">
     <app-settings
-      [isProject]="true"
       [settings]="settings$ | async"
       (updatedSettings)="onSaveSetting($event)">
     </app-settings>

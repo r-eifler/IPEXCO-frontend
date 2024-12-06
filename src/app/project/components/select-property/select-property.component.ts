@@ -27,7 +27,7 @@ import { PropertyCreatorComponent } from "../../view/property-creator/property-c
 import { PlanProperty } from "src/app/shared/domain/plan-property/plan-property";
 
 @Component({
-  selector: "app-select-property",
+  selector: "app-demo-select-property",
   standalone: true,
   imports: [
     DialogModule,
