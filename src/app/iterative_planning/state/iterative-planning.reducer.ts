@@ -35,6 +35,8 @@ import {
     questionPosedLLM,
     selectIterationStep,
     sendMessageToLLMExplanationTranslator,
+    showReverseTranslationGT,
+    showReverseTranslationQT,
     updateNewIterationStep,
 } from "./iterative-planning.actions";
 import {
@@ -357,6 +359,20 @@ on(directResponseQT, (state, action): IterativePlanningState => ({
     threadIdQT: action.threadIdQt,
     threadIdGT: action.threadIdGt,
     visibleMessages: [...state.LLMContext.visibleMessages, {role: 'sender', content: action.directResponse, iterationStepId: state.selectedIterationStepId}]
+  }
+})),
+on(showReverseTranslationGT, (state, action): IterativePlanningState => ({
+  ...state,
+  LLMContext: {
+    ...state.LLMContext,
+    visibleMessages: [...state.LLMContext.visibleMessages, {role: 'sender', content: "I understood the goal you described as : " + action.reverseTranslation, iterationStepId: state.selectedIterationStepId}]
+  }
+})),
+on(showReverseTranslationQT, (state, action): IterativePlanningState => ({
+  ...state,
+  LLMContext: {
+    ...state.LLMContext,
+    visibleMessages: [...state.LLMContext.visibleMessages, {role: 'sender', content: "I understood your question as : " + action.reverseTranslation, iterationStepId: state.selectedIterationStepId}]
   }
 }))
 );
