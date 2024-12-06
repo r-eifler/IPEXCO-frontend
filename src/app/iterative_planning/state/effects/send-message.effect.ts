@@ -14,7 +14,7 @@ import { selectSatisfiedSoftGoals } from "src/app/iterative_planning/view/step-d
 import { selectEnforcedGoals } from "src/app/iterative_planning/view/step-detail-view/step-detail-view.component.selector";
 import { ExplanationInterfaceType } from "src/app/project/domain/general-settings";
 import { PlanRunStatus } from "src/app/iterative_planning/domain/plan";
-import { loadLLMContext, loadLLMContextFailure, loadLLMContextSuccess, poseAnswer, poseAnswerLLM, questionPosed, questionPosedLLM, sendMessageToLLMExplanationTranslator, sendMessageToLLMExplanationTranslatorFailure, sendMessageToLLMExplanationTranslatorSuccess, sendMessageToLLMGoalTranslator, sendMessageToLLMGoalTranslatorFailure, sendMessageToLLMGoalTranslatorSuccess, sendMessageToLLMQTthenGTTranslators, sendMessageToLLMQTthenGTTranslatorsFailure, sendMessageToLLMQTthenGTTranslatorsSuccess } from "src/app/iterative_planning/state/iterative-planning.actions";
+import { directResponseQT, loadLLMContext, loadLLMContextFailure, loadLLMContextSuccess, poseAnswer, poseAnswerLLM, questionPosed, questionPosedLLM, sendMessageToLLMExplanationTranslator, sendMessageToLLMExplanationTranslatorFailure, sendMessageToLLMExplanationTranslatorSuccess, sendMessageToLLMGoalTranslator, sendMessageToLLMGoalTranslatorFailure, sendMessageToLLMGoalTranslatorSuccess, sendMessageToLLMQTthenGTTranslators, sendMessageToLLMQTthenGTTranslatorsFailure, sendMessageToLLMQTthenGTTranslatorsSuccess } from "src/app/iterative_planning/state/iterative-planning.actions";
 import { Question } from "src/app/iterative_planning/domain/interface/question";
 import { getComputedBase } from "../../domain/explanation/answer-factory";
 import { mapComputeBase } from "../../domain/explanation/answer-factory";
@@ -105,7 +105,9 @@ export class SendMessageToLLMEffect{
         switchMap(([{question, iterationStepId}, project, properties, iterationStep, threadIdGT, threadIdQT]) => {            
             return this.service.postMessageQTthenGT$(question, iterationStep, project, Object.values(properties), threadIdQT, threadIdGT).pipe(
             ).pipe(
-                switchMap(response => [sendMessageToLLMQTthenGTTranslatorsSuccess({threadIdQt: response.threadIdQt, threadIdGt: response.threadIdGt}), questionPosedLLM({question: response.question, naturalLanguageQuestion: question})]),
+                switchMap(response => 'directResponse' in response
+                    ? [sendMessageToLLMQTthenGTTranslatorsSuccess({threadIdQt: response.threadIdQt, threadIdGt: response.threadIdGt}), directResponseQT({directResponse: response.directResponse, threadIdQt: response.threadIdQt, threadIdGt: response.threadIdGt})]
+                    : [sendMessageToLLMQTthenGTTranslatorsSuccess({threadIdQt: response.threadIdQt, threadIdGt: response.threadIdGt}), questionPosedLLM({question: response.question, naturalLanguageQuestion: question})]),
                 catchError(() => of(sendMessageToLLMQTthenGTTranslatorsFailure()))
             );
         })

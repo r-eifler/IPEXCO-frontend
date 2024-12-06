@@ -19,6 +19,7 @@ import {
     cancelNewIterationStep,
     createIterationStepSuccess,
     deselectIterationStep,
+    directResponseQT,
     eraseLLMHistory,
     initNewIterationStep,
     loadIterationSteps,
@@ -347,6 +348,17 @@ on(loadLLMContextSuccess, (state,action): IterativePlanningState=> ({
   ...state,
   LLMContext : action.LLMContext
 })),
+on(directResponseQT, (state, action): IterativePlanningState => ({
+  ...state,
+  LLMChatLoadingState: LoadingState.Done,
+  ExplanationLoadingState: LoadingState.Done,
+  LLMContext: {
+    ...state.LLMContext,
+    threadIdQT: action.threadIdQt,
+    threadIdGT: action.threadIdGt,
+    visibleMessages: [...state.LLMContext.visibleMessages, {role: 'sender', content: action.directResponse, iterationStepId: state.selectedIterationStepId}]
+  }
+}))
 );
 
 
