@@ -7,9 +7,8 @@ import {
   UserStudyStep,
   UserStudyStepType,
 } from '../../domain/user-study';
-import {FormBuilder, FormControl, FormsModule, ReactiveFormsModule, UntypedFormControl, UntypedFormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -18,27 +17,18 @@ import {MatOptionModule, provideNativeDateAdapter} from '@angular/material/core'
 import { MatSelectModule } from '@angular/material/select';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatInputModule } from '@angular/material/input';
-import {ActionCardComponent} from '../../../shared/components/action-card/action-card/action-card.component';
-import {AsyncPipe} from '@angular/common';
-import {BreadcrumbComponent} from '../../../shared/components/breadcrumb/breadcrumb/breadcrumb.component';
-import {BreadcrumbItemComponent} from '../../../shared/components/breadcrumb/breadcrumb-item/breadcrumb-item.component';
-import {PageComponent} from '../../../shared/components/page/page/page.component';
-import {PageContentComponent} from '../../../shared/components/page/page-content/page-content.component';
-import {PageTitleComponent} from '../../../shared/components/page/page-title/page-title.component';
-import {PageSectionListComponent} from '../../../shared/components/page/page-section-list/page-section-list.component';
 import {PageModule} from '../../../shared/components/page/page.module';
-import {
-  MatDatepicker,
-  MatDatepickerInput,
-  MatDatepickerModule,
-  MatDatepickerToggle,
-  MatDateRangeInput,
-  MatDateRangePicker
-} from '@angular/material/datepicker';
+import {MatDatepickerModule} from '@angular/material/datepicker';
 import {BreadcrumbModule} from '../../../shared/components/breadcrumb/breadcrumb.module';
 import {Store} from '@ngrx/store';
 import {selectUserStudyDemos} from '../../state/user-study.selector';
-import {loadUserStudyDemos} from '../../state/user-study.actions';
+import {createUserStudy, loadUserStudyDemos} from '../../state/user-study.actions';
+import {AsyncPipe} from '@angular/common';
+import {DescriptionCardComponent} from '../../components/description-card/description-card.component';
+import {DemoCardComponent} from '../../components/demo-card/demo-card.component';
+import {FormCardComponent} from '../../components/form-card/form-card.component';
+import {selectedAtLeastOne} from '../../../validators/selected-at-least-one.validator';
+import {isNoPropertyNull} from '../../../validators/no-property-null.validator';
 
 interface Part {
   index: number;
@@ -67,16 +57,22 @@ interface Part {
     ReactiveFormsModule,
     BreadcrumbModule,
     RouterLink,
-    MatDatepickerModule
+    MatDatepickerModule,
+    AsyncPipe,
+    DescriptionCardComponent,
+    DemoCardComponent,
+    FormCardComponent
   ],
   templateUrl: './user-study-creator.component.html',
   styleUrls: ['./user-study-creator.component.scss'],
 })
-export class UserStudyCreatorComponent implements OnInit {
+export class UserStudyCreatorComponent {
 
   userStudyStepType = UserStudyStepType;
   store = inject(Store)
   fb = inject(FormBuilder);
+  router = inject(Router);
+  route = inject(ActivatedRoute);
 
   demos$ = this.store.select(selectUserStudyDemos)
 
@@ -91,178 +87,66 @@ export class UserStudyCreatorComponent implements OnInit {
       end: this.fb.control<Date | null>(null, [Validators.required]),
     }),
     redirectUrl: this.fb.control('', []),
+    steps: this.fb.array<UserStudyStep>([], [selectedAtLeastOne])
   });
 
+  steps$ = this.form.controls.steps.valueChanges;
 
   edit = false;
 
   constructor() {
-
     this.store.dispatch(loadUserStudyDemos());
-
-    // this.selectedUserStudyService
-    //   .getSelectedObject()
-    //   .pipe(
-    //     takeUntilDestroyed())
-    //   .subscribe((study) => {
-    //     if (study) {
-    //       this.userStudy = study;
-    //       let index = 0;
-    //       for (const step of this.userStudy.steps) {
-    //         const nextStep: Part = {
-    //           type: step.type,
-    //           index: index++,
-    //           active: false,
-    //         };
-    //         switch (step.type) {
-    //           case UserStudyStepType.description:
-    //             nextStep.content = step.content;
-    //             break;
-    //           case UserStudyStepType.form:
-    //             nextStep.url = step.content;
-    //             break;
-    //           case UserStudyStepType.demo:
-    //             // demosService
-    //             //   .getObject(step.content)
-    //             //   .subscribe((d) => (nextStep.demo = d));
-    //             break;
-    //         }
-    //         this.parts.push(nextStep);
-    //         this.form.disable();
-    //       }
-    //       this.form.controls.name.setValue(this.userStudy.name);
-    //       this.form.controls.description.setValue(
-    //         this.userStudy.description
-    //       );
-    //       this.form.controls.startDate.setValue(
-    //         this.userStudy.startDate
-    //       );
-    //       this.form.controls.endDate.setValue(this.userStudy.endDate);
-    //       this.form.controls.redirectUrl.setValue(
-    //         this.userStudy.redirectUrl
-    //       );
-    //     } else {
-    //       this.userStudy = {
-    //         updated: new Date().toLocaleString(),
-    //         name: "",
-    //         description: "",
-    //         user: null,
-    //         available: false,
-    //         redirectUrl: "",
-    //       };
-    //       const firstPart: Part = {
-    //         index: 0,
-    //         active: true,
-    //         type: UserStudyStepType.description,
-    //       };
-    //       this.parts.push(firstPart);
-    //       this.edit = true;
-    //       this.form.enable();
-    //     }
-    //   });
   }
 
-  ngOnInit(): void {
-    // this.responsiveService
-    //   .getMobileStatus()
-    //   .pipe(takeUntilDestroyed())
-    //   .subscribe((isMobile) => {
-    //     this.isMobile = isMobile;
-    //   });
-    // this.responsiveService.checkWidth();
-  }
-
-  editUserStudy() {
-    this.edit = true;
-    this.form.enable();
-  }
-
-  addNewPart() {
-    const newPart: Part = {
-      index: this.parts.length,
-      active: true,
-      type: UserStudyStepType.description,
+  addNewStep(type: UserStudyStepType) {
+    const newPart: UserStudyStep = {
+      type,
+      content: null
     };
-
-    this.parts.push(newPart);
-
-    this.activate(null, newPart.index);
+    this.form.controls.steps.push(this.fb.control<UserStudyStep>(newPart, [isNoPropertyNull]));
   }
 
-  deletePart(part: Part) {
-    this.parts = this.parts.map((p) => {
-      p.index = p.index > part.index ? p.index - 1 : p.index;
-      return p;
-    });
-    this.parts.splice(part.index, 1);
+  updateControl(control: FormControl<UserStudyStep>, step: UserStudyStep) {
+    console.log(step);
+    control.setValue(step);
   }
 
-  moveUp(part: Part) {
-    const switchPart = this.parts[part.index - 1];
-    switchPart.index++;
-    part.index--;
-    this.parts[switchPart.index] = switchPart;
-    this.parts[part.index] = part;
+  deleteStep(index: number) {
+    this.form.controls.steps.removeAt(index);
   }
 
-  moveDown(part: Part) {
-    const switchPart = this.parts[part.index + 1];
-    switchPart.index--;
-    part.index++;
-    this.parts[switchPart.index] = switchPart;
-    this.parts[part.index] = part;
-  }
-
-  activate(event, index: number) {
-    if (!this.edit) {
+  moveUp(index: number){
+    if(index === 0){
       return;
     }
-    this.parts = this.parts.map((p) => {
-      p.active = p.index === index;
-      return p;
-    });
-    event?.stopPropagation();
+    const value: UserStudyStep = this.form .controls.steps.controls[index].value;
+    console.log(value);
+    this.form .controls.steps.removeAt(index);
+    this.form.controls.steps.insert(index - 1, this.fb.control<UserStudyStep>(value));
   }
 
-  deactivateAll() {
-    this.parts = this.parts.map((p) => {
-      p.active = false;
-      return p;
-    });
-  }
-
-  makeTrustedURL(url: string) {
-    // return this.domSanitizer.bypassSecurityTrustResourceUrl(
-    //   url + "?embedded=true"
-    // );
-  }
-
-  async saveUserStudy() {
-    this.userStudy.name = this.form.controls.name.value;
-    this.userStudy.description = this.form.controls.description.value;
-    this.userStudy.startDate = this.form.controls.validTimeRange.controls.start.value;
-    this.userStudy.endDate = this.form.controls.validTimeRange.controls.end.value;
-    this.userStudy.redirectUrl = this.form.controls.redirectUrl.value;
-
-    this.userStudy.steps = [];
-    for (const part of this.parts) {
-      const nextStep: UserStudyStep = {type: part.type, content: null};
-      switch (part.type) {
-        case UserStudyStepType.description:
-          nextStep.content = part.content;
-          break;
-        case UserStudyStepType.form:
-          nextStep.content = part.url;
-          break;
-        case UserStudyStepType.demo:
-          nextStep.content = part.demo._id;
-          break;
-      }
-    this.userStudy.steps.push(nextStep);
+  moveDown(index: number){
+    if(index === this.form.controls.steps.length - 1) {
+      return;
     }
+    const value: UserStudyStep = this.form .controls.steps.controls[index].value;
+    console.log(value);
+    this.form .controls.steps.removeAt(index);
+    this.form.controls.steps.insert(index + 1, this.fb.control<UserStudyStep>(value));
+  }
 
-    // this.userStudiesService.saveObject(this.userStudy);
 
-    // await this.router.navigate(['/user-studies'], { relativeTo: this.route });
+  save() {
+    const userStudy: UserStudy = {
+      name: this.form.controls.name.value,
+      description: this.form.controls.description.value,
+      startDate: this.form.controls.validTimeRange.controls.start.value,
+      endDate: this.form.controls.validTimeRange.controls.end.value,
+      redirectUrl: this.form.controls.redirectUrl.value,
+      steps: this.form.controls.steps.value
+    };
+
+    this.store.dispatch(createUserStudy({userStudy}));
+    this.router.navigate(['..'], {relativeTo: this.route});
   }
 }

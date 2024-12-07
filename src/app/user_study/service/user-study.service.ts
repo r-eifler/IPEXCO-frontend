@@ -14,6 +14,12 @@ export class UserStudyService{
   private http = inject(HttpClient);
   private BASE_URL = environment.apiURL + 'user-study';
 
+  postUserStudies$(userStudy: UserStudy): Observable<UserStudy> {
+    return this.http.post<IHTTPData<UserStudy>>(this.BASE_URL, {data: userStudy}).pipe(
+      map(({data}) => data),
+    )
+  }
+
   getUserStudies$(): Observable<UserStudy[]> {
     return this.http.get<IHTTPData<UserStudy[]>>(this.BASE_URL).pipe(
       map(({data}) => data),

@@ -80,6 +80,7 @@ import {userStudyFeature, userStudyReducer} from './user_study/state/user-study.
 import {MatDatepicker} from '@angular/material/datepicker';
 import {LoadUserStudyDemosEffect} from './user_study/state/effects/load-demos.effect';
 import {UserStudyDemoService} from './user_study/service/user-study-demo.service';
+import {CreateUserStudyEffect} from './user_study/state/effects/create-user-study.effect';
 
 
 
@@ -128,6 +129,7 @@ import {UserStudyDemoService} from './user_study/service/user-study-demo.service
         QuestionQueueEffect,
         LoadUserStudiesEffect,
         LoadUserStudyDemosEffect,
+        CreateUserStudyEffect,
     ]),
     // Instrumentation must be imported after importing StoreModule (config is optional)
     StoreDevtoolsModule.instrument({

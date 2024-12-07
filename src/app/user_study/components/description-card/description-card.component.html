@@ -1,0 +1,34 @@
+  <mat-card appearance="outlined">
+    <mat-card-header>
+      <mat-card-title
+        >Description
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="content">
+      <form [formGroup]="form">
+        <mat-tab-group>
+          <mat-tab label="Text">
+            <mat-form-field class="full-width" appearance="outline">
+              <mat-label>Description for the user study participants</mat-label>
+              <textarea matInput formControlName="description"></textarea>
+            </mat-form-field>
+          </mat-tab>
+          <mat-tab label="Preview">
+            <div [innerHTML]="description$ | async | marked" class="content">
+            </div>
+          </mat-tab>
+        </mat-tab-group>
+      </form>
+    </mat-card-content>
+    <mat-card-actions align="end">
+      <button mat-icon-button (click)="deletePart()">
+        <mat-icon>delete</mat-icon>
+      </button>
+      <button mat-icon-button (click)="moveUp()" [disabled]="first()">
+        <mat-icon>keyboard_arrow_up</mat-icon>
+      </button>
+      <button mat-icon-button (click)="moveDown()" [disabled]="last()">
+        <mat-icon>keyboard_arrow_down</mat-icon>
+      </button>
+    </mat-card-actions>
+  </mat-card>

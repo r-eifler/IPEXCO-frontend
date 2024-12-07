@@ -1,14 +1,18 @@
-import { Pipe, PipeTransform } from "@angular/core";
-import * as marked from "marked";
+import {inject, Pipe, PipeTransform, SecurityContext} from '@angular/core';
+import * as marked from 'marked';
+import {DomSanitizer} from '@angular/platform-browser';
 
 @Pipe({
-  name: "marked",
+  name: 'marked',
   standalone: true,
 })
 export class MarkedPipe implements PipeTransform {
+  domSanitizer = inject(DomSanitizer);
+
   transform(value: string, ...args: unknown[]): unknown {
     if (value && value.length > 0) {
-      return marked.marked(value);
+      const sanitizedValue = this.domSanitizer.sanitize(SecurityContext.HTML, value);
+      return marked.marked(sanitizedValue);
     }
     return value;
   }
