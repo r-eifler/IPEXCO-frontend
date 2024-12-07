@@ -1,0 +1,32 @@
+<mat-card appearance="outlined">
+  <mat-card-header>
+    <mat-card-title>{{ userStudy()?.name }}</mat-card-title>
+    <mat-card-subtitle>
+    </mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content>
+    <div class="content">
+      <div class="stats">
+
+        <mat-icon>today</mat-icon>
+        <span class="property-label">Time:</span>
+        <span class="property-value">{{ userStudy()?.startDate | date }} - {{ userStudy()?.endDate | date }} </span>
+
+        <mat-icon>groups</mat-icon>
+        <span class="property-label">Participants:</span>
+        <span class="property-value">?</span>
+      </div>
+    </div>
+  </mat-card-content>
+
+  <mat-card-actions>
+    <div class="action-container">
+      <a class="details" mat-stroked-button (click)="onDetails()">Details</a>
+      <button mat-icon-button
+              matTooltip="Perform iterative planning in the userStudy."
+              (click)="onRun()"
+      ><mat-icon>play_arrow</mat-icon></button>
+    </div>
+  </mat-card-actions>
+</mat-card>

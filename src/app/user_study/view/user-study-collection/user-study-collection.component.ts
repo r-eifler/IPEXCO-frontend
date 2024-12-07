@@ -22,6 +22,7 @@ import {PageTitleComponent} from '../../../shared/components/page/page-title/pag
 import {BreadcrumbComponent} from '../../../shared/components/breadcrumb/breadcrumb/breadcrumb.component';
 import {BreadcrumbItemComponent} from '../../../shared/components/breadcrumb/breadcrumb-item/breadcrumb-item.component';
 import {DemoCardComponent} from '../../../project/components/demo-card/demo-card.component';
+import {UserStudyCardComponent} from '../../components/user-study-card/user-study-card.component';
 
 @Component({
   selector: 'app-user-study-collection',
@@ -39,6 +40,7 @@ import {DemoCardComponent} from '../../../project/components/demo-card/demo-card
     PageTitleComponent,
     BreadcrumbComponent,
     BreadcrumbItemComponent,
+    UserStudyCardComponent,
   ],
   templateUrl: './user-study-collection.component.html',
   styleUrls: ['./user-study-collection.component.scss'],
