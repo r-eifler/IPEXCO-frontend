@@ -18,6 +18,9 @@ export interface UserStudy {
   available?: boolean;
   redirectUrl: string;
   description: string;
+  project: string;
+  expectation: string;
+  confidentiality: string;
   startDate?: Date;
   endDate?: Date;
   steps?: UserStudyStep[];

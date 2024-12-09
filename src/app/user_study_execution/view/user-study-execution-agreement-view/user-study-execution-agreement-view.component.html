@@ -1,0 +1,46 @@
+@let userStudy = userStudy$ | async;
+
+<app-page>
+  <app-page-title>
+    Informed Consent
+  </app-page-title>
+  <app-page-content>
+    <app-page-section-list>
+        <app-page-section>
+          <app-page-section-title>
+            Project
+          </app-page-section-title>
+          <app-page-section-content>
+            TODO
+          </app-page-section-content>
+        </app-page-section>
+        <app-page-section>
+          <app-page-section-title>
+            Expectation
+          </app-page-section-title>
+          <app-page-section-content>
+            TODO
+          </app-page-section-content>
+        </app-page-section>
+        <app-page-section>
+          <app-page-section-title>
+            Withdraw & Confidentiality
+          </app-page-section-title>
+          <app-page-section-content>
+            TODO
+          </app-page-section-content>
+        </app-page-section>
+        <app-page-section>
+          <app-page-section-title>
+            Consent
+          </app-page-section-title>
+          <app-page-section-content>
+            <div class="consent-box">
+              <span class="highlight">I have read and understood the information above and I freely agree to participate in this research study.</span>
+              <button mat-flat-button (click)="onAccept()">Accept</button>
+            </div>
+          </app-page-section-content>
+        </app-page-section>
+    </app-page-section-list>
+  </app-page-content>
+</app-page>

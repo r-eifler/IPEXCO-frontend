@@ -33,7 +33,9 @@ export class UserStudyCardComponent {
 
   userStudy = input.required<UserStudy>();
 
-  onRun(){}
+  onRun(){
+    this.router.navigate(['user-study-execution', this.userStudy()._id]);
+  }
 
   onDetails(){
     this.router.navigate(['user-study', this.userStudy()._id, 'details']);
