@@ -1,7 +1,4 @@
-import {Component, inject, OnDestroy, OnInit} from '@angular/core';
-import { Observable, Subject } from 'rxjs';
-import { Demo } from '../../../demo/domain/demo';
-import { DomSanitizer } from '@angular/platform-browser';
+import {Component, inject} from '@angular/core';
 import {
   UserStudy,
   UserStudyStep,
@@ -12,7 +9,6 @@ import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
-import { MarkedPipe } from 'src/app/pipes/marked.pipe';
 import {MatOptionModule, provideNativeDateAdapter} from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -30,14 +26,6 @@ import {FormCardComponent} from '../../components/form-card/form-card.component'
 import {selectedAtLeastOne} from '../../../validators/selected-at-least-one.validator';
 import {isNoPropertyNull} from '../../../validators/no-property-null.validator';
 
-interface Part {
-  index: number;
-  active: boolean;
-  type: UserStudyStepType;
-  content?: string;
-  url?: string;
-  demo?: Demo;
-}
 
 @Component({
   selector: 'app-user-study-creator',
@@ -48,7 +36,6 @@ interface Part {
     MatIconModule,
     MatCardModule,
     MatButtonModule,
-    MarkedPipe,
     MatOptionModule,
     MatSelectModule,
     FormsModule,
@@ -76,9 +63,6 @@ export class UserStudyCreatorComponent {
 
   demos$ = this.store.select(selectUserStudyDemos)
 
-  userStudy: UserStudy;
-  parts: Part[] = [];
-
   form = this.fb.group({
     name: this.fb.control<string>('', [Validators.required]),
     description: this.fb.control<string>('', [Validators.required]),
@@ -92,8 +76,6 @@ export class UserStudyCreatorComponent {
 
   steps$ = this.form.controls.steps.valueChanges;
 
-  edit = false;
-
   constructor() {
     this.store.dispatch(loadUserStudyDemos());
   }
@@ -101,13 +83,14 @@ export class UserStudyCreatorComponent {
   addNewStep(type: UserStudyStepType) {
     const newPart: UserStudyStep = {
       type,
+      name: null,
       content: null
     };
     this.form.controls.steps.push(this.fb.control<UserStudyStep>(newPart, [isNoPropertyNull]));
   }
 
   updateControl(control: FormControl<UserStudyStep>, step: UserStudyStep) {
-    console.log(step);
+    // console.log(step);
     control.setValue(step);
   }
 
@@ -145,6 +128,8 @@ export class UserStudyCreatorComponent {
       redirectUrl: this.form.controls.redirectUrl.value,
       steps: this.form.controls.steps.value
     };
+
+    console.log(userStudy);
 
     this.store.dispatch(createUserStudy({userStudy}));
     this.router.navigate(['..'], {relativeTo: this.route});

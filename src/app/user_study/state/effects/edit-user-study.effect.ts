@@ -2,24 +2,24 @@ import {inject, Injectable} from '@angular/core';
 import {Actions, createEffect, ofType} from '@ngrx/effects';
 import {of} from 'rxjs';
 import {
-  createUserStudy, createUserStudyFailure,
-  createUserStudySuccess
+  editUserStudy, editUserStudyFailure,
+  editUserStudySuccess, loadUserStudy
 } from '../user-study.actions';
 import {switchMap, catchError} from 'rxjs/operators';
 import {UserStudyService} from '../../service/user-study.service';
 
 
 @Injectable()
-export class CreateUserStudyEffect{
+export class EditUserStudyEffect{
 
     private actions$ = inject(Actions)
     private service = inject(UserStudyService)
 
-    public createUserStudy$ = createEffect(() => this.actions$.pipe(
-        ofType(createUserStudy),
-        switchMap(({userStudy}) => this.service.postUserStudy$(userStudy).pipe(
-            switchMap(userStudy => [createUserStudySuccess({userStudy})]),
-            catchError(() => of(createUserStudyFailure()))
+    public editUserStudy$ = createEffect(() => this.actions$.pipe(
+        ofType(editUserStudy),
+        switchMap(({userStudy}) => this.service.putUserStudy$(userStudy).pipe(
+            switchMap(userStudy => [editUserStudySuccess({userStudy})]),
+            catchError(() => of(editUserStudyFailure()))
         ))
     ))
 }

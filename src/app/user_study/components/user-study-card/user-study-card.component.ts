@@ -1,4 +1,4 @@
-import {Component, input} from '@angular/core';
+import {Component, inject, input} from '@angular/core';
 import {DemoStatusColorPipe} from '../../../project/pipe/demo-status-color.pipe';
 import {DemoStatusNamePipe} from '../../../project/pipe/demo-status-name.pipe';
 import {LabelComponent} from '../../../shared/components/label/label/label.component';
@@ -8,6 +8,7 @@ import {MatIcon} from '@angular/material/icon';
 import {MatTooltip} from '@angular/material/tooltip';
 import {UserStudy} from '../../domain/user-study';
 import {DatePipe} from '@angular/common';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'app-user-study-card',
@@ -28,10 +29,14 @@ import {DatePipe} from '@angular/common';
 })
 export class UserStudyCardComponent {
 
+  router = inject(Router);
+
   userStudy = input.required<UserStudy>();
 
   onRun(){}
 
-  onDetails(){}
+  onDetails(){
+    this.router.navigate(['user-study', this.userStudy()._id, 'details']);
+  }
 
 }

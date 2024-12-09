@@ -33,7 +33,8 @@ export class DescriptionCardComponent implements OnInit{
   fb = inject(FormBuilder);
 
   form = this.fb.group({
-    description: ['', [Validators.required, Validators.minLength(1)]]
+    name: this.fb.control<string>(null, [Validators.required]),
+    description: this.fb.control<string>(null, [Validators.required, Validators.minLength(1)])
   })
 
   step = input.required<UserStudyStep>();
@@ -48,16 +49,18 @@ export class DescriptionCardComponent implements OnInit{
   delete = output<void>();
 
   constructor() {
-    this.description$.pipe(takeUntilDestroyed()).subscribe(
-      newContent => this.changes.emit({
+    this.form.valueChanges.pipe(takeUntilDestroyed()).subscribe(
+      data => this.changes.emit({
         type: this.step().type,
-        content: newContent
+        name: data.name,
+        content: data.description
       })
     );
   }
 
   ngOnInit(): void {
-    this.form.controls.description.setValue(this.step().content)
+    this.form.controls.name.setValue(this.step().name);
+    this.form.controls.description.setValue(this.step().content);
   }
 
   moveUp() {

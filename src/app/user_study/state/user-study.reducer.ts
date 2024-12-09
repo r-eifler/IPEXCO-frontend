@@ -3,12 +3,21 @@ import { Loadable, LoadingState } from 'src/app/shared/common/loadable.interface
 import { Creatable, CreationState } from 'src/app/shared/common/creatable.interface';
 import { UserStudy } from '../domain/user-study';
 import { Demo } from 'src/app/demo/domain/demo';
-import {loadUserStudies, loadUserStudiesSuccess, loadUserStudyDemos, loadUserStudyDemosSuccess} from './user-study.actions';
+import {
+  editUserStudy, editUserStudySuccess,
+  loadUserStudies,
+  loadUserStudiesSuccess,
+  loadUserStudy,
+  loadUserStudyDemos,
+  loadUserStudyDemosSuccess,
+  loadUserStudySuccess
+} from './user-study.actions';
 
 export interface UserStudyState {
     userStudies: Loadable<UserStudy[]>;
     createdUserStudy: Creatable<UserStudy>;
     demos: Loadable<Demo[]>;
+    userStudy: Loadable<UserStudy>;
 }
 
 export const userStudyFeature = 'user-study';
@@ -17,6 +26,7 @@ const initialState: UserStudyState = {
     userStudies: {state: LoadingState.Initial, data: undefined},
     createdUserStudy: {state: CreationState.Default, data: undefined},
     demos: {state: LoadingState.Initial, data: undefined},
+    userStudy: {state: LoadingState.Initial, data: undefined},
 }
 
 
@@ -37,5 +47,21 @@ export const userStudyReducer = createReducer(
     on(loadUserStudyDemosSuccess, (state, {demos}): UserStudyState => ({
       ...state,
       demos: {state: LoadingState.Done, data: demos},
+    })),
+    on(loadUserStudy, (state): UserStudyState => ({
+      ...state,
+      userStudy: {state: LoadingState.Loading, data: undefined}
+    })),
+    on(loadUserStudySuccess, (state, {userStudy}): UserStudyState => ({
+      ...state,
+      userStudy: {state: LoadingState.Done, data: userStudy},
+    })),
+    on(editUserStudy, (state): UserStudyState => ({
+      ...state,
+      userStudy: {state: LoadingState.Loading, data: undefined}
+    })),
+    on(editUserStudySuccess, (state, {userStudy}): UserStudyState => ({
+      ...state,
+      userStudy: {state: LoadingState.Done, data: userStudy},
     })),
 );

@@ -6,8 +6,12 @@
     </mat-card-header>
     <mat-card-content class="content">
       <form [formGroup]="form">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Name</mat-label>
+          <input matInput formControlName="name">
+        </mat-form-field>
         <mat-tab-group>
-          <mat-tab label="Text">
+          <mat-tab label="Write">
             <mat-form-field class="full-width" appearance="outline">
               <mat-label>Description for the user study participants</mat-label>
               <textarea matInput formControlName="description"></textarea>

@@ -16,9 +16,9 @@ export const loadUserStudy = createAction('[UserStudy] load user study', props<{
 export const loadUserStudySuccess = createAction('[UserStudy] load user study success', props<{userStudy: UserStudy}>());
 export const loadUserStudyFailure = createAction('[UserStudy] load user study failure');
 
-export const updateUserStudy = createAction('[UserStudy] update user study', props<{userStudy: UserStudy}>());
-export const updateUserStudySuccess = createAction('[UserStudy] update user study success', props<{userStudy: UserStudy}>());
-export const updateUserStudyFailure = createAction('[UserStudy] update user study failure');
+export const editUserStudy = createAction('[UserStudy] edit user study', props<{userStudy: UserStudy}>());
+export const editUserStudySuccess = createAction('[UserStudy] edit user study success', props<{userStudy: UserStudy}>());
+export const editUserStudyFailure = createAction('[UserStudy] edit user study failure');
 
 export const deleteUserStudy = createAction('[UserStudy] delete user study', props<{id: string}>());
 export const deleteUserStudySuccess = createAction('[UserStudy] delete user study success');

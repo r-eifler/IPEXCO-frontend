@@ -34,6 +34,7 @@ export class FormCardComponent implements OnInit {
   domSanitizer = inject(DomSanitizer);
 
   form = this.fb.group({
+    name: this.fb.control<string>(null, [Validators.required]),
     url: this.fb.control<string | null>('', [Validators.required,  Validators.minLength(1)]),
   })
 
@@ -51,15 +52,17 @@ export class FormCardComponent implements OnInit {
   delete = output<void>();
 
   constructor() {
-    this.url$.pipe(takeUntilDestroyed()).subscribe(
-      newContent => this.changes.emit({
+    this.form.valueChanges.pipe(takeUntilDestroyed()).subscribe(
+      data => this.changes.emit({
         type: this.step().type,
-        content: this.domSanitizer.sanitize(SecurityContext.URL, newContent)
-      } as UserStudyStep)
+        name: data.name,
+        content: data.url
+      })
     );
   }
 
   ngOnInit(): void {
+    this.form.controls.name.setValue(this.step().name);
     this.form.controls.url.setValue(this.step().content)
   }
 

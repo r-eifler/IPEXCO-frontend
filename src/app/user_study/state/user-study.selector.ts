@@ -7,3 +7,5 @@ const selectUserStudyFeature = createFeatureSelector<UserStudyState>(userStudyFe
 export const selectUserStudies = createSelector(selectUserStudyFeature, (state) => state.userStudies?.data)
 
 export const selectUserStudyDemos = createSelector(selectUserStudyFeature, (state) => state.demos.data)
+
+export const selectUserStudy = createSelector(selectUserStudyFeature, (state) => state.userStudy?.data)

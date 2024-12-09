@@ -22,7 +22,8 @@ import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
     MatLabel,
     ReactiveFormsModule,
     MatSelect,
-    MatOption
+    MatOption,
+    MatInput
   ],
   templateUrl: './demo-card.component.html',
   styleUrl: './demo-card.component.scss'
@@ -32,7 +33,8 @@ export class DemoCardComponent {
   fb = inject(FormBuilder);
 
   form = this.fb.group({
-    demo: ['', Validators.required],
+    name: this.fb.control<string>(null, [Validators.required]),
+    demo: this.fb.control<string>(null, Validators.required),
   })
 
   step = input.required<UserStudyStep>();
@@ -48,16 +50,18 @@ export class DemoCardComponent {
   delete = output<void>();
 
   constructor() {
-    this.demo$.pipe(takeUntilDestroyed()).subscribe(
-      newContent => this.changes.emit({
+    this.form.valueChanges.pipe(takeUntilDestroyed()).subscribe(
+      data => this.changes.emit({
         type: this.step().type,
-        content: newContent
+        name: data.name,
+        content: data.demo
       })
     );
   }
 
   ngOnInit(): void {
-    this.form.controls.demo.setValue(this.step().content)
+    this.form.controls.name.setValue(this.step().name);
+    this.form.controls.demo.setValue(this.step().content);
   }
 
   moveUp() {

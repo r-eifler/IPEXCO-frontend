@@ -6,6 +6,10 @@
   </mat-card-header>
   <mat-card-content class="content">
     <form [formGroup]="form">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Name</mat-label>
+        <input matInput formControlName="name">
+      </mat-form-field>
       <mat-form-field class="full-width" appearance="outline">
         <mat-label>Link to form</mat-label>
         <input matInput formControlName="url">
