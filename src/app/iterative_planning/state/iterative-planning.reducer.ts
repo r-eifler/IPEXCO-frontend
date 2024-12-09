@@ -1,6 +1,5 @@
 import { createReducer, on } from "@ngrx/store";
 import { map, pipe, reduce } from "ramda";
-import { Project } from "src/app/project/domain/project";
 import {
     Loadable,
     LoadingState,
@@ -46,6 +45,7 @@ import {
   sendMessageToLLMQTthenGTTranslatorsFailure,
 } from "./iterative-planning.actions";
 import { LLMContext } from "src/app/LLM/domain/context";
+import { Project } from "src/app/shared/domain/project";
 
 type messageType = ExplanationMessage['message'];
 export type Message = (Omit<ExplanationMessage, 'message'> & { message?: messageType });

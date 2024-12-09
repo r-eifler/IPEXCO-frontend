@@ -88,9 +88,9 @@
 </app-dialog>
 
 <ng-template #propertySelector>
-  <app-select-property
+  <app-demo-select-property
     [properties]="availableProperties$ | async"
     (cancel)="onCancelPropertySelection()"
     (select)="handlePropertySelection($event)"
-  ></app-select-property>
+  ></app-demo-select-property>
 </ng-template>

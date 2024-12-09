@@ -3,7 +3,6 @@ import { Observable } from 'rxjs';
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { selectProject, selectProjectSettings } from '../../state/project.selector';
-import { Project } from '../../domain/project';
 import { updateProject } from '../../state/project.actions';
 import { GeneralSettings } from '../../domain/general-settings';
 import { PlanningModel } from 'src/app/shared/domain/planning-task';
@@ -15,6 +14,7 @@ import { PageModule } from 'src/app/shared/components/page/page.module';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
 import { BreadcrumbModule } from 'src/app/shared/components/breadcrumb/breadcrumb.module';
+import { Project } from 'src/app/shared/domain/project';
 
 @Component({
   selector: 'app-project-settings-container',
@@ -58,10 +58,9 @@ export class ProjectSettingsContainerComponent implements OnInit {
       project => {
         let newProject: Project = {
           ...project,
-          settings
         }
+        newProject.settings = settings;
         this.store.dispatch(updateProject({project: newProject}))
-        // this.router.navigate(['/projects', project._id, 'overview'],);
       }
     )
   }

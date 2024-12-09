@@ -11,6 +11,7 @@ export enum StepStatus {
   export interface IterationStep {
     _id: string;
     name: string;
+    user?: string;
     createdAt?: Date;
     project: string;
     status: StepStatus;

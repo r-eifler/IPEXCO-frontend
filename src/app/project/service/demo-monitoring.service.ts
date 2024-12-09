@@ -15,6 +15,7 @@ export class DemoMonitoringService {
 
     demoComputationFinished$(demoId: string): Observable<void> {
         return interval(5000).pipe(
+            tap(() => console.log("Check demo computation finished: " + demoId)),
             exhaustMap(() => this.demoService.getDemo$(demoId).pipe(
                 map((demo) => ((demo.status != DemoRunStatus.pending) && (demo.status != DemoRunStatus.running)) ),
             )),

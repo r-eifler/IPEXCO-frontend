@@ -8,7 +8,6 @@ import { defaultDomainSpecification, DomainSpecification } from "src/app/shared/
 import { PDDLService } from "src/app/project-meta/service/pddl.service";
 import { take, tap, map} from "rxjs/operators";
 import { PlanningDomain, PlanningModel, PlanningProblem } from "src/app/shared/domain/planning-task";
-import { Project } from "../../../project/domain/project";
 import { Store } from "@ngrx/store";
 import { createProject } from "../../state/project-meta.actions";
 import { AsyncPipe } from "@angular/common";
@@ -20,6 +19,7 @@ import { MatCardModule } from "@angular/material/card";
 import { selectUser } from "src/app/user/state/user.selector";
 import { MatInputModule } from "@angular/material/input";
 import { MatButtonModule } from "@angular/material/button";
+import { Project } from "src/app/shared/domain/project";
 
 @Component({
   selector: "app-project-creator",

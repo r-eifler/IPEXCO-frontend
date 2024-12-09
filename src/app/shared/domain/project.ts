@@ -1,10 +1,12 @@
+import { GeneralSettings } from "src/app/project/domain/general-settings";
 import { DomainSpecification } from "src/app/shared/domain/domain-specification";
 import { PlanningTask } from "src/app/shared/domain/planning-task";
-import { GeneralSettings } from "./general-settings";
 
+export type ProjectType = 'demo-project' | 'general-project';
 
 export interface Project {
   _id?: string;
+  itemType?: ProjectType,
   updated?: string;
   name: string;
   public: boolean;

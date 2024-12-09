@@ -2,10 +2,10 @@ import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Demo } from "src/app/demo/domain/demo";
 import { UserStudy } from "../../../user_study/domain/user-study";
-import { Project } from "src/app/project/domain/project";
 import { MatIcon } from "@angular/material/icon";
 import { MatCardModule } from "@angular/material/card";
 import { MatButtonModule } from "@angular/material/button";
+import { Project } from "src/app/shared/domain/project";
 
 @Component({
   selector: "app-user-main-page",
