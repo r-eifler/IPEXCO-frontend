@@ -1,4 +1,4 @@
-import { PlanningTask } from "src/app/interface/planning-task";
+import { PlanningTask } from "src/app/shared/domain/planning-task";
 import { GlobalExplanation } from "./explanation/explanations";
 import { Plan } from "./plan";
 
@@ -11,6 +11,7 @@ export enum StepStatus {
   export interface IterationStep {
     _id: string;
     name: string;
+    user?: string;
     createdAt?: Date;
     project: string;
     status: StepStatus;

@@ -1,0 +1,14 @@
+<app-dialog>
+  <app-dialog-header>
+    <app-dialog-title>
+      {{data.name}}
+    </app-dialog-title>
+  </app-dialog-header>
+  <app-dialog-content>
+    <p>{{data.text}}</p>
+  </app-dialog-content>
+  <app-dialog-footer>
+    <button mat-button (click)="onCancel()">Cancel</button>
+    <button mat-flat-button (click)="onDelete()" cdkFocusInitial>Delete</button>
+  </app-dialog-footer>
+</app-dialog>

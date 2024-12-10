@@ -14,16 +14,18 @@ import { MatIconModule } from "@angular/material/icon";
 import { FormBuilder, FormControl, ReactiveFormsModule } from "@angular/forms";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatDialog, MatDialogModule } from "@angular/material/dialog";
-import { DialogModule } from "src/app/shared/component/dialog/dialog.module";
-import { EditableListModule } from "src/app/shared/component/editable-list/editable-list.module";
+import { DialogModule } from "src/app/shared/components/dialog/dialog.module";
+import { EditableListModule } from "src/app/shared/components/editable-list/editable-list.module";
 import { selectedAtLeastOne } from "src/app/validators/selected-at-least-one.validator";
-import { PlanPropertyPanelComponent } from "../../../shared/component/plan-property-panel/plan-property-panel.component";
+import { PlanPropertyPanelComponent } from "../../../shared/components/plan-property-panel/plan-property-panel.component";
 import { take } from "rxjs";
 import { Store } from "@ngrx/store";
 import { UserRoleDirective } from "src/app/user/directives/user-role.directive";
 import { createPlanProperty } from "../../state/iterative-planning.actions";
 import { PropertyCreatorComponent } from "../../view/property-creator/property-creator.component";
 import { PlanProperty } from "src/app/shared/domain/plan-property/plan-property";
+import { AsyncPipe } from "@angular/common";
+import { ProjectDirective } from "../../derectives/isProject.directive";
 
 @Component({
   selector: "app-select-property",
@@ -37,7 +39,8 @@ import { PlanProperty } from "src/app/shared/domain/plan-property/plan-property"
     MatIconModule,
     PlanPropertyPanelComponent,
     ReactiveFormsModule,
-    UserRoleDirective
+    UserRoleDirective,
+    ProjectDirective,
   ],
   templateUrl: "./select-property.component.html",
   styleUrl: "./select-property.component.scss",

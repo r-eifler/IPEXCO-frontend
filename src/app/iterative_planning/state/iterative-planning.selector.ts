@@ -15,6 +15,8 @@ export const selectIterativePlanningPropertyTemplates = createSelector(selectIte
     (state) => state.project?.data?.domainSpecification?.planPropertyTemplates)
 export const selectIterativePlanningTask = createSelector(selectIterativePlanningFeature,
         (state) => state.project?.data?.baseTask)
+export const selectIterativePlanningIsDemo = createSelector(selectIterativePlanningFeature,
+    (state) => state.project?.data.itemType == 'demo-project')
 
 export const selectIterativePlanningProjectCreationInterfaceType = createSelector(selectIterativePlanningFeature,
     (state) => state.project?.data?.settings?.propertyCreationInterfaceType)
@@ -32,7 +34,7 @@ export const selectIterativePlanningPropertiesList = createSelector(selectIterat
 export const selectIterativePlanningIterationSteps = createSelector(selectIterativePlanningFeature,
     (state) => state.iterationSteps.data)
 export const selectIterationStepIds = createSelector(selectIterativePlanningIterationSteps, map(({ _id }) => _id));
-export const selectIterationStepbyId = (id: string) => createSelector(selectIterativePlanningIterationSteps, (iteration_steps) => iteration_steps?.filter(s => s._id == id)[0]);
+export const selectIterationStepById = (id: string) => createSelector(selectIterativePlanningIterationSteps, (iteration_steps) => iteration_steps?.filter(s => s._id == id)[0]);
 
 export const selectIterationStep = memoizeWith(
   (stepId: string) => stepId,

@@ -3,7 +3,7 @@ import { Observable } from "rxjs";
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { environment } from "src/environments/environment";
 import { map } from "rxjs/operators";
-import { IHTTPData } from "src/app/interface/http-data.interface";
+import { IHTTPData } from "src/app/shared/domain/http-data.interface";
 import { PlanProperty } from "src/app/shared/domain/plan-property/plan-property";
 import { ProjectModule } from "../project.module";
 
@@ -24,6 +24,16 @@ export class ProjectPlanPropertyService{
         return this.http.get<IHTTPData<PlanProperty[]>>(this.BASE_URL,  { params: httpParams }).pipe(
             map(({data}) => data),
             map(props => props.reduce((acc, cv) => ({...acc,[cv._id]: cv}), {}))
+        )
+    }
+
+    getPlanPropertiesList$(id: string): Observable<PlanProperty[]> {
+
+        let httpParams = new HttpParams();
+        httpParams = httpParams.set('projectId', id);
+        
+        return this.http.get<IHTTPData<PlanProperty[]>>(this.BASE_URL,  { params: httpParams }).pipe(
+            map(({data}) => data)
         )
     }
 

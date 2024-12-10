@@ -1,0 +1,21 @@
+.property-list {
+    display: flex;
+    flex-direction: column;
+  
+    gap: var(--spacing-200);
+  }
+
+.property-badge-list {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  gap: var(--spacing-200);
+}
+  
+.list-list {
+  display: flex;
+  flex-direction: column;
+
+  gap: var(--spacing-200);
+}

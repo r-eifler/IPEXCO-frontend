@@ -1,7 +1,7 @@
 import { PlanProperty } from 'src/app/shared/domain/plan-property/plan-property';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { Component, OnInit} from '@angular/core';
-import { Demo } from 'src/app/interface/demo';
+import { Demo } from 'src/app/demo/domain/demo';
 import { filter, map, takeUntil, take } from 'rxjs/operators';
 import * as d3 from 'd3';
 import { combineLatest } from "rxjs/internal/observable/combineLatest";

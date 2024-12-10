@@ -4,13 +4,15 @@
 
 <app-page>
   <app-breadcrumb>
-    <a app-breadcrumb-item [routerLink]="['/projects/' + (step$ | async)?.project]"><mat-icon>home</mat-icon></a>
+    <a app-breadcrumb-item [routerLink]="['/project/' + (step$ | async)?.project]"><mat-icon>home</mat-icon></a>
     <a app-breadcrumb-item [routerLink]="['..']">All Iterations</a>
     <app-breadcrumb-item>{{ (step$ | async)?.name }}</app-breadcrumb-item>
   </app-breadcrumb>
   <app-page-title>
     {{ step?.name }}
     <app-page-title-action>
+      <button mat-icon-button matTooltip="Delete iteration step."
+        (click)="deleteIteration(step?._id)"><mat-icon>delete</mat-icon></button>
       <button mat-icon-button matTooltip="Creates a new iteration based on the properties selected in this iteration."
         (click)="createNewIteration(step?._id)"><mat-icon>call_split</mat-icon></button>
     </app-page-title-action>

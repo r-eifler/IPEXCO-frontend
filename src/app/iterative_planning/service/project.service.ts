@@ -3,9 +3,9 @@ import { Observable } from "rxjs";
 import { HttpClient } from "@angular/common/http";
 import { environment } from "src/environments/environment";
 import { map } from "rxjs/operators";
-import { IHTTPData } from "src/app/interface/http-data.interface";
+import { IHTTPData } from "src/app/shared/domain/http-data.interface";
 import { array, date, object, string, infer as zInfer } from "zod";
-import { Project } from "src/app/project/domain/project";
+import { Project } from "src/app/shared/domain/project";
 
 // const PlanningTaskUnverifiedSchema = string().transform(s => JSON.parse(s));
 
@@ -34,8 +34,11 @@ export class IterativePlanningProjectService{
             map(({data}) => data),
             map(project => ({
                 ...project, 
-                baseTask: JSON.parse(project.baseTask as unknown as string),
-                domainSpecification: JSON.parse(project.domainSpecification as unknown as string)
+                baseTask : {
+                    ...project.baseTask,
+                    model: JSON.parse(project.baseTask.model as unknown as string),
+                },
+                domainSpecification: JSON.parse(project.domainSpecification as unknown as string),
             }))
         )
 
@@ -50,8 +53,11 @@ export class IterativePlanningProjectService{
             map(({data}) => data),
             map(project => ({
                 ...project, 
-                baseTask: JSON.parse(project.baseTask as unknown as string),
-                domainSpecification: JSON.parse(project.domainSpecification as unknown as string)
+                baseTask : {
+                    ...project.baseTask,
+                    model: JSON.parse(project.baseTask.model as unknown as string),
+                },
+                domainSpecification: JSON.parse(project.domainSpecification as unknown as string),
             }))
         )
 

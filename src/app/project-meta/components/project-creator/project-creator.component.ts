@@ -4,11 +4,10 @@ import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from "@angu
 import { BehaviorSubject, combineLatest, Observable, Subject } from "rxjs";
 import { AuthenticationService } from "../../../user/services/authentication.service";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
-import { defaultDomainSpecification, DomainSpecification } from "src/app/interface/files/domain-specification";
-import { PDDLService } from "src/app/service/pddl/pddl.service";
+import { defaultDomainSpecification, DomainSpecification } from "src/app/shared/domain/domain-specification";
+import { PDDLService } from "src/app/project-meta/service/pddl.service";
 import { take, tap, map} from "rxjs/operators";
-import { PlanningDomain, PlanningModel, PlanningProblem } from "src/app/interface/planning-task";
-import { Project } from "../../../project/domain/project";
+import { PlanningDomain, PlanningModel, PlanningProblem } from "src/app/shared/domain/planning-task";
 import { Store } from "@ngrx/store";
 import { createProject } from "../../state/project-meta.actions";
 import { AsyncPipe } from "@angular/common";
@@ -18,6 +17,9 @@ import { MatStepperModule } from "@angular/material/stepper";
 import { MatFormFieldModule, MatLabel } from "@angular/material/form-field";
 import { MatCardModule } from "@angular/material/card";
 import { selectUser } from "src/app/user/state/user.selector";
+import { MatInputModule } from "@angular/material/input";
+import { MatButtonModule } from "@angular/material/button";
+import { Project } from "src/app/shared/domain/project";
 
 @Component({
   selector: "app-project-creator",
@@ -29,10 +31,12 @@ import { selectUser } from "src/app/user/state/user.selector";
     MatStepperModule,
     MatLabel,
     MatFormFieldModule,
+    MatInputModule,
     FormsModule,
     ReactiveFormsModule,
     MatCardModule,
     MatIconModule,
+    MatButtonModule,
   ],
   templateUrl: "./project-creator.component.html",
   styleUrls: ["./project-creator.component.scss"],

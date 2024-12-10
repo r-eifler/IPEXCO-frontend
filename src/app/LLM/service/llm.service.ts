@@ -3,11 +3,10 @@ import { Observable, of } from "rxjs";
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { environment } from "src/environments/environment";
 import { catchError, concatMap, map, tap } from "rxjs/operators";
-import { IHTTPData } from "src/app/interface/http-data.interface";
+import { IHTTPData } from "src/app/shared/domain/http-data.interface";
 import { Message } from "../domain/message";
 import { ExplanationTranslationRequest, GoalTranslationRequest, QTthenGTResponse, QuestionTranslationRequest } from "../interfaces/translators_interfaces";
 import { Question } from "src/app/iterative_planning/domain/interface/question";
-import { Project } from "src/app/project/domain/project";
 import { explanationTranslationRequestToString, goalTranslationRequestToString, questionTranslationRequestToString } from "../interfaces/translators_interfaces_strings";
 import { IterationStep, StepStatus } from "src/app/iterative_planning/domain/iteration_step";
 import { PlanRunStatus } from "src/app/iterative_planning/domain/plan";
@@ -15,6 +14,7 @@ import { QuestionType } from "src/app/iterative_planning/domain/explanation/expl
 import { Store } from "@ngrx/store";
 import { LLMContext } from "../domain/context";
 import { PlanProperty } from "src/app/shared/domain/plan-property/plan-property";
+import { Project } from "src/app/shared/domain/project";
 @Injectable()
 export class LLMService {
 

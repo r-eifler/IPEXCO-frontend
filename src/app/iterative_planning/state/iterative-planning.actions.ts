@@ -1,10 +1,10 @@
 import { createAction, props } from "@ngrx/store";
-import { Project } from "src/app/project/domain/project";
 import { ExplanationMessage } from "../domain/interface/explanation-message";
 import { Question } from "../domain/interface/question";
 import { IterationStep, ModIterationStep } from "../domain/iteration_step";
 import { LLMContext } from "src/app/LLM/domain/context";
 import { PlanProperty } from "src/app/shared/domain/plan-property/plan-property";
+import { Project } from "src/app/shared/domain/project";
 
 
 
@@ -54,6 +54,10 @@ export const loadIterationStepsFailure = createAction('[iterative-planning] load
 export const createIterationStep = createAction('[iterative-planning] create iteration steps');
 export const createIterationStepSuccess = createAction('[iterative-planning] create iteration steps success', props<{iterationStep: IterationStep}>());
 export const createIterationStepFailure = createAction('[iterative-planning] create iteration steps failure');
+
+export const deleteIterationStep = createAction('[iterative-planning] delete iteration step', props<{id: string}>());
+export const deleteIterationStepSuccess = createAction('[iterative-planning] delete iteration step success');
+export const deleteIterationStepFailure = createAction('[iterative-planning] delete iteration step failure');
 
 
 // Planner

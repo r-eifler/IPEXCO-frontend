@@ -3,7 +3,7 @@ import { ProjectMetaData } from "../domain/project-meta";
 import { Loadable, LoadingState } from "src/app/shared/common/loadable.interface";
 import { createProject, createProjectFailure, createProjectSuccess, deleteProject, loadProjectMetaDataList, loadProjectMetaDataListSuccess } from "./project-meta.actions";
 import { Creatable, CreationState } from "src/app/shared/common/creatable.interface";
-import { Project } from "src/app/project/domain/project";
+import { Project } from "src/app/shared/domain/project";
 
 export interface ProjectMetaDataState {
     projects: Loadable<ProjectMetaData[]>;

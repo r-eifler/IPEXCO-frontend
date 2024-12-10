@@ -1,6 +1,6 @@
 import { AsyncPipe, KeyValuePipe} from '@angular/common';
 import { Component, computed, input, OnInit, output } from '@angular/core';
-import { DialogModule } from 'src/app/shared/component/dialog/dialog.module'
+import { DialogModule } from 'src/app/shared/components/dialog/dialog.module'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatStepper, MatStepperModule } from '@angular/material/stepper';
 import { MatButtonModule } from '@angular/material/button';
@@ -9,7 +9,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatCardModule } from '@angular/material/card';
 import { PropertyTemplatePartComponent } from '../../../iterative_planning/components/property-template-part/property-template-part.component'
-import { PDDLObject, PlanningTask } from '../../../interface/planning-task';
+import { PDDLObject, PlanningTask } from '../../domain/planning-task';
 import { MatIcon } from '@angular/material/icon';
 import { generateDummyPlanProperty, generatePlanProperty, getPossibleValues, getTemplateParts, PlanPropertyTemplate, TemplatePart } from '../../domain/plan-property/plan-property-template';
 import { equalPlanProperties, PlanProperty } from 'src/app/shared/domain/plan-property/plan-property';

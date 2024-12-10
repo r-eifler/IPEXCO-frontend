@@ -1,6 +1,6 @@
 import { createAction, props } from "@ngrx/store";
 import { ProjectMetaData } from "../domain/project-meta";
-import { Project } from "src/app/project/domain/project";
+import { Project } from "src/app/shared/domain/project";
 
 export const loadProjectMetaDataList = createAction('[project-meta] load project meta data list');
 export const loadProjectMetaDataListSuccess = createAction('[project-meta] load project meta data list success', 

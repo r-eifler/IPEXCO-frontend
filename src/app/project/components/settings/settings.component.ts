@@ -1,8 +1,8 @@
-import { Component, DestroyRef, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
+import { Component, DestroyRef, effect, EventEmitter, inject, input, Input, OnChanges, OnInit, output, Output, SimpleChanges } from "@angular/core";
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
 import { ExplanationInterfaceType, GeneralSettings, PropertyCreationInterfaceType } from "../../domain/general-settings";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-import { concatMap, switchMap } from "rxjs/operators";
+import { concatMap, debounceTime, distinctUntilChanged, switchMap } from "rxjs/operators";
 import { MatFormFieldModule, MatLabel } from "@angular/material/form-field";
 import { MatSlideToggleModule } from "@angular/material/slide-toggle";
 import { MatCardModule } from "@angular/material/card";
@@ -10,6 +10,7 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatButtonToggleModule } from "@angular/material/button-toggle";
 import { MatIcon, MatIconModule } from "@angular/material/icon";
 import { AsyncPipe, NgFor, NgIf } from "@angular/common";
+import { MatInputModule } from "@angular/material/input";
 
 
 @Component({
@@ -26,20 +27,21 @@ import { AsyncPipe, NgFor, NgIf } from "@angular/common";
     MatButtonToggleModule,
     MatIconModule,
     NgIf,
+    MatInputModule,
   ],
   templateUrl: "./settings.component.html",
   styleUrls: ["./settings.component.scss"],
 })
-export class SettingsComponent implements OnInit {
+export class SettingsComponent {
 
   destroyRef = inject(DestroyRef)
   
   settingsForm: FormGroup;
 
-  @Input() isProject: boolean;
-  @Input() settings: GeneralSettings;
+  settings = input.required<GeneralSettings>();
+  isDemo = input<boolean>(false);
 
-  @Output() updatedSettings = new EventEmitter<GeneralSettings>();
+  update = output<GeneralSettings>();
 
   ExplanationTypes = ExplanationInterfaceType;
   PropertyCreationTypes = PropertyCreationInterfaceType;
@@ -77,21 +79,26 @@ export class SettingsComponent implements OnInit {
       maxPayment: new FormControl(),
       paymentSteps: new FormControl(),
     });
+
+    effect(() => this.initForm(this.settings()))
+
+    // this.settingsForm.valueChanges.pipe(
+    //   takeUntilDestroyed(this.destroyRef),
+    //   debounceTime(3000), // one event every 3000 milliseconds
+    //   distinctUntilChanged(), 
+    // ).subscribe(() => {
+    //   this.onSave();
+    //   console.log('Saved')
+    // });
+
   }
 
-
-  ngOnChanges(changes: SimpleChanges): void {
-    console.log(this.settings);
-    if(this.settings && ! this.initialized)
-      this.initForm(this.settings);
-  }
-
-  ngOnInit(): void {
-    if(this.settings && ! this.initialized)
-      this.initForm(this.settings);    
-  }
 
   initForm(settings: GeneralSettings): void {
+    if(!settings){
+      return;
+    }
+
     this.settingsForm.controls.maxRuns.setValue(settings.maxRuns);
 
     this.settingsForm.controls.allowQuestions.setValue(settings.allowQuestions);
@@ -119,14 +126,6 @@ export class SettingsComponent implements OnInit {
     this.settingsForm.controls.maxPayment.setValue(settings.paymentInfo.max);
     this.settingsForm.controls.paymentSteps.setValue(settings.paymentInfo.steps);
 
-    this.settingsForm.valueChanges.pipe(
-      takeUntilDestroyed(this.destroyRef)
-    ).subscribe(() => {
-      this.onSave();
-      console.log('Saved')
-    });
-
-    this.initialized = true
   }
 
   onSave() {
@@ -160,6 +159,6 @@ export class SettingsComponent implements OnInit {
     }
 
     // console.log(newSettings);
-    this.updatedSettings.next(newSettings);
+    this.update.emit(newSettings);
   }
 }

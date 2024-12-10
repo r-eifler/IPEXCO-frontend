@@ -10,11 +10,8 @@ import { AppComponent } from "./app.component";
 import { MAT_BOTTOM_SHEET_DEFAULT_OPTIONS } from '@angular/material/bottom-sheet';
 
 // Components
-import { NavigationComponent } from "./components/navigation/navigation.component";
+import { NavigationComponent } from "./base/components/navigation/navigation.component";
 
-// Services
-import { DomainFilesService, ProblemFilesService} from "./service/files/pddl-file-services";
-import { PddlFileUtilsService } from "./service/files/pddl-file-utils.service";
 
 // State 
 import { EffectsModule } from '@ngrx/effects';
@@ -49,7 +46,6 @@ import { UpdatePlanPropertyEffect } from './iterative_planning/state/effects/upd
 
 // Services 
 import { LLMService } from './LLM/service/llm.service';
-import { UserStudyCurrentDataService, UserStudyDataService } from "./user_study/service/user-study-data.service";
 import { ExplainerMonitoringService } from './iterative_planning/service/explainer-monitoring.service';
 import { ExplainerService } from './iterative_planning/service/explainer.service';
 import { IterationStepService } from './iterative_planning/service/iteration-step.service';
@@ -71,6 +67,13 @@ import { LoggedInEffect } from './user/state/effects/loggedIn.effect';
 import { LoadTokenEffect } from './user/state/effects/loadToken.effect';
 import { LoadUserEffect } from './user/state/effects/loadUser.effect';
 import { SendMessageToLLMEffect } from './iterative_planning/state/effects/send-message.effect';
+import { CreateDemoEffect } from './project/state/effects/create-demo.effect';
+import { LoadProjectDemosEffect } from './project/state/effects/load-demos.effect';
+import { LoadDemoProjectPlanPropertiesEffect } from './project/state/effects/load-demo-plan-properties.effect';
+import { LoadProjectDemoEffect } from './project/state/effects/load-demo.effect';
+import { UpdateDemoEffect } from './project/state/effects/update-demo.effect';
+import { DeleteProjectDemoEffect } from './project/state/effects/delete-demo.effect';
+import { DeleteIterationEffect } from './iterative_planning/state/effects/delete-iteration-step.effect';
 
 
 
@@ -98,6 +101,12 @@ import { SendMessageToLLMEffect } from './iterative_planning/state/effects/send-
         LoadProjectMetaDataListEffect,
         CreateProjectEffect,
         DeleteProjectEffect,
+        CreateDemoEffect,
+        LoadProjectDemosEffect,
+        LoadProjectDemoEffect,
+        UpdateDemoEffect,
+        DeleteProjectDemoEffect,
+        LoadDemoProjectPlanPropertiesEffect,
         LoadIterativePlanningProjectEffect,
         CreatePlanPropertyEffect,
         LoadPlanPropertiesEffect,
@@ -105,6 +114,7 @@ import { SendMessageToLLMEffect } from './iterative_planning/state/effects/send-
         DeletePlanPropertyEffect,
         LoadIterationStepsEffect,
         CreateIterationStepEffect,
+        DeleteIterationEffect,
         ComputePlanEffect,
         SendMessageToLLMEffect,
         ComputeExplanationEffect,
@@ -135,13 +145,8 @@ import { SendMessageToLLMEffect } from './iterative_planning/state/effects/send-
       multi: true,
     },
     AuthenticationInterceptor,
-    PddlFileUtilsService,
-    DomainFilesService,
-    ProblemFilesService,
     PlannerService,
     DemoService,
-    UserStudyCurrentDataService,
-    UserStudyDataService,
     ProjectService,
     ProjectMetaDataService,
     CreateProjectService,

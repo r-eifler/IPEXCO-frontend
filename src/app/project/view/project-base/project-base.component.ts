@@ -1,40 +1,67 @@
-import { Component, OnInit } from "@angular/core";
-import { Project } from "../../domain/project";
-import { ProjectSettingsContainerComponent } from "../../components/project-settings-container/project-settings-container.component";
+import { Component, inject } from "@angular/core";
 import { MatTabsModule } from "@angular/material/tabs";
-import { PlanningTaskViewComponent } from "src/app/components/planning-task/planning-task-view/planning-task-view.component";
-import { ProjectOverviewComponent } from "../../components/project-overview/project-overview.component";
+import { ActivatedRoute, Router, RouterLink, RouterModule } from "@angular/router";
+import { MatDialog } from "@angular/material/dialog";
+import { Store } from "@ngrx/store";
+import { selectProject, selectProjectDemoComputationPending } from "../../state/project.selector";
+import { PageModule } from "src/app/shared/components/page/page.module";
+import { ActionCardModule } from "src/app/shared/components/action-card/action-card.module";
+import { MatIcon, MatIconModule } from "@angular/material/icon";
+import { BreadcrumbModule } from "src/app/shared/components/breadcrumb/breadcrumb.module";
+import { MatCardModule } from "@angular/material/card";
+import { AsyncPipe } from "@angular/common";
+import { ProjectActionCardComponent } from "../../components/project-action-card/project-action-card.component";
+import { MatButtonModule } from "@angular/material/button";
+import { PlanningTaskViewComponent } from "../planning-task-view/planning-task-view.component";
 
 @Component({
   selector: "app-project-base",
   standalone: true,
   imports:[
-    ProjectSettingsContainerComponent,
+    PageModule, 
+    MatIconModule,
+    RouterLink, 
+    BreadcrumbModule,
+    ActionCardModule, 
+    MatCardModule,
+    MatIcon,
+    AsyncPipe,
+    ProjectActionCardComponent,
+    MatButtonModule,
+    RouterModule,
     MatTabsModule,
-    PlanningTaskViewComponent,
-    ProjectOverviewComponent,
   ],
   templateUrl: "./project-base.component.html",
-  styleUrls: ["./project-base.component.css"],
+  styleUrls: ["./project-base.component.scss"],
 })
-export class ProjectBaseComponent implements OnInit {
+export class ProjectBaseComponent {
 
-  activeLink = "";
-  links = [
-    { ref: "./overview", name: "Overview" },
-    { ref: "./settings", name: "Settings" },
-    { ref: "./planning-task", name: "Planning Task" },
-    { ref: "./properties", name: "Plan Properties" },
-    { ref: "./iterative-planning", name: "Iterative Planning" }
-  ];
+  store = inject(Store)
 
-  project: Project;
+  router = inject(Router);
+  route = inject(ActivatedRoute);
 
-  constructor() {
+  dialog = inject(MatDialog);
+
+  project$ = this.store.select(selectProject);
+  demoComputationRunning = this.store.select(selectProjectDemoComputationPending);
+
+  onPlanningTask(): void {
+    this.router.navigate(['planning-task'], {relativeTo: this.route.parent});
   }
 
-  ngOnInit(): void {
-
+  onDemos(): void {
+    this.router.navigate(['demos'], {relativeTo: this.route.parent});
   }
+
+  onSettings(): void {
+    this.router.navigate(['settings'], {relativeTo: this.route.parent});
+  }
+
+  deleteProject(): void {
+    // this.projectsService.deleteObject(this.currentProject);
+    this.router.navigate(['/projects']);
+  }
+
 
 }

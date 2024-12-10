@@ -3,8 +3,8 @@ import { Observable } from "rxjs";
 import { HttpClient } from "@angular/common/http";
 import { environment } from "src/environments/environment";
 import { map } from "rxjs/operators";
-import { IHTTPData } from "src/app/interface/http-data.interface";
-import { Project } from "src/app/project/domain/project";
+import { IHTTPData } from "src/app/shared/domain/http-data.interface";
+import { Project } from "src/app/shared/domain/project";
 
 
 @Injectable()

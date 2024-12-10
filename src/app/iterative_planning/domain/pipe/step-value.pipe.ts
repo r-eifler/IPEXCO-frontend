@@ -1,8 +1,8 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-import { IterationStep } from '../iteration_step';
+import { IterationStep, StepStatus } from '../iteration_step';
 import { PlanProperty } from '../../../shared/domain/plan-property/plan-property';
-import { computeStepUtility } from '../run';
+import { computeUtility } from '../plan';
 
 @Pipe({
   name: 'stepValue',
@@ -11,11 +11,11 @@ import { computeStepUtility } from '../run';
 export class StepValuePipe implements PipeTransform {
 
   transform(step: IterationStep | null, planProperties: Record<string, PlanProperty> | null): number | undefined {
-    if(!step || !planProperties) {
+    if(!step || step.status != StepStatus.solvable || !step.plan || !planProperties) {
       return undefined;
     }
 
-    return computeStepUtility(step, planProperties);
+    return computeUtility(step.plan, planProperties);
   }
 
 }

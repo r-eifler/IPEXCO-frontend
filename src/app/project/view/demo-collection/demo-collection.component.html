@@ -1,0 +1,24 @@
+
+<app-page>
+  <app-breadcrumb>
+    <a app-breadcrumb-item [routerLink]="['/project/' + (project$ | async)?._id]"><mat-icon>home</mat-icon></a>
+    <app-breadcrumb-item>Demos</app-breadcrumb-item>
+  </app-breadcrumb>
+  <app-page-title>Demos</app-page-title>
+
+  <app-page-content>
+    <div class="page-grid">
+      @for(demo of demosFinished$ | async; track demo) {
+        <app-demo-card [demo]="demo" [planProperties]="(demoProperties$ | async)?.[demo._id] ?? []" (run)="onRunIterPlanning(demo._id)"></app-demo-card>
+      }
+
+      <button app-action-card (click)="createNewDemo()" [disabled]="demoComputationPending$  | async">
+        <div class="instructions">
+          <span>Create a new demo based on the current project.</span>
+        </div>
+        <mat-icon>add</mat-icon>
+      </button>
+
+    </div>
+  </app-page-content>
+</app-page>

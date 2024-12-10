@@ -1,9 +1,8 @@
-import { UserStudyCurrentDataService } from './user-study-data.service';
 import { Injectable } from "@angular/core";
 import { environment } from "../../../environments/environment";
 import { HttpClient } from "@angular/common/http";
-import { USUser } from "../../interface/user-study/user-study-user";
-import { UserStudyData } from 'src/app/interface/user-study/user-study-store';
+import { USUser } from "../domain/user-study-user";
+import { UserStudyData } from 'src/app/user_study/domain/user-study-store';
 
 @Injectable({
   providedIn: "root",
@@ -12,11 +11,11 @@ export class UserStudyUserService {
   tokenName = "xai-user-study-jwt-token";
   BASE_URL = environment.apiURL + "user-study-users";
 
-  private user = null;
+  private user: USUser |  null = null;
 
   constructor(
     private http: HttpClient,
-    private userStudyCurrentDataService: UserStudyCurrentDataService) {}
+  ) {}
 
   register(user: USUser, userStudyId: string): Promise<boolean> {
 
@@ -88,7 +87,7 @@ export class UserStudyUserService {
     });
   }
 
-  getLoggedInUser(): USUser {
+  getLoggedInUser(): USUser |null {
     return this.user;
   }
 }

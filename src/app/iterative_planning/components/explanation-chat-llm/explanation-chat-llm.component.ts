@@ -2,7 +2,7 @@ import { AsyncPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { sendMessageToLLMQTthenGTTranslators } from '../../state/iterative-planning.actions';
-import { ChatModule } from 'src/app/shared/component/chat/chat.module';
+import { ChatModule } from 'src/app/shared/components/chat/chat.module';
 import { selectMessages, selectLLMThreadIdET, selectLLMThreadIdGT, selectLLMThreadIdQT, selectIterativePlanningSelectedStep, selectLLMChatMessages, selectIterativePlanningSelectedStepId, selectVisibleMessagesbyId, selectIsExplanationChatLoading } from '../../state/iterative-planning.selector';
 import { createPlanProperty } from '../../state/iterative-planning.actions';
 import { take, filter, map, mergeMap, combineLatestWith, switchMap } from 'rxjs/operators';

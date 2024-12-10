@@ -3,10 +3,10 @@ import { ObjectCollectionService } from "../../service/base/object-collection.se
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { environment } from "../../../environments/environment";
 import { SelectedObjectService } from "../../service/base/selected-object.service";
-import { UserStudy } from "../../interface/user-study/user-study";
-import { IHTTPData } from "../../interface/http-data.interface";
-import { USUser } from "../../interface/user-study/user-study-user";
-import { UserStudyData } from "src/app/interface/user-study/user-study-store";
+import { UserStudy } from "../domain/user-study";
+import { IHTTPData } from "../../shared/domain/http-data.interface";
+import { USUser } from "../domain/user-study-user";
+import { UserStudyData } from "src/app/user_study/domain/user-study-store";
 
 @Injectable({
   providedIn: "root",

@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-import { Color } from 'src/app/shared/component/label/label/label.component';
+import { Color } from 'src/app/shared/components/label/label/label.component';
 
 import { PlanRunStatus } from '../plan';
 

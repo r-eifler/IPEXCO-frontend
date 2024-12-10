@@ -13,7 +13,7 @@ import { MatInput, MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTabsModule } from '@angular/material/tabs';
 import { color } from 'd3';
-import { PDDLType, PlanningModel } from 'src/app/interface/planning-task';
+import { PDDLType, PlanningModel } from 'src/app/shared/domain/planning-task';
 import { GoalType } from 'src/app/shared/domain/plan-property/plan-property';
 import { defaultPlanPropertyTemplate, PlanPropertyTemplate } from 'src/app/shared/domain/plan-property/plan-property-template';
 
