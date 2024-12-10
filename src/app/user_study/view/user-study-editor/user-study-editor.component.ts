@@ -68,6 +68,9 @@ export class UserStudyEditorComponent {
   form = this.fb.group({
     name: this.fb.control<string>('', [Validators.required]),
     description: this.fb.control<string>('', [Validators.required]),
+    relatedProject: this.fb.control<string>('TODO', [Validators.required]),
+    expectation: this.fb.control<string>('TODO', [Validators.required]),
+    confidentiality: this.fb.control<string>('TODO', [Validators.required]),
     validTimeRange: this.fb.group({
       start: this.fb.control<Date | null>(null, [Validators.required]),
       end: this.fb.control<Date | null>(null, [Validators.required]),
@@ -90,6 +93,9 @@ export class UserStudyEditorComponent {
   initForm(study: UserStudy){
     this.form.controls.name.setValue(study.name);
     this.form.controls.description.setValue(study.description);
+    this.form.controls.relatedProject.setValue(study.relatedProject);
+    this.form.controls.expectation.setValue(study.expectation);
+    this.form.controls.confidentiality.setValue(study.confidentiality);
     this.form.controls.redirectUrl.setValue(study.redirectUrl);
     this.form.controls.validTimeRange.controls.start.setValue(study.startDate);
     this.form.controls.validTimeRange.controls.end.setValue(study.endDate);
@@ -142,6 +148,9 @@ export class UserStudyEditorComponent {
         ...study,
         name: this.form.controls.name.value,
         description: this.form.controls.description.value,
+        relatedProject: this.form.controls.relatedProject.value,
+        expectation: this.form.controls.expectation.value,
+        confidentiality: this.form.controls.confidentiality.value,
         startDate: this.form.controls.validTimeRange.controls.start.value,
         endDate: this.form.controls.validTimeRange.controls.end.value,
         redirectUrl: this.form.controls.redirectUrl.value,

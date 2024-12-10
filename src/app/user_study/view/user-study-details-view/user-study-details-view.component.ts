@@ -18,6 +18,7 @@ import {DemoCardComponent} from '../../components/demo-card/demo-card.component'
 import {DescriptionCardComponent} from '../../components/description-card/description-card.component';
 import {FormCardComponent} from '../../components/form-card/form-card.component';
 import {MatListModule} from '@angular/material/list';
+import {MatExpansionModule} from '@angular/material/expansion';
 
 @Component({
   selector: 'app-user-study-details-view',
@@ -34,6 +35,7 @@ import {MatListModule} from '@angular/material/list';
     MatButtonModule,
     AsyncPipe,
     MatTooltip,
+    MatExpansionModule
   ],
   templateUrl: './user-study-details-view.component.html',
   styleUrl: './user-study-details-view.component.scss'

@@ -24,6 +24,21 @@
           </mat-form-field>
 
           <mat-form-field class="full-line-input" appearance="outline">
+            <mat-label>Related Project</mat-label>
+            <textarea matInput formControlName="relatedProject"></textarea>
+          </mat-form-field>
+
+          <mat-form-field class="full-line-input" appearance="outline">
+            <mat-label>Expectations of the participants</mat-label>
+            <textarea matInput formControlName="expectation"></textarea>
+          </mat-form-field>
+
+          <mat-form-field class="full-line-input" appearance="outline">
+            <mat-label>Confidentiality</mat-label>
+            <textarea matInput formControlName="confidentiality"></textarea>
+          </mat-form-field>
+
+          <mat-form-field class="full-line-input" appearance="outline">
             <mat-label>Enter a date range</mat-label>
             <mat-date-range-input [rangePicker]="picker" [formGroup]="form.controls.validTimeRange">
               <input matStartDate placeholder="Start date" formControlName="start">

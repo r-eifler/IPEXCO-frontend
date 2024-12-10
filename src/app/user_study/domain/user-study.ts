@@ -18,7 +18,7 @@ export interface UserStudy {
   available?: boolean;
   redirectUrl: string;
   description: string;
-  project: string;
+  relatedProject: string;
   expectation: string;
   confidentiality: string;
   startDate?: Date;

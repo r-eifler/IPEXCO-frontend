@@ -64,8 +64,11 @@ export class UserStudyCreatorComponent {
   demos$ = this.store.select(selectUserStudyDemos)
 
   form = this.fb.group({
-    name: this.fb.control<string>('', [Validators.required]),
-    description: this.fb.control<string>('', [Validators.required]),
+    name: this.fb.control<string>(null, [Validators.required]),
+    description: this.fb.control<string>('TODO', [Validators.required]),
+    relatedProject: this.fb.control<string>('TODO', [Validators.required]),
+    expectation: this.fb.control<string>('TODO', [Validators.required]),
+    confidentiality: this.fb.control<string>('TODO', [Validators.required]),
     validTimeRange: this.fb.group({
       start: this.fb.control<Date | null>(null, [Validators.required]),
       end: this.fb.control<Date | null>(null, [Validators.required]),
@@ -123,6 +126,9 @@ export class UserStudyCreatorComponent {
     const userStudy: UserStudy = {
       name: this.form.controls.name.value,
       description: this.form.controls.description.value,
+      relatedProject: this.form.controls.relatedProject.value,
+      expectation: this.form.controls.expectation.value,
+      confidentiality: this.form.controls.confidentiality.value,
       startDate: this.form.controls.validTimeRange.controls.start.value,
       endDate: this.form.controls.validTimeRange.controls.end.value,
       redirectUrl: this.form.controls.redirectUrl.value,
