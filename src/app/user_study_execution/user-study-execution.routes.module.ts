@@ -18,6 +18,7 @@ import {StepFinishedGuard} from '../route-guards/step-finished-guard.guard';
 import {UserStudyExecutionStepShellComponent} from './view/user-study-execution-step-shell/user-study-execution-step-shell.component';
 import {UserStudyExecutionFailViewComponent} from './view/user-study-execution-fail-view/user-study-execution-fail-view.component';
 import {loadUserStudyExecutionStepResolver} from './resolver/load-user-study-execution-step.resolver';
+import {AuthGuard} from '../route-guards/auth-guard.guard';
 
 
 
@@ -52,7 +53,14 @@ const routes: Routes = [
             path: 'step/:stepId',
             component: UserStudyExecutionStepShellComponent,
             // canActivate: [StepFinishedGuard],
-            resolve: {loadUserStudyExecutionStepResolver}
+            resolve: {loadUserStudyExecutionStepResolver},
+            children: [
+              {
+                path: "iterative-planning",
+                loadChildren: () => import('../iterative_planning/iterative-planning.module').then(m => m.IterativePlanningModule),
+                canActivate: [AuthGuard],
+              },
+            ]
           },
           {
             path: 'finish',
