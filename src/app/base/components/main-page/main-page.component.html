@@ -1,6 +1,6 @@
 <div class="page-container">
 <div class="button-container">
-  <button mat-flat-button color="accent" (click)="newRegisterForm()">
+  <button mat-flat-button color="accent" (click)="newRegisterForm()" [disabled]="loggedIn$ | async">
     Register
   </button>
 </div>
