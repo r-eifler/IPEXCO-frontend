@@ -14,44 +14,51 @@ import {
 import {
   UserStudyExecutionAgreementViewComponent
 } from './view/user-study-execution-agreement-view/user-study-execution-agreement-view.component';
+import {StepFinishedGuard} from '../route-guards/step-finished-guard.guard';
+import {UserStudyExecutionStepShellComponent} from './view/user-study-execution-step-shell/user-study-execution-step-shell.component';
+import {UserStudyExecutionFailViewComponent} from './view/user-study-execution-fail-view/user-study-execution-fail-view.component';
+import {loadUserStudyExecutionStepResolver} from './resolver/load-user-study-execution-step.resolver';
 
 
 
 const routes: Routes = [
   {
-    path: ':userStudyId',
+    path: '',
     component: UserStudyExecutionShellComponent,
-    resolve: { loadUserStudyExecutionResolver },
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
     children: [
       {
-        path: '',
-        pathMatch: 'full',
-        redirectTo: 'start'
+        path: 'fail',
+        component: UserStudyExecutionFailViewComponent,
       },
       {
-        path: 'start',
-        component: UserStudyExecutionStartViewComponent
-      },
-      {
-        path: 'agreement',
-        component: UserStudyExecutionAgreementViewComponent,
-      },
-      {
-        path: 'description/:stepId',
-        component: UserStudyExecutionDescriptionViewComponent,
-      },
-      {
-        path: 'demo/:stepId',
-        component: UserStudyExecutionDemoViewComponent,
-      },
-      {
-        path: 'external/:stepId',
-        component: UserStudyExecutionExternalViewComponent,
-      },
-      {
-        path: 'finish',
-        component: UserStudyExecutionFinishViewComponent
+        path: ':userStudyId',
+        resolve: {loadUserStudyExecutionResolver},
+        children: [
+          {
+            path: '',
+            pathMatch: 'full',
+            redirectTo: 'start'
+          },
+          {
+            path: 'start',
+            component: UserStudyExecutionStartViewComponent
+          },
+          {
+            path: 'agreement',
+            component: UserStudyExecutionAgreementViewComponent,
+          },
+          {
+            path: 'step/:stepId',
+            component: UserStudyExecutionStepShellComponent,
+            // canActivate: [StepFinishedGuard],
+            resolve: {loadUserStudyExecutionStepResolver}
+          },
+          {
+            path: 'finish',
+            component: UserStudyExecutionFinishViewComponent
+          }
+        ]
       },
     ]
   }

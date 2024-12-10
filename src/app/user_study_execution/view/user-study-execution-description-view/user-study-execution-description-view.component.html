@@ -1,1 +1,21 @@
-<p>user-study-execution-description-view works!</p>
+@let step = step$ | async;
+
+<app-page>
+  <app-page-title>
+    {{ step.name }}
+  </app-page-title>
+  <app-page-content>
+    <app-page-section-list>
+      <app-page-section>
+        <app-page-section-content>
+          {{ step.content }}
+        </app-page-section-content>
+      </app-page-section>
+      <app-page-section>
+        <app-page-section-content>
+          <button mat-flat-button (click)="onContinue()">Continue</button>
+        </app-page-section-content>
+      </app-page-section>
+    </app-page-section-list>
+  </app-page-content>
+</app-page>

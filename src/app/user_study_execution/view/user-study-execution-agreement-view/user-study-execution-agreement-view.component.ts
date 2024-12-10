@@ -10,6 +10,7 @@ import {PageSectionContentComponent} from '../../../shared/components/page/page-
 import {PageSectionListComponent} from '../../../shared/components/page/page-section-list/page-section-list.component';
 import {PageSectionTitleComponent} from '../../../shared/components/page/page-section-title/page-section-title.component';
 import {PageModule} from '../../../shared/components/page/page.module';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-user-study-execution-agreement-view',
@@ -25,10 +26,11 @@ import {PageModule} from '../../../shared/components/page/page.module';
 export class UserStudyExecutionAgreementViewComponent {
 
   store = inject(Store);
+  router = inject(Router);
 
   userStudy$ = this.store.select(selectExecutionUserStudy);
 
-  onAccept(){
-
+  onAccept(id: string){
+    this.router.navigate(['user-study-execution', id, 'step', '0'])
   }
 }

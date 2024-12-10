@@ -8,18 +8,18 @@
     <app-page-section-list>
         <app-page-section>
           <app-page-section-title>
-            Project
+            Related Project
           </app-page-section-title>
           <app-page-section-content>
-            TODO
+            {{ userStudy?.relatedProject }}
           </app-page-section-content>
         </app-page-section>
         <app-page-section>
           <app-page-section-title>
-            Expectation
+            Expectations
           </app-page-section-title>
           <app-page-section-content>
-            TODO
+              {{ userStudy?.expectation }}
           </app-page-section-content>
         </app-page-section>
         <app-page-section>
@@ -27,7 +27,7 @@
             Withdraw & Confidentiality
           </app-page-section-title>
           <app-page-section-content>
-            TODO
+              {{ userStudy?.confidentiality }}
           </app-page-section-content>
         </app-page-section>
         <app-page-section>
@@ -37,7 +37,7 @@
           <app-page-section-content>
             <div class="consent-box">
               <span class="highlight">I have read and understood the information above and I freely agree to participate in this research study.</span>
-              <button mat-flat-button (click)="onAccept()">Accept</button>
+              <button mat-flat-button (click)="onAccept(userStudy?._id)">Accept</button>
             </div>
           </app-page-section-content>
         </app-page-section>

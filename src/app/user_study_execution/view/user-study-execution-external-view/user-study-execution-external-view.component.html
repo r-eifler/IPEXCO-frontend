@@ -1,1 +1,29 @@
-<p>user-study-execution-external-view works!</p>
+@let step = step$ | async;
+
+<app-page>
+  <app-page-title>
+    {{ step.name }}
+  </app-page-title>
+  <app-page-content>
+    <app-page-section-list>
+      <app-page-section>
+        <app-page-section-content>
+          <p>Please follow this external, finish the task it leads to and then continue here.</p>
+          @if(!clickedLink){
+            <a mat-flat-button [href]="step?.content" target="_blank" (click)="onClickLink()">External Link</a>
+          }
+          @else {
+            <a mat-stroked-button [href]="step?.content" target="_blank" (click)="onClickLink()">External Link</a>
+          }
+
+        </app-page-section-content>
+      </app-page-section>
+      <app-page-section>
+        <app-page-section-content>
+          <button mat-flat-button (click)="onContinue()" [disabled]="!clickedLink">Continue</button>
+        </app-page-section-content>
+      </app-page-section>
+    </app-page-section-list>
+  </app-page-content>
+</app-page>
+

@@ -1,6 +1,5 @@
 import { inject, Injectable } from "@angular/core";
 import { ActivatedRouteSnapshot, Router, RouterStateSnapshot, UrlTree } from "@angular/router";
-import { AuthenticationService } from "../user/services/authentication.service";
 import { Store } from "@ngrx/store";
 import { selectLoggedIn } from "../user/state/user.selector";
 import { map, Observable, take } from "rxjs";

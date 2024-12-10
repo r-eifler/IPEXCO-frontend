@@ -86,6 +86,7 @@ import {EditUserStudyEffect} from './user_study/state/effects/edit-user-study.ef
 import {ExecutionLoadUserStudyEffect} from './user_study_execution/state/effects/load-user-study.effect';
 import {userStudyExecutionFeature, userStudyExecutionReducer} from './user_study_execution/state/user-study-execution.reducer';
 import {ExecutionUserStudyService} from './user_study_execution/service/execution-user-study.service';
+import {ExecutionNextUserStudyStepEffect} from './user_study_execution/state/effects/next-user-study-step.effect';
 
 
 
@@ -139,6 +140,7 @@ import {ExecutionUserStudyService} from './user_study_execution/service/executio
       LoadUserStudyEffect,
       EditUserStudyEffect,
       ExecutionLoadUserStudyEffect,
+      ExecutionNextUserStudyStepEffect
     ]),
     // Instrumentation must be imported after importing StoreModule (config is optional)
     StoreDevtoolsModule.instrument({
