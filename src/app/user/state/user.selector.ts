@@ -8,9 +8,11 @@ const selectUserDataFeature = createFeatureSelector<UserState>(UserDataFeature);
 export const selectUser = createSelector(selectUserDataFeature, (state) => state.user.data)
 export const selectToken = createSelector(selectUserDataFeature, (state) => state.token.data)
 
-export const selectLoggedIn = createSelector(selectUserDataFeature, (state) => 
+export const selectLoggedIn = createSelector(selectUserDataFeature, (state) =>
     state.token.state == LoadingState.Done && state.token.data != undefined)
-export const selectUserError = createSelector(selectUserDataFeature, (state) => 
+export const selectLoggedOut = createSelector(selectUserDataFeature, (state) =>
+  state.token.state !== LoadingState.Done || state.token.data === undefined)
+export const selectUserError = createSelector(selectUserDataFeature, (state) =>
     state.user.state == LoadingState.Error)
 
 export const selectUserRole = createSelector(selectUserDataFeature, (state) => state.user.data?.role)

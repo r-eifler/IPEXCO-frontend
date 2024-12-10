@@ -1,6 +1,9 @@
+@let canceled = canceled$ | async;
+@let submitted = submitted$ | async;
+
 <app-page>
   <app-page-title>
-    Finished! <span style="color: red">TODO CHECK back with server!</span>
+    Finished!
   </app-page-title>
   <app-page-content>
     <app-page-section-list>
@@ -40,7 +43,7 @@
         </app-page-section-content>
       </app-page-section>
       }
-      @if(submitted){
+      @if(submitted && !canceled){
         <app-page-section>
           <app-page-section-title>
             Submitted

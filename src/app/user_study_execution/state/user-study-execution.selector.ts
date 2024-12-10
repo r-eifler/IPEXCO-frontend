@@ -11,3 +11,5 @@ export const selectExecutionUserStudyNextStepIndex = createSelector(selectUserSt
 
 export const selectExecutionUserStudyStep = createSelector(selectUserStudyExecutionFeature, (state) =>
     state.stepIndex === null || state.stepIndex < state.userStudy.data?.steps.length ? state.userStudy?.data.steps[state.stepIndex] : null)
+
+export const selectExecutionUserStudyCanceled = createSelector(selectUserStudyExecutionFeature, (state) => state.canceled)

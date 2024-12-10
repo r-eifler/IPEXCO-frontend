@@ -11,6 +11,7 @@ import {PageSectionListComponent} from '../../../shared/components/page/page-sec
 import {PageSectionTitleComponent} from '../../../shared/components/page/page-section-title/page-section-title.component';
 import {PageModule} from '../../../shared/components/page/page.module';
 import {Router} from '@angular/router';
+import {registerUserStudyUser} from '../../state/user-study-execution.actions';
 
 @Component({
   selector: 'app-user-study-execution-agreement-view',
@@ -30,7 +31,7 @@ export class UserStudyExecutionAgreementViewComponent {
 
   userStudy$ = this.store.select(selectExecutionUserStudy);
 
-  onAccept(id: string){
-    this.router.navigate(['user-study-execution', id, 'step', '0'])
+  onAccept(id: string) {
+    this.store.dispatch(registerUserStudyUser({id}));
   }
 }

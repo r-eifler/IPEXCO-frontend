@@ -38,7 +38,7 @@ export const appRoutes: Routes = [
   {
     path: "user-study-execution",
     loadChildren: () => import('./user_study_execution/user-study-execution.module').then(m => m.UserStudyExecutionModule),
-    canActivate: [AuthGuard],
+    canActivate: [],
   },
 
 ];

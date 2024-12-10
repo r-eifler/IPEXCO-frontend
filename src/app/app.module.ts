@@ -64,7 +64,7 @@ import { AuthenticationInterceptor } from "./interceptor/authentication.intercep
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RegisterEffect } from './user/state/effects/register.effect';
 import { LoggedInEffect } from './user/state/effects/loggedIn.effect';
-import { LoadTokenEffect } from './user/state/effects/loadToken.effect';
+import { LoadStoreTokenEffect } from './user/state/effects/loadStoreToken.effect';
 import { LoadUserEffect } from './user/state/effects/loadUser.effect';
 import { SendMessageToLLMEffect } from './iterative_planning/state/effects/send-message.effect';
 import { CreateDemoEffect } from './project/state/effects/create-demo.effect';
@@ -87,6 +87,9 @@ import {ExecutionLoadUserStudyEffect} from './user_study_execution/state/effects
 import {userStudyExecutionFeature, userStudyExecutionReducer} from './user_study_execution/state/user-study-execution.reducer';
 import {ExecutionUserStudyService} from './user_study_execution/service/execution-user-study.service';
 import {ExecutionNextUserStudyStepEffect} from './user_study_execution/state/effects/next-user-study-step.effect';
+import {UserStudyAuthenticationService} from './user_study_execution/service/user-study-authentication.service';
+import {RegisterUserStudyEffect} from './user_study_execution/state/effects/register-user-study.effect';
+import {FinishUserStudyEffect} from './user_study_execution/state/effects/finish-user-study.effect';
 
 
 
@@ -104,7 +107,7 @@ import {ExecutionNextUserStudyStepEffect} from './user_study_execution/state/eff
         [userStudyExecutionFeature]: userStudyExecutionReducer,
     }),
     EffectsModule.forRoot([
-      LoadTokenEffect,
+      LoadStoreTokenEffect,
       LoginEffect,
       LoadUserEffect,
       LogoutEffect,
@@ -140,7 +143,9 @@ import {ExecutionNextUserStudyStepEffect} from './user_study_execution/state/eff
       LoadUserStudyEffect,
       EditUserStudyEffect,
       ExecutionLoadUserStudyEffect,
-      ExecutionNextUserStudyStepEffect
+      ExecutionNextUserStudyStepEffect,
+      RegisterUserStudyEffect,
+      FinishUserStudyEffect,
     ]),
     // Instrumentation must be imported after importing StoreModule (config is optional)
     StoreDevtoolsModule.instrument({
@@ -183,6 +188,7 @@ import {ExecutionNextUserStudyStepEffect} from './user_study_execution/state/eff
     UserStudyService,
     UserStudyDemoService,
     ExecutionUserStudyService,
+    UserStudyAuthenticationService,
     {
       provide: MAT_BOTTOM_SHEET_DEFAULT_OPTIONS,
       useValue: { hasBackdrop: true },
