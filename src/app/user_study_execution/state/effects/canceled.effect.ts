@@ -13,7 +13,7 @@ export class UserStudyCanceledEffect{
     private store = inject(Store);
     private router = inject(Router);
 
-    public checkLogin$ = createEffect(() => this.store.select(selectExecutionUserStudyCanceled).pipe(
+    public canceled$ = createEffect(() => this.store.select(selectExecutionUserStudyCanceled).pipe(
         tap(isCanceled => console.log('Cancel Status: ' + isCanceled)),
         tap((isCanceled) => {
             if(isCanceled){

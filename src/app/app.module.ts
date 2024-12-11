@@ -86,7 +86,6 @@ import {EditUserStudyEffect} from './user_study/state/effects/edit-user-study.ef
 import {ExecutionLoadUserStudyEffect} from './user_study_execution/state/effects/load-user-study.effect';
 import {userStudyExecutionFeature, userStudyExecutionReducer} from './user_study_execution/state/user-study-execution.reducer';
 import {ExecutionUserStudyService} from './user_study_execution/service/execution-user-study.service';
-import {ExecutionNextUserStudyStepEffect} from './user_study_execution/state/effects/next-user-study-step.effect';
 import {UserStudyAuthenticationService} from './user_study_execution/service/user-study-authentication.service';
 import {RegisterUserStudyEffect} from './user_study_execution/state/effects/register-user-study.effect';
 import {FinishUserStudyEffect} from './user_study_execution/state/effects/finish-user-study.effect';
@@ -94,6 +93,8 @@ import {UserStudyExecutionEvalService} from './user_study/service/user-study-exe
 import {StoreTokenEffect} from './user/state/effects/storeToken.effect';
 import {LoadUserStudyParticipantsEffect} from './user_study/state/effects/load-user-study-participants.effect';
 import {UserStudyCanceledEffect} from './user_study_execution/state/effects/canceled.effect';
+import { UserStudyStartedEffect } from './user_study_execution/state/effects/start.effect copy';
+import { UserStudyFinishedAllStepsEffect } from './user_study_execution/state/effects/finished-all-steps.effect copy';
 
 
 
@@ -149,10 +150,11 @@ import {UserStudyCanceledEffect} from './user_study_execution/state/effects/canc
       EditUserStudyEffect,
       LoadUserStudyParticipantsEffect,
       ExecutionLoadUserStudyEffect,
-      ExecutionNextUserStudyStepEffect,
+      UserStudyStartedEffect,
       RegisterUserStudyEffect,
       FinishUserStudyEffect,
-      UserStudyCanceledEffect
+      UserStudyCanceledEffect,
+      UserStudyFinishedAllStepsEffect
     ]),
     // Instrumentation must be imported after importing StoreModule (config is optional)
     StoreDevtoolsModule.instrument({

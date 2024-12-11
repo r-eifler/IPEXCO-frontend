@@ -3,7 +3,6 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {DialogModule} from '../../../shared/components/dialog/dialog.module';
 import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
-import {executionNextUserStudyStep} from '../../state/user-study-execution.actions';
 import {Store} from '@ngrx/store';
 import {DialogComponent} from '../../../shared/components/dialog/dialog/dialog.component';
 
@@ -25,10 +24,11 @@ export class TimeOverDialogComponent {
 
   constructor(private dialogRef: MatDialogRef<DialogComponent>) {
     dialogRef.disableClose = true;
+    console.log("New Timeout Dialog!")
   }
 
   onContinue(){
-      this.store.dispatch((executionNextUserStudyStep()));
-      this.dialogRef.close();
+    console.log("Close Timeout Dialog!")
+    this.dialogRef.close();
   }
 }

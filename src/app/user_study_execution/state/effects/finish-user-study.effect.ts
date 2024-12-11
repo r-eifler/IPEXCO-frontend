@@ -7,15 +7,11 @@ import {
   executionUserStudySubmit, executionUserStudySubmitFailure, executionUserStudySubmitSuccess,
 } from '../user-study-execution.actions';
 import {logout} from '../../../user/state/user.actions';
-import {Store} from '@ngrx/store';
-import {Router} from '@angular/router';
 import {UserStudyExecutionService} from '../../service/user-study-execution.service';
 
 @Injectable()
 export class FinishUserStudyEffect{
 
-    private store = inject(Store);
-    private router = inject(Router);
     private actions$ = inject(Actions)
     private service = inject(UserStudyExecutionService)
 

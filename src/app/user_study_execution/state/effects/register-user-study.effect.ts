@@ -29,6 +29,6 @@ export class RegisterUserStudyEffect{
     public startWithFirstStep$ = createEffect(() => this.actions$.pipe(
       ofType(registerUserStudyUserSuccess),
       concatLatestFrom(() => this.store.select(selectExecutionUserStudy)),
-      tap(([_, study]) => this.router.navigate(['user-study-execution', study?._id, 'step', '0']))
+      tap(([_, study]) => this.router.navigate(['user-study-execution', study?._id, 'step']))
     ), {dispatch: false})
 }

@@ -1,10 +1,7 @@
-import { Component, inject, viewChild } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Store } from '@ngrx/store';
-import {combineLatest} from 'rxjs';
-import {filter, map, take} from 'rxjs/operators';
+import {map, take} from 'rxjs/operators';
 import {TimeOverDialogComponent} from '../../components/time-over-dialog/time-over-dialog.component';
 import {MatIconModule} from '@angular/material/icon';
 import {MatToolbarModule} from '@angular/material/toolbar';
@@ -18,10 +15,11 @@ import {UserStudyExecutionProgressComponent} from '../../components/user-study-e
 import {UserStudyExecutionTimerComponent} from '../../components/user-study-execution-timer/user-study-execution-timer.component';
 import {
   selectExecutionUserStudy,
+  selectExecutionUserStudyFinishedAllSteps,
   selectExecutionUserStudyStep,
   selectExecutionUserStudyStepIndex
 } from '../../state/user-study-execution.selector';
-import {main} from '@angular/compiler-cli/src/main';
+
 
 @Component({
   selector: 'app-shell',
@@ -47,18 +45,13 @@ export class UserStudyExecutionShellComponent {
   currenStep$ = this.store.select(selectExecutionUserStudyStep);
   currenStepIndex$ = this.store.select(selectExecutionUserStudyStepIndex);
   loggedIn$ = this.store.select(selectLoggedIn);
+  allStepsFinished$ = this.store.select(selectExecutionUserStudyFinishedAllSteps);
 
   showTimer$ = this.currenStep$.pipe(map(step => step.type === 'demo'));
 
 
   onTimeOver(){
-    this.currenStep$.pipe(take(1)).subscribe(
-      step => {
-        if(step.type === 'demo'){
-          this.dialog.open(TimeOverDialogComponent)
-        }
-      }
-    );
+   
   }
 
   onCancel() {

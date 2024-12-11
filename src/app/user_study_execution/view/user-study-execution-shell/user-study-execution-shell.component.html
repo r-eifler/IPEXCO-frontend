@@ -3,11 +3,9 @@
     <span>User Study</span>
     <app-user-study-execution-progress class="full-width" [steps]="(userStudy$ | async)?.steps" [currentStepIndex]="currenStepIndex$ | async"></app-user-study-execution-progress>
   </mat-toolbar-row>
-  @if(loggedIn$ | async){
+  @if((loggedIn$ | async) && (!(allStepsFinished$ | async))){
   <mat-toolbar-row class="bottom-row">
-<!--    @if(showTimer$ | async){-->
-      <app-user-study-execution-timer class="full-width" (over)="onTimeOver()"></app-user-study-execution-timer>
-<!--    }-->
+    <app-user-study-execution-timer class="full-width" (over)="onTimeOver()"></app-user-study-execution-timer>
     <button mat-stroked-button (click)="onCancel()">Cancel</button>
     <button mat-flat-button (click)="onNext()">Continue</button>
   </mat-toolbar-row>

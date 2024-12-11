@@ -9,8 +9,8 @@ export const executionLoadUserStudyFailure = createAction('[UserStudyExecution] 
 
 
 // steps
-export const executionSelectUserStudyStep = createAction('[UserStudyExecution] select user study step', props<{index: number}>());
 export const executionNextUserStudyStep = createAction('[UserStudyExecution] next user study step');
+export const executionFinishedLastUserStudyStep = createAction('[UserStudyExecution] finish last user study step');
 
 
 // execution

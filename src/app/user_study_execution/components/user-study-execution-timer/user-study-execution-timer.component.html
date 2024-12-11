@@ -1,5 +1,5 @@
+@if(showTimer$ | async){
 <div class="container">
-<!--  {{ remainingSeconds$ | async}}-->
   @if((remainingMinutes$ | async) >= 1){
     <span>{{remainingMinutes$ | async}} min</span>
   }
@@ -8,4 +8,4 @@
   }
   <mat-progress-bar mode="determinate" [value]="remainingTimeFraction$ | async"></mat-progress-bar>
 </div>
-
+}

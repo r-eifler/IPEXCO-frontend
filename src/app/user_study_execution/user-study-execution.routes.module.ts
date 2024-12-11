@@ -17,7 +17,6 @@ import {
 import {StepFinishedGuard} from '../route-guards/step-finished-guard.guard';
 import {UserStudyExecutionStepShellComponent} from './view/user-study-execution-step-shell/user-study-execution-step-shell.component';
 import {UserStudyExecutionFailViewComponent} from './view/user-study-execution-fail-view/user-study-execution-fail-view.component';
-import {loadUserStudyExecutionStepResolver} from './resolver/load-user-study-execution-step.resolver';
 import {AuthGuard} from '../route-guards/auth-guard.guard';
 import {UserStudyExecutionCancelViewComponent} from './view/user-study-execution-cancel-view/user-study-execution-cancel-view.component';
 import {UserStudyAuthGuard} from '../route-guards/user-study-auth.guard';
@@ -56,10 +55,8 @@ const routes: Routes = [
             component: UserStudyExecutionAgreementViewComponent,
           },
           {
-            path: 'step/:stepId',
+            path: 'step',
             component: UserStudyExecutionStepShellComponent,
-            // canActivate: [StepFinishedGuard],
-            resolve: {loadUserStudyExecutionStepResolver},
             canActivate: [UserStudyAuthGuard],
             children: [
               {
