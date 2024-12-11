@@ -7,7 +7,7 @@ import { map, Observable, take } from "rxjs";
 @Injectable({
   providedIn: "root",
 })
-export class AuthGuard  {
+export class ToHomeGuard  {
 
   store = inject(Store)
   router = inject(Router)
@@ -23,11 +23,11 @@ export class AuthGuard  {
 
     return this.store.select(selectLoggedIn).pipe(take(1)).pipe(
       map(isLoggedIn => {
-        if(isLoggedIn){
+        if(!isLoggedIn){
           return true;
         }
         else {
-          return this.router.parseUrl("/register");
+          return this.router.parseUrl("/overview");
         }
       })
     )

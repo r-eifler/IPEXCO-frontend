@@ -3,6 +3,8 @@ import { UserMainPageComponent } from './user/view/user-main-page/user-main-page
 import { ProjectCollectionComponent } from './project-meta/components/project-collection/project-collection.component';
 import { AuthGuard } from './route-guards/auth-guard.guard';
 import {NavigationComponent} from './base/components/navigation/navigation.component';
+import { MainPageComponent } from './base/components/main-page/main-page.component';
+import { ToHomeGuard } from './route-guards/to-home.guard';
 
 export const appRoutes: Routes = [
   {
@@ -12,10 +14,20 @@ export const appRoutes: Routes = [
   },
   {
     path: '',
+    redirectTo: '/overview',
+    pathMatch: 'full'
+  },
+  {
+    path: '',
     component: NavigationComponent,
     resolve: { },
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
     children: [
+      {
+        path: 'register',
+        component: MainPageComponent,
+        canActivate: [ToHomeGuard]
+      },
       {
         path: 'overview',
         component: UserMainPageComponent,
