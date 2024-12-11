@@ -1,4 +1,3 @@
-
 mat-card-header {
   padding: var(--spacing-400);
 }
@@ -26,4 +25,21 @@ mat-card-header {
   display: flex;
   gap: var(--spacing-200);
   justify-content: flex-end;
+}
+
+.example-header {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 16px;
+
+  mat-card-title {
+    margin: 0;
+  }
+
+  mat-form-field {
+    flex: 1;
+    max-width: 300px;
+    margin-top: 18px;
+  }
 }

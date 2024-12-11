@@ -8,8 +8,23 @@
   <mat-card-content>
 
     <mat-stepper linear=true #stepper>
-      <mat-step [stepControl]="projectBasic" label="Name">
+      <mat-step [stepControl]="projectBasic" label="Project Details">
         <div class="stepper-content">
+          <mat-card>
+            <mat-card-header class="example-header">
+              <mat-card-title>Start from example</mat-card-title>
+              <mat-form-field>
+                <mat-label>Select example project</mat-label>
+                <mat-select (selectionChange)="onExampleSelected($event.value)">
+                  <mat-option>None</mat-option>
+                  @for (example of exampleProjects; track example) {
+                    <mat-option [value]="example">{{example.name}}</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+            </mat-card-header>
+          </mat-card>
+
           <form
             class="main-form"
             [formGroup]="projectBasic">
@@ -38,6 +53,10 @@
 
       <mat-step label="Domain">
         <div class="stepper-content">
+          @if (selectedExample) {
+            <p>Using example files from {{selectedExample.name}}</p>
+          }
+          
           <app-template-file-upload type="pddl_domain" (fileSelected)="onDomainSelected($event)">Upload Domain File</app-template-file-upload>
           <app-template-file-upload type="pddl_problem" (fileSelected)="onProblemSelected($event)">Upload Problem File</app-template-file-upload>
           <!-- <div>

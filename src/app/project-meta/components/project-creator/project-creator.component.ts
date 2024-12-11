@@ -20,6 +20,9 @@ import { selectUser } from "src/app/user/state/user.selector";
 import { MatInputModule } from "@angular/material/input";
 import { MatButtonModule } from "@angular/material/button";
 import { Project } from "src/app/shared/domain/project";
+import { ExampleProject } from "../../example-projects";
+import { MatSelectModule } from '@angular/material/select';
+import { MatOptionModule } from '@angular/material/core';
 
 @Component({
   selector: "app-project-creator",
@@ -37,6 +40,8 @@ import { Project } from "src/app/shared/domain/project";
     MatCardModule,
     MatIconModule,
     MatButtonModule,
+    MatSelectModule,
+    MatOptionModule,
   ],
   templateUrl: "./project-creator.component.html",
   styleUrls: ["./project-creator.component.scss"],
@@ -49,6 +54,7 @@ export class ProjectCreatorComponent implements OnInit {
     name: ['', Validators.required],
     domain_name: ['', Validators.required],
     description: ['', Validators.required],
+    useExample: [false],
   });
 
   selectedDomain: any
@@ -68,6 +74,20 @@ export class ProjectCreatorComponent implements OnInit {
 
   translatedModel$: BehaviorSubject<PlanningModel>;
   modelValid$: Observable<boolean>;
+
+  exampleProjects: ExampleProject[] = [
+    {
+      name: "Blocksworld",
+      domainName: "blocksworld",
+      description: "Classic blocks world planning problem, small instance",
+      domainFile: "./assets/example-projects/blocksworld/domain.pddl",
+      problemFile: "./assets/example-projects/blocksworld/problem.pddl",
+      templateFile: "./assets/example-projects/blocksworld/templates.json",
+      promptFile: "./assets/example-projects/blocksworld/prompt.json",
+    },
+  ];
+
+  selectedExample: ExampleProject | null = null;
 
   constructor(
     private store: Store,
@@ -117,6 +137,35 @@ export class ProjectCreatorComponent implements OnInit {
   onSpecificationSelected(specification: string){
     this.selectedSpecification = specification
     // console.log(this.selectedDomain)
+  }
+
+  onExampleSelected(example: ExampleProject | null) {
+    this.selectedExample = example;
+    if (example) {
+      this.projectBasic.patchValue({
+        name: example.name,
+        domain_name: example.domainName,
+        description: example.description
+      });
+
+      // Automatically load example files without requiring user selection
+      this.loadExampleFiles(example);
+    } else {
+      // Clear form when no example is selected
+      this.projectBasic.reset();
+      this.selectedDomain = null;
+      this.selectedProblem = null;
+    }
+  }
+
+  private loadExampleFiles(example: ExampleProject) {
+    fetch(example.domainFile)
+      .then(response => response.text())
+      .then(domain => this.onDomainSelected(domain));
+    
+    fetch(example.problemFile)
+      .then(response => response.text())
+      .then(problem => this.onProblemSelected(problem));
   }
 
   onSave(): void {
