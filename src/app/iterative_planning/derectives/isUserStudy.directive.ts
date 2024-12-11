@@ -5,13 +5,13 @@ import { Store } from '@ngrx/store';
 import {selectUser} from '../../user/state/user.selector';
 
 @Directive({
-    selector: '[isDemo]',
+    selector: '[isUserStudy]',
     standalone: true,
     hostDirectives: [{
         directive: NgIf,
     }],
 })
-export class DemoDirective {
+export class UserStudyDirective {
 
     store = inject(Store);
 

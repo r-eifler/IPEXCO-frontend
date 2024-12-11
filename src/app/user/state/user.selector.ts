@@ -17,3 +17,6 @@ export const selectUserError = createSelector(selectUserDataFeature, (state) =>
 
 export const selectUserRole = createSelector(selectUserDataFeature, (state) => state.user.data?.role)
 export const selectUserName = createSelector(selectUserDataFeature, (state) => state.user.data?.name)
+
+
+export const selectIsUserStudy = createSelector(selectUserDataFeature, (state) => state.user.data?.role == 'user-study')
