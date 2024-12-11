@@ -1,4 +1,14 @@
 <div style="width: 100%">
   <mat-progress-bar mode="determinate" [value]="progress()"></mat-progress-bar>
+  <div class="label-container">
+    @for(step of steps(); track step; let index = $index){
+      @if(currentStepIndex() == index){
+        <span class="label-highlight">{{ step.name }}</span>
+      }
+      @else{
+        <span class="label">{{ step.name }}</span>
+      }
+    }
+  </div>
 </div>
 

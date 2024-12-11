@@ -18,7 +18,7 @@ export class UserStudyExecutionProgressComponent implements OnInit {
   currentStepIndex = input.required<number>();
 
   progress = computed(() =>
-    this.currentStepIndex() && this.steps()?.length > 0 ? this.currentStepIndex() / this.steps()?.length : 0)
+    this.currentStepIndex() && this.steps()?.length > 0 ? (this.currentStepIndex() / (this.steps()?.length - 1)) * 100 : 0)
 
   ngOnInit(): void {
       console.log(this.progress());

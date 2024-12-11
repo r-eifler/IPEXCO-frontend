@@ -1,1 +1,10 @@
-<p>user-study-execution-timer works!</p>
+<div class="container">
+  @if(remainingMinutes >= 1){
+    <span>{{remainingMinutes}} min</span>
+  }
+  @else{
+    <span>{{remainingSeconds}} sec</span>
+  }
+  <mat-progress-bar mode="determinate" [value]="remainingTimeFraction"></mat-progress-bar>
+</div>
+
