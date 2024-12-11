@@ -11,7 +11,7 @@
             Plan Properties
           </mat-card-title>
         </mat-card-header>
-        
+
         <mat-card-content class="sub-card-content">
           <mat-label matTooltip="Interface used for creating plan properties.">
             Property Creation Interface
@@ -69,7 +69,7 @@
             Automatic Computation
           </mat-card-title>
         </mat-card-header>
-        
+
         <mat-card-content class="sub-card-content">
 
           <mat-slide-toggle formControlName="computePlanAutomatically"
@@ -92,7 +92,7 @@
           Demo
         </mat-card-title>
       </mat-card-header>
-      
+
       <mat-card-content class="sub-card-content">
 
         <mat-slide-toggle formControlName="public"
@@ -109,7 +109,7 @@
           Features for a User Study
         </mat-card-title>
       </mat-card-header>
-      
+
       <mat-card-content class="sub-card-content">
 
         <mat-slide-toggle formControlName="introTask"
@@ -128,9 +128,9 @@
 
         @if(settingsForm.controls.useTimer.value){
         <mat-form-field style="width: 200px">
-          <mat-label>Max processing time (in min)</mat-label>
+          <mat-label>Max processing time (in sec)</mat-label>
           <input matInput type="number" formControlName="maxTime" />
-        </mat-form-field> 
+        </mat-form-field>
         }
 
         <mat-slide-toggle formControlName="measureTime">
@@ -144,11 +144,11 @@
       </mat-card-content>
     </mat-card>
 
-    
+
   }
   <button mat-stroked-button>Save</button>
 
-<!-- 
+<!--
         <div class="part">
           <h4>Payment Score</h4>
 

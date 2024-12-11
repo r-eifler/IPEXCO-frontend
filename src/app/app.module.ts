@@ -1,16 +1,16 @@
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
-import { CUSTOM_ELEMENTS_SCHEMA, NgModule, NO_ERRORS_SCHEMA } from "@angular/core";
-import { BrowserModule } from "@angular/platform-browser";
-import { RouterModule } from "@angular/router";
-import { appRoutes } from "./app.routes";
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { RouterModule } from '@angular/router';
+import { appRoutes } from './app.routes';
 
-import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from "@angular/common/http";
-import { AppComponent } from "./app.component";
+import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common/http';
+import { AppComponent } from './app.component';
 import { MAT_BOTTOM_SHEET_DEFAULT_OPTIONS } from '@angular/material/bottom-sheet';
 
 // Components
-import { NavigationComponent } from "./base/components/navigation/navigation.component";
+import { NavigationComponent } from './base/components/navigation/navigation.component';
 
 
 // State
@@ -60,7 +60,7 @@ import { ProjectPlanPropertyService } from './project/service/plan-properties.se
 
 
 // Interceptors
-import { AuthenticationInterceptor } from "./interceptor/authentication.interceptor";
+import { AuthenticationInterceptor } from './interceptor/authentication.interceptor';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RegisterEffect } from './user/state/effects/register.effect';
 import { LoggedInEffect } from './user/state/effects/loggedIn.effect';
@@ -164,7 +164,7 @@ import {UserStudyCanceledEffect} from './user_study_execution/state/effects/canc
     }),
     RouterModule.forRoot(appRoutes, {
         enableTracing: false,
-        paramsInheritanceStrategy: "always",
+        paramsInheritanceStrategy: 'always',
     }),
     BrowserModule,
     HttpClientModule,
