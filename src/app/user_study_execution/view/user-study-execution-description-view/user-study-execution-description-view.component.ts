@@ -5,10 +5,11 @@ import {PageTitleComponent} from '../../../shared/components/page/page-title/pag
 import {selectExecutionUserStudyStep} from '../../state/user-study-execution.selector';
 import {Store} from '@ngrx/store';
 import {PageModule} from '../../../shared/components/page/page.module';
-import {executionUserStudyCancel} from '../../state/user-study-execution.actions';
+import {executionNextUserStudyStep, executionUserStudyCancel} from '../../state/user-study-execution.actions';
 import {AskDeleteComponent} from '../../../shared/components/ask-delete/ask-delete.component';
 import {deleteProjectDemo} from '../../../project/state/project.actions';
 import {MatDialog} from '@angular/material/dialog';
+import {selectLoggedIn} from '../../../user/state/user.selector';
 
 @Component({
   selector: 'app-user-study-execution-description-view',
@@ -28,6 +29,7 @@ export class UserStudyExecutionDescriptionViewComponent {
   dialog = inject(MatDialog);
 
   step$ = this.store.select(selectExecutionUserStudyStep);
+  loggedIn = this.store.select((selectLoggedIn));
 
   continue = output<void>();
 
@@ -52,5 +54,4 @@ export class UserStudyExecutionDescriptionViewComponent {
       }
     });
   }
-
 }

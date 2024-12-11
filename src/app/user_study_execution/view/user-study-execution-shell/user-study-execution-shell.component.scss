@@ -1,0 +1,24 @@
+.spacer{
+  flex: 1 1 auto;
+}
+
+.top-row{
+  flex: auto 1;
+  gap: var(--spacing-500);
+}
+
+.full-width{
+  width: 100%;
+}
+
+.bottom-row{
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--spacing-200);
+}
+
+.bottom-row > button {
+  width: 150px;
+}
+
+
