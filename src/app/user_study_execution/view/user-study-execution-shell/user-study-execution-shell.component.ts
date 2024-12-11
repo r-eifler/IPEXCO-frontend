@@ -4,7 +4,7 @@ import { RouterOutlet } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Store } from '@ngrx/store';
 import {combineLatest} from 'rxjs';
-import {filter} from 'rxjs/operators';
+import {filter, map, take} from 'rxjs/operators';
 import {TimeOverDialogComponent} from '../../components/time-over-dialog/time-over-dialog.component';
 import {MatIconModule} from '@angular/material/icon';
 import {MatToolbarModule} from '@angular/material/toolbar';
@@ -16,7 +16,12 @@ import {selectLoggedIn} from '../../../user/state/user.selector';
 import {AsyncPipe} from '@angular/common';
 import {UserStudyExecutionProgressComponent} from '../../components/user-study-execution-progress/user-study-execution-progress.component';
 import {UserStudyExecutionTimerComponent} from '../../components/user-study-execution-timer/user-study-execution-timer.component';
-import {selectExecutionUserStudy, selectExecutionUserStudyStepIndex} from '../../state/user-study-execution.selector';
+import {
+  selectExecutionUserStudy,
+  selectExecutionUserStudyStep,
+  selectExecutionUserStudyStepIndex
+} from '../../state/user-study-execution.selector';
+import {main} from '@angular/compiler-cli/src/main';
 
 @Component({
   selector: 'app-shell',
@@ -39,25 +44,22 @@ export class UserStudyExecutionShellComponent {
   dialog = inject(MatDialog);
 
   userStudy$ = this.store.select(selectExecutionUserStudy);
+  currenStep$ = this.store.select(selectExecutionUserStudyStep);
   currenStepIndex$ = this.store.select(selectExecutionUserStudyStepIndex);
   loggedIn$ = this.store.select(selectLoggedIn);
 
-  // constructor(){
-  //
-  //   combineLatest([this.isDemo$, this.project$]).pipe(
-  //     takeUntilDestroyed(),
-  //     filter(([_, project]) => !!project)
-  //   ).subscribe(
-  //     ([isDemo, project]) => {
-  //       if(isDemo && project.settings.useTimer){
-  //         console.log('set timeout: ' + (project.settings.maxTime * 1000))
-  //         setTimeout(() => {
-  //           this.dialog.open(TimeOverDialogComponent)
-  //         }, project.settings.maxTime * 1000)
-  //       }
-  //     }
-  //   );
-  // }
+  showTimer$ = this.currenStep$.pipe(map(step => step.type === 'demo'));
+
+
+  onTimeOver(){
+    this.currenStep$.pipe(take(1)).subscribe(
+      step => {
+        if(step.type === 'demo'){
+          this.dialog.open(TimeOverDialogComponent)
+        }
+      }
+    );
+  }
 
   onCancel() {
     const dialogRef = this.dialog.open(AskDeleteComponent, {

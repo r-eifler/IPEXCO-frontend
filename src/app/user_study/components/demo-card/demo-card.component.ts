@@ -1,4 +1,4 @@
-import {Component, inject, input, output} from '@angular/core';
+import {Component, inject, input, OnInit, output} from '@angular/core';
 import {AsyncPipe} from '@angular/common';
 import {MatAnchor, MatIconButton} from '@angular/material/button';
 import {MatCard, MatCardActions, MatCardContent, MatCardHeader, MatCardModule, MatCardTitle} from '@angular/material/card';
@@ -10,6 +10,7 @@ import {UserStudyStep} from '../../domain/user-study';
 import {MatOption, MatSelect} from '@angular/material/select';
 import {Demo} from '../../../demo/domain/demo';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import {MatSlider, MatSliderThumb} from '@angular/material/slider';
 
 @Component({
   selector: 'app-demo-card',
@@ -23,18 +24,21 @@ import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
     ReactiveFormsModule,
     MatSelect,
     MatOption,
-    MatInput
+    MatInput,
+    MatSlider,
+    MatSliderThumb
   ],
   templateUrl: './demo-card.component.html',
   styleUrl: './demo-card.component.scss'
 })
-export class DemoCardComponent {
+export class DemoCardComponent implements OnInit {
 
   fb = inject(FormBuilder);
 
   form = this.fb.group({
-    name: this.fb.control<string>(null, [Validators.required]),
-    demo: this.fb.control<string>(null, Validators.required),
+    name: this.fb.control<string>(undefined, [Validators.required]),
+    time: this.fb.control<number>(null),
+    demo: this.fb.control<string>(undefined, Validators.required),
   })
 
   step = input.required<UserStudyStep>();
@@ -54,13 +58,23 @@ export class DemoCardComponent {
       data => this.changes.emit({
         type: this.step().type,
         name: data.name,
+        time: data.time,
         content: data.demo
       })
     );
   }
 
+  formatLabel(value: number): string {
+    if (value >= 60) {
+      return Math.round(value / 60) + 'm';
+    }
+
+    return value + 's';
+  }
+
   ngOnInit(): void {
     this.form.controls.name.setValue(this.step().name);
+    this.form.controls.time.setValue(this.step().time);
     this.form.controls.demo.setValue(this.step().content);
   }
 

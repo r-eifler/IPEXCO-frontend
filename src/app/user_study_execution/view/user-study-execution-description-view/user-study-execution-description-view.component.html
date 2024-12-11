@@ -8,7 +8,7 @@
     <app-page-section-list>
       <app-page-section>
         <app-page-section-content>
-          {{ step.content }}
+          <div [innerHTML]="step.content| marked" ></div>
         </app-page-section-content>
       </app-page-section>
     </app-page-section-list>

@@ -1,10 +1,11 @@
 <div class="container">
-  @if(remainingMinutes >= 1){
-    <span>{{remainingMinutes}} min</span>
+<!--  {{ remainingSeconds$ | async}}-->
+  @if((remainingMinutes$ | async) >= 1){
+    <span>{{remainingMinutes$ | async}} min</span>
   }
   @else{
-    <span>{{remainingSeconds}} sec</span>
+    <span>{{remainingSeconds$ | async}} sec</span>
   }
-  <mat-progress-bar mode="determinate" [value]="remainingTimeFraction"></mat-progress-bar>
+  <mat-progress-bar mode="determinate" [value]="remainingTimeFraction$ | async"></mat-progress-bar>
 </div>
 

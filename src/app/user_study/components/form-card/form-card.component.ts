@@ -11,6 +11,7 @@ import {UserStudyStep} from '../../domain/user-study';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {DomSanitizer} from '@angular/platform-browser';
 import {map} from 'rxjs/operators';
+import {MatSlider, MatSliderThumb} from '@angular/material/slider';
 
 @Component({
   selector: 'app-form-card',
@@ -24,6 +25,8 @@ import {map} from 'rxjs/operators';
     MatButtonModule,
     MatTabsModule,
     AsyncPipe,
+    MatSlider,
+    MatSliderThumb,
   ],
   templateUrl: './form-card.component.html',
   styleUrl: './form-card.component.scss'
@@ -34,8 +37,9 @@ export class FormCardComponent implements OnInit {
   domSanitizer = inject(DomSanitizer);
 
   form = this.fb.group({
-    name: this.fb.control<string>(null, [Validators.required]),
-    url: this.fb.control<string | null>('', [Validators.required,  Validators.minLength(1)]),
+    name: this.fb.control<string>(undefined, [Validators.required]),
+    time: this.fb.control<number>(null),
+    url: this.fb.control<string | undefined>('', [Validators.required,  Validators.minLength(1)]),
   })
 
   step = input.required<UserStudyStep>();
@@ -56,13 +60,23 @@ export class FormCardComponent implements OnInit {
       data => this.changes.emit({
         type: this.step().type,
         name: data.name,
+        time: data.time,
         content: data.url
       })
     );
   }
 
+  formatLabel(value: number): string {
+    if (value >= 60) {
+      return Math.round(value / 60) + 'm';
+    }
+
+    return value + 's';
+  }
+
   ngOnInit(): void {
     this.form.controls.name.setValue(this.step().name);
+    this.form.controls.time.setValue(this.step().time);
     this.form.controls.url.setValue(this.step().content)
   }
 

@@ -5,7 +5,9 @@
   </mat-toolbar-row>
   @if(loggedIn$ | async){
   <mat-toolbar-row class="bottom-row">
-    <app-user-study-execution-timer class="full-width" [time]="90"></app-user-study-execution-timer>
+<!--    @if(showTimer$ | async){-->
+      <app-user-study-execution-timer class="full-width" (over)="onTimeOver()"></app-user-study-execution-timer>
+<!--    }-->
     <button mat-stroked-button (click)="onCancel()">Cancel</button>
     <button mat-flat-button (click)="onNext()">Continue</button>
   </mat-toolbar-row>

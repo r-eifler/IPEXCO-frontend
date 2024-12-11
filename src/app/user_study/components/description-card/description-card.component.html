@@ -22,6 +22,9 @@
             </div>
           </mat-tab>
         </mat-tab-group>
+        <mat-slider min="1" max="1800" step="1"  discrete [displayWith]="formatLabel" class="full-width">
+          <input matSliderThumb [formControl]="form.controls.time">
+        </mat-slider>
       </form>
     </mat-card-content>
     <mat-card-actions align="end">

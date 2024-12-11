@@ -20,6 +20,7 @@ import {UserStudyExecutionFailViewComponent} from './view/user-study-execution-f
 import {loadUserStudyExecutionStepResolver} from './resolver/load-user-study-execution-step.resolver';
 import {AuthGuard} from '../route-guards/auth-guard.guard';
 import {UserStudyExecutionCancelViewComponent} from './view/user-study-execution-cancel-view/user-study-execution-cancel-view.component';
+import {UserStudyAuthGuard} from '../route-guards/user-study-auth.guard';
 
 
 
@@ -59,9 +60,10 @@ const routes: Routes = [
             component: UserStudyExecutionStepShellComponent,
             // canActivate: [StepFinishedGuard],
             resolve: {loadUserStudyExecutionStepResolver},
+            canActivate: [UserStudyAuthGuard],
             children: [
               {
-                path: "iterative-planning",
+                path: 'iterative-planning',
                 loadChildren: () => import('../iterative_planning/iterative-planning.module').then(m => m.IterativePlanningModule),
                 canActivate: [AuthGuard],
               },

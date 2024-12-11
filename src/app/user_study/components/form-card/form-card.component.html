@@ -15,6 +15,9 @@
         <input matInput formControlName="url">
       </mat-form-field>
       <a mat-stroked-button [href]="url$ | async" target="_blank">Test Link</a>
+      <mat-slider min="1" max="1800" step="1"  discrete [displayWith]="formatLabel" class="full-width">
+        <input matSliderThumb [formControl]="form.controls.time">
+      </mat-slider>
     </form>
   </mat-card-content>
   <mat-card-actions align="end">

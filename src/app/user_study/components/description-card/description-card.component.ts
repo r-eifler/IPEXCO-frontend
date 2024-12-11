@@ -10,6 +10,7 @@ import { MatTabsModule} from '@angular/material/tabs';
 import {AsyncPipe} from '@angular/common';
 import {MarkedPipe} from '../../../pipes/marked.pipe';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import {MatSliderModule} from '@angular/material/slider';
 
 @Component({
   selector: 'app-description-card',
@@ -24,6 +25,7 @@ import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
     MatTabsModule,
     AsyncPipe,
     MarkedPipe,
+    MatSliderModule
   ],
   templateUrl: './description-card.component.html',
   styleUrl: './description-card.component.scss'
@@ -33,8 +35,9 @@ export class DescriptionCardComponent implements OnInit{
   fb = inject(FormBuilder);
 
   form = this.fb.group({
-    name: this.fb.control<string>(null, [Validators.required]),
-    description: this.fb.control<string>(null, [Validators.required, Validators.minLength(1)])
+    name: this.fb.control<string>(undefined, [Validators.required]),
+    time: this.fb.control<number>(null),
+    description: this.fb.control<string>(undefined, [Validators.required, Validators.minLength(1)])
   })
 
   step = input.required<UserStudyStep>();
@@ -53,13 +56,23 @@ export class DescriptionCardComponent implements OnInit{
       data => this.changes.emit({
         type: this.step().type,
         name: data.name,
+        time: data.time,
         content: data.description
       })
     );
   }
 
+  formatLabel(value: number): string {
+    if (value >= 60) {
+      return Math.round(value / 60) + 'm';
+    }
+
+    return value + 's';
+  }
+
   ngOnInit(): void {
     this.form.controls.name.setValue(this.step().name);
+    this.form.controls.time.setValue(this.step().time);
     this.form.controls.description.setValue(this.step().content);
   }
 

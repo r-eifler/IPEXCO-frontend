@@ -29,5 +29,6 @@ export class TimeOverDialogComponent {
 
   onContinue(){
       this.store.dispatch((executionNextUserStudyStep()));
+      this.dialogRef.close();
   }
 }

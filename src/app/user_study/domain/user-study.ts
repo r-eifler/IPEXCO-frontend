@@ -7,6 +7,7 @@ export enum UserStudyStepType {
 export interface UserStudyStep {
   type: UserStudyStepType;
   name: string,
+  time: number | null;
   content: string | null;
 }
 

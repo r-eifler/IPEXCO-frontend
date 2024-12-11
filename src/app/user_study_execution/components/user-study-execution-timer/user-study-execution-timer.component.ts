@@ -1,41 +1,47 @@
-import {Component, effect, input} from '@angular/core';
+import {Component, inject, output} from '@angular/core';
 import {MatProgressBar} from '@angular/material/progress-bar';
-import {number} from 'zod';
+import {interval, skipWhile, switchMap, takeWhile} from 'rxjs';
+import {selectExecutionUserStudyStep} from '../../state/user-study-execution.selector';
+import {Store} from '@ngrx/store';
+import {combineLatest, map} from 'rxjs';
+import {AsyncPipe} from '@angular/common';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-user-study-execution-timer',
   standalone: true,
   imports: [
-    MatProgressBar
+    MatProgressBar,
+    AsyncPipe
   ],
   templateUrl: './user-study-execution-timer.component.html',
-  styleUrl: './user-study-execution-timer.component.scss'
+  styleUrl: './user-study-execution-timer.component.scss',
 })
 export class UserStudyExecutionTimerComponent {
 
-  time = input.required<number>();
+  store = inject(Store);
+  currenStep$ = this.store.select(selectExecutionUserStudyStep);
 
-  remainingSeconds = 0;
-  remainingMinutes = 0;
+  over = output();
 
-  remainingTimeFraction = 1;
+  startTime$ = this.currenStep$.pipe(map(step => step.time));
 
+  remainingSeconds$ = this.startTime$.pipe(
+    switchMap(startTime => interval(1000).pipe(
+      takeWhile(time => time <= startTime),
+      map(time => startTime - time)))
+  )
 
-  constructor() {
-    this.remainingTimeFraction = 1;
+  remainingMinutes$ = this.remainingSeconds$.pipe(map(sec => Math.floor(sec/60)))
+  remainingTimeFraction$ = combineLatest([this.remainingSeconds$, this.startTime$]).pipe(
+    map(([remaining, start]) => (remaining/start) * 100)
+  )
 
-    effect(() => {
-      this.remainingSeconds = this.time()
-      this.remainingTimeFraction = 1
-    });
-
-    setInterval(() => {
-      if(this.remainingSeconds > 0){
-        this.remainingSeconds -= 1;
-        this.remainingMinutes = Math.floor(this.remainingSeconds / 60);
-        this.remainingTimeFraction = (this.remainingSeconds / this.time()) * 100;
-      }
-    }, 1000);
+  constructor(){
+    this.remainingSeconds$.pipe(
+      takeUntilDestroyed(),
+      skipWhile(sec => sec > 0)).subscribe(
+        () => this.over.emit()
+    )
   }
-
 }

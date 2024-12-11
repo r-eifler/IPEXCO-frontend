@@ -107,6 +107,7 @@ export class UserStudyEditorComponent {
     const newStep: UserStudyStep = {
       type,
       name: null,
+      time: null,
       content: null
     };
     this.form.controls.steps.push(this.fb.control<UserStudyStep>(newStep, [isNoPropertyNull]));

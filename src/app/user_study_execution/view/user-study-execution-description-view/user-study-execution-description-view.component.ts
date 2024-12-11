@@ -4,6 +4,7 @@ import {PageTitleComponent} from '../../../shared/components/page/page-title/pag
 import {selectExecutionUserStudyStep} from '../../state/user-study-execution.selector';
 import {Store} from '@ngrx/store';
 import {PageModule} from '../../../shared/components/page/page.module';
+import {MarkedPipe} from '../../../pipes/marked.pipe';
 
 
 @Component({
@@ -12,7 +13,8 @@ import {PageModule} from '../../../shared/components/page/page.module';
   imports: [
     AsyncPipe,
     PageModule,
-    PageTitleComponent
+    PageTitleComponent,
+    MarkedPipe
   ],
   templateUrl: './user-study-execution-description-view.component.html',
   styleUrl: './user-study-execution-description-view.component.scss'
