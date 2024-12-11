@@ -9,12 +9,14 @@ import {
   loadUserStudiesSuccess,
   loadUserStudy,
   loadUserStudyDemos,
-  loadUserStudyDemosSuccess,
+  loadUserStudyDemosSuccess, loadUserStudyParticipantsSuccess,
   loadUserStudySuccess
 } from './user-study.actions';
+import {UserStudyExecution} from '../domain/user-study-execution';
 
 export interface UserStudyState {
     userStudies: Loadable<UserStudy[]>;
+    participants: Record<string, UserStudyExecution[]>
     createdUserStudy: Creatable<UserStudy>;
     demos: Loadable<Demo[]>;
     userStudy: Loadable<UserStudy>;
@@ -24,6 +26,7 @@ export const userStudyFeature = 'user-study';
 
 const initialState: UserStudyState = {
     userStudies: {state: LoadingState.Initial, data: undefined},
+    participants: undefined,
     createdUserStudy: {state: CreationState.Default, data: undefined},
     demos: {state: LoadingState.Initial, data: undefined},
     userStudy: {state: LoadingState.Initial, data: undefined},
@@ -47,6 +50,10 @@ export const userStudyReducer = createReducer(
     on(loadUserStudyDemosSuccess, (state, {demos}): UserStudyState => ({
       ...state,
       demos: {state: LoadingState.Done, data: demos},
+    })),
+    on(loadUserStudyParticipantsSuccess, (state, {userStudyId, participants}): UserStudyState => ({
+      ...state,
+      participants: {...state.participants, [userStudyId]: participants},
     })),
     on(loadUserStudy, (state): UserStudyState => ({
       ...state,

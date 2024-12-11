@@ -5,7 +5,7 @@ import { takeUntil } from "rxjs/operators";
 import {UserStudy} from "../../domain/user-study";
 import { USUser } from "../../domain/user-study-user";
 import { UserStudyUserService } from "../../service/user-study-user.service";
-import { UserStudyData } from 'src/app/user_study/domain/user-study-store';
+import { UserStudyData } from 'src/app/user_study/domain/user-study-execution';
 import { FormsModule } from '@angular/forms';
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';

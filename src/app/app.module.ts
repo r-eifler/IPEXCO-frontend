@@ -64,7 +64,7 @@ import { AuthenticationInterceptor } from "./interceptor/authentication.intercep
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RegisterEffect } from './user/state/effects/register.effect';
 import { LoggedInEffect } from './user/state/effects/loggedIn.effect';
-import { LoadStoreTokenEffect } from './user/state/effects/loadStoreToken.effect';
+import { LoadTokenEffect } from './user/state/effects/loadToken.effect';
 import { LoadUserEffect } from './user/state/effects/loadUser.effect';
 import { SendMessageToLLMEffect } from './iterative_planning/state/effects/send-message.effect';
 import { CreateDemoEffect } from './project/state/effects/create-demo.effect';
@@ -90,6 +90,9 @@ import {ExecutionNextUserStudyStepEffect} from './user_study_execution/state/eff
 import {UserStudyAuthenticationService} from './user_study_execution/service/user-study-authentication.service';
 import {RegisterUserStudyEffect} from './user_study_execution/state/effects/register-user-study.effect';
 import {FinishUserStudyEffect} from './user_study_execution/state/effects/finish-user-study.effect';
+import {UserStudyExecutionEvalService} from './user_study/service/user-study-execution-eval.service';
+import {StoreTokenEffect} from './user/state/effects/storeToken.effect';
+import {LoadUserStudyParticipantsEffect} from './user_study/state/effects/load-user-study-participants.effect';
 
 
 
@@ -107,7 +110,8 @@ import {FinishUserStudyEffect} from './user_study_execution/state/effects/finish
         [userStudyExecutionFeature]: userStudyExecutionReducer,
     }),
     EffectsModule.forRoot([
-      LoadStoreTokenEffect,
+      LoadTokenEffect,
+      StoreTokenEffect,
       LoginEffect,
       LoadUserEffect,
       LogoutEffect,
@@ -142,6 +146,7 @@ import {FinishUserStudyEffect} from './user_study_execution/state/effects/finish
       CreateUserStudyEffect,
       LoadUserStudyEffect,
       EditUserStudyEffect,
+      LoadUserStudyParticipantsEffect,
       ExecutionLoadUserStudyEffect,
       ExecutionNextUserStudyStepEffect,
       RegisterUserStudyEffect,
@@ -189,6 +194,7 @@ import {FinishUserStudyEffect} from './user_study_execution/state/effects/finish
     UserStudyDemoService,
     ExecutionUserStudyService,
     UserStudyAuthenticationService,
+    UserStudyExecutionEvalService,
     {
       provide: MAT_BOTTOM_SHEET_DEFAULT_OPTIONS,
       useValue: { hasBackdrop: true },

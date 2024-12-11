@@ -12,7 +12,7 @@ import { MatFormFieldModule, MatLabel } from "@angular/material/form-field";
 import {AsyncPipe, DatePipe, NgForOf, NgIf} from '@angular/common';
 import {Store} from '@ngrx/store';
 import {loadUserStudies} from '../../state/user-study.actions';
-import {selectUserStudies} from '../../state/user-study.selector';
+import {selectUserStudies, selectUserStudyParticipants} from '../../state/user-study.selector';
 import {ActionCardComponent} from '../../../shared/components/action-card/action-card/action-card.component';
 import {MatMenu, MatMenuItem} from '@angular/material/menu';
 import {MatProgressSpinner} from '@angular/material/progress-spinner';
@@ -53,6 +53,7 @@ export class UserStudyCollectionComponent {
   route = inject(ActivatedRoute);
 
   userStudies$ = this.store.select(selectUserStudies);
+  participants$ = this.store.select(selectUserStudyParticipants);
 
   constructor() {
     this.store.dispatch(loadUserStudies());

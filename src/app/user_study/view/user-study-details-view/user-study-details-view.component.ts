@@ -1,5 +1,5 @@
 import {Component, inject, input} from '@angular/core';
-import {AsyncPipe} from '@angular/common';
+import {AsyncPipe, CurrencyPipe, DatePipe} from '@angular/common';
 import {BreadcrumbComponent} from '../../../shared/components/breadcrumb/breadcrumb/breadcrumb.component';
 import {BreadcrumbItemComponent} from '../../../shared/components/breadcrumb/breadcrumb-item/breadcrumb-item.component';
 import {MatIcon} from '@angular/material/icon';
@@ -11,14 +11,14 @@ import {Store} from '@ngrx/store';
 import {deleteUserStudy} from '../../state/user-study.actions';
 import {AskDeleteComponent} from '../../../shared/components/ask-delete/ask-delete.component';
 import {MatDialog} from '@angular/material/dialog';
-import {selectUserStudy} from '../../state/user-study.selector';
+import {selectUserStudy, selectUserStudyParticipantsOfStudy} from '../../state/user-study.selector';
 import {MatTooltip} from '@angular/material/tooltip';
 import {PageModule} from '../../../shared/components/page/page.module';
-import {DemoCardComponent} from '../../components/demo-card/demo-card.component';
-import {DescriptionCardComponent} from '../../components/description-card/description-card.component';
-import {FormCardComponent} from '../../components/form-card/form-card.component';
 import {MatListModule} from '@angular/material/list';
 import {MatExpansionModule} from '@angular/material/expansion';
+import {filter, map} from 'rxjs/operators';
+import {MatTableModule} from '@angular/material/table';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-user-study-details-view',
@@ -35,7 +35,11 @@ import {MatExpansionModule} from '@angular/material/expansion';
     MatButtonModule,
     AsyncPipe,
     MatTooltip,
-    MatExpansionModule
+    MatExpansionModule,
+    MatTableModule,
+    DatePipe,
+    CurrencyPipe,
+    MatCheckboxModule
   ],
   templateUrl: './user-study-details-view.component.html',
   styleUrl: './user-study-details-view.component.scss'
@@ -49,6 +53,20 @@ export class UserStudyDetailsViewComponent {
   dialog = inject(MatDialog);
 
   userStudy$ = this.store.select(selectUserStudy);
+  participants$ = this.store.select(selectUserStudyParticipantsOfStudy);
+
+  participantsTableData$ = this.participants$.pipe(
+    filter(ps => !!ps),
+    map(ps =>
+      ps.map(p => ({
+        ...p,
+        date: p.createdAt,
+        processingTime: new Date(p.updatedAt.getTime() - p.createdAt.getTime())
+      })
+      )
+    ));
+
+  displayedColumns: string[] = ['user', 'date', 'processingTime', 'finished', 'payment', 'accepted'];
 
   onRun(){
 

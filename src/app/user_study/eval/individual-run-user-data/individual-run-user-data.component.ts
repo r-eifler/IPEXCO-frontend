@@ -2,7 +2,7 @@ import { LineChartData } from '../../service/user-study-data.service';
 import { Component, Input, OnDestroy, OnInit } from "@angular/core";
 import { BehaviorSubject, combineLatest, Subject } from "rxjs";
 import { takeUntil, filter } from "rxjs/operators";
-import { UserStudyData } from "src/app/user_study/domain/user-study-store";
+import { UserStudyData } from "src/app/user_study/domain/user-study-execution";
 import { USUser } from "src/app/user_study/domain/user-study-user";
 import { DataPoint, UserStudyDataService } from "src/app/user_study/service/user-study-data.service";
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';

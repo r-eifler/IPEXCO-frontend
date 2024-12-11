@@ -3,7 +3,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, map, switchMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import {UserStudyService} from '../../service/user-study.service';
-import {loadUserStudy, loadUserStudyFailure, loadUserStudySuccess} from '../user-study.actions';
+import {loadUserStudy, loadUserStudyFailure, loadUserStudyParticipants, loadUserStudySuccess} from '../user-study.actions';
 
 @Injectable()
 export class LoadUserStudyEffect{
@@ -14,7 +14,7 @@ export class LoadUserStudyEffect{
     public loadUserStudy$ = createEffect(() => this.actions$.pipe(
         ofType(loadUserStudy),
         switchMap(({id}) => this.service.getUserStudy$(id).pipe(
-            map(userStudy => loadUserStudySuccess({userStudy})),
+            switchMap(userStudy => [loadUserStudySuccess({userStudy}), loadUserStudyParticipants({id: userStudy._id})]),
             catchError(() => of(loadUserStudyFailure()))
         ))
     ))

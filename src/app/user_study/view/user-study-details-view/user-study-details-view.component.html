@@ -1,4 +1,5 @@
 @let userStudy = userStudy$ | async;
+@let participants = participants$ | async;
 
 <app-page>
   <app-breadcrumb>
@@ -25,7 +26,7 @@
   </app-page-title>
 
   <app-page-hero>
-    <app-user-study-hero [userStudy]="userStudy"></app-user-study-hero>
+    <app-user-study-hero [userStudy]="userStudy" [participants]="participants"></app-user-study-hero>
   </app-page-hero>
 
   <app-page-content>
@@ -112,7 +113,52 @@
           Participants
         </app-page-section-title>
         <app-page-section-content>
-          TODO
+          <table mat-table [dataSource]="participantsTableData$">
+
+            <ng-container matColumnDef="user">
+              <th mat-header-cell *matHeaderCellDef> User </th>
+              <td mat-cell *matCellDef="let element"> {{element.user}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="date">
+              <th mat-header-cell *matHeaderCellDef> Date </th>
+              <td mat-cell *matCellDef="let element"> {{element.date | date}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="processingTime">
+              <th mat-header-cell *matHeaderCellDef> Duration </th>
+              <td mat-cell *matCellDef="let element"> {{element.processingTime | date: 'mm'}}min {{element.processingTime | date: 'ss'}}sec</td>
+            </ng-container>
+
+            <ng-container matColumnDef="finished">
+              <th mat-header-cell *matHeaderCellDef> Finished </th>
+              <td mat-cell *matCellDef="let element">
+                <mat-checkbox
+                  [checked]="element.finished"
+                  [disabled]="true"
+                >
+                </mat-checkbox>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="payment">
+              <th mat-header-cell *matHeaderCellDef> Payment </th>
+              <td mat-cell *matCellDef="let element"> {{element.payment | currency}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="accepted">
+              <th mat-header-cell *matHeaderCellDef> Accepted </th>
+              <td mat-cell *matCellDef="let element">
+                <mat-checkbox
+                  [checked]="element.accepted"
+                >
+                </mat-checkbox>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
         </app-page-section-content>
       </app-page-section>
     </app-page-section-list>

@@ -1,6 +1,7 @@
 import { createAction, props } from "@ngrx/store";
 import { Demo } from "src/app/demo/domain/demo";
 import { UserStudy } from "../domain/user-study";
+import {UserStudyExecution} from '../domain/user-study-execution';
 
 // User Studies
 
@@ -23,6 +24,12 @@ export const editUserStudyFailure = createAction('[UserStudy] edit user study fa
 export const deleteUserStudy = createAction('[UserStudy] delete user study', props<{id: string}>());
 export const deleteUserStudySuccess = createAction('[UserStudy] delete user study success');
 export const deleteUserStudyFailure = createAction('[UserStudy] delete user study failure');
+
+
+// participants
+export const loadUserStudyParticipants = createAction('[UserStudy] load user study participants', props<{id: string}>());
+export const loadUserStudyParticipantsSuccess = createAction('[UserStudy] load user study participants success', props<{userStudyId: string,participants: UserStudyExecution[]}>());
+export const loadUserStudyParticipantsFailure = createAction('[UserStudy] load user study participants failure');
 
 // Demos
 

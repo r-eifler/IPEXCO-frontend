@@ -9,6 +9,7 @@ import {MatTooltip} from '@angular/material/tooltip';
 import {UserStudy} from '../../domain/user-study';
 import {DatePipe} from '@angular/common';
 import {ActivatedRoute, Router} from '@angular/router';
+import {UserStudyExecution} from '../../domain/user-study-execution';
 
 @Component({
   selector: 'app-user-study-card',
@@ -32,6 +33,7 @@ export class UserStudyCardComponent {
   router = inject(Router);
 
   userStudy = input.required<UserStudy>();
+  participants = input.required<UserStudyExecution[]>()
 
   onRun(){
     this.router.navigate(['user-study-execution', this.userStudy()._id]);

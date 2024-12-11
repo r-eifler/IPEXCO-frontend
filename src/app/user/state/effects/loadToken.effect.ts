@@ -10,7 +10,7 @@ import {
 } from '../user.actions';
 
 @Injectable()
-export class LoadStoreTokenEffect implements OnInitEffects{
+export class LoadTokenEffect implements OnInitEffects{
 
     private actions$ = inject(Actions)
 
@@ -23,7 +23,7 @@ export class LoadStoreTokenEffect implements OnInitEffects{
         map(() => {
             const token : string | null = localStorage.getItem('jwt-token');
             console.log(token);
-            if(token !== null && token !== undefined ) {
+            if(token === null || token === undefined ) {
                 return loadTokenLocalStorageFailure();
             }
             else{
@@ -31,10 +31,5 @@ export class LoadStoreTokenEffect implements OnInitEffects{
             }
         }
     )))
-
-  public updateUserToken$ = createEffect(() => this.actions$.pipe(
-    ofType(storeTokenLocalStorage),
-    tap(({token}) => localStorage.setItem('jwt-token', token))
-  ), {dispatch: false})
 
 }

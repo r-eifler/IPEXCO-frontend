@@ -8,6 +8,7 @@ import {UserStudy} from '../../domain/user-study';
 import {DatePipe} from '@angular/common';
 import {UserStudyStatusNamePipe} from '../../pipes/user-study-status-name.pipe';
 import {UserStudyStatusColorPipe} from '../../pipes/user-study-status-color.pipe';
+import {UserStudyExecution} from '../../domain/user-study-execution';
 
 @Component({
   selector: 'app-user-study-hero',
@@ -29,5 +30,5 @@ import {UserStudyStatusColorPipe} from '../../pipes/user-study-status-color.pipe
 export class UserStudyHeroComponent {
 
   userStudy = input.required<UserStudy>();
-
+  participants = input.required<UserStudyExecution[]>();
 }
