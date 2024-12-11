@@ -23,11 +23,11 @@ export class UserStudyExecutionFinishViewComponent {
   store = inject(Store);
 
   submitted$ = this.store.select(selectLoggedOut);
-  canceled$ = this.store.select(selectExecutionUserStudyCanceled);
 
   onSubmit() {
     this.store.dispatch(executionUserStudySubmit());
   }
+
   onCancel() {
     this.store.dispatch(executionUserStudyCancel());
   }

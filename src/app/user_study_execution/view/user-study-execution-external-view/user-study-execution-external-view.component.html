@@ -20,7 +20,10 @@
       </app-page-section>
       <app-page-section>
         <app-page-section-content>
-          <button mat-flat-button (click)="onContinue()" [disabled]="!clickedLink">Continue</button>
+          <div>
+            <button mat-stroked-button (click)="onCancel()">Cancel</button>
+            <button mat-flat-button (click)="onContinue()" [disabled]="!clickedLink">Continue</button>
+          </div>
         </app-page-section-content>
       </app-page-section>
     </app-page-section-list>

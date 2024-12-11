@@ -13,7 +13,10 @@
       </app-page-section>
       <app-page-section>
         <app-page-section-content>
-          <button mat-flat-button (click)="onContinue()">Continue</button>
+          <div class="button-container">
+            <button mat-stroked-button (click)="onCancel()">Cancel</button>
+            <button mat-flat-button (click)="onContinue()">Continue</button>
+          </div>
         </app-page-section-content>
       </app-page-section>
     </app-page-section-list>

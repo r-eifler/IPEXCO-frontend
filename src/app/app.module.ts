@@ -93,6 +93,7 @@ import {FinishUserStudyEffect} from './user_study_execution/state/effects/finish
 import {UserStudyExecutionEvalService} from './user_study/service/user-study-execution-eval.service';
 import {StoreTokenEffect} from './user/state/effects/storeToken.effect';
 import {LoadUserStudyParticipantsEffect} from './user_study/state/effects/load-user-study-participants.effect';
+import {UserStudyCanceledEffect} from './user_study_execution/state/effects/canceled.effect';
 
 
 
@@ -151,6 +152,7 @@ import {LoadUserStudyParticipantsEffect} from './user_study/state/effects/load-u
       ExecutionNextUserStudyStepEffect,
       RegisterUserStudyEffect,
       FinishUserStudyEffect,
+      UserStudyCanceledEffect
     ]),
     // Instrumentation must be imported after importing StoreModule (config is optional)
     StoreDevtoolsModule.instrument({

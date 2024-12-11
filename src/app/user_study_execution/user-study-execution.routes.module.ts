@@ -19,6 +19,7 @@ import {UserStudyExecutionStepShellComponent} from './view/user-study-execution-
 import {UserStudyExecutionFailViewComponent} from './view/user-study-execution-fail-view/user-study-execution-fail-view.component';
 import {loadUserStudyExecutionStepResolver} from './resolver/load-user-study-execution-step.resolver';
 import {AuthGuard} from '../route-guards/auth-guard.guard';
+import {UserStudyExecutionCancelViewComponent} from './view/user-study-execution-cancel-view/user-study-execution-cancel-view.component';
 
 
 
@@ -31,6 +32,10 @@ const routes: Routes = [
       {
         path: 'fail',
         component: UserStudyExecutionFailViewComponent,
+      },
+      {
+        path: 'canceled',
+        component: UserStudyExecutionCancelViewComponent,
       },
       {
         path: ':userStudyId',

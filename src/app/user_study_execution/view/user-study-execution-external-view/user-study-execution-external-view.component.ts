@@ -9,6 +9,9 @@ import {PageSectionListComponent} from '../../../shared/components/page/page-sec
 import {PageTitleComponent} from '../../../shared/components/page/page-title/page-title.component';
 import {Store} from '@ngrx/store';
 import {selectExecutionUserStudyStep} from '../../state/user-study-execution.selector';
+import {AskDeleteComponent} from '../../../shared/components/ask-delete/ask-delete.component';
+import {executionUserStudyCancel} from '../../state/user-study-execution.actions';
+import {MatDialog} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-user-study-execution-external-view',
@@ -30,6 +33,7 @@ import {selectExecutionUserStudyStep} from '../../state/user-study-execution.sel
 export class UserStudyExecutionExternalViewComponent {
 
   store = inject(Store);
+  dialog = inject(MatDialog);
   step$ = this.store.select(selectExecutionUserStudyStep);
 
   continue = output<void>();
@@ -43,6 +47,23 @@ export class UserStudyExecutionExternalViewComponent {
   onContinue() {
     console.log('External Link Continue');
     this.continue.emit();
+  }
+
+  onCancel() {
+    const dialogRef = this.dialog.open(AskDeleteComponent, {
+      data: {
+        name: 'Cancel User Study',
+        text: 'Are you sure you want to cancel the user study? By clicking the cancel button all data related to this run will be delete.',
+        buttonAgree: 'Cancel',
+        buttonDisagree: 'Continue with user study'
+      },
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      if(result){
+        this.store.dispatch(executionUserStudyCancel());
+      }
+    });
   }
 
 }
