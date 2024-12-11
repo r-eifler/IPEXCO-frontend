@@ -49,6 +49,7 @@ import { ExplanationInterfaceType } from "src/app/project/domain/general-setting
 import { MugsVisualizationBaseComponent } from "../visualization/mugs-visualization-base/mugs-visualization-base.component";
 import { MatDialog } from "@angular/material/dialog";
 import { AskDeleteComponent } from "src/app/shared/components/ask-delete/ask-delete.component";
+import { ProjectDirective } from "../../derectives/isProject.directive";
 
 @Component({
   selector: "app-step-detail-view",
@@ -67,7 +68,8 @@ import { AskDeleteComponent } from "src/app/shared/components/ask-delete/ask-del
     PlanPropertyPanelComponent,
     QuestionPanelComponent,
     RouterLink,
-    MugsVisualizationBaseComponent
+    MugsVisualizationBaseComponent,
+    ProjectDirective
   ],
   templateUrl: "./step-detail-view.component.html",
   styleUrl: "./step-detail-view.component.scss",

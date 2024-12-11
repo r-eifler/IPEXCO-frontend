@@ -43,7 +43,7 @@ export class UserStudyExecutionTimerComponent {
     map(([remaining, start]) => (remaining/start) * 100)
   )
 
-  overTime$ = this.remainingSeconds$.pipe(skipWhile(sec => sec > 0), map(() => true));
+  overTime$ = this.remainingSeconds$.pipe(skipWhile(sec => sec > 0), map(() => void undefined));
 
   
 
