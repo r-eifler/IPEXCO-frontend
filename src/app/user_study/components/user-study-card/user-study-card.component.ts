@@ -15,9 +15,6 @@ import {UserStudyExecution} from '../../domain/user-study-execution';
   selector: 'app-user-study-card',
   standalone: true,
   imports: [
-    DemoStatusColorPipe,
-    DemoStatusNamePipe,
-    LabelComponent,
     MatAnchor,
     MatCardModule,
     MatIcon,

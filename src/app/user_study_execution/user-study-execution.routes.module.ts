@@ -20,6 +20,7 @@ import {UserStudyExecutionFailViewComponent} from './view/user-study-execution-f
 import {AuthGuard} from '../route-guards/auth-guard.guard';
 import {UserStudyExecutionCancelViewComponent} from './view/user-study-execution-cancel-view/user-study-execution-cancel-view.component';
 import {UserStudyAuthGuard} from '../route-guards/user-study-auth.guard';
+import { LogOutUserStudyAuthGuard } from '../route-guards/user-study-logout.guard';
 
 
 
@@ -32,6 +33,7 @@ const routes: Routes = [
       {
         path: 'fail',
         component: UserStudyExecutionFailViewComponent,
+        canActivate: [LogOutUserStudyAuthGuard]
       },
       {
         path: 'canceled',
@@ -48,7 +50,8 @@ const routes: Routes = [
           },
           {
             path: 'start',
-            component: UserStudyExecutionStartViewComponent
+            component: UserStudyExecutionStartViewComponent,
+            canActivate: [LogOutUserStudyAuthGuard]
           },
           {
             path: 'agreement',

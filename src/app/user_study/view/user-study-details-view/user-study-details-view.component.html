@@ -10,7 +10,11 @@
   <app-page-title>
     {{ userStudy?.name }}
     <app-page-title-action>
-      <button mat-icon-button matTooltip="Run iterative planning."
+      <button mat-icon-button matTooltip="Copy link to the user study."
+              (click)="onCopyLink()">
+        <mat-icon>link</mat-icon>
+      </button>
+      <button mat-icon-button matTooltip="Start user study execution."
               (click)="onRun()">
         <mat-icon>play_arrow</mat-icon>
       </button>
@@ -18,7 +22,7 @@
               (click)="onEdit(userStudy?._id)">
         <mat-icon>edit</mat-icon>
       </button>
-      <button mat-icon-button matTooltip="Delete demo."
+      <button mat-icon-button matTooltip="Delete user study."
               (click)="onDelete(userStudy?._id)">
         <mat-icon>delete</mat-icon>
       </button>

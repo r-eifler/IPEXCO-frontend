@@ -16,7 +16,7 @@ import {MatTooltip} from '@angular/material/tooltip';
 import {PageModule} from '../../../shared/components/page/page.module';
 import {MatListModule} from '@angular/material/list';
 import {MatExpansionModule} from '@angular/material/expansion';
-import {filter, map} from 'rxjs/operators';
+import {filter, map, take} from 'rxjs/operators';
 import {MatTableModule} from '@angular/material/table';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 
@@ -68,8 +68,13 @@ export class UserStudyDetailsViewComponent {
 
   displayedColumns: string[] = ['user', 'date', 'processingTime', 'finished', 'payment', 'accepted'];
 
-  onRun(){
+  onCopyLink(){
+    const host = window.location.protocol + "//" + window.location.host;
+    this.userStudy$.pipe(take(1)).subscribe(study => navigator.clipboard.writeText(host + '/suser-study-execution/' + study._id));
+  }
 
+  onRun(){
+    this.userStudy$.pipe(take(1)).subscribe(study => this.router.navigate(['user-study-execution', study._id]));
   }
 
   onEdit(id: string){
