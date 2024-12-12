@@ -25,6 +25,29 @@
   <app-page-content>
     <app-page-section-list>
 
+      <app-page-section >
+        <app-page-section-title>
+          Task Information
+        </app-page-section-title>
+        <app-page-section-content>
+          <mat-accordion>
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                <mat-panel-title> Visualization </mat-panel-title>
+              </mat-expansion-panel-header>
+              <img [src]="host + (image$ | async)">
+            </mat-expansion-panel>
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                <mat-panel-title> Task Description </mat-panel-title>
+              </mat-expansion-panel-header>
+              <p>{{domainInfo$ | async}}</p>
+              <p>{{instanceInfo$ | async}}</p>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </app-page-section-content>
+      </app-page-section>
+
       @if(!isUnsolvable && (explanationInterfaceType$ | async) == expInterfaceType.MUGS_VISUALIZATION) {
       <app-page-section>
         <app-page-section-title>

@@ -32,6 +32,7 @@ import { deleteIterationStep, initNewIterationStep, questionPosed } from "../../
 import { Message } from "../../state/iterative-planning.reducer";
 import {
     selectIsExplanationLoading,
+    selectIterativePlanningProject,
     selectIterativePlanningProjectExplanationInterfaceType,
     selectIterativePlanningProperties,
     selectIterativePlanningSelectedStep,
@@ -49,6 +50,7 @@ import { ExplanationInterfaceType } from "src/app/project/domain/general-setting
 import { MugsVisualizationBaseComponent } from "../visualization/mugs-visualization-base/mugs-visualization-base.component";
 import { MatDialog } from "@angular/material/dialog";
 import { AskDeleteComponent } from "src/app/shared/components/ask-delete/ask-delete.component";
+import { MatExpansionModule } from "@angular/material/expansion";
 
 @Component({
   selector: "app-step-detail-view",
@@ -67,12 +69,16 @@ import { AskDeleteComponent } from "src/app/shared/components/ask-delete/ask-del
     PlanPropertyPanelComponent,
     QuestionPanelComponent,
     RouterLink,
-    MugsVisualizationBaseComponent
+    MugsVisualizationBaseComponent,
+    MatExpansionModule,
   ],
   templateUrl: "./step-detail-view.component.html",
   styleUrl: "./step-detail-view.component.scss",
 })
 export class StepDetailViewComponent {
+
+  host = window.location.protocol + "//" + window.location.host;
+
   private store = inject(Store);
 
   router = inject(Router);
@@ -81,6 +87,11 @@ export class StepDetailViewComponent {
 
   explanationInterfaceType$ = this.store.select(selectIterativePlanningProjectExplanationInterfaceType);
   expInterfaceType = ExplanationInterfaceType;
+
+  project$ = this.store.select(selectIterativePlanningProject);
+  image$ = this.project$.pipe(map(p => p?.summaryImage));
+  domainInfo$ = this.project$.pipe(map(p => p?.domainInfo));
+  instanceInfo$ = this.project$.pipe(map(p => p?.instanceInfo));
 
   step$ = this.store.select(selectIterativePlanningSelectedStep);
   stepId$ = this.step$.pipe(map(step => step?._id));
