@@ -62,13 +62,13 @@ const routes: Routes = [
               {
                 path: 'iterative-planning',
                 loadChildren: () => import('../iterative_planning/iterative-planning.module').then(m => m.IterativePlanningModule),
-                canActivate: [AuthGuard],
               },
             ]
           },
           {
             path: 'finish',
-            component: UserStudyExecutionFinishViewComponent
+            component: UserStudyExecutionFinishViewComponent,
+            canActivate: [UserStudyAuthGuard],
           }
         ]
       },
