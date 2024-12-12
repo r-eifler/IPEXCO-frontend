@@ -11,6 +11,7 @@ import {AsyncPipe} from '@angular/common';
 import {MarkedPipe} from '../../../pipes/marked.pipe';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {MatSliderModule} from '@angular/material/slider';
+import { Observable, startWith } from 'rxjs';
 
 @Component({
   selector: 'app-description-card',
@@ -44,7 +45,7 @@ export class DescriptionCardComponent implements OnInit{
   first = input<boolean>(false);
   last = input<boolean>(false);
 
-  description$ = this.form.controls.description.valueChanges;
+  description$: Observable<string>;
 
   changes = output<UserStudyStep>();
   up = output<void>();
@@ -74,6 +75,9 @@ export class DescriptionCardComponent implements OnInit{
     this.form.controls.name.setValue(this.step().name);
     this.form.controls.time.setValue(this.step().time);
     this.form.controls.description.setValue(this.step().content);
+    this.description$ = this.form.controls.description.valueChanges.pipe(
+      startWith(this.step()?.content)
+    );
   }
 
   moveUp() {
