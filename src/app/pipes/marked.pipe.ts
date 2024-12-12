@@ -11,8 +11,8 @@ export class MarkedPipe implements PipeTransform {
 
   transform(value: string, ...args: unknown[]): unknown {
     if (value && value.length > 0) {
-      const sanitizedValue = this.domSanitizer.sanitize(SecurityContext.HTML, value);
-      return marked.marked(sanitizedValue);
+      const sanitizedValue = this.domSanitizer.sanitize(SecurityContext.HTML, marked.marked(value));
+      return sanitizedValue;
     }
     return value;
   }
