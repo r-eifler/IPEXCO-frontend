@@ -15,7 +15,7 @@
 		<mat-icon>play_arrow</mat-icon>
 		</button>
 		<button mat-icon-button matTooltip="Delete demo."
-			(click)="onDelete()">
+			(click)="onDelete(demo?._id)">
 		<mat-icon>delete</mat-icon>
 		</button>
 	</app-page-title-action>

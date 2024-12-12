@@ -1,27 +1,29 @@
-import { Component } from "@angular/core";
+import {Component, inject} from '@angular/core';
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
 import { gsap } from "gsap";
 import { MatButtonModule } from "@angular/material/button";
 import { RegisterComponent } from "src/app/user/components/register/register.component";
+import {selectLoggedIn} from '../../../user/state/user.selector';
+import {Store} from '@ngrx/store';
+import {AsyncPipe} from '@angular/common';
 
 @Component({
   selector: "app-main-page",
   standalone: true,
   imports: [
     MatButtonModule,
+    AsyncPipe,
   ],
   templateUrl: "./main-page.component.html",
   styleUrls: ["./main-page.component.scss"],
 })
 export class MainPageComponent {
 
-  isMobile: boolean;
+  store = inject(Store);
+  dialog = inject(MatDialog)
 
-  constructor(
-    public dialog: MatDialog
-  ) {
-  }
+  loggedIn$ = this.store.select(selectLoggedIn);
 
   animateLogo() {
     const tl = gsap.timeline();
