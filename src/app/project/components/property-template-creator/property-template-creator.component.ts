@@ -92,6 +92,8 @@ export class PropertyTemplateCreatorComponent {
     const templateString = JSON.stringify(templates, null, '\t');
     this.form.controls.planPropertyTemplatesJSON.setValue(templateString);
 
+    this.form.controls.planPropertyTemplates.clear();
+
     for(const temp of templates){
       const tempForm = this.fb.group({
         class: [temp.class, Validators.required],
