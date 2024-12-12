@@ -43,6 +43,7 @@ import { LoadPlanPropertiesEffect } from './iterative_planning/state/effects/loa
 import { LoadIterativePlanningProjectEffect } from './iterative_planning/state/effects/load-project.effect';
 import { QuestionQueueEffect } from './iterative_planning/state/effects/question-queue.effect';
 import { UpdatePlanPropertyEffect } from './iterative_planning/state/effects/update-plan-property.effect'
+import { CreateLLMContextEffect } from './iterative_planning/state/effects/create-llm-context.effect'
 
 // Services 
 import { LLMService } from './LLM/service/llm.service';
@@ -119,6 +120,7 @@ import { DeleteIterationEffect } from './iterative_planning/state/effects/delete
         SendMessageToLLMEffect,
         ComputeExplanationEffect,
         QuestionQueueEffect,
+        CreateLLMContextEffect,
     ]),
     // Instrumentation must be imported after importing StoreModule (config is optional)
     StoreDevtoolsModule.instrument({

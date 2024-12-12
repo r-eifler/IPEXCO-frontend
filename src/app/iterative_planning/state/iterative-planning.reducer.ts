@@ -17,6 +17,8 @@ import { PlanProperty } from "../../shared/domain/plan-property/plan-property";
 import {
     cancelNewIterationStep,
     createIterationStepSuccess,
+    createLLMContext,
+    createLLMContextSuccess,
     deselectIterationStep,
     directResponseQT,
     eraseLLMHistory,
@@ -349,6 +351,13 @@ on(sendMessageToLLMQTthenGTTranslatorsFailure, (state): IterativePlanningState =
 on(loadLLMContextSuccess, (state,action): IterativePlanningState=> ({
   ...state,
   LLMContext : action.LLMContext
+})),
+on(createLLMContext, (state, action): IterativePlanningState => ({
+  ...state,
+})),
+on(createLLMContextSuccess, (state, action): IterativePlanningState => ({
+  ...state,
+  LLMContext: action.LLMContext
 })),
 on(directResponseQT, (state, action): IterativePlanningState => ({
   ...state,

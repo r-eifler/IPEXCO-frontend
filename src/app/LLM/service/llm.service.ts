@@ -130,6 +130,19 @@ export class LLMService {
             map(({ data }) => data)
         )
     }
+
+    createLLMContext$(projectId: string, domain: string): Observable<LLMContext> {
+        console.log("Creating LLM context for projectId: ", projectId, "and domain: ", domain);
+        return this.http.post<IHTTPData<LLMContext>>(this.BASE_URL + "create-llm-context", 
+            { projectId, domain  }
+        ).pipe(
+            map(({ data }) => data),
+            catchError(error => {
+                console.error('Error creating LLM context:', error);
+                throw error;
+            })
+        );
+    }
 }
 
 
