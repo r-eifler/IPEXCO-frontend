@@ -1,0 +1,14 @@
+@if((loggedIn$ | async) && (!(allStepsFinished$ | async))){
+<div class="container">
+    @if((remainingMinutes$ | async) >= 1){
+      <span>{{remainingMinutes$ | async}} min</span>
+    }
+    @else{
+      <span>{{remainingSeconds$ | async}} sec</span>
+  }
+  <mat-progress-bar mode="determinate" [value]="remainingTimeFraction$ | async"></mat-progress-bar>
+  <button mat-stroked-button (click)="onCancel()"><mat-icon>cancel</mat-icon>Cancel</button>
+  <button mat-flat-button (click)="onNext()" [disabled]="!(allowContinue$  | async)"><mat-icon>play_arrow</mat-icon>Continue</button>
+</div>
+}
+

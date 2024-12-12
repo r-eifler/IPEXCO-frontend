@@ -21,6 +21,7 @@
           <mat-error>Please choose a demo</mat-error>
         }
       </mat-form-field>
+      <mat-label>Maximal time to work on the demo:</mat-label>
       <mat-slider min="1" max="1800" step="1"  discrete [displayWith]="formatLabel" class="full-width">
         <input matSliderThumb [formControl]="form.controls.time">
       </mat-slider>

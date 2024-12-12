@@ -14,6 +14,7 @@
         <mat-label>Link to form</mat-label>
         <input matInput formControlName="url">
       </mat-form-field>
+      <mat-label>Minimal time before user is able to continue with the next step:</mat-label>
       <a mat-stroked-button [href]="url$ | async" target="_blank">Test Link</a>
       <mat-slider min="1" max="1800" step="1"  discrete [displayWith]="formatLabel" class="full-width">
         <input matSliderThumb [formControl]="form.controls.time">

@@ -36,8 +36,10 @@
           </app-page-section-title>
           <app-page-section-content>
             <div class="consent-box">
-              <span class="highlight">I have read and understood the information above and I freely agree to participate in this research study.</span>
-              <button mat-flat-button (click)="onAccept(userStudy?._id)">Accept</button>
+              <span class="highlight">I have read and understood the information above <br> I freely agree to participate in this research study.</span>
+              <div>
+                <button mat-flat-button (click)="onAccept(userStudy?._id)">Accept</button>
+              </div>
             </div>
           </app-page-section-content>
         </app-page-section>

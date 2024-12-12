@@ -12,7 +12,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {selectLoggedIn} from '../../../user/state/user.selector';
 import {AsyncPipe} from '@angular/common';
 import {UserStudyExecutionProgressComponent} from '../../components/user-study-execution-progress/user-study-execution-progress.component';
-import {UserStudyExecutionTimerComponent} from '../../components/user-study-execution-timer/user-study-execution-timer.component';
+import {UserStudyExecutionHandlerComponent} from '../../components/user-study-execution-handler/user-study-execution-handler.component';
 import {
   selectExecutionUserStudy,
   selectExecutionUserStudyFinishedAllSteps,
@@ -31,7 +31,7 @@ import {
     MatIconModule,
     AsyncPipe,
     UserStudyExecutionProgressComponent,
-    UserStudyExecutionTimerComponent,
+    UserStudyExecutionHandlerComponent,
   ],
   templateUrl: './user-study-execution-shell.component.html',
   styleUrl: './user-study-execution-shell.component.scss'
@@ -39,39 +39,5 @@ import {
 export class UserStudyExecutionShellComponent {
 
   store = inject(Store);
-  dialog = inject(MatDialog);
 
-  userStudy$ = this.store.select(selectExecutionUserStudy);
-  currenStep$ = this.store.select(selectExecutionUserStudyStep);
-  currenStepIndex$ = this.store.select(selectExecutionUserStudyStepIndex);
-  loggedIn$ = this.store.select(selectLoggedIn);
-  allStepsFinished$ = this.store.select(selectExecutionUserStudyFinishedAllSteps);
-
-  showTimer$ = this.currenStep$.pipe(map(step => step.type === 'demo'));
-
-
-  onTimeOver(){
-   
-  }
-
-  onCancel() {
-    const dialogRef = this.dialog.open(AskDeleteComponent, {
-      data: {
-        name: 'Cancel User Study',
-        text: 'Are you sure you want to cancel the user study? By clicking the cancel button all data related to this run will be delete.',
-        buttonAgree: 'Cancel',
-        buttonDisagree: 'Continue with user study'
-      },
-    });
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      if(result){
-        this.store.dispatch(executionUserStudyCancel());
-      }
-    });
-  }
-
-  onNext() {
-    this.store.dispatch((executionNextUserStudyStep()));
-  }
 }

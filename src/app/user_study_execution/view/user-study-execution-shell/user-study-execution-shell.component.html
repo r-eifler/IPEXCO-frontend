@@ -1,14 +1,10 @@
 <mat-toolbar class="spacer">
   <mat-toolbar-row class="top-row">
     <span>User Study</span>
-    <app-user-study-execution-progress class="full-width" [steps]="(userStudy$ | async)?.steps" [currentStepIndex]="currenStepIndex$ | async"></app-user-study-execution-progress>
+    <app-user-study-execution-progress class="full-width"></app-user-study-execution-progress>
   </mat-toolbar-row>
-  @if((loggedIn$ | async) && (!(allStepsFinished$ | async))){
-  <mat-toolbar-row class="bottom-row">
-    <app-user-study-execution-timer class="full-width" (over)="onTimeOver()"></app-user-study-execution-timer>
-    <button mat-stroked-button (click)="onCancel()">Cancel</button>
-    <button mat-flat-button (click)="onNext()">Continue</button>
+  <mat-toolbar-row>
+    <app-user-study-execution-handler class="full-width"></app-user-study-execution-handler>
   </mat-toolbar-row>
-  }
 </mat-toolbar>
 <router-outlet></router-outlet>

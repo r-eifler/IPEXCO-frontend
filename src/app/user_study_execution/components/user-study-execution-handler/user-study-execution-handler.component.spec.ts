@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { UserStudyExecutionTimerComponent } from './user-study-execution-timer.component';
+import { UserStudyExecutionHandlerComponent } from './user-study-execution-handler.component';
 
 describe('UserStudyExecutionTimerComponent', () => {
-  let component: UserStudyExecutionTimerComponent;
-  let fixture: ComponentFixture<UserStudyExecutionTimerComponent>;
+  let component: UserStudyExecutionHandlerComponent;
+  let fixture: ComponentFixture<UserStudyExecutionHandlerComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [UserStudyExecutionTimerComponent]
+      imports: [UserStudyExecutionHandlerComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(UserStudyExecutionTimerComponent);
+    fixture = TestBed.createComponent(UserStudyExecutionHandlerComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
