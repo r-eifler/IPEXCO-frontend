@@ -11,11 +11,21 @@ import { PageModule } from 'src/app/shared/components/page/page.module';
 import { IterationStepCardComponent } from '../../components/iteration-step-card/iteration-step-card.component';
 import { initNewIterationStep } from '../../state/iterative-planning.actions';
 import { selectIterativePlanningIterationSteps, selectIterativePlanningIterationStepsLoadingState, selectIterativePlanningProject, selectIterativePlanningProperties } from '../../state/iterative-planning.selector';
+import { ProjectDirective } from '../../derectives/isProject.directive';
 
 @Component({
   selector: 'app-steps-list-view',
   standalone: true,
-  imports: [PageModule, AsyncPipe, IterationStepCardComponent, ActionCardModule, MatIconModule, RouterLink, BreadcrumbModule],
+  imports: [
+    PageModule, 
+    AsyncPipe, 
+    IterationStepCardComponent, 
+    ActionCardModule, 
+    MatIconModule, 
+    RouterLink, 
+    BreadcrumbModule,
+    ProjectDirective
+  ],
   templateUrl: './steps-list-view.component.html',
   styleUrl: './steps-list-view.component.scss'
 })

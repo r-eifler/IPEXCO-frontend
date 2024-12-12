@@ -4,7 +4,7 @@
 
 <app-page>
   <app-breadcrumb>
-    <a app-breadcrumb-item [routerLink]="['/project/' + (step$ | async)?.project]"><mat-icon>home</mat-icon></a>
+    <a *isProject app-breadcrumb-item [routerLink]="['/project/' + (step$ | async)?.project]"><mat-icon>home</mat-icon></a>
     <a app-breadcrumb-item [routerLink]="['..']">All Iterations</a>
     <app-breadcrumb-item>{{ (step$ | async)?.name }}</app-breadcrumb-item>
   </app-breadcrumb>
@@ -25,7 +25,7 @@
   <app-page-content>
     <app-page-section-list>
 
-      <app-page-section >
+      <app-page-section *isDemo>
         <app-page-section-title>
           Task Information
         </app-page-section-title>

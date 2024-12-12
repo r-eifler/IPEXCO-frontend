@@ -51,6 +51,8 @@ import { MugsVisualizationBaseComponent } from "../visualization/mugs-visualizat
 import { MatDialog } from "@angular/material/dialog";
 import { AskDeleteComponent } from "src/app/shared/components/ask-delete/ask-delete.component";
 import { MatExpansionModule } from "@angular/material/expansion";
+import { DemoDirective } from "../../derectives/isDemo.directive";
+import { ProjectDirective } from "../../derectives/isProject.directive";
 
 @Component({
   selector: "app-step-detail-view",
@@ -71,6 +73,8 @@ import { MatExpansionModule } from "@angular/material/expansion";
     RouterLink,
     MugsVisualizationBaseComponent,
     MatExpansionModule,
+    DemoDirective,
+    ProjectDirective,
   ],
   templateUrl: "./step-detail-view.component.html",
   styleUrl: "./step-detail-view.component.scss",
