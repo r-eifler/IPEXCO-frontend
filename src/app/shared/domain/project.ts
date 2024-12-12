@@ -13,6 +13,9 @@ export interface Project {
   user?: string;
   domainSpecification: DomainSpecification;
   description?: string;
+  summaryImage?: string;
+  domainInfo?: string;
+  instanceInfo?: string;
   baseTask?: PlanningTask;
   settings: GeneralSettings;
   animationSettings?: string;

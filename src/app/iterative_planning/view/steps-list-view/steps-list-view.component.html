@@ -2,7 +2,7 @@
 
 <app-page>
   <app-breadcrumb>
-    <a app-breadcrumb-item [routerLink]="['/project/' + (project$ | async)?._id]" *isProject><mat-icon>home</mat-icon></a>
+    <a *isProject app-breadcrumb-item [routerLink]="['/project/' + (project$ | async)?._id]"><mat-icon>home</mat-icon></a>
     <app-breadcrumb-item>All Iterations</app-breadcrumb-item>
   </app-breadcrumb>
   <app-page-title>Plan Iterations</app-page-title>

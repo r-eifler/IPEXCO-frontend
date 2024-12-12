@@ -61,11 +61,20 @@ export class DemoService{
     }
 
     postDemo$(demo: Demo, properties: PlanProperty[]): Observable<string | null> {
-        console.log('demo service: POST');
         return this.http.post<IHTTPData<string | null>>(this.BASE_URL, {demo: demo, planProperties: properties}).pipe(
             map(({data}) => data)
         )
     }
+
+    postDemoImage$(image: any): Observable<string | null> {
+      console.log('Upload Image: ' + ImageBitmap.name);
+      const formData = new FormData();
+      formData.append('summaryImage', image);
+
+      return this.http.post<IHTTPData<string | null>>(this.BASE_URL + 'image', formData).pipe(
+          map(({data}) => data)
+      )
+  }
 
     putDemo$(demo: Demo): Observable<Demo> {
       console.log(demo);

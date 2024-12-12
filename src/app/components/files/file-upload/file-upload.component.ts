@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Output, Input} from "@angular/core";
+import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
 
 interface Data {
@@ -11,6 +12,7 @@ interface Data {
   standalone: true,
   imports: [
     MatIconModule,
+    MatButtonModule,
   ],
   templateUrl: "./file-upload.component.html",
   styleUrls: ["./file-upload.component.scss"],

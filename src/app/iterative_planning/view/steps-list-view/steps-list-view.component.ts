@@ -16,7 +16,16 @@ import { ProjectDirective } from '../../derectives/isProject.directive';
 @Component({
   selector: 'app-steps-list-view',
   standalone: true,
-  imports: [PageModule, AsyncPipe, IterationStepCardComponent, ActionCardModule, MatIconModule, RouterLink, BreadcrumbModule, ProjectDirective],
+  imports: [
+    PageModule, 
+    AsyncPipe, 
+    IterationStepCardComponent, 
+    ActionCardModule, 
+    MatIconModule, 
+    RouterLink, 
+    BreadcrumbModule,
+    ProjectDirective
+  ],
   templateUrl: './steps-list-view.component.html',
   styleUrl: './steps-list-view.component.scss'
 })
