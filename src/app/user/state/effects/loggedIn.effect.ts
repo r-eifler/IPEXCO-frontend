@@ -1,10 +1,10 @@
 import { inject, Injectable } from '@angular/core';
 import { createEffect } from '@ngrx/effects';
-import { switchMap, tap } from 'rxjs/operators';
+import { filter, switchMap, tap } from 'rxjs/operators';
 import { loadUser, LoggedIn, LoggedOut } from '../user.actions';
-
 import { Store } from '@ngrx/store';
-import { selectLoggedIn } from '../user.selector';
+import { selectLoggedIn, selectLoggedInAndUserNotLoaded } from '../user.selector';
+
 
 
 @Injectable()
@@ -16,11 +16,16 @@ export class LoggedInEffect{
         tap(isLoggedIn => console.log('Login Status: ' + isLoggedIn)),
         switchMap((isLoggedIn) => {
             if(isLoggedIn){
-                return [LoggedIn(), loadUser()];
+                return [LoggedIn()];
             }
             else{
                 return [LoggedOut()];
             }
         }))
+    )
+
+    public checkUserLoad$ = createEffect(() => this.store.select(selectLoggedInAndUserNotLoaded).pipe(
+        filter(isLoggedInAndNoUser => isLoggedInAndNoUser),
+        switchMap((_) => [loadUser()]))
     )
 }

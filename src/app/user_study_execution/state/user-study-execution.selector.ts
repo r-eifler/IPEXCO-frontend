@@ -14,3 +14,8 @@ export const selectExecutionUserStudyStep = createSelector(selectUserStudyExecut
 
 export const selectExecutionUserStudyFinishedAllSteps = createSelector(selectUserStudyExecutionFeature, (state) => state.finishedAllSteps)
 export const selectExecutionUserStudyCanceled = createSelector(selectUserStudyExecutionFeature, (state) => state.canceled)
+
+
+// For logging
+
+export const selectExecutionUserStudyPendingIterationSteps = createSelector(selectUserStudyExecutionFeature, (state) => state.pendingIterationSteps)

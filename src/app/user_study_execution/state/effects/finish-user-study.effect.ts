@@ -5,9 +5,11 @@ import { of } from 'rxjs';
 import {
   executionUserStudyCancel, executionUserStudyCancelFailure, executionUserStudyCancelSuccess,
   executionUserStudySubmit, executionUserStudySubmitFailure, executionUserStudySubmitSuccess,
+  logAction,
 } from '../user-study-execution.actions';
 import {logout} from '../../../user/state/user.actions';
 import {UserStudyExecutionService} from '../../service/user-study-execution.service';
+import { ActionType } from '../../domain/user-action';
 
 @Injectable()
 export class FinishUserStudyEffect{
@@ -18,7 +20,10 @@ export class FinishUserStudyEffect{
     public submitUserStudy$ = createEffect(() => this.actions$.pipe(
         ofType(executionUserStudySubmit),
         switchMap(() => this.service.finish().pipe(
-            switchMap(() => [executionUserStudySubmitSuccess(), logout()]),
+            switchMap(() => [ 
+              executionUserStudySubmitSuccess(), 
+              logout()]
+            ),
             catchError(() => of(executionUserStudySubmitFailure()))
         ))
     ))

@@ -1,14 +1,15 @@
 import { inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { catchError, switchMap, tap } from 'rxjs/operators';
-import { of } from 'rxjs';
-import {registerUserStudyUser, registerUserStudyUserFailure, registerUserStudyUserSuccess} from '../user-study-execution.actions';
+import { catchError, combineLatestWith, filter, switchMap, tap } from 'rxjs/operators';
+import { combineLatest, of } from 'rxjs';
+import {executionUserStudyStart, registerUserStudyUser, registerUserStudyUserFailure, registerUserStudyUserSuccess} from '../user-study-execution.actions';
 import {UserStudyAuthenticationService} from '../../service/user-study-authentication.service';
 import {registerUserSuccess} from '../../../user/state/user.actions';
-import {concatLatestFrom} from '@ngrx/operators';
-import {Store} from '@ngrx/store';
-import {selectExecutionUserStudy} from '../user-study-execution.selector';
-import {Router} from '@angular/router';
+import { Store } from '@ngrx/store';
+import { selectIsUserStudy, selectLoggedInAndUserLoaded } from 'src/app/user/state/user.selector';
+import { selectExecutionUserStudy } from '../user-study-execution.selector';
+import { concatLatestFrom } from '@ngrx/operators';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class RegisterUserStudyEffect{
@@ -26,9 +27,14 @@ export class RegisterUserStudyEffect{
         ))
     ))
 
-    public startWithFirstStep$ = createEffect(() => this.actions$.pipe(
-      ofType(registerUserStudyUserSuccess),
-      concatLatestFrom(() => this.store.select(selectExecutionUserStudy)),
-      tap(([_, study]) => this.router.navigate(['user-study-execution', study?._id, 'step']))
-    ), {dispatch: false})
+    public userStudyLoggedIn$ = createEffect(() => combineLatest([
+            this.store.select(selectLoggedInAndUserLoaded),
+            this.store.select(selectIsUserStudy)
+        ]).pipe(
+        filter(([loggedIn, isUserStudy]) => loggedIn && isUserStudy),
+        concatLatestFrom(() => this.store.select(selectExecutionUserStudy)),
+        tap(([_, study]) => this.router.navigate(['user-study-execution', study?._id, 'step'])),
+        switchMap(() => [executionUserStudyStart()])
+    ))
+
 }
