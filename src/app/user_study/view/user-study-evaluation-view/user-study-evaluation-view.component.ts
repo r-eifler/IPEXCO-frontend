@@ -8,6 +8,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { AsyncPipe } from '@angular/common';
 import { SelectTestPersonsComponent } from '../../eval/select-test-persons/select-test-persons.component';
 import { OverviewDataComponent } from '../../eval/overview-data/overview-data.component';
+import { UserStudyDashboardComponent } from "../../components/user-study-dashboard/user-study-dashboard.component";
+
 
 @Component({
   selector: 'app-user-study-evaluation-view',
@@ -19,8 +21,9 @@ import { OverviewDataComponent } from '../../eval/overview-data/overview-data.co
     MatIconModule,
     AsyncPipe,
     SelectTestPersonsComponent,
-    OverviewDataComponent
-  ],
+    OverviewDataComponent,
+    UserStudyDashboardComponent
+],
   templateUrl: './user-study-evaluation-view.component.html',
   styleUrl: './user-study-evaluation-view.component.scss'
 })

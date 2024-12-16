@@ -42,7 +42,7 @@ export class AcceptedTestPersonsComponent {
       ps.map(p => ({
         ...p,
         date: p.createdAt,
-        processingTime: new Date(p.updatedAt.getTime() - p.createdAt.getTime())
+        processingTime: new Date(p.finishedAt.getTime() - p.createdAt.getTime())
       })
       )
     ));

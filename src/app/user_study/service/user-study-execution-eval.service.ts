@@ -28,6 +28,7 @@ export class UserStudyExecutionEvalService {
           ...exec,
           createdAt: new Date(exec.createdAt),
           updatedAt: new Date(exec.updatedAt),
+          finishedAt: new Date(exec.finishedAt),
           timeLog: exec.timeLog.map(a => JSON.parse(a as any as string))
         })
       )),

@@ -4,6 +4,7 @@ export interface UserStudyExecution {
   user: string;
   createdAt?: Date;
   updatedAt?: Date;
+  finishedAt?: Date;
   userStudy: string;
   finished?: boolean;
   accepted?: boolean;

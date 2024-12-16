@@ -1,0 +1,39 @@
+@use '../../../../variables' as vars;
+
+.value {
+    display: grid;
+    justify-content: center;
+    align-items: end;
+  
+    mat-icon {
+      grid-row: 1;
+      grid-column: 1;
+  
+      opacity: 0.075;
+      --icon-size: 96px;
+      font-size: var(--icon-size);
+      width: var(--icon-size);
+      height: var(--icon-size);
+      @include vars.color(secondary);
+    }
+  
+    .value-container{
+      grid-row: 1;
+      grid-column: 1;
+  
+      display: grid;
+      align-items: center;
+      justify-items: center;
+  
+      gap: var(--spacing-100);
+  
+  
+      .value {
+        @include vars.typography(headline-small);
+      }
+  
+      .label {
+        @include vars.typography(label-small);
+      }
+    }
+}

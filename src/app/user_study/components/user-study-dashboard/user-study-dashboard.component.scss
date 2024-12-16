@@ -1,0 +1,8 @@
+@use '../../../../variables' as vars;
+@use '../../../../styles/container' as container;
+
+.page-grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: var(--page-grid-gap);
+}

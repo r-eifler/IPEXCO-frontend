@@ -20,6 +20,8 @@ import {filter, map, take} from 'rxjs/operators';
 import {MatTableModule} from '@angular/material/table';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import { AcceptedTestPersonsComponent } from '../../eval/accepted-test-persons/accepted-test-persons.component';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-user-study-details-view',
@@ -39,7 +41,8 @@ import { AcceptedTestPersonsComponent } from '../../eval/accepted-test-persons/a
     MatExpansionModule,
     MatTableModule,
     MatCheckboxModule,
-    AcceptedTestPersonsComponent
+    AcceptedTestPersonsComponent,
+    MatMenuModule
   ],
   templateUrl: './user-study-details-view.component.html',
   styleUrl: './user-study-details-view.component.scss'
@@ -51,6 +54,7 @@ export class UserStudyDetailsViewComponent {
   store = inject(Store);
   router = inject(Router);
   dialog = inject(MatDialog);
+  snackbar = inject(MatSnackBar);
 
   userStudy$ = this.store.select(selectUserStudy);
   participants$ = this.store.select(selectUserStudyParticipantsOfStudy);
@@ -58,6 +62,7 @@ export class UserStudyDetailsViewComponent {
   onCopyLink(){
     const host = window.location.protocol + "//" + window.location.host;
     this.userStudy$.pipe(take(1)).subscribe(study => navigator.clipboard.writeText(host + '/suser-study-execution/' + study._id));
+    let snackBarRef = this.snackbar.open('User study link copied to clipboard.', 'close');
   }
 
 
