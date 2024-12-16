@@ -12,10 +12,12 @@ import { SelectionModel } from "@angular/cdk/collections";
 import { toSignal } from "@angular/core/rxjs-interop";
 import { MatButtonModule } from "@angular/material/button";
 import { acceptUserStudyParticipant } from "../../state/user-study.actions";
+import { ActionType, PlanForIterationStepUserAction } from "src/app/user_study_execution/domain/user-action";
 
 interface TableData extends UserStudyExecution {
   date: Date,
-  processingTime: Date
+  processingTime: Date,
+  utility: number,
 }
 
 @Component({
@@ -47,14 +49,16 @@ export class SelectTestPersonsComponent {
       return this.participants()?.map(p => ({
         ...p,
         date: p.createdAt,
-        processingTime: new Date(p.finishedAt.getTime() - p.createdAt.getTime())
+        processingTime: new Date(p.finishedAt.getTime() - p.createdAt.getTime()),
+        utility: p.timeLog.filter(a => a.type == ActionType.PLAN_FOR_ITERATION_STEP).
+        map((a: PlanForIterationStepUserAction) => a.data.utility).reduce((p,c) => Math.max(p,c), 0)
       })
       )
       }
     );
 
 
-  displayedColumns: string[] = ['select', 'user', 'date', 'processingTime', 'finished', 'payment', 'accepted'];
+  displayedColumns: string[] = ['select', 'user', 'date', 'processingTime', 'utility', 'finished', 'payment', 'accepted'];
 
   selection = new SelectionModel<TableData>(true, []);
 

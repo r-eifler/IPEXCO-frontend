@@ -7,7 +7,8 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { MatCardModule } from '@angular/material/card';
 import { Store } from '@ngrx/store';
 import { selectUserStudyParticipantsOfStudy } from '../../state/user-study.selector';
-import { ActionType } from 'src/app/user_study_execution/domain/user-action';
+import { ActionType, AskQuestionUserAction, PlanForIterationStepUserAction } from 'src/app/user_study_execution/domain/user-action';
+import { QuestionType } from 'src/app/iterative_planning/domain/explanation/explanations';
 
 export interface DataPoint {
     name: string,
@@ -24,16 +25,15 @@ export interface DataPoint {
   templateUrl: "./overview-data.component.html",
   styleUrls: ["./overview-data.component.scss"],
 })
-export class OverviewDataComponent implements OnInit {
+export class OverviewDataComponent {
 
   private store = inject(Store);
 
-  selectedParticipants = input<string[]>([]);
+  selectedParticipantsId = input<string[]>([]);
   participants = toSignal(this.store.select(selectUserStudyParticipantsOfStudy));
 
-  showPlots = true;
 
-  view: any[] = [700, 400];
+  view: any[] = ['100%', 400];
 
   // options
   showXAxis = true;
@@ -46,33 +46,80 @@ export class OverviewDataComponent implements OnInit {
     domain: ["#3711b2"],
   };
 
+  // colorSchemeQuestionTypes = {
+  //   domain : ["#8f7eff", "#5b44d5", "#4326bd", "2c009d"],
+  // };
+
+  selectedParticipants = computed(() => this.participants()?.filter(p => this.selectedParticipantsId().includes(p.user)))
+
+  showPlots = computed(() => this.selectedParticipants()?.length > 0)
 
   iterationStepsData = computed(() => 
-    this.participants()?.filter(p => this.selectedParticipants().includes(p.user)).map(p => ({
+    this.selectedParticipants()?.map(p => ({
       name: p.user, 
-      value: p.timeLog.filter(a => a.type == 'CREATE_ITERATION_STEP').length
+      value: p.timeLog.filter(a => a.type == ActionType.CREATE_ITERATION_STEP).length
     }))
   )
 
 
-  // questionsData: DataPoint[];
-  // utilityData: DataPoint[];
-  // utilityTimeData: LineChartData[];
+  questionsData = computed(() => 
+    this.selectedParticipants()?.map(p => ({
+      name: p.user, 
+      value: p.timeLog.filter(a => a.type == ActionType.ASK_QUESTION).length
+    }))
+  )
+
+  utilityData = computed(() => 
+    this.selectedParticipants()?.map(p => ({
+      name: p.user, 
+      value: p.timeLog.filter(a => a.type == ActionType.PLAN_FOR_ITERATION_STEP).
+      map((a: PlanForIterationStepUserAction) => a.data.utility).reduce((p,c) => Math.max(p,c), 0)
+    }))
+  )
+
+  utilityTimeData = computed(() =>{
+    if(this.selectedParticipants() == null || this.selectedParticipants()?.length == 0){
+      return [];
+    }
+
+    const minTime = 0;
+    const maxTime = 600;
+    const step = 60;
+    let maxAverageUtility = [{name: 'Utility', series: []}]
+
+    const utilitiesOverTime = this.selectedParticipants()?.map(p => (
+      p.timeLog.filter(a => a.type == ActionType.PLAN_FOR_ITERATION_STEP).
+      map((a: PlanForIterationStepUserAction) => ({
+        time: ((new Date(a.timeStamp)).getTime() - ( new Date(p.timeLog.filter(a => a.type == ActionType.START_DEMO)[0].timeStamp)).getTime()) / 1000, 
+        utility: a.data.utility}
+      ))
+    ));
+
+    for(let time = minTime; time <= maxTime; time += step){
+      const maxUtilitiesUpTo = utilitiesOverTime.map(us => us.reduce(
+        (p,c) => c.time <= time ? Math.max(p,c.utility) : p, 0)
+      )
+      maxAverageUtility[0].series.push({name: time.toString(), value: average(maxUtilitiesUpTo)});
+    }
+    return maxAverageUtility 
+  })
 
 
-  ngOnInit(): void {
+  questionTypeData = computed(() => {
+      let data = {};
+      Object.keys(QuestionType).forEach(k => data[k] = {name: k, value: 0})
+      this.selectedParticipants()?.forEach(p => (
+        p.timeLog.filter(a => a.type == ActionType.ASK_QUESTION).forEach(
+          (q: AskQuestionUserAction) => data[q.data.questionType].value += 1
+        )
+      ))
+      console.log(Object.values(data));
+      return Object.values(data);
+    }
+  )
 
-    // combineLatest(([this.selectedDemoId$, this.users$])).pipe(
-    //   takeUntilDestroyed(),
-    //   filter(([id, users]) => !!id && !!users && users.length > 0)
-    // ).subscribe(async ([id, users]) => {
-    //   this.iterationStepsData = await this.userStudyDataService.getIterationStepsPerUser(id, users);
-    //   this.questionsData = await this.userStudyDataService.getQuestionsPerUser(id, users);
-    //   this.utilityData = await this.userStudyDataService.getUtilityPerUser(id, users);
-    //   this.utilityTimeData = await this.userStudyDataService.getAverageMaxUtilityOverTime(id, users);
-    //   window.setTimeout(() => (this.showPlots = true), 200);
-    // });
-  }
+}
 
-
+function average(values: number[]): number{
+  return values?.reduce((p,c) => p + c, 0) / values?.length
 }

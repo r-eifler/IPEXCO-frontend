@@ -5,7 +5,7 @@ import { selectUserStudyParticipantsOfStudy } from '../../state/user-study.selec
 import { filter, map } from 'rxjs';
 import { AsyncPipe, DatePipe } from '@angular/common';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { ActionType } from 'src/app/user_study_execution/domain/user-action';
+import { ActionType, PlanForIterationStepUserAction } from 'src/app/user_study_execution/domain/user-action';
 
 @Component({
   selector: 'app-user-study-dashboard',
@@ -40,12 +40,30 @@ export class UserStudyDashboardComponent {
 
   averageIterationSteps = computed(() => {
     const numIterSteps = this.participants()?.map(p => p.timeLog.filter(a => a.type == ActionType.CREATE_ITERATION_STEP).length);
-    return numIterSteps?.reduce((p,c) => p + c, 0) / numIterSteps?.length;
+    return average(numIterSteps);
   })
 
   averageQuestions = computed(() => {
     const questions = this.participants()?.map(p => p.timeLog.filter(a => a.type == ActionType.ASK_QUESTION).length);
-    return questions?.reduce((p,c) => p + c, 0) / questions?.length;
+    return average(questions);
   })
 
+  averageMaxUtility = computed(() => {
+    if(this.participants() == null){
+      return null;
+    }
+    const utilitiesPerParticipant = this.participants()?.
+      map(p => 
+        p.timeLog.filter(a => a.type == ActionType.PLAN_FOR_ITERATION_STEP).
+        map((a: PlanForIterationStepUserAction) => a.data.utility)
+    );
+    const maxUtilities = utilitiesPerParticipant.map(us => us.reduce((p,c) => Math.max(p,c), 0));
+    return average(maxUtilities);
+  })
+
+}
+
+
+function average(values: number[]): number{
+  return values?.reduce((p,c) => p + c, 0) / values?.length
 }
