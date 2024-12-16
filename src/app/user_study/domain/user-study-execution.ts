@@ -1,3 +1,5 @@
+import { UserAction } from "src/app/user_study_execution/domain/user-action";
+
 export interface UserStudyExecution {
   user: string;
   createdAt?: Date;
@@ -5,6 +7,6 @@ export interface UserStudyExecution {
   userStudy: string;
   finished?: boolean;
   accepted?: boolean;
-  timeLog?: string;
+  timeLog?: UserAction[];
   payment?: number;
 }

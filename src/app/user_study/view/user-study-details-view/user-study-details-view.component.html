@@ -9,19 +9,23 @@
 
   <app-page-title>
     {{ userStudy?.name }}
-    <app-page-title-action>
+      <app-page-title-action>
+        <a mat-icon-button matTooltip="Evaluate user study"
+                [routerLink]="['/user-study', userStudy?._id, 'eval']">
+          <mat-icon>query_stats</mat-icon>
+      </a>
       <button mat-icon-button matTooltip="Copy link to the user study."
               (click)="onCopyLink()">
         <mat-icon>link</mat-icon>
       </button>
-      <button mat-icon-button matTooltip="Start user study execution."
-              (click)="onRun()">
+      <a mat-icon-button matTooltip="Start user study execution."
+              [routerLink]="['/user-study', userStudy?._id, 'eval']">
         <mat-icon>play_arrow</mat-icon>
-      </button>
-      <button mat-icon-button matTooltip="Edit user study."
-              (click)="onEdit(userStudy?._id)">
+      </a>
+      <a mat-icon-button matTooltip="Edit user study."
+              [routerLink]="['/user-study', userStudy?._id, 'edit']">
         <mat-icon>edit</mat-icon>
-      </button>
+      </a>
       <button mat-icon-button matTooltip="Delete user study."
               (click)="onDelete(userStudy?._id)">
         <mat-icon>delete</mat-icon>
@@ -117,52 +121,7 @@
           Participants
         </app-page-section-title>
         <app-page-section-content>
-          <table mat-table [dataSource]="participantsTableData$">
-
-            <ng-container matColumnDef="user">
-              <th mat-header-cell *matHeaderCellDef> User </th>
-              <td mat-cell *matCellDef="let element"> {{element.user}} </td>
-            </ng-container>
-
-            <ng-container matColumnDef="date">
-              <th mat-header-cell *matHeaderCellDef> Date </th>
-              <td mat-cell *matCellDef="let element"> {{element.date | date}} </td>
-            </ng-container>
-
-            <ng-container matColumnDef="processingTime">
-              <th mat-header-cell *matHeaderCellDef> Duration </th>
-              <td mat-cell *matCellDef="let element"> {{element.processingTime | date: 'mm'}}min {{element.processingTime | date: 'ss'}}sec</td>
-            </ng-container>
-
-            <ng-container matColumnDef="finished">
-              <th mat-header-cell *matHeaderCellDef> Finished </th>
-              <td mat-cell *matCellDef="let element">
-                <mat-checkbox
-                  [checked]="element.finished"
-                  [disabled]="true"
-                >
-                </mat-checkbox>
-              </td>
-            </ng-container>
-
-            <ng-container matColumnDef="payment">
-              <th mat-header-cell *matHeaderCellDef> Payment </th>
-              <td mat-cell *matCellDef="let element"> {{element.payment | currency}} </td>
-            </ng-container>
-
-            <ng-container matColumnDef="accepted">
-              <th mat-header-cell *matHeaderCellDef> Accepted </th>
-              <td mat-cell *matCellDef="let element">
-                <mat-checkbox
-                  [checked]="element.accepted"
-                >
-                </mat-checkbox>
-              </td>
-            </ng-container>
-
-            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-          </table>
+          <app-accepted-test-persons></app-accepted-test-persons>
         </app-page-section-content>
       </app-page-section>
     </app-page-section-list>

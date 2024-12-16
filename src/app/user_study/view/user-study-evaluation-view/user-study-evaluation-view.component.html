@@ -1,0 +1,33 @@
+@let userStudy = userStudy$ | async;
+
+<app-page>
+  <app-breadcrumb>
+    <a app-breadcrumb-item [routerLink]="['/user-study/']"><mat-icon>home</mat-icon></a>
+    <a app-breadcrumb-item [routerLink]="['/user-study', userStudy?._id, 'details']">{{ userStudy?.name }}</a>
+    <app-breadcrumb-item>evaluation</app-breadcrumb-item>
+  </app-breadcrumb>
+  <app-page-title>Evaluate User Study</app-page-title>
+
+  <app-page-content>
+    <app-page-section-list>
+        <app-page-section>
+            <app-page-section-title>
+                Select Participants
+            </app-page-section-title>
+            <app-page-section-content>
+                <app-select-test-persons (selectedParticipants)="updateSelectedParticipants($event)"></app-select-test-persons>
+            </app-page-section-content>
+        </app-page-section>
+        <app-page-section>
+            <app-page-section-title>
+                Overview
+            </app-page-section-title>
+            <app-page-section-content>
+                <app-overview-data [selectedParticipants]="selectedParticipants()"></app-overview-data>
+            </app-page-section-content>
+        </app-page-section>
+    </app-page-section-list>    
+  </app-page-content>
+</app-page>
+
+

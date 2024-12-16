@@ -19,6 +19,7 @@ import {MatExpansionModule} from '@angular/material/expansion';
 import {filter, map, take} from 'rxjs/operators';
 import {MatTableModule} from '@angular/material/table';
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import { AcceptedTestPersonsComponent } from '../../eval/accepted-test-persons/accepted-test-persons.component';
 
 @Component({
   selector: 'app-user-study-details-view',
@@ -37,9 +38,8 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
     MatTooltip,
     MatExpansionModule,
     MatTableModule,
-    DatePipe,
-    CurrencyPipe,
-    MatCheckboxModule
+    MatCheckboxModule,
+    AcceptedTestPersonsComponent
   ],
   templateUrl: './user-study-details-view.component.html',
   styleUrl: './user-study-details-view.component.scss'
@@ -55,31 +55,11 @@ export class UserStudyDetailsViewComponent {
   userStudy$ = this.store.select(selectUserStudy);
   participants$ = this.store.select(selectUserStudyParticipantsOfStudy);
 
-  participantsTableData$ = this.participants$.pipe(
-    filter(ps => !!ps),
-    map(ps =>
-      ps.map(p => ({
-        ...p,
-        date: p.createdAt,
-        processingTime: new Date(p.updatedAt.getTime() - p.createdAt.getTime())
-      })
-      )
-    ));
-
-  displayedColumns: string[] = ['user', 'date', 'processingTime', 'finished', 'payment', 'accepted'];
-
   onCopyLink(){
     const host = window.location.protocol + "//" + window.location.host;
     this.userStudy$.pipe(take(1)).subscribe(study => navigator.clipboard.writeText(host + '/suser-study-execution/' + study._id));
   }
 
-  onRun(){
-    this.userStudy$.pipe(take(1)).subscribe(study => this.router.navigate(['user-study-execution', study._id]));
-  }
-
-  onEdit(id: string){
-    this.router.navigate(['user-study', id, 'edit']);
-  }
 
   onDelete(id: string) {
     const dialogRef = this.dialog.open(AskDeleteComponent, {

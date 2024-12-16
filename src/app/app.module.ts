@@ -95,6 +95,7 @@ import {LoadUserStudyParticipantsEffect} from './user_study/state/effects/load-u
 import {UserStudyCanceledEffect} from './user_study_execution/state/effects/canceled.effect';
 import { UserStudyFinishedAllStepsEffect } from './user_study_execution/state/effects/finished-all-steps.effect copy';
 import { LogUserActivitiesEffect } from './user_study_execution/state/effects/log-user-activities.effect';
+import { AcceptUserStudyParticipantEffect } from './user_study/state/effects/accept-participant.effect';
 
 
 
@@ -155,6 +156,7 @@ import { LogUserActivitiesEffect } from './user_study_execution/state/effects/lo
       UserStudyCanceledEffect,
       UserStudyFinishedAllStepsEffect,
       LogUserActivitiesEffect,
+      AcceptUserStudyParticipantEffect
     ]),
     // Instrumentation must be imported after importing StoreModule (config is optional)
     StoreDevtoolsModule.instrument({

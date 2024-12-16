@@ -1,15 +1,20 @@
-import { UserStudyDataService } from '../../service/user-study-data.service';
-import { Component, OnInit } from "@angular/core";
-import { Observable, Subject } from "rxjs";
-import { takeUntil } from "rxjs/operators";
-import {UserStudy} from "../../domain/user-study";
-import { USUser } from "../../domain/user-study-user";
-import { UserStudyUserService } from "../../service/user-study-user.service";
-import { UserStudyData } from 'src/app/user_study/domain/user-study-execution';
+import { Component, inject } from "@angular/core";
+import { filter, map } from "rxjs/operators";
 import { FormsModule } from '@angular/forms';
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
+import { Store } from '@ngrx/store';
+import { selectUserStudyParticipantsOfStudy } from '../../state/user-study.selector';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { UserStudyExecution } from "../../domain/user-study-execution";
+import { acceptUserStudyParticipant } from "../../state/user-study.actions";
+import { MatButtonModule } from "@angular/material/button";
+
+interface TableData extends UserStudyExecution {
+  date: Date,
+  processingTime: Date
+}
 
 @Component({
   selector: "app-accepted-test-persons",
@@ -20,34 +25,32 @@ import { MatTableModule } from '@angular/material/table';
     DatePipe,
     MatIconModule,
     MatTableModule,
+    MatCheckboxModule,
+    MatButtonModule
   ],
   templateUrl: "./accepted-test-persons.component.html",
-  styleUrls: ["./accepted-test-persons.component.css"],
+  styleUrls: ["./accepted-test-persons.component.scss"],
 })
-export class AcceptedTestPersonsComponent implements OnInit {
-  private ngUnsubscribe$: Subject<any> = new Subject();
+export class AcceptedTestPersonsComponent {
+  
+  store = inject(Store);
+  participants$ = this.store.select(selectUserStudyParticipantsOfStudy);
 
-  displayedColumns: string[] = [
-    "_id",
-    "prolificId",
-    "finished",
-    "createdAt",
-    "payment",
-    "accepted",
-  ];
+  participantsTableData$ = this.participants$.pipe(
+    filter(ps => !!ps),
+    map(ps =>
+      ps.map(p => ({
+        ...p,
+        date: p.createdAt,
+        processingTime: new Date(p.updatedAt.getTime() - p.createdAt.getTime())
+      })
+      )
+    ));
 
-  dataPoints$ : Observable<UserStudyData[]>;
+  displayedColumns: string[] = ['user', 'date', 'processingTime', 'finished', 'payment', 'accepted'];
 
-  constructor(
-    private userStudyDataService: UserStudyDataService
-  ) {
-    this.dataPoints$ = this.userStudyDataService.getList();
-  }
-
-  ngOnInit(): void {}
-
-  async updateAccepted(event, dataPoint: UserStudyData) {
-    dataPoint.accepted = event;
-    await this.userStudyDataService.saveObject(dataPoint);
+  
+  onAccept(dataPoint: TableData){
+    this.store.dispatch(acceptUserStudyParticipant({userId: dataPoint.user}));
   }
 }

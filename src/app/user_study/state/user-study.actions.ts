@@ -31,6 +31,10 @@ export const loadUserStudyParticipants = createAction('[UserStudy] load user stu
 export const loadUserStudyParticipantsSuccess = createAction('[UserStudy] load user study participants success', props<{userStudyId: string,participants: UserStudyExecution[]}>());
 export const loadUserStudyParticipantsFailure = createAction('[UserStudy] load user study participants failure');
 
+export const acceptUserStudyParticipant = createAction('[UserStudy] accept user study participant', props<{userId: string}>());
+export const acceptUserStudyParticipantSuccess = createAction('[UserStudy] accept user study participant success');
+export const acceptUserStudyParticipantFailure = createAction('[UserStudy] accept user study participant failure');
+
 // Demos
 
 export const loadUserStudyDemos = createAction('[UserStudy] load user study demos');

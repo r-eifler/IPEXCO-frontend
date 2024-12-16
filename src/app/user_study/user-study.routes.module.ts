@@ -6,6 +6,7 @@ import {UserStudyCollectionComponent} from './view/user-study-collection/user-st
 import {UserStudyCreatorComponent} from './view/user-study-creator/user-study-creator.component';
 import {UserStudyDetailsViewComponent} from './view/user-study-details-view/user-study-details-view.component';
 import {UserStudyEditorComponent} from './view/user-study-editor/user-study-editor.component';
+import { UserStudyEvaluationViewComponent } from './view/user-study-evaluation-view/user-study-evaluation-view.component';
 
 
 
@@ -37,6 +38,11 @@ const routes: Routes = [
       {
         path: ':userStudyId/details',
         component: UserStudyDetailsViewComponent,
+        resolve: {loadUserStudyResolver}
+      },
+      {
+        path: ':userStudyId/eval',
+        component: UserStudyEvaluationViewComponent,
         resolve: {loadUserStudyResolver}
       }
     ]

@@ -1,12 +1,18 @@
 import { USUser } from '../../domain/user-study-user';
-import { UserStudyDataService, DataPoint, LineChartData } from '../../service/user-study-data.service';
 import { filter } from 'rxjs/operators';
-import { takeUntil } from 'rxjs/operators';
-import { Component, Input, OnDestroy, OnInit } from "@angular/core";
-import { BehaviorSubject, combineLatest, Subject } from "rxjs";
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Component, computed, inject, input, Input, OnInit } from "@angular/core";
+import { BehaviorSubject, combineLatest } from "rxjs";
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { MatCardModule } from '@angular/material/card';
+import { Store } from '@ngrx/store';
+import { selectUserStudyParticipantsOfStudy } from '../../state/user-study.selector';
+import { ActionType } from 'src/app/user_study_execution/domain/user-action';
+
+export interface DataPoint {
+    name: string,
+    value: number
+  }
 
 @Component({
   selector: "app-overview-data",
@@ -16,9 +22,15 @@ import { MatCardModule } from '@angular/material/card';
     MatCardModule,
   ],
   templateUrl: "./overview-data.component.html",
-  styleUrls: ["./overview-data.component.css"],
+  styleUrls: ["./overview-data.component.scss"],
 })
 export class OverviewDataComponent implements OnInit {
+
+  private store = inject(Store);
+
+  selectedParticipants = input<string[]>([]);
+  participants = toSignal(this.store.select(selectUserStudyParticipantsOfStudy));
+
   showPlots = true;
 
   view: any[] = [700, 400];
@@ -31,43 +43,35 @@ export class OverviewDataComponent implements OnInit {
   showYAxisLabel = true;
 
   colorScheme = {
-    domain: ["#02496f"],
+    domain: ["#3711b2"],
   };
 
-  users$ = new BehaviorSubject<USUser[]>([]);
-  selectedDemoId$ = new BehaviorSubject<string>(null);
 
-  @Input()
-  set demoId(id: string) {
-    this.selectedDemoId$.next(id);
-  }
+  iterationStepsData = computed(() => 
+    this.participants()?.filter(p => this.selectedParticipants().includes(p.user)).map(p => ({
+      name: p.user, 
+      value: p.timeLog.filter(a => a.type == 'CREATE_ITERATION_STEP').length
+    }))
+  )
 
-  @Input()
-  set users(users: USUser[]) {
-    this.users$.next(users);
-  }
 
-  iterationStepsData: DataPoint[];
-  questionsData: DataPoint[];
-  utilityData: DataPoint[];
-  utilityTimeData: LineChartData[];
+  // questionsData: DataPoint[];
+  // utilityData: DataPoint[];
+  // utilityTimeData: LineChartData[];
 
-  constructor(
-    private userStudyDataService: UserStudyDataService
-  ) {}
 
   ngOnInit(): void {
 
-    combineLatest(([this.selectedDemoId$, this.users$])).pipe(
-      takeUntilDestroyed(),
-      filter(([id, users]) => !!id && !!users && users.length > 0)
-    ).subscribe(async ([id, users]) => {
-      this.iterationStepsData = await this.userStudyDataService.getIterationStepsPerUser(id, users);
-      this.questionsData = await this.userStudyDataService.getQuestionsPerUser(id, users);
-      this.utilityData = await this.userStudyDataService.getUtilityPerUser(id, users);
-      this.utilityTimeData = await this.userStudyDataService.getAverageMaxUtilityOverTime(id, users);
-      window.setTimeout(() => (this.showPlots = true), 200);
-    });
+    // combineLatest(([this.selectedDemoId$, this.users$])).pipe(
+    //   takeUntilDestroyed(),
+    //   filter(([id, users]) => !!id && !!users && users.length > 0)
+    // ).subscribe(async ([id, users]) => {
+    //   this.iterationStepsData = await this.userStudyDataService.getIterationStepsPerUser(id, users);
+    //   this.questionsData = await this.userStudyDataService.getQuestionsPerUser(id, users);
+    //   this.utilityData = await this.userStudyDataService.getUtilityPerUser(id, users);
+    //   this.utilityTimeData = await this.userStudyDataService.getAverageMaxUtilityOverTime(id, users);
+    //   window.setTimeout(() => (this.showPlots = true), 200);
+    // });
   }
 
 
