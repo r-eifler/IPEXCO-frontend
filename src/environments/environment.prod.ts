@@ -1,6 +1,9 @@
 export const environment = {
   production: true,
-  apiURL: "/api/",
-  localURL: "http://cacophony.cs.uni-saarland.de",
-  srcURL: "http://cacophony.cs.uni-saarland.de",
+  apiURL: "http://localhost:4200/api",
+  localURL: "http://localhost:4200",
+  srcURL: "http://localhost:4200",
+  // apiURL: "https://ipexco.irtse.com/api",
+  // localURL: "https://ipexco.irtse.com",
+  // srcURL: "https://ipexco.irtse.com",
 };

@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "EXPLORE-CLI": {
+    "IPEXCO": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -13,13 +13,14 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/EXPLORE-CLI",
+            "outputPath": "dist/IPEXCO",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "assets": [
               "src/favicon.ico",
+              "src/robot.txt",
               "src/assets",
               {
                 "glob": "**/*",
@@ -57,13 +58,13 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "5mb"
+                  "maximumWarning": "5mb",
+                  "maximumError": "10mb"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "6kb",
-                  "maximumError": "10kb"
+                  "maximumWarning": "100kb",
+                  "maximumError": "150kb"
                 }
               ]
             },
@@ -78,10 +79,10 @@
           },
           "configurations": {
             "production": {
-              "buildTarget": "EXPLORE-CLI:build:production"
+              "buildTarget": "IPEXCO:build:production"
             },
             "development": {
-              "buildTarget": "EXPLORE-CLI:build:development"
+              "buildTarget": "IPEXCO:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -89,7 +90,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "buildTarget": "EXPLORE-CLI:build"
+            "buildTarget": "IPEXCO:build"
           }
         },
         "test": {
@@ -116,10 +117,10 @@
           },
           "configurations": {
             "production": {
-              "devServerTarget": "EXPLORE-CLI:serve:production"
+              "devServerTarget": "IPEXCO:serve:production"
             },
             "development": {
-              "devServerTarget": "EXPLORE-CLI:serve:development"
+              "devServerTarget": "IPEXCO:serve:development"
             }
           },
           "defaultConfiguration": "development"
