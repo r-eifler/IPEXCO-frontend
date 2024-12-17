@@ -26,7 +26,7 @@ export class LogUserActivitiesEffect{
         ofType(logAction),
         concatLatestFrom(() => this.store.select(selectUserRole)),
         tap(console.log),
-        filter(([_, isUserStudy]) => isUserStudy),
+        filter(([_, role]) => role == 'user-study'),
         switchMap(([{action},_]) => this.service.log$(action).pipe(
             map(() => logActionSuccess()),
             catchError(() => of(logActionFailure()))
