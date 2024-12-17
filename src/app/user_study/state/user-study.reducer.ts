@@ -5,6 +5,10 @@ import { UserStudy } from '../domain/user-study';
 import { Demo } from 'src/app/demo/domain/demo';
 import {
   editUserStudy, editUserStudySuccess,
+  loadParticipantDistribution,
+  loadParticipantDistributions,
+  loadParticipantDistributionsSuccess,
+  loadParticipantDistributionSuccess,
   loadUserStudies,
   loadUserStudiesSuccess,
   loadUserStudy,
@@ -13,6 +17,7 @@ import {
   loadUserStudySuccess
 } from './user-study.actions';
 import {UserStudyExecution} from '../domain/user-study-execution';
+import { ParticipantDistribution } from '../domain/participant-distribution';
 
 export interface UserStudyState {
     userStudies: Loadable<UserStudy[]>;
@@ -20,6 +25,8 @@ export interface UserStudyState {
     createdUserStudy: Creatable<UserStudy>;
     demos: Loadable<Demo[]>;
     userStudy: Loadable<UserStudy>;
+    participantDistributions: Loadable<ParticipantDistribution[]>;
+    participantDistribution: Loadable<ParticipantDistribution>;
 }
 
 export const userStudyFeature = 'user-study';
@@ -30,6 +37,8 @@ const initialState: UserStudyState = {
     createdUserStudy: {state: CreationState.Default, data: undefined},
     demos: {state: LoadingState.Initial, data: undefined},
     userStudy: {state: LoadingState.Initial, data: undefined},
+    participantDistributions:  {state: LoadingState.Initial, data: undefined},
+    participantDistribution:  {state: LoadingState.Initial, data: undefined},
 }
 
 
@@ -70,5 +79,21 @@ export const userStudyReducer = createReducer(
     on(editUserStudySuccess, (state, {userStudy}): UserStudyState => ({
       ...state,
       userStudy: {state: LoadingState.Done, data: userStudy},
+    })),
+    on(loadParticipantDistributions, (state): UserStudyState => ({
+      ...state,
+      participantDistributions: {state: LoadingState.Loading, data: undefined}
+    })),
+    on(loadParticipantDistributionsSuccess, (state, {distributions}): UserStudyState => ({
+        ...state,
+        participantDistributions: {state: LoadingState.Done, data: distributions},
+    })),
+    on(loadParticipantDistribution, (state): UserStudyState => ({
+      ...state,
+      participantDistribution: {state: LoadingState.Loading, data: undefined}
+    })),
+    on(loadParticipantDistributionSuccess, (state, {distribution}): UserStudyState => ({
+      ...state,
+      participantDistribution: {state: LoadingState.Done, data: distribution},
     })),
 );

@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { MetaStudyCreatorComponent } from "./meta-study-creator.component";
+import { MetaStudyCreatorComponent } from "./participant-distribution-creator.component";
 
 describe("MetaStudyCreatorComponent", () => {
   let component: MetaStudyCreatorComponent;

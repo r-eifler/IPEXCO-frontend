@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { takeUntil } from "rxjs/operators";
 import { ActivatedRoute, ParamMap, Router } from "@angular/router";
-import { MetaStudy } from "../../domain/meta-study";
+import { MetaStudy } from "../../domain/participant-distribution";
 import { combineLatest } from "rxjs/internal/observable/combineLatest";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 

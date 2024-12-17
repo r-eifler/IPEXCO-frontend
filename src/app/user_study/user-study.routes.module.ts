@@ -7,6 +7,9 @@ import {UserStudyCreatorComponent} from './view/user-study-creator/user-study-cr
 import {UserStudyDetailsViewComponent} from './view/user-study-details-view/user-study-details-view.component';
 import {UserStudyEditorComponent} from './view/user-study-editor/user-study-editor.component';
 import { UserStudyEvaluationViewComponent } from './view/user-study-evaluation-view/user-study-evaluation-view.component';
+import { ParticipantDistributionCreatorComponent } from './view/participant-distribution-creator/participant-distribution-creator.component';
+import { loadUserStudyParticipantDistributionResolver } from './resolver/load-user-study-participant-distribution.resolver';
+import { ParticipantDistributionDetailsViewComponent } from './view/participant-distribution-details-view/participant-distribution-details-view.component';
 
 
 
@@ -31,6 +34,15 @@ const routes: Routes = [
         component: UserStudyCreatorComponent
       },
       {
+        path: 'new-distribution',
+        component: ParticipantDistributionCreatorComponent,
+      },
+      {
+        path: 'distribution/:participantDistributionId/details',
+        component: ParticipantDistributionDetailsViewComponent,
+        resolve: {loadUserStudyParticipantDistributionResolver}
+      },
+      {
         path: ':userStudyId/edit',
         component: UserStudyEditorComponent,
         resolve: {loadUserStudyResolver}
@@ -44,7 +56,7 @@ const routes: Routes = [
         path: ':userStudyId/eval',
         component: UserStudyEvaluationViewComponent,
         resolve: {loadUserStudyResolver}
-      }
+      },
     ]
   }
 ];
