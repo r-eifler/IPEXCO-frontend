@@ -10,6 +10,7 @@ import { UserStudyEvaluationViewComponent } from './view/user-study-evaluation-v
 import { ParticipantDistributionCreatorComponent } from './view/participant-distribution-creator/participant-distribution-creator.component';
 import { loadUserStudyParticipantDistributionResolver } from './resolver/load-user-study-participant-distribution.resolver';
 import { ParticipantDistributionDetailsViewComponent } from './view/participant-distribution-details-view/participant-distribution-details-view.component';
+import { ParticipantDistributionEditorComponent } from './view/participant-distribution-editor/participant-distribution-editor.component';
 
 
 
@@ -40,6 +41,11 @@ const routes: Routes = [
       {
         path: 'distribution/:participantDistributionId/details',
         component: ParticipantDistributionDetailsViewComponent,
+        resolve: {loadUserStudyParticipantDistributionResolver}
+      },
+      {
+        path: 'distribution/:participantDistributionId/edit',
+        component: ParticipantDistributionEditorComponent,
         resolve: {loadUserStudyParticipantDistributionResolver}
       },
       {

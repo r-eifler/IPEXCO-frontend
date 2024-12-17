@@ -102,6 +102,7 @@ import { UserStudyParticipantDistributionService } from './user_study/service/us
 import { CreateUserStudyParticipantDistributionEffect } from './user_study/state/effects/create-user-study-participant-distribution.effect';
 import { NextUserStudyService } from './user_study_execution/service/user-study-selection.service';
 import { RedirectToNextUserStudyEffect } from './user_study_execution/state/effects/select-user-study.effect';
+import { EditUserStudyParticipantDistributionEffect } from './user_study/state/effects/edit-user-study-participant-distribution.effect ';
 
 
 
@@ -166,7 +167,8 @@ import { RedirectToNextUserStudyEffect } from './user_study_execution/state/effe
       LoadUserStudyDistributionsEffect,
       LoadUserStudyDistributionEffect,
       CreateUserStudyParticipantDistributionEffect,
-      RedirectToNextUserStudyEffect
+      RedirectToNextUserStudyEffect,
+      EditUserStudyParticipantDistributionEffect
     ]),
     // Instrumentation must be imported after importing StoreModule (config is optional)
     StoreDevtoolsModule.instrument({

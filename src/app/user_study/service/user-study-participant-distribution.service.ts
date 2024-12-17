@@ -21,7 +21,7 @@ export class UserStudyParticipantDistributionService{
   }
 
   putParticipantDistribution$(distribution: ParticipantDistribution): Observable<ParticipantDistribution> {
-    return this.http.put<IHTTPData<ParticipantDistribution>>(this.BASE_URL, {data: distribution}).pipe(
+    return this.http.put<IHTTPData<ParticipantDistribution>>(this.BASE_URL + distribution._id, {data: distribution}).pipe(
       map(({data}) => (data)),
     )
   }

@@ -85,7 +85,7 @@ export class ParticipantDistributionCreatorComponent {
 
     this.store.dispatch(createParticipantDistribution({distribution}));
 
-    this.router.navigate(['..', {relativeTo: this.route}]);
+    this.router.navigate(['user-study', 'collection']);
   }
 
 }
