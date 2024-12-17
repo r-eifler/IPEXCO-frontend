@@ -5,6 +5,8 @@ export enum QuestionType {
   WHAT_IF_PROPERTY = 'S-WHAT-IF', // What happens if we enforce Q?
   CAN_PROPERTY = 'S-CAN', // Can Q be satisfied?
   HOW_PROPERTY = 'S-HOW', // How can Q be satisfied?
+  DIRECT_USER = 'DIRECT-USER',
+  DIRECT_ET = 'DIRECT-ET',
  
 }
 

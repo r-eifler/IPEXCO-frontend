@@ -118,8 +118,9 @@ export const loadLLMContext = createAction('[llm] load LLM context', props<{proj
 export const loadLLMContextSuccess = createAction('[llm] load LLM context success', props<{LLMContext: LLMContext}>());
 export const loadLLMContextFailure = createAction('[llm] load LLM context failure');
 
-export const directResponseQT = createAction('[iterative-planning] direct response QT', props<{ directResponse: string, threadIdQt: string, threadIdGt: string }>());
+export const directResponseQT = createAction('[iterative-planning] direct response QT', props<{ directResponse: string }>());
+export const directMessageET = createAction('[iterative-planning] direct message ET', props<{ directResponse: string }>());
 
-export const showReverseTranslationGT = createAction('[iterative-planning] show reverse translation GT', props<{ reverseTranslation: string, threadIdGt: string }>());
-export const showReverseTranslationQT = createAction('[iterative-planning] show reverse translation QT', props<{ reverseTranslation: string, threadIdQt: string }>());
+export const showReverseTranslationGT = createAction('[iterative-planning] show reverse translation GT', props<{ reverseTranslation: string}>());
+export const showReverseTranslationQT = createAction('[iterative-planning] show reverse translation QT', props<{ reverseTranslation: string}>());
 

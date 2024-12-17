@@ -76,7 +76,7 @@ export class LLMService {
 
     postMessageQTthenGT$(question: string, iterationStep: IterationStep, project: Project, properties: PlanProperty[], threadIdQt: string, threadIdGt: string): Observable<
         | { gtResponse: string, qtResponse: string, threadIdQt: string, threadIdGt: string, questionType: QuestionType, goal: string, question: Question, reverseTranslationQT: string, reverseTranslationGT: string }
-        | { directResponse: string, threadIdQt: string, threadIdGt: string }
+        | { directResponse: string, questionType: QuestionType, threadIdQt: string, threadIdGt: string }
     > {
         console.log("Properties", properties);
         console.log("IterationStep", iterationStep);
@@ -106,7 +106,7 @@ export class LLMService {
         console.log(qtRequestString, gtRequestString);
         return this.http.post<IHTTPData<
             | { gtResponse: string, qtResponse: string, threadIdQt: string, threadIdGt: string, questionType: QuestionType, goal: string, question: Question, reverseTranslationQT: string, reverseTranslationGT: string }
-            | { directResponse: string , threadIdQt: string, threadIdGt: string}
+            | { directResponse: string , questionType: QuestionType, threadIdQt: string, threadIdGt: string}
         >>(this.BASE_URL + 'qt-then-gt', { 
             qtRequest: qtRequestString, 
             gtRequest: gtRequestString, 
