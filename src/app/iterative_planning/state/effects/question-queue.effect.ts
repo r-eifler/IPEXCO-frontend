@@ -67,7 +67,9 @@ export class QuestionQueueEffect {
       console.log("Provided as: " + question);
 
       return this.store.select(selectExplanation(hash)).pipe(
+        tap(explanation => console.log('Explanation from store:', explanation)),
         filter(explanation => explanation?.status === ExplanationRunStatus.failed || explanation?.status === ExplanationRunStatus.finished),
+        tap(explanation => console.log('After filter - explanation status:', explanation?.status)),
         take(1),
         concatLatestFrom(() => [this.store.select(selectIterativePlanningProperties)]),
         map(([explanation, properties]) => 

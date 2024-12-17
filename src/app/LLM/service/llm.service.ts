@@ -45,8 +45,31 @@ export class LLMService {
         );
     }
 
-    postMessageQT$(request: string, threadId: string): Observable<{ response: string, threadId: string }> {
-        return this.http.post<IHTTPData<{ response: string, threadId: string }>>(this.BASE_URL + 'qt', { data: request, threadId: threadId }).pipe(
+    postMessageQT$(question: string, iterationStep: IterationStep, project: Project, properties: PlanProperty[], threadId: string): Observable<
+        | { directResponse: string, questionType: QuestionType, threadId: string }
+        | { response: { questionType: QuestionType, goal: string, question: Question, reverseTranslation: string }, threadId: string }
+    > {
+        const questionTranslationRequest: QuestionTranslationRequest = {
+            question: question,
+            enforcedGoals: properties.filter(p => iterationStep.hardGoals.includes(p._id)),
+            satisfiedGoals: properties.filter(p => iterationStep.plan.satisfied_properties.includes(p._id)),
+            unsatisfiedGoals: properties.filter(p => !iterationStep.plan.satisfied_properties.includes(p._id)),
+            existingPlanProperties: Object.values(properties),
+            solvable: iterationStep.plan.status == PlanRunStatus.not_solvable ? "false" : "true"
+        };
+
+        const requestString = questionTranslationRequestToString(questionTranslationRequest);
+        
+        return this.http.post<IHTTPData<{ response: { questionType: QuestionType, goal: string, question: Question, reverseTranslation: string }, threadId: string }>>(
+            this.BASE_URL + 'qt', 
+            { 
+                data: requestString, 
+                threadId: threadId, 
+                iterationStepId: iterationStep._id, 
+                projectId: project._id,
+                originalRequest: question 
+            }
+        ).pipe(
             map(({ data }) => data),
             tap(console.log)
         );

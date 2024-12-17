@@ -365,8 +365,6 @@ on(directResponseQT, (state, action): IterativePlanningState => ({
   ExplanationLoadingState: LoadingState.Done,
   LLMContext: {
     ...state.LLMContext,
-    threadIdQT: action.threadIdQt,
-    threadIdGT: action.threadIdGt,
     visibleMessages: [...state.LLMContext.visibleMessages, {role: 'sender', content: action.directResponse, iterationStepId: state.selectedIterationStepId}]
   }
 })),

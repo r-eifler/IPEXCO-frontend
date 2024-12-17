@@ -14,7 +14,7 @@ import { selectSatisfiedSoftGoals } from "src/app/iterative_planning/view/step-d
 import { selectEnforcedGoals } from "src/app/iterative_planning/view/step-detail-view/step-detail-view.component.selector";
 import { ExplanationInterfaceType } from "src/app/project/domain/general-settings";
 import { PlanRunStatus } from "src/app/iterative_planning/domain/plan";
-import { directMessageET, directResponseQT, loadLLMContext, loadLLMContextFailure, loadLLMContextSuccess, poseAnswer, poseAnswerLLM, questionPosed, questionPosedLLM, sendMessageToLLMExplanationTranslator, sendMessageToLLMExplanationTranslatorFailure, sendMessageToLLMExplanationTranslatorSuccess, sendMessageToLLMGoalTranslator, sendMessageToLLMGoalTranslatorFailure, sendMessageToLLMGoalTranslatorSuccess, sendMessageToLLMQTthenGTTranslators, sendMessageToLLMQTthenGTTranslatorsFailure, sendMessageToLLMQTthenGTTranslatorsSuccess, showReverseTranslationGT, showReverseTranslationQT } from "src/app/iterative_planning/state/iterative-planning.actions";
+import { directMessageET, directResponseQT, loadLLMContext, loadLLMContextFailure, loadLLMContextSuccess, poseAnswer, poseAnswerLLM, questionPosed, questionPosedLLM, sendMessageToLLMExplanationTranslator, sendMessageToLLMExplanationTranslatorFailure, sendMessageToLLMExplanationTranslatorSuccess, sendMessageToLLMGoalTranslator, sendMessageToLLMGoalTranslatorFailure, sendMessageToLLMGoalTranslatorSuccess, sendMessageToLLMQTthenGTTranslators, sendMessageToLLMQTthenGTTranslatorsFailure, sendMessageToLLMQTthenGTTranslatorsSuccess, sendMessageToLLMQuestionTranslator, sendMessageToLLMQuestionTranslatorSuccess, showReverseTranslationGT, showReverseTranslationQT } from "src/app/iterative_planning/state/iterative-planning.actions";
 import { Question } from "src/app/iterative_planning/domain/interface/question";
 import { getComputedBase } from "../../domain/explanation/answer-factory";
 import { mapComputeBase } from "../../domain/explanation/answer-factory";
@@ -107,38 +107,41 @@ export class SendMessageToLLMEffect {
 
 
     public sendMessageToQuestionTranslator$ = createEffect(() => this.actions$.pipe(
-        ofType(sendMessageToLLMQTthenGTTranslators),
+        ofType(sendMessageToLLMQuestionTranslator),
         concatLatestFrom(({ question, iterationStepId }) => [
             this.store.select(selectIterativePlanningProject),
             this.store.select(selectIterativePlanningProperties),
             this.store.select(selectIterationStepById(iterationStepId)),
-            this.store.select(selectLLMThreadIdGT),
             this.store.select(selectLLMThreadIdQT)
         ]),
-        switchMap(([{ question, iterationStepId }, project, properties, iterationStep, threadIdGT, threadIdQT]) => {
-            return this.service.postMessageQTthenGT$(question, iterationStep, project, Object.values(properties), threadIdQT, threadIdGT).pipe(
+        switchMap(([{ question, iterationStepId }, project, properties, iterationStep, threadIdQT]) => {
+            return this.service.postMessageQT$(question, iterationStep, project, Object.values(properties), threadIdQT).pipe(
             ).pipe(
                 switchMap(response => {
                     if ('directResponse' in response) {
                         if (response.questionType === QuestionType.DIRECT_USER) {
+                            console.log('direct response QT');
                             return [
-                                sendMessageToLLMQTthenGTTranslatorsSuccess({ threadIdQt: response.threadIdQt, threadIdGt: response.threadIdGt }),
+                                sendMessageToLLMQuestionTranslatorSuccess({ threadId: response.threadId }),
                                 directResponseQT({ directResponse: response.directResponse })
                             ];
                         } else if (response.questionType === QuestionType.DIRECT_ET) {
+                            console.log('direct response ET');
                             return [
-                                sendMessageToLLMQTthenGTTranslatorsSuccess({ threadIdQt: response.threadIdQt, threadIdGt: response.threadIdGt }),
+                                sendMessageToLLMQuestionTranslatorSuccess({ threadId: response.threadId }),
                                 directMessageET({ directResponse: response.directResponse })
                             ];
                         }
                     }
                     else {
+                        console.log('reverse translation QT');
                         return [
-                            sendMessageToLLMQTthenGTTranslatorsSuccess({ threadIdQt: response.threadIdQt, threadIdGt: response.threadIdGt }),
-                            ...('reverseTranslationQT' in response ? [showReverseTranslationQT({ reverseTranslation: response.reverseTranslationQT })] : []),
-                            ...('question' in response ? [questionPosedLLM({ question: response.question, naturalLanguageQuestion: question })] : [])
+                            sendMessageToLLMQuestionTranslatorSuccess({ threadId: response.threadId }),
+                            ...('reverseTranslationQT' in response && typeof response.reverseTranslationQT === 'string' ? [showReverseTranslationQT({ reverseTranslation: response.reverseTranslationQT })] : []),
+                            ...('question' in response ? [questionPosedLLM({ question: response.question as Question, naturalLanguageQuestion: question })] : [])
                         ];
                     }
+                    console.log(response);
                 }),
                 catchError(() => of(sendMessageToLLMQTthenGTTranslatorsFailure()))
             );
