@@ -1,4 +1,4 @@
-import { Component, inject } from "@angular/core";
+import { AfterViewInit, Component, computed, effect, inject, OnInit, Signal, ViewChild } from "@angular/core";
 import { filter, map } from "rxjs/operators";
 import { FormsModule } from '@angular/forms';
 import { CurrencyPipe, DatePipe } from '@angular/common';
@@ -10,6 +10,10 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { UserStudyExecution } from "../../domain/user-study-execution";
 import { acceptUserStudyParticipant } from "../../state/user-study.actions";
 import { MatButtonModule } from "@angular/material/button";
+import { MatPaginator, MatPaginatorModule, PageEvent } from "@angular/material/paginator";
+import { toSignal } from "@angular/core/rxjs-interop";
+import { Observable } from "rxjs";
+import { MatSortHeader, MatSortModule, Sort } from "@angular/material/sort";
 
 interface TableData extends UserStudyExecution {
   date: Date,
@@ -26,31 +30,60 @@ interface TableData extends UserStudyExecution {
     MatIconModule,
     MatTableModule,
     MatCheckboxModule,
-    MatButtonModule
+    MatButtonModule,
+    MatPaginatorModule,
+    MatSortModule
   ],
   templateUrl: "./accepted-test-persons.component.html",
   styleUrls: ["./accepted-test-persons.component.scss"],
 })
 export class AcceptedTestPersonsComponent {
+
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+
   
   store = inject(Store);
-  participants$ = this.store.select(selectUserStudyParticipantsOfStudy);
+  participants = toSignal(this.store.select(selectUserStudyParticipantsOfStudy));
 
-  participantsTableData$ = this.participants$.pipe(
-    filter(ps => !!ps),
-    map(ps =>
-      ps.map(p => ({
-        ...p,
-        date: p.createdAt,
-        processingTime: p.finished ? new Date(p.finishedAt.getTime() - p.createdAt.getTime()) : null
-      })
-      )
-    ));
+  participantsTableData = computed(() =>  
+    this.participants()?.map(p => ({
+      ...p,
+      date: p.createdAt,
+      processingTime: p.finished ? new Date(p.finishedAt.getTime() - p.createdAt.getTime()) : null
+    })
+    )
+  );
+
+  displayedParticipants: TableData[];
 
   displayedColumns: string[] = ['user', 'date', 'processingTime', 'finished', 'payment', 'accepted'];
+
+  constructor() {
+    effect(() => {
+      const index = this.paginator.pageIndex;
+      const size = this.paginator.pageSize;
+      this.displayedParticipants =  this.participantsTableData() ? [...this.participantsTableData()].splice(index * size, size) : [];
+      console.log(this.displayedParticipants);
+    })
+  }
 
   
   onAccept(dataPoint: TableData){
     this.store.dispatch(acceptUserStudyParticipant({userId: dataPoint.user}));
+  }
+
+
+  onPage(event: PageEvent){
+    const index = event.pageIndex;
+    const size = event.pageSize;
+    this.displayedParticipants =  [...this.participantsTableData()].splice(index * size, size);
+  }
+
+  announceSortChange(sortState: Sort){
+    console.log(sortState);
+    const sorted = [...this.participantsTableData()].sort();
+    const index = this.paginator.pageIndex;
+    const size = this.paginator.pageSize;
+    this.displayedParticipants =  sorted ? sorted.splice(index * size, size) : [];
   }
 }

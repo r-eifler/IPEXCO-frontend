@@ -21,13 +21,14 @@ export class UserStudyDashboardComponent {
 
   store = inject(Store);
   participants = toSignal(this.store.select(selectUserStudyParticipantsOfStudy));
+  acceptedParticipants = computed(() => this.participants()?.filter(p => p.accepted))
 
   numParticipants = computed(() => this.participants()?.length);
   numAcceptedParticipants = computed(() => this.participants()?.filter(p => p.accepted).length)
 
 
   averageTime = computed(() => {
-    if(this.participants() == null || this.participants == undefined){
+    if(this.acceptedParticipants() == null || this.participants == undefined){
       return undefined;
     }
     const times = this.participants()?.map(p => p.finished ? p.finishedAt.getTime() - p.createdAt.getTime(): null);
@@ -39,26 +40,26 @@ export class UserStudyDashboardComponent {
   })
 
   averageIterationSteps = computed(() => {
-    const numIterSteps = this.participants()?.map(p => p.timeLog.filter(a => a.type == ActionType.CREATE_ITERATION_STEP).length);
-    return average(numIterSteps);
+    const numIterSteps = this.acceptedParticipants()?.map(p => p.timeLog.filter(a => a.type == ActionType.CREATE_ITERATION_STEP).length);
+    return average(numIterSteps).toFixed(2);
   })
 
   averageQuestions = computed(() => {
-    const questions = this.participants()?.map(p => p.timeLog.filter(a => a.type == ActionType.ASK_QUESTION).length);
-    return average(questions);
+    const questions = this.acceptedParticipants()?.map(p => p.timeLog.filter(a => a.type == ActionType.ASK_QUESTION).length);
+    return average(questions).toFixed(2);
   })
 
   averageMaxUtility = computed(() => {
-    if(this.participants() == null){
+    if(this.acceptedParticipants() == null){
       return null;
     }
-    const utilitiesPerParticipant = this.participants()?.
+    const utilitiesPerParticipant = this.acceptedParticipants()?.
       map(p => 
         p.timeLog.filter(a => a.type == ActionType.PLAN_FOR_ITERATION_STEP).
         map((a: PlanForIterationStepUserAction) => a.data.utility)
     );
     const maxUtilities = utilitiesPerParticipant.map(us => us.reduce((p,c) => Math.max(p,c), 0));
-    return average(maxUtilities);
+    return average(maxUtilities).toFixed(2);
   })
 
 }

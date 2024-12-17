@@ -1,4 +1,4 @@
-import { Component, computed, inject, output } from "@angular/core";
+import { Component, computed, effect, inject, output, ViewChild } from "@angular/core";
 import { filter, map, take } from "rxjs/operators";
 import { FormsModule } from '@angular/forms';
 import { CurrencyPipe, DatePipe, NgIf } from '@angular/common';
@@ -13,6 +13,7 @@ import { toSignal } from "@angular/core/rxjs-interop";
 import { MatButtonModule } from "@angular/material/button";
 import { acceptUserStudyParticipant } from "../../state/user-study.actions";
 import { ActionType, PlanForIterationStepUserAction } from "src/app/user_study_execution/domain/user-action";
+import { MatPaginator, MatPaginatorModule, PageEvent } from "@angular/material/paginator";
 
 interface TableData extends UserStudyExecution {
   date: Date,
@@ -32,12 +33,15 @@ interface TableData extends UserStudyExecution {
     MatCheckboxModule,
     MatButtonModule,
     MatIconModule,
-    NgIf
+    NgIf,
+    MatPaginatorModule,
   ],
   templateUrl: "./select-test-persons.component.html",
   styleUrls: ["./select-test-persons.component.scss"],
 })
 export class SelectTestPersonsComponent {
+
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
   selectedParticipants = output<string[]>()
   
@@ -57,10 +61,27 @@ export class SelectTestPersonsComponent {
       }
     );
 
+  displayedParticipants: TableData[];
 
   displayedColumns: string[] = ['select', 'user', 'date', 'processingTime', 'utility', 'finished', 'payment', 'accepted'];
 
   selection = new SelectionModel<TableData>(true, []);
+
+  constructor() {
+    effect(() => {
+      const index = this.paginator.pageIndex;
+      const size = this.paginator.pageSize;
+      this.displayedParticipants =  this.participantsTableData() ? [...this.participantsTableData()].splice(index * size, size) : [];
+      console.log(this.displayedParticipants);
+    })
+  }
+
+
+  onPage(event: PageEvent){
+    const index = event.pageIndex;
+    const size = event.pageSize;
+    this.displayedParticipants =  [...this.participantsTableData()].splice(index * size, size);
+  }
 
   isAllSelected(){
     const numSelected = this.selection.selected.length;
