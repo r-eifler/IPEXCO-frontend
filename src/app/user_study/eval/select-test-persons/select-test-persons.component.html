@@ -27,7 +27,14 @@
 
   <ng-container matColumnDef="processingTime">
     <th mat-header-cell *matHeaderCellDef> Duration </th>
-    <td mat-cell *matCellDef="let element"> {{element.processingTime | date: 'mm'}}min {{element.processingTime | date: 'ss'}}sec</td>
+    <td mat-cell *matCellDef="let element"> 
+      @if(element.finished){
+      {{element.processingTime | date: 'mm'}}min {{element.processingTime | date: 'ss'}}sec
+      }
+      @else {
+        -
+      }
+    </td>
   </ng-container>
 
   <ng-container matColumnDef="utility">

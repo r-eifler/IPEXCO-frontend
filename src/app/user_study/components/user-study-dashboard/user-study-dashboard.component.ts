@@ -30,7 +30,7 @@ export class UserStudyDashboardComponent {
     if(this.participants() == null || this.participants == undefined){
       return undefined;
     }
-    const times = this.participants()?.map(p => p.finishedAt.getTime() - p.createdAt.getTime());
+    const times = this.participants()?.map(p => p.finished ? p.finishedAt.getTime() - p.createdAt.getTime(): null);
     console.log(times.map(t => new Date(t)));
     console.log('Average: ' + (times?.reduce((p,c) => p + c, 0) / times?.length))
     const duration =  new Date (times?.reduce((p,c) => p + c, 0) / times?.length);
