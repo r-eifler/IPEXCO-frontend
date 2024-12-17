@@ -90,6 +90,7 @@ export class DemoCreatorComponent implements OnInit {
   imagePath$ = this.imageFile$.pipe(
     filter(f => !!f),
     switchMap(f => this.uploadService.postDemoImage$(f)),
+    startWith(null)
     // catchError(() => console.log("ERROR"))
   );
   imageUploaded$ = this.imagePath$.pipe(map(path => path !== null))
