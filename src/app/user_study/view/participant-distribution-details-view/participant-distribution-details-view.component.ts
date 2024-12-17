@@ -108,8 +108,8 @@ export class ParticipantDistributionDetailsViewComponent {
 
   onCopyLink(){
     const host = window.location.protocol + "//" + window.location.host;
-    // this.userStudy$.pipe(take(1)).subscribe(study => navigator.clipboard.writeText(host + '/suser-study-execution/' + study._id));
-    let snackBarRef = this.snackbar.open('User study link copied to clipboard.', 'close');
+    this.distribution$.pipe(take(1)).subscribe(dis => navigator.clipboard.writeText(host + '/user-study-execution/distribution/' + dis._id));
+    let snackBarRef = this.snackbar.open('User study distribution link copied to clipboard.', 'close');
   }
 
   onDelete(id: string) {

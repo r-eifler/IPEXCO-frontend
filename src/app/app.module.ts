@@ -100,6 +100,8 @@ import { LoadUserStudyDistributionsEffect } from './user_study/state/effects/loa
 import { LoadUserStudyDistributionEffect } from './user_study/state/effects/load-user-study-participant-distribution.effect';
 import { UserStudyParticipantDistributionService } from './user_study/service/user-study-participant-distribution.service';
 import { CreateUserStudyParticipantDistributionEffect } from './user_study/state/effects/create-user-study-participant-distribution.effect';
+import { NextUserStudyService } from './user_study_execution/service/user-study-selection.service';
+import { RedirectToNextUserStudyEffect } from './user_study_execution/state/effects/select-user-study.effect';
 
 
 
@@ -163,7 +165,8 @@ import { CreateUserStudyParticipantDistributionEffect } from './user_study/state
       AcceptUserStudyParticipantEffect,
       LoadUserStudyDistributionsEffect,
       LoadUserStudyDistributionEffect,
-      CreateUserStudyParticipantDistributionEffect
+      CreateUserStudyParticipantDistributionEffect,
+      RedirectToNextUserStudyEffect
     ]),
     // Instrumentation must be imported after importing StoreModule (config is optional)
     StoreDevtoolsModule.instrument({
@@ -209,6 +212,7 @@ import { CreateUserStudyParticipantDistributionEffect } from './user_study/state
     UserStudyAuthenticationService,
     UserStudyExecutionEvalService,
     UserStudyParticipantDistributionService,
+    NextUserStudyService,
     {
       provide: MAT_BOTTOM_SHEET_DEFAULT_OPTIONS,
       useValue: { hasBackdrop: true },

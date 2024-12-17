@@ -21,6 +21,7 @@ import {AuthGuard} from '../route-guards/auth-guard.guard';
 import {UserStudyExecutionCancelViewComponent} from './view/user-study-execution-cancel-view/user-study-execution-cancel-view.component';
 import {UserStudyAuthGuard} from '../route-guards/user-study-auth.guard';
 import { LogOutUserStudyAuthGuard } from '../route-guards/user-study-logout.guard';
+import { distributeParticipantsResolver } from './resolver/distribute-participant.resolver';
 
 
 
@@ -38,6 +39,11 @@ const routes: Routes = [
       {
         path: 'canceled',
         component: UserStudyExecutionCancelViewComponent,
+      },
+      {
+        path: 'distribution/:distributionId',
+        resolve: {distributeParticipantsResolver},
+        component: UserStudyExecutionFailViewComponent,
       },
       {
         path: ':userStudyId',
