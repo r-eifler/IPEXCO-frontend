@@ -1,5 +1,5 @@
 import { Component, ElementRef, inject, OnInit, TemplateRef, viewChild } from "@angular/core";
-import { Demo, DemoRunStatus } from "src/app/demo/domain/demo";
+import { Demo, DemoRunStatus } from "src/app/project/domain/demo";
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { MatDialogRef, MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';

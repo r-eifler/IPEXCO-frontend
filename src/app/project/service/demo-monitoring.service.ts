@@ -3,7 +3,7 @@ import { tap, map, filter, take, exhaustMap } from 'rxjs/operators';
 import { interval, Observable } from 'rxjs';
 import { DemoService } from './demo.service';
 import { RunStatus } from 'src/app/iterative_planning/domain/run';
-import { DemoRunStatus } from 'src/app/demo/domain/demo';
+import { DemoRunStatus } from 'src/app/project/domain/demo';
   
 @Injectable({
   providedIn: 'root'

@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { Demo } from "src/app/demo/domain/demo";
+import { Demo } from "src/app/project/domain/demo";
 import { UserStudy } from "../../../user_study/domain/user-study";
 import { MatIcon } from "@angular/material/icon";
 import { MatCardModule } from "@angular/material/card";

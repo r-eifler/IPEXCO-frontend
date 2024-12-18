@@ -8,7 +8,7 @@ import {MatInput} from '@angular/material/input';
 import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {UserStudyStep} from '../../domain/user-study';
 import {MatOption, MatSelect} from '@angular/material/select';
-import {Demo} from '../../../demo/domain/demo';
+import {Demo} from '../../../project/domain/demo';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {MatSlider, MatSliderThumb} from '@angular/material/slider';
 

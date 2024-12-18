@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { DemoRunStatus } from 'src/app/demo/domain/demo';
+import { DemoRunStatus } from 'src/app/project/domain/demo';
 import {Color} from '../../shared/components/label/label/label.component';
 
 @Pipe({

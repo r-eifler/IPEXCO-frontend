@@ -2,7 +2,7 @@ import { createReducer, on } from '@ngrx/store';
 import { Loadable, LoadingState } from 'src/app/shared/common/loadable.interface';
 import { Creatable, CreationState } from 'src/app/shared/common/creatable.interface';
 import { UserStudy } from '../domain/user-study';
-import { Demo } from 'src/app/demo/domain/demo';
+import { Demo } from 'src/app/project/domain/demo';
 import {
   editUserStudy, editUserStudySuccess,
   loadParticipantDistribution,

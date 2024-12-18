@@ -17,7 +17,7 @@ import { isNonEmptyValidator } from "src/app/validators/non-empty.validator";
 import { PlanPropertyPanelComponent } from "../../../shared/components/plan-property-panel/plan-property-panel.component";
 import { SelectPropertyComponent } from "../../components/select-property/select-property.component";
 import { cancelNewIterationStep, createIterationStep, updateNewIterationStep } from "../../state/iterative-planning.actions";
-import { selectIterativePlanningProperties } from "../../state/iterative-planning.selector";
+import { selectIterativePlanningIterationStepComputationRunning, selectIterativePlanningProperties } from "../../state/iterative-planning.selector";
 import { selectPlanPropertyIds, selectPreselectedEnforcedGoals$, selectPreselectedSoftGoals$ } from "./create-iteration.component.selector";
 
 @Component({
@@ -48,6 +48,8 @@ export class CreateIterationComponent {
   dialogRef: MatDialogRef<unknown> | undefined;
 
   propertySelector = viewChild.required<TemplateRef<ElementRef>>('propertySelector');
+
+  computationRunning$ = this.store.select(selectIterativePlanningIterationStepComputationRunning);
 
   planProperties$ = this.store.select(selectIterativePlanningProperties);
   planPropertyIds$ = this.store.select(selectPlanPropertyIds);
