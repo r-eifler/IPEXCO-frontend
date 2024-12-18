@@ -46,12 +46,14 @@
 				<app-page-section-content>
 					<div class="list-list">
 						@for(MUGS of (MUGS$ | async); track $index) {
-						<div class="property-badge-list">
-							<mat-icon>report</mat-icon>
-							@for(id of MUGS; track id) {
-							<app-plan-property-badge [property]="(planProperties$ | async)?.[id]"></app-plan-property-badge>
-							}
-						</div>
+							<div class="icon-list-item">
+								<mat-icon>report</mat-icon>
+								<div class="property-badge-list">
+									@for(id of MUGS; track id) {
+									<app-plan-property-badge [property]="(planProperties$ | async)?.[id]"></app-plan-property-badge>
+									}
+								</div>
+							</div>
 						}
 					</div>
 				</app-page-section-content>
@@ -62,12 +64,14 @@
 				<app-page-section-content>
 					<div class="list-list">
 						@for(MGCS of (MGCS$ | async); track $index) {
-						<div class="property-badge-list">
-							<mat-icon>healing</mat-icon>
-							@for(id of MGCS; track id) {
-							<app-plan-property-badge [property]="(planProperties$ | async)?.[id]"></app-plan-property-badge>
-							}
-						</div>
+							<div class="icon-list-item">
+								<mat-icon>report</mat-icon>
+								<div class="property-badge-list">
+									@for(id of MGCS; track id) {
+									<app-plan-property-badge [property]="(planProperties$ | async)?.[id]"></app-plan-property-badge>
+									}
+								</div>
+							</div>
 						}
 					</div>
 				</app-page-section-content>

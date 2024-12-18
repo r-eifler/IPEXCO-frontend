@@ -5,17 +5,30 @@
     gap: var(--spacing-200);
   }
 
-.property-badge-list {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-
-  gap: var(--spacing-200);
-}
   
 .list-list {
   display: flex;
   flex-direction: column;
+
+  gap: var(--spacing-500);
+}
+
+.icon-list-item{
+  display: flex;
+  align-items: center;
+
+  gap: var(--spacing-200);
+
+  mat-icon {
+    flex-shrink: 0;
+  }
+}
+
+.property-badge-list {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: wrap;
 
   gap: var(--spacing-200);
 }

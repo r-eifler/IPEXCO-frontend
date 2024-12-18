@@ -2,12 +2,12 @@
     <span
         aria-hidden="false"
         class="variable-value"
-        [matBadge]="values.length"
+        [matBadge]="values()?.length"
         matBadgeColor="primary"
         matBadgeOverlap="false"
         matBadgeSize="large"
         [matMenuTriggerFor]="varMenu">
-        {{ selectedValue }}
+        {{ selectedValue() }}
     </span>
 }
 @else{
@@ -22,14 +22,14 @@
     </mat-icon>
 }
 <mat-menu #varMenu="matMenu" yPosition="above">
-    @if(isSelected){
+    @if(isSelected()){
         <button
             mat-menu-item
             (click)="resetVar()">
             reset
         </button>
     }
-    @for(value of displayOrder(values); track value){
+    @for(value of displayValues(); track value){
         <button
         mat-menu-item
         (click)="selectValue(value)">
