@@ -22,24 +22,23 @@ import { MatButtonModule } from "@angular/material/button";
 import { Project } from "src/app/shared/domain/project";
 
 @Component({
-  selector: "app-project-creator",
-  standalone: true,
-  imports: [
-    AsyncPipe,
-    MatIconModule,
-    TemplateFileUploadComponent,
-    MatStepperModule,
-    MatLabel,
-    MatFormFieldModule,
-    MatInputModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatCardModule,
-    MatIconModule,
-    MatButtonModule,
-  ],
-  templateUrl: "./project-creator.component.html",
-  styleUrls: ["./project-creator.component.scss"],
+    selector: "app-project-creator",
+    imports: [
+        AsyncPipe,
+        MatIconModule,
+        TemplateFileUploadComponent,
+        MatStepperModule,
+        MatLabel,
+        MatFormFieldModule,
+        MatInputModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MatCardModule,
+        MatIconModule,
+        MatButtonModule,
+    ],
+    templateUrl: "./project-creator.component.html",
+    styleUrls: ["./project-creator.component.scss"]
 })
 export class ProjectCreatorComponent implements OnInit {
 

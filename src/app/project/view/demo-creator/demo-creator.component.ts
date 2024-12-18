@@ -3,7 +3,7 @@ import { Demo, DemoRunStatus } from "src/app/demo/domain/demo";
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { MatDialogRef, MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
-import { BehaviorSubject, combineLatest, map, startWith, take, tap } from 'rxjs';
+import { BehaviorSubject, catchError, combineLatest, filter, map, Observable, startWith, Subject, switchMap, take, tap } from 'rxjs';
 import { selectProject, selectProjectProperties } from '../../state/project.selector';
 import { registerDemoCreation } from '../../state/project.actions';
 import { isNonEmptyValidator } from "src/app/validators/non-empty.validator";
@@ -17,29 +17,31 @@ import { PlanPropertyPanelComponent } from "src/app/shared/components/plan-prope
 import { AsyncPipe } from "@angular/common";
 import { SelectPropertyComponent } from "../../components/select-property/select-property.component";
 import { PlanProperty } from "src/app/shared/domain/plan-property/plan-property";
+import { DemoService } from "../../service/demo.service";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 @Component({
-  selector: "app-demo-creator",
-  standalone: true,
-  imports: [
-    AsyncPipe,
-    MatStepperModule,
-    MatButtonModule,
-    EditableListModule,
-    DialogModule,
-    MatIcon,
-    ReactiveFormsModule,
-    MatInputModule,
-    PlanPropertyPanelComponent,
-    SelectPropertyComponent
-  ],
-  templateUrl: "./demo-creator.component.html",
-  styleUrls: ["./demo-creator.component.scss"],
+    selector: "app-demo-creator",
+    imports: [
+        AsyncPipe,
+        MatStepperModule,
+        MatButtonModule,
+        EditableListModule,
+        DialogModule,
+        MatIcon,
+        ReactiveFormsModule,
+        MatInputModule,
+        PlanPropertyPanelComponent,
+        SelectPropertyComponent
+    ],
+    templateUrl: "./demo-creator.component.html",
+    styleUrls: ["./demo-creator.component.scss"]
 })
 export class DemoCreatorComponent implements OnInit {
 
   private fb = inject(FormBuilder);
   private store = inject(Store);
+  private uploadService = inject(DemoService);
   private dialogService = inject(MatDialog);
 
   propertySelector = viewChild.required<TemplateRef<ElementRef>>('propertySelector');
@@ -81,9 +83,21 @@ export class DemoCreatorComponent implements OnInit {
     )),
   );
 
-  imageFileName = "";
-  imageFile;
+  imageFile$ = new BehaviorSubject<any>(null);
+  imageFileName$ = this.imageFile$.pipe(map(f => f?.name));
   imageSelected = false;
+  imagePath$ = this.imageFile$.pipe(
+    filter(f => !!f),
+    switchMap(f => this.uploadService.postDemoImage$(f)),
+    startWith(null)
+    // catchError(() => console.log("ERROR"))
+  );
+  imageUploaded$ = this.imagePath$.pipe(map(path => path !== null))
+
+  constructor(){
+    this.imagePath$.pipe(takeUntilDestroyed(),tap(console.log)).subscribe();
+  }
+
 
   addSelectedProperty(planProperties: PlanProperty[]): void {
     const idControls = planProperties.map(pp => this.fb.control<PlanProperty>(pp));
@@ -93,7 +107,6 @@ export class DemoCreatorComponent implements OnInit {
 
   addProperty(): void {
     this.handlePropertySelection = (planProperties: PlanProperty[]) => {
-      console.log(planProperties)
       this.addSelectedProperty(planProperties);
       this.dialogRef?.close();
     }
@@ -109,16 +122,17 @@ export class DemoCreatorComponent implements OnInit {
 
   createDemo(): void {
 
-    this.project$.pipe(
+    combineLatest([this.project$,this.imagePath$]).pipe(
       tap(console.log),
       take(1)
     ).subscribe(
-      project => {
+      ([project, imagePath]) => {
+        console.log("Image path: " + imagePath);
         const newDemo: Demo = {
           status: DemoRunStatus.pending,
           projectId: project._id,
           name: this.form.controls.main.controls.name.value,
-          summaryImage: this.imageFile,
+          summaryImage: imagePath,
           description: this.form.controls.main.controls.description.value
             ? this.form.controls.main.controls.description.value
             : "TODO",
@@ -158,8 +172,7 @@ export class DemoCreatorComponent implements OnInit {
   }
 
   onFileChanged(event) {
-    this.imageFile = event.target.files[0];
-    this.imageFileName = this.imageFile.name;
+    this.imageFile$.next(event.target.files[0]);
   }
 
   onCancelPropertySelection(): void {

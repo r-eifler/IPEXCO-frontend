@@ -15,11 +15,10 @@ import { StepValuePipe } from '../../domain/pipe/step-value.pipe';
 import { PlanProperty } from '../../../shared/domain/plan-property/plan-property';
 
 @Component({
-  selector: 'app-iteration-step-card',
-  standalone: true,
-  imports: [MatCardModule, MatChipsModule, StepStatusNamePipe, MatIconModule, LabelModule, StepValuePipe, DefaultPipe, MatButtonModule, RouterLink, MatTooltipModule, StepStatusColorPipe],
-  templateUrl: './iteration-step-card.component.html',
-  styleUrl: './iteration-step-card.component.scss'
+    selector: 'app-iteration-step-card',
+    imports: [MatCardModule, MatChipsModule, StepStatusNamePipe, MatIconModule, LabelModule, StepValuePipe, DefaultPipe, MatButtonModule, RouterLink, MatTooltipModule, StepStatusColorPipe],
+    templateUrl: './iteration-step-card.component.html',
+    styleUrl: './iteration-step-card.component.scss'
 })
 export class IterationStepCardComponent {
   step = input.required<IterationStep | null>();

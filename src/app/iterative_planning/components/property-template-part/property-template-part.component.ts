@@ -5,15 +5,14 @@ import { MatIcon } from '@angular/material/icon';
 import { PDDLObject } from 'src/app/shared/domain/planning-task';
 
 @Component({
-  selector: 'app-property-template-part',
-  standalone: true,
-  imports: [    
-    MatMenuModule,
-    MatBadgeModule,
-	  MatIcon,
-  ],
-  templateUrl: './property-template-part.component.html',
-  styleUrl: './property-template-part.component.scss'
+    selector: 'app-property-template-part',
+    imports: [
+        MatMenuModule,
+        MatBadgeModule,
+        MatIcon,
+    ],
+    templateUrl: './property-template-part.component.html',
+    styleUrl: './property-template-part.component.scss'
 })
 export class PropertyTemplatePartComponent {
 

@@ -7,14 +7,13 @@ import { USUser } from "src/app/user_study/domain/user-study-user";
 import { UserStudyDataService } from "src/app/user_study/service/user-study-data.service";
 
 @Component({
-  selector: "app-time-logger-data",
-  standalone: true,
-  imports: [
-    NgxChartsModule,
-    MatCardModule,
-  ],
-  templateUrl: "./time-logger-data.component.html",
-  styleUrls: ["./time-logger-data.component.css"],
+    selector: "app-time-logger-data",
+    imports: [
+        NgxChartsModule,
+        MatCardModule,
+    ],
+    templateUrl: "./time-logger-data.component.html",
+    styleUrls: ["./time-logger-data.component.css"]
 })
 export class TimeLoggerDataComponent implements OnInit {
   private ngUnsubscribe$: Subject<any> = new Subject();

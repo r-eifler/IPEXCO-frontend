@@ -15,7 +15,7 @@
 
   @include vars.typography(body-medium);
 
-  & > ::ng-deep* {
+  & > ::ng-deep {
     flex-basis: fit-content;
   }
 

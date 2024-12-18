@@ -16,11 +16,10 @@ import { MatCardModule } from '@angular/material/card';
 import { MatListModule } from '@angular/material/list';
 
 @Component({
-  selector: 'app-question-panel',
-  standalone: true,
-  imports: [MatExpansionModule, MatIconModule, UnformattedModule, QuoteModule, MatButtonModule, MatCardModule, MatListModule],
-  templateUrl: './question-panel.component.html',
-  styleUrl: './question-panel.component.scss'
+    selector: 'app-question-panel',
+    imports: [MatExpansionModule, MatIconModule, UnformattedModule, QuoteModule, MatButtonModule, MatCardModule, MatListModule],
+    templateUrl: './question-panel.component.html',
+    styleUrl: './question-panel.component.scss'
 })
 export class QuestionPanelComponent implements OnInit{
 

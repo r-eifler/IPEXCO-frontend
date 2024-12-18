@@ -5,13 +5,12 @@ import { GeneralSettings } from "src/app/project/domain/general-settings";
 import { SettingsComponent } from "src/app/project/components/settings/settings.component";
 
 @Component({
-  selector: "app-demo-settings",
-  standalone: true,
-  imports: [
-    SettingsComponent,
-  ],
-  templateUrl: "./demo-settings.component.html",
-  styleUrls: ["./demo-settings.component.css"],
+    selector: "app-demo-settings",
+    imports: [
+        SettingsComponent,
+    ],
+    templateUrl: "./demo-settings.component.html",
+    styleUrls: ["./demo-settings.component.css"]
 })
 export class DemoSettingsComponent implements OnInit {
 

@@ -1,0 +1,57 @@
+@let submitted = submitted$ | async;
+
+<app-page>
+  <app-page-title>
+    Finished!
+  </app-page-title>
+  <app-page-content>
+    <app-page-section-list>
+      @if(!submitted){
+      <app-page-section>
+        <app-page-section-content>
+          Thank you for your participation!
+        </app-page-section-content>
+      </app-page-section>
+      }
+      @if(!submitted){
+      <app-page-section>
+        <app-page-section-title>
+          Submit
+        </app-page-section-title>
+        <app-page-section-content>
+          <p>
+            By clicking the submit button you agree irrevocable that your results can be used for the research purposes
+            stated in the initial consent form. It is no longer possible to  associated your data with you and
+            your browser.
+          </p>
+          <button mat-flat-button (click)="onSubmit()">Submit</button>
+        </app-page-section-content>
+      </app-page-section>
+      }
+      @if(!submitted){
+      <app-page-section>
+        <app-page-section-title>
+          Cancel
+        </app-page-section-title>
+        <app-page-section-content>
+          <p>
+            In case you want to take back your consent, this is the last possibility. By clicking the cancel
+            button all data related to this run will be delete.
+          </p>
+          <button mat-stroked-button (click)="onCancel()">Cancel</button>
+        </app-page-section-content>
+      </app-page-section>
+      }
+      @if(submitted){
+        <app-page-section>
+          <app-page-section-title>
+            Submitted
+          </app-page-section-title>
+          <app-page-section-content>
+            Thank you for your participation. All your data was submitted. You can now close the browser.
+          </app-page-section-content>
+        </app-page-section>
+      }
+    </app-page-section-list>
+  </app-page-content>
+</app-page>

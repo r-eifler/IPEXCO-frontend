@@ -10,15 +10,14 @@ import { UserStudyDemoViewComponent } from "../user-study-demo-view/user-study-d
 import { UserStudyDescriptionViewComponent } from "../user-study-description-view/user-study-description-view.component";
 
 @Component({
-  selector: "app-user-study-executer",
-  standalone: true,
-  imports: [
-    UserStudyDemoViewComponent,
-    UserStudyFormViewComponent,
-    UserStudyDescriptionViewComponent,
-  ],
-  templateUrl: "./user-study-execute.component.html",
-  styleUrls: ["./user-study-execute.component.css"],
+    selector: "app-user-study-executer",
+    imports: [
+        UserStudyDemoViewComponent,
+        UserStudyFormViewComponent,
+        UserStudyDescriptionViewComponent,
+    ],
+    templateUrl: "./user-study-execute.component.html",
+    styleUrls: ["./user-study-execute.component.css"]
 })
 export class UserStudyExecuteComponent implements OnInit {
   isMobile: boolean;

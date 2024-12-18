@@ -4,7 +4,7 @@ import { User } from "../domain/user";
 export const loadTokenLocalStorage = createAction('[user] load token local storage');
 export const loadTokenLocalStorageSuccess = createAction('[user] load token local storage success', props<{token: string}>());
 export const loadTokenLocalStorageFailure = createAction('[user] load token local storage failure');
-export const storeTokenLocalStorage = createAction('[user] load token local storage', props<{token: string}>());
+export const storeTokenLocalStorage = createAction('[user] store token local storage', props<{token: string}>());
 
 export const checkLoggedIn = createAction('[user] checkLoggedIn');
 export const LoggedIn = createAction('[user] logged in');

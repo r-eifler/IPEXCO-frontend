@@ -1,0 +1,13 @@
+@let step = step$ | async;
+
+@switch (step?.type){
+  @case(UserStudyStepType.description){
+    <app-user-study-execution-description-view (continue)="onNext()"></app-user-study-execution-description-view>
+  }
+  @case(UserStudyStepType.form){
+    <app-user-study-execution-external-view (continue)="onNext()"></app-user-study-execution-external-view>
+  }
+  @case(UserStudyStepType.demo){
+    <app-user-study-execution-demo-view></app-user-study-execution-demo-view>
+  }
+}

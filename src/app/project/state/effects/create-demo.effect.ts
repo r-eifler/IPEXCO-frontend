@@ -1,6 +1,6 @@
 import { inject, Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { demoCreationRunningFailure, demoCreationRunningSuccess, loadProjectDemos, registerDemoCreation, registerDemoCreationFailure, registerDemoCreationSuccess} from "../project.actions";
+import { demoCreationRunningFailure, demoCreationRunningSuccess, loadProjectDemos, registerDemoCreation, registerDemoCreationFailure, registerDemoCreationSuccess, uploadProjectDemoImage, uploadProjectDemoImageSuccess} from "../project.actions";
 import { catchError, switchMap } from "rxjs/operators";
 import { of } from "rxjs";
 import { DemoService } from "../../service/demo.service";
@@ -16,6 +16,14 @@ export class CreateDemoEffect{
     private service = inject(DemoService)
     private monitoringService = inject(DemoMonitoringService)
     private store = inject(Store);
+
+    // public uploadDemoImage$ = createEffect(() => this.actions$.pipe(
+    //     ofType(uploadProjectDemoImage),
+    //     switchMap(({image}) => this.service.postDemoImage$(image).pipe(
+    //         switchMap((imagePath)  => [uploadProjectDemoImageSuccess({imagePath})]),
+    //         catchError(() => of(registerDemoCreationFailure()))
+    //     ))
+    // ))
 
     public registerDemoCreation$ = createEffect(() => this.actions$.pipe(
         ofType(registerDemoCreation),

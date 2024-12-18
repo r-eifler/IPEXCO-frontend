@@ -1,0 +1,26 @@
+<mat-card appearance="outlined">
+    <mat-card-header>
+      <mat-card-title>{{ participantDistribution()?.name }}</mat-card-title>
+      <mat-card-subtitle>
+      </mat-card-subtitle>
+    </mat-card-header>
+  
+    <mat-card-content>
+      <div class="content">
+        <div class="stats">
+  
+          <mat-icon>quiz</mat-icon>
+          <span class="property-label">#User Studies:</span>
+          <span class="property-value">{{ participantDistribution()?.userStudies.length }}</span>
+
+        </div>
+      </div>
+    </mat-card-content>
+  
+    <mat-card-actions>
+      <div class="action-container">
+        <a class="details" mat-stroked-button (click)="onDetails()">Details</a>
+      </div>
+    </mat-card-actions>
+</mat-card>
+  

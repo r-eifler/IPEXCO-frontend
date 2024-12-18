@@ -1,0 +1,119 @@
+<app-page>
+  <app-breadcrumb>
+    <a app-breadcrumb-item [routerLink]="['/user-study/']"><mat-icon>home</mat-icon></a>
+    <app-breadcrumb-item>new</app-breadcrumb-item>
+  </app-breadcrumb>
+  <app-page-title>New User Study</app-page-title>
+
+  <app-page-content>
+    <form [formGroup]="form" (ngSubmit)="save()">
+    <app-page-section-list>
+      <app-page-section>
+        <app-page-section-title>
+          Main Information
+        </app-page-section-title>
+        <app-page-section-content class="input-list">
+          <mat-form-field class="full-line-input" appearance="outline">
+            <mat-label>Name</mat-label>
+            <input matInput type="text" formControlName="name" />
+          </mat-form-field>
+
+          <mat-form-field class="full-line-input" appearance="outline">
+            <mat-label>Description</mat-label>
+            <textarea matInput formControlName="description"></textarea>
+          </mat-form-field>
+
+          <mat-form-field class="full-line-input" appearance="outline">
+            <mat-label>Related Project</mat-label>
+            <textarea matInput formControlName="relatedProject"></textarea>
+          </mat-form-field>
+
+          <mat-form-field class="full-line-input" appearance="outline">
+            <mat-label>Expectations of the participants</mat-label>
+            <textarea matInput formControlName="expectation"></textarea>
+          </mat-form-field>
+
+          <mat-form-field class="full-line-input" appearance="outline">
+            <mat-label>Confidentiality</mat-label>
+            <textarea matInput formControlName="confidentiality"></textarea>
+          </mat-form-field>
+
+          <mat-form-field class="full-line-input" appearance="outline">
+            <mat-label>Enter a date range</mat-label>
+            <mat-date-range-input [rangePicker]="picker" [formGroup]="form.controls.validTimeRange">
+              <input matStartDate placeholder="Start date" formControlName="start">
+              <input matEndDate placeholder="End date" formControlName="end">
+            </mat-date-range-input>
+            <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-date-range-picker #picker></mat-date-range-picker>
+          </mat-form-field>
+
+          <mat-form-field class="full-line-input" appearance="outline">
+            <mat-label>Prolific redirect URL</mat-label>
+            <input matInput type="text" formControlName="redirectUrl" />
+          </mat-form-field>
+        </app-page-section-content>
+      </app-page-section>
+
+      <app-page-section>
+        <app-page-section-title>
+          Steps
+        </app-page-section-title>
+        <app-page-section-content class="input-list">
+          @for(control of  form.controls.steps.controls; track control; let idx = $index; let first = $first; let last = $last){
+            @switch (control.value.type){
+              @case (userStudyStepType.description){
+                <app-description-card
+                  [step]="control.value"
+                  [first]="first"
+                  [last]="last"
+                  (changes)="updateControl(control,$event)"
+                  (delete)="deleteStep(idx)"
+                  (up)="moveUp(idx)"
+                  (down)="moveDown(idx)"
+                ></app-description-card>
+              }
+              @case (userStudyStepType.demo){
+                <app-demo-card
+                  [step]="control.value"
+                  [first]="first"
+                  [last]="last"
+                  [demos]="demos$ | async"
+                  (changes)="updateControl(control,$event)"
+                  (delete)="deleteStep(idx)"
+                  (up)="moveUp(idx)"
+                  (down)="moveDown(idx)"
+                ></app-demo-card>
+              }
+              @case (userStudyStepType.form){
+                <app-form-card
+                  [step]="control.value"
+                  [first]="first"
+                  [last]="last"
+                  (changes)="updateControl(control,$event)"
+                  (delete)="deleteStep(idx)"
+                  (up)="moveUp(idx)"
+                  (down)="moveDown(idx)"
+                ></app-form-card>
+              }
+            }
+          }
+          <div class="button-container">
+            <button mat-stroked-button type="button" (click)="addNewStep(userStudyStepType.description)">new description step</button>
+            <button mat-stroked-button type="button" (click)="addNewStep(userStudyStepType.demo)">new demo step</button>
+            <button mat-stroked-button type="button" (click)="addNewStep(userStudyStepType.form)">new form step</button>
+          </div>
+        </app-page-section-content>
+      </app-page-section>
+      <app-page-section>
+        <app-page-section-content>
+          <div class="button-container">
+            <button mat-flat-button [disabled]="!form.valid">Save</button>
+          </div>
+        </app-page-section-content>
+      </app-page-section>
+    </app-page-section-list>
+    </form>
+  </app-page-content>
+</app-page>

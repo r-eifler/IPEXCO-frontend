@@ -6,14 +6,13 @@ import { AsyncPipe } from "@angular/common";
 import { MatIconModule } from "@angular/material/icon";
 
 @Component({
-  selector: "app-score-bar",
-  standalone: true,
-  imports: [
-    AsyncPipe,
-    MatIconModule,
-  ],
-  templateUrl: "./score-bar.component.html",
-  styleUrls: ["./score-bar.component.scss"],
+    selector: "app-score-bar",
+    imports: [
+        AsyncPipe,
+        MatIconModule,
+    ],
+    templateUrl: "./score-bar.component.html",
+    styleUrls: ["./score-bar.component.scss"]
 })
 export class ScoreBarComponent implements OnInit {
   @Input()

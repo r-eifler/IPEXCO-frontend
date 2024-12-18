@@ -19,22 +19,21 @@ import { NgIf } from "@angular/common";
 import { MatButtonModule } from "@angular/material/button";
 
 @Component({
-  selector: "app-register",
-  standalone: true,
-  imports: [
-    MatIconModule,
-    MatError,
-    MatLabel,
-    MatFormFieldModule,
-    ReactiveFormsModule,
-    FormsModule,
-    MatCardModule,
-    MatInputModule,
-    NgIf,
-    MatButtonModule,
-  ],
-  templateUrl: "./register.component.html",
-  styleUrls: ["./register.component.scss"],
+    selector: "app-register",
+    imports: [
+        MatIconModule,
+        MatError,
+        MatLabel,
+        MatFormFieldModule,
+        ReactiveFormsModule,
+        FormsModule,
+        MatCardModule,
+        MatInputModule,
+        NgIf,
+        MatButtonModule,
+    ],
+    templateUrl: "./register.component.html",
+    styleUrls: ["./register.component.scss"]
 })
 export class RegisterComponent implements OnInit {
 

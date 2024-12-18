@@ -1,9 +1,8 @@
 import { inject, Injectable } from "@angular/core";
 import { ActivatedRouteSnapshot, Router, RouterStateSnapshot, UrlTree } from "@angular/router";
-import { AuthenticationService } from "../user/services/authentication.service";
 import { Store } from "@ngrx/store";
-import { selectLoggedIn } from "../user/state/user.selector";
-import { map, Observable, take } from "rxjs";
+import { selectIsUserStudy, selectLoggedIn } from "../user/state/user.selector";
+import { combineLatest, map, Observable, take } from "rxjs";
 
 @Injectable({
   providedIn: "root",
@@ -22,14 +21,18 @@ export class AuthGuard  {
 
   checkLogin(): Observable<boolean | UrlTree> {
 
-    return this.store.select(selectLoggedIn).pipe(take(1)).pipe(
-      map(isLoggedIn => {
-        if(isLoggedIn){
+    return combineLatest([this.store.select(selectLoggedIn), this.store.select(selectIsUserStudy)]).pipe(
+      take(1),
+      map(([isLoggedIn, isUserStudy]) => {
+        if(isLoggedIn && ! isUserStudy){
           return true;
         }
-        else {
-          return this.router.parseUrl("/");
+        if(isUserStudy){
+          return this.router.parseUrl("/user-study-execution/fail");
         }
+        
+        return this.router.parseUrl("/register");
+        
       })
     )
   }

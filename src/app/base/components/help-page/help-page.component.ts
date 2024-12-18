@@ -5,15 +5,14 @@ import { MatStepperModule } from "@angular/material/stepper";
 import { MatTabsModule } from "@angular/material/tabs";
 
 @Component({
-  selector: "app-help-page",
-  standalone: true,
-  imports: [
-    MatCardModule,
-    MatTabsModule,
-    MatStepperModule,
-  ],
-  templateUrl: "./help-page.component.html",
-  styleUrls: ["./help-page.component.css"],
+    selector: "app-help-page",
+    imports: [
+        MatCardModule,
+        MatTabsModule,
+        MatStepperModule,
+    ],
+    templateUrl: "./help-page.component.html",
+    styleUrls: ["./help-page.component.css"]
 })
 export class HelpPageComponent implements OnInit {
   constructor() {}

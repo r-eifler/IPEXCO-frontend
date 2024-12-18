@@ -16,20 +16,19 @@ import { DemoTaskIntroComponent } from '../demo-task-intro/demo-task-intro.compo
 import { DemoHelpComponent } from '../demo-help/demo-help.component';
 
 @Component({
-  selector: "app-demo-base",
-  standalone: true,
-  imports: [
-    DemoNavigatorComponent,
-    DemoTaskIntroComponent,
-    DemoHelpComponent,
-  ],
-  templateUrl: "./demo-base.component.html",
-  styleUrls: ["./demo-base.component.scss"],
-  providers: [
-    { provide: PLANNER_REDIRECT, useValue: "../" },
-    { provide: QUESTION_REDIRECT, useValue: "../../../" },
-    { provide: DEMO_FINISHED_REDIRECT, useValue: "/demos" },
-  ],
+    selector: "app-demo-base",
+    imports: [
+        DemoNavigatorComponent,
+        DemoTaskIntroComponent,
+        DemoHelpComponent,
+    ],
+    templateUrl: "./demo-base.component.html",
+    styleUrls: ["./demo-base.component.scss"],
+    providers: [
+        { provide: PLANNER_REDIRECT, useValue: "../" },
+        { provide: QUESTION_REDIRECT, useValue: "../../../" },
+        { provide: DEMO_FINISHED_REDIRECT, useValue: "/demos" },
+    ]
 })
 export class DemoBaseComponent implements OnInit, OnDestroy {
 

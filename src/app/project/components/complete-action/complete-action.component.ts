@@ -6,16 +6,15 @@ import { MatListModule } from "@angular/material/list";
 import { PDDLAction, FactToString, predicateToString } from "src/app/shared/domain/planning-task";
 
 @Component({
-  selector: "app-complete-action",
-  standalone: true,
-  imports: [
-    MatListModule,
-    MatExpansionModule,
-    MatCardModule,
-    NgFor,
-  ],
-  templateUrl: "./complete-action.component.html",
-  styleUrls: ["./complete-action.component.scss"],
+    selector: "app-complete-action",
+    imports: [
+        MatListModule,
+        MatExpansionModule,
+        MatCardModule,
+        NgFor,
+    ],
+    templateUrl: "./complete-action.component.html",
+    styleUrls: ["./complete-action.component.scss"]
 })
 export class CompleteActionComponent implements OnInit {
   @Input() action: PDDLAction;

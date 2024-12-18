@@ -1,0 +1,60 @@
+@let distribution = distribution$ | async;
+@let userStudies = userStudies$ | async;
+@let participants = participants$ | async;
+
+<app-page>
+  <app-breadcrumb>
+    <a app-breadcrumb-item [routerLink]="['/user-study', 'collection']"><mat-icon>home</mat-icon></a>
+    <app-breadcrumb-item>{{ distribution?.name }}</app-breadcrumb-item>
+  </app-breadcrumb>
+
+  <app-page-title>
+    {{ distribution?.name }}
+      <app-page-title-action>
+      <button mat-icon-button matTooltip="Copy link to the user study distribution."
+              (click)="onCopyLink()">
+        <mat-icon>link</mat-icon>
+      </button>
+      <button mat-icon-button [matMenuTriggerFor]="menu">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu">
+        <a mat-icon-button matTooltip="Edit participant distribution."
+                [routerLink]="['/user-study', 'distribution', distribution?._id, 'edit']">
+          <mat-icon>edit</mat-icon>
+        </a>
+        <button mat-icon-button matTooltip="Delete user study."
+                (click)="onDelete(distribution?._id)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </mat-menu>
+    </app-page-title-action>
+  </app-page-title>
+
+  <app-page-hero>
+    <!-- <app-user-study-hero [userStudy]="userStudy" [participants]="participants"></app-user-study-hero> -->
+  </app-page-hero>
+
+  <app-page-content>
+    <app-page-section-list>
+      <app-page-section>
+        <app-page-section-content>
+            <div>
+            <ngx-charts-bar-vertical-stacked
+                [scheme]="colorScheme"
+                [results]="chartsValues$ | async"
+                gradient="false"
+                xAxis="true"
+                yAxis="true"
+                showXAxisLabel="true"
+                showYAxisLabel="true"
+                xAxisLabel="User Studies"
+                yAxisLabel="#Participans"
+                animations="true">
+            </ngx-charts-bar-vertical-stacked>
+            </div>
+        </app-page-section-content>
+      </app-page-section>
+    </app-page-section-list>
+  </app-page-content>
+</app-page>

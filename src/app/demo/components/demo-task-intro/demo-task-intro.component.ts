@@ -25,19 +25,18 @@ import { MarkedPipe } from 'src/app/pipes/marked.pipe';
 import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: "app-demo-task-intro",
-  standalone: true,
-  imports: [
-    MatCardModule,
-    MatDividerModule,
-    MatIconModule,
-    MatListModule,
-    MatTabsModule,
-    MarkedPipe,
-    AsyncPipe,
-  ],
-  templateUrl: "./demo-task-intro.component.html",
-  styleUrls: ["./demo-task-intro.component.css"],
+    selector: "app-demo-task-intro",
+    imports: [
+        MatCardModule,
+        MatDividerModule,
+        MatIconModule,
+        MatListModule,
+        MatTabsModule,
+        MarkedPipe,
+        AsyncPipe,
+    ],
+    templateUrl: "./demo-task-intro.component.html",
+    styleUrls: ["./demo-task-intro.component.css"]
 })
 export class DemoTaskIntroComponent implements OnInit, OnDestroy {
   private loggerId: number;

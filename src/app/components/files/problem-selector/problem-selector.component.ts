@@ -5,14 +5,13 @@ import { SelectedObjectService } from "../../../service/base/selected-object.ser
 import { TemplateFileUploadComponent } from "../file-upload/file-upload.component";
 
 @Component({
-  selector: "app-problem-selector",
-  standalone: true,
-  imports: [
-    TemplateFileUploadComponent
-  ],
-  templateUrl: "./problem-selector.component.html",
-  styleUrls: ["./problem-selector.component.css"],
-  providers: [{ provide: FilesService, useClass: ProblemFilesService }],
+    selector: "app-problem-selector",
+    imports: [
+        TemplateFileUploadComponent
+    ],
+    templateUrl: "./problem-selector.component.html",
+    styleUrls: ["./problem-selector.component.css"],
+    providers: [{ provide: FilesService, useClass: ProblemFilesService }]
 })
 export class ProblemSelectorComponent implements OnInit {
   constructor() {}

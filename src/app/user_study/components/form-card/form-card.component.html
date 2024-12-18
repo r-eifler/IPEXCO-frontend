@@ -1,0 +1,35 @@
+<mat-card appearance="outlined">
+  <mat-card-header>
+    <mat-card-title>
+      External Link
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content class="content">
+    <form [formGroup]="form">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Name</mat-label>
+        <input matInput formControlName="name">
+      </mat-form-field>
+      <mat-form-field class="full-width" appearance="outline">
+        <mat-label>Link to form</mat-label>
+        <input matInput formControlName="url">
+      </mat-form-field>
+      <mat-label>Minimal time before user is able to continue with the next step:</mat-label>
+      <a mat-stroked-button [href]="url$ | async" target="_blank">Test Link</a>
+      <mat-slider min="1" max="1800" step="1"  discrete [displayWith]="formatLabel" class="full-width">
+        <input matSliderThumb [formControl]="form.controls.time">
+      </mat-slider>
+    </form>
+  </mat-card-content>
+  <mat-card-actions align="end">
+    <button mat-icon-button (click)="deletePart()">
+      <mat-icon>delete</mat-icon>
+    </button>
+    <button mat-icon-button (click)="moveUp()" [disabled]="first()">
+      <mat-icon>keyboard_arrow_up</mat-icon>
+    </button>
+    <button mat-icon-button (click)="moveDown()" [disabled]="last()">
+      <mat-icon>keyboard_arrow_down</mat-icon>
+    </button>
+  </mat-card-actions>
+</mat-card>

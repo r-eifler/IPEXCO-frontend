@@ -8,13 +8,12 @@ import { CurrencyPipe } from '@angular/common';
 
 
 @Component({
-  selector: "app-demo-finished",
-  standalone: true,
-  imports: [
-    CurrencyPipe,
-  ],
-  templateUrl: "./demo-finished.component.html",
-  styleUrls: ["./demo-finished.component.css"],
+    selector: "app-demo-finished",
+    imports: [
+        CurrencyPipe,
+    ],
+    templateUrl: "./demo-finished.component.html",
+    styleUrls: ["./demo-finished.component.css"]
 })
 export class DemoFinishedComponent implements OnInit {
 

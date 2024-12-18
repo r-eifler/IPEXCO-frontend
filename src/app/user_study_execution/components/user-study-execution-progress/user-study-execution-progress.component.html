@@ -1,0 +1,14 @@
+<div style="width: 100%">
+  <mat-progress-bar mode="determinate" [value]="progress$ | async"></mat-progress-bar>
+  <div class="label-container">
+    @for(step of steps$ | async; track step; let index = $index){
+      @if((currentStepIndex$ | async) == index){
+        <span class="label-highlight">{{ step.name }}</span>
+      }
+      @else{
+        <span class="label">{{ step.name }}</span>
+      }
+    }
+  </div>
+</div>
+

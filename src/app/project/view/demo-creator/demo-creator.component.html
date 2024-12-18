@@ -44,7 +44,10 @@
             <button mat-icon-button (click)="fileInput.click()" type="button" style="margin-top: 20px">
               <mat-icon>add_photo_alternate</mat-icon>
             </button>
-            <p style="margin: 0; align-self: center">{{ imageFileName }}</p>
+            <p style="margin: 0; align-self: center">{{ (imageFileName$ | async) ?? "No image selected." }}</p>
+            @if(imageUploaded$ | async){
+              <mat-icon>done_outline</mat-icon>
+            }
         </div>
       </mat-step>
 

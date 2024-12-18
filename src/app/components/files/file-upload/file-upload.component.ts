@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Output, Input} from "@angular/core";
+import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
 
 interface Data {
@@ -7,13 +8,13 @@ interface Data {
 }
 
 @Component({
-  selector: "app-template-file-upload",
-  standalone: true,
-  imports: [
-    MatIconModule,
-  ],
-  templateUrl: "./file-upload.component.html",
-  styleUrls: ["./file-upload.component.scss"],
+    selector: "app-template-file-upload",
+    imports: [
+        MatIconModule,
+        MatButtonModule,
+    ],
+    templateUrl: "./file-upload.component.html",
+    styleUrls: ["./file-upload.component.scss"]
 })
 export class TemplateFileUploadComponent {
 

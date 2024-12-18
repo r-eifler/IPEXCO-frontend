@@ -28,23 +28,22 @@ import { AsyncPipe } from "@angular/common";
 import { ProjectDirective } from "../../derectives/isProject.directive";
 
 @Component({
-  selector: "app-select-property",
-  standalone: true,
-  imports: [
-    DialogModule,
-    EditableListModule,
-    MatButtonModule,
-    MatCheckboxModule,
-    MatDialogModule,
-    MatIconModule,
-    PlanPropertyPanelComponent,
-    ReactiveFormsModule,
-    UserRoleDirective,
-    ProjectDirective,
-  ],
-  templateUrl: "./select-property.component.html",
-  styleUrl: "./select-property.component.scss",
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-select-property",
+    imports: [
+        DialogModule,
+        EditableListModule,
+        MatButtonModule,
+        MatCheckboxModule,
+        MatDialogModule,
+        MatIconModule,
+        PlanPropertyPanelComponent,
+        ReactiveFormsModule,
+        UserRoleDirective,
+        ProjectDirective,
+    ],
+    templateUrl: "./select-property.component.html",
+    styleUrl: "./select-property.component.scss",
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SelectPropertyComponent {
   private fb = inject(FormBuilder);

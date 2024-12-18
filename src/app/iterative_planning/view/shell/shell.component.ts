@@ -5,18 +5,22 @@ import { RouterOutlet } from '@angular/router';
 
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Store } from '@ngrx/store';
-import { selectIterativePlanningNewStep } from '../../state/iterative-planning.selector';
+import {
+  selectIterativePlanningNewStep,
+} from '../../state/iterative-planning.selector';
 import { CreateIterationComponent } from '../create-iteration/create-iteration.component';
+import {MatDialog} from '@angular/material/dialog';
+
 
 @Component({
-  selector: 'app-shell',
-  standalone: true,
-  imports: [RouterOutlet, MatSidenavModule, MatButtonModule, CreateIterationComponent ],
-  templateUrl: './shell.component.html',
-  styleUrl: './shell.component.scss'
+    selector: 'app-shell',
+    imports: [RouterOutlet, MatSidenavModule, MatButtonModule, CreateIterationComponent],
+    templateUrl: './shell.component.html',
+    styleUrl: './shell.component.scss'
 })
 export class ShellComponent {
   private store = inject(Store);
+  private dialog = inject(MatDialog);
 
   sidenav = viewChild<MatSidenav>('sidenav');
 
