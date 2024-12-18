@@ -7,16 +7,15 @@ import {MatButtonModule} from '@angular/material/button';
 import {RouterLink} from '@angular/router';
 
 @Component({
-  selector: 'app-user-study-execution-start-view',
-  standalone: true,
-  imports: [
-    PageModule,
-    AsyncPipe,
-    MatButtonModule,
-    RouterLink,
-  ],
-  templateUrl: './user-study-execution-start-view.component.html',
-  styleUrl: './user-study-execution-start-view.component.scss'
+    selector: 'app-user-study-execution-start-view',
+    imports: [
+        PageModule,
+        AsyncPipe,
+        MatButtonModule,
+        RouterLink,
+    ],
+    templateUrl: './user-study-execution-start-view.component.html',
+    styleUrl: './user-study-execution-start-view.component.scss'
 })
 export class UserStudyExecutionStartViewComponent {
 

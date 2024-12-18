@@ -13,23 +13,22 @@ import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {MatSlider, MatSliderThumb} from '@angular/material/slider';
 
 @Component({
-  selector: 'app-demo-card',
-  standalone: true,
-  imports: [
-    MatCardModule,
-    MatFormFieldModule,
-    MatIcon,
-    MatIconButton,
-    MatLabel,
-    ReactiveFormsModule,
-    MatSelect,
-    MatOption,
-    MatInput,
-    MatSlider,
-    MatSliderThumb
-  ],
-  templateUrl: './demo-card.component.html',
-  styleUrl: './demo-card.component.scss'
+    selector: 'app-demo-card',
+    imports: [
+        MatCardModule,
+        MatFormFieldModule,
+        MatIcon,
+        MatIconButton,
+        MatLabel,
+        ReactiveFormsModule,
+        MatSelect,
+        MatOption,
+        MatInput,
+        MatSlider,
+        MatSliderThumb
+    ],
+    templateUrl: './demo-card.component.html',
+    styleUrl: './demo-card.component.scss'
 })
 export class DemoCardComponent implements OnInit {
 

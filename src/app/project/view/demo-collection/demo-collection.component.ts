@@ -20,24 +20,23 @@ import { DemoCardComponent } from "src/app/project/components/demo-card/demo-car
 import { DemoCreatorComponent } from "src/app/project/view/demo-creator/demo-creator.component";
 
 @Component({
-  selector: "app-demo-selection",
-  standalone: true,
-  imports: [
-    PageModule, 
-    MatIconModule,
-    RouterLink, 
-    BreadcrumbModule,
-    ActionCardModule, 
-    MatIconModule,
-    MatMenuModule,
-    MatCardModule,
-    MatProgressBarModule,
-    MatProgressSpinnerModule,
-    AsyncPipe,
-    DemoCardComponent
-  ],
-  templateUrl: "./demo-collection.component.html",
-  styleUrls: ["./demo-collection.component.scss"],
+    selector: "app-demo-selection",
+    imports: [
+        PageModule,
+        MatIconModule,
+        RouterLink,
+        BreadcrumbModule,
+        ActionCardModule,
+        MatIconModule,
+        MatMenuModule,
+        MatCardModule,
+        MatProgressBarModule,
+        MatProgressSpinnerModule,
+        AsyncPipe,
+        DemoCardComponent
+    ],
+    templateUrl: "./demo-collection.component.html",
+    styleUrls: ["./demo-collection.component.scss"]
 })
 export class DemoCollectionComponent{
 

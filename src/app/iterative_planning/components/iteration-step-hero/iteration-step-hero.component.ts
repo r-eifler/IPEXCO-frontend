@@ -15,11 +15,10 @@ import { StepValuePipe } from '../../domain/pipe/step-value.pipe';
 import { PlanProperty } from '../../../shared/domain/plan-property/plan-property';
 
 @Component({
-  selector: 'app-iteration-step-hero',
-  standalone: true,
-  imports: [MatCardModule, MatChipsModule, StepStatusNamePipe, MatIconModule, LabelModule, StepValuePipe, DefaultPipe, MatButtonModule, RouterLink, MatTooltipModule, StepStatusColorPipe, RouterLink],
-  templateUrl: './iteration-step-hero.component.html',
-  styleUrl: './iteration-step-hero.component.scss'
+    selector: 'app-iteration-step-hero',
+    imports: [MatCardModule, MatChipsModule, StepStatusNamePipe, MatIconModule, LabelModule, StepValuePipe, DefaultPipe, MatButtonModule, RouterLink, MatTooltipModule, StepStatusColorPipe, RouterLink],
+    templateUrl: './iteration-step-hero.component.html',
+    styleUrl: './iteration-step-hero.component.scss'
 })
 export class IterationStepHeroComponent {
   step = input.required<IterationStep | null>();

@@ -23,28 +23,27 @@ import { AsyncPipe } from "@angular/common";
 import { MatSelect } from "@angular/material/select";
 
 @Component({
-  selector: "app-participant-distribution-creator",
-  standalone: true,
-  imports: [
-    MatIconModule,
-    MatCardModule,
-    MatProgressBarModule,
-    FormsModule,
-    MatLabel,
-    MatFormFieldModule,
-    MatOptionModule,
-    ReactiveFormsModule,
-    PageModule,
-    BreadcrumbModule,
-    RouterLink,
-    MatButtonModule,
-    ReactiveFormsModule,
-    MatInputModule,
-    AsyncPipe,
-    MatSelect,
-  ],
-  templateUrl: "./participant-distribution-creator.component.html",
-  styleUrls: ["./participant-distribution-creator.component.scss"],
+    selector: "app-participant-distribution-creator",
+    imports: [
+        MatIconModule,
+        MatCardModule,
+        MatProgressBarModule,
+        FormsModule,
+        MatLabel,
+        MatFormFieldModule,
+        MatOptionModule,
+        ReactiveFormsModule,
+        PageModule,
+        BreadcrumbModule,
+        RouterLink,
+        MatButtonModule,
+        ReactiveFormsModule,
+        MatInputModule,
+        AsyncPipe,
+        MatSelect,
+    ],
+    templateUrl: "./participant-distribution-creator.component.html",
+    styleUrls: ["./participant-distribution-creator.component.scss"]
 })
 export class ParticipantDistributionCreatorComponent {
 

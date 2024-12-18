@@ -30,24 +30,23 @@ const jsonValidator: ValidatorFn = (control) => {
 }
 
 @Component({
-  selector: 'app-property-template-creator',
-  standalone: true,
-  imports: [
-    NgFor, 
-    MatCardModule, 
-    MatTabsModule, 
-    MatInputModule, 
-    MatFormFieldModule, 
-    ReactiveFormsModule,
-    MatExpansionModule,
-    MatButtonModule,
-    MatDivider,
-    MatIcon,
-    MatButtonToggleModule,
-    MatSelectModule
-  ],
-  templateUrl: './property-template-creator.component.html',
-  styleUrl: './property-template-creator.component.scss'
+    selector: 'app-property-template-creator',
+    imports: [
+        NgFor,
+        MatCardModule,
+        MatTabsModule,
+        MatInputModule,
+        MatFormFieldModule,
+        ReactiveFormsModule,
+        MatExpansionModule,
+        MatButtonModule,
+        MatDivider,
+        MatIcon,
+        MatButtonToggleModule,
+        MatSelectModule
+    ],
+    templateUrl: './property-template-creator.component.html',
+    styleUrl: './property-template-creator.component.scss'
 })
 export class PropertyTemplateCreatorComponent {
   private fb = inject(FormBuilder);

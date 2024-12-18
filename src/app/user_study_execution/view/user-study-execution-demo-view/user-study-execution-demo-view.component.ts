@@ -5,13 +5,12 @@ import {selectExecutionUserStudyStep} from '../../state/user-study-execution.sel
 import {take} from 'rxjs/operators';
 
 @Component({
-  selector: 'app-user-study-execution-demo-view',
-  standalone: true,
+    selector: 'app-user-study-execution-demo-view',
     imports: [
         RouterOutlet
     ],
-  templateUrl: './user-study-execution-demo-view.component.html',
-  styleUrl: './user-study-execution-demo-view.component.scss'
+    templateUrl: './user-study-execution-demo-view.component.html',
+    styleUrl: './user-study-execution-demo-view.component.scss'
 })
 export class UserStudyExecutionDemoViewComponent {
 

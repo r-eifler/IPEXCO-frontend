@@ -28,30 +28,29 @@ import {isNoPropertyNull} from '../../../validators/no-property-null.validator';
 
 
 @Component({
-  selector: 'app-user-study-creator',
-  standalone: true,
-  providers: [provideNativeDateAdapter()],
-  imports: [
-    PageModule,
-    MatIconModule,
-    MatCardModule,
-    MatButtonModule,
-    MatOptionModule,
-    MatSelectModule,
-    FormsModule,
-    MatTabsModule,
-    MatInputModule,
-    ReactiveFormsModule,
-    BreadcrumbModule,
-    RouterLink,
-    MatDatepickerModule,
-    AsyncPipe,
-    DescriptionCardComponent,
-    DemoCardComponent,
-    FormCardComponent
-  ],
-  templateUrl: './user-study-creator.component.html',
-  styleUrls: ['./user-study-creator.component.scss'],
+    selector: 'app-user-study-creator',
+    providers: [provideNativeDateAdapter()],
+    imports: [
+        PageModule,
+        MatIconModule,
+        MatCardModule,
+        MatButtonModule,
+        MatOptionModule,
+        MatSelectModule,
+        FormsModule,
+        MatTabsModule,
+        MatInputModule,
+        ReactiveFormsModule,
+        BreadcrumbModule,
+        RouterLink,
+        MatDatepickerModule,
+        AsyncPipe,
+        DescriptionCardComponent,
+        DemoCardComponent,
+        FormCardComponent
+    ],
+    templateUrl: './user-study-creator.component.html',
+    styleUrls: ['./user-study-creator.component.scss']
 })
 export class UserStudyCreatorComponent {
 

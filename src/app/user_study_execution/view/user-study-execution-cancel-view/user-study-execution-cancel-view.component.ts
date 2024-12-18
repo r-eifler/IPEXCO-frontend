@@ -10,21 +10,20 @@ import {PageSectionTitleComponent} from '../../../shared/components/page/page-se
 import {PageTitleComponent} from '../../../shared/components/page/page-title/page-title.component';
 
 @Component({
-  selector: 'app-user-study-execution-cancel-view',
-  standalone: true,
-  imports: [
-    AsyncPipe,
-    MatButton,
-    PageComponent,
-    PageContentComponent,
-    PageSectionComponent,
-    PageSectionContentComponent,
-    PageSectionListComponent,
-    PageSectionTitleComponent,
-    PageTitleComponent
-  ],
-  templateUrl: './user-study-execution-cancel-view.component.html',
-  styleUrl: './user-study-execution-cancel-view.component.scss'
+    selector: 'app-user-study-execution-cancel-view',
+    imports: [
+        AsyncPipe,
+        MatButton,
+        PageComponent,
+        PageContentComponent,
+        PageSectionComponent,
+        PageSectionContentComponent,
+        PageSectionListComponent,
+        PageSectionTitleComponent,
+        PageTitleComponent
+    ],
+    templateUrl: './user-study-execution-cancel-view.component.html',
+    styleUrl: './user-study-execution-cancel-view.component.scss'
 })
 export class UserStudyExecutionCancelViewComponent {
 

@@ -8,14 +8,13 @@ import { combineLatest, filter, map } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'app-user-study-execution-progress',
-  standalone: true,
-  imports: [
-    MatProgressBarModule,
-    AsyncPipe
-  ],
-  templateUrl: './user-study-execution-progress.component.html',
-  styleUrl: './user-study-execution-progress.component.scss'
+    selector: 'app-user-study-execution-progress',
+    imports: [
+        MatProgressBarModule,
+        AsyncPipe
+    ],
+    templateUrl: './user-study-execution-progress.component.html',
+    styleUrl: './user-study-execution-progress.component.scss'
 })
 export class UserStudyExecutionProgressComponent {
 

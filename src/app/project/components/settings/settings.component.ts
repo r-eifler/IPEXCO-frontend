@@ -14,23 +14,22 @@ import { MatInputModule } from "@angular/material/input";
 
 
 @Component({
-  selector: "app-settings",
-  standalone: true,
-  imports: [
-    MatLabel,
-    MatFormFieldModule,
-    MatSlideToggleModule,
-    MatCardModule,
-    ReactiveFormsModule,
-    FormsModule,
-    MatButtonModule,
-    MatButtonToggleModule,
-    MatIconModule,
-    NgIf,
-    MatInputModule,
-  ],
-  templateUrl: "./settings.component.html",
-  styleUrls: ["./settings.component.scss"],
+    selector: "app-settings",
+    imports: [
+        MatLabel,
+        MatFormFieldModule,
+        MatSlideToggleModule,
+        MatCardModule,
+        ReactiveFormsModule,
+        FormsModule,
+        MatButtonModule,
+        MatButtonToggleModule,
+        MatIconModule,
+        NgIf,
+        MatInputModule,
+    ],
+    templateUrl: "./settings.component.html",
+    styleUrls: ["./settings.component.scss"]
 })
 export class SettingsComponent {
 

@@ -9,16 +9,15 @@ import { MatTabsModule } from "@angular/material/tabs";
 import { MatCardModule } from "@angular/material/card";
 
 @Component({
-  selector: "app-demo-task-info",
-  standalone: true,
-  imports: [
-    MarkedPipe,
-    AsyncPipe,
-    MatTabsModule,
-    MatCardModule,
-  ],
-  templateUrl: "./demo-task-info.component.html",
-  styleUrls: ["./demo-task-info.component.css"],
+    selector: "app-demo-task-info",
+    imports: [
+        MarkedPipe,
+        AsyncPipe,
+        MatTabsModule,
+        MatCardModule,
+    ],
+    templateUrl: "./demo-task-info.component.html",
+    styleUrls: ["./demo-task-info.component.css"]
 })
 export class DemoTaskInfoComponent implements OnInit {
   srcUrl = environment.srcURL;

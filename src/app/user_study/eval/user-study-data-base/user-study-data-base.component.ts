@@ -22,24 +22,23 @@ import { MatSlideToggle, MatSlideToggleModule } from '@angular/material/slide-to
 import { MatCardModule } from '@angular/material/card';
 
 @Component({
-  selector: "app-user-study-data-base",
-  standalone: true,
-  imports: [
-    AsyncPipe,
-    IndividualRunUserDataComponent,
-    TimeLoggerDataComponent,
-    OverviewDataComponent,
-    MatTabsModule,
-    CurrencyPipe,
-    DatePipe,
-    MatIconModule,
-    MatListModule,
-    FormsModule,
-    MatSlideToggleModule,
-    MatCardModule,
-  ],
-  templateUrl: "./user-study-data-base.component.html",
-  styleUrls: ["./user-study-data-base.component.css"],
+    selector: "app-user-study-data-base",
+    imports: [
+        AsyncPipe,
+        IndividualRunUserDataComponent,
+        TimeLoggerDataComponent,
+        OverviewDataComponent,
+        MatTabsModule,
+        CurrencyPipe,
+        DatePipe,
+        MatIconModule,
+        MatListModule,
+        FormsModule,
+        MatSlideToggleModule,
+        MatCardModule,
+    ],
+    templateUrl: "./user-study-data-base.component.html",
+    styleUrls: ["./user-study-data-base.component.css"]
 })
 export class UserStudyDataBaseComponent implements OnInit {
 

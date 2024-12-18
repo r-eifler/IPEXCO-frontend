@@ -16,16 +16,15 @@ import {take} from 'rxjs/operators';
 import {executionNextUserStudyStep} from '../../state/user-study-execution.actions';
 
 @Component({
-  selector: 'app-user-study-execution-step-shell',
-  standalone: true,
-  imports: [
-    AsyncPipe,
-    UserStudyExecutionDescriptionViewComponent,
-    UserStudyExecutionExternalViewComponent,
-    UserStudyExecutionDemoViewComponent
-  ],
-  templateUrl: './user-study-execution-step-shell.component.html',
-  styleUrl: './user-study-execution-step-shell.component.scss'
+    selector: 'app-user-study-execution-step-shell',
+    imports: [
+        AsyncPipe,
+        UserStudyExecutionDescriptionViewComponent,
+        UserStudyExecutionExternalViewComponent,
+        UserStudyExecutionDemoViewComponent
+    ],
+    templateUrl: './user-study-execution-step-shell.component.html',
+    styleUrl: './user-study-execution-step-shell.component.scss'
 })
 export class UserStudyExecutionStepShellComponent {
 

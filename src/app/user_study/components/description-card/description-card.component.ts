@@ -14,22 +14,21 @@ import {MatSliderModule} from '@angular/material/slider';
 import { Observable, startWith } from 'rxjs';
 
 @Component({
-  selector: 'app-description-card',
-  standalone: true,
-  imports: [
-    MatCardModule,
-    MatFormField,
-    MatInputModule,
-    ReactiveFormsModule,
-    MatIconModule,
-    MatButtonModule,
-    MatTabsModule,
-    AsyncPipe,
-    MarkedPipe,
-    MatSliderModule
-  ],
-  templateUrl: './description-card.component.html',
-  styleUrl: './description-card.component.scss'
+    selector: 'app-description-card',
+    imports: [
+        MatCardModule,
+        MatFormField,
+        MatInputModule,
+        ReactiveFormsModule,
+        MatIconModule,
+        MatButtonModule,
+        MatTabsModule,
+        AsyncPipe,
+        MarkedPipe,
+        MatSliderModule
+    ],
+    templateUrl: './description-card.component.html',
+    styleUrl: './description-card.component.scss'
 })
 export class DescriptionCardComponent implements OnInit{
 

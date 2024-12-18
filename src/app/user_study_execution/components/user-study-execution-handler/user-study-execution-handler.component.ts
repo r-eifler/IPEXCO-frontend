@@ -16,16 +16,15 @@ import { selectLoggedIn } from 'src/app/user/state/user.selector';
 import { UserStudyStepType } from 'src/app/user_study/domain/user-study';
 
 @Component({
-  selector: 'app-user-study-execution-handler',
-  standalone: true,
-  imports: [
-    MatProgressBar,
-    AsyncPipe,
-    MatButtonModule,
-    MatIconModule,
-  ],
-  templateUrl: './user-study-execution-handler.component.html',
-  styleUrl: './user-study-execution-handler.component.scss',
+    selector: 'app-user-study-execution-handler',
+    imports: [
+        MatProgressBar,
+        AsyncPipe,
+        MatButtonModule,
+        MatIconModule,
+    ],
+    templateUrl: './user-study-execution-handler.component.html',
+    styleUrl: './user-study-execution-handler.component.scss'
 })
 export class UserStudyExecutionHandlerComponent {
 

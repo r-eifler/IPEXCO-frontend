@@ -8,14 +8,13 @@ interface Data {
 }
 
 @Component({
-  selector: "app-template-file-upload",
-  standalone: true,
-  imports: [
-    MatIconModule,
-    MatButtonModule,
-  ],
-  templateUrl: "./file-upload.component.html",
-  styleUrls: ["./file-upload.component.scss"],
+    selector: "app-template-file-upload",
+    imports: [
+        MatIconModule,
+        MatButtonModule,
+    ],
+    templateUrl: "./file-upload.component.html",
+    styleUrls: ["./file-upload.component.scss"]
 })
 export class TemplateFileUploadComponent {
 

@@ -3,14 +3,13 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 
 @Component({
-  selector: 'app-user-study-dashboard-card',
-  standalone: true,
-  imports: [
-    MatCardModule,
-    MatIconModule
-  ],
-  templateUrl: './user-study-dashboard-card.component.html',
-  styleUrl: './user-study-dashboard-card.component.scss'
+    selector: 'app-user-study-dashboard-card',
+    imports: [
+        MatCardModule,
+        MatIconModule
+    ],
+    templateUrl: './user-study-dashboard-card.component.html',
+    styleUrl: './user-study-dashboard-card.component.scss'
 })
 export class UserStudyDashboardCardComponent {
 

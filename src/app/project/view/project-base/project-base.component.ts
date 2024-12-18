@@ -15,24 +15,23 @@ import { MatButtonModule } from "@angular/material/button";
 import { PlanningTaskViewComponent } from "../planning-task-view/planning-task-view.component";
 
 @Component({
-  selector: "app-project-base",
-  standalone: true,
-  imports:[
-    PageModule, 
-    MatIconModule,
-    RouterLink, 
-    BreadcrumbModule,
-    ActionCardModule, 
-    MatCardModule,
-    MatIcon,
-    AsyncPipe,
-    ProjectActionCardComponent,
-    MatButtonModule,
-    RouterModule,
-    MatTabsModule,
-  ],
-  templateUrl: "./project-base.component.html",
-  styleUrls: ["./project-base.component.scss"],
+    selector: "app-project-base",
+    imports: [
+        PageModule,
+        MatIconModule,
+        RouterLink,
+        BreadcrumbModule,
+        ActionCardModule,
+        MatCardModule,
+        MatIcon,
+        AsyncPipe,
+        ProjectActionCardComponent,
+        MatButtonModule,
+        RouterModule,
+        MatTabsModule,
+    ],
+    templateUrl: "./project-base.component.html",
+    styleUrls: ["./project-base.component.scss"]
 })
 export class ProjectBaseComponent {
 

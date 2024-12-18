@@ -8,14 +8,13 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { ActionType, PlanForIterationStepUserAction } from 'src/app/user_study_execution/domain/user-action';
 
 @Component({
-  selector: 'app-user-study-dashboard',
-  standalone: true,
-  imports: [
-    UserStudyDashboardCardComponent,
-    DatePipe
-  ],
-  templateUrl: './user-study-dashboard.component.html',
-  styleUrl: './user-study-dashboard.component.scss'
+    selector: 'app-user-study-dashboard',
+    imports: [
+        UserStudyDashboardCardComponent,
+        DatePipe
+    ],
+    templateUrl: './user-study-dashboard.component.html',
+    styleUrl: './user-study-dashboard.component.scss'
 })
 export class UserStudyDashboardComponent {
 

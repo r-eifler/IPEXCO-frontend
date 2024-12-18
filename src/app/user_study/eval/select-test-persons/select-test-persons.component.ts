@@ -22,22 +22,21 @@ interface TableData extends UserStudyExecution {
 }
 
 @Component({
-  selector: "app-select-test-persons",
-  standalone: true,
-  imports: [
-    FormsModule,
-    CurrencyPipe,
-    DatePipe,
-    MatIconModule,
-    MatTableModule,
-    MatCheckboxModule,
-    MatButtonModule,
-    MatIconModule,
-    NgIf,
-    MatPaginatorModule,
-  ],
-  templateUrl: "./select-test-persons.component.html",
-  styleUrls: ["./select-test-persons.component.scss"],
+    selector: "app-select-test-persons",
+    imports: [
+        FormsModule,
+        CurrencyPipe,
+        DatePipe,
+        MatIconModule,
+        MatTableModule,
+        MatCheckboxModule,
+        MatButtonModule,
+        MatIconModule,
+        NgIf,
+        MatPaginatorModule,
+    ],
+    templateUrl: "./select-test-persons.component.html",
+    styleUrls: ["./select-test-persons.component.scss"]
 })
 export class SelectTestPersonsComponent {
 

@@ -5,14 +5,13 @@ import { BehaviorSubject, Observable, combineLatest, filter, map } from 'rxjs';
 import { PaymentInfo } from 'src/app/project/domain/general-settings';
 
 @Component({
-  selector: 'app-payment-bar',
-  standalone: true,
-  imports: [
-    CurrencyPipe,
-    AsyncPipe,
-  ],
-  templateUrl: './payment-bar.component.html',
-  styleUrls: ['./payment-bar.component.scss']
+    selector: 'app-payment-bar',
+    imports: [
+        CurrencyPipe,
+        AsyncPipe,
+    ],
+    templateUrl: './payment-bar.component.html',
+    styleUrls: ['./payment-bar.component.scss']
 })
 export class PaymentBarComponent implements OnInit {
   @Input()

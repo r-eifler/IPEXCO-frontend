@@ -21,26 +21,25 @@ import { selectIterativePlanningProperties } from "../../state/iterative-plannin
 import { selectPlanPropertyIds, selectPreselectedEnforcedGoals$, selectPreselectedSoftGoals$ } from "./create-iteration.component.selector";
 
 @Component({
-  selector: "app-create-iteration",
-  standalone: true,
-  imports: [
-    AsyncPipe,
-    EditableListModule,
-    InfoModule,
-    MatButtonModule,
-    MatDialogModule,
-    MatFormFieldModule,
-    MatIconModule,
-    MatInputModule,
-    NgFor,
-    PlanPropertyPanelComponent,
-    SelectPropertyComponent,
-    ReactiveFormsModule,
-    SideSheetModule,
-    JsonPipe,
-  ],
-  templateUrl: "./create-iteration.component.html",
-  styleUrl: "./create-iteration.component.scss",
+    selector: "app-create-iteration",
+    imports: [
+        AsyncPipe,
+        EditableListModule,
+        InfoModule,
+        MatButtonModule,
+        MatDialogModule,
+        MatFormFieldModule,
+        MatIconModule,
+        MatInputModule,
+        NgFor,
+        PlanPropertyPanelComponent,
+        SelectPropertyComponent,
+        ReactiveFormsModule,
+        SideSheetModule,
+        JsonPipe,
+    ],
+    templateUrl: "./create-iteration.component.html",
+    styleUrl: "./create-iteration.component.scss"
 })
 export class CreateIterationComponent {
   private fb = inject(FormBuilder);

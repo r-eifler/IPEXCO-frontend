@@ -6,11 +6,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 
 @Component({
-  selector: 'app-chat-input',
-  standalone: true,
-  imports: [MatFormFieldModule, MatInputModule, MatButtonModule, ReactiveFormsModule, MatIconModule],
-  templateUrl: './chat-input.component.html',
-  styleUrl: './chat-input.component.scss'
+    selector: 'app-chat-input',
+    imports: [MatFormFieldModule, MatInputModule, MatButtonModule, ReactiveFormsModule, MatIconModule],
+    templateUrl: './chat-input.component.html',
+    styleUrl: './chat-input.component.scss'
 })
 export class ChatInputComponent {
   private fb = inject(FormBuilder);

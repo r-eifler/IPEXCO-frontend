@@ -14,15 +14,14 @@ import {Router} from '@angular/router';
 import {registerUserStudyUser} from '../../state/user-study-execution.actions';
 
 @Component({
-  selector: 'app-user-study-execution-agreement-view',
-  standalone: true,
-  imports: [
-    AsyncPipe,
-    MatButtonModule,
-    PageModule
-  ],
-  templateUrl: './user-study-execution-agreement-view.component.html',
-  styleUrl: './user-study-execution-agreement-view.component.scss'
+    selector: 'app-user-study-execution-agreement-view',
+    imports: [
+        AsyncPipe,
+        MatButtonModule,
+        PageModule
+    ],
+    templateUrl: './user-study-execution-agreement-view.component.html',
+    styleUrl: './user-study-execution-agreement-view.component.scss'
 })
 export class UserStudyExecutionAgreementViewComponent {
 

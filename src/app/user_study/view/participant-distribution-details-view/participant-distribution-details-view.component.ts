@@ -24,27 +24,26 @@ import { deleteParticipantDistribution, loadUserStudies } from '../../state/user
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 @Component({
-  selector: 'app-participant-distribution-details-view',
-  standalone: true,
-  imports: [
-    BreadcrumbComponent,
-    BreadcrumbItemComponent,
-    MatIcon,
-    MatIconButton,
-    PageModule,
-    MatListModule,
-    RouterLink,
-    MatButtonModule,
-    AsyncPipe,
-    MatTooltip,
-    MatExpansionModule,
-    MatTableModule,
-    MatCheckboxModule,
-    NgxChartsModule,
-    MatMenuModule
-  ],
-  templateUrl: './participant-distribution-details-view.component.html',
-  styleUrl: './participant-distribution-details-view.component.scss'
+    selector: 'app-participant-distribution-details-view',
+    imports: [
+        BreadcrumbComponent,
+        BreadcrumbItemComponent,
+        MatIcon,
+        MatIconButton,
+        PageModule,
+        MatListModule,
+        RouterLink,
+        MatButtonModule,
+        AsyncPipe,
+        MatTooltip,
+        MatExpansionModule,
+        MatTableModule,
+        MatCheckboxModule,
+        NgxChartsModule,
+        MatMenuModule
+    ],
+    templateUrl: './participant-distribution-details-view.component.html',
+    styleUrl: './participant-distribution-details-view.component.scss'
 })
 export class ParticipantDistributionDetailsViewComponent {
 

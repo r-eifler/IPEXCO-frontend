@@ -21,21 +21,20 @@ interface TableData extends UserStudyExecution {
 }
 
 @Component({
-  selector: "app-accepted-test-persons",
-  standalone: true,
-  imports: [
-    FormsModule,
-    CurrencyPipe,
-    DatePipe,
-    MatIconModule,
-    MatTableModule,
-    MatCheckboxModule,
-    MatButtonModule,
-    MatPaginatorModule,
-    MatSortModule
-  ],
-  templateUrl: "./accepted-test-persons.component.html",
-  styleUrls: ["./accepted-test-persons.component.scss"],
+    selector: "app-accepted-test-persons",
+    imports: [
+        FormsModule,
+        CurrencyPipe,
+        DatePipe,
+        MatIconModule,
+        MatTableModule,
+        MatCheckboxModule,
+        MatButtonModule,
+        MatPaginatorModule,
+        MatSortModule
+    ],
+    templateUrl: "./accepted-test-persons.component.html",
+    styleUrls: ["./accepted-test-persons.component.scss"]
 })
 export class AcceptedTestPersonsComponent {
 

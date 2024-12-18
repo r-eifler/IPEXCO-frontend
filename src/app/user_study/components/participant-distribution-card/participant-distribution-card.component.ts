@@ -6,15 +6,14 @@ import { ParticipantDistribution } from '../../domain/participant-distribution';
 import { MatButtonModule } from '@angular/material/button';
 
 @Component({
-  selector: 'app-participant-distribution-card',
-  standalone: true,
-  imports: [
-    MatCardModule,
-    MatIconModule,
-    MatButtonModule
-  ],
-  templateUrl: './participant-distribution-card.component.html',
-  styleUrl: './participant-distribution-card.component.scss'
+    selector: 'app-participant-distribution-card',
+    imports: [
+        MatCardModule,
+        MatIconModule,
+        MatButtonModule
+    ],
+    templateUrl: './participant-distribution-card.component.html',
+    styleUrl: './participant-distribution-card.component.scss'
 })
 export class ParticipantDistributionCardComponent {
 

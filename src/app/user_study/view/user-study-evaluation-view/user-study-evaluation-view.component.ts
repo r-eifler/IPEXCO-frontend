@@ -12,20 +12,19 @@ import { UserStudyDashboardComponent } from "../../components/user-study-dashboa
 
 
 @Component({
-  selector: 'app-user-study-evaluation-view',
-  standalone: true,
-  imports: [
-    PageModule,
-    RouterLink,
-    BreadcrumbModule,
-    MatIconModule,
-    AsyncPipe,
-    SelectTestPersonsComponent,
-    OverviewDataComponent,
-    UserStudyDashboardComponent
-],
-  templateUrl: './user-study-evaluation-view.component.html',
-  styleUrl: './user-study-evaluation-view.component.scss'
+    selector: 'app-user-study-evaluation-view',
+    imports: [
+        PageModule,
+        RouterLink,
+        BreadcrumbModule,
+        MatIconModule,
+        AsyncPipe,
+        SelectTestPersonsComponent,
+        OverviewDataComponent,
+        UserStudyDashboardComponent
+    ],
+    templateUrl: './user-study-evaluation-view.component.html',
+    styleUrl: './user-study-evaluation-view.component.scss'
 })
 export class UserStudyEvaluationViewComponent {
 

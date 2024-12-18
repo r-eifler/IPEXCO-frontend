@@ -10,14 +10,13 @@ interface Displayable {
 }
 
 @Component({
-  selector: "app-object-progress-bar",
-  standalone: true,
-  imports: [
-    AsyncPipe,
-    MatIconModule,
-  ],
-  templateUrl: "./object-progress-bar.component.html",
-  styleUrls: ["./object-progress-bar.component.scss"],
+    selector: "app-object-progress-bar",
+    imports: [
+        AsyncPipe,
+        MatIconModule,
+    ],
+    templateUrl: "./object-progress-bar.component.html",
+    styleUrls: ["./object-progress-bar.component.scss"]
 })
 export class ObjectProgressBarComponent implements OnInit {
   @Input()

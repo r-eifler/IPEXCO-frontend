@@ -13,11 +13,10 @@ import {MatDialog} from '@angular/material/dialog';
 
 
 @Component({
-  selector: 'app-shell',
-  standalone: true,
-  imports: [RouterOutlet, MatSidenavModule, MatButtonModule, CreateIterationComponent ],
-  templateUrl: './shell.component.html',
-  styleUrl: './shell.component.scss'
+    selector: 'app-shell',
+    imports: [RouterOutlet, MatSidenavModule, MatButtonModule, CreateIterationComponent],
+    templateUrl: './shell.component.html',
+    styleUrl: './shell.component.scss'
 })
 export class ShellComponent {
   private store = inject(Store);

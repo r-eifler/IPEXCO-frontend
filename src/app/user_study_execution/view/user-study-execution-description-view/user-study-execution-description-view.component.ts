@@ -8,16 +8,15 @@ import {MarkedPipe} from '../../../pipes/marked.pipe';
 
 
 @Component({
-  selector: 'app-user-study-execution-description-view',
-  standalone: true,
-  imports: [
-    AsyncPipe,
-    PageModule,
-    PageTitleComponent,
-    MarkedPipe
-  ],
-  templateUrl: './user-study-execution-description-view.component.html',
-  styleUrl: './user-study-execution-description-view.component.scss'
+    selector: 'app-user-study-execution-description-view',
+    imports: [
+        AsyncPipe,
+        PageModule,
+        PageTitleComponent,
+        MarkedPipe
+    ],
+    templateUrl: './user-study-execution-description-view.component.html',
+    styleUrl: './user-study-execution-description-view.component.scss'
 })
 export class UserStudyExecutionDescriptionViewComponent {
 

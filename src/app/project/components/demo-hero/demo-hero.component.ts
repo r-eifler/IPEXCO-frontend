@@ -16,21 +16,20 @@ import { DemoStatusColorPipe } from '../../pipe/demo-status-color.pipe';
 import { DemoStatusNamePipe } from '../../pipe/demo-status-name.pipe';
 
 @Component({
-  selector: 'app-demo-hero',
-  standalone: true,
-  imports: [
-    MatCardModule, 
-    MatChipsModule, 
-    DemoStatusColorPipe,
-    DemoStatusNamePipe, 
-    MatIconModule, 
-    LabelModule, 
-    MatButtonModule, 
-    RouterLink, 
-    MatTooltipModule,
-  ],
-  templateUrl: './demo-hero.component.html',
-  styleUrl: './demo-hero.component.scss'
+    selector: 'app-demo-hero',
+    imports: [
+        MatCardModule,
+        MatChipsModule,
+        DemoStatusColorPipe,
+        DemoStatusNamePipe,
+        MatIconModule,
+        LabelModule,
+        MatButtonModule,
+        RouterLink,
+        MatTooltipModule,
+    ],
+    templateUrl: './demo-hero.component.html',
+    styleUrl: './demo-hero.component.scss'
 })
 export class DemoHeroComponent {
 

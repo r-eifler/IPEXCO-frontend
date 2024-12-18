@@ -16,14 +16,13 @@ export interface DataPoint {
   }
 
 @Component({
-  selector: "app-overview-data",
-  standalone: true,
-  imports: [
-    NgxChartsModule,
-    MatCardModule,
-  ],
-  templateUrl: "./overview-data.component.html",
-  styleUrls: ["./overview-data.component.scss"],
+    selector: "app-overview-data",
+    imports: [
+        NgxChartsModule,
+        MatCardModule,
+    ],
+    templateUrl: "./overview-data.component.html",
+    styleUrls: ["./overview-data.component.scss"]
 })
 export class OverviewDataComponent {
 

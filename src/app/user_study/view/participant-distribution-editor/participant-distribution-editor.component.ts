@@ -21,28 +21,27 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { filter, take } from 'rxjs';
 
 @Component({
-  selector: 'app-participant-distribution-editor',
-  standalone: true,
-  imports: [
-    MatIconModule,
-    MatCardModule,
-    MatProgressBarModule,
-    FormsModule,
-    MatLabel,
-    MatFormFieldModule,
-    MatOptionModule,
-    ReactiveFormsModule,
-    PageModule,
-    BreadcrumbModule,
-    RouterLink,
-    MatButtonModule,
-    ReactiveFormsModule,
-    MatInputModule,
-    AsyncPipe,
-    MatSelect,
-  ],
-  templateUrl: './participant-distribution-editor.component.html',
-  styleUrl: './participant-distribution-editor.component.scss'
+    selector: 'app-participant-distribution-editor',
+    imports: [
+        MatIconModule,
+        MatCardModule,
+        MatProgressBarModule,
+        FormsModule,
+        MatLabel,
+        MatFormFieldModule,
+        MatOptionModule,
+        ReactiveFormsModule,
+        PageModule,
+        BreadcrumbModule,
+        RouterLink,
+        MatButtonModule,
+        ReactiveFormsModule,
+        MatInputModule,
+        AsyncPipe,
+        MatSelect,
+    ],
+    templateUrl: './participant-distribution-editor.component.html',
+    styleUrl: './participant-distribution-editor.component.scss'
 })
 export class ParticipantDistributionEditorComponent {
 

@@ -21,17 +21,16 @@ import { PaymentBarComponent } from "../../../shared/components/payment-bar/paym
 
 
 @Component({
-  selector: "app-demo-navigator",
-  standalone: true,
-  imports: [
-    DemoTaskInfoComponent,
-    MatIconModule,
-    AsyncPipe,
-    PaymentBarComponent,
-    DatePipe,
-  ],
-  templateUrl: "./demo-navigator.component.html",
-  styleUrls: ["./demo-navigator.component.scss"],
+    selector: "app-demo-navigator",
+    imports: [
+        DemoTaskInfoComponent,
+        MatIconModule,
+        AsyncPipe,
+        PaymentBarComponent,
+        DatePipe,
+    ],
+    templateUrl: "./demo-navigator.component.html",
+    styleUrls: ["./demo-navigator.component.scss"]
 })
 export class DemoNavigatorComponent implements OnInit, OnDestroy {
   private ngUnsubscribe$: Subject<any> = new Subject();

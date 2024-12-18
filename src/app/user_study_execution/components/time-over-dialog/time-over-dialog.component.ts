@@ -7,15 +7,14 @@ import {Store} from '@ngrx/store';
 import {DialogComponent} from '../../../shared/components/dialog/dialog/dialog.component';
 
 @Component({
-  selector: 'app-time-over-dialog',
-  standalone: true,
-  imports: [
-    DialogModule,
-    MatIconModule,
-    MatButtonModule
-  ],
-  templateUrl: './time-over-dialog.component.html',
-  styleUrl: './time-over-dialog.component.scss'
+    selector: 'app-time-over-dialog',
+    imports: [
+        DialogModule,
+        MatIconModule,
+        MatButtonModule
+    ],
+    templateUrl: './time-over-dialog.component.html',
+    styleUrl: './time-over-dialog.component.scss'
 })
 export class TimeOverDialogComponent {
 

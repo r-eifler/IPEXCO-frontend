@@ -11,14 +11,13 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { MatCardModule } from '@angular/material/card';
 
 @Component({
-  selector: "app-individual-run-user-data",
-  standalone: true,
-  imports: [
-    MatCardModule,
-    NgxChartsModule,
-  ],
-  templateUrl: "./individual-run-user-data.component.html",
-  styleUrls: ["./individual-run-user-data.component.css"],
+    selector: "app-individual-run-user-data",
+    imports: [
+        MatCardModule,
+        NgxChartsModule,
+    ],
+    templateUrl: "./individual-run-user-data.component.html",
+    styleUrls: ["./individual-run-user-data.component.css"]
 })
 export class IndividualRunUserDataComponent implements OnInit {
 

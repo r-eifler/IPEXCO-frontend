@@ -12,12 +12,11 @@ export type AvailableQuestion = {
 }
 
 @Component({
-  selector: "app-explanation-chat",
-  standalone: true,
-  imports: [ChatModule, JsonPipe, StructuredTextComponent, NgFor],
-  templateUrl: "./explanation-chat.component.html",
-  styleUrl: "./explanation-chat.component.scss",
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-explanation-chat",
+    imports: [ChatModule, JsonPipe, StructuredTextComponent, NgFor],
+    templateUrl: "./explanation-chat.component.html",
+    styleUrl: "./explanation-chat.component.scss",
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ExplanationChatComponent {
   availableQuestions = input.required<AvailableQuestion[]>();

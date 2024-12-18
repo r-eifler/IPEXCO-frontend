@@ -6,9 +6,10 @@ import { combineLatest } from "rxjs/internal/observable/combineLatest";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 @Component({
-  selector: "app-study-selection-redirection",
-  templateUrl: "./study-selection-redirection.component.html",
-  styleUrls: ["./study-selection-redirection.component.css"],
+    selector: "app-study-selection-redirection",
+    templateUrl: "./study-selection-redirection.component.html",
+    styleUrls: ["./study-selection-redirection.component.css"],
+    standalone: false
 })
 export class StudySelectionRedirectionComponent implements OnInit {
 

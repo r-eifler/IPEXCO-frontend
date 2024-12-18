@@ -17,15 +17,14 @@ import { MatListModule } from "@angular/material/list";
 import { MatTabsModule } from "@angular/material/tabs";
 
 @Component({
-  selector: "app-demo-info",
-  standalone: true,
-  imports: [
-    MatIconModule,
-    MatListModule,
-    MatTabsModule,
-  ],
-  templateUrl: "./demo-info.component.html",
-  styleUrls: ["./demo-info.component.css"],
+    selector: "app-demo-info",
+    imports: [
+        MatIconModule,
+        MatListModule,
+        MatTabsModule,
+    ],
+    templateUrl: "./demo-info.component.html",
+    styleUrls: ["./demo-info.component.css"]
 })
 export class DemoInfoComponent implements OnInit, AfterViewInit {
 

@@ -29,27 +29,26 @@ import { loadUserStudyParticipantDistributionResolver } from '../../resolver/loa
 import { ParticipantDistributionCardComponent } from '../../components/participant-distribution-card/participant-distribution-card.component';
 
 @Component({
-  selector: 'app-user-study-collection',
-  standalone: true,
-  imports: [
-    MatIconModule,
-    MatButtonModule,
-    RouterModule,
-    MatCardModule,
-    MatFormFieldModule,
-    ActionCardComponent,
-    AsyncPipe,
-    PageModule,
-    PageContentComponent,
-    PageTitleComponent,
-    BreadcrumbComponent,
-    BreadcrumbItemComponent,
-    UserStudyCardComponent,
-    PageSectionTitleComponent,
-    ParticipantDistributionCardComponent
-],
-  templateUrl: './user-study-collection.component.html',
-  styleUrls: ['./user-study-collection.component.scss'],
+    selector: 'app-user-study-collection',
+    imports: [
+        MatIconModule,
+        MatButtonModule,
+        RouterModule,
+        MatCardModule,
+        MatFormFieldModule,
+        ActionCardComponent,
+        AsyncPipe,
+        PageModule,
+        PageContentComponent,
+        PageTitleComponent,
+        BreadcrumbComponent,
+        BreadcrumbItemComponent,
+        UserStudyCardComponent,
+        PageSectionTitleComponent,
+        ParticipantDistributionCardComponent
+    ],
+    templateUrl: './user-study-collection.component.html',
+    styleUrls: ['./user-study-collection.component.scss']
 })
 export class UserStudyCollectionComponent {
 

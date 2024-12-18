@@ -9,18 +9,17 @@ import {UserStudyExecution} from '../../domain/user-study-execution';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-user-study-card',
-  standalone: true,
-  imports: [
-    MatAnchor,
-    MatCardModule,
-    MatIcon,
-    MatIconButton,
-    MatTooltip,
-    DatePipe
-  ],
-  templateUrl: './user-study-card.component.html',
-  styleUrl: './user-study-card.component.scss'
+    selector: 'app-user-study-card',
+    imports: [
+        MatAnchor,
+        MatCardModule,
+        MatIcon,
+        MatIconButton,
+        MatTooltip,
+        DatePipe
+    ],
+    templateUrl: './user-study-card.component.html',
+    styleUrl: './user-study-card.component.scss'
 })
 export class UserStudyCardComponent {
 

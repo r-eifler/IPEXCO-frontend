@@ -8,15 +8,14 @@ import { MatButtonModule } from "@angular/material/button";
 import { Project } from "src/app/shared/domain/project";
 
 @Component({
-  selector: "app-user-main-page",
-  standalone: true,
-  imports: [
-    MatIcon,
-    MatButtonModule,
-    MatCardModule
-  ],
-  templateUrl: "./user-main-page.component.html",
-  styleUrls: ["./user-main-page.component.scss"],
+    selector: "app-user-main-page",
+    imports: [
+        MatIcon,
+        MatButtonModule,
+        MatCardModule
+    ],
+    templateUrl: "./user-main-page.component.html",
+    styleUrls: ["./user-main-page.component.scss"]
 })
 export class UserMainPageComponent implements OnInit {
 

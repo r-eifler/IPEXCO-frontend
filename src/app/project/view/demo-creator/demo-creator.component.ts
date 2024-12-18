@@ -21,22 +21,21 @@ import { DemoService } from "../../service/demo.service";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 @Component({
-  selector: "app-demo-creator",
-  standalone: true,
-  imports: [
-    AsyncPipe,
-    MatStepperModule,
-    MatButtonModule,
-    EditableListModule,
-    DialogModule,
-    MatIcon,
-    ReactiveFormsModule,
-    MatInputModule,
-    PlanPropertyPanelComponent,
-    SelectPropertyComponent
-  ],
-  templateUrl: "./demo-creator.component.html",
-  styleUrls: ["./demo-creator.component.scss"],
+    selector: "app-demo-creator",
+    imports: [
+        AsyncPipe,
+        MatStepperModule,
+        MatButtonModule,
+        EditableListModule,
+        DialogModule,
+        MatIcon,
+        ReactiveFormsModule,
+        MatInputModule,
+        PlanPropertyPanelComponent,
+        SelectPropertyComponent
+    ],
+    templateUrl: "./demo-creator.component.html",
+    styleUrls: ["./demo-creator.component.scss"]
 })
 export class DemoCreatorComponent implements OnInit {
 

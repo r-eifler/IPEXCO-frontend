@@ -15,12 +15,11 @@ import { selectLLMChatMessages } from '../../state/iterative-planning.selector';
 import { combineLatest } from 'rxjs';
 import { GoalType, PlanProperty } from 'src/app/shared/domain/plan-property/plan-property';
 @Component({
-  selector: 'app-property-creation-chat',
-  standalone: true,
-  imports: [AsyncPipe, DialogModule, ChatModule],
-  templateUrl: './property-creation-chat.component.html',
-  styleUrl: './property-creation-chat.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-property-creation-chat',
+    imports: [AsyncPipe, DialogModule, ChatModule],
+    templateUrl: './property-creation-chat.component.html',
+    styleUrl: './property-creation-chat.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PropertyCreationChatComponent {
   private store = inject(Store);

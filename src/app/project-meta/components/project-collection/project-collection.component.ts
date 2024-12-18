@@ -21,23 +21,22 @@ import { ActionCardComponent } from "src/app/shared/components/action-card/actio
 
 
 @Component({
-  selector: "app-project-selection",
-  standalone: true,
-  imports: [
-    MatIconModule,
-    MatCardModule,
-    MatProgressSpinnerModule,
-    MatMenuModule,
-    MatButtonModule,
-    RouterModule,
-    PageModule,
-    AsyncPipe,
-    NgIf,
-    NgFor,
-    ActionCardComponent,
-  ],
-  templateUrl: "./project-collection.component.html",
-  styleUrls: ["./project-collection.component.scss"],
+    selector: "app-project-selection",
+    imports: [
+        MatIconModule,
+        MatCardModule,
+        MatProgressSpinnerModule,
+        MatMenuModule,
+        MatButtonModule,
+        RouterModule,
+        PageModule,
+        AsyncPipe,
+        NgIf,
+        NgFor,
+        ActionCardComponent,
+    ],
+    templateUrl: "./project-collection.component.html",
+    styleUrls: ["./project-collection.component.scss"]
 })
 export class ProjectCollectionComponent{
 
