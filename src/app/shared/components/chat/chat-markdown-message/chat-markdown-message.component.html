@@ -1,4 +1,4 @@
-<div class="message-container" [ngClass]="role()">
+<app-chat-message [role]="role()">
     <div [innerHTML]="rawMessage() | marked"></div>
-</div>
+</app-chat-message>
   
