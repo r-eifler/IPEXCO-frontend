@@ -21,21 +21,20 @@ import { BreadcrumbModule } from "../../../shared/components/breadcrumb/breadcru
 import { BreadcrumbItemComponent } from "../../../shared/components/breadcrumb/breadcrumb-item/breadcrumb-item.component";
 
 @Component({
-  selector: "app-planning-task-view",
-  standalone: true,
-  imports: [
-    PageModule,
-    BreadcrumbModule,
-    RouterLink,
-    MatListModule,
-    MatExpansionModule,
-    CompleteActionComponent,
-    AsyncPipe,
-    NgFor,
-    MatIconModule,
-],
-  templateUrl: "./planning-task-view.component.html",
-  styleUrls: ["./planning-task-view.component.scss"],
+    selector: "app-planning-task-view",
+    imports: [
+        PageModule,
+        BreadcrumbModule,
+        RouterLink,
+        MatListModule,
+        MatExpansionModule,
+        CompleteActionComponent,
+        AsyncPipe,
+        NgFor,
+        MatIconModule,
+    ],
+    templateUrl: "./planning-task-view.component.html",
+    styleUrls: ["./planning-task-view.component.scss"]
 })
 export class PlanningTaskViewComponent {
 

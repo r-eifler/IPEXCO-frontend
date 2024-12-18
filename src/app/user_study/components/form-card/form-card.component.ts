@@ -14,22 +14,21 @@ import {map} from 'rxjs/operators';
 import {MatSlider, MatSliderThumb} from '@angular/material/slider';
 
 @Component({
-  selector: 'app-form-card',
-  standalone: true,
-  imports: [
-    MatCardModule,
-    MatFormField,
-    MatInputModule,
-    ReactiveFormsModule,
-    MatIconModule,
-    MatButtonModule,
-    MatTabsModule,
-    AsyncPipe,
-    MatSlider,
-    MatSliderThumb,
-  ],
-  templateUrl: './form-card.component.html',
-  styleUrl: './form-card.component.scss'
+    selector: 'app-form-card',
+    imports: [
+        MatCardModule,
+        MatFormField,
+        MatInputModule,
+        ReactiveFormsModule,
+        MatIconModule,
+        MatButtonModule,
+        MatTabsModule,
+        AsyncPipe,
+        MatSlider,
+        MatSliderThumb,
+    ],
+    templateUrl: './form-card.component.html',
+    styleUrl: './form-card.component.scss'
 })
 export class FormCardComponent implements OnInit {
 

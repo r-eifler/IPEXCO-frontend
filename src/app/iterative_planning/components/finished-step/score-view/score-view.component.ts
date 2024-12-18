@@ -15,18 +15,17 @@ import { MatCardModule } from "@angular/material/card";
 import { MatOptionModule } from "@angular/material/core";
 
 @Component({
-  selector: "app-score-view",
-  standalone: true,
-  imports: [
-    AsyncPipe,
-    PaymentBarComponent,
-    MatIconModule,
-    ScoreBarComponent,
-    MatCardModule,
-    MatOptionModule
-  ],
-  templateUrl: "./score-view.component.html",
-  styleUrls: ["./score-view.component.scss"],
+    selector: "app-score-view",
+    imports: [
+        AsyncPipe,
+        PaymentBarComponent,
+        MatIconModule,
+        ScoreBarComponent,
+        MatCardModule,
+        MatOptionModule
+    ],
+    templateUrl: "./score-view.component.html",
+    styleUrls: ["./score-view.component.scss"]
 })
 export class ScoreViewComponent implements OnInit {
   @Input()

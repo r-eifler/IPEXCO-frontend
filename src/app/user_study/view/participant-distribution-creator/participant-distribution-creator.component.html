@@ -1,0 +1,67 @@
+<app-page>
+  <app-breadcrumb>
+    <a app-breadcrumb-item [routerLink]="['/user-study/']"><mat-icon>home</mat-icon></a>
+    <app-breadcrumb-item>New Distribution</app-breadcrumb-item>
+  </app-breadcrumb>
+  <app-page-title>New User Study Participant Distribution</app-page-title>
+
+  <app-page-content>
+    <form [formGroup]="form" (ngSubmit)="save()">
+    <app-page-section-list>
+      <app-page-section>
+        <app-page-section-title>
+          Main Information
+        </app-page-section-title>
+        <app-page-section-content class="input-list">
+          <mat-form-field class="full-line-input" appearance="outline">
+            <mat-label>Name</mat-label>
+            <input matInput type="text" formControlName="name" />
+          </mat-form-field>
+
+          <mat-form-field class="full-line-input" appearance="outline">
+            <mat-label>Description</mat-label>
+            <textarea matInput formControlName="description"></textarea>
+          </mat-form-field>
+        </app-page-section-content>
+      </app-page-section>
+
+      <app-page-section>
+        <app-page-section-title>
+          User Studies
+        </app-page-section-title>
+        <app-page-section-content class="input-list">
+         @for(studyControl of form.controls.userStudies.controls; track studyControl;){
+            <div class="study-inputs">
+              <mat-form-field appearance="outline">
+                <mat-label>User Study</mat-label>
+                <mat-select [formControl]="studyControl.controls.userStudy">
+                  @for (study of userStudies$ | async ; track study._id) {
+                    <mat-option [value]="study._id">{{study.name}}</mat-option>
+                  }
+                </mat-select>
+                @if (studyControl.controls.userStudy.hasError('required')) {
+                  <mat-error>Please choose a demo</mat-error>
+                }
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>#participants</mat-label>
+                <input matInput type="number" [formControl]="studyControl.controls.numberParticipants">
+              </mat-form-field>
+            </div>
+         }
+         <div class="button-container">
+          <button mat-stroked-button type="button" (click)="onAddStudy()">add user study</button>
+        </div>
+        </app-page-section-content>
+      </app-page-section>
+      <app-page-section>
+        <app-page-section-content>
+          <div class="button-container">
+            <button mat-flat-button [disabled]="!form.valid">Save</button>
+          </div>
+        </app-page-section-content>
+      </app-page-section>
+    </app-page-section-list>
+    </form>
+  </app-page-content>
+</app-page>

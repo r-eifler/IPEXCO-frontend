@@ -11,21 +11,20 @@ import {UserStudyStatusColorPipe} from '../../pipes/user-study-status-color.pipe
 import {UserStudyExecution} from '../../domain/user-study-execution';
 
 @Component({
-  selector: 'app-user-study-hero',
-  standalone: true,
-  imports: [
-    UserStudyStatusNamePipe,
-    UserStudyStatusColorPipe,
-    LabelComponent,
-    MatCard,
-    MatCardContent,
-    MatCardHeader,
-    MatCardTitle,
-    MatIcon,
-    DatePipe
-  ],
-  templateUrl: './user-study-hero.component.html',
-  styleUrl: './user-study-hero.component.scss'
+    selector: 'app-user-study-hero',
+    imports: [
+        UserStudyStatusNamePipe,
+        UserStudyStatusColorPipe,
+        LabelComponent,
+        MatCard,
+        MatCardContent,
+        MatCardHeader,
+        MatCardTitle,
+        MatIcon,
+        DatePipe
+    ],
+    templateUrl: './user-study-hero.component.html',
+    styleUrl: './user-study-hero.component.scss'
 })
 export class UserStudyHeroComponent {
 

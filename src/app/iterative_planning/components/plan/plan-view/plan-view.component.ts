@@ -13,17 +13,16 @@ import { MatButtonModule } from "@angular/material/button";
 
 
 @Component({
-  selector: "app-plan-view",
-  standalone: true,
-  imports: [
-    MatCardModule,
-    AsyncPipe,
-    NgIf,
-    MatButtonModule,
-    NgFor
-  ],
-  templateUrl: "./plan-view.component.html",
-  styleUrls: ["./plan-view.component.scss"],
+    selector: "app-plan-view",
+    imports: [
+        MatCardModule,
+        AsyncPipe,
+        NgIf,
+        MatButtonModule,
+        NgFor
+    ],
+    templateUrl: "./plan-view.component.html",
+    styleUrls: ["./plan-view.component.scss"]
 })
 export class PlanViewComponent implements OnInit, OnDestroy {
 

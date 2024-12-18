@@ -5,15 +5,14 @@ import { MatCardModule } from '@angular/material/card';
 import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'app-conflict-visu-container',
-  standalone: true,
-  imports: [
-    MUGSVisuMainComponent,
-    MatCardModule,
-    AsyncPipe,
-  ],
-  templateUrl: './conflict-visu-container.component.html',
-  styleUrls: ['./conflict-visu-container.component.scss']
+    selector: 'app-conflict-visu-container',
+    imports: [
+        MUGSVisuMainComponent,
+        MatCardModule,
+        AsyncPipe,
+    ],
+    templateUrl: './conflict-visu-container.component.html',
+    styleUrls: ['./conflict-visu-container.component.scss']
 })
 export class ConflictVisuContainerComponent implements OnInit {
 

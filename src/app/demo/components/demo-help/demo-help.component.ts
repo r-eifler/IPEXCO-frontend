@@ -11,16 +11,15 @@ import { MatCardModule } from "@angular/material/card";
 import { MatListModule } from "@angular/material/list";
 
 @Component({
-  selector: "app-demo-help",
-  standalone: true,
-  imports: [
-    MatIconModule,
-    MatCardModule,
-    MatStepperModule,
-    MatListModule,
-  ],
-  templateUrl: "./demo-help.component.html",
-  styleUrls: ["./demo-help.component.css"],
+    selector: "app-demo-help",
+    imports: [
+        MatIconModule,
+        MatCardModule,
+        MatStepperModule,
+        MatListModule,
+    ],
+    templateUrl: "./demo-help.component.html",
+    styleUrls: ["./demo-help.component.css"]
 })
 export class DemoHelpComponent implements OnDestroy {
 

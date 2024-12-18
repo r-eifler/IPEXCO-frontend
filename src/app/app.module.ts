@@ -96,6 +96,13 @@ import {UserStudyCanceledEffect} from './user_study_execution/state/effects/canc
 import { UserStudyFinishedAllStepsEffect } from './user_study_execution/state/effects/finished-all-steps.effect copy';
 import { LogUserActivitiesEffect } from './user_study_execution/state/effects/log-user-activities.effect';
 import { AcceptUserStudyParticipantEffect } from './user_study/state/effects/accept-participant.effect';
+import { LoadUserStudyDistributionsEffect } from './user_study/state/effects/load-user-study-participant-distributions.effect';
+import { LoadUserStudyDistributionEffect } from './user_study/state/effects/load-user-study-participant-distribution.effect';
+import { UserStudyParticipantDistributionService } from './user_study/service/user-study-participant-distribution.service';
+import { CreateUserStudyParticipantDistributionEffect } from './user_study/state/effects/create-user-study-participant-distribution.effect';
+import { NextUserStudyService } from './user_study_execution/service/user-study-selection.service';
+import { RedirectToNextUserStudyEffect } from './user_study_execution/state/effects/select-user-study.effect';
+import { EditUserStudyParticipantDistributionEffect } from './user_study/state/effects/edit-user-study-participant-distribution.effect ';
 
 
 
@@ -156,7 +163,12 @@ import { AcceptUserStudyParticipantEffect } from './user_study/state/effects/acc
       UserStudyCanceledEffect,
       UserStudyFinishedAllStepsEffect,
       LogUserActivitiesEffect,
-      AcceptUserStudyParticipantEffect
+      AcceptUserStudyParticipantEffect,
+      LoadUserStudyDistributionsEffect,
+      LoadUserStudyDistributionEffect,
+      CreateUserStudyParticipantDistributionEffect,
+      RedirectToNextUserStudyEffect,
+      EditUserStudyParticipantDistributionEffect
     ]),
     // Instrumentation must be imported after importing StoreModule (config is optional)
     StoreDevtoolsModule.instrument({
@@ -201,6 +213,8 @@ import { AcceptUserStudyParticipantEffect } from './user_study/state/effects/acc
     ExecutionUserStudyService,
     UserStudyAuthenticationService,
     UserStudyExecutionEvalService,
+    UserStudyParticipantDistributionService,
+    NextUserStudyService,
     {
       provide: MAT_BOTTOM_SHEET_DEFAULT_OPTIONS,
       useValue: { hasBackdrop: true },

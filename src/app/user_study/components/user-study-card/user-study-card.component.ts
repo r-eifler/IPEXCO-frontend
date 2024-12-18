@@ -1,29 +1,25 @@
 import {Component, inject, input} from '@angular/core';
-import {DemoStatusColorPipe} from '../../../project/pipe/demo-status-color.pipe';
-import {DemoStatusNamePipe} from '../../../project/pipe/demo-status-name.pipe';
-import {LabelComponent} from '../../../shared/components/label/label/label.component';
 import {MatAnchor, MatIconButton} from '@angular/material/button';
-import {MatCard, MatCardActions, MatCardContent, MatCardHeader, MatCardModule, MatCardSubtitle, MatCardTitle} from '@angular/material/card';
+import {MatCardModule} from '@angular/material/card';
 import {MatIcon} from '@angular/material/icon';
 import {MatTooltip} from '@angular/material/tooltip';
 import {UserStudy} from '../../domain/user-study';
 import {DatePipe} from '@angular/common';
-import {ActivatedRoute, Router} from '@angular/router';
 import {UserStudyExecution} from '../../domain/user-study-execution';
+import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-user-study-card',
-  standalone: true,
-  imports: [
-    MatAnchor,
-    MatCardModule,
-    MatIcon,
-    MatIconButton,
-    MatTooltip,
-    DatePipe
-  ],
-  templateUrl: './user-study-card.component.html',
-  styleUrl: './user-study-card.component.scss'
+    selector: 'app-user-study-card',
+    imports: [
+        MatAnchor,
+        MatCardModule,
+        MatIcon,
+        MatIconButton,
+        MatTooltip,
+        DatePipe
+    ],
+    templateUrl: './user-study-card.component.html',
+    styleUrl: './user-study-card.component.scss'
 })
 export class UserStudyCardComponent {
 

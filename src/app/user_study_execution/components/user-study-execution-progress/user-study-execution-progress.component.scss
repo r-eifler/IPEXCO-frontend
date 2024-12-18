@@ -1,4 +1,4 @@
-@import "../../../../variables";
+@use "../../../../variables" as vars;
 
 
 .label-container{
@@ -14,5 +14,5 @@
 .label-highlight{
   font-size: medium;
   font-weight: bold;
-  color: $primary-darker;
+  color: vars.$primary-darker;
 }

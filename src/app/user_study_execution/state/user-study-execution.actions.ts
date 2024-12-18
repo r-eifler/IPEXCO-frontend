@@ -33,6 +33,10 @@ export const registerUserStudyUser = createAction('[UserStudyExecution] register
 export const registerUserStudyUserSuccess = createAction('[UserStudyExecution] register user study user success', props<{user: User, token: string}>());
 export const registerUserStudyUserFailure = createAction('[UserStudyExecution] register user study user failure');
 
+// 
+export const distributeParticipant = createAction('[UserStudyExecution] distribute participant', props<{distributionId: string}>());
+export const distributeParticipantSuccess = createAction('[UserStudyExecution] distribute participant success');
+export const distributeParticipantFailure = createAction('[UserStudyExecution] distribute participant failure');
 
 // User action logging
 

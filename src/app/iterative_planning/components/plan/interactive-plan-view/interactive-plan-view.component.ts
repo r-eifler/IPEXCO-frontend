@@ -36,14 +36,13 @@ interface Trace {
 }
 
 @Component({
-  selector: "app-interactive-plan-view",
-  standalone: true,
-  imports: [
-    MatCardModule,
-    AsyncPipe,
-  ],
-  templateUrl: "./interactive-plan-view.component.html",
-  styleUrls: ["./interactive-plan-view.component.scss"],
+    selector: "app-interactive-plan-view",
+    imports: [
+        MatCardModule,
+        AsyncPipe,
+    ],
+    templateUrl: "./interactive-plan-view.component.html",
+    styleUrls: ["./interactive-plan-view.component.scss"]
 })
 export class InteractivePlanViewComponent implements OnInit {
   toString = FactToString;

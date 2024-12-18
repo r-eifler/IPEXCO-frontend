@@ -9,14 +9,13 @@ import {Store} from '@ngrx/store';
 import {AsyncPipe} from '@angular/common';
 
 @Component({
-  selector: "app-main-page",
-  standalone: true,
-  imports: [
-    MatButtonModule,
-    AsyncPipe,
-  ],
-  templateUrl: "./main-page.component.html",
-  styleUrls: ["./main-page.component.scss"],
+    selector: "app-main-page",
+    imports: [
+        MatButtonModule,
+        AsyncPipe,
+    ],
+    templateUrl: "./main-page.component.html",
+    styleUrls: ["./main-page.component.scss"]
 })
 export class MainPageComponent {
 

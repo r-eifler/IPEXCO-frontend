@@ -14,20 +14,19 @@ import { selectIterativePlanningIterationSteps, selectIterativePlanningIteration
 import { ProjectDirective } from '../../derectives/isProject.directive';
 
 @Component({
-  selector: 'app-steps-list-view',
-  standalone: true,
-  imports: [
-    PageModule, 
-    AsyncPipe, 
-    IterationStepCardComponent, 
-    ActionCardModule, 
-    MatIconModule, 
-    RouterLink, 
-    BreadcrumbModule,
-    ProjectDirective
-  ],
-  templateUrl: './steps-list-view.component.html',
-  styleUrl: './steps-list-view.component.scss'
+    selector: 'app-steps-list-view',
+    imports: [
+        PageModule,
+        AsyncPipe,
+        IterationStepCardComponent,
+        ActionCardModule,
+        MatIconModule,
+        RouterLink,
+        BreadcrumbModule,
+        ProjectDirective
+    ],
+    templateUrl: './steps-list-view.component.html',
+    styleUrl: './steps-list-view.component.scss'
 })
 export class StepsListViewComponent{
   private store = inject(Store);

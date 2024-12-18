@@ -24,28 +24,27 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
-  selector: 'app-user-study-details-view',
-  standalone: true,
-  imports: [
-    BreadcrumbComponent,
-    BreadcrumbItemComponent,
-    MatIcon,
-    MatIconButton,
-    PageModule,
-    MatListModule,
-    UserStudyHeroComponent,
-    RouterLink,
-    MatButtonModule,
-    AsyncPipe,
-    MatTooltip,
-    MatExpansionModule,
-    MatTableModule,
-    MatCheckboxModule,
-    AcceptedTestPersonsComponent,
-    MatMenuModule
-  ],
-  templateUrl: './user-study-details-view.component.html',
-  styleUrl: './user-study-details-view.component.scss'
+    selector: 'app-user-study-details-view',
+    imports: [
+        BreadcrumbComponent,
+        BreadcrumbItemComponent,
+        MatIcon,
+        MatIconButton,
+        PageModule,
+        MatListModule,
+        UserStudyHeroComponent,
+        RouterLink,
+        MatButtonModule,
+        AsyncPipe,
+        MatTooltip,
+        MatExpansionModule,
+        MatTableModule,
+        MatCheckboxModule,
+        AcceptedTestPersonsComponent,
+        MatMenuModule
+    ],
+    templateUrl: './user-study-details-view.component.html',
+    styleUrl: './user-study-details-view.component.scss'
 })
 export class UserStudyDetailsViewComponent {
 

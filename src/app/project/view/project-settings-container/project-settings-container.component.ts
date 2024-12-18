@@ -17,19 +17,18 @@ import { BreadcrumbModule } from 'src/app/shared/components/breadcrumb/breadcrum
 import { Project } from 'src/app/shared/domain/project';
 
 @Component({
-  selector: 'app-project-settings-container',
-  standalone: true,
-  imports: [
-    PageModule, 
-    MatIconModule,
-    RouterLink, 
-    BreadcrumbModule,
-    AsyncPipe,
-    PropertyTemplateCreatorComponent,
-    SettingsComponent,
-  ],
-  templateUrl: './project-settings-container.component.html',
-  styleUrls: ['./project-settings-container.component.scss']
+    selector: 'app-project-settings-container',
+    imports: [
+        PageModule,
+        MatIconModule,
+        RouterLink,
+        BreadcrumbModule,
+        AsyncPipe,
+        PropertyTemplateCreatorComponent,
+        SettingsComponent,
+    ],
+    templateUrl: './project-settings-container.component.html',
+    styleUrls: ['./project-settings-container.component.scss']
 })
 export class ProjectSettingsContainerComponent implements OnInit {
 

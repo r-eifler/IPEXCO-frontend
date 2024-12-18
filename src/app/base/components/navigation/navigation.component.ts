@@ -20,22 +20,21 @@ import { LoginComponent } from "src/app/user/components/login/login.component";
 
 
 @Component({
-  selector: "app-navigation",
-  standalone: true,
-  imports: [
-    RouterModule,
-    MatSidenavModule,
-    MatIconModule,
-    MatListModule,
-    MatMenuModule,
-    MatToolbarModule,
-    NgIf,
-    MatButtonModule,
-    AsyncPipe,
-    MatSidenavModule
-  ],
-  templateUrl: "./navigation.component.html",
-  styleUrls: ["./navigation.component.scss"],
+    selector: "app-navigation",
+    imports: [
+        RouterModule,
+        MatSidenavModule,
+        MatIconModule,
+        MatListModule,
+        MatMenuModule,
+        MatToolbarModule,
+        NgIf,
+        MatButtonModule,
+        AsyncPipe,
+        MatSidenavModule
+    ],
+    templateUrl: "./navigation.component.html",
+    styleUrls: ["./navigation.component.scss"]
 })
 export class NavigationComponent implements OnInit {
 

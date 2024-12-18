@@ -9,7 +9,7 @@ import { concatLatestFrom } from '@ngrx/operators';
 import { ActionType } from '../../domain/user-action';import { createIterationStepSuccess, loadIterationStepsSuccess, poseAnswer, questionPosed, selectIterationStep } from 'src/app/iterative_planning/state/iterative-planning.actions';
 import { StepStatus } from 'src/app/iterative_planning/domain/iteration_step';
 import { computeUtility } from 'src/app/iterative_planning/domain/plan';
-import { selectIterativePlanningProperties, selectIterativePlanningSelectedStepId } from 'src/app/iterative_planning/state/iterative-planning.selector';
+import { selectIterativePlanningProject, selectIterativePlanningProperties, selectIterativePlanningSelectedStepId } from 'src/app/iterative_planning/state/iterative-planning.selector';
 import { structuredTextToString } from 'src/app/iterative_planning/domain/interface/explanation-message';
 import { selectIsUserStudy, selectUserRole } from 'src/app/user/state/user.selector';
 import { UserStudyExecutionService } from '../../service/user-study-execution.service';
@@ -26,7 +26,7 @@ export class LogUserActivitiesEffect{
         ofType(logAction),
         concatLatestFrom(() => this.store.select(selectUserRole)),
         tap(console.log),
-        filter(([_, isUserStudy]) => isUserStudy),
+        filter(([_, role]) => role == 'user-study'),
         switchMap(([{action},_]) => this.service.log$(action).pipe(
             map(() => logActionSuccess()),
             catchError(() => of(logActionFailure()))
@@ -52,13 +52,13 @@ export class LogUserActivitiesEffect{
         concatLatestFrom(() => this.store.select(selectExecutionUserStudyStep)),
         filter(([index, step]) => index !== null && !!step),
         switchMap(([index, step]) => {
-            console.log("LOG NEXT STEP");
             if(step?.type == 'demo'){
                 return [logAction({action: {
                     type: ActionType.START_DEMO, 
                     data: {
                         stepIndex: index,
-                        stepName: step.name
+                        stepName: step.name,
+                        demoId: step.content
                     }
                 }})]
             }
@@ -91,7 +91,8 @@ export class LogUserActivitiesEffect{
         switchMap(({iterationStep}) => [logAction({action: {
                 type: ActionType.CREATE_ITERATION_STEP, 
                 data: {
-                    stepId: iterationStep._id
+                    stepId: iterationStep._id,
+                    demoId: iterationStep.project
                 }
             }})]
         )
@@ -110,6 +111,7 @@ export class LogUserActivitiesEffect{
                 logAction({action: {
                     type: ActionType.PLAN_FOR_ITERATION_STEP, 
                     data: {
+                        demoId: step.project,
                         stepId: step._id,
                         utility: computeUtility(step.plan, planProperties)
                     }
@@ -136,11 +138,15 @@ export class LogUserActivitiesEffect{
 
     public questionAsked$ = createEffect(() => this.actions$.pipe(
         ofType(questionPosed),
-        concatLatestFrom(() => this.store.select(selectIterativePlanningSelectedStepId)),
-        switchMap(([{question}, iterationStepId]) => [
+        concatLatestFrom(() => [
+            this.store.select(selectIterativePlanningSelectedStepId),
+            this.store.select(selectIterativePlanningProject)
+        ]),
+        switchMap(([{question}, iterationStepId, project]) => [
             logAction({action: {
                 type: ActionType.ASK_QUESTION, 
                 data: {
+                    demoId: project._id,
                     stepId: iterationStepId,
                     propertyId: question.propertyId,
                     questionType: question.questionType,
@@ -152,11 +158,15 @@ export class LogUserActivitiesEffect{
 
     public answerPosed$ = createEffect(() => this.actions$.pipe(
         ofType(poseAnswer),
-        concatLatestFrom(() => this.store.select(selectIterativePlanningProperties)),
-        switchMap(([{answer}, planProperties]) => [
+        concatLatestFrom(() => [
+            this.store.select(selectIterativePlanningProperties),
+            this.store.select(selectIterativePlanningProject)
+        ]),
+        switchMap(([{answer}, planProperties, project]) => [
             logAction({action: {
                 type: ActionType.EXPLANATION, 
                 data: {
+                    demoId: project._id,
                     iterationStepId: answer.iterationStepId,
                     message: structuredTextToString(answer.message, answer.conflictSets, planProperties),
                     propertyId: answer.propertyId,

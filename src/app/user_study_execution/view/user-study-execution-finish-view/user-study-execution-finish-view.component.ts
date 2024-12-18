@@ -8,15 +8,14 @@ import {selectLoggedIn, selectLoggedOut} from '../../../user/state/user.selector
 import {selectExecutionUserStudyCanceled} from '../../state/user-study-execution.selector';
 
 @Component({
-  selector: 'app-user-study-execution-finish-view',
-  standalone: true,
-  imports: [
-    MatButton,
-    PageModule,
-    AsyncPipe,
-  ],
-  templateUrl: './user-study-execution-finish-view.component.html',
-  styleUrl: './user-study-execution-finish-view.component.scss'
+    selector: 'app-user-study-execution-finish-view',
+    imports: [
+        MatButton,
+        PageModule,
+        AsyncPipe,
+    ],
+    templateUrl: './user-study-execution-finish-view.component.html',
+    styleUrl: './user-study-execution-finish-view.component.scss'
 })
 export class UserStudyExecutionFinishViewComponent {
 

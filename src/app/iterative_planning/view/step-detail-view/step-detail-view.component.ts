@@ -55,29 +55,27 @@ import { DemoDirective } from "../../derectives/isDemo.directive";
 import { ProjectDirective } from "../../derectives/isProject.directive";
 
 @Component({
-  selector: "app-step-detail-view",
-  standalone: true,
-  imports: [
-    AsyncPipe,
-    BreadcrumbModule,
-    EmptyStateModule,
-    ExplanationChatComponent,
-    ExplanationChatLlmComponent,
-    IterationStepHeroComponent,
-    MatButtonModule,
-    MatIconModule,
-    MatTooltipModule,
-    PageModule,
-    PlanPropertyPanelComponent,
-    QuestionPanelComponent,
-    RouterLink,
-    MugsVisualizationBaseComponent,
-    MatExpansionModule,
-    DemoDirective,
-    ProjectDirective,
-  ],
-  templateUrl: "./step-detail-view.component.html",
-  styleUrl: "./step-detail-view.component.scss",
+    selector: "app-step-detail-view",
+    imports: [
+        AsyncPipe,
+        BreadcrumbModule,
+        EmptyStateModule,
+        ExplanationChatComponent,
+        ExplanationChatLlmComponent,
+        IterationStepHeroComponent,
+        MatButtonModule,
+        MatIconModule,
+        MatTooltipModule,
+        PageModule,
+        PlanPropertyPanelComponent,
+        RouterLink,
+        MugsVisualizationBaseComponent,
+        MatExpansionModule,
+        DemoDirective,
+        ProjectDirective,
+    ],
+    templateUrl: "./step-detail-view.component.html",
+    styleUrl: "./step-detail-view.component.scss"
 })
 export class StepDetailViewComponent {
 

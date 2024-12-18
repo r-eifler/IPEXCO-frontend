@@ -12,20 +12,19 @@ import {selectExecutionUserStudyStep} from '../../state/user-study-execution.sel
 import {MatDialog} from '@angular/material/dialog';
 
 @Component({
-  selector: 'app-user-study-execution-external-view',
-  standalone: true,
-  imports: [
-    AsyncPipe,
-    PageComponent,
-    PageContentComponent,
-    PageSectionComponent,
-    PageSectionContentComponent,
-    PageSectionListComponent,
-    PageTitleComponent,
-    MatAnchor
-  ],
-  templateUrl: './user-study-execution-external-view.component.html',
-  styleUrl: './user-study-execution-external-view.component.scss'
+    selector: 'app-user-study-execution-external-view',
+    imports: [
+        AsyncPipe,
+        PageComponent,
+        PageContentComponent,
+        PageSectionComponent,
+        PageSectionContentComponent,
+        PageSectionListComponent,
+        PageTitleComponent,
+        MatAnchor
+    ],
+    templateUrl: './user-study-execution-external-view.component.html',
+    styleUrl: './user-study-execution-external-view.component.scss'
 })
 export class UserStudyExecutionExternalViewComponent {
 

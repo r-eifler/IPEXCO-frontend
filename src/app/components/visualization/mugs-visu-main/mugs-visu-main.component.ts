@@ -13,14 +13,13 @@ import { MatOptionModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 
 @Component({
-  selector: 'app-mugs-visu-main',
-  standalone: true,
-  imports: [
-    MatOptionModule,
-    MatSelectModule,
-  ],
-  templateUrl: './mugs-visu-main.component.html',
-  styleUrls: ['./mugs-visu-main.component.scss']
+    selector: 'app-mugs-visu-main',
+    imports: [
+        MatOptionModule,
+        MatSelectModule,
+    ],
+    templateUrl: './mugs-visu-main.component.html',
+    styleUrls: ['./mugs-visu-main.component.scss']
 })
 
 export class MUGSVisuMainComponent implements OnInit {

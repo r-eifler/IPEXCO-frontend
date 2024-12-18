@@ -11,14 +11,13 @@ export interface AskDeleteDialogData {
 }
 
 @Component({
-  selector: 'app-ask-delete',
-  standalone: true,
-  imports: [
-    MatButtonModule,
-    DialogModule,
-  ],
-  templateUrl: './ask-delete.component.html',
-  styleUrl: './ask-delete.component.scss'
+    selector: 'app-ask-delete',
+    imports: [
+        MatButtonModule,
+        DialogModule,
+    ],
+    templateUrl: './ask-delete.component.html',
+    styleUrl: './ask-delete.component.scss'
 })
 export class AskDeleteComponent {
 

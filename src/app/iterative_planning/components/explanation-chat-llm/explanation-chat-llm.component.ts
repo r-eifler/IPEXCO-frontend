@@ -11,12 +11,11 @@ import { eraseLLMHistory } from '../../state/iterative-planning.actions';
 import { selectIsLLMChatLoading } from '../../state/iterative-planning.selector';
 import { combineLatest, Subscription } from 'rxjs';
 @Component({
-  selector: 'app-explanation-chat-llm',
-  standalone: true,
-  imports: [AsyncPipe, ChatModule],
-  templateUrl: './explanation-chat-llm.component.html',
-  styleUrl: './explanation-chat-llm.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-explanation-chat-llm',
+    imports: [AsyncPipe, ChatModule],
+    templateUrl: './explanation-chat-llm.component.html',
+    styleUrl: './explanation-chat-llm.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ExplanationChatLlmComponent implements OnInit, OnDestroy {
   private store = inject(Store);

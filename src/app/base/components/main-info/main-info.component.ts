@@ -4,15 +4,14 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatListModule } from "@angular/material/list";
 
 @Component({
-  selector: "app-main-info",
-  standalone: true,
-  imports: [
-    MatCardModule,
-    MatIconModule,
-    MatListModule,
-  ],
-  templateUrl: "./main-info.component.html",
-  styleUrls: ["./main-info.component.css"],
+    selector: "app-main-info",
+    imports: [
+        MatCardModule,
+        MatIconModule,
+        MatListModule,
+    ],
+    templateUrl: "./main-info.component.html",
+    styleUrls: ["./main-info.component.css"]
 })
 export class MainInfoComponent implements OnInit {
   constructor() {}

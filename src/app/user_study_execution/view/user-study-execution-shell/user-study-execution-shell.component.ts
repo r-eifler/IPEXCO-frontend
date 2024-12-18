@@ -22,19 +22,17 @@ import {
 
 
 @Component({
-  selector: 'app-shell',
-  standalone: true,
-  imports: [
-    RouterOutlet,
-    MatToolbarModule,
-    MatButtonModule,
-    MatIconModule,
-    AsyncPipe,
-    UserStudyExecutionProgressComponent,
-    UserStudyExecutionHandlerComponent,
-  ],
-  templateUrl: './user-study-execution-shell.component.html',
-  styleUrl: './user-study-execution-shell.component.scss'
+    selector: 'app-shell',
+    imports: [
+        RouterOutlet,
+        MatToolbarModule,
+        MatButtonModule,
+        MatIconModule,
+        UserStudyExecutionProgressComponent,
+        UserStudyExecutionHandlerComponent,
+    ],
+    templateUrl: './user-study-execution-shell.component.html',
+    styleUrl: './user-study-execution-shell.component.scss'
 })
 export class UserStudyExecutionShellComponent {
 

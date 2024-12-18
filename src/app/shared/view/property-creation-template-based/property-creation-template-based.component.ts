@@ -15,24 +15,23 @@ import { generateDummyPlanProperty, generatePlanProperty, getPossibleValues, get
 import { equalPlanProperties, PlanProperty } from 'src/app/shared/domain/plan-property/plan-property';
 
 @Component({
-  selector: 'app-property-creation-template-based',
-  standalone: true,
-  imports: [
-    KeyValuePipe,
-    DialogModule, 
-    MatStepperModule, 
-    MatButtonModule, 
-    FormsModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatExpansionModule,
-    MatCardModule,
-    PropertyTemplatePartComponent,
-    MatIcon
-  ],
-  templateUrl: './property-creation-template-based.component.html',
-  styleUrl: './property-creation-template-based.component.scss'
+    selector: 'app-property-creation-template-based',
+    imports: [
+        KeyValuePipe,
+        DialogModule,
+        MatStepperModule,
+        MatButtonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatExpansionModule,
+        MatCardModule,
+        PropertyTemplatePartComponent,
+        MatIcon
+    ],
+    templateUrl: './property-creation-template-based.component.html',
+    styleUrl: './property-creation-template-based.component.scss'
 })
 export class PropertyCreationTemplateBasedComponent implements OnInit{
 

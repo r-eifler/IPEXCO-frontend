@@ -15,20 +15,19 @@ import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { filter } from "rxjs";
 
 @Component({
-  selector: "app-login",
-  standalone: true,
-  imports: [
-    MatIconModule,
-    MatLabel,
-    MatFormFieldModule,
-    MatInputModule,
-    ReactiveFormsModule,
-    FormsModule,
-    MatCardModule,
-    MatButtonModule,
-  ],
-  templateUrl: "./login.component.html",
-  styleUrls: ["./login.component.scss"],
+    selector: "app-login",
+    imports: [
+        MatIconModule,
+        MatLabel,
+        MatFormFieldModule,
+        MatInputModule,
+        ReactiveFormsModule,
+        FormsModule,
+        MatCardModule,
+        MatButtonModule,
+    ],
+    templateUrl: "./login.component.html",
+    styleUrls: ["./login.component.scss"]
 })
 export class LoginComponent implements OnInit {
 

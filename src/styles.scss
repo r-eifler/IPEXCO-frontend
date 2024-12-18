@@ -1,12 +1,12 @@
 /* You can add global styles to this file, and also import other style files */
 
-@import 'styles/reset';
-@import 'styles/icons';
-@import 'styles/spacing';
-@import 'styles/sizing';
-@import 'styles/radius';
-@import 'styles/scrollbar';
-@import 'styles/material/index';
+@use 'styles/reset';
+@use 'styles/icons';
+@use 'styles/spacing';
+@use 'styles/sizing';
+@use 'styles/radius';
+@use 'styles/scrollbar';
+@use 'styles/material/index';
 
 html,
 body {

@@ -10,15 +10,14 @@ import { PropertyCreationChatComponent } from '../property-creation-chat/propert
 import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
-  selector: 'app-property-creator',
-  standalone: true,
-  imports: [
-    AsyncPipe,
-    PropertyCreationTemplateBasedComponent,
-    PropertyCreationChatComponent
-  ],
-  templateUrl: './property-creator.component.html',
-  styleUrl: './property-creator.component.scss'
+    selector: 'app-property-creator',
+    imports: [
+        AsyncPipe,
+        PropertyCreationTemplateBasedComponent,
+        PropertyCreationChatComponent
+    ],
+    templateUrl: './property-creator.component.html',
+    styleUrl: './property-creator.component.scss'
 })
 export class PropertyCreatorComponent {
 

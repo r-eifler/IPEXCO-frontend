@@ -1,11 +1,9 @@
-import { UserStudy } from "./user-study";
-
 export interface UserStudySelection {
-  userStudy: UserStudy | string;
-  numberTestPersons: number;
+  userStudy?: string;
+  numberParticipants?: number;
 }
 
-export interface MetaStudy {
+export interface ParticipantDistribution {
   _id?: string;
   user?: string;
   name: string;

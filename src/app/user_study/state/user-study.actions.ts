@@ -2,6 +2,7 @@ import { createAction, props } from "@ngrx/store";
 import { Demo } from "src/app/demo/domain/demo";
 import { UserStudy } from "../domain/user-study";
 import {UserStudyExecution} from '../domain/user-study-execution';
+import { ParticipantDistribution } from "../domain/participant-distribution";
 
 // User Studies
 
@@ -40,3 +41,26 @@ export const acceptUserStudyParticipantFailure = createAction('[UserStudy] accep
 export const loadUserStudyDemos = createAction('[UserStudy] load user study demos');
 export const loadUserStudyDemosSuccess = createAction('[UserStudy] load user study demos success', props<{demos: Demo[]}>());
 export const loadUserStudyDemosFailure = createAction('[UserStudy] load user study demos failure');
+
+
+// User Studies Participant Distribution
+
+export const loadParticipantDistributions = createAction('[UserStudy] load user study participant distributions');
+export const loadParticipantDistributionsSuccess = createAction('[UserStudy] load user study participant distributions success', props<{distributions: ParticipantDistribution[]}>());
+export const loadParticipantDistributionsFailure = createAction('[UserStudy] load user study participant distributions failure');
+
+export const createParticipantDistribution = createAction('[UserStudy] create user study participant distribution', props<{distribution: ParticipantDistribution}>());
+export const createParticipantDistributionSuccess = createAction('[UserStudy] create user study participant distribution success', props<{distribution: ParticipantDistribution}>());
+export const createParticipantDistributionFailure = createAction('[UserStudy] create user study participant distribution failure');
+
+export const loadParticipantDistribution= createAction('[UserStudy] load user study participant distribution', props<{id: string}>());
+export const loadParticipantDistributionSuccess = createAction('[UserStudy] load user study participant distribution success', props<{distribution: ParticipantDistribution}>());
+export const loadParticipantDistributionFailure = createAction('[UserStudy] load user study participant distribution failure');
+
+export const editParticipantDistribution= createAction('[UserStudy] edit user study participant distribution', props<{distribution: ParticipantDistribution}>());
+export const editParticipantDistributionSuccess = createAction('[UserStudy] edit user study participant distribution success', props<{distribution: ParticipantDistribution}>());
+export const editParticipantDistributionFailure = createAction('[UserStudy] edit user study participant distribution failure');
+
+export const deleteParticipantDistribution = createAction('[UserStudy] delete user study participant distribution', props<{id: string}>());
+export const deleteParticipantDistributionSuccess = createAction('[UserStudy] delete user study participant distribution success');
+export const deleteParticipantDistributionFailure = createAction('[UserStudy] delete user study participant distribution failure');

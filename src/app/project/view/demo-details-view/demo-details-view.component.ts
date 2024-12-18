@@ -19,22 +19,21 @@ import { AskDeleteComponent } from 'src/app/shared/components/ask-delete/ask-del
 import { MatDialog } from '@angular/material/dialog';
 
 @Component({
-  selector: 'app-demo-details-view',
-  standalone: true,
-  imports: [
-    PageModule,
-    BreadcrumbModule,
-    MatIconModule,
-    RouterLink,
-    AsyncPipe,
-    MatButtonModule,
-    DemoHeroComponent,
-    PlanPropertyPanelComponent,
-    PlanPropertyBadgeComponent,
-    SettingsComponent,
-],
-  templateUrl: './demo-details-view.component.html',
-  styleUrl: './demo-details-view.component.scss'
+    selector: 'app-demo-details-view',
+    imports: [
+        PageModule,
+        BreadcrumbModule,
+        MatIconModule,
+        RouterLink,
+        AsyncPipe,
+        MatButtonModule,
+        DemoHeroComponent,
+        PlanPropertyPanelComponent,
+        PlanPropertyBadgeComponent,
+        SettingsComponent,
+    ],
+    templateUrl: './demo-details-view.component.html',
+    styleUrl: './demo-details-view.component.scss'
 })
 export class DemoDetailsViewComponent {
 

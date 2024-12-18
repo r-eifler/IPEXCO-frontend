@@ -24,35 +24,34 @@ import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {filter, take} from 'rxjs/operators';
 
 @Component({
-  selector: 'app-user-study-editor',
-  standalone: true,
-  providers: [provideNativeDateAdapter()],
-  imports: [
-    AsyncPipe,
-    BreadcrumbComponent,
-    BreadcrumbItemComponent,
-    DemoCardComponent,
-    DescriptionCardComponent,
-    FormCardComponent,
-    FormsModule,
-    MatButton,
-    MatDateRangeInput,
-    MatDateRangePicker,
-    MatDatepickerToggle,
-    MatEndDate,
-    MatFormField,
-    MatHint,
-    MatIcon,
-    MatInput,
-    MatLabel,
-    MatStartDate,
-    MatSuffix,
-    PageModule,
-    ReactiveFormsModule,
-    RouterLink
-  ],
-  templateUrl: './user-study-editor.component.html',
-  styleUrl: './user-study-editor.component.scss'
+    selector: 'app-user-study-editor',
+    providers: [provideNativeDateAdapter()],
+    imports: [
+        AsyncPipe,
+        BreadcrumbComponent,
+        BreadcrumbItemComponent,
+        DemoCardComponent,
+        DescriptionCardComponent,
+        FormCardComponent,
+        FormsModule,
+        MatButton,
+        MatDateRangeInput,
+        MatDateRangePicker,
+        MatDatepickerToggle,
+        MatEndDate,
+        MatFormField,
+        MatHint,
+        MatIcon,
+        MatInput,
+        MatLabel,
+        MatStartDate,
+        MatSuffix,
+        PageModule,
+        ReactiveFormsModule,
+        RouterLink
+    ],
+    templateUrl: './user-study-editor.component.html',
+    styleUrl: './user-study-editor.component.scss'
 })
 export class UserStudyEditorComponent {
 

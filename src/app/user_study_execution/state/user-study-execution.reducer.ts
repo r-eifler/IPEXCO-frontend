@@ -78,7 +78,7 @@ export const userStudyExecutionReducer = createReducer(
     })),
     on(logPlanComputationFinished, (state, {iterationStepId}): UserStudyExecutionState => ({
       ...state,
-      pendingIterationSteps: [...state.pendingIterationSteps].splice(state.pendingIterationSteps.indexOf(iterationStepId))
+      pendingIterationSteps: [...state.pendingIterationSteps].filter(id => id != iterationStepId)
     })),
     on(logAction, (state, {action}): UserStudyExecutionState => ({
       ...state,

@@ -7,16 +7,15 @@ import { UnformattedModule } from '../unformatted/unformatted.module';
 import { MatCardModule } from '@angular/material/card';
 
 @Component({
-  selector: 'app-plan-property-badge',
-  standalone: true,
-  imports: [
-    MatCardModule, 
-    MatIconModule, 
-    UnformattedModule, 
-    QuoteModule
-  ],
-  templateUrl: './plan-property-badge.component.html',
-  styleUrl: './plan-property-badge.component.scss'
+    selector: 'app-plan-property-badge',
+    imports: [
+        MatCardModule,
+        MatIconModule,
+        UnformattedModule,
+        QuoteModule
+    ],
+    templateUrl: './plan-property-badge.component.html',
+    styleUrl: './plan-property-badge.component.scss'
 })
 export class PlanPropertyBadgeComponent {
 

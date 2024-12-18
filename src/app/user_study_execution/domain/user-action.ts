@@ -76,6 +76,7 @@ export interface StartDemoUserAction extends UserAction {
     type: ActionType.START_DEMO,
     data: {
         stepIndex: number,
+        demoId: string,
         stepName: string,
     }
 } 
@@ -84,6 +85,7 @@ export interface EndDemoUserAction extends UserAction {
     type: ActionType.END_DEMO,
     data: {
         stepIndex: number,
+        demoId: string,
         stepName: string,
     }
 } 
@@ -93,12 +95,14 @@ export interface CreateIterationStepUserAction extends UserAction {
     type: ActionType.CREATE_ITERATION_STEP
     data: {
         stepId: string,
+        demoId: string
     }
 }
 
 export interface PlanForIterationStepUserAction extends UserAction {
     type: ActionType.PLAN_FOR_ITERATION_STEP
     data: {
+        demoId: string,
         stepId: string,
         utility,
     }
@@ -114,6 +118,7 @@ export interface InspectIterationStepUserAction extends UserAction {
 export interface AskQuestionUserAction extends UserAction {
     type: ActionType.ASK_QUESTION
     data: {
+        demoId: string,
         stepId: string,
         propertyId?: string;
         questionType: QuestionType;
@@ -123,6 +128,7 @@ export interface AskQuestionUserAction extends UserAction {
 export interface ExplanationUserAction extends UserAction {
     type: ActionType.EXPLANATION
     data: {
+        demoId: string,
         iterationStepId: string;
         message: string;
         propertyId?: string;
