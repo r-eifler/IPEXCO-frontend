@@ -189,7 +189,7 @@ function howAnswerComputer(step: IterationStep, question: Question, computed: st
 }
 
 
-function subsetMinimal(original: string[][]): string[][]{
+export function subsetMinimal(original: string[][]): string[][]{
   let result: string[][] = [];
   for(let list of original){
     if(result.some(rl => rl.every(re => list.includes(re)))){
