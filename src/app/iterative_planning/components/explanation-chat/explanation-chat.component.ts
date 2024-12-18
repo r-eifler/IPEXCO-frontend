@@ -13,7 +13,7 @@ export type AvailableQuestion = {
 
 @Component({
     selector: "app-explanation-chat",
-    imports: [ChatModule, JsonPipe, StructuredTextComponent, NgFor],
+    imports: [ChatModule, StructuredTextComponent],
     templateUrl: "./explanation-chat.component.html",
     styleUrl: "./explanation-chat.component.scss",
     changeDetection: ChangeDetectionStrategy.OnPush

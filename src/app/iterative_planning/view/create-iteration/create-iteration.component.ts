@@ -31,12 +31,10 @@ import { selectPlanPropertyIds, selectPreselectedEnforcedGoals$, selectPreselect
         MatFormFieldModule,
         MatIconModule,
         MatInputModule,
-        NgFor,
         PlanPropertyPanelComponent,
         SelectPropertyComponent,
         ReactiveFormsModule,
         SideSheetModule,
-        JsonPipe,
     ],
     templateUrl: "./create-iteration.component.html",
     styleUrl: "./create-iteration.component.scss"

@@ -22,6 +22,7 @@ interface TableData extends UserStudyExecution {
 
 @Component({
     selector: "app-accepted-test-persons",
+    standalone: true,
     imports: [
         FormsModule,
         CurrencyPipe,
@@ -59,10 +60,12 @@ export class AcceptedTestPersonsComponent {
 
   constructor() {
     effect(() => {
+      if(!this.paginator){
+        this.displayedParticipants = [];
+      }
       const index = this.paginator.pageIndex;
       const size = this.paginator.pageSize;
       this.displayedParticipants =  this.participantsTableData() ? [...this.participantsTableData()].splice(index * size, size) : [];
-      console.log(this.displayedParticipants);
     })
   }
 

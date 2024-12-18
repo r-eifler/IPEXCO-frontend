@@ -32,7 +32,6 @@ const jsonValidator: ValidatorFn = (control) => {
 @Component({
     selector: 'app-property-template-creator',
     imports: [
-        NgFor,
         MatCardModule,
         MatTabsModule,
         MatInputModule,

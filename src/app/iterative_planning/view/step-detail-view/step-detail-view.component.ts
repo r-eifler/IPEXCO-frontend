@@ -68,7 +68,6 @@ import { ProjectDirective } from "../../derectives/isProject.directive";
         MatTooltipModule,
         PageModule,
         PlanPropertyPanelComponent,
-        QuestionPanelComponent,
         RouterLink,
         MugsVisualizationBaseComponent,
         MatExpansionModule,

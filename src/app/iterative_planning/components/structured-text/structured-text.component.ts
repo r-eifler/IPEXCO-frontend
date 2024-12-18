@@ -5,7 +5,7 @@ import { PlanProperty } from '../../../shared/domain/plan-property/plan-property
 
 @Component({
     selector: 'app-structured-text',
-    imports: [NgFor, NgIf],
+    imports: [],
     templateUrl: './structured-text.component.html',
     styleUrl: './structured-text.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush

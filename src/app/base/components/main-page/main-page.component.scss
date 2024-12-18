@@ -1,4 +1,4 @@
-@import "../../../../variables.scss";
+@use "../../../../variables.scss" as vars;
 
 .page-container {
   height: 100%;
@@ -87,7 +87,7 @@ svg:not(:root) {
 }
 
 .demo-container {
-  background-color: $primary-darker;
+  background-color: vars.$primary-darker;
   height: 100vh;
   display: grid;
   align-items: center;

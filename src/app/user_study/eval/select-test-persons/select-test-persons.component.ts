@@ -32,7 +32,6 @@ interface TableData extends UserStudyExecution {
         MatCheckboxModule,
         MatButtonModule,
         MatIconModule,
-        NgIf,
         MatPaginatorModule,
     ],
     templateUrl: "./select-test-persons.component.html",

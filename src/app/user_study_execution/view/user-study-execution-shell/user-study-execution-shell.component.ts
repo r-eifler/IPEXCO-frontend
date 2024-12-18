@@ -28,7 +28,6 @@ import {
         MatToolbarModule,
         MatButtonModule,
         MatIconModule,
-        AsyncPipe,
         UserStudyExecutionProgressComponent,
         UserStudyExecutionHandlerComponent,
     ],

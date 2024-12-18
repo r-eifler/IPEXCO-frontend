@@ -25,7 +25,6 @@ import { DemoStatusNamePipe } from '../../pipe/demo-status-name.pipe';
         MatIconModule,
         LabelModule,
         MatButtonModule,
-        RouterLink,
         MatTooltipModule,
     ],
     templateUrl: './demo-hero.component.html',
