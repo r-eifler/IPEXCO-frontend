@@ -67,8 +67,8 @@ export class SelectTestPersonsComponent {
 
   constructor() {
     effect(() => {
-      const index = this.paginator.pageIndex;
-      const size = this.paginator.pageSize;
+      const index = this.paginator?.pageIndex;
+      const size = this.paginator?.pageSize;
       this.displayedParticipants =  this.participantsTableData() ? [...this.participantsTableData()].splice(index * size, size) : [];
       console.log(this.displayedParticipants);
     })

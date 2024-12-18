@@ -1,19 +1,15 @@
-import { AfterViewInit, Component, computed, effect, inject, OnInit, Signal, ViewChild } from "@angular/core";
-import { filter, map } from "rxjs/operators";
-import { FormsModule } from '@angular/forms';
-import { CurrencyPipe, DatePipe } from '@angular/common';
-import { MatIconModule } from '@angular/material/icon';
+import { Component, computed, effect, inject, ViewChild } from "@angular/core";
 import { MatTableModule } from '@angular/material/table';
 import { Store } from '@ngrx/store';
 import { selectUserStudyParticipantsOfStudy } from '../../state/user-study.selector';
-import { MatCheckboxModule } from '@angular/material/checkbox';
 import { UserStudyExecution } from "../../domain/user-study-execution";
 import { acceptUserStudyParticipant } from "../../state/user-study.actions";
-import { MatButtonModule } from "@angular/material/button";
-import { MatPaginator, MatPaginatorModule, PageEvent } from "@angular/material/paginator";
 import { toSignal } from "@angular/core/rxjs-interop";
-import { Observable } from "rxjs";
-import { MatSortHeader, MatSortModule, Sort } from "@angular/material/sort";
+import { Sort } from "@angular/material/sort";
+import { MatPaginator, MatPaginatorModule, PageEvent } from "@angular/material/paginator";
+import { CurrencyPipe, DatePipe } from "@angular/common";
+import { MatIconModule } from "@angular/material/icon";
+import { MatButtonModule } from "@angular/material/button";
 
 interface TableData extends UserStudyExecution {
   date: Date,
@@ -24,15 +20,12 @@ interface TableData extends UserStudyExecution {
     selector: "app-accepted-test-persons",
     standalone: true,
     imports: [
-        FormsModule,
-        CurrencyPipe,
-        DatePipe,
-        MatIconModule,
-        MatTableModule,
-        MatCheckboxModule,
-        MatButtonModule,
-        MatPaginatorModule,
-        MatSortModule
+      MatTableModule,
+      MatPaginatorModule,
+      CurrencyPipe,
+      MatIconModule,
+      DatePipe,
+      MatButtonModule,
     ],
     templateUrl: "./accepted-test-persons.component.html",
     styleUrls: ["./accepted-test-persons.component.scss"]
@@ -60,11 +53,8 @@ export class AcceptedTestPersonsComponent {
 
   constructor() {
     effect(() => {
-      if(!this.paginator){
-        this.displayedParticipants = [];
-      }
-      const index = this.paginator.pageIndex;
-      const size = this.paginator.pageSize;
+      const index = this.paginator?.pageIndex;
+      const size = this.paginator?.pageSize;
       this.displayedParticipants =  this.participantsTableData() ? [...this.participantsTableData()].splice(index * size, size) : [];
     })
   }
