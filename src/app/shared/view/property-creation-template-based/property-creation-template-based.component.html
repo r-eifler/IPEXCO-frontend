@@ -63,6 +63,29 @@
                     }
                 </div>
             </mat-step>
+            <mat-step label="Names & Utility">
+                <div class="step-container">
+                    <form [formGroup]="form">
+                        <div class="form-container">
+
+                            <mat-form-field appearance="outline" class="full-width-form-field">
+                                <mat-label>Name</mat-label>
+                                <input matInput formControlName="name">
+                            </mat-form-field>
+
+                            <mat-form-field appearance="outline" class="full-width-form-field">
+                                <mat-label>Natural Language Description</mat-label>
+                                <input matInput formControlName="naturalLanguageDescription">
+                            </mat-form-field>
+                            
+                            <mat-form-field appearance="outline" class="full-width-form-field">
+                                <mat-label>Utility</mat-label>
+                                <input matInput formControlName="utility" type="number" >
+                            </mat-form-field>
+                            </div>
+                    </form>
+                </div>
+            </mat-step>
 
         </mat-stepper>
     </app-dialog-content>
