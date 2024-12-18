@@ -21,5 +21,6 @@
 
   & > ::ng-deep mat-icon {
     flex-basis: auto;
+    flex-shrink: 0;
   }
 }
