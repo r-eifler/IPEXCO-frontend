@@ -1,7 +1,7 @@
-import { AsyncPipe, KeyValuePipe} from '@angular/common';
-import { Component, computed, input, OnInit, output } from '@angular/core';
+import { KeyValuePipe} from '@angular/common';
+import { Component, computed, inject, input, OnInit, output } from '@angular/core';
 import { DialogModule } from 'src/app/shared/components/dialog/dialog.module'
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatStepper, MatStepperModule } from '@angular/material/stepper';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -28,12 +28,17 @@ import { equalPlanProperties, PlanProperty } from 'src/app/shared/domain/plan-pr
         MatExpansionModule,
         MatCardModule,
         PropertyTemplatePartComponent,
-        MatIcon
+        MatIcon,
+        ReactiveFormsModule,
+        MatInputModule,
+        MatFormFieldModule
     ],
     templateUrl: './property-creation-template-based.component.html',
     styleUrl: './property-creation-template-based.component.scss'
 })
 export class PropertyCreationTemplateBasedComponent implements OnInit{
+
+  fb = inject(FormBuilder);
 
   cancel = output<void>();
   created = output<PlanProperty>();
@@ -54,6 +59,12 @@ export class PropertyCreationTemplateBasedComponent implements OnInit{
 
   allSelected = false;
   propertyAlreadyExists = false;
+
+  form = this.fb.group({
+    name: this.fb.control<string>(null, [Validators.required]),
+    naturalLanguageDescription: this.fb.control<string>(null, [Validators.required]),
+    utility: this.fb.control<number>(1, [Validators.required]),
+  });
 
   ngOnInit(): void {
     let sorted: Record<string, PlanPropertyTemplate[]> = this.templates()?.reduce((acc, t) => ({...acc,[t.class]: []}), {})
@@ -94,6 +105,9 @@ export class PropertyCreationTemplateBasedComponent implements OnInit{
 
 	  this.templateParts = [];
     this.updatePossibleVariableValues();
+
+    this.form.controls.name.setValue(template.nameTemplate);
+    this.form.controls.naturalLanguageDescription.setValue(template.sentenceTemplate);
   }
 
   selectVariableValue(variable: string, object: PDDLObject) {
@@ -110,6 +124,10 @@ export class PropertyCreationTemplateBasedComponent implements OnInit{
         this.selectedTemplate,
         this.selectedVariableValue
       )
+
+      this.form.controls.name.setValue(dummy.name);
+      this.form.controls.naturalLanguageDescription.setValue(dummy.naturalLanguageDescription);
+
       this.propertyAlreadyExists = this.planPropertiesList().some(
         p => equalPlanProperties(p, dummy)
       )
@@ -129,10 +147,17 @@ export class PropertyCreationTemplateBasedComponent implements OnInit{
   }
 
   onCreateProperty(){
-    const newPlanProperty = generatePlanProperty(
+    let newPlanProperty = generatePlanProperty(
       this.selectedTemplate,
       this.selectedVariableValue,
     )
+
+    newPlanProperty.name = this.form.controls.name.value;
+    newPlanProperty.naturalLanguageDescription = this.form.controls.naturalLanguageDescription.value;
+    newPlanProperty.utility = this.form.controls.utility.value;
+
+    console.log(newPlanProperty);
+
     this.created.emit(newPlanProperty);
   }
 

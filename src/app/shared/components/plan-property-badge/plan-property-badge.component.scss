@@ -1,7 +1,4 @@
-:host {
-    display: grid;
-  }
-  
+
   .title {
     width: 100%;
   
@@ -18,42 +15,14 @@
     overflow: hidden;
   }
   
-  mat-panel-description {
-    justify-content: flex-end;
-    flex-grow: 1;
-  }
-  
-  mat-panel-title {
-    min-width: 0;
-    flex-grow: 4;
-    overflow: hidden;
-  }
-  
-  .description {
-    display: flex;
-    flex-direction: row;
-  
-    gap: var(--spacing-100);
-  }
-  
-  .utility {
-    display: flex;
-    flex-direction: row;
-  
-    gap: var(--spacing-050);
-  }
-  
-  .content-container {
-    display: flex;
-    flex-direction: column;
-  
-    gap: var(--spacing-300);
-  }
-  
   .icon-container {
     border-radius: var(--radius-full);
     padding: var(--spacing-050);
   
     display: grid;
+  }
+
+  .title{
+    padding-bottom: var(--spacing-200);
   }
   

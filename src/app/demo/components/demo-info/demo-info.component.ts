@@ -5,7 +5,7 @@ import {
   OnDestroy,
   OnInit,
 } from "@angular/core";
-import { Demo } from "../../domain/demo";
+import { Demo } from "../../../project/domain/demo";
 import { PlanProperty } from "../../../shared/domain/plan-property/plan-property";
 import { takeUntil } from "rxjs/operators";
 import { Subject } from "rxjs";

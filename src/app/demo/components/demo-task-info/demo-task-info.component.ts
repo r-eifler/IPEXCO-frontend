@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { BehaviorSubject, Observable } from "rxjs";
-import { Demo } from "../../domain/demo";
+import { Demo } from "../../../project/domain/demo";
 import { environment } from "../../../../environments/environment";
 import { MarkedPipe } from "src/app/pipes/marked.pipe";
 import { AsyncPipe } from "@angular/common";

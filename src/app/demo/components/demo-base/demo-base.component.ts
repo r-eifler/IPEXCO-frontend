@@ -7,7 +7,7 @@ import { Component, OnDestroy, OnInit } from "@angular/core";
 import { PLANNER_REDIRECT } from "src/app/app.tokens";
 import { ActivatedRoute, Router } from "@angular/router";
 import { takeUntil } from "rxjs/operators";
-import { Demo } from "../../domain/demo";
+import { Demo } from "../../../project/domain/demo";
 import { Subject } from "rxjs";
 import { TimeLoggerService } from "../../../user_study/service/time-logger.service";
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';

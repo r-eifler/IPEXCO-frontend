@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from "@angular/core";
-import { Demo } from "src/app/demo/domain/demo";
+import { Demo } from "src/app/project/domain/demo";
 import { filter, take } from "rxjs/operators";
 import { LogEvent, TimeLoggerService } from "../../../user_study/service/time-logger.service";
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';

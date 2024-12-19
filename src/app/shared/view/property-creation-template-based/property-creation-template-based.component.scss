@@ -68,3 +68,12 @@
 .note {
     color: red;
 }
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.full-width-form-field{
+    width: 100%;
+}

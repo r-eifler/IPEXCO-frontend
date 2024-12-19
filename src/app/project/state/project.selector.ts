@@ -1,7 +1,7 @@
 import { createFeatureSelector, createSelector } from "@ngrx/store";
 import { projectFeature, ProjectState } from "./project.reducer";
 import { CreationState } from "src/app/shared/common/creatable.interface";
-import { Demo, DemoRunStatus } from "src/app/demo/domain/demo";
+import { Demo, DemoRunStatus } from "src/app/project/domain/demo";
 import { map, memoizeWith } from "ramda";
 
 

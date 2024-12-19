@@ -10,7 +10,7 @@
           <app-side-sheet-section-content>
             <app-info>
               <mat-icon>lightbulb_2</mat-icon>
-              <span>You can navigate around the app while keeping this panel opened.</span>
+              <span>You can navigate around the app while keeping this panel opened. You can only create a new step once the plan computation for the previous step finished.</span>
             </app-info>
           </app-side-sheet-section-content>
         </app-side-sheet-section>
@@ -86,7 +86,7 @@
     <app-side-sheet-footer>
       <button mat-button type="button" (click)="onCancel()">Cancel</button>
 
-      <button mat-flat-button color="primary" [disabled]="form.invalid">Create</button>
+      <button mat-flat-button color="primary" [disabled]="form.invalid || (computationRunning$ | async)">Create</button>
     </app-side-sheet-footer>
   </app-side-sheet>
 </form>

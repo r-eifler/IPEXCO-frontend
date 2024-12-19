@@ -9,7 +9,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { DefaultPipe } from 'src/app/shared/common/pipe/default.pipe';
 import { LabelModule } from 'src/app/shared/components/label/label.module';
 import { PlanProperty } from '../../../shared/domain/plan-property/plan-property';
-import { Demo } from 'src/app/demo/domain/demo';
+import { Demo } from 'src/app/project/domain/demo';
 import { StepStatusNamePipe } from 'src/app/iterative_planning/domain/pipe/step-status-name.pipe';
 import { StepStatusColorPipe } from 'src/app/iterative_planning/domain/pipe/step-status-color.pipe';
 import { StepValuePipe } from 'src/app/iterative_planning/domain/pipe/step-value.pipe';
