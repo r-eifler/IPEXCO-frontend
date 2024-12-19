@@ -8,7 +8,7 @@ import { Demo } from "src/app/project/domain/demo";
 import { PlanProperty } from "src/app/shared/domain/plan-property/plan-property";
 
 @Injectable()
-export class ProjectDemoService{
+export class DemoService{
 
     private http = inject(HttpClient)
     private BASE_URL = environment.apiURL + "demo/";
@@ -33,13 +33,9 @@ export class ProjectDemoService{
       )
     }
 
-    getDemos$(projectId: string): Observable<Demo[]> {
+    getDemos$(): Observable<Demo[]> {
 
-        console.log("Demo service: getDemos");
-        let httpParams = new HttpParams();
-        httpParams = httpParams.set('projectId', projectId);
-
-        return this.http.get<IHTTPData<Demo[]>>(this.BASE_URL + 'demos/', { params: httpParams }).pipe(
+        return this.http.get<IHTTPData<Demo[]>>(this.BASE_URL + 'demos/').pipe(
             map(({data}) => data),
             tap(console.log),
             map(demos => (

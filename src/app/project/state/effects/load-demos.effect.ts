@@ -3,13 +3,13 @@ import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { loadAllDemosPlanProperties, loadProjectDemos, loadProjectDemosFailure, loadProjectDemosSuccess} from "../project.actions";
 import { catchError, map, switchMap } from "rxjs/operators";
 import { of } from "rxjs";
-import { DemoService } from "../../service/demo.service";
+import { ProjectDemoService } from "../../service/demo.service";
 
 @Injectable()
 export class LoadProjectDemosEffect{
 
     private actions$ = inject(Actions)
-    private service = inject(DemoService)
+    private service = inject(ProjectDemoService)
 
     public loadDemos$ = createEffect(() => this.actions$.pipe(
         ofType(loadProjectDemos),

@@ -17,7 +17,7 @@ import { PlanPropertyPanelComponent } from "src/app/shared/components/plan-prope
 import { AsyncPipe } from "@angular/common";
 import { SelectPropertyComponent } from "../../components/select-property/select-property.component";
 import { PlanProperty } from "src/app/shared/domain/plan-property/plan-property";
-import { DemoService } from "../../service/demo.service";
+import { ProjectDemoService } from "../../service/demo.service";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 @Component({
@@ -41,7 +41,7 @@ export class DemoCreatorComponent implements OnInit {
 
   private fb = inject(FormBuilder);
   private store = inject(Store);
-  private uploadService = inject(DemoService);
+  private uploadService = inject(ProjectDemoService);
   private dialogService = inject(MatDialog);
 
   propertySelector = viewChild.required<TemplateRef<ElementRef>>('propertySelector');

@@ -23,8 +23,6 @@ import { DemoStatusColorPipe } from 'src/app/project/pipe/demo-status-color.pipe
         LabelModule,
         MatButtonModule,
         MatTooltipModule,
-        DemoStatusNamePipe,
-        DemoStatusColorPipe
     ],
     templateUrl: './demo-card.component.html',
     styleUrl: './demo-card.component.scss'
@@ -44,6 +42,6 @@ export class DemoCardComponent {
   }
 
   onDetails(): void {
-    this.router.navigate([this.demo()?._id, 'details'], {relativeTo: this.route})
+    this.router.navigate(['..', this.demo()?._id, 'details'], {relativeTo: this.route})
   }
 }
