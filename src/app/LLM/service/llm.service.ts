@@ -97,6 +97,13 @@ export class LLMService {
         );
     }
 
+    postDirectMessageET$(directResponse: string, threadId: string): Observable<{ response: string, threadId: string }> {
+        return this.http.post<IHTTPData<{ response: string, threadId: string }>>(this.BASE_URL + 'et', { data: directResponse, threadId: threadId }).pipe(
+            map(({ data }) => data),
+            tap(console.log)
+        );
+    }
+
     postMessageQTthenGT$(question: string, iterationStep: IterationStep, project: Project, properties: PlanProperty[], threadIdQt: string, threadIdGt: string): Observable<
         | { gtResponse: string, qtResponse: string, threadIdQt: string, threadIdGt: string, questionType: QuestionType, goal: string, question: Question, reverseTranslationQT: string, reverseTranslationGT: string }
         | { directResponse: string, questionType: QuestionType, threadIdQt: string, threadIdGt: string }

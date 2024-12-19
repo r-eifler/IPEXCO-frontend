@@ -163,6 +163,22 @@ export class SendMessageToLLMEffect {
         })
     ))
 
+    public sendDirectMessageToExplanationTranslator$ = createEffect(() => this.actions$.pipe(
+        ofType(directMessageET),
+        concatLatestFrom(({ directResponse }) => [
+            this.store.select(selectLLMThreadIdET)
+        ]),
+        switchMap(([{ directResponse }, threadIdET]) => 
+            this.service.postDirectMessageET$(directResponse, threadIdET).pipe(
+                map(response => sendMessageToLLMExplanationTranslatorSuccess({ 
+                    response: response.response, 
+                    threadId: response.threadId 
+                })),
+                catchError(() => of(sendMessageToLLMExplanationTranslatorFailure()))
+            )
+        )
+    ))
+
     public loadLLMContext$ = createEffect(() => this.actions$.pipe(
         ofType(loadLLMContext),
         switchMap(({ projectId }) => this.service.getLLMContext$(projectId).pipe(
