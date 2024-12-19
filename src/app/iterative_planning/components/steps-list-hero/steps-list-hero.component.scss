@@ -1,0 +1,77 @@
+@use '../../../../variables' as vars;
+
+.content {
+  padding-top: var(--spacing-100);
+
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  justify-content: space-between;
+  align-items: end;
+
+  gap: var(--spacing-100);
+}
+
+.stats {
+  height: fit-content;
+
+  display: grid;
+  grid-template-columns: auto auto minmax(0, 1fr);
+  align-items: end;
+
+  column-gap: var(--spacing-100);
+}
+
+.utility {
+    display: grid;
+    justify-content: center;
+    align-items: end;
+  
+    mat-icon {
+      grid-row: 1;
+      grid-column: 1;
+  
+      opacity: 0.1;
+      --icon-size: 96px;
+      font-size: var(--icon-size);
+      width: var(--icon-size);
+      height: var(--icon-size);
+      @include vars.color(secondary);
+    }
+  
+    .utility-value-container{
+      grid-row: 1;
+      grid-column: 1;
+  
+      display: grid;
+      align-items: center;
+      justify-items: center;
+  
+      gap: var(--spacing-100);
+  
+  
+      .value {
+        @include vars.typography(headline-small);
+      }
+  
+      .label {
+        @include vars.typography(label-small);
+      }
+    }
+  
+  }
+
+  .property-label {
+    @include vars.typography(label-small);
+    @include vars.color(on-surface-variant);
+  }
+  
+  .property-value {
+    @include vars.typography(body-large);
+    line-height: 1;
+  }
+  
+  mat-icon {
+    ::ng-deep .material-icons {
+      font-size: 12px;
+    }
+  }
