@@ -16,6 +16,7 @@ import { DemoHeroComponent } from 'src/app/project/components/demo-hero/demo-her
 import { SettingsComponent } from 'src/app/project/components/settings/settings.component';
 import { selectDemo, selectDemoProperties, selectPlanPropertiesListOfDemo, selectPlanPropertiesOfDemo } from '../../state/demo.selector';
 import { GeneralSettings } from 'src/app/project/domain/general-settings';
+import { updateDemo } from '../../state/demo.actions';
 
 @Component({
     selector: 'app-demo-details-view',
@@ -61,18 +62,18 @@ export class DemoDetailsViewComponent {
   }
 
 
-  onDelete(id: string){
-    const dialogRef = this.dialog.open(AskDeleteComponent, {
-      data: {name: "Delete Demo", text: "Are you sure you want to delete the demo?"},
-    });
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      if(result){
-        // this.store.dispatch(deleteProjectDemo({id}))
-        this.router.navigate(["../.."], {relativeTo: this.route});
-      }
-    });
-  }
+  // onDelete(id: string){
+  //   const dialogRef = this.dialog.open(AskDeleteComponent, {
+  //     data: {name: "Delete Demo", text: "Are you sure you want to delete the demo?"},
+  //   });
+  //   dialogRef.afterClosed().subscribe(result => {
+  //     console.log('The dialog was closed');
+  //     if(result){
+  //       // this.store.dispatch(deleteProjectDemo({id}))
+  //       this.router.navigate(["../.."], {relativeTo: this.route});
+  //     }
+  //   });
+  // }
 
   onRunIterPlanning(){
     this.demo$.pipe(take(1)).subscribe(demo => {
@@ -84,7 +85,7 @@ export class DemoDetailsViewComponent {
     this.demo$.pipe(take(1)).subscribe(demo => {
       let newDemo = {...demo};
       newDemo.settings = settings;
-      // this.store.dispatch(updateDemo({demo: newDemo}))
+      this.store.dispatch(updateDemo({demo: newDemo}))
     })
   }
 

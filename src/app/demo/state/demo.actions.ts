@@ -22,3 +22,7 @@ export const loadDemoPlanPropertiesFailure = createAction('[demo] load demo plan
 export const loadDemo = createAction('[demo] load  demo', props<{id: string}>());
 export const loadDemoSuccess = createAction('[demo] load  demo success', props<{demo: Demo}>());
 export const loadDemoFailure = createAction('[demo] load  demo failure');
+
+export const updateDemo = createAction('[demo] update demo', props<{demo: Demo}>());
+export const updateDemoSuccess = createAction('[demo] update demo success', props<{demo: Demo}>());
+export const updateDemoFailure = createAction('[demo] update demo failure');
