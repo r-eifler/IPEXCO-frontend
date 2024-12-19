@@ -10,6 +10,19 @@
         @for(demo of demos$ | async; track demo) {
           <app-demo-card [demo]="demo" [planProperties]="(demoProperties$ | async)?.[demo._id] ?? []" (run)="onRunIterPlanning(demo._id)"></app-demo-card>
         }
+
+        <button app-action-card (click)="fileInput.click()">
+          <div class="instructions">
+            <span>Upload Demo</span>
+          </div>
+          <mat-icon>add</mat-icon>
+        </button>
+        <input
+          style="display: none"
+          type="file"
+          (change)="onFileChanged($event)"
+          #fileInput
+        />
       </div>
     </app-page-content>
 </app-page>

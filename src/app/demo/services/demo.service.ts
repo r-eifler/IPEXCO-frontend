@@ -57,7 +57,7 @@ export class DemoService{
     }
 
     postDemo$(demo: Demo, properties: PlanProperty[]): Observable<string | null> {
-        return this.http.post<IHTTPData<string | null>>(this.BASE_URL, {demo: demo, planProperties: properties}).pipe(
+        return this.http.post<IHTTPData<string | null>>(this.BASE_URL + 'upload', {demo: demo, planProperties: properties}).pipe(
             map(({data}) => data)
         )
     }

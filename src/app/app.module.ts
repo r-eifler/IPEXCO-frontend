@@ -110,6 +110,7 @@ import { LoadDemosEffect } from './demo/state/effects/load-demos.effect';
 import { LoadDemoPlanPropertiesEffect } from './demo/state/effects/load-demo-plan-properties.effect';
 import { DemoPlanPropertyService } from './demo/services/plan-properties.service';
 import { DemosUpdateDemoEffect } from './demo/state/effects/update-demo.effect';
+import { UploadDemoEffect } from './demo/state/effects/upload-demo.effect';
 
 
 
@@ -180,7 +181,8 @@ import { DemosUpdateDemoEffect } from './demo/state/effects/update-demo.effect';
       LoadDemoEffect,
       LoadDemosEffect,
       LoadDemoPlanPropertiesEffect,
-      DemosUpdateDemoEffect
+      DemosUpdateDemoEffect,
+      UploadDemoEffect
     ]),
     // Instrumentation must be imported after importing StoreModule (config is optional)
     StoreDevtoolsModule.instrument({

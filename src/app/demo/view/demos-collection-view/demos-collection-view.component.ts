@@ -8,8 +8,12 @@ import { PageModule } from 'src/app/shared/components/page/page.module';
 import { AsyncPipe } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { BreadcrumbModule } from 'src/app/shared/components/breadcrumb/breadcrumb.module';
-import { loadDemos } from '../../state/demo.actions';
+import { loadDemos, uploadDemo } from '../../state/demo.actions';
 import { DemoCardComponent } from '../../components/demo-card/demo-card.component';
+import { ActionCardComponent } from 'src/app/shared/components/action-card/action-card/action-card.component';
+import { BehaviorSubject, filter, map, startWith, switchMap } from 'rxjs';
+import { PlanProperty } from 'src/app/shared/domain/plan-property/plan-property';
+import { Demo } from 'src/app/project/domain/demo';
 
 @Component({
   selector: 'app-demos-collection-view',
@@ -19,7 +23,8 @@ import { DemoCardComponent } from '../../components/demo-card/demo-card.componen
     DemoCardComponent,
     MatIconModule,
     RouterLink,
-    BreadcrumbModule
+    BreadcrumbModule,
+    ActionCardComponent
   ],
   templateUrl: './demos-collection-view.component.html',
   styleUrl: './demos-collection-view.component.scss'
@@ -34,8 +39,8 @@ export class DemosCollectionViewComponent {
   demoProperties$ = this.store.select(selectDemoProperties);
 
   router = inject(Router);
-  route = inject(ActivatedRoute);
-  dialog = inject(MatDialog);
+
+  demoFile$ = new BehaviorSubject<any>(null);
 
   onRunIterPlanning(id: string){
     this.router.navigate(['/iterative-planning', id]);
@@ -45,4 +50,27 @@ export class DemosCollectionViewComponent {
     this.store.dispatch(loadDemos());
   }
 
+  onUploadDemo(){
+
+  }
+
+  onFileChanged(event) {
+    let file = event.target.files[0];
+    if (typeof FileReader !== "undefined") {
+      const reader = new FileReader();
+
+      reader.onload = (e: any) => {
+        let result  = e.target.result;
+        console.log(result)
+        let {demo, planProperties}: {demo: Demo, planProperties: Record<string, PlanProperty>} = JSON.parse(result);
+        console.log(demo);
+        console.log(planProperties);
+        this.store.dispatch(uploadDemo({demo, planProperties: Object.values(planProperties)}));
+      };
+    
+
+      reader.readAsText(file);
+      console.log(file);
+    }
+  }
 }

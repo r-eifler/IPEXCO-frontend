@@ -26,3 +26,7 @@ export const loadDemoFailure = createAction('[demo] load  demo failure');
 export const updateDemo = createAction('[demo] update demo', props<{demo: Demo}>());
 export const updateDemoSuccess = createAction('[demo] update demo success', props<{demo: Demo}>());
 export const updateDemoFailure = createAction('[demo] update demo failure');
+
+export const uploadDemo = createAction('[demo] upload demo', props<{demo: Demo, planProperties: PlanProperty[]}>());
+export const uploadDemoSuccess = createAction('[demo] upload demo success');
+export const uploadDemoFailure = createAction('[demo] upload demo failure');
