@@ -1,44 +1,20 @@
-<div *ngIf="MUGS$.length > 0; else noData">
-  <h3>Available MUGS:</h3>
-  <ul>
-    <li *ngFor="let mug of MUGS$; let i = index">
-      {{ i + 1 }}. {{ mug }}
-    </li>
-  </ul>
+<div>
+  <div id="mugs-vis" class="svg-container"></div>
 </div>
 
-<div *ngIf="MSGS$.length > 0; else noData">
-  <h3>Available MSGS:</h3>
-  <ul>
-    <li *ngFor="let msg of MSGS$; let i = index">
-      {{ i + 1 }}. {{ msg }}
-    </li>
-  </ul>
-</div>
-
-<ng-template #noData>
-  <p>No mugs available.</p>
-</ng-template>
-
-<!-- TODO: Delete up afterwards -->
-
-<div class="visualization_matrix">
-  <table class="visualization_matrix_table">
-    <tbody>
-    <tr *ngFor="let row of componentVisualizer.crossReference; let rowIndex = index">
-      <th>
-        {{ componentVisualizer.uniqueGoals[rowIndex] }}
-      </th>
-      <td *ngFor="let cell of row">
-        {{ cell }}
-      </td>
-    </tr>
-    </tbody>
-  </table>
-</div>
-
-<div class="">
-  <!-- TODO: Convert title to span and adjust css -->
-  <h3>Abandoned Goals</h3>
+<div>
+  <br/>
+  <div class="divider"></div>
+  <div class="section mx-10">
+    <h6>Enforced goals</h6>
+    <div id="sec-enforcement" class="badge-panel"></div>
+  </div>
+  <div class="divider"></div>
+  <div class="section mx-10">
+    <h6>Result</h6>
+    <div id="sec-result" class="badge-panel">
+      No goals selected
+    </div>
+  </div>
 </div>
 

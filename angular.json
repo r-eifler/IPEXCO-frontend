@@ -28,10 +28,13 @@
               }
             ],
             "styles": [
+              "node_modules/materialize-css/dist/css/materialize.min.css",
               "src/variables.scss",
               "src/styles.scss"
             ],
-            "scripts": [],
+            "scripts": [
+              "node_modules/materialize-css/dist/js/materialize.min.js"
+            ],
             "vendorChunk": true,
             "extractLicenses": false,
             "buildOptimizer": false,

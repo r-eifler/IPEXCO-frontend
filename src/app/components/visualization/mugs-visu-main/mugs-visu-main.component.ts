@@ -125,7 +125,7 @@ export class MUGSVisuMainComponent implements OnInit {
       .style("position", "absolute");
 
     //set up svg for drawing
-    this.svg = d3.select("#vis")
+    this.svg = d3.select("#helpers")
       .append("svg")
       .attr("height", this.height)
       .attr("width", this.width)
@@ -134,7 +134,7 @@ export class MUGSVisuMainComponent implements OnInit {
       .style("position", "absolute");
 
     //define a tooltip for MUGS
-    this.tooltip = d3.select("#vis")
+    this.tooltip = d3.select("#helpers")
       .append("div")
       .style("opacity", 0)
       .attr("id", "tooltip")
@@ -147,7 +147,7 @@ export class MUGSVisuMainComponent implements OnInit {
       .style("position", "absolute");
 
     //define a tooltip for box
-    this.boxtip = d3.select("#vis")
+    this.boxtip = d3.select("#helpers")
       .append("div")
       .style("opacity", 0)
       .attr("id", "boxtip")
@@ -229,7 +229,7 @@ export class MUGSVisuMainComponent implements OnInit {
       if (this.optioned != "option5") {
         this.filter();
       } else {
-        //clear the previous vis
+        //clear the previous helpers
         this.svg.selectAll("*").remove();
         this.stickyHeader.selectAll("*").remove();
       }
@@ -406,7 +406,7 @@ export class MUGSVisuMainComponent implements OnInit {
                   this.boxtip.html("Goal: " + this.arrPlanProperties[newX] + "</br>" + "belongs to: " + this.dummy[newY])
                     .style("left", (e.clientX - 500) + "px")
                     .style("top", () => {
-                      //console.log("scrollTop: " + document.getElementById("vis").scrollTop);
+                      //console.log("scrollTop: " + document.getElementById("helpers").scrollTop);
                       if ((e.clientY - 210 - this.margin.top + document.getElementById("vis").scrollTop) < 0) {
                         return "1px";
                       } else {
@@ -723,7 +723,7 @@ export class MUGSVisuMainComponent implements OnInit {
   }
 
   setOrder = function (event: any): void {
-    //clear the previous vis
+    //clear the previous helpers
     this.svg.selectAll("*").remove();
     this.stickyHeader.selectAll("*").remove();
       //console.log(event.value);
@@ -823,7 +823,7 @@ export class MUGSVisuMainComponent implements OnInit {
     if (this.dummy.lastIndexOf("collapsed row") < 0) {
 
 
-    //clear the previous vis
+    //clear the previous helpers
     this.svg.selectAll("*").remove();
     this.stickyHeader.selectAll("*").remove();
     //console.log(this.arrConflict);
@@ -875,7 +875,7 @@ export class MUGSVisuMainComponent implements OnInit {
     console.log(this.arrPlanProperties);
     if (input[0].checked == true && this.dummy.lastIndexOf("collapsed row") < 0) {
 
-      //clear the previous vis
+      //clear the previous helpers
       //this.svg.selectAll("*").remove();
       //this.stickyHeader.selectAll("*").remove();
 
@@ -1138,7 +1138,7 @@ export class MUGSVisuMainComponent implements OnInit {
         console.log(this.arrConflict);
         console.log(this.arrPlanProperties);
       }
-        //clear the previous vis
+        //clear the previous helpers
         this.svg.selectAll("*").remove();
         this.stickyHeader.selectAll("*").remove();
 
@@ -1163,7 +1163,7 @@ export class MUGSVisuMainComponent implements OnInit {
     console.log(this.group);
 
     this.varInit();
-    //clear the previous vis
+    //clear the previous helpers
     this.svg.selectAll("*").remove();
     this.stickyHeader.selectAll("*").remove();
 

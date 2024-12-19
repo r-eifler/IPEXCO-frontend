@@ -1,0 +1,163 @@
+<aside id="sidebar">
+  <button id="btnToggleSideBar" class="btn-side-toggle toggles-sidebar">
+    <span id="iconToggleSideBar" class="material-icons">
+      chevron_left
+    </span>
+  </button>
+
+  <div class="sidebar-content" id="sidebarSettings">
+
+    <header class="modal-section-header toggles-content" target="general-settings">
+      <h5 class="modal-section-heading">MUGS playground</h5> <i class="material-icons">arrow_drop_down</i>
+    </header>
+
+    <div class="slidering" id="general-settings">
+      
+      <p> Data: <b id="loaded-file"></b> </p>
+
+      <div class="modal-option">
+        <p> Use size as visual variable </p>
+        <div class="switch">
+          <label>
+            <input id="use-matrix-cell-size" type="checkbox"> <!-- checked="checked" -->
+            <span class="lever"></span>
+          </label>
+        </div>
+      </div>
+      <div class="modal-option">
+        <p> Color goals by type </p>
+        <div class="switch">
+          <label>
+            <input id="use-goal-type-color" type="checkbox" checked="checked">
+            <span class="lever"></span>
+          </label>
+        </div>
+      </div>
+
+    </div>
+
+    <hr>
+    <header class="modal-section-header toggles-content" target="lower-matrix-settings">
+      <h6 class="modal-section-heading">Lower Matrix Triangle</h6> <i class="material-icons">arrow_drop_down</i>
+    </header>
+
+    
+    <div class="slidering" id="lower-matrix-settings">
+        
+      <label>Metric</label>
+      <div class="modal-option modal-option-select">
+        <select id="metric-lower-select" class="browser-default">
+          <option value="occurr">Pairwise Occurrence</option>
+          <option value="nOccurr" selected>Normalized Pairwise Occurrence</option>
+          <option value="solvability">Solvability</option>
+          <option value="distance">Distance Correlation Coefficient</option>
+          <option value="pearson">Pearson Correlation Coefficient</option>
+          <option value="jaccard">Jaccard Index</option>
+        </select>
+      </div>
+
+      <div id="legend-lower">
+
+      </div>
+      
+    </div>
+
+    <hr>
+    <header class="modal-section-header toggles-content" target="upper-matrix-settings">
+      <h6 class="modal-section-heading">Upper Matrix Triangle</h6> <i class="material-icons">arrow_drop_down</i>
+    </header>
+    
+    <div class="slidering" id="upper-matrix-settings">
+      <div class="modal-option">
+        <p> Show </p>
+        <div class="switch">
+          <label>
+            <input id="show-upper-matrix" type="checkbox" checked="checked">
+            <span class="lever"></span>
+          </label>
+        </div>
+      </div>
+
+      <label>Metric</label>
+      <div class="modal-option modal-option-select">
+        <select id="metric-upper-select" class="browser-default">
+          <option value="occurr">Pairwise Occurrence</option>
+          <option value="nOccurr" selected>Normalized Pairwise Occurrence</option>
+          <option value="solvability">Solvability</option>
+          <option value="distance">Distance Correlation Coefficient</option>
+          <option value="pearson">Pearson Correlation Coefficient</option>
+          <option value="jaccard">Jaccard Index</option>
+        </select>
+      </div>
+
+      <div id="legend-upper">
+
+      </div>
+
+      
+    </div>
+
+    <hr>
+    <header class="modal-section-header toggles-content" target="sorting-settings">
+      <h6 class="modal-section-heading">Sorting Settings</h6> <i class="material-icons">arrow_drop_down</i>
+    </header>
+
+    <div class="slidering" id="sorting-settings">
+      
+      <label>Sort goals by</label>
+      <div class="modal-option modal-option-select">
+        <select id="sort-goals-select" class="browser-default">
+          <option value="original">Original</option>
+          <option value="type">Type</option>
+          <option value="frequency">Frequency</option>
+          <option value="user-defined">User Defined</option>
+        </select>
+      </div>
+
+      <div class="modal-option">
+        <p>Reverse</p>
+        <div class="switch">
+          <label>
+            <input id="reverse-goals-toggle" type="checkbox"> <!-- checked="checked" -->
+            <span class="lever"></span>
+          </label>
+        </div>
+      </div>
+
+
+      <label>Sort subsets by</label>
+      <div class="modal-option modal-option-select">
+        <select id="sort-subsets-select" class="browser-default">
+          <option value="original">Original</option>
+          <option value="cardinality">Size</option>
+          <option value="hierarchy">Hierarchy</option>
+        </select>
+      </div>
+
+      <div class="modal-option">
+        <p>Reverse</p>
+        <div class="switch">
+          <label>
+            <input id="reverse-subsets-toggle" type="checkbox"> <!-- checked="checked" -->
+            <span class="lever"></span>
+          </label>
+        </div>
+      </div>
+
+
+      <div class="modal-option">
+        <p> Compress </p>
+        <div class="switch">
+          <label>
+            <input id="compress-subsets-toggle" type="checkbox">
+            <span class="lever"></span>
+          </label>
+        </div>
+      </div>
+
+
+    </div>
+
+  </div>
+
+</aside>
