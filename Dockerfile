@@ -34,10 +34,10 @@ RUN npm run build --configuration=production --force
 # Use official nginx image as the base image
 FROM nginx:latest
 
-COPY nginx.conf /etc/nginx/nginx.conf
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Copy the build output to replace the default nginx contents.
-COPY --from=build /usr/local/app/dist/IPEXCO /usr/share/nginx/html
+COPY --from=build /usr/local/app/dist/IPEXCO/browser /usr/share/nginx/html
 
 # Expose port 80
 EXPOSE 80
