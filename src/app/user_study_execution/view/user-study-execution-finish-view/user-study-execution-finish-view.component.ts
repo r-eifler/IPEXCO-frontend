@@ -6,6 +6,7 @@ import {PageModule} from '../../../shared/components/page/page.module';
 import {executionUserStudyCancel, executionUserStudySubmit} from '../../state/user-study-execution.actions';
 import {selectLoggedIn, selectLoggedOut} from '../../../user/state/user.selector';
 import {selectExecutionUserStudyCanceled} from '../../state/user-study-execution.selector';
+import { MatIcon, MatIconModule } from '@angular/material/icon';
 
 @Component({
     selector: 'app-user-study-execution-finish-view',
@@ -13,6 +14,7 @@ import {selectExecutionUserStudyCanceled} from '../../state/user-study-execution
         MatButton,
         PageModule,
         AsyncPipe,
+        MatIconModule
     ],
     templateUrl: './user-study-execution-finish-view.component.html',
     styleUrl: './user-study-execution-finish-view.component.scss'
