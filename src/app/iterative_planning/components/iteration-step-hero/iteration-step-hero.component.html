@@ -20,7 +20,7 @@
       </div>
 
       <div class="plan-link-container">
-        <a mat-button [disabled]="! step()?.plan" [routerLink]="['plan']">
+        <a mat-button [disabled]="! step()?.plan" [routerLink]="['plan']" *isUserStudy>
           <mat-icon>explore</mat-icon>
           Show Plan
         </a>
