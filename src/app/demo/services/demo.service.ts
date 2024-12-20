@@ -35,7 +35,7 @@ export class DemoService{
 
     getDemos$(): Observable<Demo[]> {
 
-        return this.http.get<IHTTPData<Demo[]>>(this.BASE_URL + 'demos/').pipe(
+        return this.http.get<IHTTPData<Demo[]>>(this.BASE_URL).pipe(
             map(({data}) => data),
             tap(console.log),
             map(demos => (

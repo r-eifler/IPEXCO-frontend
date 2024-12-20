@@ -39,7 +39,7 @@ export class ProjectDemoService{
         let httpParams = new HttpParams();
         httpParams = httpParams.set('projectId', projectId);
 
-        return this.http.get<IHTTPData<Demo[]>>(this.BASE_URL + 'demos/', { params: httpParams }).pipe(
+        return this.http.get<IHTTPData<Demo[]>>(this.BASE_URL, { params: httpParams }).pipe(
             map(({data}) => data),
             tap(console.log),
             map(demos => (
