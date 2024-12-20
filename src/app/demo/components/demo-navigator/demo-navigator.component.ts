@@ -1,6 +1,6 @@
 import { DemoFinishedComponent } from "./../demo-finished/demo-finished.component";
 import { Component, EventEmitter, OnDestroy, OnInit, Output } from "@angular/core";
-import { Demo } from "src/app/demo/domain/demo";
+import { Demo } from "src/app/project/domain/demo";
 import { BehaviorSubject, combineLatest, Observable, Subject } from "rxjs";
 import { takeUntil, filter, map, take, tap } from "rxjs/operators";
 import { getMaximalPlanValue, PlanProperty } from "../../../shared/domain/plan-property/plan-property";

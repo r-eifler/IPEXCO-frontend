@@ -1,6 +1,7 @@
 import { Project } from 'src/app/shared/domain/project';
 import { GlobalExplanation } from '../../iterative_planning/domain/explanation/explanations';
 import { RunStatus } from '../../iterative_planning/domain/run';
+import { PlanProperty } from 'src/app/shared/domain/plan-property/plan-property';
 
 
 export enum DemoRunStatus {
@@ -31,4 +32,17 @@ export interface DemoDefinition {
     planProperties: string[];
     plan: string;
   }[];
+}
+
+
+export function maxUtility(demo: Demo, planProperties: PlanProperty[]): number {
+  if(!demo || ! planProperties){
+    return undefined;
+  }
+  console.log(demo);
+  const utilityOfAllMSGS = demo.globalExplanation.MGCS.map(mgcs =>
+    planProperties.map(
+      pp => !mgcs.includes(pp._id) ? pp.utility : 0).reduce((p,c) => p + c, 0)
+    )
+  return Math.max(...utilityOfAllMSGS);
 }

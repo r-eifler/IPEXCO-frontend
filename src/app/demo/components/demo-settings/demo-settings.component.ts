@@ -1,4 +1,4 @@
-import { Demo } from "src/app/demo/domain/demo";
+import { Demo } from "src/app/project/domain/demo";
 import { Component, Inject, OnInit } from "@angular/core";
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { GeneralSettings } from "src/app/project/domain/general-settings";

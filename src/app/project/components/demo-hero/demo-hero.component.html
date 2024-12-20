@@ -13,21 +13,26 @@
         <div class="stats">
             <mat-icon>flag_check</mat-icon>
             <span class="property-label">Goals:</span>
-            <span class="property-value">{{ planProperties()?.length ?? '/'}}</span>
+            <span class="property-value">{{ numPlanProperties() ?? '/'}}</span>
     
             <mat-icon>report</mat-icon>
             <span class="property-label">Conflicts:</span>
-            <span class="property-value">{{ demo()?.globalExplanation?.MUGS.length }}</span>
+            <span class="property-value">{{ numConflicts() }}</span>
     
             <mat-icon>healing</mat-icon>
             <span class="property-label">Corrections:</span>
-            <span class="property-value">{{ demo()?.globalExplanation?.MGCS.length }}</span>
+            <span class="property-value">{{ numCorrections() }}</span>
         </div>
   
         <div class="plan-link-container">
         </div>
   
         <div class="utility">
+          <mat-icon>workspace_premium</mat-icon>
+          <div class="utility-value-container">
+            <span class="value">{{ maxUtility() ?? '-/-'}}</span>
+            <span class="label">Max Utility</span>
+          </div>
         </div>
       </div>
     </mat-card-content>

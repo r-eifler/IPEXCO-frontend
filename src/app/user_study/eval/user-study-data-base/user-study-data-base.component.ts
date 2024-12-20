@@ -7,7 +7,7 @@ import {
 } from "../../domain/user-study";
 import { BehaviorSubject, combineLatest, Observable, Subject } from "rxjs";
 import { filter, map, take, takeUntil, tap } from "rxjs/operators";
-import { Demo } from "../../../demo/domain/demo";
+import { Demo } from "../../../project/domain/demo";
 import { UserStudyData } from "src/app/user_study/domain/user-study-execution";
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AsyncPipe, CurrencyPipe, DatePipe } from '@angular/common';

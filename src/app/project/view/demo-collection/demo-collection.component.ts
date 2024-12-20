@@ -1,6 +1,6 @@
 import {  ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { Component, inject, } from "@angular/core";
-import { Demo } from "src/app/demo/domain/demo";
+import { Demo } from "src/app/project/domain/demo";
 import { MatDialog } from "@angular/material/dialog";
 import { AskDeleteComponent } from "../../../shared/components/ask-delete/ask-delete.component";
 import { RunStatus } from "src/app/iterative_planning/domain/run";

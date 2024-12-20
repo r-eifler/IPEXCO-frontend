@@ -4,8 +4,11 @@ import { LoadingState } from "src/app/shared/common/loadable.interface";
 import { explanationHash } from "../domain/explanation/explanation-hash";
 import { ExplanationRunStatus } from "../domain/explanation/explanations";
 import { IterativePlanningState, Message, iterativePlanningFeature } from "./iterative-planning.reducer";
+import { StepStatus } from "../domain/iteration_step";
 
 const selectIterativePlanningFeature = createFeatureSelector<IterativePlanningState>(iterativePlanningFeature);
+
+// Project
 
 export const selectIterativePlanningProject = createSelector(selectIterativePlanningFeature,
     (state) => state.project?.data)
@@ -18,18 +21,23 @@ export const selectIterativePlanningTask = createSelector(selectIterativePlannin
 export const selectIterativePlanningIsDemo = createSelector(selectIterativePlanningFeature,
     (state) => state.project?.data?.itemType === 'demo-project')
 
+
+// Settings
+
 export const selectIterativePlanningProjectCreationInterfaceType = createSelector(selectIterativePlanningFeature,
     (state) => state.project?.data?.settings?.propertyCreationInterfaceType)
 
 export const selectIterativePlanningProjectExplanationInterfaceType = createSelector(selectIterativePlanningFeature,
   (state) => state.project?.data?.settings?.explanationInterfaceType)
 
+// Plan Properties
+
 export const selectIterativePlanningProperties = createSelector(selectIterativePlanningFeature,
     (state) => state.planProperties?.data)
 export const selectIterativePlanningPropertiesList = createSelector(selectIterativePlanningFeature,
     (state) => state.planProperties.state === LoadingState.Done ? Object.values(state.planProperties?.data) : null)
 
-
+// Iterative Planning Steps
 
 export const selectIterativePlanningIterationSteps = createSelector(selectIterativePlanningFeature,
     (state) => state.iterationSteps.data)
@@ -51,8 +59,15 @@ export const selectIterativePlanningSelectedStepId = createSelector(selectIterat
 export const selectIterativePlanningSelectedStep = createSelector(selectIterativePlanningFeature,
     (state) => state.iterationSteps.data?.filter(s => s._id == state.selectedIterationStepId)[0])
 
-export const selectIterativePlanningNumStep = createSelector(selectIterativePlanningFeature,
-    (state) => state.iterationSteps?.data.length)
+export const selectIterativePlanningNumberOfSteps = createSelector(selectIterativePlanningFeature,
+    (state) => state.iterationSteps?.data?.length)
+
+
+export const selectIterativePlanningIterationStepComputationRunning = createSelector(selectIterativePlanningFeature,
+  (state) => state.iterationSteps.data?.filter(s => s.status == StepStatus.unknown).length > 0)
+
+
+// Messages    
 
 const selectAllMessages = createSelector(selectIterativePlanningFeature, ({messages}) => messages);
 export const selectMessages = memoizeWith(
@@ -66,8 +81,13 @@ export const selectMessageTypes = memoizeWith(
   (stepId: string, propertyId?: string) => createSelector(selectMessages(stepId, propertyId), map(({questionType}) => questionType)),
 )
 
+// Questions
+
 export const selectStepAvailableQuestions = createSelector(selectIterativePlanningFeature, ({stepAvailableQuestionTypes}) => stepAvailableQuestionTypes);
 export const selectPropertyAvailableQuestions = createSelector(selectIterativePlanningFeature, ({propertyAvailableQuestionTypes}) => propertyAvailableQuestionTypes);
+
+
+// Explanations
 
 const selectAllExplanations = createSelector(selectIterativePlanningFeature, ({explanations}) => explanations);
 export const selectExplanation = memoizeWith(
@@ -97,6 +117,8 @@ export const selectIterationStepIdsWithoutExplanations = createSelector(selectIt
 
   return stepExplanationMissing;
 })
+
+// LLM
 
 export const selectLLMChatMessages = createSelector(selectIterativePlanningFeature, (state) => state.LLMContext.visibleMessages)
 export const selectLLMChatLoadingState = createSelector(selectIterativePlanningFeature, ({ LLMChatLoadingState }) => LLMChatLoadingState);

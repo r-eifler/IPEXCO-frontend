@@ -8,7 +8,7 @@ import { Store } from "@ngrx/store";
 import { EditableListModule } from "src/app/shared/components/editable-list/editable-list.module";
 
 import { AsyncPipe, JsonPipe, NgFor } from "@angular/common";
-import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { takeUntilDestroyed, toSignal } from "@angular/core/rxjs-interop";
 import { MatDialog, MatDialogModule, MatDialogRef } from "@angular/material/dialog";
 import { combineLatest, filter, map, startWith } from "rxjs";
 import { InfoModule } from "src/app/shared/components/info/info.module";
@@ -17,7 +17,7 @@ import { isNonEmptyValidator } from "src/app/validators/non-empty.validator";
 import { PlanPropertyPanelComponent } from "../../../shared/components/plan-property-panel/plan-property-panel.component";
 import { SelectPropertyComponent } from "../../components/select-property/select-property.component";
 import { cancelNewIterationStep, createIterationStep, updateNewIterationStep } from "../../state/iterative-planning.actions";
-import { selectIterativePlanningProperties } from "../../state/iterative-planning.selector";
+import { selectIterativePlanningIterationStepComputationRunning, selectIterativePlanningNumberOfSteps, selectIterativePlanningProperties } from "../../state/iterative-planning.selector";
 import { selectPlanPropertyIds, selectPreselectedEnforcedGoals$, selectPreselectedSoftGoals$ } from "./create-iteration.component.selector";
 
 @Component({
@@ -48,6 +48,10 @@ export class CreateIterationComponent {
   dialogRef: MatDialogRef<unknown> | undefined;
 
   propertySelector = viewChild.required<TemplateRef<ElementRef>>('propertySelector');
+
+  computationRunning$ = this.store.select(selectIterativePlanningIterationStepComputationRunning);
+
+  numberOfExistingSteps  = this.store.select(selectIterativePlanningNumberOfSteps);
 
   planProperties$ = this.store.select(selectIterativePlanningProperties);
   planPropertyIds$ = this.store.select(selectPlanPropertyIds);
@@ -108,6 +112,9 @@ export class CreateIterationComponent {
       this.form.controls.enforcedGoalIds.clear();
       this.addEnforcedGoalIds(enforcedGoals);
     });
+    this.numberOfExistingSteps.pipe(takeUntilDestroyed()).subscribe(numSteps => {
+      this.form.controls.general.controls.name.setValue('Step ' + (numSteps + 1));
+    })
   }
 
   addEnforcedGoalIds(ids: string[]): void {
