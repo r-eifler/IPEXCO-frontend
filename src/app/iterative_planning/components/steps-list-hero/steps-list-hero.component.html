@@ -18,7 +18,7 @@
         <div class="utility">
           <mat-icon>workspace_premium</mat-icon>
           <div class="utility-value-container">
-            <span class="value">{{ currentMaxUtility() + '/' + maxOverallUtility() }}</span>
+            <span class="value">{{ (currentMaxUtility() ? currentMaxUtility() : '-') + '/' + maxOverallUtility() }}</span>
             <span class="label">Utility</span>
           </div>
         </div>

@@ -29,7 +29,7 @@ export class StepsListHeroComponent {
   maxOverallUtility = computed(() => maxUtility(this.demo(), this.planPropertiesMap() ? Object.values(this.planPropertiesMap()) : null))
 
   currentMaxUtility = computed(() => {
-    if(!this.steps()){
+    if(!this.steps() || this.steps().length === 0){
       return 0;
     } 
     const stepUtilities = this.steps()?.map(s => s.status !== StepStatus.solvable ? 0 : computeUtility(s.plan, this.planPropertiesMap()));
