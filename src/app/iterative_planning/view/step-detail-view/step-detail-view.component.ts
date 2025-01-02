@@ -53,6 +53,7 @@ import { AskDeleteComponent } from "src/app/shared/components/ask-delete/ask-del
 import { MatExpansionModule } from "@angular/material/expansion";
 import { DemoDirective } from "../../derectives/isDemo.directive";
 import { ProjectDirective } from "../../derectives/isProject.directive";
+import { DemoInfoComponent } from "src/app/shared/components/demo/demo-info/demo-info.component";
 
 @Component({
     selector: "app-step-detail-view",
@@ -73,6 +74,7 @@ import { ProjectDirective } from "../../derectives/isProject.directive";
         MatExpansionModule,
         DemoDirective,
         ProjectDirective,
+        DemoInfoComponent,
     ],
     templateUrl: "./step-detail-view.component.html",
     styleUrl: "./step-detail-view.component.scss"

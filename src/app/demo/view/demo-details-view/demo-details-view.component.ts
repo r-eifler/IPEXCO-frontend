@@ -17,6 +17,7 @@ import { SettingsComponent } from 'src/app/project/components/settings/settings.
 import { selectDemo, selectDemoProperties, selectPlanPropertiesListOfDemo, selectPlanPropertiesOfDemo } from '../../state/demo.selector';
 import { GeneralSettings } from 'src/app/project/domain/general-settings';
 import { updateDemo } from '../../state/demo.actions';
+import { DemoInfoComponent } from 'src/app/shared/components/demo/demo-info/demo-info.component';
 
 @Component({
     selector: 'app-demo-details-view',
@@ -31,7 +32,8 @@ import { updateDemo } from '../../state/demo.actions';
         PlanPropertyPanelComponent,
         PlanPropertyBadgeComponent,
         SettingsComponent,
-        AsyncPipe
+        AsyncPipe,
+        DemoInfoComponent
     ],
     templateUrl: './demo-details-view.component.html',
     styleUrl: './demo-details-view.component.scss'
