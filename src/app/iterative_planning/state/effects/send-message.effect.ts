@@ -88,7 +88,7 @@ export class SendMessageToLLMEffect {
                         } else if (response.questionType === QuestionType.DIRECT_ET) {
                             return [
                                 sendMessageToLLMQTthenGTTranslatorsSuccess({ threadIdQt: response.threadIdQt, threadIdGt: response.threadIdGt }),
-                                directMessageET({ directResponse: response.directResponse })
+                                directMessageET({ directResponse: response.directResponse, iterationStepId })
                             ];
                         }
                     }
@@ -129,7 +129,7 @@ export class SendMessageToLLMEffect {
                             console.log('direct response ET');
                             return [
                                 sendMessageToLLMQuestionTranslatorSuccess({ threadId: response.threadId }),
-                                directMessageET({ directResponse: response.directResponse })
+                                directMessageET({ directResponse: response.directResponse, iterationStepId })
                             ];
                         }
                     }
@@ -165,11 +165,13 @@ export class SendMessageToLLMEffect {
 
     public sendDirectMessageToExplanationTranslator$ = createEffect(() => this.actions$.pipe(
         ofType(directMessageET),
-        concatLatestFrom(({ directResponse }) => [
+        concatLatestFrom(({ directResponse, iterationStepId }) => [
+            this.store.select(selectIterativePlanningProject),
+            this.store.select(selectIterationStepById(iterationStepId)),
             this.store.select(selectLLMThreadIdET)
         ]),
-        switchMap(([{ directResponse }, threadIdET]) => 
-            this.service.postDirectMessageET$(directResponse, threadIdET).pipe(
+        switchMap(([{ directResponse, iterationStepId }, project, iterationStep, threadIdET]) => 
+            this.service.postDirectMessageET$(directResponse, project, iterationStep, threadIdET).pipe(
                 map(response => sendMessageToLLMExplanationTranslatorSuccess({ 
                     response: response.response, 
                     threadId: response.threadId 

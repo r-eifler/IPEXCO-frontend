@@ -123,7 +123,7 @@ export const loadLLMContextSuccess = createAction('[llm] load LLM context succes
 export const loadLLMContextFailure = createAction('[llm] load LLM context failure');
 
 export const directResponseQT = createAction('[llm] direct response QT', props<{ directResponse: string }>());
-export const directMessageET = createAction('[llm] direct message ET', props<{ directResponse: string }>());
+export const directMessageET = createAction('[llm] direct message ET', props<{ directResponse: string, iterationStepId: string }>());
 
 export const showReverseTranslationGT = createAction('[iterative-planning] show reverse translation GT', props<{ reverseTranslation: string}>());
 export const showReverseTranslationQT = createAction('[iterative-planning] show reverse translation QT', props<{ reverseTranslation: string}>());

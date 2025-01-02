@@ -63,12 +63,13 @@ export class LLMService {
         return this.http.post<IHTTPData<{ response: { questionType: QuestionType, goal: string, question: Question, reverseTranslation: string }, threadId: string }>>(
             this.BASE_URL + 'qt', 
             { 
-                data: requestString, 
+                qtRequest: requestString, 
                 threadId: threadId, 
                 iterationStepId: iterationStep._id, 
                 projectId: project._id,
-                originalRequest: question 
+                originalQuestion: question 
             }
+
         ).pipe(
             map(({ data }) => data),
             tap(console.log)
@@ -97,8 +98,8 @@ export class LLMService {
         );
     }
 
-    postDirectMessageET$(directResponse: string, threadId: string): Observable<{ response: string, threadId: string }> {
-        return this.http.post<IHTTPData<{ response: string, threadId: string }>>(this.BASE_URL + 'et', { data: directResponse, threadId: threadId }).pipe(
+    postDirectMessageET$(directResponse: string, project: Project, iterationStep: IterationStep, threadId: string): Observable<{ response: string, threadId: string }> {
+        return this.http.post<IHTTPData<{ response: string, threadId: string }>>(this.BASE_URL + 'et', { data: directResponse, threadId: threadId, projectId: project._id, iterationStepId: iterationStep._id, originalRequest: directResponse }).pipe(
             map(({ data }) => data),
             tap(console.log)
         );
@@ -167,6 +168,7 @@ export class LLMService {
             { projectId, domain  }
         ).pipe(
             map(({ data }) => data),
+            tap(response => console.log('Successfully created LLM context:', response)),
             catchError(error => {
                 console.error('Error creating LLM context:', error);
                 throw error;
