@@ -1,6 +1,6 @@
 import {Component, inject, output} from '@angular/core';
 import {MatProgressBar} from '@angular/material/progress-bar';
-import {filter, interval, mapTo, Observable, skipWhile, switchMap, take, takeWhile} from 'rxjs';
+import {combineLatestAll, combineLatestWith, filter, interval, mapTo, Observable, skipWhile, startWith, switchMap, take, takeWhile, tap, withLatestFrom} from 'rxjs';
 import {selectExecutionUserStudyFinishedAllSteps, selectExecutionUserStudyStep} from '../../state/user-study-execution.selector';
 import {Store} from '@ngrx/store';
 import {combineLatest, map} from 'rxjs';
@@ -14,6 +14,7 @@ import { AskDeleteComponent } from 'src/app/shared/components/ask-delete/ask-del
 import { MatIconModule } from '@angular/material/icon';
 import { selectLoggedIn } from 'src/app/user/state/user.selector';
 import { UserStudyStepType } from 'src/app/user_study/domain/user-study';
+import { TimerStartsDialogComponent } from '../timer-starts-dialog/timer-starts-dialog.component';
 
 @Component({
     selector: 'app-user-study-execution-handler',
@@ -38,7 +39,10 @@ export class UserStudyExecutionHandlerComponent {
 
   isDemoStep$ = this.currentStep$.pipe(map(step => step?.type === 'demo'));
 
-  startTime$ = this.currentStep$.pipe(map(step => step?.time));
+  startTime$ = this.currentStep$.pipe(
+    filter(s => !!s),
+    map(step => step?.time),
+  );
 
   remainingTime$ = this.startTime$.pipe(
     switchMap(startTime => interval(1000).pipe(
@@ -48,7 +52,8 @@ export class UserStudyExecutionHandlerComponent {
   remainingSeconds$ = this.remainingTime$.pipe(map(sec => Math.max(0,sec)))
   remainingMinutes$ = this.remainingSeconds$.pipe(map(sec => Math.floor(sec/60)))
   remainingTimeFraction$ = combineLatest([this.remainingSeconds$, this.startTime$]).pipe(
-    map(([remaining, start]) => (remaining/start) * 100)
+    map(([remaining, start]) => (remaining/start) * 100),
+    startWith(1)
   )
 
   timeOut$ = this.remainingTime$.pipe(map((sec) => sec === 0));
@@ -59,6 +64,7 @@ export class UserStudyExecutionHandlerComponent {
   
 
   constructor(){
+
     this.timeOut$.pipe(
       takeUntilDestroyed(),
       filter((to) => to)
@@ -69,9 +75,22 @@ export class UserStudyExecutionHandlerComponent {
         }
     )
 
-    combineLatest([this.timeOut$,this.currentStep$]).pipe(
+    this.currentStep$.pipe(
       takeUntilDestroyed(),
-      filter(([to, _ ]) => to)
+      filter((step) => !!step),tap(console.log)
+    ).subscribe(
+      (step) => {
+        if(step.type === UserStudyStepType.demo){
+          const dialogRef = this.dialog.open(TimerStartsDialogComponent, {data: {timeout: Math.floor(step.time / 60)}})
+          // dialogRef.afterClosed().pipe(take(1)).subscribe(() => this.store.dispatch((executionNextUserStudyStep())))
+        }
+      }
+    );
+
+    this.timeOut$.pipe(
+      takeUntilDestroyed(),
+      withLatestFrom(this.currentStep$),
+      filter(([to, step ]) => to && !!step),tap(console.log)
     ).subscribe(
       ([_, step]) => {
         if(step.type === UserStudyStepType.demo){

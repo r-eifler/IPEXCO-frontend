@@ -156,6 +156,8 @@ export class PropertyCreationTemplateBasedComponent implements OnInit{
     newPlanProperty.naturalLanguageDescription = this.form.controls.naturalLanguageDescription.value;
     newPlanProperty.utility = this.form.controls.utility.value;
 
+    console.log(newPlanProperty);
+
     this.created.emit(newPlanProperty);
   }
 

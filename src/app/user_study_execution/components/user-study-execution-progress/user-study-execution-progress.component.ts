@@ -11,7 +11,7 @@ import { AsyncPipe } from '@angular/common';
     selector: 'app-user-study-execution-progress',
     imports: [
         MatProgressBarModule,
-        AsyncPipe
+        AsyncPipe,
     ],
     templateUrl: './user-study-execution-progress.component.html',
     styleUrl: './user-study-execution-progress.component.scss'

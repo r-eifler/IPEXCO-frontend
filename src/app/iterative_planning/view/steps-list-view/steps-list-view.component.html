@@ -7,6 +7,10 @@
   </app-breadcrumb>
   <app-page-title>Plan Iterations</app-page-title>
 
+  <app-page-hero *isDemo>
+    <app-steps-list-hero></app-steps-list-hero>
+  </app-page-hero>
+
   <app-page-content>
     <div class="page-grid">
       @for(step of steps$ | async; track step) {

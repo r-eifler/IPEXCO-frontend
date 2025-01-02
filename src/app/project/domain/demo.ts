@@ -40,7 +40,12 @@ export function maxUtility(demo: Demo, planProperties: PlanProperty[]): number {
     return undefined;
   }
   console.log(demo);
-  const utilityOfAllMSGS = demo.globalExplanation.MGCS.map(mgcs =>
+  let MGCS = demo.globalExplanation.MGCS 
+  if(!Array.isArray(MGCS)){
+    MGCS = JSON.parse(demo.globalExplanation.MGCS as unknown as string) 
+  }
+
+  const utilityOfAllMSGS = MGCS.map(mgcs =>
     planProperties.map(
       pp => !mgcs.includes(pp._id) ? pp.utility : 0).reduce((p,c) => p + c, 0)
     )

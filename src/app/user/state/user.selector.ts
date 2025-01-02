@@ -10,8 +10,7 @@ export const selectToken = createSelector(selectUserDataFeature, (state) => stat
 
 
 export const selectLoggedIn = createSelector(selectUserDataFeature, (state) =>
-  state.token.state == LoadingState.Done && state.token.data != undefined &&
-  state.user.state == LoadingState.Done && state.user.data != undefined)
+  state.token.state == LoadingState.Done && state.token.data != undefined)
 export const selectLoggedInAndUserLoaded = createSelector(selectUserDataFeature, (state) =>
     state.token.state == LoadingState.Done && state.token.data != undefined &&
     state.user.state == LoadingState.Done && state.user.data != undefined)

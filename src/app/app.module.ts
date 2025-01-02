@@ -56,7 +56,7 @@ import { IterativePlanningProjectService } from './iterative_planning/service/pr
 import { CreateProjectService } from './project-meta/service/create-project.service';
 import { ProjectMetaDataService } from './project-meta/service/project-meta-data.service';
 import { ProjectService } from './project/service/project.service';
-import { DemoService } from './project/service/demo.service';
+import { ProjectDemoService } from './project/service/demo.service';
 import { ProjectPlanPropertyService } from './project/service/plan-properties.service';
 
 
@@ -104,6 +104,14 @@ import { CreateUserStudyParticipantDistributionEffect } from './user_study/state
 import { NextUserStudyService } from './user_study_execution/service/user-study-selection.service';
 import { RedirectToNextUserStudyEffect } from './user_study_execution/state/effects/select-user-study.effect';
 import { EditUserStudyParticipantDistributionEffect } from './user_study/state/effects/edit-user-study-participant-distribution.effect ';
+import { LoadDemoEffect } from './demo/state/effects/load-demo.effect';
+import { demoFeature, DemoReducer } from './demo/state/demo.reducer';
+import { DemoService } from './demo/services/demo.service';
+import { LoadDemosEffect } from './demo/state/effects/load-demos.effect';
+import { LoadDemoPlanPropertiesEffect } from './demo/state/effects/load-demo-plan-properties.effect';
+import { DemoPlanPropertyService } from './demo/services/plan-properties.service';
+import { DemosUpdateDemoEffect } from './demo/state/effects/update-demo.effect';
+import { UploadDemoEffect } from './demo/state/effects/upload-demo.effect';
 
 
 
@@ -114,6 +122,7 @@ import { EditUserStudyParticipantDistributionEffect } from './user_study/state/e
   imports: [
     StoreModule.forRoot({
         [UserDataFeature]: UserDataReducer,
+        [demoFeature]: DemoReducer,
         [projectFeature]: projectReducer,
         [projectMetaDataFeature]: projectMetaDataReducer,
         [iterativePlanningFeature]: iterativePlanningReducer,
@@ -200,7 +209,12 @@ import { EditUserStudyParticipantDistributionEffect } from './user_study/state/e
       LoadUserStudyDistributionEffect,
       CreateUserStudyParticipantDistributionEffect,
       RedirectToNextUserStudyEffect,
-      EditUserStudyParticipantDistributionEffect
+      EditUserStudyParticipantDistributionEffect,
+      LoadDemoEffect,
+      LoadDemosEffect,
+      LoadDemoPlanPropertiesEffect,
+      DemosUpdateDemoEffect,
+      UploadDemoEffect
     ]),
     // Instrumentation must be imported after importing StoreModule (config is optional)
     StoreDevtoolsModule.instrument({
@@ -228,7 +242,7 @@ import { EditUserStudyParticipantDistributionEffect } from './user_study/state/e
     },
     AuthenticationInterceptor,
     PlannerService,
-    DemoService,
+    ProjectDemoService,
     ProjectService,
     ProjectMetaDataService,
     CreateProjectService,
@@ -247,6 +261,8 @@ import { EditUserStudyParticipantDistributionEffect } from './user_study/state/e
     UserStudyExecutionEvalService,
     UserStudyParticipantDistributionService,
     NextUserStudyService,
+    DemoService,
+    DemoPlanPropertyService,
     {
       provide: MAT_BOTTOM_SHEET_DEFAULT_OPTIONS,
       useValue: { hasBackdrop: true },

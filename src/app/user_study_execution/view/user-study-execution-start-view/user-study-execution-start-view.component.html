@@ -34,6 +34,16 @@
     </app-page-section>
     }
     @if(userStudy){
+      <app-page-section>
+        <app-page-section-content>
+          <app-info>
+            <mat-icon>schedule</mat-icon>
+            The user study takes about 30 minutes to complete. It is not possible to take a break. Therefore, please make sure that you have enough time and are undisturbed to concentrate on the study.
+          </app-info>
+        </app-page-section-content>
+      </app-page-section>
+      }
+    @if(userStudy){
     <app-page-section>
       <app-page-section-content>
         <a mat-flat-button [routerLink]="['..', 'agreement']">Let's start!</a>

@@ -1,8 +1,9 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, computed, EventEmitter, input, Input, Output } from '@angular/core';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatIcon } from '@angular/material/icon';
 import { PDDLObject } from 'src/app/shared/domain/planning-task';
+import { boolean } from 'zod';
 
 @Component({
     selector: 'app-property-template-part',
@@ -16,19 +17,14 @@ import { PDDLObject } from 'src/app/shared/domain/planning-task';
 })
 export class PropertyTemplatePartComponent {
 
-  @Input({required: true}) values: PDDLObject[];
-  @Input({required: true}) isSelected: boolean;
-  @Input({required: true}) selectedValue: string | undefined;
+  values = input.required<PDDLObject[]>();
+  isSelected = input.required<boolean>();
+  selectedValue = input.required<string>();
 
   @Output() value = new EventEmitter<PDDLObject>();
-
   @Output() reset = new EventEmitter<void>();
 
-
-  displayOrder(values: PDDLObject[]): PDDLObject[]{
-    return values.sort((a, b) => a.name.localeCompare(b.name));
-  }
-
+  displayValues = computed(() => this.values()?.sort((a, b) => a.name.localeCompare(b.name)))
 
   selectValue(v: PDDLObject) {
     this.value.emit(v);

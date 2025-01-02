@@ -12,6 +12,8 @@ import { IterationStepCardComponent } from '../../components/iteration-step-card
 import { initNewIterationStep } from '../../state/iterative-planning.actions';
 import { selectIterativePlanningIterationSteps, selectIterativePlanningIterationStepsLoadingState, selectIterativePlanningProject, selectIterativePlanningProperties } from '../../state/iterative-planning.selector';
 import { ProjectDirective } from '../../derectives/isProject.directive';
+import { DemoDirective } from '../../derectives/isDemo.directive';
+import { StepsListHeroComponent } from '../../components/steps-list-hero/steps-list-hero.component';
 
 @Component({
     selector: 'app-steps-list-view',
@@ -23,7 +25,9 @@ import { ProjectDirective } from '../../derectives/isProject.directive';
         MatIconModule,
         RouterLink,
         BreadcrumbModule,
-        ProjectDirective
+        ProjectDirective,
+        DemoDirective,
+        StepsListHeroComponent
     ],
     templateUrl: './steps-list-view.component.html',
     styleUrl: './steps-list-view.component.scss'

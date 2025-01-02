@@ -1,23 +1,45 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from "@angular/core/testing"
+import { ChatMessageComponent } from "./chat-message.component"
+import { Component } from "@angular/core";
 
-import { ChatMessageComponent } from './chat-message.component';
+@Component({
+    template: `
+        <app-chat-message [role]="role">PROJECT_ME</app-chat-message>
+    `,
+    imports: [ChatMessageComponent],
+})
+class TestHostComponent {
+    role = undefined;
+}
 
-describe('ChatMessageComponent', () => {
-  let component: ChatMessageComponent;
-  let fixture: ComponentFixture<ChatMessageComponent>;
+describe('ChatMessage', () => {
+    let fixture: ComponentFixture<TestHostComponent>;
+    let testHost: TestHostComponent;
+    let element: HTMLElement;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [ChatMessageComponent]
-    })
-    .compileComponents();
+    beforeEach(async () => {
+        await TestBed.configureTestingModule({
+            imports: [TestHostComponent],
+        }).compileComponents();
 
-    fixture = TestBed.createComponent(ChatMessageComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+        fixture = TestBed.createComponent(TestHostComponent);
+        testHost = fixture.componentInstance;
+        element = fixture.nativeElement;
+    });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-});
+    it('should create', () => {
+        expect(testHost).toBeTruthy();
+    });
+
+    it('should set the class according to the specified role',() => {
+        const chatContainer = element.querySelector('div');
+        testHost.role = 'mock-role';
+        fixture.detectChanges();
+
+        expect(chatContainer).toHaveClass('mock-role');
+    });
+
+    it('should project its content', () => {
+        expect(element.innerText).toEqual('PROJECT_ME');
+    });
+})

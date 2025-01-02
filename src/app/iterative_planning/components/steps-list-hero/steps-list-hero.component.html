@@ -1,0 +1,28 @@
+<mat-card appearance="outlined">
+    <mat-card-content>
+      <div class="content">
+        <div class="stats">
+            <mat-icon>check</mat-icon>
+            <span class="property-label">Solvable:</span>
+            <span class="property-value">{{ numSolvedSteps() }}</span>
+    
+            <mat-icon>report</mat-icon>
+            <span class="property-label">Unsolvable:</span>
+            <span class="property-value">{{ umUnSolvedSteps() }}</span>
+        </div>
+
+        <div class="plan-link-container">
+            
+          </div>
+  
+        <div class="utility">
+          <mat-icon>workspace_premium</mat-icon>
+          <div class="utility-value-container">
+            <span class="value">{{ currentMaxUtility() + '/' + maxOverallUtility() }}</span>
+            <span class="label">Utility</span>
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+</mat-card>
+  

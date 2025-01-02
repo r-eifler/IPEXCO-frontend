@@ -2,7 +2,7 @@ import { inject, Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { environment } from "src/environments/environment";
-import { map } from "rxjs/operators";
+import { map, tap } from "rxjs/operators";
 import { IHTTPData } from "src/app/shared/domain/http-data.interface";
 import { PlanProperty } from "../../shared/domain/plan-property/plan-property";
 

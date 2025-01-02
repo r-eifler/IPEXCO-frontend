@@ -23,6 +23,7 @@ export class ToHomeGuard  {
 
     return this.store.select(selectLoggedIn).pipe(take(1)).pipe(
       map(isLoggedIn => {
+        console.log("To Home guard: logged in: " + isLoggedIn);
         if(!isLoggedIn){
           return true;
         }

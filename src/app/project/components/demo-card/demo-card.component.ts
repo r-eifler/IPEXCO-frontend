@@ -6,15 +6,13 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
-import { DefaultPipe } from 'src/app/shared/common/pipe/default.pipe';
+
 import { LabelModule } from 'src/app/shared/components/label/label.module';
 import { PlanProperty } from '../../../shared/domain/plan-property/plan-property';
 import { Demo } from 'src/app/project/domain/demo';
-import { StepStatusNamePipe } from 'src/app/iterative_planning/domain/pipe/step-status-name.pipe';
-import { StepStatusColorPipe } from 'src/app/iterative_planning/domain/pipe/step-status-color.pipe';
-import { StepValuePipe } from 'src/app/iterative_planning/domain/pipe/step-value.pipe';
-import { DemoStatusColorPipe } from '../../pipe/demo-status-color.pipe';
-import { DemoStatusNamePipe } from '../../pipe/demo-status-name.pipe';
+import { DemoStatusNamePipe } from 'src/app/project/pipe/demo-status-name.pipe';
+import { DemoStatusColorPipe } from 'src/app/project/pipe/demo-status-color.pipe';
+
 
 @Component({
     selector: 'app-demo-card',

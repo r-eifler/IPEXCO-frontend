@@ -24,6 +24,7 @@ export class AuthGuard  {
     return combineLatest([this.store.select(selectLoggedIn), this.store.select(selectIsUserStudy)]).pipe(
       take(1),
       map(([isLoggedIn, isUserStudy]) => {
+        console.log("Auth guard: logged in: " + isLoggedIn + " userStudy: " + isUserStudy);
         if(isLoggedIn && ! isUserStudy){
           return true;
         }

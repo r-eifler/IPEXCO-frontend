@@ -6,7 +6,14 @@
     <a app-breadcrumb-item [routerLink]="['/user-study', userStudy?._id, 'details']">{{ userStudy?.name }}</a>
     <app-breadcrumb-item>Evaluation</app-breadcrumb-item>
   </app-breadcrumb>
-  <app-page-title>Evaluate User Study</app-page-title>
+  <app-page-title>
+    Evaluate User Study
+    <app-page-title-action>
+        <a mat-icon-button matTooltip="Download results." [href]="downloadData$ | async" download="export.json">
+        <mat-icon>download</mat-icon>
+        </a>
+    </app-page-title-action>
+  </app-page-title>
 
   <app-page-content>
     <app-page-section-list>

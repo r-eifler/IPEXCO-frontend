@@ -21,7 +21,6 @@ import {PageContentComponent} from '../../../shared/components/page/page-content
 import {PageTitleComponent} from '../../../shared/components/page/page-title/page-title.component';
 import {BreadcrumbComponent} from '../../../shared/components/breadcrumb/breadcrumb/breadcrumb.component';
 import {BreadcrumbItemComponent} from '../../../shared/components/breadcrumb/breadcrumb-item/breadcrumb-item.component';
-import {DemoCardComponent} from '../../../project/components/demo-card/demo-card.component';
 import {UserStudyCardComponent} from '../../components/user-study-card/user-study-card.component';
 import { PageSectionTitleComponent } from "../../../shared/components/page/page-section-title/page-section-title.component";
 import { PageModule } from 'src/app/shared/components/page/page.module';

@@ -170,7 +170,7 @@ function filterHowPlan(iterationStep: IterationStep, computed: string[][]): stri
 
 function whyAnswerComputer(step: IterationStep, question: Question, computed: string[][]): string[][] {
   console.log("Computed: " + computed);
-  return computed
+  return subsetMinimal(computed
     .filter( MUGS => MUGS.every(id =>
                     ((step.plan !== undefined) &&
                     (step.plan.satisfied_properties !== undefined) &&
@@ -178,12 +178,25 @@ function whyAnswerComputer(step: IterationStep, question: Question, computed: st
                     question.propertyId === id
                 )
         )
-    .map(MUGS => MUGS.filter(id =>  !(question.propertyId === id)));
+    .map(MUGS => MUGS.filter(id =>  !(question.propertyId === id))));
 }
 
 
 function howAnswerComputer(step: IterationStep, question: Question, computed: string[][]): string[][] {
-    return computed
+    return subsetMinimal(computed
       .filter( MCGS => MCGS.every(id => !(question.propertyId === id)))
-      .map(MUGS => MUGS.filter(id =>  step.plan?.satisfied_properties.includes(id)))
+      .map(MCGS => MCGS.filter(id =>  step.plan?.satisfied_properties.includes(id))))
+}
+
+
+export function subsetMinimal(original: string[][]): string[][]{
+  let result: string[][] = [];
+  for(let list of original){
+    if(result.some(rl => rl.every(re => list.includes(re)))){
+      continue;
+    }
+    result = result.filter(rl => !rl.every(re => list.includes(re)));
+    result.push(list);
+  }
+  return result;
 }

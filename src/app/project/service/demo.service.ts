@@ -8,7 +8,7 @@ import { Demo } from "src/app/project/domain/demo";
 import { PlanProperty } from "src/app/shared/domain/plan-property/plan-property";
 
 @Injectable()
-export class DemoService{
+export class ProjectDemoService{
 
     private http = inject(HttpClient)
     private BASE_URL = environment.apiURL + "demo/";
@@ -39,7 +39,7 @@ export class DemoService{
         let httpParams = new HttpParams();
         httpParams = httpParams.set('projectId', projectId);
 
-        return this.http.get<IHTTPData<Demo[]>>(this.BASE_URL + 'demos/', { params: httpParams }).pipe(
+        return this.http.get<IHTTPData<Demo[]>>(this.BASE_URL, { params: httpParams }).pipe(
             map(({data}) => data),
             tap(console.log),
             map(demos => (
