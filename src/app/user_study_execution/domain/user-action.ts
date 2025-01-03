@@ -112,6 +112,7 @@ export interface PlanForIterationStepUserAction extends UserAction {
 export interface CancelPlanForIterationStepUserAction extends UserAction {
     type: ActionType.PLAN_FOR_ITERATION_STEP
     data: {
+        demoId: string,
         stepId: string,
     }
 }
@@ -119,6 +120,7 @@ export interface CancelPlanForIterationStepUserAction extends UserAction {
 export interface InspectIterationStepUserAction extends UserAction {
     type: ActionType.INSPECT_ITERATION_STEP
     data: {
+        demoId: string,
         stepId: string,
     }
 }
