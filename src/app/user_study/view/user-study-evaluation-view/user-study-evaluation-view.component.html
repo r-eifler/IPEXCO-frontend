@@ -19,10 +19,25 @@
     <app-page-section-list>
         <app-page-section>
             <app-page-section-title>
+                Demo
+            </app-page-section-title>
+            <app-page-section-content>
+                    <mat-form-field appearance="outline" class="full-width">
+                      <mat-label>Demo</mat-label>
+                      <mat-select required (selectionChange)="onSelectDemo($event)">
+                        @for (demo of demos$ | async; track demo._id) {
+                          <mat-option [value]="demo._id">{{demo.name}}</mat-option>
+                        }
+                      </mat-select>
+                    </mat-form-field>
+            </app-page-section-content>
+        </app-page-section>
+        <app-page-section>
+            <app-page-section-title>
                 Dashboard
             </app-page-section-title>
             <app-page-section-content>
-                <app-user-study-dashboard style="width: 100%;"></app-user-study-dashboard>
+                <app-user-study-dashboard style="width: 100%;" [demoId]="selectedDemo()"></app-user-study-dashboard>
             </app-page-section-content>
         </app-page-section>
         <app-page-section>
@@ -38,7 +53,7 @@
                 Evaluation
             </app-page-section-title>
             <app-page-section-content>
-                <app-overview-data [selectedParticipantsId]="selectedParticipants()"></app-overview-data>
+                <app-overview-data [selectedParticipantsId]="selectedParticipants()" [demoId]="selectedDemo()"></app-overview-data>
             </app-page-section-content>
         </app-page-section>
     </app-page-section-list>    
