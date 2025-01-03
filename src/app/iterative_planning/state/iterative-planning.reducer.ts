@@ -259,7 +259,16 @@ export const iterativePlanningReducer = createReducer(
 
 //   // LLM STUFF TO BE UPDATED
 
-
+//   on(sendMessageToLLM, (state, { request }): IterativePlanningState => ({
+//     ...state,
+//     LLMChatLoadingState: LoadingState.Loading,
+//     LLMMessages: [...state.LLMMessages, { role: 'sender', content: request }]
+// })),
+// on(sendMessageToLLMSuccess, (state, { response }): IterativePlanningState => ({
+//     ...state,
+//     LLMChatLoadingState: LoadingState.Done,
+//     LLMMessages: [...state.LLMMessages, { role: 'receiver', content: response }]
+// })),
   on(eraseLLMHistory, (state): IterativePlanningState => ({
     ...state,
     LLMChatLoadingState: LoadingState.Initial,
@@ -272,7 +281,15 @@ export const iterativePlanningReducer = createReducer(
       threadIdET: ''
     }
 })),
-
+// on(sendMessageToLLMQuestionTranslator, (state, action): IterativePlanningState => ({
+//     ...state,
+//     LLMChatLoadingState: LoadingState.Loading,
+// })),
+// on(sendMessageToLLMQuestionTranslatorSuccess, (state, action): IterativePlanningState => ({
+//     ...state,
+//     LLMChatLoadingState: LoadingState.Done,
+//     LLMThreadIdQT: action.threadId
+// })),
 on(sendMessageToLLMGoalTranslator, (state, action): IterativePlanningState => ({
     ...state,
     LLMChatLoadingState: LoadingState.Loading,
@@ -309,11 +326,7 @@ on(sendMessageToLLMExplanationTranslatorSuccess, (state, action): IterativePlann
 on(sendMessageToLLMExplanationTranslatorFailure, (state): IterativePlanningState => ({
     ...state,
     LLMChatLoadingState: LoadingState.Done,
-    ExplanationLoadingState: LoadingState.Done,
-    LLMContext: {
-      ...state.LLMContext,
-      visibleMessages: [...state.LLMContext.visibleMessages, {role: 'sender', content: "Something went wrong. Please try again.", iterationStepId: state.selectedIterationStepId}]
-    }
+    ExplanationLoadingState: LoadingState.Done
 })),
 // on(sendMessageToLLMQTthenGTTranslators, (state, action): IterativePlanningState => ({
 //     ...state,
@@ -356,13 +369,9 @@ on(sendMessageToLLMQuestionTranslatorSuccess, (state, action): IterativePlanning
     }
 })),
 on(sendMessageToLLMQuestionTranslatorFailure, (state): IterativePlanningState => ({
-  ...state,
+    ...state,
     LLMChatLoadingState: LoadingState.Done,
-    ExplanationLoadingState: LoadingState.Done,
-    LLMContext: {
-      ...state.LLMContext,
-      visibleMessages: [...state.LLMContext.visibleMessages, {role: 'sender', content: "Something went wrong. Please try again.", iterationStepId: state.selectedIterationStepId}]
-    }
+    ExplanationLoadingState: LoadingState.Done
 })),
 on(loadLLMContextSuccess, (state,action): IterativePlanningState=> ({
   ...state,
