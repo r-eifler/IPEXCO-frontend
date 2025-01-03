@@ -89,8 +89,6 @@ export class QuestionQueueEffect {
           this.store.select(selectIterativePlanningProperties),
           this.store.select(selectIterationStepById(iterationStepId))
         ]),
-        filter(([data, threadIdET, project, properties, iterationStep]) => 
-          !!threadIdET && !!project && !!properties && !!iterationStep),
         switchMap(([data, threadIdET, project, properties, iterationStep]) => {
           return this.LLMService.postMessageET$(
             naturalLanguageQuestion, 
