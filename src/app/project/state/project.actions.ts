@@ -54,6 +54,10 @@ export const registerDemoCreation = createAction('[project] register demo creati
 export const registerDemoCreationSuccess = createAction('[project] register demo creation success', props<{id: string}>());
 export const registerDemoCreationFailure = createAction('[project] register demo creation failure');
 
+export const cancelDemoCreation = createAction('[project] cancel demo creation', props<{demoId: string}>());
+export const cancelDemoCreationSuccess = createAction('[project] cancel demo creation success');
+export const cancelDemoCreationFailure = createAction('[project] cancel demo creation failure');
+
 export const demoCreationRunning = createAction('[project] demo creation running', props<{id: string}>());
 export const demoCreationRunningSuccess = createAction('[project] demo creation running');
 export const demoCreationRunningFailure = createAction('[project] demo creation running');

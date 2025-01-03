@@ -66,6 +66,12 @@ export class ProjectDemoService{
         )
     }
 
+    postCancelDemo$(demoId: string): Observable<string | null> {
+      return this.http.post<IHTTPData<string | null>>(this.BASE_URL + 'cancel', {demoId}).pipe(
+          map(({data}) => data)
+      )
+  }
+
     postDemoImage$(image: any): Observable<string | null> {
       console.log('Upload Image: ' + ImageBitmap.name);
       const formData = new FormData();

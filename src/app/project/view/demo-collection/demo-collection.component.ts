@@ -18,6 +18,7 @@ import { BreadcrumbModule } from "src/app/shared/components/breadcrumb/breadcrum
 import { ActionCardModule } from "src/app/shared/components/action-card/action-card.module";
 import { DemoCreatorComponent } from "src/app/project/view/demo-creator/demo-creator.component";
 import { DemoCardComponent } from "src/app/project/components/demo-card/demo-card.component";
+import { DemoCardRunningComponent } from "../../components/demo-card-running/demo-card-running.component";
 
 @Component({
     selector: "app-demo-selection",
@@ -33,7 +34,8 @@ import { DemoCardComponent } from "src/app/project/components/demo-card/demo-car
         MatProgressBarModule,
         MatProgressSpinnerModule,
         AsyncPipe,
-        DemoCardComponent
+        DemoCardComponent,
+        DemoCardRunningComponent
     ],
     templateUrl: "./demo-collection.component.html",
     styleUrls: ["./demo-collection.component.scss"]

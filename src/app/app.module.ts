@@ -112,6 +112,7 @@ import { LoadDemoPlanPropertiesEffect } from './demo/state/effects/load-demo-pla
 import { DemoPlanPropertyService } from './demo/services/plan-properties.service';
 import { DemosUpdateDemoEffect } from './demo/state/effects/update-demo.effect';
 import { UploadDemoEffect } from './demo/state/effects/upload-demo.effect';
+import { CancelCreateDemoEffect } from './project/state/effects/cancel-create-demo.effect';
 
 
 
@@ -175,6 +176,7 @@ import { UploadDemoEffect } from './demo/state/effects/upload-demo.effect';
       CreateProjectEffect,
       DeleteProjectEffect,
       CreateDemoEffect,
+      CancelCreateDemoEffect,
       LoadProjectDemosEffect,
       LoadProjectDemoEffect,
       UpdateDemoEffect,
