@@ -48,41 +48,41 @@ export class LLMService {
     postMessageQT$(question: string, iterationStep: IterationStep, project: Project, properties: PlanProperty[], threadId: string): Observable<
         | { directResponse: string, questionType: QuestionType, threadId: string }
         | { response: { questionType: QuestionType, goal: string, question: Question, reverseTranslation: string }, threadId: string }
-    > {
-        const questionTranslationRequest: QuestionTranslationRequest = {
-            question: question,
-            enforcedGoals: properties.filter(p => iterationStep.hardGoals.includes(p._id)),
-            satisfiedGoals: properties.filter(p => iterationStep.plan.satisfied_properties.includes(p._id)),
-            unsatisfiedGoals: properties.filter(p => !iterationStep.plan.satisfied_properties.includes(p._id)),
-            existingPlanProperties: Object.values(properties),
-            solvable: iterationStep.plan.status == PlanRunStatus.not_solvable ? "false" : "true"
-        };
+    > {        
+            const questionTranslationRequest: QuestionTranslationRequest = {
+                question: question,
+                enforcedGoals: properties?.filter(p => p && iterationStep.hardGoals?.includes(p._id)) ?? [],
+                satisfiedGoals: properties?.filter(p => p && iterationStep.plan?.satisfied_properties?.includes(p._id)) ?? [],
+                unsatisfiedGoals: properties?.filter(p => p && !iterationStep.plan?.satisfied_properties?.includes(p._id)) ?? [],
+                existingPlanProperties: Object.values(properties ?? []),
+                solvable: iterationStep.plan?.status == PlanRunStatus.not_solvable ? "false" : "true"
+            };
 
-        const requestString = questionTranslationRequestToString(questionTranslationRequest);
+            const requestString = questionTranslationRequestToString(questionTranslationRequest);
+            
+            return this.http.post<IHTTPData<{ response: { questionType: QuestionType, goal: string, question: Question, reverseTranslation: string }, threadId: string }>>(
+                this.BASE_URL + 'qt', 
+                { 
+                    qtRequest: requestString, 
+                    threadId: threadId, 
+                    iterationStepId: iterationStep._id, 
+                    projectId: project._id,
+                    originalQuestion: question 
+                }
+            ).pipe(
+                map(({ data }) => data),
+                tap(console.log)
+            );
         
-        return this.http.post<IHTTPData<{ response: { questionType: QuestionType, goal: string, question: Question, reverseTranslation: string }, threadId: string }>>(
-            this.BASE_URL + 'qt', 
-            { 
-                qtRequest: requestString, 
-                threadId: threadId, 
-                iterationStepId: iterationStep._id, 
-                projectId: project._id,
-                originalQuestion: question 
-            }
-
-        ).pipe(
-            map(({ data }) => data),
-            tap(console.log)
-        );
     }
 
-    postMessageET$(question: string, explanation: string[][], question_type: QuestionType, questionArgument: PlanProperty[], iterationStep: IterationStep, project: Project, properties: PlanProperty[], threadId: string): Observable<{ response: string, threadId: string }> {
+    postMessageET$(question: string, explanationMUGS: string[][], explanationMGCS: string[][], question_type: QuestionType, questionArgument: PlanProperty[], iterationStep: IterationStep, project: Project, properties: PlanProperty[], threadId: string): Observable<{ response: string, threadId: string }> {
         console.log(question, question_type, questionArgument, iterationStep, project, properties, threadId);
         const request: ExplanationTranslationRequest = {
             question: question,
-            question_type: question_type,
-            MUGS: (question_type != QuestionType.HOW_PLAN && question_type != QuestionType.HOW_PROPERTY) ? explanation.map(e => e.map(pid => properties.find(p => p._id == pid))) : [], // if question_type is not HOW or HOW_PROPERTY
-            MGCS: (question_type == QuestionType.HOW_PLAN || question_type == QuestionType.HOW_PROPERTY) ? explanation.map(e => e.map(pid => properties.find(p => p._id == pid))) : [], // if question_type is HOW or HOW_PROPERTY
+            question_type: question_type ,
+            MUGS: explanationMUGS.map(e => e.map(pid => properties.find(p => p._id == pid))),
+            MGCS: explanationMGCS.map(e => e.map(pid => properties.find(p => p._id == pid))),
             questionArgument: questionArgument,
             predicates: project.baseTask.model.predicates,
             objects: project.baseTask.model.objects,
