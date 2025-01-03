@@ -10,7 +10,12 @@ import { SelectTestPersonsComponent } from '../../eval/select-test-persons/selec
 import { OverviewDataComponent } from '../../eval/overview-data/overview-data.component';
 import { UserStudyDashboardComponent } from "../../components/user-study-dashboard/user-study-dashboard.component";
 import { MatButtonModule } from '@angular/material/button';
-import { map } from 'rxjs';
+import { combineLatest, filter, map } from 'rxjs';
+import { UserStudyStepType } from '../../domain/user-study';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectChange, MatSelectModule } from '@angular/material/select';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { loadUserStudyDemos } from '../../state/user-study.actions';
 
 
 @Component({
@@ -25,6 +30,9 @@ import { map } from 'rxjs';
         OverviewDataComponent,
         UserStudyDashboardComponent,
         MatButtonModule,
+        AsyncPipe,
+        MatFormFieldModule,
+        MatSelectModule,
         AsyncPipe
     ],
     templateUrl: './user-study-evaluation-view.component.html',
@@ -37,9 +45,26 @@ export class UserStudyEvaluationViewComponent {
   userStudy$ = this.store.select(selectUserStudy);
   participants$ = this.store.select(selectUserStudyParticipantsOfStudy);
 
-  selectedParticipants: WritableSignal<string[]> = signal([])
+  demoIds$ = this.userStudy$.pipe(
+    map(us => us?.steps?.filter(s => s.type == UserStudyStepType.demo).map(s => s.content))
+  );
+  demos$ = combineLatest([this.store.select(selectUserStudyDemos), this.demoIds$]).pipe(
+    map(([demos, demoIds]) => demos?.filter(d => demoIds.includes(d._id)))
+  )
+
+  selectedParticipants: WritableSignal<string[]> = signal([]);
+  selectedDemo: WritableSignal<string> = signal(null);
 
   downloadData$ = this.participants$.pipe(map(participants => window.URL.createObjectURL(new Blob([JSON.stringify(participants)], { type: "text/json" }))))
+
+  constructor() {
+    this.store.dispatch(loadUserStudyDemos());
+  }
+
+  onSelectDemo(change: MatSelectChange){
+    console.log("eval demo: " + change.value);
+    this.selectedDemo.set(change.value);
+  }
 
   updateSelectedParticipants(selected: string[]){
     this.selectedParticipants.set(selected);

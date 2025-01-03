@@ -29,6 +29,8 @@ export class OverviewDataComponent {
   private store = inject(Store);
 
   selectedParticipantsId = input<string[]>([]);
+  demoId = input.required<string>();
+
   participants = toSignal(this.store.select(selectUserStudyParticipantsOfStudy));
 
 
@@ -51,12 +53,12 @@ export class OverviewDataComponent {
 
   selectedParticipants = computed(() => this.participants()?.filter(p => this.selectedParticipantsId().includes(p.user)))
 
-  showPlots = computed(() => this.selectedParticipants()?.length > 0)
+  showPlots = computed(() => this.selectedParticipants()?.length > 0 && this.demoId())
 
   iterationStepsData = computed(() => 
     this.selectedParticipants()?.map(p => ({
       name: p.user, 
-      value: p.timeLog.filter(a => a.type == ActionType.CREATE_ITERATION_STEP).length
+      value: p.timeLog.filter(a => a.type == ActionType.CREATE_ITERATION_STEP && a.data.demoId == this.demoId()).length
     }))
   )
 
@@ -64,14 +66,14 @@ export class OverviewDataComponent {
   questionsData = computed(() => 
     this.selectedParticipants()?.map(p => ({
       name: p.user, 
-      value: p.timeLog.filter(a => a.type == ActionType.ASK_QUESTION).length
+      value: p.timeLog.filter(a => a.type == ActionType.ASK_QUESTION && a.data.demoId == this.demoId()).length
     }))
   )
 
   utilityData = computed(() => 
     this.selectedParticipants()?.map(p => ({
       name: p.user, 
-      value: p.timeLog.filter(a => a.type == ActionType.PLAN_FOR_ITERATION_STEP).
+      value: p.timeLog.filter(a => a.type == ActionType.PLAN_FOR_ITERATION_STEP && a.data.demoId == this.demoId()).
       map((a: PlanForIterationStepUserAction) => a.data.utility).reduce((p,c) => Math.max(p,c), 0)
     }))
   )
@@ -87,7 +89,7 @@ export class OverviewDataComponent {
     let maxAverageUtility = [{name: 'Utility', series: []}]
 
     const utilitiesOverTime = this.selectedParticipants()?.map(p => (
-      p.timeLog.filter(a => a.type == ActionType.PLAN_FOR_ITERATION_STEP).
+      p.timeLog.filter(a => a.type == ActionType.PLAN_FOR_ITERATION_STEP && a.data.demoId == this.demoId()).
       map((a: PlanForIterationStepUserAction) => ({
         time: ((new Date(a.timeStamp)).getTime() - ( new Date(p.timeLog.filter(a => a.type == ActionType.START_DEMO)[0].timeStamp)).getTime()) / 1000, 
         utility: a.data.utility}
@@ -108,7 +110,7 @@ export class OverviewDataComponent {
       let data = {};
       Object.keys(QuestionType).forEach(k => data[k] = {name: k, value: 0})
       this.selectedParticipants()?.forEach(p => (
-        p.timeLog.filter(a => a.type == ActionType.ASK_QUESTION).forEach(
+        p.timeLog.filter(a => a.type == ActionType.ASK_QUESTION && a.data.demoId == this.demoId()).forEach(
           (q: AskQuestionUserAction) => data[q.data.questionType].value += 1
         )
       ))

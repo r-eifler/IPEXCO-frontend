@@ -43,9 +43,8 @@ export const selectIterativePlanningPropertiesList = createSelector(selectIterat
 export const selectIterativePlanningIterationSteps = createSelector(selectIterativePlanningFeature,
     (state) => state.iterationSteps.data)
 export const selectIterationStepIds = createSelector(selectIterativePlanningIterationSteps, map(({ _id }) => _id));
-export const selectIterationStepById = (id: string) => createSelector(selectIterativePlanningIterationSteps, (iteration_steps) => iteration_steps?.filter(s => s._id == id)[0]);
 
-export const selectIterationStep = memoizeWith(
+export const selectIterationStepById = memoizeWith(
   (stepId: string) => stepId,
   (stepId: string) => createSelector(selectIterativePlanningIterationSteps, find(({_id}) => _id === stepId)
 ));
