@@ -83,7 +83,7 @@ export class PropertyCreationTemplateBasedComponent implements OnInit{
       this.selectedVariableValue,
     )
 
-    console.log(this.possibleVariableValues)
+    // console.log(this.possibleVariableValues)
 
     this.templateParts = this.templateParts.map(p => ({
       ...p,
@@ -92,13 +92,13 @@ export class PropertyCreationTemplateBasedComponent implements OnInit{
       possibleValues: p.isVar ? this.possibleVariableValues[p.var] : []
     }))
 
-    console.log(this.templateParts)
+    // console.log(this.templateParts)
   }
 
   selectTemplate(template: PlanPropertyTemplate, stepper: MatStepper){
     this.selectedTemplate = template
     this.selectedVariableValue = {};
-    console.log(template)
+    // console.log(template)
 
     stepper.selected.completed = true;
     stepper.next();
@@ -113,7 +113,7 @@ export class PropertyCreationTemplateBasedComponent implements OnInit{
   selectVariableValue(variable: string, object: PDDLObject) {
 
     this.selectedVariableValue[variable] = object;
-    console.log("Selected Variables: " + this.selectedVariableValue)
+    // console.log("Selected Variables: " + this.selectedVariableValue)
 
     this.updatePossibleVariableValues()
 
@@ -156,7 +156,7 @@ export class PropertyCreationTemplateBasedComponent implements OnInit{
     newPlanProperty.naturalLanguageDescription = this.form.controls.naturalLanguageDescription.value;
     newPlanProperty.utility = this.form.controls.utility.value;
 
-    console.log(newPlanProperty);
+    // console.log(newPlanProperty);
 
     this.created.emit(newPlanProperty);
   }

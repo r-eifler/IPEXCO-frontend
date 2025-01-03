@@ -25,7 +25,6 @@ export class LogUserActivitiesEffect{
     public loadUserStudy$ = createEffect(() => this.actions$.pipe(
         ofType(logAction),
         concatLatestFrom(() => this.store.select(selectUserRole)),
-        tap(console.log),
         filter(([_, role]) => role == 'user-study'),
         switchMap(([{action},_]) => this.service.log$(action).pipe(
             map(() => logActionSuccess()),
