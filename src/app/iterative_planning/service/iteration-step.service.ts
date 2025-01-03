@@ -59,6 +59,14 @@ export class IterationStepService{
 
     }
 
+    postCancelIterationStep$(iterationStepId: string): Observable<string> {
+
+        return this.http.post<IHTTPData<string>>(this.BASE_URL + 'cancel', {iterationStepId}).pipe(
+            map(({data}) => data)
+        )
+
+    }
+
     putIterationStep$(iterationStep: IterationStep): Observable<IterationStep> {
 
         return this.http.put<IHTTPData<IterationStep>>(this.BASE_URL + iterationStep._id, {data: iterationStep}).pipe(

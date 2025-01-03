@@ -27,7 +27,12 @@
         <app-page-section-content>
           <div class="page-grid">
             @for(step of steps$ | async; track step) {
-              <app-iteration-step-card [step]="step" [planProperties]="planProperties" (fork)="createNewIteration(step._id)"></app-iteration-step-card>
+              <app-iteration-step-card 
+                [step]="step" 
+                [planProperties]="planProperties" 
+                (fork)="createNewIteration(step._id)"
+                (cancel)="cancelIterationStep(step._id)">
+              </app-iteration-step-card>
             }
 
             <button app-action-card (click)="createNewIteration()">

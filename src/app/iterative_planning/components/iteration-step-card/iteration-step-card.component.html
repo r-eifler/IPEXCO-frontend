@@ -32,11 +32,20 @@
 
   <mat-card-actions>
     <div class="action-container">
+      @if(! planComputationRunning()){
       <a class="details" mat-stroked-button [routerLink]="[step()?._id ]">Details</a>
       <button mat-icon-button
         matTooltip="Creates a new iteration based on the properties selected in this iteration."
         (click)="onFork()"
       ><mat-icon>call_split</mat-icon></button>
+      }
+      @else{
+      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+      <button mat-icon-button
+        matTooltip="Cancel plan computation of iteration step"
+        (click)="onCancel()"
+      ><mat-icon>cancel</mat-icon></button>
+      }
     </div>
   </mat-card-actions>
 </mat-card>

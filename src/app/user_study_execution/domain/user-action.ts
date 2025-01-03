@@ -12,6 +12,7 @@ export enum ActionType {
     END_DEMO = 'END_DEMO',
     CREATE_ITERATION_STEP = 'CREATE_ITERATION_STEP',
     PLAN_FOR_ITERATION_STEP = 'PLAN_FOR_ITERATION_STEP',
+    CANCEL_PLAN_FOR_ITERATION_STEP = 'PLAN_FOR_ITERATION_STEP',
     INSPECT_ITERATION_STEP = 'INSPECT_ITERATION_STEP',
     ASK_QUESTION = 'ASK_QUESTION',
     EXPLANATION = 'EXPLANATION',
@@ -105,6 +106,13 @@ export interface PlanForIterationStepUserAction extends UserAction {
         demoId: string,
         stepId: string,
         utility,
+    }
+}
+
+export interface CancelPlanForIterationStepUserAction extends UserAction {
+    type: ActionType.PLAN_FOR_ITERATION_STEP
+    data: {
+        stepId: string,
     }
 }
 

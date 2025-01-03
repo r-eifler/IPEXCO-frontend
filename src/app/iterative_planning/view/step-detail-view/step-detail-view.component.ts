@@ -103,6 +103,10 @@ export class StepDetailViewComponent {
     filter((step) => !!step),
     map((step) => step.plan?.status == PlanRunStatus.not_solvable)
   );
+  isCanceled$ = this.step$.pipe(
+    filter((step) => !!step),
+    map((step) => step.plan?.status == PlanRunStatus.canceled)
+  );
   planProperties$ = this.store.select(selectIterativePlanningProperties);
 
   enforcedGoals$ = this.store.select(selectEnforcedGoals);

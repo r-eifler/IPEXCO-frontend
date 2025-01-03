@@ -27,6 +27,7 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   gap: var(--spacing-100);
+  align-items: center;
 
   .details {
     display: grid;

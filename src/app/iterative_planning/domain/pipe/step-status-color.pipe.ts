@@ -22,6 +22,8 @@ export class StepStatusColorPipe implements PipeTransform {
         return 'neutral';
       case PlanRunStatus.failed:
         return 'error';
+      case PlanRunStatus.canceled:
+        return 'error';
       case PlanRunStatus.plan_found:
         return 'secondary';
       case PlanRunStatus.not_solvable:

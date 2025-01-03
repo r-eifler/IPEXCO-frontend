@@ -6,7 +6,7 @@ import { executionUserStudyStart, executionUserStudySubmit, logAction, logAction
 import { Store } from '@ngrx/store';
 import { selectExecutionUserStudyPendingIterationSteps, selectExecutionUserStudyStep, selectExecutionUserStudyStepIndex } from '../user-study-execution.selector';
 import { concatLatestFrom } from '@ngrx/operators';
-import { ActionType } from '../../domain/user-action';import { createIterationStepSuccess, loadIterationStepsSuccess, poseAnswer, questionPosed, selectIterationStep } from 'src/app/iterative_planning/state/iterative-planning.actions';
+import { ActionType, CancelPlanForIterationStepUserAction } from '../../domain/user-action';import { cancelPlanComputationAndIterationStep, createIterationStepSuccess, loadIterationStepsSuccess, poseAnswer, questionPosed, selectIterationStep } from 'src/app/iterative_planning/state/iterative-planning.actions';
 import { StepStatus } from 'src/app/iterative_planning/domain/iteration_step';
 import { computeUtility } from 'src/app/iterative_planning/domain/plan';
 import { selectIterativePlanningProject, selectIterativePlanningProperties, selectIterativePlanningSelectedStepId } from 'src/app/iterative_planning/state/iterative-planning.selector';
@@ -120,7 +120,20 @@ export class LogUserActivitiesEffect{
         )
     );
 
-    public instepIterStep$ = createEffect(() => this.actions$.pipe(
+
+    public cancelPlanForIterStep$ = createEffect(() => this.actions$.pipe(
+        ofType(cancelPlanComputationAndIterationStep),
+        switchMap(({iterationStepId}) => [
+            logAction({action: {
+                type: ActionType.CANCEL_PLAN_FOR_ITERATION_STEP, 
+                data: {
+                    stepId: iterationStepId
+                }
+            }})
+        ])
+    ));
+
+    public inspectIterStep$ = createEffect(() => this.actions$.pipe(
         ofType(selectIterationStep),
         switchMap(({iterationStepId}) => [
             logAction({action: {

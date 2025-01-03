@@ -11,7 +11,7 @@ import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { AsyncPipe } from "@angular/common";
 import { Store } from "@ngrx/store";
-import { selectProject, selectProjectDemoComputationPending, selectProjectDemoProperties, selectProjectFinishedDemos, selectProjectRunningDemos } from "src/app/project/state/project.selector";
+import { selectHasRunningDemoComputations, selectProject, selectProjectDemoComputationPending, selectProjectDemoProperties, selectProjectFinishedDemos, selectProjectRunningDemos } from "src/app/project/state/project.selector";
 import { deleteProjectDemo, loadProjectDemo } from "src/app/project/state/project.actions";
 import { PageModule } from "src/app/shared/components/page/page.module";
 import { BreadcrumbModule } from "src/app/shared/components/breadcrumb/breadcrumb.module";
@@ -19,6 +19,7 @@ import { ActionCardModule } from "src/app/shared/components/action-card/action-c
 import { DemoCreatorComponent } from "src/app/project/view/demo-creator/demo-creator.component";
 import { DemoCardComponent } from "src/app/project/components/demo-card/demo-card.component";
 import { DemoCardRunningComponent } from "../../components/demo-card-running/demo-card-running.component";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 @Component({
     selector: "app-demo-selection",
@@ -49,12 +50,16 @@ export class DemoCollectionComponent{
   project$ = this.store.select(selectProject)
   demosFinished$ = this.store.select(selectProjectFinishedDemos);
   demosRunning$ = this.store.select(selectProjectRunningDemos);
-  demoComputationPending$ = this.store.select(selectProjectDemoComputationPending);
+  demoComputationsRunning$ = this.store.select(selectHasRunningDemoComputations);
   demoProperties$ = this.store.select(selectProjectDemoProperties);
 
   router = inject(Router);
   route = inject(ActivatedRoute);
   dialog = inject(MatDialog);
+
+  constructor(){
+    this.demoComputationsRunning$.pipe(takeUntilDestroyed()).subscribe(s => console.log(s));
+  }
 
   openDeleteDialog(demo: Demo): void {
     const dialogRef = this.dialog.open(AskDeleteComponent, {
