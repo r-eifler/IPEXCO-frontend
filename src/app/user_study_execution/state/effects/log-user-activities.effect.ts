@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { catchError, filter, map, mergeMap, mergeMap, switchMap, tap } from 'rxjs/operators';
+import { catchError, filter, map, mergeMap, switchMap, tap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { executionUserStudyStart, executionUserStudySubmit, logAction, logActionFailure, logActionSuccess, logPlanComputationFinished} from '../user-study-execution.actions';
 import { Store } from '@ngrx/store';
