@@ -14,6 +14,9 @@ import { selectIterativePlanningIterationSteps, selectIterativePlanningIteration
 import { ProjectDirective } from '../../derectives/isProject.directive';
 import { DemoDirective } from '../../derectives/isDemo.directive';
 import { StepsListHeroComponent } from '../../components/steps-list-hero/steps-list-hero.component';
+import { map } from 'rxjs';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { DemoInfoComponent } from 'src/app/shared/components/demo/demo-info/demo-info.component';
 
 @Component({
     selector: 'app-steps-list-view',
@@ -27,15 +30,23 @@ import { StepsListHeroComponent } from '../../components/steps-list-hero/steps-l
         BreadcrumbModule,
         ProjectDirective,
         DemoDirective,
-        StepsListHeroComponent
+        StepsListHeroComponent,
+        MatExpansionModule,
+        DemoInfoComponent
     ],
     templateUrl: './steps-list-view.component.html',
     styleUrl: './steps-list-view.component.scss'
 })
 export class StepsListViewComponent{
+
+  host = window.location.protocol + "//" + window.location.host;
+
   private store = inject(Store);
 
   project$ = this.store.select(selectIterativePlanningProject)
+  image$ = this.project$.pipe(map(p => p?.summaryImage));
+  domainInfo$ = this.project$.pipe(map(p => p?.domainInfo));
+  instanceInfo$ = this.project$.pipe(map(p => p?.instanceInfo));
   steps$ = this.store.select(selectIterativePlanningIterationSteps);
   loadingState$ = this.store.select(selectIterativePlanningIterationStepsLoadingState);
   planProperties$ = this.store.select(selectIterativePlanningProperties);

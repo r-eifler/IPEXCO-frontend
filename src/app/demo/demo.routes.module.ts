@@ -4,6 +4,7 @@ import { ShellComponent } from './view/shell/shell.component';
 import { DemosCollectionViewComponent } from './view/demos-collection-view/demos-collection-view.component';
 import { DemoDetailsViewComponent } from './view/demo-details-view/demo-details-view.component';
 import { loadDemoResolver } from './resolver/load-demo.resolver';
+import { DemoEditViewComponent } from './view/demo-edit-view/demo-edit-view.component';
 
 
 
@@ -25,6 +26,11 @@ const routes: Routes = [
       {
         path: ':demoId/details',
         component: DemoDetailsViewComponent,
+        resolve: { loadDemoResolver }
+      },
+      {
+        path: ':demoId/edit',
+        component: DemoEditViewComponent,
         resolve: { loadDemoResolver }
       }
     ]

@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { RunStatus } from 'src/app/iterative_planning/domain/run';
-import { selectAllDemos, selectDemoProperties } from '../../state/demo.selector';
+import { selectAllFinishedDemos, selectDemoProperties } from '../../state/demo.selector';
 import { PageModule } from 'src/app/shared/components/page/page.module';
 import { AsyncPipe } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
@@ -11,7 +11,7 @@ import { BreadcrumbModule } from 'src/app/shared/components/breadcrumb/breadcrum
 import { loadDemos, uploadDemo } from '../../state/demo.actions';
 import { DemoCardComponent } from '../../components/demo-card/demo-card.component';
 import { ActionCardComponent } from 'src/app/shared/components/action-card/action-card/action-card.component';
-import { BehaviorSubject, filter, map, startWith, switchMap } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { PlanProperty } from 'src/app/shared/domain/plan-property/plan-property';
 import { Demo } from 'src/app/project/domain/demo';
 
@@ -35,7 +35,7 @@ export class DemosCollectionViewComponent {
 
   store = inject(Store);
 
-  demos$ = this.store.select(selectAllDemos);
+  demos$ = this.store.select(selectAllFinishedDemos);
   demoProperties$ = this.store.select(selectDemoProperties);
 
   router = inject(Router);

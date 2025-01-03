@@ -9,6 +9,9 @@
 	<app-page-title>
 	{{ demo?.name }}
 	<app-page-title-action>
+		<a mat-icon-button matTooltip="Edit demo." [routerLink]="['/demos', demo?._id, 'edit']">
+			<mat-icon>edit</mat-icon>
+		</a>
 		<a mat-icon-button matTooltip="Download demo." [href]="downloadData$ | async" download="demo.json">
 			<mat-icon>download</mat-icon>
 		</a>
@@ -27,6 +30,13 @@
   	<app-page-content>
      
 		<app-page-section-list>
+
+			<app-page-section>
+				<app-page-section-title>Info</app-page-section-title>
+				<app-page-section-content>
+					<app-demo-info [demo]="demo$ | async"></app-demo-info>
+				</app-page-section-content>
+			</app-page-section>
 
 			<app-page-section>
 				<app-page-section-title>Goals</app-page-section-title>
