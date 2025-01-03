@@ -25,7 +25,6 @@ export class PlanPropertyService{
     }
 
     postPlanProperty$(planProperty: PlanProperty): Observable<PlanProperty> {
-        console.log(planProperty)
         return this.http.post<IHTTPData<PlanProperty>>(this.BASE_URL, {data: planProperty}).pipe(
             map(({data}) => data)
         )

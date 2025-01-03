@@ -91,7 +91,6 @@ export class SelectPropertyComponent {
     const selectedProperties = selectedIndecees.map(
       (index) => this.availableProperties()?.[index]
     );
-    console.log(selectedProperties);
     this.select.emit(selectedProperties);
   }
 

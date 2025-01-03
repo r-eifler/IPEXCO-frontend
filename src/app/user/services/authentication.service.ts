@@ -14,7 +14,6 @@ export class AuthenticationService {
   private BASE_URL = environment.apiURL + "users/";
 
   loadUser(): Observable<User> {
-    console.log("load user service");
     return this.http.get<IHTTPData<User>>(this.BASE_URL).pipe(
       map(({data}) => data)
     )

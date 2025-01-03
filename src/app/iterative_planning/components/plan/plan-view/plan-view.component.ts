@@ -49,32 +49,27 @@ export class PlanViewComponent implements OnInit, OnDestroy {
 
     this.actions$ = this.step$.pipe(
       filter((step) => !!step && !!step.plan && step.plan.status == PlanRunStatus.plan_found),
-      tap((step => console.log(step))),
       map((step) => step?.plan?.actions)
     );
 
     this.solved$ = this.step$.pipe(takeUntilDestroyed(this.destroyRef)).pipe(
       filter((step) => !!step && !!step.plan),
       map((step) => step.plan.status == PlanRunStatus.plan_found),
-      tap((a) => console.log(a))
     );
 
     this.notSolvable$ = this.step$.pipe(takeUntilDestroyed(this.destroyRef)).pipe(
       filter((step) => !!step),
       map((step) => step.status == StepStatus.unsolvable),
-      tap((a) => console.log(a))
     );
 
     this.isRunning$ = this.step$.pipe(takeUntilDestroyed(this.destroyRef)).pipe(
       filter((step) => !!step && !!step.plan),
       map((step) => step.plan.status == PlanRunStatus.pending),
-      tap((a) => console.log(a))
     );
 
     this.hasPlan$ = this.step$.pipe(takeUntilDestroyed(this.destroyRef)).pipe(
       filter((step) => !!step),
       map((step) => !!step.plan),
-      tap((a) => console.log(a))
     );
   }
 

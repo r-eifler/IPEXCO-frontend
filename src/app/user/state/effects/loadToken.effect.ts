@@ -22,7 +22,7 @@ export class LoadTokenEffect implements OnInitEffects{
         ofType(loadTokenLocalStorage),
         map(() => {
             const token : string | null = localStorage.getItem('jwt-token');
-            console.log(token);
+            // console.log(token);
             if(token === null || token === undefined ) {
                 return loadTokenLocalStorageFailure();
             }

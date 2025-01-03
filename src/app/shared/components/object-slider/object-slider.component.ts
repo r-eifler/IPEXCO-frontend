@@ -61,7 +61,6 @@ export class ObjectSliderComponent implements OnInit {
   ngOnInit(): void {}
 
   valueChanged($event) {
-    console.log("Selected: " + $event.value);
     this.values$
       .pipe(
         filter((values) => !!values),

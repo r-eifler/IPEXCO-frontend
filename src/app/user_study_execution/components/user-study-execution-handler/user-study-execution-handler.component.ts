@@ -70,14 +70,13 @@ export class UserStudyExecutionHandlerComponent {
       filter((to) => to)
     ).subscribe(
         () => {
-          console.log("Time over");
           this.over.emit();
         }
     )
 
     this.currentStep$.pipe(
       takeUntilDestroyed(),
-      filter((step) => !!step),tap(console.log)
+      filter((step) => !!step)
     ).subscribe(
       (step) => {
         if(step.type === UserStudyStepType.demo){
@@ -90,11 +89,10 @@ export class UserStudyExecutionHandlerComponent {
     this.timeOut$.pipe(
       takeUntilDestroyed(),
       withLatestFrom(this.currentStep$),
-      filter(([to, step ]) => to && !!step),tap(console.log)
+      filter(([to, step ]) => to && !!step)
     ).subscribe(
       ([_, step]) => {
         if(step.type === UserStudyStepType.demo){
-          console.log("Time over: Demo");
           const dialogRef = this.dialog.open(TimeOverDialogComponent)
           dialogRef.afterClosed().pipe(take(1)).subscribe(() => this.store.dispatch((executionNextUserStudyStep())))
         }
@@ -112,7 +110,6 @@ export class UserStudyExecutionHandlerComponent {
       },
     });
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
       if(result){
         this.store.dispatch(executionUserStudyCancel());
       }

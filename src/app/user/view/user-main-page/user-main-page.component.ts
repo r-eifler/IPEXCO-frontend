@@ -17,7 +17,7 @@ import { Project } from "src/app/shared/domain/project";
     templateUrl: "./user-main-page.component.html",
     styleUrls: ["./user-main-page.component.scss"]
 })
-export class UserMainPageComponent implements OnInit {
+export class UserMainPageComponent {
 
   isMobile: boolean;
 
@@ -26,23 +26,8 @@ export class UserMainPageComponent implements OnInit {
     private route: ActivatedRoute
   ) {}
 
-  ngOnInit(): void {
-    // this.responsiveService
-    //   .getMobileStatus()
-    //   .pipe(takeUntilDestroyed())
-    //   .subscribe((isMobile) => {
-    //     this.isMobile = isMobile;
-    //   });
-    // this.responsiveService.checkWidth();
-
-    // this.projectsService.findCollection();
-    // // this.demosService.findCollection();
-    // this.userStudiesService.findCollection();
-  }
-
 
   async openProject(project: Project) {
-    // console.log(''.concat(...['/projects/', project._id, '/overview']));
     await this.router.navigate(
       ["".concat(...["/project/", project._id, "/overview"])],
       { relativeTo: this.route }

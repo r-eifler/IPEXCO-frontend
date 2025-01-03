@@ -85,7 +85,6 @@ export class PropertyTemplateCreatorComponent {
     if (!templates){
       return
     }
-    console.log(templates)
 
     const templateString = JSON.stringify(templates, null, '\t');
     this.form.controls.planPropertyTemplatesJSON.setValue(templateString);
@@ -144,8 +143,6 @@ export class PropertyTemplateCreatorComponent {
   }
 
   save() {
-    console.log('Save template');
-    console.log(JSON.parse(this.form.controls.planPropertyTemplatesJSON.value));
     this.updatedTemplates.next(JSON.parse(this.form.controls.planPropertyTemplatesJSON.value));
   }
 }

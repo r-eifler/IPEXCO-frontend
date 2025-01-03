@@ -68,7 +68,6 @@ export class DemoDetailsViewComponent {
       data: {name: "Delete Demo", text: "Are you sure you want to delete the demo?"},
     });
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
       if(result){
         this.store.dispatch(deleteProjectDemo({id}))
         this.router.navigate(["../.."], {relativeTo: this.route});

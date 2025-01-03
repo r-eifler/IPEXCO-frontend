@@ -90,13 +90,8 @@ export class DemoCreatorComponent implements OnInit {
     filter(f => !!f),
     switchMap(f => this.uploadService.postDemoImage$(f)),
     startWith(null)
-    // catchError(() => console.log("ERROR"))
   );
   imageUploaded$ = this.imagePath$.pipe(map(path => path !== null))
-
-  constructor(){
-    this.imagePath$.pipe(takeUntilDestroyed(),tap(console.log)).subscribe();
-  }
 
 
   addSelectedProperty(planProperties: PlanProperty[]): void {
@@ -123,11 +118,9 @@ export class DemoCreatorComponent implements OnInit {
   createDemo(): void {
 
     combineLatest([this.project$,this.imagePath$]).pipe(
-      tap(console.log),
       take(1)
     ).subscribe(
       ([project, imagePath]) => {
-        console.log("Image path: " + imagePath);
         const newDemo: Demo = {
           status: DemoRunStatus.pending,
           projectId: project._id,
@@ -148,9 +141,6 @@ export class DemoCreatorComponent implements OnInit {
           domainSpecification: project.domainSpecification,
           settings: project.settings
         };
-
-        console.log("New Demo:");
-        console.log(newDemo);
 
         const selectedPlanProperties  = this.form.controls.properties.controls.
           map(fc => {

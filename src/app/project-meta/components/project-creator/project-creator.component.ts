@@ -103,19 +103,16 @@ export class ProjectCreatorComponent implements OnInit {
     this.selectedDomain = domain
     if(!!this.selectedDomain && !!this.selectedProblem)
       this.pddlService.translateModel(this.selectedDomain, this.selectedProblem)
-    // console.log(this.selectedDomain)
   }
 
   onProblemSelected(problem: string){
     this.selectedProblem = problem
     if(!!this.selectedDomain && !!this.selectedProblem)
       this.pddlService.translateModel(this.selectedDomain, this.selectedProblem)
-    // console.log(this.selectedDomain)
   }
 
   onSpecificationSelected(specification: string){
     this.selectedSpecification = specification
-    // console.log(this.selectedDomain)
   }
 
   onSave(): void {
@@ -127,8 +124,6 @@ export class ProjectCreatorComponent implements OnInit {
       take(1),
     ).subscribe(
       ([model, user]) => {
-
-        console.log("Save new project")
 
         const newProject: Project = {
           _id: this.editedProject ? this.editedProject._id : null,

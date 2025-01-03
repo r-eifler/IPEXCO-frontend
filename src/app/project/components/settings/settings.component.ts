@@ -81,15 +81,6 @@ export class SettingsComponent {
 
     effect(() => this.initForm(this.settings()))
 
-    // this.settingsForm.valueChanges.pipe(
-    //   takeUntilDestroyed(this.destroyRef),
-    //   debounceTime(3000), // one event every 3000 milliseconds
-    //   distinctUntilChanged(),
-    // ).subscribe(() => {
-    //   this.onSave();
-    //   console.log('Saved')
-    // });
-
   }
 
 
@@ -129,8 +120,6 @@ export class SettingsComponent {
 
   onSave() {
 
-    // console.log(this.settingsForm.controls.explanationInterfaceType.value)
-
     let paymentInfo = {
       max: this.settingsForm.controls.maxPayment.value,
       min: this.settingsForm.controls.minPayment.value,
@@ -157,7 +146,6 @@ export class SettingsComponent {
       paymentInfo,
     }
 
-    // console.log(newSettings);
     this.update.emit(newSettings);
   }
 }

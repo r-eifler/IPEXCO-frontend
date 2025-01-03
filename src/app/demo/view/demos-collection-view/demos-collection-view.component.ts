@@ -61,16 +61,12 @@ export class DemosCollectionViewComponent {
 
       reader.onload = (e: any) => {
         let result  = e.target.result;
-        console.log(result)
         let {demo, planProperties}: {demo: Demo, planProperties: Record<string, PlanProperty>} = JSON.parse(result);
-        console.log(demo);
-        console.log(planProperties);
         this.store.dispatch(uploadDemo({demo, planProperties: Object.values(planProperties)}));
       };
     
 
       reader.readAsText(file);
-      console.log(file);
     }
   }
 }

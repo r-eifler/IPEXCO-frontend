@@ -24,11 +24,9 @@ export class TimerStartsDialogComponent {
 
   constructor(private dialogRef: MatDialogRef<DialogComponent>) {
     dialogRef.disableClose = true;
-    console.log("New timer start Dialog!")
   }
 
   onContinue(){
-    console.log("Close timer start Dialog!")
     this.dialogRef.close();
   }
 

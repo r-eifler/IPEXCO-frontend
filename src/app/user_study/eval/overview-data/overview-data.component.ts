@@ -112,7 +112,7 @@ export class OverviewDataComponent {
           (q: AskQuestionUserAction) => data[q.data.questionType].value += 1
         )
       ))
-      console.log(Object.values(data));
+
       return Object.values(data);
     }
   )

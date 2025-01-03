@@ -59,10 +59,6 @@ export class DemoDetailsViewComponent {
       planProperties: pp
     })], { type: "text/json" }))))
 
-  constructor(){
-    this.MUGS$.subscribe(MUGS => console.log(MUGS));
-  }
-
 
   // onDelete(id: string){
   //   const dialogRef = this.dialog.open(AskDeleteComponent, {

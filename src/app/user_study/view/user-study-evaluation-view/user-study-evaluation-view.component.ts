@@ -42,7 +42,6 @@ export class UserStudyEvaluationViewComponent {
   downloadData$ = this.participants$.pipe(map(participants => window.URL.createObjectURL(new Blob([JSON.stringify(participants)], { type: "text/json" }))))
 
   updateSelectedParticipants(selected: string[]){
-    console.log(selected);
     this.selectedParticipants.set(selected);
   }
 

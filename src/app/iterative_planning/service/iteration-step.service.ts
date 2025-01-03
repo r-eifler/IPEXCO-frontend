@@ -20,7 +20,6 @@ export class IterationStepService{
         
         return this.http.get<IHTTPData<IterationStep[]>>(this.BASE_URL,  { params: httpParams }).pipe(
             map(({data}) => data),
-            tap(steps => console.log(steps)),
             map(steps => 
                 steps.map( step => (
                 {

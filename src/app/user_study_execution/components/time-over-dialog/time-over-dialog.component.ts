@@ -23,11 +23,9 @@ export class TimeOverDialogComponent {
 
   constructor(private dialogRef: MatDialogRef<DialogComponent>) {
     dialogRef.disableClose = true;
-    console.log("New Timeout Dialog!")
   }
 
   onContinue(){
-    console.log("Close Timeout Dialog!")
     this.dialogRef.close();
   }
 }

@@ -57,17 +57,12 @@ export class DemoCollectionComponent{
   route = inject(ActivatedRoute);
   dialog = inject(MatDialog);
 
-  constructor(){
-    this.demoComputationsRunning$.pipe(takeUntilDestroyed()).subscribe(s => console.log(s));
-  }
-
   openDeleteDialog(demo: Demo): void {
     const dialogRef = this.dialog.open(AskDeleteComponent, {
       data: {name: "Delete Demo", text: "Are you sure you want to delete demo: " + demo.name + "?"},
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
       if(result){
         this.store.dispatch(deleteProjectDemo({id: demo._id}))
       }

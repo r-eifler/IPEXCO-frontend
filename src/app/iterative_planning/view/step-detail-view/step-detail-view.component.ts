@@ -182,7 +182,6 @@ export class StepDetailViewComponent {
       data: {name: "Delete Iteration", text: "Are you sure you want to delete the current iteration?"},
     });
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
       if(result){
         this.store.dispatch(deleteIterationStep({ id }));
         this.router.navigate([".."], {relativeTo: this.route});
@@ -193,14 +192,12 @@ export class StepDetailViewComponent {
 
   onPropertyQuestionSelected(question: AvailableQuestion, property: PlanProperty): void {
     this.stepId$.pipe(take(1)).subscribe((iterationStepId) =>{
-      console.log('onPropertyQuestionSelected');
       return this.store.dispatch(questionPosed({ question: { questionType: question.questionType, iterationStepId, propertyId: property._id }}))
     });
   }
 
   onQuestionSelected(question: AvailableQuestion): void {
     this.stepId$.pipe(take(1)).subscribe((iterationStepId) =>{
-      console.log('onPropertyQuestionSelected');
       return this.store.dispatch(questionPosed({ question: { questionType: question.questionType, iterationStepId }}))
     });
   }
