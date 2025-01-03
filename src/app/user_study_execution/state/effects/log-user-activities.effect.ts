@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { catchError, filter, map, switchMap, tap } from 'rxjs/operators';
+import { catchError, filter, map, mergeMap, switchMap, tap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { executionUserStudyStart, executionUserStudySubmit, logAction, logActionFailure, logActionSuccess, logPlanComputationFinished} from '../user-study-execution.actions';
 import { Store } from '@ngrx/store';
@@ -27,7 +27,7 @@ export class LogUserActivitiesEffect{
         ofType(logAction),
         concatLatestFrom(() => this.store.select(selectUserRole)),
         filter(([_, role]) => role == 'user-study'),
-        switchMap(([{action},_]) => this.service.log$(action).pipe(
+        mergeMap(([{action},_]) => this.service.log$(action).pipe(
             map(() => logActionSuccess()),
             catchError(() => of(logActionFailure()))
         ))
@@ -36,7 +36,7 @@ export class LogUserActivitiesEffect{
     
     public studyStarted$ = createEffect(() => this.actions$.pipe(
         ofType(executionUserStudyStart),
-        switchMap(() => [logAction({action: {type: ActionType.START_STUDY}})]
+        mergeMap(() => [logAction({action: {type: ActionType.START_STUDY}})]
         )
     ));
 
@@ -51,7 +51,8 @@ export class LogUserActivitiesEffect{
     public nextStep$ = createEffect(() => this.store.select(selectExecutionUserStudyStepIndex).pipe(
         concatLatestFrom(() => this.store.select(selectExecutionUserStudyStep)),
         filter(([index, step]) => index !== null && !!step),
-        switchMap(([index, step]) => {
+        mergeMap(([index, step]) => {
+            console.log("Logging the current step")
             if(step?.type == 'demo'){
                 return [logAction({action: {
                     type: ActionType.START_DEMO, 
