@@ -12,6 +12,10 @@
         <app-demo-card [demo]="demo" [planProperties]="(demoProperties$ | async)?.[demo._id] ?? []" (run)="onRunIterPlanning(demo._id)"></app-demo-card>
       }
 
+      @for(demo of demosRunning$ | async; track demo) {
+        <app-demo-card-running [demo]="demo" [planProperties]="(demoProperties$ | async)?.[demo._id] ?? []"></app-demo-card-running>
+      }
+
       <button app-action-card (click)="createNewDemo()" [disabled]="demoComputationPending$  | async">
         <div class="instructions">
           <span>Create a new demo based on the current project.</span>

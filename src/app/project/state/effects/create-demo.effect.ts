@@ -3,7 +3,7 @@ import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { demoCreationRunningFailure, demoCreationRunningSuccess, loadProjectDemos, registerDemoCreation, registerDemoCreationFailure, registerDemoCreationSuccess, uploadProjectDemoImage, uploadProjectDemoImageSuccess} from "../project.actions";
 import { catchError, switchMap } from "rxjs/operators";
 import { of } from "rxjs";
-import { DemoService } from "../../service/demo.service";
+import { ProjectDemoService } from "../../service/demo.service";
 import { concatLatestFrom } from "@ngrx/operators";
 import { Store } from "@ngrx/store";
 import { selectProject } from "../project.selector";
@@ -13,7 +13,7 @@ import { DemoMonitoringService } from "../../service/demo-monitoring.service";
 export class CreateDemoEffect{
 
     private actions$ = inject(Actions)
-    private service = inject(DemoService)
+    private service = inject(ProjectDemoService)
     private monitoringService = inject(DemoMonitoringService)
     private store = inject(Store);
 

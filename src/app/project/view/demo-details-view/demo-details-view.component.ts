@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { PageModule } from 'src/app/shared/components/page/page.module';
 import { selectPlanPropertiesOfDemo, selectProjectDemo } from '../../state/project.selector';
-import { map, Observable, take } from 'rxjs';
+import { combineLatest, filter, map, Observable, take } from 'rxjs';
 import { BreadcrumbModule } from 'src/app/shared/components/breadcrumb/breadcrumb.module';
 import { MatIconModule } from '@angular/material/icon';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -50,6 +50,13 @@ export class DemoDetailsViewComponent {
 
   MUGS$: Observable<string[][]> = this.demo$.pipe(map((demo) => demo?.globalExplanation?.MUGS));
   MGCS$: Observable<string[][]> = this.demo$.pipe(map((demo) => demo?.globalExplanation?.MGCS));
+
+  downloadData$ = combineLatest([this.demo$,this.planProperties$]).pipe(
+    filter(([d,pp]) => !!d && !!pp),
+    map(([d,pp]) => window.URL.createObjectURL(new Blob([JSON.stringify({
+      demo: d,
+      planProperties: pp
+    })], { type: "text/json" }))))
 
   constructor(){
     this.MUGS$.subscribe(MUGS => console.log(MUGS));

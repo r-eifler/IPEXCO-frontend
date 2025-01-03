@@ -5,6 +5,8 @@ import {selectExecutionUserStudy} from '../../state/user-study-execution.selecto
 import {AsyncPipe} from '@angular/common';
 import {MatButtonModule} from '@angular/material/button';
 import {RouterLink} from '@angular/router';
+import { InfoComponent } from 'src/app/shared/components/info/info/info.component';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
     selector: 'app-user-study-execution-start-view',
@@ -13,6 +15,8 @@ import {RouterLink} from '@angular/router';
         AsyncPipe,
         MatButtonModule,
         RouterLink,
+        InfoComponent,
+        MatIconModule
     ],
     templateUrl: './user-study-execution-start-view.component.html',
     styleUrl: './user-study-execution-start-view.component.scss'

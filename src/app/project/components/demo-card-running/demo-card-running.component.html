@@ -1,0 +1,39 @@
+<mat-card appearance="outlined">
+    <mat-card-header>
+      <mat-card-title>{{ demo()?.name }}</mat-card-title>
+      <mat-card-subtitle>
+        <app-label
+          [color]="demo()?.status | demoStatusColor"
+        >{{demo()?.status | demoStatusName}}</app-label>
+      </mat-card-subtitle>
+    </mat-card-header>
+  
+    <mat-card-content>
+      <div class="content">
+        <div class="stats">
+          <mat-icon>flag_check</mat-icon>
+          <span class="property-label">Goals:</span>
+          <span class="property-value">{{ planProperties().length }}</span>
+
+          <mat-icon>report</mat-icon>
+          <span class="property-label">Conflicts:</span>
+          <span class="property-value">?</span>
+
+          <mat-icon>healing</mat-icon>
+          <span class="property-label">Corrections:</span>
+          <span class="property-value">?</span>
+          </div>
+      </div>
+    </mat-card-content>
+  
+    <mat-card-actions>
+      <div class="action-container">
+        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+        <button mat-icon-button
+          matTooltip="Cancel demo computation."
+          (click)="onCancel()"
+        ><mat-icon>cancel</mat-icon></button>
+      </div>
+    </mat-card-actions>
+  </mat-card>
+  

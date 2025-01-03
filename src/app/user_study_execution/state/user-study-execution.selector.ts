@@ -10,7 +10,7 @@ export const selectExecutionUserStudyNextStepIndex = createSelector(selectUserSt
     state.stepIndex  < state.userStudy.data?.steps.length ? state.stepIndex : null)
 
 export const selectExecutionUserStudyStep = createSelector(selectUserStudyExecutionFeature, (state) =>
-    state.stepIndex === null || state.stepIndex < state.userStudy.data?.steps.length ? state.userStudy?.data?.steps[state.stepIndex] : null)
+    state.stepIndex !== null && state.stepIndex < state.userStudy.data?.steps.length ? state.userStudy?.data?.steps[state.stepIndex] : null)
 
 export const selectExecutionUserStudyFinishedAllSteps = createSelector(selectUserStudyExecutionFeature, (state) => state.finishedAllSteps)
 export const selectExecutionUserStudyCanceled = createSelector(selectUserStudyExecutionFeature, (state) => state.canceled)

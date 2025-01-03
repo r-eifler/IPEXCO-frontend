@@ -17,7 +17,10 @@ import { PlanProperty } from "../../shared/domain/plan-property/plan-property";
 import {
     cancelNewIterationStep,
     createIterationStepSuccess,
+    createLLMContext,
+    createLLMContextSuccess,
     deselectIterationStep,
+    directResponseQT,
     eraseLLMHistory,
     initNewIterationStep,
     loadIterationSteps,
@@ -33,6 +36,8 @@ import {
     questionPosedLLM,
     selectIterationStep,
     sendMessageToLLMExplanationTranslator,
+    showReverseTranslationGT,
+    showReverseTranslationQT,
     updateNewIterationStep,
 } from "./iterative-planning.actions";
 import {
@@ -40,9 +45,12 @@ import {
   sendMessageToLLMGoalTranslatorSuccess,
   sendMessageToLLMExplanationTranslatorSuccess,
   sendMessageToLLMExplanationTranslatorFailure,
-  sendMessageToLLMQTthenGTTranslators,
-  sendMessageToLLMQTthenGTTranslatorsSuccess,
-  sendMessageToLLMQTthenGTTranslatorsFailure,
+  // sendMessageToLLMQTthenGTTranslators,
+  // sendMessageToLLMQTthenGTTranslatorsSuccess,
+  // sendMessageToLLMQTthenGTTranslatorsFailure,
+  sendMessageToLLMQuestionTranslator,
+  sendMessageToLLMQuestionTranslatorSuccess,
+  sendMessageToLLMQuestionTranslatorFailure,
 } from "./iterative-planning.actions";
 import { LLMContext } from "src/app/LLM/domain/context";
 import { Project } from "src/app/shared/domain/project";
@@ -320,7 +328,30 @@ on(sendMessageToLLMExplanationTranslatorFailure, (state): IterativePlanningState
     LLMChatLoadingState: LoadingState.Done,
     ExplanationLoadingState: LoadingState.Done
 })),
-on(sendMessageToLLMQTthenGTTranslators, (state, action): IterativePlanningState => ({
+// on(sendMessageToLLMQTthenGTTranslators, (state, action): IterativePlanningState => ({
+//     ...state,
+//   LLMChatLoadingState: LoadingState.Loading,
+//   ExplanationLoadingState: LoadingState.Loading,
+//     LLMContext: {
+//       ...state.LLMContext,
+//       visibleMessages: [...state.LLMContext.visibleMessages, {role: 'receiver', content: action.question, iterationStepId: state.selectedIterationStepId}]
+//     }
+// })),
+// on(sendMessageToLLMQTthenGTTranslatorsSuccess, (state, action): IterativePlanningState => ({
+//     ...state,
+//     LLMChatLoadingState: LoadingState.Done,
+//     LLMContext: {
+//       ...state.LLMContext,
+//       threadIdQT: action.threadIdQt,
+//       threadIdGT: action.threadIdGt,
+//     }
+// })),
+// on(sendMessageToLLMQTthenGTTranslatorsFailure, (state): IterativePlanningState => ({
+//     ...state,
+//     LLMChatLoadingState: LoadingState.Done,
+//     ExplanationLoadingState: LoadingState.Done
+  // })),
+  on(sendMessageToLLMQuestionTranslator, (state, action): IterativePlanningState => ({
     ...state,
   LLMChatLoadingState: LoadingState.Loading,
   ExplanationLoadingState: LoadingState.Loading,
@@ -329,16 +360,15 @@ on(sendMessageToLLMQTthenGTTranslators, (state, action): IterativePlanningState 
       visibleMessages: [...state.LLMContext.visibleMessages, {role: 'receiver', content: action.question, iterationStepId: state.selectedIterationStepId}]
     }
 })),
-on(sendMessageToLLMQTthenGTTranslatorsSuccess, (state, action): IterativePlanningState => ({
+on(sendMessageToLLMQuestionTranslatorSuccess, (state, action): IterativePlanningState => ({
     ...state,
     LLMChatLoadingState: LoadingState.Done,
     LLMContext: {
       ...state.LLMContext,
-      threadIdQT: action.threadIdQt,
-      threadIdGT: action.threadIdGt,
+      threadIdQT: action.threadId,
     }
 })),
-on(sendMessageToLLMQTthenGTTranslatorsFailure, (state): IterativePlanningState => ({
+on(sendMessageToLLMQuestionTranslatorFailure, (state): IterativePlanningState => ({
     ...state,
     LLMChatLoadingState: LoadingState.Done,
     ExplanationLoadingState: LoadingState.Done
@@ -347,6 +377,36 @@ on(loadLLMContextSuccess, (state,action): IterativePlanningState=> ({
   ...state,
   LLMContext : action.LLMContext
 })),
+on(createLLMContext, (state, action): IterativePlanningState => ({
+  ...state,
+})),
+on(createLLMContextSuccess, (state, action): IterativePlanningState => ({
+  ...state,
+  LLMContext: action.LLMContext
+})),
+on(directResponseQT, (state, action): IterativePlanningState => ({
+  ...state,
+  LLMChatLoadingState: LoadingState.Done,
+  ExplanationLoadingState: LoadingState.Done,
+  LLMContext: {
+    ...state.LLMContext,
+    visibleMessages: [...state.LLMContext.visibleMessages, {role: 'sender', content: action.directResponse, iterationStepId: state.selectedIterationStepId}]
+  }
+})),
+on(showReverseTranslationGT, (state, action): IterativePlanningState => ({ //TODO make it possible to disable it
+  ...state,
+  LLMContext: {
+    ...state.LLMContext,
+    visibleMessages: [...state.LLMContext.visibleMessages, {role: 'sender', content: "I understood the goal you described as : " + action.reverseTranslation, iterationStepId: state.selectedIterationStepId}]
+  }
+})),
+on(showReverseTranslationQT, (state, action): IterativePlanningState => ({ //TODO make it possible to disable it
+  ...state,
+  LLMContext: {
+    ...state.LLMContext,
+    visibleMessages: [...state.LLMContext.visibleMessages, {role: 'sender', content: "I understood your question as : " + action.reverseTranslation, iterationStepId: state.selectedIterationStepId}]
+  }
+}))
 );
 
 

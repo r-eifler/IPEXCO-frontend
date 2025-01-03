@@ -1,0 +1,25 @@
+@use '../../../../../variables.scss' as vars;
+
+:host {
+  display: grid;
+}
+
+.message-container {
+  width: fit-content;
+  max-width: 60%;
+
+  padding: var(--spacing-200);
+  border-radius: var(--radius-100);
+
+  @include vars.typography(body-medium);
+
+  &.sender {
+    @include vars.background-color(secondary-container);
+  }
+
+  &.receiver {
+    @include vars.background-color(primary-container);
+
+    justify-self: end;
+  }
+}

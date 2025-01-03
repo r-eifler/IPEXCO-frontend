@@ -1,7 +1,7 @@
 <app-chat [isSenderTyping]="isAnyLoading$ | async">
-
+  <app-chat-message [role]="'sender'">{{ "Hi! I'm here to help you to understand this planning task. You can ask me any question." }}</app-chat-message>
   @for(message of messages$ | async; track message) {
-  <app-chat-message [role]="message.role">{{ message.content }}</app-chat-message>
+  <app-chat-markdown-message [role]="message.role" [rawMessage]="message.content"></app-chat-markdown-message>
   }
   @if((messages$ | async)?.length > 1){
   <ng-container app-chat-action>

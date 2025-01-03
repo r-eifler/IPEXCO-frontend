@@ -12,13 +12,17 @@ import {PageSectionTitleComponent} from '../../../shared/components/page/page-se
 import {PageModule} from '../../../shared/components/page/page.module';
 import {Router} from '@angular/router';
 import {registerUserStudyUser} from '../../state/user-study-execution.actions';
+import { InfoComponent } from 'src/app/shared/components/info/info/info.component';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
     selector: 'app-user-study-execution-agreement-view',
     imports: [
         AsyncPipe,
         MatButtonModule,
-        PageModule
+        PageModule,
+        InfoComponent,
+        MatIconModule
     ],
     templateUrl: './user-study-execution-agreement-view.component.html',
     styleUrl: './user-study-execution-agreement-view.component.scss'

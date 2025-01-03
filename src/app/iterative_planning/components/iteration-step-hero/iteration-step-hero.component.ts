@@ -13,10 +13,11 @@ import { StepStatusColorPipe } from '../../domain/pipe/step-status-color.pipe';
 import { StepStatusNamePipe } from '../../domain/pipe/step-status-name.pipe';
 import { StepValuePipe } from '../../domain/pipe/step-value.pipe';
 import { PlanProperty } from '../../../shared/domain/plan-property/plan-property';
+import { UserStudyDirective } from '../../derectives/isUserStudy.directive';
 
 @Component({
     selector: 'app-iteration-step-hero',
-    imports: [MatCardModule, MatChipsModule, StepStatusNamePipe, MatIconModule, LabelModule, StepValuePipe, DefaultPipe, MatButtonModule, RouterLink, MatTooltipModule, StepStatusColorPipe, RouterLink],
+    imports: [MatCardModule, MatChipsModule, StepStatusNamePipe, MatIconModule, LabelModule, StepValuePipe, DefaultPipe, MatButtonModule, RouterLink, MatTooltipModule, StepStatusColorPipe, RouterLink, UserStudyDirective],
     templateUrl: './iteration-step-hero.component.html',
     styleUrl: './iteration-step-hero.component.scss'
 })

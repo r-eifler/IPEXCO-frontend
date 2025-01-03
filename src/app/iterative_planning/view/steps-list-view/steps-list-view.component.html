@@ -7,21 +7,42 @@
   </app-breadcrumb>
   <app-page-title>Plan Iterations</app-page-title>
 
+  <app-page-hero *isDemo>
+    <app-steps-list-hero></app-steps-list-hero>
+  </app-page-hero>
+
   <app-page-content>
-    <div class="page-grid">
-      @for(step of steps$ | async; track step) {
-        <app-iteration-step-card [step]="step" [planProperties]="planProperties" (fork)="createNewIteration(step._id)"></app-iteration-step-card>
-      }
+    <app-page-section-list>
 
-      <button app-action-card (click)="createNewIteration()">
-        <div class="instructions">
-          <span>Perform a new plan computation from scratch</span>
-          <span class="alternative">or</span>
-          <span> fork (<mat-icon>call_split</mat-icon>) an existing one.</span>
-        </div>
-        <mat-icon>add</mat-icon>
-      </button>
+      <app-page-section *isDemo>
+        <app-page-section-title>
+          Task Information
+        </app-page-section-title>
+        <app-page-section-content>
+          <app-demo-info [demo]="project$ | async"></app-demo-info>
+        </app-page-section-content>
+      </app-page-section>
 
-    </div>
+      <app-page-section>
+        <app-page-section-content>
+          <div class="page-grid">
+            @for(step of steps$ | async; track step) {
+              <app-iteration-step-card [step]="step" [planProperties]="planProperties" (fork)="createNewIteration(step._id)"></app-iteration-step-card>
+            }
+
+            <button app-action-card (click)="createNewIteration()">
+              <div class="instructions">
+                <span>Perform a new plan computation from scratch</span>
+                <span class="alternative">or</span>
+                <span> fork (<mat-icon>call_split</mat-icon>) an existing one.</span>
+              </div>
+              <mat-icon>add</mat-icon>
+            </button>
+
+          </div>
+        </app-page-section-content>
+      </app-page-section> 
+
+    </app-page-section-list>
   </app-page-content>
 </app-page>

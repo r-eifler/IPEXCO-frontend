@@ -1,0 +1,87 @@
+@let demo = demo$ | async;
+
+<app-page>
+	<app-breadcrumb>
+		<a app-breadcrumb-item [routerLink]="['/demos']"><mat-icon>home</mat-icon></a>
+        <a app-breadcrumb-item [routerLink]="['/demos', demo?._id, 'details']">{{demo?.name}}</a>
+		<app-breadcrumb-item>edit</app-breadcrumb-item>
+	</app-breadcrumb>
+
+	<app-page-title>
+	{{ demo?.name }}
+	</app-page-title>
+
+  	<app-page-content>
+
+        <form [formGroup]="form" (submit)="save()">
+        <app-page-section-list>
+
+            <app-page-section>
+				<app-page-section-title>Main</app-page-section-title>
+				<app-page-section-content>			
+                    <mat-form-field class="full-width" appearance="outline">
+                        <mat-label>Name</mat-label>
+                        <input matInput type="text" [formControl]="form.controls.main.controls.name" />
+                    </mat-form-field>
+              
+                    <mat-form-field class="full-width" appearance="outline">
+                        <mat-label>Description</mat-label>
+                        <textarea matInput [formControl]="form.controls.main.controls.description"></textarea>
+                    </mat-form-field>	
+                </app-page-section-content>
+            </app-page-section>
+
+            <app-page-section>
+				<app-page-section-title>Task Descriptions</app-page-section-title>
+				<app-page-section-content>			
+                    <mat-form-field class="full-width" appearance="outline">
+                        <mat-label>Description of the domain</mat-label>
+                        <textarea matInput type="text" [formControl]="form.controls.taskInfo.controls.domainInfo"></textarea>
+                    </mat-form-field>
+                  
+                    <mat-form-field class="full-width" appearance="outline">
+                        <mat-label>Description of the instance</mat-label>
+                        <textarea matInput [formControl]="form.controls.taskInfo.controls.instanceInfo"></textarea>
+                    </mat-form-field>
+                </app-page-section-content>
+            </app-page-section>
+        
+
+            <app-page-section>
+                <app-page-section-title>Task Descriptions</app-page-section-title>
+                <app-page-section-content>			
+                    @if(imagePath$ | async){
+                        <img [src]="host + (imagePath$ | async)">
+                    }
+                    @else{
+                        <p>No image uploaded.</p>
+                    }
+            
+                    <div class="image-selection-container">
+                        <input
+                            style="display: none"
+                            type="file"
+                            (change)="onFileChanged($event); imageSelected=true;"
+                            #fileInput
+                        />
+                        <button mat-icon-button (click)="fileInput.click()" type="button" style="margin-top: 20px">
+                            <mat-icon>add_photo_alternate</mat-icon>
+                        </button>
+                        <p style="margin: 0; align-self: center">{{ (imageFileName$ | async) ?? "No image selected." }}</p>
+                        @if(imageUploaded$ | async){
+                            <mat-icon>done_outline</mat-icon>
+                        }
+                    </div>
+                </app-page-section-content>
+            </app-page-section>
+
+            <app-page-section>
+                <app-page-section-content>
+                    <button mat-flat-button class="full-width">Save</button>
+                </app-page-section-content>
+            </app-page-section>
+     
+        </app-page-section-list>
+        </form>
+	</app-page-content>
+</app-page>

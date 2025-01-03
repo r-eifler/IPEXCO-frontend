@@ -10,6 +10,9 @@
 	<app-page-title>
 	{{ demo?.name }}
 	<app-page-title-action>
+		<a mat-icon-button matTooltip="Download demo." [href]="downloadData$ | async" download="demo.json">
+			<mat-icon>download</mat-icon>
+		</a>
 		<button mat-icon-button matTooltip="Run iterative planning."
 			(click)="onRunIterPlanning()">
 		<mat-icon>play_arrow</mat-icon>

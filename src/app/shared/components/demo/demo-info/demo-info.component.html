@@ -1,0 +1,15 @@
+<mat-accordion>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title> Visualization </mat-panel-title>
+      </mat-expansion-panel-header>
+      <img [src]="host + demo()?.summaryImage">
+    </mat-expansion-panel>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title> Task Description </mat-panel-title>
+      </mat-expansion-panel-header>
+      <div [innerHTML]="demo()?.domainInfo | marked"></div>
+      <div [innerHTML]="demo()?.instanceInfo | marked"></div>
+    </mat-expansion-panel>
+</mat-accordion>

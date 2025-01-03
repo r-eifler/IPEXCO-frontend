@@ -67,19 +67,21 @@ export class QuestionQueueEffect {
       console.log("Provided as: " + question);
 
       return this.store.select(selectExplanation(hash)).pipe(
+        tap(explanation => console.log('Explanation from store:', explanation)),
         filter(explanation => explanation?.status === ExplanationRunStatus.failed || explanation?.status === ExplanationRunStatus.finished),
+        tap(explanation => console.log('After filter - explanation status:', explanation?.status)),
         take(1),
         concatLatestFrom(() => [this.store.select(selectIterativePlanningProperties)]),
         map(([explanation, properties]) => 
-          ({question, explanation: mapComputeBase(iterationStep, question, getComputedBase(question.questionType, explanation)), question_type: question.questionType, questionArguments: [properties[question.propertyId]], iterationStepId: iterationStep._id})
+          ({question, explanation: mapComputeBase(iterationStep, question, getComputedBase(question.questionType, explanation)), question_type: question.questionType, questionArgument: [properties[question.propertyId]], iterationStepId: iterationStep._id})
         ),
-        concatLatestFrom(({question, explanation, question_type, questionArguments,iterationStepId}) => [
+        concatLatestFrom(({question, explanation, question_type, questionArgument,iterationStepId}) => [
           this.store.select(selectLLMThreadIdET),
           this.store.select(selectIterativePlanningProject),
           this.store.select(selectIterativePlanningProperties),
           this.store.select(selectIterationStepById(iterationStepId))]),
-        switchMap(([{question, explanation, question_type, questionArguments, iterationStepId}, threadIdET, project, properties, iterationStep]) => {
-            return this.LLMService.postMessageET$(naturalLanguageQuestion, explanation,question_type, questionArguments, iterationStep, project, Object.values(properties), threadIdET).pipe(
+        switchMap(([{question, explanation, question_type, questionArgument, iterationStepId}, threadIdET, project, properties, iterationStep]) => {
+            return this.LLMService.postMessageET$(naturalLanguageQuestion, explanation,question_type, questionArgument, iterationStep, project, Object.values(properties), threadIdET).pipe(
                 switchMap(response => [sendMessageToLLMExplanationTranslatorSuccess({ response: response.response, threadId: response.threadId })]),
                 catchError(() => of(sendMessageToLLMExplanationTranslatorFailure()))
             );
