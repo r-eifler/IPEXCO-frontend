@@ -38,4 +38,10 @@ export class UserStudyExecutionService {
     )
   }
 
+  logLLMContext$(): Observable<boolean> {
+    return this.http.put<IHTTPData<boolean>>(this.BASE_URL + 'save-llm-context', {}).pipe(
+      map(({data}) => data)
+    )
+  }
+
 }
