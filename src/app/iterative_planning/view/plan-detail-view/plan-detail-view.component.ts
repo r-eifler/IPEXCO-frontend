@@ -149,14 +149,12 @@ export class PlanDetailViewComponent {
 
   onPropertyQuestionSelected(question: AvailableQuestion, property: PlanProperty): void {
     this.stepId$.pipe(take(1)).subscribe((iterationStepId) =>{
-      console.log('onPropertyQuestionSelected');
       return this.store.dispatch(questionPosed({ question: { questionType: question.questionType, iterationStepId, propertyId: property._id }}))
     });
   }
 
   onQuestionSelected(question: AvailableQuestion): void {
     this.stepId$.pipe(take(1)).subscribe((iterationStepId) =>{
-      console.log('onPropertyQuestionSelected');
       return this.store.dispatch(questionPosed({ question: { questionType: question.questionType, iterationStepId }}))
     });
   }

@@ -71,6 +71,10 @@ export const planComputationRunning = createAction('[iterative-planning] plan co
 export const planComputationRunningSuccess = createAction('[iterative-planning] plan computation running success');
 export const planComputationRunningFailure = createAction('[iterative-planning] plan computation running failure');
 
+export const cancelPlanComputationAndIterationStep= createAction('[iterative-planning] cancel plan computation and iteration step', props<{ iterationStepId: string }>());
+export const cancelPlanComputationAndIterationStepSuccess = createAction('[iterative-planning] cancel plan computation and iteration step success');
+export const cancelPlanComputationAndIterationStepFailure = createAction('[iterative-planning] cancel plan computation and iteration step failure');
+
 
 // Explainer
 

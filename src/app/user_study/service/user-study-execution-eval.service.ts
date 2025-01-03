@@ -31,8 +31,7 @@ export class UserStudyExecutionEvalService {
           finishedAt: new Date(exec.finishedAt),
           timeLog: exec.timeLog.map(a => JSON.parse(a as any as string))
         })
-      )),
-      tap(console.log),
+      ))
     )
   }
 

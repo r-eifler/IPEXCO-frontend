@@ -21,9 +21,6 @@ export class StepFinishedGuard  {
       map(stepIndex => {
         const nextIndex = Number(next.paramMap.get('stepId'));
 
-        console.log(stepIndex);
-        console.log(nextIndex);
-
         if(stepIndex === null || nextIndex === null){
           return this.router.parseUrl('/user-study-execution/fail');
         }

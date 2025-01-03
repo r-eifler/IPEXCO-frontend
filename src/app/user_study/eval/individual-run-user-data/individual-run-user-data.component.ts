@@ -63,7 +63,6 @@ export class IndividualRunUserDataComponent implements OnInit {
     ).subscribe(async ([id, users]) => {
       this.iterationStepsData = await this.userStudyDataService.getUtilityPerIterationStep(id, users[0]);
       this.utilityTimeData = await this.userStudyDataService.getMaxUtilityOverTime(id, users[0]);
-      console.log(this.iterationStepsData);
     });
   }
 

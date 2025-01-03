@@ -116,7 +116,6 @@ export class ParticipantDistributionDetailsViewComponent {
       data: {name: 'Delete Participant Distribution', text: 'Are you sure you want to delete the distribution?'},
     });
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
       if (result) {
         this.store.dispatch((deleteParticipantDistribution({id})));
         this.router.navigate(['user-study', 'collection']);

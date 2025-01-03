@@ -12,8 +12,6 @@ export class ExplainerService{
     private BASE_URL = environment.apiURL + "explainer/explain-step/";
 
     postComputeGlobalExplanation$(stepId: string): Observable<boolean> {
-
-        console.log('ExplainerService')
         
         return this.http.post<IHTTPData<boolean>>(this.BASE_URL + stepId, {}).pipe(
             map(({data}) => data)

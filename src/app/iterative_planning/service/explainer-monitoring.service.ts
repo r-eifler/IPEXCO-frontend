@@ -18,7 +18,6 @@ export class ExplainerMonitoringService {
             exhaustMap(() => this.iterationStepService.getIterationSteps$(projectId).pipe(
                 map((iterationStepList) => iterationStepList.every(explanationFinished)),
             )),
-            tap(console.log),
             filter(allFinished => allFinished),
             take(1),
             map(() => void undefined),
@@ -30,7 +29,6 @@ export class ExplainerMonitoringService {
             exhaustMap(() => this.iterationStepService.getIterationSteps$(projectId).pipe(
                 map((iterationStepList) => iterationStepList.every(explanationFinished)),
             )),
-            tap(console.log),
             filter(allFinished => allFinished),
             take(1),
             map(() => void undefined),

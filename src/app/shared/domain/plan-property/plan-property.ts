@@ -46,7 +46,6 @@ export interface PlanProperty {
 export function equalPlanProperties(p1: PlanProperty, p2: PlanProperty): boolean {
   const res =  p1.type == p2.type && p1.formula == p2.formula &&
     equalActionSets(p1.actionSets, p2.actionSets)
-  console.log('equalPlanProperties: ' + res);
   return res
 }
 

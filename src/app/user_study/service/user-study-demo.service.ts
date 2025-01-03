@@ -58,13 +58,11 @@ export class UserStudyDemoService {
 
     getDemos$(projectId: string): Observable<Demo[]> {
 
-        console.log("Demo service: getDemos");
         let httpParams = new HttpParams();
         httpParams = httpParams.set('projectId', projectId);
 
         return this.http.get<IHTTPData<Demo[]>>(this.BASE_URL + 'demos/', { params: httpParams }).pipe(
             map(({data}) => data),
-            tap(console.log),
             map(demos => (
               demos.map( demo => ({
                 ...demo,
@@ -84,14 +82,12 @@ export class UserStudyDemoService {
     }
 
     postDemo$(demo: Demo, properties: PlanProperty[]): Observable<string | null> {
-        console.log('demo service: POST');
         return this.http.post<IHTTPData<string | null>>(this.BASE_URL, {demo: demo, planProperties: properties}).pipe(
             map(({data}) => data)
         )
     }
 
     putDemo$(demo: Demo): Observable<Demo> {
-      console.log(demo);
       return this.http.put<IHTTPData<Demo>>(this.BASE_URL + demo._id, {demo: demo}).pipe(
           map(({data}) => data)
       )

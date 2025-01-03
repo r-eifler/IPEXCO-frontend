@@ -9,7 +9,7 @@ import { BreadcrumbModule } from 'src/app/shared/components/breadcrumb/breadcrum
 import { PageModule } from 'src/app/shared/components/page/page.module';
 
 import { IterationStepCardComponent } from '../../components/iteration-step-card/iteration-step-card.component';
-import { initNewIterationStep } from '../../state/iterative-planning.actions';
+import { cancelPlanComputationAndIterationStep, initNewIterationStep } from '../../state/iterative-planning.actions';
 import { selectIterativePlanningIterationSteps, selectIterativePlanningIterationStepsLoadingState, selectIterativePlanningProject, selectIterativePlanningProperties } from '../../state/iterative-planning.selector';
 import { ProjectDirective } from '../../derectives/isProject.directive';
 import { DemoDirective } from '../../derectives/isDemo.directive';
@@ -53,5 +53,9 @@ export class StepsListViewComponent{
 
   createNewIteration(baseStepId?: string) {
     this.store.dispatch(initNewIterationStep({baseStepId}));
+  }
+
+  cancelIterationStep(iterationStepId: string){
+    this.store.dispatch(cancelPlanComputationAndIterationStep({iterationStepId}))
   }
 }

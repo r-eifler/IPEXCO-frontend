@@ -9,7 +9,8 @@ export enum PlanRunStatus {
   running,
   failed,
   plan_found,
-  not_solvable
+  not_solvable,
+  canceled
 }
 
 export interface PlanAction {

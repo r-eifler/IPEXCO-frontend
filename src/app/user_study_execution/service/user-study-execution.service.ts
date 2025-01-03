@@ -15,7 +15,7 @@ export class UserStudyExecutionService {
   private BASE_URL = environment.apiURL + 'user-study-execution/';
 
   finish(): Observable<boolean> {
-    return this.http.put<boolean>(this.BASE_URL + 'finish', {}).pipe(tap(console.log))
+    return this.http.put<boolean>(this.BASE_URL + 'finish', {})
   }
 
   cancel(): Observable<boolean> {
@@ -29,9 +29,7 @@ export class UserStudyExecutionService {
       timeStamp: new Date(),
     }
 
-    console.log("Execution Service log action: ");
     const JSONAction = JSON.stringify(sendAction);
-    console.log(JSONAction);
 
     return this.http.put<IHTTPData<boolean>>(this.BASE_URL + 'action', {action: JSONAction}).pipe(
       map(({data}) => data)

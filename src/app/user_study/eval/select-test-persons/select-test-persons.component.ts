@@ -47,7 +47,6 @@ export class SelectTestPersonsComponent {
   participants = toSignal(this.store.select(selectUserStudyParticipantsOfStudy));
 
   participantsTableData = computed(() =>{
-      console.log(this.participants());
       return this.participants()?.map(p => ({
         ...p,
         date: p.createdAt,
@@ -70,7 +69,6 @@ export class SelectTestPersonsComponent {
       const index = this.paginator?.pageIndex;
       const size = this.paginator?.pageSize;
       this.displayedParticipants =  this.participantsTableData() ? [...this.participantsTableData()].splice(index * size, size) : [];
-      console.log(this.displayedParticipants);
     })
   }
 

@@ -10,8 +10,7 @@ import { ExplanationMessage } from "../../domain/interface/explanation-message";
 import { Question } from "../../domain/interface/question";
 import { IterationStep } from "../../domain/iteration_step";
 import { poseAnswer, questionPosed, questionPosedLLM, registerGlobalExplanationComputation, sendMessageToLLMExplanationTranslator, sendMessageToLLMExplanationTranslatorFailure, sendMessageToLLMExplanationTranslatorSuccess } from "../iterative-planning.actions";
-import { selectExplanation, selectIterationStep, selectIterativePlanningProject, selectIterativePlanningProjectExplanationInterfaceType, selectIterativePlanningProperties, selectLLMThreadIdET } from "../iterative-planning.selector";
-import { selectIterationStepById } from "../../../iterative_planning/state/iterative-planning.selector";
+import { selectExplanation, selectIterationStepById, selectIterativePlanningProject, selectIterativePlanningProjectExplanationInterfaceType, selectIterativePlanningProperties, selectLLMThreadIdET } from "../iterative-planning.selector";
 import { ExplanationInterfaceType } from "src/app/project/domain/general-settings";
 import { LLMService } from "src/app/LLM/service/llm.service";
 import { catchError } from "rxjs/operators";
@@ -29,7 +28,7 @@ export class QuestionQueueEffect {
 
   computeExplanation$ = createEffect(() => this.actions$.pipe(
     ofType(questionPosed, questionPosedLLM),
-    concatLatestFrom(({ question: { iterationStepId }}) => this.store.select(selectIterationStep(iterationStepId))),
+    concatLatestFrom(({ question: { iterationStepId }}) => this.store.select(selectIterationStepById(iterationStepId))),
     mergeMap(([{ question: {iterationStepId } }, iterationStep]) => {
       const hash = explanationHash(iterationStep);
 
@@ -44,7 +43,7 @@ export class QuestionQueueEffect {
 
   postAnswer$ = createEffect(() => this.actions$.pipe(
     ofType(questionPosed),
-    concatLatestFrom(({ question: { iterationStepId }}) => this.store.select(selectIterationStep(iterationStepId))),
+    concatLatestFrom(({ question: { iterationStepId }}) => this.store.select(selectIterationStepById(iterationStepId))),
     mergeMap(([{ question }, iterationStep]) => {
       const hash = explanationHash(iterationStep);
 
@@ -60,7 +59,7 @@ export class QuestionQueueEffect {
 
   postAnswerLLM$ = createEffect(() => this.actions$.pipe(
     ofType(questionPosedLLM),
-    concatLatestFrom(({ question: { iterationStepId }}) => this.store.select(selectIterationStep(iterationStepId))),
+    concatLatestFrom(({ question: { iterationStepId }}) => this.store.select(selectIterationStepById(iterationStepId))),
     filter(([_, iterationStep]) => !!iterationStep),
     mergeMap(([{ question, naturalLanguageQuestion }, iterationStep]) => {
       const hash = explanationHash(iterationStep);

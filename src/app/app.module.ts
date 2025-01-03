@@ -113,6 +113,7 @@ import { DemoPlanPropertyService } from './demo/services/plan-properties.service
 import { DemosUpdateDemoEffect } from './demo/state/effects/update-demo.effect';
 import { UploadDemoEffect } from './demo/state/effects/upload-demo.effect';
 import { CancelCreateDemoEffect } from './project/state/effects/cancel-create-demo.effect';
+import { CancelPlanIterationStepEffect } from './iterative_planning/state/effects/cancel-plan-iteration-step.effect';
 
 
 
@@ -189,6 +190,7 @@ import { CancelCreateDemoEffect } from './project/state/effects/cancel-create-de
       DeletePlanPropertyEffect,
       LoadIterationStepsEffect,
       CreateIterationStepEffect,
+      CancelPlanIterationStepEffect,
       DeleteIterationEffect,
       ComputePlanEffect,
       SendMessageToLLMEffect,

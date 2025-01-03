@@ -5,6 +5,7 @@ import { explanationHash } from "../domain/explanation/explanation-hash";
 import { ExplanationRunStatus } from "../domain/explanation/explanations";
 import { IterativePlanningState, Message, iterativePlanningFeature } from "./iterative-planning.reducer";
 import { StepStatus } from "../domain/iteration_step";
+import { PlanRunStatus } from "../domain/plan";
 
 const selectIterativePlanningFeature = createFeatureSelector<IterativePlanningState>(iterativePlanningFeature);
 
@@ -42,9 +43,8 @@ export const selectIterativePlanningPropertiesList = createSelector(selectIterat
 export const selectIterativePlanningIterationSteps = createSelector(selectIterativePlanningFeature,
     (state) => state.iterationSteps.data)
 export const selectIterationStepIds = createSelector(selectIterativePlanningIterationSteps, map(({ _id }) => _id));
-export const selectIterationStepById = (id: string) => createSelector(selectIterativePlanningIterationSteps, (iteration_steps) => iteration_steps?.filter(s => s._id == id)[0]);
 
-export const selectIterationStep = memoizeWith(
+export const selectIterationStepById = memoizeWith(
   (stepId: string) => stepId,
   (stepId: string) => createSelector(selectIterativePlanningIterationSteps, find(({_id}) => _id === stepId)
 ));
@@ -64,7 +64,7 @@ export const selectIterativePlanningNumberOfSteps = createSelector(selectIterati
 
 
 export const selectIterativePlanningIterationStepComputationRunning = createSelector(selectIterativePlanningFeature,
-  (state) => state.iterationSteps.data?.filter(s => s.status == StepStatus.unknown).length > 0)
+  (state) => state.iterationSteps.data?.filter(s => s.status == StepStatus.unknown && s.plan?.status !== PlanRunStatus.canceled).length > 0)
 
 
 // Messages    

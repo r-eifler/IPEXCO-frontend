@@ -411,9 +411,7 @@ function initFirstNewIterationStep(
     task: state.project.data.baseTask,
     status: StepStatus.unknown,
     project: state.project.data._id,
-    hardGoals: Object.values(state.planProperties.data)
-      .filter((p) => p.globalHardGoal)
-      .map((p) => p._id),
+    hardGoals: [],
     softGoals: [],
     predecessorStep: undefined,
   };

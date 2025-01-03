@@ -15,7 +15,6 @@ export class UserStudyFinishedAllStepsEffect{
     private router = inject(Router);
 
     public finished$ = createEffect(() => this.store.select(selectExecutionUserStudyFinishedAllSteps).pipe(
-        tap(isFinished => console.log('Finsihed Steps Status: ' + isFinished)),
         concatLatestFrom(() => this.store.select(selectExecutionUserStudy)),
         tap(([isFinished, study]) => {
           if(isFinished){

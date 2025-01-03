@@ -72,7 +72,6 @@ export class AcceptedTestPersonsComponent {
   }
 
   announceSortChange(sortState: Sort){
-    console.log(sortState);
     const sorted = [...this.participantsTableData()].sort();
     const index = this.paginator.pageIndex;
     const size = this.paginator.pageSize;

@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, input } from '@angular/core';
 import { UserStudyDashboardCardComponent } from '../user-study-dashboard-card/user-study-dashboard-card.component';
 import { Store } from '@ngrx/store';
 import { selectUserStudyParticipantsOfStudy } from '../../state/user-study.selector';
@@ -22,29 +22,33 @@ export class UserStudyDashboardComponent {
   participants = toSignal(this.store.select(selectUserStudyParticipantsOfStudy));
   acceptedParticipants = computed(() => this.participants()?.filter(p => p.accepted))
 
-  numParticipants = computed(() => this.participants()?.length);
-  numAcceptedParticipants = computed(() => this.participants()?.filter(p => p.accepted).length)
+  demoId = input.required<string>();
+  demoSelected = computed(() => !! this.demoId())
+
+  numParticipants = computed(() => this.participants()?.length ?? 0);
+  numAcceptedParticipants = computed(() => this.participants() ? this.participants()?.filter(p => p.accepted).length : 0)
 
 
   averageTime = computed(() => {
-    if(this.acceptedParticipants() == null || this.participants == undefined){
+    if(this.acceptedParticipants() == null || this.participants() == undefined || this.participants().length == 0){
       return undefined;
     }
     const times = this.participants()?.map(p => p.finished ? p.finishedAt.getTime() - p.createdAt.getTime(): null);
-    console.log(times.map(t => new Date(t)));
-    console.log('Average: ' + (times?.reduce((p,c) => p + c, 0) / times?.length))
     const duration =  new Date (times?.reduce((p,c) => p + c, 0) / times?.length);
-    console.log(duration);
     return duration;
   })
 
   averageIterationSteps = computed(() => {
-    const numIterSteps = this.acceptedParticipants()?.map(p => p.timeLog.filter(a => a.type == ActionType.CREATE_ITERATION_STEP).length);
+    const numIterSteps = this.acceptedParticipants()?.map(p => 
+      p.timeLog.filter(a => a.type == ActionType.CREATE_ITERATION_STEP && a.data.demoId == this.demoId()).length
+    );
     return average(numIterSteps).toFixed(2);
   })
 
   averageQuestions = computed(() => {
-    const questions = this.acceptedParticipants()?.map(p => p.timeLog.filter(a => a.type == ActionType.ASK_QUESTION).length);
+    const questions = this.acceptedParticipants()?.map(p => 
+      p.timeLog.filter(a => a.type == ActionType.ASK_QUESTION && a.data.demoId == this.demoId()).length
+    );
     return average(questions).toFixed(2);
   })
 
@@ -54,7 +58,7 @@ export class UserStudyDashboardComponent {
     }
     const utilitiesPerParticipant = this.acceptedParticipants()?.
       map(p => 
-        p.timeLog.filter(a => a.type == ActionType.PLAN_FOR_ITERATION_STEP).
+        p.timeLog.filter(a => a.type == ActionType.PLAN_FOR_ITERATION_STEP && a.data.demoId == this.demoId()).
         map((a: PlanForIterationStepUserAction) => a.data.utility)
     );
     const maxUtilities = utilitiesPerParticipant.map(us => us.reduce((p,c) => Math.max(p,c), 0));

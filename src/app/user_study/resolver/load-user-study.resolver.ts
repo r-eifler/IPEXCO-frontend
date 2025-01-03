@@ -5,7 +5,6 @@ import { loadUserStudy } from '../state/user-study.actions';
 
 export const loadUserStudyResolver: ResolveFn<void> = (snapshot) => {
 
-  console.log(snapshot.paramMap);
   const id = snapshot.paramMap.get('userStudyId');
 
   inject(Store).dispatch(loadUserStudy({ id }))

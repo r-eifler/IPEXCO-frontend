@@ -37,7 +37,6 @@ export class DemoService{
 
         return this.http.get<IHTTPData<Demo[]>>(this.BASE_URL).pipe(
             map(({data}) => data),
-            tap(console.log),
             map(demos => (
               demos.map( demo => ({
                 ...demo, 
@@ -63,7 +62,6 @@ export class DemoService{
     }
 
     postDemoImage$(image: any): Observable<string | null> {
-      console.log('Upload Image: ' + ImageBitmap.name);
       const formData = new FormData();
       formData.append('summaryImage', image);
 
@@ -73,7 +71,6 @@ export class DemoService{
   }
 
     putDemo$(demo: Demo): Observable<Demo> {
-      console.log(demo);
       return this.http.put<IHTTPData<Demo>>(this.BASE_URL + demo._id, {demo: demo}).pipe(
           map(({data}) => data)
       )

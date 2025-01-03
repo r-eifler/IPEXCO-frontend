@@ -68,7 +68,7 @@ export class UserStudyDataBaseComponent implements OnInit {
     // private propertiesService: PlanPropertyMapService,
   ) {
 
-    console.log("User study base");
+    // console.log("User study base");
     // this.demosService.findCollection();
 
     // this.userStudy$ = this.selectedUserStudy.getSelectedObject()

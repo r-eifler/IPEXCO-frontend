@@ -39,7 +39,6 @@ export function maxUtility(demo: Demo, planProperties: PlanProperty[]): number {
   if(!demo || ! planProperties){
     return undefined;
   }
-  console.log(demo);
   let MGCS = demo.globalExplanation.MGCS 
   if(!Array.isArray(MGCS)){
     MGCS = JSON.parse(demo.globalExplanation.MGCS as unknown as string) 

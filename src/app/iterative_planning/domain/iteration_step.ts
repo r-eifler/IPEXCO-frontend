@@ -5,7 +5,7 @@ import { Plan } from "./plan";
 export enum StepStatus {
     unknown,
     solvable,
-    unsolvable,
+    unsolvable
   }
 
   export interface IterationStep {

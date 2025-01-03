@@ -70,17 +70,13 @@ export class DemoEditViewComponent {
 
     this.imageFile$.pipe(
       takeUntilDestroyed(),
-      tap(console.log),
       filter(f => !!f),
       switchMap(f => this.uploadService.postDemoImage$(f).pipe(tap(path => this.imagePath$.next(path))))
     ).subscribe();
 
-    this.imageFile$.pipe(takeUntilDestroyed()).subscribe(path => console.log(path));
-    this.imagePath$.pipe(takeUntilDestroyed()).subscribe(path => console.log(path));
   }
 
   initForm(demo: Demo){
-    console.log(demo);
     this.form.controls.main.controls.name.setValue(demo.name);
     this.form.controls.main.controls.description.setValue(demo.description);
     this.form.controls.taskInfo.controls.domainInfo.setValue(demo.domainInfo);
@@ -105,9 +101,6 @@ export class DemoEditViewComponent {
           domainInfo: this.form.controls.taskInfo.controls.domainInfo.value,
           instanceInfo: this.form.controls.taskInfo.controls.instanceInfo.value,
         };
-
-        console.log("New Demo:");
-        console.log(newDemo);
 
         this.store.dispatch(updateDemo({demo: newDemo}))
 

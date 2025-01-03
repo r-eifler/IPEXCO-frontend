@@ -1,15 +1,16 @@
 import { inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { catchError, filter, map, mergeMap, switchMap, tap } from 'rxjs/operators';
+import { catchError, filter, map, mergeMap, mergeMap, switchMap, tap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { executionUserStudyStart, executionUserStudySubmit, logAction, logActionFailure, logActionSuccess, logPlanComputationFinished} from '../user-study-execution.actions';
 import { Store } from '@ngrx/store';
 import { selectExecutionUserStudyPendingIterationSteps, selectExecutionUserStudyStep, selectExecutionUserStudyStepIndex } from '../user-study-execution.selector';
 import { concatLatestFrom } from '@ngrx/operators';
-import { ActionType } from '../../domain/user-action';import { createIterationStepSuccess, loadIterationStepsSuccess, poseAnswer, poseAnswerLLM, questionPosed, questionPosedLLM, selectIterationStep, sendMessageToLLMExplanationTranslator, sendMessageToLLMExplanationTranslatorFailure, sendMessageToLLMExplanationTranslatorSuccess, sendMessageToLLMQuestionTranslator, sendMessageToLLMQuestionTranslatorFailure, sendMessageToLLMQuestionTranslatorSuccess } from 'src/app/iterative_planning/state/iterative-planning.actions';
+import { ActionType, CancelPlanForIterationStepUserAction } from '../../domain/user-action';
+import { cancelPlanComputationAndIterationStep, createIterationStepSuccess, loadIterationStepsSuccess, poseAnswer, poseAnswerLLM, questionPosed, questionPosedLLM, selectIterationStep, sendMessageToLLMExplanationTranslator, sendMessageToLLMExplanationTranslatorFailure, sendMessageToLLMExplanationTranslatorSuccess, sendMessageToLLMQuestionTranslator, sendMessageToLLMQuestionTranslatorFailure, sendMessageToLLMQuestionTranslatorSuccess } from 'src/app/iterative_planning/state/iterative-planning.actions';
 import { StepStatus } from 'src/app/iterative_planning/domain/iteration_step';
 import { computeUtility } from 'src/app/iterative_planning/domain/plan';
-import { selectIterativePlanningProject, selectIterativePlanningProperties, selectIterativePlanningSelectedStepId } from 'src/app/iterative_planning/state/iterative-planning.selector';
+import { selectIterationStepById, selectIterativePlanningProject, selectIterativePlanningProperties, selectIterativePlanningSelectedStepId } from 'src/app/iterative_planning/state/iterative-planning.selector';
 import { structuredTextToString } from 'src/app/iterative_planning/domain/interface/explanation-message';
 import { selectIsUserStudy, selectUserRole } from 'src/app/user/state/user.selector';
 import { UserStudyExecutionService } from '../../service/user-study-execution.service';
@@ -25,7 +26,6 @@ export class LogUserActivitiesEffect{
     public loadUserStudy$ = createEffect(() => this.actions$.pipe(
         ofType(logAction),
         concatLatestFrom(() => this.store.select(selectUserRole)),
-        tap(console.log),
         filter(([_, role]) => role == 'user-study'),
         mergeMap(([{action},_]) => this.service.log$(action).pipe(
             map(() => logActionSuccess()),
@@ -121,13 +121,30 @@ export class LogUserActivitiesEffect{
         )
     );
 
-    public instepIterStep$ = createEffect(() => this.actions$.pipe(
+
+    public cancelPlanForIterStep$ = createEffect(() => this.actions$.pipe(
+        ofType(cancelPlanComputationAndIterationStep),
+        concatLatestFrom(({iterationStepId}) => [this.store.select(selectIterationStepById(iterationStepId))]),
+        switchMap(([{iterationStepId}, step]) => [
+            logAction({action: {
+                type: ActionType.CANCEL_PLAN_FOR_ITERATION_STEP, 
+                data: {
+                    stepId: iterationStepId,
+                    demoId: step.project
+                }
+            }})
+        ])
+    ));
+
+    public inspectIterStep$ = createEffect(() => this.actions$.pipe(
         ofType(selectIterationStep),
-        switchMap(({iterationStepId}) => [
+        concatLatestFrom(({iterationStepId}) => [this.store.select(selectIterationStepById(iterationStepId))]),
+        switchMap(([{iterationStepId}, step]) => [
             logAction({action: {
                 type: ActionType.INSPECT_ITERATION_STEP, 
                 data: {
-                    stepId: iterationStepId
+                    stepId: iterationStepId,
+                    demoId: step.project
                 }
             }})
         ])

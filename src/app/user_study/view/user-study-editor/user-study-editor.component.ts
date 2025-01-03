@@ -113,7 +113,6 @@ export class UserStudyEditorComponent {
   }
 
   updateControl(control: FormControl<UserStudyStep>, step: UserStudyStep) {
-    // console.log(step);
     control.setValue(step);
   }
 
@@ -126,7 +125,6 @@ export class UserStudyEditorComponent {
       return;
     }
     const value: UserStudyStep = this.form .controls.steps.controls[index].value;
-    console.log(value);
     this.form .controls.steps.removeAt(index);
     this.form.controls.steps.insert(index - 1, this.fb.control<UserStudyStep>(value));
   }
@@ -136,7 +134,6 @@ export class UserStudyEditorComponent {
       return;
     }
     const value: UserStudyStep = this.form .controls.steps.controls[index].value;
-    console.log(value);
     this.form .controls.steps.removeAt(index);
     this.form.controls.steps.insert(index + 1, this.fb.control<UserStudyStep>(value));
   }
@@ -156,8 +153,6 @@ export class UserStudyEditorComponent {
         redirectUrl: this.form.controls.redirectUrl.value,
         steps: this.form.controls.steps.value
       };
-
-      console.log(userStudy);
 
       this.store.dispatch(editUserStudy({userStudy}));
       this.router.navigate(['user-study', study._id, 'details']);

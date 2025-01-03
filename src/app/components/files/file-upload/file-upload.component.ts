@@ -52,7 +52,6 @@ export class TemplateFileUploadComponent {
       };
 
       this.name = fileObject.name;
-      console.log(this.name)
       reader.readAsText(fileObject);
     }
   }

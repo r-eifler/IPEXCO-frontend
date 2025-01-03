@@ -98,7 +98,6 @@ export class SelectPropertyComponent {
         if(!newP){
           return
         }
-        console.log(newP);
         this.store.dispatch(createPlanProperty({planProperty: newP}))
       }
       );

@@ -70,7 +70,6 @@ export class UserStudyDetailsViewComponent {
       data: {name: 'Delete User Study', text: 'Are you sure you want to delete the user study?'},
     });
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
       if (result) {
         this.store.dispatch((deleteUserStudy({id})));
         this.router.navigate(['user-study', 'collection']);
