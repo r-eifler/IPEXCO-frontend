@@ -74,7 +74,7 @@
                   (down)="moveDown(idx)"
                 ></app-description-card>
               }
-              @case (userStudyStepType.toolDescription){
+              @case (userStudyStepType.userManual){
                 <app-tool-description-card
                   [step]="control.value"
                   [first]="first"
@@ -124,7 +124,7 @@
           }
           <div class="button-container">
             <button mat-stroked-button type="button" (click)="addNewStep(userStudyStepType.description)">new description step</button>
-            <button mat-stroked-button type="button" (click)="addNewStep(userStudyStepType.toolDescription)">new tool description step</button>
+            <button mat-stroked-button type="button" (click)="addNewStep(userStudyStepType.userManual)">new user manual step</button>
             <button mat-stroked-button type="button" (click)="addNewStep(userStudyStepType.demoInfo)">new demo information step</button>
             <button mat-stroked-button type="button" (click)="addNewStep(userStudyStepType.demo)">new demo step</button>
             <button mat-stroked-button type="button" (click)="addNewStep(userStudyStepType.form)">new form step</button>

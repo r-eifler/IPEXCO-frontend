@@ -3,7 +3,7 @@ export enum UserStudyStepType {
   form = 'form',
   demo = 'demo',
   demoInfo = 'demoInfo',
-  toolDescription = 'toolDescription'
+  userManual = 'userManual'
 }
 
 export interface UserStudyStep {

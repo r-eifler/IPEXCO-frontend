@@ -10,7 +10,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatTabsModule } from '@angular/material/tabs';
 import { Observable, startWith } from 'rxjs';
-import { MarkedPipe } from 'src/app/pipes/marked.pipe';
 import { UserStudyStep } from '../../domain/user-study';
 
 @Component({
@@ -25,10 +24,10 @@ import { UserStudyStep } from '../../domain/user-study';
     MatTabsModule,
     MatSliderModule
   ],
-  templateUrl: './tool-description-card.component.html',
-  styleUrl: './tool-description-card.component.scss'
+  templateUrl: './user-manual-card.component.html',
+  styleUrl: './user-manual-card.component.scss'
 })
-export class ToolDescriptionCardComponent {
+export class UserManualCardComponent {
 
   fb = inject(FormBuilder);
 
