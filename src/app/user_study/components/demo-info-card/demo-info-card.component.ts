@@ -36,7 +36,7 @@ export class DemoInfoCardComponent {
 
   form = this.fb.group({
     name: this.fb.control<string>(undefined, [Validators.required]),
-    time: this.fb.control<number>(null),
+    time: this.fb.control<number>(1),
     demo: this.fb.control<string>(undefined, Validators.required),
   })
 

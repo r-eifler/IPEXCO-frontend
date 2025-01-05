@@ -3,7 +3,7 @@ import { Injectable, inject } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
 import {IHTTPData} from '../../shared/domain/http-data.interface';
-import {map} from 'rxjs/operators';
+import {map } from 'rxjs/operators';
 
 
 @Injectable()
@@ -14,7 +14,7 @@ export class NextUserStudyService{
 
   getNextStudy$(id: string): Observable<string> {
     return this.http.get<IHTTPData<string>>(this.BASE_URL + id + '/next').pipe(
-      map(({data}) => data),
+      map(({data}) => data)
     )
   }
 

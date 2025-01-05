@@ -33,7 +33,7 @@ export class UserManualCardComponent {
 
   form = this.fb.group({
     name: this.fb.control<string>(undefined, [Validators.required]),
-    time: this.fb.control<number>(null),
+    time: this.fb.control<number>(1),
   })
 
   step = input.required<UserStudyStep>();
@@ -53,7 +53,7 @@ export class UserManualCardComponent {
         type: this.step().type,
         name: data.name,
         time: data.time,
-        content: ""
+        content: "TODO"
       })
     );
   }

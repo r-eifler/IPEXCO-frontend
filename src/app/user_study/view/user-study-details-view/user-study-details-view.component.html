@@ -116,6 +116,20 @@
                   <div matListItemLine>Questionnaire/External Link</div>
                 </mat-list-item>
               }
+              @case (userStudyStepType.userManual){
+                <mat-list-item>
+                  <mat-icon matListItemIcon>help</mat-icon>
+                  <div matListItemTitle>{{ step.name }}</div>
+                  <div matListItemLine>User Manual</div>
+                </mat-list-item>
+              }
+              @case (userStudyStepType.demoInfo){
+                <mat-list-item>
+                  <mat-icon matListItemIcon>info</mat-icon>
+                  <div matListItemTitle>{{ step.name }}</div>
+                  <div matListItemLine>Task Information</div>
+                </mat-list-item>
+              }
             }
           }
           </mat-list>

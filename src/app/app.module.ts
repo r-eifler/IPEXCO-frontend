@@ -113,6 +113,10 @@ import { DemosUpdateDemoEffect } from './demo/state/effects/update-demo.effect';
 import { UploadDemoEffect } from './demo/state/effects/upload-demo.effect';
 import { CancelCreateDemoEffect } from './project/state/effects/cancel-create-demo.effect';
 import { CancelPlanIterationStepEffect } from './iterative_planning/state/effects/cancel-plan-iteration-step.effect';
+import { LoadUserStudyExecutionDemoEffect } from './user_study_execution/state/effects/load-demo.effect';
+import { UserStudyExecutionDemoService } from './user_study_execution/service/user-study-execution-demo.service';
+import { UserStudyExecutionPlanPropertyService } from './user_study_execution/service/user-study-execution-plan-properties.service';
+import { LoadUserStudyExecutionPlanPropertiesEffect } from './user_study_execution/state/effects/load-plan-properties.effect';
 
 
 
@@ -171,6 +175,8 @@ import { CancelPlanIterationStepEffect } from './iterative_planning/state/effect
       EditUserStudyEffect,
       LoadUserStudyParticipantsEffect,
       ExecutionLoadUserStudyEffect,
+      LoadUserStudyExecutionDemoEffect,
+      LoadUserStudyExecutionPlanPropertiesEffect,
       RegisterUserStudyEffect,
       FinishUserStudyEffect,
       UserStudyCanceledEffect,
@@ -235,6 +241,8 @@ import { CancelPlanIterationStepEffect } from './iterative_planning/state/effect
     NextUserStudyService,
     DemoService,
     DemoPlanPropertyService,
+    UserStudyExecutionDemoService,
+    UserStudyExecutionPlanPropertyService,
     {
       provide: MAT_BOTTOM_SHEET_DEFAULT_OPTIONS,
       useValue: { hasBackdrop: true },

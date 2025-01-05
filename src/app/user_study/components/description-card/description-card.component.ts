@@ -36,7 +36,7 @@ export class DescriptionCardComponent implements OnInit{
 
   form = this.fb.group({
     name: this.fb.control<string>(undefined, [Validators.required]),
-    time: this.fb.control<number>(null),
+    time: this.fb.control<number>(1),
     description: this.fb.control<string>(undefined, [Validators.required, Validators.minLength(1)])
   })
 

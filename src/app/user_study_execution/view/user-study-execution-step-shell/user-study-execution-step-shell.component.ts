@@ -14,6 +14,8 @@ import {UserStudyExecutionExternalViewComponent} from '../user-study-execution-e
 import {UserStudyExecutionDemoViewComponent} from '../user-study-execution-demo-view/user-study-execution-demo-view.component';
 import {take} from 'rxjs/operators';
 import {executionNextUserStudyStep} from '../../state/user-study-execution.actions';
+import { UserManualViewComponent } from '../user-manual-view/user-manual-view.component';
+import { DemoInformationViewComponent } from '../demo-information-view/demo-information-view.component';
 
 @Component({
     selector: 'app-user-study-execution-step-shell',
@@ -21,7 +23,9 @@ import {executionNextUserStudyStep} from '../../state/user-study-execution.actio
         AsyncPipe,
         UserStudyExecutionDescriptionViewComponent,
         UserStudyExecutionExternalViewComponent,
-        UserStudyExecutionDemoViewComponent
+        UserStudyExecutionDemoViewComponent,
+        UserManualViewComponent,
+        DemoInformationViewComponent
     ],
     templateUrl: './user-study-execution-step-shell.component.html',
     styleUrl: './user-study-execution-step-shell.component.scss'
@@ -36,7 +40,4 @@ export class UserStudyExecutionStepShellComponent {
 
   step$ = this.store.select(selectExecutionUserStudyStep);
 
-  onNext() {
-    this.store.dispatch((executionNextUserStudyStep()));
-  }
 }

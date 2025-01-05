@@ -117,6 +117,6 @@ export class UserStudyExecutionHandlerComponent {
   }
 
   onNext() {
-    this.store.dispatch((executionNextUserStudyStep()));
+    this.store.dispatch(executionNextUserStudyStep());
   }
 }
