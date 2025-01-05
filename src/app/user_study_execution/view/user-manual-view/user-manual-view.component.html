@@ -1,1 +1,26 @@
-<p>user-manual-view works!</p>
+@let step = step$ | async;
+@let demo = demo$ | async;
+
+<app-page>
+<app-page-title>
+    {{ step.name }}
+</app-page-title>
+<app-page-content>
+      <app-page-section-list>
+        <app-page-section>
+          <app-page-section-content>
+            <app-info>
+                <mat-icon>info</mat-icon>
+                <span>Below you find the user manual. Please read it carefully. During the use of the tool you can access it via <mat-icon>help</mat-icon></span>
+            </app-info>
+          </app-page-section-content>
+        </app-page-section>
+        <app-page-section>
+            <app-page-section-content>
+                <app-user-manual [settings]="demo?.settings"></app-user-manual>
+            </app-page-section-content>
+        </app-page-section>
+    </app-page-section-list>
+</app-page-content>
+</app-page>
+  

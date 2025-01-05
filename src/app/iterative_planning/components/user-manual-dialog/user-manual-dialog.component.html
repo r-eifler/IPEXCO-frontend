@@ -1,0 +1,11 @@
+<app-dialog>
+    <app-dialog-header>
+        <app-dialog-title>User Manual</app-dialog-title>
+    </app-dialog-header>
+    <app-dialog-content>
+        <app-user-manual [settings]="settings$ | async"></app-user-manual>
+    </app-dialog-content>
+    <app-dialog-footer>
+        <button mat-flat-button (click)="onClose()">Close</button>
+    </app-dialog-footer>
+</app-dialog>

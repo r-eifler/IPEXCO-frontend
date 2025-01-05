@@ -39,15 +39,11 @@ export class DemoInformationViewComponent {
 
   constructor(){
 
-    this.demo$.pipe(takeUntilDestroyed()).subscribe(d => console.log(d));
 
     this.step$.pipe(
       takeUntilDestroyed(),
       filter(s => !!s && s.type == UserStudyStepType.demoInfo)
-    ).subscribe(s => {
-      console.log(s);
-      this.store.dispatch(loadUserStudyDemo({demoId: s.content}));
-    })
+    ).subscribe(s => this.store.dispatch(loadUserStudyDemo({demoId: s.content})))
     
   }
 

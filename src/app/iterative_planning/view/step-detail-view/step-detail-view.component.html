@@ -12,8 +12,12 @@
   <app-page-title>
     {{ step?.name }}
     <app-page-title-action>
-      <button mat-icon-button matTooltip="Delete iteration step."
+      <button mat-icon-button matTooltip="Delete iteration step." *isProject
         (click)="deleteIteration(step?._id)"><mat-icon>delete</mat-icon></button>
+      <button mat-icon-button matTooltip="Open user manual."
+        (click)="onHelp()">
+      <mat-icon>help</mat-icon>
+      </button>
       <button mat-icon-button matTooltip="Creates a new iteration based on the properties selected in this iteration."
         (click)="createNewIteration(step?._id)"><mat-icon>call_split</mat-icon></button>
     </app-page-title-action>

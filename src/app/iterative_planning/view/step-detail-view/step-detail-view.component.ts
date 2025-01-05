@@ -54,6 +54,7 @@ import { MatExpansionModule } from "@angular/material/expansion";
 import { DemoDirective } from "../../derectives/isDemo.directive";
 import { ProjectDirective } from "../../derectives/isProject.directive";
 import { DemoInfoComponent } from "src/app/shared/components/demo/demo-info/demo-info.component";
+import { UserManualDialogComponent } from "../../components/user-manual-dialog/user-manual-dialog.component";
 
 @Component({
     selector: "app-step-detail-view",
@@ -75,6 +76,7 @@ import { DemoInfoComponent } from "src/app/shared/components/demo/demo-info/demo
         DemoDirective,
         ProjectDirective,
         DemoInfoComponent,
+        ProjectDirective
     ],
     templateUrl: "./step-detail-view.component.html",
     styleUrl: "./step-detail-view.component.scss"
@@ -200,5 +202,10 @@ export class StepDetailViewComponent {
     this.stepId$.pipe(take(1)).subscribe((iterationStepId) =>{
       return this.store.dispatch(questionPosed({ question: { questionType: question.questionType, iterationStepId }}))
     });
+  }
+
+
+  onHelp(){
+    this.dialog.open(UserManualDialogComponent);
   }
 }
