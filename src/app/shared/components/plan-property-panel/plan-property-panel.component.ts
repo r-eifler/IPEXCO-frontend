@@ -16,4 +16,5 @@ import { ProjectDirective } from 'src/app/iterative_planning/derectives/isProjec
 })
 export class PlanPropertyPanelComponent {
   property = input.required<PlanProperty | null>();
+  showFormula = input(true);
 }

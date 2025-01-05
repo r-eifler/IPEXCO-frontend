@@ -65,6 +65,8 @@ export class UserStudyExecutionHandlerComponent {
 
   constructor(){
 
+    console.log('EXECUTION HANDLER !!!!');
+
     this.timeOut$.pipe(
       takeUntilDestroyed(),
       filter((to) => to)

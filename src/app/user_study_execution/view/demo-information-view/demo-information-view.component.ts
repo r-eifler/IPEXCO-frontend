@@ -9,6 +9,9 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { PlanPropertyPanelComponent } from 'src/app/shared/components/plan-property-panel/plan-property-panel.component';
 import { AsyncPipe } from '@angular/common';
 import { MarkedPipe } from 'src/app/pipes/marked.pipe';
+import { PageModule } from 'src/app/shared/components/page/page.module';
+import { InfoComponent } from 'src/app/shared/components/info/info/info.component';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-demo-information-view',
@@ -16,7 +19,10 @@ import { MarkedPipe } from 'src/app/pipes/marked.pipe';
     MatTabsModule,
     PlanPropertyPanelComponent,
     AsyncPipe,
-    MarkedPipe
+    MarkedPipe,
+    PageModule,
+    InfoComponent,
+    MatIconModule
   ],
   templateUrl: './demo-information-view.component.html',
   styleUrl: './demo-information-view.component.scss'
@@ -33,7 +39,7 @@ export class DemoInformationViewComponent {
 
   constructor(){
 
-    this.step$.pipe(takeUntilDestroyed()).subscribe(s => console.log(s));
+    this.demo$.pipe(takeUntilDestroyed()).subscribe(d => console.log(d));
 
     this.step$.pipe(
       takeUntilDestroyed(),

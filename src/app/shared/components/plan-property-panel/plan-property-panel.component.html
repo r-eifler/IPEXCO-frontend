@@ -25,9 +25,11 @@
 
     <ng-content></ng-content>
 
+    @if(showFormula()){
     <app-unformatted *isProject>
       {{ property()?.formula }}
     </app-unformatted>
+    }
   </div>
 
 </mat-expansion-panel>

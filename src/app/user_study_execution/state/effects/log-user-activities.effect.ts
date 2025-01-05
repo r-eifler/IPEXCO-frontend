@@ -63,7 +63,7 @@ export class LogUserActivitiesEffect{
                     }
                 }})]
             }
-            if(step?.type == 'description'){
+            else if(step?.type == 'description'){
                 return [logAction({action: {
                     type: ActionType.START_DESCRIPTION, 
                     data: {
@@ -72,9 +72,36 @@ export class LogUserActivitiesEffect{
                     }
                 }})]
             }
-            if(step?.type == 'form'){
+            else if(step?.type == 'form'){
                 return [logAction({action: {
                     type: ActionType.START_EXTERNAL, 
+                    data: {
+                        stepIndex: index,
+                        stepName: step.name
+                    }
+                }})]
+            }
+            else if(step?.type == 'demoInfo'){
+                return [logAction({action: {
+                    type: ActionType.START_DEMO_INFO, 
+                    data: {
+                        stepIndex: index,
+                        stepName: step.name
+                    }
+                }})]
+            }
+            else if(step?.type == 'userManual'){
+                return [logAction({action: {
+                    type: ActionType.START_USER_MANUAL, 
+                    data: {
+                        stepIndex: index,
+                        stepName: step.name
+                    }
+                }})]
+            }
+            else {
+                return [logAction({action: {
+                    type: ActionType.OTHER, 
                     data: {
                         stepIndex: index,
                         stepName: step.name
