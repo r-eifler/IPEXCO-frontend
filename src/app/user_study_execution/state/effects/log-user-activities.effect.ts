@@ -171,7 +171,7 @@ export class LogUserActivitiesEffect{
                 type: ActionType.INSPECT_ITERATION_STEP, 
                 data: {
                     stepId: iterationStepId,
-                    demoId: step.project
+                    demoId: step ? step.project : undefined
                 }
             }})
         ])

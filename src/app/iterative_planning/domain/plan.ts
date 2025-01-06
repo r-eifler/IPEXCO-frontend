@@ -47,5 +47,8 @@ export function nextState(state: State, action: PDDLAction): State {
 
 
 export function computeUtility(plan: Plan, planProperties: Record<string, PlanProperty>): number {
+  if(!plan || !planProperties){
+    return undefined;
+  }
   return sum(plan.satisfied_properties?.map(ppId => planProperties[ppId].utility));
 }
