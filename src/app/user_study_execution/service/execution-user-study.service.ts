@@ -3,7 +3,7 @@ import { Injectable, inject } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
 import {IHTTPData} from '../../shared/domain/http-data.interface';
-import {map} from 'rxjs/operators';
+import {map, tap} from 'rxjs/operators';
 import {UserStudy} from '../../user_study/domain/user-study';
 
 
@@ -20,7 +20,7 @@ export class ExecutionUserStudyService {
         ...data,
         startDate: new Date(data.startDate),
         endDate: new Date(data.endDate),
-      })),
+      }))
     )
   }
 }

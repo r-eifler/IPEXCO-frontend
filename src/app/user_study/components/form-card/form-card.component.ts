@@ -37,7 +37,7 @@ export class FormCardComponent implements OnInit {
 
   form = this.fb.group({
     name: this.fb.control<string>(undefined, [Validators.required]),
-    time: this.fb.control<number>(null),
+    time: this.fb.control<number>(1),
     url: this.fb.control<string | undefined>('', [Validators.required,  Validators.minLength(1)]),
   })
 

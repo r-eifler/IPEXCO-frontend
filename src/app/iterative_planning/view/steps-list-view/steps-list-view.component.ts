@@ -17,6 +17,9 @@ import { StepsListHeroComponent } from '../../components/steps-list-hero/steps-l
 import { map } from 'rxjs';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { DemoInfoComponent } from 'src/app/shared/components/demo/demo-info/demo-info.component';
+import { MatDialog } from '@angular/material/dialog';
+import { UserManualDialogComponent } from '../../components/user-manual-dialog/user-manual-dialog.component';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
     selector: 'app-steps-list-view',
@@ -32,7 +35,9 @@ import { DemoInfoComponent } from 'src/app/shared/components/demo/demo-info/demo
         DemoDirective,
         StepsListHeroComponent,
         MatExpansionModule,
-        DemoInfoComponent
+        DemoInfoComponent,
+        MatButtonModule,
+        MatIconModule
     ],
     templateUrl: './steps-list-view.component.html',
     styleUrl: './steps-list-view.component.scss'
@@ -42,6 +47,7 @@ export class StepsListViewComponent{
   host = window.location.protocol + "//" + window.location.host;
 
   private store = inject(Store);
+  readonly dialog = inject(MatDialog);
 
   project$ = this.store.select(selectIterativePlanningProject)
   image$ = this.project$.pipe(map(p => p?.summaryImage));
@@ -57,5 +63,9 @@ export class StepsListViewComponent{
 
   cancelIterationStep(iterationStepId: string){
     this.store.dispatch(cancelPlanComputationAndIterationStep({iterationStepId}))
+  }
+
+  onHelp(){
+    this.dialog.open(UserManualDialogComponent);
   }
 }

@@ -65,6 +65,8 @@ export class UserStudyExecutionHandlerComponent {
 
   constructor(){
 
+    console.log('EXECUTION HANDLER !!!!');
+
     this.timeOut$.pipe(
       takeUntilDestroyed(),
       filter((to) => to)
@@ -117,6 +119,6 @@ export class UserStudyExecutionHandlerComponent {
   }
 
   onNext() {
-    this.store.dispatch((executionNextUserStudyStep()));
+    this.store.dispatch(executionNextUserStudyStep());
   }
 }

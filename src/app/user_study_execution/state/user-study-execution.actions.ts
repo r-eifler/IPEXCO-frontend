@@ -3,6 +3,8 @@ import {UserStudy} from '../../user_study/domain/user-study';
 import {User} from '../../user/domain/user';
 import { UserAction } from '../domain/user-action';
 import { IterationStep } from 'src/app/iterative_planning/domain/iteration_step';
+import { Demo } from 'src/app/project/domain/demo';
+import { PlanProperty } from 'src/app/shared/domain/plan-property/plan-property';
 
 // User Studies
 export const executionLoadUserStudy = createAction('[UserStudyExecution] load user study', props<{id: string}>());
@@ -26,6 +28,17 @@ export const executionUserStudySubmitFailure = createAction('[UserStudyExecution
 export const executionUserStudyCancel = createAction('[UserStudyExecution] cancel');
 export const executionUserStudyCancelSuccess = createAction('[UserStudyExecution] cancel success');
 export const executionUserStudyCancelFailure = createAction('[UserStudyExecution] cancel failure');
+
+// demo 
+export const loadUserStudyDemo = createAction('[UserStudyExecution] load user study demo', props<{demoId: string}>());
+export const loadUserStudyDemoSuccess = createAction('[UserStudyExecution] load user study demo success', props<{demo: Demo}>());
+export const loadUserStudyDemoFailure = createAction('[UserStudyExecution] load user study demo failure');
+
+
+// planProperties 
+export const loadUserStudyPlanProperties = createAction('[UserStudyExecution] load user study Plan Properties', props<{demoId: string}>());
+export const loadUserStudyPlanPropertiesSuccess = createAction('[UserStudyExecution] load user study Plan Properties success', props<{planProperties: PlanProperty[]}>());
+export const loadUserStudyPlanPropertiesFailure = createAction('[UserStudyExecution] load user study Plan Properties failure');
 
 
 // user

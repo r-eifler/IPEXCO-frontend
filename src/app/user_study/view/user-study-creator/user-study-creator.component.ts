@@ -25,6 +25,8 @@ import {DemoCardComponent} from '../../components/demo-card/demo-card.component'
 import {FormCardComponent} from '../../components/form-card/form-card.component';
 import {selectedAtLeastOne} from '../../../validators/selected-at-least-one.validator';
 import {isNoPropertyNull} from '../../../validators/no-property-null.validator';
+import { UserManualCardComponent } from '../../components/user-manual-card/user-manual-card.component';
+import { DemoInfoCardComponent } from '../../components/demo-info-card/demo-info-card.component';
 
 
 @Component({
@@ -47,7 +49,9 @@ import {isNoPropertyNull} from '../../../validators/no-property-null.validator';
         AsyncPipe,
         DescriptionCardComponent,
         DemoCardComponent,
-        FormCardComponent
+        FormCardComponent,
+        UserManualCardComponent,
+        DemoInfoCardComponent,
     ],
     templateUrl: './user-study-creator.component.html',
     styleUrls: ['./user-study-creator.component.scss']
@@ -89,6 +93,7 @@ export class UserStudyCreatorComponent {
       time: null,
       content: null
     };
+    console.log(newPart);
     this.form.controls.steps.push(this.fb.control<UserStudyStep>(newPart, [isNoPropertyNull]));
   }
 
