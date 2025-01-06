@@ -18,11 +18,10 @@ import {DialogComponent} from '../../../shared/components/dialog/dialog/dialog.c
 })
 export class TimeOverDialogComponent {
 
-  store = inject(Store);
-  data: any = inject(MAT_DIALOG_DATA);
+  dialogRef = inject(MatDialogRef<DialogComponent>);
 
-  constructor(private dialogRef: MatDialogRef<DialogComponent>) {
-    dialogRef.disableClose = true;
+  constructor() {
+    this.dialogRef.disableClose = true;
   }
 
   onContinue(){

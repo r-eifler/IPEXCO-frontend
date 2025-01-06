@@ -15,6 +15,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { selectLoggedIn } from 'src/app/user/state/user.selector';
 import { UserStudyStepType } from 'src/app/user_study/domain/user-study';
 import { TimerStartsDialogComponent } from '../timer-starts-dialog/timer-starts-dialog.component';
+import { FinishDemoInfoDialogComponent } from '../finish-demo-info-dialog/finish-demo-info-dialog.component';
 
 @Component({
     selector: 'app-user-study-execution-handler',
@@ -65,8 +66,6 @@ export class UserStudyExecutionHandlerComponent {
 
   constructor(){
 
-    console.log('EXECUTION HANDLER !!!!');
-
     this.timeOut$.pipe(
       takeUntilDestroyed(),
       filter((to) => to)
@@ -83,7 +82,6 @@ export class UserStudyExecutionHandlerComponent {
       (step) => {
         if(step.type === UserStudyStepType.demo){
           const dialogRef = this.dialog.open(TimerStartsDialogComponent, {data: {timeout: Math.floor(step.time / 60)}})
-          // dialogRef.afterClosed().pipe(take(1)).subscribe(() => this.store.dispatch((executionNextUserStudyStep())))
         }
       }
     );
@@ -119,6 +117,23 @@ export class UserStudyExecutionHandlerComponent {
   }
 
   onNext() {
-    this.store.dispatch(executionNextUserStudyStep());
+    this.currentStep$.pipe(
+      filter((step) => !!step),
+      take(1),
+    ).subscribe(
+      (step) => {
+        if(step.type === UserStudyStepType.demo){
+          const dialogRef = this.dialog.open(FinishDemoInfoDialogComponent)
+          dialogRef.afterClosed().pipe(take(1)).subscribe((nextUserStudyStep) => {
+            if(nextUserStudyStep){
+              this.store.dispatch((executionNextUserStudyStep()));
+            }
+          })
+        }
+        else{
+          this.store.dispatch(executionNextUserStudyStep());
+        }
+      }
+    );
   }
 }
