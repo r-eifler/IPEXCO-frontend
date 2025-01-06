@@ -10,15 +10,17 @@ import { EditableListModule } from "src/app/shared/components/editable-list/edit
 import { AsyncPipe, JsonPipe, NgFor } from "@angular/common";
 import { takeUntilDestroyed, toSignal } from "@angular/core/rxjs-interop";
 import { MatDialog, MatDialogModule, MatDialogRef } from "@angular/material/dialog";
-import { combineLatest, filter, map, startWith } from "rxjs";
+import { combineLatest, filter, map, startWith, take, tap } from "rxjs";
 import { InfoModule } from "src/app/shared/components/info/info.module";
 import { SideSheetModule } from "src/app/shared/components/side-sheet/side-sheet.module";
 import { isNonEmptyValidator } from "src/app/validators/non-empty.validator";
 import { PlanPropertyPanelComponent } from "../../../shared/components/plan-property-panel/plan-property-panel.component";
 import { SelectPropertyComponent } from "../../components/select-property/select-property.component";
 import { cancelNewIterationStep, createIterationStep, updateNewIterationStep } from "../../state/iterative-planning.actions";
-import { selectIterativePlanningIterationStepComputationRunning, selectIterativePlanningNumberOfSteps, selectIterativePlanningProperties } from "../../state/iterative-planning.selector";
+import { selectIterativePlanningCreatedStepId, selectIterativePlanningIterationStepComputationRunning, selectIterativePlanningNumberOfSteps, selectIterativePlanningProperties } from "../../state/iterative-planning.selector";
 import { selectPlanPropertyIds, selectPreselectedEnforcedGoals$, selectPreselectedSoftGoals$ } from "./create-iteration.component.selector";
+import { concatLatestFrom } from "@ngrx/operators";
+import { ActivatedRoute, Router } from "@angular/router";
 
 @Component({
     selector: "app-create-iteration",
@@ -43,6 +45,8 @@ export class CreateIterationComponent {
   private fb = inject(FormBuilder);
   private store = inject(Store);
   private dialogService = inject(MatDialog);
+  private router = inject(Router);
+  private activatedRoute = inject(ActivatedRoute)
 
   handlePropertyIdSelection: (ids: string[]) => void;
   dialogRef: MatDialogRef<unknown> | undefined;
