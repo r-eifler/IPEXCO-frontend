@@ -163,9 +163,9 @@ function filterWhyPlan(iterationStep: IterationStep, computed: string[][]): stri
 }
 
 function filterHowPlan(iterationStep: IterationStep, computed: string[][]): string[][] {
-  return computed.filter(
-    MUGS => MUGS.every(id => iterationStep.hardGoals.includes(id))
-  );
+  return computed.map(
+    MCGS => MCGS.filter(id => iterationStep.hardGoals.includes(id))
+  ).filter(possibleCorrections => possibleCorrections.length > 0);
 }
 
 function whyAnswerComputer(step: IterationStep, question: Question, computed: string[][]): string[][] {
