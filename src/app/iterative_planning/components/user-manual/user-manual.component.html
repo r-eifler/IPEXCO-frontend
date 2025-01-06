@@ -1,25 +1,217 @@
-<mat-tab-group>
+<app-page>
+    <app-page-content>
+        <app-page-section-list>
+            <app-page-section>
+                <app-page-section-title>
+                    Iterative Planning
+                </app-page-section-title>
+                <app-page-section-content>
+                    <p>
+                        We are considering tasks where due to limited resources and time 
+                        not all goals can be achieved.
+                    </p>
 
-    <mat-tab label="Iterative Planning">
-        <div class="tab-container">
-            <p>TODO</p>
-        </div>
-        </mat-tab>
+                    <p>
+                        Below you can see a list of sample goals of activities that you want to schedule, 
+                        but due to limited time and space in your car this is not possible. 
+                        Each goal is assigned a utility indicated on the right with 
+                        <mat-icon>workspace_premium</mat-icon> X.
+                        The utility indicates how important the goal is.
+                        If you click on the panel, you get a more details.
+                    </p>
 
-    <mat-tab label="Explanations"> 
-        <div class="tab-container">
-            @if(templatesManual()){
-                <div>
-                    <p>TODO</p>
-                </div>
-            }
-            @if(LLMManual()){
-                <div>
-                    <p>TODO</p>
-                </div>
-            }
-        </div>
-    </mat-tab>
-    
-</mat-tab-group>
+                    <div class="property-list">
+						@for(property of samplePlanProperties; track property._id) {
+							<app-plan-property-panel [property]="property" [showFormula]="false"></app-plan-property-panel>
+						}
+					</div>
+                    
+                    <p>
+                        Thus the goal is to find a trade-off between the goals that can be achieved.
+                        This means you must find a selection of goals that can be achieved and whose
+                        and whose overall utility is maximized.
+                        Each selection of goals is called an <span class="highlight">Iteration Step.</span>
+                    </p>
+
+                    <p>
+                        As orientation we display the maximal possible utility and
+                        the highest achieved utility as shown below in the top of the list of iteration steps. 
+                    </p>
+
+                    <app-steps-list-hero
+                        [demo]="sampleDemo"
+                        [steps]="sampleSteps"
+                        [planPropertiesMap]="samplePlanPropertiesMap"
+                    ></app-steps-list-hero>
+
+                    <p>
+                        To open the interface to create a new iteration step you can click on the card shown below.
+                        If you want to start from the goals selected in a step you can fork from a step by clicking
+                        <mat-icon>call_split</mat-icon>.
+                    </p>
+
+
+                    <div class="page-grid">
+                        <button app-action-card>
+                            <div class="instructions">
+                              <span>Perform a new plan computation from scratch</span>
+                              <span class="alternative">or</span>
+                              <span> fork (<mat-icon>call_split</mat-icon>) an existing one.</span>
+                            </div>
+                            <mat-icon>add</mat-icon>
+                        </button>
+                        <app-iteration-step-card 
+                            [step]="sampleSteps[1]" 
+                            [planProperties]="samplePlanPropertiesMap">
+                        </app-iteration-step-card>
+                    </div>
+
+                    <p> 
+                        For each iteration step you must select the <span class="highlight">Enforced Goals</span>.
+                        Below we create a new iteration with two enforced goals.
+                    </p>
+
+                    <img src="assets/manual/new_step_interface.png">
+
+                    <p>
+                        In addition to the enforced goals it is also possible to select <span class="highlight">Soft Goals</span>.
+                        These are goals that the tool will not try achieve, but they will play a role in the conflict analysis
+                        between the goals detailed below.
+                    </p>
+
+                    <img src="assets/manual/add_soft_goals.png">
+
+                    <p>
+                        If you create a new iteration step the tool will check whether it is possible to achieve 
+                        all the enforced goals. 
+                        Below you see a list of three iteration steps, each with a different status.
+                    </p>
+
+                    <div class="page-grid">
+                        @for(step of sampleSteps; track step) {
+                          <app-iteration-step-card 
+                            [step]="step" 
+                            [planProperties]="samplePlanPropertiesMap">
+                          </app-iteration-step-card>
+                        }
+                    </div>
+
+                    <mat-list>
+                        <mat-list-item>
+                            <span matListItemLine><span class="highlight">Step 1</span> is unsolvable. </span>
+                            <span matListItemLine>This means is is not possible to achieve the 3 enforced goals.</span>
+                        </mat-list-item>
+                        <mat-list-item>
+                            <span matListItemLine><span class="highlight">Step 2</span> is solved.</span>
+                            <span matListItemLine>
+                                This means it is possible to achieve the 2 enforced goals.
+                                The summed utility of the step is 5.
+                            </span>
+                        </mat-list-item>
+                        <mat-list-item>
+                            <span matListItemLine><span class="highlight">Step 4</span> is still running. </span>
+                            <span matListItemLine>
+                                This mean the tool has not yet determined whether the enforced goals can be achieved.
+                            </span>
+                            <span matListItemLine>
+                                Checking whether the enforced goals can be achieved takes time, especially if the 
+                                selection is unsolvable. Thus it is possible to cancel the check by clicking <mat-icon>cancel</mat-icon>
+                            </span>
+                            
+                        </mat-list-item>
+                        <mat-list-item>
+                            <span matListItemLine><span class="highlight">Step 3</span> was canceled.</span>
+                            <span matListItemLine>
+                                It is not possible to restart the check for a step. If you want to check the same selection 
+                                of goal you can fork from the canceled step.
+                            </span>
+                        </mat-list-item>
+                    </mat-list>
+
+
+                </app-page-section-content>
+            </app-page-section>
+            <app-page-section>
+                <app-page-section-title>
+                    Iteration Step Details
+                </app-page-section-title>
+                <app-page-section-content>
+                    <p>
+                        The details view of the an iteration step provides addition information and gives access 
+                        to other tool features.
+                    </p>
+
+                    <h3>Unsolvable Step</h3>
+
+                    <p>
+                        For an unsolvable step the list of the enforced goals is shown. In our example step from above this is:
+                    </p>
+
+                    <h4>Enforced Goals</h4>
+                    <div class="property-list">
+						<app-plan-property-panel [property]="samplePlanProperties[0]" [showFormula]="false"></app-plan-property-panel>
+                        <app-plan-property-panel [property]="samplePlanProperties[1]" [showFormula]="false"></app-plan-property-panel>
+                        <app-plan-property-panel [property]="samplePlanProperties[2]" [showFormula]="false"></app-plan-property-panel>
+					</div>
+
+                    <h3>Solvable Step</h3>
+
+                    <p>
+                        For a solvable step in addition to the list of the enforced goals the satisfied and unsatisfied soft 
+                        goals are shown. Note, the soft goals are selected when a new iteration step is created, but the tool 
+                        does not try to achieve them.
+                        Nevertheless, they might be satisfied by chance.
+                    </p>
+
+                    <p>
+                        For our sample step this looks as follows:
+                    </p>
+
+                    <h4>Unsatisfied Softgoals</h4>
+                    <div class="property-list">
+						<app-plan-property-panel [property]="samplePlanProperties[4]" [showFormula]="false"></app-plan-property-panel>
+					</div>
+
+                    <h4>Satisfied Softgoals</h4>
+                    <div class="property-list">
+						<app-plan-property-panel [property]="samplePlanProperties[3]" [showFormula]="false"></app-plan-property-panel>
+					</div>
+
+                    <h4>Enforced Goals</h4>
+                    <div class="property-list">
+                        <app-plan-property-panel [property]="samplePlanProperties[0]" [showFormula]="false"></app-plan-property-panel>
+						<app-plan-property-panel [property]="samplePlanProperties[2]" [showFormula]="false"></app-plan-property-panel>
+					</div>
+
+
+                </app-page-section-content>
+            </app-page-section>
+            <app-page-section>
+                <app-page-section-title>
+                    Explanations
+                </app-page-section-title>
+                <app-page-section-content>
+                    <p>
+                        To facilitate the selection of goals the tool can provide explanations for user questions.
+                        Below we explain you can ask the tool questions.
+                    </p>
+                </app-page-section-content>
+                <app-page-section-content>
+                    <div class="tab-container">
+                        @if(templatesManual()){
+                            <div>
+                                <p>TODO</p>
+                            </div>
+                        }
+                        @if(LLMManual()){
+                            <div>
+                                <p>TODO</p>
+                            </div>
+                        }
+                    </div>
+                </app-page-section-content>
+            </app-page-section>
+        </app-page-section-list>
+    </app-page-content>
+</app-page>
   

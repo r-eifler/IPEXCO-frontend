@@ -1,7 +1,53 @@
+@use '../../../../variables' as vars;
+@use '../../../../styles/container' as container;
+
 .tab-container {
-    margin: var(--spacing-200);
-    display: flex;
-    flex-direction: column;
-  
-    gap: var(--spacing-200);
+  margin: var(--spacing-200);
+  display: flex;
+  flex-direction: column;
+
+  gap: var(--spacing-200);
+}
+
+.highlight{
+  font-weight: 700;
+}
+
+.property-list {
+  display: flex;
+  flex-direction: column;
+
+  gap: var(--spacing-200);
+}
+
+
+app-page-content {
+  @include container.sm {
+    .page-grid {
+      grid-template-columns: repeat(1, minmax(0, 1fr));
+    }
   }
+
+  @include container.md {
+    .page-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @include container.lg {
+    .page-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @include container.xl {
+    .page-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+}
+
+.page-grid {
+  display: grid;
+  gap: var(--page-grid-gap);
+}
