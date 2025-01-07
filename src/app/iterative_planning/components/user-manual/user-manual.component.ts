@@ -203,10 +203,6 @@ export class UserManualComponent {
     }
   ];
 
-<<<<<<< HEAD
-  onUserMessage(request: string) {
-
-=======
   userMessage: string = '';
 
   sentMessage(): boolean {
@@ -215,6 +211,5 @@ export class UserManualComponent {
 
   onUserMessage(request: string) {
     this.userMessage = request;
->>>>>>> llm-version
   }
 }
