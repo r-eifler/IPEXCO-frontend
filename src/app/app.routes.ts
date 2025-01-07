@@ -6,6 +6,7 @@ import {NavigationComponent} from './base/components/navigation/navigation.compo
 import { MainPageComponent } from './base/components/main-page/main-page.component';
 import { ToHomeGuard } from './route-guards/to-home.guard';
 import { UserManualComponent } from './iterative_planning/components/user-manual/user-manual.component';
+import { HelpPageComponent } from './base/components/help-page/help-page.component';
 
 export const appRoutes: Routes = [
   {
@@ -41,7 +42,7 @@ export const appRoutes: Routes = [
       },
       {
         path: 'manual',
-        component: UserManualComponent,
+        component: HelpPageComponent,
         canActivate: [AuthGuard],
       },
       {
