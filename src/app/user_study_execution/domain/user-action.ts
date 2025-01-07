@@ -31,6 +31,7 @@ export enum ActionType {
     ANSWER_GT = 'ANSWER_GT',
     FAILED_GT = 'FAILED_GT',
     LLM_CONTEXT = 'LLM_CONTEXT',
+    ASK_QUESTION_LLM = 'ASK_QUESTION_LLM',
 }
 
 
