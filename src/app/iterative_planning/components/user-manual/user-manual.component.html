@@ -218,7 +218,11 @@
                                     <app-chat-markdown-message [role]="'receiver'" [rawMessage]="'So if I stop enforcing &quot;go to the supermarket&quot; the planning task should be solvable?'"></app-chat-markdown-message>
                                     <app-chat-markdown-message [role]="'sender'" [rawMessage]="'Correct! Removing &quot;go to the supermarket&quot; should be enough to solve the conflict and thus make the task solvable.'"></app-chat-markdown-message>
                                     
-                                    <app-chat-input (userInput)="onUserMessage($event)"></app-chat-input>
+                                    @if(sentMessage()){
+                                        <app-chat-markdown-message [role]="'receiver'" [rawMessage]="userMessage"></app-chat-markdown-message>
+                                    }
+                                    <app-chat-input (userInput)="onUserMessage($event)" [preset]="'Type your question here, then press enter or use the button on the right.'"></app-chat-input>
+
                                   </app-chat>
 
                                 <p>
@@ -243,8 +247,10 @@
 
                                     <app-chat-markdown-message [role]="'receiver'" [rawMessage]="'So what can I do ? '"></app-chat-markdown-message>
                                     <app-chat-markdown-message [role]="'sender'" [rawMessage]="'To achieve &quot;go to the supermarket&quot; you can stop enforcing one of &quot;go to gym&quot; or &quot;go to yoga&quot;.'"></app-chat-markdown-message>
-                                    
-                                    <app-chat-input (userInput)="onUserMessage($event)" [preset]="'Type your question here, then press enter or use the button on the right.'"></app-chat-input>
+                                    @if(sentMessage()){
+                                        <app-chat-markdown-message [role]="'receiver'" [rawMessage]="userMessage"></app-chat-markdown-message>
+                                    }
+                                    <app-chat-input (userInput)="onUserMessage($event)"></app-chat-input>
                                 </app-chat>
 
                                 <p>
@@ -257,16 +263,24 @@
                                     <app-chat-markdown-message [role]="'receiver'" [rawMessage]="'Why no yoga'"></app-chat-markdown-message>
                                     <app-chat-markdown-message [role]="'sender'" [rawMessage]="'I understood your question as : &quot;Why is the goal &quot;go to yoga&quot; not satisfied?&quot;.'"></app-chat-markdown-message>
                                     <app-chat-markdown-message [role]="'sender'" [rawMessage]="'Because you enforced &quot;go to gym&quot;, &quot;go to yoga&quot; which are in conflict with &quot;go to the supermarket&quot;.'"></app-chat-markdown-message>
+                                    @if(sentMessage()){
+                                        <app-chat-markdown-message [role]="'receiver'" [rawMessage]="userMessage"></app-chat-markdown-message>
+                                    }
                                     <app-chat-input (userInput)="onUserMessage($event)"></app-chat-input>
                                 </app-chat>
 
                                 <p>
                                    You can try any question you want. The explainer will try to answer it and if it does not understand your question it will ask you to clarify it.
                                 </p>
-
-
                             </div>
-
+                                <div class="disclaimer">
+                                    <p>
+                                        <strong>Disclaimer:</strong> The AI explainer is an experimental feature designed to assist with understanding planning tasks. 
+                                        While we strive for accuracy, the AI may occasionally provide incomplete, inaccurate, or inconsistent responses. 
+                                        Please use these explanations as a helpful guide rather than definitive answers, and always verify critical decisions 
+                                        through the planning interface. If you notice any inconsistencies, feel free to rephrase your question.
+                                    </p>
+                            </div>
 
                         }
                     </div>

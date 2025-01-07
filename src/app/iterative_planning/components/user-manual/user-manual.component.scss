@@ -51,3 +51,22 @@ app-page-content {
   display: grid;
   gap: var(--page-grid-gap);
 }
+
+.disclaimer {
+  background-color: rgba(255, 247, 237, 0.8);
+  border: 1px solid #ffd700;
+  border-radius: 8px;
+  padding: var(--spacing-300);
+  margin-top: var(--spacing-400);
+  
+  p {
+    margin: 0;
+    color: #664d03;
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+
+  strong {
+    color: #664d03;
+  }
+}
