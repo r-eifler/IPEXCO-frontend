@@ -15,6 +15,7 @@ export class ChatInputComponent {
   private fb = inject(FormBuilder);
 
   disabled = input<boolean>();
+  preset = input<string>("Type your question here...");
 
   userInput = output<string>();
 
