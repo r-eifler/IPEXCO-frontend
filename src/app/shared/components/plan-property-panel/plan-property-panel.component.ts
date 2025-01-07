@@ -7,6 +7,7 @@ import { UnformattedModule } from 'src/app/shared/components/unformatted/unforma
 
 import { PlanProperty } from '../../domain/plan-property/plan-property';
 import { ProjectDirective } from 'src/app/iterative_planning/derectives/isProject.directive';
+import { NgClass } from '@angular/common';
 
 @Component({
     selector: 'app-plan-property-panel',

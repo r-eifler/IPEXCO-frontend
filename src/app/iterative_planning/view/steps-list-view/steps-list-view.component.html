@@ -19,7 +19,11 @@
   </app-page-title>
 
   <app-page-hero *isDemo>
-    <app-steps-list-hero></app-steps-list-hero>
+    <app-steps-list-hero
+      [demo]="project$ | async"
+      [steps]="steps$ | async"
+      [planPropertiesMap]="planProperties"
+    ></app-steps-list-hero>
   </app-page-hero>
 
   <app-page-content>

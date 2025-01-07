@@ -1,12 +1,13 @@
-import { Component, computed, inject, Signal } from '@angular/core';
+import { Component, computed, inject, input, Signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { Store } from '@ngrx/store';
 import { selectIterativePlanningIterationSteps, selectIterativePlanningProject, selectIterativePlanningProperties } from '../../state/iterative-planning.selector';
 import { Demo, maxUtility } from 'src/app/project/domain/demo';
-import { StepStatus } from '../../domain/iteration_step';
+import { IterationStep, StepStatus } from '../../domain/iteration_step';
 import { computeUtility } from '../../domain/plan';
+import { PlanProperty } from 'src/app/shared/domain/plan-property/plan-property';
 
 @Component({
   selector: 'app-steps-list-hero',
@@ -19,12 +20,9 @@ import { computeUtility } from '../../domain/plan';
 })
 export class StepsListHeroComponent {
 
-  store = inject(Store);
-
-  demo = toSignal(this.store.select(selectIterativePlanningProject)) as Signal<Demo>;
-  planPropertiesMap = toSignal(this.store.select(selectIterativePlanningProperties));
-  steps = toSignal(this.store.select(selectIterativePlanningIterationSteps));
-
+  demo = input.required<Demo>();
+  planPropertiesMap = input.required<Record<string,PlanProperty>>();
+  steps = input.required<IterationStep[]>();
 
   maxOverallUtility = computed(() => maxUtility(this.demo(), this.planPropertiesMap() ? Object.values(this.planPropertiesMap()) : null))
 
