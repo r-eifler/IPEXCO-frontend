@@ -14,6 +14,8 @@ import { ActionCardComponent } from 'src/app/shared/components/action-card/actio
 import { Demo, DemoRunStatus } from 'src/app/project/domain/demo';
 import { ExplanationRunStatus } from '../../domain/explanation/explanations';
 import { StepsListHeroComponent } from '../steps-list-hero/steps-list-hero.component';
+import { LabelModule } from 'src/app/shared/components/label/label.module';
+import { ChatModule } from 'src/app/shared/components/chat/chat.module';
 
 @Component({
   selector: 'app-user-manual',
@@ -26,7 +28,9 @@ import { StepsListHeroComponent } from '../steps-list-hero/steps-list-hero.compo
     IterationStepCardComponent,
     MatButtonModule,
     ActionCardComponent,
-    StepsListHeroComponent
+    StepsListHeroComponent,
+    LabelModule,
+    ChatModule
   ],
   templateUrl: './user-manual.component.html',
   styleUrl: './user-manual.component.scss'
@@ -199,4 +203,7 @@ export class UserManualComponent {
     }
   ];
 
+  onUserMessage(request: string) {
+
+  }
 }
