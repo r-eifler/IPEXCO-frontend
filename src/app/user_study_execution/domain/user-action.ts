@@ -21,6 +21,16 @@ export enum ActionType {
     ASK_QUESTION = 'ASK_QUESTION',
     EXPLANATION = 'EXPLANATION',
     FAILED = 'FAILED',
+    ASK_QT = 'ASK_QT',
+    ANSWER_QT = 'ANSWER_QT',
+    FAILED_QT = 'FAILED_QT',
+    ASK_ET = 'ASK_ET',
+    ANSWER_ET = 'ANSWER_ET',
+    FAILED_ET = 'FAILED_ET',
+    ASK_GT = 'ASK_GT',
+    ANSWER_GT = 'ANSWER_GT',
+    FAILED_GT = 'FAILED_GT',
+    LLM_CONTEXT = 'LLM_CONTEXT',
 }
 
 

@@ -43,6 +43,7 @@ import { LoadPlanPropertiesEffect } from './iterative_planning/state/effects/loa
 import { LoadIterativePlanningProjectEffect } from './iterative_planning/state/effects/load-project.effect';
 import { QuestionQueueEffect } from './iterative_planning/state/effects/question-queue.effect';
 import { UpdatePlanPropertyEffect } from './iterative_planning/state/effects/update-plan-property.effect'
+import { CreateLLMContextEffect } from './iterative_planning/state/effects/create-llm-context.effect'
 
 // Services
 import { LLMService } from './LLM/service/llm.service';
@@ -135,6 +136,37 @@ import { LoadUserStudyExecutionPlanPropertiesEffect } from './user_study_executi
         [userStudyExecutionFeature]: userStudyExecutionReducer,
     }),
     EffectsModule.forRoot([
+        LoadTokenEffect,
+        LoginEffect,
+        LoadUserEffect,
+        LogoutEffect,
+        RegisterEffect,
+        LoggedInEffect,
+        LoadProjectEffect,
+        UpdateProjectEffect,
+        LoadProjectPlanPropertiesEffect,
+        LoadProjectMetaDataListEffect,
+        CreateProjectEffect,
+        DeleteProjectEffect,
+        CreateDemoEffect,
+        LoadProjectDemosEffect,
+        LoadProjectDemoEffect,
+        UpdateDemoEffect,
+        DeleteProjectDemoEffect,
+        LoadDemoProjectPlanPropertiesEffect,
+        LoadIterativePlanningProjectEffect,
+        CreatePlanPropertyEffect,
+        LoadPlanPropertiesEffect,
+        UpdatePlanPropertyEffect,
+        DeletePlanPropertyEffect,
+        LoadIterationStepsEffect,
+        CreateIterationStepEffect,
+        DeleteIterationEffect,
+        ComputePlanEffect,
+        SendMessageToLLMEffect,
+        ComputeExplanationEffect,
+        QuestionQueueEffect,
+        CreateLLMContextEffect,
       LoadTokenEffect,
       StoreTokenEffect,
       LoginEffect,

@@ -23,7 +23,7 @@ export function explanationTranslationRequestToString(request: ExplanationTransl
     return templates.explanation_translator
         .replace('{question}', request.question)
         .replace('{question_type}', request.question_type)
-        .replace('{question_arguments}', `[${request.questionArguments.map(argument => argument.name).join(', ')}]`)
+        .replace('{question_arguments}', `[${request.questionArgument.map(argument => argument.name).join(', ')}]`)
         .replace('{mugs}', `[${request.MUGS.map(mug => `[${mug.map(p => p.name).join(', ')}]`).join(', ')}]`)
         .replace('{mgcs}', `[${request.MGCS.map(mgc => `[${mgc.map(p => p.name).join(', ')}]`).join(', ')}]`)
         .replace('{enforced_goals}', `[${request.enforcedGoals.map(goal => goal.name).join(', ')}]`)

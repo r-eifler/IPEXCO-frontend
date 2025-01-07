@@ -7,7 +7,7 @@ import { Store } from '@ngrx/store';
 import { selectExecutionUserStudyPendingIterationSteps, selectExecutionUserStudyStep, selectExecutionUserStudyStepIndex } from '../user-study-execution.selector';
 import { concatLatestFrom } from '@ngrx/operators';
 import { ActionType, CancelPlanForIterationStepUserAction } from '../../domain/user-action';
-import { cancelPlanComputationAndIterationStep, createIterationStepSuccess, loadIterationStepsSuccess, poseAnswer, questionPosed, selectIterationStep } from 'src/app/iterative_planning/state/iterative-planning.actions';
+import { cancelPlanComputationAndIterationStep, createIterationStepSuccess, loadIterationStepsSuccess, poseAnswer, poseAnswerLLM, questionPosed, questionPosedLLM, selectIterationStep, sendMessageToLLMExplanationTranslator, sendMessageToLLMExplanationTranslatorFailure, sendMessageToLLMExplanationTranslatorSuccess, sendMessageToLLMQuestionTranslator, sendMessageToLLMQuestionTranslatorFailure, sendMessageToLLMQuestionTranslatorSuccess } from 'src/app/iterative_planning/state/iterative-planning.actions';
 import { StepStatus } from 'src/app/iterative_planning/domain/iteration_step';
 import { computeUtility } from 'src/app/iterative_planning/domain/plan';
 import { selectIterationStepById, selectIterativePlanningProject, selectIterativePlanningProperties, selectIterativePlanningSelectedStepId } from 'src/app/iterative_planning/state/iterative-planning.selector';
@@ -202,7 +202,7 @@ export class LogUserActivitiesEffect{
 
 
     public answerPosed$ = createEffect(() => this.actions$.pipe(
-        ofType(poseAnswer),
+        ofType(poseAnswer, poseAnswerLLM),
         concatLatestFrom(() => [
             this.store.select(selectIterativePlanningProperties),
             this.store.select(selectIterativePlanningProject)
@@ -222,4 +222,63 @@ export class LogUserActivitiesEffect{
         ])
     ));
 
+    // LLMs logging
+
+    public questionAskedLLM$ = createEffect(() => this.actions$.pipe(
+        ofType(questionPosedLLM),
+        concatLatestFrom(() => [
+            this.store.select(selectIterativePlanningProject),
+            this.store.select(selectIterativePlanningSelectedStepId)
+        ]),
+        switchMap(([{question}, project, iterationStepId]) => [
+            logAction({action: {
+                type: ActionType.ASK_QUESTION, 
+                data: {
+                    demoId: project._id,
+                    stepId: iterationStepId,
+                    propertyId: question.propertyId,
+                    questionType: question.questionType,
+                }
+            }})
+        ])
+    ));
+
+    public sentMessageToQT$ = createEffect(() => this.actions$.pipe(
+        ofType(sendMessageToLLMQuestionTranslator),
+        switchMap(({question}) => [logAction({action: {type: ActionType.ASK_QT, data: {question}}})])
+    ));
+    
+    public sentMessageToQTSuccess$ = createEffect(() => this.actions$.pipe(
+        ofType(sendMessageToLLMQuestionTranslatorSuccess),
+        switchMap(({}) => [logAction({action: {type: ActionType.ANSWER_QT, data: {}}})])
+    ));
+
+    public sentMessageToQTFailure$ = createEffect(() => this.actions$.pipe(
+        ofType(sendMessageToLLMQuestionTranslatorFailure),
+        switchMap(({}) => [logAction({action: {type: ActionType.FAILED_QT, data: {}}})])
+    ));
+
+    public sentMessageToET$ = createEffect(() => this.actions$.pipe(
+        ofType(sendMessageToLLMExplanationTranslator),
+        switchMap(({question, explanationMUGS, explanationMGCS}) => [logAction({action: {type: ActionType.ASK_ET, data: {question, explanationMUGS, explanationMGCS}}})])
+    ));
+
+    public sentMessageToETSuccess$ = createEffect(() => this.actions$.pipe(
+        ofType(sendMessageToLLMExplanationTranslatorSuccess),
+        switchMap(({response}) => [logAction({action: {type: ActionType.ANSWER_ET, data: {response}}})])
+    ));
+
+    public sentMessageToETFailure$ = createEffect(() => this.actions$.pipe(
+        ofType(sendMessageToLLMExplanationTranslatorFailure),
+        switchMap(({}) => [logAction({action: {type: ActionType.FAILED_ET, data: {}}})])
+    ));
+
+
+    public logLLMContexts$ = createEffect(() => this.actions$.pipe(
+        ofType(executionUserStudySubmit),
+        switchMap(() => this.service.logLLMContext$().pipe(
+            map(() => logActionSuccess()),
+            catchError(() => of(logActionFailure()))
+        ))
+    ));
 }
