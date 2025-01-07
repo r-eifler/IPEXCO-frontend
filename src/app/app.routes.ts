@@ -5,6 +5,7 @@ import { AuthGuard } from './route-guards/auth-guard.guard';
 import {NavigationComponent} from './base/components/navigation/navigation.component';
 import { MainPageComponent } from './base/components/main-page/main-page.component';
 import { ToHomeGuard } from './route-guards/to-home.guard';
+import { UserManualComponent } from './iterative_planning/components/user-manual/user-manual.component';
 
 export const appRoutes: Routes = [
   {
@@ -36,6 +37,11 @@ export const appRoutes: Routes = [
       {
         path: 'projects',
         component: ProjectCollectionComponent,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'manual',
+        component: UserManualComponent,
         canActivate: [AuthGuard],
       },
       {

@@ -1,6 +1,7 @@
 @let step = step$ | async;
 @let isUnsolvable = isUnsolvable$ | async;
 @let isCanceled = isCanceled$ | async;
+@let planComputationRunning = planComputationRunning$ | async;
 @let interfaceType = explanationInterfaceType$ | async;
 
 <app-page>
@@ -39,79 +40,66 @@
         </app-page-section-content>
       </app-page-section>
 
-      @if(!isUnsolvable && (explanationInterfaceType$ | async) == expInterfaceType.MUGS_VISUALIZATION) {
-      <app-page-section>
-        <app-page-section-title>
-          <mat-icon>lightbulb_2</mat-icon>
-          Insights
-        </app-page-section-title>
-        <app-page-section-content>
-          <app-mugs-visualization-base></app-mugs-visualization-base>
-        </app-page-section-content>
-      </app-page-section>
-      }
-
-      @if(isUnsolvable && (interfaceType == expInterfaceType.TEMPLATE_QUESTION_ANSWER || interfaceType ==
-      expInterfaceType.MUGS_VISUALIZATION)) {
-      <app-page-section>
-        <app-page-section-title>
-          <mat-icon>lightbulb_2</mat-icon>
-          Insights
-        </app-page-section-title>
-        <app-page-section-content>
-          @if((explanationInterfaceType$ | async) == expInterfaceType.TEMPLATE_QUESTION_ANSWER){
-          <app-explanation-chat [isLoading]="isExplanationLoading$ | async"
-            [availableQuestions]="globalAvalableQuestionTypes$ | async" (questionSelected)="onQuestionSelected($event)"
-            [messages]="globalMessages$ | async" [properties]="planProperties$ | async"></app-explanation-chat>
-          }
-          @if((explanationInterfaceType$ | async) == expInterfaceType.MUGS_VISUALIZATION){
-          <app-mugs-visualization-base></app-mugs-visualization-base>
-          }
-        </app-page-section-content>
-      </app-page-section>
-      }
-
-      @if(!step?.plan && !isUnsolvable) {
-      <app-page-section>
-        <app-page-section-content>
-          <app-empty-state-section>
-            <span>There is no plan information available for this step (yet).<br />
-              Therefore, only a limited set of information is available here.</span>
-            <mat-icon>explore_off</mat-icon>
-          </app-empty-state-section>
-        </app-page-section-content>
-      </app-page-section>
-      }
-
-      @if(step?.plan && isCanceled) {
+      @if(planComputationRunning && ! isCanceled && !isUnsolvable) {
         <app-page-section>
           <app-page-section-content>
+            <div class="action-container">
+              <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+              <button mat-icon-button
+                matTooltip="Cancel plan computation of iteration step"
+                (click)="onCancel()"
+              ><mat-icon>cancel</mat-icon></button>
+            </div>
             <app-empty-state-section>
-              <span>There is no plan information available for this step since the plan computation was canceled.<br />
+              <span>There is no plan information available for this step (yet).<br />
                 Therefore, only a limited set of information is available here.</span>
               <mat-icon>explore_off</mat-icon>
             </app-empty-state-section>
           </app-page-section-content>
         </app-page-section>
         }
+  
+        @if(! planComputationRunning && isCanceled && !isUnsolvable) {
+          <app-page-section>
+            <app-page-section-content>
+              <app-empty-state-section>
+                <span>There is no plan information available for this step since the plan computation was canceled.<br />
+                  Therefore, only a limited set of information is available here.</span>
+                <mat-icon>explore_off</mat-icon>
+              </app-empty-state-section>
+            </app-page-section-content>
+          </app-page-section>
+        }
 
-      @if(interfaceType == expInterfaceType.LLM_CHAT) {
+      @if(!planComputationRunning && !isCanceled && isUnsolvable && (interfaceType == expInterfaceType.TEMPLATE_QUESTION_ANSWER )) {
       <app-page-section>
         <app-page-section-title>
           <mat-icon>lightbulb_2</mat-icon>
           Insights
         </app-page-section-title>
         <app-page-section-content>
-          <p></p>
-          @if(interfaceType == expInterfaceType.LLM_CHAT){
-          <app-explanation-chat-llm></app-explanation-chat-llm>
-          }
+          <app-explanation-chat [isLoading]="isExplanationLoading$ | async"
+            [availableQuestions]="globalAvalableQuestionTypes$ | async" (questionSelected)="onQuestionSelected($event)"
+            [messages]="globalMessages$ | async" [properties]="planProperties$ | async"></app-explanation-chat>
         </app-page-section-content>
       </app-page-section>
       }
 
-      @if(step?.plan && !isUnsolvable && !isCanceled && (explanationInterfaceType$ | async) ==
-      expInterfaceType.TEMPLATE_QUESTION_ANSWER) {
+
+
+      @if(!planComputationRunning && !isCanceled && isUnsolvable && (interfaceType == expInterfaceType.LLM_CHAT)) {
+      <app-page-section>
+        <app-page-section-title>
+          <mat-icon>lightbulb_2</mat-icon>
+          Insights
+        </app-page-section-title>
+        <app-page-section-content>
+          <app-explanation-chat-llm></app-explanation-chat-llm>
+        </app-page-section-content>
+      </app-page-section>
+      }
+
+      @if(!planComputationRunning && !isCanceled && !isUnsolvable && (interfaceType == expInterfaceType.TEMPLATE_QUESTION_ANSWER )) {
       <app-page-section>
         <app-page-section-title>Unsatisfied Softgoals <mat-icon
             matTooltip="Expand the individual goals to gather more information as of why they are unsolvable.">info</mat-icon></app-page-section-title>
@@ -139,7 +127,8 @@
         </app-page-section-content>
       </app-page-section>
       }
-      @if(step?.plan && !isUnsolvable && !isCanceled && (explanationInterfaceType$ | async) == expInterfaceType.LLM_CHAT) {
+
+      @if(!planComputationRunning && !isCanceled && isUnsolvable && (interfaceType == expInterfaceType.LLM_CHAT )) {
       <app-page-section>
         <app-page-section-title>Unsatisfied Softgoals</app-page-section-title>
         <app-page-section-content>
@@ -160,7 +149,7 @@
       }
 
 
-      @if(step?.plan && !isUnsolvable && !isCanceled) {
+      @if(!planComputationRunning && !isCanceled && !isUnsolvable) {
       <app-page-section>
         <app-page-section-title>Satisfied Softgoals</app-page-section-title>
         <app-page-section-content>

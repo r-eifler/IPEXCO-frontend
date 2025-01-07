@@ -55,6 +55,9 @@ export const selectIterativePlanningIterationStepsLoadingState = createSelector(
 export const selectIterativePlanningNewStep = createSelector(selectIterativePlanningFeature,
     (state) => state.newStep)
 
+export const selectIterativePlanningCreatedStepId = createSelector(selectIterativePlanningFeature,
+  (state) => state.createdStep)
+
 export const selectIterativePlanningSelectedStepId = createSelector(selectIterativePlanningFeature,
     (state) => state.selectedIterationStepId)
 export const selectIterativePlanningSelectedStep = createSelector(selectIterativePlanningFeature,

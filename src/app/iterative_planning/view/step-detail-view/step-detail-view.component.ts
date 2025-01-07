@@ -28,7 +28,7 @@ import { questionFactory } from "../../domain/explanation/question-factory";
 import { StructuredText } from "../../domain/interface/explanation-message";
 import { PlanRunStatus } from "../../domain/plan";
 import { PlanProperty } from "../../../shared/domain/plan-property/plan-property";
-import { deleteIterationStep, initNewIterationStep, questionPosed } from "../../state/iterative-planning.actions";
+import { cancelPlanComputationAndIterationStep, deleteIterationStep, initNewIterationStep, questionPosed } from "../../state/iterative-planning.actions";
 import { Message } from "../../state/iterative-planning.reducer";
 import {
     selectIsExplanationLoading,
@@ -55,6 +55,7 @@ import { DemoDirective } from "../../derectives/isDemo.directive";
 import { ProjectDirective } from "../../derectives/isProject.directive";
 import { DemoInfoComponent } from "src/app/shared/components/demo/demo-info/demo-info.component";
 import { UserManualDialogComponent } from "../../components/user-manual-dialog/user-manual-dialog.component";
+import { MatProgressBar, MatProgressBarModule } from "@angular/material/progress-bar";
 
 @Component({
     selector: "app-step-detail-view",
@@ -71,12 +72,12 @@ import { UserManualDialogComponent } from "../../components/user-manual-dialog/u
         PageModule,
         PlanPropertyPanelComponent,
         RouterLink,
-        MugsVisualizationBaseComponent,
         MatExpansionModule,
         DemoDirective,
         ProjectDirective,
         DemoInfoComponent,
-        ProjectDirective
+        ProjectDirective,
+        MatProgressBarModule
     ],
     templateUrl: "./step-detail-view.component.html",
     styleUrl: "./step-detail-view.component.scss"
@@ -109,6 +110,11 @@ export class StepDetailViewComponent {
     filter((step) => !!step),
     map((step) => step.plan?.status == PlanRunStatus.canceled)
   );
+  planComputationRunning$ = this.step$.pipe(
+    filter((step) => !!step),
+    map((step) => step.plan?.status == PlanRunStatus.pending || step.plan?.status == PlanRunStatus.running)
+  );
+
   planProperties$ = this.store.select(selectIterativePlanningProperties);
 
   enforcedGoals$ = this.store.select(selectEnforcedGoals);
@@ -207,5 +213,11 @@ export class StepDetailViewComponent {
 
   onHelp(){
     this.dialog.open(UserManualDialogComponent);
+  }
+
+  onCancel(){
+    this.stepId$.pipe(take(1)).subscribe(id => 
+      this.store.dispatch(cancelPlanComputationAndIterationStep({iterationStepId: id}))
+    );
   }
 }

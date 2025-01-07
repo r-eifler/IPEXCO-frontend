@@ -68,6 +68,7 @@ export interface IterativePlanningState {
   iterationSteps: Loadable<IterationStep[]>;
   messages?: Message[] 
   newStep: undefined | ModIterationStep;
+  createdStep: undefined | string;
   planProperties: Loadable<Record<string, PlanProperty>>;
   project: Loadable<Project>;
   propertyAvailableQuestionTypes: QuestionType[];
@@ -86,6 +87,7 @@ const initialState: IterativePlanningState = {
   iterationSteps: { state: LoadingState.Initial, data: undefined },
   messages: [],
   newStep: undefined,
+  createdStep: undefined,
   planProperties: { state: LoadingState.Initial, data: undefined },
   project: { state: LoadingState.Initial, data: undefined },
   propertyAvailableQuestionTypes: [QuestionType.CAN_PROPERTY, QuestionType.WHAT_IF_PROPERTY, QuestionType.WHY_NOT_PROPERTY, QuestionType.HOW_PROPERTY],
@@ -175,9 +177,10 @@ export const iterativePlanningReducer = createReducer(
   ),
   on(
     createIterationStepSuccess,
-    (state): IterativePlanningState => ({
+    (state, {iterationStep}): IterativePlanningState => ({
       ...state,
       newStep: undefined,
+      createdStep: iterationStep._id
     })
   ),
   on(initNewIterationStep, (state, { baseStepId }): IterativePlanningState => {
@@ -197,8 +200,8 @@ export const iterativePlanningReducer = createReducer(
         hardGoals: [...(baseStep?.hardGoals ?? [])],
         softGoals: [...(baseStep?.softGoals ?? [])],
         predecessorStep: baseStepId,
-      }
-      
+      },
+      createdStep: undefined
     };
   }),
   on(
