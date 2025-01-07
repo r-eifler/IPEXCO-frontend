@@ -228,9 +228,10 @@ export class LogUserActivitiesEffect{
         ofType(questionPosedLLM),
         concatLatestFrom(() => [
             this.store.select(selectIterativePlanningProject),
-            this.store.select(selectIterativePlanningSelectedStepId)
+            this.store.select(selectIterativePlanningSelectedStepId),
+            this.store.select(selectIterativePlanningProperties)
         ]),
-        switchMap(([{question}, project, iterationStepId]) => [
+        switchMap(([{question, naturalLanguageQuestion}, project, iterationStepId, planProperties]) => [
             logAction({action: {
                 type: ActionType.ASK_QUESTION, 
                 data: {
@@ -238,6 +239,16 @@ export class LogUserActivitiesEffect{
                     stepId: iterationStepId,
                     propertyId: question.propertyId,
                     questionType: question.questionType,
+                }
+            }
+            }),
+            logAction({action: {
+                type: ActionType.ASK_QUESTION_LLM, 
+                data: {
+                    demoId: project._id,
+                    stepId: iterationStepId,
+                    retrievedQuestion: question.questionType + planProperties[question.propertyId],
+                    originalQuestion: naturalLanguageQuestion,
                 }
             }})
         ])
