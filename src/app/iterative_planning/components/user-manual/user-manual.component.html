@@ -20,6 +20,11 @@
                         If you click on the panel, you get a more details.
                     </p>
 
+                    <p>
+                        A goal marked with a <mat-icon>lock</mat-icon> must be satisfied. It is automatically selected
+                        and you cannot deselect it.
+                    </p>
+
                     <div class="property-list">
 						@for(property of samplePlanProperties; track property._id) {
 							<app-plan-property-panel [property]="property" [showFormula]="false"></app-plan-property-panel>
@@ -97,19 +102,19 @@
                     </div>
 
                     <mat-list>
-                        <mat-list-item>
-                            <span matListItemLine><span class="highlight">Step 1</span> is unsolvable. </span>
+                        <mat-list-item class="more-space-below-margin">
+                            <span matListItemLine class="more-space-below-padding"><span class="highlight">Step 1</span> is <app-label color="error">Unsolvable</app-label>. </span>
                             <span matListItemLine>This means is is not possible to achieve the 3 enforced goals.</span>
                         </mat-list-item>
-                        <mat-list-item>
-                            <span matListItemLine><span class="highlight">Step 2</span> is solved.</span>
+                        <mat-list-item class="more-space-below-margin">
+                            <span matListItemLine class="more-space-below-padding"><span class="highlight">Step 2</span> is <app-label color="secondary">Solvable</app-label>.</span>
                             <span matListItemLine>
                                 This means it is possible to achieve the 2 enforced goals.
                                 The summed utility of the step is 5.
                             </span>
                         </mat-list-item>
-                        <mat-list-item>
-                            <span matListItemLine><span class="highlight">Step 4</span> is still running. </span>
+                        <mat-list-item class="more-space-below-margin">
+                            <span matListItemLine class="more-space-below-padding"><span class="highlight">Step 4</span> is still <app-label color="default">Running</app-label>. </span>
                             <span matListItemLine>
                                 This mean the tool has not yet determined whether the enforced goals can be achieved.
                             </span>
@@ -119,8 +124,8 @@
                             </span>
                             
                         </mat-list-item>
-                        <mat-list-item>
-                            <span matListItemLine><span class="highlight">Step 3</span> was canceled.</span>
+                        <mat-list-item class="more-space-below-margin">
+                            <span matListItemLine class="more-space-below-padding"><span class="highlight">Step 3</span> was <app-label color="error">Canceled</app-label>.</span>
                             <span matListItemLine>
                                 It is not possible to restart the check for a step. If you want to check the same selection 
                                 of goal you can fork from the canceled step.

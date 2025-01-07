@@ -72,7 +72,7 @@ export class UserManualComponent {
       formula: '',
       project: '',
       isUsed: false,
-      globalHardGoal: false,
+      globalHardGoal: true,
       utility: 3,
       color: '#f07575',
       icon: 'shopping_cart',
