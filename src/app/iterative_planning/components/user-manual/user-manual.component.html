@@ -205,8 +205,69 @@
                         }
                         @if(LLMManual()){
                             <div>
-                                <p>TODO</p>
+                                <p>
+                                    When you are inside a  <app-label color="secondary">Solved</app-label>  or an   <app-label color="error">Unsolvable</app-label> iteration step you have access to an AI chat interface that can answer questions.
+
+                                </p>
+                                <app-chat [isSenderTyping]="false">
+                                    <app-chat-message [role]="'sender'">{{ "Hi! I'm here to help you to understand this planning task. You can ask me any question." }}</app-chat-message>
+                                    
+                                    <app-chat-markdown-message [role]="'receiver'" [rawMessage]="'Why is this step unsolvable?'"></app-chat-markdown-message>
+                                    <app-chat-markdown-message [role]="'sender'" [rawMessage]="'Because you enforced &quot;go to gym&quot;, &quot;go to yoga&quot; and &quot;go to the supermarket&quot; which are in conflict with each other. You have to forgo at least one of them.'"></app-chat-markdown-message>
+
+                                    <app-chat-markdown-message [role]="'receiver'" [rawMessage]="'So if I stop enforcing &quot;go to the supermarket&quot; the planning task should be solvable?'"></app-chat-markdown-message>
+                                    <app-chat-markdown-message [role]="'sender'" [rawMessage]="'Correct! Removing &quot;go to the supermarket&quot; should be enough to solve the conflict and thus make the task solvable.'"></app-chat-markdown-message>
+                                    
+                                    <app-chat-input (userInput)="onUserMessage($event)"></app-chat-input>
+                                  </app-chat>
+
+                                <p>
+                                    The tool is mainly designed to answer questions like:
+                                </p>
+                                <ul>
+                                    <li>Why is this step unsolvable?</li>
+                                    <li>How can I make this step solvable?</li>
+                                    <li>Why isn't this softgoal satisfied?</li>
+                                    <li>Can this goal be enforced while keeping the other enforced goals?</li>
+                                    <li>What if I enforce this goal?</li>
+                                    <li>How can I achieve this goal?</li>
+                                </ul>
+                                <p>
+                                    The tool should remember previous questions and answers and thus supports follow-up questions implicitely referecing previous ones, like in the following example:
+                                </p>
+                                <app-chat [isSenderTyping]="false">
+                                    <app-chat-message [role]="'sender'">{{ "Hi! I'm here to help you to understand this planning task. You can ask me any question." }}</app-chat-message>
+                                    
+                                    <app-chat-markdown-message [role]="'receiver'" [rawMessage]="'Why cant I go to the supermarket?'"></app-chat-markdown-message>
+                                    <app-chat-markdown-message [role]="'sender'" [rawMessage]="'Because you enforced &quot;go to gym&quot;, &quot;go to yoga&quot; which are in conflict with &quot;go to the supermarket&quot;.'"></app-chat-markdown-message>
+
+                                    <app-chat-markdown-message [role]="'receiver'" [rawMessage]="'So what can I do ? '"></app-chat-markdown-message>
+                                    <app-chat-markdown-message [role]="'sender'" [rawMessage]="'To achieve &quot;go to the supermarket&quot; you can stop enforcing one of &quot;go to gym&quot; or &quot;go to yoga&quot;.'"></app-chat-markdown-message>
+                                    
+                                    <app-chat-input (userInput)="onUserMessage($event)" [preset]="'test'"></app-chat-input>
+                                </app-chat>
+
+                                <p>
+                                    If you provide a semi-implicit question the explainer should be understand it anyway and tell you how it understood your question.
+                                    For example:
+                                </p>
+                                <app-chat [isSenderTyping]="false">
+                                    <app-chat-message [role]="'sender'">{{ "Hi! I'm here to help you to understand this planning task. You can ask me any question." }}</app-chat-message>
+                                    
+                                    <app-chat-markdown-message [role]="'receiver'" [rawMessage]="'Why no yoga'"></app-chat-markdown-message>
+                                    <app-chat-markdown-message [role]="'sender'" [rawMessage]="'I understood your question as : &quot;Why is the goal &quot;go to yoga&quot; not satisfied?&quot;.'"></app-chat-markdown-message>
+                                    <app-chat-markdown-message [role]="'sender'" [rawMessage]="'Because you enforced &quot;go to gym&quot;, &quot;go to yoga&quot; which are in conflict with &quot;go to the supermarket&quot;.'"></app-chat-markdown-message>
+                                    <app-chat-input (userInput)="onUserMessage($event)"></app-chat-input>
+                                </app-chat>
+
+                                <p>
+                                   You can try any question you want. The explainer will try to answer it and if it does not understand your question it will ask you to clarify it.
+                                </p>
+
+
                             </div>
+
+
                         }
                     </div>
                 </app-page-section-content>
