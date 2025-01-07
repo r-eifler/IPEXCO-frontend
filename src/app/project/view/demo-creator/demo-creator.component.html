@@ -61,6 +61,14 @@
               <button mat-icon-button (click)="removeSelectedProperty(idx)" type="button">
                 <mat-icon>delete</mat-icon>
               </button>
+              <button mat-icon-button (click)="globalHardGoal(idx)" type="button">
+                @if(property.globalHardGoal){
+                  <mat-icon>lock</mat-icon>
+                }
+                @else{
+                  <mat-icon>lock_open_right</mat-icon>
+                }
+              </button>
             </app-editable-list-entry-suffix>
           </app-editable-list-entry>
           }

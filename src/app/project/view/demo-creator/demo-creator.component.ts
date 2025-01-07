@@ -113,6 +113,12 @@ export class DemoCreatorComponent implements OnInit {
     this.form.controls.properties.removeAt(index);
   }
 
+  globalHardGoal(index: number): void {
+    let currentP = {...this.form.controls.properties.at(index).value};
+    currentP.globalHardGoal = !currentP.globalHardGoal;
+    this.form.controls.properties.at(index).setValue(currentP);
+  }
+
   ngOnInit(): void {}
 
   createDemo(): void {

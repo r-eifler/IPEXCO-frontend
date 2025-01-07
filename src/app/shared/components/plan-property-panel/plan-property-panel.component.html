@@ -10,6 +10,9 @@
     </mat-panel-title>
     <mat-panel-description>
       <div class="description">
+        @if(property()?.globalHardGoal){
+          <mat-icon>lock</mat-icon>
+        }
         <div class="utility">
           <mat-icon>workspace_premium</mat-icon>
           {{ property()?.utility }}
