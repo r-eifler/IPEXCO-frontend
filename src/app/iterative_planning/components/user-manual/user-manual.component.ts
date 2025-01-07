@@ -203,7 +203,18 @@ export class UserManualComponent {
     }
   ];
 
+<<<<<<< HEAD
   onUserMessage(request: string) {
 
+=======
+  userMessage: string = '';
+
+  sentMessage(): boolean {
+    return this.userMessage !== '';
+  }
+
+  onUserMessage(request: string) {
+    this.userMessage = request;
+>>>>>>> llm-version
   }
 }
