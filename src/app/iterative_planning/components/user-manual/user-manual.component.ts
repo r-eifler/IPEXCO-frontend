@@ -16,6 +16,7 @@ import { ExplanationRunStatus } from '../../domain/explanation/explanations';
 import { StepsListHeroComponent } from '../steps-list-hero/steps-list-hero.component';
 import { LabelModule } from 'src/app/shared/components/label/label.module';
 import { ChatModule } from 'src/app/shared/components/chat/chat.module';
+import { InfoComponent } from 'src/app/shared/components/info/info/info.component';
 
 @Component({
   selector: 'app-user-manual',
@@ -30,7 +31,8 @@ import { ChatModule } from 'src/app/shared/components/chat/chat.module';
     ActionCardComponent,
     StepsListHeroComponent,
     LabelModule,
-    ChatModule
+    ChatModule,
+    InfoComponent
   ],
   templateUrl: './user-manual.component.html',
   styleUrl: './user-manual.component.scss'

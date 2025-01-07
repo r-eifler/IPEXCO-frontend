@@ -237,7 +237,7 @@
                                     <li>How can I achieve this goal?</li>
                                 </ul>
                                 <p>
-                                    The tool should remember previous questions and answers and thus supports follow-up questions implicitely referecing previous ones, like in the following example:
+                                    The tool remembers previous questions and answers and thus supports follow-up questions implicitly referencing previous ones, like in the following example:
                                 </p>
                                 <app-chat [isSenderTyping]="false">
                                     <app-chat-message [role]="'sender'">{{ "Hi! I'm here to help you to understand this planning task. You can ask me any question." }}</app-chat-message>
@@ -254,7 +254,7 @@
                                 </app-chat>
 
                                 <p>
-                                    If you provide a semi-implicit question the explainer should be understand it anyway and tell you how it understood your question.
+                                    The explainer can infer missing parts in partially implicit question and tells you how it understood your question.
                                     For example:
                                 </p>
                                 <app-chat [isSenderTyping]="false">
@@ -273,14 +273,13 @@
                                    You can try any question you want. The explainer will try to answer it and if it does not understand your question it will ask you to clarify it.
                                 </p>
                             </div>
-                                <div class="disclaimer">
-                                    <p>
-                                        <strong>Disclaimer:</strong> The AI explainer is an experimental feature designed to assist with understanding planning tasks. 
+                                <app-info>
+                                        <mat-icon>warning</mat-icon>
+                                        <span><span class="highlight">Disclaimer:</span> The AI explainer is an experimental feature designed to assist with understanding planning tasks. 
                                         While we strive for accuracy, the AI may occasionally provide incomplete, inaccurate, or inconsistent responses. 
                                         Please use these explanations as a helpful guide rather than definitive answers, and always verify critical decisions 
-                                        through the planning interface. If you notice any inconsistencies, feel free to rephrase your question.
-                                    </p>
-                            </div>
+                                        through the planning interface. If you notice any inconsistencies, feel free to rephrase your question.</span>
+                                </app-info>
 
                         }
                     </div>
