@@ -12,11 +12,18 @@ import { PlanRunStatus } from '../../domain/plan';
 import { MatButtonModule } from '@angular/material/button';
 import { ActionCardComponent } from 'src/app/shared/components/action-card/action-card/action-card.component';
 import { Demo, DemoRunStatus } from 'src/app/project/domain/demo';
-import { ExplanationRunStatus } from '../../domain/explanation/explanations';
+import { ExplanationRunStatus, QuestionType } from '../../domain/explanation/explanations';
 import { StepsListHeroComponent } from '../steps-list-hero/steps-list-hero.component';
 import { LabelModule } from 'src/app/shared/components/label/label.module';
 import { ChatModule } from 'src/app/shared/components/chat/chat.module';
 import { InfoComponent } from 'src/app/shared/components/info/info/info.component';
+import { StructuredText } from '../../domain/interface/explanation-message';
+import { questionFactory } from '../../domain/explanation/question-factory';
+
+type AvailableQuestion = {
+  message: StructuredText;
+  questionType: QuestionType;
+}
 
 @Component({
   selector: 'app-user-manual',
@@ -144,6 +151,11 @@ export class UserManualComponent {
     '4': this.samplePlanProperties[3],
     '5': this.samplePlanProperties[4],
   }
+
+  unsolvableQuestionTypes = [QuestionType.HOW_PLAN, QuestionType.WHY_PLAN]
+  unsolvableQuestions = this.unsolvableQuestionTypes.map(t => ({message: questionFactory(t)(undefined), questionType: t}));
+  solvableQuestionTypes = [QuestionType.CAN_PROPERTY, QuestionType.WHAT_IF_PROPERTY, QuestionType.WHY_NOT_PROPERTY, QuestionType.HOW_PROPERTY]
+  solvableQuestions: AvailableQuestion[] = this.solvableQuestionTypes.map(t => ({message: questionFactory(t)(this.samplePlanProperties[4].name), questionType: t}));
 
   sampleSteps: IterationStep[] = [
     {

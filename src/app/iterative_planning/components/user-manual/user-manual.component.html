@@ -101,38 +101,32 @@
                         }
                     </div>
 
-                    <mat-list>
-                        <mat-list-item class="more-space-below-margin">
-                            <span matListItemLine class="more-space-below-padding"><span class="highlight">Step 1</span> is <app-label color="error">Unsolvable</app-label>. </span>
-                            <span matListItemLine>This means is is not possible to achieve the 3 enforced goals.</span>
-                        </mat-list-item>
-                        <mat-list-item class="more-space-below-margin">
-                            <span matListItemLine class="more-space-below-padding"><span class="highlight">Step 2</span> is <app-label color="secondary">Solvable</app-label>.</span>
-                            <span matListItemLine>
-                                This means it is possible to achieve the 2 enforced goals.
-                                The summed utility of the step is 5.
-                            </span>
-                        </mat-list-item>
-                        <mat-list-item class="more-space-below-margin">
-                            <span matListItemLine class="more-space-below-padding"><span class="highlight">Step 4</span> is still <app-label color="default">Running</app-label>. </span>
-                            <span matListItemLine>
-                                This mean the tool has not yet determined whether the enforced goals can be achieved.
-                            </span>
-                            <span matListItemLine>
-                                Checking whether the enforced goals can be achieved takes time, especially if the 
-                                selection is unsolvable. Thus it is possible to cancel the check by clicking <mat-icon>cancel</mat-icon>
-                            </span>
-                            
-                        </mat-list-item>
-                        <mat-list-item class="more-space-below-margin">
-                            <span matListItemLine class="more-space-below-padding"><span class="highlight">Step 3</span> was <app-label color="error">Canceled</app-label>.</span>
-                            <span matListItemLine>
-                                It is not possible to restart the check for a step. If you want to check the same selection 
-                                of goal you can fork from the canceled step.
-                            </span>
-                        </mat-list-item>
-                    </mat-list>
+                    <div class="more-space-below-padding">
+                        <p><span class="highlight">Step 1</span> is <app-label color="error">Unsolvable</app-label>. </p>
+                        This means is is not possible to achieve the 3 enforced goals.
+                    </div>
 
+                    <div class="more-space-below-padding">
+                        <p><span class="highlight">Step 2</span> is <app-label color="secondary">Solvable</app-label>. </p>
+                        This means it is possible to achieve the 2 enforced goals.
+                        The summed utility of the step is 5.
+                    </div>
+
+                    <div class="more-space-below-padding">
+                        <p><span class="highlight">Step 3</span> is still <app-label color="default">Running</app-label>. </p>
+                        <p>This mean the tool has not yet determined whether the enforced goals can be achieved.</p>
+
+                        <app-info>
+                            <mat-icon>info</mat-icon> <span>Checking whether the enforced goals can be achieved takes time, especially if the 
+                            selection is unsolvable. Thus it is possible to cancel the check by clicking <mat-icon>cancel</mat-icon></span>
+                        </app-info>
+                    </div>
+
+                    <div class="more-space-below-padding">
+                        <p><span class="highlight">Step 4</span> was <app-label color="error">Canceled</app-label>. </p>
+                        It is not possible to restart the check for a step. If you want to check the same selection 
+                        of goal you can fork from the canceled step.
+                    </div>
 
                 </app-page-section-content>
             </app-page-section>
@@ -202,13 +196,67 @@
                     </p>
                 </app-page-section-content>
                 <app-page-section-content>
-                    <div class="tab-container">
+                    <div>
                         @if(templatesManual()){
+                            <h3>Template Interface</h3>
                             <div>
-                                <p>TODO</p>
+                                <p>
+                                    Depending on whether a step is <app-label color="secondary">Solved</app-label>  or 
+                                    <app-label color="error">Unsolvable</app-label> you have access to different questions.
+                                </p>
+
+                                <p>
+                                    The question ans answers are given in a chat-style interface. It is not possible to ask 
+                                    possible to ask a question by typing it. Instead you can select from a list of questions.
+                                    To ask a questions you just have to click on it.
+                                </p>
+
+                                <h4>Unsolvable Step</h4>
+
+                                <p>
+                                    In an unsolvable step you can ask the two question shown below.
+                                </p>
+
+                                <app-chat>
+                                    <app-chat-message role="sender">Here are some question, that I could help you with:</app-chat-message>
+                                  
+                                    @for(question of unsolvableQuestions; track question) {
+                                    <button app-chat-action >{{ question.message.mainText }}</button>
+                                    }
+                                  
+                                </app-chat> 
+                                
+                                <h4>Solvable Step</h4>
+
+                                <p>
+                                    In an solvable step you can ask questions about the unsatisfied soft goals.
+                                    The soft goals represent the goals you want to monitor to decide whether you 
+                                    want to enforce them in a future step. Thus you can ask "why" it is not 
+                                    satisfy and 'how' you can satisfy it.
+                                </p>
+
+                                <p>
+                                    To access the question interface click on the goal you want to ask questions about.
+                                    You can try it below:
+                                </p>
+
+                                <h4>Unsatisfied Softgoals</h4>
+                                <div class="property-list">
+                                    <app-plan-property-panel [property]="samplePlanProperties[4]" [showFormula]="false">
+                                        <app-chat>
+                                            <app-chat-message role="sender">Here are some question, that I could help you with:</app-chat-message>
+                                          
+                                            @for(question of solvableQuestions; track question) {
+                                            <button app-chat-action >{{ question.message.mainText }}</button>
+                                            }
+                                          
+                                        </app-chat>
+                                    </app-plan-property-panel>
+                                </div>
                             </div>
                         }
                         @if(LLMManual()){
+                            <h3>LLM Interface</h3>
                             <div>
                                 <p>
                                     When you are inside a  <app-label color="secondary">Solved</app-label>  or an   <app-label color="error">Unsolvable</app-label> iteration step you have access to an AI chat interface that can answer questions.
