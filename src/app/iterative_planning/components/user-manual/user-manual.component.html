@@ -218,15 +218,11 @@
                                     <app-chat-markdown-message [role]="'receiver'" [rawMessage]="'So if I stop enforcing &quot;go to the supermarket&quot; the planning task should be solvable?'"></app-chat-markdown-message>
                                     <app-chat-markdown-message [role]="'sender'" [rawMessage]="'Correct! Removing &quot;go to the supermarket&quot; should be enough to solve the conflict and thus make the task solvable.'"></app-chat-markdown-message>
                                     
-<<<<<<< HEAD
-                                    <app-chat-input (userInput)="onUserMessage($event)"></app-chat-input>
-=======
                                     @if(sentMessage()){
                                         <app-chat-markdown-message [role]="'receiver'" [rawMessage]="userMessage"></app-chat-markdown-message>
                                     }
                                     <app-chat-input (userInput)="onUserMessage($event)" [preset]="'Type your question here, then press enter or use the button on the right.'"></app-chat-input>
 
->>>>>>> llm-version
                                   </app-chat>
 
                                 <p>
