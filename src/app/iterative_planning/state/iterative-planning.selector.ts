@@ -68,7 +68,7 @@ export const selectIterativePlanningNumberOfSteps = createSelector(selectIterati
 
 
 export const selectIterativePlanningIterationStepComputationRunning = createSelector(selectIterativePlanningFeature,
-  (state) => state.iterationSteps.data?.filter(s => s.status == StepStatus.unknown && s.plan?.status !== PlanRunStatus.canceled).length > 0)
+  (state) => state.iterationSteps.data?.filter(s => s.plan && (s.plan?.status == PlanRunStatus.running || s.plan.status == PlanRunStatus.pending)).length > 0)
 
 
 // Messages    
