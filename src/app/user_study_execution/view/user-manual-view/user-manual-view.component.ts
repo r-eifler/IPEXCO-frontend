@@ -29,7 +29,6 @@ export class UserManualViewComponent {
 
   step$ = this.store.select(selectExecutionUserStudyStep);
   demo$ = this.store.select(selectExecutionUserStudyDemo);
-  planProperties$ = this.store.select(selectExecutionUserStudyPlanProperties);
 
   constructor(){
 

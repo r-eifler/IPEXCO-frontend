@@ -82,6 +82,7 @@
                     [step]="control.value"
                     [first]="first"
                     [last]="last"
+                    [demos]="demos$ | async"
                     (changes)="updateControl(control,$event)"
                     (delete)="deleteStep(idx)"
                     (up)="moveUp(idx)"
