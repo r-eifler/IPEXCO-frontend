@@ -42,7 +42,7 @@ export class DemoEditViewComponent {
   form = this.fb.group({
     main: this.fb.group({
       name: this.fb.control<string>("", Validators.required),
-      description: this.fb.control<string>(""),
+      description: this.fb.control<string>("TODO", Validators.required),
     }),
     taskInfo: this.fb.group({
       domainInfo: this.fb.control<string>(""),
