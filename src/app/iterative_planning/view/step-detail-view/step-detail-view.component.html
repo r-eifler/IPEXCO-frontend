@@ -71,7 +71,7 @@
           </app-page-section>
         }
 
-      @if(!planComputationRunning && !isCanceled && isUnsolvable && (interfaceType == expInterfaceType.TEMPLATE_QUESTION_ANSWER )) {
+      @if(!planComputationRunning && !isCanceled && ( isUnsolvable || hasUnsolvedSoftGoals$ | async) && (interfaceType == expInterfaceType.TEMPLATE_QUESTION_ANSWER )) {
       <app-page-section>
         <app-page-section-title>
           <mat-icon>lightbulb_2</mat-icon>
