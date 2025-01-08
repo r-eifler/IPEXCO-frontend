@@ -6,7 +6,7 @@
   @if((messages$ | async)?.length > 1){
   <ng-container app-chat-action>
     <div class="button-group">
-      <button app-chat-action (click)="onEraseHistory()">Erase history</button>
+      <button app-chat-action (click)="onEraseHistory()">Hide previous messages</button>
     </div>
   </ng-container>
   }
