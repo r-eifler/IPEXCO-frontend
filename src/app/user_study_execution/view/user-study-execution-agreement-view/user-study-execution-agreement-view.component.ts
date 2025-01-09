@@ -14,6 +14,9 @@ import {Router} from '@angular/router';
 import {registerUserStudyUser} from '../../state/user-study-execution.actions';
 import { InfoComponent } from 'src/app/shared/components/info/info/info.component';
 import { MatIconModule } from '@angular/material/icon';
+import { ChatMarkdownMessageComponent } from 'src/app/shared/components/chat/chat-markdown-message/chat-markdown-message.component';
+import { Marked } from 'marked';
+import { MarkedPipe } from 'src/app/pipes/marked.pipe';
 
 @Component({
     selector: 'app-user-study-execution-agreement-view',
@@ -22,7 +25,8 @@ import { MatIconModule } from '@angular/material/icon';
         MatButtonModule,
         PageModule,
         InfoComponent,
-        MatIconModule
+        MatIconModule,
+        MarkedPipe
     ],
     templateUrl: './user-study-execution-agreement-view.component.html',
     styleUrl: './user-study-execution-agreement-view.component.scss'
