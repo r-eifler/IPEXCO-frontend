@@ -11,7 +11,7 @@
             Related Project
           </app-page-section-title>
           <app-page-section-content>
-            {{ userStudy?.relatedProject }}
+            <div [innerHTML]="userStudy?.relatedProject | marked"></div>
           </app-page-section-content>
         </app-page-section>
         <app-page-section>
@@ -19,7 +19,7 @@
             Expectations
           </app-page-section-title>
           <app-page-section-content>
-              {{ userStudy?.expectation }}
+            <div [innerHTML]="userStudy?.expectation | marked"></div>
           </app-page-section-content>
         </app-page-section>
         <app-page-section>
@@ -27,7 +27,7 @@
             Withdraw & Confidentiality
           </app-page-section-title>
           <app-page-section-content>
-              {{ userStudy?.confidentiality }}
+            <div [innerHTML]="userStudy?.confidentiality | marked"></div>
           </app-page-section-content>
         </app-page-section>
         <app-page-section>
