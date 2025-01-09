@@ -1,6 +1,7 @@
 import { PlanningTask } from "src/app/shared/domain/planning-task";
 import { GlobalExplanation } from "./explanation/explanations";
-import { Plan } from "./plan";
+import { computeUtility, Plan } from "./plan";
+import { PlanProperty } from "src/app/shared/domain/plan-property/plan-property";
 
 export enum StepStatus {
     unknown,
@@ -23,7 +24,12 @@ export enum StepStatus {
     predecessorStep: string | null;
 }
 
-  export interface ModIterationStep extends IterationStep {
-    baseStep: string;
-  }
+export interface ModIterationStep extends IterationStep {
+  baseStep: string;
+}
 
+
+export function computeCurrentMaxUtility(steps: IterationStep[], planProperties: Record<string,PlanProperty>){
+  const stepUtilities = steps?.map(s => s.status !== StepStatus.solvable ? 0 : computeUtility(s.plan, planProperties));
+  return Math.max(...stepUtilities);
+}

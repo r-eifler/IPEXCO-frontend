@@ -20,7 +20,8 @@
 
   <app-page-hero *isDemo>
     <app-steps-list-hero
-      [demo]="project$ | async"
+      [maxOverallUtility]="maxOverallUtility$ | async"
+      [currentMaxUtility]="currentMaxUtility$ | async"
       [steps]="steps$ | async"
       [planPropertiesMap]="planProperties"
     ></app-steps-list-hero>
@@ -45,6 +46,7 @@
               <app-iteration-step-card 
                 [step]="step" 
                 [planProperties]="planProperties" 
+                [maxOverallUtility]="maxOverallUtility$ | async"
                 (fork)="createNewIteration(step._id)"
                 (cancel)="cancelIterationStep(step._id)">
               </app-iteration-step-card>

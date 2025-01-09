@@ -8,7 +8,7 @@ import { Store } from '@ngrx/store';
 import { StepStatus } from 'src/app/iterative_planning/domain/iteration_step';
 import { computeUtility } from 'src/app/iterative_planning/domain/plan';
 import { selectIterativePlanningIterationSteps, selectIterativePlanningProject, selectIterativePlanningProperties } from 'src/app/iterative_planning/state/iterative-planning.selector';
-import { Demo, maxUtility } from 'src/app/project/domain/demo';
+import { Demo, computeMaxPossibleUtility } from 'src/app/project/domain/demo';
 import { DialogModule } from 'src/app/shared/components/dialog/dialog.module';
 import { DialogComponent } from 'src/app/shared/components/dialog/dialog/dialog.component';
 
@@ -32,7 +32,7 @@ export class FinishDemoInfoDialogComponent {
   steps = toSignal(this.store.select(selectIterativePlanningIterationSteps));
   
   
-  maxOverallUtility = computed(() => maxUtility(this.demo(), this.planPropertiesMap() ? Object.values(this.planPropertiesMap()) : null))
+  maxOverallUtility = computed(() => computeMaxPossibleUtility(this.demo(), this.planPropertiesMap() ? Object.values(this.planPropertiesMap()) : null))
 
   currentMaxUtility = computed(() => {
     if(!this.steps() || this.steps().length === 0){

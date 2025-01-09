@@ -32,6 +32,7 @@ import { cancelPlanComputationAndIterationStep, deleteIterationStep, initNewIter
 import { Message } from "../../state/iterative-planning.reducer";
 import {
     selectIsExplanationLoading,
+    selectIterativePlanningMaxPossibleUtility,
     selectIterativePlanningProject,
     selectIterativePlanningProjectExplanationInterfaceType,
     selectIterativePlanningProperties,
@@ -96,6 +97,7 @@ export class StepDetailViewComponent {
   expInterfaceType = ExplanationInterfaceType;
 
   project$ = this.store.select(selectIterativePlanningProject);
+  maxOverAllUtility$ = this.store.select(selectIterativePlanningMaxPossibleUtility);
   image$ = this.project$.pipe(map(p => p?.summaryImage));
   domainInfo$ = this.project$.pipe(map(p => p?.domainInfo));
   instanceInfo$ = this.project$.pipe(map(p => p?.instanceInfo));

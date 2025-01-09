@@ -14,7 +14,7 @@ import { StepStatusNamePipe } from '../../domain/pipe/step-status-name.pipe';
 import { StepValuePipe } from '../../domain/pipe/step-value.pipe';
 import { PlanProperty } from '../../../shared/domain/plan-property/plan-property';
 import { UserStudyDirective } from '../../derectives/isUserStudy.directive';
-import { maxUtility } from 'src/app/project/domain/demo';
+import { computeMaxPossibleUtility } from 'src/app/project/domain/demo';
 import { Demo } from 'src/app/shared/domain/demo';
 import { ProjectDirective } from '../../derectives/isProject.directive';
 import { DemoDirective } from '../../derectives/isDemo.directive';
@@ -42,9 +42,9 @@ import { DemoDirective } from '../../derectives/isDemo.directive';
     styleUrl: './iteration-step-hero.component.scss'
 })
 export class IterationStepHeroComponent {
-  demo = input.required<Demo>();
+  
   step = input.required<IterationStep | null>();
   planProperties = input.required<Record<string, PlanProperty> | null>();
 
-   maxOverallUtility = computed(() => maxUtility(this.demo(), this.planProperties() ? Object.values(this.planProperties()) : null))
+  maxOverallUtility = input.required<number>();
 }

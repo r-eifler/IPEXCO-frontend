@@ -43,7 +43,8 @@
             </p>
 
             <app-steps-list-hero
-                [demo]="sampleDemo"
+                [maxOverallUtility]="maxOverallUtility"
+                [currentMaxUtility]="currentMaxUtility"
                 [steps]="sampleSteps"
                 [planPropertiesMap]="samplePlanPropertiesMap"
             ></app-steps-list-hero>
@@ -65,7 +66,8 @@
                 </button>
                 <app-iteration-step-card 
                     [step]="sampleSteps[1]" 
-                    [planProperties]="samplePlanPropertiesMap">
+                    [planProperties]="samplePlanPropertiesMap"
+                    [maxOverallUtility]="maxOverallUtility">
                 </app-iteration-step-card>
             </div>
 
@@ -94,7 +96,8 @@
                 @for(step of sampleSteps; track step) {
                     <app-iteration-step-card 
                     [step]="step" 
-                    [planProperties]="samplePlanPropertiesMap">
+                    [planProperties]="samplePlanPropertiesMap"
+                    [maxOverallUtility]="maxOverallUtility">
                     </app-iteration-step-card>
                 }
             </div>
