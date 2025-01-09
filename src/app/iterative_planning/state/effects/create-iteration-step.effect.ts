@@ -9,6 +9,7 @@ import { createIterationStep, createIterationStepFailure, createIterationStepSuc
 import { selectIterativePlanningCreatedStepId, selectIterativePlanningNewStep, selectIterativePlanningProject } from "../iterative-planning.selector";
 import { ActivatedRoute, Router } from "@angular/router";
 import { selectIsUserStudy } from "src/app/user/state/user.selector";
+import { selectExecutionUserStudy } from "src/app/user_study_execution/state/user-study-execution.selector";
 
 @Injectable()
 export class CreateIterationStepEffect{
@@ -30,10 +31,14 @@ export class CreateIterationStepEffect{
 
     public navigateToCreatedIterationStep$ = createEffect(() => this.store.select(selectIterativePlanningCreatedStepId).pipe(
         filter(stepId => !!stepId),
-        concatLatestFrom(() => [this.store.select(selectIterativePlanningProject),this.store.select(selectIsUserStudy)]),
-        tap(([stepId, project, isUserStudy]) => {
-            if(isUserStudy){
-                this.router.navigate(['/user-study-execution','iterative-planning', project._id, 'steps', stepId]);
+        concatLatestFrom(() => [
+            this.store.select(selectIterativePlanningProject),
+            this.store.select(selectIsUserStudy),
+            this.store.select(selectExecutionUserStudy)
+        ]),
+        tap(([stepId, project, isUserStudy, userStudy]) => {
+            if(isUserStudy || userStudy){
+                this.router.navigate(['/user-study-execution',userStudy._id,'step','iterative-planning', project._id,'steps',stepId]);
             }
             else{
                 this.router.navigate(['/iterative-planning', project._id, 'steps', stepId]);
