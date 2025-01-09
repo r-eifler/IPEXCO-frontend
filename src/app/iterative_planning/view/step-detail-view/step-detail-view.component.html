@@ -90,7 +90,7 @@
 
 
 
-      @if(!planComputationRunning && !isCanceled && isUnsolvable && (interfaceType == expInterfaceType.LLM_CHAT)) {
+      @if(!planComputationRunning && !isCanceled && (interfaceType == expInterfaceType.LLM_CHAT)) {
       <app-page-section>
         <app-page-section-title>
           <mat-icon>lightbulb_2</mat-icon>
@@ -131,7 +131,7 @@
       </app-page-section>
       }
 
-      @if(!planComputationRunning && !isCanceled && isUnsolvable && (interfaceType == expInterfaceType.LLM_CHAT )) {
+      @if(!planComputationRunning && !isCanceled && !isUnsolvable && (interfaceType == expInterfaceType.LLM_CHAT )) {
       <app-page-section>
         <app-page-section-title>Unsatisfied Softgoals</app-page-section-title>
         <app-page-section-content>
