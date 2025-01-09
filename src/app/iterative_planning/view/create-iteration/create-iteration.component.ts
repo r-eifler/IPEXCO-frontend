@@ -16,11 +16,12 @@ import { SideSheetModule } from "src/app/shared/components/side-sheet/side-sheet
 import { isNonEmptyValidator } from "src/app/validators/non-empty.validator";
 import { PlanPropertyPanelComponent } from "../../../shared/components/plan-property-panel/plan-property-panel.component";
 import { SelectPropertyComponent } from "../../components/select-property/select-property.component";
-import { cancelNewIterationStep, createIterationStep, updateNewIterationStep } from "../../state/iterative-planning.actions";
-import { selectIterativePlanningCreatedStepId, selectIterativePlanningIterationStepComputationRunning, selectIterativePlanningNumberOfSteps, selectIterativePlanningProperties } from "../../state/iterative-planning.selector";
+import { cancelNewIterationStep, createIterationStep } from "../../state/iterative-planning.actions";
+import { selectIterativePlanningCreatedStepId, selectIterativePlanningIterationStepComputationRunning, selectIterativePlanningNewStepBase, selectIterativePlanningNumberOfSteps, selectIterativePlanningProject, selectIterativePlanningProperties } from "../../state/iterative-planning.selector";
 import { selectPlanPropertyIds, selectPreselectedEnforcedGoals$, selectPreselectedSoftGoals$ } from "./create-iteration.component.selector";
 import { concatLatestFrom } from "@ngrx/operators";
 import { ActivatedRoute, Router } from "@angular/router";
+import { IterationStep, StepStatus } from "../../domain/iteration_step";
 
 @Component({
     selector: "app-create-iteration",
@@ -169,15 +170,27 @@ export class CreateIterationComponent {
   }
 
   onSubmit(): void {
-    this.store.dispatch(updateNewIterationStep({
-      iterationStep: {
+     combineLatest([
+      this.store.select(selectIterativePlanningNewStepBase),
+      this.store.select(selectIterativePlanningProject)
+    ]).pipe(take(1)).subscribe(([baseStep, project]) => {
+      
+      const newStep: IterationStep = {
         name: this.form.controls.general.controls.name.value,
         hardGoals: this.form.controls.enforcedGoalIds.value,
         softGoals: this.form.controls.softGoalIds.value,
-      },
-    }));
+        project: project._id,
+        status: StepStatus.unknown,
+        task: baseStep?.task ?? project.baseTask,
+        predecessorStep: baseStep._id
+      }
 
-    this.store.dispatch(createIterationStep())
+      console.log(newStep)
+ 
+ 
+     this.store.dispatch(createIterationStep({iterationStep: newStep}))
+    });
+     
   }
 }
 

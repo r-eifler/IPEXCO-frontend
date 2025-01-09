@@ -20,6 +20,7 @@
       <mat-icon>help</mat-icon>
       </button>
       <button mat-icon-button matTooltip="Creates a new iteration based on the properties selected in this iteration."
+        [disabled]="!anabelCreationInterface"
         (click)="createNewIteration(step?._id)"><mat-icon>call_split</mat-icon></button>
     </app-page-title-action>
   </app-page-title>

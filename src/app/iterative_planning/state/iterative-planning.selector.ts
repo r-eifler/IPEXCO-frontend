@@ -39,6 +39,22 @@ export const selectIterativePlanningProperties = createSelector(selectIterativeP
 export const selectIterativePlanningPropertiesList = createSelector(selectIterativePlanningFeature,
     (state) => state.planProperties.state === LoadingState.Done ? Object.values(state.planProperties?.data) : null)
 
+
+// Create new step
+
+export const selectIterativePlanningCreateStepInterfaceOpen= createSelector(selectIterativePlanningFeature,
+  (state) => state.createStepInterfaceOpen)
+
+export const selectIterativePlanningNewStepBase = createSelector(selectIterativePlanningFeature,
+  (state) => state.newStepBase && state.iterationSteps.data ? state.iterationSteps.data.find(({_id}) => _id === state.newStepBase): undefined)
+
+export const selectIterativePlanningCreatedStepId = createSelector(selectIterativePlanningFeature,
+  (state) => state.createdStep)
+
+export const selectIterativePlanningLoadingFinished = createSelector(selectIterativePlanningFeature,
+  (state) => state.project.state == LoadingState.Done && state.iterationSteps.state == LoadingState.Done && state.planProperties.state == LoadingState.Done)
+
+
 // Iterative Planning Steps
 
 export const selectIterativePlanningIterationSteps = createSelector(selectIterativePlanningFeature,
@@ -52,12 +68,6 @@ export const selectIterationStepById = memoizeWith(
 ));
 export const selectIterativePlanningIterationStepsLoadingState = createSelector(selectIterativePlanningFeature,
     (state) => state.iterationSteps.state)
-
-export const selectIterativePlanningNewStep = createSelector(selectIterativePlanningFeature,
-    (state) => state.newStep)
-
-export const selectIterativePlanningCreatedStepId = createSelector(selectIterativePlanningFeature,
-  (state) => state.createdStep)
 
 export const selectIterativePlanningSelectedStepId = createSelector(selectIterativePlanningFeature,
     (state) => state.selectedIterationStepId)

@@ -36,6 +36,7 @@
       @if(! planComputationRunning()){
       <a class="details" mat-stroked-button [routerLink]="[step()?._id ]">Details</a>
       <button mat-icon-button
+        [disabled]="!anabelCreationInterface"
         matTooltip="Creates a new iteration based on the properties selected in this iteration."
         (click)="onFork()"
       ><mat-icon>call_split</mat-icon></button>

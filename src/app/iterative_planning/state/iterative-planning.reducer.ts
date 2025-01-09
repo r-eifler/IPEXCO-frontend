@@ -25,7 +25,6 @@ import {
     initNewIterationStep,
     loadIterationSteps,
     loadIterationStepsSuccess,
-    loadLLMContext,
     loadLLMContextSuccess,
     loadPlanProperties,
     loadPlanPropertiesSuccess,
@@ -33,12 +32,10 @@ import {
     loadProjectSuccess,
     poseAnswer,
     questionPosed,
-    questionPosedLLM,
     selectIterationStep,
     sendMessageToLLMExplanationTranslator,
     showReverseTranslationGT,
     showReverseTranslationQT,
-    updateNewIterationStep,
 } from "./iterative-planning.actions";
 import {
   sendMessageToLLMGoalTranslator,
@@ -67,7 +64,8 @@ export interface IterativePlanningState {
   explanations: Record<string,GlobalExplanation | undefined>;
   iterationSteps: Loadable<IterationStep[]>;
   messages?: Message[] 
-  newStep: undefined | ModIterationStep;
+  newStepBase: undefined | string;
+  createStepInterfaceOpen: boolean;
   createdStep: undefined | string;
   planProperties: Loadable<Record<string, PlanProperty>>;
   project: Loadable<Project>;
@@ -86,8 +84,9 @@ const initialState: IterativePlanningState = {
   explanations: {},
   iterationSteps: { state: LoadingState.Initial, data: undefined },
   messages: [],
-  newStep: undefined,
   createdStep: undefined,
+  createStepInterfaceOpen: false,
+  newStepBase: undefined,
   planProperties: { state: LoadingState.Initial, data: undefined },
   project: { state: LoadingState.Initial, data: undefined },
   propertyAvailableQuestionTypes: [QuestionType.CAN_PROPERTY, QuestionType.WHAT_IF_PROPERTY, QuestionType.WHY_NOT_PROPERTY, QuestionType.HOW_PROPERTY],
@@ -144,12 +143,7 @@ export const iterativePlanningReducer = createReducer(
     loadPlanPropertiesSuccess,
     (state, { planProperties }): IterativePlanningState => ({
       ...state,
-      planProperties: { state: LoadingState.Done, data: planProperties },
-      newStep:
-        state.iterationSteps.state == LoadingState.Done &&
-          state.iterationSteps.data.length == 0
-          ? initFirstNewIterationStep(state)
-          : state.newStep,
+      planProperties: { state: LoadingState.Done, data: planProperties }
     })
   ),
   on(
@@ -167,11 +161,6 @@ export const iterativePlanningReducer = createReducer(
     (state, { iterationSteps }): IterativePlanningState => ({
       ...state,
       iterationSteps: { state: LoadingState.Done, data: iterationSteps },
-      newStep:
-        iterationSteps.length == 0 &&
-          state.planProperties.state == LoadingState.Done
-          ? initFirstNewIterationStep(state)
-          : undefined,
       explanations: extractExplanations(iterationSteps),
     })
   ),
@@ -179,52 +168,25 @@ export const iterativePlanningReducer = createReducer(
     createIterationStepSuccess,
     (state, {iterationStep}): IterativePlanningState => ({
       ...state,
-      newStep: undefined,
-      createdStep: iterationStep._id
+      createdStep: iterationStep._id,
+      newStepBase: undefined,
+      createStepInterfaceOpen: false
     })
   ),
-  on(initNewIterationStep, (state, { baseStepId }): IterativePlanningState => {
-    const baseStep = state.iterationSteps.data?.find(
-      ({ _id }) => _id === baseStepId
-    );
-
-    return {
-      ...state,
-      newStep: {
-        _id: undefined,
-        name: undefined,
-        baseStep: baseStepId,
-        task: state.project.data?.baseTask,
-        status: StepStatus.unknown,
-        project: state.project.data._id,
-        hardGoals: [...(baseStep?.hardGoals ?? [])],
-        softGoals: [...(baseStep?.softGoals ?? [])],
-        predecessorStep: baseStepId,
-      },
-      createdStep: undefined
-    };
-  }),
   on(
-    updateNewIterationStep,
-    (state, { iterationStep }): IterativePlanningState => {
-      if (!state.newStep) {
-        return state;
-      }
-
-      return {
-        ...state,
-        newStep: {
-          ...state.newStep,
-          ...iterationStep,
-        },
-      };
-    }
+    initNewIterationStep,
+    (state, {baseStepId}): IterativePlanningState => ({
+      ...state,
+      newStepBase: baseStepId,
+      createStepInterfaceOpen: true
+    })
   ),
   on(
     cancelNewIterationStep,
     (state): IterativePlanningState => ({
       ...state,
-      newStep: undefined,
+      newStepBase: undefined,
+      createStepInterfaceOpen: false
     })
   ),
   on(
@@ -404,21 +366,6 @@ on(showReverseTranslationQT, (state, action): IterativePlanningState => ({ //TOD
 );
 
 
-function initFirstNewIterationStep(
-  state: IterativePlanningState
-): ModIterationStep {
-  return {
-    _id: undefined,
-    name: "Iteration Step 1",
-    baseStep: null,
-    task: state.project.data.baseTask,
-    status: StepStatus.unknown,
-    project: state.project.data._id,
-    hardGoals: state.planProperties.data ? Object.values(state.planProperties.data).filter(pp => pp.globalHardGoal).map(pp => pp._id) : [],
-    softGoals: [],
-    predecessorStep: undefined,
-  };
-}
 
 function extractExplanations(iterationSteps: IterationStep[]): Record<string,GlobalExplanation | undefined> {
   return pipe(

@@ -1,4 +1,4 @@
-import { Component, computed, input, output } from '@angular/core';
+import { Component, computed, inject, input, output } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
@@ -17,6 +17,8 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { PlanRunStatus } from '../../domain/plan';
 import { ProjectDirective } from '../../derectives/isProject.directive';
 import { DemoDirective } from '../../derectives/isDemo.directive';
+import { Store } from '@ngrx/store';
+import { selectIterativePlanningLoadingFinished } from '../../state/iterative-planning.selector';
 
 @Component({
     selector: 'app-iteration-step-card',
@@ -40,8 +42,13 @@ import { DemoDirective } from '../../derectives/isDemo.directive';
     styleUrl: './iteration-step-card.component.scss'
 })
 export class IterationStepCardComponent {
+
+  store = inject(Store);
+
   step = input.required<IterationStep | null>();
   planProperties = input.required<Record<string, PlanProperty> | null>();
+
+  anabelCreationInterface = this.store.select(selectIterativePlanningLoadingFinished);
 
   planComputationRunning = computed(() => 
     ! this.step()?.plan ||

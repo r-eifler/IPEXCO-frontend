@@ -10,7 +10,7 @@ import { PageModule } from 'src/app/shared/components/page/page.module';
 
 import { IterationStepCardComponent } from '../../components/iteration-step-card/iteration-step-card.component';
 import { cancelPlanComputationAndIterationStep, initNewIterationStep } from '../../state/iterative-planning.actions';
-import { selectIterativePlanningCurrentMaxUtility, selectIterativePlanningIterationSteps, selectIterativePlanningIterationStepsLoadingState, selectIterativePlanningMaxPossibleUtility, selectIterativePlanningProject, selectIterativePlanningProperties } from '../../state/iterative-planning.selector';
+import { selectIterativePlanningCurrentMaxUtility, selectIterativePlanningIterationSteps, selectIterativePlanningIterationStepsLoadingState, selectIterativePlanningLoadingFinished, selectIterativePlanningMaxPossibleUtility, selectIterativePlanningProject, selectIterativePlanningProperties } from '../../state/iterative-planning.selector';
 import { ProjectDirective } from '../../derectives/isProject.directive';
 import { DemoDirective } from '../../derectives/isDemo.directive';
 import { StepsListHeroComponent } from '../../components/steps-list-hero/steps-list-hero.component';
@@ -56,6 +56,8 @@ export class StepsListViewComponent{
   steps$ = this.store.select(selectIterativePlanningIterationSteps);
   loadingState$ = this.store.select(selectIterativePlanningIterationStepsLoadingState);
   planProperties$ = this.store.select(selectIterativePlanningProperties);
+
+  anabelCreationInterface = this.store.select(selectIterativePlanningLoadingFinished);
 
   maxOverallUtility$ = this.store.select(selectIterativePlanningMaxPossibleUtility);
   currentMaxUtility$ = this.store.select(selectIterativePlanningCurrentMaxUtility);

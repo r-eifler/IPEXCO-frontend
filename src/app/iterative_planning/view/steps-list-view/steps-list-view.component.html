@@ -52,7 +52,7 @@
               </app-iteration-step-card>
             }
 
-            <button app-action-card (click)="createNewIteration()">
+            <button app-action-card (click)="createNewIteration()" [disabled]="!anabelCreationInterface">
               <div class="instructions">
                 <span>Perform a new plan computation from scratch</span>
                 <span class="alternative">or</span>

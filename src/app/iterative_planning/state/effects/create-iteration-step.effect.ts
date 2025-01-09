@@ -6,7 +6,7 @@ import { of } from "rxjs";
 import { catchError, filter, switchMap, tap } from "rxjs/operators";
 import { IterationStepService } from "../../service/iteration-step.service";
 import { createIterationStep, createIterationStepFailure, createIterationStepSuccess, loadIterationSteps } from "../iterative-planning.actions";
-import { selectIterativePlanningCreatedStepId, selectIterativePlanningNewStep, selectIterativePlanningProject } from "../iterative-planning.selector";
+import { selectIterativePlanningCreatedStepId, selectIterativePlanningProject } from "../iterative-planning.selector";
 import { ActivatedRoute, Router } from "@angular/router";
 import { selectIsUserStudy } from "src/app/user/state/user.selector";
 import { selectExecutionUserStudy } from "src/app/user_study_execution/state/user-study-execution.selector";
@@ -21,8 +21,7 @@ export class CreateIterationStepEffect{
 
     public createIterationStep$ = createEffect(() => this.actions$.pipe(
         ofType(createIterationStep),
-        concatLatestFrom(() => this.store.select(selectIterativePlanningNewStep)),
-        switchMap(([, iterationStep]) => this.service.postIterationStep$(iterationStep).pipe(
+        switchMap(({iterationStep}) => this.service.postIterationStep$(iterationStep).pipe(
             concatLatestFrom(() => this.store.select(selectIterativePlanningProject)),
             switchMap(([iterationStep, project]) => [createIterationStepSuccess({iterationStep}), loadIterationSteps({id: project._id})]),
             catchError(() => of(createIterationStepFailure()))

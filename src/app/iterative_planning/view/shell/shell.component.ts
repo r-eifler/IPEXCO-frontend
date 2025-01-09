@@ -5,11 +5,9 @@ import { RouterOutlet } from '@angular/router';
 
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Store } from '@ngrx/store';
-import {
-  selectIterativePlanningNewStep,
-} from '../../state/iterative-planning.selector';
 import { CreateIterationComponent } from '../create-iteration/create-iteration.component';
 import {MatDialog} from '@angular/material/dialog';
+import { selectIterativePlanningCreateStepInterfaceOpen } from '../../state/iterative-planning.selector';
 
 
 @Component({
@@ -25,8 +23,8 @@ export class ShellComponent {
   sidenav = viewChild<MatSidenav>('sidenav');
 
   constructor() {
-    this.store.select(selectIterativePlanningNewStep).pipe(
+    this.store.select(selectIterativePlanningCreateStepInterfaceOpen).pipe(
       takeUntilDestroyed(),
-    ).subscribe(step => step ? this.sidenav()?.open() : this.sidenav()?.close());
+    ).subscribe(open => open ? this.sidenav()?.open() : this.sidenav()?.close());
   }
 }
