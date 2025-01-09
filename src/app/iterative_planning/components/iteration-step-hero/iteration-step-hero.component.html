@@ -29,7 +29,8 @@
       <div class="utility">
         <mat-icon>workspace_premium</mat-icon>
         <div class="utility-value-container">
-          <span class="value">{{ step() | stepValue : planProperties() | default : '-/-'}}</span>
+          <span class="value" *isProject>{{ step() | stepValue : planProperties() | default : '-/-'}}</span>
+          <span class="value" *isDemo>{{ (step() | stepValue : planProperties() | default : '-') + '/' + maxOverallUtility() }}</span>
           <span class="label">Utility</span>
         </div>
       </div>
