@@ -1,210 +1,244 @@
 <div class=page-content>
-<app-page-section-list>
-    <app-page-section>
-        <app-page-section-title>
-            Iterative Planning
-        </app-page-section-title>
-        <app-page-section-content>
-            <p>
-                We are considering tasks where due to limited resources and time 
-                not all goals can be achieved.
-            </p>
+    <app-page-section-list>
+        <app-page-section>
+            <app-page-section-content>
+                <app-info>
+                    <mat-icon>info</mat-icon>
+                    You can partially interact with some features below, but most functionalities don't work in this
+                    manual. Clicking buttons will have consequences only in the real application.
+                </app-info>
+            </app-page-section-content>
+        </app-page-section>
+        <app-page-section>
+            <app-page-section-title>
 
-            <p>
-                Below you can see a list of sample goals of activities that you want to schedule, 
-                but due to limited time and space in your car this is not possible. 
-                Each goal is assigned a utility indicated on the right with 
-                <mat-icon>workspace_premium</mat-icon> X.
-                The utility indicates how important the goal is.
-                If you click on the panel, you get a more details.
-            </p>
+                Iterative Planning
+            </app-page-section-title>
+            <app-page-section-content>
+                <p>
+                    Planning is the process of finding a sequence of actions that will go from an initial state to a target state. This target state can be defined by a set of goals that we want to achieve. Here we are considering tasks where due to limited resources and time
+                    not all goals can be achieved. Several possible plans that don't all satisfy the same goals are thus acceptable.
+                </p>
+                <p>
+                    Your role is <span class="highlight">not</span> to find plans, but to give the right instructions to an automated planner. To help you to do this, we provide you with an <span class="highlight">explanation interface</span> described at the bottom of this page.
+                </p>
 
-            <p>
-                A goal marked with a <mat-icon>lock</mat-icon> must be satisfied. It is automatically selected
-                and you cannot deselect it.
-            </p>
+                <p>
+                    Below you can see a list of sample goals of activities that you want to schedule,
+                    but due to limited time and space in your car this is not possible.
+                    Each goal is assigned a utility indicated on the right with
+                    <mat-icon>workspace_premium</mat-icon>.
+                    The utility indicates how important the goal is.
+                    If you click on the panel, you get a more details.
+                </p>
 
-            <div class="property-list">
-                @for(property of samplePlanProperties; track property._id) {
+                <p>
+                    A goal marked with a <mat-icon>lock</mat-icon> must <span class="highlight">always</span> be satisfied. It is automatically selected
+                    and you cannot deselect it.
+                </p>
+
+                <div class="property-list">
+                    @for(property of samplePlanProperties; track property._id) {
                     <app-plan-property-panel [property]="property" [showFormula]="false"></app-plan-property-panel>
-                }
-            </div>
-            
-            <p>
-                Thus the goal is to find a trade-off between the goals that can be achieved.
-                This means you must find a selection of goals that can be achieved and that 
-                maximizes the utility.
-                Each selection of goals is called an <span class="highlight">Iteration Step.</span>
-            </p>
+                    }
+                </div>
 
-            <p>
-                As orientation we display the maximal possible utility and
-                the highest achieved utility as shown below in the top of the list of iteration steps. 
-            </p>
+                <p>
+                    Your task is to find a trade-off between the goals that can be achieved.
+                    This means you must find a selection of goals that can be achieved and that
+                    <span class="highlight">maximizes the utility</span>.
+                    Each selection of goals is called an <span class="highlight">Iteration Step.</span>
+                </p>
 
-            <app-steps-list-hero
-                [demo]="sampleDemo"
-                [steps]="sampleSteps"
-                [planPropertiesMap]="samplePlanPropertiesMap"
-            ></app-steps-list-hero>
+                <p>
+                    As orientation we display the maximal possible utility and
+                    the highest achieved utility as shown below in the top of the list of iteration steps.
+                </p>
 
-            <p>
-                To open the interface to create a new iteration step you can click on the card shown below.
-                If you want to start from the goals selected in a step you can fork from a step by clicking
-                <mat-icon>call_split</mat-icon>.
-            </p>
+                <app-steps-list-hero [demo]="sampleDemo" [steps]="sampleSteps"
+                    [planPropertiesMap]="samplePlanPropertiesMap"></app-steps-list-hero>
 
-            <div class="page-grid">
-                <button app-action-card>
-                    <div class="instructions">
-                        <span>Perform a new plan computation from scratch</span>
-                        <span class="alternative"> or</span>
-                        <span> fork (<mat-icon>call_split</mat-icon>) an existing one.</span>
-                    </div>
-                    <mat-icon>add</mat-icon>
-                </button>
-                <app-iteration-step-card 
-                    [step]="sampleSteps[1]" 
-                    [planProperties]="samplePlanPropertiesMap">
-                </app-iteration-step-card>
-            </div>
+                <p>
+                    To open the interface to create a new iteration step you can click on the card shown below.
+                    If you want to start from the goals selected in a step you can fork from a step by clicking
+                    <mat-icon>call_split</mat-icon>.
+                </p>
 
-            <p> 
-                For each iteration step you must select the <span class="highlight">Enforced Goals</span>.
-                Below we create a new iteration with two enforced goals.
-            </p>
-
-            <img src="assets/manual/new_step_interface.png">
-
-            <p>
-                In addition to the enforced goals it is also possible to select <span class="highlight">Soft Goals</span>.
-                These are goals that the tool will not try achieve, but they will play a role in the conflict analysis
-                between the goals detailed below.
-            </p>
-
-            <img src="assets/manual/add_soft_goals.png">
-
-            <p>
-                If you create a new iteration step the tool will check whether it is possible to achieve 
-                all the enforced goals. 
-                Below you see a list of three iteration steps, each with a different status.
-            </p>
-
-            <div class="page-grid">
-                @for(step of sampleSteps; track step) {
-                    <app-iteration-step-card 
-                    [step]="step" 
-                    [planProperties]="samplePlanPropertiesMap">
+                <div class="page-grid">
+                    <button app-action-card>
+                        <div class="instructions">
+                            <span>Perform a new plan computation from scratch</span>
+                            <span class="alternative"> or</span>
+                            <span> fork (<mat-icon>call_split</mat-icon>) an existing one.</span>
+                        </div>
+                        <mat-icon>add</mat-icon>
+                    </button>
+                    <app-iteration-step-card [step]="sampleSteps[1]" [planProperties]="samplePlanPropertiesMap">
                     </app-iteration-step-card>
-                }
-            </div>
+                </div>
 
-            <div class="more-space-below-padding">
-                <p><span class="highlight">Step 1</span> is <app-label color="error">Unsolvable</app-label>. </p>
-                This means is is not possible to achieve the 3 enforced goals.
-            </div>
+                <p>
+                    For each iteration step you must select the <span class="highlight">Enforced Goals</span>.
+                    Below we create a new iteration with two enforced goals.
+                </p>
 
-            <div class="more-space-below-padding">
-                <p><span class="highlight">Step 2</span> is <app-label color="secondary">Solvable</app-label>. </p>
-                This means it is possible to achieve the 2 enforced goals.
-                The summed utility of the step is 6.
-            </div>
+                <img src="assets/manual/new_step_interface.png">
 
-            <div class="more-space-below-padding">
-                <p><span class="highlight">Step 3</span> is still <app-label color="default">Running</app-label>. </p>
-                <p>This mean the tool has not yet determined whether the enforced goals can be achieved.</p>
+                <p>
+                    In addition to the enforced goals it is also possible to select <span class="highlight">Soft
+                        Goals</span>.
+                    These are goals that the tool will not try achieve, but they will play a role in the conflict
+                    analysis
+                    between the goals detailed below.
+                </p>
+
+                <img src="assets/manual/add_soft_goals.png">
+
+                <p>
+                    If you create a new iteration step the tool will check whether it is possible to achieve
+                    all the enforced goals.
+                    Below you see a list of three iteration steps, each with a different status.
+                </p>
+
+                <div class="page-grid">
+                    @for(step of sampleSteps; track step) {
+                    <app-iteration-step-card [step]="step" [planProperties]="samplePlanPropertiesMap">
+                    </app-iteration-step-card>
+                    }
+                </div>
+
+                <div class="more-space-below-padding">
+                    <p><span class="highlight">Step 1</span> is <app-label color="error">Unsolvable</app-label>. </p>
+                    This means is is not possible to achieve the 3 enforced goals.
+                </div>
+
+                <div class="more-space-below-padding">
+                    <p><span class="highlight">Step 2</span> is <app-label color="secondary">Solvable</app-label>. </p>
+                    This means it is possible to achieve the 2 enforced goals.
+                    The summed utility of the step is 6.
+                </div>
+
+                <div class="more-space-below-padding">
+                    <p><span class="highlight">Step 3</span> is still <app-label color="default">Running</app-label>.
+                    </p>
+                    <p>This mean the tool has not yet determined whether the enforced goals can be achieved.</p>
+
+                    <app-info>
+                        <mat-icon>info</mat-icon> <span>Checking whether the enforced goals can be achieved takes time,
+                            especially if the
+                            selection is unsolvable. Thus it is possible to cancel the check by clicking
+                            <mat-icon>cancel</mat-icon></span>
+                    </app-info>
+                </div>
+
+                <div class="more-space-below-padding">
+                    <p><span class="highlight">Step 4</span> was <app-label color="error">Canceled</app-label>. </p>
+                    It is not possible to restart the check for a step. If you want to check the same selection
+                    of goal you can fork from the canceled step.
+                </div>
 
                 <app-info>
-                    <mat-icon>info</mat-icon> <span>Checking whether the enforced goals can be achieved takes time, especially if the 
-                    selection is unsolvable. Thus it is possible to cancel the check by clicking <mat-icon>cancel</mat-icon></span>
+                    <mat-icon>edit_note</mat-icon>
+                    <span>A quick summary on the different kind of goals: </span>
+
+                    <ul>
+                        <li><span class="highlight">Enforced Goals</span> are goals that you ask the planner to satisfy in an iteration step.</li>
+                        <li><span class="highlight">Soft Goals</span> are goals that you want to track to decide
+                            whether you want to enforce them in a future step, or to ask questions about. The planner
+                            doesn't try to satisfy them but they can be satisfied by chance.</li>
+                        <li><span class="highlight">Locked Goals </span><mat-icon>lock</mat-icon> are goals that must be enforced at every iteration step.
+                        </li>
+                    </ul>
                 </app-info>
-            </div>
 
-            <div class="more-space-below-padding">
-                <p><span class="highlight">Step 4</span> was <app-label color="error">Canceled</app-label>. </p>
-                It is not possible to restart the check for a step. If you want to check the same selection 
-                of goal you can fork from the canceled step.
-            </div>
+            </app-page-section-content>
+        </app-page-section>
+        <app-page-section>
+            <app-page-section-title>
+                Iteration Step Details
+            </app-page-section-title>
+            <app-page-section-content>
+                <p>
+                    The details view of the an iteration step provides addition information and gives access
+                    to other tool features.
+                </p>
 
-        </app-page-section-content>
-    </app-page-section>
-    <app-page-section>
-        <app-page-section-title>
-            Iteration Step Details
-        </app-page-section-title>
-        <app-page-section-content>
-            <p>
-                The details view of the an iteration step provides addition information and gives access 
-                to other tool features.
-            </p>
+                <h3>Unsolvable Step</h3>
 
-            <h3>Unsolvable Step</h3>
+                <p>
+                    For an unsolvable step the list of the enforced goals is shown. In our example step from above this
+                    is:
+                </p>
 
-            <p>
-                For an unsolvable step the list of the enforced goals is shown. In our example step from above this is:
-            </p>
+                <h4>Enforced Goals</h4>
+                <div class="property-list">
+                    <app-plan-property-panel [property]="samplePlanProperties[0]"
+                        [showFormula]="false"></app-plan-property-panel>
+                    <app-plan-property-panel [property]="samplePlanProperties[1]"
+                        [showFormula]="false"></app-plan-property-panel>
+                    <app-plan-property-panel [property]="samplePlanProperties[2]"
+                        [showFormula]="false"></app-plan-property-panel>
+                </div>
 
-            <h4>Enforced Goals</h4>
-            <div class="property-list">
-                <app-plan-property-panel [property]="samplePlanProperties[0]" [showFormula]="false"></app-plan-property-panel>
-                <app-plan-property-panel [property]="samplePlanProperties[1]" [showFormula]="false"></app-plan-property-panel>
-                <app-plan-property-panel [property]="samplePlanProperties[2]" [showFormula]="false"></app-plan-property-panel>
-            </div>
+                <h3>Solvable Step</h3>
 
-            <h3>Solvable Step</h3>
+                <p>
+                    For a solvable step in addition to the list of the enforced goals the satisfied and unsatisfied soft
+                    goals are shown. Note, the soft goals are selected when a new iteration step is created, but the
+                    tool
+                    does not try to achieve them.
+                    Nevertheless, they might be satisfied by chance.
+                </p>
 
-            <p>
-                For a solvable step in addition to the list of the enforced goals the satisfied and unsatisfied soft 
-                goals are shown. Note, the soft goals are selected when a new iteration step is created, but the tool 
-                does not try to achieve them.
-                Nevertheless, they might be satisfied by chance.
-            </p>
+                <p>
+                    For our sample step this looks as follows:
+                </p>
 
-            <p>
-                For our sample step this looks as follows:
-            </p>
+                <h4>Unsatisfied Softgoals</h4>
+                <div class="property-list">
+                    <app-plan-property-panel [property]="samplePlanProperties[4]"
+                        [showFormula]="false"></app-plan-property-panel>
+                </div>
 
-            <h4>Unsatisfied Softgoals</h4>
-            <div class="property-list">
-                <app-plan-property-panel [property]="samplePlanProperties[4]" [showFormula]="false"></app-plan-property-panel>
-            </div>
+                <h4>Satisfied Softgoals</h4>
+                <div class="property-list">
+                    <app-plan-property-panel [property]="samplePlanProperties[3]"
+                        [showFormula]="false"></app-plan-property-panel>
+                </div>
 
-            <h4>Satisfied Softgoals</h4>
-            <div class="property-list">
-                <app-plan-property-panel [property]="samplePlanProperties[3]" [showFormula]="false"></app-plan-property-panel>
-            </div>
-
-            <h4>Enforced Goals</h4>
-            <div class="property-list">
-                <app-plan-property-panel [property]="samplePlanProperties[0]" [showFormula]="false"></app-plan-property-panel>
-                <app-plan-property-panel [property]="samplePlanProperties[2]" [showFormula]="false"></app-plan-property-panel>
-            </div>
+                <h4>Enforced Goals</h4>
+                <div class="property-list">
+                    <app-plan-property-panel [property]="samplePlanProperties[0]"
+                        [showFormula]="false"></app-plan-property-panel>
+                    <app-plan-property-panel [property]="samplePlanProperties[2]"
+                        [showFormula]="false"></app-plan-property-panel>
+                </div>
 
 
-        </app-page-section-content>
-    </app-page-section>
-    <app-page-section>
-        <app-page-section-title>
-            Explanations
-        </app-page-section-title>
-        <app-page-section-content>
-            <p>
-                To facilitate the selection of goals the tool can provide explanations for user questions.
-                Below we explain you can ask the tool questions.
-            </p>
-        </app-page-section-content>
-        <app-page-section-content>
-            <div>
-                @if(templatesManual()){
+            </app-page-section-content>
+        </app-page-section>
+        <app-page-section>
+            <app-page-section-title>
+                Explanations
+            </app-page-section-title>
+            <app-page-section-content>
+                <p>
+                    To facilitate the selection of goals the tool can provide explanations for user questions.
+                    Below we explain you can ask the tool questions.
+                </p>
+            </app-page-section-content>
+            <app-page-section-content>
+                <div>
+                    @if(templatesManual()){
                     <h3>Template Interface</h3>
                     <div>
                         <p>
-                            Depending on whether a step is <app-label color="secondary">Solved</app-label>  or 
+                            Depending on whether a step is <app-label color="secondary">Solved</app-label> or
                             <app-label color="error">Unsolvable</app-label> you have access to different questions.
                         </p>
 
                         <p>
-                            The questions and answers are given in a chat-style interface. It is not possible to ask 
+                            The questions and answers are given in a chat-style interface. It is not possible to ask
                             a question by typing it. Instead you can select from a list of questions.
                             To ask a question you just have to click on it.
                         </p>
@@ -216,20 +250,21 @@
                         </p>
 
                         <app-chat>
-                            <app-chat-message role="sender">Here are some question, that I could help you with:</app-chat-message>
-                            
+                            <app-chat-message role="sender">Here are some question, that I could help you
+                                with:</app-chat-message>
+
                             @for(question of unsolvableQuestions; track question) {
-                            <button app-chat-action >{{ question.message.mainText }}</button>
+                            <button app-chat-action>{{ question.message.mainText }}</button>
                             }
-                            
-                        </app-chat> 
-                        
+
+                        </app-chat>
+
                         <h4>Solvable Step</h4>
 
                         <p>
                             In an solvable step you can ask questions about the unsatisfied soft goals.
-                            The soft goals represent the goals you want to monitor to decide whether you 
-                            want to enforce them in a future step. Thus you can ask "why" it is not 
+                            The soft goals represent the goals you want to monitor to decide whether you
+                            want to enforce them in a future step. Thus you can ask "why" it is not
                             satisfy and 'how' you can satisfy it.
                         </p>
 
@@ -242,39 +277,49 @@
                         <div class="property-list">
                             <app-plan-property-panel [property]="samplePlanProperties[4]" [showFormula]="false">
                                 <app-chat>
-                                    <app-chat-message role="sender">Here are some question, that I could help you with:</app-chat-message>
-                                    
+                                    <app-chat-message role="sender">Here are some question, that I could help you
+                                        with:</app-chat-message>
+
                                     @for(question of solvableQuestions; track question) {
-                                    <button app-chat-action >{{ question.message.mainText }}</button>
+                                    <button app-chat-action>{{ question.message.mainText }}</button>
                                     }
-                                    
+
                                 </app-chat>
                             </app-plan-property-panel>
                         </div>
                     </div>
-                }
-                @if(LLMManual()){
+                    }
+                    @if(LLMManual()){
                     <h3>LLM Interface</h3>
                     <div>
                         <p>
-                            When you are inside a  <app-label color="secondary">Solved</app-label>  or an   <app-label color="error">Unsolvable</app-label> iteration step you have access to an AI chat interface that can answer questions.
+                            When you are inside a <app-label color="secondary">Solved</app-label> or an <app-label
+                                color="error">Unsolvable</app-label> iteration step you have access to an AI chat
+                            interface that can answer questions.
 
                         </p>
                         <app-chat [isSenderTyping]="false">
-                            <app-chat-message [role]="'sender'">{{ "Hi! I'm here to help you to understand this planning task. You can ask me any question." }}</app-chat-message>
-                            
-                            <app-chat-markdown-message [role]="'receiver'" [rawMessage]="'Why is this step unsolvable?'"></app-chat-markdown-message>
-                            <app-chat-markdown-message [role]="'sender'" [rawMessage]="'Because you enforced &quot;go to gym&quot;, &quot;go to yoga&quot; and &quot;go to the supermarket&quot; which are in conflict with each other. You have to forgo at least one of them.'"></app-chat-markdown-message>
+                            <app-chat-message [role]="'sender'">{{ "Hi! I'm here to help you to understand this planning
+                                task. You can ask me any question." }}</app-chat-message>
 
-                            <app-chat-markdown-message [role]="'receiver'" [rawMessage]="'So if I stop enforcing &quot;go to the supermarket&quot; the planning task should be solvable?'"></app-chat-markdown-message>
-                            <app-chat-markdown-message [role]="'sender'" [rawMessage]="'Correct! Removing &quot;go to the supermarket&quot; should be enough to solve the conflict and thus make the task solvable.'"></app-chat-markdown-message>
-                            
+                            <app-chat-markdown-message [role]="'receiver'"
+                                [rawMessage]="'Why is this step unsolvable?'"></app-chat-markdown-message>
+                            <app-chat-markdown-message [role]="'sender'"
+                                [rawMessage]="'Because you enforced &quot;go to gym&quot;, &quot;go to yoga&quot; and &quot;go to the supermarket&quot; which are in conflict with each other. You have to forgo at least one of them.'"></app-chat-markdown-message>
+
+                            <app-chat-markdown-message [role]="'receiver'"
+                                [rawMessage]="'So if I stop enforcing &quot;go to the supermarket&quot; the planning task should be solvable?'"></app-chat-markdown-message>
+                            <app-chat-markdown-message [role]="'sender'"
+                                [rawMessage]="'Correct! Removing &quot;go to the supermarket&quot; should be enough to solve the conflict and thus make the task solvable.'"></app-chat-markdown-message>
+
                             @if(sentMessage()){
-                                <app-chat-markdown-message [role]="'receiver'" [rawMessage]="userMessage"></app-chat-markdown-message>
+                            <app-chat-markdown-message [role]="'receiver'"
+                                [rawMessage]="userMessage"></app-chat-markdown-message>
                             }
-                            <app-chat-input (userInput)="onUserMessage($event)" [preset]="'Type your question here, then press enter or use the button on the right.'"></app-chat-input>
+                            <app-chat-input (userInput)="onUserMessage($event)"
+                                [preset]="'Type your question here, then press enter or use the button on the right.'"></app-chat-input>
 
-                            </app-chat>
+                        </app-chat>
 
                         <p>
                             The tool is mainly designed to answer questions like:
@@ -288,53 +333,71 @@
                             <li>How can I achieve this goal?</li>
                         </ul>
                         <p>
-                            The tool remembers previous questions and answers and thus supports follow-up questions implicitly referencing previous ones, like in the following example:
+                            The tool remembers previous questions and answers and thus supports follow-up questions
+                            implicitly referencing previous ones, like in the following example:
                         </p>
                         <app-chat [isSenderTyping]="false">
-                            <app-chat-message [role]="'sender'">{{ "Hi! I'm here to help you to understand this planning task. You can ask me any question." }}</app-chat-message>
-                            
-                            <app-chat-markdown-message [role]="'receiver'" [rawMessage]="'Why cant I go to the supermarket?'"></app-chat-markdown-message>
-                            <app-chat-markdown-message [role]="'sender'" [rawMessage]="'Because you enforced &quot;go to gym&quot;, &quot;go to yoga&quot; which are in conflict with &quot;go to the supermarket&quot;.'"></app-chat-markdown-message>
+                            <app-chat-message [role]="'sender'">{{ "Hi! I'm here to help you to understand this planning
+                                task. You can ask me any question." }}</app-chat-message>
 
-                            <app-chat-markdown-message [role]="'receiver'" [rawMessage]="'So what can I do ? '"></app-chat-markdown-message>
-                            <app-chat-markdown-message [role]="'sender'" [rawMessage]="'To achieve &quot;go to the supermarket&quot; you can stop enforcing one of &quot;go to gym&quot; or &quot;go to yoga&quot;.'"></app-chat-markdown-message>
+                            <app-chat-markdown-message [role]="'receiver'"
+                                [rawMessage]="'Why cant I go to the supermarket?'"></app-chat-markdown-message>
+                            <app-chat-markdown-message [role]="'sender'"
+                                [rawMessage]="'Because you enforced &quot;go to gym&quot;, &quot;go to yoga&quot; which are in conflict with &quot;go to the supermarket&quot;.'"></app-chat-markdown-message>
+
+                            <app-chat-markdown-message [role]="'receiver'"
+                                [rawMessage]="'So what can I do ? '"></app-chat-markdown-message>
+                            <app-chat-markdown-message [role]="'sender'"
+                                [rawMessage]="'To achieve &quot;go to the supermarket&quot; you can stop enforcing one of &quot;go to gym&quot; or &quot;go to yoga&quot;.'"></app-chat-markdown-message>
                             @if(sentMessage()){
-                                <app-chat-markdown-message [role]="'receiver'" [rawMessage]="userMessage"></app-chat-markdown-message>
+                            <app-chat-markdown-message [role]="'receiver'"
+                                [rawMessage]="userMessage"></app-chat-markdown-message>
                             }
                             <app-chat-input (userInput)="onUserMessage($event)"></app-chat-input>
                         </app-chat>
 
                         <p>
-                            The explainer can infer missing parts in partially implicit question and tells you how it understood your question.
+                            The explainer can infer missing parts in partially implicit question and tells you how it
+                            understood your question.
                             For example:
                         </p>
                         <app-chat [isSenderTyping]="false">
-                            <app-chat-message [role]="'sender'">{{ "Hi! I'm here to help you to understand this planning task. You can ask me any question." }}</app-chat-message>
-                            
-                            <app-chat-markdown-message [role]="'receiver'" [rawMessage]="'Why no yoga'"></app-chat-markdown-message>
-                            <app-chat-markdown-message [role]="'sender'" [rawMessage]="'I understood your question as : &quot;Why is the goal &quot;go to yoga&quot; not satisfied?&quot;.'"></app-chat-markdown-message>
-                            <app-chat-markdown-message [role]="'sender'" [rawMessage]="'Because you enforced &quot;go to gym&quot;, &quot;go to yoga&quot; which are in conflict with &quot;go to the supermarket&quot;.'"></app-chat-markdown-message>
+                            <app-chat-message [role]="'sender'">{{ "Hi! I'm here to help you to understand this planning
+                                task. You can ask me any question." }}</app-chat-message>
+
+                            <app-chat-markdown-message [role]="'receiver'"
+                                [rawMessage]="'Why no yoga'"></app-chat-markdown-message>
+                            <app-chat-markdown-message [role]="'sender'"
+                                [rawMessage]="'I understood your question as : &quot;Why is the goal &quot;go to yoga&quot; not satisfied?&quot;.'"></app-chat-markdown-message>
+                            <app-chat-markdown-message [role]="'sender'"
+                                [rawMessage]="'Because you enforced &quot;go to gym&quot;, &quot;go to yoga&quot; which are in conflict with &quot;go to the supermarket&quot;.'"></app-chat-markdown-message>
                             @if(sentMessage()){
-                                <app-chat-markdown-message [role]="'receiver'" [rawMessage]="userMessage"></app-chat-markdown-message>
+                            <app-chat-markdown-message [role]="'receiver'"
+                                [rawMessage]="userMessage"></app-chat-markdown-message>
                             }
                             <app-chat-input (userInput)="onUserMessage($event)"></app-chat-input>
                         </app-chat>
 
                         <p>
-                            You can try any question you want. The explainer will try to answer it and if it does not understand your question it will ask you to clarify it.
+                            You can try any question you want. The explainer will try to answer it and if it does not
+                            understand your question it will ask you to clarify it.
                         </p>
                     </div>
-                        <app-info>
-                                <mat-icon>warning</mat-icon>
-                                <span><span class="highlight">Disclaimer:</span> The AI explainer is an experimental feature designed to assist with understanding planning tasks. 
-                                While we strive for accuracy, the AI may occasionally provide incomplete, inaccurate, or inconsistent responses. 
-                                Please use these explanations as a helpful guide rather than definitive answers, and always verify critical decisions 
-                                through the planning interface. If you notice any inconsistencies, feel free to rephrase your question.</span>
-                        </app-info>
+                    <app-info>
+                        <mat-icon>warning</mat-icon>
+                        <span><span class="highlight">Disclaimer:</span> The AI explainer is an experimental feature
+                            designed to assist with understanding planning tasks.
+                            While we strive for accuracy, the AI may occasionally provide incomplete, inaccurate, or
+                            inconsistent responses.
+                            Please use these explanations as a helpful guide rather than definitive answers, and always
+                            verify critical decisions
+                            through the planning interface. If you notice any inconsistencies, feel free to rephrase
+                            your question.</span>
+                    </app-info>
 
-                }
-            </div>
-        </app-page-section-content>
-    </app-page-section>
-</app-page-section-list>
+                    }
+                </div>
+            </app-page-section-content>
+        </app-page-section>
+    </app-page-section-list>
 </div>
