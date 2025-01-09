@@ -7,7 +7,7 @@ import { Store } from '@ngrx/store';
 import { selectExecutionUserStudyPendingIterationSteps, selectExecutionUserStudyStep, selectExecutionUserStudyStepIndex } from '../user-study-execution.selector';
 import { concatLatestFrom } from '@ngrx/operators';
 import { ActionType, CancelPlanForIterationStepUserAction } from '../../domain/user-action';
-import { cancelPlanComputationAndIterationStep, createIterationStepSuccess, loadIterationStepsSuccess, poseAnswer, poseAnswerLLM, questionPosed, questionPosedLLM, selectIterationStep, sendMessageToLLMExplanationTranslator, sendMessageToLLMExplanationTranslatorFailure, sendMessageToLLMExplanationTranslatorSuccess, sendMessageToLLMQuestionTranslator, sendMessageToLLMQuestionTranslatorFailure, sendMessageToLLMQuestionTranslatorSuccess } from 'src/app/iterative_planning/state/iterative-planning.actions';
+import { cancelPlanComputationAndIterationStep, createIterationStepSuccess, directMessageET, directResponseQT, loadIterationStepsSuccess, poseAnswer, poseAnswerLLM, questionPosed, questionPosedLLM, selectIterationStep, sendMessageToLLMExplanationTranslator, sendMessageToLLMExplanationTranslatorFailure, sendMessageToLLMExplanationTranslatorSuccess, sendMessageToLLMQuestionTranslator, sendMessageToLLMQuestionTranslatorFailure, sendMessageToLLMQuestionTranslatorSuccess } from 'src/app/iterative_planning/state/iterative-planning.actions';
 import { StepStatus } from 'src/app/iterative_planning/domain/iteration_step';
 import { computeUtility } from 'src/app/iterative_planning/domain/plan';
 import { selectIterationStepById, selectIterativePlanningProject, selectIterativePlanningProperties, selectIterativePlanningSelectedStepId } from 'src/app/iterative_planning/state/iterative-planning.selector';
@@ -247,7 +247,7 @@ export class LogUserActivitiesEffect{
                 data: {
                     demoId: project._id,
                     stepId: iterationStepId,
-                    retrievedQuestion: question.questionType + planProperties[question.propertyId],
+                    translatedQuestion: question.questionType +" "+ planProperties[question.propertyId].name,
                     originalQuestion: naturalLanguageQuestion,
                 }
             }})
@@ -282,6 +282,16 @@ export class LogUserActivitiesEffect{
     public sentMessageToETFailure$ = createEffect(() => this.actions$.pipe(
         ofType(sendMessageToLLMExplanationTranslatorFailure),
         switchMap(({}) => [logAction({action: {type: ActionType.FAILED_ET, data: {}}})])
+    ));
+
+    public sentDirectResponseQT$ = createEffect(() => this.actions$.pipe(
+        ofType(directResponseQT),
+        switchMap(({directResponse}) => [logAction({action: {type: ActionType.DIRECT_RESPONSE_QT, data: {directResponse}}})])
+    ));
+
+    public sentDirectQuestionET$ = createEffect(() => this.actions$.pipe(
+        ofType(directMessageET),
+        switchMap(({directResponse, iterationStepId}) => [logAction({action: {type: ActionType.DIRECT_QUESTION_ET, data: {directResponse, iterationStepId}}})])
     ));
 
 
