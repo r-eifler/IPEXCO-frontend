@@ -4,14 +4,14 @@ import { MatListModule } from '@angular/material/list';
 import { MatTabsModule } from '@angular/material/tabs';
 import { ExplanationInterfaceType, GeneralSettings } from 'src/app/project/domain/general-settings';
 import { PageModule } from 'src/app/shared/components/page/page.module';
-import { IterationStep, StepStatus } from '../../domain/iteration_step';
+import { computeCurrentMaxUtility, IterationStep, StepStatus } from '../../domain/iteration_step';
 import { GoalType, PlanProperty } from 'src/app/shared/domain/plan-property/plan-property';
 import { PlanPropertyPanelComponent } from 'src/app/shared/components/plan-property-panel/plan-property-panel.component';
 import { IterationStepCardComponent } from '../iteration-step-card/iteration-step-card.component';
 import { PlanRunStatus } from '../../domain/plan';
 import { MatButtonModule } from '@angular/material/button';
 import { ActionCardComponent } from 'src/app/shared/components/action-card/action-card/action-card.component';
-import { Demo, DemoRunStatus } from 'src/app/project/domain/demo';
+import { Demo, DemoRunStatus, computeMaxPossibleUtility } from 'src/app/project/domain/demo';
 import { ExplanationRunStatus, QuestionType } from '../../domain/explanation/explanations';
 import { StepsListHeroComponent } from '../steps-list-hero/steps-list-hero.component';
 import { LabelModule } from 'src/app/shared/components/label/label.module';
@@ -216,6 +216,10 @@ export class UserManualComponent {
       }
     }
   ];
+
+  maxOverallUtility = computeMaxPossibleUtility(this.sampleDemo, this.samplePlanProperties);
+  currentMaxUtility = computeCurrentMaxUtility(this.sampleSteps, this.samplePlanPropertiesMap);
+
 
   userMessage: string = '';
 

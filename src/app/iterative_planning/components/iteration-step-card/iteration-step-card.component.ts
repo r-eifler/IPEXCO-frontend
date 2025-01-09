@@ -15,6 +15,8 @@ import { StepValuePipe } from '../../domain/pipe/step-value.pipe';
 import { PlanProperty } from '../../../shared/domain/plan-property/plan-property';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { PlanRunStatus } from '../../domain/plan';
+import { ProjectDirective } from '../../derectives/isProject.directive';
+import { DemoDirective } from '../../derectives/isDemo.directive';
 
 @Component({
     selector: 'app-iteration-step-card',
@@ -30,7 +32,9 @@ import { PlanRunStatus } from '../../domain/plan';
       RouterLink, 
       MatTooltipModule, 
       StepStatusColorPipe,
-      MatProgressBarModule
+      MatProgressBarModule,
+      ProjectDirective,
+      DemoDirective
     ],
     templateUrl: './iteration-step-card.component.html',
     styleUrl: './iteration-step-card.component.scss'
@@ -44,6 +48,8 @@ export class IterationStepCardComponent {
     this.step().plan.status == PlanRunStatus.pending || 
     this.step().plan.status == PlanRunStatus.running
   )
+
+  maxOverallUtility = input.required<number>();
 
   fork = output<void>();
   cancel = output<void>();

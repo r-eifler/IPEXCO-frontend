@@ -55,8 +55,12 @@
                     the highest achieved utility as shown below in the top of the list of iteration steps.
                 </p>
 
-                <app-steps-list-hero [demo]="sampleDemo" [steps]="sampleSteps"
-                    [planPropertiesMap]="samplePlanPropertiesMap"></app-steps-list-hero>
+                <app-steps-list-hero 
+                    [steps]="sampleSteps"
+                    [planPropertiesMap]="samplePlanPropertiesMap"
+                    [maxOverallUtility]="maxOverallUtility"
+                    [currentMaxUtility]="currentMaxUtility">
+                </app-steps-list-hero>
 
                 <p>
                     To open the interface to create a new iteration step you can click on the card shown below.
@@ -73,7 +77,10 @@
                         </div>
                         <mat-icon>add</mat-icon>
                     </button>
-                    <app-iteration-step-card [step]="sampleSteps[1]" [planProperties]="samplePlanPropertiesMap">
+                    <app-iteration-step-card 
+                        [step]="sampleSteps[1]" 
+                        [planProperties]="samplePlanPropertiesMap"
+                        [maxOverallUtility]="maxOverallUtility">
                     </app-iteration-step-card>
                 </div>
 
@@ -102,7 +109,11 @@
 
                 <div class="page-grid">
                     @for(step of sampleSteps; track step) {
-                    <app-iteration-step-card [step]="step" [planProperties]="samplePlanPropertiesMap">
+                    <app-iteration-step-card 
+                        [step]="step" 
+                        [planProperties]="samplePlanPropertiesMap"
+                        [maxOverallUtility]="maxOverallUtility"
+                    >
                     </app-iteration-step-card>
                     }
                 </div>
@@ -139,8 +150,9 @@
 
                 <app-info>
                     <mat-icon>edit_note</mat-icon>
+                    <span>
                     <span>A quick summary on the different kind of goals: </span>
-
+                    
                     <ul>
                         <li><span class="highlight">Enforced Goals</span> are goals that you ask the planner to satisfy in an iteration step.</li>
                         <li><span class="highlight">Soft Goals</span> are goals that you want to track to decide
@@ -149,6 +161,7 @@
                         <li><span class="highlight">Locked Goals </span><mat-icon>lock</mat-icon> are goals that must be enforced at every iteration step.
                         </li>
                     </ul>
+                    </span>
                 </app-info>
 
             </app-page-section-content>

@@ -5,7 +5,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterLink } from '@angular/router';
-import { Demo, maxUtility } from 'src/app/project/domain/demo';
+import { Demo, computeMaxPossibleUtility } from 'src/app/project/domain/demo';
 import { StepStatusColorPipe } from 'src/app/iterative_planning/domain/pipe/step-status-color.pipe';
 import { StepStatusNamePipe } from 'src/app/iterative_planning/domain/pipe/step-status-name.pipe';
 import { StepValuePipe } from 'src/app/iterative_planning/domain/pipe/step-value.pipe';
@@ -39,6 +39,6 @@ export class DemoHeroComponent {
   numConflicts = computed(() => this.demo()?.globalExplanation?.MUGS?.length);
   numCorrections = computed(() => this.demo()?.globalExplanation.MGCS?.length);
 
-  maxUtility = computed(() => maxUtility(this.demo(), this.planProperties()))
+  maxUtility = computed(() => computeMaxPossibleUtility(this.demo(), this.planProperties()))
 
 }

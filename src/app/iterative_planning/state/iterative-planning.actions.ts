@@ -59,7 +59,6 @@ export const deleteIterationStep = createAction('[iterative-planning] delete ite
 export const deleteIterationStepSuccess = createAction('[iterative-planning] delete iteration step success');
 export const deleteIterationStepFailure = createAction('[iterative-planning] delete iteration step failure');
 
-
 // Planner
 
 export const registerPlanComputation = createAction('[iterative-planning] register plan computation', props<{ iterationStepId: string }>());
@@ -68,7 +67,7 @@ export const registerPlanComputationSuccess = createAction('[iterative-planning]
 export const registerPlanComputationFailure = createAction('[iterative-planning] register plan computation failure');
 
 export const planComputationRunning = createAction('[iterative-planning] plan computation running');
-export const planComputationRunningSuccess = createAction('[iterative-planning] plan computation running success');
+export const planComputationRunningSuccess = createAction('[iterative-planning] plan computation running success', props<{ iterationStepId: string }>());
 export const planComputationRunningFailure = createAction('[iterative-planning] plan computation running failure');
 
 export const cancelPlanComputationAndIterationStep= createAction('[iterative-planning] cancel plan computation and iteration step', props<{ iterationStepId: string }>());

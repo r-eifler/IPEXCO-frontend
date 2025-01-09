@@ -4,8 +4,9 @@ import { LoadingState } from "src/app/shared/common/loadable.interface";
 import { explanationHash } from "../domain/explanation/explanation-hash";
 import { ExplanationRunStatus } from "../domain/explanation/explanations";
 import { IterativePlanningState, Message, iterativePlanningFeature } from "./iterative-planning.reducer";
-import { StepStatus } from "../domain/iteration_step";
-import { PlanRunStatus } from "../domain/plan";
+import { computeCurrentMaxUtility, StepStatus } from "../domain/iteration_step";
+import { computeUtility, PlanRunStatus } from "../domain/plan";
+import { Demo, computeMaxPossibleUtility } from "src/app/project/domain/demo";
 
 const selectIterativePlanningFeature = createFeatureSelector<IterativePlanningState>(iterativePlanningFeature);
 
@@ -69,6 +70,24 @@ export const selectIterativePlanningNumberOfSteps = createSelector(selectIterati
 
 export const selectIterativePlanningIterationStepComputationRunning = createSelector(selectIterativePlanningFeature,
   (state) => state.iterationSteps.data?.filter(s => s.plan && (s.plan?.status == PlanRunStatus.running || s.plan.status == PlanRunStatus.pending)).length > 0)
+
+export const selectIterativePlanningCurrentMaxUtility = createSelector(selectIterativePlanningFeature, (state) => {
+    let cmu = undefined;
+    if(!state.iterationSteps.data || state.iterationSteps.data.length === 0){
+      return 0;
+    } 
+    cmu = computeCurrentMaxUtility(state.iterationSteps.data, state.planProperties.data);
+    return cmu;
+});
+
+export const selectIterativePlanningMaxPossibleUtility = createSelector(selectIterativePlanningFeature, (state) => {
+  let maxOverallUtility = undefined;
+  if(state.project?.data?.itemType === 'demo-project'){
+    maxOverallUtility = computeMaxPossibleUtility(state.project.data as Demo, state.planProperties.data ? Object.values(state.planProperties.data) : null)
+  }
+
+  return maxOverallUtility;
+});
 
 
 // Messages    

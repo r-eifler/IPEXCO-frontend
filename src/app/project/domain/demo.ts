@@ -35,7 +35,7 @@ export interface DemoDefinition {
 }
 
 
-export function maxUtility(demo: Demo, planProperties: PlanProperty[]): number {
+export function computeMaxPossibleUtility(demo: Demo, planProperties: PlanProperty[]): number {
   if(!demo || ! planProperties){
     return undefined;
   }
