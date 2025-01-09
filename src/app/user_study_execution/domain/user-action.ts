@@ -5,6 +5,7 @@ export enum ActionType {
     START_STUDY = 'START_STUDY',
     END_STUDY = 'END_STUDY',
     START_EXTERNAL = 'START_EXTERNAL',
+    OPEN_EXTERNAL_LINK = 'OPEN_EXTERNAL_LINK',
     END_EXTERNAL = 'END_EXTERNAL',
     START_DESCRIPTION = 'START_DESCRIPTION',
     END_DESCRIPTION = 'END_DESCRIPTION',
@@ -73,6 +74,14 @@ export interface EndDescriptionUserAction extends UserAction {
 
 export interface StartExternalUserAction extends UserAction {
     type: ActionType.START_EXTERNAL,
+    data: {
+        stepIndex: number,
+        stepName: string,
+    }
+} 
+
+export interface OpenExternalLinkUserAction extends UserAction {
+    type: ActionType.OPEN_EXTERNAL_LINK,
     data: {
         stepIndex: number,
         stepName: string,

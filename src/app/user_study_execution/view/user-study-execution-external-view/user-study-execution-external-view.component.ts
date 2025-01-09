@@ -8,8 +8,11 @@ import {PageSectionContentComponent} from '../../../shared/components/page/page-
 import {PageSectionListComponent} from '../../../shared/components/page/page-section-list/page-section-list.component';
 import {PageTitleComponent} from '../../../shared/components/page/page-title/page-title.component';
 import {Store} from '@ngrx/store';
-import {selectExecutionUserStudyStep} from '../../state/user-study-execution.selector';
+import {selectExecutionUserStudyStep, selectExecutionUserStudyStepIndex} from '../../state/user-study-execution.selector';
 import {MatDialog} from '@angular/material/dialog';
+import { logAction } from '../../state/user-study-execution.actions';
+import { ActionType } from '../../domain/user-action';
+import { combineLatest, take } from 'rxjs';
 
 @Component({
     selector: 'app-user-study-execution-external-view',
@@ -31,10 +34,22 @@ export class UserStudyExecutionExternalViewComponent {
   store = inject(Store);
   dialog = inject(MatDialog);
   step$ = this.store.select(selectExecutionUserStudyStep);
+  stepIndex$ = this.store.select(selectExecutionUserStudyStepIndex);
 
   clickedLink = false;
 
   onClickLink(){
+    combineLatest([this.stepIndex$, this.step$]).pipe(take(1)).subscribe(([index, step]) =>
+      this.store.dispatch(logAction({
+        action: {
+          type: ActionType.OPEN_EXTERNAL_LINK, 
+          data: {
+              stepIndex: index,
+              stepName: step.name
+          }
+        }
+      }))
+    );
     this.clickedLink = true;
   }
 }
