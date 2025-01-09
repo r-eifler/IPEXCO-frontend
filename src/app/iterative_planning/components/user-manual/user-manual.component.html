@@ -101,6 +101,24 @@
 
                 <img src="assets/manual/add_soft_goals.png">
 
+                <p></p>
+
+                <app-info>
+                    <mat-icon>edit_note</mat-icon>
+                    <span>
+                    <span>A quick summary on the different kind of goals: </span>
+                    
+                    <ul>
+                        <li><span class="highlight">Enforced Goals</span> are goals that you ask the planner to satisfy in an iteration step.</li>
+                        <li><span class="highlight">Soft Goals</span> are goals that you want to track to decide
+                            whether you want to enforce them in a future step, or to ask questions about. The planner
+                            doesn't try to satisfy them but they can be satisfied by chance.</li>
+                        <li><span class="highlight">Locked Goals </span><mat-icon>lock</mat-icon> are goals that must be enforced at every iteration step.
+                        </li>
+                    </ul>
+                    </span>
+                </app-info>
+
                 <p>
                     If you create a new iteration step the tool will check whether it is possible to achieve
                     all the enforced goals.
@@ -148,21 +166,20 @@
                     of goal you can fork from the canceled step.
                 </div>
 
-                <app-info>
-                    <mat-icon>edit_note</mat-icon>
-                    <span>
-                    <span>A quick summary on the different kind of goals: </span>
-                    
-                    <ul>
-                        <li><span class="highlight">Enforced Goals</span> are goals that you ask the planner to satisfy in an iteration step.</li>
-                        <li><span class="highlight">Soft Goals</span> are goals that you want to track to decide
-                            whether you want to enforce them in a future step, or to ask questions about. The planner
-                            doesn't try to satisfy them but they can be satisfied by chance.</li>
-                        <li><span class="highlight">Locked Goals </span><mat-icon>lock</mat-icon> are goals that must be enforced at every iteration step.
-                        </li>
-                    </ul>
-                    </span>
-                </app-info>
+                <h4>Navigation Between Steps</h4>
+
+                <p>
+                    To navigate between iteration step you can use the list of all iteration steps. 
+                    To get back to the list from the detail view of an iteration steps, click on <app-breadcrumb-item>All Iterations</app-breadcrumb-item>
+                    in the top.
+                </p>
+
+                <div>
+                    <app-breadcrumb>
+                        <app-breadcrumb-item>All Iterations</app-breadcrumb-item>
+                        <app-breadcrumb-item>Step 1</app-breadcrumb-item>
+                      </app-breadcrumb>
+                </div>
 
             </app-page-section-content>
         </app-page-section>

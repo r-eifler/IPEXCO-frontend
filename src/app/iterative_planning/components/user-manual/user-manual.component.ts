@@ -19,6 +19,8 @@ import { ChatModule } from 'src/app/shared/components/chat/chat.module';
 import { InfoComponent } from 'src/app/shared/components/info/info/info.component';
 import { StructuredText } from '../../domain/interface/explanation-message';
 import { questionFactory } from '../../domain/explanation/question-factory';
+import { BreadcrumbComponent } from 'src/app/shared/components/breadcrumb/breadcrumb/breadcrumb.component';
+import { BreadcrumbModule } from 'src/app/shared/components/breadcrumb/breadcrumb.module';
 
 type AvailableQuestion = {
   message: StructuredText;
@@ -39,7 +41,8 @@ type AvailableQuestion = {
     StepsListHeroComponent,
     LabelModule,
     ChatModule,
-    InfoComponent
+    InfoComponent,
+    BreadcrumbModule
   ],
   templateUrl: './user-manual.component.html',
   styleUrl: './user-manual.component.scss'
