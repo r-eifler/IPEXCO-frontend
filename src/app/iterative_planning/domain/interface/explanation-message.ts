@@ -20,9 +20,9 @@ export function structuredTextToString(
     let s = text.mainText + '\n';
     if(text.includeComputation){
       subsets.forEach(subset => { 
-        s += text.setPrefix ?? '' + '\n' ;
-        s += '- ' + subset.map(pId => properties[pId]).join(', ') + text.setConnector + '\n';
-        s += text.setSuffix ?? '' + '\n' ;
+        s += text.setPrefix ?? '' + ' \n ' ;
+        s += '- ' + subset.map(pId => properties[pId].name).join(text.setConnector) + ' \n ';
+        s += text.setSuffix ?? '' + ' \n ' ;
       });
     }
     return s;
