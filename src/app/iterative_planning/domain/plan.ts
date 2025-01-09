@@ -50,5 +50,8 @@ export function computeUtility(plan: Plan, planProperties: Record<string, PlanPr
   if(!plan || !planProperties){
     return undefined;
   }
+  if(plan.satisfied_properties.some(ppId => !planProperties[ppId])){
+    return undefined;
+  }
   return sum(plan.satisfied_properties?.map(ppId => planProperties[ppId].utility));
 }
