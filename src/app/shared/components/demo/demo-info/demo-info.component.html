@@ -3,7 +3,9 @@
       <mat-expansion-panel-header>
         <mat-panel-title> Visualization </mat-panel-title>
       </mat-expansion-panel-header>
-      <img [src]="host + demo()?.summaryImage">
+      <div class="image-container">
+        <img [src]="host + demo()?.summaryImage">
+      </div>
     </mat-expansion-panel>
     <mat-expansion-panel>
       <mat-expansion-panel-header>
