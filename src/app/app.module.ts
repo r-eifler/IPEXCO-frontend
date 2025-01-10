@@ -118,6 +118,8 @@ import { LoadUserStudyExecutionDemoEffect } from './user_study_execution/state/e
 import { UserStudyExecutionDemoService } from './user_study_execution/service/user-study-execution-demo.service';
 import { UserStudyExecutionPlanPropertyService } from './user_study_execution/service/user-study-execution-plan-properties.service';
 import { LoadUserStudyExecutionPlanPropertiesEffect } from './user_study_execution/state/effects/load-plan-properties.effect';
+import { ProjectDemoUpdatePlanPropertyEffect } from './project/state/effects/update-plan-property.effect';
+import { DemoDemoUpdatePlanPropertyEffect } from './demo/state/effects/update-plan-property.effect';
 
 
 
@@ -154,6 +156,7 @@ import { LoadUserStudyExecutionPlanPropertiesEffect } from './user_study_executi
         UpdateDemoEffect,
         DeleteProjectDemoEffect,
         LoadDemoProjectPlanPropertiesEffect,
+        ProjectDemoUpdatePlanPropertyEffect,
         LoadIterativePlanningProjectEffect,
         CreatePlanPropertyEffect,
         LoadPlanPropertiesEffect,
@@ -224,7 +227,8 @@ import { LoadUserStudyExecutionPlanPropertiesEffect } from './user_study_executi
       LoadDemosEffect,
       LoadDemoPlanPropertiesEffect,
       DemosUpdateDemoEffect,
-      UploadDemoEffect
+      UploadDemoEffect,
+      DemoDemoUpdatePlanPropertyEffect
     ]),
     // Instrumentation must be imported after importing StoreModule (config is optional)
     StoreDevtoolsModule.instrument({

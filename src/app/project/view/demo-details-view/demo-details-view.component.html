@@ -38,7 +38,7 @@
 				<app-page-section-content>				
 					<div class="property-list">
 						@for(property of (planPropertiesList$ | async); track property._id) {
-							<app-plan-property-panel [property]="property"></app-plan-property-panel>
+							<app-plan-property-update-panel [property]="property" (update)="updateProperty($event)"></app-plan-property-update-panel>
 						}
 					</div>
 				</app-page-section-content>
@@ -68,7 +68,7 @@
 					<div class="list-list">
 						@for(MGCS of (MGCS$ | async); track $index) {
 							<div class="icon-list-item">
-								<mat-icon>report</mat-icon>
+								<mat-icon>healing</mat-icon>
 								<div class="property-badge-list">
 									@for(id of MGCS; track id) {
 									<app-plan-property-badge [property]="(planProperties$ | async)?.[id]"></app-plan-property-badge>

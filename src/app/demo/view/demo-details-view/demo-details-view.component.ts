@@ -16,8 +16,9 @@ import { DemoHeroComponent } from 'src/app/project/components/demo-hero/demo-her
 import { SettingsComponent } from 'src/app/project/components/settings/settings.component';
 import { selectDemo, selectDemoProperties, selectPlanPropertiesListOfDemo, selectPlanPropertiesOfDemo } from '../../state/demo.selector';
 import { GeneralSettings } from 'src/app/project/domain/general-settings';
-import { updateDemo } from '../../state/demo.actions';
+import { updateDemo, updatePlanProperty } from '../../state/demo.actions';
 import { DemoInfoComponent } from 'src/app/shared/components/demo/demo-info/demo-info.component';
+import { PlanPropertyUpdatePanelComponent } from 'src/app/shared/components/plan-property-update-panel/plan-property-update-panel.component';
 
 @Component({
     selector: 'app-demo-details-view',
@@ -29,7 +30,7 @@ import { DemoInfoComponent } from 'src/app/shared/components/demo/demo-info/demo
         AsyncPipe,
         MatButtonModule,
         DemoHeroComponent,
-        PlanPropertyPanelComponent,
+        PlanPropertyUpdatePanelComponent,
         PlanPropertyBadgeComponent,
         SettingsComponent,
         AsyncPipe,
@@ -86,5 +87,9 @@ export class DemoDetailsViewComponent {
       this.store.dispatch(updateDemo({demo: newDemo}))
     })
   }
+
+    updateProperty(property: PlanProperty){
+      this.store.dispatch(updatePlanProperty({planProperty: property}));
+    }
 
 }
