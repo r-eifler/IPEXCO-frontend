@@ -182,7 +182,7 @@ export class CreateIterationComponent {
         project: project._id,
         status: StepStatus.unknown,
         task: baseStep?.task ?? project.baseTask,
-        predecessorStep: baseStep._id
+        predecessorStep: baseStep?._id ?? null
       }
 
       console.log(newStep)
