@@ -193,6 +193,12 @@ export class UIControls {
     setchart.resize()
   }
 
+  public updateGoalSelectionView(): void {
+    this.updateEnforcementSection();
+    this.updateResultSection();
+    this.updateView();
+  }
+
   public addEventListener(): void{
     document.addEventListener("select-elements", async (e: CustomEvent) => {
       const { x, y } = e.detail.selected;
@@ -201,9 +207,7 @@ export class UIControls {
 
       this._dataHandlerService.enforceElements(this.data, selection);
       //this._dataHandlerService.unenforceElements(this.data, selection);
-      this.updateEnforcementSection();
-      this.updateResultSection();
-      this.updateView();
+      this.updateGoalSelectionView();
 
     });
 

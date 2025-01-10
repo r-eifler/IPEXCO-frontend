@@ -3,19 +3,24 @@ import * as matrix from './helpers/matrix.js';
 import * as d3 from 'd3';
 import {UIControls} from './ui-controls';
 import {DataHandlerService} from './DataHandlerService';
+import {PlanRunStatus} from '../../../../domain/plan';
 
 
 export class VisualizationLauncher {
   private readonly mugsData: string[][];
   private readonly msgsData: string[][];
   private readonly mugsTypes: Record<string, number>;
+  private readonly statusType: PlanRunStatus;
   private readonly dataHandlerService: DataHandlerService;
+  private readonly enforcedGoals: string[];
 
 
-  constructor(entryMugs: string[][], entryMsgs: string[][], entryMugTypes: Record<string, number>) {
+  constructor(entryMugs: string[][], entryMsgs: string[][], entryMugTypes: Record<string, number>, statusType: PlanRunStatus, enforcedGoals: string[]) {
     this.mugsData = entryMugs;
     this.msgsData = entryMsgs;
     this.mugsTypes = entryMugTypes;
+    this.statusType = statusType;
+    this.enforcedGoals = enforcedGoals;
     this.dataHandlerService = new DataHandlerService();
   }
 
@@ -48,7 +53,12 @@ export class VisualizationLauncher {
     matrix.draw(state.currentData);
 
     uiControls.showUpperMatrix(false);
-    uiControls.colorGoalsByTypes(true); //TODO: fetch and add goal types (See plAN propertyInterface)
+    uiControls.colorGoalsByTypes(true);
+
+    if (this.statusType != PlanRunStatus.not_solvable){
+      this.dataHandlerService.enforceElements(state.currentData, this.enforcedGoals);
+      uiControls.updateGoalSelectionView();
+    }
 
     d3.select(window).on('resize', () => {
       matrix.resize();

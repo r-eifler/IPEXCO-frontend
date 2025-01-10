@@ -11,6 +11,7 @@ import {VisualizationLauncher} from './legacy/visualization-launcher';
 import {DataHandlerService} from './legacy/DataHandlerService';
 import {ActionSet, PlanProperty} from '../../../../shared/domain/plan-property/plan-property';
 import {PlanRunStatus} from '../../../domain/plan';
+import {selectSatisfiedSoftGoals} from '../../step-detail-view/step-detail-view.component.selector';
 
 
 @Component({
@@ -26,15 +27,23 @@ export class MugsVisualizationBaseComponent {
   private store = inject(Store);
   private visualizationLauncher: VisualizationLauncher;
 
+  //
+  // Observables
+  //
   step$ = this.store.select(selectIterativePlanningSelectedStep);
   stepId$ = this.step$.pipe(map(step => step?._id));
   stepGlobalExplanation$ = this.step$.pipe(map(step => step?.globalExplanation));
 
+  //
+  // Class fields
+  //
   containerHeaderId: string = "mugs-vis";
   containerGoalInteractionSectionTest: string = "";
   stepGoals : Record<string, string> = {};
-  MUGS : string[][] = []
-  MSGS : string[][] = []
+  stepStatusType: PlanRunStatus;
+  MUGS : string[][] = [];
+  MSGS : string[][] = [];
+  enforcedGoals : string[] = [];
   MUGTypes: Record<string, number> = {};
 
   explanationDetails$ = this.stepGlobalExplanation$.pipe(
@@ -57,7 +66,6 @@ export class MugsVisualizationBaseComponent {
   }
 
   ngAfterViewInit(): void {
-    // Initialize your drawing here after the id is set
     this.initializeVisualizationLauncher();
   }
 
@@ -66,6 +74,7 @@ export class MugsVisualizationBaseComponent {
       filter((step) => !!step),
       map((step) => step.plan?.status)
     ).subscribe((status) => {
+      this.stepStatusType = status;
       switch (status) {
         case PlanRunStatus.not_solvable:
           this.containerGoalInteractionSectionTest = "Unenforced Goals"
@@ -93,7 +102,7 @@ export class MugsVisualizationBaseComponent {
   }
 
   private initializeVisualizationLauncher(): void {
-    this.visualizationLauncher = new VisualizationLauncher(this.MUGS, this.MSGS, this.MUGTypes);
+    this.visualizationLauncher = new VisualizationLauncher(this.MUGS, this.MSGS, this.MUGTypes, this.stepStatusType, this.enforcedGoals);
     this.visualizationLauncher.initialize(`#${this.containerHeaderId}`);
   }
 
@@ -124,6 +133,7 @@ export class MugsVisualizationBaseComponent {
     this.store.select(selectEnforcedGoals).pipe(take(1)).subscribe(enforcedGoals => {
       enforcedGoals.forEach((goal) =>{
         this.stepGoals[goal._id] = goal.name
+        this.enforcedGoals.push(goal.name);
       })
     });
 
@@ -168,4 +178,6 @@ export class MugsVisualizationBaseComponent {
       console.log(this.MUGS)
     });
   }
+
+  protected readonly PlanRunStatus = PlanRunStatus;
 }

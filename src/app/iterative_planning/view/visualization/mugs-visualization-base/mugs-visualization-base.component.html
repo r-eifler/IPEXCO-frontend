@@ -1,20 +1,24 @@
-<div>
-  <div [id]="containerHeaderId" class="svg-container"></div>
-</div>
-
-<div>
-  <br/>
-  <div class="divider"></div>
-  <div class="section mx-10">
-    <h6>{{ containerGoalInteractionSectionTest }}</h6>
-    <div id="sec-enforcement" class="badge-panel"></div>
+@if (stepStatusType != PlanRunStatus.running && stepStatusType != PlanRunStatus.pending && stepStatusType != PlanRunStatus.failed)
+{
+  <div>
+    <div [id]="containerHeaderId" class="svg-container"></div>
   </div>
-  <div class="divider"></div>
-  <div class="section mx-10">
-    <h6>Result</h6>
-    <div id="sec-result" class="badge-panel">
-      No goals selected
+
+  <div>
+    <br/>
+    <div class="divider"></div>
+    <div class="section mx-10">
+      <h6>{{ containerGoalInteractionSectionTest }}</h6>
+      <div id="sec-enforcement" class="badge-panel"></div>
+    </div>
+    <div class="divider"></div>
+    <div class="section mx-10">
+      <h6>Result</h6>
+      <div id="sec-result" class="badge-panel">
+        No goals selected
+      </div>
     </div>
   </div>
-</div>
+}
+
 
