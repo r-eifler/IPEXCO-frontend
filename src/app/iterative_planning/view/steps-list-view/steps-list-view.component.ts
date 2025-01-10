@@ -16,7 +16,6 @@ import { DemoDirective } from '../../derectives/isDemo.directive';
 import { StepsListHeroComponent } from '../../components/steps-list-hero/steps-list-hero.component';
 import { map } from 'rxjs';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { DemoInfoComponent } from 'src/app/shared/components/demo/demo-info/demo-info.component';
 import { MatDialog } from '@angular/material/dialog';
 import { UserManualDialogComponent } from '../../components/user-manual-dialog/user-manual-dialog.component';
 import { MatButtonModule } from '@angular/material/button';
@@ -35,7 +34,6 @@ import { MatButtonModule } from '@angular/material/button';
         DemoDirective,
         StepsListHeroComponent,
         MatExpansionModule,
-        DemoInfoComponent,
         MatButtonModule,
         MatIconModule
     ],

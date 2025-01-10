@@ -1,0 +1,58 @@
+@let step = step$ | async;
+@let demo = demo$ | async;
+
+
+<app-dialog>
+    <app-dialog-header>
+        <app-dialog-title>
+            Task Information
+        </app-dialog-title>
+    </app-dialog-header>
+    <app-dialog-content>
+        <app-page-section-list>
+            <app-page-section>
+                <app-page-section-title>
+                    Domain
+                </app-page-section-title>
+                <app-page-section-content>
+                    <div [innerHTML]="demo?.domainInfo | marked"></div>
+                </app-page-section-content>
+            </app-page-section>
+            <app-page-section>
+                <app-page-section-title>
+                    Instance
+                </app-page-section-title>
+                <app-page-section-content>
+                    <div [innerHTML]="demo?.instanceInfo | marked"></div>
+                </app-page-section-content>
+            </app-page-section>
+            <app-page-section>
+                <app-page-section-title>
+                    Goals
+                </app-page-section-title>
+                <app-page-section-content>
+                    @if(planProperties$ | async){
+                        <div class="property-list">
+                            @for(property of (planProperties$ | async); track property._id) {
+                                <app-plan-property-panel [property]="property" [showFormula]="false"></app-plan-property-panel>
+                            }
+                        </div>
+                    }
+                </app-page-section-content>
+            </app-page-section>
+            <app-page-section>
+                <app-page-section-title>
+                    Visualization
+                </app-page-section-title>
+                <app-page-section-content>
+                    <div class="image-container">
+                        <img [src]="host + demo?.summaryImage">
+                    </div>
+                </app-page-section-content>
+            </app-page-section>
+        </app-page-section-list>
+    </app-dialog-content>
+    <app-dialog-footer>
+        <button mat-flat-button (click)="onClose()">Close</button>
+    </app-dialog-footer>
+</app-dialog>

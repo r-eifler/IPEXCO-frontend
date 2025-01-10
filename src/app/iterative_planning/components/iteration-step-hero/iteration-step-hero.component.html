@@ -20,10 +20,14 @@
       </div>
 
       <div class="plan-link-container">
-        <a mat-button [disabled]="! step()?.plan" [routerLink]="['plan']" *isUserStudy>
+        <a mat-button [routerLink]="['plan']" *isProject>
           <mat-icon>explore</mat-icon>
           Show Plan
         </a>
+        <button mat-button (click)="openTaskInfo()" *isDemo>
+          <mat-icon>info</mat-icon>
+          Show Task Information
+        </button>
       </div>
 
       <div class="utility">

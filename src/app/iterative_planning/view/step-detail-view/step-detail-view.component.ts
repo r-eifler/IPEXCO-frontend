@@ -49,15 +49,12 @@ import {
     selectUnsatisfiedSoftGoals,
 } from "./step-detail-view.component.selector";
 import { ExplanationInterfaceType } from "src/app/project/domain/general-settings";
-import { MugsVisualizationBaseComponent } from "../visualization/mugs-visualization-base/mugs-visualization-base.component";
 import { MatDialog } from "@angular/material/dialog";
 import { AskDeleteComponent } from "src/app/shared/components/ask-delete/ask-delete.component";
 import { MatExpansionModule } from "@angular/material/expansion";
-import { DemoDirective } from "../../derectives/isDemo.directive";
 import { ProjectDirective } from "../../derectives/isProject.directive";
-import { DemoInfoComponent } from "src/app/shared/components/demo/demo-info/demo-info.component";
 import { UserManualDialogComponent } from "../../components/user-manual-dialog/user-manual-dialog.component";
-import { MatProgressBar, MatProgressBarModule } from "@angular/material/progress-bar";
+import { MatProgressBarModule } from "@angular/material/progress-bar";
 
 @Component({
     selector: "app-step-detail-view",
@@ -75,9 +72,7 @@ import { MatProgressBar, MatProgressBarModule } from "@angular/material/progress
         PlanPropertyPanelComponent,
         RouterLink,
         MatExpansionModule,
-        DemoDirective,
         ProjectDirective,
-        DemoInfoComponent,
         ProjectDirective,
         MatProgressBarModule
     ],

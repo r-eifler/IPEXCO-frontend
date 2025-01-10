@@ -1,4 +1,4 @@
-import { Component, computed, input } from '@angular/core';
+import { Component, computed, inject, input } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
@@ -18,6 +18,8 @@ import { computeMaxPossibleUtility } from 'src/app/project/domain/demo';
 import { Demo } from 'src/app/shared/domain/demo';
 import { ProjectDirective } from '../../derectives/isProject.directive';
 import { DemoDirective } from '../../derectives/isDemo.directive';
+import { MatDialog } from '@angular/material/dialog';
+import { TaskInformationDialogComponent } from '../../view/task-information-dialog/task-information-dialog.component';
 
 @Component({
     selector: 'app-iteration-step-hero',
@@ -30,11 +32,9 @@ import { DemoDirective } from '../../derectives/isDemo.directive';
       StepValuePipe, 
       DefaultPipe, 
       MatButtonModule, 
-      RouterLink, 
       MatTooltipModule, 
       StepStatusColorPipe,
       RouterLink, 
-      UserStudyDirective,
       ProjectDirective,
       DemoDirective
     ],
@@ -42,9 +42,15 @@ import { DemoDirective } from '../../derectives/isDemo.directive';
     styleUrl: './iteration-step-hero.component.scss'
 })
 export class IterationStepHeroComponent {
+
+  dialog = inject(MatDialog);
   
   step = input.required<IterationStep | null>();
   planProperties = input.required<Record<string, PlanProperty> | null>();
 
   maxOverallUtility = input.required<number>();
+
+  openTaskInfo(){
+     this.dialog.open(TaskInformationDialogComponent);
+  }
 }

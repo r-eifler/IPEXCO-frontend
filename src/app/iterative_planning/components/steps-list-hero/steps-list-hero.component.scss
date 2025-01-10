@@ -21,57 +21,62 @@
   column-gap: var(--spacing-100);
 }
 
+.plan-link-container {
+  display: grid;
+  justify-content: center;
+}
+
 .utility {
-    display: grid;
-    justify-content: center;
-    align-items: end;
-  
-    mat-icon {
-      grid-row: 1;
-      grid-column: 1;
-  
-      opacity: 0.1;
-      --icon-size: 96px;
-      font-size: var(--icon-size);
-      width: var(--icon-size);
-      height: var(--icon-size);
-      @include vars.color(secondary);
-    }
-  
-    .utility-value-container{
-      grid-row: 1;
-      grid-column: 1;
-  
-      display: grid;
-      align-items: center;
-      justify-items: center;
-  
-      gap: var(--spacing-100);
-  
-  
-      .value {
-        @include vars.typography(headline-small);
-      }
-  
-      .label {
-        @include vars.typography(label-small);
-      }
-    }
-  
+  display: grid;
+  justify-content: center;
+  align-items: end;
+
+  mat-icon {
+    grid-row: 1;
+    grid-column: 1;
+
+    opacity: 0.1;
+    --icon-size: 96px;
+    font-size: var(--icon-size);
+    width: var(--icon-size);
+    height: var(--icon-size);
+    @include vars.color(secondary);
   }
 
-  .property-label {
-    @include vars.typography(label-small);
-    @include vars.color(on-surface-variant);
-  }
-  
-  .property-value {
-    @include vars.typography(body-large);
-    line-height: 1;
-  }
-  
-  mat-icon {
-    ::ng-deep .material-icons {
-      font-size: 12px;
+  .utility-value-container{
+    grid-row: 1;
+    grid-column: 1;
+
+    display: grid;
+    align-items: center;
+    justify-items: center;
+
+    gap: var(--spacing-100);
+
+
+    .value {
+      @include vars.typography(headline-small);
+    }
+
+    .label {
+      @include vars.typography(label-small);
     }
   }
+
+}
+
+.property-label {
+  @include vars.typography(label-small);
+  @include vars.color(on-surface-variant);
+}
+
+.property-value {
+  @include vars.typography(body-large);
+  line-height: 1;
+}
+
+mat-icon {
+  ::ng-deep .material-icons {
+    font-size: 12px;
+  }
+}
