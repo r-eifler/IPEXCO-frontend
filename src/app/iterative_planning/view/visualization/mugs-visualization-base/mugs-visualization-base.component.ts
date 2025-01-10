@@ -3,12 +3,14 @@ import {DOCUMENT, NgForOf, NgIf} from '@angular/common';
 import {Store} from '@ngrx/store';
 import {selectIterativePlanningProperties, selectIterativePlanningSelectedStep} from '../../../state/iterative-planning.selector';
 import {catchError, map, take} from 'rxjs/operators';
-import {of} from 'rxjs';
+import {filter, Observable, of} from 'rxjs';
 import {registerGlobalExplanationComputation} from '../../../state/iterative-planning.actions';
 import {selectEnforcedGoals} from '../../plan-detail-view/plan-detail-view.component.selector';
 import {selectSoftGoals} from './mugs-visualization-base.component.selector';
 import {VisualizationLauncher} from './legacy/visualization-launcher';
 import {DataHandlerService} from './legacy/DataHandlerService';
+import {ActionSet, PlanProperty} from '../../../../shared/domain/plan-property/plan-property';
+import {PlanRunStatus} from '../../../domain/plan';
 
 
 @Component({
@@ -25,12 +27,11 @@ export class MugsVisualizationBaseComponent {
   private visualizationLauncher: VisualizationLauncher;
 
   step$ = this.store.select(selectIterativePlanningSelectedStep);
-  //
-  test$ = this.store.select(selectIterativePlanningProperties); //TODO: Mapping 'PlanProperty' (Shared/Domain/PlanProperty)
-  //
   stepId$ = this.step$.pipe(map(step => step?._id));
   stepGlobalExplanation$ = this.step$.pipe(map(step => step?.globalExplanation));
 
+  containerHeaderId: string = "mugs-vis";
+  containerGoalInteractionSectionTest: string = "";
   stepGoals : Record<string, string> = {};
   MUGS : string[][] = []
   MSGS : string[][] = []
@@ -48,21 +49,70 @@ export class MugsVisualizationBaseComponent {
   )
 
   ngOnInit() : void {
+    this.setStepHeaderText();
     this.computeExplanations();
     this.computeStepGoals();
+    this.computeStepGoalIntCategory();
     this.mapExplanationsToStepGoals();
+  }
+
+  ngAfterViewInit(): void {
+    // Initialize your drawing here after the id is set
     this.initializeVisualizationLauncher();
+  }
+
+  private setStepHeaderText(){
+    this.step$.pipe(
+      filter((step) => !!step),
+      map((step) => step.plan?.status)
+    ).subscribe((status) => {
+      switch (status) {
+        case PlanRunStatus.not_solvable:
+          this.containerGoalInteractionSectionTest = "Unenforced Goals"
+          break;
+
+        case PlanRunStatus.failed:
+          this.explanationDetails$ = undefined;
+          console.log('MUG-Visualization-Base: Unexpected Step:', status);
+          break;
+
+        case PlanRunStatus.pending:
+          this.explanationDetails$ = undefined;
+          console.log('MUG-Visualization-Base: Unexpected Step:', status);
+          break;
+
+        case PlanRunStatus.running:
+          this.explanationDetails$ = undefined;
+          console.log('MUG-Visualization-Base: Unexpected Step:', status);
+          break;
+
+        default:
+          this.containerGoalInteractionSectionTest = "Enforced Goals"
+      }
+    });
   }
 
   private initializeVisualizationLauncher(): void {
     this.visualizationLauncher = new VisualizationLauncher(this.MUGS, this.MSGS, this.MUGTypes);
-    this.visualizationLauncher.initialize("#mugs-vis");
+    this.visualizationLauncher.initialize(`#${this.containerHeaderId}`);
   }
 
-  private computeExplanations() : void{
-    this.stepId$.pipe(take(1)).subscribe(stepId => {
-      console.log('MUG-Visualization-Base: Register Global Computation for StepId:', stepId);
-      this.store.dispatch(registerGlobalExplanationComputation({iterationStepId: stepId}));
+  private computeStepGoalIntCategory(): void{
+    let actionsClassToInt: Record<string, number> = {};
+    let planProperties: Observable<Record<string, PlanProperty>> = this.store.select(selectIterativePlanningProperties);
+    let counter = 0;
+
+    planProperties.pipe(take(1)).subscribe(properties => {
+      Object.values(properties).forEach((property: PlanProperty) => {
+        if (property._id in this.stepGoals){
+          const actionName = property.name;
+          const actionClass = property.class;
+          if(!(actionClass in actionsClassToInt)){
+            actionsClassToInt[actionClass] = counter++;
+          }
+          this.MUGTypes[actionName] = actionsClassToInt[actionClass];
+        }
+      });
     });
   }
 
@@ -83,6 +133,13 @@ export class MugsVisualizationBaseComponent {
       })
     });
 
+  }
+
+  private computeExplanations() : void{
+    this.stepId$.pipe(take(1)).subscribe(stepId => {
+      console.log('MUG-Visualization-Base: Register Global Computation for StepId:', stepId);
+      this.store.dispatch(registerGlobalExplanationComputation({iterationStepId: stepId}));
+    });
   }
 
   private mapExplanationsToStepGoals(){
@@ -108,7 +165,7 @@ export class MugsVisualizationBaseComponent {
 
       this.MUGS = mappedMUGS;
       this.MSGS = mappedMSGS;
-
-    }).unsubscribe();
+      console.log(this.MUGS)
+    });
   }
 }
