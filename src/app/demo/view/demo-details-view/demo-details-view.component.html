@@ -43,7 +43,7 @@
 				<app-page-section-content>				
 					<div class="property-list">
 						@for(property of (planPropertiesList$ | async); track property._id) {
-							<app-plan-property-panel [property]="property"></app-plan-property-panel>
+							<app-plan-property-update-panel [property]="property" (update)="updateProperty($event)"></app-plan-property-update-panel>
 						}
 					</div>
 				</app-page-section-content>

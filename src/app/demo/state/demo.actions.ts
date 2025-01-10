@@ -30,3 +30,7 @@ export const updateDemoFailure = createAction('[demo] update demo failure');
 export const uploadDemo = createAction('[demo] upload demo', props<{demo: Demo, planProperties: PlanProperty[]}>());
 export const uploadDemoSuccess = createAction('[demo] upload demo success');
 export const uploadDemoFailure = createAction('[demo] upload demo failure');
+
+export const updatePlanProperty = createAction('[project] update plan property', props<{planProperty: PlanProperty}>());
+export const updatePlanPropertySuccess = createAction('[project] update plan property success', props<{planProperty: PlanProperty}>());
+export const updatePlanPropertyFailure = createAction('[project] update plan property failure');

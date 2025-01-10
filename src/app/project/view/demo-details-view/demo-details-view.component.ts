@@ -9,14 +9,14 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AsyncPipe } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { DemoHeroComponent } from '../../components/demo-hero/demo-hero.component';
-import { PlanPropertyPanelComponent } from 'src/app/shared/components/plan-property-panel/plan-property-panel.component';
 import { PlanPropertyBadgeComponent } from 'src/app/shared/components/plan-property-badge/plan-property-badge.component';
 import { PlanProperty } from 'src/app/shared/domain/plan-property/plan-property';
 import { SettingsComponent } from "../../components/settings/settings.component";
 import { GeneralSettings } from '../../domain/general-settings';
-import { deleteProjectDemo, updateDemo } from '../../state/project.actions';
+import { deleteProjectDemo, updateDemo, updatePlanProperty } from '../../state/project.actions';
 import { AskDeleteComponent } from 'src/app/shared/components/ask-delete/ask-delete.component';
 import { MatDialog } from '@angular/material/dialog';
+import { PlanPropertyUpdatePanelComponent } from 'src/app/shared/components/plan-property-update-panel/plan-property-update-panel.component';
 
 @Component({
     selector: 'app-demo-details-view',
@@ -28,7 +28,7 @@ import { MatDialog } from '@angular/material/dialog';
         AsyncPipe,
         MatButtonModule,
         DemoHeroComponent,
-        PlanPropertyPanelComponent,
+        PlanPropertyUpdatePanelComponent,
         PlanPropertyBadgeComponent,
         SettingsComponent,
     ],
@@ -87,6 +87,10 @@ export class DemoDetailsViewComponent {
       newDemo.settings = settings;
       this.store.dispatch(updateDemo({demo: newDemo}))
     })
+  }
+
+  updateProperty(property: PlanProperty){
+    this.store.dispatch(updatePlanProperty({planProperty: property}));
   }
 
 }
