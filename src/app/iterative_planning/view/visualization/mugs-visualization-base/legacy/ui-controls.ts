@@ -1,23 +1,24 @@
-import state from "./state.js";
-import * as matrix from "./helpers/matrix.js";
-import * as setchart from "./helpers/setchart.js";
+import state from './state.js';
+import * as matrix from './helpers/matrix.js';
+import * as setchart from './helpers/setchart.js';
 import * as d3 from 'd3';
 import {IMetric, IMetrics} from './interfaces/IMetrics';
 import {IDataObject} from './interfaces/IDataObject';
 import {metricDefinitions} from './data-classes/metric-definition';
 import {SolvabilityResult} from './types/solvability-result';
 import {DataHandlerService} from './DataHandlerService';
+import {PlanRunStatus} from '../../../../domain/plan';
 
 
 export class UIControls {
   private metrics: IMetrics;
   private currentMetric: IMetric;
-  private readonly data: IDataObject;
+  protected data: IDataObject;
   private readonly _dataHandlerService: DataHandlerService;
 
   constructor(dataHandlerService: DataHandlerService, data: IDataObject) {
     this._dataHandlerService = dataHandlerService;
-    this.data = data;
+    this.data = Object.create(data);
     this.initializeMetrics();
     this.currentMetric = this.metrics.nOccurr;
     this.setMetrics();
@@ -70,13 +71,13 @@ export class UIControls {
     enforcementSection.selectChildren().remove();
 
     const remove = e => {
-      const enforcedElements = this.data.enforcedElements.filter(element => element !== e.currentTarget.dataset.element);
+      const enforcedElements = this.data.selectedElements.filter(element => element !== e.currentTarget.dataset.element);
 
       this._dataHandlerService.restoreData(this.data);
-      if(this._dataHandlerService.enforceElements.length === 0) {
+      if(this._dataHandlerService.setElementSelection.length === 0) {
         this._dataHandlerService.computeOrderDependentValues(this.data);
       } else {
-        this._dataHandlerService.enforceElements(this.data, enforcedElements);
+        this._dataHandlerService.setElementSelection(this.data, enforcedElements);
       }
 
       this.updateView();
@@ -99,7 +100,7 @@ export class UIControls {
         Object.keys(counts).length > 0 ? Math.max(...Object.values(counts)) : 1
       ]);
 
-    this.data.enforcedElements.forEach(element => {
+    this.data.selectedElements.forEach(element => {
       let count = 0;
       if(result === "unsolvable") {
         count = counts[element] || 0;
@@ -126,10 +127,14 @@ export class UIControls {
     let icon = null;
     let color = "";
 
-    if(this.data.enforcedElements.length > 0) {
+    if(this.data.selectedElements.length > 0) {
       switch (result) {
         case "solvable":
-          text = "Selection is solvable";
+          if (this._dataHandlerService.stepType == PlanRunStatus.not_solvable){
+            text = "Selection is solvable";
+          }else{
+            text = "Remaining goal selection is solvable";
+          }
           icon = "check_circle";
           color = "green";
           break;
@@ -205,8 +210,7 @@ export class UIControls {
 
       const selection = Array.from(new Set([x, y]));
 
-      this._dataHandlerService.enforceElements(this.data, selection);
-      //this._dataHandlerService.unenforceElements(this.data, selection);
+      this._dataHandlerService.setElementSelection(this.data, selection);
       this.updateGoalSelectionView();
 
     });

@@ -96,7 +96,6 @@ function resize() {
         .data([...singularElements])
         .enter()
         .append("rect")
-        //.attr("id", d => TODO think of usable id)
         .attr("x", 0)
         .attr("y", d => y(d) + 1)
         .attr("width", width)

@@ -1,12 +1,15 @@
-import state from "./state.js";
+import state from './state.js';
 import * as d3 from 'd3';
 import {ISourceData} from './interfaces/IState';
 import {defaultDataObject, IDataObject} from './interfaces/IDataObject';
 import {Utils} from './utils';
 import {VectorMetrics} from './vector-metrics';
+import {PlanRunStatus} from '../../../../domain/plan';
 
 
 export class DataHandlerService {
+  public stepType: PlanRunStatus;
+
   constructor() {}
 
   /**
@@ -56,7 +59,7 @@ export class DataHandlerService {
     const source = state.sourceData;
 
     data.elements = this.getElements(source.MUGS);
-    data.enforcedElements = [];
+    data.selectedElements = [];
 
     // Prepare Minimally Unsolvable Goal Subsets (MUGS).
     data.MUGS = source.MUGS ? source.MUGS.map((mugs, i) => {
@@ -173,35 +176,37 @@ export class DataHandlerService {
    */
   public computeSolvability(data: IDataObject): { result: string, mugs: string[], msgs: string[], counts: {} } {
     const originalData = this.getDataObj(state.sourceData);
-
-    const { enforcedElements } = data;
+    let { selectedElements } = data;
 
     const MUGS = originalData.MUGS.map(mugs => mugs.s);
+    const MSGS = originalData.MSGS.map(msgs => msgs.s);
+    MSGS.sort((a, b) => a.size - b.size);
     MUGS.sort((a, b) => a.size - b.size);
 
-    let foundMUGS = [];
-    let elementCounts = {};
+    let foundMUGS: string[] = [];
+    let foundMSGS: string[] = [];
+    let elementCounts: Record<string, number> = {};
+    let result: string;
+
+    if (this.stepType == PlanRunStatus.not_solvable){
+      selectedElements = originalData.elements.filter(element => !selectedElements.includes(element));
+    }
+
     MUGS.forEach(mugs => {
       // Check if the mugs is a subset of the enforced elements.
-      if(enforcedElements.filter(element => mugs.has(element)).length === mugs.size) {
+      if(selectedElements.filter(element => mugs.has(element)).length === mugs.size) {
         if(foundMUGS.length === 0)
           foundMUGS = [...mugs];
         mugs.forEach(element => elementCounts[element] = (elementCounts[element] || 0) + 1);
       }
     });
 
-    const MSGS = originalData.MSGS.map(msgs => msgs.s);
-    MSGS.sort((a, b) => a.size - b.size);
-
-    let foundMSGS = [];
     MSGS.forEach(msgs => {
-      if(enforcedElements.filter(element => msgs.has(element)).length === enforcedElements.length) {
+      if(selectedElements.filter(element => msgs.has(element)).length === selectedElements.length) {
         foundMSGS = [...msgs];
         return;
       }
     });
-
-    let result = "";
 
     if(foundMUGS.length === 0) {
       if(foundMSGS.length === 0) {
@@ -216,11 +221,10 @@ export class DataHandlerService {
         result = "undecided";
       }
     }
-
     return { result, mugs: foundMUGS, msgs: foundMSGS, counts: elementCounts };
   }
 
-  public enforceElements(data: IDataObject, elements: string[]): void {
+  public setElementSelection(data: IDataObject, elements: string[]): void {
     data.elements = data.elements.filter(element => !elements.includes(element));
 
     // Remove elements from all MUGS
@@ -235,50 +239,7 @@ export class DataHandlerService {
     // Filter duplicate MUGS
     data.MUGS = Utils.uniq(data.MUGS, (a, b) => Utils.setEquals(a.s, b.s));
 
-    data.enforcedElements = data.enforcedElements.concat(elements);
-
-    data.MSGS.forEach(msgs => {
-      elements.forEach(element => msgs.s.delete(element));
-      msgs.l = Array.from(msgs.s);
-    });
-
-    const len = data.MSGS.length;
-    data.MSGS = data.MSGS.filter(msgs => msgs.l.length > 0);
-    if(len > data.MSGS.length) {
-      // TODO: Should this happen?
-      //console.log("Warning: MSGS removed.");
-    }
-
-    // Filter duplicate MSGS
-    data.MSGS = Utils.uniq(data.MSGS, (a, b) => Utils.setEquals(a.s, b.s));
-
-    data.original = {};
-    data.elements.forEach((d_x, i_x) => {
-      data.original[d_x] = i_x;
-    });
-
-    this.computeOrderDependentValues(data);
-  }
-
-  public unenforceElements(data: IDataObject, elements: string[]): void {
-    let temp: string[];
-    temp = data.elements.filter(element => !elements.includes(element));
-    data.elements = elements;
-    elements = temp;
-
-    // Remove elements from all MUGS
-    data.MUGS.forEach(mugs => {
-      elements.forEach(element => mugs.s.delete(element));
-      mugs.l = Array.from(mugs.s);
-    });
-
-    // Remove now empty MUGS
-    data.MUGS = data.MUGS.filter(mugs => mugs.l.length > 0);
-
-    // Filter duplicate MUGS
-    data.MUGS = Utils.uniq(data.MUGS, (a, b) => Utils.setEquals(a.s, b.s));
-
-    data.enforcedElements = data.enforcedElements.concat(elements);
+    data.selectedElements = data.selectedElements.concat(elements);
 
     data.MSGS.forEach(msgs => {
       elements.forEach(element => msgs.s.delete(element));

@@ -22,6 +22,7 @@ export class VisualizationLauncher {
     this.statusType = statusType;
     this.enforcedGoals = enforcedGoals;
     this.dataHandlerService = new DataHandlerService();
+    this.dataHandlerService.stepType = statusType;
   }
 
   private initializeData(): void {
@@ -56,7 +57,7 @@ export class VisualizationLauncher {
     uiControls.colorGoalsByTypes(true);
 
     if (this.statusType != PlanRunStatus.not_solvable){
-      this.dataHandlerService.enforceElements(state.currentData, this.enforcedGoals);
+      this.dataHandlerService.setElementSelection(state.currentData, this.enforcedGoals);
       uiControls.updateGoalSelectionView();
     }
 

@@ -61,8 +61,8 @@ function resize() {
 
     // set the dimensions and margins of the graph
   //TODO: Find better way to adjust size dynamically to have larger diagram
-    const width = data.elements.length * constants.rectWidth; // window.innerWidth;
-    const height = width; // window.innerHeight
+    const width = data.elements.length * constants.rectWidth;
+    const height = width;
 
     d3.select(parentId)
         .style("height", height + margin.top + margin.bottom + "px") // includes barchart above
@@ -202,7 +202,7 @@ function resize() {
             compress: state.settings.compress
         }
     );
-};
+}
 
 function mouseover(e, d) {
     if (d.x === d.y) {

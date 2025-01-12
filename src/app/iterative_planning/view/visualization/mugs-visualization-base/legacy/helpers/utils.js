@@ -1,8 +1,8 @@
 import * as d3 from 'd3';
 
 const constants = {
-    rectWidth: 20,
-    compressed: 5
+    rectWidth: 30,
+    compressed: 10
 }
 
 function separateTicks(t, i, length, dim, separation = 1) {

@@ -3,7 +3,7 @@ interface IDataObject {
   MUGS: Record<string, any>[];
   counts: Record<string, number>;
   elements: string[];
-  enforcedElements: string[];
+  selectedElements: string[];
   extents: {
     occurr: [number | undefined, number | undefined];
     nOccurr: [number | undefined, number | undefined];
@@ -26,7 +26,7 @@ const defaultDataObject: IDataObject = {
   MUGS: [],
   counts: {},
   elements: [],
-  enforcedElements: [],
+  selectedElements: [],
   extents: {
     occurr: [undefined, undefined],
     nOccurr: [undefined, undefined],
