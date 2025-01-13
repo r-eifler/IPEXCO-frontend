@@ -9,7 +9,7 @@ import { concatLatestFrom } from '@ngrx/operators';
 import { ActionType, CancelPlanForIterationStepUserAction } from '../../domain/user-action';
 import { cancelPlanComputationAndIterationStep, createIterationStepSuccess, directMessageET, directResponseQT, loadIterationStepsSuccess, poseAnswer, poseAnswerLLM, questionPosed, questionPosedLLM, selectIterationStep, sendMessageToLLMExplanationTranslator, sendMessageToLLMExplanationTranslatorFailure, sendMessageToLLMExplanationTranslatorSuccess, sendMessageToLLMQuestionTranslator, sendMessageToLLMQuestionTranslatorFailure, sendMessageToLLMQuestionTranslatorSuccess } from 'src/app/iterative_planning/state/iterative-planning.actions';
 import { StepStatus } from 'src/app/iterative_planning/domain/iteration_step';
-import { computeUtility } from 'src/app/iterative_planning/domain/plan';
+import { computeUtility, PlanRunStatus } from 'src/app/iterative_planning/domain/plan';
 import { selectIterationStepById, selectIterativePlanningProject, selectIterativePlanningProperties, selectIterativePlanningSelectedStepId } from 'src/app/iterative_planning/state/iterative-planning.selector';
 import { structuredTextToString } from 'src/app/iterative_planning/domain/interface/explanation-message';
 import { selectIsUserStudy, selectUserRole } from 'src/app/user/state/user.selector';
@@ -141,7 +141,8 @@ export class LogUserActivitiesEffect{
                     data: {
                         demoId: step.project,
                         stepId: step._id,
-                        utility: computeUtility(step.plan, planProperties) ?? 0
+                        utility: computeUtility(step.plan, planProperties) ?? 0,
+                        planStatus: step.plan ? step.plan?.status : PlanRunStatus.pending
                     }
                 }})
             ]))

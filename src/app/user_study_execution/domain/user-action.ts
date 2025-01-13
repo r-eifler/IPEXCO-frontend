@@ -1,4 +1,5 @@
 import { QuestionType } from "src/app/iterative_planning/domain/explanation/explanations"
+import { PlanRunStatus } from "src/app/iterative_planning/domain/plan"
 
 export enum ActionType {
     OTHER = 'OTHER',
@@ -131,6 +132,7 @@ export interface PlanForIterationStepUserAction extends UserAction {
     data: {
         demoId: string,
         stepId: string,
+        planStatus: PlanRunStatus, 
         utility,
     }
 }
