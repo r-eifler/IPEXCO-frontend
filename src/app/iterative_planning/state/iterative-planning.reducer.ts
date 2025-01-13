@@ -375,7 +375,7 @@ function extractExplanations(iterationSteps: IterationStep[]): Record<string,Glo
 }
 
 function extractExplanation(iterationStep: IterationStep): Record<string,GlobalExplanation | undefined> {
-  if(!!iterationStep){
+  if(!iterationStep){
     return undefined;
   }
 
