@@ -3,6 +3,7 @@
 @let isCanceled = isCanceled$ | async;
 @let planComputationRunning = planComputationRunning$ | async;
 @let interfaceType = explanationInterfaceType$ | async;
+@let hasUnsolvedSoftGoals = hasUnsolvedSoftGoals$ | async;
 
 <app-page>
   <app-breadcrumb>
@@ -82,7 +83,7 @@
 
 
 
-      @if(!planComputationRunning && !isCanceled && (interfaceType == expInterfaceType.LLM_CHAT)) {
+      @if(!planComputationRunning && !isCanceled && (hasUnsolvedSoftGoals || isUnsolvable) && (interfaceType == expInterfaceType.LLM_CHAT)) {
       <app-page-section>
         <app-page-section-title>
           <mat-icon>lightbulb_2</mat-icon>
