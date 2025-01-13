@@ -375,6 +375,10 @@ function extractExplanations(iterationSteps: IterationStep[]): Record<string,Glo
 }
 
 function extractExplanation(iterationStep: IterationStep): Record<string,GlobalExplanation | undefined> {
+  if(!!iterationStep){
+    return undefined;
+  }
+
   const hash = explanationHash(iterationStep);
 
   return {
