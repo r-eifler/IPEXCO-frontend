@@ -11,5 +11,9 @@
 }
 
 @if ((interfaceType$ | async) == interfaceType.LLM_CHAT){
-    <app-property-creation-chat></app-property-creation-chat>
+    <app-property-creation-chat
+        (created)="handleCreatedProperty($event)"
+        (cancel)="handleCancel()"
+    >
+    </app-property-creation-chat>
 }
