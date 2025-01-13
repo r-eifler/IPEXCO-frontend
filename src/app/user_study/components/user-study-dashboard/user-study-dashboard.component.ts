@@ -59,7 +59,7 @@ export class UserStudyDashboardComponent {
     const utilitiesPerParticipant = this.acceptedParticipants()?.
       map(p => 
         p.timeLog.filter(a => a.type == ActionType.PLAN_FOR_ITERATION_STEP && a.data.demoId == this.demoId()).
-        map((a: PlanForIterationStepUserAction) => a.data.utility)
+        map((a: PlanForIterationStepUserAction) => a.data.utility ? a.data.utility : 0)
     );
     const maxUtilities = utilitiesPerParticipant.map(us => us.reduce((p,c) => Math.max(p,c), 0));
     return average(maxUtilities).toFixed(2);
