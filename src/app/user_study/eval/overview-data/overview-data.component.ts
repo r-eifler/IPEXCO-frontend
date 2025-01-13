@@ -108,7 +108,7 @@ export class OverviewDataComponent {
 
   questionTypeData = computed(() => {
       let data = {};
-      Object.keys(QuestionType).forEach(k => data[k] = {name: k, value: 0})
+      Object.values(QuestionType).forEach(k => data[k] = {name: k, value: 0})
       this.selectedParticipants()?.forEach(p => (
         p.timeLog.filter(a => a.type == ActionType.ASK_QUESTION && a.data.demoId == this.demoId()).forEach(
           (q: AskQuestionUserAction) => data[q.data.questionType].value += 1
