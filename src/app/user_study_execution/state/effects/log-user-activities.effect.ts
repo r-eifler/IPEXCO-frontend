@@ -262,7 +262,7 @@ export class LogUserActivitiesEffect{
     
     public sentMessageToQTSuccess$ = createEffect(() => this.actions$.pipe(
         ofType(sendMessageToLLMQuestionTranslatorSuccess),
-        switchMap(({}) => [logAction({action: {type: ActionType.ANSWER_QT, data: {}}})])
+        switchMap(({duration}) => [logAction({action: {type: ActionType.ANSWER_QT, data: {duration}}})])
     ));
 
     public sentMessageToQTFailure$ = createEffect(() => this.actions$.pipe(
@@ -277,7 +277,7 @@ export class LogUserActivitiesEffect{
 
     public sentMessageToETSuccess$ = createEffect(() => this.actions$.pipe(
         ofType(sendMessageToLLMExplanationTranslatorSuccess),
-        switchMap(({response}) => [logAction({action: {type: ActionType.ANSWER_ET, data: {response}}})])
+        switchMap(({response, duration}) => [logAction({action: {type: ActionType.ANSWER_ET, data: {response, duration}}})])
     ));
 
     public sentMessageToETFailure$ = createEffect(() => this.actions$.pipe(
