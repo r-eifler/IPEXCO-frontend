@@ -141,7 +141,7 @@ export class LogUserActivitiesEffect{
                     data: {
                         demoId: step.project,
                         stepId: step._id,
-                        utility: computeUtility(step.plan, planProperties)
+                        utility: computeUtility(step.plan, planProperties) ?? 0
                     }
                 }})
             ]))

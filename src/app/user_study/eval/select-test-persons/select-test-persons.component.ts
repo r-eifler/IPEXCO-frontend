@@ -52,7 +52,7 @@ export class SelectTestPersonsComponent {
         date: p.createdAt,
         processingTime: p.finished ? new Date(p.finishedAt.getTime() - p.createdAt.getTime()) : null,
         utility: p.timeLog.filter(a => a.type == ActionType.PLAN_FOR_ITERATION_STEP).
-        map((a: PlanForIterationStepUserAction) => a.data.utility).reduce((p,c) => Math.max(p,c), 0)
+        map((a: PlanForIterationStepUserAction) => a.data.utility ?  a.data.utility : 0).reduce((p,c) => Math.max(p,c), 0)
       })
       )
       }

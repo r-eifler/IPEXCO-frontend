@@ -74,7 +74,7 @@ export class OverviewDataComponent {
     this.selectedParticipants()?.map(p => ({
       name: p.user, 
       value: p.timeLog.filter(a => a.type == ActionType.PLAN_FOR_ITERATION_STEP && a.data.demoId == this.demoId()).
-      map((a: PlanForIterationStepUserAction) => a.data.utility).reduce((p,c) => Math.max(p,c), 0)
+      map((a: PlanForIterationStepUserAction) => a.data.utility ? a.data.utility : 0).reduce((p,c) => Math.max(p,c), 0)
     }))
   )
 
@@ -92,7 +92,7 @@ export class OverviewDataComponent {
       p.timeLog.filter(a => a.type == ActionType.PLAN_FOR_ITERATION_STEP && a.data.demoId == this.demoId()).
       map((a: PlanForIterationStepUserAction) => ({
         time: ((new Date(a.timeStamp)).getTime() - ( new Date(p.timeLog.filter(a => a.type == ActionType.START_DEMO)[0].timeStamp)).getTime()) / 1000, 
-        utility: a.data.utility}
+        utility: a.data.utility ? a.data.utility : 0}
       ))
     ));
 
