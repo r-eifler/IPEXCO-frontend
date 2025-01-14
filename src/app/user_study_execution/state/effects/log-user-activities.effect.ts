@@ -232,7 +232,7 @@ export class LogUserActivitiesEffect{
             this.store.select(selectIterativePlanningSelectedStepId),
             this.store.select(selectIterativePlanningProperties)
         ]),
-        switchMap(([{question, naturalLanguageQuestion}, project, iterationStepId, planProperties]) => [
+        mergeMap(([{question, naturalLanguageQuestion}, project, iterationStepId, planProperties]) => [
             logAction({action: {
                 type: ActionType.ASK_QUESTION, 
                 data: {
