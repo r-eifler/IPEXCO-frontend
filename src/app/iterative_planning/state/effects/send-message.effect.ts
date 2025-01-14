@@ -6,7 +6,7 @@ import { LLMService } from "../../../LLM/service/llm.service";
 import { concatLatestFrom } from "@ngrx/operators";
 import { Store } from "@ngrx/store";
 import { selectLLMChatMessages, selectLLMThreadIdQT, selectLLMThreadIdGT, selectLLMThreadIdET } from "../iterative-planning.selector";
-import { goalTranslationRequestToString, questionTranslationRequestToString, explanationTranslationRequestToString } from "../../../LLM/interfaces/translators_interfaces_strings";
+import { questionTranslationRequestToString, explanationTranslationRequestToString } from "../../../LLM/interfaces/translators_interfaces_strings";
 import { GoalTranslationRequest, QuestionTranslationRequest, ExplanationTranslationRequest } from "../../../LLM/interfaces/translators_interfaces";
 import { selectIterativePlanningProject, selectIterativePlanningProjectExplanationInterfaceType, selectIterativePlanningProperties, selectIterativePlanningSelectedStep, selectIterationStepById } from "../../../iterative_planning/state/iterative-planning.selector";
 import { selectUnsatisfiedSoftGoals } from "src/app/iterative_planning/view/step-detail-view/step-detail-view.component.selector";
@@ -51,24 +51,24 @@ export class SendMessageToLLMEffect {
 
 
 
-    public sendMessageToGoalTranslator$ = createEffect(() => this.actions$.pipe(
-        ofType(sendMessageToLLMGoalTranslator),
-        concatLatestFrom(() => [
-            this.store.select(selectIterativePlanningProject),
-            this.store.select(selectIterativePlanningProperties),
-            this.store.select(selectLLMThreadIdGT)
-        ]),
-        switchMap(([action, project, properties, threadIdGT]) => {
-            const startTime = performance.now();
-            return this.service.postMessageGT$(action.goalDescription, project, Object.values(properties), threadIdGT).pipe(
-                map(({ response: { formula, shortName, reverseTranslation, feedback }, threadId }) => {
-                    const duration = performance.now() - startTime;
-                    return sendMessageToLLMGoalTranslatorSuccess({ response: { formula, shortName }, threadId, duration });
-                }),
-                catchError(() => of(sendMessageToLLMGoalTranslatorFailure()))
-            );
-        })
-    ))
+    // public sendMessageToGoalTranslator$ = createEffect(() => this.actions$.pipe(
+    //     ofType(sendMessageToLLMGoalTranslator),
+    //     concatLatestFrom(() => [
+    //         this.store.select(selectIterativePlanningProject),
+    //         this.store.select(selectIterativePlanningProperties),
+    //         this.store.select(selectLLMThreadIdGT)
+    //     ]),
+    //     switchMap(([action, project, properties, threadIdGT]) => {
+    //         const startTime = performance.now();
+    //         return this.service.postMessageGT$(action.goalDescription, project, Object.values(properties), threadIdGT).pipe(
+    //             map(({ response: { formula, shortName, reverseTranslation, feedback }, threadId }) => {
+    //                 const duration = performance.now() - startTime;
+    //                 return sendMessageToLLMGoalTranslatorSuccess({ response: { formula, shortName }, threadId, duration });
+    //             }),
+    //             catchError(() => of(sendMessageToLLMGoalTranslatorFailure()))
+    //         );
+    //     })
+    // ))
 
     public sendMessageToQuestionAndGoalTranslator$ = createEffect(() => this.actions$.pipe(
         ofType(sendMessageToLLMQTthenGTTranslators),
