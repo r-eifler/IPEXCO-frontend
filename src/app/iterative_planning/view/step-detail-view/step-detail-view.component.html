@@ -134,6 +134,9 @@
         <app-page-section-title>
           <span *isProject>Unsatisfied Softgoals</span>
           <span *isDemo>Unsatisfied Goals</span>
+          <mat-icon
+            matTooltip="These are goals that the planner did not try to satisfy. You can ask why they are unsatisfied and how to satisfy them. There might be no particularreason why they are unsatisfied.">info
+          </mat-icon>
         </app-page-section-title>
         <app-page-section-content>
           @if(hasUnsolvedSoftGoals$ | async) {
@@ -158,6 +161,9 @@
         <app-page-section-title>
           <span *isProject>Satisfied Softgoals</span>
           <span *isDemo>Additionally Satisfied Goals</span>
+          <mat-icon
+            matTooltip="These are goals that the planner did not try to satisfy but satisfied by chance.">info
+          </mat-icon>
         </app-page-section-title>
         <app-page-section-content>
           @if(hasSolvedSoftGoals$ | async) {
