@@ -12,6 +12,6 @@
   }
   <app-chat-input 
     (userInput)="onUserMessage($event)"
-    [disabled]="isAnyLoading"
+    [disabled]="isAnyLoading$ | async"
   ></app-chat-input>
 </app-chat>
