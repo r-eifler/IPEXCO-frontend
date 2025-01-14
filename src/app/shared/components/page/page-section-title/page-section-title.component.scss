@@ -16,4 +16,7 @@
 h2 {
   all: unset;
   @include variables.typography(headline-small);
+  display: flex;
+  gap: var(--spacing-100);
+  align-items: center;
 }
