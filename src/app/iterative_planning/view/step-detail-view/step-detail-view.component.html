@@ -95,15 +95,27 @@
         </app-page-section-content>
       </app-page-section>
       }
+      
 
       @if(!planComputationRunning && !isCanceled && !isUnsolvable && (interfaceType == expInterfaceType.TEMPLATE_QUESTION_ANSWER )) {
       <app-page-section>
+       
         <app-page-section-title>
-          <span *isProject>Unsatisfied Softgoals</span>
-          <span *isDemo>Unsatisfied Goals</span>
-          <mat-icon
+          
+          <span *isProject>Unsatisfied Softgoals
+            <mat-icon
             matTooltip="Expand the individual goals to gather more information as of why they are unsolvable.">info
-          </mat-icon></app-page-section-title>
+            </mat-icon>
+          </span>
+          <span *isDemo>
+            <app-info>
+              <mat-icon>info</mat-icon>
+              <span class="highlight">Expand the individual goals to gather more information as of why they are unsolvable.</span>
+            </app-info>
+            
+          <p>Unsatisfied Goals</p>
+        </span>
+          </app-page-section-title>
         <app-page-section-content>
           @if(hasUnsolvedSoftGoals$ | async) {
           <div class="property-list">

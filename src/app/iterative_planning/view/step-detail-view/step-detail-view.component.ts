@@ -56,6 +56,7 @@ import { ProjectDirective } from "../../derectives/isProject.directive";
 import { UserManualDialogComponent } from "../../components/user-manual-dialog/user-manual-dialog.component";
 import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { DemoDirective } from "../../derectives/isDemo.directive";
+import { InfoComponent } from "src/app/shared/components/info/info/info.component";
 
 @Component({
     selector: "app-step-detail-view",
@@ -75,7 +76,8 @@ import { DemoDirective } from "../../derectives/isDemo.directive";
         MatExpansionModule,
         ProjectDirective,
         DemoDirective,
-        MatProgressBarModule
+        MatProgressBarModule,
+        InfoComponent
     ],
     templateUrl: "./step-detail-view.component.html",
     styleUrl: "./step-detail-view.component.scss"
@@ -100,6 +102,7 @@ export class StepDetailViewComponent {
   image$ = this.project$.pipe(map(p => p?.summaryImage));
   domainInfo$ = this.project$.pipe(map(p => p?.domainInfo));
   instanceInfo$ = this.project$.pipe(map(p => p?.instanceInfo));
+
 
   step$ = this.store.select(selectIterativePlanningSelectedStep);
   stepId$ = this.step$.pipe(map(step => step?._id));
