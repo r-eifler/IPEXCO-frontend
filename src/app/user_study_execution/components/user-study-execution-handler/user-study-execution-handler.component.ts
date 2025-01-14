@@ -114,7 +114,7 @@ export class UserStudyExecutionHandlerComponent {
             dialogRef = this.dialog.open(AskDeleteComponent, {
               data: {
                 name: 'Maximal Possible Utility',
-                text: 'Congratulation you achieved the maximal possible utility. If you need more time to familiarize yourself with the tool you can go back to the introduction task. If you feal comfortable with the tool you can continue with the next step.',
+                text: 'Congratulation you achieved the maximal possible utility. If you need more time to familiarize yourself with the tool you can go back to the introduction task. If you feel comfortable with the tool you can continue with the next step.',
                 buttonAgree: 'Next User Study Part',
                 buttonDisagree: 'Back to Introduction Task'
               },
