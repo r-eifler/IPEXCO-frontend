@@ -7,7 +7,7 @@ import { IHTTPData } from "src/app/shared/domain/http-data.interface";
 import { Message } from "../domain/message";
 import { ExplanationTranslationRequest, GoalTranslationRequest, QTthenGTResponse, QuestionTranslationRequest } from "../interfaces/translators_interfaces";
 import { Question } from "src/app/iterative_planning/domain/interface/question";
-import { explanationTranslationRequestToString, goalTranslationRequestToString, questionTranslationRequestToString } from "../interfaces/translators_interfaces_strings";
+import { explanationTranslationRequestToString, questionTranslationRequestToString } from "../interfaces/translators_interfaces_strings";
 import { IterationStep, StepStatus } from "src/app/iterative_planning/domain/iteration_step";
 import { PlanRunStatus } from "src/app/iterative_planning/domain/plan";
 import { QuestionType } from "src/app/iterative_planning/domain/explanation/explanations";
@@ -30,20 +30,20 @@ export class LLMService {
     //     );
     // }
 
-    postMessageGT$(request: string, project: Project, properties: PlanProperty[], threadId: string): Observable<{ response: { formula: string, shortName: string, reverseTranslation: string, feedback: string }, threadId: string }> {
-        const goalTranslationRequest: GoalTranslationRequest = {
-            goalDescription: request,
-            predicates: project.baseTask.model.predicates,
-            objects: project.baseTask.model.objects,
-            existingPlanProperties: Object.values(properties)
-        };
-        const requestString = goalTranslationRequestToString(goalTranslationRequest);
-        console.log(requestString);
-        return this.http.post<IHTTPData<{ response: { formula: string, shortName: string, reverseTranslation: string, feedback: string }, threadId: string }>>(this.BASE_URL + 'gt', { data: requestString, threadId: threadId, originalRequest: request, projectId: project._id }).pipe(
-            map(({ data }) => data),
-            tap(console.log)
-        );
-    }
+    // postMessageGT$(request: string, project: Project, properties: PlanProperty[], threadId: string): Observable<{ response: { formula: string, shortName: string, reverseTranslation: string, feedback: string }, threadId: string }> {
+    //     const goalTranslationRequest: GoalTranslationRequest = {
+    //         goalDescription: request,
+    //         predicates: project.baseTask.model.predicates,
+    //         objects: project.baseTask.model.objects,
+    //         existingPlanProperties: Object.values(properties)
+    //     };
+    //     const requestString = goalTranslationRequestToString(goalTranslationRequest);
+    //     console.log(requestString);
+    //     return this.http.post<IHTTPData<{ response: { formula: string, shortName: string, reverseTranslation: string, feedback: string }, threadId: string }>>(this.BASE_URL + 'gt', { data: requestString, threadId: threadId, originalRequest: request, projectId: project._id }).pipe(
+    //         map(({ data }) => data),
+    //         tap(console.log)
+    //     );
+    // }
 
     postMessageQT$(question: string, iterationStep: IterationStep, project: Project, properties: PlanProperty[], threadId: string): Observable<
         | { directResponse: string, questionType: QuestionType, threadId: string }
@@ -132,8 +132,8 @@ export class LLMService {
             existingPlanProperties: Object.values(properties)
         };
         console.log(goalTranslationRequest);
-        const gtRequestString = goalTranslationRequestToString(goalTranslationRequest);
-
+        // const gtRequestString = goalTranslationRequestToString(goalTranslationRequest);
+        const gtRequestString = "{goal_description}";
         console.log(qtRequestString, gtRequestString);
         return this.http.post<IHTTPData<
             | { gtResponse: string, qtResponse: string, threadIdQt: string, threadIdGt: string, questionType: QuestionType, goal: string, question: Question, reverseTranslationQT: string, reverseTranslationGT: string }
