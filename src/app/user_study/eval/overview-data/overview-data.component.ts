@@ -84,8 +84,8 @@ export class OverviewDataComponent {
     }
 
     const minTime = 0;
-    const maxTime = 600;
-    const step = 60;
+    const maxTime =1200;
+    const step = 15;
     let maxAverageUtility = [{name: 'Utility', series: []}]
 
     const utilitiesOverTime = this.selectedParticipants()?.map(p => (
