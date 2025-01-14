@@ -10,5 +10,8 @@
     </div>
   </ng-container>
   }
-  <app-chat-input (userInput)="onUserMessage($event)"></app-chat-input>
+  <app-chat-input 
+    (userInput)="onUserMessage($event)"
+    [disabled]="isAnyLoading"
+  ></app-chat-input>
 </app-chat>
