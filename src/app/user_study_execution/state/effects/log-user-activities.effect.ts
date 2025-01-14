@@ -14,6 +14,7 @@ import { selectIterationStepById, selectIterativePlanningProject, selectIterativ
 import { structuredTextToString } from 'src/app/iterative_planning/domain/interface/explanation-message';
 import { selectIsUserStudy, selectUserRole } from 'src/app/user/state/user.selector';
 import { UserStudyExecutionService } from '../../service/user-study-execution.service';
+import { QuestionType } from 'src/app/iterative_planning/domain/explanation/explanations';
 
 
 @Injectable()
@@ -287,12 +288,37 @@ export class LogUserActivitiesEffect{
 
     public sentDirectResponseQT$ = createEffect(() => this.actions$.pipe(
         ofType(directResponseQT),
-        switchMap(({directResponse}) => [logAction({action: {type: ActionType.DIRECT_RESPONSE_QT, data: {directResponse}}})])
+        concatLatestFrom(() => [
+            this.store.select(selectIterativePlanningProject),
+            this.store.select(selectIterativePlanningSelectedStepId),
+        ]),
+        mergeMap(([{ directResponse }, project, iterationStepId]) => [
+            logAction({ action: { type: ActionType.DIRECT_RESPONSE_QT, data: { directResponse } } }),
+            logAction({ action: { type: ActionType.ASK_QUESTION, 
+                data: {
+                    demoId: project._id,
+                    stepId: iterationStepId,
+                    propertyId: null,
+                    questionType: QuestionType.DIRECT_USER,
+                }} } )
+        ])
     ));
 
     public sentDirectQuestionET$ = createEffect(() => this.actions$.pipe(
         ofType(directMessageET),
-        switchMap(({directResponse, iterationStepId}) => [logAction({action: {type: ActionType.DIRECT_QUESTION_ET, data: {directResponse, iterationStepId}}})])
+        concatLatestFrom(() => [
+            this.store.select(selectIterativePlanningProject),
+        ]),
+        mergeMap(([{ directResponse, iterationStepId }, project ]) => [
+            logAction({ action: { type: ActionType.DIRECT_QUESTION_ET, data: { directResponse, iterationStepId } } }),
+            logAction({ action: { type: ActionType.ASK_QUESTION, 
+                data: {
+                    demoId: project._id,
+                    stepId: iterationStepId,
+                    propertyId: null,
+                    questionType: QuestionType.DIRECT_ET,
+                }} } )
+        ])
     ));
 
 
