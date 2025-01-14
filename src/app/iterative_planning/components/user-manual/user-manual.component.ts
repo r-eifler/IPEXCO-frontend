@@ -101,7 +101,7 @@ export class UserManualComponent {
       color: '#f07575',
       icon: 'directions_car',
       class: '',
-      naturalLanguageDescription: 'Load the groceries at the supermarket into your car and drive home and unload the groceries. The groceries require on unite of space in your car.'
+      naturalLanguageDescription: 'Load the groceries at the supermarket into your car and drive home and unload the groceries. The groceries require one unite of space in your car.'
     },
     {
       _id: '3',
@@ -129,7 +129,7 @@ export class UserManualComponent {
     color: '#88dd88',
     icon: 'group',
     class: '',
-    naturalLanguageDescription: 'Drive to friend house at 4pm a spend one hour there.'
+    naturalLanguageDescription: 'Drive to friend house at 4pm and spend one hour there.'
   },
   {
     _id: '5',
@@ -143,7 +143,7 @@ export class UserManualComponent {
     color: '#f4b371',
     icon: 'directions_car',
     class: '',
-    naturalLanguageDescription: 'Drive to school at 2pm. Alice needs requires on unite of space in your car.'
+    naturalLanguageDescription: 'Drive to school at 2pm. Alice needs requires one unite of space in your car.'
   },
   ]
 
