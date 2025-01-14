@@ -10,7 +10,7 @@
       <app-editable-list>
         @if(!hasProperties()) {
         <app-editable-list-empty-state>
-          There are no (more) plan properties to choose from. Create a new one that you are interested in.
+          There are no (more) plan properties to choose from. <span *isProject>Create a new one that you are interested in.</span>
           <mat-icon>travel_explore</mat-icon>
         </app-editable-list-empty-state>
         }
