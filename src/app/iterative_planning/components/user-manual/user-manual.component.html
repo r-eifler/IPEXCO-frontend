@@ -91,17 +91,7 @@
 
                 <img src="assets/manual/new_step_interface.png">
 
-                <p>
-                    In addition to the enforced goals it is also possible to select <span class="highlight">Soft
-                        Goals</span>.
-                    These are goals that the tool will not try achieve, but they will play a role in the conflict
-                    analysis
-                    between the goals detailed below.
-                </p>
 
-                <img src="assets/manual/add_soft_goals.png">
-
-                <p></p>
 
                 <app-info>
                     <mat-icon>edit_note</mat-icon>
@@ -110,10 +100,10 @@
                     
                     <ul>
                         <li><span class="highlight">Enforced Goals</span> are goals that you ask the planner to satisfy in an iteration step.</li>
-                        <li><span class="highlight">Soft Goals</span> are goals that you want to track to decide
-                            whether you want to enforce them in a future step, or to ask questions about. The planner
-                            doesn't try to satisfy them but they can be satisfied by chance.</li>
                         <li><span class="highlight">Locked Goals </span><mat-icon>lock</mat-icon> are goals that must be enforced at every iteration step.
+                        <li><span class="highlight">Additionally Satisfied Goals</span> are goals that the computed plan satisfy by chance but that the planner does not try to satisfy. They do not contain any enforced goals.
+                        </li>
+                        <li><span class="highlight">Unsatisfied Goals</span> are goals that the computed plan does not satisfy.
                         </li>
                     </ul>
                     </span>
@@ -212,10 +202,8 @@
                 <h3>Solvable Step</h3>
 
                 <p>
-                    For a solvable step in addition to the list of the enforced goals the satisfied and unsatisfied soft
-                    goals are shown. Note, the soft goals are selected when a new iteration step is created, but the
-                    tool
-                    does not try to achieve them.
+                    For a solvable step in addition to the list of the enforced goals the unsatisfied and additionally satisfied (but not enforced)
+                    goals are shown. Note that the tool does not try to achieve the goals that are not enforced.
                     Nevertheless, they might be satisfied by chance.
                 </p>
 
@@ -223,13 +211,13 @@
                     For our sample step this looks as follows:
                 </p>
 
-                <h4>Unsatisfied Softgoals</h4>
+                <h4>Unsatisfied Goals</h4>
                 <div class="property-list">
                     <app-plan-property-panel [property]="samplePlanProperties[4]"
                         [showFormula]="false"></app-plan-property-panel>
                 </div>
 
-                <h4>Satisfied Softgoals</h4>
+                <h4>Additionally Satisfied Goals</h4>
                 <div class="property-list">
                     <app-plan-property-panel [property]="samplePlanProperties[3]"
                         [showFormula]="false"></app-plan-property-panel>
@@ -292,10 +280,8 @@
                         <h4>Solvable Step</h4>
 
                         <p>
-                            In an solvable step you can ask questions about the unsatisfied soft goals.
-                            The soft goals represent the goals you want to monitor to decide whether you
-                            want to enforce them in a future step. Thus you can ask "why" it is not
-                            satisfy and 'how' you can satisfy it.
+                            In an solvable step you can ask questions about the unsatisfied goals. 
+                            Thus you can ask "why" it is not satisfy and 'how' you can satisfy it.
                         </p>
 
                         <p>
@@ -303,7 +289,7 @@
                             You can try it below:
                         </p>
 
-                        <h4>Unsatisfied Softgoals</h4>
+                        <h4>Unsatisfied Goals</h4>
                         <div class="property-list">
                             <app-plan-property-panel [property]="samplePlanProperties[4]" [showFormula]="false">
                                 <app-chat>
@@ -357,7 +343,7 @@
                         <ul>
                             <li>Why is this step unsolvable?</li>
                             <li>How can I make this step solvable?</li>
-                            <li>Why isn't this softgoal satisfied?</li>
+                            <li>Why isn't this goal satisfied?</li>
                             <li>Can this goal be enforced while keeping the other enforced goals?</li>
                             <li>What if I enforce this goal?</li>
                             <li>How can I achieve this goal?</li>
