@@ -73,7 +73,7 @@
 					<div class="list-list">
 						@for(MGCS of (MGCS$ | async); track $index) {
 							<div class="icon-list-item">
-								<mat-icon>report</mat-icon>
+								<mat-icon>healing</mat-icon>
 								<div class="property-badge-list">
 									@for(id of MGCS; track id) {
 									<app-plan-property-badge [property]="(planProperties$ | async)?.[id]"></app-plan-property-badge>
