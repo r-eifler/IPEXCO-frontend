@@ -18,4 +18,5 @@ import { NgClass } from '@angular/common';
 export class PlanPropertyPanelComponent {
   property = input.required<PlanProperty | null>();
   showFormula = input(true);
+  expanded = input(false);
 }

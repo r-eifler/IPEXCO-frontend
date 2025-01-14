@@ -157,15 +157,15 @@ function howPropertyText(computed: string[][], propertyDescription?: string): St
 }
 
 function filterWhyPlan(iterationStep: IterationStep, computed: string[][]): string[][] {
-  return computed.filter(
-    MUGS => MUGS.every(id => iterationStep.hardGoals.includes(id))
+  return subsetMinimal(computed.filter(
+    MUGS => MUGS.every(id => iterationStep.hardGoals.includes(id)))
   );
 }
 
 function filterHowPlan(iterationStep: IterationStep, computed: string[][]): string[][] {
-  return computed.map(
+  return subsetMinimal(computed.map(
     MCGS => MCGS.filter(id => iterationStep.hardGoals.includes(id))
-  ).filter(possibleCorrections => possibleCorrections.length > 0);
+  ).filter(possibleCorrections => possibleCorrections.length > 0));
 }
 
 function whyAnswerComputer(step: IterationStep, question: Question, computed: string[][]): string[][] {
