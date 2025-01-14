@@ -55,6 +55,7 @@ import { MatExpansionModule } from "@angular/material/expansion";
 import { ProjectDirective } from "../../derectives/isProject.directive";
 import { UserManualDialogComponent } from "../../components/user-manual-dialog/user-manual-dialog.component";
 import { MatProgressBarModule } from "@angular/material/progress-bar";
+import { DemoDirective } from "../../derectives/isDemo.directive";
 
 @Component({
     selector: "app-step-detail-view",
@@ -73,7 +74,7 @@ import { MatProgressBarModule } from "@angular/material/progress-bar";
         RouterLink,
         MatExpansionModule,
         ProjectDirective,
-        ProjectDirective,
+        DemoDirective,
         MatProgressBarModule
     ],
     templateUrl: "./step-detail-view.component.html",

@@ -17,11 +17,12 @@ import { isNonEmptyValidator } from "src/app/validators/non-empty.validator";
 import { PlanPropertyPanelComponent } from "../../../shared/components/plan-property-panel/plan-property-panel.component";
 import { SelectPropertyComponent } from "../../components/select-property/select-property.component";
 import { cancelNewIterationStep, createIterationStep } from "../../state/iterative-planning.actions";
-import { selectIterativePlanningCreatedStepId, selectIterativePlanningIterationStepComputationRunning, selectIterativePlanningNewStepBase, selectIterativePlanningNumberOfSteps, selectIterativePlanningProject, selectIterativePlanningProperties } from "../../state/iterative-planning.selector";
+import { selectIterativePlanningCreatedStepId, selectIterativePlanningIsDemo, selectIterativePlanningIterationStepComputationRunning, selectIterativePlanningNewStepBase, selectIterativePlanningNumberOfSteps, selectIterativePlanningProject, selectIterativePlanningProperties } from "../../state/iterative-planning.selector";
 import { selectPlanPropertyIds, selectPreselectedEnforcedGoals$, selectPreselectedSoftGoals$ } from "./create-iteration.component.selector";
 import { concatLatestFrom } from "@ngrx/operators";
 import { ActivatedRoute, Router } from "@angular/router";
 import { IterationStep, StepStatus } from "../../domain/iteration_step";
+import { ProjectDirective } from "../../derectives/isProject.directive";
 
 @Component({
     selector: "app-create-iteration",
@@ -38,6 +39,7 @@ import { IterationStep, StepStatus } from "../../domain/iteration_step";
         SelectPropertyComponent,
         ReactiveFormsModule,
         SideSheetModule,
+        ProjectDirective
     ],
     templateUrl: "./create-iteration.component.html",
     styleUrl: "./create-iteration.component.scss"
@@ -46,8 +48,6 @@ export class CreateIterationComponent {
   private fb = inject(FormBuilder);
   private store = inject(Store);
   private dialogService = inject(MatDialog);
-  private router = inject(Router);
-  private activatedRoute = inject(ActivatedRoute)
 
   handlePropertyIdSelection: (ids: string[]) => void;
   dialogRef: MatDialogRef<unknown> | undefined;
@@ -172,13 +172,17 @@ export class CreateIterationComponent {
   onSubmit(): void {
      combineLatest([
       this.store.select(selectIterativePlanningNewStepBase),
-      this.store.select(selectIterativePlanningProject)
-    ]).pipe(take(1)).subscribe(([baseStep, project]) => {
+      this.store.select(selectIterativePlanningProject),
+      this.planPropertyIds$,
+      this.store.select(selectIterativePlanningIsDemo)
+    ]).pipe(take(1)).subscribe(([baseStep, project, planPropertiesIds, isDemo]) => {
+
+      const enforcedGoalIds = this.form.controls.enforcedGoalIds.value;
       
       const newStep: IterationStep = {
         name: this.form.controls.general.controls.name.value,
-        hardGoals: this.form.controls.enforcedGoalIds.value,
-        softGoals: this.form.controls.softGoalIds.value,
+        hardGoals: enforcedGoalIds,
+        softGoals: isDemo ? planPropertiesIds.filter(ppId => ! enforcedGoalIds.includes(ppId)) : this.form.controls.softGoalIds.value,
         project: project._id,
         status: StepStatus.unknown,
         task: baseStep?.task ?? project.baseTask,

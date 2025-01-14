@@ -98,8 +98,12 @@
 
       @if(!planComputationRunning && !isCanceled && !isUnsolvable && (interfaceType == expInterfaceType.TEMPLATE_QUESTION_ANSWER )) {
       <app-page-section>
-        <app-page-section-title>Unsatisfied Softgoals <mat-icon
-            matTooltip="Expand the individual goals to gather more information as of why they are unsolvable.">info</mat-icon></app-page-section-title>
+        <app-page-section-title>
+          <span *isProject>Unsatisfied Softgoals</span>
+          <span *isDemo>Unsatisfied Goals</span>
+          <mat-icon
+            matTooltip="Expand the individual goals to gather more information as of why they are unsolvable.">info
+          </mat-icon></app-page-section-title>
         <app-page-section-content>
           @if(hasUnsolvedSoftGoals$ | async) {
           <div class="property-list">
@@ -117,7 +121,7 @@
           </div>
           } @else {
           <app-empty-state-section>
-            <span>All specified subgoals could be satisfied.</span>
+            <span>All specified goals could be satisfied.</span>
             <mat-icon>celebration</mat-icon>
           </app-empty-state-section>
           }
@@ -127,7 +131,10 @@
 
       @if(!planComputationRunning && !isCanceled && !isFailed && !isUnsolvable && (interfaceType == expInterfaceType.LLM_CHAT )) {
       <app-page-section>
-        <app-page-section-title>Unsatisfied Softgoals</app-page-section-title>
+        <app-page-section-title>
+          <span *isProject>Unsatisfied Softgoals</span>
+          <span *isDemo>Unsatisfied Goals</span>
+        </app-page-section-title>
         <app-page-section-content>
           @if(hasUnsolvedSoftGoals$ | async) {
           <div class="property-list">
@@ -137,7 +144,7 @@
           </div>
           } @else {
           <app-empty-state-section>
-            <span>All specified subgoals could be satisfied.</span>
+            <span>All specified goals could be satisfied.</span>
             <mat-icon>celebration</mat-icon>
           </app-empty-state-section>
           }
@@ -148,7 +155,10 @@
 
       @if(!planComputationRunning && !isCanceled && !isUnsolvable) {
       <app-page-section>
-        <app-page-section-title>Satisfied Softgoals</app-page-section-title>
+        <app-page-section-title>
+          <span *isProject>Satisfied Softgoals</span>
+          <span *isDemo>Additionally Satisfied Goals</span>
+        </app-page-section-title>
         <app-page-section-content>
           @if(hasSolvedSoftGoals$ | async) {
           <div class="property-list">

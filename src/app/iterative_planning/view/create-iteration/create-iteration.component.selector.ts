@@ -1,6 +1,6 @@
 import { createSelector } from "@ngrx/store";
 
-import { selectIterativePlanningNewStepBase, selectIterativePlanningPropertiesList } from "../../state/iterative-planning.selector";
+import { selectIterativePlanningIsDemo, selectIterativePlanningNewStepBase, selectIterativePlanningPropertiesList } from "../../state/iterative-planning.selector";
 
 export const selectPlanPropertyIds = createSelector(selectIterativePlanningPropertiesList, properties => properties?.map(({_id}) => _id) ?? []);
 
@@ -10,4 +10,5 @@ export const selectPreselectedEnforcedGoals$ = createSelector(selectGlobalHardGo
     (globalHardIds, baseStep) => baseStep?.hardGoals ? [...globalHardIds,...baseStep.hardGoals.filter(pId => !globalHardIds.includes(pId))] : globalHardIds);
 
 
-export const selectPreselectedSoftGoals$ = createSelector(selectIterativePlanningNewStepBase, step => step?.softGoals ?? []);
+export const selectPreselectedSoftGoals$ = createSelector(selectIterativePlanningNewStepBase, selectIterativePlanningIsDemo, 
+    (step, isDemo) => isDemo ? [] : (step?.softGoals ?? []));

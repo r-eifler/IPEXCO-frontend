@@ -15,9 +15,9 @@
         <span class="property-label">Enforced Goals:</span>
         <span class="property-value">{{ step()?.hardGoals?.length }}</span>
 
-        <mat-icon>flag_check</mat-icon>
-        <span class="property-label">Soft Goals:</span>
-        <span class="property-value">{{ step()?.softGoals?.length }}</span>
+        <mat-icon *isProject>flag_check</mat-icon>
+        <span class="property-label" *isProject>Soft Goals:</span>
+        <span class="property-value" *isProject>{{ step()?.softGoals?.length }}</span>
       </div>
 
       <div class="utility">
