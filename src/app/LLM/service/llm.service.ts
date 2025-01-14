@@ -87,8 +87,14 @@ export class LLMService {
             predicates: project.baseTask.model.predicates,
             objects: project.baseTask.model.objects,
             enforcedGoals: properties.filter(p => iterationStep.hardGoals.includes(p._id)),
-            satisfiedGoals: properties.filter(p => iterationStep.plan.satisfied_properties.includes(p._id)),
-            unsatisfiedGoals: properties.filter(p => !iterationStep.plan.satisfied_properties.includes(p._id)),
+            satisfiedGoals: properties.filter(p => 
+                iterationStep.plan.satisfied_properties.includes(p._id) && 
+                !iterationStep.hardGoals.includes(p._id)
+            ),
+            unsatisfiedGoals: properties.filter(p => 
+                !iterationStep.plan.satisfied_properties.includes(p._id) && 
+                !iterationStep.hardGoals.includes(p._id)
+            ),
             existingPlanProperties: Object.values(properties)
         };
         const requestString = explanationTranslationRequestToString(request);

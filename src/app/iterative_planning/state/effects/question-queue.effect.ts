@@ -5,10 +5,10 @@ import { Store } from "@ngrx/store";
 import { filter, map, mergeMap, switchMap, take, tap } from "rxjs";
 import { getAnswer, getComputedBase, mapComputeBase } from "../../domain/explanation/answer-factory";
 import { explanationHash } from "../../domain/explanation/explanation-hash";
-import { ExplanationRunStatus, GlobalExplanation } from "../../domain/explanation/explanations";
+import { ExplanationRunStatus, GlobalExplanation, QuestionType } from "../../domain/explanation/explanations";
 import { ExplanationMessage } from "../../domain/interface/explanation-message";
 import { Question } from "../../domain/interface/question";
-import { IterationStep } from "../../domain/iteration_step";
+import { IterationStep, StepStatus } from "../../domain/iteration_step";
 import { poseAnswer, questionPosed, questionPosedLLM, registerGlobalExplanationComputation, sendMessageToLLMExplanationTranslator, sendMessageToLLMExplanationTranslatorFailure, sendMessageToLLMExplanationTranslatorSuccess } from "../iterative-planning.actions";
 import { selectExplanation, selectIterationStepById, selectIterativePlanningProject, selectIterativePlanningProjectExplanationInterfaceType, selectIterativePlanningProperties, selectLLMThreadIdET } from "../iterative-planning.selector";
 import { ExplanationInterfaceType } from "src/app/project/domain/general-settings";
@@ -76,8 +76,12 @@ export class QuestionQueueEffect {
         concatLatestFrom(() => [this.store.select(selectIterativePlanningProperties)]),
         map(([explanation, properties]) => ({
           question,
-          explanationMUGS: explanation.MUGS ? mapComputeBase(iterationStep, question, explanation.MUGS) : [],
-          explanationMGCS: explanation.MGCS ? mapComputeBase(iterationStep, question, explanation.MGCS) : [],
+          explanationMUGS: (explanation.MUGS && iterationStep.status === StepStatus.solvable) ? 
+            mapComputeBase(iterationStep, {...question, questionType: QuestionType.WHY_NOT_PROPERTY}, explanation.MUGS) : 
+            (iterationStep.status === StepStatus.unsolvable ? mapComputeBase(iterationStep, {...question, questionType: QuestionType.WHY_PLAN}, explanation.MUGS) : []),
+          explanationMGCS: (explanation.MGCS && iterationStep.status === StepStatus.solvable) ? 
+            mapComputeBase(iterationStep, {...question, questionType: QuestionType.HOW_PROPERTY}, explanation.MGCS) : 
+            (iterationStep.status === StepStatus.unsolvable ? mapComputeBase(iterationStep, {...question, questionType: QuestionType.HOW_PLAN}, explanation.MGCS) : []),
           question_type: question.questionType,
           questionArgument: properties?.[question.propertyId] ? [properties[question.propertyId]] : [],
           iterationStepId: iterationStep._id
