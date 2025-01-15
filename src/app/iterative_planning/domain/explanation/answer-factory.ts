@@ -5,7 +5,7 @@ import { GlobalExplanation, QuestionType } from "./explanations";
 
 
 export function getComputedBase(questionType: QuestionType, explanation: GlobalExplanation): string[][] {
-  console.log("Explanation: ", explanation.MGCS, explanation.MUGS, explanation.status);
+  // console.log("Explanation: ", explanation.MGCS, explanation.MUGS, explanation.status);
   switch(questionType) {
     case QuestionType.WHY_PLAN:
       return explanation?.MUGS;
@@ -169,7 +169,7 @@ function filterHowPlan(iterationStep: IterationStep, computed: string[][]): stri
 }
 
 function whyAnswerComputer(step: IterationStep, question: Question, computed: string[][]): string[][] {
-  console.log("Computed: " + computed);
+  // console.log("Computed: " + computed);
   return subsetMinimal(computed
     .filter( MUGS => MUGS.every(id =>
                     ((step.plan !== undefined) &&
@@ -185,17 +185,19 @@ function whyAnswerComputer(step: IterationStep, question: Question, computed: st
 function howAnswerComputer(step: IterationStep, question: Question, computed: string[][]): string[][] {
     return subsetMinimal(computed
       .filter( MCGS => MCGS.every(id => !(question.propertyId === id)))
-      .map(MCGS => MCGS.filter(id =>  step.plan?.satisfied_properties.includes(id))))
+      .map(MCGS => MCGS.filter(id =>  step.plan?.satisfied_properties.includes(id))));
 }
 
 
 export function subsetMinimal(original: string[][]): string[][]{
   let result: string[][] = [];
   for(let list of original){
+    // subset already contained
     if(result.some(rl => rl.every(re => list.includes(re)))){
       continue;
     }
-    result = result.filter(rl => !rl.every(re => list.includes(re)));
+    //remove all super sets
+    result = result.filter(rl => !list.every(le => rl.includes(le)));
     result.push(list);
   }
   return result;
