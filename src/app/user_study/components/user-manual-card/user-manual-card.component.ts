@@ -60,7 +60,7 @@ export class UserManualCardComponent {
       data => this.changes.emit({
         type: this.step().type,
         name: data.name,
-        time: data.time,
+        time: data.time <= 60 ? data.time : (Math.floor(data.time / 60)*60) ,
         content: data.demo
       })
     );

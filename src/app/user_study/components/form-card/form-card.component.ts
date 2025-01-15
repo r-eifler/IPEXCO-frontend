@@ -59,7 +59,7 @@ export class FormCardComponent implements OnInit {
       data => this.changes.emit({
         type: this.step().type,
         name: data.name,
-        time: data.time,
+        time: data.time <= 60 ? data.time : (Math.floor(data.time / 60)*60) ,
         content: data.url
       })
     );
@@ -67,7 +67,7 @@ export class FormCardComponent implements OnInit {
 
   formatLabel(value: number): string {
     if (value >= 60) {
-      return Math.round(value / 60) + 'm';
+      return Math.floor(value / 60) + 'm';
     }
 
     return value + 's';
