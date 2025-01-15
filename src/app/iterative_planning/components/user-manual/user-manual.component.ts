@@ -115,7 +115,7 @@ export class UserManualComponent {
       color: '#668cff',
       icon: 'fitness_center',
       class: '',
-      naturalLanguageDescription: 'Drive to the Fitness center and take a one hours fitness course.'
+      naturalLanguageDescription: 'Drive to the Fitness center and take one hours fitness course.'
     },
     {
     _id: '4',
