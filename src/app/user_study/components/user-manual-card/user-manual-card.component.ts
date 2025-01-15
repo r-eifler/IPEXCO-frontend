@@ -68,7 +68,7 @@ export class UserManualCardComponent {
 
   formatLabel(value: number): string {
     if (value >= 60) {
-      return Math.round(value / 60) + 'm';
+      return Math.floor(value / 60) + 'm';
     }
 
     return value + 's';
