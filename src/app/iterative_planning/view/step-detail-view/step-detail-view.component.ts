@@ -127,7 +127,6 @@ export class StepDetailViewComponent {
   globalMessages$ = this.stepId$.pipe(
     switchMap(stepId => this.store.select(selectMessages(stepId))),
   );
-
   propertyAvailableQuestionTypes$(property: PlanProperty): Observable<{questionType: QuestionType, message: StructuredText}[]> {
     return this.step$.pipe(
       map((step) => step?._id),

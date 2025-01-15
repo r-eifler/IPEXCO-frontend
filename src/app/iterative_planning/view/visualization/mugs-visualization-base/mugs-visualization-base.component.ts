@@ -1,5 +1,4 @@
 import {Component, inject} from '@angular/core';
-import {DOCUMENT, NgForOf, NgIf} from '@angular/common';
 import {Store} from '@ngrx/store';
 import {selectIterativePlanningProperties, selectIterativePlanningSelectedStep} from '../../../state/iterative-planning.selector';
 import {catchError, map, take} from 'rxjs/operators';
@@ -8,17 +7,16 @@ import {registerGlobalExplanationComputation} from '../../../state/iterative-pla
 import {selectEnforcedGoals} from '../../plan-detail-view/plan-detail-view.component.selector';
 import {selectSoftGoals} from './mugs-visualization-base.component.selector';
 import {VisualizationLauncher} from './legacy/visualization-launcher';
-import {DataHandlerService} from './legacy/DataHandlerService';
-import {ActionSet, PlanProperty} from '../../../../shared/domain/plan-property/plan-property';
+import {PlanProperty} from '../../../../shared/domain/plan-property/plan-property';
 import {PlanRunStatus} from '../../../domain/plan';
-import {selectSatisfiedSoftGoals} from '../../step-detail-view/step-detail-view.component.selector';
+import {AsyncPipe} from '@angular/common';
 
 
 @Component({
   selector: 'app-mugs-visualization-base',
   standalone: true,
   imports: [
-
+    AsyncPipe
   ],
   templateUrl: './mugs-visualization-base.component.html',
   styleUrl: './mugs-visualization-base.component.scss'
@@ -102,11 +100,14 @@ export class MugsVisualizationBaseComponent {
   }
 
   private initializeVisualizationLauncher(): void {
+    if (Object.keys(this.MUGS).length == 0 || Object.keys(this.MSGS).length == 0) {return ;}
     this.visualizationLauncher = new VisualizationLauncher(this.MUGS, this.MSGS, this.MUGTypes, this.stepStatusType, this.enforcedGoals);
     this.visualizationLauncher.initialize(`#${this.containerHeaderId}`);
   }
 
   private computeStepGoalIntCategory(): void{
+    if (Object.keys(this.stepGoals).length == 0) { return ; }
+
     let actionsClassToInt: Record<string, number> = {};
     let planProperties: Observable<Record<string, PlanProperty>> = this.store.select(selectIterativePlanningProperties);
     let counter = 0;
@@ -153,9 +154,8 @@ export class MugsVisualizationBaseComponent {
   }
 
   private mapExplanationsToStepGoals(){
-    if (this.explanationDetails$ == undefined) {
-      return;
-    }
+    if (Object.keys(this.stepGoals).length == 0) { return ; }
+
     const allG = Object.keys(this.stepGoals);
     this.explanationDetails$.pipe(take(1)).subscribe(explanation =>
     {

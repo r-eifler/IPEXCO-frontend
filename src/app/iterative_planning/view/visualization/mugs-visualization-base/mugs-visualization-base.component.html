@@ -1,4 +1,6 @@
-@if (stepStatusType != PlanRunStatus.running && stepStatusType != PlanRunStatus.pending && stepStatusType != PlanRunStatus.failed)
+@let step = step$ | async;
+
+@if (step && stepStatusType != PlanRunStatus.running && stepStatusType != PlanRunStatus.pending && stepStatusType != PlanRunStatus.failed)
 {
   <div>
     <div [id]="containerHeaderId" class="svg-container"></div>
@@ -20,5 +22,3 @@
     </div>
   </div>
 }
-
-

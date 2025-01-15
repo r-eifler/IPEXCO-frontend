@@ -32,13 +32,13 @@ export class VisualizationLauncher {
   }
 
   public initialize(containerId: string): void {
-    this.initializeData();
-
     const container = document.querySelector(containerId);
     if (!container) {
       console.error(`Container with ID "${containerId}" not found.`);
       return;
     }
+
+    this.initializeData();
 
     // Process and prepare data for visualization
     state.sourceData.elements = this.dataHandlerService.getElements(state.sourceData.MUGS);

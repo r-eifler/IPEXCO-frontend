@@ -103,7 +103,7 @@ export const sendMessageToLLMGoalTranslatorSuccess = createAction('[llm] send me
 export const sendMessageToLLMGoalTranslatorFailure = createAction('[llm] send message to goal translator failure');
 
 export const sendMessageToLLMExplanationTranslator = createAction('[llm] send message to explanation translator', props<{question: string, explanation: string[][], question_type: string, questionArguments: PlanProperty[], iterationStepId: string}>());
-export const sendMessageToLLMExplanationTranslatorSuccess = createAction('[llm] send message to explanation translator success', props<{response: string, threadId: string}>()); 
+export const sendMessageToLLMExplanationTranslatorSuccess = createAction('[llm] send message to explanation translator success', props<{response: string, threadId: string}>());
 export const sendMessageToLLMExplanationTranslatorFailure = createAction('[llm] send message to explanation translator failure');
 
 export const sendMessageToLLMQTthenGTTranslators = createAction('[llm] send message to QTthenGT translators', props<{question: string, iterationStepId: string}>());
