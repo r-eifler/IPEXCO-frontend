@@ -86,13 +86,13 @@ function whyNotPropertyText(computed: string[][], propertyDescription?: string):
     mainText = `This goal "${propertyDescription}" itself cannot be satisfied.`;
     includeComputation = false;
   } else {
-    mainText = `This goal "${propertyDescription}" cannot be satisifed, since it is in conflict with each of the following set of goals:`;
+    mainText = `This goal "${propertyDescription}" cannot be satisfied, since it is in conflict with each of the following set of goals:`;
   }
 
   return {
     includeComputation,
     mainText,
-    setPrefix: `"${propertyDescription}" is in conflict with`,
+    setPrefix: ``,
     setConnector: 'and'
   };
 }
