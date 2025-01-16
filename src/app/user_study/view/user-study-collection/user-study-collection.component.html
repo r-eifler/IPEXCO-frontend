@@ -1,0 +1,49 @@
+<app-page>
+  <app-breadcrumb>
+    <a app-breadcrumb-item [routerLink]="['/user-studies/']"><mat-icon>home</mat-icon></a>
+  </app-breadcrumb>
+  <app-page-title>User Studies</app-page-title>
+
+  <app-page-content>
+    <app-page-section-list>
+      <app-page-section>
+        <app-page-section-content>
+          <div class="page-grid">
+            @for(userStudy of userStudies$ | async; track userStudy._id) {
+              <app-user-study-card [userStudy]="userStudy" [participants]="(participants$ | async)?.[userStudy._id]"></app-user-study-card>
+            }
+      
+            <button app-action-card (click)="createNewUserStudy()">
+              <div class="instructions">
+                <span>Create a new user study.</span>
+              </div>
+              <mat-icon>add</mat-icon>
+            </button>
+      
+          </div>
+        </app-page-section-content>
+      </app-page-section>
+
+      <app-page-section>
+        <app-page-section-title>
+          Participants Distribution
+        </app-page-section-title>
+        <app-page-section-content>
+          <div class="page-grid">
+            @for(distribution of participantsDistributions$ | async; track distribution._id) {
+              <app-participant-distribution-card [participantDistribution]="distribution"></app-participant-distribution-card>
+            }
+      
+            <button app-action-card (click)="createNewUserStudyParticipantDistribution()">
+              <div class="instructions">
+                <span>Create a new distribution of participants over user studies.</span>
+              </div>
+              <mat-icon>add</mat-icon>
+            </button>
+      
+          </div>
+        </app-page-section-content>
+      </app-page-section>
+    </app-page-section-list>
+  </app-page-content>
+</app-page>

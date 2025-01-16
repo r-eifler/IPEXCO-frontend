@@ -1,0 +1,64 @@
+@let step = step$ | async;
+@let demo = demo$ | async;
+
+<app-page>
+<app-page-title>
+    {{ step.name }}
+</app-page-title>
+<app-page-content>
+      <app-page-section-list>
+        <app-page-section>
+          <app-page-section-content>
+            <app-info>
+                <mat-icon>info</mat-icon>
+                <span>Below you find a description of the task you will work on in the next step. Please read it carefully.</span>
+            </app-info>
+          </app-page-section-content>
+        </app-page-section>
+        <app-page-section>
+            <app-page-section-content>
+                <mat-tab-group>
+
+                    <mat-tab label="Domain">
+                        <div class="tab-container">
+                            <div [innerHTML]="demo?.domainInfo | marked"></div>
+                        </div>
+                        </mat-tab>
+                
+                    <mat-tab label="Instance" class="tab-container"> 
+                        <div class="tab-container">
+                            <div [innerHTML]="demo?.instanceInfo | marked"></div>
+                        </div>
+                    </mat-tab>
+                
+                    <mat-tab label="Visualization" class="tab-container">
+                        <div class="tab-container">
+                            <div class="image-container">
+                                <img [src]="host + demo?.summaryImage">
+                            </div>
+                        </div>
+                    </mat-tab>
+                
+                    <mat-tab label="Goals" class="tab-container">
+                        <div class="tab-container">
+                            <app-info>
+                                <mat-icon>info</mat-icon>
+                                <span>These are the goals you must consider. On the right marked with <mat-icon>workspace_premium</mat-icon> the utility of the goals is shown. If you click on a panel, you will see a more detailed description.</span>
+                            </app-info>
+                            @if(planProperties$ | async){
+                            <div class="property-list">
+                                @for(property of (planProperties$ | async); track property._id) {
+                                    <app-plan-property-panel [property]="property" [showFormula]="false"></app-plan-property-panel>
+                                }
+                            </div>
+                            }
+                        </div>
+                    </mat-tab>
+                    
+                </mat-tab-group>
+            </app-page-section-content>
+        </app-page-section>
+    </app-page-section-list>
+</app-page-content>
+</app-page>
+  

@@ -1,0 +1,25 @@
+.property-list {
+    margin: var(--spacing-200);
+    display: flex;
+    flex-direction: column;
+  
+    gap: var(--spacing-200);
+  }
+
+  .tab-container {
+    margin: var(--spacing-200);
+    display: flex;
+    flex-direction: column;
+  
+    gap: var(--spacing-200);
+  }
+
+  .image-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    img {
+        width: 40%;
+    }
+}

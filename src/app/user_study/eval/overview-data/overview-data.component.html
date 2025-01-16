@@ -1,34 +1,35 @@
-<mat-card class="basic-card">
+<div class="container">
+
+@if(showPlots()){
+<mat-card class="basic-card" appearance="outlined">
   <mat-card-header>
     <mat-card-title> Iteration Steps per User</mat-card-title>
   </mat-card-header>
-  <mat-card-content>
-    <ngx-charts-bar-vertical
-      *ngIf="showPlots"
-      [view]="view"
-      [scheme]="colorScheme"
-      [results]="iterationStepsData"
-      [xAxis]="showXAxis"
-      [yAxis]="showYAxis"
-      [legend]="false"
-      [showXAxisLabel]="showXAxisLabel"
-      [showYAxisLabel]="showYAxisLabel"
-      xAxisLabel="Users"
-      yAxisLabel="#Iteration Steps">
-    </ngx-charts-bar-vertical>
-  </mat-card-content>
+  <mat-card-content class="card-content">
+      <ngx-charts-bar-vertical
+        *ngIf="showPlots"
+        [scheme]="colorScheme"
+        [results]="iterationStepsData()"
+        [xAxis]="showXAxis"
+        [yAxis]="showYAxis"
+        [legend]="false"
+        [showXAxisLabel]="showXAxisLabel"
+        [showYAxisLabel]="showYAxisLabel"
+        yAxisLabel="#Iteration Steps"
+        xAxisLabel="Users">
+      </ngx-charts-bar-vertical>
+</mat-card-content>
 </mat-card>
 
-<mat-card class="basic-card">
+<mat-card class="basic-card"  appearance="outlined">
   <mat-card-header>
     <mat-card-title>Questions per User</mat-card-title>
   </mat-card-header>
-  <mat-card-content>
+  <mat-card-content class="card-content"> 
     <ngx-charts-bar-vertical
       *ngIf="showPlots"
-      [view]="view"
       [scheme]="colorScheme"
-      [results]="questionsData"
+      [results]="questionsData()"
       [xAxis]="showXAxis"
       [yAxis]="showYAxis"
       [legend]="false"
@@ -41,16 +42,15 @@
 </mat-card>
 
 
-<mat-card class="basic-card">
+ <mat-card class="basic-card">
   <mat-card-header>
     <mat-card-title>Max Utility per User</mat-card-title>
   </mat-card-header>
-  <mat-card-content>
+  <mat-card-content class="card-content">
     <ngx-charts-bar-vertical
       *ngIf="showPlots"
-      [view]="view"
       [scheme]="colorScheme"
-      [results]="utilityData"
+      [results]="utilityData()"
       [xAxis]="showXAxis"
       [yAxis]="showYAxis"
       [legend]="false"
@@ -62,21 +62,43 @@
   </mat-card-content>
 </mat-card>
 
+
 <mat-card class="basic-card">
   <mat-card-header>
-    <mat-card-title>Max utility over time</mat-card-title>
+    <mat-card-title>Max average utility over time</mat-card-title>
   </mat-card-header>
-  <mat-card-content>
+  <mat-card-content class="card-content">
     <ngx-charts-line-chart
-      [view]="view"
       [scheme]="colorScheme"
       [showXAxisLabel]="showXAxisLabel"
       [showYAxisLabel]="showYAxisLabel"
       [xAxis]="showXAxis"
       [yAxis]="showYAxis"
-      xAxisLabel="Time"
+      xAxisLabel="Time (sec)"
       yAxisLabel="Utility"
-      [results]="utilityTimeData">
-</ngx-charts-line-chart>
+      [results]="utilityTimeData()">
+    </ngx-charts-line-chart>
   </mat-card-content>
 </mat-card>
+
+<mat-card class="basic-card">
+  <mat-card-header>
+    <mat-card-title>Distribution of question types</mat-card-title>
+  </mat-card-header>
+  <mat-card-content class="card-content">
+    <ngx-charts-pie-grid
+      [scheme]="colorScheme"
+      [results]="questionTypeData()"
+      >
+    </ngx-charts-pie-grid>
+</mat-card-content>
+</mat-card>
+}
+@else {
+  <mat-card appearance="outlined">
+    <mat-card-content class="center">
+      <p>No participants selected or demo selected!</p>
+    </mat-card-content>
+  </mat-card>
+}
+</div>

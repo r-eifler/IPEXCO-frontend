@@ -14,9 +14,6 @@ export interface Demo extends Project {
   projectId: string,
   status: DemoRunStatus;
   completion: number;
-  summaryImage?: string;
-  domainInfo?: string;
-  instanceInfo?: string;
   maxUtility?: { value: number; selectedPlanProperties: string[] };
 }
 

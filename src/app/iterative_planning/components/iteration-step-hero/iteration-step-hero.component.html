@@ -14,22 +14,27 @@
         <span class="property-label">Enforced Goals:</span>
         <span class="property-value">{{ step()?.hardGoals?.length }}</span>
 
-        <mat-icon>flag_check</mat-icon>
-        <span class="property-label">Soft Goals:</span>
-        <span class="property-value">{{ step()?.softGoals?.length }}</span>
+        <mat-icon *isProject>flag_check</mat-icon>
+        <span class="property-label" *isProject>Soft Goals:</span>
+        <span class="property-value" *isProject>{{ step()?.softGoals?.length }}</span>
       </div>
 
       <div class="plan-link-container">
-        <a mat-button [disabled]="! step()?.plan" [routerLink]="['plan']">
+        <a mat-button [routerLink]="['plan']" *isProject>
           <mat-icon>explore</mat-icon>
           Show Plan
         </a>
+        <button mat-button (click)="openTaskInfo()" *isDemo>
+          <mat-icon>info</mat-icon>
+          Show Task Information
+        </button>
       </div>
 
       <div class="utility">
         <mat-icon>workspace_premium</mat-icon>
         <div class="utility-value-container">
-          <span class="value">{{ step() | stepValue : planProperties() | default : '-/-'}}</span>
+          <span class="value" *isProject>{{ step() | stepValue : planProperties() | default : '-/-'}}</span>
+          <span class="value" *isDemo>{{ (step() | stepValue : planProperties() | default : '-') + '/' + maxOverallUtility() }}</span>
           <span class="label">Utility</span>
         </div>
       </div>

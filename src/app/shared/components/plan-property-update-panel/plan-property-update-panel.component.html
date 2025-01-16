@@ -1,0 +1,68 @@
+<mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        <div class="title">
+          <div class="icon-container" [style]="'background-color: ' + property()?.color + ';'">
+            <mat-icon>{{ property()?.icon }}</mat-icon>
+          </div>
+          <span class="property-name">{{ property()?.name }}</span>
+        </div>
+      </mat-panel-title>
+      <mat-panel-description>
+        <div class="description">
+          @if(property()?.globalHardGoal){
+            <mat-icon>lock</mat-icon>
+          }
+          <div class="utility">
+            <mat-icon>workspace_premium</mat-icon>
+            {{ property()?.utility }}
+          </div>
+        </div>
+      </mat-panel-description>
+    </mat-expansion-panel-header> 
+    <div>
+        <form [formGroup]="form" (submit)="onSave()">
+            <div class="form-container">
+
+                <mat-form-field appearance="outline" class="full-width-form-field">
+                    <mat-label>Name</mat-label>
+                    <input matInput formControlName="name">
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="full-width-form-field">
+                    <mat-label>Natural Language Description</mat-label>
+                    <textarea matInput formControlName="naturalLanguageDescription">
+                    </textarea>
+                </mat-form-field>
+                
+                <mat-form-field appearance="outline" class="full-width-form-field">
+                    <mat-label>Utility</mat-label>
+                    <input matInput formControlName="utility" type="number" >
+                </mat-form-field>
+                <div class="split-input">
+                <mat-form-field appearance="outline">
+                    <mat-label>Color</mat-label>
+                    <input matInput placeholder="Color" formControlName="color">
+                </mat-form-field>
+                <div class=color-box [style]="'background-color: ' + form.controls.color.value + ';'"></div>
+                </div>
+                <div class="split-input">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Icon</mat-label>
+                        <input matInput placeholder="Icon" formControlName="icon">
+                    </mat-form-field>
+                    <div class="visu-box">
+                        <mat-icon aria-hidden="false" [fontIcon]="form.controls.icon.value"></mat-icon>
+                    </div>
+                </div>
+
+                <div class="button-container">
+                    <button mat-flat-button>Save</button>
+                </div>
+            </div>
+        </form>
+    </div>
+  
+  </mat-expansion-panel>
+  
+  

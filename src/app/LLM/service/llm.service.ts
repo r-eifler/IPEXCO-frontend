@@ -7,7 +7,7 @@ import { IHTTPData } from "src/app/shared/domain/http-data.interface";
 import { Message } from "../domain/message";
 import { ExplanationTranslationRequest, GoalTranslationRequest, QTthenGTResponse, QuestionTranslationRequest } from "../interfaces/translators_interfaces";
 import { Question } from "src/app/iterative_planning/domain/interface/question";
-import { explanationTranslationRequestToString, goalTranslationRequestToString, questionTranslationRequestToString } from "../interfaces/translators_interfaces_strings";
+import { explanationTranslationRequestToString, questionTranslationRequestToString } from "../interfaces/translators_interfaces_strings";
 import { IterationStep, StepStatus } from "src/app/iterative_planning/domain/iteration_step";
 import { PlanRunStatus } from "src/app/iterative_planning/domain/plan";
 import { QuestionType } from "src/app/iterative_planning/domain/explanation/explanations";
@@ -16,12 +16,12 @@ import { LLMContext } from "../domain/context";
 import { PlanProperty } from "src/app/shared/domain/plan-property/plan-property";
 import { Project } from "src/app/shared/domain/project";
 @Injectable()
-export class LLMService{
+export class LLMService {
 
     private http = inject(HttpClient)
     private BASE_URL = environment.apiURL + "llm/";
 
-    
+
     // postMessage$(messages: Message[] ): Observable<string> {
     //     console.log(messages);
     //     return this.http.post<IHTTPData<string>>(this.BASE_URL + "simple", { data: messages }).pipe(
@@ -29,52 +29,92 @@ export class LLMService{
     //         tap(console.log)
     //     );
     // }
-    
-    postMessageGT$(request: string, project: Project, properties: PlanProperty[], threadId: string): Observable<{response:{ formula: string, shortName: string }, threadId: string}> {
-        const goalTranslationRequest: GoalTranslationRequest = {
-            goalDescription: request,
-            predicates: project.baseTask.model.predicates,
-            objects: project.baseTask.model.objects,
-            existingPlanProperties: Object.values(properties)
-        };
-        const requestString = goalTranslationRequestToString(goalTranslationRequest);
-        console.log(requestString);
-        return this.http.post<IHTTPData<{response:{ formula: string, shortName: string }, threadId: string}>>(this.BASE_URL + 'gt', { data: requestString, threadId: threadId, originalRequest: request, projectId: project._id}).pipe(
-            map(({ data }) => data),
-            tap(console.log)
-        );
+
+    // postMessageGT$(request: string, project: Project, properties: PlanProperty[], threadId: string): Observable<{ response: { formula: string, shortName: string, reverseTranslation: string, feedback: string }, threadId: string }> {
+    //     const goalTranslationRequest: GoalTranslationRequest = {
+    //         goalDescription: request,
+    //         predicates: project.baseTask.model.predicates,
+    //         objects: project.baseTask.model.objects,
+    //         existingPlanProperties: Object.values(properties)
+    //     };
+    //     const requestString = goalTranslationRequestToString(goalTranslationRequest);
+    //     console.log(requestString);
+    //     return this.http.post<IHTTPData<{ response: { formula: string, shortName: string, reverseTranslation: string, feedback: string }, threadId: string }>>(this.BASE_URL + 'gt', { data: requestString, threadId: threadId, originalRequest: request, projectId: project._id }).pipe(
+    //         map(({ data }) => data),
+    //         tap(console.log)
+    //     );
+    // }
+
+    postMessageQT$(question: string, iterationStep: IterationStep, project: Project, properties: PlanProperty[], threadId: string): Observable<
+        | { directResponse: string, questionType: QuestionType, threadId: string }
+        | { response: { questionType: QuestionType, goal: string, question: Question, reverseTranslation: string }, threadId: string }
+    > {        
+            const questionTranslationRequest: QuestionTranslationRequest = {
+                question: question,
+                enforcedGoals: properties?.filter(p => p && iterationStep.hardGoals?.includes(p._id)) ?? [],
+                satisfiedGoals: properties?.filter(p => p && iterationStep.plan?.satisfied_properties?.includes(p._id)) ?? [],
+                unsatisfiedGoals: properties?.filter(p => p && !iterationStep.plan?.satisfied_properties?.includes(p._id)) ?? [],
+                existingPlanProperties: Object.values(properties ?? []),
+                solvable: iterationStep.plan?.status == PlanRunStatus.not_solvable ? "false" : "true"
+            };
+
+            const requestString = questionTranslationRequestToString(questionTranslationRequest);
+            
+            return this.http.post<IHTTPData<{ response: { questionType: QuestionType, goal: string, question: Question, reverseTranslation: string }, threadId: string }>>(
+                this.BASE_URL + 'qt', 
+                { 
+                    qtRequest: requestString, 
+                    threadId: threadId, 
+                    iterationStepId: iterationStep._id, 
+                    projectId: project._id,
+                    originalQuestion: question 
+                }
+            ).pipe(
+                map(({ data }) => data),
+                tap(console.log)
+            );
+        
     }
 
-    postMessageQT$(request: string, threadId: string): Observable<{response: string, threadId: string}> {
-        return this.http.post<IHTTPData<{response: string, threadId: string}>>(this.BASE_URL + 'qt', { data: request, threadId: threadId }).pipe(
-            map(({ data }) => data),
-            tap(console.log)
-        );
-    }
-
-    postMessageET$(question: string, explanation:string[][],question_type: QuestionType, questionArguments: PlanProperty[], iterationStep: IterationStep, project: Project, properties: PlanProperty[], threadId: string): Observable<{response: string, threadId: string}> {
-        console.log(question, question_type, questionArguments, iterationStep, project, properties, threadId);
+    postMessageET$(question: string, explanationMUGS: string[][], explanationMGCS: string[][], question_type: QuestionType, questionArgument: PlanProperty[], iterationStep: IterationStep, project: Project, properties: PlanProperty[], threadId: string): Observable<{ response: string, threadId: string }> {
+        console.log(question, question_type, questionArgument, iterationStep, project, properties, threadId);
         const request: ExplanationTranslationRequest = {
             question: question,
-            question_type: question_type,
-            MUGS: (question_type != QuestionType.HOW_PLAN && question_type != QuestionType.WHY_PLAN) ? explanation.map(e => e.map(pid => properties.find(p => p._id == pid))) : [], // if question_type is not HOW or WHY
-            MGCS: (question_type == QuestionType.HOW_PLAN || question_type == QuestionType.HOW_PROPERTY) ? explanation.map(e => e.map(pid => properties.find(p => p._id == pid))) : [], // if question_type is HOW or HOW_PROPERTY
-            questionArguments: questionArguments,
+            question_type: question_type ,
+            MUGS: explanationMUGS.map(e => e.map(pid => properties.find(p => p._id == pid))),
+            MGCS: explanationMGCS.map(e => e.map(pid => properties.find(p => p._id == pid))),
+            questionArgument: questionArgument,
             predicates: project.baseTask.model.predicates,
             objects: project.baseTask.model.objects,
             enforcedGoals: properties.filter(p => iterationStep.hardGoals.includes(p._id)),
-            satisfiedGoals: properties.filter(p => iterationStep.plan.satisfied_properties.includes(p._id)),
-            unsatisfiedGoals: properties.filter(p => !iterationStep.plan.satisfied_properties.includes(p._id)),
+            satisfiedGoals: properties.filter(p => 
+                iterationStep.plan.satisfied_properties.includes(p._id) && 
+                !iterationStep.hardGoals.includes(p._id)
+            ),
+            unsatisfiedGoals: properties.filter(p => 
+                !iterationStep.plan.satisfied_properties.includes(p._id) && 
+                !iterationStep.hardGoals.includes(p._id)
+            ),
             existingPlanProperties: Object.values(properties)
         };
         const requestString = explanationTranslationRequestToString(request);
-        return this.http.post<IHTTPData<{response: string, threadId: string}>>(this.BASE_URL + 'et', { data: requestString, threadId: threadId, iterationStepId: iterationStep._id, projectId: project._id, originalRequest: question}).pipe(
+        return this.http.post<IHTTPData<{ response: string, threadId: string }>>(this.BASE_URL + 'et', { data: requestString, threadId: threadId, iterationStepId: iterationStep._id, projectId: project._id, originalRequest: question }).pipe(
             map(({ data }) => data),
             tap(console.log)
         );
     }
 
-    postMessageQTthenGT$(question: string, iterationStep: IterationStep, project: Project, properties: PlanProperty[], threadIdQt: string, threadIdGt: string): Observable<{gtResponse: string, qtResponse: string, threadIdQt: string, threadIdGt: string, questionType: QuestionType, goal: string, question:Question }> {
+    postDirectMessageET$(directResponse: string, project: Project, iterationStep: IterationStep, threadId: string): Observable<{ response: string, threadId: string }> {
+        return this.http.post<IHTTPData<{ response: string, threadId: string }>>(this.BASE_URL + 'et', { data: directResponse, threadId: threadId, projectId: project._id, iterationStepId: iterationStep._id, originalRequest: directResponse }).pipe(
+            map(({ data }) => data),
+            tap(console.log)
+        );
+    }
+
+    postMessageQTthenGT$(question: string, iterationStep: IterationStep, project: Project, properties: PlanProperty[], threadIdQt: string, threadIdGt: string): Observable<
+        | { gtResponse: string, qtResponse: string, threadIdQt: string, threadIdGt: string, questionType: QuestionType, goal: string, question: Question, reverseTranslationQT: string, reverseTranslationGT: string }
+        | { directResponse: string, questionType: QuestionType, threadIdQt: string, threadIdGt: string }
+    > {
         console.log("Properties", properties);
         console.log("IterationStep", iterationStep);
         console.log("Enforced Goals", iterationStep.hardGoals.map(p => properties[p]));
@@ -98,10 +138,21 @@ export class LLMService{
             existingPlanProperties: Object.values(properties)
         };
         console.log(goalTranslationRequest);
-        const gtRequestString = goalTranslationRequestToString(goalTranslationRequest);
-
+        // const gtRequestString = goalTranslationRequestToString(goalTranslationRequest);
+        const gtRequestString = "{goal_description}";
         console.log(qtRequestString, gtRequestString);
-        return this.http.post<IHTTPData<{ gtResponse: string, qtResponse: string, threadIdQt: string, threadIdGt: string, questionType: QuestionType, goal: string, question:Question}>>(this.BASE_URL + 'qt-then-gt', { qtRequest: qtRequestString, gtRequest: gtRequestString, projectId: project._id, threadIdQt, threadIdGt, iterationStepId: iterationStep._id, originalQuestion: question }).pipe(
+        return this.http.post<IHTTPData<
+            | { gtResponse: string, qtResponse: string, threadIdQt: string, threadIdGt: string, questionType: QuestionType, goal: string, question: Question, reverseTranslationQT: string, reverseTranslationGT: string }
+            | { directResponse: string , questionType: QuestionType, threadIdQt: string, threadIdGt: string}
+        >>(this.BASE_URL + 'qt-then-gt', { 
+            qtRequest: qtRequestString, 
+            gtRequest: gtRequestString, 
+            projectId: project._id, 
+            threadIdQt, 
+            threadIdGt, 
+            iterationStepId: iterationStep._id, 
+            originalQuestion: question
+        }).pipe(
             map(({ data }) => data),
             tap(console.log)
         );
@@ -111,10 +162,24 @@ export class LLMService{
 
         let httpParams = new HttpParams();
         httpParams = httpParams.set('projectId', id);
-        
-        return this.http.get<IHTTPData<LLMContext>>(this.BASE_URL+"llm-context",  { params: httpParams }).pipe(
-            map(({data}) => data)
+
+        return this.http.get<IHTTPData<LLMContext>>(this.BASE_URL + "llm-context", { params: httpParams }).pipe(
+            map(({ data }) => data)
         )
+    }
+
+    createLLMContext$(projectId: string, domain: string): Observable<LLMContext> {
+        console.log("Creating LLM context for projectId: ", projectId, "and domain: ", domain);
+        return this.http.post<IHTTPData<LLMContext>>(this.BASE_URL + "create-llm-context", 
+            { projectId, domain  }
+        ).pipe(
+            map(({ data }) => data),
+            tap(response => console.log('Successfully created LLM context:', response)),
+            catchError(error => {
+                console.error('Error creating LLM context:', error);
+                throw error;
+            })
+        );
     }
 }
 

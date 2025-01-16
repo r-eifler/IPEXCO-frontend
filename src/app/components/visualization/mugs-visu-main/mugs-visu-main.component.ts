@@ -1,7 +1,7 @@
 import { PlanProperty } from 'src/app/shared/domain/plan-property/plan-property';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { Component, OnInit} from '@angular/core';
-import { Demo } from 'src/app/demo/domain/demo';
+import { Demo } from 'src/app/project/domain/demo';
 import { filter, map, takeUntil, take } from 'rxjs/operators';
 import * as d3 from 'd3';
 import { combineLatest } from "rxjs/internal/observable/combineLatest";
@@ -13,14 +13,13 @@ import { MatOptionModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 
 @Component({
-  selector: 'app-mugs-visu-main',
-  standalone: true,
-  imports: [
-    MatOptionModule,
-    MatSelectModule,
-  ],
-  templateUrl: './mugs-visu-main.component.html',
-  styleUrls: ['./mugs-visu-main.component.scss']
+    selector: 'app-mugs-visu-main',
+    imports: [
+        MatOptionModule,
+        MatSelectModule,
+    ],
+    templateUrl: './mugs-visu-main.component.html',
+    styleUrls: ['./mugs-visu-main.component.scss']
 })
 
 export class MUGSVisuMainComponent implements OnInit {

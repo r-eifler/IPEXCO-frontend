@@ -181,8 +181,8 @@ export function generatePlanProperty(
     selectedValues: Record<string, PDDLObject>): Record<string, PDDLObject[]> {
 
     const variables = Object.keys(template.variables)
-    console.log(variables)
-    console.log(template.variables[variables[0]])
+    // console.log(variables)
+    // console.log(template.variables[variables[0]])
     let possibleObjects: Record<string, PDDLObject[]> = {}
     variables.forEach(v => possibleObjects[v] = getPossibleObjectsBasedOnType(template.variables[v], task));
 

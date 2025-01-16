@@ -15,11 +15,12 @@
 
   @include vars.typography(body-medium);
 
-  & > ::ng-deep* {
+  & > ::ng-deep {
     flex-basis: fit-content;
   }
 
   & > ::ng-deep mat-icon {
     flex-basis: auto;
+    flex-shrink: 0;
   }
 }

@@ -9,7 +9,8 @@ export enum PlanRunStatus {
   running,
   failed,
   plan_found,
-  not_solvable
+  not_solvable,
+  canceled
 }
 
 export interface PlanAction {
@@ -46,5 +47,11 @@ export function nextState(state: State, action: PDDLAction): State {
 
 
 export function computeUtility(plan: Plan, planProperties: Record<string, PlanProperty>): number {
+  if(!plan || !planProperties){
+    return undefined;
+  }
+  if(plan.satisfied_properties.some(ppId => !planProperties[ppId])){
+    return undefined;
+  }
   return sum(plan.satisfied_properties?.map(ppId => planProperties[ppId].utility));
 }

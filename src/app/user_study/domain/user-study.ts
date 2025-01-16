@@ -1,22 +1,29 @@
 export enum UserStudyStepType {
-  description,
-  form,
-  demo,
+  description = 'description',
+  form = 'form',
+  demo = 'demo',
+  demoInfo = 'demoInfo',
+  userManual = 'userManual'
 }
 
 export interface UserStudyStep {
   type: UserStudyStepType;
-  content: string;
+  name: string,
+  time: number | null;
+  content: string | null;
 }
 
 export interface UserStudy {
   _id?: string;
-  updated: string;
+  updated?: string;
   name: string;
-  user: string;
-  available: boolean;
+  user?: string;
+  available?: boolean;
   redirectUrl: string;
   description: string;
+  relatedProject: string;
+  expectation: string;
+  confidentiality: string;
   startDate?: Date;
   endDate?: Date;
   steps?: UserStudyStep[];

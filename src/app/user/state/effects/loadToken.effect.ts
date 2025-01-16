@@ -1,7 +1,13 @@
-import { inject, Injectable } from "@angular/core";
-import { Actions, createEffect, ofType, OnInitEffects } from "@ngrx/effects";
-import { map } from "rxjs/operators";
-import { loadTokenLocalStorage, loadTokenLocalStorageFailure, loadTokenLocalStorageSuccess } from "../user.actions";
+import { inject, Injectable } from '@angular/core';
+import { Actions, createEffect, ofType, OnInitEffects } from '@ngrx/effects';
+import {map, tap} from 'rxjs/operators';
+import {
+  loadTokenLocalStorage,
+  loadTokenLocalStorageFailure,
+  loadTokenLocalStorageSuccess,
+  registerUserSuccess,
+  storeTokenLocalStorage
+} from '../user.actions';
 
 @Injectable()
 export class LoadTokenEffect implements OnInitEffects{
@@ -15,8 +21,9 @@ export class LoadTokenEffect implements OnInitEffects{
     public loadTokenFromLocalStorage$ = createEffect(() => this.actions$.pipe(
         ofType(loadTokenLocalStorage),
         map(() => {
-            const token = localStorage.getItem("jwt-token");
-            if(!token){
+            const token : string | null = localStorage.getItem('jwt-token');
+            // console.log(token);
+            if(token === null || token === undefined ) {
                 return loadTokenLocalStorageFailure();
             }
             else{
@@ -24,4 +31,5 @@ export class LoadTokenEffect implements OnInitEffects{
             }
         }
     )))
+
 }

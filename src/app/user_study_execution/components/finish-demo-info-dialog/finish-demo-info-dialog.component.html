@@ -1,0 +1,33 @@
+<app-dialog>
+    <app-dialog-header>
+      <app-dialog-title>
+        <div class="icon-title">
+          <mat-icon>alarm</mat-icon> Finish Task?
+        </div>
+      </app-dialog-title>
+    </app-dialog-header>
+    <app-dialog-content>
+        @if(currentMaxUtility() == maxOverallUtility()){
+            <span>
+                Congratulation you achieved the maximal possible utility. 
+                Please continue with the next part of the user study.
+            </span>
+        }
+        @else{
+            <span>
+                You are still missing a utility of {{ missingUtility() }} and the time is not over yet. 
+                Please try to find a solvable selection of goals with a higher utility.
+            </span>
+        }
+    </app-dialog-content>
+    <app-dialog-footer>
+        @if(currentMaxUtility() == maxOverallUtility()){
+            <button mat-flat-button (click)="onClose(true)">Next User Study Part</button>
+        }
+        @else{
+            <button mat-flat-button (click)="onClose(false)">Back to Task</button>
+            <button mat-button (click)="onClose(true)">Next User Study Part</button>
+        }
+    </app-dialog-footer>
+</app-dialog>
+  

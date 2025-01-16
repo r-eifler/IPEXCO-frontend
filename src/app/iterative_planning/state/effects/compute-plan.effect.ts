@@ -5,7 +5,7 @@ import { catchError, map, switchMap } from "rxjs/operators";
 import { of } from "rxjs";
 import { Store } from "@ngrx/store";
 import { concatLatestFrom } from "@ngrx/operators";
-import { selectIterativePlanningProject, selectIterativePlanningSelectedStepId } from "../iterative-planning.selector";
+import { selectIterativePlanningProject, selectIterativePlanningProperties, selectIterativePlanningSelectedStepId } from "../iterative-planning.selector";
 import { PlannerService } from "../../service/planner.service";
 import { PlannerMonitoringService } from "../../service/planner-monitoring.service";
 
@@ -49,9 +49,9 @@ export class ComputePlanEffect{
     public listenPlanComputationFinished$ = createEffect(() => this.actions$.pipe(
         ofType(registerPlanComputationSuccess),
         concatLatestFrom(() => this.store.select(selectIterativePlanningProject)),
-        switchMap(([_, {_id: projectId}]) => {
+        switchMap(([iterationStepId, {_id: projectId}]) => {
             return this.monitoringService.planComputationFinished$(projectId).pipe(
-                switchMap(() => [planComputationRunningSuccess(), loadIterationSteps({id: projectId})]),
+                switchMap(() => [planComputationRunningSuccess(iterationStepId), loadIterationSteps({id: projectId})]),
                 catchError(() => of(planComputationRunningFailure())),
             )
         })

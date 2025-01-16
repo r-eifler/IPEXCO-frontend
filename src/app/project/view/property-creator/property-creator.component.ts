@@ -9,14 +9,13 @@ import { AsyncPipe } from '@angular/common';
 import { PlanProperty } from 'src/app/shared/domain/plan-property/plan-property';
 
 @Component({
-  selector: 'app-property-creator',
-  standalone: true,
-  imports: [
-    AsyncPipe,
-    PropertyCreationTemplateBasedComponent
-  ],
-  templateUrl: './property-creator.component.html',
-  styleUrl: './property-creator.component.scss'
+    selector: 'app-property-creator',
+    imports: [
+        AsyncPipe,
+        PropertyCreationTemplateBasedComponent
+    ],
+    templateUrl: './property-creator.component.html',
+    styleUrl: './property-creator.component.scss'
 })
 export class PropertyCreatorComponent {
 

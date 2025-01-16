@@ -7,8 +7,8 @@ import {
 } from "../../domain/user-study";
 import { BehaviorSubject, combineLatest, Observable, Subject } from "rxjs";
 import { filter, map, take, takeUntil, tap } from "rxjs/operators";
-import { Demo } from "../../../demo/domain/demo";
-import { UserStudyData } from "src/app/user_study/domain/user-study-store";
+import { Demo } from "../../../project/domain/demo";
+import { UserStudyData } from "src/app/user_study/domain/user-study-execution";
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AsyncPipe, CurrencyPipe, DatePipe } from '@angular/common';
 import { IndividualRunUserDataComponent } from '../individual-run-user-data/individual-run-user-data.component';
@@ -22,24 +22,23 @@ import { MatSlideToggle, MatSlideToggleModule } from '@angular/material/slide-to
 import { MatCardModule } from '@angular/material/card';
 
 @Component({
-  selector: "app-user-study-data-base",
-  standalone: true,
-  imports: [
-    AsyncPipe,
-    IndividualRunUserDataComponent,
-    TimeLoggerDataComponent,
-    OverviewDataComponent,
-    MatTabsModule,
-    CurrencyPipe,
-    DatePipe,
-    MatIconModule,
-    MatListModule,
-    FormsModule,
-    MatSlideToggleModule,
-    MatCardModule,
-  ],
-  templateUrl: "./user-study-data-base.component.html",
-  styleUrls: ["./user-study-data-base.component.css"],
+    selector: "app-user-study-data-base",
+    imports: [
+        AsyncPipe,
+        IndividualRunUserDataComponent,
+        TimeLoggerDataComponent,
+        OverviewDataComponent,
+        MatTabsModule,
+        CurrencyPipe,
+        DatePipe,
+        MatIconModule,
+        MatListModule,
+        FormsModule,
+        MatSlideToggleModule,
+        MatCardModule,
+    ],
+    templateUrl: "./user-study-data-base.component.html",
+    styleUrls: ["./user-study-data-base.component.css"]
 })
 export class UserStudyDataBaseComponent implements OnInit {
 
@@ -69,7 +68,7 @@ export class UserStudyDataBaseComponent implements OnInit {
     // private propertiesService: PlanPropertyMapService,
   ) {
 
-    console.log("User study base");
+    // console.log("User study base");
     // this.demosService.findCollection();
 
     // this.userStudy$ = this.selectedUserStudy.getSelectedObject()

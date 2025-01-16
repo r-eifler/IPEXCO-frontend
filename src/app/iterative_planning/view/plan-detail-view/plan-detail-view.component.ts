@@ -50,27 +50,20 @@ import { MugsVisualizationBaseComponent } from "../visualization/mugs-visualizat
 import { PlanViewComponent } from "../../components/plan/plan-view/plan-view.component";
 
 @Component({
-  selector: "app-plan-detail-view",
-  standalone: true,
-  imports: [
-    AsyncPipe,
-    BreadcrumbModule,
-    EmptyStateModule,
-    ExplanationChatComponent,
-    ExplanationChatLlmComponent,
-    IterationStepHeroComponent,
-    MatButtonModule,
-    MatIconModule,
-    MatTooltipModule,
-    PageModule,
-    PlanPropertyPanelComponent,
-    QuestionPanelComponent,
-    RouterLink,
-    MugsVisualizationBaseComponent,
-    PlanViewComponent
-  ],
-  templateUrl: "./plan-detail-view.component.html",
-  styleUrl: "./plan-detail-view.component.scss",
+    selector: "app-plan-detail-view",
+    imports: [
+        AsyncPipe,
+        BreadcrumbModule,
+        EmptyStateModule,
+        MatButtonModule,
+        MatIconModule,
+        MatTooltipModule,
+        PageModule,
+        RouterLink,
+        PlanViewComponent
+    ],
+    templateUrl: "./plan-detail-view.component.html",
+    styleUrl: "./plan-detail-view.component.scss"
 })
 export class PlanDetailViewComponent {
   private store = inject(Store);
@@ -156,14 +149,12 @@ export class PlanDetailViewComponent {
 
   onPropertyQuestionSelected(question: AvailableQuestion, property: PlanProperty): void {
     this.stepId$.pipe(take(1)).subscribe((iterationStepId) =>{
-      console.log('onPropertyQuestionSelected');
       return this.store.dispatch(questionPosed({ question: { questionType: question.questionType, iterationStepId, propertyId: property._id }}))
     });
   }
 
   onQuestionSelected(question: AvailableQuestion): void {
     this.stepId$.pipe(take(1)).subscribe((iterationStepId) =>{
-      console.log('onPropertyQuestionSelected');
       return this.store.dispatch(questionPosed({ question: { questionType: question.questionType, iterationStepId }}))
     });
   }

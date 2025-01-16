@@ -1,9 +1,9 @@
 import { inject, Injectable } from '@angular/core';
 import { tap, map, filter, take, exhaustMap } from 'rxjs/operators';
 import { interval, Observable } from 'rxjs';
-import { DemoService } from './demo.service';
+import { ProjectDemoService } from './demo.service';
 import { RunStatus } from 'src/app/iterative_planning/domain/run';
-import { DemoRunStatus } from 'src/app/demo/domain/demo';
+import { DemoRunStatus } from 'src/app/project/domain/demo';
   
 @Injectable({
   providedIn: 'root'
@@ -11,7 +11,7 @@ import { DemoRunStatus } from 'src/app/demo/domain/demo';
 export class DemoMonitoringService {
 
 
-    private demoService = inject(DemoService);
+    private demoService = inject(ProjectDemoService);
 
     demoComputationFinished$(demoId: string): Observable<void> {
         return interval(5000).pipe(

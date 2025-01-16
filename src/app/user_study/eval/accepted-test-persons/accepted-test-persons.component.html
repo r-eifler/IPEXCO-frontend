@@ -1,56 +1,67 @@
-<table mat-table [dataSource]="dataPoints$" class="user-table">
-  <!--- Note that these columns can be defined in any order.
-        The actual rendered columns are set as a property on the row definition" -->
 
-  <!-- Position Column -->
-  <ng-container matColumnDef="_id">
-    <th mat-header-cell *matHeaderCellDef>ID</th>
-    <td mat-cell *matCellDef="let element">{{ element.user._id }}</td>
+<table mat-table [dataSource]="displayedParticipants" matSort (matSortChange)="announceSortChange($event)">
+
+  <ng-container matColumnDef="user">
+    <th mat-header-cell *matHeaderCellDef> User </th>
+    <td mat-cell *matCellDef="let element"> {{element.user}} </td>
   </ng-container>
 
-  <!-- Name Column -->
-  <ng-container matColumnDef="prolificId">
-    <th mat-header-cell *matHeaderCellDef>Prolific ID</th>
-    <td mat-cell *matCellDef="let element">{{ element.user.prolificId }}</td>
+  <ng-container matColumnDef="date">
+    <th mat-header-cell *matHeaderCellDef> Date </th>
+    <td mat-cell *matCellDef="let element"> {{element.date | date}} </td>
   </ng-container>
 
-  <!-- Weight Column -->
+  <ng-container matColumnDef="processingTime">
+    <th mat-header-cell *matHeaderCellDef> Duration </th>
+    <td mat-cell *matCellDef="let element"> 
+      @if(element.finished){
+      {{element.processingTime | date: 'hh'}}h {{element.processingTime | date: 'mm'}}min {{element.processingTime | date: 'ss'}}sec
+      }
+      @else {
+        -
+      }
+    </td>
+  </ng-container>
+
   <ng-container matColumnDef="finished">
-    <th mat-header-cell *matHeaderCellDef>Finished</th>
+    <th mat-header-cell *matHeaderCellDef> Finished </th>
     <td mat-cell *matCellDef="let element">
-      <mat-icon *ngIf="element.finished">done</mat-icon>
-      <mat-icon *ngIf="!element.finished">query_builder</mat-icon>
+      @if(element.finished){
+        <mat-icon>check</mat-icon>
+      }
+      @else {
+        <mat-icon>error</mat-icon>
+      }
     </td>
   </ng-container>
 
-  <!-- Symbol Column -->
-  <ng-container matColumnDef="createdAt">
-    <th mat-header-cell *matHeaderCellDef>Date</th>
-    <td mat-cell *matCellDef="let element">
-      {{ element.createdAt | date: "short" }}
-    </td>
-  </ng-container>
-
-  <!-- Symbol Column -->
   <ng-container matColumnDef="payment">
-    <th mat-header-cell *matHeaderCellDef>Payment</th>
-    <td mat-cell *matCellDef="let element">
-      {{ element.payment | currency: "GBP":"symbol":"1.2-2" }}
-    </td>
+    <th mat-header-cell *matHeaderCellDef> Payment </th>
+    <td mat-cell *matCellDef="let element"> {{element.payment | currency}} </td>
   </ng-container>
 
-  <!-- Symbol Column -->
   <ng-container matColumnDef="accepted">
-    <th mat-header-cell *matHeaderCellDef>Accepted</th>
+    <th mat-header-cell *matHeaderCellDef> Accepted </th>
     <td mat-cell *matCellDef="let element">
-      <mat-checkbox
-        [(ngModel)]="element.accepted"
-        (ngModelChange)="updateAccepted($event, element)"
-      >
-      </mat-checkbox>
+      <button mat-button 
+        (click)="onAccept(element)"
+        [disabled]="element.accepted" 
+        matTooltip="Accept this participant for the evaluation.">
+        @if(element.accepted){
+          accepted
+        }
+        @else {
+          accept
+        }
+      </button>
     </td>
   </ng-container>
 
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 </table>
+
+<mat-paginator [length]="participantsTableData()?.length"  [pageSizeOptions]="[10]"
+                 showFirstLastButtons (page)="onPage($event)"
+                 aria-label="Select page of periodic elements">
+ </mat-paginator>

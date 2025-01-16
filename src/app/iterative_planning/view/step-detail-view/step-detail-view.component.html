@@ -1,99 +1,115 @@
 @let step = step$ | async;
 @let isUnsolvable = isUnsolvable$ | async;
+@let isCanceled = isCanceled$ | async;
+@let planComputationRunning = planComputationRunning$ | async;
 @let interfaceType = explanationInterfaceType$ | async;
+@let hasUnsolvedSoftGoals = hasUnsolvedSoftGoals$ | async;
+@let isFailed = isFailed$ | async;
 
 <app-page>
   <app-breadcrumb>
-    <a app-breadcrumb-item [routerLink]="['/project/' + (step$ | async)?.project]"><mat-icon>home</mat-icon></a>
+    <a *isProject app-breadcrumb-item [routerLink]="['/project/' + (step$ | async)?.project]"><mat-icon>home</mat-icon></a>
     <a app-breadcrumb-item [routerLink]="['..']">All Iterations</a>
     <app-breadcrumb-item>{{ (step$ | async)?.name }}</app-breadcrumb-item>
   </app-breadcrumb>
   <app-page-title>
     {{ step?.name }}
     <app-page-title-action>
-      <button mat-icon-button matTooltip="Delete iteration step."
+      <button mat-icon-button matTooltip="Delete iteration step." *isProject
         (click)="deleteIteration(step?._id)"><mat-icon>delete</mat-icon></button>
+      <button mat-icon-button matTooltip="Open user manual."
+        (click)="onHelp()">
+      <mat-icon>help</mat-icon>
+      </button>
       <button mat-icon-button matTooltip="Creates a new iteration based on the properties selected in this iteration."
+        [disabled]="!anabelCreationInterface"
         (click)="createNewIteration(step?._id)"><mat-icon>call_split</mat-icon></button>
     </app-page-title-action>
   </app-page-title>
   <app-page-hero>
-    <app-iteration-step-hero [step]="step$ | async"
-      [planProperties]="planProperties$ | async"></app-iteration-step-hero>
+    <app-iteration-step-hero
+      [maxOverallUtility]="maxOverAllUtility$ | async" 
+      [step]="step$ | async"
+      [planProperties]="planProperties$ | async">
+    </app-iteration-step-hero>
   </app-page-hero>
 
   <app-page-content>
     <app-page-section-list>
 
-      @if(!isUnsolvable && (explanationInterfaceType$ | async) == expInterfaceType.MUGS_VISUALIZATION) {
-      <app-page-section>
-        <app-page-section-title>
-          <mat-icon>lightbulb_2</mat-icon>
-          Insights
-        </app-page-section-title>
-        <app-page-section-content>
-          <app-mugs-visualization-base></app-mugs-visualization-base>
-        </app-page-section-content>
-      </app-page-section>
-      }
+      @if(planComputationRunning && ! isCanceled && !isUnsolvable) {
+        <app-page-section>
+          <app-page-section-content>
+            <div class="action-container">
+              <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+              <button mat-icon-button
+                matTooltip="Cancel plan computation of iteration step"
+                (click)="onCancel()"
+              ><mat-icon>cancel</mat-icon></button>
+            </div>
+            <app-empty-state-section>
+              <span>There is no plan information available for this step (yet).<br />
+                Therefore, only a limited set of information is available here.</span>
+              <mat-icon>explore_off</mat-icon>
+            </app-empty-state-section>
+          </app-page-section-content>
+        </app-page-section>
+        }
+  
+        @if(! planComputationRunning && isCanceled && !isUnsolvable) {
+          <app-page-section>
+            <app-page-section-content>
+              <app-empty-state-section>
+                <span>There is no plan information available for this step since the plan computation was canceled.<br />
+                  Therefore, only a limited set of information is available here.</span>
+                <mat-icon>explore_off</mat-icon>
+              </app-empty-state-section>
+            </app-page-section-content>
+          </app-page-section>
+        }
 
-      @if(isUnsolvable && (interfaceType == expInterfaceType.TEMPLATE_QUESTION_ANSWER || interfaceType ==
-      expInterfaceType.MUGS_VISUALIZATION)) {
+      @if(!planComputationRunning && !isCanceled && isUnsolvable && (interfaceType == expInterfaceType.TEMPLATE_QUESTION_ANSWER )) {
       <app-page-section>
         <app-page-section-title>
           <mat-icon>lightbulb_2</mat-icon>
           Insights
         </app-page-section-title>
         <app-page-section-content>
-          @if((explanationInterfaceType$ | async) == expInterfaceType.TEMPLATE_QUESTION_ANSWER){
           <app-explanation-chat [isLoading]="isExplanationLoading$ | async"
             [availableQuestions]="globalAvalableQuestionTypes$ | async" (questionSelected)="onQuestionSelected($event)"
             [messages]="globalMessages$ | async" [properties]="planProperties$ | async"></app-explanation-chat>
-          }
-          @if((explanationInterfaceType$ | async) == expInterfaceType.MUGS_VISUALIZATION){
-          <app-mugs-visualization-base></app-mugs-visualization-base>
-          }
         </app-page-section-content>
       </app-page-section>
       }
 
-      @if(!step?.plan && !isUnsolvable) {
-      <app-page-section>
-        <app-page-section-content>
-          <app-empty-state-section>
-            <span>There is no plan information available for this step (yet).<br />
-              Therefore, only a limited set of information is available here.</span>
-            <mat-icon>explore_off</mat-icon>
-          </app-empty-state-section>
-        </app-page-section-content>
-      </app-page-section>
-      }
 
-      @if(interfaceType == expInterfaceType.LLM_CHAT) {
+
+      @if(!planComputationRunning && !isCanceled && !isFailed && (hasUnsolvedSoftGoals || isUnsolvable) && (interfaceType == expInterfaceType.LLM_CHAT)) {
       <app-page-section>
         <app-page-section-title>
           <mat-icon>lightbulb_2</mat-icon>
           Insights
         </app-page-section-title>
         <app-page-section-content>
-          <p></p>
-          @if(interfaceType == expInterfaceType.LLM_CHAT){
           <app-explanation-chat-llm></app-explanation-chat-llm>
-          }
         </app-page-section-content>
       </app-page-section>
       }
 
-      @if(step?.plan && !isUnsolvable && (explanationInterfaceType$ | async) ==
-      expInterfaceType.TEMPLATE_QUESTION_ANSWER) {
+      @if(!planComputationRunning && !isCanceled && !isUnsolvable && (interfaceType == expInterfaceType.TEMPLATE_QUESTION_ANSWER )) {
       <app-page-section>
-        <app-page-section-title>Unsatisfied Softgoals <mat-icon
-            matTooltip="Expand the individual goals to gather more information as of why they are unsolvable.">info</mat-icon></app-page-section-title>
+        <app-page-section-title>
+          <span *isProject>Unsatisfied Softgoals</span>
+          <span *isDemo>Unsatisfied Goals</span>
+          <mat-icon
+            matTooltip="Expand the individual goals to gather more information as of why they are unsatisfied.">info
+          </mat-icon></app-page-section-title>
         <app-page-section-content>
           @if(hasUnsolvedSoftGoals$ | async) {
           <div class="property-list">
-            @for(property of unsolvedSoftGoals$ | async; track property) {
-            <app-plan-property-panel [property]="property">
+            @for(property of unsolvedSoftGoals$ | async; track property; let idx = $index) {
+            <app-plan-property-panel [property]="property"
+              [expanded]="(isIntroTask$ | async) && idx === 0">
               <app-explanation-chat
                 [isLoading]="isExplanationLoading$ | async"
                 [availableQuestions]="propertyAvailableQuestionTypes$(property) | async"
@@ -106,16 +122,23 @@
           </div>
           } @else {
           <app-empty-state-section>
-            <span>All specified subgoals could be satisfied.</span>
+            <span>All specified goals could be satisfied.</span>
             <mat-icon>celebration</mat-icon>
           </app-empty-state-section>
           }
         </app-page-section-content>
       </app-page-section>
       }
-      @if(step?.plan && !isUnsolvable && (explanationInterfaceType$ | async) == expInterfaceType.LLM_CHAT) {
+
+      @if(!planComputationRunning && !isCanceled && !isFailed && !isUnsolvable && (interfaceType == expInterfaceType.LLM_CHAT )) {
       <app-page-section>
-        <app-page-section-title>Unsatisfied Softgoals</app-page-section-title>
+        <app-page-section-title>
+          <span *isProject>Unsatisfied Softgoals</span>
+          <span *isDemo>Unsatisfied Goals</span>
+          <mat-icon
+            matTooltip="These are goals that the planner did not try to satisfy. You can ask why they are unsatisfied and how to satisfy them. There might be no particular reason why they are unsatisfied.">info
+          </mat-icon>
+        </app-page-section-title>
         <app-page-section-content>
           @if(hasUnsolvedSoftGoals$ | async) {
           <div class="property-list">
@@ -125,7 +148,7 @@
           </div>
           } @else {
           <app-empty-state-section>
-            <span>All specified subgoals could be satisfied.</span>
+            <span>All specified goals could be satisfied.</span>
             <mat-icon>celebration</mat-icon>
           </app-empty-state-section>
           }
@@ -134,9 +157,15 @@
       }
 
 
-      @if(step?.plan && !isUnsolvable) {
+      @if(!planComputationRunning && !isCanceled && !isUnsolvable) {
       <app-page-section>
-        <app-page-section-title>Satisfied Softgoals</app-page-section-title>
+        <app-page-section-title>
+          <span *isProject>Satisfied Softgoals</span>
+          <span *isDemo>Additionally Satisfied Goals</span>
+          <mat-icon
+            matTooltip="These are goals that the planner did not try to satisfy but satisfied by chance.">info
+          </mat-icon>
+        </app-page-section-title>
         <app-page-section-content>
           @if(hasSolvedSoftGoals$ | async) {
           <div class="property-list">

@@ -14,7 +14,7 @@
   @include vars.color(on-primary-container);
 
   font-style: italic;
-  font-weight: 200;
+  font-weight: 400;
 
   .quote {
     @include vars.typography(headline-large);

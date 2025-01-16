@@ -2,26 +2,60 @@
 
 <app-page>
   <app-breadcrumb>
-    <a app-breadcrumb-item [routerLink]="['/project/' + (project$ | async)?._id]"><mat-icon>home</mat-icon></a>
+    <a *isProject app-breadcrumb-item [routerLink]="['/project/' + (project$ | async)?._id]"><mat-icon>home</mat-icon></a>
     <app-breadcrumb-item>All Iterations</app-breadcrumb-item>
   </app-breadcrumb>
-  <app-page-title>Plan Iterations</app-page-title>
+  <app-page-title>
+    
+    Plan Iterations
+
+    <app-page-title-action>
+      <button mat-icon-button matTooltip="Open user manual."
+        (click)="onHelp()">
+      <mat-icon>help</mat-icon>
+      </button>
+    </app-page-title-action>
+
+  </app-page-title>
+
+  <app-page-hero *isDemo>
+    <app-steps-list-hero
+      [maxOverallUtility]="maxOverallUtility$ | async"
+      [currentMaxUtility]="currentMaxUtility$ | async"
+      [steps]="steps$ | async"
+      [planPropertiesMap]="planProperties"
+    ></app-steps-list-hero>
+  </app-page-hero>
 
   <app-page-content>
-    <div class="page-grid">
-      @for(step of steps$ | async; track step) {
-        <app-iteration-step-card [step]="step" [planProperties]="planProperties" (fork)="createNewIteration(step._id)"></app-iteration-step-card>
-      }
+    <app-page-section-list>
+      
+      <app-page-section>
+        <app-page-section-content>
+          <div class="page-grid">
+            @for(step of steps$ | async; track step) {
+              <app-iteration-step-card 
+                [step]="step" 
+                [planProperties]="planProperties" 
+                [maxOverallUtility]="maxOverallUtility$ | async"
+                (fork)="createNewIteration(step._id)"
+                (cancel)="cancelIterationStep(step._id)">
+              </app-iteration-step-card>
+            }
 
-      <button app-action-card (click)="createNewIteration()">
-        <div class="instructions">
-          <span>Perform a new plan computation from scratch</span>
-          <span class="alternative">or</span>
-          <span> fork (<mat-icon>call_split</mat-icon>) an existing one.</span>
-        </div>
-        <mat-icon>add</mat-icon>
-      </button>
+            <button app-action-card (click)="createNewIteration()" [disabled]="!anabelCreationInterface">
+              <div class="instructions">
+                <span>Perform a new plan computation from scratch</span>
+                <span class="alternative">or</span>
+                <span> fork (<mat-icon>call_split</mat-icon>) an existing one.</span>
+              </div>
+              <mat-icon>add</mat-icon>
+            </button>
 
-    </div>
+          </div>
+        </app-page-section-content>
+      </app-page-section> 
+
+    </app-page-section-list>
   </app-page-content>
 </app-page>

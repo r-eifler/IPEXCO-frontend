@@ -1,5 +1,5 @@
 import { createAction, props } from "@ngrx/store";
-import { Demo } from "src/app/demo/domain/demo";
+import { Demo } from "src/app/project/domain/demo";
 import { PlanProperty } from "src/app/shared/domain/plan-property/plan-property";
 import { Project } from "src/app/shared/domain/project";
 
@@ -46,9 +46,17 @@ export const loadProjectDemos = createAction('[project] load project demos', pro
 export const loadProjectDemosSuccess = createAction('[project] load project demos success', props<{demos: Demo[]}>());
 export const loadProjectDemosFailure = createAction('[project] load project demos failure');
 
+export const uploadProjectDemoImage = createAction('[project] upload project demo image', props<{image: any}>());
+export const uploadProjectDemoImageSuccess = createAction('[project] upload project demo image success', props<{imagePath: string}>());
+export const uploadProjectDemoImageFailure = createAction('[project] upload project demo image failure');
+
 export const registerDemoCreation = createAction('[project] register demo creation', props<{demo: Demo, properties: PlanProperty[]}>());
 export const registerDemoCreationSuccess = createAction('[project] register demo creation success', props<{id: string}>());
 export const registerDemoCreationFailure = createAction('[project] register demo creation failure');
+
+export const cancelDemoCreation = createAction('[project] cancel demo creation', props<{demoId: string}>());
+export const cancelDemoCreationSuccess = createAction('[project] cancel demo creation success');
+export const cancelDemoCreationFailure = createAction('[project] cancel demo creation failure');
 
 export const demoCreationRunning = createAction('[project] demo creation running', props<{id: string}>());
 export const demoCreationRunningSuccess = createAction('[project] demo creation running');

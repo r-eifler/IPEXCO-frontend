@@ -20,7 +20,6 @@ export class IterationStepService{
         
         return this.http.get<IHTTPData<IterationStep[]>>(this.BASE_URL,  { params: httpParams }).pipe(
             map(({data}) => data),
-            tap(steps => console.log(steps)),
             map(steps => 
                 steps.map( step => (
                 {
@@ -54,6 +53,14 @@ export class IterationStepService{
     postIterationStep$(iterationStep: IterationStep): Observable<IterationStep> {
 
         return this.http.post<IHTTPData<IterationStep>>(this.BASE_URL, {data: iterationStep}).pipe(
+            map(({data}) => data)
+        )
+
+    }
+
+    postCancelIterationStep$(iterationStepId: string): Observable<string> {
+
+        return this.http.post<IHTTPData<string>>(this.BASE_URL + 'cancel', {iterationStepId}).pipe(
             map(({data}) => data)
         )
 

@@ -1,53 +1,80 @@
-import { UserStudyDataService } from '../../service/user-study-data.service';
-import { Component, OnInit } from "@angular/core";
-import { Observable, Subject } from "rxjs";
-import { takeUntil } from "rxjs/operators";
-import {UserStudy} from "../../domain/user-study";
-import { USUser } from "../../domain/user-study-user";
-import { UserStudyUserService } from "../../service/user-study-user.service";
-import { UserStudyData } from 'src/app/user_study/domain/user-study-store';
-import { FormsModule } from '@angular/forms';
-import { CurrencyPipe, DatePipe } from '@angular/common';
-import { MatIconModule } from '@angular/material/icon';
+import { Component, computed, effect, inject, ViewChild } from "@angular/core";
 import { MatTableModule } from '@angular/material/table';
+import { Store } from '@ngrx/store';
+import { selectUserStudyParticipantsOfStudy } from '../../state/user-study.selector';
+import { UserStudyExecution } from "../../domain/user-study-execution";
+import { acceptUserStudyParticipant } from "../../state/user-study.actions";
+import { toSignal } from "@angular/core/rxjs-interop";
+import { Sort } from "@angular/material/sort";
+import { MatPaginator, MatPaginatorModule, PageEvent } from "@angular/material/paginator";
+import { CurrencyPipe, DatePipe } from "@angular/common";
+import { MatIconModule } from "@angular/material/icon";
+import { MatButtonModule } from "@angular/material/button";
+
+interface TableData extends UserStudyExecution {
+  date: Date,
+  processingTime: Date
+}
 
 @Component({
-  selector: "app-accepted-test-persons",
-  standalone: true,
-  imports: [
-    FormsModule,
-    CurrencyPipe,
-    DatePipe,
-    MatIconModule,
-    MatTableModule,
-  ],
-  templateUrl: "./accepted-test-persons.component.html",
-  styleUrls: ["./accepted-test-persons.component.css"],
+    selector: "app-accepted-test-persons",
+    standalone: true,
+    imports: [
+      MatTableModule,
+      MatPaginatorModule,
+      CurrencyPipe,
+      MatIconModule,
+      DatePipe,
+      MatButtonModule,
+    ],
+    templateUrl: "./accepted-test-persons.component.html",
+    styleUrls: ["./accepted-test-persons.component.scss"]
 })
-export class AcceptedTestPersonsComponent implements OnInit {
-  private ngUnsubscribe$: Subject<any> = new Subject();
+export class AcceptedTestPersonsComponent {
 
-  displayedColumns: string[] = [
-    "_id",
-    "prolificId",
-    "finished",
-    "createdAt",
-    "payment",
-    "accepted",
-  ];
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  dataPoints$ : Observable<UserStudyData[]>;
+  
+  store = inject(Store);
+  participants = toSignal(this.store.select(selectUserStudyParticipantsOfStudy));
 
-  constructor(
-    private userStudyDataService: UserStudyDataService
-  ) {
-    this.dataPoints$ = this.userStudyDataService.getList();
+  participantsTableData = computed(() =>  
+    this.participants()?.map(p => ({
+      ...p,
+      date: p.createdAt,
+      processingTime: p.finished ? new Date(p.finishedAt.getTime() - p.createdAt.getTime()) : null
+    })
+    )
+  );
+
+  displayedParticipants: TableData[];
+
+  displayedColumns: string[] = ['user', 'date', 'processingTime', 'finished', 'payment', 'accepted'];
+
+  constructor() {
+    effect(() => {
+      const index = this.paginator?.pageIndex;
+      const size = this.paginator?.pageSize;
+      this.displayedParticipants =  this.participantsTableData() ? [...this.participantsTableData()].splice(index * size, size) : [];
+    })
   }
 
-  ngOnInit(): void {}
+  
+  onAccept(dataPoint: TableData){
+    this.store.dispatch(acceptUserStudyParticipant({userId: dataPoint.user}));
+  }
 
-  async updateAccepted(event, dataPoint: UserStudyData) {
-    dataPoint.accepted = event;
-    await this.userStudyDataService.saveObject(dataPoint);
+
+  onPage(event: PageEvent){
+    const index = event.pageIndex;
+    const size = event.pageSize;
+    this.displayedParticipants =  [...this.participantsTableData()].splice(index * size, size);
+  }
+
+  announceSortChange(sortState: Sort){
+    const sorted = [...this.participantsTableData()].sort();
+    const index = this.paginator.pageIndex;
+    const size = this.paginator.pageSize;
+    this.displayedParticipants =  sorted ? sorted.splice(index * size, size) : [];
   }
 }

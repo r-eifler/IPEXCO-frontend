@@ -2,7 +2,8 @@
 
 @use "./ipexco-theme";
 
-@include mat.core();
+@include mat.elevation-classes();
+@include mat.app-background();
 
 $primary: mat.get-theme-color(ipexco-theme.$light-theme, primary, 60);
 $primary-darker: mat.get-theme-color(ipexco-theme.$light-theme, primary, 40);

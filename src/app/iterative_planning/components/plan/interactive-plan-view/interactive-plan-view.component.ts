@@ -36,14 +36,13 @@ interface Trace {
 }
 
 @Component({
-  selector: "app-interactive-plan-view",
-  standalone: true,
-  imports: [
-    MatCardModule,
-    AsyncPipe,
-  ],
-  templateUrl: "./interactive-plan-view.component.html",
-  styleUrls: ["./interactive-plan-view.component.scss"],
+    selector: "app-interactive-plan-view",
+    imports: [
+        MatCardModule,
+        AsyncPipe,
+    ],
+    templateUrl: "./interactive-plan-view.component.html",
+    styleUrls: ["./interactive-plan-view.component.scss"]
 })
 export class InteractivePlanViewComponent implements OnInit {
   toString = FactToString;
@@ -99,7 +98,7 @@ export class InteractivePlanViewComponent implements OnInit {
           }),
         });
 
-        console.log(state_trace_ex[0])
+        // console.log(state_trace_ex[0])
 
         let used_predicate_names: Set<string> = new Set();
 

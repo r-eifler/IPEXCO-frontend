@@ -14,28 +14,27 @@ import { MatInputModule } from "@angular/material/input";
 
 
 @Component({
-  selector: "app-settings",
-  standalone: true,
-  imports: [
-    MatLabel,
-    MatFormFieldModule,
-    MatSlideToggleModule,
-    MatCardModule,
-    ReactiveFormsModule,
-    FormsModule,
-    MatButtonModule,
-    MatButtonToggleModule,
-    MatIconModule,
-    NgIf,
-    MatInputModule,
-  ],
-  templateUrl: "./settings.component.html",
-  styleUrls: ["./settings.component.scss"],
+    selector: "app-settings",
+    imports: [
+        MatLabel,
+        MatFormFieldModule,
+        MatSlideToggleModule,
+        MatCardModule,
+        ReactiveFormsModule,
+        FormsModule,
+        MatButtonModule,
+        MatButtonToggleModule,
+        MatIconModule,
+        NgIf,
+        MatInputModule,
+    ],
+    templateUrl: "./settings.component.html",
+    styleUrls: ["./settings.component.scss"]
 })
 export class SettingsComponent {
 
   destroyRef = inject(DestroyRef)
-  
+
   settingsForm: FormGroup;
 
   settings = input.required<GeneralSettings>();
@@ -68,8 +67,8 @@ export class SettingsComponent {
       measureTime: new FormControl(),
       maxTime: new FormControl([
         Validators.required,
-        Validators.min(0.05),
-        Validators.max(60),
+        Validators.min(5),
+        Validators.max(36000),
       ]),
       checkMaxUtility: new FormControl(),
       computePlanAutomatically: new FormControl(),
@@ -81,15 +80,6 @@ export class SettingsComponent {
     });
 
     effect(() => this.initForm(this.settings()))
-
-    // this.settingsForm.valueChanges.pipe(
-    //   takeUntilDestroyed(this.destroyRef),
-    //   debounceTime(3000), // one event every 3000 milliseconds
-    //   distinctUntilChanged(), 
-    // ).subscribe(() => {
-    //   this.onSave();
-    //   console.log('Saved')
-    // });
 
   }
 
@@ -114,7 +104,7 @@ export class SettingsComponent {
 
     this.settingsForm.controls.useTimer.setValue(settings.useTimer);
     this.settingsForm.controls.measureTime.setValue(settings.measureTime);
-    this.settingsForm.controls.maxTime.setValue(settings.maxTime / 6000);
+    this.settingsForm.controls.maxTime.setValue(settings.maxTime);
 
     this.settingsForm.controls.checkMaxUtility.setValue(settings.checkMaxUtility);
 
@@ -130,14 +120,12 @@ export class SettingsComponent {
 
   onSave() {
 
-    // console.log(this.settingsForm.controls.explanationInterfaceType.value)
-
     let paymentInfo = {
       max: this.settingsForm.controls.maxPayment.value,
       min: this.settingsForm.controls.minPayment.value,
       steps: this.settingsForm.controls.paymentSteps.value,
     }
-     
+
     let newSettings: GeneralSettings = {
       _id: undefined,
       maxRuns: parseInt(this.settingsForm.controls.maxRuns.value),
@@ -150,7 +138,7 @@ export class SettingsComponent {
       globalExplanation: this.settingsForm.controls.globalExplanation.value,
       useTimer: this.settingsForm.controls.useTimer.value,
       measureTime: this.settingsForm.controls.measureTime.value,
-      maxTime: this.settingsForm.controls.maxTime.value * 60000,
+      maxTime: this.settingsForm.controls.maxTime.value,
       computePlanAutomatically: this.settingsForm.controls.computePlanAutomatically.value,
       computeDependenciesAutomatically: this.settingsForm.controls.computeDependenciesAutomatically.value,
       checkMaxUtility: this.settingsForm.controls.checkMaxUtility.value,
@@ -158,7 +146,6 @@ export class SettingsComponent {
       paymentInfo,
     }
 
-    // console.log(newSettings);
     this.update.emit(newSettings);
   }
 }

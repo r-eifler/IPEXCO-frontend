@@ -27,25 +27,24 @@ import { PropertyCreatorComponent } from "../../view/property-creator/property-c
 import { PlanProperty } from "src/app/shared/domain/plan-property/plan-property";
 
 @Component({
-  selector: "app-demo-select-property",
-  standalone: true,
-  imports: [
-    DialogModule,
-    EditableListModule,
-    MatButtonModule,
-    MatCheckboxModule,
-    MatDialogModule,
-    MatIconModule,
-    PlanPropertyPanelComponent,
-    ReactiveFormsModule,
-    UserRoleDirective,
-  ],
-  schemas:[
-    NO_ERRORS_SCHEMA
-  ],
-  templateUrl: "./select-property.component.html",
-  styleUrl: "./select-property.component.scss",
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-demo-select-property",
+    imports: [
+        DialogModule,
+        EditableListModule,
+        MatButtonModule,
+        MatCheckboxModule,
+        MatDialogModule,
+        MatIconModule,
+        PlanPropertyPanelComponent,
+        ReactiveFormsModule,
+        UserRoleDirective,
+    ],
+    schemas: [
+        NO_ERRORS_SCHEMA
+    ],
+    templateUrl: "./select-property.component.html",
+    styleUrl: "./select-property.component.scss",
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SelectPropertyComponent {
   private fb = inject(FormBuilder);
@@ -92,7 +91,6 @@ export class SelectPropertyComponent {
     const selectedProperties = selectedIndecees.map(
       (index) => this.availableProperties()?.[index]
     );
-    console.log(selectedProperties);
     this.select.emit(selectedProperties);
   }
 

@@ -22,24 +22,23 @@ import { MatButtonModule } from "@angular/material/button";
 import { Project } from "src/app/shared/domain/project";
 
 @Component({
-  selector: "app-project-creator",
-  standalone: true,
-  imports: [
-    AsyncPipe,
-    MatIconModule,
-    TemplateFileUploadComponent,
-    MatStepperModule,
-    MatLabel,
-    MatFormFieldModule,
-    MatInputModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatCardModule,
-    MatIconModule,
-    MatButtonModule,
-  ],
-  templateUrl: "./project-creator.component.html",
-  styleUrls: ["./project-creator.component.scss"],
+    selector: "app-project-creator",
+    imports: [
+        AsyncPipe,
+        MatIconModule,
+        TemplateFileUploadComponent,
+        MatStepperModule,
+        MatLabel,
+        MatFormFieldModule,
+        MatInputModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MatCardModule,
+        MatIconModule,
+        MatButtonModule,
+    ],
+    templateUrl: "./project-creator.component.html",
+    styleUrls: ["./project-creator.component.scss"]
 })
 export class ProjectCreatorComponent implements OnInit {
 
@@ -104,19 +103,16 @@ export class ProjectCreatorComponent implements OnInit {
     this.selectedDomain = domain
     if(!!this.selectedDomain && !!this.selectedProblem)
       this.pddlService.translateModel(this.selectedDomain, this.selectedProblem)
-    // console.log(this.selectedDomain)
   }
 
   onProblemSelected(problem: string){
     this.selectedProblem = problem
     if(!!this.selectedDomain && !!this.selectedProblem)
       this.pddlService.translateModel(this.selectedDomain, this.selectedProblem)
-    // console.log(this.selectedDomain)
   }
 
   onSpecificationSelected(specification: string){
     this.selectedSpecification = specification
-    // console.log(this.selectedDomain)
   }
 
   onSave(): void {
@@ -128,8 +124,6 @@ export class ProjectCreatorComponent implements OnInit {
       take(1),
     ).subscribe(
       ([model, user]) => {
-
-        console.log("Save new project")
 
         const newProject: Project = {
           _id: this.editedProject ? this.editedProject._id : null,

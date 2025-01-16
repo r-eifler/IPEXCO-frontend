@@ -1,7 +1,7 @@
 import { AsyncPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { sendMessageToLLMQTthenGTTranslators } from '../../state/iterative-planning.actions';
+import { sendMessageToLLMQTthenGTTranslators, sendMessageToLLMQuestionTranslator } from '../../state/iterative-planning.actions';
 import { ChatModule } from 'src/app/shared/components/chat/chat.module';
 import { selectMessages, selectLLMThreadIdET, selectLLMThreadIdGT, selectLLMThreadIdQT, selectIterativePlanningSelectedStep, selectLLMChatMessages, selectIterativePlanningSelectedStepId, selectVisibleMessagesbyId, selectIsExplanationChatLoading } from '../../state/iterative-planning.selector';
 import { createPlanProperty } from '../../state/iterative-planning.actions';
@@ -11,12 +11,11 @@ import { eraseLLMHistory } from '../../state/iterative-planning.actions';
 import { selectIsLLMChatLoading } from '../../state/iterative-planning.selector';
 import { combineLatest, Subscription } from 'rxjs';
 @Component({
-  selector: 'app-explanation-chat-llm',
-  standalone: true,
-  imports: [AsyncPipe, ChatModule],
-  templateUrl: './explanation-chat-llm.component.html',
-  styleUrl: './explanation-chat-llm.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-explanation-chat-llm',
+    imports: [AsyncPipe, ChatModule],
+    templateUrl: './explanation-chat-llm.component.html',
+    styleUrl: './explanation-chat-llm.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ExplanationChatLlmComponent implements OnInit, OnDestroy {
   private store = inject(Store);
@@ -39,12 +38,26 @@ export class ExplanationChatLlmComponent implements OnInit, OnDestroy {
   // Add subscription management
   private subscriptions: Subscription[] = [];
 
+  // onUserMessage(request: string) {
+  //   this.stepId$.pipe(
+  //     take(1),
+  //   ).subscribe({
+  //     next: (iterationStepId) => {
+  //       this.store.dispatch(sendMessageToLLMQTthenGTTranslators({
+  //         question: request,
+  //         iterationStepId: iterationStepId,
+  //       }));
+  //     },
+  //     error: (error) => console.error('Error sending message:', error)
+  //   });
+  // }
+
   onUserMessage(request: string) {
     this.stepId$.pipe(
       take(1),
     ).subscribe({
       next: (iterationStepId) => {
-        this.store.dispatch(sendMessageToLLMQTthenGTTranslators({
+        this.store.dispatch(sendMessageToLLMQuestionTranslator({
           question: request,
           iterationStepId: iterationStepId,
         }));

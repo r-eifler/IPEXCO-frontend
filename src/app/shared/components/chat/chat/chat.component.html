@@ -1,6 +1,6 @@
 <div class="chat-container">
   <div class="message-container" #messageContainer>
-    <ng-content select="app-chat-message,[app-chat-action]"></ng-content>
+    <ng-content select="app-chat-message,app-chat-markdown-message,[app-chat-action]"></ng-content>
     @if(isSenderTyping()) {
       <app-chat-typing></app-chat-typing>
     }

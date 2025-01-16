@@ -28,10 +28,14 @@ import { questionFactory } from "../../domain/explanation/question-factory";
 import { StructuredText } from "../../domain/interface/explanation-message";
 import { PlanRunStatus } from "../../domain/plan";
 import { PlanProperty } from "../../../shared/domain/plan-property/plan-property";
-import { deleteIterationStep, initNewIterationStep, questionPosed } from "../../state/iterative-planning.actions";
+import { cancelPlanComputationAndIterationStep, deleteIterationStep, initNewIterationStep, questionPosed } from "../../state/iterative-planning.actions";
 import { Message } from "../../state/iterative-planning.reducer";
 import {
     selectIsExplanationLoading,
+    selectIterativePlanningIsIntroTask,
+    selectIterativePlanningLoadingFinished,
+    selectIterativePlanningMaxPossibleUtility,
+    selectIterativePlanningProject,
     selectIterativePlanningProjectExplanationInterfaceType,
     selectIterativePlanningProperties,
     selectIterativePlanningSelectedStep,
@@ -46,33 +50,41 @@ import {
     selectUnsatisfiedSoftGoals,
 } from "./step-detail-view.component.selector";
 import { ExplanationInterfaceType } from "src/app/project/domain/general-settings";
-import { MugsVisualizationBaseComponent } from "../visualization/mugs-visualization-base/mugs-visualization-base.component";
 import { MatDialog } from "@angular/material/dialog";
 import { AskDeleteComponent } from "src/app/shared/components/ask-delete/ask-delete.component";
+import { MatExpansionModule } from "@angular/material/expansion";
+import { ProjectDirective } from "../../derectives/isProject.directive";
+import { UserManualDialogComponent } from "../../components/user-manual-dialog/user-manual-dialog.component";
+import { MatProgressBarModule } from "@angular/material/progress-bar";
+import { DemoDirective } from "../../derectives/isDemo.directive";
 
 @Component({
-  selector: "app-step-detail-view",
-  standalone: true,
-  imports: [
-    AsyncPipe,
-    BreadcrumbModule,
-    EmptyStateModule,
-    ExplanationChatComponent,
-    ExplanationChatLlmComponent,
-    IterationStepHeroComponent,
-    MatButtonModule,
-    MatIconModule,
-    MatTooltipModule,
-    PageModule,
-    PlanPropertyPanelComponent,
-    QuestionPanelComponent,
-    RouterLink,
-    MugsVisualizationBaseComponent
-  ],
-  templateUrl: "./step-detail-view.component.html",
-  styleUrl: "./step-detail-view.component.scss",
+    selector: "app-step-detail-view",
+    imports: [
+        AsyncPipe,
+        BreadcrumbModule,
+        EmptyStateModule,
+        ExplanationChatComponent,
+        ExplanationChatLlmComponent,
+        IterationStepHeroComponent,
+        MatButtonModule,
+        MatIconModule,
+        MatTooltipModule,
+        PageModule,
+        PlanPropertyPanelComponent,
+        RouterLink,
+        MatExpansionModule,
+        ProjectDirective,
+        DemoDirective,
+        MatProgressBarModule
+    ],
+    templateUrl: "./step-detail-view.component.html",
+    styleUrl: "./step-detail-view.component.scss"
 })
 export class StepDetailViewComponent {
+
+  host = window.location.protocol + "//" + window.location.host;
+
   private store = inject(Store);
 
   router = inject(Router);
@@ -81,6 +93,15 @@ export class StepDetailViewComponent {
 
   explanationInterfaceType$ = this.store.select(selectIterativePlanningProjectExplanationInterfaceType);
   expInterfaceType = ExplanationInterfaceType;
+  isIntroTask$ = this.store.select(selectIterativePlanningIsIntroTask);
+
+  anabelCreationInterface = this.store.select(selectIterativePlanningLoadingFinished);
+
+  project$ = this.store.select(selectIterativePlanningProject);
+  maxOverAllUtility$ = this.store.select(selectIterativePlanningMaxPossibleUtility);
+  image$ = this.project$.pipe(map(p => p?.summaryImage));
+  domainInfo$ = this.project$.pipe(map(p => p?.domainInfo));
+  instanceInfo$ = this.project$.pipe(map(p => p?.instanceInfo));
 
   step$ = this.store.select(selectIterativePlanningSelectedStep);
   stepId$ = this.step$.pipe(map(step => step?._id));
@@ -88,6 +109,19 @@ export class StepDetailViewComponent {
     filter((step) => !!step),
     map((step) => step.plan?.status == PlanRunStatus.not_solvable)
   );
+  isCanceled$ = this.step$.pipe(
+    filter((step) => !!step),
+    map((step) => step.plan?.status == PlanRunStatus.canceled)
+  );
+  planComputationRunning$ = this.step$.pipe(
+    filter((step) => !!step),
+    map((step) => step.plan?.status == PlanRunStatus.pending || step.plan?.status == PlanRunStatus.running)
+  );
+  isFailed$ = this.step$.pipe(
+    filter((step) => !!step),
+    map((step) => step.plan?.status == PlanRunStatus.failed)
+  );
+
   planProperties$ = this.store.select(selectIterativePlanningProperties);
 
   enforcedGoals$ = this.store.select(selectEnforcedGoals);
@@ -162,7 +196,6 @@ export class StepDetailViewComponent {
       data: {name: "Delete Iteration", text: "Are you sure you want to delete the current iteration?"},
     });
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
       if(result){
         this.store.dispatch(deleteIterationStep({ id }));
         this.router.navigate([".."], {relativeTo: this.route});
@@ -173,15 +206,24 @@ export class StepDetailViewComponent {
 
   onPropertyQuestionSelected(question: AvailableQuestion, property: PlanProperty): void {
     this.stepId$.pipe(take(1)).subscribe((iterationStepId) =>{
-      console.log('onPropertyQuestionSelected');
       return this.store.dispatch(questionPosed({ question: { questionType: question.questionType, iterationStepId, propertyId: property._id }}))
     });
   }
 
   onQuestionSelected(question: AvailableQuestion): void {
     this.stepId$.pipe(take(1)).subscribe((iterationStepId) =>{
-      console.log('onPropertyQuestionSelected');
       return this.store.dispatch(questionPosed({ question: { questionType: question.questionType, iterationStepId }}))
     });
+  }
+
+
+  onHelp(){
+    this.dialog.open(UserManualDialogComponent);
+  }
+
+  onCancel(){
+    this.stepId$.pipe(take(1)).subscribe(id => 
+      this.store.dispatch(cancelPlanComputationAndIterationStep({iterationStepId: id}))
+    );
   }
 }

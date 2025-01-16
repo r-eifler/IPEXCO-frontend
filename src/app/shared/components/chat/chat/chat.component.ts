@@ -4,11 +4,10 @@ import { ChatMessageComponent } from '../chat-message/chat-message.component';
 import { ChatTypingComponent } from '../chat-typing/chat-typing.component';
 
 @Component({
-  selector: 'app-chat',
-  standalone: true,
-  imports: [ChatTypingComponent],
-  templateUrl: './chat.component.html',
-  styleUrl: './chat.component.scss'
+    selector: 'app-chat',
+    imports: [ChatTypingComponent],
+    templateUrl: './chat.component.html',
+    styleUrl: './chat.component.scss'
 })
 export class ChatComponent {
   isSenderTyping = input<boolean>();

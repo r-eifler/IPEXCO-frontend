@@ -11,7 +11,7 @@
             Plan Properties
           </mat-card-title>
         </mat-card-header>
-        
+
         <mat-card-content class="sub-card-content">
           <mat-label matTooltip="Interface used for creating plan properties.">
             Property Creation Interface
@@ -63,13 +63,13 @@
         </mat-card-content>
       </mat-card>
 
-      <mat-card appearance="outlined">
+      <!-- <mat-card appearance="outlined">
         <mat-card-header>
           <mat-card-title>
             Automatic Computation
           </mat-card-title>
         </mat-card-header>
-        
+
         <mat-card-content class="sub-card-content">
 
           <mat-slide-toggle formControlName="computePlanAutomatically"
@@ -83,7 +83,7 @@
             Explanations
           </mat-slide-toggle>
       </mat-card-content>
-    </mat-card>
+    </mat-card> -->
 
     @if(isDemo()){
     <mat-card appearance="outlined">
@@ -92,7 +92,7 @@
           Demo
         </mat-card-title>
       </mat-card-header>
-      
+
       <mat-card-content class="sub-card-content">
 
         <mat-slide-toggle formControlName="public"
@@ -109,7 +109,7 @@
           Features for a User Study
         </mat-card-title>
       </mat-card-header>
-      
+
       <mat-card-content class="sub-card-content">
 
         <mat-slide-toggle formControlName="introTask"
@@ -117,7 +117,7 @@
           Intro Task
         </mat-slide-toggle>
 
-        <mat-form-field style="width: 250px">
+        <!-- <mat-form-field style="width: 250px">
           <mat-label>Maximal number of iteration steps</mat-label>
           <input matInput type="number" formControlName="maxRuns" />
         </mat-form-field>
@@ -128,9 +128,9 @@
 
         @if(settingsForm.controls.useTimer.value){
         <mat-form-field style="width: 200px">
-          <mat-label>Max processing time (in min)</mat-label>
+          <mat-label>Max processing time (in sec)</mat-label>
           <input matInput type="number" formControlName="maxTime" />
-        </mat-form-field> 
+        </mat-form-field>
         }
 
         <mat-slide-toggle formControlName="measureTime">
@@ -140,15 +140,15 @@
         <mat-slide-toggle formControlName="checkMaxUtility"
           matTooltip="The user is notified, when they reached the maximal possible utility.">
           Stop demo if max utility achieved
-        </mat-slide-toggle>
+        </mat-slide-toggle> -->
       </mat-card-content>
     </mat-card>
 
-    
+
   }
   <button mat-stroked-button>Save</button>
 
-<!-- 
+<!--
         <div class="part">
           <h4>Payment Score</h4>
 

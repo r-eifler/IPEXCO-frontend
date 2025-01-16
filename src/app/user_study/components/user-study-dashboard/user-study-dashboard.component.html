@@ -1,0 +1,33 @@
+<div class="page-grid">
+    <app-user-study-dashboard-card 
+        icon="group" 
+        title="Accepted Participants" 
+        [value]="numAcceptedParticipants() + '/' + numParticipants()">
+    </app-user-study-dashboard-card>
+
+    <app-user-study-dashboard-card 
+        icon="schedule" 
+        title="AVG #Time" 
+        [value]="averageTime() ? ((averageTime() | date: 'mm') + 'min ' + (averageTime() | date: 'ss') + 's') : '?'">
+    </app-user-study-dashboard-card>
+
+    <app-user-study-dashboard-card 
+        icon="stairs_2" 
+        title="AVG #Iteration Steps" 
+        [value]="demoSelected() ? averageIterationSteps() : 'select demo'">
+    </app-user-study-dashboard-card>
+
+    <app-user-study-dashboard-card 
+        icon="contact_support" 
+        title="AVG #Questions" 
+        [value]="demoSelected() ? averageQuestions() : 'select demo'">
+    </app-user-study-dashboard-card>
+
+    <app-user-study-dashboard-card 
+        icon="workspace_premium" 
+        title="AVG MAX utility" 
+        [value]="demoSelected() ? averageMaxUtility() : 'select demo'">
+    </app-user-study-dashboard-card>
+</div>
+
+

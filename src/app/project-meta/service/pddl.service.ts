@@ -40,7 +40,6 @@ export class PDDLService {
 
     return this.http.post<IHTTPData<any>>(this.BASE_URL + "domain", {data: domainText})
       .subscribe((httpData) => {
-        console.log(httpData.data)
         this.domain$.next(httpData.data)
       });
   }
@@ -49,7 +48,6 @@ export class PDDLService {
 
     return this.http.post<IHTTPData<any>>(this.BASE_URL + "problem", {data: problemText})
       .subscribe((httpData) => {
-        console.log(httpData.data)
         this.problem$.next(httpData.data)
       });
   }
@@ -58,7 +56,6 @@ export class PDDLService {
 
     return this.http.post<IHTTPData<any>>(this.BASE_URL + "model", {data: {problem: problemText, domain: domainText}})
       .subscribe((httpData) => {
-        console.log(httpData.data)
         this.model$.next(httpData.data)
       });
   }

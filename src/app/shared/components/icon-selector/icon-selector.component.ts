@@ -3,13 +3,12 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 
 @Component({
-  selector: 'app-icon-selector',
-  standalone: true,
-  imports: [
-    MatIconModule,
-  ],
-  templateUrl: './icon-selector.component.html',
-  styleUrls: ['./icon-selector.component.scss']
+    selector: 'app-icon-selector',
+    imports: [
+        MatIconModule,
+    ],
+    templateUrl: './icon-selector.component.html',
+    styleUrls: ['./icon-selector.component.scss']
 })
 export class IconSelectorComponent implements OnInit {
 

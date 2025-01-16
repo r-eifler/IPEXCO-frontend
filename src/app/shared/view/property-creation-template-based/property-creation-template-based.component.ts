@@ -1,7 +1,7 @@
-import { AsyncPipe, KeyValuePipe} from '@angular/common';
-import { Component, computed, input, OnInit, output } from '@angular/core';
+import { KeyValuePipe} from '@angular/common';
+import { Component, computed, inject, input, OnInit, output } from '@angular/core';
 import { DialogModule } from 'src/app/shared/components/dialog/dialog.module'
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatStepper, MatStepperModule } from '@angular/material/stepper';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -15,26 +15,30 @@ import { generateDummyPlanProperty, generatePlanProperty, getPossibleValues, get
 import { equalPlanProperties, PlanProperty } from 'src/app/shared/domain/plan-property/plan-property';
 
 @Component({
-  selector: 'app-property-creation-template-based',
-  standalone: true,
-  imports: [
-    KeyValuePipe,
-    DialogModule, 
-    MatStepperModule, 
-    MatButtonModule, 
-    FormsModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatExpansionModule,
-    MatCardModule,
-    PropertyTemplatePartComponent,
-    MatIcon
-  ],
-  templateUrl: './property-creation-template-based.component.html',
-  styleUrl: './property-creation-template-based.component.scss'
+    selector: 'app-property-creation-template-based',
+    imports: [
+        KeyValuePipe,
+        DialogModule,
+        MatStepperModule,
+        MatButtonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatExpansionModule,
+        MatCardModule,
+        PropertyTemplatePartComponent,
+        MatIcon,
+        ReactiveFormsModule,
+        MatInputModule,
+        MatFormFieldModule
+    ],
+    templateUrl: './property-creation-template-based.component.html',
+    styleUrl: './property-creation-template-based.component.scss'
 })
 export class PropertyCreationTemplateBasedComponent implements OnInit{
+
+  fb = inject(FormBuilder);
 
   cancel = output<void>();
   created = output<PlanProperty>();
@@ -56,6 +60,12 @@ export class PropertyCreationTemplateBasedComponent implements OnInit{
   allSelected = false;
   propertyAlreadyExists = false;
 
+  form = this.fb.group({
+    name: this.fb.control<string>(null, [Validators.required]),
+    naturalLanguageDescription: this.fb.control<string>(null, [Validators.required]),
+    utility: this.fb.control<number>(1, [Validators.required]),
+  });
+
   ngOnInit(): void {
     let sorted: Record<string, PlanPropertyTemplate[]> = this.templates()?.reduce((acc, t) => ({...acc,[t.class]: []}), {})
     this.templates().forEach(t => sorted[(t.class)].push(t))
@@ -73,7 +83,7 @@ export class PropertyCreationTemplateBasedComponent implements OnInit{
       this.selectedVariableValue,
     )
 
-    console.log(this.possibleVariableValues)
+    // console.log(this.possibleVariableValues)
 
     this.templateParts = this.templateParts.map(p => ({
       ...p,
@@ -82,25 +92,28 @@ export class PropertyCreationTemplateBasedComponent implements OnInit{
       possibleValues: p.isVar ? this.possibleVariableValues[p.var] : []
     }))
 
-    console.log(this.templateParts)
+    // console.log(this.templateParts)
   }
 
   selectTemplate(template: PlanPropertyTemplate, stepper: MatStepper){
     this.selectedTemplate = template
     this.selectedVariableValue = {};
-    console.log(template)
+    // console.log(template)
 
     stepper.selected.completed = true;
     stepper.next();
 
 	  this.templateParts = [];
     this.updatePossibleVariableValues();
+
+    this.form.controls.name.setValue(template.nameTemplate);
+    this.form.controls.naturalLanguageDescription.setValue(template.sentenceTemplate);
   }
 
   selectVariableValue(variable: string, object: PDDLObject) {
 
     this.selectedVariableValue[variable] = object;
-    console.log("Selected Variables: " + this.selectedVariableValue)
+    // console.log("Selected Variables: " + this.selectedVariableValue)
 
     this.updatePossibleVariableValues()
 
@@ -111,6 +124,10 @@ export class PropertyCreationTemplateBasedComponent implements OnInit{
         this.selectedTemplate,
         this.selectedVariableValue
       )
+
+      this.form.controls.name.setValue(dummy.name);
+      this.form.controls.naturalLanguageDescription.setValue(dummy.naturalLanguageDescription);
+
       this.propertyAlreadyExists = this.planPropertiesList().some(
         p => equalPlanProperties(p, dummy)
       )
@@ -130,10 +147,17 @@ export class PropertyCreationTemplateBasedComponent implements OnInit{
   }
 
   onCreateProperty(){
-    const newPlanProperty = generatePlanProperty(
+    let newPlanProperty = generatePlanProperty(
       this.selectedTemplate,
       this.selectedVariableValue,
     )
+
+    newPlanProperty.name = this.form.controls.name.value;
+    newPlanProperty.naturalLanguageDescription = this.form.controls.naturalLanguageDescription.value;
+    newPlanProperty.utility = this.form.controls.utility.value;
+
+    // console.log(newPlanProperty);
+
     this.created.emit(newPlanProperty);
   }
 

@@ -43,7 +43,6 @@ export const deselectIterationStep = createAction('[iterative-planning] deselect
 
 
 export const initNewIterationStep = createAction('[iterative-planning] init new iteration step', props<{ baseStepId?: string }>());
-export const updateNewIterationStep = createAction('[iterative-planning] init new iteration step', props<{ iterationStep: Partial<ModIterationStep> }>());
 export const cancelNewIterationStep = createAction('[iterative-planning] cancel new iteration step');
 
 export const loadIterationSteps = createAction('[iterative-planning] load iteration steps', props<{id: string}>());
@@ -51,14 +50,13 @@ export const loadIterationStepsSuccess = createAction('[iterative-planning] load
 export const loadIterationStepsFailure = createAction('[iterative-planning] load iteration steps failure');
 
 
-export const createIterationStep = createAction('[iterative-planning] create iteration steps');
+export const createIterationStep = createAction('[iterative-planning] create iteration steps', props<{iterationStep: IterationStep}>());
 export const createIterationStepSuccess = createAction('[iterative-planning] create iteration steps success', props<{iterationStep: IterationStep}>());
 export const createIterationStepFailure = createAction('[iterative-planning] create iteration steps failure');
 
 export const deleteIterationStep = createAction('[iterative-planning] delete iteration step', props<{id: string}>());
 export const deleteIterationStepSuccess = createAction('[iterative-planning] delete iteration step success');
 export const deleteIterationStepFailure = createAction('[iterative-planning] delete iteration step failure');
-
 
 // Planner
 
@@ -68,8 +66,12 @@ export const registerPlanComputationSuccess = createAction('[iterative-planning]
 export const registerPlanComputationFailure = createAction('[iterative-planning] register plan computation failure');
 
 export const planComputationRunning = createAction('[iterative-planning] plan computation running');
-export const planComputationRunningSuccess = createAction('[iterative-planning] plan computation running success');
+export const planComputationRunningSuccess = createAction('[iterative-planning] plan computation running success', props<{ iterationStepId: string }>());
 export const planComputationRunningFailure = createAction('[iterative-planning] plan computation running failure');
+
+export const cancelPlanComputationAndIterationStep= createAction('[iterative-planning] cancel plan computation and iteration step', props<{ iterationStepId: string }>());
+export const cancelPlanComputationAndIterationStepSuccess = createAction('[iterative-planning] cancel plan computation and iteration step success');
+export const cancelPlanComputationAndIterationStepFailure = createAction('[iterative-planning] cancel plan computation and iteration step failure');
 
 
 // Explainer
@@ -99,17 +101,32 @@ export const poseAnswerLLM = createAction('[iterative-planning] pose answer LLM'
 export const eraseLLMHistory = createAction('[llm] erase history');
 
 export const sendMessageToLLMGoalTranslator = createAction('[llm] send message to goal translator', props<{goalDescription: string}>());
-export const sendMessageToLLMGoalTranslatorSuccess = createAction('[llm] send message to goal translator success', props<{response: {formula: string, shortName: string}, threadId: string}>());
+export const sendMessageToLLMGoalTranslatorSuccess = createAction('[llm] send message to goal translator success', props<{response: {formula: string, shortName: string}, threadId: string, duration?: number}>());
 export const sendMessageToLLMGoalTranslatorFailure = createAction('[llm] send message to goal translator failure');
 
-export const sendMessageToLLMExplanationTranslator = createAction('[llm] send message to explanation translator', props<{question: string, explanation: string[][], question_type: string, questionArguments: PlanProperty[], iterationStepId: string}>());
-export const sendMessageToLLMExplanationTranslatorSuccess = createAction('[llm] send message to explanation translator success', props<{response: string, threadId: string}>());
+export const sendMessageToLLMExplanationTranslator = createAction('[llm] send message to explanation translator', props<{question: string, explanationMUGS: string[][], explanationMGCS: string[][], question_type: string, questionArgument: PlanProperty[], iterationStepId: string}>());
+export const sendMessageToLLMExplanationTranslatorSuccess = createAction('[llm] send message to explanation translator success', props<{response: string, threadId: string, duration?: number}>()); 
 export const sendMessageToLLMExplanationTranslatorFailure = createAction('[llm] send message to explanation translator failure');
 
+export const sendMessageToLLMQuestionTranslator = createAction('[llm] send message to question translator', props<{question: string, iterationStepId: string}>());
+export const sendMessageToLLMQuestionTranslatorSuccess = createAction('[llm] send message to question translator success', props<{threadId: string, response?: string, duration?: number}>());
+export const sendMessageToLLMQuestionTranslatorFailure = createAction('[llm] send message to question translator failure');
+
 export const sendMessageToLLMQTthenGTTranslators = createAction('[llm] send message to QTthenGT translators', props<{question: string, iterationStepId: string}>());
-export const sendMessageToLLMQTthenGTTranslatorsSuccess = createAction('[llm] send message to QTthenGT translators success', props<{threadIdQt: string, threadIdGt: string}>());
+export const sendMessageToLLMQTthenGTTranslatorsSuccess = createAction('[llm] send message to QTthenGT translators success', props<{threadIdQt: string, threadIdGt: string, duration?: number}>());
 export const sendMessageToLLMQTthenGTTranslatorsFailure = createAction('[llm] send message to QTthenGT translators failure');
+
+export const createLLMContext = createAction('[llm] create LLM context', props<{ projectId: string, domain: string }>());
+export const createLLMContextSuccess = createAction('[llm] create LLM context success', props<{LLMContext: LLMContext}>());
+export const createLLMContextFailure = createAction('[llm] create LLM context failure');
 
 export const loadLLMContext = createAction('[llm] load LLM context', props<{projectId: string}>());
 export const loadLLMContextSuccess = createAction('[llm] load LLM context success', props<{LLMContext: LLMContext}>());
 export const loadLLMContextFailure = createAction('[llm] load LLM context failure');
+
+export const directResponseQT = createAction('[llm] direct response QT', props<{ directResponse: string }>());
+export const directMessageET = createAction('[llm] direct message ET', props<{ directResponse: string, iterationStepId: string }>());
+
+export const showReverseTranslationGT = createAction('[iterative-planning] show reverse translation GT', props<{ reverseTranslation: string}>());
+export const showReverseTranslationQT = createAction('[iterative-planning] show reverse translation QT', props<{ reverseTranslation: string}>());
+

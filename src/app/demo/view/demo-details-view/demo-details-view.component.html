@@ -1,0 +1,96 @@
+@let demo = demo$ | async;
+
+<app-page>
+	<app-breadcrumb>
+		<a app-breadcrumb-item [routerLink]="['/demos']"><mat-icon>home</mat-icon></a>
+		<app-breadcrumb-item>{{ demo?.name }}</app-breadcrumb-item>
+	</app-breadcrumb>
+
+	<app-page-title>
+	{{ demo?.name }}
+	<app-page-title-action>
+		<a mat-icon-button matTooltip="Edit demo." [routerLink]="['/demos', demo?._id, 'edit']">
+			<mat-icon>edit</mat-icon>
+		</a>
+		<a mat-icon-button matTooltip="Download demo." [href]="downloadData$ | async" download="demo.json">
+			<mat-icon>download</mat-icon>
+		</a>
+		<button mat-icon-button matTooltip="Run iterative planning."
+			(click)="onRunIterPlanning()">
+		<mat-icon>play_arrow</mat-icon>
+		</button>
+	</app-page-title-action>
+	</app-page-title>
+
+	<app-page-hero>
+		<app-demo-hero [demo]="demo$ | async" [planProperties]="planPropertiesList$ | async"> 
+		</app-demo-hero>
+	</app-page-hero>
+
+  	<app-page-content>
+     
+		<app-page-section-list>
+
+			<app-page-section>
+				<app-page-section-title>Info</app-page-section-title>
+				<app-page-section-content>
+					<app-demo-info [demo]="demo$ | async"></app-demo-info>
+				</app-page-section-content>
+			</app-page-section>
+
+			<app-page-section>
+				<app-page-section-title>Goals</app-page-section-title>
+				<app-page-section-content>				
+					<div class="property-list">
+						@for(property of (planPropertiesList$ | async); track property._id) {
+							<app-plan-property-update-panel [property]="property" (update)="updateProperty($event)"></app-plan-property-update-panel>
+						}
+					</div>
+				</app-page-section-content>
+			</app-page-section>
+		
+			<app-page-section>
+				<app-page-section-title>Conflicts</app-page-section-title>
+				<app-page-section-content>
+					<div class="list-list">
+						@for(MUGS of (MUGS$ | async); track $index) {
+							<div class="icon-list-item">
+								<mat-icon>report</mat-icon>
+								<div class="property-badge-list">
+									@for(id of MUGS; track id) {
+									<app-plan-property-badge [property]="(planProperties$ | async)?.[id]"></app-plan-property-badge>
+									}
+								</div>
+							</div>
+						}
+					</div>
+				</app-page-section-content>
+			</app-page-section>
+
+			<app-page-section>
+				<app-page-section-title>Corrections</app-page-section-title>
+				<app-page-section-content>
+					<div class="list-list">
+						@for(MGCS of (MGCS$ | async); track $index) {
+							<div class="icon-list-item">
+								<mat-icon>healing</mat-icon>
+								<div class="property-badge-list">
+									@for(id of MGCS; track id) {
+									<app-plan-property-badge [property]="(planProperties$ | async)?.[id]"></app-plan-property-badge>
+									}
+								</div>
+							</div>
+						}
+					</div>
+				</app-page-section-content>
+			</app-page-section>
+
+			<app-page-section>
+				<app-page-section-title>Settings</app-page-section-title>
+				<app-page-section-content>
+					<app-settings [settings]="demo?.settings" (update)="updateSettings($event)" [isDemo]="true"></app-settings>
+				</app-page-section-content>
+			</app-page-section>
+		</app-page-section-list> 
+	</app-page-content>
+</app-page>

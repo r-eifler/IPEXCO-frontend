@@ -1,9 +1,9 @@
 import { inject, Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { demoCreationRunningFailure, demoCreationRunningSuccess, loadProjectDemos, registerDemoCreation, registerDemoCreationFailure, registerDemoCreationSuccess} from "../project.actions";
+import { demoCreationRunningFailure, demoCreationRunningSuccess, loadProjectDemos, registerDemoCreation, registerDemoCreationFailure, registerDemoCreationSuccess, uploadProjectDemoImage, uploadProjectDemoImageSuccess} from "../project.actions";
 import { catchError, switchMap } from "rxjs/operators";
 import { of } from "rxjs";
-import { DemoService } from "../../service/demo.service";
+import { ProjectDemoService } from "../../service/demo.service";
 import { concatLatestFrom } from "@ngrx/operators";
 import { Store } from "@ngrx/store";
 import { selectProject } from "../project.selector";
@@ -13,9 +13,17 @@ import { DemoMonitoringService } from "../../service/demo-monitoring.service";
 export class CreateDemoEffect{
 
     private actions$ = inject(Actions)
-    private service = inject(DemoService)
+    private service = inject(ProjectDemoService)
     private monitoringService = inject(DemoMonitoringService)
     private store = inject(Store);
+
+    // public uploadDemoImage$ = createEffect(() => this.actions$.pipe(
+    //     ofType(uploadProjectDemoImage),
+    //     switchMap(({image}) => this.service.postDemoImage$(image).pipe(
+    //         switchMap((imagePath)  => [uploadProjectDemoImageSuccess({imagePath})]),
+    //         catchError(() => of(registerDemoCreationFailure()))
+    //     ))
+    // ))
 
     public registerDemoCreation$ = createEffect(() => this.actions$.pipe(
         ofType(registerDemoCreation),

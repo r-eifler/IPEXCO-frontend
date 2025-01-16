@@ -5,14 +5,13 @@ import { SelectedObjectService } from "../../../service/base/selected-object.ser
 import { TemplateFileUploadComponent } from "../file-upload/file-upload.component";
 
 @Component({
-  selector: "app-domain-selector",
-  standalone: true,
-  imports: [
-    TemplateFileUploadComponent,
-  ],
-  templateUrl: "./domain-selector.component.html",
-  styleUrls: ["./domain-selector.component.css"],
-  providers: [{ provide: FilesService, useClass: DomainFilesService }],
+    selector: "app-domain-selector",
+    imports: [
+        TemplateFileUploadComponent,
+    ],
+    templateUrl: "./domain-selector.component.html",
+    styleUrls: ["./domain-selector.component.css"],
+    providers: [{ provide: FilesService, useClass: DomainFilesService }]
 })
 export class DomainSelectorComponent implements OnInit {
   constructor() {}

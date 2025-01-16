@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { Demo } from "src/app/demo/domain/demo";
+import { Demo } from "src/app/project/domain/demo";
 import { UserStudy } from "../../../user_study/domain/user-study";
 import { MatIcon } from "@angular/material/icon";
 import { MatCardModule } from "@angular/material/card";
@@ -8,17 +8,16 @@ import { MatButtonModule } from "@angular/material/button";
 import { Project } from "src/app/shared/domain/project";
 
 @Component({
-  selector: "app-user-main-page",
-  standalone: true,
-  imports: [
-    MatIcon,
-    MatButtonModule,
-    MatCardModule
-  ],
-  templateUrl: "./user-main-page.component.html",
-  styleUrls: ["./user-main-page.component.scss"],
+    selector: "app-user-main-page",
+    imports: [
+        MatIcon,
+        MatButtonModule,
+        MatCardModule
+    ],
+    templateUrl: "./user-main-page.component.html",
+    styleUrls: ["./user-main-page.component.scss"]
 })
-export class UserMainPageComponent implements OnInit {
+export class UserMainPageComponent {
 
   isMobile: boolean;
 
@@ -27,23 +26,8 @@ export class UserMainPageComponent implements OnInit {
     private route: ActivatedRoute
   ) {}
 
-  ngOnInit(): void {
-    // this.responsiveService
-    //   .getMobileStatus()
-    //   .pipe(takeUntilDestroyed())
-    //   .subscribe((isMobile) => {
-    //     this.isMobile = isMobile;
-    //   });
-    // this.responsiveService.checkWidth();
-
-    // this.projectsService.findCollection();
-    // // this.demosService.findCollection();
-    // this.userStudiesService.findCollection();
-  }
-
 
   async openProject(project: Project) {
-    // console.log(''.concat(...['/projects/', project._id, '/overview']));
     await this.router.navigate(
       ["".concat(...["/project/", project._id, "/overview"])],
       { relativeTo: this.route }

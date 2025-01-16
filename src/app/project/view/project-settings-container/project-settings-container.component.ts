@@ -17,19 +17,18 @@ import { BreadcrumbModule } from 'src/app/shared/components/breadcrumb/breadcrum
 import { Project } from 'src/app/shared/domain/project';
 
 @Component({
-  selector: 'app-project-settings-container',
-  standalone: true,
-  imports: [
-    PageModule, 
-    MatIconModule,
-    RouterLink, 
-    BreadcrumbModule,
-    AsyncPipe,
-    PropertyTemplateCreatorComponent,
-    SettingsComponent,
-  ],
-  templateUrl: './project-settings-container.component.html',
-  styleUrls: ['./project-settings-container.component.scss']
+    selector: 'app-project-settings-container',
+    imports: [
+        PageModule,
+        MatIconModule,
+        RouterLink,
+        BreadcrumbModule,
+        AsyncPipe,
+        PropertyTemplateCreatorComponent,
+        SettingsComponent,
+    ],
+    templateUrl: './project-settings-container.component.html',
+    styleUrls: ['./project-settings-container.component.scss']
 })
 export class ProjectSettingsContainerComponent implements OnInit {
 
@@ -45,7 +44,6 @@ export class ProjectSettingsContainerComponent implements OnInit {
     this.project$ = store.select(selectProject);
     this.templates$ = this.project$.pipe(
       map(p => p?.domainSpecification?.planPropertyTemplates),
-      tap(console.log)
     )
     this.model$ = this.project$.pipe(
       map(p => p?.baseTask?.model)
@@ -53,7 +51,6 @@ export class ProjectSettingsContainerComponent implements OnInit {
   }
 
   onSaveSetting(settings: GeneralSettings): void {
-    console.log(settings)
     this.project$.pipe(take(1)).subscribe(
       project => {
         let newProject: Project = {
@@ -66,7 +63,6 @@ export class ProjectSettingsContainerComponent implements OnInit {
   }
 
   onSaveTemplates(templates: PlanPropertyTemplate[]): void {
-    console.log(templates)
     this.project$.pipe(take(1)).subscribe(
       project => {
         let newProject: Project = {

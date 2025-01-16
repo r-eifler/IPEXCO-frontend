@@ -181,10 +181,6 @@ export function factToPDDL(fact: PDDLFact): string {
 }
 
 export function FactToString(fact: PDDLFact): string {
-  // if(!fact.name || !fact.arguments) {
-  //   console.log(fact);
-  //   return "error";
-  // }
   if (fact.negated) {
     return "! " + fact.name + "(" + fact.arguments.map(f => f).join(",") + ")";
   }

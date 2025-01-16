@@ -5,7 +5,7 @@ import { GlobalExplanation, QuestionType } from "./explanations";
 
 
 export function getComputedBase(questionType: QuestionType, explanation: GlobalExplanation): string[][] {
-  console.log("Explanation: ", explanation.MGCS, explanation.MUGS, explanation.status);
+  // console.log("Explanation: ", explanation.MGCS, explanation.MUGS, explanation.status);
   switch(questionType) {
     case QuestionType.WHY_PLAN:
       return explanation?.MUGS;
@@ -86,13 +86,13 @@ function whyNotPropertyText(computed: string[][], propertyDescription?: string):
     mainText = `This goal "${propertyDescription}" itself cannot be satisfied.`;
     includeComputation = false;
   } else {
-    mainText = `This goal "${propertyDescription}" cannot be satisifed, since it is in conflict with each of the following set of goals:`;
+    mainText = `This goal "${propertyDescription}" cannot be satisfied, since it is in conflict with each of the following set of goals:`;
   }
 
   return {
     includeComputation,
     mainText,
-    setPrefix: `"${propertyDescription}" is in conflict with`,
+    setPrefix: ``,
     setConnector: 'and'
   };
 }
@@ -157,20 +157,20 @@ function howPropertyText(computed: string[][], propertyDescription?: string): St
 }
 
 function filterWhyPlan(iterationStep: IterationStep, computed: string[][]): string[][] {
-  return computed.filter(
-    MUGS => MUGS.every(id => iterationStep.hardGoals.includes(id))
+  return subsetMinimal(computed.filter(
+    MUGS => MUGS.every(id => iterationStep.hardGoals.includes(id)))
   );
 }
 
 function filterHowPlan(iterationStep: IterationStep, computed: string[][]): string[][] {
-  return computed.filter(
-    MUGS => MUGS.every(id => iterationStep.hardGoals.includes(id))
-  );
+  return subsetMinimal(computed.map(
+    MCGS => MCGS.filter(id => iterationStep.hardGoals.includes(id))
+  ).filter(possibleCorrections => possibleCorrections.length > 0));
 }
 
 function whyAnswerComputer(step: IterationStep, question: Question, computed: string[][]): string[][] {
-  console.log("Computed: " + computed);
-  return computed
+  // console.log("Computed: " + computed);
+  return subsetMinimal(computed
     .filter( MUGS => MUGS.every(id =>
                     ((step.plan !== undefined) &&
                     (step.plan.satisfied_properties !== undefined) &&
@@ -178,12 +178,27 @@ function whyAnswerComputer(step: IterationStep, question: Question, computed: st
                     question.propertyId === id
                 )
         )
-    .map(MUGS => MUGS.filter(id =>  !(question.propertyId === id)));
+    .map(MUGS => MUGS.filter(id =>  !(question.propertyId === id))));
 }
 
 
 function howAnswerComputer(step: IterationStep, question: Question, computed: string[][]): string[][] {
-    return computed
+    return subsetMinimal(computed
       .filter( MCGS => MCGS.every(id => !(question.propertyId === id)))
-      .map(MUGS => MUGS.filter(id =>  step.plan?.satisfied_properties.includes(id)))
+      .map(MCGS => MCGS.filter(id =>  step.plan?.satisfied_properties.includes(id))));
+}
+
+
+export function subsetMinimal(original: string[][]): string[][]{
+  let result: string[][] = [];
+  for(let list of original){
+    // subset already contained
+    if(result.some(rl => rl.every(re => list.includes(re)))){
+      continue;
+    }
+    //remove all super sets
+    result = result.filter(rl => !list.every(le => rl.includes(le)));
+    result.push(list);
+  }
+  return result;
 }

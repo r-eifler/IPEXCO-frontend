@@ -10,6 +10,9 @@
 	<app-page-title>
 	{{ demo?.name }}
 	<app-page-title-action>
+		<a mat-icon-button matTooltip="Download demo." [href]="downloadData$ | async" download="demo.json">
+			<mat-icon>download</mat-icon>
+		</a>
 		<button mat-icon-button matTooltip="Run iterative planning."
 			(click)="onRunIterPlanning()">
 		<mat-icon>play_arrow</mat-icon>
@@ -35,7 +38,7 @@
 				<app-page-section-content>				
 					<div class="property-list">
 						@for(property of (planPropertiesList$ | async); track property._id) {
-							<app-plan-property-panel [property]="property"></app-plan-property-panel>
+							<app-plan-property-update-panel [property]="property" (update)="updateProperty($event)"></app-plan-property-update-panel>
 						}
 					</div>
 				</app-page-section-content>
@@ -46,12 +49,14 @@
 				<app-page-section-content>
 					<div class="list-list">
 						@for(MUGS of (MUGS$ | async); track $index) {
-						<div class="property-badge-list">
-							<mat-icon>report</mat-icon>
-							@for(id of MUGS; track id) {
-							<app-plan-property-badge [property]="(planProperties$ | async)?.[id]"></app-plan-property-badge>
-							}
-						</div>
+							<div class="icon-list-item">
+								<mat-icon>report</mat-icon>
+								<div class="property-badge-list">
+									@for(id of MUGS; track id) {
+									<app-plan-property-badge [property]="(planProperties$ | async)?.[id]"></app-plan-property-badge>
+									}
+								</div>
+							</div>
 						}
 					</div>
 				</app-page-section-content>
@@ -62,12 +67,14 @@
 				<app-page-section-content>
 					<div class="list-list">
 						@for(MGCS of (MGCS$ | async); track $index) {
-						<div class="property-badge-list">
-							<mat-icon>healing</mat-icon>
-							@for(id of MGCS; track id) {
-							<app-plan-property-badge [property]="(planProperties$ | async)?.[id]"></app-plan-property-badge>
-							}
-						</div>
+							<div class="icon-list-item">
+								<mat-icon>healing</mat-icon>
+								<div class="property-badge-list">
+									@for(id of MGCS; track id) {
+									<app-plan-property-badge [property]="(planProperties$ | async)?.[id]"></app-plan-property-badge>
+									}
+								</div>
+							</div>
 						}
 					</div>
 				</app-page-section-content>

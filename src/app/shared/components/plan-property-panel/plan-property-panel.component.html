@@ -1,4 +1,4 @@
-<mat-expansion-panel>
+<mat-expansion-panel [expanded]="expanded()">
   <mat-expansion-panel-header>
     <mat-panel-title>
       <div class="title">
@@ -10,6 +10,9 @@
     </mat-panel-title>
     <mat-panel-description>
       <div class="description">
+        @if(property()?.globalHardGoal){
+          <mat-icon>lock</mat-icon>
+        }
         <div class="utility">
           <mat-icon>workspace_premium</mat-icon>
           {{ property()?.utility }}
@@ -25,9 +28,11 @@
 
     <ng-content></ng-content>
 
-    <app-unformatted>
+    @if(showFormula()){
+    <app-unformatted *isProject>
       {{ property()?.formula }}
     </app-unformatted>
+    }
   </div>
 
 </mat-expansion-panel>

@@ -1,50 +1,60 @@
-import { inject, Injectable } from "@angular/core";
-import { ObjectCollectionService } from "../../service/base/object-collection.service";
-import { HttpClient, HttpParams } from "@angular/common/http";
-import { environment } from "../../../environments/environment";
-import { SelectedObjectService } from "../../service/base/selected-object.service";
-import { UserStudy } from "../domain/user-study";
-import { IHTTPData } from "../../shared/domain/http-data.interface";
-import { USUser } from "../domain/user-study-user";
-import { UserStudyData } from "src/app/user_study/domain/user-study-store";
+import { HttpClient } from '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
+import {UserStudy} from '../domain/user-study';
+import { environment } from 'src/environments/environment';
+import { Observable } from 'rxjs';
+import {IHTTPData} from '../../shared/domain/http-data.interface';
+import {map} from 'rxjs/operators';
 
-@Injectable({
-  providedIn: "root",
-})
+
+
+@Injectable()
 export class UserStudyService{
-  
-  private http = inject(HttpClient)
-  BASE_URL = environment.apiURL + "user-study/";
-  
 
-  loadData(id: string): Promise<UserStudyData[]> {
-    return new Promise((resolve, reject) => {
-      this.http
-        .get<IHTTPData<UserStudyData[]>>(this.BASE_URL + id + "/data")
-        .subscribe((res) => {
-          resolve(res.data);
-        });
-    });
+  private http = inject(HttpClient);
+  private BASE_URL = environment.apiURL + 'user-study/';
+
+  postUserStudy$(userStudy: UserStudy): Observable<UserStudy> {
+    return this.http.post<IHTTPData<UserStudy>>(this.BASE_URL, {data: userStudy}).pipe(
+      map(({data}) => ({
+        ...data,
+        startDate: new Date(data.startDate),
+        endDate: new Date(data.endDate),
+      })),
+    )
   }
 
-  getUsers(id: string): Promise<USUser[]> {
-    return new Promise((resolve, reject) => {
-      this.http
-        .get<IHTTPData<USUser[]>>(this.BASE_URL + id + "/users")
-        .subscribe((res) => {
-          resolve(res.data);
-        });
-    });
+  putUserStudy$(userStudy: UserStudy): Observable<UserStudy> {
+    return this.http.put<IHTTPData<UserStudy>>(this.BASE_URL + userStudy._id, {data: userStudy}).pipe(
+      map(({data}) => ({
+        ...data,
+        startDate: new Date(data.startDate),
+        endDate: new Date(data.endDate),
+      })),
+    )
   }
 
-  getNumberAcceptedUsers(id: string): Promise<number> {
-    return new Promise((resolve, reject) => {
-      this.http
-        .get<IHTTPData<number>>(this.BASE_URL + id + "/num_accepted_users")
-        .subscribe((res) => {
-          resolve(res.data);
-        });
-    });
+  getUserStudies$(): Observable<UserStudy[]> {
+    return this.http.get<IHTTPData<UserStudy[]>>(this.BASE_URL).pipe(
+      map(({data}) => data),
+    )
+  }
+
+  getUserStudy$(id: string): Observable<UserStudy> {
+    return this.http.get<IHTTPData<UserStudy>>(this.BASE_URL + id).pipe(
+      map(({data}) => ({
+        ...data,
+        startDate: new Date(data.startDate),
+        endDate: new Date(data.endDate),
+      })),
+    )
+  }
+
+  deleteUserStudy$(id: string): Observable<boolean> {
+
+    return this.http.delete<IHTTPData<boolean>>(this.BASE_URL + id).pipe(
+      map(({data}) => data),
+    )
+
   }
 }
-

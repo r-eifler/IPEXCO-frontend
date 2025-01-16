@@ -24,6 +24,8 @@ export class StepStatusNamePipe implements PipeTransform {
         return 'Solved';
       case PlanRunStatus.not_solvable:
         return 'Unsolvable';
+      case PlanRunStatus.canceled:
+        return 'Canceled';
     }
   }
 
