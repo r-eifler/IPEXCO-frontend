@@ -198,7 +198,6 @@ export class UIControls {
       {
         console.error("Error in select-elements event handler:", e);
       }
-      // TODO: Redo Result text from compute solvability.
     });
 
     document.addEventListener("on-visualization-load", async (e) => {

@@ -191,12 +191,12 @@ export class DataHandlerService {
     let result: string;
 
     if (this.stepType == PlanRunStatus.not_solvable){
-      selectedElements = originalData.elements.filter(element => !selectedElements.includes(element));
+      selectedElements = originalData.elements.filter(element => !selectedElements.some(selected => selected.name === element.name));
     }
 
     MUGS.forEach(mugs => {
       // Check if the mugs is a subset of the enforced elements.
-      if(selectedElements.filter(element => mugs.has(element)).length === mugs.size) {
+      if(selectedElements.filter(element => mugs.has(element.name)).length === mugs.size) {
         if(foundMUGS.length === 0)
           foundMUGS = [...mugs];
         mugs.forEach(element => elementCounts[element] = (elementCounts[element] || 0) + 1);
@@ -204,7 +204,7 @@ export class DataHandlerService {
     });
 
     MSGS.forEach(msgs => {
-      if(selectedElements.filter(element => msgs.has(element)).length === selectedElements.length) {
+      if(selectedElements.filter(element => msgs.has(element.name)).length === selectedElements.length) {
         foundMSGS = [...msgs];
         return;
       }
