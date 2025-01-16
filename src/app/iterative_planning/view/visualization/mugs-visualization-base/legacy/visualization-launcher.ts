@@ -11,18 +11,14 @@ export class VisualizationLauncher {
   private readonly mugsData: string[][];
   private readonly msgsData: string[][];
   private readonly mugsTypes: Record<string, number>;
-  private readonly statusType: PlanRunStatus;
   private readonly dataHandlerService: DataHandlerService;
-  private readonly enforcedGoals: string[];
   private uiControls: UIControls;
 
 
-  constructor(entryMugs: string[][], entryMsgs: string[][], entryMugTypes: Record<string, number>, statusType: PlanRunStatus, enforcedGoals: string[]) {
+  constructor(entryMugs: string[][], entryMsgs: string[][], entryMugTypes: Record<string, number>, statusType: PlanRunStatus) {
     this.mugsData = entryMugs;
     this.msgsData = entryMsgs;
     this.mugsTypes = entryMugTypes;
-    this.statusType = statusType;
-    this.enforcedGoals = enforcedGoals;
     this.dataHandlerService = new DataHandlerService();
     this.dataHandlerService.stepType = statusType;
   }
@@ -64,16 +60,12 @@ export class VisualizationLauncher {
     this.uiControls.showUpperMatrix(false);
     this.uiControls.colorGoalsByTypes(true);
 
-    // if (this.statusType != PlanRunStatus.not_solvable){
-    //   this.dataHandlerService.setElementSelection(state.currentData, this.enforcedGoals);
-    //   uiControls.updateGoalSelectionView();
-    // }
-
     d3.select(window).on('resize', () => {
       matrix.resize();
     });
 
     document.dispatchEvent(new CustomEvent("on-visualization-load", {}));
+
   }
 }
 

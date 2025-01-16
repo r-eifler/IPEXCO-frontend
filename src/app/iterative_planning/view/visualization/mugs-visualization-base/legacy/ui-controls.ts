@@ -15,7 +15,7 @@ import {EventEmitter} from '@angular/core';
 export class UIControls {
   private metrics: IMetrics;
   private currentMetric: IMetric;
-  protected data: IDataObject;
+  private data: IDataObject;
   private readonly _dataHandlerService: DataHandlerService;
   selectionChanged: EventEmitter<PlanProperty[]> = new EventEmitter();
 
@@ -198,7 +198,7 @@ export class UIControls {
       {
         console.error("Error in select-elements event handler:", e);
       }
-
+      // TODO: Redo Result text from compute solvability.
     });
 
     document.addEventListener("on-visualization-load", async (e) => {
@@ -208,6 +208,11 @@ export class UIControls {
       this._dataHandlerService.computeOrderDependentValues(this.data);
       matrix.resize();
     });
+  }
+
+  public ForceEnforceGoalsToSelection(enforcedGoals: PlanProperty[]){
+    this._dataHandlerService.setElementSelection(this.data, enforcedGoals);
+    this.updateGoalSelectionView();
   }
 
 }

@@ -65,7 +65,8 @@ export class MugsVisualizationBaseComponent {
   stepStatusType: PlanRunStatus;
   MUGS : string[][] = [];
   MSGS : string[][] = [];
-  enforcedGoals : string[] = [];
+  enforcedGoals : PlanProperty[] = [];
+  enfGoals: string[] = [];
   MUGTypes: Record<string, number> = {};
   planProperties: PlanProperty[] = [];
   selectedPlanProperties: PlanProperty[] = [];
@@ -127,13 +128,18 @@ export class MugsVisualizationBaseComponent {
 
   private initializeVisualizationLauncher(): void {
     if (Object.keys(this.MUGS).length == 0 || Object.keys(this.MSGS).length == 0) {return ;}
-    this.visualizationLauncher = new VisualizationLauncher(this.MUGS, this.MSGS, this.MUGTypes, this.stepStatusType, this.enforcedGoals);
+    this.visualizationLauncher = new VisualizationLauncher(this.MUGS, this.MSGS, this.MUGTypes, this.stepStatusType);
     this.visualizationLauncher.initialize(`#${this.containerHeaderId}`, this.planProperties, this.selectedPlanProperties);
 
-    this.uiControl = this.visualizationLauncher.getUIControlsInstance(); // Get instance of UIControls
+    this.uiControl = this.visualizationLauncher.getUIControlsInstance();
+
     this.uiControl.selectionChanged.subscribe(change => {
       this.selectedPlanProperties = change;
     });
+
+    if (this.stepStatusType != PlanRunStatus.not_solvable){
+      this.uiControl.ForceEnforceGoalsToSelection(this.enforcedGoals);
+    }
 
   }
 
@@ -157,6 +163,13 @@ export class MugsVisualizationBaseComponent {
         }
       });
     });
+
+    // Set Enforced Goals
+    this.planProperties.forEach(property => {
+      if (this.enfGoals.includes(property.name)){
+        this.enforcedGoals.push(property);
+      }
+    })
   }
 
   private computeStepGoals(){
@@ -167,7 +180,7 @@ export class MugsVisualizationBaseComponent {
     this.store.select(selectEnforcedGoals).pipe(take(1)).subscribe(enforcedGoals => {
       enforcedGoals.forEach((goal) =>{
         this.stepGoals[goal._id] = goal.name
-        this.enforcedGoals.push(goal.name);
+        this.enfGoals.push(goal.name);
       })
     });
 
