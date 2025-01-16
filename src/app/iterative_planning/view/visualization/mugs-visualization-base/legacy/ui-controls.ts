@@ -8,6 +8,8 @@ import {metricDefinitions} from './data-classes/metric-definition';
 import {SolvabilityResult} from './types/solvability-result';
 import {DataHandlerService} from './DataHandlerService';
 import {PlanRunStatus} from '../../../../domain/plan';
+import {PlanProperty} from '../../../../../shared/domain/plan-property/plan-property';
+import {EventEmitter} from '@angular/core';
 
 
 export class UIControls {
@@ -15,6 +17,7 @@ export class UIControls {
   private currentMetric: IMetric;
   protected data: IDataObject;
   private readonly _dataHandlerService: DataHandlerService;
+  selectionChanged: EventEmitter<PlanProperty[]> = new EventEmitter();
 
   constructor(dataHandlerService: DataHandlerService, data: IDataObject) {
     this._dataHandlerService = dataHandlerService;
@@ -49,7 +52,7 @@ export class UIControls {
 
   // Sorting
   private sortElements(): void {
-    this.data.elements.sort((a, b) => this.data.original[a] - this.data.original[b])
+    this.data.elements.sort((a, b) => this.data.original[a.name] - this.data.original[b.name])
   }
 
   private sortSets(): void {
@@ -66,58 +69,16 @@ export class UIControls {
     matrix.draw(this.data);
   }
 
-  private updateEnforcementSection(): void{
-    const enforcementSection = d3.select("#sec-enforcement")
-    enforcementSection.selectChildren().remove();
-
-    const remove = e => {
-      const enforcedElements = this.data.selectedElements.filter(element => element !== e.currentTarget.dataset.element);
-
-      this._dataHandlerService.restoreData(this.data);
-      if(this._dataHandlerService.setElementSelection.length === 0) {
-        this._dataHandlerService.computeOrderDependentValues(this.data);
-      } else {
-        this._dataHandlerService.setElementSelection(this.data, enforcedElements);
-      }
-
-      this.updateView();
-
-      // Remove the button.
-      e.currentTarget.remove();
-
-      this.updateEnforcementSection();
-      this.updateResultSection();
+  public updateEnforcementSection(planProperty: PlanProperty): void{
+    const enforcedElements = this.data.selectedElements.filter(element => element.name !== planProperty.name);
+    this._dataHandlerService.restoreData(this.data);
+    if(this._dataHandlerService.setElementSelection.length === 0) {
+      this._dataHandlerService.computeOrderDependentValues(this.data);
+    }else {
+      this._dataHandlerService.setElementSelection(this.data, enforcedElements);
     }
 
-    // TODO: Don't compute this twice (here and in updateResultSection)
-    const { result, counts } = this._dataHandlerService.computeSolvability(this.data) as SolvabilityResult;
-
-    const colorScale = d3.scaleSequential()
-      .interpolator(
-        d3.piecewise(d3.interpolateRgb.gamma(1.8), ["#9e9e9e", "#f44336"])
-      ).domain([
-        0,
-        Object.keys(counts).length > 0 ? Math.max(...Object.values(counts)) : 1
-      ]);
-
-    this.data.selectedElements.forEach(element => {
-      let count = 0;
-      if(result === "unsolvable") {
-        count = counts[element] || 0;
-      }
-
-      enforcementSection
-        .append("a")
-        .attr("class", "btn-small")
-        .style("background", colorScale(count))
-        .style("text-transform", "none")
-        .attr("data-element", element)
-        .on("click", remove)
-        .text(element)
-        .append("i")
-        .attr("class", "small material-icons right")
-        .text("close");
-    });
+    this.updateView();
   }
 
   private updateResultSection(): void {
@@ -199,19 +160,44 @@ export class UIControls {
   }
 
   public updateGoalSelectionView(): void {
-    this.updateEnforcementSection();
+    this.selectionChanged.emit(this.data.selectedElements);
     this.updateResultSection();
     this.updateView();
   }
 
+  private GetPlanPropertyOfSelectionEntries(selection: string[]):PlanProperty[]
+  {
+    const result: PlanProperty[] = [];
+
+    for (const entry in selection) {
+      if (selection.hasOwnProperty(entry)) {
+        const entryValue = selection[entry];
+        this.data.elements.forEach(element => {
+          if (element.name === entryValue) {
+            result.push(element);
+          }
+        });
+      }
+    }
+
+    return result;
+  }
+
   public addEventListener(): void{
     document.addEventListener("select-elements", async (e: CustomEvent) => {
-      const { x, y } = e.detail.selected;
+      try{
+        const { x, y } = e.detail.selected;
 
-      const selection = Array.from(new Set([x, y]));
+        const selection: string[] = Array.from(new Set([x, y]));
+        const planPropertySelection: PlanProperty[] = this.GetPlanPropertyOfSelectionEntries(selection);
 
-      this._dataHandlerService.setElementSelection(this.data, selection);
-      this.updateGoalSelectionView();
+        this._dataHandlerService.setElementSelection(this.data, planPropertySelection);
+        this.updateGoalSelectionView();
+      }
+      catch(e)
+      {
+        console.error("Error in select-elements event handler:", e);
+      }
 
     });
 

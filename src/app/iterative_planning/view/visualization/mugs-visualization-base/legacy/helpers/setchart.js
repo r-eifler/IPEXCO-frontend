@@ -8,6 +8,7 @@ let where, svg, data, margin, width, height, x, y;
 function draw(_data, _where, _dims) {
     where = _where;
     data = _data;
+  data.elementsName = _data.elements.map(d => d.name);
     margin = _dims.margin;
     width = _dims.width;
     height = _dims.height;
@@ -33,7 +34,7 @@ function resize() {
 
     y = d3.scaleBand()
         .range([0, height])
-        .domain(data.elements);
+        .domain(data.elementsName);
 
     const goals = []
     data.MUGS.forEach((ugs) => {

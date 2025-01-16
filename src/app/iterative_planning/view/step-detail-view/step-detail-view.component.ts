@@ -57,27 +57,27 @@ import { ProjectDirective } from "../../derectives/isProject.directive";
 import { UserManualDialogComponent } from "../../components/user-manual-dialog/user-manual-dialog.component";
 import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { DemoDirective } from "../../derectives/isDemo.directive";
+import {MugsVisualizationBaseComponent} from '../visualization/mugs-visualization-base/mugs-visualization-base.component';
 
 @Component({
     selector: "app-step-detail-view",
-    imports: [
-        AsyncPipe,
-        BreadcrumbModule,
-        EmptyStateModule,
-        ExplanationChatComponent,
-        ExplanationChatLlmComponent,
-        IterationStepHeroComponent,
-        MatButtonModule,
-        MatIconModule,
-        MatTooltipModule,
-        PageModule,
-        PlanPropertyPanelComponent,
-        RouterLink,
-        MatExpansionModule,
-        ProjectDirective,
-        DemoDirective,
-        MatProgressBarModule
-    ],
+  imports: [
+    AsyncPipe,
+    BreadcrumbModule,
+    EmptyStateModule,
+    ExplanationChatComponent,
+    ExplanationChatLlmComponent,
+    IterationStepHeroComponent,
+    MatButtonModule,
+    MatIconModule,
+    MatTooltipModule,
+    PageModule,
+    PlanPropertyPanelComponent,
+    RouterLink,
+    MatExpansionModule,
+    MatProgressBarModule,
+    MugsVisualizationBaseComponent
+  ],
     templateUrl: "./step-detail-view.component.html",
     styleUrl: "./step-detail-view.component.scss"
 })
@@ -222,7 +222,7 @@ export class StepDetailViewComponent {
   }
 
   onCancel(){
-    this.stepId$.pipe(take(1)).subscribe(id => 
+    this.stepId$.pipe(take(1)).subscribe(id =>
       this.store.dispatch(cancelPlanComputationAndIterationStep({iterationStepId: id}))
     );
   }

@@ -4,6 +4,7 @@ import * as d3 from 'd3';
 import {UIControls} from './ui-controls';
 import {DataHandlerService} from './DataHandlerService';
 import {PlanRunStatus} from '../../../../domain/plan';
+import {PlanProperty} from '../../../../../shared/domain/plan-property/plan-property';
 
 
 export class VisualizationLauncher {
@@ -13,6 +14,7 @@ export class VisualizationLauncher {
   private readonly statusType: PlanRunStatus;
   private readonly dataHandlerService: DataHandlerService;
   private readonly enforcedGoals: string[];
+  private uiControls: UIControls;
 
 
   constructor(entryMugs: string[][], entryMsgs: string[][], entryMugTypes: Record<string, number>, statusType: PlanRunStatus, enforcedGoals: string[]) {
@@ -31,7 +33,11 @@ export class VisualizationLauncher {
     state.sourceData.types = this.mugsTypes;
   }
 
-  public initialize(containerId: string): void {
+  public getUIControlsInstance(): UIControls {
+    return this.uiControls; // Return the instance of UIControls to the component
+  }
+
+  public initialize(containerId: string, planProperties: PlanProperty[], selectedPlanProperties: PlanProperty[]): void {
     const container = document.querySelector(containerId);
     if (!container) {
       console.error(`Container with ID "${containerId}" not found.`);
@@ -41,25 +47,27 @@ export class VisualizationLauncher {
     this.initializeData();
 
     // Process and prepare data for visualization
-    state.sourceData.elements = this.dataHandlerService.getElements(state.sourceData.MUGS);
+    // state.sourceData.elements = this.dataHandlerService.getElements(state.sourceData.MUGS);
+    state.sourceData.elements = planProperties;
     state.currentData = this.dataHandlerService.getDataObj(state.sourceData);
+    state.currentData.selectedElements = selectedPlanProperties;
     this.dataHandlerService.computeOrderDependentValues(state.currentData);
 
     // Set up UI controls for visualization changes
-    const uiControls = new UIControls(this.dataHandlerService, state.currentData);
-    uiControls.addEventListener();
+    this.uiControls = new UIControls(this.dataHandlerService, state.currentData);
+    this.uiControls.addEventListener();
 
     // Initialize the matrix visualization
     matrix.init(containerId);
     matrix.draw(state.currentData);
 
-    uiControls.showUpperMatrix(false);
-    uiControls.colorGoalsByTypes(true);
+    this.uiControls.showUpperMatrix(false);
+    this.uiControls.colorGoalsByTypes(true);
 
-    if (this.statusType != PlanRunStatus.not_solvable){
-      this.dataHandlerService.setElementSelection(state.currentData, this.enforcedGoals);
-      uiControls.updateGoalSelectionView();
-    }
+    // if (this.statusType != PlanRunStatus.not_solvable){
+    //   this.dataHandlerService.setElementSelection(state.currentData, this.enforcedGoals);
+    //   uiControls.updateGoalSelectionView();
+    // }
 
     d3.select(window).on('resize', () => {
       matrix.resize();

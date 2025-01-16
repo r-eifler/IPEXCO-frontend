@@ -9,6 +9,7 @@ let where, svg, data, margin, width, height;
 function draw(_data, _where, _dims) {
     where = _where;
     data = _data;
+  data.elementsName = _data.elements.map(d => d.name);
     margin = _dims.margin;
     width = _dims.width;
     height = _dims.height;
@@ -35,7 +36,7 @@ function resize() {
     // scales and axes
     const x = d3.scaleBand()
         .range([0, width])
-        .domain(data.elements);
+        .domain(data.elementsName);
     const y = d3.scaleLinear()
         .range([0, height])
         .domain([Math.max(...Object.values(data.counts)), 0]);
@@ -53,7 +54,7 @@ function resize() {
 
     // bars
     svg.selectAll()
-        .data(data.elements.map(d => {
+        .data(data.elementsName.map(d => {
             return {
                 value: data.counts[d],
                 name: d,

@@ -5,6 +5,7 @@ import {defaultDataObject, IDataObject} from './interfaces/IDataObject';
 import {Utils} from './utils';
 import {VectorMetrics} from './vector-metrics';
 import {PlanRunStatus} from '../../../../domain/plan';
+import {PlanProperty} from '../../../../../shared/domain/plan-property/plan-property';
 
 
 export class DataHandlerService {
@@ -35,7 +36,8 @@ export class DataHandlerService {
 
     data["types"] = Object.assign({}, source.types);
 
-    data.elements = this.getElements(source.MUGS);
+    // data.elements = this.getElements(source.MUGS);
+    data.elements = source.elements;
 
     // Prepare Minimally Unsolvable Goal Subsets (MUGS).
     data.MUGS = source.MUGS ? source.MUGS.map((mugs, i) => {
@@ -49,7 +51,7 @@ export class DataHandlerService {
 
     // Store the original order of elements as (name, index) pairs.
     data.elements.forEach((d_x, i_x) => {
-      data.original[d_x] = i_x;
+      data.original[d_x.name] = i_x;
     });
 
     return data;
@@ -58,7 +60,7 @@ export class DataHandlerService {
   public restoreData(data: IDataObject) {
     const source = state.sourceData;
 
-    data.elements = this.getElements(source.MUGS);
+    data.elements = source.elements;
     data.selectedElements = [];
 
     // Prepare Minimally Unsolvable Goal Subsets (MUGS).
@@ -74,7 +76,7 @@ export class DataHandlerService {
     // Store the original order of elements as (name, index) pairs.
     data.original = {};
     data.elements.forEach((d_x, i_x) => {
-      data.original[d_x] = i_x;
+      data.original[d_x.name] = i_x;
     });
   }
 
@@ -85,15 +87,15 @@ export class DataHandlerService {
 
     data.onehots = {};
     data.elements.forEach((d_x, i_x) => {
-      data.occurrence[d_x] = {};
-      data.onehots[d_x] = [];
+      data.occurrence[d_x.name] = {};
+      data.onehots[d_x.name] = [];
       data.elements.forEach((d_y, i_y) => {
         data.matrix.push({
-          x: d_x,
-          y: d_y,
+          x: d_x.name,
+          y: d_y.name,
         })
-        if (d_x !== d_y) {
-          data.occurrence[d_x][d_y] = 0;
+        if (d_x.name !== d_y.name) {
+          data.occurrence[d_x.name][d_y.name] = 0;
         }
       });
 
@@ -104,12 +106,12 @@ export class DataHandlerService {
     data.MUGS.forEach((mugs, i) => {
       mugs.l.forEach(d => {
         data.elements.forEach(e => {
-          if (data.onehots[e].length < i+1) {
-            data.onehots[e].push(0);
+          if (data.onehots[e.name].length < i+1) {
+            data.onehots[e.name].push(0);
           }
 
-          if (d === e) {
-            data.onehots[e][i] = 1;
+          if (d === e.name) {
+            data.onehots[e.name][i] = 1;
           }
         })
 
@@ -224,12 +226,14 @@ export class DataHandlerService {
     return { result, mugs: foundMUGS, msgs: foundMSGS, counts: elementCounts };
   }
 
-  public setElementSelection(data: IDataObject, elements: string[]): void {
-    data.elements = data.elements.filter(element => !elements.includes(element));
+  public setElementSelection(data: IDataObject, elements: PlanProperty[]): void {
+    data.elements = data.elements.filter(element =>
+      !elements.some(e => e.name === element.name)
+    );
 
     // Remove elements from all MUGS
     data.MUGS.forEach(mugs => {
-      elements.forEach(element => mugs.s.delete(element));
+      elements.forEach(element => mugs.s.delete(element.name));
       mugs.l = Array.from(mugs.s);
     });
 
@@ -242,14 +246,13 @@ export class DataHandlerService {
     data.selectedElements = data.selectedElements.concat(elements);
 
     data.MSGS.forEach(msgs => {
-      elements.forEach(element => msgs.s.delete(element));
+      elements.forEach(element => msgs.s.delete(element.name));
       msgs.l = Array.from(msgs.s);
     });
 
     const len = data.MSGS.length;
     data.MSGS = data.MSGS.filter(msgs => msgs.l.length > 0);
     if(len > data.MSGS.length) {
-      // TODO: Should this happen?
       //console.log("Warning: MSGS removed.");
     }
 
@@ -258,7 +261,7 @@ export class DataHandlerService {
 
     data.original = {};
     data.elements.forEach((d_x, i_x) => {
-      data.original[d_x] = i_x;
+      data.original[d_x.name] = i_x;
     });
 
     this.computeOrderDependentValues(data);

@@ -19,7 +19,9 @@ function init(parent) {
 
 function draw(_data) {
     data = _data;
-    console.log(_data);
+  data.elementsName = _data.elements.map(d => d.name);
+
+  console.log(_data);
     // append the svg object to the body of the page
     svg = d3.select(parentId)
         .append("svg")
@@ -60,8 +62,7 @@ function remove() {
 function resize() {
 
     // set the dimensions and margins of the graph
-  //TODO: Find better way to adjust size dynamically to have larger diagram
-    const width = data.elements.length * constants.rectWidth;
+    const width = data.elementsName.length * constants.rectWidth;
     const height = width;
 
     d3.select(parentId)
@@ -75,10 +76,10 @@ function resize() {
     // build scales and axes:
     x = d3.scaleBand()
         .range([0, width])
-        .domain(data.elements);
+        .domain(data.elementsName);
     y = d3.scaleBand()
         .range([0, height])
-        .domain(data.elements);
+        .domain(data.elementsName);
 
     const squareSize = d3.scaleLinear()
         .range([minimalSize, x.bandwidth()])
@@ -90,7 +91,7 @@ function resize() {
         .attr("class", "y axis")
         .call(d3
             .axisLeft(y)
-            .tickFormat((t, i) => separateTicks(t, i, data.elements.length, height, 30))
+            .tickFormat((t, i) => separateTicks(t, i, data.elementsName.length, height, 30))
             .tickSize(0)
         )
         .selectAll("text").attr("class", d => d);
@@ -173,7 +174,7 @@ function resize() {
         data,
         "#mugs-helpers-barchart",
         {
-            width: data.elements.length * constants.rectWidth,
+            width: data.elementsName.length * constants.rectWidth,
             height: 100,
             margin: {
                 top: 50,
@@ -192,7 +193,7 @@ function resize() {
         "#mugs-helpers-setchart",
         {
             width: data.MUGS.length * (state.settings.compress ? constants.compressed : constants.rectWidth),
-            height: data.elements.length * constants.rectWidth,
+            height: data.elementsName.length * constants.rectWidth,
             margin: {
                 top: margin.top,
                 right: 0,
@@ -223,7 +224,7 @@ function mouseover(e, d) {
 
 function mousemove(e, d) {
     tooltip.mousemove(e, {
-        top: margin.top + data.elements.length * constants.rectWidth + 10,
+        top: margin.top + data.elementsName.length * constants.rectWidth + 10,
         left: margin.left - OFFSET
     })
 }

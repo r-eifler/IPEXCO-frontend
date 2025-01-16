@@ -1,9 +1,12 @@
+import {PlanProperty} from '../../../../../../shared/domain/plan-property/plan-property';
+
 interface IDataObject {
   MSGS: Record<string, any>[];
   MUGS: Record<string, any>[];
   counts: Record<string, number>;
-  elements: string[];
-  selectedElements: string[];
+  elements: PlanProperty[];
+  elementsName: string[]
+  selectedElements: PlanProperty[];
   extents: {
     occurr: [number | undefined, number | undefined];
     nOccurr: [number | undefined, number | undefined];
@@ -26,6 +29,7 @@ const defaultDataObject: IDataObject = {
   MUGS: [],
   counts: {},
   elements: [],
+  elementsName: [],
   selectedElements: [],
   extents: {
     occurr: [undefined, undefined],

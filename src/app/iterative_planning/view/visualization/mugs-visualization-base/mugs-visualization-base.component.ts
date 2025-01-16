@@ -10,13 +10,36 @@ import {VisualizationLauncher} from './legacy/visualization-launcher';
 import {PlanProperty} from '../../../../shared/domain/plan-property/plan-property';
 import {PlanRunStatus} from '../../../domain/plan';
 import {AsyncPipe} from '@angular/common';
+import {PageSectionTitleComponent} from '../../../../shared/components/page/page-section-title/page-section-title.component';
+import {PageSectionComponent} from '../../../../shared/components/page/page-section/page-section.component';
+import {PageSectionContentComponent} from '../../../../shared/components/page/page-section-content/page-section-content.component';
+import {PageComponent} from '../../../../shared/components/page/page/page.component';
+import {PageContentComponent} from '../../../../shared/components/page/page-content/page-content.component';
+import {PlanPropertyBadgeComponent} from '../../../../shared/components/plan-property-badge/plan-property-badge.component';
+import {EditableListEntryComponent} from '../../../../shared/components/editable-list/editable-list-entry/editable-list-entry.component';
+import {
+  EditableListEntrySuffixComponent
+} from '../../../../shared/components/editable-list/editable-list-entry-suffix/editable-list-entry-suffix.component';
+import {MatIcon} from '@angular/material/icon';
+import {MatIconButton} from '@angular/material/button';
+import {UIControls} from './legacy/ui-controls';
 
 
 @Component({
   selector: 'app-mugs-visualization-base',
   standalone: true,
   imports: [
-    AsyncPipe
+    AsyncPipe,
+    PageSectionTitleComponent,
+    PageSectionComponent,
+    PageSectionContentComponent,
+    PageComponent,
+    PageContentComponent,
+    PlanPropertyBadgeComponent,
+    EditableListEntryComponent,
+    EditableListEntrySuffixComponent,
+    MatIcon,
+    MatIconButton
   ],
   templateUrl: './mugs-visualization-base.component.html',
   styleUrl: './mugs-visualization-base.component.scss'
@@ -24,6 +47,7 @@ import {AsyncPipe} from '@angular/common';
 export class MugsVisualizationBaseComponent {
   private store = inject(Store);
   private visualizationLauncher: VisualizationLauncher;
+  private uiControl: UIControls;
 
   //
   // Observables
@@ -43,6 +67,8 @@ export class MugsVisualizationBaseComponent {
   MSGS : string[][] = [];
   enforcedGoals : string[] = [];
   MUGTypes: Record<string, number> = {};
+  planProperties: PlanProperty[] = [];
+  selectedPlanProperties: PlanProperty[] = [];
 
   explanationDetails$ = this.stepGlobalExplanation$.pipe(
     map((explanation) => ({
@@ -102,7 +128,13 @@ export class MugsVisualizationBaseComponent {
   private initializeVisualizationLauncher(): void {
     if (Object.keys(this.MUGS).length == 0 || Object.keys(this.MSGS).length == 0) {return ;}
     this.visualizationLauncher = new VisualizationLauncher(this.MUGS, this.MSGS, this.MUGTypes, this.stepStatusType, this.enforcedGoals);
-    this.visualizationLauncher.initialize(`#${this.containerHeaderId}`);
+    this.visualizationLauncher.initialize(`#${this.containerHeaderId}`, this.planProperties, this.selectedPlanProperties);
+
+    this.uiControl = this.visualizationLauncher.getUIControlsInstance(); // Get instance of UIControls
+    this.uiControl.selectionChanged.subscribe(change => {
+      this.selectedPlanProperties = change;
+    });
+
   }
 
   private computeStepGoalIntCategory(): void{
@@ -121,6 +153,7 @@ export class MugsVisualizationBaseComponent {
             actionsClassToInt[actionClass] = counter++;
           }
           this.MUGTypes[actionName] = actionsClassToInt[actionClass];
+          this.planProperties.push(property);
         }
       });
     });
@@ -180,4 +213,10 @@ export class MugsVisualizationBaseComponent {
   }
 
   protected readonly PlanRunStatus = PlanRunStatus;
+
+  protected removeselectedPlanProperty(prop: PlanProperty): void
+  {
+    this.selectedPlanProperties = this.selectedPlanProperties.filter((property: PlanProperty) => property._id !== prop._id);
+    this.uiControl.updateEnforcementSection(prop)
+  }
 }

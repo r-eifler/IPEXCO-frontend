@@ -2,23 +2,41 @@
 
 @if (step && stepStatusType != PlanRunStatus.running && stepStatusType != PlanRunStatus.pending && stepStatusType != PlanRunStatus.failed)
 {
-  <div>
-    <div [id]="containerHeaderId" class="svg-container"></div>
-  </div>
-
-  <div>
-    <br/>
-    <div class="divider"></div>
-    <div class="section mx-10">
-      <h6>{{ containerGoalInteractionSectionTest }}</h6>
-      <div id="sec-enforcement" class="badge-panel"></div>
-    </div>
-    <div class="divider"></div>
-    <div class="section mx-10">
-      <h6>Result</h6>
-      <div id="sec-result" class="badge-panel">
-        No goals selected
-      </div>
-    </div>
-  </div>
+  <app-page>
+    <app-page-content>
+      <app-page-section>
+        <app-page-section-content>
+          <div [id]="containerHeaderId" class="svg-container"></div>
+        </app-page-section-content>
+      </app-page-section>
+      <br/>
+      <br/>
+      <app-page-section>
+        <app-page-section-content>
+          <app-page-section-title>{{ containerGoalInteractionSectionTest }}</app-page-section-title>
+        </app-page-section-content>
+        <app-page-section-content style="display: flex; flex-wrap: wrap; gap: 10px;">
+          @for (property of selectedPlanProperties; track property._id;)
+          {
+            <app-editable-list-entry>
+              <app-plan-property-badge [property]="property" class="badge-item"></app-plan-property-badge>
+              <app-editable-list-entry-suffix>
+                <button mat-icon-button (click)="removeselectedPlanProperty(property)" type="button" [disabled]="property.globalHardGoal"><mat-icon>delete</mat-icon></button>
+              </app-editable-list-entry-suffix>
+            </app-editable-list-entry>
+          }
+        </app-page-section-content>
+      </app-page-section>
+      <br/>
+      <br/>
+      <app-page-section>
+        <app-page-section-content>
+          <app-page-section-title>Result</app-page-section-title>
+          <div id="sec-result" class="badge-panel">
+            No goals selected
+          </div>
+        </app-page-section-content>
+      </app-page-section>
+    </app-page-content>
+  </app-page>
 }
