@@ -231,5 +231,6 @@ export class MugsVisualizationBaseComponent {
   {
     this.selectedPlanProperties = this.selectedPlanProperties.filter((property: PlanProperty) => property._id !== prop._id);
     this.uiControl.updateEnforcementSection(prop)
+    this.uiControl.updateGoalSelectionView()
   }
 }
