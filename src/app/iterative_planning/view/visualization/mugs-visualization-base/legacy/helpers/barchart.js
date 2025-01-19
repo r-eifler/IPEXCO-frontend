@@ -9,7 +9,7 @@ let where, svg, data, margin, width, height;
 function draw(_data, _where, _dims) {
     where = _where;
     data = _data;
-  data.elementsName = _data.elements.map(d => d.name);
+    data.elementsName = _data.elements.map(d => d.name);
     margin = _dims.margin;
     width = _dims.width;
     height = _dims.height;
@@ -37,6 +37,7 @@ function resize() {
     const x = d3.scaleBand()
         .range([0, width])
         .domain(data.elementsName);
+
     const y = d3.scaleLinear()
         .range([0, height])
         .domain([Math.max(...Object.values(data.counts)), 0]);
@@ -47,6 +48,7 @@ function resize() {
         .attr("class", "y axis")
         .call(
             d3.axisLeft(y)
+                .ticks(Math.ceil(Math.max(...Object.values(data.counts))))
                 .tickFormat((t, i) => t === 0 ? null : separateTicks(t, i, Object.values(data.counts).length, height, 30))
                 .tickSize(0)
         );
@@ -75,7 +77,7 @@ function resize() {
         .on("mouseover", mouseover)
         .on("mousemove", tooltip.mousemove)
         .on("mouseleave", mouseleave);
-};
+}
 
 function mouseover(e, d, style) {
     tooltip.html(

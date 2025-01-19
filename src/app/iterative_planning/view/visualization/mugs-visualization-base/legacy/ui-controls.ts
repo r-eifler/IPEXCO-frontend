@@ -5,7 +5,6 @@ import * as d3 from 'd3';
 import {IMetric, IMetrics} from './interfaces/IMetrics';
 import {IDataObject} from './interfaces/IDataObject';
 import {metricDefinitions} from './data-classes/metric-definition';
-import {SolvabilityResult} from './types/solvability-result';
 import {DataHandlerService} from './DataHandlerService';
 import {PlanRunStatus} from '../../../../domain/plan';
 import {PlanProperty} from '../../../../../shared/domain/plan-property/plan-property';
