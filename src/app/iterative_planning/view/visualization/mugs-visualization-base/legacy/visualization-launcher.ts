@@ -1,5 +1,6 @@
 import state from './state.js';
 import * as matrix from './helpers/matrix.js';
+import * as setChart from './helpers/setchart.js';
 import * as d3 from 'd3';
 import {UIControls} from './ui-controls';
 import {DataHandlerService} from './DataHandlerService';
@@ -21,6 +22,12 @@ export class VisualizationLauncher {
     this.mugsTypes = entryMugTypes;
     this.dataHandlerService = new DataHandlerService();
     this.dataHandlerService.stepType = statusType;
+
+    if (statusType == PlanRunStatus.not_solvable){
+      setChart.setIsStepUnsolvable(true);
+    }else {
+      setChart.setIsStepUnsolvable(false);
+    }
   }
 
   private initializeData(): void {

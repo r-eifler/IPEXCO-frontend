@@ -2,8 +2,13 @@ import state from "../state.js"
 import { COLORS } from "./colors.js";
 import { tooltip, separateTicks, constants } from "./utils.js";
 import * as d3 from 'd3';
+import {DataHandlerService} from "../DataHandlerService";
 
-let where, svg, data, margin, width, height, x, y;
+let where, svg, data, margin, width, height, x, y, isStepUnsolvable;
+
+function setIsStepUnsolvable(value) {
+  isStepUnsolvable = value
+}
 
 function draw(_data, _where, _dims) {
     where = _where;
@@ -85,12 +90,32 @@ function resize() {
 
 
     // Find all elements where a unit MUGS exists that only contains this element.
+    const dataHandlerService = new DataHandlerService();
+    const dataCopy = Object.create(data);
+    dataHandlerService.restoreData(dataCopy);
+    const potentialSolvableElements = []
+
     const singularElements = new Set();
     data.MUGS.forEach(mugs => {
         if(mugs.l.length === 1) {
+          if (isStepUnsolvable) {
+            potentialSolvableElements.push(mugs.l[0]);
+          }else{
             singularElements.add(mugs.l[0]);
+          }
         }
     });
+
+    if (isStepUnsolvable) {
+      const result = potentialSolvableElements.filter(potentialElement => {
+        return !dataCopy.MUGS.some(mugs => {
+          const fullSet = new Set(mugs.l);
+          return  [...fullSet].every(item => potentialSolvableElements.includes(item));
+        });
+      });
+
+      result.forEach(item => singularElements.add(item));
+    }
 
     // Highlight goal rows of singular elements.
     svg.selectAll()
@@ -150,7 +175,7 @@ function resize() {
             )
         svg.select("#setchart-x-axis path.domain").remove();
     }
-};
+}
 
 function mouseover(e, d, style) {
     if (d.x) {
@@ -173,5 +198,5 @@ function mouseleave(e, d) {
     tooltip.mouseleave(d3.selectAll(`#${d.id}, .${d.goal}, .mugs_${d.x}, #seg_${d.x}`));
 }
 
-export { draw, resize };
+export { draw, resize, setIsStepUnsolvable };
 
