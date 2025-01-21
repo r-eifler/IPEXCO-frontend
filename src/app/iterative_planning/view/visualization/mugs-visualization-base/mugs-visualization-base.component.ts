@@ -9,7 +9,7 @@ import {selectSoftGoals} from './mugs-visualization-base.component.selector';
 import {VisualizationLauncher} from './legacy/visualization-launcher';
 import {PlanProperty} from '../../../../shared/domain/plan-property/plan-property';
 import {PlanRunStatus} from '../../../domain/plan';
-import {AsyncPipe} from '@angular/common';
+import {AsyncPipe, NgStyle} from '@angular/common';
 import {PageSectionTitleComponent} from '../../../../shared/components/page/page-section-title/page-section-title.component';
 import {PageSectionComponent} from '../../../../shared/components/page/page-section/page-section.component';
 import {PageSectionContentComponent} from '../../../../shared/components/page/page-section-content/page-section-content.component';
@@ -39,7 +39,8 @@ import {UIControls} from './legacy/ui-controls';
     EditableListEntryComponent,
     EditableListEntrySuffixComponent,
     MatIcon,
-    MatIconButton
+    MatIconButton,
+    NgStyle
   ],
   templateUrl: './mugs-visualization-base.component.html',
   styleUrl: './mugs-visualization-base.component.scss'
@@ -70,6 +71,8 @@ export class MugsVisualizationBaseComponent {
   MUGTypes: Record<string, number> = {};
   planProperties: PlanProperty[] = [];
   selectedPlanProperties: PlanProperty[] = [];
+  planPropertiesCriticality: Record<string, string> = {};
+  length = 0;
 
   explanationDetails$ = this.stepGlobalExplanation$.pipe(
     map((explanation) => ({
@@ -84,7 +87,6 @@ export class MugsVisualizationBaseComponent {
 
   ngOnInit() : void {
     this.setStepHeaderText();
-    this.computeExplanations();
     this.computeStepGoals();
     this.computeStepGoalIntCategory();
     this.mapExplanationsToStepGoals();
@@ -134,7 +136,9 @@ export class MugsVisualizationBaseComponent {
     this.uiControl = this.visualizationLauncher.getUIControlsInstance();
 
     this.uiControl.selectionChanged.subscribe(change => {
-      this.selectedPlanProperties = change;
+      this.planPropertiesCriticality = change.criticalityMapping
+      this.selectedPlanProperties = change.planProperties;
+      this.length = Object.keys(this.planPropertiesCriticality).length
     });
 
     if (this.stepStatusType != PlanRunStatus.not_solvable){
@@ -190,13 +194,6 @@ export class MugsVisualizationBaseComponent {
       })
     });
 
-  }
-
-  private computeExplanations() : void{
-    this.stepId$.pipe(take(1)).subscribe(stepId => {
-      console.log('MUG-Visualization-Base: Register Global Computation for StepId:', stepId);
-      this.store.dispatch(registerGlobalExplanationComputation({iterationStepId: stepId}));
-    });
   }
 
   private mapExplanationsToStepGoals(){

@@ -25,8 +25,10 @@ export class VisualizationLauncher {
 
     if (statusType == PlanRunStatus.not_solvable){
       setChart.setIsStepUnsolvable(true);
+      matrix.setIsStepUnsolvable(true);
     }else {
       setChart.setIsStepUnsolvable(false);
+      matrix.setIsStepUnsolvable(false);
     }
   }
 

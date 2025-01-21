@@ -7,6 +7,7 @@ interface IDataObject {
   elements: PlanProperty[];
   elementsName: string[]
   selectedElements: PlanProperty[];
+  elementsCriticality: Record<string, string>;
   extents: {
     occurr: [number | undefined, number | undefined];
     nOccurr: [number | undefined, number | undefined];
@@ -31,6 +32,7 @@ const defaultDataObject: IDataObject = {
   elements: [],
   elementsName: [],
   selectedElements: [],
+  elementsCriticality : {},
   extents: {
     occurr: [undefined, undefined],
     nOccurr: [undefined, undefined],

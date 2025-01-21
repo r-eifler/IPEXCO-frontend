@@ -2,13 +2,18 @@ import state from "../state.js";
 import { separateTicks, tooltip, constants } from "./utils.js";
 import * as barchart from './barchart.js';
 import * as setchart from './setchart.js';
+import * as criticalitychart from './criticalitychart.js'
 import * as d3 from 'd3';
 
-let parentId, svgId, svg, matrixGroup, bgSquares, fgSquares, data, x, y;
+let parentId, svgId, svg, matrixGroup, bgSquares, fgSquares, data, x, y, isStepUnsolvable;
 const OFFSET = 2
 const margin = { top: 150, right: 0, bottom: 0, left: 200 }
 
 const minimalSize = 5;
+
+function setIsStepUnsolvable(value) {
+  isStepUnsolvable = value
+}
 
 function init(parent) {
     parentId = parent;
@@ -18,7 +23,7 @@ function init(parent) {
 }
 
 function draw(_data) {
-    data = _data;
+  data = _data;
   data.elementsName = _data.elements.map(d => d.name);
 
   console.log(_data);
@@ -26,6 +31,7 @@ function draw(_data) {
     svg = d3.select(parentId)
         .append("svg")
         .attr("id", svgId.slice(1));
+
     console.log(svg)
     matrixGroup = svg.append("g")
         .attr("class", "mainG-cv")
@@ -186,23 +192,49 @@ function resize() {
     );
 
     // add mugs helpers
-    d3.select("#mugs-helpers-setchart").remove();
-    d3.select(parentId).append("svg").attr("id", "mugs-helpers-setchart");
-    setchart.draw(
-        data,
-        "#mugs-helpers-setchart",
-        {
-            width: data.MUGS.length * (state.settings.compress ? constants.compressed : constants.rectWidth),
-            height: data.elementsName.length * constants.rectWidth,
-            margin: {
-                top: margin.top,
-                right: 0,
-                bottom: OFFSET,
-                left: 0
-            },
-            compress: state.settings.compress
-        }
+  d3.select("#charts-container").remove()
+  d3.select(parentId)
+    .style("display", "flex")
+    .style("width", "100%")
+    .style("gap", "0px")
+    .append("div")
+    .attr("id", "charts-container")
+
+  if (isStepUnsolvable) {
+    d3.select("#charts-container").append("svg").attr("id", "mugs-helpers-criticalitychart").style("margin-right", "-10px");
+    criticalitychart.draw(
+      data,
+      "#mugs-helpers-criticalitychart",
+      {
+        width: data.MUGS.length * (state.settings.compress ? constants.compressed : constants.rectWidth),
+        height: data.elementsName.length * constants.rectWidth,
+        margin: {
+          top: margin.top,
+          right: 0,
+          bottom: OFFSET,
+          left: 0
+        },
+        compress: state.settings.compress
+      }
     );
+  }
+
+  d3.select("#charts-container").append("svg").attr("id", "mugs-helpers-setchart");
+  setchart.draw(
+    data,
+    "#mugs-helpers-setchart",
+    {
+      width: data.MUGS.length * (state.settings.compress ? constants.compressed : constants.rectWidth),
+      height: data.elementsName.length * constants.rectWidth,
+      margin: {
+        top: margin.top,
+        right: 0,
+        bottom: OFFSET,
+        left: 0
+      },
+      compress: state.settings.compress
+    }
+  );
 }
 
 function mouseover(e, d) {
@@ -234,4 +266,4 @@ function mouseleave(e, d) {
     tooltip.mouseleave(d3.selectAll(`#${d.y}${d.x}, .${d.x}, .${d.y}`));
 }
 
-export { init, draw, remove, resize };
+export { init, draw, remove, resize, setIsStepUnsolvable };

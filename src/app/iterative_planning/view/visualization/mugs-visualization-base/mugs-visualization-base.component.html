@@ -19,10 +19,20 @@
           @for (property of selectedPlanProperties; track property._id;)
           {
             <app-editable-list-entry>
-              <app-plan-property-badge [property]="property" class="badge-item"></app-plan-property-badge>
-              <app-editable-list-entry-suffix>
-                <button mat-icon-button (click)="removeselectedPlanProperty(property)" type="button" [disabled]="property.globalHardGoal"><mat-icon>delete</mat-icon></button>
-              </app-editable-list-entry-suffix>
+                <app-plan-property-badge [property]="property" class="badge-item"></app-plan-property-badge>
+                <app-editable-list-entry-suffix>
+                  @if (stepStatusType != PlanRunStatus.not_solvable && length > 0){
+                    <mat-icon
+                      [ngStyle]="{
+                        color: planPropertiesCriticality[property.name],
+                        backgroundColor: planPropertiesCriticality[property.name],
+                        borderRadius: '20px'
+                      }">
+                      circle-icon
+                    </mat-icon>
+                  }
+                  <button mat-icon-button (click)="removeselectedPlanProperty(property)" type="button" [disabled]="property.globalHardGoal"><mat-icon>delete</mat-icon></button>
+                </app-editable-list-entry-suffix>
             </app-editable-list-entry>
           }
         </app-page-section-content>

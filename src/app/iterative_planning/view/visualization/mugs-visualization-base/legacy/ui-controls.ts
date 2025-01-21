@@ -9,6 +9,8 @@ import {DataHandlerService} from './DataHandlerService';
 import {PlanRunStatus} from '../../../../domain/plan';
 import {PlanProperty} from '../../../../../shared/domain/plan-property/plan-property';
 import {EventEmitter} from '@angular/core';
+import {SolvabilityResult} from './types/solvability-result';
+import {ISelectionChangeEmitter} from './interfaces/IUIControlEmitters';
 
 
 export class UIControls {
@@ -16,7 +18,7 @@ export class UIControls {
   private currentMetric: IMetric;
   private data: IDataObject;
   private readonly _dataHandlerService: DataHandlerService;
-  selectionChanged: EventEmitter<PlanProperty[]> = new EventEmitter();
+  selectionChanged: EventEmitter<ISelectionChangeEmitter> = new EventEmitter();
 
   constructor(dataHandlerService: DataHandlerService, data: IDataObject) {
     this._dataHandlerService = dataHandlerService;
@@ -80,6 +82,34 @@ export class UIControls {
     this.updateView();
   }
 
+  public computeCriticality(){
+    this.data.elementsCriticality = {};
+    const { result, counts } = this._dataHandlerService.computeSolvability(this.data) as SolvabilityResult;
+    const colorScale = d3.scaleSequential()
+      .interpolator(
+        d3.piecewise(d3.interpolateRgb.gamma(1.8), ["#9e9e9e", "#f44336"])
+      ).domain([
+        0,
+        Object.keys(counts).length > 0 ? Math.max(...Object.values(counts)) : 1
+      ]);
+
+    let arrayElement: PlanProperty[];
+    if (this._dataHandlerService.stepType == PlanRunStatus.not_solvable){
+      arrayElement = this.data.elements;
+    }else{
+      arrayElement = this.data.selectedElements;
+    }
+
+    arrayElement.forEach(element => {
+      let count = 0;
+      if(result === "unsolvable") {
+        count = counts[element.name] || 0;
+        this.data.elementsCriticality[element.name] = colorScale(count);
+      }
+
+    });
+  }
+
   private updateResultSection(): void {
     const { result, mugs, msgs } = this._dataHandlerService.computeSolvability(this.data);
 
@@ -134,6 +164,7 @@ export class UIControls {
 
       resultSection
         .append("div")
+        .style("margin-top", "10px")
         .text(`Smallest MUGS: ${mugs.join(", ")}`);
     }
 
@@ -144,7 +175,10 @@ export class UIControls {
 
       resultSection
         .append("div")
-        .text(`Smallest MSGS: ${msgs.join(", ")}`);
+        .style("margin-top", "10px")
+        //.text(`Smallest MSGS: ${msgs.join(", ")}`);
+        .html(`Largest MSGS: ${msgs.map(set => `(${[...set].join(", ")})`).join(", ")}`);
+
     }
   }
 
@@ -159,7 +193,12 @@ export class UIControls {
   }
 
   public updateGoalSelectionView(): void {
-    this.selectionChanged.emit(this.data.selectedElements);
+    this.computeCriticality();
+    const selectionChangeEmitter: ISelectionChangeEmitter = {
+      planProperties: this.data.selectedElements,
+      criticalityMapping: this.data.elementsCriticality
+    };
+    this.selectionChanged.emit(selectionChangeEmitter);
     this.updateResultSection();
     this.updateView();
   }
@@ -200,7 +239,6 @@ export class UIControls {
     });
 
     document.addEventListener("on-visualization-load", async (e) => {
-      // TODO: Make sure all visualization settings are applied.
       this.sortElements();
       this.sortSets();
       this._dataHandlerService.computeOrderDependentValues(this.data);

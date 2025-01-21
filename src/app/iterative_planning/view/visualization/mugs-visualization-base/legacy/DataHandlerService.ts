@@ -141,7 +141,11 @@ export class DataHandlerService {
 
       d.corr = {};
       d.corr.occurr = data.occurrence[d.x][d.y];
-      d.corr.nOccurr = data.occurrence[d.x][d.y] / data.maxOccurrence;
+      if (d.x === 0 && d.y === 0 && d.maxOccurrence === 0) {
+        d.corr.nOccurr = 0
+      }else{
+        d.corr.nOccurr = data.occurrence[d.x][d.y] / data.maxOccurrence ;
+      }
       d.corr.solvability = Utils.computeSolvabilityFraction(data.elements, data.MSGS, [d.x, d.y]);
       d.corr.distance = d.x !== d.y ? VectorMetrics.distanceCorrelation(ox, oy) : 0;
       d.corr.pearson = d.x !== d.y ? VectorMetrics.pearsonCorrelation(ox, oy) : 0;
@@ -205,7 +209,7 @@ export class DataHandlerService {
 
     MSGS.forEach(msgs => {
       if(selectedElements.filter(element => msgs.has(element.name)).length === selectedElements.length) {
-        foundMSGS = [...msgs];
+        foundMSGS.push(msgs);
         return;
       }
     });
