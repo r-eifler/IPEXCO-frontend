@@ -1,4 +1,4 @@
-import {Component, inject} from '@angular/core';
+import {ChangeDetectorRef, Component, inject} from '@angular/core';
 import {Store} from '@ngrx/store';
 import {selectIterativePlanningProperties, selectIterativePlanningSelectedStep} from '../../../state/iterative-planning.selector';
 import {catchError, map, take} from 'rxjs/operators';
@@ -50,6 +50,8 @@ export class MugsVisualizationBaseComponent {
   private visualizationLauncher: VisualizationLauncher;
   private uiControl: UIControls;
 
+  constructor(private cdr: ChangeDetectorRef) {}
+
   //
   // Observables
   //
@@ -96,6 +98,14 @@ export class MugsVisualizationBaseComponent {
     this.initializeVisualizationLauncher();
   }
 
+  private computeExplanations() : void{
+    this.stepId$.pipe(take(1)).subscribe(stepId => {
+      console.log('MUG-Visualization-Base: Register Global Computation for StepId:', stepId);
+      this.store.dispatch(registerGlobalExplanationComputation({iterationStepId: stepId}));
+    });
+  }
+
+
   private setStepHeaderText(){
     this.step$.pipe(
       filter((step) => !!step),
@@ -136,13 +146,26 @@ export class MugsVisualizationBaseComponent {
     this.uiControl = this.visualizationLauncher.getUIControlsInstance();
 
     this.uiControl.selectionChanged.subscribe(change => {
-      this.planPropertiesCriticality = change.criticalityMapping
-      this.selectedPlanProperties = change.planProperties;
-      this.length = Object.keys(this.planPropertiesCriticality).length
+      setTimeout(() => {
+        this.planPropertiesCriticality = change.criticalityMapping
+        this.selectedPlanProperties = change.planProperties;
+        this.length = Object.keys(this.planPropertiesCriticality).length
+      })
     });
-
+    this.cdr.detectChanges();
     if (this.stepStatusType != PlanRunStatus.not_solvable){
       this.uiControl.ForceEnforceGoalsToSelection(this.enforcedGoals);
+      // this.enforcedGoals.forEach(g => {
+      //   const event = new CustomEvent("select-elements", {
+      //     detail: {
+      //       selected: {
+      //         x: g.name,
+      //         y: "",
+      //       }
+      //     }
+      //   });
+      //   document.dispatchEvent(event);
+      // })
     }
 
   }
@@ -202,6 +225,10 @@ export class MugsVisualizationBaseComponent {
     const allG = Object.keys(this.stepGoals);
     this.explanationDetails$.pipe(take(1)).subscribe(explanation =>
     {
+      if (explanation.MUGS==undefined) {
+        this.computeExplanations()
+        this.mapExplanationsToStepGoals()
+      }
       const mappedMUGS: string[][] = explanation.MUGS.map((goals: string[]) =>
         goals.map(goalId => {
           const goal = this.stepGoals[goalId];

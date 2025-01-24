@@ -165,7 +165,7 @@ export class UIControls {
       resultSection
         .append("div")
         .style("margin-top", "10px")
-        .text(`Smallest MUGS: ${mugs.join(", ")}`);
+        .text(`Smallest MUGS: [ ${mugs.join(", ")} ]`);
     }
 
     if(msgs !== null && msgs.length > 0) {
@@ -176,8 +176,7 @@ export class UIControls {
       resultSection
         .append("div")
         .style("margin-top", "10px")
-        //.text(`Smallest MSGS: ${msgs.join(", ")}`);
-        .html(`Largest MSGS: ${msgs.map(set => `(${[...set].join(", ")})`).join(", ")}`);
+        .text(`Smallest MSGS: [ ${msgs.join(", ")} ]`);
 
     }
   }

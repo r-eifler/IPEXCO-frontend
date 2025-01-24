@@ -57,6 +57,8 @@ function resize() {
     // bars
     svg.selectAll()
         .data(data.elementsName.map(d => {
+          // console.log(d);
+          // console.log(data.counts);
             return {
                 value: data.counts[d],
                 name: d,
@@ -71,7 +73,7 @@ function resize() {
         .attr("x", d => x(d.name))
         .attr("y", d => y(d.value))
         .attr("width", x.bandwidth()-OFFSET)
-        .attr("height", d => height - y(d.value))
+        .attr("height", d => height - y(d.value) >= 0 ? height - y(d.value): 0)
         .attr("fill", COLORS.bars)
         .style("opacity", opacity.default)
         .on("mouseover", mouseover)

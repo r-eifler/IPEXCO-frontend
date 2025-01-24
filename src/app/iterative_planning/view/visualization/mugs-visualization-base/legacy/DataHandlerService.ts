@@ -209,7 +209,7 @@ export class DataHandlerService {
 
     MSGS.forEach(msgs => {
       if(selectedElements.filter(element => msgs.has(element.name)).length === selectedElements.length) {
-        foundMSGS.push(msgs);
+        foundMSGS = [...msgs];
         return;
       }
     });
