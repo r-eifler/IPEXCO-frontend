@@ -52,9 +52,9 @@ function draw(_data) {
         .append("rect")
         .attr("id", d => d.x + "" + d.y)
         .attr("class", d => "bg v_" + d.x + " v_" + d.y)
-        .on("mouseover", mouseover)
-        .on("mousemove", mousemove)
-        .on("mouseleave", mouseleave)
+        // .on("mouseover", mouseover)
+        // .on("mousemove", mousemove)
+        // .on("mouseleave", mouseleave)
         .on("click", (e, d) => document.dispatchEvent(new CustomEvent("select-elements", { detail: { selected: d, event: e } })))
         .style("fill-opacity", 0)
 

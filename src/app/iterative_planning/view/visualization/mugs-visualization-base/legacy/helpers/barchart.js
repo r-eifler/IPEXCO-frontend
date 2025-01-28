@@ -76,9 +76,9 @@ function resize() {
         .attr("height", d => height - y(d.value) >= 0 ? height - y(d.value): 0)
         .attr("fill", COLORS.bars)
         .style("opacity", opacity.default)
-        .on("mouseover", mouseover)
-        .on("mousemove", tooltip.mousemove)
-        .on("mouseleave", mouseleave);
+        // .on("mouseover", mouseover)
+        // .on("mousemove", tooltip.mousemove)
+        // .on("mouseleave", mouseleave);
 }
 
 function mouseover(e, d, style) {

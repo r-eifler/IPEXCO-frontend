@@ -122,9 +122,9 @@ function resize() {
             .attr("width", constants.compressed)
             .attr("height", constants.rectWidth)
             .style("fill", d => colorMapping(d.type))
-            .on("mouseover", mouseover)
-            .on("mousemove", tooltip.mousemove)
-            .on("mouseleave", mouseleave);
+            // .on("mouseover", mouseover)
+            // .on("mousemove", tooltip.mousemove)
+            // .on("mouseleave", mouseleave);
     } else {
         const radius = 8;
 
@@ -138,9 +138,9 @@ function resize() {
             .attr("cy", d => y(d.goal)+rectOffset)
             .attr("r", radius)
             .style("fill", d => colorMapping(d.type))
-            .on("mouseover", mouseover)
-            .on("mousemove", tooltip.mousemove)
-            .on("mouseleave", mouseleave);
+            // .on("mouseover", mouseover)
+            // .on("mousemove", tooltip.mousemove)
+            // .on("mouseleave", mouseleave);
 
 
         svg.select("#setchart-x-axis").remove();
