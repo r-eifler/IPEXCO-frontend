@@ -1,0 +1,41 @@
+@use '../../../../variables' as vars;
+
+.title {
+    width: 100%;
+  
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  
+    gap: var(--spacing-100);
+}
+
+.name-container {
+    width: fit-content;
+  
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  
+    gap: var(--spacing-100);
+}
+
+.property-name {
+    text-wrap: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.icon-container {
+    border-radius: var(--radius-full);
+    padding: var(--spacing-050);
+
+    display: grid;
+    background-color: vars.$primary-lighter
+}
+
+.title{
+    padding-bottom: var(--spacing-200);
+}
+  

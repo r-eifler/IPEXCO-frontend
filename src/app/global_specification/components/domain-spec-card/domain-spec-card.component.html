@@ -1,0 +1,24 @@
+<mat-card appearance="outlined">
+    <mat-card-header>
+        <div class="title">
+            <div class="name-container">
+                <div class="icon-container">
+                    <mat-icon>description</mat-icon>
+                </div>
+                <span class="property-name">{{ spec()?.name }}</span>
+            </div>
+
+            <div>
+                <mat-chip-set>
+                    <!-- @if(service()?.encoding){
+                        <mat-chip>{{ service()?.encoding }}</mat-chip>
+                    }
+                    @if(service()?.domainId){
+                        <mat-chip>{{ service()?.domainId }}</mat-chip>
+                    } -->
+                </mat-chip-set>
+            </div>
+        </div>
+    </mat-card-header>
+</mat-card>
+    

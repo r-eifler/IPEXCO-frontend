@@ -1,0 +1,130 @@
+@let domainSpecs = domainSpecifications$ | async;
+@let prompts = prompts$ | async;
+@let planners = planners$ | async;
+@let explainers = explainers$ | async;
+@let domains = domains$ | async;
+
+<app-page>
+    <app-page-title>
+        Domain Specification & Services
+    </app-page-title>
+    <app-page-content>
+        <app-page-section-list>
+            <app-page-section>
+                <app-page-section-title>
+                    Domains
+                </app-page-section-title>
+                <app-page-section-content>
+                    <div class="list-container">
+                        @if(domainSpecs?.length > 0){
+                            <app-editable-list>
+                                @for(spec of domainSpecs; track spec._id){
+                                    <app-editable-list-entry>
+                                        <app-domain-spec-card [spec]="spec"></app-domain-spec-card>
+                                        <app-editable-list-entry-suffix>
+                                            <button mat-icon-button (click)="editDomainSpec(spec._id)" type="button"><mat-icon>edit</mat-icon></button>
+                                            </app-editable-list-entry-suffix>
+                                        <app-editable-list-entry-suffix>
+                                        <button mat-icon-button (click)="removeDomainSpec(spec._id)" type="button"><mat-icon>delete</mat-icon></button>
+                                        </app-editable-list-entry-suffix>
+                                    </app-editable-list-entry>
+                                }
+                            </app-editable-list>
+                        }
+                        @else{
+                            <app-empty-state-section>
+                                <span>No domains available.</span>
+                            </app-empty-state-section>
+                        }
+                        <div class="button-container">
+                            <button mat-button (click)="onNewDomainSpec()">
+                                <mat-icon>note_add</mat-icon>
+                                new
+                            </button>
+                        </div>
+                    </div>
+                </app-page-section-content>
+            </app-page-section> 
+            <app-page-section>
+                <app-page-section-title>
+                    Services
+                </app-page-section-title>
+                <app-page-section-content>
+                    <div class="list-container">
+                        @if(planners?.length > 0){
+                            <app-editable-list>
+                            @for(planner of planners; track planner._id){
+                                <app-editable-list-entry>
+                                    <app-service-card [service]="planner" [type]="'planner'" [domains]="domains" ></app-service-card>
+                                    <app-editable-list-entry-suffix>
+                                    <button mat-icon-button (click)="removePlanner(planner._id)" type="button"><mat-icon>delete</mat-icon></button>
+                                    </app-editable-list-entry-suffix>
+                                </app-editable-list-entry>
+                            }
+                            </app-editable-list>
+                        }
+                        @else{
+                            <app-empty-state-section>
+                                <span>No planner available.</span>
+                            </app-empty-state-section>
+                        }
+                        <div class="button-container">
+                            <button mat-button (click)="onNewPlanner()">
+                                <mat-icon>add</mat-icon>
+                                add planner service
+                            </button>
+                        </div>
+                        @if(explainers?.length > 0){
+                            <app-editable-list>
+                            @for(explainer of explainers; track explainer._id){
+                                <app-editable-list-entry>
+                                    <app-service-card [service]="explainer" [type]="'explainer'" [domains]="domains"></app-service-card>
+                                    <app-editable-list-entry-suffix>
+                                    <button mat-icon-button (click)="removeExplainer(explainer._id)" type="button"><mat-icon>delete</mat-icon></button>
+                                    </app-editable-list-entry-suffix>
+                                </app-editable-list-entry>
+                            }
+                            </app-editable-list>
+                        }
+                        @else{
+                            <app-empty-state-section>
+                                <span>No explainer available.</span>
+                            </app-empty-state-section>
+                        }
+                        <div class="button-container">
+                            <button mat-button (click)="onNewExplainer()">
+                                <mat-icon>add</mat-icon>
+                                add explainer service
+                            </button>
+                        </div>
+                    </div>
+                </app-page-section-content>
+            </app-page-section> 
+            <app-page-section>
+                <app-page-section-title>
+                    Prompts
+                </app-page-section-title>
+                <app-page-section-content>
+                    <div class="list-container">
+                        @if(domainSpecs?.length > 0){
+                            @for(prompt of prompts; track prompt._id){
+                                <p>TODO</p>
+                            }
+                        }
+                        @else{
+                            <app-empty-state-section>
+                                <span>No prompts available.</span>
+                            </app-empty-state-section>
+                        }
+                        <div class="button-container">
+                            <button mat-button>
+                                <mat-icon>maps_ugc</mat-icon>
+                                new
+                            </button>
+                        </div>
+                    </div>
+                </app-page-section-content>
+            </app-page-section>  
+        </app-page-section-list>
+    </app-page-content>
+</app-page>

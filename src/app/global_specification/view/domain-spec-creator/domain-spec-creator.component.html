@@ -1,0 +1,20 @@
+<app-dialog>
+    <app-dialog-header>
+        <app-dialog-title>New Domain</app-dialog-title>
+    </app-dialog-header>
+    <app-dialog-content>
+        <form>
+            <div class="inputs-list">
+                <mat-form-field appearance="outline">
+                    <mat-label>Name</mat-label>
+                    <input matInput  [formControl]="form.controls.name">
+                </mat-form-field>
+            </div>
+        </form>
+    </app-dialog-content>
+    <app-dialog-footer>
+        <button mat-button (click)="onCancel()">Cancel</button>
+        <button mat-flat-button (click)="onCreate()">Create</button>
+    </app-dialog-footer>
+</app-dialog>
+

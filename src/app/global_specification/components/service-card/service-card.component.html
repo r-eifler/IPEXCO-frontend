@@ -1,0 +1,34 @@
+<mat-card appearance="outlined">
+    <mat-card-header>
+        <div class="title">
+            <div class="name-container">
+                <div class="icon-container">
+                    @if(type() == 'planner'){
+                        <mat-icon>explore</mat-icon>
+                    }
+                    @else{
+                        <mat-icon>contact_support</mat-icon>
+                    }
+                </div>
+                <span class="property-name">{{ service()?.name }}</span>
+            </div>
+            
+            <div>
+                <span>{{ service()?.url }}</span>
+            </div>
+
+            <div>
+                <mat-chip-set>
+                    @if(service()?.encoding){
+                        <mat-chip>{{ service()?.encoding }}</mat-chip>
+                    }
+                    @if(service()?.domainId){
+                        <mat-chip>{{ domainName() }}</mat-chip>
+                    }
+                </mat-chip-set>
+            </div>
+        </div>
+    </mat-card-header>
+</mat-card>
+    
+    

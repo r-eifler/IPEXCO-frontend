@@ -1,0 +1,18 @@
+
+enum PromptType {
+    SYSTEM = 'SYSTEM',
+    EXPLANATION_TRANSLATOR = 'EXPLANATION_TRANSLATOR',
+    EXPLANATION_TRANSLATOR_TEMPLATE = 'EXPLANATION_TRANSLATOR_TEMPLATE',
+    GOAL_TRANSLATOR = 'GOAL_TRANSLATOR',
+    GOAL_TRANSLATOR_TEMPLATE = 'GOAL_TRANSLATOR_TEMPLATE',
+    QUESTION_TRANSLATOR = 'QUESTION_TRANSLATOR',
+    QUESTION_TRANSLATOR_TEMPLATE = 'QUESTION_TRANSLATOR_TEMPLATE',
+}
+
+export interface Prompt {
+    _id?: string,
+    type: PromptType,
+    domain: string | null,
+    explainer: string | null,
+    text: string,
+}
