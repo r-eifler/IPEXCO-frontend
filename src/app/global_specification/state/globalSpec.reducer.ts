@@ -3,11 +3,12 @@ import { Loadable, LoadingState } from "src/app/shared/common/loadable.interface
 import { DomainSpecification } from "../domain/domain_specification";
 import { Prompt } from "../domain/prompt";
 import { Explainer, Planner } from "../domain/services";
-import { loadDomainSpecifications, loadDomainSpecificationsSuccess, loadExplainers, loadExplainersSuccess, loadPlanners, loadPlannersSuccess, loadPrompts, loadPromptsSuccess } from "./globalSpec.actions";
+import { loadDomainSpecification, loadDomainSpecifications, loadDomainSpecificationsSuccess, loadDomainSpecificationSuccess, loadExplainers, loadExplainersSuccess, loadPlanners, loadPlannersSuccess, loadPrompts, loadPromptsSuccess } from "./globalSpec.actions";
 
 
 export interface GlobalSpecificationState {
     domainSpecifications: Loadable<DomainSpecification[]>;
+    domainSpecification: Loadable<DomainSpecification>;
     prompts: Loadable<Prompt[]>;
     planner: Loadable<Planner[]>;
     explainer: Loadable<Explainer[]>;
@@ -17,6 +18,7 @@ export const globalSpecificationFeature = 'global-specification';
 
 const initialState: GlobalSpecificationState = {
     domainSpecifications: {state: LoadingState.Initial, data: undefined},
+    domainSpecification: {state: LoadingState.Initial, data: undefined},
     prompts: {state: LoadingState.Initial, data: undefined},
     planner: {state: LoadingState.Initial, data: undefined},
     explainer: {state: LoadingState.Initial, data: undefined},
@@ -32,6 +34,14 @@ export const globalSpecificationReducer = createReducer(
     on(loadDomainSpecificationsSuccess, (state, {domainSpecifications}): GlobalSpecificationState => ({
         ...state,
         domainSpecifications: {state: LoadingState.Done, data: domainSpecifications},
+    })),
+    on(loadDomainSpecification, (state): GlobalSpecificationState => ({
+        ...state,
+        domainSpecification: {state: LoadingState.Loading, data: undefined},
+    })),
+    on(loadDomainSpecificationSuccess, (state, {domainSpecification}): GlobalSpecificationState => ({
+        ...state,
+        domainSpecification: {state: LoadingState.Done, data: domainSpecification},
     })),
     on(loadPrompts, (state): GlobalSpecificationState => ({
         ...state,

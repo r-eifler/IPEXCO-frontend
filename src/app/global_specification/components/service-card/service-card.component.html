@@ -18,14 +18,14 @@
             </div>
 
             <div>
-                <mat-chip-set>
+                <div class="reverse">
                     @if(service()?.encoding){
-                        <mat-chip>{{ service()?.encoding }}</mat-chip>
+                        <mat-chip class="color">{{ service()?.encoding }}</mat-chip>
                     }
                     @if(service()?.domainId){
                         <mat-chip>{{ domainName() }}</mat-chip>
                     }
-                </mat-chip-set>
+                </div>
             </div>
         </div>
     </mat-card-header>

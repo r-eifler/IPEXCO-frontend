@@ -2,9 +2,7 @@ import { inject, Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { catchError, switchMap } from "rxjs/operators";
 import { of } from "rxjs";
-import { ExplainerServicesService } from "../../service/explainer.service";
-import { PlannerServicesService } from "../../service/planner.service";
-import { createDomainSpecification, createDomainSpecificationFailure, createDomainSpecificationSuccess, createExplainer, createExplainerFailure, createExplainerSuccess, createPlanner, createPlannerFailure, createPlannerSuccess, loadDomainSpecifications, loadExplainers, loadPlanners } from "../globalSpec.actions";
+import { createDomainSpecification, createDomainSpecificationFailure, createDomainSpecificationSuccess, loadDomainSpecifications } from "../globalSpec.actions";
 import { DomainSpecificationService } from "../../service/domainSpecification.service";
 
 

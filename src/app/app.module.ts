@@ -123,7 +123,7 @@ import { DemoDemoUpdatePlanPropertyEffect } from './demo/state/effects/update-pl
 import { DomainSpecificationService } from './global_specification/service/domainSpecification.service';
 import { PromptsService } from './global_specification/service/prompts.service';
 import { globalSpecificationFeature, globalSpecificationReducer } from './global_specification/state/globalSpec.reducer';
-import { LoadDomainSpecificationsEffect } from './global_specification/state/effects/load-domain-spec.effect';
+import { LoadDomainSpecificationsEffect } from './global_specification/state/effects/load-domain-specs.effect';
 import { LoadPromptsEffect } from './global_specification/state/effects/load-prompts.effect';
 import { LoadServicesEffect } from './global_specification/state/effects/load-services.effect';
 import { PlannerServicesService } from './global_specification/service/planner.service';
@@ -132,6 +132,8 @@ import { CreateServicesEffect } from './global_specification/state/effects/creat
 import { DeleteServicesEffect } from './global_specification/state/effects/delete-services.effect';
 import { CreateDomainSpecificationEffect } from './global_specification/state/effects/create-domain-spec.effect';
 import { DeleteDomainSpecificationEffect } from './global_specification/state/effects/delete-domain-spec.effect';
+import { LoadDomainSpecificationEffect } from './global_specification/state/effects/load-domain-spec.effect';
+import { UpdateDomainSpecificationEffect } from './global_specification/state/effects/update-domain-spec.effect';
 
 
 
@@ -243,6 +245,8 @@ import { DeleteDomainSpecificationEffect } from './global_specification/state/ef
         UploadDemoEffect,
         DemoDemoUpdatePlanPropertyEffect,
         LoadDomainSpecificationsEffect,
+        LoadDomainSpecificationEffect,
+        UpdateDomainSpecificationEffect,
         LoadPromptsEffect,
         LoadServicesEffect,
         CreateServicesEffect,

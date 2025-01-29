@@ -11,6 +11,10 @@ export const loadDomainSpecifications = createAction('[global specification] loa
 export const loadDomainSpecificationsSuccess = createAction('[global specification] load  domain specifications success', props<{domainSpecifications: DomainSpecification[]}>());
 export const loadDomainSpecificationsFailure = createAction('[global specification] load  domain specifications failure');
 
+export const loadDomainSpecification = createAction('[global specification] load  domain specification', props<{id: string}>());
+export const loadDomainSpecificationSuccess = createAction('[global specification] load  domain specification success', props<{domainSpecification: DomainSpecification}>());
+export const loadDomainSpecificationFailure = createAction('[global specification] load  domain specification failure');
+
 export const createDomainSpecification = createAction('[global specification] create  domainSpecification', props<{domainSpecification: DomainSpecification}>());
 export const createDomainSpecificationSuccess = createAction('[global specification] create  domainSpecification success', props<{domainSpecification: DomainSpecification}>());
 export const createDomainSpecificationFailure = createAction('[global specification] create  domainSpecification failure');

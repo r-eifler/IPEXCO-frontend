@@ -28,7 +28,7 @@ export class DomainSpecCreatorComponent {
     fb = inject(FormBuilder);
   
     form = this.fb.group({
-        name: this.fb.control(null, Validators.required),
+        name: this.fb.control<string>(null, Validators.required),
     });
   
     onCancel(){

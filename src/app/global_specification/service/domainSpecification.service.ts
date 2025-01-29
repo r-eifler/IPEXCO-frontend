@@ -26,6 +26,17 @@ export class DomainSpecificationService{
         ))
     }
 
+    getById$(id: string): Observable<DomainSpecification> {
+
+      return this.http.get<IHTTPData<DomainSpecification>>(this.BASE_URL + id).pipe(
+          map(({data}) => data),
+          map(spec => ({
+              ...spec, 
+              planPropertyTemplates: spec.planPropertyTemplates && spec.planPropertyTemplates.length > 0 ? JSON.parse(spec.planPropertyTemplates as unknown as string) : []
+          })
+      ))
+  }
+
     post$(spec: DomainSpecification): Observable<DomainSpecification | null> {
         return this.http.post<IHTTPData<DomainSpecification | null>>(this.BASE_URL, {data: spec}).pipe(
             map(({data}) => data)

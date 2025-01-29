@@ -14,6 +14,7 @@ import { ServiceCardComponent } from '../../components/service-card/service-card
 import { EditableListModule } from 'src/app/shared/components/editable-list/editable-list.module';
 import { DomainSpecCreatorComponent } from '../domain-spec-creator/domain-spec-creator.component';
 import { DomainSpecCardComponent } from '../../components/domain-spec-card/domain-spec-card.component';
+import { RouterLink } from '@angular/router';
 
 
 @Component({
@@ -26,7 +27,8 @@ import { DomainSpecCardComponent } from '../../components/domain-spec-card/domai
     EmptyStateSectionComponent,
     ServiceCardComponent,
     EditableListModule,
-    DomainSpecCardComponent
+    DomainSpecCardComponent,
+    RouterLink
   ],
   templateUrl: './specification-overview.component.html',
   styleUrl: './specification-overview.component.scss'
@@ -98,8 +100,5 @@ export class SpecificationOverviewComponent {
     this.store.dispatch(deleteExplainer({id}))
   }
 
-  editDomainSpec(id: string){
-    console.log("TODO")
-  }
 
 }

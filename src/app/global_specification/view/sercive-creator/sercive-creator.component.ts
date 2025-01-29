@@ -36,10 +36,10 @@ export class ServiceCreatorComponent {
   private urlRegex = /^http?:\/\/.+(:[0-9]{4,5})?.*$/;
 
   form = this.fb.group({
-      name: this.fb.control(null, Validators.required),
-      domainId: this.fb.control(null),
-      url: this.fb.control(null, [Validators.required, Validators.pattern(this.urlRegex)]),
-      encoding: this.fb.control(null, Validators.required),
+      name: this.fb.control<string>(null, Validators.required),
+      domainId: this.fb.control<string>(null),
+      url: this.fb.control<string>(null, [Validators.required, Validators.pattern(this.urlRegex)]),
+      encoding: this.fb.control<Encoding>(null, Validators.required),
   });
 
   onCancel(){

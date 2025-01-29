@@ -5,6 +5,7 @@ import { globalSpecificationFeature, GlobalSpecificationState } from "./globalSp
 const selectSpecFeature = createFeatureSelector<GlobalSpecificationState>(globalSpecificationFeature);
 
 export const selectDomainSpecifications = createSelector(selectSpecFeature, (state) => state.domainSpecifications.data)
+export const selectDomainSpecification = createSelector(selectSpecFeature, (state) => state.domainSpecification.data)
 export const selectPrompts = createSelector(selectSpecFeature, (state) => state.prompts.data)
 export const selectPlanners= createSelector(selectSpecFeature, (state) => state.planner.data)
 export const selectExplainers= createSelector(selectSpecFeature, (state) => state.explainer.data)

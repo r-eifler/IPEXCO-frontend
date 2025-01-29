@@ -11,7 +11,7 @@
       (update)="onSaveSetting($event)">
     </app-settings>
     <app-property-template-creator
-      [planning_task]="model$ | async"
+      [variablesTypes]="(model$ | async).types"
       [templates]="templates$ | async"
       (updatedTemplates)="onSaveTemplates($event)">
     </app-property-template-creator>

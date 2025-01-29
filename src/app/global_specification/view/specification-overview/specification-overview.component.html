@@ -22,10 +22,10 @@
                                     <app-editable-list-entry>
                                         <app-domain-spec-card [spec]="spec"></app-domain-spec-card>
                                         <app-editable-list-entry-suffix>
-                                            <button mat-icon-button (click)="editDomainSpec(spec._id)" type="button"><mat-icon>edit</mat-icon></button>
+                                            <a mat-icon-button ><mat-icon [routerLink]="'/spec/edit/' + spec._id">edit</mat-icon></a>
                                             </app-editable-list-entry-suffix>
                                         <app-editable-list-entry-suffix>
-                                        <button mat-icon-button (click)="removeDomainSpec(spec._id)" type="button"><mat-icon>delete</mat-icon></button>
+                                        <button mat-icon-button (click)="removeDomainSpec(spec._id)"><mat-icon>delete</mat-icon></button>
                                         </app-editable-list-entry-suffix>
                                     </app-editable-list-entry>
                                 }
