@@ -168,10 +168,10 @@ export class LLMService {
         )
     }
 
-    createLLMContext$(projectId: string, domain: string): Observable<LLMContext> {
-        console.log("Creating LLM context for projectId: ", projectId, "and domain: ", domain);
+    createLLMContext$(projectId: string, iterationStepId: string): Observable<LLMContext> {
+        console.log("Creating LLM context for projectId: ", projectId, "and iterationStepId: ", iterationStepId);
         return this.http.post<IHTTPData<LLMContext>>(this.BASE_URL + "create-llm-context", 
-            { projectId, domain  }
+            { projectId, iterationStepId  }
         ).pipe(
             map(({ data }) => data),
             tap(response => console.log('Successfully created LLM context:', response)),

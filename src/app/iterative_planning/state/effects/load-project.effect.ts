@@ -23,7 +23,7 @@ export class LoadIterativePlanningProjectEffect{
                 loadIterationSteps({ id }),
                 ...(project.settings.explanationInterfaceType === 'LLM_CHAT' || 
                     project.settings.propertyCreationInterfaceType === 'LLM_CHAT' 
-                    ? [createLLMContext({projectId: id, domain: project.baseTask?.domain_name})]
+                    ? [createLLMContext({projectId: id, iterationStepId: null})]
                     : [])
             ]),
             catchError(() => of(loadProjectFailure())),

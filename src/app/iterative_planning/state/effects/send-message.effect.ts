@@ -172,24 +172,24 @@ export class SendMessageToLLMEffect {
         })
     ))
 
-    public sendMessageToExplanationTranslator$ = createEffect(() => this.actions$.pipe(
-        ofType(sendMessageToLLMExplanationTranslator),
-        concatLatestFrom(({ question, explanationMUGS, explanationMGCS, question_type, questionArgument, iterationStepId }) => [
-            this.store.select(selectLLMThreadIdET),
-            this.store.select(selectIterativePlanningProject),
-            this.store.select(selectIterativePlanningProperties),
-            this.store.select(selectIterationStepById(iterationStepId))]),
-        switchMap(([{ question, explanationMUGS, explanationMGCS, question_type, questionArgument, iterationStepId }, threadIdET, project, properties, iterationStep]) => {
-            const startTime = performance.now();
-            return this.service.postMessageET$(question, explanationMUGS, explanationMGCS, question_type as QuestionType, questionArgument, iterationStep, project, Object.values(properties), threadIdET).pipe(
-                switchMap(response => {
-                    const duration = performance.now() - startTime;
-                    return [sendMessageToLLMExplanationTranslatorSuccess({ response: response.response, threadId: response.threadId, duration })];
-                }),
-                catchError(() => of(sendMessageToLLMExplanationTranslatorFailure()))
-            );
-        })
-    ))
+    // public sendMessageToExplanationTranslator$ = createEffect(() => this.actions$.pipe(
+    //     ofType(sendMessageToLLMExplanationTranslator),
+    //     concatLatestFrom(({ question, explanationMUGS, explanationMGCS, question_type, questionArgument, iterationStepId }) => [
+    //         this.store.select(selectLLMThreadIdET),
+    //         this.store.select(selectIterativePlanningProject),
+    //         this.store.select(selectIterativePlanningProperties),
+    //         this.store.select(selectIterationStepById(iterationStepId))]),
+    //     switchMap(([{ question, explanationMUGS, explanationMGCS, question_type, questionArgument, iterationStepId }, threadIdET, project, properties, iterationStep]) => {
+    //         const startTime = performance.now();
+    //         return this.service.postMessageET$(question, explanationMUGS, explanationMGCS, question_type as QuestionType, questionArgument, iterationStep, project, Object.values(properties), threadIdET).pipe(
+    //             switchMap(response => {
+    //                 const duration = performance.now() - startTime;
+    //                 return [sendMessageToLLMExplanationTranslatorSuccess({ response: response.response, threadId: response.threadId, duration })];
+    //             }),
+    //             catchError(() => of(sendMessageToLLMExplanationTranslatorFailure()))
+    //         );
+    //     })
+    // ))
 
     public sendDirectMessageToExplanationTranslator$ = createEffect(() => this.actions$.pipe(
         ofType(directMessageET),

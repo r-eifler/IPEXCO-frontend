@@ -231,29 +231,56 @@ export class LogUserActivitiesEffect{
         concatLatestFrom(() => [
             this.store.select(selectIterativePlanningProject),
             this.store.select(selectIterativePlanningSelectedStepId),
-            this.store.select(selectIterativePlanningProperties)
         ]),
-        mergeMap(([{question, naturalLanguageQuestion}, project, iterationStepId, planProperties]) => [
-            logAction({action: {
+        map(([{question}, project, iterationStepId]) => {
+            console.log('LLM Question Asked:', {
+                propertyId: question.propertyId,
+                questionType: question.questionType,
+                demoId: project._id,
+                stepId: iterationStepId
+            });
+            
+            return logAction({action: {
                 type: ActionType.ASK_QUESTION, 
                 data: {
                     demoId: project._id,
                     stepId: iterationStepId,
-                    propertyId: question.propertyId,
+                    propertyId: question.propertyId ?? null,
                     questionType: question.questionType,
                 }
-            }
-            }),
-            logAction({action: {
+            }})
+        })
+    ));
+
+    public questionAskedLLMTranslation$ = createEffect(() => this.actions$.pipe(
+        ofType(questionPosedLLM),
+        concatLatestFrom(() => [
+            this.store.select(selectIterativePlanningProject),
+            this.store.select(selectIterativePlanningSelectedStepId),
+            this.store.select(selectIterativePlanningProperties)
+        ]),
+        map(([{question, naturalLanguageQuestion}, project, iterationStepId, planProperties]) => {
+            console.log('Logging LLM question translation:', {
+                originalQuestion: naturalLanguageQuestion,
+                translatedQuestion: question.questionType + 
+                    (question.propertyId && planProperties[question.propertyId]?.name 
+                        ? " " + planProperties[question.propertyId].name 
+                        : "")
+            });
+            
+            return logAction({action: {
                 type: ActionType.ASK_QUESTION_LLM, 
                 data: {
                     demoId: project._id,
                     stepId: iterationStepId,
-                    translatedQuestion: question.questionType +" "+ planProperties[question.propertyId].name,
+                    translatedQuestion: question.questionType + 
+                        (question.propertyId && planProperties[question.propertyId]?.name 
+                            ? " " + planProperties[question.propertyId].name 
+                            : ""),
                     originalQuestion: naturalLanguageQuestion,
                 }
             }})
-        ])
+        })
     ));
 
     public sentMessageToQT$ = createEffect(() => this.actions$.pipe(
