@@ -14,15 +14,22 @@ export class PromptsService{
     private BASE_URL = environment.apiURL + "llm-spec/";
 
     
-    getPrompt$(): Observable<Prompt[]> {
+    getPrompts$(): Observable<Prompt[]> {
 
         return this.http.get<IHTTPData<Prompt[]>>(this.BASE_URL + 'prompt').pipe(
             map(({data}) => data),
         )
     }
 
-    postPrompt$(prompt: Prompt): Observable<string | null> {
-        return this.http.post<IHTTPData<string | null>>(this.BASE_URL + 'prompt', {data: prompt}).pipe(
+    getPrompt$(id: string): Observable<Prompt> {
+
+        return this.http.get<IHTTPData<Prompt>>(this.BASE_URL + 'prompt/' + id).pipe(
+            map(({data}) => data),
+        )
+    }
+
+    postPrompt$(prompt: Prompt): Observable<Prompt | null> {
+        return this.http.post<IHTTPData<Prompt | null>>(this.BASE_URL + 'prompt', {data: prompt}).pipe(
             map(({data}) => data)
         )
     }
@@ -35,20 +42,27 @@ export class PromptsService{
     }
 
     deletePrompt$(id: string): Observable<boolean> {
-      return this.http.delete<IHTTPData<boolean>>(this.BASE_URL  + 'prompt/ '+ id).pipe(
+      return this.http.delete<IHTTPData<boolean>>(this.BASE_URL  + 'prompt/' + id).pipe(
           map(({data}) => data)
       )
     }
 
-    getOutputSchema$(): Observable<OutputSchema[]> {
+    getOutputSchemas$(): Observable<OutputSchema[]> {
 
         return this.http.get<IHTTPData<OutputSchema[]>>(this.BASE_URL + 'output-schema').pipe(
             map(({data}) => data),
         )
     }
 
-    postOutputSchema$(prompt: OutputSchema): Observable<string | null> {
-        return this.http.post<IHTTPData<string | null>>(this.BASE_URL + 'output-schema', {data: prompt}).pipe(
+    getOutputSchema$(id: string): Observable<OutputSchema> {
+
+        return this.http.get<IHTTPData<OutputSchema>>(this.BASE_URL + 'output-schema/' + id).pipe(
+            map(({data}) => data),
+        )
+    }
+
+    postOutputSchema$(prompt: OutputSchema): Observable<OutputSchema | null> {
+        return this.http.post<IHTTPData<OutputSchema | null>>(this.BASE_URL + 'output-schema', {data: prompt}).pipe(
             map(({data}) => data)
         )
     }

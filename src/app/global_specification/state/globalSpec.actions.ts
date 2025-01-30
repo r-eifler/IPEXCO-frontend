@@ -1,6 +1,6 @@
 import { createAction, props } from "@ngrx/store";
 import { DomainSpecification } from "../domain/domain_specification";
-import { Prompt } from "../domain/prompt";
+import { OutputSchema, Prompt } from "../domain/prompt";
 import { Explainer, Planner } from "../domain/services";
 
 
@@ -36,6 +36,10 @@ export const loadPrompts = createAction('[global specification] load  prompts');
 export const loadPromptsSuccess = createAction('[global specification] load  prompts success', props<{prompts: Prompt[]}>());
 export const loadPromptsFailure = createAction('[global specification] load  prompts failure');
 
+export const loadPrompt = createAction('[global specification] load  prompt', props<{id: string}>());
+export const loadPromptSuccess = createAction('[global specification] load  prompt success', props<{prompt: Prompt}>());
+export const loadPromptFailure = createAction('[global specification] load  prompt failure');
+
 export const createPrompt = createAction('[global specification] create  prompt', props<{prompt: Prompt}>());
 export const createPromptSuccess = createAction('[global specification] create  prompt success', props<{prompt: Prompt}>());
 export const createPromptFailure = createAction('[global specification] create  prompt failure');
@@ -44,9 +48,30 @@ export const deletePrompt = createAction('[global specification] delete  prompts
 export const deletePromptSuccess = createAction('[global specification] delete  prompts success');
 export const deletePromptFailure = createAction('[global specification] delete  prompts failure');
 
-export const updatePrompt = createAction('[global specification] update prompt', props<{prompts: Prompt}>());
-export const updatePromptSuccess = createAction('[global specification] update prompt success', props<{prompts: Prompt}>());
+export const updatePrompt = createAction('[global specification] update prompt', props<{prompt: Prompt}>());
+export const updatePromptSuccess = createAction('[global specification] update prompt success', props<{prompt: Prompt}>());
 export const updatePromptFailure = createAction('[global specification] update prompt failure');
+
+// Output Schema
+export const loadOutputSchemas = createAction('[global specification] load  output schemas');
+export const loadOutputSchemasSuccess = createAction('[global specification] load  output schemas success', props<{outputSchemas: OutputSchema[]}>());
+export const loadOutputSchemasFailure = createAction('[global specification] load  output schemas failure');
+
+export const loadOutputSchema = createAction('[global specification] load  output schema', props<{id: string}>());
+export const loadOutputSchemaSuccess = createAction('[global specification] load  output schema success', props<{outputSchema: OutputSchema}>());
+export const loadOutputSchemaFailure = createAction('[global specification] load  output schema failure');
+
+export const createOutputSchema = createAction('[global specification] create  output schema', props<{outputSchema: OutputSchema}>());
+export const createOutputSchemaSuccess = createAction('[global specification] create  output schema success', props<{outputSchema: OutputSchema}>());
+export const createOutputSchemaFailure = createAction('[global specification] create  output schema failure');
+
+export const deleteOutputSchema = createAction('[global specification] delete  output schemas', props<{id: string}>());
+export const deleteOutputSchemaSuccess = createAction('[global specification] delete  output schemas success');
+export const deleteOutputSchemaFailure = createAction('[global specification] delete  output schemas failure');
+
+export const updateOutputSchema = createAction('[global specification] update output schema', props<{outputSchema: OutputSchema}>());
+export const updateOutputSchemaSuccess = createAction('[global specification] update output schema success', props<{outputSchema: OutputSchema}>());
+export const updateOutputSchemaFailure = createAction('[global specification] update output schema failure');
 
 
 

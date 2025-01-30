@@ -134,6 +134,10 @@ import { CreateDomainSpecificationEffect } from './global_specification/state/ef
 import { DeleteDomainSpecificationEffect } from './global_specification/state/effects/delete-domain-spec.effect';
 import { LoadDomainSpecificationEffect } from './global_specification/state/effects/load-domain-spec.effect';
 import { UpdateDomainSpecificationEffect } from './global_specification/state/effects/update-domain-spec.effect';
+import { CreatePromptsEffect } from './global_specification/state/effects/create-prompts.effect';
+import { DeletePromptsEffect } from './global_specification/state/effects/delete-prompts.effect';
+import { LoadPromptEffect } from './global_specification/state/effects/load-prompt.effect';
+import { UpdatePromptsEffect } from './global_specification/state/effects/update-prompt.effect';
 
 
 
@@ -248,6 +252,10 @@ import { UpdateDomainSpecificationEffect } from './global_specification/state/ef
         LoadDomainSpecificationEffect,
         UpdateDomainSpecificationEffect,
         LoadPromptsEffect,
+        LoadPromptEffect,
+        UpdatePromptsEffect,
+        CreatePromptsEffect,
+        DeletePromptsEffect,
         LoadServicesEffect,
         CreateServicesEffect,
         DeleteServicesEffect,

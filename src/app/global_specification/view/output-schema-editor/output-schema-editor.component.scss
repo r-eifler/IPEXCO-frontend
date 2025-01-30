@@ -1,0 +1,15 @@
+@use '../../../../variables' as vars;
+
+mat-form-field {
+    width: 100%;
+}
+
+.mat-mdc-standard-chip:not(.mdc-evolution-chip--disabled) {
+    background-color: vars.$primary-lighter
+}
+
+.chip-list {
+    display: flex;
+    flex-direction: row;
+    gap: var(--spacing-100);
+}

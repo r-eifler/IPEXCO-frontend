@@ -1,0 +1,28 @@
+<mat-card appearance="outlined">
+    <mat-card-header>
+        <div class="title">
+            <div class="name-container">
+                <div class="icon-container">
+                    <mat-icon>speaker_notes</mat-icon>
+                </div>
+                <span class="property-name">{{ prompt()?.name }}</span>
+            </div>
+
+            <div>
+                <div class="reverse">
+
+                    @if(prompt()?.domain){
+                        <mat-chip class="color">{{ domainName() }}</mat-chip>
+                    }
+                    @if(prompt()?.explainer){
+                        <mat-chip>{{ explainerName() }}</mat-chip>
+                    }
+                    <mat-chip>{{ prompt()?.type }}</mat-chip>
+                    <mat-chip>{{ prompt()?.agent }}</mat-chip>
+                </div>
+            </div>
+        </div>
+    </mat-card-header>
+</mat-card>
+    
+    

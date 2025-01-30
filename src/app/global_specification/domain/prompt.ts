@@ -1,10 +1,10 @@
-enum AgentType {
+export enum AgentType {
     EXPLANATION_TRANSLATOR = 'EXPLANATION_TRANSLATOR',
     GOAL_TRANSLATOR = 'GOAL_TRANSLATOR',
     QUESTION_CLASSIFIER = 'QUESTION_CLASSIFIER',
 }
 
-enum PromptType {
+export enum PromptType {
     SYSTEM = 'SYSTEM',
     INSTRUCTION_AND_EXAMPLES  = 'INSTRUCTION_AND_EXAMPLES',
     INPUT_DATA = 'INPUT_DATA'
@@ -12,6 +12,7 @@ enum PromptType {
 
 export interface Prompt {
     _id?: string,
+    name: string,
     agent: AgentType,
     type: PromptType,
     domain: string | null,
@@ -21,6 +22,7 @@ export interface Prompt {
 
 export interface OutputSchema {
     _id?: string,
+    name: string,
     agent: AgentType,
     domain: string | null,
     explainer: string | null,

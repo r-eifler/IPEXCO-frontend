@@ -1,5 +1,6 @@
 @let domainSpecs = domainSpecifications$ | async;
 @let prompts = prompts$ | async;
+@let outputSchemas = outputSchemas$ | async;
 @let planners = planners$ | async;
 @let explainers = explainers$ | async;
 @let domains = domains$ | async;
@@ -22,10 +23,10 @@
                                     <app-editable-list-entry>
                                         <app-domain-spec-card [spec]="spec"></app-domain-spec-card>
                                         <app-editable-list-entry-suffix>
-                                            <a mat-icon-button ><mat-icon [routerLink]="'/spec/edit/' + spec._id">edit</mat-icon></a>
-                                            </app-editable-list-entry-suffix>
+                                            <a mat-icon-button ><mat-icon [routerLink]="'/spec/domain/' + spec._id + '/edit'">edit</mat-icon></a>
+                                        </app-editable-list-entry-suffix>
                                         <app-editable-list-entry-suffix>
-                                        <button mat-icon-button (click)="removeDomainSpec(spec._id)"><mat-icon>delete</mat-icon></button>
+                                            <button mat-icon-button (click)="removeDomainSpec(spec._id)"><mat-icon>delete</mat-icon></button>
                                         </app-editable-list-entry-suffix>
                                     </app-editable-list-entry>
                                 }
@@ -57,7 +58,7 @@
                                 <app-editable-list-entry>
                                     <app-service-card [service]="planner" [type]="'planner'" [domains]="domains" ></app-service-card>
                                     <app-editable-list-entry-suffix>
-                                    <button mat-icon-button (click)="removePlanner(planner._id)" type="button"><mat-icon>delete</mat-icon></button>
+                                        <button mat-icon-button (click)="removePlanner(planner._id)" type="button"><mat-icon>delete</mat-icon></button>
                                     </app-editable-list-entry-suffix>
                                 </app-editable-list-entry>
                             }
@@ -80,7 +81,7 @@
                                 <app-editable-list-entry>
                                     <app-service-card [service]="explainer" [type]="'explainer'" [domains]="domains"></app-service-card>
                                     <app-editable-list-entry-suffix>
-                                    <button mat-icon-button (click)="removeExplainer(explainer._id)" type="button"><mat-icon>delete</mat-icon></button>
+                                        <button mat-icon-button (click)="removeExplainer(explainer._id)" type="button"><mat-icon>delete</mat-icon></button>
                                     </app-editable-list-entry-suffix>
                                 </app-editable-list-entry>
                             }
@@ -102,14 +103,24 @@
             </app-page-section> 
             <app-page-section>
                 <app-page-section-title>
-                    Prompts
+                    LMM Agents
                 </app-page-section-title>
                 <app-page-section-content>
                     <div class="list-container">
-                        @if(domainSpecs?.length > 0){
-                            @for(prompt of prompts; track prompt._id){
-                                <p>TODO</p>
-                            }
+                        @if(prompts?.length > 0){
+                            <app-editable-list>
+                                @for(prompt of prompts; track prompt._id){
+                                    <app-editable-list-entry>
+                                        <app-prompt-card [prompt]="prompt" [domains]="domains" [explainer]="explainers"></app-prompt-card>
+                                        <app-editable-list-entry-suffix>
+                                            <a mat-icon-button ><mat-icon [routerLink]="'/spec/prompt/' + prompt._id + '/edit'">edit</mat-icon></a>
+                                        </app-editable-list-entry-suffix>
+                                        <app-editable-list-entry-suffix>
+                                            <button mat-icon-button (click)="removePrompt(prompt._id)" type="button"><mat-icon>delete</mat-icon></button>
+                                        </app-editable-list-entry-suffix>
+                                    </app-editable-list-entry>
+                                }
+                            </app-editable-list>
                         }
                         @else{
                             <app-empty-state-section>
@@ -117,9 +128,36 @@
                             </app-empty-state-section>
                         }
                         <div class="button-container">
+                            <button mat-button (click)="onNewPrompt()">
+                                <mat-icon>add_comment</mat-icon>
+                                new prompt
+                            </button>
+                        </div>
+
+                        @if(outputSchemas?.length > 0){
+                            <app-editable-list>
+                                @for(outputSchema of outputSchemas; track outputSchema._id){
+                                    <app-editable-list-entry>
+                                        <app-output-schema-card [schema]="outputSchema" [domains]="domains" [explainer]="explainers"></app-output-schema-card>
+                                        <app-editable-list-entry-suffix>
+                                            <a mat-icon-button ><mat-icon [routerLink]="'/spec/schema/' + outputSchema._id + '/edit'">edit</mat-icon></a>
+                                        </app-editable-list-entry-suffix>
+                                        <app-editable-list-entry-suffix>
+                                            <button mat-icon-button (click)="removeOutputSchema(outputSchema._id)" type="button"><mat-icon>delete</mat-icon></button>
+                                        </app-editable-list-entry-suffix>
+                                    </app-editable-list-entry>
+                                }
+                            </app-editable-list>
+                        }
+                        @else{
+                            <app-empty-state-section>
+                                <span>No output schemas available.</span>
+                            </app-empty-state-section>
+                        }
+                        <div class="button-container" (click)="onNewOutputSchema()">
                             <button mat-button>
-                                <mat-icon>maps_ugc</mat-icon>
-                                new
+                                <mat-icon>schema</mat-icon>
+                                new output schema
                             </button>
                         </div>
                     </div>

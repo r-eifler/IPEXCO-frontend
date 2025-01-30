@@ -1,15 +1,18 @@
 import { createReducer, on } from "@ngrx/store";
 import { Loadable, LoadingState } from "src/app/shared/common/loadable.interface";
 import { DomainSpecification } from "../domain/domain_specification";
-import { Prompt } from "../domain/prompt";
+import { OutputSchema, Prompt } from "../domain/prompt";
 import { Explainer, Planner } from "../domain/services";
-import { loadDomainSpecification, loadDomainSpecifications, loadDomainSpecificationsSuccess, loadDomainSpecificationSuccess, loadExplainers, loadExplainersSuccess, loadPlanners, loadPlannersSuccess, loadPrompts, loadPromptsSuccess } from "./globalSpec.actions";
+import { loadDomainSpecification, loadDomainSpecifications, loadDomainSpecificationsSuccess, loadDomainSpecificationSuccess, loadExplainers, loadExplainersSuccess, loadOutputSchema, loadOutputSchemas, loadOutputSchemasSuccess, loadOutputSchemaSuccess, loadPlanners, loadPlannersSuccess, loadPrompt, loadPrompts, loadPromptsSuccess, loadPromptSuccess } from "./globalSpec.actions";
 
 
 export interface GlobalSpecificationState {
     domainSpecifications: Loadable<DomainSpecification[]>;
     domainSpecification: Loadable<DomainSpecification>;
     prompts: Loadable<Prompt[]>;
+    prompt: Loadable<Prompt>;
+    outputSchemas: Loadable<OutputSchema[]>;
+    outputSchema: Loadable<OutputSchema>;
     planner: Loadable<Planner[]>;
     explainer: Loadable<Explainer[]>;
 }
@@ -20,6 +23,9 @@ const initialState: GlobalSpecificationState = {
     domainSpecifications: {state: LoadingState.Initial, data: undefined},
     domainSpecification: {state: LoadingState.Initial, data: undefined},
     prompts: {state: LoadingState.Initial, data: undefined},
+    prompt: {state: LoadingState.Initial, data: undefined},
+    outputSchemas: {state: LoadingState.Initial, data: undefined},
+    outputSchema: {state: LoadingState.Initial, data: undefined},
     planner: {state: LoadingState.Initial, data: undefined},
     explainer: {state: LoadingState.Initial, data: undefined},
 }
@@ -50,6 +56,30 @@ export const globalSpecificationReducer = createReducer(
     on(loadPromptsSuccess, (state, {prompts}): GlobalSpecificationState => ({
         ...state,
         prompts: {state: LoadingState.Done, data: prompts},
+    })),
+    on(loadPrompt, (state): GlobalSpecificationState => ({
+        ...state,
+        prompt: {state: LoadingState.Loading, data: undefined},
+    })),
+    on(loadPromptSuccess, (state, {prompt}): GlobalSpecificationState => ({
+        ...state,
+        prompt: {state: LoadingState.Done, data: prompt},
+    })),
+    on(loadOutputSchemas, (state): GlobalSpecificationState => ({
+        ...state,
+        outputSchemas: {state: LoadingState.Loading, data: undefined},
+    })),
+    on(loadOutputSchemasSuccess, (state, {outputSchemas}): GlobalSpecificationState => ({
+        ...state,
+        outputSchemas: {state: LoadingState.Done, data: outputSchemas},
+    })),
+    on(loadOutputSchema, (state): GlobalSpecificationState => ({
+        ...state,
+        outputSchema: {state: LoadingState.Loading, data: undefined},
+    })),
+    on(loadOutputSchemaSuccess, (state, {outputSchema}): GlobalSpecificationState => ({
+        ...state,
+        outputSchema: {state: LoadingState.Done, data: outputSchema},
     })),
     on(loadPlanners, (state): GlobalSpecificationState => ({
         ...state,

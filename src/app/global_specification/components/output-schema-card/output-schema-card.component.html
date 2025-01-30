@@ -1,0 +1,25 @@
+<mat-card appearance="outlined">
+    <mat-card-header>
+        <div class="title">
+            <div class="name-container">
+                <div class="icon-container">
+                    <mat-icon>schema</mat-icon>
+                </div>
+                <span class="property-name">{{ schema()?.name }}</span>
+            </div>
+
+            <div>
+                <div class="reverse">
+
+                    @if(schema()?.domain){
+                        <mat-chip class="color">{{ domainName() }}</mat-chip>
+                    }
+                    @if(schema()?.explainer){
+                        <mat-chip>{{ explainerName() }}</mat-chip>
+                    }
+                    <mat-chip>{{ schema()?.agent }}</mat-chip>
+                </div>
+            </div>
+        </div>
+    </mat-card-header>
+</mat-card>
