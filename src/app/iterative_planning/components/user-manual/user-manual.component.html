@@ -55,7 +55,7 @@
                     the highest achieved utility as shown below in the top of the list of iteration steps.
                 </p>
 
-                <app-steps-list-hero 
+                <app-steps-list-hero
                     [steps]="sampleSteps"
                     [planPropertiesMap]="samplePlanPropertiesMap"
                     [maxOverallUtility]="maxOverallUtility"
@@ -77,8 +77,8 @@
                         </div>
                         <mat-icon>add</mat-icon>
                     </button>
-                    <app-iteration-step-card 
-                        [step]="sampleSteps[1]" 
+                    <app-iteration-step-card
+                        [step]="sampleSteps[1]"
                         [planProperties]="samplePlanPropertiesMap"
                         [maxOverallUtility]="maxOverallUtility">
                     </app-iteration-step-card>
@@ -95,7 +95,7 @@
                     <mat-icon>edit_note</mat-icon>
                     <span>
                     <span>A quick summary on the different kind of goals: </span>
-                    
+
                     <ul>
                         <li><span class="highlight">Enforced Goals</span> are goals that you ask the planner to satisfy in an iteration step.</li>
                         <li><span class="highlight">Locked Goals </span><mat-icon>lock</mat-icon> are goals that must be enforced at every iteration step.
@@ -115,8 +115,8 @@
 
                 <div class="page-grid">
                     @for(step of sampleSteps; track step) {
-                    <app-iteration-step-card 
-                        [step]="step" 
+                    <app-iteration-step-card
+                        [step]="step"
                         [planProperties]="samplePlanPropertiesMap"
                         [maxOverallUtility]="maxOverallUtility"
                     >
@@ -157,7 +157,7 @@
                 <h4>Navigation Between Steps</h4>
 
                 <p>
-                    To navigate between iteration steps you can use the list of all iteration steps. 
+                    To navigate between iteration steps you can use the list of all iteration steps.
                     To get back to the list from the detail view of an iteration steps, click on <app-breadcrumb-item>All Iterations</app-breadcrumb-item>
                     in the top.
                 </p>
@@ -278,7 +278,7 @@
                         <h4>Solvable Step</h4>
 
                         <p>
-                            In an solvable step you can ask questions about the unsatisfied goals. 
+                            In an solvable step you can ask questions about the unsatisfied goals.
                             Thus you can ask "why" it is not satisfy and 'how' you can satisfy it.
                         </p>
 
@@ -303,6 +303,64 @@
                         </div>
                     </div>
                     }
+
+                    @if(mugsVisualizationManual()){
+                      <h3>MUGS Visualization Interface</h3>
+                      <div>
+                        <p>
+                          Depending on whether a step is <app-label color="secondary">Solved</app-label> or
+                          <app-label color="error">Unsolvable</app-label> you have access to different visualization
+                          variants.
+                        </p>
+
+                        <ul>
+                          <li> You can click on the squares in the matrix to either <strong>enforce or unenforce</strong> goals depending on the step.
+                            In both cases, you will be provided with a selection result to see the effects of each action. </li>
+                          <li> A row within the matrix represents a specific goal whose name can be seen on the y-axis (to the very left of the matrix). </li>
+                          <li> Squares represents the interaction of a goal with another. Each square is attributed a different color. </li>
+                          <li> The colors act as a metric for the pairwise occurrence of a goal with another. A much greener color indicates that this pair appeared more frequently in the set of MUGS. </li>
+                          <li> Clicking on these squares will always enforce/unenforce the pairs associated with it. If you just want to enforce/unenforce a single goal, make use of the pink colored squares. These squares mark the
+                            intersection of a goal with itself. </li>
+                          <li> The pink color serves just as an indicator and nothing else. </li>
+                          <li> The bars on top on the matrix shows the number of times a goal appeared in the set of MUGS. Starting from top to bottom,
+                           each goal has a bar (from left to right). The first goal in the matrix (from the top) is associated with the first bar (from the left) and so on. </li>
+                          <li> The small squares to the gives a global view about the different MUGS. A complete MUGS is identified column-wise via the vertical links between each circle. </li>
+                        </ul>
+
+                        <h4>Unsolvable Step</h4>
+
+                        <p>
+                          In an unsolvable step you can only unenforce goals. Meaning, the matrix represent the set of goals which are conflicting
+                          (in other words all goals displayed in the matrix are in already enforced). By clicking on one or a pair of these
+                          conflicting goals, you unenforce that goal/pair. This results into a new matrix without that goal. You can always view
+                          the goals you unenforced under the selection list as well as re-enforced them by clicking on the trash icon next to it.
+                        </p>
+                        <p>
+                          Note that the names of the goals in the matrix will be assigned a different shade of red after your first unenforcement.
+                          A very red color indicates that this goal highly conflicts with the other goals in the matrix. Hence, removing it
+                          might probably result into a solvable state. The selection result for this step is based on the goals in the matrix.
+                        </p>
+
+                        <h4>Solvable Step</h4>
+
+                        <p>
+                          In a solvable step you can only enforce goals. Meaning, the matrix represent all goals which are not yet
+                          enforced. By clicking on one or a pair of these conflicting goals, you enforce that goal/pair.
+                          The result can be viewed in the selection list. This list represents the goals from the original matrix
+                          you enforced. You can at any time unenforce (remove) a goal from this list by clicking on the trash icon
+                          next to that goal.
+                        </p>
+                        <p>
+                          Note that each goal in the selection will be assigned a different shade of red after your first enforcement, represented
+                          by the dot next to it.
+                          A very red color indicates that this goal highly conflicts with the other goals in the list. Hence, removing it
+                          might probably result into a solvable list. The selection result for this step is based on the goals in the selection list.
+                        </p>
+
+
+                      </div>
+                    }
+
                     @if(LLMManual()){
                     <h3>LLM Interface</h3>
                     <div>

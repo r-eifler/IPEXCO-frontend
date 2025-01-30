@@ -3,7 +3,7 @@ import { COLORS } from "./colors.js";
 import { tooltip, separateTicks, constants } from "./utils.js";
 import * as d3 from 'd3';
 
-let where, svg, data, margin, width, height, x, y, isStepUnsolvable;
+let where, svg, data, margin, width, height, x, y, isStepUnsolvable, dataElementColors;
 
 function setIsStepUnsolvable(value) {
   isStepUnsolvable = value
@@ -13,6 +13,7 @@ function draw(_data, _where, _dims) {
     where = _where;
     data = _data;
     data.elementsName = _data.elements.map(d => d.name);
+    dataElementColors = _data.elements.map(d => ({ name: d.name, color: d.color }));
     margin = _dims.margin;
     width = _dims.width;
     height = _dims.height;
@@ -55,9 +56,10 @@ function resize() {
         .domain(Array.from(new Set(Object.values(data.types))))
         .range(COLORS.types)
 
-    const colorMapping = state.settings.useGoalColor ?
-        (type) => color(type) :
-        () => COLORS.types[0];
+    const colorMapping = (name) => {
+      const match = dataElementColors.find(el => el.name === name);
+      return match ? match.color : "";
+    };
 
     const rectOffset = state.settings.compress ? 1.5:10;
 
@@ -74,17 +76,6 @@ function resize() {
         .attr("width", 2)
         .attr("height", d => Math.max(...d.l.map(g=>y(g))) - Math.min(...d.l.map(g=>y(g))))
         .style("fill", COLORS.bars);
-
-    // Uncomment to enable highlighting mugs columns with only a single goal.
-    /*svg.selectAll("rect.seg-highlight")
-        .attr("x", d => x(""+d.i) + 2)
-        .attr("y", 0)
-        .attr("width", constants.rectWidth - 2)
-        .attr("height", height)
-        .attr("rx", (constants.rectWidth - 2) / 2)
-        .style("fill", COLORS.barsHighlight);*/
-
-
 
     // Find all elements where a unit MUGS exists that only contains this element.
     const singularElements = new Set();
@@ -121,7 +112,7 @@ function resize() {
             .attr("y", d => y(d.goal))
             .attr("width", constants.compressed)
             .attr("height", constants.rectWidth)
-            .style("fill", d => colorMapping(d.type))
+            .style("fill", d => colorMapping(d.name))
             // .on("mouseover", mouseover)
             // .on("mousemove", tooltip.mousemove)
             // .on("mouseleave", mouseleave);
@@ -137,7 +128,7 @@ function resize() {
             .attr("cx", d => x(d.x) + (rectOffset+(rectOffset-radius)/2))
             .attr("cy", d => y(d.goal)+rectOffset)
             .attr("r", radius)
-            .style("fill", d => colorMapping(d.type))
+            .style("fill", d => colorMapping(d.goal))
             // .on("mouseover", mouseover)
             // .on("mousemove", tooltip.mousemove)
             // .on("mouseleave", mouseleave);
@@ -149,9 +140,13 @@ function resize() {
             .attr("class", "x axis")
             .call(
                 d3.axisTop(x)
-                    .tickFormat((t, i) => separateTicks(t, i, data.MUGS.length, width, 30))
+                    .tickFormat((t, i) => separateTicks(t, i, data.MUGS.length, width, 20))
                     .tickSize(0)
             )
+      svg.select("#setchart-x-axis")
+        .selectAll("text")
+        .style("font-size", "16px")
+
         svg.select("#setchart-x-axis path.domain").remove();
     }
 }

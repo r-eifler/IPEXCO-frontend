@@ -15,18 +15,19 @@
         <app-page-section-content>
           <app-page-section-title>{{ containerGoalInteractionSectionTest }}</app-page-section-title>
         </app-page-section-content>
-        <app-page-section-content style="display: flex; flex-wrap: wrap; gap: 10px;">
+        <app-page-section-content style="width: 50%;">
           @for (property of selectedPlanProperties; track property._id;)
           {
             <app-editable-list-entry>
-                <app-plan-property-badge [property]="property" class="badge-item"></app-plan-property-badge>
-                <app-editable-list-entry-suffix>
+                <app-plan-property-panel [property]="property" style="margin: 5px;"></app-plan-property-panel>
+                <app-editable-list-entry-suffix style="display: flex;">
                   @if (stepStatusType != PlanRunStatus.not_solvable && length > 0){
                     <mat-icon
                       [ngStyle]="{
                         color: planPropertiesCriticality[property.name],
                         backgroundColor: planPropertiesCriticality[property.name],
-                        borderRadius: '20px'
+                        borderRadius: '20px',
+                        margin: '7px 0 0 0'
                       }">
                       circle-icon
                     </mat-icon>
@@ -41,7 +42,7 @@
       <br/>
       <app-page-section>
         <app-page-section-content>
-          <app-page-section-title>Result</app-page-section-title>
+          <app-page-section-title>Selection Result</app-page-section-title>
           <div id="sec-result" class="badge-panel">
             No goals selected
           </div>

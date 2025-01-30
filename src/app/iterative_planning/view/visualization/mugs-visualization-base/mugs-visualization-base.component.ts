@@ -15,7 +15,6 @@ import {PageSectionComponent} from '../../../../shared/components/page/page-sect
 import {PageSectionContentComponent} from '../../../../shared/components/page/page-section-content/page-section-content.component';
 import {PageComponent} from '../../../../shared/components/page/page/page.component';
 import {PageContentComponent} from '../../../../shared/components/page/page-content/page-content.component';
-import {PlanPropertyBadgeComponent} from '../../../../shared/components/plan-property-badge/plan-property-badge.component';
 import {EditableListEntryComponent} from '../../../../shared/components/editable-list/editable-list-entry/editable-list-entry.component';
 import {
   EditableListEntrySuffixComponent
@@ -23,6 +22,7 @@ import {
 import {MatIcon} from '@angular/material/icon';
 import {MatIconButton} from '@angular/material/button';
 import {UIControls} from './legacy/ui-controls';
+import {PlanPropertyPanelComponent} from '../../../../shared/components/plan-property-panel/plan-property-panel.component';
 
 
 @Component({
@@ -35,12 +35,12 @@ import {UIControls} from './legacy/ui-controls';
     PageSectionContentComponent,
     PageComponent,
     PageContentComponent,
-    PlanPropertyBadgeComponent,
     EditableListEntryComponent,
     EditableListEntrySuffixComponent,
     MatIcon,
     MatIconButton,
-    NgStyle
+    NgStyle,
+    PlanPropertyPanelComponent
   ],
   templateUrl: './mugs-visualization-base.component.html',
   styleUrl: './mugs-visualization-base.component.scss'
@@ -70,7 +70,6 @@ export class MugsVisualizationBaseComponent {
   MSGS : string[][] = [];
   enforcedGoals : PlanProperty[] = [];
   enfGoals: string[] = [];
-  MUGTypes: Record<string, number> = {};
   planProperties: PlanProperty[] = [];
   selectedPlanProperties: PlanProperty[] = [];
   planPropertiesCriticality: Record<string, string> = {};
@@ -114,7 +113,7 @@ export class MugsVisualizationBaseComponent {
       this.stepStatusType = status;
       switch (status) {
         case PlanRunStatus.not_solvable:
-          this.containerGoalInteractionSectionTest = "Unenforced Goals"
+          this.containerGoalInteractionSectionTest = "Unenforced Selection List"
           break;
 
         case PlanRunStatus.failed:
@@ -133,14 +132,14 @@ export class MugsVisualizationBaseComponent {
           break;
 
         default:
-          this.containerGoalInteractionSectionTest = "Enforced Goals"
+          this.containerGoalInteractionSectionTest = "Enforced Selection List"
       }
     });
   }
 
   private initializeVisualizationLauncher(): void {
     if (Object.keys(this.MUGS).length == 0 || Object.keys(this.MSGS).length == 0) {return ;}
-    this.visualizationLauncher = new VisualizationLauncher(this.MUGS, this.MSGS, this.MUGTypes, this.stepStatusType);
+    this.visualizationLauncher = new VisualizationLauncher(this.MUGS, this.MSGS, this.stepStatusType);
     this.visualizationLauncher.initialize(`#${this.containerHeaderId}`, this.planProperties, this.selectedPlanProperties);
 
     this.uiControl = this.visualizationLauncher.getUIControlsInstance();
@@ -173,19 +172,11 @@ export class MugsVisualizationBaseComponent {
   private computeStepGoalIntCategory(): void{
     if (Object.keys(this.stepGoals).length == 0) { return ; }
 
-    let actionsClassToInt: Record<string, number> = {};
     let planProperties: Observable<Record<string, PlanProperty>> = this.store.select(selectIterativePlanningProperties);
-    let counter = 0;
 
     planProperties.pipe(take(1)).subscribe(properties => {
       Object.values(properties).forEach((property: PlanProperty) => {
         if (property._id in this.stepGoals){
-          const actionName = property.name;
-          const actionClass = property.class;
-          if(!(actionClass in actionsClassToInt)){
-            actionsClassToInt[actionClass] = counter++;
-          }
-          this.MUGTypes[actionName] = actionsClassToInt[actionClass];
           this.planProperties.push(property);
         }
       });

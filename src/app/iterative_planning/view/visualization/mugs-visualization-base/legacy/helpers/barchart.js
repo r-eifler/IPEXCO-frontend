@@ -49,9 +49,14 @@ function resize() {
         .call(
             d3.axisLeft(y)
                 .ticks(Math.ceil(Math.max(...Object.values(data.counts))))
-                .tickFormat((t, i) => t === 0 ? null : separateTicks(t, i, Object.values(data.counts).length, height, 30))
+                .tickFormat((t, i) => t === 0 ? null : separateTicks(t, i, Object.values(data.counts).length, height, 60))
                 .tickSize(0)
         );
+
+  svg.select("#barchart-y-axis")
+    .selectAll("text")
+    .style("font-size", "15px")
+
     svg.select("#barchart-y-axis path.domain").remove();
 
     // bars

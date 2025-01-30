@@ -2,12 +2,11 @@ import state from "../state.js";
 import { separateTicks, tooltip, constants } from "./utils.js";
 import * as barchart from './barchart.js';
 import * as setchart from './setchart.js';
-import * as criticalitychart from './criticalitychart.js'
 import * as d3 from 'd3';
 
 let parentId, svgId, svg, matrixGroup, bgSquares, fgSquares, data, x, y, isStepUnsolvable;
 const OFFSET = 2
-const margin = { top: 150, right: 0, bottom: 0, left: 200 }
+const margin = { top: 150, right: 0, bottom: 0, left: 300 }
 
 const minimalSize = 5;
 
@@ -102,6 +101,11 @@ function resize() {
         )
         .selectAll("text").attr("class", d => d);
 
+    matrixGroup.select("#matrix-y-axis")
+      .selectAll("text")
+      .style("font-size", "14px")
+      .style("fill", isStepUnsolvable? d => data.elementsCriticality[d] : "")
+
     // hide the axis line
     matrixGroup.select("#matrix-y-axis path.domain").remove();
 
@@ -192,34 +196,8 @@ function resize() {
     );
 
     // add mugs helpers
-  d3.select("#charts-container").remove()
-  d3.select(parentId)
-    .style("display", "flex")
-    .style("width", "100%")
-    .style("gap", "0px")
-    .append("div")
-    .attr("id", "charts-container")
-
-  if (isStepUnsolvable) {
-    d3.select("#charts-container").append("svg").attr("id", "mugs-helpers-criticalitychart").style("margin-right", "-10px");
-    criticalitychart.draw(
-      data,
-      "#mugs-helpers-criticalitychart",
-      {
-        width: data.MUGS.length * (state.settings.compress ? constants.compressed : constants.rectWidth),
-        height: data.elementsName.length * constants.rectWidth,
-        margin: {
-          top: margin.top,
-          right: 0,
-          bottom: OFFSET,
-          left: 0
-        },
-        compress: state.settings.compress
-      }
-    );
-  }
-
-  d3.select("#charts-container").append("svg").attr("id", "mugs-helpers-setchart");
+  d3.select("#mugs-helpers-setchart").remove()
+  d3.select(parentId).append("svg").attr("id", "mugs-helpers-setchart");
   setchart.draw(
     data,
     "#mugs-helpers-setchart",

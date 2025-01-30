@@ -22,7 +22,6 @@ interface IDataObject {
   occurrence: Record<string, any>;
   onehots: Record<string, any>;
   original: Record<string, any>;
-  types: Record<string, number>;
 }
 
 const defaultDataObject: IDataObject = {
@@ -46,7 +45,6 @@ const defaultDataObject: IDataObject = {
   occurrence: {},
   onehots: {},
   original: {},
-  types: {},
 };
 
 

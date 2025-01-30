@@ -11,15 +11,13 @@ import {PlanProperty} from '../../../../../shared/domain/plan-property/plan-prop
 export class VisualizationLauncher {
   private readonly mugsData: string[][];
   private readonly msgsData: string[][];
-  private readonly mugsTypes: Record<string, number>;
   private readonly dataHandlerService: DataHandlerService;
   private uiControls: UIControls;
 
 
-  constructor(entryMugs: string[][], entryMsgs: string[][], entryMugTypes: Record<string, number>, statusType: PlanRunStatus) {
+  constructor(entryMugs: string[][], entryMsgs: string[][], statusType: PlanRunStatus) {
     this.mugsData = entryMugs;
     this.msgsData = entryMsgs;
-    this.mugsTypes = entryMugTypes;
     this.dataHandlerService = new DataHandlerService();
     this.dataHandlerService.stepType = statusType;
 
@@ -35,7 +33,6 @@ export class VisualizationLauncher {
   private initializeData(): void {
     state.sourceData.MUGS = this.mugsData;
     state.sourceData.MSGS = this.msgsData;
-    state.sourceData.types = this.mugsTypes;
   }
 
   public getUIControlsInstance(): UIControls {
