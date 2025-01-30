@@ -53,7 +53,7 @@ export class DomainSpecEditorComponent {
     ).subscribe(spec => {
       this.form.controls.name.setValue(spec.name);
       this.form.controls.description.setValue(spec.description);
-      this.form.controls.templates.setValue(JSON.stringify(spec.planPropertyTemplates));
+      this.form.controls.templates.setValue(JSON.stringify(spec.planPropertyTemplates, null, "\t"));
     });
   }
 

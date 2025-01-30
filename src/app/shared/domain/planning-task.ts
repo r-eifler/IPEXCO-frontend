@@ -52,7 +52,6 @@ export interface PlanningModel extends PlanningDomain, PlanningProblem {}
 export interface PlanningTask {
   _id?: string;
   name: string;
-  domain_name: string;
   encoding: string;
   model: PlanningModel;
 }
@@ -251,7 +250,7 @@ export function getObjectTypeMap(task: PlanningTask): Map<string, string[]> {
 }
 
 export function toPDDLDomain(task: PlanningTask): string {
-  let d = "(define (domain " + task.domain_name.replace(/\s+/g, "") + ")\n";
+  let d = "(define (domainName)\n";
   d += "(:requirements :typing :action-costs)\n";
   d +=
     "(:types " +
@@ -268,8 +267,8 @@ export function toPDDLDomain(task: PlanningTask): string {
 }
 
 export function toPDDLProblem(task: PlanningTask): string {
-  let p = "(define (problem " + task.name.replace(/\s+/g, "") + ")\n";
-  p += "(domain " + task.domain_name.replace(/\s+/g, "") + ")";
+  let p = "(define (problemName)\n";
+  p += "(domainName)";
   p +=
     "(:objects " +
     task.model.objects.map((o) => o.name + "-" + o.type).join("\n") +

@@ -16,8 +16,6 @@ export const selectIterativePlanningProject = createSelector(selectIterativePlan
     (state) => state.project?.data)
 export const selectIterativePlanningProjectId = createSelector(selectIterativePlanningFeature,
   (state) => state.project?.data._id)
-export const selectIterativePlanningPropertyTemplates = createSelector(selectIterativePlanningFeature,
-    (state) => state.project?.data?.domainSpecification?.planPropertyTemplates)
 export const selectIterativePlanningTask = createSelector(selectIterativePlanningFeature,
         (state) => state.project?.data?.baseTask)
 export const selectIterativePlanningIsDemo = createSelector(selectIterativePlanningFeature,
@@ -25,6 +23,10 @@ export const selectIterativePlanningIsDemo = createSelector(selectIterativePlann
 export const selectIterativePlanningIsIntroTask = createSelector(selectIterativePlanningFeature,
   (state) => state.project?.data?.settings?.userStudy.introTask)
 
+// Domain Spec
+
+export const selectIterativePlanningPropertyTemplates = createSelector(selectIterativePlanningFeature,
+  (state) => state.domainSpecification?.data?.planPropertyTemplates)
 
 // Settings
 

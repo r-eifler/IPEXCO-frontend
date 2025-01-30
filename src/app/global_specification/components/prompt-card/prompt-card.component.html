@@ -18,7 +18,9 @@
                         <mat-chip>{{ explainerName() }}</mat-chip>
                     }
                     <mat-chip>{{ prompt()?.type }}</mat-chip>
-                    <mat-chip>{{ prompt()?.agent }}</mat-chip>
+                    @if(prompt()?.agent){
+                        <mat-chip>{{ prompt()?.agent }}</mat-chip>
+                    }
                 </div>
             </div>
         </div>

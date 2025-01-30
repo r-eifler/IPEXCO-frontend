@@ -1,13 +1,10 @@
-import { map, take, tap } from 'rxjs/operators';
-import { Observable } from 'rxjs';
-import { Component, OnInit } from '@angular/core';
+import { map, take } from 'rxjs/operators';
+import { Component, inject, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { selectProject, selectProjectSettings } from '../../state/project.selector';
-import { updateProject } from '../../state/project.actions';
+import { selectExplainer, selectOutputSchemas, selectPlanners, selectProject, selectProjectSettings, selectPrompts } from '../../state/project.selector';
+import { loadExplainers, loadOutputSchemas, loadPlanners, loadPrompts, updateProject } from '../../state/project.actions';
 import { GeneralSettings } from '../../domain/general-settings';
-import { PlanningModel } from 'src/app/shared/domain/planning-task';
 import { AsyncPipe } from '@angular/common';
-import { PropertyTemplateCreatorComponent } from '../../components/property-template-creator/property-template-creator.component';
 import { SettingsComponent } from '../../components/settings/settings.component';
 import { PlanPropertyTemplate } from 'src/app/shared/domain/plan-property/plan-property-template';
 import { PageModule } from 'src/app/shared/components/page/page.module';
@@ -24,7 +21,6 @@ import { Project } from 'src/app/shared/domain/project';
         RouterLink,
         BreadcrumbModule,
         AsyncPipe,
-        PropertyTemplateCreatorComponent,
         SettingsComponent,
     ],
     templateUrl: './project-settings-container.component.html',
@@ -32,23 +28,25 @@ import { Project } from 'src/app/shared/domain/project';
 })
 export class ProjectSettingsContainerComponent implements OnInit {
 
-  settings$: Observable<GeneralSettings>
-  project$: Observable<Project>
-  model$: Observable<PlanningModel>
-  templates$: Observable<PlanPropertyTemplate[]>
+  store = inject(Store);
+  settings$ = this.store.select(selectProjectSettings);
+  project$ = this.store.select(selectProject);
+  planners$ = this.store.select(selectPlanners);
+  explainer$ = this.store.select(selectExplainer);
+  prompts$ = this.store.select(selectPrompts);
+  outputSchemas$ = this.store.select(selectOutputSchemas);
 
-  constructor(
-    private store: Store
-  ) {
-    this.settings$ = store.select(selectProjectSettings);
-    this.project$ = store.select(selectProject);
-    this.templates$ = this.project$.pipe(
-      map(p => p?.domainSpecification?.planPropertyTemplates),
-    )
-    this.model$ = this.project$.pipe(
-      map(p => p?.baseTask?.model)
-    )
+  model$ = this.project$.pipe(
+    map(p => p?.baseTask?.model)
+  )
+
+  constructor(){
+    this.store.dispatch(loadPlanners());
+    this.store.dispatch(loadExplainers());
+    this.store.dispatch(loadPrompts());
+    this.store.dispatch(loadOutputSchemas());
   }
+
 
   onSaveSetting(settings: GeneralSettings): void {
     this.project$.pipe(take(1)).subscribe(
@@ -63,19 +61,19 @@ export class ProjectSettingsContainerComponent implements OnInit {
   }
 
   onSaveTemplates(templates: PlanPropertyTemplate[]): void {
-    this.project$.pipe(take(1)).subscribe(
-      project => {
-        let newProject: Project = {
-          ...project,
-          domainSpecification: {
-            ...project.domainSpecification,
-            planPropertyTemplates: templates
-          }
-        }
-        this.store.dispatch(updateProject({project: newProject}))
-        // this.router.navigate(['/projects', project._id, 'overview'],);
-      }
-    )
+    // this.project$.pipe(take(1)).subscribe(
+    //   project => {
+    //     let newProject: Project = {
+    //       ...project,
+    //       domainSpecification: {
+    //         ...project.domainSpecification,
+    //         planPropertyTemplates: templates
+    //       }
+    //     }
+    //     this.store.dispatch(updateProject({project: newProject}))
+    //     // this.router.navigate(['/projects', project._id, 'overview'],);
+    //   }
+    // )
   }
 
   ngOnInit(): void {

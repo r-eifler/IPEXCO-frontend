@@ -16,25 +16,15 @@ export class DomainSpecificationService{
     get$(): Observable<DomainSpecification[]> {
 
         return this.http.get<IHTTPData<DomainSpecification[]>>(this.BASE_URL).pipe(
-            map(({data}) => data),
-            map(specs => (
-              specs.map( spec => ({
-                ...spec, 
-                planPropertyTemplates: spec.planPropertyTemplates && spec.planPropertyTemplates.length > 0 ? JSON.parse(spec.planPropertyTemplates as unknown as string) : []
-              })
-            )),
-        ))
+            map(({data}) => data)
+        )
     }
 
     getById$(id: string): Observable<DomainSpecification> {
 
       return this.http.get<IHTTPData<DomainSpecification>>(this.BASE_URL + id).pipe(
-          map(({data}) => data),
-          map(spec => ({
-              ...spec, 
-              planPropertyTemplates: spec.planPropertyTemplates && spec.planPropertyTemplates.length > 0 ? JSON.parse(spec.planPropertyTemplates as unknown as string) : []
-          })
-      ))
+          map(({data}) => data)
+      )
   }
 
     post$(spec: DomainSpecification): Observable<DomainSpecification | null> {

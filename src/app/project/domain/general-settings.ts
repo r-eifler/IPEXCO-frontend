@@ -19,7 +19,7 @@ export interface GeneralSettings {
   _id: string;
   main: {
       public: boolean;
-      maxRuns: number;
+      maxRuns: number| null;
       usePlanPropertyUtility: boolean;
   }
   services: {
@@ -38,7 +38,7 @@ export interface GeneralSettings {
     maxCompletionTokens: number| null,
     prompts: string[],
     outputSchema: string[],
-}
+  }
   userStudy: {
       introTask: boolean;
       checkMaxUtility: boolean;

@@ -8,23 +8,27 @@
   <mat-card-content>
 
     <mat-stepper linear=true #stepper>
-      <mat-step [stepControl]="projectBasic" label="Name">
+      <mat-step [stepControl]="form" label="Name">
         <div class="stepper-content">
           <form
             class="main-form"
-            [formGroup]="projectBasic">
+            [formGroup]="form">
 
-            <mat-form-field class="example-full-width">
+            <mat-form-field class="example-full-width" appearance="outline">
               <mat-label>Name</mat-label>
               <input matInput type="text" formControlName="name" />
             </mat-form-field>
 
-            <mat-form-field class="example-full-width">
-              <mat-label>Domain Name</mat-label>
-              <input matInput type="text" formControlName="domain_name" />
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Domain</mat-label>
+              <mat-select [formControl]="form.controls.domain" required>
+                @for (domain of (domains$ | async); track domain._id) {
+                  <mat-option [value]="domain._id">{{domain.name}}</mat-option>
+                }
+              </mat-select>
             </mat-form-field>
 
-            <mat-form-field>
+            <mat-form-field appearance="outline">
               <mat-label>Description</mat-label>
               <textarea matInput formControlName="description"></textarea>
             </mat-form-field>
@@ -36,7 +40,7 @@
         </div>
       </mat-step>
 
-      <mat-step label="Domain">
+      <mat-step label="Problem">
         <div class="stepper-content">
           <app-template-file-upload type="pddl_domain" (fileSelected)="onDomainSelected($event)">Upload Domain File</app-template-file-upload>
           <app-template-file-upload type="pddl_problem" (fileSelected)="onProblemSelected($event)">Upload Problem File</app-template-file-upload>
@@ -49,7 +53,7 @@
 
           <div class="button-container">
             <button mat-button matStepperPrevious>Back</button>
-            <button mat-flat-button color="primary" (click)="onSave()" [disabled]="!((modelValid$ | async))">Save</button>
+            <button mat-flat-button color="primary" (click)="onSave()" [disabled]="!((modelValid$ | async)) || !form.valid">Save</button>
           </div>
         </div>
       </mat-step>

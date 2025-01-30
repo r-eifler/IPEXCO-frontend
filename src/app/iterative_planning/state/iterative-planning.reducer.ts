@@ -23,6 +23,8 @@ import {
     directResponseQT,
     eraseLLMHistory,
     initNewIterationStep,
+    loadDomainSpecification,
+    loadDomainSpecificationSuccess,
     loadIterationSteps,
     loadIterationStepsSuccess,
     loadLLMContextSuccess,
@@ -51,6 +53,7 @@ import {
 } from "./iterative-planning.actions";
 import { LLMContext } from "src/app/LLM/domain/context";
 import { Project } from "src/app/shared/domain/project";
+import { DomainSpecification } from "src/app/global_specification/domain/domain_specification";
 
 type messageType = ExplanationMessage['message'];
 export type Message = (Omit<ExplanationMessage, 'message'> & { message?: messageType });
@@ -69,6 +72,7 @@ export interface IterativePlanningState {
   createdStep: undefined | string;
   planProperties: Loadable<Record<string, PlanProperty>>;
   project: Loadable<Project>;
+  domainSpecification: Loadable<DomainSpecification>;
   propertyAvailableQuestionTypes: QuestionType[];
   selectedIterationStepId: undefined | string;
   stepAvailableQuestionTypes: QuestionType[];
@@ -89,6 +93,7 @@ const initialState: IterativePlanningState = {
   newStepBase: undefined,
   planProperties: { state: LoadingState.Initial, data: undefined },
   project: { state: LoadingState.Initial, data: undefined },
+  domainSpecification: { state: LoadingState.Initial, data: undefined },
   propertyAvailableQuestionTypes: [QuestionType.CAN_PROPERTY, QuestionType.WHAT_IF_PROPERTY, QuestionType.WHY_NOT_PROPERTY, QuestionType.HOW_PROPERTY],
   selectedIterationStepId: undefined,
   stepAvailableQuestionTypes: [QuestionType.HOW_PLAN, QuestionType.WHY_PLAN],
@@ -129,6 +134,14 @@ export const iterativePlanningReducer = createReducer(
       project: { state: LoadingState.Done, data: project },
     })
   ),
+  on(loadDomainSpecification, (state): IterativePlanningState => ({
+          ...state,
+          domainSpecification: {state: LoadingState.Loading, data: undefined},
+  })),
+  on(loadDomainSpecificationSuccess, (state, {domainSpecification}): IterativePlanningState => ({
+      ...state,
+      domainSpecification: {state: LoadingState.Done, data: domainSpecification}
+  })),
   on(
     loadPlanProperties,
     (state): IterativePlanningState => ({

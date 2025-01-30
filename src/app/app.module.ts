@@ -138,6 +138,17 @@ import { CreatePromptsEffect } from './global_specification/state/effects/create
 import { DeletePromptsEffect } from './global_specification/state/effects/delete-prompts.effect';
 import { LoadPromptEffect } from './global_specification/state/effects/load-prompt.effect';
 import { UpdatePromptsEffect } from './global_specification/state/effects/update-prompt.effect';
+import { ProjectLoadPromptsEffect } from './project/state/effects/load-prompts.effect';
+import { ProjectLoadServicesEffect } from './project/state/effects/load-services.effect';
+import { ProjectExplainerServicesService } from './project/service/explainer.service';
+import { ProjectPlannerServicesService } from './project/service/planner.service';
+import { ProjectPromptsService } from './project/service/prompts.service';
+import { ProjectLoadDomainSpecificationEffect } from './project/state/effects/load-domain-spec.effect';
+import { ProjectDomainSpecificationService } from './project/service/domainSpecification.service';
+import { IterativePlanningDomainSpecificationService } from './iterative_planning/service/domainSpecification.service';
+import { MetaProjectDomainSpecificationService } from './project-meta/service/domainSpecification.service';
+import { MetaProjectLoadDomainSpecificationsEffect } from './project-meta/state/effects/load-domain-specs.effect';
+import { IterativePlanningLoadDomainSpecificationEffect } from './iterative_planning/state/effects/load-domain-spec.effect';
 
 
 
@@ -260,7 +271,12 @@ import { UpdatePromptsEffect } from './global_specification/state/effects/update
         CreateServicesEffect,
         DeleteServicesEffect,
         CreateDomainSpecificationEffect,
-        DeleteDomainSpecificationEffect
+        DeleteDomainSpecificationEffect,
+        ProjectLoadPromptsEffect,
+        ProjectLoadServicesEffect,
+        ProjectLoadDomainSpecificationEffect,
+        MetaProjectLoadDomainSpecificationsEffect,
+        IterativePlanningLoadDomainSpecificationEffect,
     ]),
     // Instrumentation must be imported after importing StoreModule (config is optional)
     StoreDevtoolsModule.instrument({
@@ -315,6 +331,12 @@ import { UpdatePromptsEffect } from './global_specification/state/effects/update
     PromptsService,
     PlannerServicesService,
     ExplainerServicesService,
+    ProjectExplainerServicesService,
+    ProjectPlannerServicesService,
+    ProjectPromptsService,
+    ProjectDomainSpecificationService,
+    IterativePlanningDomainSpecificationService,
+    MetaProjectDomainSpecificationService,
     {
       provide: MAT_BOTTOM_SHEET_DEFAULT_OPTIONS,
       useValue: { hasBackdrop: true },

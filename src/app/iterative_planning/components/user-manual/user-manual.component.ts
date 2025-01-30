@@ -65,7 +65,6 @@ export class UserManualComponent {
     completion: 0,
     name: '',
     public: false,
-    domainSpecification: undefined,
     settings: undefined,
     globalExplanation: {
       status: ExplanationRunStatus.finished,
