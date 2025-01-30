@@ -21,8 +21,8 @@ export class LoadIterativePlanningProjectEffect{
                 loadProjectSuccess({project}), 
                 loadPlanProperties({id}), 
                 loadIterationSteps({ id }),
-                ...(project.settings.explanationInterfaceType === 'LLM_CHAT' || 
-                    project.settings.propertyCreationInterfaceType === 'LLM_CHAT' 
+                ...(project.settings.interfaces.explanationInterfaceType === 'LLM_CHAT' || 
+                    project.settings.interfaces.propertyCreationInterfaceType === 'LLM_CHAT' 
                     ? [createLLMContext({projectId: id, domain: project.baseTask?.domain_name})]
                     : [])
             ]),

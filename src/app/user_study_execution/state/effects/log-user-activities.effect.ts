@@ -325,7 +325,7 @@ export class LogUserActivitiesEffect{
     public logLLMContexts$ = createEffect(() => this.actions$.pipe(
         ofType(executionUserStudySubmit),
         concatLatestFrom(() => [this.store.select(selectIterativePlanningProject)]),
-        filter(([_, project]) => project.settings.explanationInterfaceType === 'LLM_CHAT'),
+        filter(([_, project]) => project.settings.interfaces.explanationInterfaceType === 'LLM_CHAT'),
         switchMap(([_, project]) => this.service.logLLMContext$().pipe(
             map(() => logActionSuccess()),
             catchError(() => of(logActionFailure()))

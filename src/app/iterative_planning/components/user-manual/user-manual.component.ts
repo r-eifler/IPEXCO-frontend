@@ -52,10 +52,10 @@ export class UserManualComponent {
   settings: Signal<GeneralSettings> = input(null);
 
   templatesManual = computed(() => 
-    this.settings() ? this.settings()?.explanationInterfaceType === ExplanationInterfaceType.TEMPLATE_QUESTION_ANSWER : true
+    this.settings() ? this.settings()?.interfaces.explanationInterfaceType === ExplanationInterfaceType.TEMPLATE_QUESTION_ANSWER : true
   );
   LLMManual = computed(
-    () => this.settings() ? this.settings()?.explanationInterfaceType === ExplanationInterfaceType.LLM_CHAT : true
+    () => this.settings() ? this.settings()?.interfaces.explanationInterfaceType === ExplanationInterfaceType.LLM_CHAT : true
   );
 
   sampleDemo: Demo = {

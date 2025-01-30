@@ -14,7 +14,7 @@ export class LoadPromptsEffect{
 
     public load$ = createEffect(() => this.actions$.pipe(
         ofType(loadPrompts),
-        switchMap(() => this.service.get$().pipe(
+        switchMap(() => this.service.getPrompt$().pipe(
             switchMap(prompts => [loadPromptsSuccess({prompts})] ),
             catchError(() => of(loadPromptsFailure()))
         ))

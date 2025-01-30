@@ -4,38 +4,64 @@ import { HttpClient } from "@angular/common/http";
 import { environment } from "src/environments/environment";
 import { map } from "rxjs/operators";
 import { IHTTPData } from "src/app/shared/domain/http-data.interface";
-import { Prompt } from "../domain/prompt";
+import { OutputSchema, Prompt } from "../domain/prompt";
 
 
 @Injectable()
 export class PromptsService{
 
     private http = inject(HttpClient)
-    private BASE_URL = environment.apiURL + "prompts/";
+    private BASE_URL = environment.apiURL + "llm-spec/";
 
     
-    get$(): Observable<Prompt[]> {
+    getPrompt$(): Observable<Prompt[]> {
 
-        return this.http.get<IHTTPData<Prompt[]>>(this.BASE_URL).pipe(
+        return this.http.get<IHTTPData<Prompt[]>>(this.BASE_URL + 'prompt').pipe(
             map(({data}) => data),
         )
     }
 
-    post$(prompt: Prompt): Observable<string | null> {
-        return this.http.post<IHTTPData<string | null>>(this.BASE_URL, {data: prompt}).pipe(
+    postPrompt$(prompt: Prompt): Observable<string | null> {
+        return this.http.post<IHTTPData<string | null>>(this.BASE_URL + 'prompt', {data: prompt}).pipe(
             map(({data}) => data)
         )
     }
 
 
-    put$(prompt: Prompt): Observable<Prompt> {
-      return this.http.put<IHTTPData<Prompt>>(this.BASE_URL + prompt._id, {data: prompt}).pipe(
+    putPrompt$(prompt: Prompt): Observable<Prompt> {
+      return this.http.put<IHTTPData<Prompt>>(this.BASE_URL  + 'prompt/' + prompt._id, {data: prompt}).pipe(
           map(({data}) => data)
       )
     }
 
-    delete$(id: string): Observable<boolean> {
-      return this.http.delete<IHTTPData<boolean>>(this.BASE_URL + id).pipe(
+    deletePrompt$(id: string): Observable<boolean> {
+      return this.http.delete<IHTTPData<boolean>>(this.BASE_URL  + 'prompt/ '+ id).pipe(
+          map(({data}) => data)
+      )
+    }
+
+    getOutputSchema$(): Observable<OutputSchema[]> {
+
+        return this.http.get<IHTTPData<OutputSchema[]>>(this.BASE_URL + 'output-schema').pipe(
+            map(({data}) => data),
+        )
+    }
+
+    postOutputSchema$(prompt: OutputSchema): Observable<string | null> {
+        return this.http.post<IHTTPData<string | null>>(this.BASE_URL + 'output-schema', {data: prompt}).pipe(
+            map(({data}) => data)
+        )
+    }
+
+
+    putOutputSchema$(prompt: OutputSchema): Observable<OutputSchema> {
+      return this.http.put<IHTTPData<OutputSchema>>(this.BASE_URL  + 'output-schema/' + prompt._id, {data: prompt}).pipe(
+          map(({data}) => data)
+      )
+    }
+
+    deleteOutputSchema$(id: string): Observable<boolean> {
+      return this.http.delete<IHTTPData<boolean>>(this.BASE_URL  + 'output-schema/ '+ id).pipe(
           map(({data}) => data)
       )
     }

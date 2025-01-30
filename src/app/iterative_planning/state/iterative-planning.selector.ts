@@ -23,16 +23,16 @@ export const selectIterativePlanningTask = createSelector(selectIterativePlannin
 export const selectIterativePlanningIsDemo = createSelector(selectIterativePlanningFeature,
     (state) => state.project?.data?.itemType === 'demo-project')
 export const selectIterativePlanningIsIntroTask = createSelector(selectIterativePlanningFeature,
-  (state) => state.project?.data?.settings?.introTask)
+  (state) => state.project?.data?.settings?.userStudy.introTask)
 
 
 // Settings
 
 export const selectIterativePlanningProjectCreationInterfaceType = createSelector(selectIterativePlanningFeature,
-    (state) => state.project?.data?.settings?.propertyCreationInterfaceType)
+    (state) => state.project?.data?.settings?.interfaces.propertyCreationInterfaceType)
 
 export const selectIterativePlanningProjectExplanationInterfaceType = createSelector(selectIterativePlanningFeature,
-  (state) => state.project?.data?.settings?.explanationInterfaceType)
+  (state) => state.project?.data?.settings?.interfaces.explanationInterfaceType)
 
 // Plan Properties
 
