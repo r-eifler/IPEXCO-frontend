@@ -1,0 +1,22 @@
+<app-spec-card>
+    @if(type() == 'planner'){
+        <mat-icon>explore</mat-icon>
+    }
+    @else{
+        <mat-icon>contact_support</mat-icon>
+    }
+    <app-spec-card-title>
+        {{ service()?.name }}
+    </app-spec-card-title>
+
+    <app-spec-card-sub-title>
+        {{ service()?.url }}
+    </app-spec-card-sub-title>
+
+    @if(service()?.encoding){
+        <app-spec-card-feature>{{ service()?.encoding }}</app-spec-card-feature>
+    }
+    @if(service()?.domainId){
+        <app-spec-card-feature>{{ domainName() }}</app-spec-card-feature>
+    }
+</app-spec-card>

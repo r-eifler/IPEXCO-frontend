@@ -1,16 +1,18 @@
-import { Component, DestroyRef, effect, EventEmitter, inject, input, Input, OnChanges, OnInit, output, Output, SimpleChanges } from "@angular/core";
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
+import { Component, computed, DestroyRef, effect, inject, input, output } from "@angular/core";
+import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
 import { ExplanationInterfaceType, GeneralSettings, PropertyCreationInterfaceType } from "../../domain/general-settings";
-import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-import { concatMap, debounceTime, distinctUntilChanged, switchMap } from "rxjs/operators";
 import { MatFormFieldModule, MatLabel } from "@angular/material/form-field";
 import { MatSlideToggleModule } from "@angular/material/slide-toggle";
 import { MatCardModule } from "@angular/material/card";
 import { MatButtonModule } from "@angular/material/button";
 import { MatButtonToggleModule } from "@angular/material/button-toggle";
-import { MatIcon, MatIconModule } from "@angular/material/icon";
-import { AsyncPipe, NgFor, NgIf } from "@angular/common";
+import { MatIconModule } from "@angular/material/icon";
+import { NgIf } from "@angular/common";
 import { MatInputModule } from "@angular/material/input";
+import { Explainer, Planner } from "src/app/global_specification/domain/services";
+import { MatOptionModule } from "@angular/material/core";
+import { MatSelectModule } from "@angular/material/select";
+import { AgentType, OutputSchema, Prompt, PromptType } from "src/app/global_specification/domain/prompt";
 
 
 @Component({
@@ -27,6 +29,9 @@ import { MatInputModule } from "@angular/material/input";
         MatIconModule,
         NgIf,
         MatInputModule,
+        MatFormFieldModule,
+        MatOptionModule,
+        MatSelectModule
     ],
     templateUrl: "./settings.component.html",
     styleUrls: ["./settings.component.scss"]
@@ -35,49 +40,64 @@ export class SettingsComponent {
 
   destroyRef = inject(DestroyRef)
 
-  settingsForm: FormGroup;
-
   settings = input.required<GeneralSettings>();
   isDemo = input<boolean>(false);
+  planners = input.required<Planner[]>();
+  explainer = input.required<Explainer[]>();
+  prompts = input.required<Prompt[]>();
+  outputSchemas = input.required<OutputSchema[]>();
+
+  systemPrompts = computed(() => this.prompts()?.filter(p => p.type == PromptType.SYSTEM));
+  goalTransInstructionPrompts = computed(() => this.prompts()?.filter(p => p.type == PromptType.INSTRUCTION_AND_EXAMPLES && p.agent == AgentType.GOAL_TRANSLATOR));
+  goalTransDataPrompts = computed(() => this.prompts()?.filter(p => p.type == PromptType.INPUT_DATA && p.agent == AgentType.GOAL_TRANSLATOR));
+  questionClassInstructionPrompts = computed(() => this.prompts()?.filter(p => p.type == PromptType.INSTRUCTION_AND_EXAMPLES && p.agent == AgentType.QUESTION_CLASSIFIER));
+  questionClassDataPrompts = computed(() => this.prompts()?.filter(p => p.type == PromptType.INPUT_DATA && p.agent == AgentType.QUESTION_CLASSIFIER));
+  explanationTransInstructionPrompts = computed(() => this.prompts()?.filter(p => p.type == PromptType.INSTRUCTION_AND_EXAMPLES && p.agent == AgentType.EXPLANATION_TRANSLATOR));
+  explanationTransDataPrompts = computed(() => this.prompts()?.filter(p => p.type == PromptType.INPUT_DATA && p.agent == AgentType.EXPLANATION_TRANSLATOR));
 
   update = output<GeneralSettings>();
 
   ExplanationTypes = ExplanationInterfaceType;
   PropertyCreationTypes = PropertyCreationInterfaceType;
 
-  initialized = false;
+  fb = inject(FormBuilder);
+
+  form = this.fb.group({
+    main: this.fb.group({
+      public: this.fb.control<boolean>(false, Validators.required),
+      maxRuns: this.fb.control<number | null>(null),
+      usePlanPropertyUtility: this.fb.control<boolean>(false, Validators.required),
+    }),
+    services: this.fb.group({
+      computePlanAutomatically: this.fb.control<boolean>(false, Validators.required),
+      computeExplanationsAutomatically: this.fb.control<boolean>(false, Validators.required),
+      planners: this.fb.control<string[]>([], Validators.required),
+      explainer: this.fb.control<string[]>([], Validators.required),
+    }),
+    interfaces: this.fb.group({
+      propertyCreationInterfaceType: this.fb.control<PropertyCreationInterfaceType>(PropertyCreationInterfaceType.TEMPLATE_BASED, Validators.required),
+      explanationInterfaceType: this.fb.control<ExplanationInterfaceType>(ExplanationInterfaceType.TEMPLATE_QUESTION_ANSWER, Validators.required),
+    }),
+    llmConfig: this.fb.group({
+      model:  this.fb.control<string>('', Validators.required),
+      temperature:  this.fb.control<number>(0, [Validators.required, Validators.min(0), Validators.max(2)]),
+      maxCompletionTokens: this.fb.control<number | null>(null, Validators.required),
+      prompts: this.fb.control<string[]>([]),
+      outputSchema:  this.fb.control<string[]>([]),
+    }),
+    userStudy: this.fb.group({
+          introTask: this.fb.control<boolean>(false, Validators.required),
+          checkMaxUtility: this.fb.control<boolean>(false, Validators.required),
+          showPaymentInfo: this.fb.control<boolean>(false, Validators.required),
+          paymentInfo: this.fb.group({
+            min: this.fb.control<number>(0, Validators.required),
+            max: this.fb.control<number>(0, Validators.required),
+            steps: this.fb.control<string>('', Validators.required),
+          }),
+    })
+  })
 
   constructor() {
-    this.settingsForm = new FormGroup({
-      maxRuns: new FormControl([
-        Validators.required,
-        Validators.min(1),
-        Validators.max(100),
-      ]),
-      allowQuestions: new FormControl(),
-      provideRelaxationExplanations: new FormControl(),
-      introTask: new FormControl(),
-      public: new FormControl(),
-      usePlanPropertyValues: new FormControl(),
-      useConstraints: new FormControl(),
-      explanationInterfaceType: new FormControl(),
-      propertyCreationInterfaceType: new FormControl(),
-      globalExplanation: new FormControl(),
-      useTimer: new FormControl(),
-      measureTime: new FormControl(),
-      maxTime: new FormControl([
-        Validators.required,
-        Validators.min(5),
-        Validators.max(36000),
-      ]),
-      checkMaxUtility: new FormControl(),
-      computePlanAutomatically: new FormControl(),
-      computeDependenciesAutomatically: new FormControl(),
-      showPaymentScore: new FormControl(),
-      minPayment: new FormControl(),
-      maxPayment: new FormControl(),
-      paymentSteps: new FormControl(),
-    });
 
     effect(() => this.initForm(this.settings()))
 
@@ -89,61 +109,67 @@ export class SettingsComponent {
       return;
     }
 
-    this.settingsForm.controls.maxRuns.setValue(settings.maxRuns);
+    this.form.controls.main.controls.maxRuns.setValue(settings.main.maxRuns);
+    this.form.controls.main.controls.public.setValue(settings.main.public);
+    this.form.controls.main.controls.usePlanPropertyUtility.setValue(settings.main.usePlanPropertyUtility);
 
-    this.settingsForm.controls.allowQuestions.setValue(settings.allowQuestions);
+    this.form.controls.interfaces.controls.explanationInterfaceType.setValue(settings.interfaces.explanationInterfaceType);
+    this.form.controls.interfaces.controls.propertyCreationInterfaceType.setValue(settings.interfaces.propertyCreationInterfaceType);
 
-    this.settingsForm.controls.introTask.setValue(settings.introTask);
-    this.settingsForm.controls.public.setValue(settings.public);
+    this.form.controls.services.controls.computePlanAutomatically.setValue(settings.services.computePlanAutomatically);
+    this.form.controls.services.controls.computeExplanationsAutomatically.setValue(settings.services.computeExplanationsAutomatically);
+    this.form.controls.services.controls.planners.setValue(settings.services.planners);
+    this.form.controls.services.controls.explainer.setValue(settings.services.explainer);
 
-    this.settingsForm.controls.usePlanPropertyValues.setValue(settings.usePlanPropertyUtility);
-
-    this.settingsForm.controls.explanationInterfaceType.setValue(settings.explanationInterfaceType);
-    this.settingsForm.controls.propertyCreationInterfaceType.setValue(settings.propertyCreationInterfaceType);
-    this.settingsForm.controls.globalExplanation.setValue(settings.globalExplanation);
-
-    this.settingsForm.controls.useTimer.setValue(settings.useTimer);
-    this.settingsForm.controls.measureTime.setValue(settings.measureTime);
-    this.settingsForm.controls.maxTime.setValue(settings.maxTime);
-
-    this.settingsForm.controls.checkMaxUtility.setValue(settings.checkMaxUtility);
-
-    this.settingsForm.controls.computePlanAutomatically.setValue(settings.computePlanAutomatically);
-    this.settingsForm.controls.computeDependenciesAutomatically.setValue(settings.computeDependenciesAutomatically);
-
-    this.settingsForm.controls.showPaymentScore.setValue(settings.showPaymentInfo);
-    this.settingsForm.controls.minPayment.setValue(settings.paymentInfo.min);
-    this.settingsForm.controls.maxPayment.setValue(settings.paymentInfo.max);
-    this.settingsForm.controls.paymentSteps.setValue(settings.paymentInfo.steps);
+    this.form.controls.userStudy.controls.introTask.setValue(settings.userStudy.introTask);
+    this.form.controls.userStudy.controls.checkMaxUtility.setValue(settings.userStudy.checkMaxUtility);
+    this.form.controls.userStudy.controls.showPaymentInfo.setValue(settings.userStudy.showPaymentInfo);
+    this.form.controls.userStudy.controls.paymentInfo.controls.min.setValue(settings.userStudy.paymentInfo.min);
+    this.form.controls.userStudy.controls.paymentInfo.controls.max.setValue(settings.userStudy.paymentInfo.max);
+    this.form.controls.userStudy.controls.paymentInfo.controls.steps.setValue(
+      settings.userStudy.paymentInfo.steps.join(';')
+    );
 
   }
 
   onSave() {
 
     let paymentInfo = {
-      max: this.settingsForm.controls.maxPayment.value,
-      min: this.settingsForm.controls.minPayment.value,
-      steps: this.settingsForm.controls.paymentSteps.value,
+      max: this.form.controls.userStudy.controls.paymentInfo.controls.max.value,
+      min: this.form.controls.userStudy.controls.paymentInfo.controls.min.value,
+      steps: this.form.controls.userStudy.controls.paymentInfo.controls.steps.value.split(';').map(s => Number(s)),
     }
 
     let newSettings: GeneralSettings = {
       _id: undefined,
-      maxRuns: parseInt(this.settingsForm.controls.maxRuns.value),
-      allowQuestions: this.settingsForm.controls.allowQuestions.value,
-      introTask: this.settingsForm.controls.introTask.value,
-      public: this.settingsForm.controls.public.value,
-      usePlanPropertyUtility: this.settingsForm.controls.usePlanPropertyValues.value,
-      explanationInterfaceType: this.settingsForm.controls.explanationInterfaceType.value,
-      propertyCreationInterfaceType: this.settingsForm.controls.propertyCreationInterfaceType.value,
-      globalExplanation: this.settingsForm.controls.globalExplanation.value,
-      useTimer: this.settingsForm.controls.useTimer.value,
-      measureTime: this.settingsForm.controls.measureTime.value,
-      maxTime: this.settingsForm.controls.maxTime.value,
-      computePlanAutomatically: this.settingsForm.controls.computePlanAutomatically.value,
-      computeDependenciesAutomatically: this.settingsForm.controls.computeDependenciesAutomatically.value,
-      checkMaxUtility: this.settingsForm.controls.checkMaxUtility.value,
-      showPaymentInfo: this.settingsForm.controls.showPaymentScore.value,
-      paymentInfo,
+      main: {
+        public: this.form.controls.main.controls.public.value,
+        maxRuns: this.form.controls.main.controls.maxRuns.value,
+        usePlanPropertyUtility: this.form.controls.main.controls.usePlanPropertyUtility.value,
+      },
+      services: {
+          computePlanAutomatically: this.form.controls.services.controls.computePlanAutomatically.value,
+          computeExplanationsAutomatically: this.form.controls.services.controls.computeExplanationsAutomatically.value,
+          planners: this.form.controls.services.controls.planners.value,
+          explainer: this.form.controls.services.controls.explainer.value,
+      },
+      interfaces: {
+          explanationInterfaceType: this.form.controls.interfaces.controls.explanationInterfaceType.value,
+          propertyCreationInterfaceType: this.form.controls.interfaces.controls.propertyCreationInterfaceType.value,
+      },
+      llmConfig: {
+        model: this.form.controls.llmConfig.controls.model.value,
+        temperature: this.form.controls.llmConfig.controls.temperature.value,
+        maxCompletionTokens: this.form.controls.llmConfig.controls.maxCompletionTokens.value,
+        prompts: this.form.controls.llmConfig.controls.prompts.value,
+        outputSchema: this.form.controls.llmConfig.controls.outputSchema.value,
+      },
+      userStudy: {
+          introTask: this.form.controls.userStudy.controls.introTask.value,
+          checkMaxUtility: this.form.controls.userStudy.controls.checkMaxUtility.value,
+          showPaymentInfo: this.form.controls.userStudy.controls.showPaymentInfo.value,
+          paymentInfo
+      }
     }
 
     this.update.emit(newSettings);

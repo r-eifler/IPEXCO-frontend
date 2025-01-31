@@ -23,7 +23,6 @@ export class DemoService{
                 ...demo.baseTask,
                 model: JSON.parse(demo.baseTask.model as unknown as string),
                 },
-              domainSpecification: JSON.parse(demo.domainSpecification as unknown as string),
               globalExplanation : demo.globalExplanation ? {
                 ...demo.globalExplanation,
                 MUGS: demo.globalExplanation.MUGS ? JSON.parse(demo.globalExplanation.MUGS as unknown as string) : undefined,
@@ -44,7 +43,6 @@ export class DemoService{
                     ...demo.baseTask,
                     model: JSON.parse(demo.baseTask.model as unknown as string),
                 },
-                domainSpecification: JSON.parse(demo.domainSpecification as unknown as string),
                 globalExplanation : demo.globalExplanation ? {
                   ...demo.globalExplanation,
                   MUGS: demo.globalExplanation.MUGS ? JSON.parse(demo.globalExplanation.MUGS as unknown as string) : undefined,

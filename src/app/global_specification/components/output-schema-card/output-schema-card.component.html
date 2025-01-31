@@ -1,0 +1,17 @@
+<app-spec-card>
+    <mat-icon>schema</mat-icon>
+    <app-spec-card-title>
+        {{ schema()?.name }}
+    </app-spec-card-title>
+
+    @if(schema()?.agent){
+        <app-spec-card-feature>{{ schema()?.agent }}</app-spec-card-feature>
+    }
+    @if(schema()?.domain){
+        <app-spec-card-feature>{{ domainName() }}</app-spec-card-feature>
+    }
+    @if(schema()?.explainer){
+        <app-spec-card-feature>{{ explainerName() }}</app-spec-card-feature>
+    }
+
+</app-spec-card>

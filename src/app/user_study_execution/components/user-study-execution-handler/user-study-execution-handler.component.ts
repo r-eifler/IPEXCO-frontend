@@ -110,7 +110,7 @@ export class UserStudyExecutionHandlerComponent {
       ([cur, max, step, demo]) => {
         if(step.type === UserStudyStepType.demo){
           let dialogRef = null;
-          if(demo.settings.introTask){
+          if(demo.settings.userStudy.introTask){
             dialogRef = this.dialog.open(AskDeleteComponent, {
               data: {
                 name: 'Maximal Possible Utility',

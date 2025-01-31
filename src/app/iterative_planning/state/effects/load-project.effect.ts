@@ -3,7 +3,7 @@ import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { catchError, switchMap } from "rxjs/operators";
 import { of } from "rxjs";
 import { IterativePlanningProjectService } from "../../service/project.service";
-import { createLLMContext, loadIterationSteps, loadLLMContext, loadPlanProperties, loadProject, loadProjectFailure, loadProjectSuccess } from "../iterative-planning.actions";
+import { createLLMContext, loadDomainSpecification, loadIterationSteps, loadLLMContext, loadPlanProperties, loadProject, loadProjectFailure, loadProjectSuccess } from "../iterative-planning.actions";
 import { Store } from "@ngrx/store";
 
 @Injectable()
@@ -19,11 +19,12 @@ export class LoadIterativePlanningProjectEffect{
         switchMap(({id}) => this.service.getProject$(id).pipe(
             switchMap(project => [
                 loadProjectSuccess({project}), 
+                loadDomainSpecification({id: project.domain}),
                 loadPlanProperties({id}), 
                 loadIterationSteps({ id }),
-                ...(project.settings.explanationInterfaceType === 'LLM_CHAT' || 
-                    project.settings.propertyCreationInterfaceType === 'LLM_CHAT' 
-                    ? [createLLMContext({projectId: id, iterationStepId: null})]
+                ...(project.settings.interfaces.explanationInterfaceType === 'LLM_CHAT' || 
+                    project.settings.interfaces.propertyCreationInterfaceType === 'LLM_CHAT' 
+                    ? [createLLMContext({projectId: id, domain: project.domain})]
                     : [])
             ]),
             catchError(() => of(loadProjectFailure())),

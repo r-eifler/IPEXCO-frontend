@@ -16,23 +16,25 @@ export const selectIterativePlanningProject = createSelector(selectIterativePlan
     (state) => state.project?.data)
 export const selectIterativePlanningProjectId = createSelector(selectIterativePlanningFeature,
   (state) => state.project?.data._id)
-export const selectIterativePlanningPropertyTemplates = createSelector(selectIterativePlanningFeature,
-    (state) => state.project?.data?.domainSpecification?.planPropertyTemplates)
 export const selectIterativePlanningTask = createSelector(selectIterativePlanningFeature,
         (state) => state.project?.data?.baseTask)
 export const selectIterativePlanningIsDemo = createSelector(selectIterativePlanningFeature,
     (state) => state.project?.data?.itemType === 'demo-project')
 export const selectIterativePlanningIsIntroTask = createSelector(selectIterativePlanningFeature,
-  (state) => state.project?.data?.settings?.introTask)
+  (state) => state.project?.data?.settings?.userStudy.introTask)
 
+// Domain Spec
+
+export const selectIterativePlanningPropertyTemplates = createSelector(selectIterativePlanningFeature,
+  (state) => state.domainSpecification?.data?.planPropertyTemplates)
 
 // Settings
 
 export const selectIterativePlanningProjectCreationInterfaceType = createSelector(selectIterativePlanningFeature,
-    (state) => state.project?.data?.settings?.propertyCreationInterfaceType)
+    (state) => state.project?.data?.settings?.interfaces.propertyCreationInterfaceType)
 
 export const selectIterativePlanningProjectExplanationInterfaceType = createSelector(selectIterativePlanningFeature,
-  (state) => state.project?.data?.settings?.explanationInterfaceType)
+  (state) => state.project?.data?.settings?.interfaces.explanationInterfaceType)
 
 // Plan Properties
 

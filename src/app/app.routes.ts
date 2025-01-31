@@ -65,6 +65,11 @@ export const appRoutes: Routes = [
         loadChildren: () => import('./user_study/user-study.module').then(m => m.UserStudyModule),
         canActivate: [AuthGuard],
       },
+      {
+        path: 'spec',
+        loadChildren: () => import('./global_specification/global_specification.module').then(m => m.GlobalSpecificationModule),
+        canActivate: [AuthGuard],
+      },
     ]
   }
 ];

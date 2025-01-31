@@ -2,185 +2,253 @@
 <div *ngIf="settings">
 
   <form class="settings-form"
-    [formGroup]="settingsForm"
+    [formGroup]="form"
     (ngSubmit)="onSave()">
 
       <mat-card appearance="outlined">
         <mat-card-header>
           <mat-card-title>
-            Plan Properties
+            Main
           </mat-card-title>
         </mat-card-header>
 
         <mat-card-content class="sub-card-content">
-          <mat-label matTooltip="Interface used for creating plan properties.">
-            Property Creation Interface
-          </mat-label>
-          <mat-button-toggle-group  formControlName="propertyCreationInterfaceType">
-            <mat-button-toggle [value]="PropertyCreationTypes.TEMPLATE_BASED">Templates</mat-button-toggle>
-            <mat-button-toggle [value]="PropertyCreationTypes.LLM_CHAT">LLM Chat</mat-button-toggle>
-          </mat-button-toggle-group>
 
-          <mat-slide-toggle formControlName="usePlanPropertyValues">
-            use utility
+          <mat-slide-toggle [formControl]="form.controls.main.controls.public">
+            public
           </mat-slide-toggle>
+
+          <mat-slide-toggle [formControl]="form.controls.main.controls.usePlanPropertyUtility">
+            use utility
+          </mat-slide-toggle> 
+
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Maximal number of iteration Steps</mat-label>
+            <input matInput type="number" placeholder="100"  [formControl]="form.controls.main.controls.maxRuns">
+          </mat-form-field>
+
         </mat-card-content>
       </mat-card>
 
       <mat-card appearance="outlined">
         <mat-card-header>
           <mat-card-title>
-            Explanations
+            Services
           </mat-card-title>
         </mat-card-header>
 
         <mat-card-content class="sub-card-content">
-          <mat-slide-toggle formControlName="allowQuestions"
-            color="primary"
-            matTooltip="Allow the user to ask conflict explanations.">
-            Provide Conflict Explanations
+
+          <mat-slide-toggle [formControl]="form.controls.services.controls.computePlanAutomatically">
+            automatic plan computation
           </mat-slide-toggle>
 
-          <mat-slide-toggle formControlName="globalExplanation" *ngIf="settingsForm.controls.allowQuestions.value"
-            matTooltip="Global conflict explanation independent of the iteration step.">
-            Global Explanation
+          <mat-slide-toggle [formControl]="form.controls.services.controls.computePlanAutomatically">
+            automatic explanation computation
           </mat-slide-toggle>
 
-          <mat-label matTooltip="Interface used for providing explanations" *ngIf="settingsForm.controls.allowQuestions.value">
-            Explanation Interface
-          </mat-label>
-          <mat-button-toggle-group  formControlName="explanationInterfaceType" *ngIf="settingsForm.controls.allowQuestions.value">
-            <mat-button-toggle [value]="ExplanationTypes.TEMPLATE_QUESTION_ANSWER">Templates</mat-button-toggle>
-            <mat-button-toggle [value]="ExplanationTypes.MUGS_VISUALIZATION">MUGS Visualization</mat-button-toggle>
-            <mat-button-toggle [value]="ExplanationTypes.LLM_CHAT">LLM Chat</mat-button-toggle>
-          </mat-button-toggle-group>
+          <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Planners</mat-label>
+              <mat-select [formControl]="form.controls.services.controls.planners" multiple>
+                <option value="" disabled selected></option>
+                @for (planner of planners(); track planner._id) {
+                  <mat-option [value]="planner._id">{{planner.name}}</mat-option>
+                }
+              </mat-select>
+          </mat-form-field>
 
-          <mat-slide-toggle formControlName="provideRelaxationExplanations" *ngIf="settingsForm.controls.useConstraints.value"
-            matTooltip="Provide the user with relaxation explanations while analysing
-            the conflicts.">
-            Provide Relaxation Explanations
-          </mat-slide-toggle>
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Explainers</mat-label>
+            <mat-select [formControl]="form.controls.services.controls.planners" multiple>
+              <option value="" disabled selected></option>
+              @for (exp of explainer(); track exp._id) {
+                <mat-option [value]="exp._id">{{exp.name}}</mat-option>
+              }
+            </mat-select>
+        </mat-form-field>
+
         </mat-card-content>
       </mat-card>
 
-      <!-- <mat-card appearance="outlined">
+      <mat-card appearance="outlined">
         <mat-card-header>
           <mat-card-title>
-            Automatic Computation
+            Interfaces
           </mat-card-title>
         </mat-card-header>
 
         <mat-card-content class="sub-card-content">
 
-          <mat-slide-toggle formControlName="computePlanAutomatically"
-            matTooltip="When a new iteration step is created, a plan is automatically computed.">
-            Plans
-          </mat-slide-toggle>
+        <mat-label matTooltip="Interface used for creating plan properties.">
+            Property Creation Interface
+        </mat-label>
+        <mat-button-toggle-group  [formControl]="form.controls.interfaces.controls.propertyCreationInterfaceType">
+          <mat-button-toggle [value]="PropertyCreationTypes.TEMPLATE_BASED">Templates</mat-button-toggle>
+          <mat-button-toggle [value]="PropertyCreationTypes.LLM_CHAT">LLM Chat</mat-button-toggle>
+        </mat-button-toggle-group>
 
-          <mat-slide-toggle formControlName="computeDependenciesAutomatically"
-            matTooltip="When a new iteration step is created, the explanations
-              are computed without asking a question.">
-            Explanations
-          </mat-slide-toggle>
-      </mat-card-content>
-    </mat-card> -->
+        <mat-label matTooltip="Interface used for providing explanations">
+          Explanation Interface
+        </mat-label>
+        <mat-button-toggle-group  [formControl]="form.controls.interfaces.controls.explanationInterfaceType">
+          <mat-button-toggle [value]="ExplanationTypes.TEMPLATE_QUESTION_ANSWER">Templates</mat-button-toggle>
+          <mat-button-toggle [value]="ExplanationTypes.MUGS_VISUALIZATION">MUGS Visualization</mat-button-toggle>
+          <mat-button-toggle [value]="ExplanationTypes.LLM_CHAT">LLM Chat</mat-button-toggle>
+        </mat-button-toggle-group>
+       
 
-    @if(isDemo()){
-    <mat-card appearance="outlined">
-      <mat-card-header>
-        <mat-card-title>
-          Demo
-        </mat-card-title>
-      </mat-card-header>
+        </mat-card-content>
+      </mat-card>
 
-      <mat-card-content class="sub-card-content">
+      @if(form.controls.interfaces.controls.explanationInterfaceType.value == ExplanationTypes.LLM_CHAT || 
+      form.controls.interfaces.controls.propertyCreationInterfaceType.value == PropertyCreationTypes.LLM_CHAT){
+      <mat-card appearance="outlined">
+        <mat-card-header>
+          <mat-card-title>
+            LLM Config
+          </mat-card-title>
+        </mat-card-header>
 
-        <mat-slide-toggle formControlName="public"
-          matTooltip="Makes the demo publicly available. Neets to be set to true, when the
-          demo is used in a user study.">
-          public
-        </mat-slide-toggle>
-      </mat-card-content>
-    </mat-card>
+        <mat-card-content class="sub-card-content">
 
-    <mat-card appearance="outlined">
-      <mat-card-header>
-        <mat-card-title>
-          Features for a User Study
-        </mat-card-title>
-      </mat-card-header>
-
-      <mat-card-content class="sub-card-content">
-
-        <mat-slide-toggle formControlName="introTask"
-          matTooltip="If a demo is an intro task, additional instructions are displayed.">
-          Intro Task
-        </mat-slide-toggle>
-
-        <!-- <mat-form-field style="width: 250px">
-          <mat-label>Maximal number of iteration steps</mat-label>
-          <input matInput type="number" formControlName="maxRuns" />
-        </mat-form-field>
-
-        <mat-slide-toggle formControlName="useTimer">
-          Use Timer
-        </mat-slide-toggle>
-
-        @if(settingsForm.controls.useTimer.value){
-        <mat-form-field style="width: 200px">
-          <mat-label>Max processing time (in sec)</mat-label>
-          <input matInput type="number" formControlName="maxTime" />
-        </mat-form-field>
-        }
-
-        <mat-slide-toggle formControlName="measureTime">
-          Measure Time
-        </mat-slide-toggle>
-
-        <mat-slide-toggle formControlName="checkMaxUtility"
-          matTooltip="The user is notified, when they reached the maximal possible utility.">
-          Stop demo if max utility achieved
-        </mat-slide-toggle> -->
-      </mat-card-content>
-    </mat-card>
-
-
-  }
-  <button mat-stroked-button>Save</button>
-
-<!--
-        <div class="part">
-          <h4>Payment Score</h4>
-
-          <mat-slide-toggle formControlName="showPaymentScore"
-            matTooltip="Display a process bar with the achived utility and The
-            corresponding payment.">
-            Show Payment Score
-          </mat-slide-toggle>
-
-          <mat-form-field style="width: 200px" *ngIf="settingsForm.controls.showPaymentScore.value">
-            <mat-label matTooltip="Payment for participation">
-              Minimal Payment
-            </mat-label>
-            <input matInput type="number" formControlName="minPayment" />
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Model</mat-label>
+            <input matInput type="text" placeholder="gpt-4o-mini"  [formControl]="form.controls.llmConfig.controls.model">
           </mat-form-field>
 
-          <mat-form-field style="width: 200px" *ngIf="settingsForm.controls.showPaymentScore.value">
-            <mat-label matTooltip="Payment for achieving the maximal utility">
-              Max Payment
-            </mat-label>
-            <input matInput type="number" formControlName="maxPayment" />
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Temperature</mat-label>
+            <input matInput type="number" placeholder="0"  [formControl]="form.controls.llmConfig.controls.temperature">
+            @if (form.controls.llmConfig.controls.temperature.hasError('min') || form.controls.llmConfig.controls.temperature.hasError('max')) {
+              <mat-error>Temperature must between 0 and 2.</mat-error>
+            }
+          </mat-form-field> 
+
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Maximal number of completion tokens</mat-label>
+            <input matInput type="number"   [formControl]="form.controls.llmConfig.controls.maxCompletionTokens">
           </mat-form-field>
 
-          <mat-form-field style="width: 200px" *ngIf="settingsForm.controls.showPaymentScore.value">
-            <mat-label matTooltip="Different levels of payment, in fraction of the
-              differents between the utiity of the global hard goals and the maximal possible utility.">
-              Payment Steps
-            </mat-label>
-            <input matInput type="string" formControlName="paymentSteps" />
+          <mat-label>Prompts</mat-label>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>System Prompt</mat-label>
+            <mat-select [formControl]="form.controls.services.controls.planners">
+              <option value="" disabled selected></option>
+              @for (prompt of systemPrompts(); track prompt._id) {
+                <mat-option [value]="prompt._id">{{prompt.name}}</mat-option>
+              }
+            </mat-select>
           </mat-form-field>
-        </div> -->
 
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Goal Translator Instructions Prompt</mat-label>
+            <mat-select [formControl]="form.controls.services.controls.planners">
+              <option value="" disabled selected></option>
+              @for (prompt of goalTransInstructionPrompts(); track prompt._id) {
+                <mat-option [value]="prompt._id">{{prompt.name}}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
 
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Goal Translator Data Prompt</mat-label>
+            <mat-select [formControl]="form.controls.services.controls.planners">
+              <option value="" disabled selected></option>
+              @for (prompt of goalTransDataPrompts(); track prompt._id) {
+                <mat-option [value]="prompt._id">{{prompt.name}}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Question Classifier Instructions Prompt</mat-label>
+            <mat-select [formControl]="form.controls.services.controls.planners">
+              <option value="" disabled selected></option>
+              @for (prompt of questionClassInstructionPrompts(); track prompt._id) {
+                <mat-option [value]="prompt._id">{{prompt.name}}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Question Classifier Data Prompt</mat-label>
+            <mat-select [formControl]="form.controls.services.controls.planners">
+              <option value="" disabled selected></option>
+              @for (prompt of questionClassDataPrompts(); track prompt._id) {
+                <mat-option [value]="prompt._id">{{prompt.name}}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Explanation Translator Instructions Prompt</mat-label>
+            <mat-select [formControl]="form.controls.services.controls.planners">
+              <option value="" disabled selected></option>
+              @for (prompt of explanationTransInstructionPrompts(); track prompt._id) {
+                <mat-option [value]="prompt._id">{{prompt.name}}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Explanation Translator Data Prompt</mat-label>
+            <mat-select [formControl]="form.controls.services.controls.planners">
+              <option value="" disabled selected></option>
+              @for (prompt of explanationTransDataPrompts(); track prompt._id) {
+                <mat-option [value]="prompt._id">{{prompt.name}}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+        </mat-card-content>
+      </mat-card>
+      }
+
+      <mat-card appearance="outlined">
+        <mat-card-header>
+          <mat-card-title>
+            User Study
+          </mat-card-title>
+        </mat-card-header>
+
+        <mat-card-content class="sub-card-content">
+
+          <mat-slide-toggle [formControl]="form.controls.userStudy.controls.introTask">
+            introduction Task
+          </mat-slide-toggle>
+
+          <mat-slide-toggle [formControl]="form.controls.userStudy.controls.checkMaxUtility">
+            Notify user when maximal utility is reached
+          </mat-slide-toggle>
+
+          <mat-slide-toggle [formControl]="form.controls.userStudy.controls.showPaymentInfo">
+            Show information about payment
+          </mat-slide-toggle>
+
+          @if(form.controls.userStudy.controls.showPaymentInfo.value){
+            <mat-form-field class="example-full-width" appearance="outline">
+              <mat-label>Minimal Payment</mat-label>
+              <input matInput type="number"   [formControl]="form.controls.userStudy.controls.paymentInfo.controls.min">
+            </mat-form-field>
+
+            <mat-form-field class="example-full-width" appearance="outline">
+              <mat-label>Maximal Payment</mat-label>
+              <input matInput type="number"   [formControl]="form.controls.userStudy.controls.paymentInfo.controls.max">
+            </mat-form-field>
+
+            <mat-form-field class="example-full-width" appearance="outline">
+              <mat-label>Steps (semicolon separated list)</mat-label>
+              <input matInput type="number"   [formControl]="form.controls.userStudy.controls.paymentInfo.controls.max">
+            </mat-form-field>
+          }
+
+        </mat-card-content>
+      </mat-card>
+   
+
+    <div class="button-container">
+      <button mat-flat-button [disabled]="!form.valid">Save</button>
+    </div>
   </form>
 </div>

@@ -1,0 +1,51 @@
+@let schema = schema$ | async;
+
+<app-page>
+    <app-breadcrumb>
+        <a app-breadcrumb-item [routerLink]="['/spec']"><mat-icon>home</mat-icon></a>
+        <app-breadcrumb-item>edit</app-breadcrumb-item>
+    </app-breadcrumb>
+    <app-page-title>
+        Edit Prompt
+    </app-page-title>
+    <app-page-content>
+        <form>
+        <app-page-section-list>
+            <app-page-section>
+                <app-page-section-content>
+                    <div class="chip-list">
+                        <mat-chip>{{ schema?.agent }}</mat-chip>
+                        @if(schema?.domain){
+                            <mat-chip class="color">{{ domainName$ | async }}</mat-chip>
+                        }
+                        @if(schema?.explainer){
+                            <mat-chip>{{ explainerName$ | async }}</mat-chip>
+                        }
+                    </div>
+                </app-page-section-content>
+            </app-page-section> 
+            <app-page-section>
+                <app-page-section-content>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Name</mat-label>
+                        <input matInput [formControl]="form.controls.name">
+                    </mat-form-field>
+                </app-page-section-content>
+            </app-page-section> 
+            <app-page-section>
+                <app-page-section-title>
+                    Text
+                </app-page-section-title>
+                <app-page-section-content>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Text</mat-label>
+                        <textarea matInput [formControl]="form.controls.text"></textarea>
+                    </mat-form-field>
+                </app-page-section-content>
+            </app-page-section>  
+        </app-page-section-list>
+        <button mat-flat-button type="button" (click)="onSave()" [disabled]="!form.valid">Save</button>
+        </form>
+    </app-page-content>
+</app-page>
+

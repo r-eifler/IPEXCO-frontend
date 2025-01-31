@@ -1,4 +1,7 @@
 import { createAction, props } from "@ngrx/store";
+import { DomainSpecification } from "src/app/global_specification/domain/domain_specification";
+import { OutputSchema, Prompt } from "src/app/global_specification/domain/prompt";
+import { Explainer, Planner } from "src/app/global_specification/domain/services";
 import { Demo } from "src/app/project/domain/demo";
 import { PlanProperty } from "src/app/shared/domain/plan-property/plan-property";
 import { Project } from "src/app/shared/domain/project";
@@ -13,6 +16,11 @@ export const loadProjectFailure = createAction('[project] load project failure')
 export const updateProject = createAction('[project] update project', props<{project: Project}>());
 export const updateProjectSuccess = createAction('[project] update project success', props<{project: Project}>());
 export const updateProjectFailure = createAction('[project] update project failure');
+
+// domain spec
+export const loadDomainSpecification = createAction('[project] load  domain specification', props<{id: string}>());
+export const loadDomainSpecificationSuccess = createAction('[project] load  domain specification success', props<{domainSpecification: DomainSpecification}>());
+export const loadDomainSpecificationFailure = createAction('[project] load  domain specification failure');
 
 
 // Plan Properties
@@ -74,3 +82,28 @@ export const loadDemoPlanPropertiesFailure = createAction('[project] load demo p
 export const loadProjectDemo = createAction('[project] load project demo', props<{id: string}>());
 export const loadProjectDemoSuccess = createAction('[project] load project demo success', props<{demo: Demo}>());
 export const loadProjectDemoFailure = createAction('[project] load project demo failure');
+
+
+// planner
+export const loadPlanners = createAction('[project] load  planners');
+export const loadPlannersSuccess = createAction('[project] load  planners success', props<{planners: Planner[]}>());
+export const loadPlannersFailure = createAction('[project] load  planners failure');
+
+
+// explainer
+export const loadExplainers = createAction('[project] load  explainers');
+export const loadExplainersSuccess = createAction('[project] load  explainers success', props<{explainers: Explainer[]}>());
+export const loadExplainersFailure = createAction('[project] load  explainers failure');
+
+
+// prompts
+export const loadPrompts = createAction('[project] load  prompts');
+export const loadPromptsSuccess = createAction('[project] load  prompts success', props<{prompts: Prompt[]}>());
+export const loadPromptsFailure = createAction('[project] load  prompts failure');
+
+
+// Output Schema
+export const loadOutputSchemas = createAction('[project] load  output schemas');
+export const loadOutputSchemasSuccess = createAction('[project] load  output schemas success', props<{outputSchemas: OutputSchema[]}>());
+export const loadOutputSchemasFailure = createAction('[project] load  output schemas failure');
+

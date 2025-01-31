@@ -12,12 +12,17 @@ export const selectProject = createSelector(selectProjectFeature, (state) => sta
 export const selectProjectSettings = createSelector(selectProjectFeature, (state) => state.project.data?.settings)
 export const selectProjectPlanningTask = createSelector(selectProjectFeature, (state) => state.project.data?.baseTask)
 
-export const selectProjectPlanPropertyCreationInterfaceType = createSelector(selectProjectFeature,
-    (state) => state.project?.data?.settings?.propertyCreationInterfaceType)
-export const selectProjectPlanPropertyTemplates = createSelector(selectProjectFeature,
-    (state) => state.project?.data?.domainSpecification?.planPropertyTemplates)
+export const selectProjectPlanPropertyTemplates = createSelector(selectProjectFeature, (state) => state.domainSpecification?.data?.planPropertyTemplates)
 
-export const selectProjectProperties = createSelector(selectProjectFeature, (state) => state.planProperties.data)
+export const selectProjectPlanPropertyCreationInterfaceType = createSelector(selectProjectFeature,
+    (state) => state.project?.data?.settings?.interfaces.propertyCreationInterfaceType)
+
+export const selectPlanners = createSelector(selectProjectFeature, (state) => state.planners.data);
+export const selectExplainer = createSelector(selectProjectFeature, (state) => state.explainer.data);
+export const selectPrompts = createSelector(selectProjectFeature, (state) => state.prompts.data);
+export const selectOutputSchemas = createSelector(selectProjectFeature, (state) => state.outputSchemas.data);
+
+export const selectProjectProperties = createSelector(selectProjectFeature, (state) => state.planProperties.data);
 
 
 export const selectProjectAllDemos = createSelector(selectProjectFeature, (state) => state.demos.data)

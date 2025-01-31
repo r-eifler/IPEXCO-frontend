@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { selectProjectPlanPropertyCreationInterfaceType, selectProjectPlanPropertyTemplates, selectProjectPlanningTask, selectProjectProperties } from '../../state/project.selector';
@@ -7,6 +7,7 @@ import { PropertyCreationTemplateBasedComponent } from 'src/app/shared/view/prop
 import { PropertyCreationInterfaceType } from '../../domain/general-settings';
 import { AsyncPipe } from '@angular/common';
 import { PlanProperty } from 'src/app/shared/domain/plan-property/plan-property';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
     selector: 'app-property-creator',
@@ -35,5 +36,9 @@ export class PropertyCreatorComponent {
 
   handleCancel(){
     this.dialogRef.close(null)
+  }
+
+  constructor(){
+    this.templates$.pipe(takeUntilDestroyed(),tap(console.log)).subscribe();
   }
 }

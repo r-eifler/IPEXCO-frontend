@@ -144,7 +144,6 @@ export class DemoCreatorComponent implements OnInit {
           public: false,
           completion:  0.0,
           baseTask: project.baseTask,
-          domainSpecification: project.domainSpecification,
           settings: project.settings
         };
 

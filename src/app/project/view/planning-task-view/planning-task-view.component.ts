@@ -41,7 +41,6 @@ export class PlanningTaskViewComponent {
   store = inject(Store);
 
   project$ = this.store.select(selectProject);
-  domain_name$ = this.store.select(selectProjectPlanningTask).pipe(map(pt => pt?.domain_name));
   planning_model$ = this.store.select(selectProjectPlanningTask).pipe(map(pt => pt?.model));
 
 

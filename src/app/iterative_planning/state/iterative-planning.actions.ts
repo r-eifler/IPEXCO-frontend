@@ -5,6 +5,7 @@ import { IterationStep, ModIterationStep } from "../domain/iteration_step";
 import { LLMContext } from "src/app/LLM/domain/context";
 import { PlanProperty } from "src/app/shared/domain/plan-property/plan-property";
 import { Project } from "src/app/shared/domain/project";
+import { DomainSpecification } from "src/app/global_specification/domain/domain_specification";
 
 
 
@@ -14,6 +15,10 @@ export const loadProject = createAction('[iterative-planning] load project', pro
 export const loadProjectSuccess = createAction('[iterative-planning] load project success', props<{project: Project}>());
 export const loadProjectFailure = createAction('[iterative-planning] load project failure');
 
+// domain spec
+export const loadDomainSpecification = createAction('[iterative-planning]  load  domain specification', props<{id: string}>());
+export const loadDomainSpecificationSuccess = createAction('[iterative-planning]  load  domain specification success', props<{domainSpecification: DomainSpecification}>());
+export const loadDomainSpecificationFailure = createAction('[iterative-planning]  load  domain specification failure');
 
 // Plan Properties
 

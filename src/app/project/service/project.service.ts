@@ -39,7 +39,6 @@ export class ProjectService{
                     ...project.baseTask,
                     model: JSON.parse(project.baseTask.model as unknown as string),
                 },
-                domainSpecification: JSON.parse(project.domainSpecification as unknown as string)
             }))
         )
     }
@@ -53,7 +52,6 @@ export class ProjectService{
                     ...project.baseTask,
                     model: JSON.parse(project.baseTask.model as unknown as string),
                 },
-                domainSpecification: JSON.parse(project.domainSpecification as unknown as string)
             }))
         )
 

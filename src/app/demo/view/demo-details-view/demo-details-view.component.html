@@ -88,7 +88,15 @@
 			<app-page-section>
 				<app-page-section-title>Settings</app-page-section-title>
 				<app-page-section-content>
-					<app-settings [settings]="demo?.settings" (update)="updateSettings($event)" [isDemo]="true"></app-settings>
+					<app-settings 
+						[settings]="demo?.settings" 
+						[planners]="[]"
+						[explainer]="[]"
+						[prompts]="[]"
+						[outputSchemas]="[]"
+						(update)="updateSettings($event)" 
+						[isDemo]="true">
+					</app-settings>
 				</app-page-section-content>
 			</app-page-section>
 		</app-page-section-list> 

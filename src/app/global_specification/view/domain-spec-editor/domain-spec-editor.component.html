@@ -1,0 +1,53 @@
+@let domainSpec = domainSpec$ | async;
+
+<app-page>
+    <app-breadcrumb>
+        <a app-breadcrumb-item [routerLink]="['/spec']"><mat-icon>home</mat-icon></a>
+        <app-breadcrumb-item>edit</app-breadcrumb-item>
+    </app-breadcrumb>
+    <app-page-title>
+        Edit Domain
+    </app-page-title>
+    <app-page-content>
+        <form>
+        <app-page-section-list>
+            <app-page-section>
+                <app-page-section-title>
+                    Main
+                </app-page-section-title>
+                <app-page-section-content>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Name</mat-label>
+                        <input matInput [formControl]="form.controls.name">
+                    </mat-form-field>
+                </app-page-section-content>
+            </app-page-section> 
+
+            <app-page-section>
+                <app-page-section-title>
+                    Description
+                </app-page-section-title>
+                <app-page-section-content>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Description</mat-label>
+                        <textarea matInput [formControl]="form.controls.description"></textarea>
+                    </mat-form-field>
+                </app-page-section-content>
+            </app-page-section>  
+            <app-page-section>
+                <app-page-section-title>
+                    Goal Templates
+                </app-page-section-title>
+                <app-page-section-content>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Templates</mat-label>
+                        <textarea matInput [formControl]="form.controls.templates"></textarea>
+                    </mat-form-field>
+                </app-page-section-content>
+            </app-page-section>  
+        </app-page-section-list>
+        <button mat-flat-button type="button" (click)="onSave()" [disabled]="!form.valid">Save</button>
+        </form>
+    </app-page-content>
+</app-page>
+

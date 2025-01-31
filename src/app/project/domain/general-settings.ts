@@ -16,41 +16,65 @@ export enum ExplanationInterfaceType {
 }
 
 export interface GeneralSettings {
-  _id: string|number;
-  public: boolean;
-  maxRuns: number;
-  allowQuestions: boolean;
-  usePlanPropertyUtility: boolean;
-  useTimer: boolean;
-  measureTime: boolean;
-  maxTime: number;
-  checkMaxUtility: boolean;
-  showPaymentInfo: boolean;
-  paymentInfo?: PaymentInfo;
-  introTask: boolean;
-  computePlanAutomatically: boolean;
-  computeDependenciesAutomatically: boolean;
-  propertyCreationInterfaceType: PropertyCreationInterfaceType;
-  explanationInterfaceType: ExplanationInterfaceType;
-  globalExplanation: boolean;
+  _id: string;
+  main: {
+      public: boolean;
+      maxRuns: number| null;
+      usePlanPropertyUtility: boolean;
+  }
+  services: {
+      computePlanAutomatically: boolean;
+      computeExplanationsAutomatically: boolean;
+      planners: string[];
+      explainer: string[]
+  }
+  interfaces: {
+      propertyCreationInterfaceType: PropertyCreationInterfaceType;
+      explanationInterfaceType: ExplanationInterfaceType;
+  }
+  llmConfig: {
+    model: string,
+    temperature: number,
+    maxCompletionTokens: number| null,
+    prompts: string[],
+    outputSchema: string[],
+  }
+  userStudy: {
+      introTask: boolean;
+      checkMaxUtility: boolean;
+      showPaymentInfo: boolean;
+      paymentInfo?: PaymentInfo;
+  }
 }
 
 export const defaultGeneralSetting: GeneralSettings = {
-  _id: 0,
-  public: false,
-  maxRuns: 100,
-  allowQuestions: true,
-  usePlanPropertyUtility: false,
-  explanationInterfaceType: ExplanationInterfaceType.TEMPLATE_QUESTION_ANSWER,
-  propertyCreationInterfaceType: PropertyCreationInterfaceType.TEMPLATE_BASED,
-  globalExplanation: false,
-  useTimer: false,
-  measureTime: false,
-  maxTime: 0,
-  checkMaxUtility: false,
-  introTask: false,
-  computePlanAutomatically: false,
-  computeDependenciesAutomatically: false,
-  showPaymentInfo: false,
-  paymentInfo: { min: 0, max: 10, steps: [0.5, 0.75, 1] },
+  _id: '0',
+  main: {
+    public: false,
+    maxRuns: 100,
+    usePlanPropertyUtility: false,
+  },
+  services: {
+      computePlanAutomatically: true,
+      computeExplanationsAutomatically: true,
+      planners: [],
+      explainer: [],
+  },
+  interfaces: {
+      explanationInterfaceType: ExplanationInterfaceType.TEMPLATE_QUESTION_ANSWER,
+      propertyCreationInterfaceType: PropertyCreationInterfaceType.TEMPLATE_BASED,
+  },
+  llmConfig: {
+    model: 'gpt-4o-mini',
+    temperature: 0,
+    maxCompletionTokens: null,
+    prompts: [],
+    outputSchema: [],
+  },
+  userStudy: {
+      introTask: false,
+      checkMaxUtility: true,
+      showPaymentInfo: false,
+      paymentInfo: { min: 0, max: 10, steps: [0.5, 0.75, 1] }
+  }
 };

@@ -120,6 +120,35 @@ import { UserStudyExecutionPlanPropertyService } from './user_study_execution/se
 import { LoadUserStudyExecutionPlanPropertiesEffect } from './user_study_execution/state/effects/load-plan-properties.effect';
 import { ProjectDemoUpdatePlanPropertyEffect } from './project/state/effects/update-plan-property.effect';
 import { DemoDemoUpdatePlanPropertyEffect } from './demo/state/effects/update-plan-property.effect';
+import { DomainSpecificationService } from './global_specification/service/domainSpecification.service';
+import { PromptsService } from './global_specification/service/prompts.service';
+import { globalSpecificationFeature, globalSpecificationReducer } from './global_specification/state/globalSpec.reducer';
+import { LoadDomainSpecificationsEffect } from './global_specification/state/effects/load-domain-specs.effect';
+import { LoadPromptsEffect } from './global_specification/state/effects/load-prompts.effect';
+import { LoadServicesEffect } from './global_specification/state/effects/load-services.effect';
+import { PlannerServicesService } from './global_specification/service/planner.service';
+import { ExplainerServicesService } from './global_specification/service/explainer.service';
+import { CreateServicesEffect } from './global_specification/state/effects/create-services.effect';
+import { DeleteServicesEffect } from './global_specification/state/effects/delete-services.effect';
+import { CreateDomainSpecificationEffect } from './global_specification/state/effects/create-domain-spec.effect';
+import { DeleteDomainSpecificationEffect } from './global_specification/state/effects/delete-domain-spec.effect';
+import { LoadDomainSpecificationEffect } from './global_specification/state/effects/load-domain-spec.effect';
+import { UpdateDomainSpecificationEffect } from './global_specification/state/effects/update-domain-spec.effect';
+import { CreatePromptsEffect } from './global_specification/state/effects/create-prompts.effect';
+import { DeletePromptsEffect } from './global_specification/state/effects/delete-prompts.effect';
+import { LoadPromptEffect } from './global_specification/state/effects/load-prompt.effect';
+import { UpdatePromptsEffect } from './global_specification/state/effects/update-prompt.effect';
+import { ProjectLoadPromptsEffect } from './project/state/effects/load-prompts.effect';
+import { ProjectLoadServicesEffect } from './project/state/effects/load-services.effect';
+import { ProjectExplainerServicesService } from './project/service/explainer.service';
+import { ProjectPlannerServicesService } from './project/service/planner.service';
+import { ProjectPromptsService } from './project/service/prompts.service';
+import { ProjectLoadDomainSpecificationEffect } from './project/state/effects/load-domain-spec.effect';
+import { ProjectDomainSpecificationService } from './project/service/domainSpecification.service';
+import { IterativePlanningDomainSpecificationService } from './iterative_planning/service/domainSpecification.service';
+import { MetaProjectDomainSpecificationService } from './project-meta/service/domainSpecification.service';
+import { MetaProjectLoadDomainSpecificationsEffect } from './project-meta/state/effects/load-domain-specs.effect';
+import { IterativePlanningLoadDomainSpecificationEffect } from './iterative_planning/state/effects/load-domain-spec.effect';
 
 
 
@@ -136,6 +165,7 @@ import { DemoDemoUpdatePlanPropertyEffect } from './demo/state/effects/update-pl
         [iterativePlanningFeature]: iterativePlanningReducer,
         [userStudyFeature]: userStudyReducer,
         [userStudyExecutionFeature]: userStudyExecutionReducer,
+        [globalSpecificationFeature]: globalSpecificationReducer,
     }),
     EffectsModule.forRoot([
         LoadTokenEffect,
@@ -170,65 +200,83 @@ import { DemoDemoUpdatePlanPropertyEffect } from './demo/state/effects/update-pl
         ComputeExplanationEffect,
         QuestionQueueEffect,
         CreateLLMContextEffect,
-      LoadTokenEffect,
-      StoreTokenEffect,
-      LoginEffect,
-      LoadUserEffect,
-      LogoutEffect,
-      RegisterEffect,
-      LoggedInEffect,
-      LoadProjectEffect,
-      UpdateProjectEffect,
-      LoadProjectPlanPropertiesEffect,
-      LoadProjectMetaDataListEffect,
-      CreateProjectEffect,
-      DeleteProjectEffect,
-      CreateDemoEffect,
-      CancelCreateDemoEffect,
-      LoadProjectDemosEffect,
-      LoadProjectDemoEffect,
-      UpdateDemoEffect,
-      DeleteProjectDemoEffect,
-      LoadDemoProjectPlanPropertiesEffect,
-      LoadIterativePlanningProjectEffect,
-      CreatePlanPropertyEffect,
-      LoadPlanPropertiesEffect,
-      UpdatePlanPropertyEffect,
-      DeletePlanPropertyEffect,
-      LoadIterationStepsEffect,
-      CreateIterationStepEffect,
-      CancelPlanIterationStepEffect,
-      DeleteIterationEffect,
-      ComputePlanEffect,
-      SendMessageToLLMEffect,
-      ComputeExplanationEffect,
-      QuestionQueueEffect,
-      LoadUserStudiesEffect,
-      LoadUserStudyDemosEffect,
-      CreateUserStudyEffect,
-      LoadUserStudyEffect,
-      EditUserStudyEffect,
-      LoadUserStudyParticipantsEffect,
-      ExecutionLoadUserStudyEffect,
-      LoadUserStudyExecutionDemoEffect,
-      LoadUserStudyExecutionPlanPropertiesEffect,
-      RegisterUserStudyEffect,
-      FinishUserStudyEffect,
-      UserStudyCanceledEffect,
-      UserStudyFinishedAllStepsEffect,
-      LogUserActivitiesEffect,
-      AcceptUserStudyParticipantEffect,
-      LoadUserStudyDistributionsEffect,
-      LoadUserStudyDistributionEffect,
-      CreateUserStudyParticipantDistributionEffect,
-      RedirectToNextUserStudyEffect,
-      EditUserStudyParticipantDistributionEffect,
-      LoadDemoEffect,
-      LoadDemosEffect,
-      LoadDemoPlanPropertiesEffect,
-      DemosUpdateDemoEffect,
-      UploadDemoEffect,
-      DemoDemoUpdatePlanPropertyEffect
+        LoadTokenEffect,
+        StoreTokenEffect,
+        LoginEffect,
+        LoadUserEffect,
+        LogoutEffect,
+        RegisterEffect,
+        LoggedInEffect,
+        LoadProjectEffect,
+        UpdateProjectEffect,
+        LoadProjectPlanPropertiesEffect,
+        LoadProjectMetaDataListEffect,
+        CreateProjectEffect,
+        DeleteProjectEffect,
+        CreateDemoEffect,
+        CancelCreateDemoEffect,
+        LoadProjectDemosEffect,
+        LoadProjectDemoEffect,
+        UpdateDemoEffect,
+        DeleteProjectDemoEffect,
+        LoadDemoProjectPlanPropertiesEffect,
+        LoadIterativePlanningProjectEffect,
+        CreatePlanPropertyEffect,
+        LoadPlanPropertiesEffect,
+        UpdatePlanPropertyEffect,
+        DeletePlanPropertyEffect,
+        LoadIterationStepsEffect,
+        CreateIterationStepEffect,
+        CancelPlanIterationStepEffect,
+        DeleteIterationEffect,
+        ComputePlanEffect,
+        SendMessageToLLMEffect,
+        ComputeExplanationEffect,
+        QuestionQueueEffect,
+        LoadUserStudiesEffect,
+        LoadUserStudyDemosEffect,
+        CreateUserStudyEffect,
+        LoadUserStudyEffect,
+        EditUserStudyEffect,
+        LoadUserStudyParticipantsEffect,
+        ExecutionLoadUserStudyEffect,
+        LoadUserStudyExecutionDemoEffect,
+        LoadUserStudyExecutionPlanPropertiesEffect,
+        RegisterUserStudyEffect,
+        FinishUserStudyEffect,
+        UserStudyCanceledEffect,
+        UserStudyFinishedAllStepsEffect,
+        LogUserActivitiesEffect,
+        AcceptUserStudyParticipantEffect,
+        LoadUserStudyDistributionsEffect,
+        LoadUserStudyDistributionEffect,
+        CreateUserStudyParticipantDistributionEffect,
+        RedirectToNextUserStudyEffect,
+        EditUserStudyParticipantDistributionEffect,
+        LoadDemoEffect,
+        LoadDemosEffect,
+        LoadDemoPlanPropertiesEffect,
+        DemosUpdateDemoEffect,
+        UploadDemoEffect,
+        DemoDemoUpdatePlanPropertyEffect,
+        LoadDomainSpecificationsEffect,
+        LoadDomainSpecificationEffect,
+        UpdateDomainSpecificationEffect,
+        LoadPromptsEffect,
+        LoadPromptEffect,
+        UpdatePromptsEffect,
+        CreatePromptsEffect,
+        DeletePromptsEffect,
+        LoadServicesEffect,
+        CreateServicesEffect,
+        DeleteServicesEffect,
+        CreateDomainSpecificationEffect,
+        DeleteDomainSpecificationEffect,
+        ProjectLoadPromptsEffect,
+        ProjectLoadServicesEffect,
+        ProjectLoadDomainSpecificationEffect,
+        MetaProjectLoadDomainSpecificationsEffect,
+        IterativePlanningLoadDomainSpecificationEffect,
     ]),
     // Instrumentation must be imported after importing StoreModule (config is optional)
     StoreDevtoolsModule.instrument({
@@ -279,6 +327,16 @@ import { DemoDemoUpdatePlanPropertyEffect } from './demo/state/effects/update-pl
     DemoPlanPropertyService,
     UserStudyExecutionDemoService,
     UserStudyExecutionPlanPropertyService,
+    DomainSpecificationService,
+    PromptsService,
+    PlannerServicesService,
+    ExplainerServicesService,
+    ProjectExplainerServicesService,
+    ProjectPlannerServicesService,
+    ProjectPromptsService,
+    ProjectDomainSpecificationService,
+    IterativePlanningDomainSpecificationService,
+    MetaProjectDomainSpecificationService,
     {
       provide: MAT_BOTTOM_SHEET_DEFAULT_OPTIONS,
       useValue: { hasBackdrop: true },

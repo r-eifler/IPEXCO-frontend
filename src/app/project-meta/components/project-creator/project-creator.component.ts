@@ -4,12 +4,11 @@ import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from "@angu
 import { BehaviorSubject, combineLatest, Observable, Subject } from "rxjs";
 import { AuthenticationService } from "../../../user/services/authentication.service";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
-import { defaultDomainSpecification, DomainSpecification } from "src/app/shared/domain/domain-specification";
 import { PDDLService } from "src/app/project-meta/service/pddl.service";
 import { take, tap, map} from "rxjs/operators";
 import { PlanningDomain, PlanningModel, PlanningProblem } from "src/app/shared/domain/planning-task";
 import { Store } from "@ngrx/store";
-import { createProject } from "../../state/project-meta.actions";
+import { createProject, loadDomainSpecifications } from "../../state/project-meta.actions";
 import { AsyncPipe } from "@angular/common";
 import { MatIconModule } from "@angular/material/icon";
 import { TemplateFileUploadComponent } from "src/app/components/files/file-upload/file-upload.component";
@@ -20,6 +19,8 @@ import { selectUser } from "src/app/user/state/user.selector";
 import { MatInputModule } from "@angular/material/input";
 import { MatButtonModule } from "@angular/material/button";
 import { Project } from "src/app/shared/domain/project";
+import { selectDomainSpecifications } from "../../state/project-meta.selector";
+import { MatSelectModule } from "@angular/material/select";
 
 @Component({
     selector: "app-project-creator",
@@ -36,18 +37,24 @@ import { Project } from "src/app/shared/domain/project";
         MatCardModule,
         MatIconModule,
         MatButtonModule,
+        MatSelectModule,
+        AsyncPipe
     ],
     templateUrl: "./project-creator.component.html",
     styleUrls: ["./project-creator.component.scss"]
 })
 export class ProjectCreatorComponent implements OnInit {
 
-  private formBuilder = inject(FormBuilder);
+  store = inject(Store);
 
-  projectBasic = this.formBuilder.group({
-    name: ['', Validators.required],
-    domain_name: ['', Validators.required],
-    description: ['', Validators.required],
+  domains$ = this.store.select(selectDomainSpecifications);
+
+  private fb = inject(FormBuilder);
+
+  form = this.fb.group({
+    name: this.fb.control<string>('', Validators.required),
+    domain: this.fb.control<string>('', Validators.required),
+    description: this.fb.control<string>('', Validators.required),
   });
 
   selectedDomain: any
@@ -69,12 +76,13 @@ export class ProjectCreatorComponent implements OnInit {
   modelValid$: Observable<boolean>;
 
   constructor(
-    private store: Store,
     private userService: AuthenticationService,
     private pddlService: PDDLService,
     public dialogRef: MatDialogRef<ProjectCreatorComponent>,
     @Inject(MAT_DIALOG_DATA) data
   ) {
+
+    this.store.dispatch(loadDomainSpecifications());
 
     this.editedProject = data.project;
 
@@ -128,14 +136,13 @@ export class ProjectCreatorComponent implements OnInit {
         const newProject: Project = {
           _id: this.editedProject ? this.editedProject._id : null,
           updated: new Date().toLocaleString(),
-          name: this.projectBasic.controls.name.value,
+          name: this.form.controls.name.value,
           user: user._id,
-          description: this.projectBasic.controls.description.value,
-          domainSpecification: defaultDomainSpecification,
+          domain: this.form.controls.domain.value,
+          description: this.form.controls.description.value,
           settings: defaultGeneralSetting,
           baseTask: {
-            name: this.projectBasic.controls.name.value,
-            domain_name: this.projectBasic.controls.domain_name.value,
+            name: this.form.controls.name.value,
             encoding: "classic",
             model: model
           },
