@@ -14,7 +14,7 @@ import { AskDeleteComponent } from 'src/app/shared/components/ask-delete/ask-del
 import { MatDialog } from '@angular/material/dialog';
 import { DemoHeroComponent } from 'src/app/project/components/demo-hero/demo-hero.component';
 import { SettingsComponent } from 'src/app/project/components/settings/settings.component';
-import { selectDemo, selectDemoProperties, selectPlanPropertiesListOfDemo, selectPlanPropertiesOfDemo } from '../../state/demo.selector';
+import { selectDemo, selectPlanPropertiesListOfDemo, selectPlanPropertiesOfDemo } from '../../state/demo.selector';
 import { GeneralSettings } from 'src/app/project/domain/general-settings';
 import { updateDemo, updatePlanProperty } from '../../state/demo.actions';
 import { DemoInfoComponent } from 'src/app/shared/components/demo/demo-info/demo-info.component';

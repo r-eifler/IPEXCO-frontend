@@ -2,13 +2,17 @@ import { Routes } from '@angular/router';
 import { UserMainPageComponent } from './user/view/user-main-page/user-main-page.component';
 import { ProjectCollectionComponent } from './project-meta/components/project-collection/project-collection.component';
 import { AuthGuard } from './route-guards/auth-guard.guard';
-import {NavigationComponent} from './base/components/navigation/navigation.component';
-import { MainPageComponent } from './base/components/main-page/main-page.component';
+import { NavigationComponent} from './base/components/navigation/navigation.component';
+import { MainPageComponent } from './user/view/main-page/main-page.component';
 import { ToHomeGuard } from './route-guards/to-home.guard';
-import { UserManualComponent } from './iterative_planning/components/user-manual/user-manual.component';
 import { HelpPageComponent } from './base/components/help-page/help-page.component';
+import { demosFeature } from './demo/state/demo.feature';
+import { provideState } from '@ngrx/store';
+import { userFeature } from './user/state/user.feature';
+import { provideEffects } from '@ngrx/effects';
+import { userFeatureEffects } from './user/state/effects/effects';
 
-export const appRoutes: Routes = [
+export const routes: Routes = [
   {
     path: 'user-study-execution',
     loadChildren: () => import('./user_study_execution/user-study-execution.module').then(m => m.UserStudyExecutionModule),
@@ -16,7 +20,7 @@ export const appRoutes: Routes = [
   },
   {
     path: '',
-    redirectTo: '/overview',
+    redirectTo: '/user',
     pathMatch: 'full'
   },
   {
@@ -25,6 +29,14 @@ export const appRoutes: Routes = [
     resolve: { },
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
     children: [
+      {
+        path: 'user',
+        providers: [
+          provideState(userFeature),
+          provideEffects(userFeatureEffects)
+        ],
+        loadChildren: () => import('./user/user.module').then(m => m.UserModule),
+      },
       {
         path: 'register',
         component: MainPageComponent,
@@ -47,6 +59,9 @@ export const appRoutes: Routes = [
       },
       {
         path: 'demos',
+        providers: [
+          provideState(demosFeature)
+        ],
         loadChildren: () => import('./demo/demo.module').then(m => m.DemoModule),
         canActivate: [AuthGuard],
       },

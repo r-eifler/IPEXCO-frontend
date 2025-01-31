@@ -1,11 +1,7 @@
 import { inject, Injectable } from '@angular/core';
-import { Actions, createEffect, ofType, OnInitEffects } from '@ngrx/effects';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
 import {map, tap} from 'rxjs/operators';
 import {
-  loadTokenLocalStorage,
-  loadTokenLocalStorageFailure,
-  loadTokenLocalStorageSuccess,
-  registerUserSuccess,
   storeTokenLocalStorage
 } from '../user.actions';
 

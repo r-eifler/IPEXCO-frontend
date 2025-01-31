@@ -4,7 +4,7 @@ import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
 import { gsap } from "gsap";
 import { MatButtonModule } from "@angular/material/button";
 import { RegisterComponent } from "src/app/user/components/register/register.component";
-import {selectLoggedIn} from '../../../user/state/user.selector';
+import {selectLoggedIn} from '../../state/user.selector';
 import {Store} from '@ngrx/store';
 import {AsyncPipe} from '@angular/common';
 

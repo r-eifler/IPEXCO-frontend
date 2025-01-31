@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { RunStatus } from 'src/app/iterative_planning/domain/run';
-import { selectAllFinishedDemos, selectDemoProperties } from '../../state/demo.selector';
+import { selectAllFinishedDemos } from '../../state/demo.selector';
 import { PageModule } from 'src/app/shared/components/page/page.module';
 import { AsyncPipe } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
@@ -14,6 +14,7 @@ import { ActionCardComponent } from 'src/app/shared/components/action-card/actio
 import { BehaviorSubject } from 'rxjs';
 import { PlanProperty } from 'src/app/shared/domain/plan-property/plan-property';
 import { Demo } from 'src/app/project/domain/demo';
+import { demosFeature } from '../../state/demo.feature';
 
 @Component({
   selector: 'app-demos-collection-view',
@@ -36,7 +37,7 @@ export class DemosCollectionViewComponent {
   store = inject(Store);
 
   demos$ = this.store.select(selectAllFinishedDemos);
-  demoProperties$ = this.store.select(selectDemoProperties);
+  demoProperties$ = this.store.select(demosFeature.selectDemoProperties);
 
   router = inject(Router);
 
