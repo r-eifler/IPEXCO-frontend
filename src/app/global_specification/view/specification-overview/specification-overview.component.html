@@ -17,9 +17,11 @@
                 </app-page-section-title>
                 <app-page-section-content>
                     <app-editable-list>
+                        @if(domainSpecs?.length ==0){
                         <app-editable-list-empty-state>
                             <span>No domains available.</span>
                         </app-editable-list-empty-state>
+                        }
                         @for(spec of domainSpecs; track spec._id){
                             <app-editable-list-entry>
                                 <app-domain-spec-card [spec]="spec"></app-domain-spec-card>
@@ -47,9 +49,11 @@
                 <app-page-section-content>
                     <div class="list-container">
                         <app-editable-list>
+                            @if(planners?.length ==0){
                             <app-editable-list-empty-state>
                                 <span>No planner service available.</span>
                             </app-editable-list-empty-state>
+                            }
                             @for(planner of planners; track planner._id){
                                 <app-editable-list-entry>
                                     <app-service-card [service]="planner" [type]="'planner'" [domains]="domains" ></app-service-card>
@@ -67,9 +71,11 @@
                         </app-editable-list>
          
                         <app-editable-list>
+                            @if(explainers?.length ==0){
                             <app-editable-list-empty-state>
                                 <span>No explainer service available.</span>
                             </app-editable-list-empty-state>
+                            }
                             @for(explainer of explainers; track explainer._id){
                                 <app-editable-list-entry>
                                     <app-service-card [service]="explainer" [type]="'explainer'" [domains]="domains"></app-service-card>
@@ -95,9 +101,11 @@
                 <app-page-section-content>
                     <div class="list-container">
                         <app-editable-list>
+                            @if(prompts?.length ==0){
                             <app-editable-list-empty-state>
                                 <span>No prompts available.</span>
                             </app-editable-list-empty-state>
+                            }
                             @for(prompt of prompts; track prompt._id){
                                 <app-editable-list-entry>
                                     <app-prompt-card [prompt]="prompt" [domains]="domains" [explainer]="explainers"></app-prompt-card>
@@ -119,9 +127,11 @@
 
 
                         <app-editable-list>
+                            @if(outputSchemas?.length ==0){
                             <app-editable-list-empty-state>
                                 <span>No output schemas available.</span>
                             </app-editable-list-empty-state>
+                            }
                             @for(outputSchema of outputSchemas; track outputSchema._id){
                                 <app-editable-list-entry>
                                     <app-output-schema-card [schema]="outputSchema" [domains]="domains" [explainer]="explainers"></app-output-schema-card>
