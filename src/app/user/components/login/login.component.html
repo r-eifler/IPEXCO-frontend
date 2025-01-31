@@ -1,42 +1,24 @@
-<mat-card>
-  <mat-card-header>
-    <mat-card-title>
+<app-dialog>
+  <app-dialog-header>
+    <app-dialog-title>
       Login
-    </mat-card-title>
-  </mat-card-header>
-  <mat-card-content>
-    <form
-      class="main-form"
-      [formGroup]="loginForm"
-      (ngSubmit)="onLogin()"
-      style="display: flex; flex-direction: column">
-
-      <mat-form-field class="form-inputs ">
+    </app-dialog-title>
+  </app-dialog-header>
+  <app-dialog-content>
+    <form [formGroup]="loginForm">
+      <mat-form-field class="form-inputs" appearance="outline">
         <mat-label>User name</mat-label>
         <input matInput type="text" formControlName="name" />
       </mat-form-field>
 
-      <mat-form-field class="form-inputs ">
+      <mat-form-field class="form-inputs" appearance="outline">
         <mat-label>Password</mat-label>
         <input matInput type="password" formControlName="password" />
       </mat-form-field>
-
-      <div style="display: flex">
-        <button
-          mat-flat-button
-          color="secondray"
-          type="button"
-          (click)="onBack()"
-          style="flex-grow: 1">
-          <mat-icon> keyboard_backspace </mat-icon>
-        </button>
-        <button
-          mat-flat-button
-          color="primary"
-          style="flex-grow: 4; margin-left: 10px">
-          Login
-        </button>
-      </div>
     </form>
-  </mat-card-content>
-</mat-card>
+  </app-dialog-content>
+  <app-dialog-footer>
+    <button mat-button (click)="onBack()"> Cancel </button>
+    <button mat-flat-button (click)="onLogin()">Login</button>
+  </app-dialog-footer>
+</app-dialog>
