@@ -1,5 +1,4 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import {  Routes } from '@angular/router';
 import { ShellComponent } from './view/shell/shell.component';
 import { SpecificationOverviewComponent } from './view/specification-overview/specification-overview.component';
 import { DomainSpecEditorComponent } from './view/domain-spec-editor/domain-spec-editor.component';
@@ -8,13 +7,30 @@ import { PromptEditorComponent } from './view/prompt-editor/prompt-editor.compon
 import { OutputSchemaEditorComponent } from './view/output-schema-editor/output-schema-editor.component';
 import { loadPromptResolver } from './resolver/load-prompt.resolver';
 import { loadOutputSchemaResolver } from './resolver/load-output-schema.resolver';
+import { globalSpecFeatureEffects } from './state/effects/effects';
+import { globalSpecFeature } from './state/globalSpec.feature';
+import { provideState } from '@ngrx/store';
+import { provideEffects } from '@ngrx/effects';
+import { DomainSpecificationService } from './service/domainSpecification.service';
+import { ExplainerServicesService } from './service/explainer.service';
+import { PlannerServicesService } from './service/planner.service';
+import { PromptsService } from './service/prompts.service';
 
 
-const routes: Routes = [
+
+export const routes: Routes = [
   {
     path: '',
     component: ShellComponent,
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
+      providers: [
+        provideState(globalSpecFeature),
+        provideEffects(globalSpecFeatureEffects),
+        DomainSpecificationService,
+        ExplainerServicesService,
+        PlannerServicesService,
+        PromptsService,
+      ],
     children: [
       {
         path: '',
@@ -43,8 +59,3 @@ const routes: Routes = [
     ]
   }
 ];
-
-@NgModule({
-  imports: [ RouterModule.forChild(routes) ]
-})
-export class GlobalSpecificationRoutesModule { }

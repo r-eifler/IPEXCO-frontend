@@ -6,12 +6,10 @@ import { NavigationComponent} from './base/components/navigation/navigation.comp
 import { MainPageComponent } from './user/view/main-page/main-page.component';
 import { ToHomeGuard } from './route-guards/to-home.guard';
 import { HelpPageComponent } from './base/components/help-page/help-page.component';
-import { demosFeature } from './demo/state/demo.feature';
 import { provideState } from '@ngrx/store';
 import { userFeature } from './user/state/user.feature';
 import { provideEffects } from '@ngrx/effects';
 import { userFeatureEffects } from './user/state/effects/effects';
-import { demosFeatureEffects } from './demo/state/effects/effects';
 import { AuthenticationService } from './user/services/authentication.service';
 
 export const routes: Routes = [
@@ -42,7 +40,7 @@ export const routes: Routes = [
     children: [
       {
         path: 'user',
-        loadChildren: () => import('./user/user.module').then(m => m.UserModule),
+        loadChildren: () => import('./user/user.routes').then(m => m.routes),
       },
       {
         path: 'register',
@@ -86,7 +84,7 @@ export const routes: Routes = [
       },
       {
         path: 'spec',
-        loadChildren: () => import('./global_specification/global_specification.module').then(m => m.GlobalSpecificationModule),
+        loadChildren: () => import('./global_specification/global_specification.routes').then(m => m.routes),
         canActivate: [AuthGuard],
       },
     ]
