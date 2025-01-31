@@ -1,16 +1,6 @@
-<mat-card appearance="outlined">
-    <mat-card-header>
-        <div class="title">
-            <div class="name-container">
-                <div class="icon-container">
-                    <mat-icon>description</mat-icon>
-                </div>
-                <span class="property-name">{{ spec()?.name }}</span>
-            </div>
-
-            <div>
-            </div>
-        </div>
-    </mat-card-header>
-</mat-card>
-    
+<app-spec-card>
+    <mat-icon>description</mat-icon>
+    <app-spec-card-title>
+        {{ spec()?.name }}
+    </app-spec-card-title>
+</app-spec-card>

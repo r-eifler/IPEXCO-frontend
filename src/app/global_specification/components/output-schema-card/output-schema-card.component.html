@@ -1,25 +1,17 @@
-<mat-card appearance="outlined">
-    <mat-card-header>
-        <div class="title">
-            <div class="name-container">
-                <div class="icon-container">
-                    <mat-icon>schema</mat-icon>
-                </div>
-                <span class="property-name">{{ schema()?.name }}</span>
-            </div>
+<app-spec-card>
+    <mat-icon>schema</mat-icon>
+    <app-spec-card-title>
+        {{ schema()?.name }}
+    </app-spec-card-title>
 
-            <div>
-                <div class="reverse">
+    @if(schema()?.agent){
+        <app-spec-card-feature>{{ schema()?.agent }}</app-spec-card-feature>
+    }
+    @if(schema()?.domain){
+        <app-spec-card-feature>{{ domainName() }}</app-spec-card-feature>
+    }
+    @if(schema()?.explainer){
+        <app-spec-card-feature>{{ explainerName() }}</app-spec-card-feature>
+    }
 
-                    @if(schema()?.domain){
-                        <mat-chip class="color">{{ domainName() }}</mat-chip>
-                    }
-                    @if(schema()?.explainer){
-                        <mat-chip>{{ explainerName() }}</mat-chip>
-                    }
-                    <mat-chip>{{ schema()?.agent }}</mat-chip>
-                </div>
-            </div>
-        </div>
-    </mat-card-header>
-</mat-card>
+</app-spec-card>

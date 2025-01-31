@@ -3,13 +3,13 @@ import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { OutputSchema } from '../../domain/prompt';
+import { SpecCardModule } from 'src/app/shared/components/spec-card/spec-card.module';
 
 @Component({
   selector: 'app-output-schema-card',
   imports: [
-    MatCardModule,
     MatIconModule,
-    MatChipsModule
+    SpecCardModule
   ],
   templateUrl: './output-schema-card.component.html',
   styleUrl: './output-schema-card.component.scss'

@@ -28,7 +28,6 @@ import { OutputSchemaCardComponent } from '../../components/output-schema-card/o
     AsyncPipe,
     MatButtonModule,
     MatIconModule,
-    EmptyStateSectionComponent,
     ServiceCardComponent,
     EditableListModule,
     DomainSpecCardComponent,

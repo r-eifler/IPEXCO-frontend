@@ -3,13 +3,13 @@ import { Service } from '../../domain/services';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
+import { SpecCardModule } from 'src/app/shared/components/spec-card/spec-card.module';
 
 @Component({
   selector: 'app-service-card',
   imports: [
-    MatCardModule,
     MatIconModule,
-    MatChipsModule
+    SpecCardModule
   ],
   templateUrl: './service-card.component.html',
   styleUrl: './service-card.component.scss'

@@ -75,7 +75,7 @@ export class PromptsService{
     }
 
     deleteOutputSchema$(id: string): Observable<boolean> {
-      return this.http.delete<IHTTPData<boolean>>(this.BASE_URL  + 'output-schema/ '+ id).pipe(
+      return this.http.delete<IHTTPData<boolean>>(this.BASE_URL  + 'output-schema/'+ id).pipe(
           map(({data}) => data)
       )
     }

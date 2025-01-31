@@ -1,30 +1,18 @@
-<mat-card appearance="outlined">
-    <mat-card-header>
-        <div class="title">
-            <div class="name-container">
-                <div class="icon-container">
-                    <mat-icon>speaker_notes</mat-icon>
-                </div>
-                <span class="property-name">{{ prompt()?.name }}</span>
-            </div>
+ <app-spec-card>
+    <mat-icon>speaker_notes</mat-icon>
+    <app-spec-card-title>
+        {{ prompt()?.name }}
+    </app-spec-card-title>
 
-            <div>
-                <div class="reverse">
+    <app-spec-card-feature>{{ prompt()?.type }}</app-spec-card-feature>
+    @if(prompt()?.agent){
+        <app-spec-card-feature>{{ prompt()?.agent }}</app-spec-card-feature>
+    }
+    @if(prompt()?.domain){
+        <app-spec-card-feature>{{ domainName() }}</app-spec-card-feature>
+    }
+    @if(prompt()?.explainer){
+        <app-spec-card-feature>{{ explainerName() }}</app-spec-card-feature>
+    }
 
-                    @if(prompt()?.domain){
-                        <mat-chip class="color">{{ domainName() }}</mat-chip>
-                    }
-                    @if(prompt()?.explainer){
-                        <mat-chip>{{ explainerName() }}</mat-chip>
-                    }
-                    <mat-chip>{{ prompt()?.type }}</mat-chip>
-                    @if(prompt()?.agent){
-                        <mat-chip>{{ prompt()?.agent }}</mat-chip>
-                    }
-                </div>
-            </div>
-        </div>
-    </mat-card-header>
-</mat-card>
-    
-    
+</app-spec-card>

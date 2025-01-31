@@ -3,13 +3,13 @@ import { Prompt } from '../../domain/prompt';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
+import { SpecCardModule } from 'src/app/shared/components/spec-card/spec-card.module';
 
 @Component({
   selector: 'app-prompt-card',
   imports: [
-    MatCardModule,
     MatIconModule,
-    MatChipsModule
+    SpecCardModule
   ],
   templateUrl: './prompt-card.component.html',
   styleUrl: './prompt-card.component.scss'
