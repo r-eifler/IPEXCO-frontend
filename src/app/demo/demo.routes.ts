@@ -1,18 +1,35 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
 import { ShellComponent } from './view/shell/shell.component';
 import { DemosCollectionViewComponent } from './view/demos-collection-view/demos-collection-view.component';
 import { DemoDetailsViewComponent } from './view/demo-details-view/demo-details-view.component';
 import { loadDemoResolver } from './resolver/load-demo.resolver';
 import { DemoEditViewComponent } from './view/demo-edit-view/demo-edit-view.component';
+import { provideEffects } from '@ngrx/effects';
+import { provideState } from '@ngrx/store';
+import { demosFeature } from './state/demo.feature';
+import { demosFeatureEffects } from './state/effects/effects';
+import { DemoService } from './services/demo.service';
+import { DemoExplainerServicesService } from './services/explainer.service';
+import { DemoPlanPropertyService } from './services/plan-properties.service';
+import { DemoPlannerServicesService } from './services/planner.service';
+import { DemoPromptsService } from './services/prompts.service';
+import { Routes } from '@angular/router';
 
 
 
-const routes: Routes = [
+export const routes: Routes = [
   {
     path: '',
     component: ShellComponent,
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
+    providers: [
+      provideState(demosFeature),
+      provideEffects(demosFeatureEffects),
+      DemoService,
+      DemoPlanPropertyService,
+      DemoExplainerServicesService,
+      DemoPlannerServicesService,
+      DemoPromptsService,
+    ],
     children: [
       {
         path: '',
@@ -37,7 +54,3 @@ const routes: Routes = [
   }
 ];
 
-@NgModule({
-  imports: [ RouterModule.forChild(routes) ]
-})
-export class DemoRoutesModule { }

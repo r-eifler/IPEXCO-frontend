@@ -4,14 +4,14 @@ import { globalSpecificationFeature, GlobalSpecificationState } from "./globalSp
 
 const selectSpecFeature = createFeatureSelector<GlobalSpecificationState>(globalSpecificationFeature);
 
-export const selectDomainSpecifications = createSelector(selectSpecFeature, (state) => state.domainSpecifications.data)
-export const selectDomainSpecification = createSelector(selectSpecFeature, (state) => state.domainSpecification.data)
-export const selectPrompts = createSelector(selectSpecFeature, (state) => state.prompts.data)
-export const selectPrompt = createSelector(selectSpecFeature, (state) => state.prompt.data)
-export const selectOutputSchemas = createSelector(selectSpecFeature, (state) => state.outputSchemas.data)
-export const selectOutputSchema = createSelector(selectSpecFeature, (state) => state.outputSchema.data)
-export const selectPlanners= createSelector(selectSpecFeature, (state) => state.planner.data)
-export const selectExplainers= createSelector(selectSpecFeature, (state) => state.explainer.data)
+export const selectDomainSpecifications = createSelector(selectSpecFeature, (state) => state.domainSpecifications?.data)
+export const selectDomainSpecification = createSelector(selectSpecFeature, (state) => state.domainSpecification?.data)
+export const selectPrompts = createSelector(selectSpecFeature, (state) => state.prompts?.data)
+export const selectPrompt = createSelector(selectSpecFeature, (state) => state.prompt?.data)
+export const selectOutputSchemas = createSelector(selectSpecFeature, (state) => state.outputSchemas?.data)
+export const selectOutputSchema = createSelector(selectSpecFeature, (state) => state.outputSchema?.data)
+export const selectPlanners= createSelector(selectSpecFeature, (state) => state.planner?.data)
+export const selectExplainers= createSelector(selectSpecFeature, (state) => state.explainer?.data)
 
 
 export const selectDomainName = (id: string) => createSelector(selectSpecFeature, (state) => 

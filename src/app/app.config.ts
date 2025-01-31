@@ -8,6 +8,8 @@ import { provideAnimations } from "@angular/platform-browser/animations";
 import { provideStoreDevtools } from "@ngrx/store-devtools";
 import { demosFeature } from "./demo/state/demo.feature";
 import { authInterceptor } from "./interceptor/authentication.interceptor";
+import { provideEffects } from "@ngrx/effects";
+import { userFeatureEffects } from "./user/state/effects/effects";
 
 export const appConfig: ApplicationConfig = {
     providers: [
@@ -21,8 +23,6 @@ export const appConfig: ApplicationConfig = {
             traceLimit: 75, // maximum stack trace frames to be stored (in case trace option was provided as true)
             connectInZone: true // If set to true, the connection is established within the Angular zone
         }),
-        provideState(userFeature),
-        provideState(demosFeature),
         provideHttpClient(
             withInterceptors([authInterceptor]),
         ),

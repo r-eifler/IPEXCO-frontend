@@ -12,12 +12,17 @@ import { userFeature } from './user/state/user.feature';
 import { provideEffects } from '@ngrx/effects';
 import { userFeatureEffects } from './user/state/effects/effects';
 import { demosFeatureEffects } from './demo/state/effects/effects';
+import { AuthenticationService } from './user/services/authentication.service';
 
 export const routes: Routes = [
   {
     path: 'user-study-execution',
     loadChildren: () => import('./user_study_execution/user-study-execution.module').then(m => m.UserStudyExecutionModule),
-    canActivate: [],
+    providers: [
+      provideState(userFeature),
+      provideEffects(userFeatureEffects),
+      AuthenticationService,
+    ],
   },
   {
     path: '',
@@ -29,13 +34,14 @@ export const routes: Routes = [
     component: NavigationComponent,
     resolve: { },
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
+    providers: [
+        provideState(userFeature),
+        provideEffects(userFeatureEffects),
+        AuthenticationService,
+    ],
     children: [
       {
         path: 'user',
-        providers: [
-          provideState(userFeature),
-          provideEffects(userFeatureEffects)
-        ],
         loadChildren: () => import('./user/user.module').then(m => m.UserModule),
       },
       {
@@ -60,11 +66,7 @@ export const routes: Routes = [
       },
       {
         path: 'demos',
-        providers: [
-          provideState(demosFeature),
-          provideEffects(demosFeatureEffects)
-        ],
-        loadChildren: () => import('./demo/demo.module').then(m => m.DemoModule),
+        loadChildren: () => import('./demo/demo.routes').then(m => m.routes),
         canActivate: [AuthGuard],
       },
       {
