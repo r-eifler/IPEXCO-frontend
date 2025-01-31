@@ -3,9 +3,11 @@ import { provideRouter } from "@angular/router";
 import { routes } from "./app.routes";
 import { provideState, provideStore } from "@ngrx/store";
 import { userFeature } from "./user/state/user.feature";
-import { provideHttpClient } from "@angular/common/http";
+import { provideHttpClient, withInterceptors } from "@angular/common/http";
 import { provideAnimations } from "@angular/platform-browser/animations";
 import { provideStoreDevtools } from "@ngrx/store-devtools";
+import { demosFeature } from "./demo/state/demo.feature";
+import { authInterceptor } from "./interceptor/authentication.interceptor";
 
 export const appConfig: ApplicationConfig = {
     providers: [
@@ -20,7 +22,10 @@ export const appConfig: ApplicationConfig = {
             connectInZone: true // If set to true, the connection is established within the Angular zone
         }),
         provideState(userFeature),
-        provideHttpClient(),
+        provideState(demosFeature),
+        provideHttpClient(
+            withInterceptors([authInterceptor]),
+        ),
         provideAnimations(),
     ],
   };

@@ -11,6 +11,7 @@ import { provideState } from '@ngrx/store';
 import { userFeature } from './user/state/user.feature';
 import { provideEffects } from '@ngrx/effects';
 import { userFeatureEffects } from './user/state/effects/effects';
+import { demosFeatureEffects } from './demo/state/effects/effects';
 
 export const routes: Routes = [
   {
@@ -60,7 +61,8 @@ export const routes: Routes = [
       {
         path: 'demos',
         providers: [
-          provideState(demosFeature)
+          provideState(demosFeature),
+          provideEffects(demosFeatureEffects)
         ],
         loadChildren: () => import('./demo/demo.module').then(m => m.DemoModule),
         canActivate: [AuthGuard],

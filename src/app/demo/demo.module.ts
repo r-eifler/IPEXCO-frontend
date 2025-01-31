@@ -8,6 +8,8 @@ import { DemoExplainerServicesService } from './services/explainer.service';
 import { DemoPlannerServicesService } from './services/planner.service';
 import { DemoPromptsService } from './services/prompts.service';
 import { demosFeature } from './state/demo.feature';
+import { DemoService } from './services/demo.service';
+import { DemoPlanPropertyService } from './services/plan-properties.service';
 
 
 @NgModule({
@@ -21,6 +23,8 @@ import { demosFeature } from './state/demo.feature';
     ]),
   ],
   providers: [
+    DemoService,
+    DemoPlanPropertyService,
     DemoExplainerServicesService,
     DemoPlannerServicesService,
     DemoPromptsService
