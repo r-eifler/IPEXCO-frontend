@@ -15,7 +15,7 @@ export class UpdateProjectEffect{
         ofType(updateProject),
         switchMap(({project}) => this.service.putProject$(project).pipe(
             map(project => updateProjectSuccess({project})),
-            catchError(() => of(updateProjectFailure()))
+            catchError((e) => of(updateProjectFailure()))
         ))
     ))
 }

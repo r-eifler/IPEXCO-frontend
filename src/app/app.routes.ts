@@ -74,7 +74,7 @@ export const routes: Routes = [
       },
       {
         path: 'iterative-planning',
-        loadChildren: () => import('./iterative_planning/iterative-planning.module').then(m => m.IterativePlanningModule),
+        loadChildren: () => import('./iterative_planning/iterative-planning.routes').then(m => m.routes),
         canActivate: [AuthGuard],
       },
       {

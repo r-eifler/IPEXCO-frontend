@@ -65,7 +65,7 @@ export class SettingsComponent {
   form = this.fb.group({
     main: this.fb.group({
       public: this.fb.control<boolean>(false, Validators.required),
-      maxRuns: this.fb.control<number | null>(null),
+      maxRuns: this.fb.control<number | null>(100),
       usePlanPropertyUtility: this.fb.control<boolean>(false, Validators.required),
     }),
     services: this.fb.group({
@@ -79,7 +79,7 @@ export class SettingsComponent {
       explanationInterfaceType: this.fb.control<ExplanationInterfaceType>(ExplanationInterfaceType.TEMPLATE_QUESTION_ANSWER, Validators.required),
     }),
     llmConfig: this.fb.group({
-      model:  this.fb.control<string>('', Validators.required),
+      model:  this.fb.control<string>('gpt-4o-mini', Validators.required),
       temperature:  this.fb.control<number>(0, [Validators.required, Validators.min(0), Validators.max(2)]),
       maxCompletionTokens: this.fb.control<number | null>(null, Validators.required),
       prompts: this.fb.control<string[]>([]),
@@ -99,7 +99,7 @@ export class SettingsComponent {
 
   constructor() {
 
-    effect(() => this.initForm(this.settings()))
+    // effect(() => this.initForm(this.settings()))
 
   }
 
