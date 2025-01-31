@@ -1,41 +1,40 @@
-import { createFeatureSelector, createSelector } from "@ngrx/store";
-import { projectFeature, ProjectState } from "./project.reducer";
+import { createSelector } from "@ngrx/store";
 import { CreationState } from "src/app/shared/common/creatable.interface";
 import { Demo, DemoRunStatus } from "src/app/project/domain/demo";
 import { map, memoizeWith } from "ramda";
+import { projectFeature } from "./project.feature";
 
+const selectState = projectFeature.selectProjectFeatureState;
 
-const selectProjectFeature = createFeatureSelector<ProjectState>(projectFeature);
+export const selectProject = createSelector(selectState, (state) => state.project.data)
 
-export const selectProject = createSelector(selectProjectFeature, (state) => state.project.data)
+export const selectProjectSettings = createSelector(selectState, (state) => state.project.data?.settings)
+export const selectProjectPlanningTask = createSelector(selectState, (state) => state.project.data?.baseTask)
 
-export const selectProjectSettings = createSelector(selectProjectFeature, (state) => state.project.data?.settings)
-export const selectProjectPlanningTask = createSelector(selectProjectFeature, (state) => state.project.data?.baseTask)
+export const selectProjectPlanPropertyTemplates = createSelector(selectState, (state) => state.domainSpecification?.data?.planPropertyTemplates)
 
-export const selectProjectPlanPropertyTemplates = createSelector(selectProjectFeature, (state) => state.domainSpecification?.data?.planPropertyTemplates)
-
-export const selectProjectPlanPropertyCreationInterfaceType = createSelector(selectProjectFeature,
+export const selectProjectPlanPropertyCreationInterfaceType = createSelector(selectState,
     (state) => state.project?.data?.settings?.interfaces.propertyCreationInterfaceType)
 
-export const selectPlanners = createSelector(selectProjectFeature, (state) => state.planners.data);
-export const selectExplainer = createSelector(selectProjectFeature, (state) => state.explainer.data);
-export const selectPrompts = createSelector(selectProjectFeature, (state) => state.prompts.data);
-export const selectOutputSchemas = createSelector(selectProjectFeature, (state) => state.outputSchemas.data);
+export const selectPlanners = createSelector(selectState, (state) => state.planners.data);
+export const selectExplainer = createSelector(selectState, (state) => state.explainer.data);
+export const selectPrompts = createSelector(selectState, (state) => state.prompts.data);
+export const selectOutputSchemas = createSelector(selectState, (state) => state.outputSchemas.data);
 
-export const selectProjectProperties = createSelector(selectProjectFeature, (state) => state.planProperties.data);
+export const selectProjectProperties = createSelector(selectState, (state) => state.planProperties.data);
 
 
-export const selectProjectAllDemos = createSelector(selectProjectFeature, (state) => state.demos.data)
-export const selectProjectFinishedDemos = createSelector(selectProjectFeature, (state) => state.demos.data?.filter(d => demoFinished(d)))
-export const selectProjectRunningDemos = createSelector(selectProjectFeature, (state) => state.demos.data?.filter(d => !demoFinished(d)))
-export const selectProjectDemoComputationPending = createSelector(selectProjectFeature, (state) => state.demoCreation.state == CreationState.Pending)
+export const selectProjectAllDemos = createSelector(selectState, (state) => state.demos.data)
+export const selectProjectFinishedDemos = createSelector(selectState, (state) => state.demos.data?.filter(d => demoFinished(d)))
+export const selectProjectRunningDemos = createSelector(selectState, (state) => state.demos.data?.filter(d => !demoFinished(d)))
+export const selectProjectDemoComputationPending = createSelector(selectState, (state) => state.demoCreation.state == CreationState.Pending)
 export const selectHasRunningDemoComputations = createSelector(selectProjectRunningDemos, (demos) => demos?.length > 0 )
 
-export const selectProjectDemoProperties = createSelector(selectProjectFeature, (state) => state.demoProperties)
+export const selectProjectDemoProperties = createSelector(selectState, (state) => state.demoProperties)
 export const selectProjectDemoIds = createSelector(selectProjectAllDemos, map(({ _id }) => _id));
 
-export const selectProjectDemo = createSelector(selectProjectFeature, (state) => state.demo?.data)
-export const selectPlanPropertiesOfDemo = createSelector(selectProjectFeature, (state) => state.demoProperties[state.demo?.data?._id]?.reduce((acc, cv) => ({...acc,[cv._id]: cv}), {}));
+export const selectProjectDemo = createSelector(selectState, (state) => state.demo?.data)
+export const selectPlanPropertiesOfDemo = createSelector(selectState, (state) => state.demoProperties[state.demo?.data?._id]?.reduce((acc, cv) => ({...acc,[cv._id]: cv}), {}));
 export const selectPlanPropertiesOfDemoById = memoizeWith(
     (demoId: string) => demoId,
     (demoId: string) => createSelector(selectProjectDemoProperties, (planProperties) => planProperties[demoId]?.reduce((acc, cv) => ({...acc,[cv._id]: cv}), {}), 

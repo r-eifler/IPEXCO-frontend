@@ -8,14 +8,38 @@ import { PlanningTaskViewComponent } from './view/planning-task-view/planning-ta
 import { DemoCollectionComponent } from './view/demo-collection/demo-collection.component';
 import { DemoDetailsViewComponent } from './view/demo-details-view/demo-details-view.component';
 import { loadDemoResolver } from './resolver/load-demo.resolver';
+import { provideState } from '@ngrx/store';
+import { projectFeature } from './state/project.feature';
+import { provideEffects } from '@ngrx/effects';
+import { projectFeatureEffects } from './state/effects/effects';
+import { DemoMonitoringService } from './service/demo-monitoring.service';
+import { ProjectDemoService } from './service/demo.service';
+import { ProjectDomainSpecificationService } from './service/domainSpecification.service';
+import { ProjectExplainerServicesService } from './service/explainer.service';
+import { ProjectPlanPropertyService } from './service/plan-properties.service';
+import { ProjectPlannerServicesService } from './service/planner.service';
+import { ProjectService } from './service/project.service';
+import { ProjectPromptsService } from './service/prompts.service';
 
 
-const routes: Routes = [
+export const routes: Routes = [
   {
     path: ':projectId',
     component: ShellComponent,
     resolve: { loadProjectResolver },
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
+    providers: [
+      provideState(projectFeature),
+      provideEffects(projectFeatureEffects),
+      DemoMonitoringService,
+      ProjectDemoService,
+      ProjectDomainSpecificationService,
+      ProjectExplainerServicesService,
+      ProjectPlanPropertyService,
+      ProjectPlannerServicesService,
+      ProjectService,
+      ProjectPromptsService,
+    ],
     children: [
       {
         path: '',

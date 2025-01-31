@@ -5,9 +5,7 @@ import { IHTTPData } from "src/app/shared/domain/http-data.interface";
 import { BehaviorSubject } from "rxjs";
 import { PlanningDomain, PlanningModel, PlanningProblem } from "src/app/shared/domain/planning-task";
 
-@Injectable({
-  providedIn: "root",
-})
+@Injectable()
 export class PDDLService {
 
   http: HttpClient;

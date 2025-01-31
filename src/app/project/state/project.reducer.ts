@@ -23,7 +23,6 @@ export interface ProjectState {
     demo: Loadable<Demo>;
 }
 
-export const projectFeature = 'project';
 
 const initialState: ProjectState = {
     project: {state: LoadingState.Initial, data: undefined},

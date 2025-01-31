@@ -26,9 +26,7 @@ export interface LogEntry {
   info: any;
 }
 
-@Injectable({
-  providedIn: "root",
-})
+@Injectable()
 export class TimeLoggerService {
   private logEntries: LogEntry[] = [];
 

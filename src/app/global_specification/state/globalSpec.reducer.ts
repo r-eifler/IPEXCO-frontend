@@ -17,7 +17,6 @@ export interface GlobalSpecificationState {
     explainer: Loadable<Explainer[]>;
 }
 
-export const globalSpecificationFeature = 'global-specification';
 
 const initialState: GlobalSpecificationState = {
     domainSpecifications: {state: LoadingState.Initial, data: undefined},

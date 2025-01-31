@@ -54,7 +54,7 @@ export const routes: Routes = [
       },
       {
         path: 'projects',
-        component: ProjectCollectionComponent,
+        loadChildren: () => import('./project-meta/project-meta.routes').then(m => m.routes),
         canActivate: [AuthGuard],
       },
       {
@@ -69,7 +69,7 @@ export const routes: Routes = [
       },
       {
         path: 'project',
-        loadChildren: () => import('./project/project.module').then(m => m.ProjectModule),
+        loadChildren: () => import('./project/project.routes').then(m => m.routes),
         canActivate: [AuthGuard],
       },
       {

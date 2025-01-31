@@ -5,9 +5,7 @@ import { IterationStepService } from './iteration-step.service';
 import { IterationStep } from '../domain/iteration_step';
 import { ExplanationRunStatus } from '../domain/explanation/explanations';
   
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class ExplainerMonitoringService {
 
 

@@ -5,12 +5,8 @@ import { environment } from "src/environments/environment";
 import { map } from "rxjs/operators";
 import { IHTTPData } from "src/app/shared/domain/http-data.interface";
 import { PlanProperty } from "src/app/shared/domain/plan-property/plan-property";
-import { ProjectModule } from "../project.module";
 
-
-@Injectable({
-    providedIn: ProjectModule
-})
+@Injectable()
 export class ProjectPlanPropertyService{
 
     private http = inject(HttpClient)
