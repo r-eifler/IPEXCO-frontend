@@ -31,7 +31,6 @@ export interface UserStudyExecutionState {
     runningDemoPlanProperties: Loadable<PlanProperty[]>;
 }
 
-export const userStudyExecutionFeature = 'user-study-execution';
 
 const initialState: UserStudyExecutionState = {
     userStudy: {state: LoadingState.Initial, data: undefined},

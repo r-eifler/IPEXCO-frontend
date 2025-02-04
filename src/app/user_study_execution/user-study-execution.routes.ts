@@ -5,31 +5,42 @@ import {loadUserStudyExecutionResolver} from './resolver/load-user-study-executi
 import {UserStudyExecutionStartViewComponent} from './view/user-study-execution-start-view/user-study-execution-start-view.component';
 import {UserStudyExecutionFinishViewComponent} from './view/user-study-execution-finish-view/user-study-execution-finish-view.component';
 import {
-  UserStudyExecutionDescriptionViewComponent
-} from './view/user-study-execution-description-view/user-study-execution-description-view.component';
-import {UserStudyExecutionDemoViewComponent} from './view/user-study-execution-demo-view/user-study-execution-demo-view.component';
-import {
-  UserStudyExecutionExternalViewComponent
-} from './view/user-study-execution-external-view/user-study-execution-external-view.component';
-import {
   UserStudyExecutionAgreementViewComponent
 } from './view/user-study-execution-agreement-view/user-study-execution-agreement-view.component';
-import {StepFinishedGuard} from '../route-guards/step-finished-guard.guard';
 import {UserStudyExecutionStepShellComponent} from './view/user-study-execution-step-shell/user-study-execution-step-shell.component';
 import {UserStudyExecutionFailViewComponent} from './view/user-study-execution-fail-view/user-study-execution-fail-view.component';
-import {AuthGuard} from '../route-guards/auth-guard.guard';
 import {UserStudyExecutionCancelViewComponent} from './view/user-study-execution-cancel-view/user-study-execution-cancel-view.component';
 import {UserStudyAuthGuard} from '../route-guards/user-study-auth.guard';
 import { LogOutUserStudyAuthGuard } from '../route-guards/user-study-logout.guard';
 import { distributeParticipantsResolver } from './resolver/distribute-participant.resolver';
+import { provideState } from '@ngrx/store';
+import { userStudyExecutionFeature } from './state/user-study-execution.feature';
+import { provideEffects } from '@ngrx/effects';
+import { userStudyExecutionFeatureEffects } from './state/effects/effects';
+import { ExecutionUserStudyService } from './service/execution-user-study.service';
+import { UserStudyAuthenticationService } from './service/user-study-authentication.service';
+import { UserStudyExecutionDemoService } from './service/user-study-execution-demo.service';
+import { UserStudyExecutionPlanPropertyService } from './service/user-study-execution-plan-properties.service';
+import { UserStudyExecutionService } from './service/user-study-execution.service';
+import { NextUserStudyService } from './service/user-study-selection.service';
 
 
 
-const routes: Routes = [
+export const routes: Routes = [
   {
     path: '',
     component: UserStudyExecutionShellComponent,
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
+    providers: [
+      provideState(userStudyExecutionFeature),
+      provideEffects(userStudyExecutionFeatureEffects),
+      ExecutionUserStudyService,
+      UserStudyExecutionDemoService,
+      UserStudyAuthenticationService,
+      UserStudyExecutionPlanPropertyService,
+      UserStudyExecutionService,
+      NextUserStudyService
+    ],
     children: [
       {
         path: 'fail',

@@ -15,11 +15,9 @@ import { AuthenticationService } from './user/services/authentication.service';
 export const routes: Routes = [
   {
     path: 'user-study-execution',
-    loadChildren: () => import('./user_study_execution/user-study-execution.module').then(m => m.UserStudyExecutionModule),
+    loadChildren: () => import('./user_study_execution/user-study-execution.routes').then(m => m.routes),
     providers: [
       provideState(userFeature),
-      provideEffects(userFeatureEffects),
-      AuthenticationService,
     ],
   },
   {
