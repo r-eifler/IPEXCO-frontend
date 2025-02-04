@@ -1,15 +1,11 @@
 import { ApplicationConfig, isDevMode } from "@angular/core";
 import { provideRouter } from "@angular/router";
 import { routes } from "./app.routes";
-import { provideState, provideStore } from "@ngrx/store";
-import { userFeature } from "./user/state/user.feature";
+import { provideStore } from "@ngrx/store";
 import { provideHttpClient, withInterceptors } from "@angular/common/http";
 import { provideAnimations } from "@angular/platform-browser/animations";
 import { provideStoreDevtools } from "@ngrx/store-devtools";
-import { demosFeature } from "./demo/state/demo.feature";
 import { authInterceptor } from "./interceptor/authentication.interceptor";
-import { provideEffects } from "@ngrx/effects";
-import { userFeatureEffects } from "./user/state/effects/effects";
 
 export const appConfig: ApplicationConfig = {
     providers: [
