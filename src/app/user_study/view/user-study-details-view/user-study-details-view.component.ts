@@ -19,7 +19,7 @@ import {MatExpansionModule} from '@angular/material/expansion';
 import {filter, map, take} from 'rxjs/operators';
 import {MatTableModule} from '@angular/material/table';
 import {MatCheckboxModule} from '@angular/material/checkbox';
-import { AcceptedTestPersonsComponent } from '../../eval/accepted-test-persons/accepted-test-persons.component';
+import { AcceptedTestPersonsComponent } from '../../components/accepted-test-persons/accepted-test-persons.component';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSnackBar } from '@angular/material/snack-bar';
 

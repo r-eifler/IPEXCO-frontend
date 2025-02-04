@@ -6,8 +6,7 @@ import { RouterLink } from '@angular/router';
 import { BreadcrumbModule } from 'src/app/shared/components/breadcrumb/breadcrumb.module';
 import { MatIconModule } from '@angular/material/icon';
 import { AsyncPipe } from '@angular/common';
-import { SelectTestPersonsComponent } from '../../eval/select-test-persons/select-test-persons.component';
-import { OverviewDataComponent } from '../../eval/overview-data/overview-data.component';
+import { OverviewDataComponent } from '../../components/overview-data/overview-data.component';
 import { UserStudyDashboardComponent } from "../../components/user-study-dashboard/user-study-dashboard.component";
 import { MatButtonModule } from '@angular/material/button';
 import { combineLatest, filter, map } from 'rxjs';
@@ -16,6 +15,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectChange, MatSelectModule } from '@angular/material/select';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { loadUserStudyDemos } from '../../state/user-study.actions';
+import { SelectTestPersonsComponent } from '../../components/select-test-persons/select-test-persons.component';
 
 
 @Component({
@@ -26,14 +26,14 @@ import { loadUserStudyDemos } from '../../state/user-study.actions';
         BreadcrumbModule,
         MatIconModule,
         AsyncPipe,
-        SelectTestPersonsComponent,
         OverviewDataComponent,
         UserStudyDashboardComponent,
         MatButtonModule,
         AsyncPipe,
         MatFormFieldModule,
         MatSelectModule,
-        AsyncPipe
+        AsyncPipe,
+        SelectTestPersonsComponent
     ],
     templateUrl: './user-study-evaluation-view.component.html',
     styleUrl: './user-study-evaluation-view.component.scss'

@@ -13,7 +13,7 @@ import { BreadcrumbItemComponent } from 'src/app/shared/components/breadcrumb/br
 import { BreadcrumbComponent } from 'src/app/shared/components/breadcrumb/breadcrumb/breadcrumb.component';
 import { PageModule } from 'src/app/shared/components/page/page.module';
 import { UserStudyHeroComponent } from '../../components/user-study-hero/user-study-hero.component';
-import { AcceptedTestPersonsComponent } from '../../eval/accepted-test-persons/accepted-test-persons.component';
+import { AcceptedTestPersonsComponent } from '../../components/accepted-test-persons/accepted-test-persons.component';
 import { Store } from '@ngrx/store';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';

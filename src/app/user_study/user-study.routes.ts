@@ -1,5 +1,3 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
 import { ShellComponent } from './view/shell/shell.component';
 import { loadUserStudyResolver } from './resolver/load-user-study.resolver';
 import {UserStudyCollectionComponent} from './view/user-study-collection/user-study-collection.component';
@@ -11,15 +9,32 @@ import { ParticipantDistributionCreatorComponent } from './view/participant-dist
 import { loadUserStudyParticipantDistributionResolver } from './resolver/load-user-study-participant-distribution.resolver';
 import { ParticipantDistributionDetailsViewComponent } from './view/participant-distribution-details-view/participant-distribution-details-view.component';
 import { ParticipantDistributionEditorComponent } from './view/participant-distribution-editor/participant-distribution-editor.component';
+import { Routes } from '@angular/router';
+import { provideState } from '@ngrx/store';
+import { userStudyFeature } from './state/user-study.feature';
+import { provideEffects } from '@ngrx/effects';
+import { userStudyFeatureEffects } from './state/effects/effects';
+import { UserStudyParticipantDistributionService } from './service/user-study-participant-distribution.service';
+import { UserStudyDemoService } from './service/user-study-demo.service';
+import { UserStudyExecutionEvalService } from './service/user-study-execution-eval.service';
+import { UserStudyService } from './service/user-study.service';
 
 
 
-const routes: Routes = [
+export const routes: Routes = [
   {
     path: '',
     component: ShellComponent,
     resolve: { },
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
+    providers: [
+      provideState(userStudyFeature),
+      provideEffects(userStudyFeatureEffects),
+      UserStudyDemoService,
+      UserStudyExecutionEvalService,
+      UserStudyParticipantDistributionService,
+      UserStudyService
+    ],
     children: [
       {
         path: '',
@@ -66,8 +81,3 @@ const routes: Routes = [
     ]
   }
 ];
-
-@NgModule({
-  imports: [ RouterModule.forChild(routes) ]
-})
-export class UserStudyRoutesModule { }

@@ -6,7 +6,6 @@ import { filter, map, take, tap } from "rxjs/operators";
 import { IterationStep, StepStatus } from "src/app/iterative_planning/domain/iteration_step";
 import { PlanAction, PlanRunStatus } from "src/app/iterative_planning/domain/plan";
 import { selectIterativePlanningSelectedStep } from "src/app/iterative_planning/state/iterative-planning.selector";
-import { LogEvent, TimeLoggerService } from "../../../../user_study/service/time-logger.service";
 import { MatCardModule } from "@angular/material/card";
 import { AsyncPipe, NgFor, NgIf } from "@angular/common";
 import { MatButtonModule } from "@angular/material/button";
@@ -24,7 +23,7 @@ import { MatButtonModule } from "@angular/material/button";
     templateUrl: "./plan-view.component.html",
     styleUrls: ["./plan-view.component.scss"]
 })
-export class PlanViewComponent implements OnInit, OnDestroy {
+export class PlanViewComponent implements OnInit {
 
   step$: Observable<IterationStep>;
   actions$: Observable<PlanAction[]>;
@@ -36,7 +35,6 @@ export class PlanViewComponent implements OnInit, OnDestroy {
 
   constructor(
     private store: Store,
-    private timeLogger: TimeLoggerService,
     private destroyRef: DestroyRef
   ) {
     this.step$ = this.store.select(selectIterativePlanningSelectedStep);
@@ -73,12 +71,6 @@ export class PlanViewComponent implements OnInit, OnDestroy {
     );
   }
 
-  ngOnDestroy(): void {
-    this.step$.pipe(
-      filter(s => !!s),
-      take(1)
-    ).subscribe(step => this.timeLogger.log(LogEvent.END_CHECK_PLAN, {stepId: step._id}))
-  }
 
   computePlan(): void {
     // this.store.dispatch(registerPlanComputation())
