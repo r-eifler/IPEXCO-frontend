@@ -36,7 +36,7 @@ export class UserManualViewComponent {
     this.step$.pipe(
       takeUntilDestroyed(),
       filter(s => !!s && s.type == UserStudyStepType.userManual)
-    ).subscribe(s => this.store.dispatch(loadUserStudyDemo({demoId: s.content})))
+    ).subscribe(s => !!s && !!s.content ? this.store.dispatch(loadUserStudyDemo({demoId: s.content})) : console.log("Cannot load demo for user manual"))
     
   }
 

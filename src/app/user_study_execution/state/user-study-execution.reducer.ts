@@ -65,8 +65,8 @@ export const userStudyExecutionReducer = createReducer(
     })),
     on(executionNextUserStudyStep, (state): UserStudyExecutionState => ({
       ...state,
-      stepIndex: state.stepIndex < state.userStudy.data?.steps.length - 1 ? state.stepIndex + 1 : null,
-      finishedAllSteps: state.stepIndex == state.userStudy.data?.steps.length - 1,
+      stepIndex: state.stepIndex && state.userStudy.data?.steps && state.stepIndex < state.userStudy.data?.steps.length - 1 ? state.stepIndex + 1 : null,
+      finishedAllSteps: !!state.userStudy.data?.steps && !!state.stepIndex && (state.stepIndex == state.userStudy.data?.steps.length - 1),
     })),
     on(loadUserStudyDemo, (state): UserStudyExecutionState => ({
       ...state,
@@ -100,7 +100,7 @@ export const userStudyExecutionReducer = createReducer(
     })),
     on(createIterationStepSuccess, (state, {iterationStep}): UserStudyExecutionState =>({
       ... state,
-      pendingIterationSteps: [...state.pendingIterationSteps, iterationStep._id]
+      pendingIterationSteps: [...state.pendingIterationSteps].concat(iterationStep._id ? [iterationStep._id] : [])
     })),
     on(logPlanComputationFinished, (state, {iterationStepId}): UserStudyExecutionState => ({
       ...state,

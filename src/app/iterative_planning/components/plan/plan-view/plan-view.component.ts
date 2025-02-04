@@ -43,8 +43,6 @@ export class PlanViewComponent implements OnInit {
 
   ngOnInit(): void {
 
-    // this.timeLogger.log(LogEvent.START_CHECK_PLAN, {stepId: step._id});
-
     this.actions$ = this.step$.pipe(
       filter((step) => !!step && !!step.plan && step.plan.status == PlanRunStatus.plan_found),
       map((step) => step?.plan?.actions)
@@ -71,9 +69,4 @@ export class PlanViewComponent implements OnInit {
     );
   }
 
-
-  computePlan(): void {
-    // this.store.dispatch(registerPlanComputation())
-    // this.timeLogger.log(LogEvent.COMPUTE_PLAN, {stepId: step._id});
-  }
 }

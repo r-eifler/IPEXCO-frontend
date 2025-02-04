@@ -32,7 +32,7 @@ export class AuthGuard  {
           return this.router.parseUrl("/user-study-execution/fail");
         }
         
-        return this.router.parseUrl("/register");
+        return this.router.parseUrl("/user/register");
         
       })
     )
