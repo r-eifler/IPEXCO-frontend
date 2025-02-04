@@ -19,6 +19,7 @@ import { createIterationStepSuccess } from 'src/app/iterative_planning/state/ite
 import { UserAction } from '../domain/user-action';
 import { Demo } from 'src/app/shared/domain/demo';
 import { PlanProperty } from 'src/app/shared/domain/plan-property/plan-property';
+import { isNil } from 'ramda';
 
 export interface UserStudyExecutionState {
     userStudy: Loadable<UserStudy>;
@@ -65,7 +66,11 @@ export const userStudyExecutionReducer = createReducer(
     })),
     on(executionNextUserStudyStep, (state): UserStudyExecutionState => ({
       ...state,
-      stepIndex: state.stepIndex && state.userStudy.data?.steps && state.stepIndex < state.userStudy.data?.steps.length - 1 ? state.stepIndex + 1 : null,
+      stepIndex: state.stepIndex !== null && state.stepIndex !== undefined && 
+      state.userStudy.data?.steps !== null  && state.userStudy.data?.steps !== undefined && 
+      state.stepIndex < state.userStudy.data?.steps.length - 1 ? 
+        state.stepIndex + 1 : 
+        null,
       finishedAllSteps: !!state.userStudy.data?.steps && !!state.stepIndex && (state.stepIndex == state.userStudy.data?.steps.length - 1),
     })),
     on(loadUserStudyDemo, (state): UserStudyExecutionState => ({

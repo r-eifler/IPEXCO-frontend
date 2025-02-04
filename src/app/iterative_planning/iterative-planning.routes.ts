@@ -26,20 +26,6 @@ export const routes: Routes = [
     component: ShellComponent,
     resolve: { loadProjectResolver },
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
-    providers: [
-      provideState(iterativePlanningFeature),
-      provideEffects(iterativePlanningFeatureEffects),
-      IterativePlanningDomainSpecificationService,
-      ExplainerMonitoringService,
-      ExplainerService,
-      IterationStepService,
-      PlanPropertyService,
-      PlannerMonitoringService,
-      IterativePlanningProjectService,
-      PlannerService,
-      LLMService,
-      PlannerMonitoringService,
-    ],
     children: [
       { path: '', redirectTo: 'steps', pathMatch: 'full' },
       {

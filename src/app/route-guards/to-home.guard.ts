@@ -28,7 +28,7 @@ export class ToHomeGuard  {
           return true;
         }
         else {
-          return this.router.parseUrl("/user");
+          return this.router.parseUrl("/user/register");
         }
       })
     )

@@ -11,6 +11,17 @@ import { userFeature } from './user/state/user.feature';
 import { provideEffects } from '@ngrx/effects';
 import { userFeatureEffects } from './user/state/effects/effects';
 import { AuthenticationService } from './user/services/authentication.service';
+import { IterativePlanningDomainSpecificationService } from './iterative_planning/service/domainSpecification.service';
+import { ExplainerMonitoringService } from './iterative_planning/service/explainer-monitoring.service';
+import { ExplainerService } from './iterative_planning/service/explainer.service';
+import { IterationStepService } from './iterative_planning/service/iteration-step.service';
+import { PlanPropertyService } from './iterative_planning/service/plan-properties.service';
+import { PlannerMonitoringService } from './iterative_planning/service/planner-monitoring.service';
+import { PlannerService } from './iterative_planning/service/planner.service';
+import { IterativePlanningProjectService } from './iterative_planning/service/project.service';
+import { iterativePlanningFeatureEffects } from './iterative_planning/state/effects/effects';
+import { iterativePlanningFeature } from './iterative_planning/state/iterative-planning.feature';
+import { LLMService } from './LLM/service/llm.service';
 
 export const routes: Routes = [
   {
@@ -68,6 +79,20 @@ export const routes: Routes = [
       {
         path: 'iterative-planning',
         loadChildren: () => import('./iterative_planning/iterative-planning.routes').then(m => m.routes),
+        providers: [
+          provideState(iterativePlanningFeature),
+          provideEffects(iterativePlanningFeatureEffects),
+          IterativePlanningDomainSpecificationService,
+          ExplainerMonitoringService,
+          ExplainerService,
+          IterationStepService,
+          PlanPropertyService,
+          PlannerMonitoringService,
+          IterativePlanningProjectService,
+          PlannerService,
+          LLMService,
+          PlannerMonitoringService,
+        ],
         canActivate: [AuthGuard],
       },
       {
