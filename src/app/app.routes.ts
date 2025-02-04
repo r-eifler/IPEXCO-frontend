@@ -39,17 +39,17 @@ export const routes: Routes = [
     ],
     children: [
       {
+        path: 'manual',
+        component: HelpPageComponent,
+        canActivate: [AuthGuard],
+      },
+      {
         path: 'user',
         loadChildren: () => import('./user/user.routes').then(m => m.routes),
       },
       {
-        path: 'register',
-        component: MainPageComponent,
-        canActivate: [ToHomeGuard]
-      },
-      {
-        path: 'overview',
-        component: UserMainPageComponent,
+        path: 'spec',
+        loadChildren: () => import('./global_specification/global_specification.routes').then(m => m.routes),
         canActivate: [AuthGuard],
       },
       {
@@ -58,18 +58,13 @@ export const routes: Routes = [
         canActivate: [AuthGuard],
       },
       {
-        path: 'manual',
-        component: HelpPageComponent,
+        path: 'project',
+        loadChildren: () => import('./project/project.routes').then(m => m.routes),
         canActivate: [AuthGuard],
       },
       {
         path: 'demos',
         loadChildren: () => import('./demo/demo.routes').then(m => m.routes),
-        canActivate: [AuthGuard],
-      },
-      {
-        path: 'project',
-        loadChildren: () => import('./project/project.routes').then(m => m.routes),
         canActivate: [AuthGuard],
       },
       {
@@ -79,12 +74,7 @@ export const routes: Routes = [
       },
       {
         path: 'user-study',
-        loadChildren: () => import('./user_study/user-study.module').then(m => m.UserStudyModule),
-        canActivate: [AuthGuard],
-      },
-      {
-        path: 'spec',
-        loadChildren: () => import('./global_specification/global_specification.routes').then(m => m.routes),
+        loadChildren: () => import('./user_study/user-study.routes').then(m => m.routes),
         canActivate: [AuthGuard],
       },
     ]
