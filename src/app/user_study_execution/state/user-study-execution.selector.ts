@@ -5,7 +5,7 @@ import { userStudyExecutionFeature } from './user-study-execution.feature';
 const selectState = userStudyExecutionFeature.selectUserStudyExecutionFeatureState;
 
 
-export const selectExecutionUserStudy = createSelector(selectState, (state) => state.userStudy?.data)
+export const selectExecutionUserStudy = createSelector(selectState, (state) => state?.userStudy?.data)
 
 export const selectExecutionUserStudyStepIndex = createSelector(selectState, (state) => state.stepIndex)
 export const selectExecutionUserStudyNextStepIndex = createSelector(selectState, (state): number | null =>

@@ -16,6 +16,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { jsonValidator } from 'src/app/validators/json.validator';
 import { DomainSpecification } from '../../domain/domain_specification';
 import { updateDomainSpecification } from '../../state/globalSpec.actions';
+import { Encoding } from '../../domain/services';
+import { MatOptionModule } from '@angular/material/core';
+import { MatSelectModule } from '@angular/material/select';
 
 @Component({
   selector: 'app-domain-spec-editor',
@@ -28,12 +31,20 @@ import { updateDomainSpecification } from '../../state/globalSpec.actions';
     MatButtonModule,
     MatFormField,
     ReactiveFormsModule,
-    MatInputModule
+    MatInputModule,
+    MatOptionModule,
+    MatSelectModule
   ],
   templateUrl: './domain-spec-editor.component.html',
   styleUrl: './domain-spec-editor.component.scss'
 })
 export class DomainSpecEditorComponent {
+
+  encodings = [
+    Encoding.DOMAIN_DEPENDENT,
+    Encoding.PDDL_CLASSIC,
+    Encoding.PDDL_NUMERIC
+  ]
 
   store = inject(Store);
   fb = inject(FormBuilder);
@@ -42,6 +53,7 @@ export class DomainSpecEditorComponent {
 
   form = this.fb.group({
     name: this.fb.control<string>(null, Validators.required),
+    encoding: this.fb.control<Encoding>(null, Validators.required),
     description: this.fb.control<string>(null),
     templates: this.fb.control<string>("[]", [Validators.required, jsonValidator]),
   })
@@ -52,6 +64,7 @@ export class DomainSpecEditorComponent {
       filter(spec => !!spec)
     ).subscribe(spec => {
       this.form.controls.name.setValue(spec.name);
+      this.form.controls.encoding.setValue(spec.encoding);
       this.form.controls.description.setValue(spec.description);
       this.form.controls.templates.setValue(JSON.stringify(spec.planPropertyTemplates, null, "\t"));
     });
@@ -62,6 +75,7 @@ export class DomainSpecEditorComponent {
       const newDomainSpec: DomainSpecification = {
         ...spec,
         name: this.form.controls.name.value,
+        encoding: this.form.controls.encoding.value,
         planPropertyTemplates: JSON.parse(this.form.controls.templates.value),
         description: this.form.controls.description.value
       }

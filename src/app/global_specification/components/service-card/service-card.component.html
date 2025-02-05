@@ -10,7 +10,7 @@
     </app-spec-card-title>
 
     <app-spec-card-sub-title>
-        {{ service()?.url }}
+        <span>{{ service()?.url }}</span><span>{{ apiKey() }}</span>
     </app-spec-card-sub-title>
 
     @if(service()?.encoding){

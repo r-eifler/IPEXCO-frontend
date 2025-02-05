@@ -21,7 +21,7 @@
       <div >
         <p *ngFor="let action of actions$ | async" class="actions">
           <span style="font-weight: 500;">{{ action.name }}</span>(
-          @for (p of action.arguments; track p) {
+          @for (p of action.params; track p) {
           {{ p }}
           @if (!$last) {, }
           })

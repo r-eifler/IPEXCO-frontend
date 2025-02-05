@@ -1,6 +1,6 @@
 
 import { sum } from "ramda";
-import { PlanProperty } from "src/app/shared/domain/plan-property/plan-property";
+import { Action, PlanProperty } from "src/app/shared/domain/plan-property/plan-property";
 import { factEquals, PDDLAction, PDDLFact } from "src/app/shared/domain/planning-task";
 
 
@@ -13,16 +13,11 @@ export enum PlanRunStatus {
   canceled
 }
 
-export interface PlanAction {
-  name: string,
-  arguments: string[]
-}
-
 
 export interface Plan{
   createdAt?: Date;
   status: PlanRunStatus;
-  actions?: PlanAction[];
+  actions?: Action[];
   satisfied_properties?: string[];
   cost: number;
 }

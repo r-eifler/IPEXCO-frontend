@@ -118,6 +118,7 @@ export class SettingsComponent {
   constructor() {
 
     effect(() => {
+      try{
       this.form.controls.main.controls.maxRuns.setValue(this.settings()?.main.maxRuns);
       this.form.controls.main.controls.public.setValue(this.settings()?.main.public);
       this.form.controls.main.controls.usePlanPropertyUtility.setValue(this.settings()?.main.usePlanPropertyUtility);
@@ -180,6 +181,10 @@ export class SettingsComponent {
       this.form.controls.userStudy.controls.paymentInfo.controls.steps.setValue(
         this.settings()?.userStudy.paymentInfo.steps.join(';')
       );
+    }
+    catch(e: any){
+      console.log('Could not initialize settings!')
+    }
     })
 
   }

@@ -2,7 +2,7 @@ import { createReducer, on } from "@ngrx/store";
 import { Loadable, LoadingState } from "src/app/shared/common/loadable.interface";
 import { Demo } from "src/app/project/domain/demo";
 import { PlanProperty } from "src/app/shared/domain/plan-property/plan-property";
-import { loadDemos, loadDemosSuccess, loadDemoPlanPropertiesSuccess, loadDemo, loadDemoSuccess } from "./demo.actions";
+import { loadDemos, loadDemosSuccess, loadDemoPlanPropertiesSuccess, loadDemo, loadDemoSuccess, loadExplainers, loadExplainersSuccess, loadOutputSchemas, loadOutputSchemasSuccess, loadPlanners, loadPlannersSuccess, loadPrompts, loadPromptsSuccess } from "./demo.actions";
 import { Explainer, Planner } from "src/app/global_specification/domain/services";
 import { OutputSchema, Prompt } from "src/app/global_specification/domain/prompt";
 
@@ -52,6 +52,38 @@ export const demoReducer = createReducer(
     on(loadDemoSuccess, (state, {demo}): DemoState => ({
         ...state,
         demo: {state: LoadingState.Done, data: demo},
+    })),
+    on(loadPlanners, (state): DemoState => ({
+        ...state,
+        planners: {state: LoadingState.Loading, data: undefined}
+    })),
+    on(loadPlannersSuccess, (state, {planners}): DemoState => ({
+        ...state,
+        planners: {state: LoadingState.Done, data: planners}
+    })),
+    on(loadExplainers, (state): DemoState => ({
+        ...state,
+        explainer: {state: LoadingState.Loading, data: undefined}
+    })),
+    on(loadExplainersSuccess, (state, {explainers}): DemoState => ({
+        ...state,
+        explainer: {state: LoadingState.Done, data: explainers}
+    })),
+    on(loadPrompts, (state): DemoState => ({
+        ...state,
+        prompts: {state: LoadingState.Loading, data: undefined}
+    })),
+    on(loadPromptsSuccess, (state, {prompts}): DemoState => ({
+        ...state,
+        prompts: {state: LoadingState.Done, data: prompts}
+    })),
+    on(loadOutputSchemas, (state): DemoState => ({
+        ...state,
+        outputSchemas: {state: LoadingState.Loading, data: undefined}
+    })),
+    on(loadOutputSchemasSuccess, (state, {outputSchemas}): DemoState => ({
+        ...state,
+        outputSchemas: {state: LoadingState.Done, data: outputSchemas}
     })),
 );
 

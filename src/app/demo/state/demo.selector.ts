@@ -15,4 +15,7 @@ export const selectPlanPropertiesOfDemo = createSelector(demosFeature.selectDemo
 
 export const selectDemo = createSelector(demosFeature.selectDemo, (demo) => demo.data)
 
-
+export const selectPlanners = createSelector(demosFeature.selectDemosFeatureState, (state) => state.planners.data);
+export const selectExplainer = createSelector(demosFeature.selectDemosFeatureState, (state) => state.explainer.data);
+export const selectPrompts = createSelector(demosFeature.selectDemosFeatureState, (state) => state.prompts.data);
+export const selectOutputSchemas = createSelector(demosFeature.selectDemosFeatureState, (state) => state.outputSchemas.data);

@@ -14,9 +14,9 @@ import { AskDeleteComponent } from 'src/app/shared/components/ask-delete/ask-del
 import { MatDialog } from '@angular/material/dialog';
 import { DemoHeroComponent } from 'src/app/project/components/demo-hero/demo-hero.component';
 import { SettingsComponent } from 'src/app/project/components/settings/settings.component';
-import { selectDemo, selectPlanPropertiesListOfDemo, selectPlanPropertiesOfDemo } from '../../state/demo.selector';
+import { selectDemo, selectExplainer, selectOutputSchemas, selectPlanners, selectPlanPropertiesListOfDemo, selectPlanPropertiesOfDemo, selectPrompts } from '../../state/demo.selector';
 import { GeneralSettings } from 'src/app/project/domain/general-settings';
-import { updateDemo, updatePlanProperty } from '../../state/demo.actions';
+import { loadExplainers, loadOutputSchemas, loadPlanners, loadPrompts, updateDemo, updatePlanProperty } from '../../state/demo.actions';
 import { DemoInfoComponent } from 'src/app/shared/components/demo/demo-info/demo-info.component';
 import { PlanPropertyUpdatePanelComponent } from 'src/app/shared/components/plan-property-update-panel/plan-property-update-panel.component';
 
@@ -49,6 +49,10 @@ export class DemoDetailsViewComponent {
   demo$ = this.store.select(selectDemo)
   planProperties$ = this.store.select(selectPlanPropertiesOfDemo)
   planPropertiesList$ = this.store.select(selectPlanPropertiesListOfDemo)
+  planners$ = this.store.select(selectPlanners);
+  explainer$ = this.store.select(selectExplainer);
+  prompts$ = this.store.select(selectPrompts);
+  outputSchemas$ = this.store.select(selectOutputSchemas);
 
   MUGS$: Observable<string[][]> = this.demo$.pipe(map((demo) => demo?.globalExplanation?.MUGS));
   MGCS$: Observable<string[][]> = this.demo$.pipe(map((demo) => demo?.globalExplanation?.MGCS));
@@ -61,18 +65,12 @@ export class DemoDetailsViewComponent {
     })], { type: "text/json" }))))
 
 
-  // onDelete(id: string){
-  //   const dialogRef = this.dialog.open(AskDeleteComponent, {
-  //     data: {name: "Delete Demo", text: "Are you sure you want to delete the demo?"},
-  //   });
-  //   dialogRef.afterClosed().subscribe(result => {
-  //     console.log('The dialog was closed');
-  //     if(result){
-  //       // this.store.dispatch(deleteProjectDemo({id}))
-  //       this.router.navigate(["../.."], {relativeTo: this.route});
-  //     }
-  //   });
-  // }
+  constructor() {
+    this.store.dispatch(loadPlanners());
+    this.store.dispatch(loadExplainers());
+    this.store.dispatch(loadPrompts());
+    this.store.dispatch(loadOutputSchemas());
+  }
 
   onRunIterPlanning(){
     this.demo$.pipe(take(1)).subscribe(demo => {

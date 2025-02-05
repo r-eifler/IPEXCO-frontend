@@ -90,10 +90,10 @@
 				<app-page-section-content>
 					<app-settings 
 						[settings]="demo?.settings" 
-						[planners]="[]"
-						[explainer]="[]"
-						[prompts]="[]"
-						[outputSchemas]="[]"
+						[planners]="planners$ | async"
+						[explainer]="explainer$ | async"
+						[prompts]="prompts$ | async"
+						[outputSchemas]="outputSchemas$ | async"
 						(update)="updateSettings($event)" 
 						[isDemo]="true">
 					</app-settings>

@@ -11,6 +11,7 @@ export interface Service{
     name: string;
     domainId?: string;
     url: string;
+    apiKey: string;
     encoding: Encoding;
 }
 

@@ -38,6 +38,7 @@ export class ServiceCreatorComponent {
   form = this.fb.group({
       name: this.fb.control<string>(null, Validators.required),
       domainId: this.fb.control<string>(null),
+      apiKey: this.fb.control<string>(null, Validators.required),
       url: this.fb.control<string>(null, [Validators.required, Validators.pattern(this.urlRegex)]),
       encoding: this.fb.control<Encoding>(null, Validators.required),
   });
@@ -50,6 +51,7 @@ export class ServiceCreatorComponent {
     let service: Service = {
       name: this.form.controls.name.value,
       url: this.form.controls.url.value,
+      apiKey: this.form.controls.apiKey.value,
       encoding: this.form.controls.encoding.value,
       domainId: this.form.controls.domainId.value
     }

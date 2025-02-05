@@ -103,7 +103,7 @@ export class InteractivePlanViewComponent implements OnInit {
         for (const action of plan.actions) {
           const i_action = instantiateAction(
             action_map.get(action.name),
-            action.arguments
+            action.params
           );
           i_action.effect.forEach((item) =>
             used_predicate_names.add(item.name)

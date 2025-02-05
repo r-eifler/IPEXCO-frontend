@@ -4,11 +4,12 @@ import { Store } from "@ngrx/store";
 import { Observable } from "rxjs";
 import { filter, map, take, tap } from "rxjs/operators";
 import { IterationStep, StepStatus } from "src/app/iterative_planning/domain/iteration_step";
-import { PlanAction, PlanRunStatus } from "src/app/iterative_planning/domain/plan";
+import { PlanRunStatus } from "src/app/iterative_planning/domain/plan";
 import { selectIterativePlanningSelectedStep } from "src/app/iterative_planning/state/iterative-planning.selector";
 import { MatCardModule } from "@angular/material/card";
 import { AsyncPipe, NgFor, NgIf } from "@angular/common";
 import { MatButtonModule } from "@angular/material/button";
+import { Action } from "src/app/shared/domain/plan-property/plan-property";
 
 
 @Component({
@@ -26,7 +27,7 @@ import { MatButtonModule } from "@angular/material/button";
 export class PlanViewComponent implements OnInit {
 
   step$: Observable<IterationStep>;
-  actions$: Observable<PlanAction[]>;
+  actions$: Observable<Action[]>;
   solved$: Observable<boolean>;
   notSolvable$: Observable<boolean>;
   isRunning$: Observable<boolean>;
