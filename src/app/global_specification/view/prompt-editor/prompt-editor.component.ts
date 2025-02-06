@@ -1,21 +1,19 @@
 import { AsyncPipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
+import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormField, MatInputModule } from '@angular/material/input';
 import { RouterLink } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { combineLatest, filter, map, take } from 'rxjs';
 import { BreadcrumbModule } from 'src/app/shared/components/breadcrumb/breadcrumb.module';
 import { PageModule } from 'src/app/shared/components/page/page.module';
-import { selectDomainSpecifications, selectExplainers, selectPrompt } from '../../state/globalSpec.selector';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Store } from '@ngrx/store';
-import { combineLatest, filter, map, take, tap } from 'rxjs';
-import { jsonValidator } from 'src/app/validators/json.validator';
-import { DomainSpecification } from '../../domain/domain_specification';
-import { loadDomainSpecifications, loadExplainers, updateDomainSpecification, updatePrompt } from '../../state/globalSpec.actions';
 import { Prompt } from '../../domain/prompt';
-import { MatChipsModule } from '@angular/material/chips';
+import { loadDomainSpecifications, loadServices, updatePrompt } from '../../state/globalSpec.actions';
+import { selectDomainSpecifications, selectExplainers, selectPrompt } from '../../state/globalSpec.selector';
 
 @Component({
   selector: 'app-prompt-editor',
@@ -69,7 +67,7 @@ export class PromptEditorComponent {
 
 
     this.store.dispatch(loadDomainSpecifications());
-    this.store.dispatch(loadExplainers());
+    this.store.dispatch(loadServices());
   }
 
   onSave() {

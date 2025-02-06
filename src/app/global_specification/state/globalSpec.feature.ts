@@ -13,10 +13,8 @@ export const {
     selectGlobalSpecFeatureState,
     selectDomainSpecification,
     selectDomainSpecifications,
-    selectExplainer,
     selectOutputSchema,
     selectOutputSchemas,
-    selectPlanner,
     selectPrompt,
     selectPrompts
   } = globalSpecFeature;

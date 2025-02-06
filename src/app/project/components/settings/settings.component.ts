@@ -9,11 +9,11 @@ import { MatButtonToggleModule } from "@angular/material/button-toggle";
 import { MatIconModule } from "@angular/material/icon";
 import { NgIf } from "@angular/common";
 import { MatInputModule } from "@angular/material/input";
-import { Explainer, Planner } from "src/app/global_specification/domain/services";
 import { MatOptionModule } from "@angular/material/core";
 import { MatSelectModule } from "@angular/material/select";
 import { AgentType, OutputSchema, Prompt, PromptType } from "src/app/global_specification/domain/prompt";
 import { MatCheckboxModule } from "@angular/material/checkbox";
+import { Service } from "src/app/global_specification/domain/services";
 
 
 @Component({
@@ -44,8 +44,8 @@ export class SettingsComponent {
 
   settings = input.required<GeneralSettings>();
   isDemo = input<boolean>(false);
-  planners = input.required<Planner[]>();
-  explainer = input.required<Explainer[]>();
+  planners = input.required<Service[]>();
+  explainer = input.required<Service[]>();
   prompts = input.required<Prompt[]>();
   outputSchemas = input.required<OutputSchema[]>();
 

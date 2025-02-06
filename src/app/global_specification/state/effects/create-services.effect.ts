@@ -2,31 +2,21 @@ import { inject, Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { catchError, switchMap } from "rxjs/operators";
 import { of } from "rxjs";
-import { ExplainerServicesService } from "../../service/explainer.service";
-import { PlannerServicesService } from "../../service/planner.service";
-import { createExplainer, createExplainerFailure, createExplainerSuccess, createPlanner, createPlannerFailure, createPlannerSuccess, loadExplainers, loadPlanners } from "../globalSpec.actions";
-
+import { ServicesService } from "../../service/services.service";
+import { createService, createServiceFailure, createServiceSuccess, loadServices } from "../globalSpec.actions";
 
 @Injectable()
 export class CreateServicesEffect{
 
     private actions$ = inject(Actions)
-    private servicePlanner = inject(PlannerServicesService)
-    private serviceExplainer = inject(ExplainerServicesService)
+    private service = inject(ServicesService)
 
-    public createPlanners$ = createEffect(() => this.actions$.pipe(
-        ofType(createPlanner),
-        switchMap(({planner}) => this.servicePlanner.post$(planner).pipe(
-            switchMap(planner => [createPlannerSuccess({planner: planner}), loadPlanners()] ),
-            catchError(() => of(createPlannerFailure()))
+    public createServices$ = createEffect(() => this.actions$.pipe(
+        ofType(createService),
+        switchMap(({service}) => this.service.post$(service).pipe(
+            switchMap(service => [createServiceSuccess({service: service}), loadServices()] ),
+            catchError(() => of(createServiceFailure()))
         ))
     ));
 
-    public createExplainers$ = createEffect(() => this.actions$.pipe(
-        ofType(createExplainer),
-        switchMap(({explainer}) => this.serviceExplainer.post$(explainer).pipe(
-            switchMap(exp => [createExplainerSuccess({explainer: exp}), loadExplainers()] ),
-            catchError(() => of(createExplainerFailure()))
-        ))
-    ));
 }

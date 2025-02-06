@@ -3,6 +3,7 @@ import { CreationState } from "src/app/shared/common/creatable.interface";
 import { Demo, DemoRunStatus } from "src/app/project/domain/demo";
 import { map, memoizeWith } from "ramda";
 import { projectFeature } from "./project.feature";
+import { ServiceType } from "src/app/global_specification/domain/services";
 
 const selectState = projectFeature.selectProjectFeatureState;
 
@@ -16,8 +17,8 @@ export const selectProjectPlanPropertyTemplates = createSelector(selectState, (s
 export const selectProjectPlanPropertyCreationInterfaceType = createSelector(selectState,
     (state) => state.project?.data?.settings?.interfaces.propertyCreationInterfaceType)
 
-export const selectPlanners = createSelector(selectState, (state) => state.planners.data);
-export const selectExplainer = createSelector(selectState, (state) => state.explainer.data);
+export const selectPlanners = createSelector(selectState, (state) => state.services.data?.filter(s => s.type === ServiceType.PLANNER));
+export const selectExplainer = createSelector(selectState, (state) => state.services.data?.filter(s => s.type === ServiceType.EXPLAINER));
 export const selectPrompts = createSelector(selectState, (state) => state.prompts.data);
 export const selectOutputSchemas = createSelector(selectState, (state) => state.outputSchemas.data);
 

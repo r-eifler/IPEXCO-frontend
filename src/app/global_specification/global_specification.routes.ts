@@ -12,8 +12,7 @@ import { globalSpecFeature } from './state/globalSpec.feature';
 import { provideState } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
 import { DomainSpecificationService } from './service/domainSpecification.service';
-import { ExplainerServicesService } from './service/explainer.service';
-import { PlannerServicesService } from './service/planner.service';
+import { ServicesService } from './service/services.service';
 import { PromptsService } from './service/prompts.service';
 
 
@@ -27,8 +26,7 @@ export const routes: Routes = [
         provideState(globalSpecFeature),
         provideEffects(globalSpecFeatureEffects),
         DomainSpecificationService,
-        ExplainerServicesService,
-        PlannerServicesService,
+        ServicesService,
         PromptsService,
       ],
     children: [

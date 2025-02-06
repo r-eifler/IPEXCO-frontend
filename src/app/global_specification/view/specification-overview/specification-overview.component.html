@@ -58,12 +58,12 @@
                                 <app-editable-list-entry>
                                     <app-service-card [service]="planner" [type]="'planner'" [domains]="domains" ></app-service-card>
                                     <app-editable-list-entry-suffix>
-                                        <button mat-icon-button (click)="removePlanner(planner._id)" type="button"><mat-icon>delete</mat-icon></button>
+                                        <button mat-icon-button (click)="removeService(planner._id)" type="button"><mat-icon>delete</mat-icon></button>
                                     </app-editable-list-entry-suffix>
                                 </app-editable-list-entry>
                             }
                             <app-editable-list-action>
-                                <button mat-button (click)="onNewPlanner()">
+                                <button mat-button (click)="onNewService()">
                                     <mat-icon>add</mat-icon>
                                     Add Planner Service
                                 </button>
@@ -80,12 +80,12 @@
                                 <app-editable-list-entry>
                                     <app-service-card [service]="explainer" [type]="'explainer'" [domains]="domains"></app-service-card>
                                     <app-editable-list-entry-suffix>
-                                        <button mat-icon-button (click)="removeExplainer(explainer._id)" type="button"><mat-icon>delete</mat-icon></button>
+                                        <button mat-icon-button (click)="removeService(explainer._id)" type="button"><mat-icon>delete</mat-icon></button>
                                     </app-editable-list-entry-suffix>
                                 </app-editable-list-entry>
                             }
                             <app-editable-list-action>
-                                <button mat-button (click)="onNewExplainer()">
+                                <button mat-button (click)="onNewService()">
                                     <mat-icon>add</mat-icon>
                                     Add Explainer Service
                                 </button>

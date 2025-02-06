@@ -15,9 +15,8 @@ import { projectFeatureEffects } from './state/effects/effects';
 import { DemoMonitoringService } from './service/demo-monitoring.service';
 import { ProjectDemoService } from './service/demo.service';
 import { ProjectDomainSpecificationService } from './service/domainSpecification.service';
-import { ProjectExplainerServicesService } from './service/explainer.service';
 import { ProjectPlanPropertyService } from './service/plan-properties.service';
-import { ProjectPlannerServicesService } from './service/planner.service';
+import { ProjectServicesService } from './service/services.service';
 import { ProjectService } from './service/project.service';
 import { ProjectPromptsService } from './service/prompts.service';
 
@@ -34,9 +33,8 @@ export const routes: Routes = [
       DemoMonitoringService,
       ProjectDemoService,
       ProjectDomainSpecificationService,
-      ProjectExplainerServicesService,
       ProjectPlanPropertyService,
-      ProjectPlannerServicesService,
+      ProjectServicesService,
       ProjectService,
       ProjectPromptsService,
     ],

@@ -2,8 +2,23 @@ import { createReducer, on } from "@ngrx/store";
 import { Loadable, LoadingState } from "src/app/shared/common/loadable.interface";
 import { DomainSpecification } from "../domain/domain_specification";
 import { OutputSchema, Prompt } from "../domain/prompt";
-import { Explainer, Planner } from "../domain/services";
-import { loadDomainSpecification, loadDomainSpecifications, loadDomainSpecificationsSuccess, loadDomainSpecificationSuccess, loadExplainers, loadExplainersSuccess, loadOutputSchema, loadOutputSchemas, loadOutputSchemasSuccess, loadOutputSchemaSuccess, loadPlanners, loadPlannersSuccess, loadPrompt, loadPrompts, loadPromptsSuccess, loadPromptSuccess } from "./globalSpec.actions";
+import { 
+    loadDomainSpecification, 
+    loadDomainSpecifications, 
+    loadDomainSpecificationsSuccess, 
+    loadDomainSpecificationSuccess, 
+    loadOutputSchema, 
+    loadOutputSchemas, 
+    loadOutputSchemasSuccess, 
+    loadOutputSchemaSuccess, 
+    loadPrompt, 
+    loadPrompts, 
+    loadPromptsSuccess, 
+    loadPromptSuccess, 
+    loadServices, 
+    loadServicesSuccess 
+} from "./globalSpec.actions";
+import { Service } from "../domain/services";
 
 
 export interface GlobalSpecificationState {
@@ -13,8 +28,7 @@ export interface GlobalSpecificationState {
     prompt: Loadable<Prompt>;
     outputSchemas: Loadable<OutputSchema[]>;
     outputSchema: Loadable<OutputSchema>;
-    planner: Loadable<Planner[]>;
-    explainer: Loadable<Explainer[]>;
+    services: Loadable<Service[]>;
 }
 
 
@@ -25,8 +39,7 @@ const initialState: GlobalSpecificationState = {
     prompt: {state: LoadingState.Initial, data: undefined},
     outputSchemas: {state: LoadingState.Initial, data: undefined},
     outputSchema: {state: LoadingState.Initial, data: undefined},
-    planner: {state: LoadingState.Initial, data: undefined},
-    explainer: {state: LoadingState.Initial, data: undefined},
+    services: {state: LoadingState.Initial, data: undefined},
 }
 
 
@@ -80,20 +93,12 @@ export const globalSpecificationReducer = createReducer(
         ...state,
         outputSchema: {state: LoadingState.Done, data: outputSchema},
     })),
-    on(loadPlanners, (state): GlobalSpecificationState => ({
+    on(loadServices, (state): GlobalSpecificationState => ({
         ...state,
-        planner: {state: LoadingState.Loading, data: undefined},
+        services: {state: LoadingState.Loading, data: undefined},
     })),
-    on(loadPlannersSuccess, (state, {planners}): GlobalSpecificationState => ({
+    on(loadServicesSuccess, (state, {services}): GlobalSpecificationState => ({
         ...state,
-        planner: {state: LoadingState.Done, data: planners},
-    })),
-    on(loadExplainers, (state): GlobalSpecificationState => ({
-        ...state,
-        explainer: {state: LoadingState.Loading, data: undefined},
-    })),
-    on(loadExplainersSuccess, (state, {explainers}): GlobalSpecificationState => ({
-        ...state,
-        explainer: {state: LoadingState.Done, data: explainers},
+        services: {state: LoadingState.Done, data: services},
     })),
 );

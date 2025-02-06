@@ -16,10 +16,9 @@ export const {
     selectDemoProperties,
     selectDemos,
     selectDomainSpecification,
-    selectExplainer,
+    selectServices,
     selectOutputSchemas,
     selectPlanProperties,
-    selectPlanners,
     selectProject,
     selectPrompts,
   } = projectFeature;

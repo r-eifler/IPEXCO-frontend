@@ -1,5 +1,6 @@
 import { createSelector } from "@ngrx/store";
 import { globalSpecFeature } from "./globalSpec.feature";
+import { ServiceType } from "../domain/services";
 
 
 export const selectDomainSpecifications = createSelector(globalSpecFeature.selectGlobalSpecFeatureState, (state) => state.domainSpecifications?.data)
@@ -8,8 +9,10 @@ export const selectPrompts = createSelector(globalSpecFeature.selectGlobalSpecFe
 export const selectPrompt = createSelector(globalSpecFeature.selectGlobalSpecFeatureState, (state) => state.prompt?.data)
 export const selectOutputSchemas = createSelector(globalSpecFeature.selectGlobalSpecFeatureState, (state) => state.outputSchemas?.data)
 export const selectOutputSchema = createSelector(globalSpecFeature.selectGlobalSpecFeatureState, (state) => state.outputSchema?.data)
-export const selectPlanners= createSelector(globalSpecFeature.selectGlobalSpecFeatureState, (state) => state.planner?.data)
-export const selectExplainers= createSelector(globalSpecFeature.selectGlobalSpecFeatureState, (state) => state.explainer?.data)
+export const selectPlanners= createSelector(globalSpecFeature.selectGlobalSpecFeatureState, (state) => state.services?.data?.
+    filter(s => s.type == ServiceType.PLANNER))
+export const selectExplainers= createSelector(globalSpecFeature.selectGlobalSpecFeatureState, (state) => state.services?.data?.
+    filter(s => s.type == ServiceType.PLANNER))
 
 
 export const selectDomainName = (id: string) => createSelector(globalSpecFeature.selectGlobalSpecFeatureState, (state) => 
