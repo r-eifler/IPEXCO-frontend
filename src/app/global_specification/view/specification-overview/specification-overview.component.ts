@@ -26,7 +26,7 @@ import {
   loadPrompts,
   loadServices
 } from '../../state/globalSpec.actions';
-import { selectDomainSpecifications, selectExplainers, selectOutputSchemas, selectPlanners, selectPrompts } from '../../state/globalSpec.selector';
+import { selectDomainSpecifications, selectExplainers, selectOutputSchemas, selectPlanners, selectPrompts, selectServices } from '../../state/globalSpec.selector';
 import { DomainSpecCreatorComponent } from '../domain-spec-creator/domain-spec-creator.component';
 import { OutputSchemaCreatorComponent } from '../output-schema-creator/output-schema-creator.component';
 import { PromptCreatorComponent } from '../prompt-creator/prompt-creator.component';
@@ -59,7 +59,7 @@ export class SpecificationOverviewComponent {
   domainSpecifications$ = this.store.select(selectDomainSpecifications);
   prompts$ = this.store.select(selectPrompts);
   outputSchemas$ = this.store.select(selectOutputSchemas);
-  planners$ = this.store.select(selectPlanners);
+  services$ = this.store.select(selectServices);
   explainers$ = this.store.select(selectExplainers);
 
 

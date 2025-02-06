@@ -14,8 +14,6 @@ export const {
     selectDemos,
     selectDemoProperties,
     selectDemo,
-    selectPlanners,
-    selectExplainer,
     selectPrompts,
     selectOutputSchemas
   } = demosFeature;

@@ -41,7 +41,7 @@
     </app-dialog-content>
     <app-dialog-footer>
         <button mat-button (click)="onCancel()">Cancel</button>
-        <button mat-flat-button (click)="onCreate()">Create</button>
+        <button mat-flat-button (click)="onCreate()" [disabled]="!form.valid">Create</button>
     </app-dialog-footer>
 </app-dialog>
 

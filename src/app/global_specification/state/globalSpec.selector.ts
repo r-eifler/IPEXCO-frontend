@@ -9,6 +9,8 @@ export const selectPrompts = createSelector(globalSpecFeature.selectGlobalSpecFe
 export const selectPrompt = createSelector(globalSpecFeature.selectGlobalSpecFeatureState, (state) => state.prompt?.data)
 export const selectOutputSchemas = createSelector(globalSpecFeature.selectGlobalSpecFeatureState, (state) => state.outputSchemas?.data)
 export const selectOutputSchema = createSelector(globalSpecFeature.selectGlobalSpecFeatureState, (state) => state.outputSchema?.data)
+
+export const selectServices= createSelector(globalSpecFeature.selectGlobalSpecFeatureState, (state) => state.services?.data)
 export const selectPlanners= createSelector(globalSpecFeature.selectGlobalSpecFeatureState, (state) => state.services?.data?.
     filter(s => s.type == ServiceType.PLANNER))
 export const selectExplainers= createSelector(globalSpecFeature.selectGlobalSpecFeatureState, (state) => state.services?.data?.

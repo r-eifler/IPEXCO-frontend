@@ -2,6 +2,7 @@ import { createSelector } from "@ngrx/store";
 import { DemoRunStatus } from "src/app/project/domain/demo";
 import { map } from "ramda";
 import { demosFeature } from "./demo.feature";
+import { ServiceType } from "src/app/global_specification/domain/services";
 
 
 
@@ -15,7 +16,9 @@ export const selectPlanPropertiesOfDemo = createSelector(demosFeature.selectDemo
 
 export const selectDemo = createSelector(demosFeature.selectDemo, (demo) => demo.data)
 
-export const selectPlanners = createSelector(demosFeature.selectDemosFeatureState, (state) => state.planners.data);
-export const selectExplainer = createSelector(demosFeature.selectDemosFeatureState, (state) => state.explainer.data);
+export const selectPlanners = createSelector(demosFeature.selectDemosFeatureState, (state) => state.services.data?.
+    filter(s => s.type === ServiceType.PLANNER ));
+export const selectExplainer = createSelector(demosFeature.selectDemosFeatureState, (state) => state.services.data?.
+    filter(s => s.type === ServiceType.EXPLAINER));
 export const selectPrompts = createSelector(demosFeature.selectDemosFeatureState, (state) => state.prompts.data);
 export const selectOutputSchemas = createSelector(demosFeature.selectDemosFeatureState, (state) => state.outputSchemas.data);

@@ -8,9 +8,8 @@ import { provideState } from '@ngrx/store';
 import { demosFeature } from './state/demo.feature';
 import { demosFeatureEffects } from './state/effects/effects';
 import { DemoService } from './services/demo.service';
-import { DemoExplainerServicesService } from './services/explainer.service';
 import { DemoPlanPropertyService } from './services/plan-properties.service';
-import { DemoPlannerServicesService } from './services/planner.service';
+import { DemoServicesService } from './services/planner.service';
 import { DemoPromptsService } from './services/prompts.service';
 import { Routes } from '@angular/router';
 
@@ -26,8 +25,7 @@ export const routes: Routes = [
       provideEffects(demosFeatureEffects),
       DemoService,
       DemoPlanPropertyService,
-      DemoExplainerServicesService,
-      DemoPlannerServicesService,
+      DemoServicesService,
       DemoPromptsService,
     ],
     children: [

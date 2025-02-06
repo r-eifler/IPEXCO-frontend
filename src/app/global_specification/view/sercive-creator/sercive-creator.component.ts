@@ -7,6 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { DialogModule } from 'src/app/shared/components/dialog/dialog.module';
 import { Encoding, Service, ServiceType } from '../../domain/services';
+import { domainOnlyForDomainDependentEncoding } from '../../validators/domain_dpendent.validator';
 
 @Component({
   selector: 'app-sercive-creator',
@@ -34,6 +35,8 @@ export class ServiceCreatorComponent {
     ServiceType.TESTER
   ]
 
+  encoding = Encoding
+
   encodings = [
     Encoding.DOMAIN_DEPENDENT,
     Encoding.PDDL_CLASSIC,
@@ -45,12 +48,12 @@ export class ServiceCreatorComponent {
 
   form = this.fb.group({
       name: this.fb.control<string>(null, Validators.required),
-      domainId: this.fb.control<string>(null),
+      type: this.fb.control<ServiceType>(null, Validators.required),
       apiKey: this.fb.control<string>(null, Validators.required),
       url: this.fb.control<string>(null, [Validators.required, Validators.pattern(this.urlRegex)]),
       encoding: this.fb.control<Encoding>(null, Validators.required),
-      type: this.fb.control<ServiceType>(null, Validators.required),
-  });
+      domainId: this.fb.control<string>(null),
+  }, { validators: domainOnlyForDomainDependentEncoding });
 
   onCancel(){
     this.dialogRef.close();
@@ -63,7 +66,7 @@ export class ServiceCreatorComponent {
       url: this.form.controls.url.value,
       apiKey: this.form.controls.apiKey.value,
       encoding: this.form.controls.encoding.value,
-      domainId: this.form.controls.domainId.value
+      domainId: this.form.controls.encoding.value == this.encoding.DOMAIN_DEPENDENT ? this.form.controls.domainId.value : null
     }
     this.dialogRef.close(service)
   }

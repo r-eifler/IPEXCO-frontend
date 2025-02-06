@@ -2,33 +2,22 @@ import { inject, Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { catchError, switchMap } from "rxjs/operators";
 import { of } from "rxjs";
-import { DemoPlannerServicesService } from "../../services/planner.service";
-import { DemoExplainerServicesService } from "../../services/explainer.service";
-import { loadExplainers, loadExplainersFailure, loadExplainersSuccess, loadPlanners, loadPlannersFailure, loadPlannersSuccess } from "../demo.actions";
-
-
+import { DemoServicesService } from "../../services/planner.service";
+import { loadServices, loadServicesSuccess, loadServicesFailure } from "../demo.actions";
 
 
 @Injectable()
 export class DemoLoadServicesEffect{
 
     private actions$ = inject(Actions)
-    private servicePlanner = inject(DemoPlannerServicesService)
-    private serviceExplainer = inject(DemoExplainerServicesService)
+    private service = inject(DemoServicesService)
 
-    public loadPlanners$ = createEffect(() => this.actions$.pipe(
-        ofType(loadPlanners),
-        switchMap(() => this.servicePlanner.get$().pipe(
-            switchMap(planner => [loadPlannersSuccess({planners: planner})] ),
-            catchError(() => of(loadPlannersFailure()))
+    public loadServices$ = createEffect(() => this.actions$.pipe(
+        ofType(loadServices),
+        switchMap(() => this.service.get$().pipe(
+            switchMap(services => [loadServicesSuccess({services})] ),
+            catchError(() => of(loadServicesFailure()))
         ))
     ));
 
-    public loadExplainers$ = createEffect(() => this.actions$.pipe(
-        ofType(loadExplainers),
-        switchMap(() => this.serviceExplainer.get$().pipe(
-            switchMap(exp => [loadExplainersSuccess({explainers: exp})] ),
-            catchError(() => of(loadExplainersFailure()))
-        ))
-    ));
 }
