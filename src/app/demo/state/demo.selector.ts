@@ -16,6 +16,7 @@ export const selectPlanPropertiesOfDemo = createSelector(demosFeature.selectDemo
 
 export const selectDemo = createSelector(demosFeature.selectDemo, (demo) => demo.data)
 
+export const selectServices = createSelector(demosFeature.selectDemosFeatureState, (state) => state.services.data);
 export const selectPlanners = createSelector(demosFeature.selectDemosFeatureState, (state) => state.services.data?.
     filter(s => s.type === ServiceType.PLANNER ));
 export const selectExplainer = createSelector(demosFeature.selectDemosFeatureState, (state) => state.services.data?.

@@ -25,8 +25,7 @@ export interface GeneralSettings {
   services: {
       computePlanAutomatically: boolean;
       computeExplanationsAutomatically: boolean;
-      planners: string[];
-      explainer: string[]
+      services: string[];
   }
   interfaces: {
       propertyCreationInterfaceType: PropertyCreationInterfaceType;
@@ -57,8 +56,7 @@ export const defaultGeneralSetting: GeneralSettings = {
   services: {
       computePlanAutomatically: true,
       computeExplanationsAutomatically: true,
-      planners: [],
-      explainer: [],
+      services: [],
   },
   interfaces: {
       explanationInterfaceType: ExplanationInterfaceType.TEMPLATE_QUESTION_ANSWER,

@@ -16,7 +16,7 @@ import { PlanPropertyBadgeComponent } from 'src/app/shared/components/plan-prope
 import { PlanPropertyUpdatePanelComponent } from 'src/app/shared/components/plan-property-update-panel/plan-property-update-panel.component';
 import { PlanProperty } from 'src/app/shared/domain/plan-property/plan-property';
 import { loadOutputSchemas, loadPrompts, loadServices, updateDemo, updatePlanProperty } from '../../state/demo.actions';
-import { selectDemo, selectExplainer, selectOutputSchemas, selectPlanners, selectPlanPropertiesListOfDemo, selectPlanPropertiesOfDemo, selectPrompts } from '../../state/demo.selector';
+import { selectDemo, selectExplainer, selectOutputSchemas, selectPlanners, selectPlanPropertiesListOfDemo, selectPlanPropertiesOfDemo, selectPrompts, selectServices } from '../../state/demo.selector';
 
 @Component({
     selector: 'app-demo-details-view',
@@ -47,7 +47,7 @@ export class DemoDetailsViewComponent {
   demo$ = this.store.select(selectDemo)
   planProperties$ = this.store.select(selectPlanPropertiesOfDemo)
   planPropertiesList$ = this.store.select(selectPlanPropertiesListOfDemo)
-  planners$ = this.store.select(selectPlanners);
+  services$ = this.store.select(selectServices);
   explainer$ = this.store.select(selectExplainer);
   prompts$ = this.store.select(selectPrompts);
   outputSchemas$ = this.store.select(selectOutputSchemas);

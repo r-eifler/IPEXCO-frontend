@@ -17,6 +17,7 @@ export const selectProjectPlanPropertyTemplates = createSelector(selectState, (s
 export const selectProjectPlanPropertyCreationInterfaceType = createSelector(selectState,
     (state) => state.project?.data?.settings?.interfaces.propertyCreationInterfaceType)
 
+export const selectServices = createSelector(selectState, (state) => state.services.data);
 export const selectPlanners = createSelector(selectState, (state) => state.services.data?.filter(s => s.type === ServiceType.PLANNER));
 export const selectExplainer = createSelector(selectState, (state) => state.services.data?.filter(s => s.type === ServiceType.EXPLAINER));
 export const selectPrompts = createSelector(selectState, (state) => state.prompts.data);
