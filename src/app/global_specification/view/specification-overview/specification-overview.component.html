@@ -72,7 +72,7 @@
             </app-page-section> 
             <app-page-section>
                 <app-page-section-title>
-                    LMM Agents
+                    LLM Agents
                 </app-page-section-title>
                 <app-page-section-content>
                     <div class="list-container">
@@ -120,7 +120,7 @@
                                 </app-editable-list-entry>
                             }
                             <app-editable-list-action>
-                                <button mat-button>
+                                <button mat-button (click)="onNewOutputSchema()">
                                     <mat-icon>schema</mat-icon>
                                     New Output Schema
                                 </button>

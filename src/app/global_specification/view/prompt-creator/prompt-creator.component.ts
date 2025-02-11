@@ -35,6 +35,8 @@ export class PromptCreatorComponent {
       AgentType.EXPLANATION_TRANSLATOR,
     ]
 
+    promptType = PromptType;
+
     promptTypes = [
       PromptType.SYSTEM,
       PromptType.INSTRUCTION_AND_EXAMPLES,

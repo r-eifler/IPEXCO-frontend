@@ -11,23 +11,26 @@
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>Prompt Type</mat-label>
+                  <mat-select [formControl]="form.controls.type" required>
+                    @for (type of promptTypes; track type) {
+                      <mat-option [value]="type">{{type}}</mat-option>
+                    }
+                  </mat-select>
+                </mat-form-field>
+
+                @if(form.controls.type.value != null && form.controls.type.value != promptType.SYSTEM){
+                <mat-form-field appearance="outline" class="full-width">
                     <mat-label>Agent</mat-label>
-                    <mat-select [formControl]="form.controls.agent" required>
+                    <mat-select [formControl]="form.controls.agent">
                       @for (type of agentTypes; track type) {
                         <mat-option [value]="type">{{type}}</mat-option>
                       }
                     </mat-select>
                 </mat-form-field>
+                }
 
-                <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>Prompt Type</mat-label>
-                    <mat-select [formControl]="form.controls.type" required>
-                      @for (type of promptTypes; track type) {
-                        <mat-option [value]="type">{{type}}</mat-option>
-                      }
-                    </mat-select>
-                </mat-form-field>
-
+                @if(form.controls.type.value != null && form.controls.type.value != promptType.SYSTEM){
                 <mat-form-field appearance="outline" class="full-width">
                     <mat-label>Domain</mat-label>
                     <mat-select [formControl]="form.controls.domain" required>
@@ -36,6 +39,7 @@
                       }
                     </mat-select>
                 </mat-form-field>
+                }
             </div>
         </form>
     </app-dialog-content>
