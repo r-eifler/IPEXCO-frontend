@@ -1,9 +1,7 @@
 import { Component, computed, input } from '@angular/core';
-import { Service } from '../../domain/services';
-import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
-import { MatChipsModule } from '@angular/material/chips';
 import { SpecCardModule } from 'src/app/shared/components/spec-card/spec-card.module';
+import { Service, ServiceType } from '../../domain/services';
 
 @Component({
   selector: 'app-service-card',
@@ -17,9 +15,18 @@ import { SpecCardModule } from 'src/app/shared/components/spec-card/spec-card.mo
 export class ServiceCardComponent {
 
   service = input.required<Service>();
-  type = input.required<'planner' | 'explainer'>();
   domains = input.required<{_id: string, name: string}[]>();
 
-  domainName = computed(() => this.domains()?.filter(e => e._id == this.service().domainId)[0].name)
+  type_icon_mapping = {
+    [ServiceType.PLANNER]: 'explore',
+    [ServiceType.EXPLAINER]: 'contact_support',
+    [ServiceType.TESTER]: 'bug_report',
+    [ServiceType.VERIFIER]: 'verified',
+    [ServiceType.PROPERTY_CHECKER]: 'check'
+  }
+
+  domainName = computed(() => this.domains()?.find(e => e._id == this.service().domainId).name);
+  apiKey = computed(() => this.service()?.apiKey?.replace(/./g, '*'));
+  icon = computed(() => this.type_icon_mapping[this.service()?.type])
 
 }

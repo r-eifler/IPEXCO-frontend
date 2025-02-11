@@ -8,8 +8,7 @@
   <app-page-content class="container">
     <app-settings
       [settings]="settings$ | async"
-      [planners]="planners$ | async"
-      [explainer]="explainer$ | async"
+      [services]="services$ | async"
       [prompts]="prompts$ | async"
       [outputSchemas]="outputSchemas$ | async"
       (update)="onSaveSetting($event)">

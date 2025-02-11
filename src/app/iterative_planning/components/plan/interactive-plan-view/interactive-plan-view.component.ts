@@ -1,7 +1,6 @@
 import { Component, DestroyRef, OnInit } from "@angular/core";
 import { Subject, Observable } from "rxjs";
 import { filter, map } from "rxjs/operators";
-import { TimeLoggerService } from "src/app/user_study/service/time-logger.service";
 import {
   PDDLAction,
   PDDLFact,
@@ -57,7 +56,6 @@ export class InteractivePlanViewComponent implements OnInit {
 
   constructor(
     private store: Store,
-    private timeLogger: TimeLoggerService,
     private destroyRef: DestroyRef
   ) {
     this.step$ = this.store.select(selectIterativePlanningSelectedStep);
@@ -105,7 +103,7 @@ export class InteractivePlanViewComponent implements OnInit {
         for (const action of plan.actions) {
           const i_action = instantiateAction(
             action_map.get(action.name),
-            action.arguments
+            action.params
           );
           i_action.effect.forEach((item) =>
             used_predicate_names.add(item.name)

@@ -24,15 +24,6 @@ export class IterationStepService{
                 steps.map( step => (
                 {
                     ... step,
-                    plan: step?.plan ? {
-                            ...step.plan, 
-                            cost: undefined,
-                            actions: step.plan.actions ? JSON.parse(step.plan.actions as unknown as string) : undefined,
-                        } : undefined,
-                    task : {
-                        ...step.task,
-                        model: JSON.parse(step.task.model as unknown as string),
-                    },
                     globalExplanation : step.globalExplanation ? {
                         ...step.globalExplanation,
                         MUGS: step.globalExplanation.MUGS ? JSON.parse(step.globalExplanation.MUGS as unknown as string) : undefined,
@@ -59,7 +50,6 @@ export class IterationStepService{
     }
 
     postCancelIterationStep$(iterationStepId: string): Observable<string> {
-
         return this.http.post<IHTTPData<string>>(this.BASE_URL + 'cancel', {iterationStepId}).pipe(
             map(({data}) => data)
         )

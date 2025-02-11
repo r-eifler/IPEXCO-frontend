@@ -1,24 +1,22 @@
+import { AsyncPipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { PageModule } from 'src/app/shared/components/page/page.module';
-import { combineLatest, filter, map, Observable, take } from 'rxjs';
-import { BreadcrumbModule } from 'src/app/shared/components/breadcrumb/breadcrumb.module';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { AsyncPipe } from '@angular/common';
-import { MatButtonModule } from '@angular/material/button';
-import { PlanPropertyPanelComponent } from 'src/app/shared/components/plan-property-panel/plan-property-panel.component';
-import { PlanPropertyBadgeComponent } from 'src/app/shared/components/plan-property-badge/plan-property-badge.component';
-import { PlanProperty } from 'src/app/shared/domain/plan-property/plan-property';
-import { AskDeleteComponent } from 'src/app/shared/components/ask-delete/ask-delete.component';
-import { MatDialog } from '@angular/material/dialog';
+import { Store } from '@ngrx/store';
+import { combineLatest, filter, map, Observable, take } from 'rxjs';
 import { DemoHeroComponent } from 'src/app/project/components/demo-hero/demo-hero.component';
 import { SettingsComponent } from 'src/app/project/components/settings/settings.component';
-import { selectDemo, selectDemoProperties, selectPlanPropertiesListOfDemo, selectPlanPropertiesOfDemo } from '../../state/demo.selector';
 import { GeneralSettings } from 'src/app/project/domain/general-settings';
-import { updateDemo, updatePlanProperty } from '../../state/demo.actions';
+import { BreadcrumbModule } from 'src/app/shared/components/breadcrumb/breadcrumb.module';
 import { DemoInfoComponent } from 'src/app/shared/components/demo/demo-info/demo-info.component';
+import { PageModule } from 'src/app/shared/components/page/page.module';
+import { PlanPropertyBadgeComponent } from 'src/app/shared/components/plan-property-badge/plan-property-badge.component';
 import { PlanPropertyUpdatePanelComponent } from 'src/app/shared/components/plan-property-update-panel/plan-property-update-panel.component';
+import { PlanProperty } from 'src/app/shared/domain/plan-property/plan-property';
+import { loadOutputSchemas, loadPrompts, loadServices, updateDemo, updatePlanProperty } from '../../state/demo.actions';
+import { selectDemo, selectExplainer, selectOutputSchemas, selectPlanners, selectPlanPropertiesListOfDemo, selectPlanPropertiesOfDemo, selectPrompts, selectServices } from '../../state/demo.selector';
 
 @Component({
     selector: 'app-demo-details-view',
@@ -49,6 +47,10 @@ export class DemoDetailsViewComponent {
   demo$ = this.store.select(selectDemo)
   planProperties$ = this.store.select(selectPlanPropertiesOfDemo)
   planPropertiesList$ = this.store.select(selectPlanPropertiesListOfDemo)
+  services$ = this.store.select(selectServices);
+  explainer$ = this.store.select(selectExplainer);
+  prompts$ = this.store.select(selectPrompts);
+  outputSchemas$ = this.store.select(selectOutputSchemas);
 
   MUGS$: Observable<string[][]> = this.demo$.pipe(map((demo) => demo?.globalExplanation?.MUGS));
   MGCS$: Observable<string[][]> = this.demo$.pipe(map((demo) => demo?.globalExplanation?.MGCS));
@@ -61,18 +63,11 @@ export class DemoDetailsViewComponent {
     })], { type: "text/json" }))))
 
 
-  // onDelete(id: string){
-  //   const dialogRef = this.dialog.open(AskDeleteComponent, {
-  //     data: {name: "Delete Demo", text: "Are you sure you want to delete the demo?"},
-  //   });
-  //   dialogRef.afterClosed().subscribe(result => {
-  //     console.log('The dialog was closed');
-  //     if(result){
-  //       // this.store.dispatch(deleteProjectDemo({id}))
-  //       this.router.navigate(["../.."], {relativeTo: this.route});
-  //     }
-  //   });
-  // }
+  constructor() {
+    this.store.dispatch(loadServices());
+    this.store.dispatch(loadPrompts());
+    this.store.dispatch(loadOutputSchemas());
+  }
 
   onRunIterPlanning(){
     this.demo$.pipe(take(1)).subscribe(demo => {

@@ -12,7 +12,6 @@ export interface ProjectMetaDataState {
     createdProject: Creatable<Project>;
 }
 
-export const projectMetaDataFeature = 'project-meta';
 
 const initialState: ProjectMetaDataState = {
     projects: {state: LoadingState.Initial, data: undefined},

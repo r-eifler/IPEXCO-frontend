@@ -5,9 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { map, Observable} from 'rxjs';
 import {User} from '../../user/domain/user';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class UserStudyAuthenticationService {
 
   private http = inject(HttpClient)

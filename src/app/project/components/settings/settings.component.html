@@ -14,13 +14,9 @@
 
         <mat-card-content class="sub-card-content">
 
-          <mat-slide-toggle [formControl]="form.controls.main.controls.public">
-            public
-          </mat-slide-toggle>
+          <mat-checkbox [formControl]="form.controls.main.controls.public">public</mat-checkbox>
 
-          <mat-slide-toggle [formControl]="form.controls.main.controls.usePlanPropertyUtility">
-            use utility
-          </mat-slide-toggle> 
+          <mat-checkbox [formControl]="form.controls.main.controls.usePlanPropertyUtility">use utility</mat-checkbox>
 
           <mat-form-field class="example-full-width" appearance="outline">
             <mat-label>Maximal number of iteration Steps</mat-label>
@@ -39,13 +35,13 @@
 
         <mat-card-content class="sub-card-content">
 
-          <mat-slide-toggle [formControl]="form.controls.services.controls.computePlanAutomatically">
+          <mat-checkbox [formControl]="form.controls.services.controls.computePlanAutomatically">
             automatic plan computation
-          </mat-slide-toggle>
+          </mat-checkbox>
 
-          <mat-slide-toggle [formControl]="form.controls.services.controls.computePlanAutomatically">
+          <mat-checkbox [formControl]="form.controls.services.controls.computeExplanationsAutomatically">
             automatic explanation computation
-          </mat-slide-toggle>
+          </mat-checkbox>
 
           <mat-form-field appearance="outline" class="full-width">
               <mat-label>Planners</mat-label>
@@ -59,12 +55,42 @@
 
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>Explainers</mat-label>
-            <mat-select [formControl]="form.controls.services.controls.planners" multiple>
+            <mat-select [formControl]="form.controls.services.controls.explainer" multiple>
               <option value="" disabled selected></option>
               @for (exp of explainer(); track exp._id) {
                 <mat-option [value]="exp._id">{{exp.name}}</mat-option>
               }
             </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Property Checker</mat-label>
+          <mat-select [formControl]="form.controls.services.controls.propertyChecker" multiple>
+            <option value="" disabled selected></option>
+            @for (s of propertyChecker(); track s._id) {
+              <mat-option [value]="s._id">{{s.name}}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Tester</mat-label>
+          <mat-select [formControl]="form.controls.services.controls.tester" multiple>
+            <option value="" disabled selected></option>
+            @for (s of tester(); track s._id) {
+              <mat-option [value]="s._id">{{s.name}}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Verifier</mat-label>
+          <mat-select [formControl]="form.controls.services.controls.verifier" multiple>
+            <option value="" disabled selected></option>
+            @for (s of verifier(); track s._id) {
+              <mat-option [value]="s._id">{{s.name}}</mat-option>
+            }
+          </mat-select>
         </mat-form-field>
 
         </mat-card-content>
@@ -133,7 +159,7 @@
 
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>System Prompt</mat-label>
-            <mat-select [formControl]="form.controls.services.controls.planners">
+            <mat-select [formControl]="form.controls.llmConfig.controls.prompts.controls.system">
               <option value="" disabled selected></option>
               @for (prompt of systemPrompts(); track prompt._id) {
                 <mat-option [value]="prompt._id">{{prompt.name}}</mat-option>
@@ -143,7 +169,7 @@
 
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>Goal Translator Instructions Prompt</mat-label>
-            <mat-select [formControl]="form.controls.services.controls.planners">
+            <mat-select [formControl]="form.controls.llmConfig.controls.prompts.controls.goalTransInstructions">
               <option value="" disabled selected></option>
               @for (prompt of goalTransInstructionPrompts(); track prompt._id) {
                 <mat-option [value]="prompt._id">{{prompt.name}}</mat-option>
@@ -153,7 +179,7 @@
 
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>Goal Translator Data Prompt</mat-label>
-            <mat-select [formControl]="form.controls.services.controls.planners">
+            <mat-select [formControl]="form.controls.llmConfig.controls.prompts.controls.goalTransData">
               <option value="" disabled selected></option>
               @for (prompt of goalTransDataPrompts(); track prompt._id) {
                 <mat-option [value]="prompt._id">{{prompt.name}}</mat-option>
@@ -163,7 +189,7 @@
 
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>Question Classifier Instructions Prompt</mat-label>
-            <mat-select [formControl]="form.controls.services.controls.planners">
+            <mat-select [formControl]="form.controls.llmConfig.controls.prompts.controls.questionClassInstructions">
               <option value="" disabled selected></option>
               @for (prompt of questionClassInstructionPrompts(); track prompt._id) {
                 <mat-option [value]="prompt._id">{{prompt.name}}</mat-option>
@@ -173,7 +199,7 @@
 
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>Question Classifier Data Prompt</mat-label>
-            <mat-select [formControl]="form.controls.services.controls.planners">
+            <mat-select [formControl]="form.controls.llmConfig.controls.prompts.controls.questionClassData">
               <option value="" disabled selected></option>
               @for (prompt of questionClassDataPrompts(); track prompt._id) {
                 <mat-option [value]="prompt._id">{{prompt.name}}</mat-option>
@@ -183,7 +209,7 @@
 
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>Explanation Translator Instructions Prompt</mat-label>
-            <mat-select [formControl]="form.controls.services.controls.planners">
+            <mat-select [formControl]="form.controls.llmConfig.controls.prompts.controls.explanationTransInstruction">
               <option value="" disabled selected></option>
               @for (prompt of explanationTransInstructionPrompts(); track prompt._id) {
                 <mat-option [value]="prompt._id">{{prompt.name}}</mat-option>
@@ -193,10 +219,41 @@
 
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>Explanation Translator Data Prompt</mat-label>
-            <mat-select [formControl]="form.controls.services.controls.planners">
+            <mat-select [formControl]="form.controls.llmConfig.controls.prompts.controls.explanationTransData">
               <option value="" disabled selected></option>
               @for (prompt of explanationTransDataPrompts(); track prompt._id) {
                 <mat-option [value]="prompt._id">{{prompt.name}}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Goal Translator Output Schema</mat-label>
+            <mat-select [formControl]="form.controls.llmConfig.controls.outputSchemas.controls.goalTrans">
+              <option value="" disabled selected></option>
+              @for (schema of goalTransOutputSchemas(); track schema._id) {
+                <mat-option [value]="schema._id">{{schema.name}}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Question Classifier Output Schema</mat-label>
+            <mat-select [formControl]="form.controls.llmConfig.controls.outputSchemas.controls.questionClass">
+              <option value="" disabled selected></option>
+              @for (schema of questionClassOutputSchemas(); track schema._id) {
+                <mat-option [value]="schema._id">{{schema.name}}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Explanation Translator Output Schema</mat-label>
+            <mat-select [formControl]="form.controls.llmConfig.controls.outputSchemas.controls.explanationTrans">
+              <option value="" disabled selected></option>
+              @for (schema of explanationTransOutputSchemas(); track schema._id) {
+                <mat-option [value]="schema._id">{{schema.name}}</mat-option>
               }
             </mat-select>
           </mat-form-field>
@@ -214,17 +271,17 @@
 
         <mat-card-content class="sub-card-content">
 
-          <mat-slide-toggle [formControl]="form.controls.userStudy.controls.introTask">
+          <mat-checkbox [formControl]="form.controls.userStudy.controls.introTask">
             introduction Task
-          </mat-slide-toggle>
+          </mat-checkbox>
 
-          <mat-slide-toggle [formControl]="form.controls.userStudy.controls.checkMaxUtility">
+          <mat-checkbox [formControl]="form.controls.userStudy.controls.checkMaxUtility">
             Notify user when maximal utility is reached
-          </mat-slide-toggle>
+          </mat-checkbox>
 
-          <mat-slide-toggle [formControl]="form.controls.userStudy.controls.showPaymentInfo">
+          <mat-checkbox [formControl]="form.controls.userStudy.controls.showPaymentInfo">
             Show information about payment
-          </mat-slide-toggle>
+          </mat-checkbox>
 
           @if(form.controls.userStudy.controls.showPaymentInfo.value){
             <mat-form-field class="example-full-width" appearance="outline">
@@ -248,7 +305,8 @@
    
 
     <div class="button-container">
-      <button mat-flat-button [disabled]="!form.valid">Save</button>
+      <!-- <button mat-flat-button [disabled]="!form.valid">Save</button> -->
+      <button mat-flat-button>Save</button>
     </div>
   </form>
 </div>

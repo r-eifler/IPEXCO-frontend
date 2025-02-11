@@ -7,6 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { DomainSpecification } from '../../domain/domain_specification';
 import { DialogModule } from 'src/app/shared/components/dialog/dialog.module';
+import { Encoding } from '../../domain/services';
 
 @Component({
   selector: 'app-domain-spec-creator',
@@ -24,11 +25,18 @@ import { DialogModule } from 'src/app/shared/components/dialog/dialog.module';
 export class DomainSpecCreatorComponent {
 
     dialogRef = inject(MatDialogRef);
+
+    encodings = [
+      Encoding.DOMAIN_DEPENDENT,
+      Encoding.PDDL_CLASSIC,
+      Encoding.PDDL_NUMERIC
+    ]
   
     fb = inject(FormBuilder);
   
     form = this.fb.group({
         name: this.fb.control<string>(null, Validators.required),
+        encoding: this.fb.control<Encoding>(null, Validators.required),
     });
   
     onCancel(){
@@ -38,8 +46,9 @@ export class DomainSpecCreatorComponent {
     onCreate(){
       let spec: DomainSpecification = {
         name: this.form.controls.name.value,
+        encoding: this.form.controls.encoding.value,
         planPropertyTemplates: [],
-        description: 'TODO'
+        description: 'TODO',
       }
       this.dialogRef.close(spec)
     }

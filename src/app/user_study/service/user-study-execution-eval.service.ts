@@ -6,9 +6,7 @@ import { map, Observable} from 'rxjs';
 import {tap} from 'rxjs/operators';
 import {UserStudyExecution} from '../domain/user-study-execution';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class UserStudyExecutionEvalService {
 
   private http = inject(HttpClient)

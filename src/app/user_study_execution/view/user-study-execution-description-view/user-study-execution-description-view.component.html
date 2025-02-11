@@ -2,13 +2,13 @@
 
 <app-page>
   <app-page-title>
-    {{ step.name }}
+    {{ step?.name }}
   </app-page-title>
   <app-page-content>
     <app-page-section-list>
       <app-page-section>
         <app-page-section-content>
-          <div [innerHTML]="step.content| marked" ></div>
+          <div [innerHTML]="step?.content| marked" ></div>
         </app-page-section-content>
       </app-page-section>
     </app-page-section-list>

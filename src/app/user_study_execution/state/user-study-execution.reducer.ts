@@ -19,6 +19,7 @@ import { createIterationStepSuccess } from 'src/app/iterative_planning/state/ite
 import { UserAction } from '../domain/user-action';
 import { Demo } from 'src/app/shared/domain/demo';
 import { PlanProperty } from 'src/app/shared/domain/plan-property/plan-property';
+import { isNil } from 'ramda';
 
 export interface UserStudyExecutionState {
     userStudy: Loadable<UserStudy>;
@@ -31,7 +32,6 @@ export interface UserStudyExecutionState {
     runningDemoPlanProperties: Loadable<PlanProperty[]>;
 }
 
-export const userStudyExecutionFeature = 'user-study-execution';
 
 const initialState: UserStudyExecutionState = {
     userStudy: {state: LoadingState.Initial, data: undefined},
@@ -66,8 +66,12 @@ export const userStudyExecutionReducer = createReducer(
     })),
     on(executionNextUserStudyStep, (state): UserStudyExecutionState => ({
       ...state,
-      stepIndex: state.stepIndex < state.userStudy.data?.steps.length - 1 ? state.stepIndex + 1 : null,
-      finishedAllSteps: state.stepIndex == state.userStudy.data?.steps.length - 1,
+      stepIndex: state.stepIndex !== null && state.stepIndex !== undefined && 
+      state.userStudy.data?.steps !== null  && state.userStudy.data?.steps !== undefined && 
+      state.stepIndex < state.userStudy.data?.steps.length - 1 ? 
+        state.stepIndex + 1 : 
+        null,
+      finishedAllSteps: !!state.userStudy.data?.steps && !!state.stepIndex && (state.stepIndex == state.userStudy.data?.steps.length - 1),
     })),
     on(loadUserStudyDemo, (state): UserStudyExecutionState => ({
       ...state,
@@ -101,7 +105,7 @@ export const userStudyExecutionReducer = createReducer(
     })),
     on(createIterationStepSuccess, (state, {iterationStep}): UserStudyExecutionState =>({
       ... state,
-      pendingIterationSteps: [...state.pendingIterationSteps, iterationStep._id]
+      pendingIterationSteps: [...state.pendingIterationSteps].concat(iterationStep._id ? [iterationStep._id] : [])
     })),
     on(logPlanComputationFinished, (state, {iterationStepId}): UserStudyExecutionState => ({
       ...state,

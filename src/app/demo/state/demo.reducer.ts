@@ -2,25 +2,31 @@ import { createReducer, on } from "@ngrx/store";
 import { Loadable, LoadingState } from "src/app/shared/common/loadable.interface";
 import { Demo } from "src/app/project/domain/demo";
 import { PlanProperty } from "src/app/shared/domain/plan-property/plan-property";
-import { loadDemos, loadDemosSuccess, loadDemoPlanPropertiesSuccess, loadDemo, loadDemoSuccess } from "./demo.actions";
+import { loadDemos, loadDemosSuccess, loadDemoPlanPropertiesSuccess, loadDemo, loadDemoSuccess, loadOutputSchemas, loadOutputSchemasSuccess, loadServices, loadServicesSuccess, loadPrompts, loadPromptsSuccess } from "./demo.actions";
+import { OutputSchema, Prompt } from "src/app/global_specification/domain/prompt";
+import { Service } from "src/app/global_specification/domain/services";
 
 
 export interface DemoState {
     demos: Loadable<Demo[]>;
     demoProperties: Record<string, PlanProperty[]>
     demo: Loadable<Demo>;
+    services: Loadable<Service[]>;
+    prompts: Loadable<Prompt[]>;
+    outputSchemas: Loadable<OutputSchema[]>;
 }
-
-export const demoFeature = 'demo';
 
 const initialState: DemoState = {
     demos: {state: LoadingState.Initial, data: undefined},
     demoProperties: {},
     demo: {state: LoadingState.Initial, data: undefined},
+    services: { state: LoadingState.Initial, data: undefined },
+    prompts: { state: LoadingState.Initial, data: undefined },
+    outputSchemas: { state: LoadingState.Initial, data: undefined },
 }
 
 
-export const DemoReducer = createReducer(
+export const demoReducer = createReducer(
     initialState,
     on(loadDemos, (state): DemoState => ({
         ...state,
@@ -45,4 +51,29 @@ export const DemoReducer = createReducer(
         ...state,
         demo: {state: LoadingState.Done, data: demo},
     })),
+    on(loadServices, (state): DemoState => ({
+        ...state,
+        services: {state: LoadingState.Loading, data: undefined}
+    })),
+    on(loadServicesSuccess, (state, {services}): DemoState => ({
+        ...state,
+        services: {state: LoadingState.Done, data: services}
+    })),
+    on(loadPrompts, (state): DemoState => ({
+        ...state,
+        prompts: {state: LoadingState.Loading, data: undefined}
+    })),
+    on(loadPromptsSuccess, (state, {prompts}): DemoState => ({
+        ...state,
+        prompts: {state: LoadingState.Done, data: prompts}
+    })),
+    on(loadOutputSchemas, (state): DemoState => ({
+        ...state,
+        outputSchemas: {state: LoadingState.Loading, data: undefined}
+    })),
+    on(loadOutputSchemasSuccess, (state, {outputSchemas}): DemoState => ({
+        ...state,
+        outputSchemas: {state: LoadingState.Done, data: outputSchemas}
+    })),
 );
+

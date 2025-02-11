@@ -32,35 +32,14 @@ export class IterativePlanningProjectService{
 
         return this.http.get<IHTTPData<Project>>(this.BASE_URL + id).pipe(
             map(({data}) => data),
-            map(project => ({
-                ...project, 
-                baseTask : {
-                    ...project.baseTask,
-                    model: JSON.parse(project.baseTask.model as unknown as string),
-                },
-            }))
         )
-
-        // return this.http.get<{ data: unknown }>(this.BASE_URL).pipe(
-        //     map(({data}) => array(ProjectSchema).parse(data)),
-        // )
     }
 
     putProject$(project: Project): Observable<Project> {
 
         return this.http.put<IHTTPData<Project>>(this.BASE_URL + project._id, {data: project}).pipe(
             map(({data}) => data),
-            map(project => ({
-                ...project, 
-                baseTask : {
-                    ...project.baseTask,
-                    model: JSON.parse(project.baseTask.model as unknown as string),
-                }
-            }))
         )
 
-        // return this.http.get<{ data: unknown }>(this.BASE_URL).pipe(
-        //     map(({data}) => array(ProjectSchema).parse(data)),
-        // )
     }
 }

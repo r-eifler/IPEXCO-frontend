@@ -5,9 +5,7 @@ import { ProjectDemoService } from './demo.service';
 import { RunStatus } from 'src/app/iterative_planning/domain/run';
 import { DemoRunStatus } from 'src/app/project/domain/demo';
   
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class DemoMonitoringService {
 
 

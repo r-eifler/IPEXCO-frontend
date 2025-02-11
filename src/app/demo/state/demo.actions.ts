@@ -1,4 +1,6 @@
 import { createAction, props } from "@ngrx/store";
+import { Prompt, OutputSchema } from "src/app/global_specification/domain/prompt";
+import { Service } from "src/app/global_specification/domain/services";
 import { Demo } from "src/app/shared/domain/demo";
 import { PlanProperty } from "src/app/shared/domain/plan-property/plan-property";
 
@@ -31,6 +33,24 @@ export const uploadDemo = createAction('[demo] upload demo', props<{demo: Demo, 
 export const uploadDemoSuccess = createAction('[demo] upload demo success');
 export const uploadDemoFailure = createAction('[demo] upload demo failure');
 
-export const updatePlanProperty = createAction('[project] update plan property', props<{planProperty: PlanProperty}>());
-export const updatePlanPropertySuccess = createAction('[project] update plan property success', props<{planProperty: PlanProperty}>());
-export const updatePlanPropertyFailure = createAction('[project] update plan property failure');
+export const updatePlanProperty = createAction('[demo] update plan property', props<{planProperty: PlanProperty}>());
+export const updatePlanPropertySuccess = createAction('[demo] update plan property success', props<{planProperty: PlanProperty}>());
+export const updatePlanPropertyFailure = createAction('[demo] update plan property failure');
+
+
+// services
+export const loadServices = createAction('[demo] load  services');
+export const loadServicesSuccess = createAction('[demo] load  services success', props<{services: Service[]}>());
+export const loadServicesFailure = createAction('[demo] load  services failure');
+
+
+// prompts
+export const loadPrompts = createAction('[demo] load  prompts');
+export const loadPromptsSuccess = createAction('[demo] load  prompts success', props<{prompts: Prompt[]}>());
+export const loadPromptsFailure = createAction('[demo] load  prompts failure');
+
+
+// Output Schema
+export const loadOutputSchemas = createAction('[demo] load  output schemas');
+export const loadOutputSchemasSuccess = createAction('[demo] load  output schemas success', props<{outputSchemas: OutputSchema[]}>());
+export const loadOutputSchemasFailure = createAction('[demo] load  output schemas failure');

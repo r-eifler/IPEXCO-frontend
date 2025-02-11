@@ -1,7 +1,7 @@
 import { createAction, props } from "@ngrx/store";
 import { DomainSpecification } from "src/app/global_specification/domain/domain_specification";
 import { OutputSchema, Prompt } from "src/app/global_specification/domain/prompt";
-import { Explainer, Planner } from "src/app/global_specification/domain/services";
+import { Service } from "src/app/global_specification/domain/services";
 import { Demo } from "src/app/project/domain/demo";
 import { PlanProperty } from "src/app/shared/domain/plan-property/plan-property";
 import { Project } from "src/app/shared/domain/project";
@@ -84,16 +84,10 @@ export const loadProjectDemoSuccess = createAction('[project] load project demo 
 export const loadProjectDemoFailure = createAction('[project] load project demo failure');
 
 
-// planner
-export const loadPlanners = createAction('[project] load  planners');
-export const loadPlannersSuccess = createAction('[project] load  planners success', props<{planners: Planner[]}>());
-export const loadPlannersFailure = createAction('[project] load  planners failure');
-
-
-// explainer
-export const loadExplainers = createAction('[project] load  explainers');
-export const loadExplainersSuccess = createAction('[project] load  explainers success', props<{explainers: Explainer[]}>());
-export const loadExplainersFailure = createAction('[project] load  explainers failure');
+// services
+export const loadServices = createAction('[project] load  services');
+export const loadServicesSuccess = createAction('[project] load  services success', props<{services: Service[]}>());
+export const loadServicesFailure = createAction('[project] load  services failure');
 
 
 // prompts

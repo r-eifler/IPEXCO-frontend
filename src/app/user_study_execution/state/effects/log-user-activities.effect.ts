@@ -105,7 +105,7 @@ export class LogUserActivitiesEffect{
                     type: ActionType.OTHER, 
                     data: {
                         stepIndex: index,
-                        stepName: step.name
+                        stepName: step?.name
                     }
                 }})]
             }
@@ -134,15 +134,15 @@ export class LogUserActivitiesEffect{
             this.store.select(selectIterativePlanningProperties)
         ]),
         switchMap(([{iterationSteps}, pendingStepIdes, planProperties]) => 
-            iterationSteps.filter(step => pendingStepIdes.includes(step._id) && step.status != StepStatus.unknown).
+            iterationSteps.filter(step => step?._id && pendingStepIdes.includes(step._id) && step.status != StepStatus.unknown).
             flatMap(step => [
-                logPlanComputationFinished({iterationStepId: step._id}),
+                logPlanComputationFinished({iterationStepId: step._id ?? 'Missing ID'}),
                 logAction({action: {
                     type: ActionType.PLAN_FOR_ITERATION_STEP, 
                     data: {
                         demoId: step.project,
                         stepId: step._id,
-                        utility: computeUtility(step.plan, planProperties) ?? 0,
+                        utility: step.plan && planProperties ? computeUtility(step?.plan, planProperties) : 0,
                         planStatus: step.plan ? step.plan?.status : PlanRunStatus.pending
                     }
                 }})
@@ -159,7 +159,7 @@ export class LogUserActivitiesEffect{
                 type: ActionType.CANCEL_PLAN_FOR_ITERATION_STEP, 
                 data: {
                     stepId: iterationStepId,
-                    demoId: step.project
+                    demoId: step?.project
                 }
             }})
         ])
@@ -193,7 +193,7 @@ export class LogUserActivitiesEffect{
             logAction({action: {
                 type: ActionType.ASK_QUESTION, 
                 data: {
-                    demoId: project._id,
+                    demoId: project?._id ?? 'Missing ID',
                     stepId: iterationStepId,
                     propertyId: question.propertyId,
                     questionType: question.questionType,
@@ -213,9 +213,9 @@ export class LogUserActivitiesEffect{
             logAction({action: {
                 type: ActionType.EXPLANATION, 
                 data: {
-                    demoId: project._id,
+                    demoId: project?._id ?? 'Missing ID',
                     iterationStepId: answer.iterationStepId,
-                    message: structuredTextToString(answer.message, answer.conflictSets, planProperties),
+                    message: answer.conflictSets && planProperties ? structuredTextToString(answer.message, answer.conflictSets, planProperties) : 'error: no conflicts',
                     propertyId: answer.propertyId,
                     questionType: answer.questionType,
                     subSets: answer.conflictSets
@@ -243,7 +243,7 @@ export class LogUserActivitiesEffect{
             return logAction({action: {
                 type: ActionType.ASK_QUESTION, 
                 data: {
-                    demoId: project._id,
+                    demoId: project?._id ?? 'Missing ID',
                     stepId: iterationStepId,
                     propertyId: question.propertyId ?? null,
                     questionType: question.questionType,
@@ -271,7 +271,7 @@ export class LogUserActivitiesEffect{
             return logAction({action: {
                 type: ActionType.ASK_QUESTION_LLM, 
                 data: {
-                    demoId: project._id,
+                    demoId: project?._id ?? 'Missing ID',
                     stepId: iterationStepId,
                     translatedQuestion: question.questionType + 
                         (question.propertyId && planProperties[question.propertyId]?.name 
@@ -323,7 +323,7 @@ export class LogUserActivitiesEffect{
             logAction({ action: { type: ActionType.DIRECT_RESPONSE_QT, data: { directResponse } } }),
             logAction({ action: { type: ActionType.ASK_QUESTION, 
                 data: {
-                    demoId: project._id,
+                    demoId: project?._id ?? 'Missing ID',
                     stepId: iterationStepId,
                     propertyId: null,
                     questionType: QuestionType.DIRECT_USER,
@@ -340,7 +340,7 @@ export class LogUserActivitiesEffect{
             logAction({ action: { type: ActionType.DIRECT_QUESTION_ET, data: { directResponse, iterationStepId } } }),
             logAction({ action: { type: ActionType.ASK_QUESTION, 
                 data: {
-                    demoId: project._id,
+                    demoId: project?._id ?? 'Missing ID',
                     stepId: iterationStepId,
                     propertyId: null,
                     questionType: QuestionType.DIRECT_ET,
@@ -352,7 +352,7 @@ export class LogUserActivitiesEffect{
     public logLLMContexts$ = createEffect(() => this.actions$.pipe(
         ofType(executionUserStudySubmit),
         concatLatestFrom(() => [this.store.select(selectIterativePlanningProject)]),
-        filter(([_, project]) => project.settings.interfaces.explanationInterfaceType === 'LLM_CHAT'),
+        filter(([_, project]) => project?.settings.interfaces.explanationInterfaceType === 'LLM_CHAT'),
         switchMap(([_, project]) => this.service.logLLMContext$().pipe(
             map(() => logActionSuccess()),
             catchError(() => of(logActionFailure()))

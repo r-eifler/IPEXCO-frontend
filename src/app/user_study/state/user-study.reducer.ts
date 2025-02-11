@@ -29,7 +29,6 @@ export interface UserStudyState {
     participantDistribution: Loadable<ParticipantDistribution>;
 }
 
-export const userStudyFeature = 'user-study';
 
 const initialState: UserStudyState = {
     userStudies: {state: LoadingState.Initial, data: undefined},

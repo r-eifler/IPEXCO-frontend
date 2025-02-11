@@ -1,8 +1,8 @@
 import { map, take } from 'rxjs/operators';
 import { Component, inject, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { selectExplainer, selectOutputSchemas, selectPlanners, selectProject, selectProjectSettings, selectPrompts } from '../../state/project.selector';
-import { loadExplainers, loadOutputSchemas, loadPlanners, loadPrompts, updateProject } from '../../state/project.actions';
+import { selectExplainer, selectOutputSchemas, selectPlanners, selectProject, selectProjectSettings, selectPrompts, selectServices } from '../../state/project.selector';
+import { loadOutputSchemas, loadPrompts, loadServices, updateProject } from '../../state/project.actions';
 import { GeneralSettings } from '../../domain/general-settings';
 import { AsyncPipe } from '@angular/common';
 import { SettingsComponent } from '../../components/settings/settings.component';
@@ -31,7 +31,7 @@ export class ProjectSettingsContainerComponent implements OnInit {
   store = inject(Store);
   settings$ = this.store.select(selectProjectSettings);
   project$ = this.store.select(selectProject);
-  planners$ = this.store.select(selectPlanners);
+  services$ = this.store.select(selectServices);
   explainer$ = this.store.select(selectExplainer);
   prompts$ = this.store.select(selectPrompts);
   outputSchemas$ = this.store.select(selectOutputSchemas);
@@ -41,8 +41,7 @@ export class ProjectSettingsContainerComponent implements OnInit {
   )
 
   constructor(){
-    this.store.dispatch(loadPlanners());
-    this.store.dispatch(loadExplainers());
+    this.store.dispatch(loadServices());
     this.store.dispatch(loadPrompts());
     this.store.dispatch(loadOutputSchemas());
   }

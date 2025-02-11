@@ -1,7 +1,7 @@
 import { createAction, props } from "@ngrx/store";
 import { DomainSpecification } from "../domain/domain_specification";
 import { OutputSchema, Prompt } from "../domain/prompt";
-import { Explainer, Planner } from "../domain/services";
+import { Service } from "../domain/services";
 
 
 
@@ -76,40 +76,21 @@ export const updateOutputSchemaFailure = createAction('[global specification] up
 
 
 
-// planner
+// service
 
-export const loadPlanners = createAction('[global specification] load  planners');
-export const loadPlannersSuccess = createAction('[global specification] load  planners success', props<{planners: Planner[]}>());
-export const loadPlannersFailure = createAction('[global specification] load  planners failure');
+export const loadServices = createAction('[global specification] load  services');
+export const loadServicesSuccess = createAction('[global specification] load  services success', props<{services: Service[]}>());
+export const loadServicesFailure = createAction('[global specification] load  services failure');
 
-export const createPlanner = createAction('[global specification] create  planner', props<{planner: Planner}>());
-export const createPlannerSuccess = createAction('[global specification] create  planner success', props<{planner: Planner}>());
-export const createPlannerFailure = createAction('[global specification] create  planner failure');
+export const createService = createAction('[global specification] create  service', props<{service: Service}>());
+export const createServiceSuccess = createAction('[global specification] create  service success', props<{service: Service}>());
+export const createServiceFailure = createAction('[global specification] create  service failure');
 
-export const deletePlanner = createAction('[global specification] delete  planners', props<{id: string}>());
-export const deletePlannerSuccess = createAction('[global specification] delete  planners success');
-export const deletePlannerFailure = createAction('[global specification] delete  planners failure');
+export const deleteService = createAction('[global specification] delete  services', props<{id: string}>());
+export const deleteServiceSuccess = createAction('[global specification] delete  services success');
+export const deleteServiceFailure = createAction('[global specification] delete  services failure');
 
-export const updatePlanner = createAction('[global specification] update planner', props<{planners: Planner}>());
-export const updatePlannerSuccess = createAction('[global specification] update planner success', props<{planner: Planner}>());
-export const updatePlannerFailure = createAction('[global specification] update planner failure');
+export const updateService = createAction('[global specification] update service', props<{services: Service}>());
+export const updateServiceSuccess = createAction('[global specification] update service success', props<{service: Service}>());
+export const updateServiceFailure = createAction('[global specification] update service failure');
 
-
-
-// explainer
-
-export const loadExplainers = createAction('[global specification] load  explainers');
-export const loadExplainersSuccess = createAction('[global specification] load  explainers success', props<{explainers: Explainer[]}>());
-export const loadExplainersFailure = createAction('[global specification] load  explainers failure');
-
-export const createExplainer = createAction('[global specification] create  explainer', props<{explainer: Explainer}>());
-export const createExplainerSuccess = createAction('[global specification] create  explainer success', props<{explainer: Explainer}>());
-export const createExplainerFailure = createAction('[global specification] create  explainer failure');
-
-export const deleteExplainer = createAction('[global specification] delete  explainers', props<{id: string}>());
-export const deleteExplainerSuccess = createAction('[global specification] delete  explainers success');
-export const deleteExplainerFailure = createAction('[global specification] delete  explainers failure');
-
-export const updateExplainer = createAction('[global specification] update explainer', props<{explainers: Explainer}>());
-export const updateExplainerSuccess = createAction('[global specification] update explainer success', props<{explainer: Explainer}>());
-export const updateExplainerFailure = createAction('[global specification] update explainer failure');

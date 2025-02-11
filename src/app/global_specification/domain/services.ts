@@ -1,3 +1,10 @@
+export enum ServiceType {
+  PLANNER = 'PLANNER',
+  EXPLAINER = 'EXPLAINER',
+  PROPERTY_CHECKER = 'PROPERTY_CHECKER',
+  TESTER = 'TESTER',
+  VERIFIER = 'VERIFIER'
+}
 
 export enum Encoding{
     PDDL_CLASSIC = 'PDDL_CLASSIC',
@@ -9,20 +16,14 @@ export enum Encoding{
 export interface Service{
     _id?: string;
     name: string;
+    type: ServiceType;
     domainId?: string;
     url: string;
+    apiKey: string;
     encoding: Encoding;
 }
 
 
-export interface Planner  extends Service{
-    
-}
-
-
-export interface Explainer  extends Service{
-
-}
 
 
 

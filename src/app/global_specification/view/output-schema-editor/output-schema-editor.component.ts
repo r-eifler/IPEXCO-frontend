@@ -13,7 +13,7 @@ import { combineLatest, filter, map, take } from 'rxjs';
 import { BreadcrumbModule } from 'src/app/shared/components/breadcrumb/breadcrumb.module';
 import { PageModule } from 'src/app/shared/components/page/page.module';
 import { OutputSchema, } from '../../domain/prompt';
-import { loadDomainSpecifications, loadExplainers, updateOutputSchema } from '../../state/globalSpec.actions';
+import { loadDomainSpecifications, loadServices, updateOutputSchema } from '../../state/globalSpec.actions';
 import { selectOutputSchema, selectDomainSpecifications, selectExplainers } from '../../state/globalSpec.selector';
 import { jsonValidator } from 'src/app/validators/json.validator';
 
@@ -70,7 +70,7 @@ export class OutputSchemaEditorComponent {
 
 
     this.store.dispatch(loadDomainSpecifications());
-    this.store.dispatch(loadExplainers());
+    this.store.dispatch(loadServices());
   }
   
   onSave() {

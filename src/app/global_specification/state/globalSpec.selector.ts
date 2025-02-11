@@ -1,20 +1,23 @@
-import { createFeatureSelector, createSelector } from "@ngrx/store";
-import { globalSpecificationFeature, GlobalSpecificationState } from "./globalSpec.reducer";
+import { createSelector } from "@ngrx/store";
+import { globalSpecFeature } from "./globalSpec.feature";
+import { ServiceType } from "../domain/services";
 
 
-const selectSpecFeature = createFeatureSelector<GlobalSpecificationState>(globalSpecificationFeature);
+export const selectDomainSpecifications = createSelector(globalSpecFeature.selectGlobalSpecFeatureState, (state) => state.domainSpecifications?.data)
+export const selectDomainSpecification = createSelector(globalSpecFeature.selectGlobalSpecFeatureState, (state) => state.domainSpecification?.data)
+export const selectPrompts = createSelector(globalSpecFeature.selectGlobalSpecFeatureState, (state) => state.prompts?.data)
+export const selectPrompt = createSelector(globalSpecFeature.selectGlobalSpecFeatureState, (state) => state.prompt?.data)
+export const selectOutputSchemas = createSelector(globalSpecFeature.selectGlobalSpecFeatureState, (state) => state.outputSchemas?.data)
+export const selectOutputSchema = createSelector(globalSpecFeature.selectGlobalSpecFeatureState, (state) => state.outputSchema?.data)
 
-export const selectDomainSpecifications = createSelector(selectSpecFeature, (state) => state.domainSpecifications.data)
-export const selectDomainSpecification = createSelector(selectSpecFeature, (state) => state.domainSpecification.data)
-export const selectPrompts = createSelector(selectSpecFeature, (state) => state.prompts.data)
-export const selectPrompt = createSelector(selectSpecFeature, (state) => state.prompt.data)
-export const selectOutputSchemas = createSelector(selectSpecFeature, (state) => state.outputSchemas.data)
-export const selectOutputSchema = createSelector(selectSpecFeature, (state) => state.outputSchema.data)
-export const selectPlanners= createSelector(selectSpecFeature, (state) => state.planner.data)
-export const selectExplainers= createSelector(selectSpecFeature, (state) => state.explainer.data)
+export const selectServices= createSelector(globalSpecFeature.selectGlobalSpecFeatureState, (state) => state.services?.data)
+export const selectPlanners= createSelector(globalSpecFeature.selectGlobalSpecFeatureState, (state) => state.services?.data?.
+    filter(s => s.type == ServiceType.PLANNER))
+export const selectExplainers= createSelector(globalSpecFeature.selectGlobalSpecFeatureState, (state) => state.services?.data?.
+    filter(s => s.type == ServiceType.PLANNER))
 
 
-export const selectDomainName = (id: string) => createSelector(selectSpecFeature, (state) => 
+export const selectDomainName = (id: string) => createSelector(globalSpecFeature.selectGlobalSpecFeatureState, (state) => 
     state.domainSpecifications.data ? state.domainSpecifications.data.filter(e => e._id == id) : null
 )
 

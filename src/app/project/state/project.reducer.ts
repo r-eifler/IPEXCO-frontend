@@ -1,20 +1,44 @@
 import { createReducer, on } from "@ngrx/store";
 import { Loadable, LoadingState } from "src/app/shared/common/loadable.interface";
-import { demoCreationRunningFailure, demoCreationRunningSuccess, loadDemoPlanPropertiesSuccess, loadPlanProperties, loadPlanPropertiesSuccess, loadProject, loadProjectDemos, loadProjectDemosSuccess, loadProjectSuccess, registerDemoCreation, registerDemoCreationSuccess, loadProjectDemo, updateProject, updateProjectSuccess, loadProjectDemoSuccess, updateDemoSuccess, loadPlanners, loadPlannersSuccess, loadExplainers, loadExplainersSuccess, loadPrompts, loadPromptsSuccess, loadOutputSchemas, loadOutputSchemasSuccess, loadDomainSpecification, loadDomainSpecificationSuccess } from "./project.actions";
+import { 
+    demoCreationRunningFailure, 
+    demoCreationRunningSuccess, 
+    loadDemoPlanPropertiesSuccess, 
+    loadPlanProperties, 
+    loadPlanPropertiesSuccess, 
+    loadProject, 
+    loadProjectDemos, 
+    loadProjectDemosSuccess, 
+    loadProjectSuccess, 
+    registerDemoCreation, 
+    registerDemoCreationSuccess, 
+    loadProjectDemo, 
+    updateProject, 
+    updateProjectSuccess, 
+    loadProjectDemoSuccess, 
+    updateDemoSuccess, 
+    loadPrompts, 
+    loadPromptsSuccess, 
+    loadOutputSchemas, 
+    loadOutputSchemasSuccess, 
+    loadDomainSpecification, 
+    loadDomainSpecificationSuccess, 
+    loadServices,
+    loadServicesSuccess
+} from "./project.actions";
 import { Demo } from "src/app/project/domain/demo";
 import { PlanProperty } from "src/app/shared/domain/plan-property/plan-property";
 import { Creatable, CreationState } from "src/app/shared/common/creatable.interface";
 import { Project } from "src/app/shared/domain/project";
-import { Explainer, Planner } from "src/app/global_specification/domain/services";
 import { OutputSchema, Prompt } from "src/app/global_specification/domain/prompt";
 import { DomainSpecification } from "src/app/global_specification/domain/domain_specification";
+import { Service } from "src/app/global_specification/domain/services";
 
 export interface ProjectState {
     project: Loadable<Project>;
     domainSpecification: Loadable<DomainSpecification>
     planProperties: Loadable<Record<string, PlanProperty>>;
-    planners: Loadable<Planner[]>;
-    explainer: Loadable<Explainer[]>;
+    services: Loadable<Service[]>;
     prompts: Loadable<Prompt[]>;
     outputSchemas: Loadable<OutputSchema[]>;
     demos: Loadable<Demo[]>;
@@ -23,14 +47,12 @@ export interface ProjectState {
     demo: Loadable<Demo>;
 }
 
-export const projectFeature = 'project';
 
 const initialState: ProjectState = {
     project: {state: LoadingState.Initial, data: undefined},
     domainSpecification: {state: LoadingState.Initial, data: undefined},
     planProperties: { state: LoadingState.Initial, data: undefined },
-    planners: { state: LoadingState.Initial, data: undefined },
-    explainer: { state: LoadingState.Initial, data: undefined },
+    services: { state: LoadingState.Initial, data: undefined },
     prompts: { state: LoadingState.Initial, data: undefined },
     outputSchemas: { state: LoadingState.Initial, data: undefined },
     demos: {state: LoadingState.Initial, data: undefined},
@@ -79,21 +101,13 @@ export const projectReducer = createReducer(
             planProperties: { state: LoadingState.Done, data: planProperties },
         })
     ),
-    on(loadPlanners, (state): ProjectState => ({
+    on(loadServices, (state): ProjectState => ({
         ...state,
-        planners: {state: LoadingState.Loading, data: undefined}
+        services: {state: LoadingState.Loading, data: undefined}
     })),
-    on(loadPlannersSuccess, (state, {planners}): ProjectState => ({
+    on(loadServicesSuccess, (state, {services}): ProjectState => ({
         ...state,
-        planners: {state: LoadingState.Done, data: planners}
-    })),
-    on(loadExplainers, (state): ProjectState => ({
-        ...state,
-        explainer: {state: LoadingState.Loading, data: undefined}
-    })),
-    on(loadExplainersSuccess, (state, {explainers}): ProjectState => ({
-        ...state,
-        explainer: {state: LoadingState.Done, data: explainers}
+        services: {state: LoadingState.Done, data: services}
     })),
     on(loadPrompts, (state): ProjectState => ({
         ...state,

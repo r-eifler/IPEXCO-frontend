@@ -1,4 +1,4 @@
-import { AbstractControl, ValidatorFn } from "@angular/forms";
+import { ValidatorFn } from "@angular/forms";
 
 
 export const jsonValidator: ValidatorFn = (control) => {
@@ -7,4 +7,5 @@ export const jsonValidator: ValidatorFn = (control) => {
     } catch(e) {
         return { invalidJson: true };
     }
+    return null;
 };

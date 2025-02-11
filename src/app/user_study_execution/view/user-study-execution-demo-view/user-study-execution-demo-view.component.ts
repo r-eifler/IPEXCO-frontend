@@ -22,8 +22,9 @@ export class UserStudyExecutionDemoViewComponent {
 
   constructor() {
     this.step$.pipe(take(1)).subscribe(step => {
-      console.log("Demo in user Study: go to " + ['iterative-planning', step.content])
-      this.router.navigate(['iterative-planning', step.content], {relativeTo: this.route});
+      console.log("Demo in user Study: go to " + ['iterative-planning', step?.content])
+      if(step?.content)
+        this.router.navigate(['iterative-planning', step.content], {relativeTo: this.route});
     })
   }
 }
