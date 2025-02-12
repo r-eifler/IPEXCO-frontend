@@ -1,3 +1,5 @@
+import { BaseModel } from "./planning-task";
+
 const zip = (a, b) => a.map((k, i) => [k, b[i]]);
 
 export interface PDDLType {
@@ -45,11 +47,8 @@ export interface PDDLPlanningDomain {
     actions: PDDLAction[];
 }
 
-export interface PDDLPlanningProblem {
-    objects: {
-        name: string; 
-        type: string | undefined;
-    }[];
+export interface PDDLPlanningProblem extends BaseModel{
+    objects: PDDLObject[];
     initial: PDDLFact[];
     goal: PDDLFact[];
 }

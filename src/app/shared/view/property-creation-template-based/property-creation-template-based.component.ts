@@ -9,11 +9,11 @@ import { MatInputModule } from '@angular/material/input';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatCardModule } from '@angular/material/card';
 import { PropertyTemplatePartComponent } from '../../../iterative_planning/components/property-template-part/property-template-part.component'
-import { PlanningTask } from '../../domain/planning-task';
+import { PlanningTask, TaskObject } from '../../domain/planning-task';
 import { MatIcon } from '@angular/material/icon';
 import { generatePlanProperty, getPossibleValues, getTemplateParts, PlanPropertyTemplate, TemplatePart } from '../../domain/plan-property/plan-property-template';
 import { equalPlanProperties, PlanProperty } from 'src/app/shared/domain/plan-property/plan-property';
-import { PDDLObject } from '../../domain/PDDL_task';
+import { PropertyTemplateNumericPartComponent } from 'src/app/iterative_planning/components/property-template-numeric-part/property-template-numeric-part.component';
 
 @Component({
     selector: 'app-property-creation-template-based',
@@ -29,6 +29,7 @@ import { PDDLObject } from '../../domain/PDDL_task';
         MatExpansionModule,
         MatCardModule,
         PropertyTemplatePartComponent,
+        PropertyTemplateNumericPartComponent,
         MatIcon,
         ReactiveFormsModule,
         MatInputModule,
@@ -55,8 +56,9 @@ export class PropertyCreationTemplateBasedComponent implements OnInit{
   selectedTemplate: PlanPropertyTemplate;
 
   templateParts: TemplatePart[] = [];
-  selectedVariableValue: Record<string, PDDLObject> = {};
-  possibleVariableValues: Record<string, PDDLObject[]>;
+  selectedVariableValue: Record<string, TaskObject> = {};
+  possibleVariableValues: Record<string, TaskObject[]>;
+  selectedNumericVariableValue: Record<string, number> = {};
 
   allSelected = false;
   propertyAlreadyExists = false;
@@ -71,6 +73,23 @@ export class PropertyCreationTemplateBasedComponent implements OnInit{
     let sorted: Record<string, PlanPropertyTemplate[]> = this.templates()?.reduce((acc, t) => ({...acc,[t.class]: []}), {})
     this.templates().forEach(t => sorted[(t.class)].push(t))
     this.groupedTemplates = sorted;
+  }
+
+  private getDisplayText(part: TemplatePart){
+    if(!part.isVar){
+      return part.text;
+    }
+    if(part.numeric){
+      if(this.selectedNumericVariableValue[part.var]){
+        return this.selectedNumericVariableValue[part.var].toString();
+      }
+      return '0';
+    }
+
+    if (this.selectedVariableValue[part.var]){
+      return this.selectedVariableValue[part.var].name
+    }
+    return part.var;
   }
 
   private updatePossibleVariableValues(){
@@ -89,8 +108,8 @@ export class PropertyCreationTemplateBasedComponent implements OnInit{
     this.templateParts = this.templateParts.map(p => ({
       ...p,
       isSelected: p.isVar ? this.selectedVariableValue[p.var] !== undefined : false,
-      text: (p.isVar && this.selectedVariableValue[p.var]) ? this.selectedVariableValue[p.var].name: p.text,
-      possibleValues: p.isVar ? this.possibleVariableValues[p.var] : []
+      text: this.getDisplayText(p),
+      possibleValues: this.possibleVariableValues[p.var] 
     }))
 
     // console.log(this.templateParts)
@@ -111,19 +130,34 @@ export class PropertyCreationTemplateBasedComponent implements OnInit{
     this.form.controls.naturalLanguageDescription.setValue(template.sentenceTemplate);
   }
 
-  selectVariableValue(variable: string, object: PDDLObject) {
 
+  selectNumericVariableValue(variable: string, value: number) {
+
+    // console.log("select: " + value)
+    this.selectedNumericVariableValue[variable] = value;
+
+    // this.updatePossibleVariableValues();
+    this.checkAllSelected();
+  }
+
+  selectVariableValue(variable: string, object: TaskObject) {
+
+    // console.log("select: " + object.name)
     this.selectedVariableValue[variable] = object;
-    // console.log("Selected Variables: " + this.selectedVariableValue)
 
-    this.updatePossibleVariableValues()
+    this.updatePossibleVariableValues();
+    this.checkAllSelected();
+  }
 
-	  this.allSelected = Object.keys(this.selectedVariableValue).length === Object.keys(this.possibleVariableValues).length
+  checkAllSelected(){
+	  this.allSelected = Object.keys(this.selectedVariableValue).length  + 
+      Object.keys(this.selectedNumericVariableValue).length === Object.keys(this.selectedTemplate.variables).length
 
     if(this.allSelected){
       const dummy: PlanProperty = generatePlanProperty(
         this.selectedTemplate,
-        this.selectedVariableValue
+        this.selectedVariableValue,
+        this.selectedNumericVariableValue
       )
 
       this.form.controls.name.setValue(dummy.name);
@@ -151,6 +185,7 @@ export class PropertyCreationTemplateBasedComponent implements OnInit{
     let newPlanProperty = generatePlanProperty(
       this.selectedTemplate,
       this.selectedVariableValue,
+      this.selectedNumericVariableValue
     )
 
     newPlanProperty.name = this.form.controls.name.value;
