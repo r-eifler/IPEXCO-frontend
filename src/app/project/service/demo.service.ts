@@ -17,18 +17,6 @@ export class ProjectDemoService{
 
       return this.http.get<IHTTPData<Demo>>(this.BASE_URL + id).pipe(
           map(({data}) => data),
-          map(demo => ({
-              ...demo, 
-              baseTask : {
-                ...demo.baseTask,
-                model: JSON.parse(demo.baseTask.model as unknown as string),
-                },
-              globalExplanation : demo.globalExplanation ? {
-                ...demo.globalExplanation,
-                MUGS: demo.globalExplanation.MUGS ? JSON.parse(demo.globalExplanation.MUGS as unknown as string) : undefined,
-                MGCS: demo.globalExplanation.MGCS ? JSON.parse(demo.globalExplanation.MGCS as unknown as string) : undefined,
-              } : undefined
-          }))
       )
     }
 
@@ -39,21 +27,7 @@ export class ProjectDemoService{
 
         return this.http.get<IHTTPData<Demo[]>>(this.BASE_URL, { params: httpParams }).pipe(
             map(({data}) => data),
-            map(demos => (
-              demos.map( demo => ({
-                ...demo, 
-                baseTask : {
-                    ...demo.baseTask,
-                    model: JSON.parse(demo.baseTask.model as unknown as string),
-                },
-                globalExplanation : demo.globalExplanation ? {
-                  ...demo.globalExplanation,
-                  MUGS: demo.globalExplanation.MUGS ? JSON.parse(demo.globalExplanation.MUGS as unknown as string) : undefined,
-                  MGCS: demo.globalExplanation.MGCS ? JSON.parse(demo.globalExplanation.MGCS as unknown as string) : undefined,
-                } : undefined
-              })
-            )),
-        ))
+        )
     }
 
     postDemo$(demo: Demo, properties: PlanProperty[]): Observable<string | null> {

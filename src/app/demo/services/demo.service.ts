@@ -1,11 +1,11 @@
+import { HttpClient } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { HttpClient, HttpParams } from "@angular/common/http";
-import { environment } from "src/environments/environment";
-import { map, tap } from "rxjs/operators";
-import { IHTTPData } from "src/app/shared/domain/http-data.interface";
+import { map } from "rxjs/operators";
 import { Demo } from "src/app/project/domain/demo";
+import { IHTTPData } from "src/app/shared/domain/http-data.interface";
 import { PlanProperty } from "src/app/shared/domain/plan-property/plan-property";
+import { environment } from "src/environments/environment";
 
 @Injectable()
 export class DemoService{
@@ -17,18 +17,6 @@ export class DemoService{
 
       return this.http.get<IHTTPData<Demo>>(this.BASE_URL + id).pipe(
           map(({data}) => data),
-          map(demo => ({
-              ...demo, 
-              baseTask : {
-                ...demo.baseTask,
-                model: JSON.parse(demo.baseTask.model as unknown as string),
-                },
-              globalExplanation : demo.globalExplanation ? {
-                ...demo.globalExplanation,
-                MUGS: demo.globalExplanation.MUGS ? JSON.parse(demo.globalExplanation.MUGS as unknown as string) : undefined,
-                MGCS: demo.globalExplanation.MGCS ? JSON.parse(demo.globalExplanation.MGCS as unknown as string) : undefined,
-              } : undefined
-          }))
       )
     }
 
@@ -36,21 +24,7 @@ export class DemoService{
 
         return this.http.get<IHTTPData<Demo[]>>(this.BASE_URL).pipe(
             map(({data}) => data),
-            map(demos => (
-              demos.map( demo => ({
-                ...demo, 
-                baseTask : {
-                    ...demo.baseTask,
-                    model: JSON.parse(demo.baseTask.model as unknown as string),
-                },
-                globalExplanation : demo.globalExplanation ? {
-                  ...demo.globalExplanation,
-                  MUGS: demo.globalExplanation.MUGS ? JSON.parse(demo.globalExplanation.MUGS as unknown as string) : undefined,
-                  MGCS: demo.globalExplanation.MGCS ? JSON.parse(demo.globalExplanation.MGCS as unknown as string) : undefined,
-                } : undefined
-              })
-            )),
-        ))
+        );
     }
 
     postDemo$(demo: Demo, properties: PlanProperty[]): Observable<string | null> {
