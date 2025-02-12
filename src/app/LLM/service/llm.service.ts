@@ -15,6 +15,7 @@ import { Store } from "@ngrx/store";
 import { LLMContext } from "../domain/context";
 import { PlanProperty } from "src/app/shared/domain/plan-property/plan-property";
 import { Project } from "src/app/shared/domain/project";
+import { PDDLPlanningModel } from "src/app/shared/domain/PDDL_task";
 @Injectable()
 export class LLMService {
 
@@ -84,8 +85,8 @@ export class LLMService {
             MUGS: explanationMUGS.map(e => e.map(pid => properties.find(p => p._id == pid))),
             MGCS: explanationMGCS.map(e => e.map(pid => properties.find(p => p._id == pid))),
             questionArgument: questionArgument,
-            predicates: project.baseTask.model.predicates,
-            objects: project.baseTask.model.objects,
+            predicates: (project.baseTask.model as  PDDLPlanningModel).predicates,
+            objects: (project.baseTask.model as PDDLPlanningModel).objects,
             enforcedGoals: properties.filter(p => iterationStep.hardGoals.includes(p._id)),
             satisfiedGoals: properties.filter(p => 
                 iterationStep.plan.satisfied_properties.includes(p._id) && 
@@ -133,8 +134,8 @@ export class LLMService {
         // Create and stringify Goal Translator request
         const goalTranslationRequest: GoalTranslationRequest = {
             goalDescription: "{goal_description}",
-            predicates: project.baseTask.model.predicates,
-            objects: project.baseTask.model.objects,
+            predicates: (project.baseTask.model as PDDLPlanningModel).predicates,
+            objects: (project.baseTask.model as PDDLPlanningModel).objects ,
             existingPlanProperties: Object.values(properties)
         };
         console.log(goalTranslationRequest);

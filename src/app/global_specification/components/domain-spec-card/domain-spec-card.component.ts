@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, effect, input } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { DomainSpecification } from '../../domain/domain_specification';
 import { SpecCardModule } from 'src/app/shared/components/spec-card/spec-card.module';

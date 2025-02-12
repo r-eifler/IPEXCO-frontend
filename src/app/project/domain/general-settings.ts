@@ -16,7 +16,6 @@ export enum ExplanationInterfaceType {
 }
 
 export interface GeneralSettings {
-  _id: string;
   main: {
       public: boolean;
       maxRuns: number| null;
@@ -47,7 +46,6 @@ export interface GeneralSettings {
 }
 
 export const defaultGeneralSetting: GeneralSettings = {
-  _id: '0',
   main: {
     public: false,
     maxRuns: 100,

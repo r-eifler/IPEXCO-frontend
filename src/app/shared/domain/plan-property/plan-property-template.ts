@@ -1,5 +1,6 @@
-import { PDDLFact, FactToString, PlanningTask, PDDLObject } from "src/app/shared/domain/planning-task";
-import { Action, ActionSet, GoalType, PlanProperty, toAction } from "src/app/shared/domain/plan-property/plan-property";
+import { Action, ActionSet, GoalType, PlanProperty, PlanPropertyDefinition, toAction } from "src/app/shared/domain/plan-property/plan-property";
+import { FactToString, PDDLFact, PDDLPlanningModel } from "../PDDL_task";
+import { PlanningTask } from "../planning-task";
 
 export interface PlanPropertyTemplate {
   class: string;
@@ -8,6 +9,7 @@ export interface PlanPropertyTemplate {
   type: GoalType;
   variables: Record<string,string[]>;
   nameTemplate: string;
+  definitionTemplate: PlanPropertyDefinition;
   formulaTemplate: string;
   actionSetsTemplates: ActionSetsTemplates[];
   sentenceTemplate: string;
@@ -29,12 +31,17 @@ export const defaultPlanPropertyTemplate = {
   goalVariableConstraints:[],
 }
 
+export interface TaskObject {
+  name: string,
+  type: string,
+}
+
 export interface TemplatePart {
 	isVar: boolean,
 	isSelected: boolean,
 	var: string | undefined,
 	text: string, 
-	possibleValues: PDDLObject[]
+	possibleValues: TaskObject[]
 }
 
 export function getTemplateParts(template: PlanPropertyTemplate): TemplatePart[]{
@@ -71,7 +78,7 @@ export function getTemplateParts(template: PlanPropertyTemplate): TemplatePart[]
 
 export function generatePlanProperty(
     template: PlanPropertyTemplate,
-    varObjectMapping: Record<string, PDDLObject>,
+    varObjectMapping: Record<string, TaskObject>,
   ): PlanProperty {
 
     let name = template.nameTemplate;
@@ -87,6 +94,11 @@ export function generatePlanProperty(
         regex,
         object.name
       );
+    }
+
+    let definition = {
+      name: template.definitionTemplate.name,
+      parameters: template.definitionTemplate.parameters.map(p => varObjectMapping[p].name)
     }
 
     const actionSets: ActionSet[] = [];
@@ -105,6 +117,7 @@ export function generatePlanProperty(
     return {
       name,
       type: template.type,
+      definition,
       formula,
       actionSets,
       naturalLanguageDescription,
@@ -119,71 +132,23 @@ export function generatePlanProperty(
   }
 
 
-  export function generateDummyPlanProperty(
-    template: PlanPropertyTemplate,
-    varObjectMapping: Record<string, PDDLObject>
-  ): PlanProperty {
-
-    let name = template.nameTemplate;
-    let formula = template.formulaTemplate;
-    let naturalLanguageDescription = template.sentenceTemplate;
-
-    for (const variable of Object.keys(varObjectMapping)) {
-      const object = varObjectMapping[variable];
-      const regex = new RegExp(variable.replace("$", "\\$"), "g");
-      formula = formula.replace(regex, object.name);
-      name = name.replace(regex, object.name);
-      naturalLanguageDescription = naturalLanguageDescription.replace(
-        regex,
-        object.name
-      );
-    }
-
-    const actionSets: ActionSet[] = [];
-    for (const actionSetT of template.actionSetsTemplates) {
-      const actions: Action[] = [];
-      for (let actionT of actionSetT.actionTemplates) {
-        for (const variable of Object.keys(varObjectMapping)) {
-          const object = varObjectMapping[variable];
-          actionT = actionT.replace(variable, object.name);
-        }
-        actions.push(toAction(actionT));
-      }
-      actionSets.push({ name: actionSetT.name, actions });
-    }
-
-    return {
-      name,
-      type: template.type,
-      formula,
-      actionSets,
-      naturalLanguageDescription,
-      project: null,
-      isUsed: false,
-      globalHardGoal: false,
-      utility: 1,
-      color: template.color,
-      icon: template.icon,
-      class: template.class
-    };
-  }
 
   export function getPossibleObjectsBasedOnType(
     types: string[],
     task: PlanningTask
-  ): PDDLObject[] {
-    return task.model.objects.filter(o => types.includes(o.type))
+  ): TaskObject[] {
+    return (task.model as PDDLPlanningModel).objects.filter(o => types.includes(o.type))
   }
 
   export function getPossibleValues(
     template: PlanPropertyTemplate,
     task: PlanningTask,
-    selectedValues: Record<string, PDDLObject>): Record<string, PDDLObject[]> {
+    selectedValues: Record<string, TaskObject>): Record<string, TaskObject[]> {
 
     const variables = Object.keys(template.variables)
     // console.log(variables)
     // console.log(template.variables[variables[0]])
-    let possibleObjects: Record<string, PDDLObject[]> = {}
+    let possibleObjects: Record<string, TaskObject[]> = {}
     variables.forEach(v => possibleObjects[v] = getPossibleObjectsBasedOnType(template.variables[v], task));
 
     // for already selected variables possible values is []
@@ -197,7 +162,7 @@ export function generatePlanProperty(
     //check assignment based on init and goal constraints
     for(let constraint of template.initVariableConstraints){
         const constraintPossibleValues = 
-          getObjectsSatisfyingConstraint(variables,selectedValues, constraint, task.model.initial);
+          getObjectsSatisfyingConstraint(variables,selectedValues, constraint, (task.model as PDDLPlanningModel).initial);
         
         variables.forEach( v => possibleObjects[v] = possibleObjects[v].filter(
           o => constraintPossibleValues[v].includes(o.name)
@@ -209,7 +174,7 @@ export function generatePlanProperty(
 
 function getObjectsSatisfyingConstraint(
   variables: string[],
-  selectedObjects: Record<string,PDDLObject>,
+  selectedObjects: Record<string,TaskObject>,
   constraint: string,
   knowledgeBase: PDDLFact[]
 ): Record<string,string[]> {

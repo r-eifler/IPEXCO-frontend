@@ -24,17 +24,23 @@ export enum GoalType {
   goalFact = "G",
   LTL = "LTL",
   AS = "AS",
+  DOMAIN_DEPENDENT = "DOMAIN_DEPENDENT",
+}
+
+export interface PlanPropertyDefinition {
+  name: string;
+  parameters: string[]
 }
 
 export interface PlanProperty {
   _id?: string;
-  name: string;
-  type: GoalType;
-  naturalLanguage?: string;
-  formula: string;
-  actionSets?: ActionSet[]; //LtL over actions : unsupported yet for LLM
-  naturalLanguageDescription?: string;
   project: string;
+  name: string;
+  definition: PlanPropertyDefinition | null; 
+  naturalLanguageDescription?: string;
+  type: GoalType;
+  formula: string | null;
+  actionSets?: ActionSet[]; //LtL over actions : unsupported yet for LLM
   isUsed: boolean;
   globalHardGoal: boolean;
   utility: number;

@@ -9,10 +9,11 @@ import { MatInputModule } from '@angular/material/input';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatCardModule } from '@angular/material/card';
 import { PropertyTemplatePartComponent } from '../../../iterative_planning/components/property-template-part/property-template-part.component'
-import { PDDLObject, PlanningTask } from '../../domain/planning-task';
+import { PlanningTask } from '../../domain/planning-task';
 import { MatIcon } from '@angular/material/icon';
-import { generateDummyPlanProperty, generatePlanProperty, getPossibleValues, getTemplateParts, PlanPropertyTemplate, TemplatePart } from '../../domain/plan-property/plan-property-template';
+import { generatePlanProperty, getPossibleValues, getTemplateParts, PlanPropertyTemplate, TemplatePart } from '../../domain/plan-property/plan-property-template';
 import { equalPlanProperties, PlanProperty } from 'src/app/shared/domain/plan-property/plan-property';
+import { PDDLObject } from '../../domain/PDDL_task';
 
 @Component({
     selector: 'app-property-creation-template-based',
@@ -120,7 +121,7 @@ export class PropertyCreationTemplateBasedComponent implements OnInit{
 	  this.allSelected = Object.keys(this.selectedVariableValue).length === Object.keys(this.possibleVariableValues).length
 
     if(this.allSelected){
-      const dummy: PlanProperty = generateDummyPlanProperty(
+      const dummy: PlanProperty = generatePlanProperty(
         this.selectedTemplate,
         this.selectedVariableValue
       )

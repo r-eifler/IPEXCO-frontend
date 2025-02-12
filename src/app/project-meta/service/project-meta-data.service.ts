@@ -32,15 +32,7 @@ export class ProjectMetaDataService{
 
         return this.http.get<IHTTPData<ProjectMetaData[]>>(this.BASE_URL).pipe(
             map(({data}) => data),
-            // map(l => l.map(project => ({
-            //     ...project, 
-            //     baseTask: JSON.parse(project.baseTask as unknown as string)
-            // })))
         )
-
-        // return this.http.get<{ data: unknown }>(this.BASE_URL).pipe(
-        //     map(({data}) => array(ProjectSchema).parse(data)),
-        // )
     }
 
     deleteProject$(id: string): Observable<boolean> {

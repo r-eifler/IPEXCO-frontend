@@ -1,16 +1,8 @@
 import { Routes } from '@angular/router';
-import { UserMainPageComponent } from './user/view/user-main-page/user-main-page.component';
-import { ProjectCollectionComponent } from './project-meta/components/project-collection/project-collection.component';
-import { AuthGuard } from './route-guards/auth-guard.guard';
-import { NavigationComponent} from './base/components/navigation/navigation.component';
-import { MainPageComponent } from './user/view/main-page/main-page.component';
-import { ToHomeGuard } from './route-guards/to-home.guard';
-import { HelpPageComponent } from './base/components/help-page/help-page.component';
-import { provideState } from '@ngrx/store';
-import { userFeature } from './user/state/user.feature';
 import { provideEffects } from '@ngrx/effects';
-import { userFeatureEffects } from './user/state/effects/effects';
-import { AuthenticationService } from './user/services/authentication.service';
+import { provideState } from '@ngrx/store';
+import { HelpPageComponent } from './base/components/help-page/help-page.component';
+import { NavigationComponent } from './base/components/navigation/navigation.component';
 import { IterativePlanningDomainSpecificationService } from './iterative_planning/service/domainSpecification.service';
 import { ExplainerMonitoringService } from './iterative_planning/service/explainer-monitoring.service';
 import { ExplainerService } from './iterative_planning/service/explainer.service';
@@ -22,6 +14,10 @@ import { IterativePlanningProjectService } from './iterative_planning/service/pr
 import { iterativePlanningFeatureEffects } from './iterative_planning/state/effects/effects';
 import { iterativePlanningFeature } from './iterative_planning/state/iterative-planning.feature';
 import { LLMService } from './LLM/service/llm.service';
+import { AuthGuard } from './route-guards/auth-guard.guard';
+import { AuthenticationService } from './user/services/authentication.service';
+import { userFeatureEffects } from './user/state/effects/effects';
+import { userFeature } from './user/state/user.feature';
 
 export const routes: Routes = [
   {

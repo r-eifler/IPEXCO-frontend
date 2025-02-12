@@ -222,7 +222,6 @@ export class SettingsComponent {
     }
 
     let newSettings: GeneralSettings = {
-      _id: undefined,
       main: {
         public: this.form.controls.main.controls.public.value,
         maxRuns: this.form.controls.main.controls.maxRuns.value,

@@ -1,7 +1,7 @@
 
 import { sum } from "ramda";
+import { factEquals, PDDLAction, PDDLFact } from "src/app/shared/domain/PDDL_task";
 import { Action, PlanProperty } from "src/app/shared/domain/plan-property/plan-property";
-import { factEquals, PDDLAction, PDDLFact } from "src/app/shared/domain/planning-task";
 
 
 export enum PlanRunStatus {

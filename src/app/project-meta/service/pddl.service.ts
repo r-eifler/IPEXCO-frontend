@@ -1,53 +1,20 @@
-import { Injectable } from "@angular/core";
-import { HttpClient, HttpParams } from "@angular/common/http";
-import { environment } from "../../../environments/environment";
-import { IHTTPData } from "src/app/shared/domain/http-data.interface";
+import { HttpClient } from "@angular/common/http";
+import { inject, Injectable } from "@angular/core";
 import { BehaviorSubject } from "rxjs";
-import { PlanningDomain, PlanningModel, PlanningProblem } from "src/app/shared/domain/planning-task";
+import { IHTTPData } from "src/app/shared/domain/http-data.interface";
+import { environment } from "../../../environments/environment";
+import { PDDLPlanningModel } from "src/app/shared/domain/PDDL_task";
 
 @Injectable()
 export class PDDLService {
 
-  http: HttpClient;
+  private http = inject(HttpClient)
   BASE_URL  = environment.apiURL + "pddl/";
 
-  private domain$: BehaviorSubject<PlanningDomain>;
-  private problem$: BehaviorSubject<PlanningProblem>;
-  private model$: BehaviorSubject<PlanningModel>;
-
-  constructor(http: HttpClient) {
-    this.http = http;
-    this.domain$ = new BehaviorSubject<PlanningDomain>(null);
-    this.problem$ = new BehaviorSubject<PlanningProblem>(null);
-    this.model$ = new BehaviorSubject<PlanningModel>(null);
-  }
-
-  getDomain(){
-    return this.domain$;
-  }
-
-  getProblem(){
-    return this.problem$;
-  }
+  private model$ = new BehaviorSubject<PDDLPlanningModel>(null);
 
   getModel(){
     return this.model$;
-  }
-
-  translateDomain(domainText: string) {
-
-    return this.http.post<IHTTPData<any>>(this.BASE_URL + "domain", {data: domainText})
-      .subscribe((httpData) => {
-        this.domain$.next(httpData.data)
-      });
-  }
-
-  translateProblem(problemText: string) {
-
-    return this.http.post<IHTTPData<any>>(this.BASE_URL + "problem", {data: problemText})
-      .subscribe((httpData) => {
-        this.problem$.next(httpData.data)
-      });
   }
 
   translateModel(domainText: string, problemText: string) {

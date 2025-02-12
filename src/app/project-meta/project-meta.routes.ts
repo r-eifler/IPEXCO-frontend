@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { ProjectCollectionComponent } from './components/project-collection/project-collection.component';
+import { ProjectCollectionComponent } from './view/project-collection/project-collection.component';
 import { provideState } from '@ngrx/store';
 import { projectMetaFeature } from './state/project-meta.feature';
 import { provideEffects } from '@ngrx/effects';

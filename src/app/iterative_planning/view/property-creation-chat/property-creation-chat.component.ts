@@ -67,7 +67,7 @@ export class PropertyCreationChatComponent {
       const planProperty: PlanProperty = {
         name: shortName, 
         type: GoalType.LTL,
-        naturalLanguage: naturalLanguage,
+        definition: null,
         naturalLanguageDescription: naturalLanguage,
         formula: formula,
         project: project._id, 
