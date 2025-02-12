@@ -13,7 +13,7 @@ export class UploadDemoEffect{
 
     public uploadDemo$ = createEffect(() => this.actions$.pipe(
         ofType(uploadDemo),
-        switchMap(({demo, planProperties}) => this.service.postDemo$(demo, planProperties).pipe(
+        switchMap(({demo, planProperties, domainSpecification}) => this.service.postDemo$(demo, planProperties, domainSpecification).pipe(
             switchMap(() => [uploadDemoSuccess(), loadDemos()]),
             catchError(() => of(uploadDemoFailure()))
         ))

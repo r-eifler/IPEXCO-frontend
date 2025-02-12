@@ -19,19 +19,7 @@ export class IterationStepService{
         httpParams = httpParams.set('projectId', id);
         
         return this.http.get<IHTTPData<IterationStep[]>>(this.BASE_URL,  { params: httpParams }).pipe(
-            map(({data}) => data),
-            map(steps => 
-                steps.map( step => (
-                {
-                    ... step,
-                    globalExplanation : step.globalExplanation ? {
-                        ...step.globalExplanation,
-                        MUGS: step.globalExplanation.MUGS ? JSON.parse(step.globalExplanation.MUGS as unknown as string) : undefined,
-                        MGCS: step.globalExplanation.MGCS ? JSON.parse(step.globalExplanation.MGCS as unknown as string) : undefined,
-                    } : undefined
-                }
-                ))
-            ),
+            map(({data}) => data)
           )
             
     }

@@ -2,6 +2,7 @@ import { HttpClient } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
+import { DomainSpecification } from "src/app/global_specification/domain/domain_specification";
 import { Demo } from "src/app/project/domain/demo";
 import { IHTTPData } from "src/app/shared/domain/http-data.interface";
 import { PlanProperty } from "src/app/shared/domain/plan-property/plan-property";
@@ -27,8 +28,12 @@ export class DemoService{
         );
     }
 
-    postDemo$(demo: Demo, properties: PlanProperty[]): Observable<string | null> {
-        return this.http.post<IHTTPData<string | null>>(this.BASE_URL + 'upload', {demo: demo, planProperties: properties}).pipe(
+    postDemo$(demo: Demo, properties: PlanProperty[], domainSpecification: DomainSpecification): Observable<string | null> {
+        return this.http.post<IHTTPData<string | null>>(this.BASE_URL + 'upload', {
+            demo: demo, 
+            planProperties: properties,
+            domainSpecification
+        }).pipe(
             map(({data}) => data)
         )
     }

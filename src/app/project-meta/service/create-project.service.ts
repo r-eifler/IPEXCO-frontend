@@ -17,14 +17,6 @@ export class CreateProjectService{
 
         return this.http.post<IHTTPData<Project>>(this.BASE_URL, {data: project}).pipe(
             map(({data}) => data),
-            // map(l => l.map(project => ({
-            //     ...project, 
-            //     baseTask: JSON.parse(project.baseTask as unknown as string)
-            // })))
         )
-
-        // return this.http.get<{ data: unknown }>(this.BASE_URL).pipe(
-        //     map(({data}) => array(ProjectSchema).parse(data)),
-        // )
     }
 }

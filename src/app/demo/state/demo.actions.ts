@@ -1,4 +1,5 @@
 import { createAction, props } from "@ngrx/store";
+import { DomainSpecification } from "src/app/global_specification/domain/domain_specification";
 import { Prompt, OutputSchema } from "src/app/global_specification/domain/prompt";
 import { Service } from "src/app/global_specification/domain/services";
 import { Demo } from "src/app/shared/domain/demo";
@@ -29,13 +30,19 @@ export const updateDemo = createAction('[demo] update demo', props<{demo: Demo}>
 export const updateDemoSuccess = createAction('[demo] update demo success', props<{demo: Demo}>());
 export const updateDemoFailure = createAction('[demo] update demo failure');
 
-export const uploadDemo = createAction('[demo] upload demo', props<{demo: Demo, planProperties: PlanProperty[]}>());
+export const uploadDemo = createAction('[demo] upload demo', props<{demo: Demo, planProperties: PlanProperty[], domainSpecification: DomainSpecification}>());
 export const uploadDemoSuccess = createAction('[demo] upload demo success');
 export const uploadDemoFailure = createAction('[demo] upload demo failure');
 
 export const updatePlanProperty = createAction('[demo] update plan property', props<{planProperty: PlanProperty}>());
 export const updatePlanPropertySuccess = createAction('[demo] update plan property success', props<{planProperty: PlanProperty}>());
 export const updatePlanPropertyFailure = createAction('[demo] update plan property failure');
+
+// domain spec
+export const loadDomainSpecification = createAction('[demo] load  domain specification', props<{id: string}>());
+export const loadDomainSpecificationSuccess = createAction('[demo] load  domain specification success', props<{domainSpecification: DomainSpecification}>());
+export const loadDomainSpecificationFailure = createAction('[demo] load  domain specification failure');
+
 
 
 // services

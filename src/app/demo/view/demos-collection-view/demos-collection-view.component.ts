@@ -15,6 +15,7 @@ import { BehaviorSubject } from 'rxjs';
 import { PlanProperty } from 'src/app/shared/domain/plan-property/plan-property';
 import { Demo } from 'src/app/project/domain/demo';
 import { demosFeature } from '../../state/demo.feature';
+import { DomainSpecification } from 'src/app/global_specification/domain/domain_specification';
 
 @Component({
   selector: 'app-demos-collection-view',
@@ -51,10 +52,6 @@ export class DemosCollectionViewComponent {
     this.store.dispatch(loadDemos());
   }
 
-  onUploadDemo(){
-
-  }
-
   onFileChanged(event) {
     let file = event.target.files[0];
     if (typeof FileReader !== "undefined") {
@@ -62,8 +59,12 @@ export class DemosCollectionViewComponent {
 
       reader.onload = (e: any) => {
         let result  = e.target.result;
-        let {demo, planProperties}: {demo: Demo, planProperties: Record<string, PlanProperty>} = JSON.parse(result);
-        this.store.dispatch(uploadDemo({demo, planProperties: Object.values(planProperties)}));
+        let {demo, planProperties, domainSpecification}: {
+          demo: Demo, 
+          planProperties: Record<string, PlanProperty>,
+          domainSpecification: DomainSpecification
+        } = JSON.parse(result);
+        this.store.dispatch(uploadDemo({demo, planProperties: Object.values(planProperties), domainSpecification}));
       };
     
 

@@ -126,6 +126,9 @@ export class SettingsComponent {
   constructor() {
 
     effect(() => {
+    if (this.settings() == null || this.settings() == undefined){
+      return;
+    }
 		try{
 			this.form.controls.main.controls.maxRuns.setValue(this.settings()?.main.maxRuns);
 			this.form.controls.main.controls.public.setValue(this.settings()?.main.public);

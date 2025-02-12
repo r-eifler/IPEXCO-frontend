@@ -15,6 +15,7 @@ export const selectPlanPropertiesListOfDemo = createSelector(demosFeature.select
 export const selectPlanPropertiesOfDemo = createSelector(demosFeature.selectDemosFeatureState, (state) => state.demoProperties[state.demo?.data?._id]?.reduce((acc, cv) => ({...acc,[cv._id]: cv}), {}));
 
 export const selectDemo = createSelector(demosFeature.selectDemo, (demo) => demo.data)
+export const selectDomainSpecification = createSelector(demosFeature.selectDomainSpecification, (spec) => spec.data)
 
 export const selectServices = createSelector(demosFeature.selectDemosFeatureState, (state) => state.services.data);
 export const selectPlanners = createSelector(demosFeature.selectDemosFeatureState, (state) => state.services.data?.
