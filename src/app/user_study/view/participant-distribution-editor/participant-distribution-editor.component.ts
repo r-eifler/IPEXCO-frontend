@@ -19,7 +19,6 @@ import { BreadcrumbModule } from 'src/app/shared/components/breadcrumb/breadcrum
 import { PageModule } from 'src/app/shared/components/page/page.module';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { filter, take } from 'rxjs';
-import { inputIsNotNullOrUndefined } from 'src/app/shared/common/check_null_undefined';
 
 @Component({
     selector: 'app-participant-distribution-editor',

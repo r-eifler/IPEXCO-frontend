@@ -139,7 +139,6 @@ export class OverviewDataComponent {
 
 
   questionTypeData = computed(() => {
-      // TODO ask Merlin
       type questionTypeMap = { [key in QuestionType]?: {name: QuestionType, value: number} };
       let data: questionTypeMap = {};
       Object.values(QuestionType).forEach(k => {data[k] = {name: k, value: 0}});
@@ -149,12 +148,10 @@ export class OverviewDataComponent {
         map(a => a as AskQuestionUserAction).
         filter(a => a.data.demoId == this.demoId()).forEach( a => {
           const key = a.data.questionType;
-          if(data[k] === undefined){
+          if(data[key] === undefined){
             return;
           }
-          // q.data.questionType !== undefined && data[q.data.questionType] !== undefined && data[q.data.questionType]?.value !== undefined ? 
-          // data[q.data.questionType].value += 1 : 
-          // true
+          data[key].value += 1;
         })
       ))
 

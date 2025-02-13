@@ -2,7 +2,6 @@ import { CancelCreateDemoEffect } from "./cancel-create-demo.effect";
 import { CreateDemoEffect } from "./create-demo.effect";
 import { DeleteProjectDemoEffect } from "./delete-demo.effect";
 import { LoadDemoProjectPlanPropertiesEffect } from "./load-demo-plan-properties.effect";
-import { LoadProjectDemoEffect } from "./load-demo.effect";
 import { LoadProjectDemosEffect } from "./load-demos.effect";
 import { ProjectLoadDomainSpecificationEffect } from "./load-domain-spec.effect";
 import { LoadProjectPlanPropertiesEffect } from "./load-plan-properties.effect";
@@ -18,7 +17,6 @@ export const projectFeatureEffects = [
     CreateDemoEffect,
     DeleteProjectDemoEffect,
     LoadDemoProjectPlanPropertiesEffect,
-    LoadProjectDemoEffect,
     LoadProjectDemosEffect,
     ProjectLoadDomainSpecificationEffect,
     LoadProjectPlanPropertiesEffect,

@@ -4,6 +4,7 @@ import { ServiceType } from "src/app/global_specification/domain/services";
 import { CreationState } from "src/app/shared/common/creatable.interface";
 import { projectFeature } from "./project.feature";
 import { Demo, DemoRunStatus } from "src/app/shared/domain/demo";
+import { PlanProperty } from "src/app/shared/domain/plan-property/plan-property";
 
 const selectState = projectFeature.selectProjectFeatureState;
 
@@ -35,8 +36,20 @@ export const selectHasRunningDemoComputations = createSelector(selectProjectRunn
 export const selectProjectDemoProperties = createSelector(selectState, (state) => state.demoProperties)
 export const selectProjectDemoIds = createSelector(selectProjectAllDemos, map(({ _id }) => _id));
 
-export const selectProjectDemo = createSelector(selectState, (state) => state.demo?.data)
-export const selectPlanPropertiesOfDemo = createSelector(selectState, (state) => state.demoProperties[state.demo?.data?._id]?.reduce((acc, cv) => ({...acc,[cv._id]: cv}), {}));
+export const selectSelectedProjectDemo = createSelector(selectState, (state) => 
+    state.demoId !== null ? state.demos?.data?.find(d => d._id == state.demoId) : null)
+export const selectPlanPropertiesOfDemo = createSelector(selectState, 
+    (state) => {
+        if(state.demoId == null){
+            return undefined
+        }
+        const properties = state.demoProperties[state.demoId];
+        if(properties === null || properties === undefined){
+            return undefined;
+        }
+        return properties.reduce((acc, cv) => ({...acc,[cv._id]: cv}), {}) as Record<string, PlanProperty>;
+    });
+    
 export const selectPlanPropertiesOfDemoById = memoizeWith(
     (demoId: string) => demoId,
     (demoId: string) => createSelector(selectProjectDemoProperties, (planProperties) => planProperties[demoId]?.reduce((acc, cv) => ({...acc,[cv._id]: cv}), {}), 

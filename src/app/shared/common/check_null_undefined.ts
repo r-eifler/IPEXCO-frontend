@@ -1,20 +1,29 @@
-import { filter, Observable } from "rxjs";
+import { filter, map, Observable, pipe, UnaryFunction } from "rxjs";
 
-export function inputIsNotNullOrUndefined<T>(input: null | undefined | T): input is T {
-    return input !== null && input !== undefined;
-  }
   
-export function isNotNullOrUndefined<T>() {
-  return (source$: Observable<null | undefined | T>) =>
-    source$.pipe(
-      filter(inputIsNotNullOrUndefined)
-    );
+export function filterNotNullOrUndefined<T>() {
+  return pipe(
+    filter((v: null | undefined | T) => v !== null && v != undefined),
+    map(v => v as T),
+  );
 }
 
 
-export function allNotNullOrUndefined<T>() {
-  return (source$: Observable<(null | undefined | T)[]>) =>
-    source$.pipe(
-      filter((list) => list.every(inputIsNotNullOrUndefined))
-    );
+export function filterListNotNullOrUndefined<A,B>() : 
+  UnaryFunction<Observable<[null | undefined |A, null | undefined |B]>,
+  Observable<[A,B]>>;
+export function filterListNotNullOrUndefined<A,B,C>() : 
+  UnaryFunction<Observable<[null | undefined |A, null | undefined |B,null | undefined |C]>,
+  Observable<[A,B,C]>>;
+
+export function filterListNotNullOrUndefined() {
+  return pipe(
+    filter((list: (null | undefined | any)[]) => 
+      list !== null && list != undefined &&
+       list.every(e =>  e !== null && e != undefined)
+    ),
+    map(v => v as any),
+  );
 }
+
+

@@ -4,7 +4,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { Store } from '@ngrx/store';
 import { combineLatest, filter, map, Observable } from 'rxjs';
 import { selectExecutionUserStudy, selectExecutionUserStudyStepIndex } from '../../state/user-study-execution.selector';
-import { inputIsNotNullOrUndefined } from 'src/app/shared/common/check_null_undefined';
+import { filterListNotNullOrUndefined } from 'src/app/shared/common/check_null_undefined';
 
 @Component({
     selector: 'app-user-study-execution-progress',
@@ -26,11 +26,8 @@ export class UserStudyExecutionProgressComponent {
   currentStepIndex$ = this.store.select(selectExecutionUserStudyStepIndex);
 
   progress$ = combineLatest([this.steps$, this.currentStepIndex$]).pipe(
-    filter((list) => list.every(inputIsNotNullOrUndefined)),
-    map(([steps, stepIndex]) =>  steps !== undefined && stepIndex !== null && steps?.length > 0 ? 
-      (stepIndex / (steps?.length - 1)) * 100 : 
-      0
-    )
+    filterListNotNullOrUndefined(),
+    map(([steps, stepIndex]) => steps?.length > 0 ? (stepIndex / (steps?.length - 1)) * 100 : 0)
   );
 
 

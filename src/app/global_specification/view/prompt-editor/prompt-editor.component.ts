@@ -14,6 +14,7 @@ import { PageModule } from 'src/app/shared/components/page/page.module';
 import { Prompt } from '../../domain/prompt';
 import { loadDomainSpecifications, loadServices, updatePrompt } from '../../state/globalSpec.actions';
 import { selectDomainSpecifications, selectExplainers, selectPrompt } from '../../state/globalSpec.selector';
+import { allNotNullOrUndefined } from 'src/app/shared/common/check_null_undefined';
 
 @Component({
   selector: 'app-prompt-editor',

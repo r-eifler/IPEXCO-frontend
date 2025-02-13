@@ -1,17 +1,23 @@
 import { inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { catchError, map, mergeMap } from 'rxjs/operators';
+import { concatLatestFrom } from '@ngrx/operators';
+import { Store } from '@ngrx/store';
 import { of } from 'rxjs';
+import { catchError, map, mergeMap, switchMap } from 'rxjs/operators';
+import { filterListNotNullOrUndefined } from 'src/app/shared/common/check_null_undefined';
+import { UserStudyExecutionEvalService } from '../../service/user-study-execution-eval.service';
 import {
-  loadUserStudyParticipants, loadUserStudyParticipantsFailure,
-  loadUserStudyParticipantsSuccess,
+    acceptUserStudyParticipantSuccess,
+    loadUserStudyParticipants, loadUserStudyParticipantsFailure,
+    loadUserStudyParticipantsSuccess,
 } from '../user-study.actions';
-import {UserStudyExecutionEvalService} from '../../service/user-study-execution-eval.service';
+import { selectUserStudy } from '../user-study.selector';
 
 
 @Injectable()
 export class LoadUserStudyParticipantsEffect{
 
+    private store = inject(Store);
     private actions$ = inject(Actions)
     private service = inject(UserStudyExecutionEvalService)
 
@@ -21,5 +27,12 @@ export class LoadUserStudyParticipantsEffect{
             map(participants => loadUserStudyParticipantsSuccess({userStudyId: id, participants})),
             catchError(() => of(loadUserStudyParticipantsFailure()))
         ))
-    ))
+    ));
+
+    public reloadUserStudy$ = createEffect(() => this.actions$.pipe(
+        ofType(acceptUserStudyParticipantSuccess),
+        concatLatestFrom(() => this.store.select(selectUserStudy)),
+        filterListNotNullOrUndefined(),
+        switchMap((userStudy) => [loadUserStudyParticipants({id: userStudy._id})])
+    ));
 }

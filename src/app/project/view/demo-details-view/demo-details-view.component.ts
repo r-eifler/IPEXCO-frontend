@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { PageModule } from 'src/app/shared/components/page/page.module';
-import { selectPlanPropertiesOfDemo, selectProjectDemo } from '../../state/project.selector';
+import { selectPlanPropertiesOfDemo, selectSelectedProjectDemo } from '../../state/project.selector';
 import { combineLatest, filter, map, Observable, take } from 'rxjs';
 import { BreadcrumbModule } from 'src/app/shared/components/breadcrumb/breadcrumb.module';
 import { MatIconModule } from '@angular/material/icon';
@@ -17,7 +17,7 @@ import { deleteProjectDemo, updateDemo, updatePlanProperty } from '../../state/p
 import { AskDeleteComponent } from 'src/app/shared/components/ask-delete/ask-delete.component';
 import { MatDialog } from '@angular/material/dialog';
 import { PlanPropertyUpdatePanelComponent } from 'src/app/shared/components/plan-property-update-panel/plan-property-update-panel.component';
-import { isNotNullOrUndefined } from 'src/app/shared/common/check_null_undefined';
+import { filterNotNullOrUndefined } from 'src/app/shared/common/check_null_undefined';
 
 @Component({
     selector: 'app-demo-details-view',
@@ -43,14 +43,20 @@ export class DemoDetailsViewComponent {
   route = inject(ActivatedRoute);
   dialog = inject(MatDialog);
 
-  demo$ = this.store.select(selectProjectDemo)
-  planProperties$: Observable<Record<string, PlanProperty>> = this.store.select(selectPlanPropertiesOfDemo)
-  planPropertiesList$: Observable<PlanProperty[]> = this.store.select(selectPlanPropertiesOfDemo).pipe(
+  demo$ = this.store.select(selectSelectedProjectDemo)
+  planProperties$ = this.store.select(selectPlanPropertiesOfDemo)
+  planPropertiesList$ = this.store.select(selectPlanPropertiesOfDemo).pipe(
     map((planProperties) => Object.values(planProperties ?? {}))
   );
 
-  MUGS$: Observable<string[][]> = this.demo$.pipe(map((demo) => demo?.globalExplanation?.MUGS));
-  MGCS$: Observable<string[][]> = this.demo$.pipe(map((demo) => demo?.globalExplanation?.MGCS));
+  MUGS$ = this.demo$.pipe(
+    filter(demo => !!demo),
+    map(demo => demo.globalExplanation?.MUGS ?? null)
+  );
+  MGCS$ = this.demo$.pipe(
+    filter(demo => !!demo),
+    map((demo) => demo?.globalExplanation?.MGCS ?? null)
+  );
 
   downloadData$ = combineLatest([this.demo$,this.planProperties$]).pipe(
     filter(([d,pp]) => !!d && !!pp),
@@ -79,7 +85,7 @@ export class DemoDetailsViewComponent {
   onRunIterPlanning(){
     this.demo$.pipe(
       take(1),
-      isNotNullOrUndefined(),
+      filterNotNullOrUndefined()
     ).subscribe(demo => {
       this.router.navigate(['/iterative-planning', demo._id]);
     })
@@ -87,6 +93,9 @@ export class DemoDetailsViewComponent {
 
   updateSettings(settings: GeneralSettings){
     this.demo$.pipe(take(1)).subscribe(demo => {
+      if(demo == null || demo == undefined){
+        return;
+      }
       let newDemo = {...demo};
       newDemo.settings = settings;
       this.store.dispatch(updateDemo({demo: newDemo}))

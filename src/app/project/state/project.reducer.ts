@@ -1,38 +1,35 @@
 import { createReducer, on } from "@ngrx/store";
-import { Loadable, LoadingState } from "src/app/shared/common/loadable.interface";
-import { 
-    demoCreationRunningFailure, 
-    demoCreationRunningSuccess, 
-    loadDemoPlanPropertiesSuccess, 
-    loadPlanProperties, 
-    loadPlanPropertiesSuccess, 
-    loadProject, 
-    loadProjectDemos, 
-    loadProjectDemosSuccess, 
-    loadProjectSuccess, 
-    registerDemoCreation, 
-    registerDemoCreationSuccess, 
-    loadProjectDemo, 
-    updateProject, 
-    updateProjectSuccess, 
-    loadProjectDemoSuccess, 
-    updateDemoSuccess, 
-    loadPrompts, 
-    loadPromptsSuccess, 
-    loadOutputSchemas, 
-    loadOutputSchemasSuccess, 
-    loadDomainSpecification, 
-    loadDomainSpecificationSuccess, 
-    loadServices,
-    loadServicesSuccess
-} from "./project.actions";
-import { PlanProperty } from "src/app/shared/domain/plan-property/plan-property";
-import { Creatable, CreationState } from "src/app/shared/common/creatable.interface";
-import { Project } from "src/app/shared/domain/project";
-import { OutputSchema, Prompt } from "src/app/global_specification/domain/prompt";
 import { DomainSpecification } from "src/app/global_specification/domain/domain_specification";
+import { OutputSchema, Prompt } from "src/app/global_specification/domain/prompt";
 import { Service } from "src/app/global_specification/domain/services";
+import { Creatable, CreationState } from "src/app/shared/common/creatable.interface";
+import { Loadable, LoadingState } from "src/app/shared/common/loadable.interface";
 import { Demo } from "src/app/shared/domain/demo";
+import { PlanProperty } from "src/app/shared/domain/plan-property/plan-property";
+import { Project } from "src/app/shared/domain/project";
+import {
+    demoCreationRunningFailure,
+    demoCreationRunningSuccess,
+    loadDemoPlanPropertiesSuccess,
+    loadDomainSpecification,
+    loadDomainSpecificationSuccess,
+    loadOutputSchemas,
+    loadOutputSchemasSuccess,
+    loadPlanProperties,
+    loadPlanPropertiesSuccess,
+    loadProject,
+    loadProjectDemos,
+    loadProjectDemosSuccess,
+    loadProjectSuccess,
+    loadPrompts,
+    loadPromptsSuccess,
+    loadServices,
+    loadServicesSuccess,
+    registerDemoCreation,
+    registerDemoCreationSuccess,
+    updateProject,
+    updateProjectSuccess
+} from "./project.actions";
 
 export interface ProjectState {
     project: Loadable<Project>;
@@ -44,7 +41,7 @@ export interface ProjectState {
     demos: Loadable<Demo[]>;
     demoProperties: Record<string, PlanProperty[]>
     demoCreation: Creatable<String>;
-    demo: Loadable<Demo>;
+    demoId: string | null;
 }
 
 
@@ -58,7 +55,7 @@ const initialState: ProjectState = {
     demos: {state: LoadingState.Initial, data: undefined},
     demoCreation: {state: CreationState.Default, data: undefined},
     demoProperties: {},
-    demo: {state: LoadingState.Initial, data: undefined},
+    demoId: null,
 }
 
 
@@ -67,7 +64,7 @@ export const projectReducer = createReducer(
     on(loadProject, (state): ProjectState => ({
         ...state,
         project: {state: LoadingState.Loading, data: undefined},
-        demo: {state: LoadingState.Initial, data: undefined},
+        demoId: null,
     })),
     on(loadProjectSuccess, (state, {project}): ProjectState => ({
         ...state,
@@ -132,9 +129,6 @@ export const projectReducer = createReducer(
     on(loadProjectDemosSuccess, (state, {demos}): ProjectState => ({
         ...state,
         demos: {state: LoadingState.Done, data: demos},
-        demo: state?.demo.state == LoadingState.Done ?
-            {state: LoadingState.Done, data: demos.find(demo => demo._id == state.demo.data._id)} :
-            {state: LoadingState.Initial, data: undefined}
     })),
     on(registerDemoCreation, (state, {demo}): ProjectState => ({
         ...state,
@@ -155,17 +149,5 @@ export const projectReducer = createReducer(
     on(loadDemoPlanPropertiesSuccess, (state,{demoId, planProperties}): ProjectState => ({
         ...state,
         demoProperties: {...state.demoProperties, [demoId]: planProperties}
-    })),
-    on(loadProjectDemo, (state): ProjectState => ({
-        ...state,
-        demo: {state: LoadingState.Loading, data: undefined},
-    })),
-    on(loadProjectDemoSuccess, (state, {demo}): ProjectState => ({
-        ...state,
-        demo: {state: LoadingState.Done, data: demo},
-    })),
-    on(updateDemoSuccess, (state, {demo}): ProjectState => ({
-        ...state,
-        demo: {state: LoadingState.Done, data: demo},
-    })),
+    }))
 );

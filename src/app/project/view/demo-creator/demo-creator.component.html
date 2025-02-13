@@ -102,6 +102,6 @@
   <app-demo-select-property
     [properties]="availableProperties$ | async"
     (cancel)="onCancelPropertySelection()"
-    (select)="handlePropertySelection ? handlePropertySelection($event) : true" 
+    (select)="handlePropertySelection?.($event)" 
   ></app-demo-select-property>
 </ng-template>

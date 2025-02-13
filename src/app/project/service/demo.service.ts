@@ -5,7 +5,7 @@ import { environment } from "src/environments/environment";
 import { map, tap } from "rxjs/operators";
 import { IHTTPData } from "src/app/shared/domain/http-data.interface";
 import { Demo } from "src/app/project/domain/demo";
-import { PlanProperty } from "src/app/shared/domain/plan-property/plan-property";
+import { PlanProperty, PlanPropertyBase } from "src/app/shared/domain/plan-property/plan-property";
 
 @Injectable()
 export class ProjectDemoService{
@@ -30,7 +30,7 @@ export class ProjectDemoService{
         )
     }
 
-    postDemo$(demo: Demo, properties: PlanProperty[]): Observable<string | null> {
+    postDemo$(demo: Demo, properties: PlanPropertyBase[]): Observable<string | null> {
         return this.http.post<IHTTPData<string | null>>(this.BASE_URL, {demo: demo, planProperties: properties}).pipe(
             map(({data}) => data)
         )
