@@ -3,7 +3,7 @@ import { DomainSpecification } from "src/app/global_specification/domain/domain_
 import { OutputSchema, Prompt } from "src/app/global_specification/domain/prompt";
 import { Service } from "src/app/global_specification/domain/services";
 import { Demo } from "src/app/project/domain/demo";
-import { PlanProperty } from "src/app/shared/domain/plan-property/plan-property";
+import { PlanProperty, PlanPropertyBase } from "src/app/shared/domain/plan-property/plan-property";
 import { Project } from "src/app/shared/domain/project";
 
 // project
@@ -58,7 +58,7 @@ export const uploadProjectDemoImage = createAction('[project] upload project dem
 export const uploadProjectDemoImageSuccess = createAction('[project] upload project demo image success', props<{imagePath: string}>());
 export const uploadProjectDemoImageFailure = createAction('[project] upload project demo image failure');
 
-export const registerDemoCreation = createAction('[project] register demo creation', props<{demo: Demo, properties: PlanProperty[]}>());
+export const registerDemoCreation = createAction('[project] register demo creation', props<{demo: Demo, properties: PlanPropertyBase[]}>());
 export const registerDemoCreationSuccess = createAction('[project] register demo creation success', props<{id: string}>());
 export const registerDemoCreationFailure = createAction('[project] register demo creation failure');
 

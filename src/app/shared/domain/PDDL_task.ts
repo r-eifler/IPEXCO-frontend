@@ -1,6 +1,7 @@
+import { unfold } from "ramda";
 import { BaseModel } from "./planning-task";
 
-const zip = (a, b) => a.map((k, i) => [k, b[i]]);
+const zip = (a : PDDLObject[], b : string) => a.map((k, i) => [k, b[i]]);
 
 export interface PDDLType {
     name: string;
@@ -63,16 +64,16 @@ export function predicateToFact(pred: PDDLPredicate): PDDLFact {
     };
   }
   
-  export function instantiatePredicateFromArgs(
-    pred: PDDLPredicate,
-    args: string
-  ): PDDLPredicate {
-    let init_params = [];
-    for (const arg of zip(pred.parameters, args)) {
-      init_params.push({ name: arg[2], type: arg[1].type });
-    }
-    return { name: pred.name, parameters: init_params, negated: pred.negated };
-  }
+  // export function instantiatePredicateFromArgs(
+  //   pred: PDDLPredicate,
+  //   args: string
+  // ): PDDLPredicate {
+  //   let init_params = [];
+  //   for (const arg of zip(pred.parameters, args)) {
+  //     init_params.push({ name: arg[2], type: arg[1].type });
+  //   }
+  //   return { name: pred.name, parameters: init_params, negated: pred.negated };
+  // }
   
   export function instantiatePredicateFromArgsMap(
     pred: PDDLPredicate,
@@ -81,7 +82,11 @@ export function predicateToFact(pred: PDDLPredicate): PDDLFact {
     return {
       name: pred.name,
       parameters: pred.parameters.map((p) => {
-        return { name: args.get(p.name), type: p.type };
+        const value = args.get(p.name);
+        if(value === undefined){
+          throw Error('[Instantiate PDDL Predicate] Parameter not in arguments!')
+        }
+        return { name: value, type: p.type };
       }),
       negated: pred.negated,
     };
@@ -95,7 +100,11 @@ export function predicateToFact(pred: PDDLPredicate): PDDLFact {
     for (const param of pred.parameters) {
       let partial_args_list: string[][] = [...init_params];
       init_params = [];
-      for (const object of typeObjectMap.get(param.type))
+      const objects = typeObjectMap.get(param.type);
+      if(objects === undefined){
+        throw Error('[Instantiate PDDL Predicate] No objects with given type!')
+      }
+      for (const object of objects)
         for (const partial_args of partial_args_list) {
           let copy = [...partial_args];
           copy.push(object);
@@ -153,7 +162,11 @@ export function predicateToFact(pred: PDDLPredicate): PDDLFact {
   ): PDDLFact {
     let init_args = [];
     for (const arg of fact.arguments) {
-      init_args.push(args.get(arg));
+      const value = args.get(arg);
+      if(value === undefined){
+        throw Error('[Instantiate PDDL Action] Parameter not in arguments!')
+      }
+      init_args.push(value);
     }
     return { name: fact.name, arguments: init_args, negated: fact.negated };
   }
@@ -184,9 +197,14 @@ export function predicateToFact(pred: PDDLPredicate): PDDLFact {
       args_map.set(action.parameters[i].name, args[i]);
     }
   
-    let i_params: PDDLObject[] = action.parameters.map((o) => {
-      return { name: args_map.get(o.name), type: o.type };
-    });
+    let i_params: PDDLObject[] = action.parameters.
+    map((o) => {
+      if(args_map.get(o.name) === undefined){
+        throw Error('[Instantiate PDDL Action] Parameter not in arguments!')
+      }
+      return { name: args_map.get(o.name) as string, type: o.type };
+    }
+    );
   
     let i_precon = [];
     for (const pre of action.precondition) {
@@ -234,7 +252,7 @@ export function predicateToFact(pred: PDDLPredicate): PDDLFact {
       if (!otmap.has(o.type)) {
         otmap.set(o.type, []);
       }
-      otmap.get(o.type).push(o.name);
+      otmap.get(o.type)?.push(o.name);
     }
     return otmap;
   }

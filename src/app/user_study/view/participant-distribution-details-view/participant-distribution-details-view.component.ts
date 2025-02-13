@@ -1,27 +1,25 @@
 import { AsyncPipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { MatIconButton, MatButtonModule } from '@angular/material/button';
+import { MatButtonModule, MatIconButton } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDialog } from '@angular/material/dialog';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIcon } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltip } from '@angular/material/tooltip';
 import { Router, RouterLink } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { combineLatest, filter, map, Observable, take } from 'rxjs';
+import { AskDeleteComponent } from 'src/app/shared/components/ask-delete/ask-delete.component';
 import { BreadcrumbItemComponent } from 'src/app/shared/components/breadcrumb/breadcrumb-item/breadcrumb-item.component';
 import { BreadcrumbComponent } from 'src/app/shared/components/breadcrumb/breadcrumb/breadcrumb.component';
 import { PageModule } from 'src/app/shared/components/page/page.module';
-import { UserStudyHeroComponent } from '../../components/user-study-hero/user-study-hero.component';
-import { AcceptedTestPersonsComponent } from '../../components/accepted-test-persons/accepted-test-persons.component';
-import { Store } from '@ngrx/store';
-import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { selectUserStudies, selectUserStudy, selectUserStudyParticipantDistribution, selectUserStudyParticipants, selectUserStudyParticipantsOfStudy } from '../../state/user-study.selector';
-import { combineLatest, filter, map, Observable, take } from 'rxjs';
-import { AskDeleteComponent } from 'src/app/shared/components/ask-delete/ask-delete.component';
 import { deleteParticipantDistribution, loadUserStudies } from '../../state/user-study.actions';
-import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { selectUserStudies, selectUserStudyParticipantDistribution, selectUserStudyParticipants } from '../../state/user-study.selector';
 
 @Component({
     selector: 'app-participant-distribution-details-view',
@@ -63,22 +61,33 @@ export class ParticipantDistributionDetailsViewComponent {
   );
   userStudies$ = this.store.select(selectUserStudies);
   selectedUserStudies$ = combineLatest([this.usedStudyIds$, this.userStudies$]).pipe(
-    filter(([ids, studies]) => !!ids && !!studies),
-    map(([ids, studies]) => studies.filter(s => ids.includes(s._id)))
+    filter(([ids, studies]) => 
+      !!ids && 
+      !!studies &&
+      studies.every(s => s._id !== undefined)
+    ),
+    map(([ids, studies]) => studies !== undefined ? studies.filter(s => ids.includes(s._id as string)) : [])
   );
 
   participants$ = this.store.select(selectUserStudyParticipants);
 
   participantsPerStudy$: Observable<Record<string, number>> = 
   combineLatest([this.selectedUserStudies$, this.participants$]).pipe(
-    filter(([selectedUserStudies, participants]) => !!selectedUserStudies && !! participants),
+    filter(([selectedUserStudies, participants]) => 
+      !!selectedUserStudies && 
+      !!participants &&
+      !!selectedUserStudies.every(s => s._id !== undefined) 
+  ),
     map(([selectedUserStudies, participants]) => 
-      selectedUserStudies.reduce((p,c) => ({...p, [c._id]: participants[c._id]?.length}), {}))
+      selectedUserStudies.reduce((p,c) => ({...p, [(c._id as string)]: participants[c._id as string]?.length}), {}))
   );
 
   neededParticipantsPerStudy$ : Observable<Record<string, number>> = this.distribution$.pipe(
     filter(d => !!d), 
-    map(d => d.userStudies.reduce((p: Record<string, number>,c) => ({...p, [c.userStudy]: c.numberParticipants}), {}))
+    map(d => d ? d.userStudies.reduce((p: Record<string, number>,c) => 
+      ({...p, [c.userStudy]: c.numberParticipants}), 
+      {}
+    ) : {})
   );
 
   chartsValues$ = combineLatest([this.selectedUserStudies$, this.participantsPerStudy$, this.neededParticipantsPerStudy$]).pipe(
@@ -89,11 +98,11 @@ export class ParticipantDistributionDetailsViewComponent {
         series: [
           {
             name: "finished",
-            value: participants[us._id] ?? 0
+            value: us._id ? participants[us._id] ?? 0 : 0
           },
           {
             name: "pending",
-            value: needed[us._id] - participants[us._id]
+            value: us._id ?  needed[us._id] - participants[us._id] : 0
           },
         ]
       }) 
@@ -107,8 +116,15 @@ export class ParticipantDistributionDetailsViewComponent {
 
   onCopyLink(){
     const host = window.location.protocol + "//" + window.location.host;
-    this.distribution$.pipe(take(1)).subscribe(dis => navigator.clipboard.writeText(host + '/user-study-execution/distribution/' + dis._id));
-    let snackBarRef = this.snackbar.open('User study distribution link copied to clipboard.', 'close');
+    this.distribution$.pipe(take(1)).subscribe(dis => {
+      if(dis?._id !== undefined){
+        navigator.clipboard.writeText(host + '/user-study-execution/distribution/' + dis._id)
+        this.snackbar.open('User study distribution link copied to clipboard.', 'close');
+      }
+      else {
+        this.snackbar.open('User study distribution link not available.', 'close');
+      }
+    });
   }
 
   onDelete(id: string) {

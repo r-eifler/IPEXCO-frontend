@@ -2,9 +2,8 @@ import { createAction, props } from '@ngrx/store';
 import {UserStudy} from '../../user_study/domain/user-study';
 import {User} from '../../user/domain/user';
 import { UserAction } from '../domain/user-action';
-import { IterationStep } from 'src/app/iterative_planning/domain/iteration_step';
-import { Demo } from 'src/app/project/domain/demo';
 import { PlanProperty } from 'src/app/shared/domain/plan-property/plan-property';
+import { Demo } from 'src/app/shared/domain/demo';
 
 // User Studies
 export const executionLoadUserStudy = createAction('[UserStudyExecution] load user study', props<{id: string}>());

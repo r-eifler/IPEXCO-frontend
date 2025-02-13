@@ -62,6 +62,7 @@
         </app-page-section-title>
         <app-page-section-content class="input-list">
           @for(control of  form.controls.steps.controls; track control; let idx = $index; let first = $first; let last = $last){
+            @if(control.value !== null){
             @switch (control.value.type){
               @case (userStudyStepType.description){
                 <app-description-card
@@ -121,7 +122,7 @@
                   (down)="moveDown(idx)"
                 ></app-form-card>
               }
-            }
+            }}
           }
           <div class="button-container">
             <button mat-stroked-button type="button" (click)="addNewStep(userStudyStepType.description)">New Description Step</button>

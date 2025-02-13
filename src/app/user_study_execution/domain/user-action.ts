@@ -42,7 +42,7 @@ export enum ActionType {
 export interface UserAction {
     type: ActionType
     timeStamp?: Date,
-    data?: any
+    data?: unknown
 }
 
 export interface OtherUserAction extends UserAction {
@@ -133,12 +133,12 @@ export interface PlanForIterationStepUserAction extends UserAction {
         demoId: string,
         stepId: string,
         planStatus: PlanRunStatus, 
-        utility,
+        utility: number | null,
     }
 }
 
 export interface CancelPlanForIterationStepUserAction extends UserAction {
-    type: ActionType.PLAN_FOR_ITERATION_STEP
+    type: ActionType.CANCEL_PLAN_FOR_ITERATION_STEP
     data: {
         demoId: string,
         stepId: string,

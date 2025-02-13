@@ -2,7 +2,6 @@ import { createReducer, on } from '@ngrx/store';
 import { Loadable, LoadingState } from 'src/app/shared/common/loadable.interface';
 import { Creatable, CreationState } from 'src/app/shared/common/creatable.interface';
 import { UserStudy } from '../domain/user-study';
-import { Demo } from 'src/app/project/domain/demo';
 import {
   editUserStudy, editUserStudySuccess,
   loadParticipantDistribution,
@@ -18,10 +17,11 @@ import {
 } from './user-study.actions';
 import {UserStudyExecution} from '../domain/user-study-execution';
 import { ParticipantDistribution } from '../domain/participant-distribution';
+import { Demo } from 'src/app/shared/domain/demo';
 
 export interface UserStudyState {
     userStudies: Loadable<UserStudy[]>;
-    participants: Record<string, UserStudyExecution[]>
+    participants: Record<string, UserStudyExecution[]>;
     createdUserStudy: Creatable<UserStudy>;
     demos: Loadable<Demo[]>;
     userStudy: Loadable<UserStudy>;
@@ -32,7 +32,7 @@ export interface UserStudyState {
 
 const initialState: UserStudyState = {
     userStudies: {state: LoadingState.Initial, data: undefined},
-    participants: undefined,
+    participants: {},
     createdUserStudy: {state: CreationState.Default, data: undefined},
     demos: {state: LoadingState.Initial, data: undefined},
     userStudy: {state: LoadingState.Initial, data: undefined},

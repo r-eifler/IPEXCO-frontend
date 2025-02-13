@@ -13,15 +13,15 @@ export enum RunStatus {
   notStarted,
 }
 
-export interface PlanRun {
-  _id?: string;
-  createdAt?: Date;
-  name: string;
-  status: RunStatus;
-  log?: string;
-  result?: string;
-  satPlanProperties?: string[];
-}
+// export interface PlanRun {
+//   _id?: string;
+//   createdAt: Date;
+//   name: string;
+//   status: RunStatus;
+//   log: string | null;
+//   result: string | null;
+//   satPlanProperties: string[];
+// }
 
 
 
@@ -31,7 +31,7 @@ export function computePlanValue( step: IterationStep, planProperties: Record<st
       step.plan.status == PlanRunStatus.running ||
       step.plan.status == PlanRunStatus.pending 
     ) {
-    return null;
+    return undefined;
   }
   if (step.plan.status == PlanRunStatus.not_solvable) {
     return 0;
@@ -41,7 +41,7 @@ export function computePlanValue( step: IterationStep, planProperties: Record<st
     return step.plan.satisfied_properties.map(pid => planProperties.pid.utility).reduce((acc, v) => acc + v,0);
   }
 
-  return null
+  return undefined
 }
 
 

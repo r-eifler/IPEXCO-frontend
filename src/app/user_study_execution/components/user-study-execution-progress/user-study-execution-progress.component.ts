@@ -1,11 +1,10 @@
-import {Component, computed, inject, input, OnInit} from '@angular/core';
-import {UserStudyStep} from '../../../user_study/domain/user-study';
-import {number} from 'zod';
-import {MatProgressBarModule} from '@angular/material/progress-bar';
-import { selectExecutionUserStudy, selectExecutionUserStudyStep, selectExecutionUserStudyStepIndex } from '../../state/user-study-execution.selector';
-import { Store } from '@ngrx/store';
-import { combineLatest, filter, map } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
+import { Component, inject } from '@angular/core';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { Store } from '@ngrx/store';
+import { combineLatest, filter, map, Observable } from 'rxjs';
+import { selectExecutionUserStudy, selectExecutionUserStudyStepIndex } from '../../state/user-study-execution.selector';
+import { inputIsNotNullOrUndefined } from 'src/app/shared/common/check_null_undefined';
 
 @Component({
     selector: 'app-user-study-execution-progress',
@@ -18,6 +17,8 @@ import { AsyncPipe } from '@angular/common';
 })
 export class UserStudyExecutionProgressComponent {
 
+  
+
   store = inject(Store);
 
   userStudy$ = this.store.select(selectExecutionUserStudy);
@@ -25,8 +26,13 @@ export class UserStudyExecutionProgressComponent {
   currentStepIndex$ = this.store.select(selectExecutionUserStudyStepIndex);
 
   progress$ = combineLatest([this.steps$, this.currentStepIndex$]).pipe(
-    map(([steps, stepIndex]) =>  stepIndex && steps?.length > 0 ? (stepIndex / (steps?.length - 1)) * 100 : 0)
+    filter((list) => list.every(inputIsNotNullOrUndefined)),
+    map(([steps, stepIndex]) =>  steps !== undefined && stepIndex !== null && steps?.length > 0 ? 
+      (stepIndex / (steps?.length - 1)) * 100 : 
+      0
+    )
   );
 
 
 }
+

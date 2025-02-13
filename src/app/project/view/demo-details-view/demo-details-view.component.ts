@@ -17,6 +17,7 @@ import { deleteProjectDemo, updateDemo, updatePlanProperty } from '../../state/p
 import { AskDeleteComponent } from 'src/app/shared/components/ask-delete/ask-delete.component';
 import { MatDialog } from '@angular/material/dialog';
 import { PlanPropertyUpdatePanelComponent } from 'src/app/shared/components/plan-property-update-panel/plan-property-update-panel.component';
+import { isNotNullOrUndefined } from 'src/app/shared/common/check_null_undefined';
 
 @Component({
     selector: 'app-demo-details-view',
@@ -76,7 +77,10 @@ export class DemoDetailsViewComponent {
   }
 
   onRunIterPlanning(){
-    this.demo$.pipe(take(1)).subscribe(demo => {
+    this.demo$.pipe(
+      take(1),
+      isNotNullOrUndefined(),
+    ).subscribe(demo => {
       this.router.navigate(['/iterative-planning', demo._id]);
     })
   }

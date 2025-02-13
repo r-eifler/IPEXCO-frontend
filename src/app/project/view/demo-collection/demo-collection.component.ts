@@ -1,25 +1,24 @@
-import {  ActivatedRoute, Router, RouterLink } from "@angular/router";
+import { AsyncPipe } from "@angular/common";
 import { Component, inject, } from "@angular/core";
-import { Demo } from "src/app/project/domain/demo";
+import { MatCardModule } from "@angular/material/card";
 import { MatDialog } from "@angular/material/dialog";
-import { AskDeleteComponent } from "../../../shared/components/ask-delete/ask-delete.component";
-import { RunStatus } from "src/app/iterative_planning/domain/run";
 import { MatIconModule } from "@angular/material/icon";
 import { MatMenuModule } from "@angular/material/menu";
-import { MatCardModule } from "@angular/material/card";
 import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
-import { AsyncPipe } from "@angular/common";
+import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { Store } from "@ngrx/store";
-import { selectHasRunningDemoComputations, selectProject, selectProjectDemoComputationPending, selectProjectDemoProperties, selectProjectFinishedDemos, selectProjectRunningDemos } from "src/app/project/state/project.selector";
-import { deleteProjectDemo, loadProjectDemo } from "src/app/project/state/project.actions";
-import { PageModule } from "src/app/shared/components/page/page.module";
-import { BreadcrumbModule } from "src/app/shared/components/breadcrumb/breadcrumb.module";
-import { ActionCardModule } from "src/app/shared/components/action-card/action-card.module";
-import { DemoCreatorComponent } from "src/app/project/view/demo-creator/demo-creator.component";
+import { RunStatus } from "src/app/iterative_planning/domain/run";
 import { DemoCardComponent } from "src/app/project/components/demo-card/demo-card.component";
+import { deleteProjectDemo } from "src/app/project/state/project.actions";
+import { selectHasRunningDemoComputations, selectProject, selectProjectDemoProperties, selectProjectFinishedDemos, selectProjectRunningDemos } from "src/app/project/state/project.selector";
+import { DemoCreatorComponent } from "src/app/project/view/demo-creator/demo-creator.component";
+import { ActionCardModule } from "src/app/shared/components/action-card/action-card.module";
+import { BreadcrumbModule } from "src/app/shared/components/breadcrumb/breadcrumb.module";
+import { PageModule } from "src/app/shared/components/page/page.module";
+import { AskDeleteComponent } from "../../../shared/components/ask-delete/ask-delete.component";
 import { DemoCardRunningComponent } from "../../components/demo-card-running/demo-card-running.component";
-import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { Demo } from "src/app/shared/domain/demo";
 
 @Component({
     selector: "app-demo-selection",

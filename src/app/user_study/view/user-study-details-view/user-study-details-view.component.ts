@@ -60,8 +60,17 @@ export class UserStudyDetailsViewComponent {
 
   onCopyLink(){
     const host = window.location.protocol + "//" + window.location.host;
-    this.userStudy$.pipe(take(1)).subscribe(study => navigator.clipboard.writeText(host + '/user-study-execution/' + study._id));
-    let snackBarRef = this.snackbar.open('User study link copied to clipboard.', 'close');
+    this.userStudy$.pipe(
+      take(1)
+    ).subscribe(study => {
+      if(study !== undefined){
+        navigator.clipboard.writeText(host + '/user-study-execution/' + study._id);
+        this.snackbar.open('User study link copied to clipboard.', 'close');
+      }
+      else {
+        this.snackbar.open('User study link not available.', 'close');
+      }
+    });
   }
 
 

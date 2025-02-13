@@ -17,7 +17,7 @@ export class UserStudyFinishedAllStepsEffect{
     public finished$ = createEffect(() => this.store.select(selectExecutionUserStudyFinishedAllSteps).pipe(
         concatLatestFrom(() => this.store.select(selectExecutionUserStudy)),
         tap(([isFinished, study]) => {
-          if(isFinished){
+          if(isFinished && !!study){
             this.router.navigate(['user-study-execution', study._id, 'finish'])
           }
       })

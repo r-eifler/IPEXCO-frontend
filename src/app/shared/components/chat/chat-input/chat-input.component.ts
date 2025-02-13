@@ -32,7 +32,8 @@ export class ChatInputComponent {
       return;
     }
 
-    this.userInput.emit(this.form.controls.input.value.trim());
+    if(this.form.controls.input.value !== null)
+      this.userInput.emit(this.form.controls.input.value.trim());
 
     this.form.controls.input.setValue('');
   }

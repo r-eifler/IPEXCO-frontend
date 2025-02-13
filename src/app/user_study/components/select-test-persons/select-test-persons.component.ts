@@ -17,7 +17,7 @@ import { MatPaginator, MatPaginatorModule, PageEvent } from "@angular/material/p
 
 interface TableData extends UserStudyExecution {
   date: Date,
-  processingTime: Date,
+  processingTime: Date | null,
   utility: number,
 }
 
@@ -39,7 +39,7 @@ interface TableData extends UserStudyExecution {
 })
 export class SelectTestPersonsComponent {
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
 
   selectedParticipants = output<string[]>()
   
@@ -52,13 +52,14 @@ export class SelectTestPersonsComponent {
         date: p.createdAt,
         processingTime: p.finished ? new Date(p.finishedAt.getTime() - p.createdAt.getTime()) : null,
         utility: p.timeLog.filter(a => a.type == ActionType.PLAN_FOR_ITERATION_STEP).
-        map((a: PlanForIterationStepUserAction) => a.data.utility ?  a.data.utility : 0).reduce((p,c) => Math.max(p,c), 0)
+          map( a => a as PlanForIterationStepUserAction).
+          map( a => a.data.utility ?  a.data.utility : 0).reduce((p,c) => Math.max(p,c), 0)
       })
       )
       }
     );
 
-  displayedParticipants: TableData[];
+  displayedParticipants: TableData[] = [];
 
   displayedColumns: string[] = ['select', 'user', 'date', 'processingTime', 'utility', 'finished', 'payment', 'accepted'];
 
@@ -66,33 +67,41 @@ export class SelectTestPersonsComponent {
 
   constructor() {
     effect(() => {
+      if(this.paginator === undefined){
+        return;
+      }
       const index = this.paginator?.pageIndex;
       const size = this.paginator?.pageSize;
-      this.displayedParticipants =  this.participantsTableData() ? [...this.participantsTableData()].splice(index * size, size) : [];
+      const tableData = this.participantsTableData();
+      this.displayedParticipants =  tableData ? [...tableData].splice(index * size, size) : [];
     })
   }
 
 
   onPage(event: PageEvent){
+    if(this.paginator === undefined){
+      return;
+    }
     const index = event.pageIndex;
     const size = event.pageSize;
-    this.displayedParticipants =  [...this.participantsTableData()].splice(index * size, size);
+    const tableData = this.participantsTableData();
+    this.displayedParticipants =  tableData ? [...tableData].splice(index * size, size) : [];
   }
 
   isAllSelected(){
     const numSelected = this.selection.selected.length;
-    const numRows = this.participants().length
+    const numRows = this.participants()?.length
     return numSelected == numRows;
   }
   
   toggleAllRows() {
     this.isAllSelected() ?
         this.selection.clear() :
-        this.participantsTableData().forEach(row => this.selection.select(row));
+        this.participantsTableData()?.forEach(row => this.selection.select(row));
     this.selectedParticipants.emit(this.selection.selected.map(td => td.user));
   }
 
-  toggle(row){
+  toggle(row: TableData){
     this.selection.toggle(row);
     this.selectedParticipants.emit(this.selection.selected.map(td => td.user));
   }

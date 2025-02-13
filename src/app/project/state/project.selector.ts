@@ -1,9 +1,9 @@
 import { createSelector } from "@ngrx/store";
-import { CreationState } from "src/app/shared/common/creatable.interface";
-import { Demo, DemoRunStatus } from "src/app/project/domain/demo";
 import { map, memoizeWith } from "ramda";
-import { projectFeature } from "./project.feature";
 import { ServiceType } from "src/app/global_specification/domain/services";
+import { CreationState } from "src/app/shared/common/creatable.interface";
+import { projectFeature } from "./project.feature";
+import { Demo, DemoRunStatus } from "src/app/shared/domain/demo";
 
 const selectState = projectFeature.selectProjectFeatureState;
 
@@ -26,11 +26,11 @@ export const selectOutputSchemas = createSelector(selectState, (state) => state.
 export const selectProjectProperties = createSelector(selectState, (state) => state.planProperties.data);
 
 
-export const selectProjectAllDemos = createSelector(selectState, (state) => state.demos.data)
+export const selectProjectAllDemos = createSelector(selectState, (state) => state.demos.data ?? [])
 export const selectProjectFinishedDemos = createSelector(selectState, (state) => state.demos.data?.filter(d => demoFinished(d)))
 export const selectProjectRunningDemos = createSelector(selectState, (state) => state.demos.data?.filter(d => !demoFinished(d)))
 export const selectProjectDemoComputationPending = createSelector(selectState, (state) => state.demoCreation.state == CreationState.Pending)
-export const selectHasRunningDemoComputations = createSelector(selectProjectRunningDemos, (demos) => demos?.length > 0 )
+export const selectHasRunningDemoComputations = createSelector(selectProjectRunningDemos, (demos) => demos ? demos?.length > 0 : false)
 
 export const selectProjectDemoProperties = createSelector(selectState, (state) => state.demoProperties)
 export const selectProjectDemoIds = createSelector(selectProjectAllDemos, map(({ _id }) => _id));

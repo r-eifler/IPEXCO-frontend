@@ -49,11 +49,15 @@ export class UserStudyEvaluationViewComponent {
     map(us => us?.steps?.filter(s => s.type == UserStudyStepType.demo).map(s => s.content))
   );
   demos$ = combineLatest([this.store.select(selectUserStudyDemos), this.demoIds$]).pipe(
-    map(([demos, demoIds]) => demos?.filter(d => demoIds.includes(d._id)))
+    map(([demos, demoIds]) => 
+      demoIds ? 
+      demos?.filter(d => d._id != undefined ? demoIds.includes(d._id) : false) :
+      []
+    )
   )
 
   selectedParticipants: WritableSignal<string[]> = signal([]);
-  selectedDemo: WritableSignal<string> = signal(null);
+  selectedDemo: WritableSignal<string|null> = signal(null);
 
   downloadData$ = this.participants$.pipe(map(participants => window.URL.createObjectURL(new Blob([JSON.stringify(participants)], { type: "text/json" }))))
 

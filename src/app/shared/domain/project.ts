@@ -3,20 +3,20 @@ import { PlanningTask } from "src/app/shared/domain/planning-task";
 
 export type ProjectType = 'demo-project' | 'general-project';
 
-export interface Project {
-  _id?: string;
-  itemType?: ProjectType,
-  updated?: string;
+export interface ProjectBase {
   name: string;
   public: boolean;
-  user?: string;
-  domain?: string; 
-  description?: string;
-  summaryImage?: string;
-  domainInfo?: string;
-  instanceInfo?: string;
-  baseTask?: PlanningTask;
+  domain: string; 
+  description: string;
+  instanceInfo: string;
+  baseTask: PlanningTask;
   settings: GeneralSettings;
-  animationSettings?: string;
-  animationImage?: string;
+  summaryImage: string | null;
+}
+
+export interface Project extends ProjectBase {
+  _id: string;
+  itemType: ProjectType,
+  updated: string;
+  user: string;
 }

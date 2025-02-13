@@ -1,4 +1,4 @@
-import { Action, ActionSet, GoalType, PlanProperty, PlanPropertyDefinition, toAction } from "src/app/shared/domain/plan-property/plan-property";
+import { Action, ActionSet, GoalType, PlanProperty, PlanPropertyBase, PlanPropertyDefinition, toAction } from "src/app/shared/domain/plan-property/plan-property";
 import { FactToString, PDDLFact, PDDLPlanningModel } from "../PDDL_task";
 import { PlanningTask, TaskObject } from "../planning-task";
 
@@ -79,11 +79,11 @@ export function getTemplateParts(template: PlanPropertyTemplate): TemplatePart[]
     return parts
   }
 
-export function generatePlanProperty(
+export function generatePlanProperty (
     template: PlanPropertyTemplate,
     varObjectMapping: Record<string, TaskObject>,
     varNumericValueMapping: Record<string, number>,
-  ): PlanProperty {
+  ): PlanPropertyBase {
 
     let fullMapping: Record<string, string> = {}
     for (const variable of Object.keys(varObjectMapping)) {
@@ -136,10 +136,9 @@ export function generatePlanProperty(
       name,
       type: template.type,
       definition,
-      formula,
+      formula: formula ?? null,
       actionSets,
       naturalLanguageDescription,
-      project: null,
       isUsed: false,
       globalHardGoal: false,
       utility: 1,
@@ -239,11 +238,17 @@ function getObjectsSatisfyingConstraint(
   for (const pre of knowledgeBase) {
     const m = conRegex.exec(FactToString(pre).replace(/\\s+/g, ""));
     if (m) {
-      freeVariables.map(v => collection[v].add(m.groups[v]))
+      freeVariables.forEach(v => {
+        if (m.groups !== undefined){
+          const value = m.groups[v]
+          if(value)
+            collection[v].add(value)
+        }
+    })
     }
   }
 
-  let res = {}
+  let res: Record<string, string[]> = {}
   Object.keys(collection).forEach(k => res[k] = [...collection[k]]);
   return res
 

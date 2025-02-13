@@ -10,7 +10,7 @@ import {
 import {switchMap, catchError} from 'rxjs/operators';
 import { UserStudyExecutionEvalService } from '../../service/user-study-execution-eval.service';
 import { concatLatestFrom } from '@ngrx/operators';
-import { Store } from '@ngrx/store';
+import { Action, Store } from '@ngrx/store';
 import { selectUserStudy } from '../user-study.selector';
 
 
@@ -25,7 +25,13 @@ export class AcceptUserStudyParticipantEffect{
         ofType(acceptUserStudyParticipant),
         concatLatestFrom(() => this.store.select(selectUserStudy)),
         switchMap(([{userId}, study]) => this.service.accept(userId).pipe(
-            switchMap(() => [acceptUserStudyParticipantSuccess(), loadUserStudyParticipants({id: study._id})]),
+            switchMap(() => {
+                let actions: Action[] = [acceptUserStudyParticipantSuccess()];
+                if(study !== undefined){
+                    actions.push(loadUserStudyParticipants({id: study._id}));
+                }
+                return actions;
+            }),
             catchError(() => of(createUserStudyFailure()))
         ))
     ))

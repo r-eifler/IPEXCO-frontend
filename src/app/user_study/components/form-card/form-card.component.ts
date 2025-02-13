@@ -36,7 +36,7 @@ export class FormCardComponent implements OnInit {
   domSanitizer = inject(DomSanitizer);
 
   form = this.fb.group({
-    name: this.fb.control<string>(undefined, [Validators.required]),
+    name: this.fb.control<string | null>(null, [Validators.required]),
     time: this.fb.control<number>(1),
     url: this.fb.control<string | undefined>('', [Validators.required,  Validators.minLength(1)]),
   })
@@ -46,7 +46,7 @@ export class FormCardComponent implements OnInit {
   last = input<boolean>(false);
 
   url$ = this.form.controls.url.valueChanges.pipe(
-    map(link => this.domSanitizer.sanitize(SecurityContext.URL, link))
+    map(link => link !== undefined && link !== null ? this.domSanitizer.sanitize(SecurityContext.URL, link) : null)
   )
 
   changes = output<UserStudyStep>();
@@ -58,9 +58,9 @@ export class FormCardComponent implements OnInit {
     this.form.valueChanges.pipe(takeUntilDestroyed()).subscribe(
       data => this.changes.emit({
         type: this.step().type,
-        name: data.name,
-        time: data.time <= 60 ? data.time : (Math.floor(data.time / 60)*60) ,
-        content: data.url
+        name: data.name ?? '',
+        time: data.time ? data.time <= 60 ? data.time : (Math.floor(data.time / 60)*60) : null,
+        content: data.url ?? undefined
       })
     );
   }

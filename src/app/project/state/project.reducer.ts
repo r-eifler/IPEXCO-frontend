@@ -26,13 +26,13 @@ import {
     loadServices,
     loadServicesSuccess
 } from "./project.actions";
-import { Demo } from "src/app/project/domain/demo";
 import { PlanProperty } from "src/app/shared/domain/plan-property/plan-property";
 import { Creatable, CreationState } from "src/app/shared/common/creatable.interface";
 import { Project } from "src/app/shared/domain/project";
 import { OutputSchema, Prompt } from "src/app/global_specification/domain/prompt";
 import { DomainSpecification } from "src/app/global_specification/domain/domain_specification";
 import { Service } from "src/app/global_specification/domain/services";
+import { Demo } from "src/app/shared/domain/demo";
 
 export interface ProjectState {
     project: Loadable<Project>;

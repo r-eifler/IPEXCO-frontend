@@ -2,7 +2,7 @@ import { Component, computed, input, Signal } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatTabsModule } from '@angular/material/tabs';
-import { ExplanationInterfaceType, GeneralSettings } from 'src/app/project/domain/general-settings';
+import { defaultGeneralSetting, ExplanationInterfaceType, GeneralSettings } from 'src/app/project/domain/general-settings';
 import { PageModule } from 'src/app/shared/components/page/page.module';
 import { computeCurrentMaxUtility, IterationStep, StepStatus } from '../../domain/iteration_step';
 import { GoalType, PlanProperty } from 'src/app/shared/domain/plan-property/plan-property';
@@ -21,6 +21,7 @@ import { StructuredText } from '../../domain/interface/explanation-message';
 import { questionFactory } from '../../domain/explanation/question-factory';
 import { BreadcrumbComponent } from 'src/app/shared/components/breadcrumb/breadcrumb/breadcrumb.component';
 import { BreadcrumbModule } from 'src/app/shared/components/breadcrumb/breadcrumb.module';
+import { PlanningTask } from 'src/app/shared/domain/planning-task';
 
 type AvailableQuestion = {
   message: StructuredText;
@@ -49,7 +50,7 @@ type AvailableQuestion = {
 })
 export class UserManualComponent {
 
-  settings: Signal<GeneralSettings> = input(null);
+  settings = input<GeneralSettings | null>(null);
 
   templatesManual = computed(() => 
     this.settings() ? this.settings()?.interfaces.explanationInterfaceType === ExplanationInterfaceType.TEMPLATE_QUESTION_ANSWER : true
@@ -65,7 +66,7 @@ export class UserManualComponent {
     completion: 0,
     name: '',
     public: false,
-    settings: undefined,
+    settings: defaultGeneralSetting,
     globalExplanation: {
       status: ExplanationRunStatus.finished,
       MUGS: [],
@@ -164,6 +165,14 @@ export class UserManualComponent {
   solvableQuestionTypes = [QuestionType.CAN_PROPERTY, QuestionType.WHAT_IF_PROPERTY, QuestionType.WHY_NOT_PROPERTY, QuestionType.HOW_PROPERTY]
   solvableQuestions: AvailableQuestion[] = this.solvableQuestionTypes.map(t => ({message: questionFactory(t)(this.samplePlanProperties[4].name), questionType: t}));
 
+
+  dummyTask: PlanningTask = {
+    name: 'Dummy Task',
+    model: {
+      objects: []
+    }
+  }
+
   sampleSteps: IterationStep[] = [
     {
       _id: '1',
@@ -172,7 +181,7 @@ export class UserManualComponent {
       status: StepStatus.unsolvable,
       hardGoals: ['1','2','3'],
       softGoals: [],
-      task: undefined,
+      task: this.dummyTask,
       predecessorStep: '',
       plan: {
         status: PlanRunStatus.not_solvable,
@@ -186,7 +195,7 @@ export class UserManualComponent {
       status: StepStatus.solvable,
       hardGoals: ['1','3'],
       softGoals: ['4','5'],
-      task: undefined,
+      task: this.dummyTask,
       predecessorStep: '',
       plan: {
         status: PlanRunStatus.plan_found,
@@ -201,7 +210,7 @@ export class UserManualComponent {
       status: StepStatus.unknown,
       hardGoals: ['1','3'],
       softGoals: [],
-      task: undefined,
+      task: this.dummyTask,
       predecessorStep: '',
       plan: {
         status: PlanRunStatus.running,
@@ -215,7 +224,7 @@ export class UserManualComponent {
       status: StepStatus.unknown,
       hardGoals: ['1','3'],
       softGoals: [],
-      task: undefined,
+      task: this.dummyTask,
       predecessorStep: '',
       plan: {
         status: PlanRunStatus.canceled,

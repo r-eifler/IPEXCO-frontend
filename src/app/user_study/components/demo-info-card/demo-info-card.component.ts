@@ -9,8 +9,8 @@ import { MatIcon } from '@angular/material/icon';
 import { MatInput } from '@angular/material/input';
 import { MatSelect } from '@angular/material/select';
 import { MatSlider, MatSliderThumb } from '@angular/material/slider';
-import { Demo } from 'src/app/project/domain/demo';
 import { UserStudyStep } from '../../domain/user-study';
+import { Demo } from 'src/app/shared/domain/demo';
 
 @Component({
   selector: 'app-demo-info-card',
@@ -35,9 +35,9 @@ export class DemoInfoCardComponent {
   fb = inject(FormBuilder);
 
   form = this.fb.group({
-    name: this.fb.control<string>(undefined, [Validators.required]),
+    name: this.fb.control<string | null>(null, [Validators.required]),
     time: this.fb.control<number>(1),
-    demo: this.fb.control<string>(undefined, Validators.required),
+    demo: this.fb.control<string | null>(null, Validators.required),
   })
 
   step = input.required<UserStudyStep>();
@@ -56,9 +56,9 @@ export class DemoInfoCardComponent {
     this.form.valueChanges.pipe(takeUntilDestroyed()).subscribe(
       data => this.changes.emit({
         type: this.step().type,
-        name: data.name,
-        time: data.time <= 60 ? data.time : (Math.floor(data.time / 60)*60) ,
-        content: data.demo
+        name: data.name ?? 'TODO',
+        time: data.time ? (data.time <= 60 ? data.time : (Math.floor(data.time / 60)*60)) : null ,
+        content: data.demo ?? undefined
       })
     );
   }
@@ -74,7 +74,9 @@ export class DemoInfoCardComponent {
   ngOnInit(): void {
     this.form.controls.name.setValue(this.step().name);
     this.form.controls.time.setValue(this.step().time);
-    this.form.controls.demo.setValue(this.step().content);
+    const content = this.step().content;
+    if(content !== undefined)
+      this.form.controls.demo.setValue(content);
   }
 
   moveUp() {

@@ -7,5 +7,6 @@ export const loadUserStudyResolver: ResolveFn<void> = (snapshot) => {
 
   const id = snapshot.paramMap.get('userStudyId');
 
-  inject(Store).dispatch(loadUserStudy({ id }))
+  if(id !== null)
+    inject(Store).dispatch(loadUserStudy({ id }))
 }

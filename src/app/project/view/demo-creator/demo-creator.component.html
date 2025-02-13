@@ -54,7 +54,7 @@
       <mat-step [stepControl]="form.controls.image" label="Properties">
         <app-editable-list>
 
-          @for(property of selectedPlanProperties$ | async; track property._id; let idx = $index) {
+          @for(property of selectedPlanProperties$ | async; track property?._id; let idx = $index) {
           <app-editable-list-entry>
             <app-plan-property-panel [property]="property"></app-plan-property-panel>
             <app-editable-list-entry-suffix>
@@ -62,7 +62,7 @@
                 <mat-icon>delete</mat-icon>
               </button>
               <button mat-icon-button (click)="globalHardGoal(idx)" type="button">
-                @if(property.globalHardGoal){
+                @if(property?.globalHardGoal){
                   <mat-icon>lock</mat-icon>
                 }
                 @else{
@@ -102,6 +102,6 @@
   <app-demo-select-property
     [properties]="availableProperties$ | async"
     (cancel)="onCancelPropertySelection()"
-    (select)="handlePropertySelection($event)"
+    (select)="handlePropertySelection ? handlePropertySelection($event) : true" 
   ></app-demo-select-property>
 </ng-template>

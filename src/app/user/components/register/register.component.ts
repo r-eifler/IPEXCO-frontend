@@ -1,6 +1,6 @@
 import { AuthenticationService } from "../../../user/services/authentication.service";
 import { Component, inject, OnInit } from "@angular/core";
-import { FormsModule, ReactiveFormsModule, UntypedFormControl, UntypedFormGroup, Validators } from "@angular/forms";
+import { FormBuilder, FormsModule, ReactiveFormsModule, UntypedFormControl, UntypedFormGroup, Validators } from "@angular/forms";
 import { User } from "src/app/user/domain/user";
 import { passwordValidator } from "src/app/validators/user.validators";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -37,19 +37,21 @@ import { MatButtonModule } from "@angular/material/button";
 })
 export class RegisterComponent implements OnInit {
 
-  registerForm = new UntypedFormGroup(
+  fb = inject(FormBuilder);
+
+  registerForm = this.fb.group(
     {
-      name: new UntypedFormControl("", [
+      name: this.fb.control<string | null>(null, [
         Validators.required,
         Validators.minLength(5),
         Validators.maxLength(32),
       ]),
-      password: new UntypedFormControl("", [
+      password: this.fb.control<string | null>(null, [
         Validators.required,
         Validators.minLength(8),
         Validators.maxLength(32),
       ]),
-      passwordRepeat: new UntypedFormControl("", [
+      passwordRepeat: this.fb.control<string | null>(null, [
         Validators.required,
         Validators.minLength(8),
         Validators.maxLength(32),
@@ -57,6 +59,13 @@ export class RegisterComponent implements OnInit {
     },
     [passwordValidator]
   );
+
+  maxLengthErrorName = this.registerForm.get('name')?.hasError('maxlength') ?? false
+  minLengthErrorName = this.registerForm.get('name')?.hasError('minlength') ?? false
+
+  maxLengthErrorPassword = this.registerForm.get('password')?.hasError('maxlength') ?? false
+  minLengthErrorPassword = this.registerForm.get('password')?.hasError('minlength') ?? false
+  notSameErrorPassword = this.registerForm.hasError('notSame') ?? false
 
   snackBar = inject(MatSnackBar);
 

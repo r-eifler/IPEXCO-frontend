@@ -7,24 +7,30 @@ export enum AgentType {
 export enum PromptType {
     SYSTEM = 'SYSTEM',
     INSTRUCTION_AND_EXAMPLES  = 'INSTRUCTION_AND_EXAMPLES',
-    INPUT_DATA = 'INPUT_DATA'
+    INPUT_DATA = 'INPUT_DATA',
 }
 
-export interface Prompt {
-    _id?: string,
-    name: string,
-    agent: AgentType,
-    type: PromptType,
-    domain: string | null,
-    explainer: string | null,
-    text: string,
+export interface PromptBase {
+    name: string;
+    agent: AgentType;
+    type: PromptType;
+    domain: string | null;
+    explainer: string | null;
+    text: string;
 }
 
-export interface OutputSchema {
-    _id?: string,
-    name: string,
-    agent: AgentType,
-    domain: string | null,
-    explainer: string | null,
-    text: string,
+export interface Prompt extends PromptBase{
+    _id: string;
+}
+
+export interface OutputSchemaBase {
+    name: string;
+    agent: AgentType;
+    domain: string | null;
+    explainer: string | null;
+    text: string;
+}
+
+export interface OutputSchema extends OutputSchemaBase {
+    _id: string;
 }

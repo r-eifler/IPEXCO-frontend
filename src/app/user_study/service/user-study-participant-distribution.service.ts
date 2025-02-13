@@ -4,7 +4,7 @@ import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
 import {IHTTPData} from '../../shared/domain/http-data.interface';
 import {map} from 'rxjs/operators';
-import { ParticipantDistribution } from '../domain/participant-distribution';
+import { ParticipantDistribution, ParticipantDistributionBase } from '../domain/participant-distribution';
 
 
 
@@ -14,7 +14,7 @@ export class UserStudyParticipantDistributionService{
   private http = inject(HttpClient);
   private BASE_URL = environment.apiURL + 'user-study-participant-distribution/';
 
-  postParticipantDistribution$(distribution: ParticipantDistribution): Observable<ParticipantDistribution> {
+  postParticipantDistribution$(distribution: ParticipantDistributionBase): Observable<ParticipantDistribution> {
     return this.http.post<IHTTPData<ParticipantDistribution>>(this.BASE_URL, {data: distribution}).pipe(
       map(({data}) => (data)),
     )

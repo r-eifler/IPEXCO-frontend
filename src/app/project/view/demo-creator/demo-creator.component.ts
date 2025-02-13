@@ -1,24 +1,23 @@
+import { AsyncPipe } from "@angular/common";
 import { Component, ElementRef, inject, OnInit, TemplateRef, viewChild } from "@angular/core";
-import { Demo, DemoRunStatus } from "src/app/project/domain/demo";
-import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
-import { MatDialogRef, MatDialog } from '@angular/material/dialog';
-import { Store } from '@ngrx/store';
-import { BehaviorSubject, catchError, combineLatest, filter, map, Observable, startWith, Subject, switchMap, take, tap } from 'rxjs';
-import { selectProject, selectProjectProperties } from '../../state/project.selector';
-import { registerDemoCreation } from '../../state/project.actions';
-import { isNonEmptyValidator } from "src/app/validators/non-empty.validator";
-import { EditableListModule } from "src/app/shared/components/editable-list/editable-list.module";
-import { MatStepperModule } from "@angular/material/stepper";
+import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from "@angular/forms";
 import { MatButtonModule } from "@angular/material/button";
-import { DialogModule } from "src/app/shared/components/dialog/dialog.module";
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatIcon } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
+import { MatStepperModule } from "@angular/material/stepper";
+import { Store } from '@ngrx/store';
+import { BehaviorSubject, combineLatest, filter, map, startWith, switchMap, take } from 'rxjs';
+import { DialogModule } from "src/app/shared/components/dialog/dialog.module";
+import { EditableListModule } from "src/app/shared/components/editable-list/editable-list.module";
 import { PlanPropertyPanelComponent } from "src/app/shared/components/plan-property-panel/plan-property-panel.component";
-import { AsyncPipe } from "@angular/common";
+import { PlanProperty, PlanPropertyBase } from "src/app/shared/domain/plan-property/plan-property";
+import { isNonEmptyValidator } from "src/app/validators/non-empty.validator";
 import { SelectPropertyComponent } from "../../components/select-property/select-property.component";
-import { PlanProperty } from "src/app/shared/domain/plan-property/plan-property";
 import { ProjectDemoService } from "../../service/demo.service";
-import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { registerDemoCreation } from '../../state/project.actions';
+import { selectProject, selectProjectProperties } from '../../state/project.selector';
+import { Demo, DemoBase, DemoRunStatus } from "src/app/shared/domain/demo";
 
 @Component({
     selector: "app-demo-creator",
@@ -46,7 +45,7 @@ export class DemoCreatorComponent implements OnInit {
 
   propertySelector = viewChild.required<TemplateRef<ElementRef>>('propertySelector');
 
-  handlePropertySelection: (planProperties: PlanProperty[]) => void;
+  handlePropertySelection: ((planProperties: PlanProperty[]) => void) | undefined;
   dialogRef: MatDialogRef<unknown> | undefined;
 
   ownDialogRef: MatDialogRef<unknown> | undefined = inject(MatDialogRef)
@@ -64,8 +63,8 @@ export class DemoCreatorComponent implements OnInit {
       domainInfo: this.fb.control<string>(""),
       instanceInfo: this.fb.control<string>(""),
     }),
-    image: this.fb.control<File>(null),
-    properties: this.fb.array<FormControl<PlanProperty>>([], [isNonEmptyValidator])
+    image: this.fb.control<File | null>(null),
+    properties: this.fb.array<FormControl<PlanProperty | null>>([], [isNonEmptyValidator])
   });
 
   selectedPlanProperties$ = this.form.controls.properties.valueChanges.pipe(
@@ -79,7 +78,7 @@ export class DemoCreatorComponent implements OnInit {
     this.selectedPlanProperties$,
   ]).pipe(
     map(([projectPlanProperties, selectedProperties]) => projectPlanProperties?.filter(
-      ({_id}) => !selectedProperties?.map(pp => pp._id).includes(_id),
+      ({_id}) => !selectedProperties.filter(pp => pp !== null).map(pp => pp._id).includes(_id),
     )),
   );
 
@@ -114,9 +113,13 @@ export class DemoCreatorComponent implements OnInit {
   }
 
   globalHardGoal(index: number): void {
-    let currentP = {...this.form.controls.properties.at(index).value};
-    currentP.globalHardGoal = !currentP.globalHardGoal;
-    this.form.controls.properties.at(index).setValue(currentP);
+    const currProp = this.form.controls.properties.at(index).value
+    if(currProp === null){
+      return;
+    }
+    let newProp = {...currProp};
+    newProp.globalHardGoal = !newProp.globalHardGoal;
+    this.form.controls.properties.at(index).setValue(newProp);
   }
 
   ngOnInit(): void {}
@@ -127,33 +130,28 @@ export class DemoCreatorComponent implements OnInit {
       take(1)
     ).subscribe(
       ([project, imagePath]) => {
-        const newDemo: Demo = {
+        if(project == undefined){
+          return
+        }
+        const newDemo: DemoBase = {
           status: DemoRunStatus.pending,
           projectId: project._id,
-          name: this.form.controls.main.controls.name.value,
+          name: this.form.controls.main.controls.name.value ?? 'TODO',
           summaryImage: imagePath,
           description: this.form.controls.main.controls.description.value
             ? this.form.controls.main.controls.description.value
-            : "TODO",
-          domainInfo: this.form.controls.taskInfo.controls.domainInfo.value
-            ? this.form.controls.taskInfo.controls.domainInfo.value
             : "TODO",
           instanceInfo: this.form.controls.taskInfo.controls.instanceInfo.value
             ? this.form.controls.taskInfo.controls.instanceInfo.value
             : "TODO",
           public: false,
-          completion:  0.0,
           baseTask: project.baseTask,
-          settings: project.settings
+          settings: project.settings,
+          domain: project.domain,
         };
 
-        const selectedPlanProperties  = this.form.controls.properties.controls.
-          map(fc => {
-            let pp = {...fc.value};
-            pp._id = null;
-            pp.project = null;
-            return pp;
-          });
+        const selectedPlanProperties : PlanPropertyBase[]  = this.form.controls.properties.controls.
+          map(fc => fc.value).filter(pp => pp !== null);
 
         this.store.dispatch(registerDemoCreation({demo: newDemo, properties: selectedPlanProperties}))
 
@@ -163,11 +161,14 @@ export class DemoCreatorComponent implements OnInit {
   }
 
   cancel(){
-    this.ownDialogRef.close();
+    if(this.ownDialogRef)
+      this.ownDialogRef.close();
   }
 
-  onFileChanged(event) {
-    this.imageFile$.next(event.target.files[0]);
+  onFileChanged(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if(input.files && input.files.length > 0)
+      this.imageFile$.next(input.files[0]);
   }
 
   onCancelPropertySelection(): void {

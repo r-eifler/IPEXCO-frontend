@@ -1,14 +1,11 @@
-import { USUser } from '../../domain/user-study-user';
-import { filter } from 'rxjs/operators';
-import { Component, computed, inject, input, Input, OnInit } from "@angular/core";
-import { BehaviorSubject, combineLatest } from "rxjs";
-import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
-import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { Component, computed, inject, input } from "@angular/core";
+import { toSignal } from '@angular/core/rxjs-interop';
 import { MatCardModule } from '@angular/material/card';
 import { Store } from '@ngrx/store';
-import { selectUserStudyParticipantsOfStudy } from '../../state/user-study.selector';
-import { ActionType, AskQuestionUserAction, PlanForIterationStepUserAction } from 'src/app/user_study_execution/domain/user-action';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { QuestionType } from 'src/app/iterative_planning/domain/explanation/explanations';
+import { ActionType, AskQuestionUserAction, CreateIterationStepUserAction, PlanForIterationStepUserAction, StartDemoUserAction } from 'src/app/user_study_execution/domain/user-action';
+import { selectUserStudyParticipantsOfStudy } from '../../state/user-study.selector';
 
 export interface DataPoint {
     name: string,
@@ -53,30 +50,41 @@ export class OverviewDataComponent {
 
   selectedParticipants = computed(() => this.participants()?.filter(p => this.selectedParticipantsId().includes(p.user)))
 
-  showPlots = computed(() => this.selectedParticipants()?.length > 0 && this.demoId())
+  showPlots = computed(() => {
+    const selectedParticipants = this.selectedParticipants();
+    return  selectedParticipants != undefined && 
+    selectedParticipants.length > 0 && this.demoId()
+  });
 
   iterationStepsData = computed(() => 
     this.selectedParticipants()?.map(p => ({
       name: p.user, 
-      value: p.timeLog.filter(a => a.type == ActionType.CREATE_ITERATION_STEP && a.data.demoId == this.demoId()).length
+      value: p.timeLog.filter(a => a.type == ActionType.CREATE_ITERATION_STEP).
+      map(a => a as CreateIterationStepUserAction).
+      filter(a => a.data.demoId == this.demoId()).length
     }))
-  )
+  );
 
 
   questionsData = computed(() => 
     this.selectedParticipants()?.map(p => ({
       name: p.user, 
-      value: p.timeLog.filter(a => a.type == ActionType.ASK_QUESTION && a.data.demoId == this.demoId()).length
+      value: p.timeLog.filter(a => a.type == ActionType.ASK_QUESTION).
+      map(a => a as AskQuestionUserAction).
+      filter(a => a.data.demoId == this.demoId()).length
     }))
-  )
+  );
 
   utilityData = computed(() => 
     this.selectedParticipants()?.map(p => ({
       name: p.user, 
-      value: p.timeLog.filter(a => a.type == ActionType.PLAN_FOR_ITERATION_STEP && a.data.demoId == this.demoId()).
+      value: p.timeLog.
+      filter(a => a.type == ActionType.PLAN_FOR_ITERATION_STEP).
+      map(a => a as PlanForIterationStepUserAction).
+      filter(a => a.data.demoId == this.demoId()).
       map((a: PlanForIterationStepUserAction) => a.data.utility ? a.data.utility : 0).reduce((p,c) => Math.max(p,c), 0)
     }))
-  )
+  );
 
   utilityTimeData = computed(() =>{
     if(this.selectedParticipants() == null || this.selectedParticipants()?.length == 0){
@@ -86,15 +94,39 @@ export class OverviewDataComponent {
     const minTime = 0;
     const maxTime =1200;
     const step = 15;
-    let maxAverageUtility = [{name: 'Utility', series: []}]
+    let maxAverageUtility:{
+      name: string, 
+      series: {
+        name: string,
+        value: number
+      }[]
+    }[] = [{name: 'Utility', series: []}]
 
-    const utilitiesOverTime = this.selectedParticipants()?.map(p => (
-      p.timeLog.filter(a => a.type == ActionType.PLAN_FOR_ITERATION_STEP && a.data.demoId == this.demoId()).
-      map((a: PlanForIterationStepUserAction) => ({
-        time: ((new Date(a.timeStamp)).getTime() - ( new Date(p.timeLog.filter(a => a.type == ActionType.START_DEMO)[0].timeStamp)).getTime()) / 1000, 
-        utility: a.data.utility ? a.data.utility : 0}
-      ))
-    ));
+    const utilitiesOverTime = this.selectedParticipants()?.map(p => {
+
+        const startTime = p.timeLog.
+        filter(a => a.type == ActionType.START_DEMO).
+        map(a => a as StartDemoUserAction).
+        filter(a => a.data.demoId === this.demoId())[0].timeStamp;
+
+        if(startTime === undefined){
+          return undefined;
+        }
+
+        const planActions = p.timeLog.
+        filter(a => a.type == ActionType.PLAN_FOR_ITERATION_STEP).
+        map(a => a as PlanForIterationStepUserAction).
+        filter(a => a.data.demoId == this.demoId())
+
+        return planActions.map(a => a.timeStamp?.getTime() ? {
+          time: a.timeStamp?.getTime() - startTime.getTime(),
+          utility: a.data.utility ? a.data.utility : 0
+        } : null).filter(e => !!e)
+    }).filter(e => e !== undefined);
+
+    if(utilitiesOverTime === undefined){
+      return undefined;
+    }
 
     for(let time = minTime; time <= maxTime; time += step){
       const maxUtilitiesUpTo = utilitiesOverTime.map(us => us.reduce(
@@ -107,12 +139,23 @@ export class OverviewDataComponent {
 
 
   questionTypeData = computed(() => {
-      let data = {};
-      Object.values(QuestionType).forEach(k => data[k] = {name: k, value: 0})
+      // TODO ask Merlin
+      type questionTypeMap = { [key in QuestionType]?: {name: QuestionType, value: number} };
+      let data: questionTypeMap = {};
+      Object.values(QuestionType).forEach(k => {data[k] = {name: k, value: 0}});
+
       this.selectedParticipants()?.forEach(p => (
-        p.timeLog.filter(a => a.type == ActionType.ASK_QUESTION && a.data.demoId == this.demoId()).forEach(
-          (q: AskQuestionUserAction) => data[q.data.questionType].value += 1
-        )
+        p.timeLog.filter(a => a.type == ActionType.ASK_QUESTION).
+        map(a => a as AskQuestionUserAction).
+        filter(a => a.data.demoId == this.demoId()).forEach( a => {
+          const key = a.data.questionType;
+          if(data[k] === undefined){
+            return;
+          }
+          // q.data.questionType !== undefined && data[q.data.questionType] !== undefined && data[q.data.questionType]?.value !== undefined ? 
+          // data[q.data.questionType].value += 1 : 
+          // true
+        })
       ))
 
       return Object.values(data);

@@ -31,8 +31,8 @@ export enum ExplanationRunStatus {
 }
 
 export interface GlobalExplanation{
-  createdAt?: Date;
-  MUGS?: string[][];
-  MGCS?: string[][];
+  createdAt: Date;
+  MUGS: string[][] | null;
+  MGCS: string[][] | null;
   status: ExplanationRunStatus;
 }

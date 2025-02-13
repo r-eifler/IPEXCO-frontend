@@ -2,7 +2,7 @@ import { HttpClient } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
-import { Demo } from "src/app/project/domain/demo";
+import { Demo } from "src/app/shared/domain/demo";
 import { IHTTPData } from "src/app/shared/domain/http-data.interface";
 import { environment } from "src/environments/environment";
 

@@ -1,5 +1,4 @@
 export interface Action {
-  _id?: string;
   name: string;
   params: string[];
 }
@@ -10,12 +9,17 @@ export function toAction(as: string): Action {
 }
 
 export interface ActionSet {
-  _id?: string;
   name: string;
   actions: Action[];
 }
 
-export function equalActionSets(a1: ActionSet[], a2: ActionSet[]): boolean {
+export function equalActionSets(a1: ActionSet[] | undefined, a2: ActionSet[] | undefined): boolean {
+  if(a1 === undefined && a2 == undefined){
+    return true;
+  }
+  if(a1 === undefined || a2 == undefined){
+    return false;
+  }
   // TODO
   return false;
 }
@@ -32,9 +36,7 @@ export interface PlanPropertyDefinition {
   parameters: string[]
 }
 
-export interface PlanProperty {
-  _id?: string;
-  project: string;
+export interface PlanPropertyBase {
   name: string;
   definition: PlanPropertyDefinition | null; 
   naturalLanguageDescription?: string;
@@ -49,7 +51,12 @@ export interface PlanProperty {
   class: string;
 }
 
-export function equalPlanProperties(p1: PlanProperty, p2: PlanProperty): boolean {
+export interface PlanProperty extends PlanPropertyBase{
+  _id: string;
+  project: string;
+}
+
+export function equalPlanProperties(p1: PlanPropertyBase, p2: PlanPropertyBase): boolean {
   const res =  p1.type == p2.type && p1.formula == p2.formula &&
     equalActionSets(p1.actionSets, p2.actionSets)
   return res

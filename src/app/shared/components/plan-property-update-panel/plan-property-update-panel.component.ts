@@ -32,31 +32,42 @@ export class PlanPropertyUpdatePanelComponent {
   fb = inject(FormBuilder);
 
   form = this.fb.group({
-    name: this.fb.control<string>(null, [Validators.required]),
-    naturalLanguageDescription: this.fb.control<string>(null, [Validators.required]),
+    name: this.fb.control<string | null>(null, [Validators.required]),
+    naturalLanguageDescription: this.fb.control<string | null>(null, [Validators.required]),
     utility: this.fb.control<number>(1, [Validators.required]),
-    color: this.fb.control<string>(null, [Validators.required]),
-    icon: this.fb.control<string>(null, [Validators.required]),
+    color: this.fb.control<string | null>(null, [Validators.required]),
+    icon: this.fb.control<string | null>(null, [Validators.required]),
   });
 
   constructor(){
     effect(() => {
-      this.form.controls.name.setValue(this.property()?.name);
-      this.form.controls.naturalLanguageDescription.setValue(this.property()?.naturalLanguageDescription);
-      this.form.controls.utility.setValue(this.property()?.utility);
-      this.form.controls.icon.setValue(this.property()?.icon);
-      this.form.controls.color.setValue(this.property()?.color);
+      const property = this.property();
+      if(property === null){
+        return 
+      }
+      this.form.controls.name.setValue(property.name);
+      this.form.controls.utility.setValue(property.utility);
+      this.form.controls.icon.setValue(property.icon);
+      this.form.controls.color.setValue(property.color);
+      if(property.naturalLanguageDescription){
+        this.form.controls.naturalLanguageDescription.setValue(property.naturalLanguageDescription );
+      }
     })
   }
 
   onSave(){
+    const baseProperty = this.property();
+    if(baseProperty === null){
+      return
+    }
+
     let newPlanProperty: PlanProperty = {
-      ...this.property(),
-      name: this.form.controls.name.value,
-      naturalLanguageDescription: this.form.controls.naturalLanguageDescription.value,
-      utility: this.form.controls.utility.value,
-      icon: this.form.controls.icon.value,
-      color: this.form.controls.color.value,
+      ...baseProperty,
+      name: this.form.controls.name.value ?? '',
+      naturalLanguageDescription: this.form.controls.naturalLanguageDescription.value ?? 'TODO',
+      utility: this.form.controls.utility.value ?? 1,
+      icon: this.form.controls.icon.value ?? 'star',
+      color: this.form.controls.color.value ?? '#000000',
     }
 
     this.update.emit(newPlanProperty);

@@ -15,10 +15,10 @@ export enum PlanRunStatus {
 
 
 export interface Plan{
-  createdAt?: Date;
+  createdAt: Date;
   status: PlanRunStatus;
-  actions?: Action[];
-  satisfied_properties?: string[];
+  actions: Action[] | null;
+  satisfied_properties: string[];
   cost: number;
 }
 
