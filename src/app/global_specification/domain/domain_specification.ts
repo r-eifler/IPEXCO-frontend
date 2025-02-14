@@ -1,14 +1,20 @@
-import { PlanPropertyTemplate } from "src/app/shared/domain/plan-property/plan-property-template";
-import { Encoding } from "./services";
+import { PlanPropertyTemplateZ } from "src/app/shared/domain/plan-property/plan-property-template";
+import { array, object, string, infer as zinfer } from "zod";
+import { EncodingZ } from "./services";
 
+export const DomainSpecificationBaseZ = object({
+    name: string(),
+    encoding: EncodingZ,
+    planPropertyTemplates: array(PlanPropertyTemplateZ),
+    description: string(),
+});
 
-export interface DomainSpecificationBase {
-    name: string;
-    encoding: Encoding,
-    planPropertyTemplates: PlanPropertyTemplate[]  ;
-    description: string;
-}
+export type DomainSpecificationBase = zinfer<typeof DomainSpecificationBaseZ>;
 
-export interface DomainSpecification extends DomainSpecificationBase{
-    _id: string;
-}
+export const DomainSpecificationZ = DomainSpecificationBaseZ.merge(
+    object({
+        _id: string(),
+    })
+);
+
+export type DomainSpecification = zinfer<typeof DomainSpecificationZ>;

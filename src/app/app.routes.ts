@@ -18,6 +18,7 @@ import { AuthGuard } from './route-guards/auth-guard.guard';
 import { AuthenticationService } from './user/services/authentication.service';
 import { userFeatureEffects } from './user/state/effects/effects';
 import { userFeature } from './user/state/user.feature';
+import { FailureEffect } from './shared/effects/failure.effect';
 
 export const routes: Routes = [
   {
@@ -39,7 +40,7 @@ export const routes: Routes = [
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
     providers: [
         provideState(userFeature),
-        provideEffects(userFeatureEffects),
+        provideEffects([...userFeatureEffects,FailureEffect] ),
         AuthenticationService,
     ],
     children: [

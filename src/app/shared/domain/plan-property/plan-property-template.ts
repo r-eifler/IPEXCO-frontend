@@ -1,21 +1,33 @@
-import { Action, ActionSet, GoalType, PlanProperty, PlanPropertyBase, PlanPropertyDefinition, toAction } from "src/app/shared/domain/plan-property/plan-property";
+import { Action, ActionSet, GoalType, GoalTypeZ, PlanPropertyBase, PlanPropertyDefinitionZ, toAction } from "src/app/shared/domain/plan-property/plan-property";
+import { array, object, optional, record, string, infer as zinfer } from "zod";
 import { FactToString, PDDLFact, PDDLPlanningModel } from "../PDDL_task";
 import { PlanningTask, TaskObject } from "../planning-task";
 
-export interface PlanPropertyTemplate {
-  class: string;
-  color: string,
-  icon: string,
-  type: GoalType;
-  variables: Record<string,string[]>;
-  nameTemplate: string;
-  definitionTemplate: PlanPropertyDefinition;
-  formulaTemplate?: string;
-  actionSetsTemplates?: ActionSetsTemplates[];
-  sentenceTemplate: string;
-  initVariableConstraints?: string[];
-  goalVariableConstraints?: string[];
-}
+export const ActionSetsTemplatesZ = object({
+  name: string(),
+  actionTemplates: array(string()),
+});
+
+export type ActionSetsTemplates = zinfer<typeof ActionSetsTemplatesZ>;
+
+
+
+export const PlanPropertyTemplateZ = object({
+  class: string(),
+  color: string(),
+  icon: string(),
+  type: GoalTypeZ,
+  variables: record(string(),array(string())),
+  nameTemplate: string(),
+  definitionTemplate: PlanPropertyDefinitionZ,
+  formulaTemplate: optional(string()),
+  actionSetsTemplates: optional(array(ActionSetsTemplatesZ)),
+  sentenceTemplate: string(),
+  initVariableConstraints: optional(array(string())),
+  goalVariableConstraints: optional(array(string())),
+});
+
+export type PlanPropertyTemplate = zinfer<typeof PlanPropertyTemplateZ>;
 
 export const defaultPlanPropertyTemplate = {
   class: 'None',
@@ -252,10 +264,5 @@ function getObjectsSatisfyingConstraint(
   Object.keys(collection).forEach(k => res[k] = [...collection[k]]);
   return res
 
-}
-
-export interface ActionSetsTemplates {
-  name: string;
-  actionTemplates: string[];
 }
 

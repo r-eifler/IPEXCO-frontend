@@ -1,3 +1,5 @@
+import { nativeEnum, nullable, object, string, infer as zinfer } from "zod";
+
 export enum AgentType {
     EXPLANATION_TRANSLATOR = 'EXPLANATION_TRANSLATOR',
     GOAL_TRANSLATOR = 'GOAL_TRANSLATOR',
@@ -12,27 +14,44 @@ export enum PromptType {
     NONE = 'NONE'
 }
 
-export interface PromptBase {
-    name: string;
-    agent: AgentType;
-    type: PromptType;
-    domain: string | null;
-    explainer: string | null;
-    text: string;
-}
+export const AgentTypeZ = nativeEnum(AgentType);
+export const PromptTypeZ = nativeEnum(PromptType);
 
-export interface Prompt extends PromptBase{
-    _id: string;
-}
+export const PromptBaseZ = object({
+    name: string(),
+    agent: AgentTypeZ,
+    type: PromptTypeZ,
+    domain: nullable(string()),
+    explainer: nullable(string()),
+    text: string(),
+});
 
-export interface OutputSchemaBase {
-    name: string;
-    agent: AgentType;
-    domain: string | null;
-    explainer: string | null;
-    text: string;
-}
+export type PromptBase = zinfer<typeof PromptBaseZ>;
 
-export interface OutputSchema extends OutputSchemaBase {
-    _id: string;
-}
+export const PromptZ = PromptBaseZ.merge(
+    object({
+        _id: string()
+    })
+);
+
+export type Prompt = zinfer<typeof PromptZ>;
+
+
+export const OutputSchemaBaseZ = object({
+    name: string(),
+    agent: AgentTypeZ,
+    domain: nullable(string()),
+    explainer: nullable(string()),
+    text: string(),
+});
+
+export type OutputSchemaBase = zinfer<typeof OutputSchemaBaseZ>;
+
+export const OutputSchemaZ = OutputSchemaBaseZ.merge(
+    object({
+        _id: string(),
+    })
+);
+
+export type OutputSchema = zinfer<typeof OutputSchemaZ>;
+

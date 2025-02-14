@@ -1,3 +1,5 @@
+import { array, infer as zinfer, nativeEnum, object, string } from "zod";
+
 export interface Action {
   name: string;
   params: string[];
@@ -31,10 +33,14 @@ export enum GoalType {
   DOMAIN_DEPENDENT = "DOMAIN_DEPENDENT",
 }
 
-export interface PlanPropertyDefinition {
-  name: string;
-  parameters: string[]
-}
+export const GoalTypeZ = nativeEnum(GoalType);
+
+export const PlanPropertyDefinitionZ  = object({
+  name: string(),
+  parameters: array(string()),
+});
+
+export type PlanPropertyDefinition = zinfer<typeof PlanPropertyDefinitionZ>;
 
 export interface PlanPropertyBase {
   name: string;
