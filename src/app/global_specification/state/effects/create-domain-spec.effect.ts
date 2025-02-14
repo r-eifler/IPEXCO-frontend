@@ -15,7 +15,7 @@ export class CreateDomainSpecificationEffect{
     public create$ = createEffect(() => this.actions$.pipe(
         ofType(createDomainSpecification),
         switchMap(({domainSpecification}) => this.service.post$(domainSpecification).pipe(
-            switchMap(spec => [createDomainSpecificationSuccess({domainSpecification: spec}), loadDomainSpecifications()] ),
+            switchMap(spec => spec !== null ? [createDomainSpecificationSuccess({domainSpecification: spec})] : [createDomainSpecificationFailure()]),
             catchError(() => of(createDomainSpecificationFailure()))
         ))
     ));

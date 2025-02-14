@@ -1,10 +1,10 @@
 import { StructuredText } from "../interface/explanation-message";
 import { Question } from "../interface/question";
 import { IterationStep } from "../iteration_step";
-import { GlobalExplanation, QuestionType } from "./explanations";
+import { DefinedGlobalExplanation, QuestionType } from "./explanations";
 
 
-export function getComputedBase(questionType: QuestionType, explanation: GlobalExplanation): string[][] {
+export function getComputedBase(questionType: QuestionType, explanation: DefinedGlobalExplanation): string[][] {
   // console.log("Explanation: ", explanation.MGCS, explanation.MUGS, explanation.status);
   switch(questionType) {
     case QuestionType.WHY_PLAN:
@@ -20,6 +20,8 @@ export function getComputedBase(questionType: QuestionType, explanation: GlobalE
     case QuestionType.HOW_PROPERTY:
       return explanation?.MGCS;
   }
+
+  throw Error('This should not happen!');
 }
 
 export function mapComputeBase(step: IterationStep, question: Question, computed: string[][]): string[][] {
@@ -37,6 +39,8 @@ export function mapComputeBase(step: IterationStep, question: Question, computed
     case QuestionType.HOW_PROPERTY:
       return howAnswerComputer(step, question, computed);
   }
+
+  throw Error('This should not happen!');
 }
 
 export function getAnswer(questionType: QuestionType, computed: string[][], propertyDescription?: string): StructuredText {
@@ -54,6 +58,8 @@ export function getAnswer(questionType: QuestionType, computed: string[][], prop
     case QuestionType.HOW_PROPERTY:
       return howPropertyText(computed, propertyDescription);
   }
+
+  throw Error('This should not happen!');
 }
 
 function whyPlanText(): StructuredText {

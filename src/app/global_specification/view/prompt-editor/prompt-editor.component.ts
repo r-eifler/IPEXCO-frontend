@@ -14,7 +14,6 @@ import { PageModule } from 'src/app/shared/components/page/page.module';
 import { Prompt } from '../../domain/prompt';
 import { loadDomainSpecifications, loadServices, updatePrompt } from '../../state/globalSpec.actions';
 import { selectDomainSpecifications, selectExplainers, selectPrompt } from '../../state/globalSpec.selector';
-import { allNotNullOrUndefined } from 'src/app/shared/common/check_null_undefined';
 
 @Component({
   selector: 'app-prompt-editor',
@@ -44,17 +43,17 @@ export class PromptEditorComponent {
 
   domainName$ = combineLatest([this.prompt$, this.domains$]).pipe(
     filter(([prompt, domains]) => !!prompt && !!domains),
-    map(([prompt, domains]) => prompt.domain ? domains.find(d => d._id == prompt.domain).name : null)
+    map(([prompt, domains]) => prompt?.domain ? domains?.find(d => d?._id == prompt?.domain)?.name : null)
   )
 
   explainerName$ = combineLatest([this.prompt$, this.explainer$]).pipe(
     filter(([prompt, explainers]) => !!prompt && !!explainers),
-    map(([prompt, explainers]) => prompt.explainer ? explainers.find(e => e._id == prompt.explainer) : null)
+    map(([prompt, explainers]) => prompt?.explainer ? explainers?.find(e => e._id == prompt.explainer) : null)
   )
 
   form = this.fb.group({
-    name: this.fb.control<string>(null, Validators.required),
-    text: this.fb.control<string>(null),
+    name: this.fb.control<string | null>(null, Validators.required),
+    text: this.fb.control<string | null>(null),
   })
 
   constructor() {
@@ -73,10 +72,14 @@ export class PromptEditorComponent {
 
   onSave() {
     this.prompt$.pipe(take(1)).subscribe(prompt => {
+      if(prompt === undefined){
+        return;
+      }
+
       const newPrompt: Prompt = {
         ...prompt,
-        name: this.form.controls.name.value,
-        text: this.form.controls.text.value,
+        name: this.form.controls.name.value ?? 'TODO',
+        text: this.form.controls.text.value ?? 'TODO',
       }
       this.store.dispatch(updatePrompt({prompt: newPrompt}))
     })

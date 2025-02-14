@@ -1,19 +1,17 @@
-import { Component, Input, input, OnInit } from '@angular/core';
-import { PlanProperty } from '../../../shared/domain/plan-property/plan-property';
-import { IterationStep } from '../../domain/iteration_step';
-import { ExplanationTemplate } from '../../domain/explanation/explanation_templates';
+import { Component, input, OnInit } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
-import { UnformattedModule } from 'src/app/shared/components/unformatted/unformatted.module';
-import { QuoteModule } from 'src/app/shared/components/quote/quote.module';
-import { Store } from '@ngrx/store';
-import { registerGlobalExplanationComputation } from '../../state/iterative-planning.actions';
-import { MatButtonModule } from '@angular/material/button';
-import { selectIterativePlanningIterationSteps, selectIterativePlanningProperties } from '../../state/iterative-planning.selector';
-import { first, Observable, take } from 'rxjs';
-import { AnswerType, ExplanationRunStatus } from '../../domain/explanation/explanations';
-import { MatCardModule } from '@angular/material/card';
 import { MatListModule } from '@angular/material/list';
+import { Store } from '@ngrx/store';
+import { QuoteModule } from 'src/app/shared/components/quote/quote.module';
+import { UnformattedModule } from 'src/app/shared/components/unformatted/unformatted.module';
+import { PlanProperty } from '../../../shared/domain/plan-property/plan-property';
+import { ExplanationTemplate } from '../../domain/explanation/explanation_templates';
+import { AnswerType, ExplanationRunStatus } from '../../domain/explanation/explanations';
+import { IterationStep } from '../../domain/iteration_step';
+import { registerGlobalExplanationComputation } from '../../state/iterative-planning.actions';
 
 @Component({
     selector: 'app-question-panel',
@@ -28,11 +26,11 @@ export class QuestionPanelComponent implements OnInit{
   template = input.required<ExplanationTemplate | null>();
   step = input.required<IterationStep | null>();
 
-  answerPhrase: string;
-  answerSetsIds: string[][] 
-  answerSets: PlanProperty[][] 
+  answerPhrase: string | undefined;
+  answerSetsIds: string[][] | undefined 
+  answerSets: PlanProperty[][] | undefined 
 
-  explanationAvailable: boolean;
+  explanationAvailable: boolean | undefined;
 
   constructor(
     private store: Store
@@ -40,17 +38,27 @@ export class QuestionPanelComponent implements OnInit{
 
   ngOnInit(): void {
 
-    this.explanationAvailable = !!this.step().globalExplanation && this.step().globalExplanation.status == ExplanationRunStatus.finished
+    const step = this.step();
+    const properties  = this.planProperties();
+    if(step === null || properties === null){
+      return;
+    }
+
+    this.explanationAvailable =  step.globalExplanation && step.globalExplanation?.status == ExplanationRunStatus.finished
 
     if(this.explanationAvailable){
-      let answerBase = this.template().answerType == AnswerType.MUGS ?  this.step().globalExplanation.MUGS : this.step().globalExplanation.MGCS;
-      [this.answerPhrase, this.answerSetsIds] = this.template().answerComputer(this.step(), null, answerBase, true);
-      this.answerSets = this.answerSetsIds.map(set => set.map(id => this.planProperties()[id]));
+      // TODO Check for what this is needed
+      // let answerBase = this.template()?.answerType == AnswerType.MUGS ?  step.globalExplanation?.MUGS : step.globalExplanation?.MGCS;
+      // [this.answerPhrase, this.answerSetsIds] = this.template()?.answerComputer(step, null, answerBase, true);
+
+      // this.answerSets = this.answerSetsIds?.map(set => set.map(id => properties[id]));
     }
   }
 
   computeAnswer() {
-    this.store.dispatch(registerGlobalExplanationComputation({iterationStepId: this.step()._id}))
+    const step = this.step();
+    if(step !== null)
+      this.store.dispatch(registerGlobalExplanationComputation({iterationStepId: step._id}))
   }
   
 }

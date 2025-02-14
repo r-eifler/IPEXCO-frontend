@@ -2,7 +2,7 @@ import { inject, Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { catchError, switchMap } from "rxjs/operators";
 import { of } from "rxjs";
-import { loadOutputSchemas, loadOutputSchemasFailure, loadOutputSchemasSuccess, loadPrompts, loadPromptsFailure, loadPromptsSuccess } from "../globalSpec.actions";
+import { createOutputSchemaSuccess, createPromptSuccess, loadOutputSchemas, loadOutputSchemasFailure, loadOutputSchemasSuccess, loadPrompts, loadPromptsFailure, loadPromptsSuccess } from "../globalSpec.actions";
 import { PromptsService } from "../../service/prompts.service";
 
 
@@ -20,6 +20,11 @@ export class LoadPromptsEffect{
         ))
     ))
 
+    public reloadPrompts$ = createEffect(() => this.actions$.pipe(
+        ofType(createPromptSuccess),
+        switchMap(() => [loadPrompts()] ),
+    ));
+
 
     public loadOutputSchema$ = createEffect(() => this.actions$.pipe(
         ofType(loadOutputSchemas),
@@ -27,5 +32,10 @@ export class LoadPromptsEffect{
             switchMap(schemas => [loadOutputSchemasSuccess({outputSchemas: schemas})] ),
             catchError(() => of(loadOutputSchemasFailure()))
         ))
-    ))
+    ));
+
+    public reloadOutputSchema$ = createEffect(() => this.actions$.pipe(
+        ofType(createOutputSchemaSuccess),
+        switchMap(() => [loadOutputSchemas()] ),
+    ));
 }

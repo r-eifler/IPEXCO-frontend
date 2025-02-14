@@ -1,27 +1,26 @@
-import { Component, computed, input, Signal } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatTabsModule } from '@angular/material/tabs';
 import { defaultGeneralSetting, ExplanationInterfaceType, GeneralSettings } from 'src/app/project/domain/general-settings';
-import { PageModule } from 'src/app/shared/components/page/page.module';
-import { computeCurrentMaxUtility, IterationStep, StepStatus } from '../../domain/iteration_step';
-import { GoalType, PlanProperty } from 'src/app/shared/domain/plan-property/plan-property';
-import { PlanPropertyPanelComponent } from 'src/app/shared/components/plan-property-panel/plan-property-panel.component';
-import { IterationStepCardComponent } from '../iteration-step-card/iteration-step-card.component';
-import { PlanRunStatus } from '../../domain/plan';
-import { MatButtonModule } from '@angular/material/button';
 import { ActionCardComponent } from 'src/app/shared/components/action-card/action-card/action-card.component';
-import { Demo, DemoRunStatus, computeMaxPossibleUtility } from 'src/app/project/domain/demo';
-import { ExplanationRunStatus, QuestionType } from '../../domain/explanation/explanations';
-import { StepsListHeroComponent } from '../steps-list-hero/steps-list-hero.component';
-import { LabelModule } from 'src/app/shared/components/label/label.module';
+import { BreadcrumbModule } from 'src/app/shared/components/breadcrumb/breadcrumb.module';
 import { ChatModule } from 'src/app/shared/components/chat/chat.module';
 import { InfoComponent } from 'src/app/shared/components/info/info/info.component';
-import { StructuredText } from '../../domain/interface/explanation-message';
-import { questionFactory } from '../../domain/explanation/question-factory';
-import { BreadcrumbComponent } from 'src/app/shared/components/breadcrumb/breadcrumb/breadcrumb.component';
-import { BreadcrumbModule } from 'src/app/shared/components/breadcrumb/breadcrumb.module';
+import { LabelModule } from 'src/app/shared/components/label/label.module';
+import { PageModule } from 'src/app/shared/components/page/page.module';
+import { PlanPropertyPanelComponent } from 'src/app/shared/components/plan-property-panel/plan-property-panel.component';
+import { GoalType, PlanProperty } from 'src/app/shared/domain/plan-property/plan-property';
 import { PlanningTask } from 'src/app/shared/domain/planning-task';
+import { ExplanationRunStatus, QuestionType } from '../../domain/explanation/explanations';
+import { questionFactory } from '../../domain/explanation/question-factory';
+import { StructuredText } from '../../domain/interface/explanation-message';
+import { computeCurrentMaxUtility, IterationStep, StepStatus } from '../../domain/iteration_step';
+import { PlanRunStatus } from '../../domain/plan';
+import { IterationStepCardComponent } from '../iteration-step-card/iteration-step-card.component';
+import { StepsListHeroComponent } from '../steps-list-hero/steps-list-hero.component';
+import { computeMaxPossibleUtility, Demo, DemoRunStatus } from 'src/app/shared/domain/demo';
 
 type AvailableQuestion = {
   message: StructuredText;
@@ -63,15 +62,28 @@ export class UserManualComponent {
     _id: '1',
     projectId: '',
     status: DemoRunStatus.finished,
-    completion: 0,
     name: '',
     public: false,
     settings: defaultGeneralSetting,
     globalExplanation: {
       status: ExplanationRunStatus.finished,
       MUGS: [],
-      MGCS: [['2','5']]
-    }
+      MGCS: [['2', '5']],
+      createdAt: new Date()
+    },
+    itemType: 'demo-project',
+    updated: '',
+    user: '',
+    domain: '',
+    description: '',
+    instanceInfo: '',
+    baseTask: {
+      name: '',
+      model: {
+        objects: []
+      }
+    },
+    summaryImage: null
   }
 
   samplePlanProperties: PlanProperty[] = [
@@ -185,8 +197,13 @@ export class UserManualComponent {
       predecessorStep: '',
       plan: {
         status: PlanRunStatus.not_solvable,
-        cost: 0
-      }
+        cost: 0,
+        createdAt: new Date(),
+        actions: null,
+        satisfied_properties: []
+      },
+      user: '',
+      createdAt: new Date(),
     },
     {
       _id: '2',
@@ -200,8 +217,12 @@ export class UserManualComponent {
       plan: {
         status: PlanRunStatus.plan_found,
         cost: 0,
+        createdAt: new Date(),
+        actions: null,
         satisfied_properties: ['1', '3', '4']
-      }
+      },
+      user: '',
+      createdAt: new Date(),
     },
     {
       _id: '3',
@@ -215,21 +236,31 @@ export class UserManualComponent {
       plan: {
         status: PlanRunStatus.running,
         cost: 0,
-      }
+        createdAt: new Date(),
+        actions: null,
+        satisfied_properties: []
+      },
+      user: '',
+      createdAt: new Date(),
     },
     {
       _id: '4',
       name: 'Step 4',
       project: '',
       status: StepStatus.unknown,
-      hardGoals: ['1','3'],
+      hardGoals: ['1', '3'],
       softGoals: [],
       task: this.dummyTask,
       predecessorStep: '',
       plan: {
         status: PlanRunStatus.canceled,
         cost: 0,
-      }
+        createdAt: new Date(),
+        actions: null,
+        satisfied_properties: []
+      },
+      user: '',
+      createdAt: new Date(),
     }
   ];
 

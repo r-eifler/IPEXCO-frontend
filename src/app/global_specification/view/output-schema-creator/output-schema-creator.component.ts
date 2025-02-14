@@ -6,7 +6,7 @@ import { MatFormField } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { DialogModule } from 'src/app/shared/components/dialog/dialog.module';
-import { AgentType, OutputSchema, Prompt } from '../../domain/prompt';
+import { AgentType, OutputSchema, OutputSchemaBase, Prompt } from '../../domain/prompt';
 
 @Component({
   selector: 'app-output-schema-creator',
@@ -39,10 +39,10 @@ export class OutputSchemaCreatorComponent {
       fb = inject(FormBuilder);
     
       form = this.fb.group({
-          name: this.fb.control<string>(null, Validators.required),
-          agent: this.fb.control<AgentType>(null, Validators.required),
-          domain: this.fb.control<string>(null),
-          explainer:  this.fb.control<string>(null),
+          name: this.fb.control<string | null>(null, Validators.required),
+          agent: this.fb.control<AgentType | null>(null, Validators.required),
+          domain: this.fb.control<string | null>(null),
+          explainer:  this.fb.control<string | null>(null),
       });
     
       onCancel(){
@@ -50,9 +50,9 @@ export class OutputSchemaCreatorComponent {
       }
     
       onCreate(){
-        const schema: OutputSchema = {
-          name: this.form.controls.name.value,
-          agent: this.form.controls.agent.value,
+        const schema: OutputSchemaBase = {
+          name: this.form.controls.name.value ?? 'TODO',
+          agent: this.form.controls.agent.value ?? AgentType.NONE,
           domain: this.form.controls.domain.value,
           explainer: this.form.controls.explainer.value,
           text: ''

@@ -7,6 +7,7 @@ import { Store } from "@ngrx/store";
 import { concatLatestFrom } from "@ngrx/operators";
 import { selectIterativePlanningProject } from "../iterative-planning.selector";
 import { IterationStepService } from "../../service/iteration-step.service";
+import { filterListNotNullOrUndefined } from "src/app/shared/common/check_null_undefined";
 
 @Injectable()
 export class DeleteIterationEffect{
@@ -18,9 +19,16 @@ export class DeleteIterationEffect{
     public deleteIterationStep$ = createEffect(() => this.actions$.pipe(
         ofType(deleteIterationStep),
         switchMap(({id}) => this.service.deleteIterationStep$(id).pipe(
-            concatLatestFrom(() => this.store.select(selectIterativePlanningProject)),
-            switchMap(([_, project]) => [deleteIterationStepSuccess(), loadIterationSteps({id: project._id})]),
+            switchMap(() => [deleteIterationStepSuccess()]),
             catchError(() => of(deleteIterationStepFailure()))
         ))
-    ))
+    ));
+
+    public deleteIterationStepSucess$ = createEffect(() => this.actions$.pipe(
+        ofType(deleteIterationStepSuccess),
+        concatLatestFrom(() => this.store.select(selectIterativePlanningProject)),
+        filterListNotNullOrUndefined(),
+        switchMap(([_, project]) => [loadIterationSteps({id: project._id})]),
+        catchError(() => of(deleteIterationStepFailure()))
+    ));
 }

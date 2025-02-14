@@ -1,5 +1,5 @@
 import { AsyncPipe, NgFor, NgIf } from "@angular/common";
-import { Component } from "@angular/core";
+import { Component, inject } from "@angular/core";
 import { MatButtonModule } from "@angular/material/button";
 import { MatCardModule } from "@angular/material/card";
 import { MatDialog } from "@angular/material/dialog";
@@ -38,22 +38,16 @@ import { ProjectCreatorComponent } from "../project-creator/project-creator.comp
 })
 export class ProjectCollectionComponent{
 
-  projectsMetaData$: Observable<ProjectMetaData[]>;
-  projectCreationPending$: Observable<boolean>
-  projectCreationError$: Observable<boolean>
-  projectCreationNone$: Observable<boolean>
+  store = inject(Store);
+  dialog = inject(MatDialog)
 
-  constructor(
-    private store: Store,
-    public dialog: MatDialog
-  ) {
+  projectsMetaData$ = this.store.select(selectProjectsMetaData);
+  projectCreationPending$ = this.store.select(selectProjectCreationPending);
+  projectCreationError$ = this.store.select(selectProjectCreationError);
+  projectCreationNone$ = this.store.select(selectProjectCreationNone);
 
-    store.dispatch(loadProjectMetaDataList())
-
-    this.projectsMetaData$ = store.select(selectProjectsMetaData)
-    this.projectCreationPending$ = store.select(selectProjectCreationPending)
-    this.projectCreationError$ = store.select(selectProjectCreationError)
-    this.projectCreationNone$ = store.select(selectProjectCreationNone)
+  constructor() {
+    this.store.dispatch(loadProjectMetaDataList())
   }
 
 

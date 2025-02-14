@@ -7,5 +7,6 @@ export const loadDemoResolver: ResolveFn<void> = (snapshot) => {
 
   const id = snapshot.paramMap.get('demoId');
 
-  inject(Store).dispatch(loadDemo({ id }))
+  if(id !== null)
+    inject(Store).dispatch(loadDemo({ id }))
 }

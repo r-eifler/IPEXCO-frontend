@@ -33,6 +33,6 @@ export class LoadUserStudyParticipantsEffect{
         ofType(acceptUserStudyParticipantSuccess),
         concatLatestFrom(() => this.store.select(selectUserStudy)),
         filterListNotNullOrUndefined(),
-        switchMap((userStudy) => [loadUserStudyParticipants({id: userStudy._id})])
+        switchMap(([_, userStudy]) => [loadUserStudyParticipants({id: userStudy._id})])
     ));
 }

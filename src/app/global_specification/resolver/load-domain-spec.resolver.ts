@@ -7,5 +7,6 @@ export const loadDomainSpecResolver: ResolveFn<void> = (snapshot) => {
 
   const id = snapshot.paramMap.get('domainSpecId');
 
-  inject(Store).dispatch(loadDomainSpecification({ id }))
+  if(id !== null)
+    inject(Store).dispatch(loadDomainSpecification({ id }))
 }

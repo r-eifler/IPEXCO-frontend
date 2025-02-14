@@ -13,7 +13,7 @@ import { Store } from "@ngrx/store";
 import { BehaviorSubject, combineLatest } from "rxjs";
 import { filter, map, shareReplay, startWith, take, tap } from "rxjs/operators";
 import { TemplateFileUploadComponent } from "src/app/components/files/file-upload/file-upload.component";
-import { Project } from "src/app/shared/domain/project";
+import { Project, ProjectBase } from "src/app/shared/domain/project";
 import { selectUser } from "src/app/user/state/user.selector";
 import { defaultGeneralSetting } from "../../../project/domain/general-settings";
 import { createProject, loadDomainSpecifications } from "../../state/project-meta.actions";
@@ -22,6 +22,7 @@ import { PDDLService } from "../../service/pddl.service";
 import { DialogModule } from "src/app/shared/components/dialog/dialog.module";
 import { Encoding } from "src/app/global_specification/domain/services";
 import { SpecCardFeatureComponent } from "src/app/shared/components/spec-card/spec-card-feature/spec-card-feature.component";
+import { filterListNotNullOrUndefined } from "src/app/shared/common/check_null_undefined";
 
 @Component({
     selector: "app-project-creator",
@@ -63,28 +64,28 @@ export class ProjectCreatorComponent {
   private fb = inject(FormBuilder);
 
   form = this.fb.group({
-    name: this.fb.control<string>(null, Validators.required),
-    domain: this.fb.control<string>(null, Validators.required),
-    description: this.fb.control<string>(null),
+    name: this.fb.control<string | null>(null, Validators.required),
+    domain: this.fb.control<string | null>(null, Validators.required),
+    description: this.fb.control<string | null>(null),
   });
 
   domains$ = this.store.select(selectDomainSpecifications);
   selectedDomain$ = combineLatest([this.domains$, this.form.controls.domain.valueChanges]).pipe(
-    map(([domains, domainId]) => domains.find(d => d._id == domainId)),
+    map(([domains, domainId]) => domains ? domains.find(d => d._id == domainId) : null),
     shareReplay(1),
   );
 
-  selectedDomain: string
-  selectedProblem: string
+  selectedDomain: string | undefined
+  selectedProblem: string | undefined
 
   translatedPddlModel$ = this.pddlService.getModel().pipe(startWith(null));
   pddlModelValid$ = this.translatedPddlModel$.pipe(
     map(m => !!this.selectedProblem && !!this.selectedDomain && !!m)
   )
 
-  domainDependentModel$ = new BehaviorSubject<string>(null);
+  domainDependentModel$ = new BehaviorSubject<string | null>(null);
   domainDependentModelValid$ = this.domainDependentModel$.pipe(
-    filter(m => !!m),
+    filter(m => m !== null),
     map(m => {
       try{
         JSON.parse(m);
@@ -97,8 +98,10 @@ export class ProjectCreatorComponent {
   )
 
   model$ = combineLatest([this.selectedDomain$, this.translatedPddlModel$, this.domainDependentModel$]).pipe(
-    // filter(([domain, pddlModel, domainDependentModel]) => !!domain),
     map(([domain, pddlModel, domainDependentModel]) => {
+      if(domain === undefined || domain === null){
+        return null;
+      }
       switch(domain.encoding){
         case(Encoding.PDDL_NUMERIC): {
           throw Error('Numeric PDDL encoding not yet supported!');
@@ -107,7 +110,7 @@ export class ProjectCreatorComponent {
           return pddlModel as unknown;
         }
         case(Encoding.DOMAIN_DEPENDENT): {
-          return JSON.parse(domainDependentModel) as unknown;
+          return domainDependentModel ? JSON.parse(domainDependentModel) as unknown : null;
         }
       }
     }),
@@ -190,19 +193,18 @@ export class ProjectCreatorComponent {
     ).subscribe(
       (model) => {
 
-        const newProject: Project = {
-          _id: null,
-          updated: new Date().toLocaleString(),
-          name: this.form.controls.name.value,
-          user: null,
-          domain: this.form.controls.domain.value,
+        const newProject: ProjectBase = {
+          name: this.form.controls.name.value ?? 'TODO',
+          domain: this.form.controls.domain.value ?? 'TODO',
           description: this.form.controls.description.value ? this.form.controls.description.value : "TODO",
           settings: defaultGeneralSetting,
           baseTask: {
-            name: this.form.controls.name.value,
+            name: this.form.controls.name.value ?? 'TODO',
             model: model,
           },
           public: false,
+          instanceInfo: "",
+          summaryImage: null
         };
 
         console.log("create new project");

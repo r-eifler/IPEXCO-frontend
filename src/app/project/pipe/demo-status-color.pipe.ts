@@ -1,7 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { DemoRunStatus } from 'src/app/project/domain/demo';
 
 import { Color } from 'src/app/shared/components/label/label/label.component';
+import { DemoRunStatus } from 'src/app/shared/domain/demo';
 
 
 @Pipe({
@@ -25,6 +25,8 @@ export class DemoStatusColorPipe implements PipeTransform {
       case DemoRunStatus.finished:
         return 'secondary';
     }
-  }
 
+    return 'neutral'
+  }
+;
 }

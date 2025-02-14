@@ -5,7 +5,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { MatFormField } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { DomainSpecification } from '../../domain/domain_specification';
+import { DomainSpecification, DomainSpecificationBase } from '../../domain/domain_specification';
 import { DialogModule } from 'src/app/shared/components/dialog/dialog.module';
 import { Encoding } from '../../domain/services';
 
@@ -35,8 +35,8 @@ export class DomainSpecCreatorComponent {
     fb = inject(FormBuilder);
   
     form = this.fb.group({
-        name: this.fb.control<string>(null, Validators.required),
-        encoding: this.fb.control<Encoding>(null, Validators.required),
+        name: this.fb.control<string | null>(null, Validators.required),
+        encoding: this.fb.control<Encoding | null>(null, Validators.required),
     });
   
     onCancel(){
@@ -44,9 +44,9 @@ export class DomainSpecCreatorComponent {
     }
   
     onCreate(){
-      let spec: DomainSpecification = {
-        name: this.form.controls.name.value,
-        encoding: this.form.controls.encoding.value,
+      let spec: DomainSpecificationBase = {
+        name: this.form.controls.name.value ?? 'TODO',
+        encoding: this.form.controls.encoding.value ?? Encoding.NONE,
         planPropertyTemplates: [],
         description: 'TODO',
       }

@@ -1,9 +1,9 @@
 import { createAction, props } from "@ngrx/store";
 import { ExplanationMessage } from "../domain/interface/explanation-message";
 import { Question } from "../domain/interface/question";
-import { IterationStep, ModIterationStep } from "../domain/iteration_step";
+import { IterationStep, IterationStepBase, ModIterationStep } from "../domain/iteration_step";
 import { LLMContext } from "src/app/LLM/domain/context";
-import { PlanProperty } from "src/app/shared/domain/plan-property/plan-property";
+import { PlanProperty, PlanPropertyBase } from "src/app/shared/domain/plan-property/plan-property";
 import { Project } from "src/app/shared/domain/project";
 import { DomainSpecification } from "src/app/global_specification/domain/domain_specification";
 
@@ -27,7 +27,7 @@ export const loadPlanPropertiesSuccess = createAction('[iterative-planning] load
 export const loadPlanPropertiesFailure = createAction('[iterative-planning] load plan properties failure');
 
 
-export const createPlanProperty = createAction('[iterative-planning] create plan property', props<{planProperty: PlanProperty}>());
+export const createPlanProperty = createAction('[iterative-planning] create plan property', props<{planProperty: PlanPropertyBase}>());
 export const createPlanPropertySuccess = createAction('[iterative-planning] create plan property success', props<{planProperty: PlanProperty}>());
 export const createPlanPropertyFailure = createAction('[iterative-planning] create plan property failure');
 
@@ -55,7 +55,7 @@ export const loadIterationStepsSuccess = createAction('[iterative-planning] load
 export const loadIterationStepsFailure = createAction('[iterative-planning] load iteration steps failure');
 
 
-export const createIterationStep = createAction('[iterative-planning] create iteration steps', props<{iterationStep: IterationStep}>());
+export const createIterationStep = createAction('[iterative-planning] create iteration steps', props<{iterationStep: IterationStepBase}>());
 export const createIterationStepSuccess = createAction('[iterative-planning] create iteration steps success', props<{iterationStep: IterationStep}>());
 export const createIterationStepFailure = createAction('[iterative-planning] create iteration steps failure');
 

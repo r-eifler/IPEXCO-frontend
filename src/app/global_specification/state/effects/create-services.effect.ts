@@ -14,7 +14,7 @@ export class CreateServicesEffect{
     public createServices$ = createEffect(() => this.actions$.pipe(
         ofType(createService),
         switchMap(({service}) => this.service.post$(service).pipe(
-            switchMap(service => [createServiceSuccess({service: service}), loadServices()] ),
+            switchMap(service => service !== null ? [createServiceSuccess({service: service})] : [createServiceFailure()]),
             catchError(() => of(createServiceFailure()))
         ))
     ));

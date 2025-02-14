@@ -11,52 +11,52 @@ import { BreadcrumbModule } from "src/app/shared/components/breadcrumb/breadcrum
 import { EmptyStateModule } from "src/app/shared/components/empty-state/empty-state.module";
 import { PageModule } from "src/app/shared/components/page/page.module";
 
+import { MatDialog } from "@angular/material/dialog";
+import { MatExpansionModule } from "@angular/material/expansion";
+import { MatProgressBarModule } from "@angular/material/progress-bar";
 import {
-    filter as rFilter,
-    includes as rIncludes,
-    map as rMap,
-    not as rNot,
+  filter as rFilter,
+  includes as rIncludes,
+  map as rMap,
+  not as rNot,
 } from "ramda";
-import { AvailableQuestion, ExplanationChatComponent } from "../../components/explanation-chat/explanation-chat.component";
-import { ExplanationChatLlmComponent } from "../../components/explanation-chat-llm/explanation-chat-llm.component";
-import { IterationStepHeroComponent } from "../../components/iteration-step-hero/iteration-step-hero.component";
+import { ExplanationInterfaceType } from "src/app/project/domain/general-settings";
+import { filterNotNullOrUndefined } from "src/app/shared/common/check_null_undefined";
+import { AskDeleteComponent } from "src/app/shared/components/ask-delete/ask-delete.component";
 import { PlanPropertyPanelComponent } from "../../../shared/components/plan-property-panel/plan-property-panel.component";
-import { QuestionPanelComponent } from "../../components/question-panel/question-panel.component";
+import { PlanProperty } from "../../../shared/domain/plan-property/plan-property";
+import { ExplanationChatLlmComponent } from "../../components/explanation-chat-llm/explanation-chat-llm.component";
+import { AvailableQuestion, ExplanationChatComponent } from "../../components/explanation-chat/explanation-chat.component";
+import { IterationStepHeroComponent } from "../../components/iteration-step-hero/iteration-step-hero.component";
+import { UserManualDialogComponent } from "../../components/user-manual-dialog/user-manual-dialog.component";
+import { DemoDirective } from "../../derectives/isDemo.directive";
+import { ProjectDirective } from "../../derectives/isProject.directive";
 import { explanationHash } from "../../domain/explanation/explanation-hash";
 import { QuestionType } from "../../domain/explanation/explanations";
 import { questionFactory } from "../../domain/explanation/question-factory";
 import { StructuredText } from "../../domain/interface/explanation-message";
 import { PlanRunStatus } from "../../domain/plan";
-import { PlanProperty } from "../../../shared/domain/plan-property/plan-property";
 import { cancelPlanComputationAndIterationStep, deleteIterationStep, initNewIterationStep, questionPosed } from "../../state/iterative-planning.actions";
 import { Message } from "../../state/iterative-planning.reducer";
 import {
-    selectIsExplanationLoading,
-    selectIterativePlanningIsIntroTask,
-    selectIterativePlanningLoadingFinished,
-    selectIterativePlanningMaxPossibleUtility,
-    selectIterativePlanningProject,
-    selectIterativePlanningProjectExplanationInterfaceType,
-    selectIterativePlanningProperties,
-    selectIterativePlanningSelectedStep,
-    selectMessageTypes,
-    selectMessages,
-    selectPropertyAvailableQuestions,
-    selectStepAvailableQuestions,
+  selectIsExplanationLoading,
+  selectIterativePlanningIsIntroTask,
+  selectIterativePlanningLoadingFinished,
+  selectIterativePlanningMaxPossibleUtility,
+  selectIterativePlanningProject,
+  selectIterativePlanningProjectExplanationInterfaceType,
+  selectIterativePlanningProperties,
+  selectIterativePlanningSelectedStep,
+  selectMessageTypes,
+  selectMessages,
+  selectPropertyAvailableQuestions,
+  selectStepAvailableQuestions,
 } from "../../state/iterative-planning.selector";
 import {
-    selectEnforcedGoals,
-    selectSatisfiedSoftGoals,
-    selectUnsatisfiedSoftGoals,
+  selectEnforcedGoals,
+  selectSatisfiedSoftGoals,
+  selectUnsatisfiedSoftGoals,
 } from "./step-detail-view.component.selector";
-import { ExplanationInterfaceType } from "src/app/project/domain/general-settings";
-import { MatDialog } from "@angular/material/dialog";
-import { AskDeleteComponent } from "src/app/shared/components/ask-delete/ask-delete.component";
-import { MatExpansionModule } from "@angular/material/expansion";
-import { ProjectDirective } from "../../derectives/isProject.directive";
-import { UserManualDialogComponent } from "../../components/user-manual-dialog/user-manual-dialog.component";
-import { MatProgressBarModule } from "@angular/material/progress-bar";
-import { DemoDirective } from "../../derectives/isDemo.directive";
 
 @Component({
     selector: "app-step-detail-view",
@@ -100,7 +100,6 @@ export class StepDetailViewComponent {
   project$ = this.store.select(selectIterativePlanningProject);
   maxOverAllUtility$ = this.store.select(selectIterativePlanningMaxPossibleUtility);
   image$ = this.project$.pipe(map(p => p?.summaryImage));
-  domainInfo$ = this.project$.pipe(map(p => p?.domainInfo));
   instanceInfo$ = this.project$.pipe(map(p => p?.instanceInfo));
 
   step$ = this.store.select(selectIterativePlanningSelectedStep);
@@ -126,7 +125,9 @@ export class StepDetailViewComponent {
 
   enforcedGoals$ = this.store.select(selectEnforcedGoals);
   solvedSoftGoals$ = this.store.select(selectSatisfiedSoftGoals);
-  unsolvedSoftGoals$ = this.store.select(selectUnsatisfiedSoftGoals);
+  unsolvedSoftGoals$ = this.store.select(selectUnsatisfiedSoftGoals).pipe(
+    map(list => list.filter(pp => pp !== undefined))
+  );
 
   hasEnforcedGoals$ = this.enforcedGoals$.pipe(map((goals) => !!goals?.length));
   hasSolvedSoftGoals$ = this.solvedSoftGoals$.pipe(
@@ -137,13 +138,14 @@ export class StepDetailViewComponent {
   );
 
   isExplanationLoading$ = this.step$.pipe(
+    filterNotNullOrUndefined(),
     map(explanationHash),
     switchMap(hash => this.store.select(selectIsExplanationLoading(hash)))
   );
 
-  globalAvalableQuestionTypes$ = this.step$.pipe(
+  globalAvailableQuestionTypes$ = this.step$.pipe(
     map((step) => step?._id),
-    filter((id) => !!id),
+    filterNotNullOrUndefined(),
     switchMap((stepId) =>
       combineLatest([
         this.store.select(selectStepAvailableQuestions),
@@ -159,13 +161,14 @@ export class StepDetailViewComponent {
   );
 
   globalMessages$ = this.stepId$.pipe(
+    filterNotNullOrUndefined(),
     switchMap(stepId => this.store.select(selectMessages(stepId))),
   );
 
   propertyAvailableQuestionTypes$(property: PlanProperty): Observable<{questionType: QuestionType, message: StructuredText}[]> {
     return this.step$.pipe(
       map((step) => step?._id),
-      filter((id) => !!id),
+      filterNotNullOrUndefined(),
       switchMap((stepId) =>
         combineLatest([
           this.store.select(selectPropertyAvailableQuestions),
@@ -183,6 +186,7 @@ export class StepDetailViewComponent {
 
   propertyMessages$(property: PlanProperty): Observable<Message[]> {
     return this.stepId$.pipe(
+      filterNotNullOrUndefined(),
       switchMap(stepId => this.store.select(selectMessages(stepId, property._id))),
     );
   }
@@ -193,6 +197,9 @@ export class StepDetailViewComponent {
   }
 
   deleteIteration(id?: string) {
+    if(id === undefined){
+      return;
+    }
     const dialogRef = this.dialog.open(AskDeleteComponent, {
       data: {name: "Delete Iteration", text: "Are you sure you want to delete the current iteration?"},
     });
@@ -206,14 +213,16 @@ export class StepDetailViewComponent {
   }
 
   onPropertyQuestionSelected(question: AvailableQuestion, property: PlanProperty): void {
-    this.stepId$.pipe(take(1)).subscribe((iterationStepId) =>{
-      return this.store.dispatch(questionPosed({ question: { questionType: question.questionType, iterationStepId, propertyId: property._id }}))
+    this.stepId$.pipe(take(1)).subscribe((iterationStepId) => {
+      if(iterationStepId != undefined)
+        return this.store.dispatch(questionPosed({ question: { questionType: question.questionType, iterationStepId, propertyId: property._id }}))
     });
   }
 
   onQuestionSelected(question: AvailableQuestion): void {
-    this.stepId$.pipe(take(1)).subscribe((iterationStepId) =>{
-      return this.store.dispatch(questionPosed({ question: { questionType: question.questionType, iterationStepId }}))
+    this.stepId$.pipe(take(1)).subscribe((iterationStepId) => {
+      if(iterationStepId != undefined)
+        return this.store.dispatch(questionPosed({ question: { questionType: question.questionType, iterationStepId }}))
     });
   }
 
@@ -223,8 +232,9 @@ export class StepDetailViewComponent {
   }
 
   onCancel(){
-    this.stepId$.pipe(take(1)).subscribe(id => 
-      this.store.dispatch(cancelPlanComputationAndIterationStep({iterationStepId: id}))
-    );
+    this.stepId$.pipe(take(1)).subscribe(id => {
+      if(id != undefined)
+        this.store.dispatch(cancelPlanComputationAndIterationStep({iterationStepId: id}))
+    });
   }
 }

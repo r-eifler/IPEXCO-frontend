@@ -1,11 +1,11 @@
 import { createReducer, on } from "@ngrx/store";
 import { Loadable, LoadingState } from "src/app/shared/common/loadable.interface";
-import { Demo } from "src/app/project/domain/demo";
 import { PlanProperty } from "src/app/shared/domain/plan-property/plan-property";
 import { loadDemos, loadDemosSuccess, loadDemoPlanPropertiesSuccess, loadDemo, loadDemoSuccess, loadOutputSchemas, loadOutputSchemasSuccess, loadServices, loadServicesSuccess, loadPrompts, loadPromptsSuccess, loadDomainSpecification, loadDomainSpecificationSuccess } from "./demo.actions";
 import { OutputSchema, Prompt } from "src/app/global_specification/domain/prompt";
 import { Service } from "src/app/global_specification/domain/services";
 import { DomainSpecification } from "src/app/global_specification/domain/domain_specification";
+import { Demo } from "src/app/shared/domain/demo";
 
 
 export interface DemoState {
@@ -39,7 +39,7 @@ export const demoReducer = createReducer(
         ...state,
         demos: {state: LoadingState.Done, data: demos},
         demo: state?.demo.state == LoadingState.Done ?
-            {state: LoadingState.Done, data: demos.find(demo => demo._id == state.demo.data._id)} :
+            {state: LoadingState.Done, data: demos.find(demo => demo._id == state.demo?.data?._id)} :
             {state: LoadingState.Initial, data: undefined}
     })),
     on(loadDemoPlanPropertiesSuccess, (state,{demoId, planProperties}): DemoState => ({

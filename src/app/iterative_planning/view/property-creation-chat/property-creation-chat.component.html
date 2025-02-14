@@ -9,7 +9,7 @@
       @for(message of messages$ | async; track message) {
       <app-chat-message [role]="message.role">{{ message.content }}</app-chat-message>
       }
-      @if((messages$ | async).length > 1){
+      @if((messages$ | async)?.length > 1){
       <ng-container app-chat-action>
         <div class="button-group">
           <button app-chat-action (click)="onSaveProperty()">Save this property</button>

@@ -1,13 +1,13 @@
 import { createAction, props } from "@ngrx/store";
 import { ProjectMetaData } from "../domain/project-meta";
-import { Project } from "src/app/shared/domain/project";
+import { Project, ProjectBase } from "src/app/shared/domain/project";
 import { DomainSpecification } from "src/app/global_specification/domain/domain_specification";
 
 export const loadProjectMetaDataList = createAction('[project-meta] load project meta data list');
 export const loadProjectMetaDataListSuccess = createAction('[project-meta] load project meta data list success', props<{projects: ProjectMetaData[]}>());
 export const loadProjectMetaDataListFailure = createAction('[project-meta] load project meta data list failure');
 
-export const createProject = createAction('[project-meta] create new project', props<{project: Project}>());
+export const createProject = createAction('[project-meta] create new project', props<{project: ProjectBase}>());
 export const createProjectSuccess = createAction('[project-meta] create new project success');
 export const createProjectFailure = createAction('[project-meta] create new project failure');
 

@@ -82,11 +82,11 @@ export class SettingsComponent {
     services: this.fb.group({
       computePlanAutomatically: this.fb.control<boolean>(false, Validators.required),
       computeExplanationsAutomatically: this.fb.control<boolean>(false, Validators.required),
-      planners: this.fb.control<string[]>([], Validators.required),
-      explainer: this.fb.control<string[]>([], Validators.required),
-	  propertyChecker: this.fb.control<string[]>([], Validators.required),
-	  tester: this.fb.control<string[]>([]),
-	  verifier: this.fb.control<string[]>([]),
+      planners: this.fb.control<string[]>([], {validators: [Validators.required], nonNullable: true}),
+      explainer: this.fb.control<string[]>([], {validators: [Validators.required], nonNullable: true}),
+      propertyChecker: this.fb.control<string[]>([], {validators: [Validators.required], nonNullable: true}),
+      tester: this.fb.control<string[]>([]),
+      verifier: this.fb.control<string[]>([]),
     }),
     interfaces: this.fb.group({
       propertyCreationInterfaceType: this.fb.control<PropertyCreationInterfaceType>(PropertyCreationInterfaceType.TEMPLATE_BASED, Validators.required),
@@ -97,18 +97,18 @@ export class SettingsComponent {
       temperature:  this.fb.control<number>(0, [Validators.required, Validators.min(0), Validators.max(2)]),
       maxCompletionTokens: this.fb.control<number | null>(null, Validators.required),
       prompts: this.fb.group({
-        system: this.fb.control<string>(null),
-        goalTransInstructions: this.fb.control<string>(null),
-        goalTransData: this.fb.control<string>(null),
-        questionClassInstructions: this.fb.control<string>(null),
-        questionClassData: this.fb.control<string>(null),
-        explanationTransInstruction: this.fb.control<string>(null),
-        explanationTransData: this.fb.control<string>(null),
+        system: this.fb.control<string | null>(null),
+        goalTransInstructions: this.fb.control<string | null>(null),
+        goalTransData: this.fb.control<string | null>(null),
+        questionClassInstructions: this.fb.control<string | null>(null),
+        questionClassData: this.fb.control<string | null>(null),
+        explanationTransInstruction: this.fb.control<string | null>(null),
+        explanationTransData: this.fb.control<string | null>(null),
       }),
       outputSchemas:  this.fb.group({
-        goalTrans: this.fb.control<string>(null),
-        questionClass: this.fb.control<string>(null),
-        explanationTrans: this.fb.control<string>(null),
+        goalTrans: this.fb.control<string | null>(null),
+        questionClass: this.fb.control<string | null>(null),
+        explanationTrans: this.fb.control<string | null>(null),
       }),
     }),
     userStudy: this.fb.group({
@@ -126,52 +126,53 @@ export class SettingsComponent {
   constructor() {
 
     effect(() => {
-    if (this.settings() == null || this.settings() == undefined){
+    const settings = this.settings();
+    if (settings == null || settings == undefined){
       return;
     }
 		try{
-			this.form.controls.main.controls.maxRuns.setValue(this.settings()?.main.maxRuns);
-			this.form.controls.main.controls.public.setValue(this.settings()?.main.public);
-			this.form.controls.main.controls.usePlanPropertyUtility.setValue(this.settings()?.main.usePlanPropertyUtility);
+			this.form.controls.main.controls.maxRuns.setValue(settings.main.maxRuns);
+			this.form.controls.main.controls.public.setValue(settings.main.public);
+			this.form.controls.main.controls.usePlanPropertyUtility.setValue(settings.main.usePlanPropertyUtility);
 		
-			this.form.controls.interfaces.controls.explanationInterfaceType.setValue(this.settings()?.interfaces.explanationInterfaceType);
-			this.form.controls.interfaces.controls.propertyCreationInterfaceType.setValue(this.settings()?.interfaces.propertyCreationInterfaceType);
+			this.form.controls.interfaces.controls.explanationInterfaceType.setValue(settings.interfaces.explanationInterfaceType);
+			this.form.controls.interfaces.controls.propertyCreationInterfaceType.setValue(settings.interfaces.propertyCreationInterfaceType);
 		
-			this.form.controls.services.controls.computePlanAutomatically.setValue(this.settings()?.services.computePlanAutomatically);
-			this.form.controls.services.controls.computeExplanationsAutomatically.setValue(this.settings()?.services.computeExplanationsAutomatically);
+			this.form.controls.services.controls.computePlanAutomatically.setValue(settings.services.computePlanAutomatically);
+			this.form.controls.services.controls.computeExplanationsAutomatically.setValue(settings.services.computeExplanationsAutomatically);
 			this.form.controls.services.controls.planners.setValue(
-				this.planners().filter(s => this.settings()?.services.services.includes(s._id)).map(s => s._id)
+				this.planners().filter(s => settings.services.services.includes(s._id)).map(s => s._id)
 			);
 			this.form.controls.services.controls.explainer.setValue(
-				this.explainer().filter(s => this.settings()?.services.services.includes(s._id)).map(s => s._id)
+				this.explainer().filter(s => settings.services.services.includes(s._id)).map(s => s._id)
 			);
 			this.form.controls.services.controls.propertyChecker.setValue(
-				this.propertyChecker().filter(s => this.settings()?.services.services.includes(s._id)).map(s => s._id)
+				this.propertyChecker().filter(s => settings.services.services.includes(s._id)).map(s => s._id)
 			);
 			this.form.controls.services.controls.tester.setValue(
-				this.tester().filter(s => this.settings()?.services.services.includes(s._id)).map(s => s._id)
+				this.tester().filter(s => settings.services.services.includes(s._id)).map(s => s._id)
 			);
 			this.form.controls.services.controls.verifier.setValue(
-				this.verifier().filter(s => this.settings()?.services.services.includes(s._id)).map(s => s._id)
+				this.verifier().filter(s => settings.services.services.includes(s._id)).map(s => s._id)
 			);
 
 		
-			this.form.controls.llmConfig.controls.model.setValue(this.settings()?.llmConfig.model);
-			this.form.controls.llmConfig.controls.temperature.setValue(this.settings()?.llmConfig.temperature);
-			this.form.controls.llmConfig.controls.maxCompletionTokens.setValue(this.settings()?.llmConfig.maxCompletionTokens);
+			this.form.controls.llmConfig.controls.model.setValue(settings.llmConfig.model);
+			this.form.controls.llmConfig.controls.temperature.setValue(settings.llmConfig.temperature);
+			this.form.controls.llmConfig.controls.maxCompletionTokens.setValue(settings.llmConfig.maxCompletionTokens);
   
-			if(this.settings()?.llmConfig.prompts && this.settings()?.llmConfig.prompts.length > 0){
+			if(settings.llmConfig.prompts && settings.llmConfig.prompts.length > 0){
 
-				const systemPrompt = this.systemPrompts()?.find(p => this.settings()?.llmConfig.prompts.includes(p._id))
+				const systemPrompt = this.systemPrompts()?.find(p => settings.llmConfig.prompts.includes(p._id))
 
-				const goalTransDataPrompt = this.goalTransDataPrompts()?.find(p => this.settings()?.llmConfig.prompts.includes(p._id))
-				const goalTransInstructionPrompt = this.goalTransInstructionPrompts()?.find(p => this.settings()?.llmConfig.prompts.includes(p._id))
+				const goalTransDataPrompt = this.goalTransDataPrompts()?.find(p => settings.llmConfig.prompts.includes(p._id))
+				const goalTransInstructionPrompt = this.goalTransInstructionPrompts()?.find(p => settings.llmConfig.prompts.includes(p._id))
 
-				const questionClassDataPrompt = this.questionClassDataPrompts()?.find(p => this.settings()?.llmConfig.prompts.includes(p._id))
-				const questionClassInstructionPrompt = this.questionClassInstructionPrompts()?.find(p => this.settings()?.llmConfig.prompts.includes(p._id))
+				const questionClassDataPrompt = this.questionClassDataPrompts()?.find(p => settings.llmConfig.prompts.includes(p._id))
+				const questionClassInstructionPrompt = this.questionClassInstructionPrompts()?.find(p => settings.llmConfig.prompts.includes(p._id))
 
-				const explanationTransDataPrompt = this.explanationTransDataPrompts()?.find(p => this.settings()?.llmConfig.prompts.includes(p._id))
-				const explanationTransInstructionPrompt = this.explanationTransInstructionPrompts()?.find(p => this.settings()?.llmConfig.prompts.includes(p._id))
+				const explanationTransDataPrompt = this.explanationTransDataPrompts()?.find(p => settings.llmConfig.prompts.includes(p._id))
+				const explanationTransInstructionPrompt = this.explanationTransInstructionPrompts()?.find(p => settings.llmConfig.prompts.includes(p._id))
 
 
 
@@ -187,25 +188,28 @@ export class SettingsComponent {
 				this.form.controls.llmConfig.controls.prompts.controls.explanationTransInstruction.setValue(explanationTransInstructionPrompt?._id ?? null);
 			}
 
-			if(this.settings()?.llmConfig.outputSchema && this.settings()?.llmConfig.outputSchema.length > 0){
+			if(settings.llmConfig.outputSchema && settings.llmConfig.outputSchema.length > 0){
 
-				const goalTransOutputSchema = this.goalTransOutputSchemas()?.find(p => this.settings()?.llmConfig.outputSchema.includes(p._id))
-				const questionClassOutputSchema = this.questionClassOutputSchemas()?.find(p => this.settings()?.llmConfig.outputSchema.includes(p._id))
-				const explanationTransOutputSchema = this.explanationTransOutputSchemas()?.find(p => this.settings()?.llmConfig.outputSchema.includes(p._id))
+				const goalTransOutputSchema = this.goalTransOutputSchemas()?.find(p => settings.llmConfig.outputSchema.includes(p._id))
+				const questionClassOutputSchema = this.questionClassOutputSchemas()?.find(p => settings.llmConfig.outputSchema.includes(p._id))
+				const explanationTransOutputSchema = this.explanationTransOutputSchemas()?.find(p => settings.llmConfig.outputSchema.includes(p._id))
 
 				this.form.controls.llmConfig.controls.outputSchemas.controls.goalTrans.setValue(goalTransOutputSchema?._id ?? null);
 				this.form.controls.llmConfig.controls.outputSchemas.controls.questionClass.setValue(questionClassOutputSchema?._id ?? null);
 				this.form.controls.llmConfig.controls.outputSchemas.controls.explanationTrans.setValue(explanationTransOutputSchema?._id ?? null);
 			}
 		
-			this.form.controls.userStudy.controls.introTask.setValue(this.settings()?.userStudy.introTask);
-			this.form.controls.userStudy.controls.checkMaxUtility.setValue(this.settings()?.userStudy.checkMaxUtility);
-			this.form.controls.userStudy.controls.showPaymentInfo.setValue(this.settings()?.userStudy.showPaymentInfo);
-			this.form.controls.userStudy.controls.paymentInfo.controls.min.setValue(this.settings()?.userStudy.paymentInfo.min);
-			this.form.controls.userStudy.controls.paymentInfo.controls.max.setValue(this.settings()?.userStudy.paymentInfo.max);
-			this.form.controls.userStudy.controls.paymentInfo.controls.steps.setValue(
-				this.settings()?.userStudy.paymentInfo.steps.join(';')
+			this.form.controls.userStudy.controls.introTask.setValue(settings.userStudy.introTask);
+			this.form.controls.userStudy.controls.checkMaxUtility.setValue(settings.userStudy.checkMaxUtility);
+			this.form.controls.userStudy.controls.showPaymentInfo.setValue(settings.userStudy.showPaymentInfo);
+      const paymentInfo = settings.userStudy.paymentInfo;
+      if(paymentInfo != undefined){
+        this.form.controls.userStudy.controls.paymentInfo.controls.min.setValue(paymentInfo.min);
+        this.form.controls.userStudy.controls.paymentInfo.controls.max.setValue(paymentInfo.max);
+        this.form.controls.userStudy.controls.paymentInfo.controls.steps.setValue(
+          paymentInfo.steps.join(';')
 			);
+      }
 		}
 		catch(e: any){
 			console.log('Could not initialize settings!')
@@ -217,37 +221,37 @@ export class SettingsComponent {
   onSave() {
 
     let paymentInfo = {
-      max: this.form.controls.userStudy.controls.paymentInfo.controls.max.value,
-      min: this.form.controls.userStudy.controls.paymentInfo.controls.min.value,
+      max: this.form.controls.userStudy.controls.paymentInfo.controls.max.value ?? 0,
+      min: this.form.controls.userStudy.controls.paymentInfo.controls.min.value ?? 1,
       steps: this.form.controls.userStudy.controls.paymentInfo.controls.steps.value 
 	  	? this.form.controls.userStudy.controls.paymentInfo.controls.steps.value.split(';').map(s => Number(s))
-		: null,
+		: [1],
     }
 
     let newSettings: GeneralSettings = {
       main: {
-        public: this.form.controls.main.controls.public.value,
+        public: this.form.controls.main.controls.public.value ?? false,
         maxRuns: this.form.controls.main.controls.maxRuns.value,
-        usePlanPropertyUtility: this.form.controls.main.controls.usePlanPropertyUtility.value,
+        usePlanPropertyUtility: this.form.controls.main.controls.usePlanPropertyUtility.value ?? true,
       },
       services: {
-          	computePlanAutomatically: this.form.controls.services.controls.computePlanAutomatically.value,
-          	computeExplanationsAutomatically: this.form.controls.services.controls.computeExplanationsAutomatically.value,
+          	computePlanAutomatically: this.form.controls.services.controls.computePlanAutomatically.value ?? true,
+          	computeExplanationsAutomatically: this.form.controls.services.controls.computeExplanationsAutomatically.value ?? true,
           	services: [
-        		...this.form.controls.services.controls.planners.value ,
+        		  ...this.form.controls.services.controls.planners.value ,
             	...this.form.controls.services.controls.explainer.value,
-				...this.form.controls.services.controls.propertyChecker.value,
-				...this.form.controls.services.controls.tester.value,
-				...this.form.controls.services.controls.verifier.value,
-          	]
+              ...this.form.controls.services.controls.propertyChecker.value,
+              ...(this.form.controls.services.controls.tester.value ?? []),
+              ...(this.form.controls.services.controls.verifier.value ?? []),
+          	].filter(e => e !== null)
       },
       interfaces: {
-          explanationInterfaceType: this.form.controls.interfaces.controls.explanationInterfaceType.value,
-          propertyCreationInterfaceType: this.form.controls.interfaces.controls.propertyCreationInterfaceType.value,
+          explanationInterfaceType: this.form.controls.interfaces.controls.explanationInterfaceType.value ?? ExplanationInterfaceType.TEMPLATE_QUESTION_ANSWER,
+          propertyCreationInterfaceType: this.form.controls.interfaces.controls.propertyCreationInterfaceType.value ?? PropertyCreationInterfaceType.TEMPLATE_BASED,
       },
       llmConfig: {
-        model: this.form.controls.llmConfig.controls.model.value,
-        temperature: this.form.controls.llmConfig.controls.temperature.value,
+        model: this.form.controls.llmConfig.controls.model.value ?? '',
+        temperature: this.form.controls.llmConfig.controls.temperature.value ?? 0,
         maxCompletionTokens: this.form.controls.llmConfig.controls.maxCompletionTokens.value,
         prompts: [
           this.form.controls.llmConfig.controls.prompts.controls.system.value,
@@ -257,17 +261,17 @@ export class SettingsComponent {
           this.form.controls.llmConfig.controls.prompts.controls.questionClassData.value,
           this.form.controls.llmConfig.controls.prompts.controls.explanationTransInstruction.value,
           this.form.controls.llmConfig.controls.prompts.controls.explanationTransData.value,
-        ].filter(e => !!e),
+        ].filter(e => e !== null),
         outputSchema: [
           this.form.controls.llmConfig.controls.outputSchemas.controls.goalTrans.value,
           this.form.controls.llmConfig.controls.outputSchemas.controls.questionClass.value,
           this.form.controls.llmConfig.controls.outputSchemas.controls.explanationTrans.value,
-        ].filter(e => !!e),
+        ].filter(e => e !== null),
       },
       userStudy: {
-          introTask: this.form.controls.userStudy.controls.introTask.value,
-          checkMaxUtility: this.form.controls.userStudy.controls.checkMaxUtility.value,
-          showPaymentInfo: this.form.controls.userStudy.controls.showPaymentInfo.value,
+          introTask: this.form.controls.userStudy.controls.introTask.value ?? false,
+          checkMaxUtility: this.form.controls.userStudy.controls.checkMaxUtility.value ?? true,
+          showPaymentInfo: this.form.controls.userStudy.controls.showPaymentInfo.value ?? false,
           paymentInfo
       }
     }

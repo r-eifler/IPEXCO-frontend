@@ -4,7 +4,7 @@ import { HttpClient, HttpParams } from "@angular/common/http";
 import { environment } from "src/environments/environment";
 import { map, tap } from "rxjs/operators";
 import { IHTTPData } from "src/app/shared/domain/http-data.interface";
-import { IterationStep } from "../domain/iteration_step";
+import { IterationStep, IterationStepBase } from "../domain/iteration_step";
 
 
 @Injectable()
@@ -24,12 +24,7 @@ export class IterationStepService{
             
     }
 
-    // step?.plan ? {
-    //     ...step.plan, 
-    //     actions: JSON.parse(step.plan as unknown as string),
-    // } :
-
-    postIterationStep$(iterationStep: IterationStep): Observable<IterationStep> {
+    postIterationStep$(iterationStep: IterationStepBase): Observable<IterationStep> {
 
         return this.http.post<IHTTPData<IterationStep>>(this.BASE_URL, {data: iterationStep}).pipe(
             map(({data}) => data)

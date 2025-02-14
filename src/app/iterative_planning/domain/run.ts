@@ -46,6 +46,6 @@ export function computePlanValue( step: IterationStep, planProperties: Record<st
 
 
 
-export function computeStepUtility(step, planProperties: Record<string, PlanProperty>): number {
+export function computeStepUtility(step: IterationStep, planProperties: Record<string, PlanProperty>) {
   return computePlanValue(step, planProperties);
 }

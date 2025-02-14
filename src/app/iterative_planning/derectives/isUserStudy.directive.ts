@@ -19,7 +19,8 @@ export class UserStudyDirective {
 
     constructor(ngIf: NgIf) {
         effect(() => {
-            ngIf.ngIf = this.user().role === 'user-study'
+            const user = this.user();
+            ngIf.ngIf = user !==  undefined ?user.role === 'user-study' : false
         });
     }
 }

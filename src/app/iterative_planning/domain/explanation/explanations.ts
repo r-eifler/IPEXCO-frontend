@@ -32,7 +32,15 @@ export enum ExplanationRunStatus {
 
 export interface GlobalExplanation{
   createdAt: Date;
-  MUGS: string[][] | null;
-  MGCS: string[][] | null;
+  MUGS?: string[][];
+  MGCS?: string[][];
+  status: ExplanationRunStatus;
+}
+
+
+export interface DefinedGlobalExplanation{
+  createdAt: Date;
+  MUGS: string[][];
+  MGCS: string[][];
   status: ExplanationRunStatus;
 }

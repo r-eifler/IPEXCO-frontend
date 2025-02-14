@@ -1,11 +1,11 @@
+import { HttpClient, HttpParams } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { HttpClient, HttpParams } from "@angular/common/http";
-import { environment } from "src/environments/environment";
-import { map, tap } from "rxjs/operators";
+import { map } from "rxjs/operators";
+import { Demo, DemoBase } from "src/app/shared/domain/demo";
 import { IHTTPData } from "src/app/shared/domain/http-data.interface";
-import { Demo } from "src/app/project/domain/demo";
-import { PlanProperty, PlanPropertyBase } from "src/app/shared/domain/plan-property/plan-property";
+import { PlanPropertyBase } from "src/app/shared/domain/plan-property/plan-property";
+import { environment } from "src/environments/environment";
 
 @Injectable()
 export class ProjectDemoService{
@@ -30,7 +30,7 @@ export class ProjectDemoService{
         )
     }
 
-    postDemo$(demo: Demo, properties: PlanPropertyBase[]): Observable<string | null> {
+    postDemo$(demo: DemoBase, properties: PlanPropertyBase[]): Observable<string | null> {
         return this.http.post<IHTTPData<string | null>>(this.BASE_URL, {demo: demo, planProperties: properties}).pipe(
             map(({data}) => data)
         )

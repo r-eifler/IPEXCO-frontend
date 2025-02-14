@@ -15,7 +15,7 @@ export class CreatePromptsEffect{
     public createPrompts$ = createEffect(() => this.actions$.pipe(
         ofType(createPrompt),
         switchMap(({prompt}) => this.service.postPrompt$(prompt).pipe(
-            switchMap(prompt => [createPromptSuccess({prompt}), loadPrompts()] ),
+            switchMap(prompt => prompt !== null ? [createPromptSuccess({prompt})] : [createPromptFailure()]),
             catchError(() => of(createPromptFailure()))
         ))
     ))
@@ -24,7 +24,7 @@ export class CreatePromptsEffect{
     public createOutputSchema$ = createEffect(() => this.actions$.pipe(
         ofType(createOutputSchema),
         switchMap(({outputSchema}) => this.service.postOutputSchema$(outputSchema).pipe(
-            switchMap(outputSchema => [createOutputSchemaSuccess({outputSchema}), loadOutputSchemas()] ),
+            switchMap(outputSchema => outputSchema !== null ? [createOutputSchemaSuccess({outputSchema})] : [createOutputSchemaFailure()]),
             catchError(() => of(createOutputSchemaFailure()))
         ))
     ))

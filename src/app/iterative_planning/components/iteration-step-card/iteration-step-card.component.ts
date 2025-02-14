@@ -52,8 +52,8 @@ export class IterationStepCardComponent {
 
   planComputationRunning = computed(() => 
     ! this.step()?.plan ||
-    this.step().plan.status == PlanRunStatus.pending || 
-    this.step().plan.status == PlanRunStatus.running
+    this.step()?.plan?.status == PlanRunStatus.pending || 
+    this.step()?.plan?.status == PlanRunStatus.running
   )
 
   maxOverallUtility = input.required<number>();

@@ -13,7 +13,7 @@ import { selectIterativePlanningProject } from '../../state/iterative-planning.s
 import { eraseLLMHistory } from '../../state/iterative-planning.actions';
 import { selectLLMChatMessages } from '../../state/iterative-planning.selector';
 import { combineLatest } from 'rxjs';
-import { GoalType, PlanProperty } from 'src/app/shared/domain/plan-property/plan-property';
+import { GoalType, PlanProperty, PlanPropertyBase } from 'src/app/shared/domain/plan-property/plan-property';
 @Component({
     selector: 'app-property-creation-chat',
     imports: [AsyncPipe, DialogModule, ChatModule],
@@ -64,13 +64,12 @@ export class PropertyCreationChatComponent {
         )
       )
     ).subscribe(({ formula, shortName, naturalLanguage, project }) => {
-      const planProperty: PlanProperty = {
+      const planProperty: PlanPropertyBase = {
         name: shortName, 
         type: GoalType.LTL,
         definition: null,
         naturalLanguageDescription: naturalLanguage,
         formula: formula,
-        project: project._id, 
         isUsed: true,
         globalHardGoal: false,
         utility: 1,

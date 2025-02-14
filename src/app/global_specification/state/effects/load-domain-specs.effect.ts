@@ -3,7 +3,7 @@ import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { catchError, switchMap } from "rxjs/operators";
 import { of } from "rxjs";
 import { DomainSpecificationService } from "../../service/domainSpecification.service";
-import { loadDomainSpecifications, loadDomainSpecificationsFailure, loadDomainSpecificationsSuccess } from "../globalSpec.actions";
+import { createDomainSpecificationSuccess, loadDomainSpecifications, loadDomainSpecificationsFailure, loadDomainSpecificationsSuccess } from "../globalSpec.actions";
 
 
 @Injectable()
@@ -18,5 +18,10 @@ export class LoadDomainSpecificationsEffect{
             switchMap(specs => [loadDomainSpecificationsSuccess({domainSpecifications: specs})] ),
             catchError(() => of(loadDomainSpecificationsFailure()))
         ))
-    ))
+    ));
+
+    public reload$ = createEffect(() => this.actions$.pipe(
+        ofType(createDomainSpecificationSuccess),
+        switchMap(spec => [loadDomainSpecifications()] ),
+    ));
 }

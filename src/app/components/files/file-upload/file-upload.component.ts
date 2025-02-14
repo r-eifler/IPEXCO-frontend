@@ -21,21 +21,22 @@ export class TemplateFileUploadComponent {
   valid = input<boolean>(false);
   fileContent = output<string>();
 
-  @ViewChild('fileInput') inputNode: ElementRef<any>
+  @ViewChild('fileInput') inputNode: ElementRef<any> | undefined
 
-  private selectedFile;
-  name: string
+  private selectedFile: string | undefined;
+  name: string | undefined
 
 
   onUploadFileSelected() {
-    let fileObject = this.inputNode.nativeElement.files[0];
+    let fileObject = this.inputNode?.nativeElement.files[0];
 
     if (typeof FileReader !== "undefined") {
       const reader = new FileReader();
 
       reader.onload = (e: any) => {
         this.selectedFile = e.target.result;
-        this.fileContent.emit(this.selectedFile)
+        if(this.selectedFile !== undefined)
+          this.fileContent.emit(this.selectedFile)
       };
 
       this.name = fileObject.name;

@@ -1,5 +1,5 @@
 import { NgFor, NgIf } from "@angular/common";
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, input, Input, OnInit } from "@angular/core";
 import { MatCardModule } from "@angular/material/card";
 import { MatExpansionModule } from "@angular/material/expansion";
 import { MatListModule } from "@angular/material/list";
@@ -17,7 +17,8 @@ import { FactToString, PDDLAction, predicateToString } from "src/app/shared/doma
     styleUrls: ["./complete-action.component.scss"]
 })
 export class CompleteActionComponent implements OnInit {
-  @Input() action: PDDLAction;
+
+  action = input.required<PDDLAction>();
 
   factOut = FactToString;
   predicatOut = predicateToString;

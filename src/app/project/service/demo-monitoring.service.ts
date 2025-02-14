@@ -2,9 +2,8 @@ import { inject, Injectable } from '@angular/core';
 import { tap, map, filter, take, exhaustMap } from 'rxjs/operators';
 import { interval, Observable } from 'rxjs';
 import { ProjectDemoService } from './demo.service';
-import { RunStatus } from 'src/app/iterative_planning/domain/run';
-import { DemoRunStatus } from 'src/app/project/domain/demo';
-  
+import { DemoRunStatus } from 'src/app/shared/domain/demo';
+
 @Injectable()
 export class DemoMonitoringService {
 

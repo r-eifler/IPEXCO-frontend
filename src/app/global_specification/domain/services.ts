@@ -3,13 +3,15 @@ export enum ServiceType {
     EXPLAINER = 'EXPLAINER',
     PROPERTY_CHECKER = 'PROPERTY_CHECKER',
     TESTER = 'TESTER',
-    VERIFIER = 'VERIFIER'
+    VERIFIER = 'VERIFIER',
+    NONE = 'NONE'
 }
 
 export enum Encoding{
     PDDL_CLASSIC = 'PDDL_CLASSIC',
     PDDL_NUMERIC = 'PDDL_NUMERIC',
-    DOMAIN_DEPENDENT = 'DOMAIN_DEPENDENT'
+    DOMAIN_DEPENDENT = 'DOMAIN_DEPENDENT',
+    NONE = 'NONE'
   }
 
 export interface ServiceBase {

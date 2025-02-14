@@ -3,7 +3,7 @@ import { inject, Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { DomainSpecification } from "src/app/global_specification/domain/domain_specification";
-import { Demo } from "src/app/project/domain/demo";
+import { Demo } from "src/app/shared/domain/demo";
 import { IHTTPData } from "src/app/shared/domain/http-data.interface";
 import { PlanProperty } from "src/app/shared/domain/plan-property/plan-property";
 import { environment } from "src/environments/environment";

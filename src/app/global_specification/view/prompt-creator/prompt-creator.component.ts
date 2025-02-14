@@ -5,7 +5,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatFormField } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { AgentType, Prompt, PromptType } from '../../domain/prompt';
+import { AgentType, Prompt, PromptBase, PromptType } from '../../domain/prompt';
 import { DialogModule } from 'src/app/shared/components/dialog/dialog.module';
 
 @Component({
@@ -46,11 +46,11 @@ export class PromptCreatorComponent {
     fb = inject(FormBuilder);
   
     form = this.fb.group({
-        name: this.fb.control<string>(null, Validators.required),
-        agent: this.fb.control<AgentType>(null, Validators.required),
-        type: this.fb.control<PromptType>(null, Validators.required),
-        domain: this.fb.control<string>(null),
-        explainer:  this.fb.control<string>(null),
+        name: this.fb.control<string | null>(null, Validators.required),
+        agent: this.fb.control<AgentType | null>(null, Validators.required),
+        type: this.fb.control<PromptType | null>(null, Validators.required),
+        domain: this.fb.control<string | null>(null),
+        explainer:  this.fb.control<string | null>(null),
     });
   
     onCancel(){
@@ -58,10 +58,10 @@ export class PromptCreatorComponent {
     }
   
     onCreate(){
-      const prompt: Prompt = {
-        name: this.form.controls.name.value,
-        agent: this.form.controls.agent.value,
-        type: this.form.controls.type.value,
+      const prompt: PromptBase = {
+        name: this.form.controls.name.value ?? 'TODO',
+        agent: this.form.controls.agent.value ?? AgentType.NONE,
+        type: this.form.controls.type.value ?? PromptType.NONE,
         domain: this.form.controls.domain.value,
         explainer: this.form.controls.explainer.value,
         text: ''

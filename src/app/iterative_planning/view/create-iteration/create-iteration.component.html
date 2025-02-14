@@ -34,7 +34,7 @@
               <app-editable-list-entry>
                 <app-plan-property-panel [property]="property"></app-plan-property-panel>
                 <app-editable-list-entry-suffix>
-                  <button mat-icon-button (click)="removeEnforcedGoal(idx)" type="button" [disabled]="property.globalHardGoal"><mat-icon>delete</mat-icon></button>
+                  <button mat-icon-button (click)="removeEnforcedGoal(idx)" type="button" [disabled]="property?.globalHardGoal ?? false"><mat-icon>delete</mat-icon></button>
                 </app-editable-list-entry-suffix>
               </app-editable-list-entry>
               }
@@ -95,6 +95,6 @@
   <app-select-property
     [properties]="availableProperties$ | async"
     (cancel)="onCancelPropertySelection()"
-    (select)="handlePropertyIdSelection($event)"
+    (select)="handlePropertyIdSelection?.($event)"
   ></app-select-property>
 </ng-template>

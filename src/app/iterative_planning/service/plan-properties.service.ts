@@ -4,7 +4,7 @@ import { HttpClient, HttpParams } from "@angular/common/http";
 import { environment } from "src/environments/environment";
 import { map, tap } from "rxjs/operators";
 import { IHTTPData } from "src/app/shared/domain/http-data.interface";
-import { PlanProperty } from "../../shared/domain/plan-property/plan-property";
+import { PlanProperty, PlanPropertyBase } from "../../shared/domain/plan-property/plan-property";
 
 
 @Injectable()
@@ -24,7 +24,7 @@ export class PlanPropertyService{
         )
     }
 
-    postPlanProperty$(planProperty: PlanProperty): Observable<PlanProperty> {
+    postPlanProperty$(planProperty: PlanPropertyBase): Observable<PlanProperty> {
         return this.http.post<IHTTPData<PlanProperty>>(this.BASE_URL, {data: planProperty}).pipe(
             map(({data}) => data)
         )

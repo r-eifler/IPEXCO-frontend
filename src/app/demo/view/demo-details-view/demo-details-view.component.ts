@@ -17,6 +17,7 @@ import { PlanPropertyUpdatePanelComponent } from 'src/app/shared/components/plan
 import { PlanProperty } from 'src/app/shared/domain/plan-property/plan-property';
 import { loadOutputSchemas, loadPrompts, loadServices, updateDemo, updatePlanProperty } from '../../state/demo.actions';
 import { selectDemo, selectDomainSpecification, selectExplainer, selectOutputSchemas, selectPlanners, selectPlanPropertiesListOfDemo, selectPlanPropertiesOfDemo, selectPrompts, selectServices } from '../../state/demo.selector';
+import { filterNotNullOrUndefined } from 'src/app/shared/common/check_null_undefined';
 
 @Component({
     selector: 'app-demo-details-view',
@@ -53,8 +54,8 @@ export class DemoDetailsViewComponent {
   prompts$ = this.store.select(selectPrompts);
   outputSchemas$ = this.store.select(selectOutputSchemas);
 
-  MUGS$: Observable<string[][]> = this.demo$.pipe(map((demo) => demo?.globalExplanation?.MUGS));
-  MGCS$: Observable<string[][]> = this.demo$.pipe(map((demo) => demo?.globalExplanation?.MGCS));
+  MUGS$ = this.demo$.pipe(map((demo) => demo?.globalExplanation?.MUGS));
+  MGCS$ = this.demo$.pipe(map((demo) => demo?.globalExplanation?.MGCS));
 
   downloadData$ = combineLatest([this.demo$,this.planProperties$, this.domainSpecification$]).pipe(
     filter(([d,pp,spec]) => !!d && !!pp && !!spec),
@@ -72,13 +73,19 @@ export class DemoDetailsViewComponent {
   }
 
   onRunIterPlanning(){
-    this.demo$.pipe(take(1)).subscribe(demo => {
+    this.demo$.pipe(
+      take(1),
+      filterNotNullOrUndefined(),
+    ).subscribe(demo => {
       this.router.navigate(['/iterative-planning', demo._id]);
     })
   }
 
   updateSettings(settings: GeneralSettings){
-    this.demo$.pipe(take(1)).subscribe(demo => {
+    this.demo$.pipe(
+      take(1),
+      filterNotNullOrUndefined(),
+    ).subscribe(demo => {
       let newDemo = {...demo};
       newDemo.settings = settings;
       this.store.dispatch(updateDemo({demo: newDemo}))

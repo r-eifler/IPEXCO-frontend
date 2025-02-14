@@ -41,7 +41,7 @@ export function nextState(state: State, action: PDDLAction): State {
 }
 
 
-export function computeUtility(plan: Plan, planProperties: Record<string, PlanProperty>): number {
+export function computeUtility(plan: Plan, planProperties: Record<string, PlanProperty>) {
   if(!plan || !planProperties){
     return undefined;
   }

@@ -2,9 +2,12 @@ import { inject, Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { catchError, filter, map, switchMap } from "rxjs/operators";
 import { of } from "rxjs";
-import { loadIterationSteps, loadIterationStepsFailure, loadIterationStepsSuccess } from "../iterative-planning.actions";
+import { cancelPlanComputationAndIterationStepSuccess, createIterationStepSuccess, globalExplanationComputationRunningSuccess, loadIterationSteps, loadIterationStepsFailure, loadIterationStepsSuccess, planComputationRunningFailure, planComputationRunningSuccess, registerGlobalExplanationComputationSuccess, registerPlanComputationSuccess } from "../iterative-planning.actions";
 import { Store } from "@ngrx/store";
 import { IterationStepService } from "../../service/iteration-step.service";
+import { selectIterativePlanningProject } from "../iterative-planning.selector";
+import { concatLatestFrom } from "@ngrx/operators";
+import { filterListNotNullOrUndefined } from "src/app/shared/common/check_null_undefined";
 
 @Injectable()
 export class LoadIterationStepsEffect{
@@ -21,5 +24,19 @@ export class LoadIterationStepsEffect{
             catchError(() => of(loadIterationStepsFailure())),
         ))
     ))
+
+    public reloadIterationStep$ = createEffect(() => this.actions$.pipe(
+        ofType(
+            createIterationStepSuccess,
+            planComputationRunningSuccess,
+            registerPlanComputationSuccess,
+            globalExplanationComputationRunningSuccess,
+            registerGlobalExplanationComputationSuccess,
+            cancelPlanComputationAndIterationStepSuccess
+        ),
+        concatLatestFrom(() => this.store.select(selectIterativePlanningProject)),
+        filterListNotNullOrUndefined(),
+        switchMap(([,project]) => [loadIterationSteps({id: project._id})]),
+    ));
 
 }

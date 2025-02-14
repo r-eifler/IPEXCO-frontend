@@ -33,8 +33,12 @@ export class PropertyCreatorComponent {
   templates$ = this.store.select(selectIterativePlanningPropertyTemplates);
 
   handleCreatedProperty(property: PlanProperty){
-    property.project = this.projectId()
-    this.dialogRef.close(property);
+    const projectId = this.projectId();
+    if(projectId !== undefined){
+      property.project = projectId;
+      this.dialogRef.close(property);
+    }
+    throw new Error("Didn't expect to get here");
   }
 
   handleCancel(){

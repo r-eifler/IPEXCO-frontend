@@ -1,13 +1,13 @@
-import { createFeatureSelector, createSelector } from "@ngrx/store";
-import { KeyValuePair, filter, find, map, memoizeWith, pipe, zip } from "ramda";
+import { createSelector } from "@ngrx/store";
+import { filter, KeyValuePair, map, memoizeWith, pipe, zip } from "ramda";
 import { LoadingState } from "src/app/shared/common/loadable.interface";
 import { explanationHash } from "../domain/explanation/explanation-hash";
 import { ExplanationRunStatus } from "../domain/explanation/explanations";
-import { IterativePlanningState, Message } from "./iterative-planning.reducer";
-import { computeCurrentMaxUtility, StepStatus } from "../domain/iteration_step";
-import { computeUtility, PlanRunStatus } from "../domain/plan";
-import { Demo, computeMaxPossibleUtility } from "src/app/project/domain/demo";
+import { computeCurrentMaxUtility } from "../domain/iteration_step";
+import { PlanRunStatus } from "../domain/plan";
 import { iterativePlanningFeature } from "./iterative-planning.feature";
+import { Message } from "./iterative-planning.reducer";
+import { computeMaxPossibleUtility, Demo } from "src/app/shared/domain/demo";
 
 const selectState = iterativePlanningFeature.selectIterativePlanningFeatureState;
 
@@ -16,7 +16,7 @@ const selectState = iterativePlanningFeature.selectIterativePlanningFeatureState
 export const selectIterativePlanningProject = createSelector(selectState,
     (state) => state.project?.data)
 export const selectIterativePlanningProjectId = createSelector(selectState,
-  (state) => state.project?.data._id)
+  (state) => state.project?.data?._id)
 export const selectIterativePlanningTask = createSelector(selectState,
         (state) => state.project?.data?.baseTask)
 export const selectIterativePlanningIsDemo = createSelector(selectState,
@@ -42,7 +42,10 @@ export const selectIterativePlanningProjectExplanationInterfaceType = createSele
 export const selectIterativePlanningProperties = createSelector(selectState,
     (state) => state.planProperties?.data)
 export const selectIterativePlanningPropertiesList = createSelector(selectState,
-    (state) => state.planProperties.state === LoadingState.Done ? Object.values(state.planProperties?.data) : null)
+    (state) => state.planProperties.state === LoadingState.Done && state.planProperties?.data !== undefined? 
+    Object.values(state.planProperties?.data) 
+    : null
+  )
 
 
 // Create new step
@@ -63,7 +66,7 @@ export const selectIterativePlanningLoadingFinished = createSelector(selectState
 // Iterative Planning Steps
 
 export const selectIterativePlanningIterationSteps = createSelector(selectState,
-    (state) => state.iterationSteps.data)
+    (state) => state.iterationSteps.data ?? [])
 export const selectIterationStepIds = createSelector(selectIterativePlanningIterationSteps, map(({ _id }) => _id));
 
 export const selectIterationStepById = memoizeWith(
@@ -84,11 +87,17 @@ export const selectIterativePlanningNumberOfSteps = createSelector(selectState,
 
 
 export const selectIterativePlanningIterationStepComputationRunning = createSelector(selectState,
-  (state) => state.iterationSteps.data?.filter(s => s.plan && (s.plan?.status == PlanRunStatus.running || s.plan.status == PlanRunStatus.pending)).length > 0)
+  (state) => {
+    const iterationSteps =  state.iterationSteps.data;
+    if(iterationSteps === undefined){
+      return false;
+    }
+    return iterationSteps.filter(s => s.plan && (s.plan?.status == PlanRunStatus.running || s.plan.status == PlanRunStatus.pending)).length > 0
+});
 
 export const selectIterativePlanningCurrentMaxUtility = createSelector(selectState, (state) => {
     let cmu = undefined;
-    if(!state.iterationSteps.data || state.iterationSteps.data.length === 0){
+    if(!state.iterationSteps.data || state.iterationSteps.data.length === 0 || state.planProperties.data == undefined){
       return 0;
     } 
     cmu = computeCurrentMaxUtility(state.iterationSteps.data, state.planProperties.data);
@@ -97,8 +106,8 @@ export const selectIterativePlanningCurrentMaxUtility = createSelector(selectSta
 
 export const selectIterativePlanningMaxPossibleUtility = createSelector(selectState, (state) => {
   let maxOverallUtility = undefined;
-  if(state.project?.data?.itemType === 'demo-project'){
-    maxOverallUtility = computeMaxPossibleUtility(state.project.data as Demo, state.planProperties.data ? Object.values(state.planProperties.data) : null)
+  if(state.project?.data?.itemType === 'demo-project' && state.planProperties.data !== undefined){
+    maxOverallUtility = computeMaxPossibleUtility(state.project.data as Demo, Object.values(state.planProperties.data))
   }
 
   return maxOverallUtility;

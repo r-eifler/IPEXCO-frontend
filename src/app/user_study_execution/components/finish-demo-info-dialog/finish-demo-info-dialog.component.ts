@@ -58,7 +58,7 @@ export class FinishDemoInfoDialogComponent {
       s.status !== StepStatus.solvable || s.plan === undefined || s.plan === null ? 
       0 : 
       computeUtility(s.plan, properties)
-    );
+    ).filter(v => v !== undefined);
     return Math.max(...stepUtilities);
   })
 

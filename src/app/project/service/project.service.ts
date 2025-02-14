@@ -5,7 +5,6 @@ import { environment } from "src/environments/environment";
 import { map, tap } from "rxjs/operators";
 import { IHTTPData } from "src/app/shared/domain/http-data.interface";
 import { array, date, object, string, infer as zInfer } from "zod";
-import { Demo } from "src/app/project/domain/demo";
 import { Project } from "src/app/shared/domain/project";
 
 // const PlanningTaskUnverifiedSchema = string().transform(s => JSON.parse(s));

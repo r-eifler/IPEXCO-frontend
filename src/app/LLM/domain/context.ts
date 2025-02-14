@@ -14,7 +14,7 @@ export interface LLMContext {
 export interface visibleLLMMessage{
     role: 'sender' | 'receiver',
     content: string,
-    iterationStepId: string | null
+    iterationStepId?: string
 }
   
 export interface LLMMessage{

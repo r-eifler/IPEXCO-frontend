@@ -11,7 +11,7 @@ export class PDDLService {
   private http = inject(HttpClient)
   BASE_URL  = environment.apiURL + "pddl/";
 
-  private model$ = new BehaviorSubject<PDDLPlanningModel>(null);
+  private model$ = new BehaviorSubject<PDDLPlanningModel | null>(null);
 
   getModel(){
     return this.model$;

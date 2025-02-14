@@ -1,4 +1,4 @@
-import { Component, DestroyRef, OnDestroy, OnInit } from "@angular/core";
+import { Component, DestroyRef, inject, OnDestroy, OnInit } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { Store } from "@ngrx/store";
 import { Observable } from "rxjs";
@@ -24,50 +24,36 @@ import { Action } from "src/app/shared/domain/plan-property/plan-property";
     templateUrl: "./plan-view.component.html",
     styleUrls: ["./plan-view.component.scss"]
 })
-export class PlanViewComponent implements OnInit {
+export class PlanViewComponent {
 
-  step$: Observable<IterationStep>;
-  actions$: Observable<Action[]>;
-  solved$: Observable<boolean>;
-  notSolvable$: Observable<boolean>;
-  isRunning$: Observable<boolean>;
-  hasPlan$: Observable<boolean>;
-  plannerBusy$: Observable<boolean>;
+  store = inject(Store);
 
-  constructor(
-    private store: Store,
-    private destroyRef: DestroyRef
-  ) {
-    this.step$ = this.store.select(selectIterativePlanningSelectedStep);
-    // this.plannerBusy$ = this.plannerService.isPlannerBusy();
-  }
+  step$ = this.store.select(selectIterativePlanningSelectedStep);
+ 
+  actions$ = this.step$.pipe(
+    filter((step) => !!step && !!step.plan && step.plan.status == PlanRunStatus.plan_found),
+    map((step) => step?.plan?.actions)
+  );
 
-  ngOnInit(): void {
+  solved$ = this.step$.pipe(
+    filter((step) => !!step && !!step.plan),
+    map((step) => step?.plan?.status == PlanRunStatus.plan_found),
+  );
 
-    this.actions$ = this.step$.pipe(
-      filter((step) => !!step && !!step.plan && step.plan.status == PlanRunStatus.plan_found),
-      map((step) => step?.plan?.actions)
-    );
+  notSolvable$ = this.step$.pipe(
+    filter((step) => !!step),
+    map((step) => step.status == StepStatus.unsolvable),
+  );
 
-    this.solved$ = this.step$.pipe(takeUntilDestroyed(this.destroyRef)).pipe(
-      filter((step) => !!step && !!step.plan),
-      map((step) => step.plan.status == PlanRunStatus.plan_found),
-    );
+  isRunning$ = this.step$.pipe(
+    filter((step) => !!step && !!step.plan),
+    map((step) => step?.plan?.status == PlanRunStatus.pending),
+  );
 
-    this.notSolvable$ = this.step$.pipe(takeUntilDestroyed(this.destroyRef)).pipe(
-      filter((step) => !!step),
-      map((step) => step.status == StepStatus.unsolvable),
-    );
+  hasPlan$ = this.step$.pipe(
+    filter((step) => !!step),
+    map((step) => !!step.plan),
+  );
 
-    this.isRunning$ = this.step$.pipe(takeUntilDestroyed(this.destroyRef)).pipe(
-      filter((step) => !!step && !!step.plan),
-      map((step) => step.plan.status == PlanRunStatus.pending),
-    );
-
-    this.hasPlan$ = this.step$.pipe(takeUntilDestroyed(this.destroyRef)).pipe(
-      filter((step) => !!step),
-      map((step) => !!step.plan),
-    );
-  }
 
 }

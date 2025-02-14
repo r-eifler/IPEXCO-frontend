@@ -10,6 +10,7 @@ import { selectIterativePlanningProject } from '../../state/iterative-planning.s
 import { eraseLLMHistory } from '../../state/iterative-planning.actions';
 import { selectIsLLMChatLoading } from '../../state/iterative-planning.selector';
 import { combineLatest, Subscription } from 'rxjs';
+import { filterNotNullOrUndefined } from 'src/app/shared/common/check_null_undefined';
 @Component({
     selector: 'app-explanation-chat-llm',
     imports: [AsyncPipe, ChatModule],
@@ -33,7 +34,10 @@ export class ExplanationChatLlmComponent implements OnInit, OnDestroy {
   project$ = this.store.select(selectIterativePlanningProject);
   step$ = this.store.select(selectIterativePlanningSelectedStep);
   stepId$ = this.step$.pipe(map(step => step?._id));
-  messages$ = this.stepId$.pipe(switchMap(id => this.store.select(selectVisibleMessagesbyId(id))));
+  messages$ = this.stepId$.pipe(
+    filterNotNullOrUndefined(),
+    switchMap(id => this.store.select(selectVisibleMessagesbyId(id)))
+  );
 
   // Add subscription management
   private subscriptions: Subscription[] = [];
@@ -55,6 +59,7 @@ export class ExplanationChatLlmComponent implements OnInit, OnDestroy {
   onUserMessage(request: string) {
     this.stepId$.pipe(
       take(1),
+      filterNotNullOrUndefined(),
     ).subscribe({
       next: (iterationStepId) => {
         this.store.dispatch(sendMessageToLLMQuestionTranslator({

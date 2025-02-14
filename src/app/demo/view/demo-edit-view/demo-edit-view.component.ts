@@ -1,19 +1,20 @@
-import { Component, inject } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { selectDemo } from '../../state/demo.selector';
-import { PageModule } from 'src/app/shared/components/page/page.module';
-import { BreadcrumbModule } from 'src/app/shared/components/breadcrumb/breadcrumb.module';
 import { AsyncPipe } from '@angular/common';
-import { MatIconModule } from '@angular/material/icon';
-import { Router, RouterLink } from '@angular/router';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatInputModule } from '@angular/material/input';
-import { BehaviorSubject, combineLatest, filter, map, startWith, switchMap, take, tap } from 'rxjs';
-import { ProjectDemoService } from 'src/app/project/service/demo.service';
-import { MatButtonModule } from '@angular/material/button';
+import { Component, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Demo } from 'src/app/project/domain/demo';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { Router, RouterLink } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { BehaviorSubject, combineLatest, filter, map, switchMap, take, tap } from 'rxjs';
+import { ProjectDemoService } from 'src/app/project/service/demo.service';
+import { BreadcrumbModule } from 'src/app/shared/components/breadcrumb/breadcrumb.module';
+import { PageModule } from 'src/app/shared/components/page/page.module';
 import { updateDemo } from '../../state/demo.actions';
+import { selectDemo } from '../../state/demo.selector';
+import { Demo } from 'src/app/shared/domain/demo';
+import { filterListNotNullOrUndefined } from 'src/app/shared/common/check_null_undefined';
 
 @Component({
   selector: 'app-demo-edit-view',
@@ -48,12 +49,12 @@ export class DemoEditViewComponent {
       domainInfo: this.fb.control<string>(""),
       instanceInfo: this.fb.control<string>(""),
     }),
-    image: this.fb.control<File>(null),
+    image: this.fb.control<File | null>(null),
   });
 
   demo$ = this.store.select(selectDemo)
 
-  imagePath$ = new BehaviorSubject<string>(null);
+  imagePath$ = new BehaviorSubject<string | null>(null);
 
   imageFile$ = new BehaviorSubject<any>(null);
   imageFileName$ = this.imageFile$.pipe(map(f => f?.name));
@@ -71,7 +72,9 @@ export class DemoEditViewComponent {
     this.imageFile$.pipe(
       takeUntilDestroyed(),
       filter(f => !!f),
-      switchMap(f => this.uploadService.postDemoImage$(f).pipe(tap(path => this.imagePath$.next(path))))
+      switchMap(f => this.uploadService.postDemoImage$(f).pipe(
+        tap(path => path !==  null ? this.imagePath$.next(path) : true))
+      )
     ).subscribe();
 
   }
@@ -79,27 +82,30 @@ export class DemoEditViewComponent {
   initForm(demo: Demo){
     this.form.controls.main.controls.name.setValue(demo.name);
     this.form.controls.main.controls.description.setValue(demo.description);
-    this.form.controls.taskInfo.controls.domainInfo.setValue(demo.domainInfo);
     this.form.controls.taskInfo.controls.instanceInfo.setValue(demo.instanceInfo);
 
     this.imagePath$.next(demo.summaryImage);
 
   }
 
-  onFileChanged(event) {
-    this.imageFile$.next(event.target.files[0]);
+  onFileChanged(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if(input.files && input.files.length > 0)
+      this.imageFile$.next(input.files[0]);
   }
 
   save(){
-    combineLatest([this.demo$, this.imagePath$]).pipe(take(1)).subscribe(
+    combineLatest([this.demo$, this.imagePath$]).pipe(
+      take(1),
+      filterListNotNullOrUndefined(),
+    ).subscribe(
       ([demo, imagePath]) => {
         const newDemo: Demo = {
           ...demo,
-          name: this.form.controls.main.controls.name.value,
+          name: this.form.controls.main.controls.name.value ?? 'TODO',
           summaryImage: imagePath,
-          description: this.form.controls.main.controls.description.value,
-          domainInfo: this.form.controls.taskInfo.controls.domainInfo.value,
-          instanceInfo: this.form.controls.taskInfo.controls.instanceInfo.value,
+          description: this.form.controls.main.controls.description.value ?? 'TODO',
+          instanceInfo: this.form.controls.taskInfo.controls.instanceInfo.value ?? 'TODO',
         };
 
         this.store.dispatch(updateDemo({demo: newDemo}))

@@ -7,6 +7,7 @@ import { PlanPropertyService } from "../../service/plan-properties.service";
 import { Store } from "@ngrx/store";
 import { concatLatestFrom } from "@ngrx/operators";
 import { selectIterativePlanningProject } from "../iterative-planning.selector";
+import { filterListNotNullOrUndefined } from "src/app/shared/common/check_null_undefined";
 
 @Injectable()
 export class CreatePlanPropertyEffect{
@@ -18,9 +19,9 @@ export class CreatePlanPropertyEffect{
     public createPlanProperty$ = createEffect(() => this.actions$.pipe(
         ofType(createPlanProperty),
         switchMap(({planProperty}) => this.service.postPlanProperty$(planProperty).pipe(
-            concatLatestFrom(() => this.store.select(selectIterativePlanningProject)),
-            switchMap(([planProperty, project]) => [createPlanPropertySuccess({planProperty}), loadPlanProperties({id: project._id})]),
+            switchMap((planProperty) => [createPlanPropertySuccess({planProperty})]),
             catchError(() => of(createPlanPropertyFailure()))
         ))
-    ))
+    ));
+
 }

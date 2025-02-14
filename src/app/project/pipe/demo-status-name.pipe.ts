@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { DemoRunStatus } from 'src/app/project/domain/demo';
+import { DemoRunStatus } from 'src/app/shared/domain/demo';
 
 @Pipe({
   name: 'demoStatusName',
@@ -7,7 +7,7 @@ import { DemoRunStatus } from 'src/app/project/domain/demo';
 })
 export class DemoStatusNamePipe implements PipeTransform {
 
-  transform(value: DemoRunStatus | undefined): string {
+  transform(value: DemoRunStatus | undefined) {
     if(value === undefined || value === null) {
       return 'Unknown';
     }

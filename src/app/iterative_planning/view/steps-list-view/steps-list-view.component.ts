@@ -49,7 +49,7 @@ export class StepsListViewComponent{
 
   project$ = this.store.select(selectIterativePlanningProject)
   image$ = this.project$.pipe(map(p => p?.summaryImage));
-  domainInfo$ = this.project$.pipe(map(p => p?.domainInfo));
+  // domainInfo$ = this.project$.pipe(map(p => p?.domainInfo));
   instanceInfo$ = this.project$.pipe(map(p => p?.instanceInfo));
   steps$ = this.store.select(selectIterativePlanningIterationSteps);
   loadingState$ = this.store.select(selectIterativePlanningIterationStepsLoadingState);
