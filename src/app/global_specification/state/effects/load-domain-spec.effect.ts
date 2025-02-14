@@ -16,7 +16,7 @@ export class LoadDomainSpecificationEffect{
         ofType(loadDomainSpecification),
         switchMap(({id}) => this.service.getById$(id).pipe(
             switchMap(spec => [loadDomainSpecificationSuccess({domainSpecification: spec})] ),
-            catchError(() => of(loadDomainSpecificationFailure()))
+            catchError((err) => of(loadDomainSpecificationFailure(err)))
         ))
     ))
 }

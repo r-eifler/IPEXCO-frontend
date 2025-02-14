@@ -15,8 +15,8 @@ export class DeleteServicesEffect{
     public deletePlanners$ = createEffect(() => this.actions$.pipe(
         ofType(deleteService),
         switchMap(({id}) => this.service.delete$(id).pipe(
-            switchMap(() => [deleteServiceSuccess(), loadServices()] ),
-            catchError(() => of(deleteServiceFailure()))
+            switchMap(() => [deleteServiceSuccess()] ),
+            catchError((err) => of(deleteServiceFailure(err)))
         ))
     ));
 

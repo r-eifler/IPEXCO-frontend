@@ -16,7 +16,7 @@ export class UpdateDomainSpecificationEffect{
         ofType(updateDomainSpecification),
         switchMap(({domainSpecification}) => this.service.put$(domainSpecification).pipe(
             switchMap(spec => [updateDomainSpecificationSuccess({domainSpecification: spec}), loadDomainSpecifications()] ),
-            catchError(() => of(updateDomainSpecificationFailure()))
+            catchError((err) => of(updateDomainSpecificationFailure(err)))
         ))
     ));
 

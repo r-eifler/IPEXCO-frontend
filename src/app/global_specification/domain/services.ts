@@ -1,3 +1,5 @@
+import { z } from "zod";
+
 export enum ServiceType {
     PLANNER = 'PLANNER',
     EXPLAINER = 'EXPLAINER',
@@ -12,23 +14,28 @@ export enum Encoding{
     PDDL_NUMERIC = 'PDDL_NUMERIC',
     DOMAIN_DEPENDENT = 'DOMAIN_DEPENDENT',
     NONE = 'NONE'
-  }
-
-export interface ServiceBase {
-    name: string;
-    type: ServiceType;
-    domainId: string | null;
-    url: string;
-    apiKey: string;
-    encoding: Encoding;
 }
 
+const ServiceTypeZ = z.nativeEnum(ServiceType);
+const EncodingZ = z.nativeEnum(Encoding);
 
-export interface Service extends ServiceBase{
-    _id: string;
-}
+export const ServiceBaseZ = z.object({
+    name: z.string(),
+    type : ServiceTypeZ,
+    domainId: z.nullable(z.string()),
+    url: z.string(),
+    apiKey: z.string(),
+    encoding: EncodingZ,
+});
 
+export type ServiceBase = z.infer<typeof ServiceBaseZ>;
 
+export const ServiceZ = ServiceBaseZ.merge(
+    z.object({
+        _id: z.string(),
+    })
+)
 
+export type Service = z.infer<typeof ServiceZ>;
 
 

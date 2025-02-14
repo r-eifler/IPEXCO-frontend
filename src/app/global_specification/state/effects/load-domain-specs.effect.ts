@@ -1,9 +1,9 @@
 import { inject, Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { catchError, switchMap } from "rxjs/operators";
 import { of } from "rxjs";
+import { catchError, switchMap } from "rxjs/operators";
 import { DomainSpecificationService } from "../../service/domainSpecification.service";
-import { createDomainSpecificationSuccess, loadDomainSpecifications, loadDomainSpecificationsFailure, loadDomainSpecificationsSuccess } from "../globalSpec.actions";
+import { createDomainSpecificationSuccess, deleteDomainSpecificationSuccess, loadDomainSpecifications, loadDomainSpecificationsFailure, loadDomainSpecificationsSuccess } from "../globalSpec.actions";
 
 
 @Injectable()
@@ -16,12 +16,12 @@ export class LoadDomainSpecificationsEffect{
         ofType(loadDomainSpecifications),
         switchMap(() => this.service.get$().pipe(
             switchMap(specs => [loadDomainSpecificationsSuccess({domainSpecifications: specs})] ),
-            catchError(() => of(loadDomainSpecificationsFailure()))
+            catchError((err) => of(loadDomainSpecificationsFailure(err)))
         ))
     ));
 
     public reload$ = createEffect(() => this.actions$.pipe(
-        ofType(createDomainSpecificationSuccess),
+        ofType(createDomainSpecificationSuccess, deleteDomainSpecificationSuccess),
         switchMap(spec => [loadDomainSpecifications()] ),
     ));
 }

@@ -1,9 +1,9 @@
 import { inject, Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { catchError, switchMap } from "rxjs/operators";
 import { of } from "rxjs";
+import { catchError, switchMap } from "rxjs/operators";
 import { ServicesService } from "../../service/services.service";
-import { createService, createServiceFailure, createServiceSuccess, loadServices } from "../globalSpec.actions";
+import { createService, createServiceFailure, createServiceSuccess } from "../globalSpec.actions";
 
 @Injectable()
 export class CreateServicesEffect{
@@ -14,8 +14,8 @@ export class CreateServicesEffect{
     public createServices$ = createEffect(() => this.actions$.pipe(
         ofType(createService),
         switchMap(({service}) => this.service.post$(service).pipe(
-            switchMap(service => service !== null ? [createServiceSuccess({service: service})] : [createServiceFailure()]),
-            catchError(() => of(createServiceFailure()))
+            switchMap(service => service !== null ? [createServiceSuccess({service: service})] : [createServiceFailure({err: 'Service is null'})]),
+            catchError((err) => of(createServiceFailure(err)))
         ))
     ));
 

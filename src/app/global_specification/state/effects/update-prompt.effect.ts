@@ -16,7 +16,7 @@ export class UpdatePromptsEffect{
         ofType(updatePrompt),
         switchMap(({prompt}) => this.service.putPrompt$(prompt).pipe(
             switchMap((prompt) => [updatePromptSuccess({prompt}), loadPrompts()] ),
-            catchError(() => of(updatePromptFailure()))
+            catchError((err) => of(updatePromptFailure(err)))
         ))
     ))
 
@@ -25,7 +25,7 @@ export class UpdatePromptsEffect{
         ofType(updateOutputSchema),
         switchMap(({outputSchema}) => this.service.putOutputSchema$(outputSchema).pipe(
             switchMap((outputSchema) => [updateOutputSchemaSuccess({outputSchema}), loadOutputSchemas()] ),
-            catchError(() => of(updateOutputSchemaFailure()))
+            catchError((err) => of(updateOutputSchemaFailure(err)))
         ))
     ))
 }

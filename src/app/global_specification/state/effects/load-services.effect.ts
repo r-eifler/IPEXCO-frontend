@@ -3,7 +3,7 @@ import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { catchError, switchMap } from "rxjs/operators";
 import { of } from "rxjs";
 import { ServicesService } from "../../service/services.service";
-import { createServiceSuccess, loadServices, loadServicesFailure, loadServicesSuccess } from "../globalSpec.actions";
+import { createServiceSuccess, deleteServiceSuccess, loadServices, loadServicesFailure, loadServicesSuccess } from "../globalSpec.actions";
 
 
 @Injectable()
@@ -16,12 +16,12 @@ export class LoadServicesEffect{
         ofType(loadServices),
         switchMap(() => this.servicePlanner.get$().pipe(
             switchMap(services => [loadServicesSuccess({services: services})] ),
-            catchError(() => of(loadServicesFailure()))
+            catchError((err) => of(loadServicesFailure(err)))
         ))
     ));
 
     public roadServices$ = createEffect(() => this.actions$.pipe(
-        ofType(createServiceSuccess),
+        ofType(createServiceSuccess, deleteServiceSuccess),
         switchMap(() => [loadServices()]),
     ));
 }

@@ -16,7 +16,7 @@ export class DeletePromptsEffect{
         ofType(deletePrompt),
         switchMap(({id}) => this.service.deletePrompt$(id).pipe(
             switchMap(() => [deletePromptSuccess(), loadPrompts()] ),
-            catchError(() => of(deletePromptFailure()))
+            catchError((err) => of(deletePromptFailure(err)))
         ))
     ))
 
@@ -25,7 +25,7 @@ export class DeletePromptsEffect{
         ofType(deleteOutputSchema),
         switchMap(({id}) => this.service.deleteOutputSchema$(id).pipe(
             switchMap(() => [deleteOutputSchemaSuccess(), loadOutputSchemas()] ),
-            catchError(() => of(deleteOutputSchemaFailure()))
+            catchError((err) => of(deleteOutputSchemaFailure(err)))
         ))
     ))
 }
