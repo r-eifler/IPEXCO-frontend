@@ -5,6 +5,7 @@ interface IDataObject {
   MUGS: Record<string, any>[];
   counts: Record<string, number>;
   elements: PlanProperty[];
+  types: {};
   elementsName: string[]
   selectedElements: PlanProperty[];
   elementsCriticality: Record<string, string>;
@@ -29,6 +30,7 @@ const defaultDataObject: IDataObject = {
   MUGS: [],
   counts: {},
   elements: [],
+  types: {},
   elementsName: [],
   selectedElements: [],
   elementsCriticality : {},
