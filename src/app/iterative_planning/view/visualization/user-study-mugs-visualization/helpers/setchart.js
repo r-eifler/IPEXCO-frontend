@@ -1,4 +1,3 @@
-import {separateTicks } from "./utils.js";
 import * as d3 from 'd3';
 
 let where, svg, data, margin, width, height, x, y, dataElementColors;
