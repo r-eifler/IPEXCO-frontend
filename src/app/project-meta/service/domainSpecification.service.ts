@@ -1,10 +1,10 @@
+import { HttpClient } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { HttpClient } from "@angular/common/http";
+import { map } from "rxjs/operators";
+import { DomainSpecification, DomainSpecificationZ } from "src/app/global_specification/domain/domain_specification";
 import { environment } from "src/environments/environment";
-import { map, tap } from "rxjs/operators";
-import { IHTTPData } from "src/app/shared/domain/http-data.interface";
-import { DomainSpecification } from "src/app/global_specification/domain/domain_specification";
+import { array } from "zod";
 
 @Injectable()
 export class MetaProjectDomainSpecificationService{
@@ -14,9 +14,8 @@ export class MetaProjectDomainSpecificationService{
 
     
     get$(): Observable<DomainSpecification[]> {
-
-        return this.http.get<IHTTPData<DomainSpecification[]>>(this.BASE_URL).pipe(
-            map(({data}) => data)
+        return this.http.get<unknown>(this.BASE_URL).pipe(
+            map((data => array(DomainSpecificationZ).parse(data))),
         )
     }
 

@@ -18,6 +18,6 @@ export const deleteProjectFailure = createAction('[project-meta] delete project 
 
 // domain specifications
 
-export const loadDomainSpecifications = createAction('[project-meta] load  domain specifications');
-export const loadDomainSpecificationsSuccess = createAction('[project-meta] load  domain specifications success', props<{domainSpecifications: DomainSpecification[]}>());
-export const loadDomainSpecificationsFailure = createAction('[project-meta] load  domain specifications failure');
+export const loadDomainSpecifications = createAction('[project-meta] load domain specifications');
+export const loadDomainSpecificationsSuccess = createAction('[project-meta] load domain specifications success', props<{domainSpecifications: DomainSpecification[]}>());
+export const loadDomainSpecificationsFailure = createAction('[project-meta] load domain specifications failure');

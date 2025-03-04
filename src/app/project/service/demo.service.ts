@@ -7,7 +7,9 @@ import { IHTTPData } from "src/app/shared/domain/http-data.interface";
 import { PlanPropertyBase } from "src/app/shared/domain/plan-property/plan-property";
 import { environment } from "src/environments/environment";
 
-@Injectable()
+@Injectable({
+    providedIn: "root"
+})
 export class ProjectDemoService{
 
     private http = inject(HttpClient)

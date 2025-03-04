@@ -2,20 +2,18 @@ import { Injectable, inject } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { concatLatestFrom } from "@ngrx/operators";
 import { Store } from "@ngrx/store";
-import { filter, map, mergeMap, switchMap, take, tap } from "rxjs";
+import { filter, map, mergeMap, of, switchMap, take, tap } from "rxjs";
+import { catchError } from "rxjs/operators";
+import { LLMService } from "src/app/LLM/service/llm.service";
+import { filterListNotNullOrUndefined, filterNotNullOrUndefined } from "src/app/shared/common/check_null_undefined";
 import { getAnswer, getComputedBase, mapComputeBase } from "../../domain/explanation/answer-factory";
 import { explanationHash } from "../../domain/explanation/explanation-hash";
-import { DefinedGlobalExplanation, ExplanationRunStatus, GlobalExplanation, QuestionType } from "../../domain/explanation/explanations";
+import { DefinedGlobalExplanation, ExplanationRunStatus, QuestionType } from "../../domain/explanation/explanations";
 import { ExplanationMessage } from "../../domain/interface/explanation-message";
 import { Question } from "../../domain/interface/question";
 import { IterationStep, StepStatus } from "../../domain/iteration_step";
-import { poseAnswer, questionPosed, questionPosedLLM, registerGlobalExplanationComputation, sendMessageToLLMExplanationTranslator, sendMessageToLLMExplanationTranslatorFailure, sendMessageToLLMExplanationTranslatorSuccess } from "../iterative-planning.actions";
+import { poseAnswer, questionPosed, questionPosedLLM, registerGlobalExplanationComputation, sendMessageToLLMExplanationTranslatorFailure, sendMessageToLLMExplanationTranslatorSuccess } from "../iterative-planning.actions";
 import { selectExplanation, selectIterationStepById, selectIterativePlanningProject, selectIterativePlanningProjectExplanationInterfaceType, selectIterativePlanningProperties, selectLLMThreadIdET } from "../iterative-planning.selector";
-import { ExplanationInterfaceType } from "src/app/project/domain/general-settings";
-import { LLMService } from "src/app/LLM/service/llm.service";
-import { catchError } from "rxjs/operators";
-import { of } from "rxjs";
-import { filterListNotNullOrUndefined, filterNotNullOrUndefined } from "src/app/shared/common/check_null_undefined";
 
 @Injectable()
 export class QuestionQueueEffect {
@@ -52,7 +50,7 @@ export class QuestionQueueEffect {
 
       return this.store.select(selectExplanation(hash)).pipe(
         filter(explanation => 
-          explanation?.status === ExplanationRunStatus.finished &&
+          explanation?.status === ExplanationRunStatus.FINISHED &&
           explanation?.MGCS !== undefined &&
           explanation?.MUGS !== undefined
         ),
@@ -79,8 +77,8 @@ export class QuestionQueueEffect {
         // tap(explanation => console.log('Explanation from store:', explanation)),
         filterNotNullOrUndefined(),
         filter(explanation =>  
-          (explanation.status === ExplanationRunStatus.failed || 
-           explanation.status === ExplanationRunStatus.finished)),
+          (explanation.status === ExplanationRunStatus.FAILED|| 
+           explanation.status === ExplanationRunStatus.FINISHED)),
         tap(explanation => console.log('After filter - explanation status:', explanation?.status)),
         take(1),
         concatLatestFrom(() => [this.store.select(selectIterativePlanningProperties)]),

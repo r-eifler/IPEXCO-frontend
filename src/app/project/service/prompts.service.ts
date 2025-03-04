@@ -1,10 +1,10 @@
+import { HttpClient } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { HttpClient } from "@angular/common/http";
-import { environment } from "src/environments/environment";
 import { map } from "rxjs/operators";
-import { IHTTPData } from "src/app/shared/domain/http-data.interface";
-import { OutputSchema, Prompt } from "src/app/global_specification/domain/prompt";
+import { OutputSchema, OutputSchemaZ, Prompt, PromptZ } from "src/app/global_specification/domain/prompt";
+import { environment } from "src/environments/environment";
+import { array } from "zod";
 
 
 @Injectable()
@@ -15,17 +15,15 @@ export class ProjectPromptsService{
 
     
     getPrompts$(): Observable<Prompt[]> {
-
-        return this.http.get<IHTTPData<Prompt[]>>(this.BASE_URL + 'prompt').pipe(
-            map(({data}) => data),
+        return this.http.get<unknown>(this.BASE_URL + 'prompt').pipe(
+            map(data => array(PromptZ).parse(data)),
         )
     }
 
 
     getOutputSchemas$(): Observable<OutputSchema[]> {
-
-        return this.http.get<IHTTPData<OutputSchema[]>>(this.BASE_URL + 'output-schema').pipe(
-            map(({data}) => data),
+        return this.http.get<unknown>(this.BASE_URL + 'output-schema').pipe(
+            map(data => array(OutputSchemaZ).parse(data)),
         )
     }
 

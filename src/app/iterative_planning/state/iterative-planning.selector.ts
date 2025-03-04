@@ -144,7 +144,7 @@ export const selectExplanation = memoizeWith(
 
 export const selectIsExplanationLoading = memoizeWith(
   (explanationHash: string) => explanationHash,
-  (explanationHash: string) => createSelector(selectExplanation(explanationHash), (explanation) => explanation?.status === ExplanationRunStatus.pending || explanation?.status === ExplanationRunStatus.running),
+  (explanationHash: string) => createSelector(selectExplanation(explanationHash), (explanation) => explanation?.status === ExplanationRunStatus.PENDING || explanation?.status === ExplanationRunStatus.RUNNING),
 );
 
 export const selectIterationStepIdsWithoutExplanations = createSelector(selectIterativePlanningIterationSteps, selectAllExplanations, (iterationSteps, allExplanations) => {

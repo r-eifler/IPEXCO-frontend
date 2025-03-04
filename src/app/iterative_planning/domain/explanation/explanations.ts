@@ -24,10 +24,10 @@ export interface Answer{
 }
 
 export enum ExplanationRunStatus {
-  pending,
-  running,
-  failed,
-  finished
+  PENDING = "PENDING",
+  RUNNING = "RUNNING",
+  FAILED = "FAILED",
+  FINISHED = "FINISHED"
 }
 
 export interface GlobalExplanation{

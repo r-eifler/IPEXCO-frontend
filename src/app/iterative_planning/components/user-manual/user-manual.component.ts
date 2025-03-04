@@ -66,7 +66,7 @@ export class UserManualComponent {
     public: false,
     settings: defaultGeneralSetting,
     globalExplanation: {
-      status: ExplanationRunStatus.finished,
+      status: ExplanationRunStatus.FINISHED,
       MUGS: [],
       MGCS: [['2', '5']],
       createdAt: new Date()

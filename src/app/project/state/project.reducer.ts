@@ -27,6 +27,7 @@ import {
     loadServicesSuccess,
     registerDemoCreation,
     registerDemoCreationSuccess,
+    selectProjectDemo,
     updateProject,
     updateProjectSuccess
 } from "./project.actions";
@@ -145,6 +146,10 @@ export const projectReducer = createReducer(
     on(demoCreationRunningFailure, (state): ProjectState => ({
         ...state,
         demoCreation: {state: CreationState.Default, data: undefined}
+    })),
+    on(selectProjectDemo, (state,{id}): ProjectState => ({
+        ...state,
+        demoId: id,
     })),
     on(loadDemoPlanPropertiesSuccess, (state,{demoId, planProperties}): ProjectState => ({
         ...state,

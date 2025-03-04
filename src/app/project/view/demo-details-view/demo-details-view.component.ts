@@ -1,23 +1,23 @@
+import { AsyncPipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { PageModule } from 'src/app/shared/components/page/page.module';
-import { selectPlanPropertiesOfDemo, selectSelectedProjectDemo } from '../../state/project.selector';
-import { combineLatest, filter, map, Observable, take } from 'rxjs';
-import { BreadcrumbModule } from 'src/app/shared/components/breadcrumb/breadcrumb.module';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { AsyncPipe } from '@angular/common';
-import { MatButtonModule } from '@angular/material/button';
-import { DemoHeroComponent } from '../../components/demo-hero/demo-hero.component';
+import { Store } from '@ngrx/store';
+import { combineLatest, filter, map, take } from 'rxjs';
+import { filterNotNullOrUndefined } from 'src/app/shared/common/check_null_undefined';
+import { AskDeleteComponent } from 'src/app/shared/components/ask-delete/ask-delete.component';
+import { BreadcrumbModule } from 'src/app/shared/components/breadcrumb/breadcrumb.module';
+import { PageModule } from 'src/app/shared/components/page/page.module';
 import { PlanPropertyBadgeComponent } from 'src/app/shared/components/plan-property-badge/plan-property-badge.component';
+import { PlanPropertyUpdatePanelComponent } from 'src/app/shared/components/plan-property-update-panel/plan-property-update-panel.component';
 import { PlanProperty } from 'src/app/shared/domain/plan-property/plan-property';
+import { DemoHeroComponent } from '../../components/demo-hero/demo-hero.component';
 import { SettingsComponent } from "../../components/settings/settings.component";
 import { GeneralSettings } from '../../domain/general-settings';
-import { deleteProjectDemo, updateDemo, updatePlanProperty } from '../../state/project.actions';
-import { AskDeleteComponent } from 'src/app/shared/components/ask-delete/ask-delete.component';
-import { MatDialog } from '@angular/material/dialog';
-import { PlanPropertyUpdatePanelComponent } from 'src/app/shared/components/plan-property-update-panel/plan-property-update-panel.component';
-import { filterNotNullOrUndefined } from 'src/app/shared/common/check_null_undefined';
+import { deleteProjectDemo, loadOutputSchemas, loadPrompts, loadServices, updateDemo, updatePlanProperty } from '../../state/project.actions';
+import { selectOutputSchemas, selectPlanPropertiesOfDemo, selectPrompts, selectSelectedProjectDemo, selectServices } from '../../state/project.selector';
 
 @Component({
     selector: 'app-demo-details-view',
@@ -49,6 +49,10 @@ export class DemoDetailsViewComponent {
     map((planProperties) => Object.values(planProperties ?? {}))
   );
 
+  services$ = this.store.select(selectServices);
+  prompts$ = this.store.select(selectPrompts);
+  outputSchemas$ = this.store.select(selectOutputSchemas);
+
   MUGS$ = this.demo$.pipe(
     filter(demo => !!demo),
     map(demo => demo.globalExplanation?.MUGS ?? null)
@@ -66,9 +70,10 @@ export class DemoDetailsViewComponent {
     })], { type: "text/json" }))))
 
   constructor(){
-    this.MUGS$.subscribe(MUGS => console.log(MUGS));
+    this.store.dispatch(loadServices());
+    this.store.dispatch(loadPrompts());
+    this.store.dispatch(loadOutputSchemas());
   }
-
 
   onDelete(id: string){
     const dialogRef = this.dialog.open(AskDeleteComponent, {
