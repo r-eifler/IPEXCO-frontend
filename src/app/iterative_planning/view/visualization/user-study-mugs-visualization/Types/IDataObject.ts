@@ -5,3 +5,9 @@ export interface IDataObject {
   elements: PlanProperty[];
   elementsName: string[]
 }
+
+export const defaultDataObject: IDataObject = {
+  MUGS: [],
+  elements: [],
+  elementsName: []
+}

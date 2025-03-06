@@ -1,37 +1,24 @@
+import { separateTicks } from "./utils.js";
 import * as d3 from 'd3';
 
 let where, svg, data, margin, width, height, x, y, dataElementColors;
 
-const OFFSET = 2
-const margins = { top: 150, right: 0, bottom: 0, left: 300 }
-const constants = { rectWidth: 30, compressed: 10 }
-const rectOffset =  10;
-const radius = 8;
+function draw(_data, _where, _dims){
+  where = _where;
+  data = _data;
+  data.elementsName = _data.elements.map(d => d.name);
+  dataElementColors = _data.elements.map(d => ({ name: d.name, color: d.color }));
+  margin = _dims.margin;
+  width = _dims.width;
+  height = _dims.height;
 
-function init(parent, mugsLength, elementsLength){
-  where = parent
-  width = mugsLength * constants.rectWidth;
-  height = elementsLength * constants.rectWidth;
-  margin = {
-    top: margins.top,
-    right: 0,
-    bottom: OFFSET,
-    left: 0
-  }
-}
+  // append the svg object to the body of the page
+  svg = d3.select(where)
+    .append("g")
+    .attr("class", "mainG-gv")
+    .attr("transform", `translate(${margin.right},${margin.top})`)
 
-function draw(_data) {
-    data = _data;
-    data.elementsName = _data.elements.map(d => d.name);
-    dataElementColors = _data.elements.map(d => ({ name: d.name, color: d.color }));
-
-    // append the svg object to the body of the page
-    svg = d3.select(where)
-        .append("g")
-        .attr("class", "mainG-gv")
-        .attr("transform", `translate(${margin.right},${margin.top})`)
-
-    resize();
+  resize();
 }
 
 function resize() {
@@ -42,7 +29,7 @@ function resize() {
   // scales and axes
   x = d3.scaleBand()
     .range([0, width])
-    .domain(data.MUGS.map(d => "" + d.i));
+    .domain(data.MUGS.map(d => ""+d.i));
 
   y = d3.scaleBand()
     .range([0, height])
@@ -52,11 +39,14 @@ function resize() {
   data.MUGS.forEach((ugs) => {
     ugs.l.forEach(g => {
       goals.push({
-        x: "" + ugs.i,
+        x: ""+ugs.i,
         goal: g
       });
     });
   });
+
+  const rectOffset = 10;
+  const radius = 8;
 
   const colorMapping = (name) => {
     const match = dataElementColors.find(el => el.name === name);
@@ -64,13 +54,27 @@ function resize() {
   };
 
   svg.selectAll()
+    .data(data.MUGS)
+    .enter()
+    .append("rect")
+    .attr("id", d => "seg_" + d.i)
+    .classed("seg-highlight", d => d.l.length === 1);
+
+  svg.selectAll("rect:not(.seg-highlight)")
+    .attr("x", d => x(""+d.i) + rectOffset)
+    .attr("y", d => Math.min(...d.l.map(g=>y(g))) + rectOffset)
+    .attr("width", 2)
+    .attr("height", d => Math.max(...d.l.map(g=>y(g))) - Math.min(...d.l.map(g=>y(g))))
+    .style("fill", "#bdbdbd");
+
+  svg.selectAll()
     .data(goals)
     .enter()
     .append("circle")
     .attr("id", d => d.x + ":" + d.goal)
     .attr("class", d => `mugs mugs_${d.x} ${d.goal}`)
-    .attr("cx", d => x(d.x) + (rectOffset + (rectOffset - radius) / 2))
-    .attr("cy", d => y(d.goal) + rectOffset)
+    .attr("cx", d => x(d.x) + (rectOffset+(rectOffset-radius)/2))
+    .attr("cy", d => y(d.goal)+rectOffset)
     .attr("r", radius)
     .style("fill", d => colorMapping(d.goal))
 
@@ -85,11 +89,10 @@ function resize() {
     )
   svg.select("#setchart-x-axis")
     .selectAll("text")
-    .style("font-size", "16px")
+    .style("font-size", "10px")
 
   svg.select("#setchart-x-axis path.domain").remove();
 
 }
 
-export { init, draw, resize };
-
+export {draw}

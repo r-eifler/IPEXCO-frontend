@@ -53,6 +53,7 @@
             <mat-button-toggle [value]="ExplanationTypes.TEMPLATE_QUESTION_ANSWER">Templates</mat-button-toggle>
             <mat-button-toggle [value]="ExplanationTypes.MUGS_VISUALIZATION">MUGS Visualization</mat-button-toggle>
             <mat-button-toggle [value]="ExplanationTypes.LLM_CHAT">LLM Chat</mat-button-toggle>
+            <mat-button-toggle [value]="ExplanationTypes.MUGS_VISUALIZATION_ANSWER">US MUGS VISUALIZATION</mat-button-toggle>
           </mat-button-toggle-group>
 
           <mat-slide-toggle formControlName="provideRelaxationExplanations" *ngIf="settingsForm.controls.useConstraints.value"

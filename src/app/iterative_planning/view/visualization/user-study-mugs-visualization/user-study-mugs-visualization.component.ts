@@ -1,42 +1,66 @@
-import {Component, input} from '@angular/core';
+import {Component, inject, input} from '@angular/core';
 import {PlanProperty} from '../../../../shared/domain/plan-property/plan-property';
-import {PageComponent} from '../../../../shared/components/page/page/page.component';
-import {PageSectionComponent} from '../../../../shared/components/page/page-section/page-section.component';
-import * as setchart from "./helpers/setchart.js"
-import {IDataObject} from './Types/IDataObject';
+import * as drawer from "./helpers/visualization-drawer.js"
+import {defaultDataObject, IDataObject} from './Types/IDataObject';
+import {Store} from '@ngrx/store';
+import {selectIterativePlanningProperties} from '../../../state/iterative-planning.selector';
+import {Observable} from 'rxjs';
+import {take} from 'rxjs/operators';
 
 @Component({
   selector: 'app-user-study-mugs-visualization',
   templateUrl: './user-study-mugs-visualization.component.html',
   styleUrls: ['./user-study-mugs-visualization.component.scss'],
   imports: [
-    PageComponent,
-    PageSectionComponent
+
   ],
   standalone: true
 })
 
 export class UserStudyMugsVisualizationComponent {
-  answer = input.required<PlanProperty[][] | null>();
+  private store = inject(Store);
+  answer = input.required<string[][] | null>();
 
-  containerHeaderId: string = "mugs-vis";
+  containerHeaderId: string = "";
   MUGS: Record<string, any>[] = []
   elements: PlanProperty[] = [];
-  data: IDataObject;
+  data: IDataObject = defaultDataObject;
 
   ngOnInit(): void {
-    this.CheckContainer();
-    this.Initialize();
-    setchart.init(this.containerHeaderId, this.MUGS.length, this.elements.length);
-    setchart.draw(this.data);
+    this.SetContainerId();
   }
 
+  ngAfterViewInit(): void {
+    setTimeout(() => {
+      this.CheckContainer();
+      this.Initialize();
+      //drawer.remove();
+      drawer.init(`#${this.containerHeaderId}`, Math.floor((Math.random() * 100) + 1));
+      drawer.draw(this.data);
+    }, 60);
+  }
+
+  private SetContainerId(): void {
+    this.containerHeaderId = `mugs-vis-${Math.floor((Math.random() * 100) + 1)}`
+    console.log(this.containerHeaderId);
+  }
 
   private CheckContainer() :void {
-    const container = document.querySelector(this.containerHeaderId);
+    const container = document.querySelector(`#${this.containerHeaderId}`);
     if (!container) {
       throw new Error(`Container with ID "${this.containerHeaderId}" not found.`);
     }
+  }
+
+  private GetStepPlanProperties(): PlanProperty[]{
+    let planProperties: Observable<Record<string, PlanProperty>> = this.store.select(selectIterativePlanningProperties);
+    let result: PlanProperty[] = [];
+    planProperties.pipe(take(1)).subscribe(properties => {
+      Object.values(properties).forEach((property: PlanProperty) => {
+        result.push(property);
+      })
+    })
+    return result;
   }
 
   private Initialize(): void {
@@ -44,25 +68,26 @@ export class UserStudyMugsVisualizationComponent {
       return;
     }
 
-    // Init set of MUGS
-    this.MUGS = this.answer().map((mugs: PlanProperty[], index: number) => {
+    const planProperties = this.GetStepPlanProperties();
+
+    this.MUGS = this.answer().map((ids: string[], index: number) => {
       return {
-        index,
-        l: mugs.map(mug => mug.name),
-        s: new Set(mugs.map(mug => mug.name))
-      }
-    })
+        i: index,
+        l: ids.map((id) => {
+          const property = planProperties.find((prop) => prop._id === id);
+          return property ? property.name : null;
+        }),
+        s: new Set(ids.map((id) => {
+          const property = planProperties.find((prop) => prop._id === id);
+          return property ? property.name : null;
+        }))
+      };
+    });
 
-    // Init Unique PlanProperty
-    this.elements = this.answer()
-      .flat()
-      .filter((value: PlanProperty, index: number, self: PlanProperty[]): boolean =>
-        index === self.findIndex((prop: PlanProperty): boolean => prop._id === value._id)
-      );
-
-    // Construct dataset
+    // Init data Set
     this.data.MUGS = this.MUGS
-    this.data.elements = this.elements
+    this.data.elements = planProperties;
+
   }
 
 }
