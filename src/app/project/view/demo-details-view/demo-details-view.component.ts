@@ -18,6 +18,7 @@ import { SettingsComponent } from "../../components/settings/settings.component"
 import { GeneralSettings } from '../../domain/general-settings';
 import { deleteProjectDemo, loadOutputSchemas, loadPrompts, loadServices, updateDemo, updatePlanProperty } from '../../state/project.actions';
 import { selectOutputSchemas, selectPlanPropertiesOfDemo, selectPrompts, selectSelectedProjectDemo, selectServices } from '../../state/project.selector';
+import { DemoBase } from 'src/app/shared/domain/demo';
 
 @Component({
     selector: 'app-demo-details-view',
@@ -101,9 +102,9 @@ export class DemoDetailsViewComponent {
       if(demo == null || demo == undefined){
         return;
       }
-      let newDemo = {...demo};
+      let newDemo : DemoBase = {...demo};
       newDemo.settings = settings;
-      this.store.dispatch(updateDemo({demo: newDemo}))
+      this.store.dispatch(updateDemo({id: demo._id, demo: newDemo}))
     })
   }
 

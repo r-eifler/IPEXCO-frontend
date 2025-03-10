@@ -56,5 +56,5 @@ export const selectPlanPropertiesOfDemoById = memoizeWith(
   ));
 
 function demoFinished(demo: Demo): boolean {
-    return demo.status != DemoRunStatus.pending && demo.status != DemoRunStatus.running;
+    return demo.status != DemoRunStatus.PENDING && demo.status != DemoRunStatus.RUNNING;
 }

@@ -16,7 +16,7 @@ export class MetaProjectLoadDomainSpecificationsEffect{
         ofType(loadDomainSpecifications),
         switchMap(() => this.service.get$().pipe(
             switchMap(specs => [loadDomainSpecificationsSuccess({domainSpecifications: specs})] ),
-            catchError(() => of(loadDomainSpecificationsFailure()))
+            catchError((e) => of(loadDomainSpecificationsFailure({err: e})))
         ))
     ))
 }

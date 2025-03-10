@@ -13,13 +13,13 @@ export class DemoStatusNamePipe implements PipeTransform {
     }
 
     switch (value) {
-      case DemoRunStatus.pending:
+      case DemoRunStatus.PENDING:
         return 'Pending';
-      case DemoRunStatus.running:
+      case DemoRunStatus.RUNNING:
         return 'Running';
-      case DemoRunStatus.failed:
+      case DemoRunStatus.FAILED:
         return 'Failed';
-      case DemoRunStatus.finished:
+      case DemoRunStatus.FINISHED:
         return 'Finished';
     }
   }

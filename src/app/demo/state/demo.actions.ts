@@ -2,7 +2,7 @@ import { createAction, props } from "@ngrx/store";
 import { DomainSpecification } from "src/app/global_specification/domain/domain_specification";
 import { Prompt, OutputSchema } from "src/app/global_specification/domain/prompt";
 import { Service } from "src/app/global_specification/domain/services";
-import { Demo } from "src/app/shared/domain/demo";
+import { Demo, DemoBase } from "src/app/shared/domain/demo";
 import { PlanProperty } from "src/app/shared/domain/plan-property/plan-property";
 
 
@@ -26,7 +26,7 @@ export const loadDemo = createAction('[demo] load  demo', props<{id: string}>())
 export const loadDemoSuccess = createAction('[demo] load  demo success', props<{demo: Demo}>());
 export const loadDemoFailure = createAction('[demo] load  demo failure');
 
-export const updateDemo = createAction('[demo] update demo', props<{demo: Demo}>());
+export const updateDemo = createAction('[demo] update demo', props<{id: string, demo: DemoBase}>());
 export const updateDemoSuccess = createAction('[demo] update demo success', props<{demo: Demo}>());
 export const updateDemoFailure = createAction('[demo] update demo failure');
 

@@ -14,7 +14,7 @@ export class DemoMonitoringService {
         return interval(5000).pipe(
             tap(() => console.log("Check demo computation finished: " + demoId)),
             exhaustMap(() => this.demoService.getDemo$(demoId).pipe(
-                map((demo) => ((demo.status != DemoRunStatus.pending) && (demo.status != DemoRunStatus.running)) ),
+                map((demo) => ((demo.status != DemoRunStatus.PENDING) && (demo.status != DemoRunStatus.RUNNING)) ),
             )),
             filter(allFinished => allFinished),
             take(1),

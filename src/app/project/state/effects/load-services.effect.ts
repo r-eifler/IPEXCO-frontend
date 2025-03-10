@@ -18,7 +18,7 @@ export class ProjectLoadServicesEffect{
         ofType(loadServices),
         switchMap(() => this.servicePlanner.get$().pipe(
             switchMap(services => [loadServicesSuccess({services})] ),
-            catchError(() => of(loadServicesFailure()))
+            catchError((e) => of(loadServicesFailure({err: e})))
         ))
     ));
 

@@ -1,10 +1,9 @@
+import { HttpClient } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { HttpClient } from "@angular/common/http";
-import { environment } from "src/environments/environment";
 import { map } from "rxjs/operators";
-import { IHTTPData } from "src/app/shared/domain/http-data.interface";
-import { Project, ProjectBase } from "src/app/shared/domain/project";
+import { Project, ProjectBase, ProjectZ } from "src/app/shared/domain/project";
+import { environment } from "src/environments/environment";
 
 
 @Injectable()
@@ -15,8 +14,8 @@ export class CreateProjectService{
 
     postProject$(project: ProjectBase): Observable<Project> {
 
-        return this.http.post<IHTTPData<Project>>(this.BASE_URL, {data: project}).pipe(
-            map(({data}) => data),
+        return this.http.post<unknown>(this.BASE_URL,project).pipe(
+            map(data => ProjectZ.parse(data)),
         )
     }
 }

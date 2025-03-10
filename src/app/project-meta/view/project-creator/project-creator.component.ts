@@ -1,5 +1,5 @@
 import { AsyncPipe } from "@angular/common";
-import { Component, inject, OnInit } from "@angular/core";
+import { Component, inject } from "@angular/core";
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
 import { MatButtonModule } from "@angular/material/button";
 import { MatCardModule } from "@angular/material/card";
@@ -13,16 +13,14 @@ import { Store } from "@ngrx/store";
 import { BehaviorSubject, combineLatest } from "rxjs";
 import { filter, map, shareReplay, startWith, take, tap } from "rxjs/operators";
 import { TemplateFileUploadComponent } from "src/app/components/files/file-upload/file-upload.component";
-import { Project, ProjectBase } from "src/app/shared/domain/project";
-import { selectUser } from "src/app/user/state/user.selector";
+import { Encoding } from "src/app/global_specification/domain/services";
+import { DialogModule } from "src/app/shared/components/dialog/dialog.module";
+import { SpecCardFeatureComponent } from "src/app/shared/components/spec-card/spec-card-feature/spec-card-feature.component";
+import { ProjectBase } from "src/app/shared/domain/project";
 import { defaultGeneralSetting } from "../../../project/domain/general-settings";
+import { PDDLService } from "../../service/pddl.service";
 import { createProject, loadDomainSpecifications } from "../../state/project-meta.actions";
 import { selectDomainSpecifications } from "../../state/project-meta.selector";
-import { PDDLService } from "../../service/pddl.service";
-import { DialogModule } from "src/app/shared/components/dialog/dialog.module";
-import { Encoding } from "src/app/global_specification/domain/services";
-import { SpecCardFeatureComponent } from "src/app/shared/components/spec-card/spec-card-feature/spec-card-feature.component";
-import { filterListNotNullOrUndefined } from "src/app/shared/common/check_null_undefined";
 
 @Component({
     selector: "app-project-creator",
@@ -203,7 +201,7 @@ export class ProjectCreatorComponent {
             model: model,
           },
           public: false,
-          instanceInfo: "",
+          instanceInfo: null,
           summaryImage: null
         };
 

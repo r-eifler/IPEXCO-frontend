@@ -23,7 +23,7 @@ export class CancelCreateDemoEffect{
             concatLatestFrom(() => this.store.select(selectProject)),
             filterListNotNullOrUndefined(),
             switchMap(([ _ , project])  => [cancelDemoCreationSuccess(), loadProjectDemos({id: project._id})]),
-            catchError(() => of(cancelDemoCreationFailure()))
+            catchError((e) => of(cancelDemoCreationFailure({err: e})))
         ))
     ))
 

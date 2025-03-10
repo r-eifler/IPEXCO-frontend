@@ -8,7 +8,7 @@ import { DemoRunStatus } from "src/app/shared/domain/demo";
 
 export const selectAllDemos = createSelector(demosFeature.selectDemos, (demos) => demos.data ?? [])
 
-export const selectAllFinishedDemos = createSelector(selectAllDemos, (demos) => demos?.filter(demo => demo.status === DemoRunStatus.finished));
+export const selectAllFinishedDemos = createSelector(selectAllDemos, (demos) => demos?.filter(demo => demo.status === DemoRunStatus.FINISHED));
 export const selectAllDemosIds = createSelector(selectAllDemos, map(({ _id }) => _id))
 
 export const selectPlanPropertiesListOfDemo = createSelector(demosFeature.selectDemosFeatureState, 

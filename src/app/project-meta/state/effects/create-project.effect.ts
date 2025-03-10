@@ -15,7 +15,7 @@ export class CreateProjectEffect{
         ofType(createProject),
         switchMap(({project}) => this.service.postProject$(project).pipe(
             switchMap(_ => [createProjectSuccess(), loadProjectMetaDataList()]),
-            catchError(() => of(createProjectFailure()))
+            catchError((e) => of(createProjectFailure({err: e})))
         ))
     ))
 }

@@ -18,6 +18,7 @@ import { PlanProperty } from 'src/app/shared/domain/plan-property/plan-property'
 import { loadOutputSchemas, loadPrompts, loadServices, updateDemo, updatePlanProperty } from '../../state/demo.actions';
 import { selectDemo, selectDomainSpecification, selectExplainer, selectOutputSchemas, selectPlanners, selectPlanPropertiesListOfDemo, selectPlanPropertiesOfDemo, selectPrompts, selectServices } from '../../state/demo.selector';
 import { filterNotNullOrUndefined } from 'src/app/shared/common/check_null_undefined';
+import { DemoBase } from 'src/app/shared/domain/demo';
 
 @Component({
     selector: 'app-demo-details-view',
@@ -86,9 +87,9 @@ export class DemoDetailsViewComponent {
       take(1),
       filterNotNullOrUndefined(),
     ).subscribe(demo => {
-      let newDemo = {...demo};
+      let newDemo: DemoBase = {...demo};
       newDemo.settings = settings;
-      this.store.dispatch(updateDemo({demo: newDemo}))
+      this.store.dispatch(updateDemo({id: demo._id, demo: newDemo}))
     })
   }
 

@@ -3,10 +3,10 @@ import { inject, Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { DomainSpecification } from "src/app/global_specification/domain/domain_specification";
-import { Demo } from "src/app/shared/domain/demo";
-import { IHTTPData } from "src/app/shared/domain/http-data.interface";
+import { Demo, DemoBase, DemoZ } from "src/app/shared/domain/demo";
 import { PlanProperty } from "src/app/shared/domain/plan-property/plan-property";
 import { environment } from "src/environments/environment";
+import { array, boolean, string } from "zod";
 
 @Injectable()
 export class DemoService{
@@ -15,47 +15,48 @@ export class DemoService{
     private BASE_URL = environment.apiURL + "demo/";
 
     getDemo$(id: string): Observable<Demo> {
-
-      return this.http.get<IHTTPData<Demo>>(this.BASE_URL + id).pipe(
-          map(({data}) => data),
-      )
-    }
-
-    getDemos$(): Observable<Demo[]> {
-
-        return this.http.get<IHTTPData<Demo[]>>(this.BASE_URL).pipe(
-            map(({data}) => data),
-        );
-    }
-
-    postDemo$(demo: Demo, properties: PlanProperty[], domainSpecification: DomainSpecification): Observable<string | null> {
-        return this.http.post<IHTTPData<string | null>>(this.BASE_URL + 'upload', {
-            demo: demo, 
-            planProperties: properties,
-            domainSpecification
-        }).pipe(
-            map(({data}) => data)
+        return this.http.get<unknown>(this.BASE_URL + id).pipe(
+            map((data) => DemoZ.parse(data)),
         )
     }
 
-    postDemoImage$(image: any): Observable<string | null> {
-      const formData = new FormData();
-      formData.append('summaryImage', image);
+    getDemos$(): Observable<Demo[]> {
+        return this.http.get<unknown>(this.BASE_URL).pipe(
+            map((data) => array(DemoZ).parse(data)),
+        );
+    }
 
-      return this.http.post<IHTTPData<string | null>>(this.BASE_URL + 'image', formData).pipe(
-          map(({data}) => data)
-      )
-  }
+    postDemo$(demo: Demo, properties: PlanProperty[], domainSpec: DomainSpecification): Observable<string> {
 
-    putDemo$(demo: Demo): Observable<Demo> {
-      return this.http.put<IHTTPData<Demo>>(this.BASE_URL + demo._id, {demo: demo}).pipe(
-          map(({data}) => data)
-      )
+        const demoData = {
+            demo: demo, 
+            planProperties: properties,
+            domainSpecification: domainSpec
+        }
+
+        return this.http.post<unknown>(this.BASE_URL + 'upload', demoData).pipe(
+            map(data => string().parse(data))
+        )
+    }
+
+    postDemoImage$(image: any): Observable<Demo> {
+        const formData = new FormData();
+        formData.append('summaryImage', image);
+
+        return this.http.post<unknown>(this.BASE_URL + 'image', formData).pipe(
+            map((data) => DemoZ.parse(data)),
+        )
+    }
+
+    putDemo$(id: string, demo: DemoBase): Observable<Demo> {
+        return this.http.put<unknown>(this.BASE_URL + id, demo).pipe(
+            map((data) => DemoZ.parse(data)),
+        )
     }
 
     deleteDemo$(id: string): Observable<boolean> {
-      return this.http.delete<IHTTPData<boolean>>(this.BASE_URL + id).pipe(
-          map(({data}) => data)
-      )
+        return this.http.delete<unknown>(this.BASE_URL + id).pipe(
+            map((data) => boolean().parse(data))
+        )
     }
 }

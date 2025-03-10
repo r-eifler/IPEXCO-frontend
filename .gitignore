@@ -55,4 +55,4 @@ launch-chromium
 
 
 #local setup
-step/local
+setup/local

@@ -17,8 +17,8 @@ export class CreateDemoEffect{
     public registerDemoCreation$ = createEffect(() => this.actions$.pipe(
         ofType(registerDemoCreation),
         switchMap(({demo, properties}) => this.service.postDemo$(demo, properties).pipe(
-            switchMap((id)  => !id ? [registerDemoCreationFailure()] : [registerDemoCreationSuccess({id})]),
-            catchError(() => of(registerDemoCreationFailure()))
+            switchMap((id)  => !id ? [registerDemoCreationFailure({err: 'Register demo computation failed.'})] : [registerDemoCreationSuccess({id})]),
+            catchError((e) => of(registerDemoCreationFailure({err: e})))
         ))
     ));
 
@@ -27,7 +27,7 @@ export class CreateDemoEffect{
         switchMap(({id}) => 
             this.monitoringService.demoComputationFinished$(id).pipe(
                 switchMap(() => [demoCreationRunningSuccess()]),
-                catchError(() => of(demoCreationRunningFailure())),
+                catchError((e) => of(demoCreationRunningFailure({err: e}))),
             )
         )
     ));

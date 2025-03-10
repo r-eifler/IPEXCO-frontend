@@ -1,3 +1,5 @@
+import { array, coerce, nativeEnum, object, optional, string, infer as zinfer } from "zod";
+
 export enum QuestionType {
   WHY_PLAN = 'US-WHY', // Why is the task unsolvable?
   HOW_PLAN = 'US-HOW', // How can I make the task solvable?
@@ -30,17 +32,22 @@ export enum ExplanationRunStatus {
   FINISHED = "FINISHED"
 }
 
-export interface GlobalExplanation{
-  createdAt: Date;
-  MUGS?: string[][];
-  MGCS?: string[][];
-  status: ExplanationRunStatus;
-}
+export const ExplanationRunStatusZ = nativeEnum(ExplanationRunStatus);
 
+export const GlobalExplanationZ = object({
+  createdAt: coerce.date(),
+  MUGS: optional(array(array(string()))),
+  MGCS: optional(array(array(string()))),
+  status: ExplanationRunStatusZ
+});
 
-export interface DefinedGlobalExplanation{
-  createdAt: Date;
-  MUGS: string[][];
-  MGCS: string[][];
-  status: ExplanationRunStatus;
-}
+export type GlobalExplanation = zinfer<typeof GlobalExplanationZ>;
+
+export const DefinedGlobalExplanationZ = object({
+  createdAt: coerce.date(),
+  MUGS: array(array(string())),
+  MGCS: array(array(string())),
+  status: ExplanationRunStatusZ
+});
+
+export type DefinedGlobalExplanation = zinfer<typeof DefinedGlobalExplanationZ>;

@@ -134,7 +134,7 @@ export class DemoCreatorComponent implements OnInit {
           return
         }
         const newDemo: DemoBase = {
-          status: DemoRunStatus.pending,
+          status: DemoRunStatus.PENDING,
           projectId: project._id,
           name: this.form.controls.main.controls.name.value ?? 'TODO',
           summaryImage: imagePath,

@@ -61,7 +61,7 @@ export class UserManualComponent {
   sampleDemo: Demo = {
     _id: '1',
     projectId: '',
-    status: DemoRunStatus.finished,
+    status: DemoRunStatus.FINISHED,
     name: '',
     public: false,
     settings: defaultGeneralSetting,
@@ -72,7 +72,6 @@ export class UserManualComponent {
       createdAt: new Date()
     },
     itemType: 'demo-project',
-    updated: '',
     user: '',
     domain: '',
     description: '',

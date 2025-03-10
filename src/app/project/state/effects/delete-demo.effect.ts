@@ -15,8 +15,8 @@ export class DeleteProjectDemoEffect{
     public deleteDemo$ = createEffect(() => this.actions$.pipe(
         ofType(deleteProjectDemo),
         switchMap(({id}) => this.service.deleteDemo$(id).pipe(
-            switchMap(deleted => deleted ? [deleteProjectDemoSuccess()] : [deleteProjectDemoFailure()]),
-            catchError(() => of(deleteProjectDemoFailure()))
+            switchMap(deleted => deleted ? [deleteProjectDemoSuccess()] : [deleteProjectDemoFailure({err:'Project delete failed'})]),
+            catchError((e) => of(deleteProjectDemoFailure({err: e})))
         ))
     ))
 }

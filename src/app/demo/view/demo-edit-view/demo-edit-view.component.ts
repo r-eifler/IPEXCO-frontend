@@ -13,7 +13,7 @@ import { BreadcrumbModule } from 'src/app/shared/components/breadcrumb/breadcrum
 import { PageModule } from 'src/app/shared/components/page/page.module';
 import { updateDemo } from '../../state/demo.actions';
 import { selectDemo } from '../../state/demo.selector';
-import { Demo } from 'src/app/shared/domain/demo';
+import { Demo, DemoBase } from 'src/app/shared/domain/demo';
 import { filterListNotNullOrUndefined } from 'src/app/shared/common/check_null_undefined';
 
 @Component({
@@ -84,8 +84,9 @@ export class DemoEditViewComponent {
     this.form.controls.main.controls.description.setValue(demo.description);
     this.form.controls.taskInfo.controls.instanceInfo.setValue(demo.instanceInfo);
 
-    this.imagePath$.next(demo.summaryImage);
-
+    if(demo.summaryImage !== undefined){
+      this.imagePath$.next(demo.summaryImage);
+    }
   }
 
   onFileChanged(event: Event) {
@@ -100,7 +101,7 @@ export class DemoEditViewComponent {
       filterListNotNullOrUndefined(),
     ).subscribe(
       ([demo, imagePath]) => {
-        const newDemo: Demo = {
+        const newDemo: DemoBase = {
           ...demo,
           name: this.form.controls.main.controls.name.value ?? 'TODO',
           summaryImage: imagePath,
@@ -108,7 +109,7 @@ export class DemoEditViewComponent {
           instanceInfo: this.form.controls.taskInfo.controls.instanceInfo.value ?? 'TODO',
         };
 
-        this.store.dispatch(updateDemo({demo: newDemo}))
+        this.store.dispatch(updateDemo({id: demo._id, demo: newDemo}))
 
         this.router.navigate(['/demos', demo._id, 'details']);
     });

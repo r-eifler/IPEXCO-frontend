@@ -13,12 +13,12 @@ export class UpdateDemoEffect{
 
     public updateDemo$ = createEffect(() => this.actions$.pipe(
         ofType(updateDemo),
-        switchMap(({demo}) => this.service.putDemo$(demo).pipe(
+        switchMap(({id, demo}) => this.service.putDemo$(id, demo).pipe(
             switchMap((demo)  => [
                 updateDemoSuccess({demo}), 
-                loadProjectDemos({id: demo.projectId}),
-            ]),
-            catchError(() => of(updateDemoFailure()))
+                demo.projectId !== null ? loadProjectDemos({id: demo.projectId}) : null,
+            ].filter(e => e !== null)),
+            catchError((e) => of(updateDemoFailure({err: e})))
         ))
     ))
 
