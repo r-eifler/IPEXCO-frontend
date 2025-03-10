@@ -1,18 +1,23 @@
 import { array, infer as zinfer, nativeEnum, object, string } from "zod";
 
-export interface Action {
-  name: string;
-  params: string[];
-}
+export const ActionZ = object({
+  name: string(),
+  params: array(string()),
+});
+
+export type Action = zinfer<typeof ActionZ>;
+
+export const ActionSetZ = Object({
+  _id: string(),
+  name: string(),
+  actions: array(ActionZ),
+});
+
+export type ActionSet = zinfer<typeof ActionSetZ>;
 
 export function toAction(as: string): Action {
   const [name, ...params] = as.split(" ");
   return { name, params };
-}
-
-export interface ActionSet {
-  name: string;
-  actions: Action[];
 }
 
 export function equalActionSets(a1: ActionSet[] | undefined, a2: ActionSet[] | undefined): boolean {

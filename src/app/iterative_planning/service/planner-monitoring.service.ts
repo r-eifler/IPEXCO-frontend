@@ -26,6 +26,6 @@ export class PlannerMonitoringService {
 }
 
 function planFinished(iterationStep: IterationStep): boolean {
-    return iterationStep.plan?.status !== PlanRunStatus.pending &&
-    iterationStep.plan?.status !== PlanRunStatus.running;
+    return iterationStep.plan?.status !== PlanRunStatus.PENDING &&
+    iterationStep.plan?.status !== PlanRunStatus.RUNNING;
 }

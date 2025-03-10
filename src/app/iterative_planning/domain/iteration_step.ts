@@ -3,10 +3,10 @@ import { GlobalExplanation } from "./explanation/explanations";
 import { computeUtility, Plan } from "./plan";
 import { PlanProperty } from "src/app/shared/domain/plan-property/plan-property";
 
-export enum StepStatus {
-    unknown,
-    solvable,
-    unsolvable
+export enum StepStatus{
+  UNKNOWN = "UNKNOWN",
+  SOLVABLE = "SOLVABLE",
+  UNSOLVABLE = "UNSOLVABLE",
 }
 
 export interface IterationStepBase {
@@ -37,7 +37,7 @@ export function computeCurrentMaxUtility(
   planProperties: Record<string,PlanProperty>
 ){
   const stepUtilities = steps?.map(s => 
-    s.status !== StepStatus.solvable || s.plan === undefined || s.plan == null ? 
+    s.status !== StepStatus.SOLVABLE || s.plan === undefined || s.plan == null ? 
     0 : 
     computeUtility(s.plan, planProperties)
   ).filter(v => v !== undefined);

@@ -166,7 +166,7 @@ export function generatePlanProperty (
     types: string[],
     task: PlanningTask
   ): TaskObject[] {
-    return task.model.objects.filter(o => types.includes(o.type))
+    return task.objects.filter(o => types.includes(o.type))
   }
 
   export function getPossibleValues(

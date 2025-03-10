@@ -84,12 +84,12 @@ export class QuestionQueueEffect {
         concatLatestFrom(() => [this.store.select(selectIterativePlanningProperties)]),
         map(([explanation, properties]) => ({
           question,
-          explanationMUGS: (explanation.MUGS !== undefined && iterationStep.status === StepStatus.solvable) ? 
+          explanationMUGS: (explanation.MUGS !== undefined && iterationStep.status === StepStatus.SOLVABLE) ? 
             mapComputeBase(iterationStep, {...question, questionType: QuestionType.WHY_NOT_PROPERTY}, explanation.MUGS) : 
-            (explanation.MUGS !== undefined &&  iterationStep.status === StepStatus.unsolvable ? mapComputeBase(iterationStep, {...question, questionType: QuestionType.WHY_PLAN}, explanation.MUGS) : []),
-          explanationMGCS: (explanation.MGCS !== undefined && iterationStep.status === StepStatus.solvable) ? 
+            (explanation.MUGS !== undefined &&  iterationStep.status === StepStatus.UNSOLVABLE ? mapComputeBase(iterationStep, {...question, questionType: QuestionType.WHY_PLAN}, explanation.MUGS) : []),
+          explanationMGCS: (explanation.MGCS !== undefined && iterationStep.status === StepStatus.SOLVABLE) ? 
             mapComputeBase(iterationStep, {...question, questionType: QuestionType.HOW_PROPERTY}, explanation.MGCS) : 
-            (explanation.MGCS !== undefined && iterationStep.status === StepStatus.unsolvable ? mapComputeBase(iterationStep, {...question, questionType: QuestionType.HOW_PLAN}, explanation.MGCS) : []),
+            (explanation.MGCS !== undefined && iterationStep.status === StepStatus.UNSOLVABLE ? mapComputeBase(iterationStep, {...question, questionType: QuestionType.HOW_PLAN}, explanation.MGCS) : []),
           question_type: question.questionType,
           questionArgument: question.propertyId && properties?.[question.propertyId] ? [properties[question.propertyId]] : [],
           iterationStepId: iterationStep._id

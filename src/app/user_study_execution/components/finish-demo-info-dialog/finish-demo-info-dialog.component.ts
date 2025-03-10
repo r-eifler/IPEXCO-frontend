@@ -55,7 +55,7 @@ export class FinishDemoInfoDialogComponent {
     }
  
     const stepUtilities = steps.map(s => 
-      s.status !== StepStatus.solvable || s.plan === undefined || s.plan === null ? 
+      s.status !== StepStatus.SOLVABLE || s.plan === undefined || s.plan === null ? 
       0 : 
       computeUtility(s.plan, properties)
     ).filter(v => v !== undefined);

@@ -106,19 +106,19 @@ export class StepDetailViewComponent {
   stepId$ = this.step$.pipe(map(step => step?._id));
   isUnsolvable$ = this.step$.pipe(
     filter((step) => !!step),
-    map((step) => step.plan?.status == PlanRunStatus.not_solvable)
+    map((step) => step.plan?.status == PlanRunStatus.UNSOLVABLE)
   );
   isCanceled$ = this.step$.pipe(
     filter((step) => !!step),
-    map((step) => step.plan?.status == PlanRunStatus.canceled)
+    map((step) => step.plan?.status == PlanRunStatus.CANCELED)
   );
   planComputationRunning$ = this.step$.pipe(
     filter((step) => !!step),
-    map((step) => step.plan?.status == PlanRunStatus.pending || step.plan?.status == PlanRunStatus.running)
+    map((step) => step.plan?.status == PlanRunStatus.PENDING || step.plan?.status == PlanRunStatus.RUNNING)
   );
   isFailed$ = this.step$.pipe(
     filter((step) => !!step),
-    map((step) => step.plan?.status == PlanRunStatus.failed)
+    map((step) => step.plan?.status == PlanRunStatus.FAILED)
   );
 
   planProperties$ = this.store.select(selectIterativePlanningProperties);

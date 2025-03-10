@@ -30,8 +30,8 @@ export class StepsListHeroComponent {
   maxOverallUtility = input.required<number>();
   currentMaxUtility = input.required<number>();
 
-  numSolvedSteps = computed(() => this.steps()?.filter(s => s.status === StepStatus.solvable).length)
-  umUnSolvedSteps = computed(() => this.steps()?.filter(s => s.status === StepStatus.unsolvable).length)
+  numSolvedSteps = computed(() => this.steps()?.filter(s => s.status === StepStatus.SOLVABLE).length)
+  umUnSolvedSteps = computed(() => this.steps()?.filter(s => s.status === StepStatus.UNSOLVABLE).length)
 
   openTaskInfo(){
    this.dialog.open(TaskInformationDialogComponent);

@@ -1,5 +1,4 @@
 import { unfold } from "ramda";
-import { BaseModel } from "./planning-task";
 
 const zip = (a : PDDLObject[], b : string) => a.map((k, i) => [k, b[i]]);
 
@@ -48,7 +47,7 @@ export interface PDDLPlanningDomain {
     actions: PDDLAction[];
 }
 
-export interface PDDLPlanningProblem extends BaseModel{
+export interface PDDLPlanningProblem {
     objects: PDDLObject[];
     initial: PDDLFact[];
     goal: PDDLFact[];

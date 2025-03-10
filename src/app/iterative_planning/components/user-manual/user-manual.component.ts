@@ -78,9 +78,8 @@ export class UserManualComponent {
     instanceInfo: '',
     baseTask: {
       name: '',
-      model: {
-        objects: []
-      }
+      objects: [],
+      model: {}
     },
     summaryImage: null
   }
@@ -179,9 +178,8 @@ export class UserManualComponent {
 
   dummyTask: PlanningTask = {
     name: 'Dummy Task',
-    model: {
-      objects: []
-    }
+    objects: [],
+    model: {}
   }
 
   sampleSteps: IterationStep[] = [
@@ -189,14 +187,13 @@ export class UserManualComponent {
       _id: '1',
       name: 'Step 1',
       project: '',
-      status: StepStatus.unsolvable,
+      status: StepStatus.UNSOLVABLE,
       hardGoals: ['1','2','3'],
       softGoals: [],
       task: this.dummyTask,
       predecessorStep: '',
       plan: {
-        status: PlanRunStatus.not_solvable,
-        cost: 0,
+        status: PlanRunStatus.UNSOLVABLE,
         createdAt: new Date(),
         actions: null,
         satisfied_properties: []
@@ -208,14 +205,13 @@ export class UserManualComponent {
       _id: '2',
       name: 'Step 2',
       project: '',
-      status: StepStatus.solvable,
+      status: StepStatus.SOLVABLE,
       hardGoals: ['1','3'],
       softGoals: ['4','5'],
       task: this.dummyTask,
       predecessorStep: '',
       plan: {
-        status: PlanRunStatus.plan_found,
-        cost: 0,
+        status: PlanRunStatus.SOLVED,
         createdAt: new Date(),
         actions: null,
         satisfied_properties: ['1', '3', '4']
@@ -227,14 +223,13 @@ export class UserManualComponent {
       _id: '3',
       name: 'Step 3',
       project: '',
-      status: StepStatus.unknown,
+      status: StepStatus.UNKNOWN,
       hardGoals: ['1','3'],
       softGoals: [],
       task: this.dummyTask,
       predecessorStep: '',
       plan: {
-        status: PlanRunStatus.running,
-        cost: 0,
+        status: PlanRunStatus.RUNNING,
         createdAt: new Date(),
         actions: null,
         satisfied_properties: []
@@ -246,14 +241,13 @@ export class UserManualComponent {
       _id: '4',
       name: 'Step 4',
       project: '',
-      status: StepStatus.unknown,
+      status: StepStatus.UNKNOWN,
       hardGoals: ['1', '3'],
       softGoals: [],
       task: this.dummyTask,
       predecessorStep: '',
       plan: {
-        status: PlanRunStatus.canceled,
-        cost: 0,
+        status: PlanRunStatus.CANCELED,
         createdAt: new Date(),
         actions: null,
         satisfied_properties: []

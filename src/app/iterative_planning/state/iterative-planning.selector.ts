@@ -92,7 +92,7 @@ export const selectIterativePlanningIterationStepComputationRunning = createSele
     if(iterationSteps === undefined){
       return false;
     }
-    return iterationSteps.filter(s => s.plan && (s.plan?.status == PlanRunStatus.running || s.plan.status == PlanRunStatus.pending)).length > 0
+    return iterationSteps.filter(s => s.plan && (s.plan?.status == PlanRunStatus.RUNNING || s.plan.status == PlanRunStatus.PENDING)).length > 0
 });
 
 export const selectIterativePlanningCurrentMaxUtility = createSelector(selectState, (state) => {

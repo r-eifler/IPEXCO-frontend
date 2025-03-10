@@ -37,6 +37,7 @@ export class PropertyCreatorComponent {
     if(projectId !== undefined){
       property.project = projectId;
       this.dialogRef.close(property);
+      return;
     }
     throw new Error("Didn't expect to get here");
   }

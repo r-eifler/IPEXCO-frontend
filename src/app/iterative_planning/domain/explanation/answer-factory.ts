@@ -191,7 +191,7 @@ function whyAnswerComputer(step: IterationStep, question: Question, computed: st
 function howAnswerComputer(step: IterationStep, question: Question, computed: string[][]): string[][] {
     return subsetMinimal(computed
       .filter( MCGS => MCGS.every(id => !(question.propertyId === id)))
-      .map(MCGS => MCGS.filter(id =>  step.plan?.satisfied_properties.includes(id))));
+      .map(MCGS => MCGS.filter(id =>  step.plan?.satisfied_properties?.includes(id))));
 }
 
 

@@ -34,7 +34,7 @@ export class SendMessageToLLMEffect {
     stepId$ = this.step$.pipe(map(step => step?._id));
     isUnsolvable$ = this.step$.pipe(
         filter((step) => !!step),
-        map((step) => step.plan?.status == PlanRunStatus.not_solvable)
+        map((step) => step.plan?.status == PlanRunStatus.UNSOLVABLE)
     );
     planProperties$ = this.store.select(selectIterativePlanningProperties);
 

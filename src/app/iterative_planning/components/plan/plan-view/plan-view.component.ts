@@ -31,23 +31,23 @@ export class PlanViewComponent {
   step$ = this.store.select(selectIterativePlanningSelectedStep);
  
   actions$ = this.step$.pipe(
-    filter((step) => !!step && !!step.plan && step.plan.status == PlanRunStatus.plan_found),
+    filter((step) => !!step && !!step.plan && step.plan.status == PlanRunStatus.SOLVED),
     map((step) => step?.plan?.actions)
   );
 
   solved$ = this.step$.pipe(
     filter((step) => !!step && !!step.plan),
-    map((step) => step?.plan?.status == PlanRunStatus.plan_found),
+    map((step) => step?.plan?.status == PlanRunStatus.SOLVED),
   );
 
   notSolvable$ = this.step$.pipe(
     filter((step) => !!step),
-    map((step) => step.status == StepStatus.unsolvable),
+    map((step) => step.status == StepStatus.UNSOLVABLE),
   );
 
   isRunning$ = this.step$.pipe(
     filter((step) => !!step && !!step.plan),
-    map((step) => step?.plan?.status == PlanRunStatus.pending),
+    map((step) => step?.plan?.status == PlanRunStatus.PENDING),
   );
 
   hasPlan$ = this.step$.pipe(

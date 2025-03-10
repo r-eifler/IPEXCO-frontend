@@ -21,6 +21,7 @@ import { defaultGeneralSetting } from "../../../project/domain/general-settings"
 import { PDDLService } from "../../service/pddl.service";
 import { createProject, loadDomainSpecifications } from "../../state/project-meta.actions";
 import { selectDomainSpecifications } from "../../state/project-meta.selector";
+import { TaskObject } from "src/app/shared/domain/planning-task";
 
 @Component({
     selector: "app-project-creator",
@@ -115,6 +116,27 @@ export class ProjectCreatorComponent {
     shareReplay(1),
   )
 
+
+  objects$ = combineLatest([this.selectedDomain$, this.translatedPddlModel$, this.domainDependentModel$]).pipe(
+    map(([domain, pddlModel, domainDependentModel]) => {
+      if(domain === undefined || domain === null){
+        return null;
+      }
+      switch(domain.encoding){
+        case(Encoding.PDDL_NUMERIC): {
+          throw Error('Numeric PDDL encoding not yet supported!');
+        }
+        case(Encoding.PDDL_CLASSIC): {
+          return pddlModel?.objects as TaskObject[];
+        }
+        case(Encoding.DOMAIN_DEPENDENT): {
+          return [];
+        }
+      }
+    }),
+    shareReplay(1),
+  )
+
   modelValid$ = combineLatest([this.selectedDomain$, this.translatedPddlModel$, this.domainDependentModel$]).pipe(
     map(([domain, pddlModel, domainDependentModel]) => {
       if(!domain) {
@@ -185,11 +207,11 @@ export class ProjectCreatorComponent {
 
   onSave(): void {
     console.log("onSave");
-    this.model$.pipe(
+    combineLatest([this.model$, this.objects$]).pipe(
       tap(console.log),
       take(1),
     ).subscribe(
-      (model) => {
+      ([model,objects]) => {
 
         const newProject: ProjectBase = {
           name: this.form.controls.name.value ?? 'TODO',
@@ -198,7 +220,8 @@ export class ProjectCreatorComponent {
           settings: defaultGeneralSetting,
           baseTask: {
             name: this.form.controls.name.value ?? 'TODO',
-            model: model,
+            objects,
+            model,
           },
           public: false,
           instanceInfo: null,
