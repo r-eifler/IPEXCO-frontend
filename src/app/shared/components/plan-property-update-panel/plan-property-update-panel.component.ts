@@ -1,6 +1,6 @@
 import { Component, effect, inject, input, output } from '@angular/core';
 import { PlanProperty } from '../../domain/plan-property/plan-property';
-import { ProjectDirective } from 'src/app/iterative_planning/derectives/isProject.directive';
+import { ProjectDirective } from 'src/app/iterative_planning/directives/isProject.directive';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { QuoteModule } from '../quote/quote.module';

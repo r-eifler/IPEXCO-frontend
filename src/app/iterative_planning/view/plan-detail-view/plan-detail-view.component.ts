@@ -19,6 +19,8 @@ import {
   selectIterativePlanningProjectExplanationInterfaceType,
   selectIterativePlanningSelectedStep
 } from "../../state/iterative-planning.selector";
+import { BelugaPlanAnimationComponent } from "src/app/domain_plugins/beluga/components/beluga-plan-animation/beluga-plan-animation.component";
+import { BelugaDirective } from "src/app/domain_plugins/beluga/directives/isBeluga.directive";
 
 @Component({
     selector: "app-plan-detail-view",
@@ -31,7 +33,9 @@ import {
         MatTooltipModule,
         PageModule,
         RouterLink,
-        PlanViewComponent
+        PlanViewComponent,
+        BelugaPlanAnimationComponent,
+        BelugaDirective
     ],
     templateUrl: "./plan-detail-view.component.html",
     styleUrl: "./plan-detail-view.component.scss"
@@ -39,15 +43,8 @@ import {
 export class PlanDetailViewComponent {
   private store = inject(Store);
 
-  explanationInterfaceType$ = this.store.select(selectIterativePlanningProjectExplanationInterfaceType);
-  expInterfaceType = ExplanationInterfaceType
-
   step$ = this.store.select(selectIterativePlanningSelectedStep);
   stepId$ = this.step$.pipe(map(step => step?._id));
-  isUnsolvable$ = this.step$.pipe(
-    filter((step) => !!step),
-    map((step) => step.plan?.status == PlanRunStatus.UNSOLVABLE)
-  );
 
   createNewIteration(baseStepId?: string) {
     this.store.dispatch(initNewIterationStep({ baseStepId }));

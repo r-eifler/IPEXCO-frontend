@@ -26,6 +26,9 @@ export const selectIterativePlanningIsIntroTask = createSelector(selectState,
 
 // Domain Spec
 
+export const selectIterativePlanningDomainSpecification = createSelector(selectState,
+  (state) => state.domainSpecification?.data)
+
 export const selectIterativePlanningPropertyTemplates = createSelector(selectState,
   (state) => state.domainSpecification?.data?.planPropertyTemplates)
 

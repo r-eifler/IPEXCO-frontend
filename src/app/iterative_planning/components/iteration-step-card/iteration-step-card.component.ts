@@ -15,8 +15,8 @@ import { StepValuePipe } from '../../domain/pipe/step-value.pipe';
 import { PlanProperty } from '../../../shared/domain/plan-property/plan-property';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { PlanRunStatus } from '../../domain/plan';
-import { ProjectDirective } from '../../derectives/isProject.directive';
-import { DemoDirective } from '../../derectives/isDemo.directive';
+import { ProjectDirective } from '../../directives/isProject.directive';
+import { DemoDirective } from '../../directives/isDemo.directive';
 import { Store } from '@ngrx/store';
 import { selectIterativePlanningLoadingFinished } from '../../state/iterative-planning.selector';
 

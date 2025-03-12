@@ -29,8 +29,8 @@ import { ExplanationChatLlmComponent } from "../../components/explanation-chat-l
 import { AvailableQuestion, ExplanationChatComponent } from "../../components/explanation-chat/explanation-chat.component";
 import { IterationStepHeroComponent } from "../../components/iteration-step-hero/iteration-step-hero.component";
 import { UserManualDialogComponent } from "../../components/user-manual-dialog/user-manual-dialog.component";
-import { DemoDirective } from "../../derectives/isDemo.directive";
-import { ProjectDirective } from "../../derectives/isProject.directive";
+import { DemoDirective } from "../../directives/isDemo.directive";
+import { ProjectDirective } from "../../directives/isProject.directive";
 import { explanationHash } from "../../domain/explanation/explanation-hash";
 import { QuestionType } from "../../domain/explanation/explanations";
 import { questionFactory } from "../../domain/explanation/question-factory";
