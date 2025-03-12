@@ -58,6 +58,9 @@ import {
   selectUnsatisfiedSoftGoals,
 } from "./step-detail-view.component.selector";
 import {MugsVisualizationBaseComponent} from '../visualization/mugs-visualization-base/mugs-visualization-base.component';
+import {ExplanationWrapperComponent} from '../explanation-wrapper/explanation-wrapper.component';
+import {QuestionFormComponent} from '../question-form/question-form.component';
+import {tap} from 'rxjs/operators';
 
 @Component({
     selector: "app-step-detail-view",
@@ -76,7 +79,10 @@ import {MugsVisualizationBaseComponent} from '../visualization/mugs-visualizatio
     RouterLink,
     MatExpansionModule,
     MatProgressBarModule,
-    MugsVisualizationBaseComponent
+    MugsVisualizationBaseComponent,
+    ExplanationWrapperComponent,
+    ProjectDirective,
+    DemoDirective
   ],
     templateUrl: "./step-detail-view.component.html",
     styleUrl: "./step-detail-view.component.scss"

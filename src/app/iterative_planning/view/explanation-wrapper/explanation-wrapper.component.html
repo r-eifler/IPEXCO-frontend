@@ -1,0 +1,51 @@
+@let interfaceType = explanationInterfaceType$ | async;
+@let isExplanationLoading = isExplanationLoading$ | async;
+@let messages = globalMessages$ | async;
+
+<app-page>
+  <app-page-content>
+
+      <app-page-section>
+        @if(isUnsolvable()){
+          <app-page-section-content>
+            <app-question-form
+              [isLoading]="isExplanationLoading"
+              [availableQuestions]="globalAvalableQuestionTypes$ | async"
+              [property]="null"
+              (questionSelected)="onQuestionSelected($event)"
+            >
+            </app-question-form>
+
+            @for(message of  messages; track message;) {
+              @if(message.message.includeComputation){
+                @if(interfaceType === ExplanationInterfaceType.MUGS_VISUALIZATION_ANSWER){
+                  <app-user-study-mugs-visualization [answer]="message.conflictSets"></app-user-study-mugs-visualization>
+                }
+              }
+            }
+
+          </app-page-section-content>
+        }@else{
+          <app-page-section-content>
+            <app-question-form
+              [isLoading]="isExplanationLoading"
+              [availableQuestions]="propertyAvailableQuestionTypes$(property()) | async"
+              [property]="property()"
+              (questionSelected)="onPropertyQuestionSelected($event, property())"
+            >
+            </app-question-form>
+
+            @for(message of propertyMessages$(property()) | async; track message;) {
+              @if(message.message.includeComputation){
+                @if(interfaceType === ExplanationInterfaceType.MUGS_VISUALIZATION_ANSWER){
+                  <app-user-study-mugs-visualization [answer]="message.conflictSets"></app-user-study-mugs-visualization>
+                }
+              }
+            }
+          </app-page-section-content>
+        }
+      </app-page-section>
+
+  </app-page-content>
+</app-page>
+
