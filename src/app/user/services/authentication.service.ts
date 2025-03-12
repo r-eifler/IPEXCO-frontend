@@ -5,7 +5,9 @@ import { IHTTPData } from "../../shared/domain/http-data.interface";
 import { HttpClient } from "@angular/common/http";
 import { map, Observable, take, tap } from "rxjs";
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class AuthenticationService {
 
   private http = inject(HttpClient)

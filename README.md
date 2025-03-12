@@ -1,12 +1,14 @@
 # IPEXCO
 
-## Install & Run
+## Front-End Install & Run
 
 1. install **npm**
 2. `npm install`
 3. `npm start` 
 
 
-## TODO
+## Back-end Setup and Example
+
+See [Setup](setup/README.md)
 
 
