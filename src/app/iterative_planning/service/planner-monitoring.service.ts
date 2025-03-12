@@ -1,14 +1,11 @@
 import { inject, Injectable } from '@angular/core';
 import { tap, map, filter, take, exhaustMap } from 'rxjs/operators';
 import { interval, Observable } from 'rxjs';
-import { environment } from 'src/environments/environment';
 import { IterationStepService } from './iteration-step.service';
 import { IterationStep } from '../domain/iteration_step';
 import { PlanRunStatus } from '../domain/plan';
   
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class PlannerMonitoringService {
 
 
@@ -29,6 +26,6 @@ export class PlannerMonitoringService {
 }
 
 function planFinished(iterationStep: IterationStep): boolean {
-    return iterationStep.plan?.status !== PlanRunStatus.pending &&
-    iterationStep.plan?.status !== PlanRunStatus.running;
+    return iterationStep.plan?.status !== PlanRunStatus.PENDING &&
+    iterationStep.plan?.status !== PlanRunStatus.RUNNING;
 }

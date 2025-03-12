@@ -20,10 +20,18 @@
       </div>
 
       <div class="plan-link-container">
-        <a mat-button [routerLink]="['plan']" *isProject>
-          <mat-icon>explore</mat-icon>
-          Show Plan
-        </a>
+        @if(solved()){
+          <a mat-button [routerLink]="['plan']" *isProject>
+            <mat-icon>explore</mat-icon>
+            Show Plan
+          </a>
+        }
+        @else{
+          <a mat-button [routerLink]="['plan']" *isProject [disabled]="true">
+            <mat-icon>explore</mat-icon>
+            No Plan available
+          </a>
+        }
         <button mat-button (click)="openTaskInfo()" *isDemo>
           <mat-icon>info</mat-icon>
           Show Task Information

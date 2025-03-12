@@ -10,7 +10,9 @@
         <app-page-section-content>
           <div class="page-grid">
             @for(userStudy of userStudies$ | async; track userStudy._id) {
+              @if(userStudy._id){
               <app-user-study-card [userStudy]="userStudy" [participants]="(participants$ | async)?.[userStudy._id]"></app-user-study-card>
+              }
             }
       
             <button app-action-card (click)="createNewUserStudy()">

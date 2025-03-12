@@ -11,8 +11,8 @@ import { PageModule } from 'src/app/shared/components/page/page.module';
 import { IterationStepCardComponent } from '../../components/iteration-step-card/iteration-step-card.component';
 import { cancelPlanComputationAndIterationStep, initNewIterationStep } from '../../state/iterative-planning.actions';
 import { selectIterativePlanningCurrentMaxUtility, selectIterativePlanningIterationSteps, selectIterativePlanningIterationStepsLoadingState, selectIterativePlanningLoadingFinished, selectIterativePlanningMaxPossibleUtility, selectIterativePlanningProject, selectIterativePlanningProperties } from '../../state/iterative-planning.selector';
-import { ProjectDirective } from '../../derectives/isProject.directive';
-import { DemoDirective } from '../../derectives/isDemo.directive';
+import { ProjectDirective } from '../../directives/isProject.directive';
+import { DemoDirective } from '../../directives/isDemo.directive';
 import { StepsListHeroComponent } from '../../components/steps-list-hero/steps-list-hero.component';
 import { map } from 'rxjs';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -49,7 +49,7 @@ export class StepsListViewComponent{
 
   project$ = this.store.select(selectIterativePlanningProject)
   image$ = this.project$.pipe(map(p => p?.summaryImage));
-  domainInfo$ = this.project$.pipe(map(p => p?.domainInfo));
+  // domainInfo$ = this.project$.pipe(map(p => p?.domainInfo));
   instanceInfo$ = this.project$.pipe(map(p => p?.instanceInfo));
   steps$ = this.store.select(selectIterativePlanningIterationSteps);
   loadingState$ = this.store.select(selectIterativePlanningIterationStepsLoadingState);

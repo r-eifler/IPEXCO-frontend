@@ -16,11 +16,7 @@ export class ExecutionUserStudyService {
 
   getUserStudy$(id: string): Observable<UserStudy> {
     return this.http.get<IHTTPData<UserStudy>>(this.BASE_URL + id).pipe(
-      map(({data}) => ({
-        ...data,
-        startDate: new Date(data.startDate),
-        endDate: new Date(data.endDate),
-      }))
+      map(({data}) => data)
     )
   }
 }

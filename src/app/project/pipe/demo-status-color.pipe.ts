@@ -1,7 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { DemoRunStatus } from 'src/app/project/domain/demo';
 
 import { Color } from 'src/app/shared/components/label/label/label.component';
+import { DemoRunStatus } from 'src/app/shared/domain/demo';
 
 
 @Pipe({
@@ -16,15 +16,17 @@ export class DemoStatusColorPipe implements PipeTransform {
     }
 
     switch (value) {
-      case DemoRunStatus.pending:
+      case DemoRunStatus.PENDING:
         return 'neutral';
-      case DemoRunStatus.running:
+      case DemoRunStatus.RUNNING:
         return 'neutral';
-      case DemoRunStatus.failed:
+      case DemoRunStatus.FAILED:
         return 'error';
-      case DemoRunStatus.finished:
+      case DemoRunStatus.FINISHED:
         return 'secondary';
     }
-  }
 
+    return 'neutral'
+  }
+;
 }

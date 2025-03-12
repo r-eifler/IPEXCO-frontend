@@ -15,8 +15,8 @@ import { StepValuePipe } from '../../domain/pipe/step-value.pipe';
 import { PlanProperty } from '../../../shared/domain/plan-property/plan-property';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { PlanRunStatus } from '../../domain/plan';
-import { ProjectDirective } from '../../derectives/isProject.directive';
-import { DemoDirective } from '../../derectives/isDemo.directive';
+import { ProjectDirective } from '../../directives/isProject.directive';
+import { DemoDirective } from '../../directives/isDemo.directive';
 import { Store } from '@ngrx/store';
 import { selectIterativePlanningLoadingFinished } from '../../state/iterative-planning.selector';
 
@@ -52,8 +52,8 @@ export class IterationStepCardComponent {
 
   planComputationRunning = computed(() => 
     ! this.step()?.plan ||
-    this.step().plan.status == PlanRunStatus.pending || 
-    this.step().plan.status == PlanRunStatus.running
+    this.step()?.plan?.status == PlanRunStatus.PENDING || 
+    this.step()?.plan?.status == PlanRunStatus.RUNNING
   )
 
   maxOverallUtility = input.required<number>();

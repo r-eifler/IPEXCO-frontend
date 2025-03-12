@@ -1,0 +1,35 @@
+<app-dialog>
+    <app-dialog-header>
+        <app-dialog-title>New Planner Call</app-dialog-title>
+    </app-dialog-header>
+    <app-dialog-content>
+        <form>
+            <div class="inputs-list">
+                <mat-form-field appearance="outline">
+                    <mat-label>Name</mat-label>
+                    <input matInput placeholder="Plan ..." [formControl]="form.controls.name">
+                    @if (form.controls.name.hasError('required')) {
+                        <mat-error>Please enter a name</mat-error>
+                    }
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Planner</mat-label>
+                    <mat-select [formControl]="form.controls.planner">
+                      @for (planner of data.planners; track planner) {
+                        <mat-option [value]="planner._id">{{planner.name}}</mat-option>
+                      }
+                    </mat-select>
+                    @if (form.controls.planner.hasError('required')) {
+                        <mat-error>Please select a planner</mat-error>
+                    }
+                </mat-form-field>
+
+            </div>
+        </form>
+    </app-dialog-content>
+    <app-dialog-footer>
+        <button mat-button (click)="onCancel()">Cancel</button>
+        <button mat-flat-button (click)="onCreate()" [disabled]="!form.valid">Create</button>
+    </app-dialog-footer>
+</app-dialog>

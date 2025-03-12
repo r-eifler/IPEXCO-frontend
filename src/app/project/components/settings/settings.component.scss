@@ -43,3 +43,9 @@ mat-button-toggle-group{
   flex-direction: column;
   gap: 20px;
 }
+
+.button-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}

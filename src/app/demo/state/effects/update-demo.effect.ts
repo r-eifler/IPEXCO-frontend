@@ -15,7 +15,7 @@ export class DemosUpdateDemoEffect{
 
     public updateDemo$ = createEffect(() => this.actions$.pipe(
         ofType(updateDemo),
-        switchMap(({demo}) => this.service.putDemo$(demo).pipe(
+        switchMap(({id, demo}) => this.service.putDemo$(id, demo).pipe(
             switchMap((demo)  => [updateDemoSuccess({demo}), loadDemos()]),
             catchError(() => of(updateDemoFailure()))
         ))

@@ -6,7 +6,7 @@ import { HttpClient } from "@angular/common/http";
 import { map, Observable, take, tap } from "rxjs";
 
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root'
 })
 export class AuthenticationService {
 

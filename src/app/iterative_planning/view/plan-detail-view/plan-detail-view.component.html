@@ -1,5 +1,4 @@
 @let step = step$ | async;
-@let isUnsolvable = isUnsolvable$ | async;
 
 <app-page>
   <app-breadcrumb>
@@ -17,14 +16,9 @@
       ><mat-icon>call_split</mat-icon></button>
     </app-page-title-action>
   </app-page-title>
-  <!-- <app-page-hero> -->
-    <!-- <app-iteration-step-hero
-      [step]="step$ | async"
-      [planProperties]="planProperties$ | async"
-    ></app-iteration-step-hero> -->
-  <!-- </app-page-hero> -->
 
   <app-page-content>
     <app-plan-view></app-plan-view>
+    <!-- <app-beluga-plan-animation *isBeluga></app-beluga-plan-animation> -->
   </app-page-content>
 </app-page>

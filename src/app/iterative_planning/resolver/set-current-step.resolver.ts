@@ -6,5 +6,6 @@ import { selectIterationStep } from "../state/iterative-planning.actions";
 export const setCurrentStepResolver: ResolveFn<void> = (snapshot) => {
   const iterationStepId = snapshot.paramMap.get('stepId');
 
-  inject(Store).dispatch(selectIterationStep({ iterationStepId }))
+  if(iterationStepId !== null)
+    inject(Store).dispatch(selectIterationStep({ iterationStepId }))
 }

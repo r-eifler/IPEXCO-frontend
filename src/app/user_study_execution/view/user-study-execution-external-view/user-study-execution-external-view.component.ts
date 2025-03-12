@@ -45,7 +45,7 @@ export class UserStudyExecutionExternalViewComponent {
           type: ActionType.OPEN_EXTERNAL_LINK, 
           data: {
               stepIndex: index,
-              stepName: step.name
+              stepName: step?.name ?? 'Step without name'
           }
         }
       }))

@@ -4,7 +4,7 @@ import { HttpClient, HttpParams } from "@angular/common/http";
 import { environment } from "src/environments/environment";
 import { map, tap } from "rxjs/operators";
 import { IHTTPData } from "src/app/shared/domain/http-data.interface";
-import { IterationStep } from "../domain/iteration_step";
+import { IterationStep, IterationStepBase } from "../domain/iteration_step";
 
 
 @Injectable()
@@ -19,38 +19,12 @@ export class IterationStepService{
         httpParams = httpParams.set('projectId', id);
         
         return this.http.get<IHTTPData<IterationStep[]>>(this.BASE_URL,  { params: httpParams }).pipe(
-            map(({data}) => data),
-            map(steps => 
-                steps.map( step => (
-                {
-                    ... step,
-                    plan: step?.plan ? {
-                            ...step.plan, 
-                            cost: undefined,
-                            actions: step.plan.actions ? JSON.parse(step.plan.actions as unknown as string) : undefined,
-                        } : undefined,
-                    task : {
-                        ...step.task,
-                        model: JSON.parse(step.task.model as unknown as string),
-                    },
-                    globalExplanation : step.globalExplanation ? {
-                        ...step.globalExplanation,
-                        MUGS: step.globalExplanation.MUGS ? JSON.parse(step.globalExplanation.MUGS as unknown as string) : undefined,
-                        MGCS: step.globalExplanation.MGCS ? JSON.parse(step.globalExplanation.MGCS as unknown as string) : undefined,
-                    } : undefined
-                }
-                ))
-            ),
+            map(({data}) => data)
           )
             
     }
 
-    // step?.plan ? {
-    //     ...step.plan, 
-    //     actions: JSON.parse(step.plan as unknown as string),
-    // } :
-
-    postIterationStep$(iterationStep: IterationStep): Observable<IterationStep> {
+    postIterationStep$(iterationStep: IterationStepBase): Observable<IterationStep> {
 
         return this.http.post<IHTTPData<IterationStep>>(this.BASE_URL, {data: iterationStep}).pipe(
             map(({data}) => data)
@@ -59,7 +33,6 @@ export class IterationStepService{
     }
 
     postCancelIterationStep$(iterationStepId: string): Observable<string> {
-
         return this.http.post<IHTTPData<string>>(this.BASE_URL + 'cancel', {iterationStepId}).pipe(
             map(({data}) => data)
         )

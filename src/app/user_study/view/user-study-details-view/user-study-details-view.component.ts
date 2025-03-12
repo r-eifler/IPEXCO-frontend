@@ -19,7 +19,7 @@ import {MatExpansionModule} from '@angular/material/expansion';
 import {filter, map, take} from 'rxjs/operators';
 import {MatTableModule} from '@angular/material/table';
 import {MatCheckboxModule} from '@angular/material/checkbox';
-import { AcceptedTestPersonsComponent } from '../../eval/accepted-test-persons/accepted-test-persons.component';
+import { AcceptedTestPersonsComponent } from '../../components/accepted-test-persons/accepted-test-persons.component';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -60,8 +60,17 @@ export class UserStudyDetailsViewComponent {
 
   onCopyLink(){
     const host = window.location.protocol + "//" + window.location.host;
-    this.userStudy$.pipe(take(1)).subscribe(study => navigator.clipboard.writeText(host + '/user-study-execution/' + study._id));
-    let snackBarRef = this.snackbar.open('User study link copied to clipboard.', 'close');
+    this.userStudy$.pipe(
+      take(1)
+    ).subscribe(study => {
+      if(study !== undefined){
+        navigator.clipboard.writeText(host + '/user-study-execution/' + study._id);
+        this.snackbar.open('User study link copied to clipboard.', 'close');
+      }
+      else {
+        this.snackbar.open('User study link not available.', 'close');
+      }
+    });
   }
 
 

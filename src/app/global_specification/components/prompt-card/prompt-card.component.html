@@ -1,0 +1,18 @@
+ <app-spec-card>
+    <mat-icon>speaker_notes</mat-icon>
+    <app-spec-card-title>
+        {{ prompt()?.name }}
+    </app-spec-card-title>
+
+    <app-spec-card-feature>{{ prompt()?.type }}</app-spec-card-feature>
+    @if(prompt()?.agent){
+        <app-spec-card-feature>{{ prompt()?.agent }}</app-spec-card-feature>
+    }
+    @if(prompt()?.domain){
+        <app-spec-card-feature>{{ domainName() }}</app-spec-card-feature>
+    }
+    @if(prompt()?.explainer){
+        <app-spec-card-feature>{{ explainerName() }}</app-spec-card-feature>
+    }
+
+</app-spec-card>

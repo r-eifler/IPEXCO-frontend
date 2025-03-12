@@ -1,25 +1,29 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import {userStudyExecutionFeature, UserStudyExecutionState} from './user-study-execution.reducer';
+import { UserStudyExecutionState} from './user-study-execution.reducer';
+import { userStudyExecutionFeature } from './user-study-execution.feature';
 
-const selectUserStudyExecutionFeature = createFeatureSelector<UserStudyExecutionState>(userStudyExecutionFeature);
+const selectState = userStudyExecutionFeature.selectUserStudyExecutionFeatureState;
 
-export const selectExecutionUserStudy = createSelector(selectUserStudyExecutionFeature, (state) => state.userStudy?.data)
 
-export const selectExecutionUserStudyStepIndex = createSelector(selectUserStudyExecutionFeature, (state) => state.stepIndex)
-export const selectExecutionUserStudyNextStepIndex = createSelector(selectUserStudyExecutionFeature, (state): number | null =>
-    state.stepIndex  < state.userStudy.data?.steps.length ? state.stepIndex : null)
+export const selectExecutionUserStudy = createSelector(selectState, (state) => state?.userStudy?.data)
 
-export const selectExecutionUserStudyStep = createSelector(selectUserStudyExecutionFeature, (state) =>
-    state.stepIndex !== null && state.stepIndex < state.userStudy.data?.steps.length ? state.userStudy?.data?.steps[state.stepIndex] : null)
+export const selectExecutionUserStudyStepIndex = createSelector(selectState, (state) => state.stepIndex)
+export const selectExecutionUserStudyNextStepIndex = createSelector(selectState, (state): number | null =>
+    state.stepIndex !== null && state.userStudy.data?.steps && state.stepIndex  < state.userStudy.data?.steps.length ? state.stepIndex : null)
 
-export const selectExecutionUserStudyFinishedAllSteps = createSelector(selectUserStudyExecutionFeature, (state) => state.finishedAllSteps)
-export const selectExecutionUserStudyCanceled = createSelector(selectUserStudyExecutionFeature, (state) => state.canceled)
+export const selectExecutionUserStudyStep = createSelector(selectState, (state) =>
+    state.stepIndex !== null && state.userStudy.data?.steps && state.stepIndex < state.userStudy.data?.steps.length ? 
+    state.userStudy?.data?.steps[state.stepIndex] : null
+)
+
+export const selectExecutionUserStudyFinishedAllSteps = createSelector(selectState, (state) => state.finishedAllSteps)
+export const selectExecutionUserStudyCanceled = createSelector(selectState, (state) => state.canceled)
 
 
 // Demo
-export const selectExecutionUserStudyDemo = createSelector(selectUserStudyExecutionFeature, (state) => state.runningDemo?.data)
-export const selectExecutionUserStudyPlanProperties = createSelector(selectUserStudyExecutionFeature, (state) => state.runningDemoPlanProperties?.data)
+export const selectExecutionUserStudyDemo = createSelector(selectState, (state) => state.runningDemo?.data)
+export const selectExecutionUserStudyPlanProperties = createSelector(selectState, (state) => state.runningDemoPlanProperties?.data)
 
 // For logging
 
-export const selectExecutionUserStudyPendingIterationSteps = createSelector(selectUserStudyExecutionFeature, (state) => state.pendingIterationSteps)
+export const selectExecutionUserStudyPendingIterationSteps = createSelector(selectState, (state) => state.pendingIterationSteps)

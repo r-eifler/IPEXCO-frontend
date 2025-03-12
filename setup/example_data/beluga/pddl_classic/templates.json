@@ -1,0 +1,59 @@
+[
+	{
+		"class": "Deliver",
+		"color": "#ed736b",
+		"icon": "flight",
+		"type": "G",
+		"variables": {
+			"$J": ["jig"]
+		},
+		"nameTemplate": "$J delivered",
+		"definitionTemplate": {
+			"name": "delivered",
+			"parameters": ["$J"]
+		},
+		"formulaTemplate": "empty($J)",
+		"actionSetsTemplates": [],
+		"sentenceTemplate": "Jig $J is delivered to factory",
+		"initVariableConstraints": [],
+		"goalVariableConstraints": []
+	},
+	{
+		"class": "Flights",
+		"color": "#ed736b",
+		"icon": "flight_land",
+		"type": "G",
+		"variables": {
+			"$B": ["beluga"]
+		},
+		"nameTemplate": "$B ",
+		"definitionTemplate": {
+			"name": "loaded",
+			"parameters": ["$B"]
+		},
+		"formulaTemplate": "to_load(dummy-type,dummy-slot,$B)",
+		"actionSetsTemplates": [],
+		"sentenceTemplate": "Flight $B is completely loaded",
+		"initVariableConstraints": [],
+		"goalVariableConstraints": []
+	},
+	{
+		"class": "Flights",
+		"color": "#ed736b",
+		"icon": "flight_takeoff",
+		"type": "G",
+		"variables": {
+			"$B": ["beluga"]
+		},
+		"nameTemplate": "$B ",
+		"definitionTemplate": {
+			"name": "unloaded",
+			"parameters": ["$B"]
+		},
+		"formulaTemplate": "to_unload(dummy-slot,$B)",
+		"actionSetsTemplates": [],
+		"sentenceTemplate": "Flight $B is completely unloaded",
+		"initVariableConstraints": [],
+		"goalVariableConstraints": []
+	}
+]

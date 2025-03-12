@@ -109,14 +109,16 @@ export class UserStudyEditorComponent {
   addNewStep(type: UserStudyStepType) {
     const newStep: UserStudyStep = {
       type,
-      name: null,
+      name: '',
       time: null,
-      content: null
     };
     this.form.controls.steps.push(this.fb.control<UserStudyStep>(newStep, [isNoPropertyNull]));
   }
 
-  updateControl(control: FormControl<UserStudyStep>, step: UserStudyStep) {
+  updateControl(control: FormControl<UserStudyStep | null>, step: UserStudyStep | null) {
+    if(step == null){
+      return;
+    }
     control.setValue(step);
   }
 
@@ -128,7 +130,10 @@ export class UserStudyEditorComponent {
     if(index === 0){
       return;
     }
-    const value: UserStudyStep = this.form .controls.steps.controls[index].value;
+    const value = this.form .controls.steps.controls[index].value;
+    if(value == null){
+      return;
+    }
     this.form .controls.steps.removeAt(index);
     this.form.controls.steps.insert(index - 1, this.fb.control<UserStudyStep>(value));
   }
@@ -137,7 +142,10 @@ export class UserStudyEditorComponent {
     if(index === this.form.controls.steps.length - 1) {
       return;
     }
-    const value: UserStudyStep = this.form .controls.steps.controls[index].value;
+    const value = this.form .controls.steps.controls[index].value;
+    if(value == null){
+      return;
+    }
     this.form .controls.steps.removeAt(index);
     this.form.controls.steps.insert(index + 1, this.fb.control<UserStudyStep>(value));
   }
@@ -145,21 +153,27 @@ export class UserStudyEditorComponent {
 
   save() {
     this.userStudy$.pipe(take(1)).subscribe(study => {
-      const userStudy: UserStudy = {
+
+      if(study === undefined){
+        console.error('No study available!');
+        return;
+      }
+
+      const updatedStudy: UserStudy = {
         ...study,
-        name: this.form.controls.name.value,
-        description: this.form.controls.description.value,
-        relatedProject: this.form.controls.relatedProject.value,
-        expectation: this.form.controls.expectation.value,
-        confidentiality: this.form.controls.confidentiality.value,
+        name: this.form.controls.name.value as string ?? 'TODO',
+        description: this.form.controls.description.value as string ?? 'TODO',
+        relatedProject: this.form.controls.relatedProject.value as string ?? 'TODO',
+        expectation: this.form.controls.expectation.value as string ?? 'TODO',
+        confidentiality: this.form.controls.confidentiality.value as string ?? 'TODO',
         startDate: this.form.controls.validTimeRange.controls.start.value,
         endDate: this.form.controls.validTimeRange.controls.end.value,
         redirectUrl: this.form.controls.redirectUrl.value,
-        steps: this.form.controls.steps.value
+        steps: (this.form.controls.steps.value as UserStudyStep[]) ?? []
       };
 
-      this.store.dispatch(editUserStudy({userStudy}));
-      this.router.navigate(['user-study', study._id, 'details']);
+      this.store.dispatch(editUserStudy({userStudy: updatedStudy}));
+        this.router.navigate(['user-study', study._id, 'details']);
     })
 
   }

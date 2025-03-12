@@ -10,23 +10,23 @@ import { PlanRunStatus } from '../plan';
 })
 export class StepStatusColorPipe implements PipeTransform {
 
-  transform(value: PlanRunStatus | undefined): Color {
+  transform(value: PlanRunStatus | undefined) {
     if(value === undefined || value === null) {
       return 'neutral'
     }
 
     switch (value) {
-      case PlanRunStatus.pending:
+      case PlanRunStatus.PENDING:
         return 'neutral';
-      case PlanRunStatus.running:
+      case PlanRunStatus.RUNNING:
         return 'neutral';
-      case PlanRunStatus.failed:
+      case PlanRunStatus.FAILED:
         return 'error';
-      case PlanRunStatus.canceled:
+      case PlanRunStatus.CANCELED:
         return 'error';
-      case PlanRunStatus.plan_found:
+      case PlanRunStatus.SOLVED:
         return 'secondary';
-      case PlanRunStatus.not_solvable:
+      case PlanRunStatus.UNSOLVABLE:
         return 'error';
     }
   }

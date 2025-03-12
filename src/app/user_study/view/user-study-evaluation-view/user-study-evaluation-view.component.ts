@@ -6,8 +6,7 @@ import { RouterLink } from '@angular/router';
 import { BreadcrumbModule } from 'src/app/shared/components/breadcrumb/breadcrumb.module';
 import { MatIconModule } from '@angular/material/icon';
 import { AsyncPipe } from '@angular/common';
-import { SelectTestPersonsComponent } from '../../eval/select-test-persons/select-test-persons.component';
-import { OverviewDataComponent } from '../../eval/overview-data/overview-data.component';
+import { OverviewDataComponent } from '../../components/overview-data/overview-data.component';
 import { UserStudyDashboardComponent } from "../../components/user-study-dashboard/user-study-dashboard.component";
 import { MatButtonModule } from '@angular/material/button';
 import { combineLatest, filter, map } from 'rxjs';
@@ -16,6 +15,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectChange, MatSelectModule } from '@angular/material/select';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { loadUserStudyDemos } from '../../state/user-study.actions';
+import { SelectTestPersonsComponent } from '../../components/select-test-persons/select-test-persons.component';
 
 
 @Component({
@@ -26,14 +26,14 @@ import { loadUserStudyDemos } from '../../state/user-study.actions';
         BreadcrumbModule,
         MatIconModule,
         AsyncPipe,
-        SelectTestPersonsComponent,
         OverviewDataComponent,
         UserStudyDashboardComponent,
         MatButtonModule,
         AsyncPipe,
         MatFormFieldModule,
         MatSelectModule,
-        AsyncPipe
+        AsyncPipe,
+        SelectTestPersonsComponent
     ],
     templateUrl: './user-study-evaluation-view.component.html',
     styleUrl: './user-study-evaluation-view.component.scss'
@@ -49,11 +49,15 @@ export class UserStudyEvaluationViewComponent {
     map(us => us?.steps?.filter(s => s.type == UserStudyStepType.demo).map(s => s.content))
   );
   demos$ = combineLatest([this.store.select(selectUserStudyDemos), this.demoIds$]).pipe(
-    map(([demos, demoIds]) => demos?.filter(d => demoIds.includes(d._id)))
+    map(([demos, demoIds]) => 
+      demoIds ? 
+      demos?.filter(d => d._id != undefined ? demoIds.includes(d._id) : false) :
+      []
+    )
   )
 
   selectedParticipants: WritableSignal<string[]> = signal([]);
-  selectedDemo: WritableSignal<string> = signal(null);
+  selectedDemo: WritableSignal<string|null> = signal(null);
 
   downloadData$ = this.participants$.pipe(map(participants => window.URL.createObjectURL(new Blob([JSON.stringify(participants)], { type: "text/json" }))))
 

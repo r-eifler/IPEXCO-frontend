@@ -4,9 +4,10 @@ import { concatLatestFrom } from "@ngrx/operators";
 import { Store } from "@ngrx/store";
 import { of } from "rxjs";
 import { catchError, switchMap } from "rxjs/operators";
+import { filterListNotNullOrUndefined } from "src/app/shared/common/check_null_undefined";
 import { ExplainerMonitoringService } from "../../service/explainer-monitoring.service";
 import { ExplainerService } from "../../service/explainer.service";
-import { globalExplanationComputationRunningFailure, globalExplanationComputationRunningSuccess, loadIterationSteps, registerGlobalExplanationComputation, registerGlobalExplanationComputationFailure, registerGlobalExplanationComputationSuccess } from "../iterative-planning.actions";
+import { globalExplanationComputationRunningFailure, globalExplanationComputationRunningSuccess, registerGlobalExplanationComputation, registerGlobalExplanationComputationFailure, registerGlobalExplanationComputationSuccess } from "../iterative-planning.actions";
 import { selectIterativePlanningProject } from "../iterative-planning.selector";
 
 @Injectable()
@@ -20,8 +21,7 @@ export class ComputeExplanationEffect{
     public registerGlobalExplanationComputation$ = createEffect(() => this.actions$.pipe(
         ofType(registerGlobalExplanationComputation),
         switchMap(({ iterationStepId }) => this.explainerService.postComputeGlobalExplanation$(iterationStepId).pipe(
-            concatLatestFrom(() => this.store.select(selectIterativePlanningProject)),
-            switchMap(([_, project]) => [registerGlobalExplanationComputationSuccess({iterationStepId}), loadIterationSteps({id: project._id})]),
+            switchMap(() => [registerGlobalExplanationComputationSuccess({iterationStepId})]),
             catchError(() => of(registerGlobalExplanationComputationFailure()))
         ))
     ))
@@ -30,9 +30,10 @@ export class ComputeExplanationEffect{
     public listenGlobalExplanationComputationFinished$ = createEffect(() => this.actions$.pipe(
         ofType(registerGlobalExplanationComputationSuccess),
         concatLatestFrom(() => this.store.select(selectIterativePlanningProject)),
+        filterListNotNullOrUndefined(),
         switchMap(([_, {_id: projectId}]) => {
             return this.monitoringService.globalExplanationComputationFinished$(projectId).pipe(
-                switchMap(() => [globalExplanationComputationRunningSuccess(), loadIterationSteps({id: projectId})]),
+                switchMap(() => [globalExplanationComputationRunningSuccess()]),
                 catchError(() => of(globalExplanationComputationRunningFailure())),
             )
         })

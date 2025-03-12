@@ -1,10 +1,9 @@
 import { inject, Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { catchError, map, switchMap } from "rxjs/operators";
 import { of } from "rxjs";
-import { CreateProjectService } from "../../service/create-project.service";
-import { createProject, createProjectFailure, deleteProject, deleteProjectFailure, deleteProjectSuccess, loadProjectMetaDataList } from "../project-meta.actions";
+import { catchError, switchMap } from "rxjs/operators";
 import { ProjectMetaDataService } from "../../service/project-meta-data.service";
+import { deleteProject, deleteProjectFailure, deleteProjectSuccess, loadProjectMetaDataList } from "../project-meta.actions";
 
 @Injectable()
 export class DeleteProjectEffect{
@@ -16,7 +15,7 @@ export class DeleteProjectEffect{
         ofType(deleteProject),
         switchMap(({id}) => this.service.deleteProject$(id).pipe(
             switchMap(() => [deleteProjectSuccess(), loadProjectMetaDataList()]),
-            catchError(() => of(deleteProjectFailure()))
+            catchError((e) => of(deleteProjectFailure({err: e})))
         ))
     ))
 }

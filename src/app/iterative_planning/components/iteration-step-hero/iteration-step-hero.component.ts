@@ -6,20 +6,18 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterLink } from '@angular/router';
 
+import { MatDialog } from '@angular/material/dialog';
 import { DefaultPipe } from 'src/app/shared/common/pipe/default.pipe';
 import { LabelModule } from 'src/app/shared/components/label/label.module';
+import { PlanProperty } from '../../../shared/domain/plan-property/plan-property';
+import { DemoDirective } from '../../directives/isDemo.directive';
+import { ProjectDirective } from '../../directives/isProject.directive';
 import { IterationStep } from '../../domain/iteration_step';
 import { StepStatusColorPipe } from '../../domain/pipe/step-status-color.pipe';
 import { StepStatusNamePipe } from '../../domain/pipe/step-status-name.pipe';
 import { StepValuePipe } from '../../domain/pipe/step-value.pipe';
-import { PlanProperty } from '../../../shared/domain/plan-property/plan-property';
-import { UserStudyDirective } from '../../derectives/isUserStudy.directive';
-import { computeMaxPossibleUtility } from 'src/app/project/domain/demo';
-import { Demo } from 'src/app/shared/domain/demo';
-import { ProjectDirective } from '../../derectives/isProject.directive';
-import { DemoDirective } from '../../derectives/isDemo.directive';
-import { MatDialog } from '@angular/material/dialog';
 import { TaskInformationDialogComponent } from '../../view/task-information-dialog/task-information-dialog.component';
+import { PlanRunStatus } from '../../domain/plan';
 
 @Component({
     selector: 'app-iteration-step-hero',
@@ -49,6 +47,8 @@ export class IterationStepHeroComponent {
   planProperties = input.required<Record<string, PlanProperty> | null>();
 
   maxOverallUtility = input.required<number>();
+
+  solved = computed(() => this.step()?.plan?.status === PlanRunStatus.SOLVED)
 
   openTaskInfo(){
      this.dialog.open(TaskInformationDialogComponent);

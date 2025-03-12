@@ -25,7 +25,7 @@ import { createPlanProperty } from "../../state/iterative-planning.actions";
 import { PropertyCreatorComponent } from "../../view/property-creator/property-creator.component";
 import { PlanProperty } from "src/app/shared/domain/plan-property/plan-property";
 import { AsyncPipe } from "@angular/common";
-import { ProjectDirective } from "../../derectives/isProject.directive";
+import { ProjectDirective } from "../../directives/isProject.directive";
 
 @Component({
     selector: "app-select-property",
@@ -59,7 +59,7 @@ export class SelectPropertyComponent {
   hasProperties = computed(() => !!this.properties()?.length);
 
   form = this.fb.group({
-    propertyIds: this.fb.array<FormControl<boolean>>([], [selectedAtLeastOne]),
+    propertyIds: this.fb.array<FormControl<boolean | null>>([], [selectedAtLeastOne]),
   });
 
   constructor(
@@ -83,11 +83,11 @@ export class SelectPropertyComponent {
     const selectedIndecees =
       this.form.controls.propertyIds.value?.reduce(
         (acc, selected, idx) => (selected ? [...acc, idx] : acc),
-        []
+        [] as number[]
       ) ?? [];
     const selectedIds = selectedIndecees.map(
       (index) => this.properties()?.[index]?._id
-    );
+    ).filter(i => i !== undefined);
 
     this.select.emit(selectedIds);
   }
