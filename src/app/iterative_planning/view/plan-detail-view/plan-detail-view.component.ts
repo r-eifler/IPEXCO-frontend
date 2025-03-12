@@ -34,8 +34,6 @@ import { BelugaDirective } from "src/app/domain_plugins/beluga/directives/isBelu
         PageModule,
         RouterLink,
         PlanViewComponent,
-        BelugaPlanAnimationComponent,
-        BelugaDirective
     ],
     templateUrl: "./plan-detail-view.component.html",
     styleUrl: "./plan-detail-view.component.scss"

@@ -19,6 +19,8 @@ import { AuthenticationService } from './user/services/authentication.service';
 import { userFeatureEffects } from './user/state/effects/effects';
 import { userFeature } from './user/state/user.feature';
 import { FailureEffect } from './shared/effects/failure.effect';
+import { planningFeature } from './planning/state/planning.feature';
+import { planningFeatureEffects } from './planning/state/effects/effects';
 
 export const routes: Routes = [
   {
@@ -90,6 +92,11 @@ export const routes: Routes = [
           LLMService,
           PlannerMonitoringService,
         ],
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'planning',
+        loadChildren: () => import('./planning/planning.routes').then(m => m.routes),
         canActivate: [AuthGuard],
       },
       {
