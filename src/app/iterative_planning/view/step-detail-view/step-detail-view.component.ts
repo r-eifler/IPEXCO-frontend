@@ -80,7 +80,9 @@ import {tap} from 'rxjs/operators';
     MatExpansionModule,
     MatProgressBarModule,
     MugsVisualizationBaseComponent,
-    ExplanationWrapperComponent
+    ExplanationWrapperComponent,
+    ProjectDirective,
+    DemoDirective
   ],
     templateUrl: "./step-detail-view.component.html",
     styleUrl: "./step-detail-view.component.scss"

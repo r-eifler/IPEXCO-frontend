@@ -21,28 +21,22 @@ export class UserStudyMugsVisualizationComponent {
   private store = inject(Store);
   answer = input.required<string[][] | null>();
 
-  containerHeaderId: string = "";
+  containerHeaderId: string = "mugs-vis";
   MUGS: Record<string, any>[] = []
   elements: PlanProperty[] = [];
   data: IDataObject = defaultDataObject;
 
   ngOnInit(): void {
-    this.SetContainerId();
   }
 
   ngAfterViewInit(): void {
     setTimeout(() => {
       this.CheckContainer();
       this.Initialize();
-      //drawer.remove();
-      drawer.init(`#${this.containerHeaderId}`, Math.floor((Math.random() * 100) + 1));
+      drawer.remove();
+      drawer.init(`#${this.containerHeaderId}`);
       drawer.draw(this.data);
     }, 60);
-  }
-
-  private SetContainerId(): void {
-    this.containerHeaderId = `mugs-vis-${Math.floor((Math.random() * 100) + 1)}`
-    console.log(this.containerHeaderId);
   }
 
   private CheckContainer() :void {

@@ -1,8 +1,12 @@
-<app-chat [isSenderTyping]="isLoading()">
-  <app-chat-message role="sender">Here are some question, that I could help you with:</app-chat-message>
-  @for(question of availableQuestions(); track question) {
-    <button app-chat-action (click)="onQuestionSelected(question)">{{ question.message.mainText }}</button>
+<h2>Questions</h2>
+<h3>US-WHY</h3>
+<mat-selection-list #quests (selectionChange)="onSelectionChanged($event, quests.selectedOptions.selected)">
+  @for (question of avaQuestions; track question) {
+    <mat-list-option [value]="question" [selected]="question === selectedItem">
+      <div>{{question.message.mainText}}</div>
+      @if(property() != null){
+        <div style="color: gray">{{property().name}}</div>
+      }
+    </mat-list-option>
   }
-</app-chat>
-
-
+</mat-selection-list>

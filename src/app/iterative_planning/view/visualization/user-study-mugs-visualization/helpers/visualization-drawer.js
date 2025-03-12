@@ -2,14 +2,13 @@ import * as d3 from "d3";
 import * as setchart from "./setchart";
 import {constants, separateTicks} from "./utils";
 
-let parentId, svgId, gId, svg, matrixGroup, data, x, y;
+let parentId, svgId, svg, matrixGroup, data, x, y;
 const OFFSET = 2
-const margin = { top: 10, right: 0, bottom: 0, left: 275 }
+const margin = { top: 50, right: 0, bottom: 0, left: 275 }
 
-function init(parent, uniqueId) {
+function init(parent) {
   parentId = parent;
   svgId = parentId + "-svg";
-  gId = uniqueId;
 }
 
 function remove() {
@@ -63,13 +62,12 @@ function resize() {
 
   matrixGroup.select("#matrix-y-axis")
     .selectAll("text")
-    .style("font-size", "13px")
+    .style("font-size", "14px")
 
   matrixGroup.select("#matrix-y-axis path.domain").remove();
 
-  const setchartId = "mugs-helpers-setchart" + gId
-
-  //d3.select("#mugs-helpers-setchart").remove()
+  const setchartId = "mugs-helpers-setchart"
+  d3.select(`#${setchartId}`).remove()
   d3.select(parentId).append("svg").attr("id", setchartId);
   setchart.draw(
     data,
