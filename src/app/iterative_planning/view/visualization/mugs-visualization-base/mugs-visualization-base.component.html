@@ -1,6 +1,6 @@
 @let step = step$ | async;
 
-@if (step && stepStatusType != PlanRunStatus.running && stepStatusType != PlanRunStatus.pending && stepStatusType != PlanRunStatus.failed)
+@if (step && stepStatusType != PlanRunStatus.RUNNING && stepStatusType != PlanRunStatus.PENDING && stepStatusType != PlanRunStatus.FAILED)
 {
   <app-page>
     <app-page-content>
@@ -21,7 +21,7 @@
             <app-editable-list-entry>
                 <app-plan-property-panel [property]="property" style="margin: 5px;"></app-plan-property-panel>
                 <app-editable-list-entry-suffix style="display: flex;">
-                  @if (stepStatusType != PlanRunStatus.not_solvable && length > 0){
+                  @if (stepStatusType != PlanRunStatus.UNSOLVABLE && length > 0){
                     <mat-icon
                       [ngStyle]="{
                         color: planPropertiesCriticality[property.name],

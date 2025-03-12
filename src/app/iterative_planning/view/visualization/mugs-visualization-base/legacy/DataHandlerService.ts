@@ -194,7 +194,7 @@ export class DataHandlerService {
     let elementCounts: Record<string, number> = {};
     let result: string;
 
-    if (this.stepType == PlanRunStatus.not_solvable){
+    if (this.stepType == PlanRunStatus.UNSOLVABLE){
       selectedElements = originalData.elements.filter(element => !selectedElements.some(selected => selected.name === element.name));
     }
 

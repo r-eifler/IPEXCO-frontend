@@ -72,7 +72,7 @@ export class PropertyCreationTemplateBasedComponent implements OnInit{
   });
 
   ngOnInit(): void {
-    let sorted: Record<string, PlanPropertyTemplate[]> = this.templates()?.reduce((acc, t) => ({...acc,[t.class]: []}), {})
+    let sorted: Record<string, PlanPropertyTemplate[]> = this.templates()?.reduce((acc, t) => ({...acc,[t.class]: []}), {}) as Record<string, PlanPropertyTemplate[]>
     this.templates().forEach(t => sorted[(t.class)].push(t))
     this.groupedTemplates = sorted;
   }

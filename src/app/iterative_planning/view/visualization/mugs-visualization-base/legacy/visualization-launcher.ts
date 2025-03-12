@@ -21,7 +21,7 @@ export class VisualizationLauncher {
     this.dataHandlerService = new DataHandlerService();
     this.dataHandlerService.stepType = statusType;
 
-    if (statusType == PlanRunStatus.not_solvable){
+    if (statusType == PlanRunStatus.UNSOLVABLE){
       setChart.setIsStepUnsolvable(true);
       matrix.setIsStepUnsolvable(true);
     }else {

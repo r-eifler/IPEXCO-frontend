@@ -86,7 +86,7 @@ export class LLMService {
             MGCS: explanationMGCS.map(e => e.map(pid => properties.find(p => p._id == pid)).filter(pp => pp != undefined)),
             questionArgument: questionArgument,
             predicates: (project.baseTask.model as  PDDLPlanningModel).predicates,
-            objects: project.baseTask.objects,
+            objects: project.baseTask.objects as {name: string, type: string}[],
             enforcedGoals: properties.filter(p => iterationStep.hardGoals.includes(p._id)),
             satisfiedGoals: properties.filter(p => 
                 iterationStep.plan?.satisfied_properties?.includes(p._id) && 
@@ -135,7 +135,7 @@ export class LLMService {
         const goalTranslationRequest: GoalTranslationRequest = {
             goalDescription: "{goal_description}",
             predicates: (project.baseTask.model as PDDLPlanningModel).predicates,
-            objects: project.baseTask.objects ,
+            objects: project.baseTask.objects  as {name: string, type: string}[],
             existingPlanProperties: Object.values(properties)
         };
         console.log(goalTranslationRequest);

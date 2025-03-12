@@ -112,21 +112,21 @@ export class MugsVisualizationBaseComponent {
     ).subscribe((status) => {
       this.stepStatusType = status;
       switch (status) {
-        case PlanRunStatus.not_solvable:
+        case PlanRunStatus.UNSOLVABLE:
           this.containerGoalInteractionSectionTest = "Unenforced Selection List"
           break;
 
-        case PlanRunStatus.failed:
+        case PlanRunStatus.FAILED:
           this.explanationDetails$ = undefined;
           console.log('MUG-Visualization-Base: Unexpected Step:', status);
           break;
 
-        case PlanRunStatus.pending:
+        case PlanRunStatus.PENDING:
           this.explanationDetails$ = undefined;
           console.log('MUG-Visualization-Base: Unexpected Step:', status);
           break;
 
-        case PlanRunStatus.running:
+        case PlanRunStatus.RUNNING:
           this.explanationDetails$ = undefined;
           console.log('MUG-Visualization-Base: Unexpected Step:', status);
           break;
@@ -152,7 +152,7 @@ export class MugsVisualizationBaseComponent {
       })
     });
     this.cdr.detectChanges();
-    if (this.stepStatusType != PlanRunStatus.not_solvable){
+    if (this.stepStatusType != PlanRunStatus.UNSOLVABLE){
       this.uiControl.ForceEnforceGoalsToSelection(this.enforcedGoals);
       // this.enforcedGoals.forEach(g => {
       //   const event = new CustomEvent("select-elements", {

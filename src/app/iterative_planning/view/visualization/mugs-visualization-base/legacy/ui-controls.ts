@@ -94,7 +94,7 @@ export class UIControls {
       ]);
 
     let arrayElement: PlanProperty[];
-    if (this._dataHandlerService.stepType == PlanRunStatus.not_solvable){
+    if (this._dataHandlerService.stepType == PlanRunStatus.UNSOLVABLE){
       arrayElement = this.data.elements;
     }else{
       arrayElement = this.data.selectedElements;
@@ -120,7 +120,7 @@ export class UIControls {
     if(this.data.selectedElements.length > 0) {
       switch (result) {
         case "solvable":
-          if (this._dataHandlerService.stepType == PlanRunStatus.not_solvable){
+          if (this._dataHandlerService.stepType == PlanRunStatus.UNSOLVABLE){
             text = "Selection is solvable";
           }else{
             text = "Remaining goal selection is solvable";
