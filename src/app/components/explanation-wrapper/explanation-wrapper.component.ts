@@ -1,9 +1,9 @@
 import {Component, inject, input} from '@angular/core';
 import {
+  selectExplanation,
   selectIsExplanationLoading,
   selectIterativePlanningProjectExplanationInterfaceType,
   selectIterativePlanningSelectedStep,
-  selectMessages,
   selectMessageTypes,
   selectPropertyAvailableQuestions,
   selectStepAvailableQuestions
@@ -12,13 +12,9 @@ import {Store} from '@ngrx/store';
 import {ExplanationInterfaceType} from '../../project/domain/general-settings';
 import {QuestionFormComponent} from '../question-form/question-form.component';
 import {UserStudyMugsVisualizationComponent} from '../visualization/user-study-mugs-visualization/user-study-mugs-visualization.component';
-import {PageComponent} from '../../shared/components/page/page/page.component';
-import {PageSectionComponent} from '../../shared/components/page/page-section/page-section.component';
-import {AsyncPipe} from '@angular/common';
-import {PageSectionContentComponent} from '../../shared/components/page/page-section-content/page-section-content.component';
-import {PageContentComponent} from '../../shared/components/page/page-content/page-content.component';
+import {AsyncPipe, NgIf} from '@angular/common';
 import {combineLatest, filter, map, Observable, switchMap, take} from 'rxjs';
-import {QuestionType} from '../../iterative_planning/domain/explanation/explanations';
+import {ExplanationRunStatus, QuestionType} from '../../iterative_planning/domain/explanation/explanations';
 import {
   filter as rFilter,
   includes as rIncludes,
@@ -28,10 +24,9 @@ import {
 import {questionFactory} from '../../iterative_planning/domain/explanation/question-factory';
 import {explanationHash} from '../../iterative_planning/domain/explanation/explanation-hash';
 import {AvailableQuestion} from '../../iterative_planning/components/explanation-chat/explanation-chat.component';
-import {questionPosed} from '../../iterative_planning/state/iterative-planning.actions';
 import {PlanProperty} from '../../shared/domain/plan-property/plan-property';
 import {StructuredText} from '../../iterative_planning/domain/interface/explanation-message';
-import {Message} from '../../iterative_planning/state/iterative-planning.reducer';
+import {mapComputeBase} from '../../iterative_planning/domain/explanation/answer-factory';
 
 
 @Component({
@@ -41,7 +36,8 @@ import {Message} from '../../iterative_planning/state/iterative-planning.reducer
   imports: [
     QuestionFormComponent,
     UserStudyMugsVisualizationComponent,
-    AsyncPipe
+    AsyncPipe,
+    NgIf
   ],
   standalone: true
 })
@@ -55,19 +51,32 @@ export class ExplanationWrapperComponent {
 
   explanationInterfaceType$ = this.store.select(selectIterativePlanningProjectExplanationInterfaceType);
   step$ = this.store.select(selectIterativePlanningSelectedStep);
-  stepId$ = this.step$.pipe(map(step => step?._id));
 
   isExplanationLoading$ = this.step$.pipe(
     map(explanationHash),
     switchMap(hash => this.store.select(selectIsExplanationLoading(hash)))
   );
 
-  globalMessages$ = this.stepId$.pipe(
-    switchMap(stepId => this.store.select(selectMessages(stepId))));
+  globalAnswers: Observable<string[][]> = new Observable();
 
-  propertyMessages$(property: PlanProperty): Observable<Message[]> {
-    return this.stepId$.pipe(
-      switchMap(stepId => this.store.select(selectMessages(stepId, property._id))),
+  answers$(question: AvailableQuestion, property?: PlanProperty | null) {
+    this.globalAnswers = this.step$.pipe(
+      switchMap(iterationStep => {
+        const hash = explanationHash(iterationStep);
+        return this.store.select(selectExplanation(hash)).pipe(
+          filter(explanation =>
+            explanation?.status === ExplanationRunStatus.failed ||
+            explanation?.status === ExplanationRunStatus.finished
+          ),
+          take(1),
+          map(explanation => mapComputeBase(
+            iterationStep,
+            { iterationStepId: iterationStep._id, propertyId: property?._id, questionType: question.questionType },
+            explanation.MUGS
+          ))
+          //tap(result => console.log('Computed Answer:', result))
+        );
+      })
     );
   }
 
@@ -87,18 +96,6 @@ export class ExplanationWrapperComponent {
       )
     )
   );
-
-  onQuestionSelected(question: AvailableQuestion): void {
-    this.stepId$.pipe(take(1)).subscribe((iterationStepId) =>{
-      return this.store.dispatch(questionPosed({ question: { questionType: question.questionType, iterationStepId }}))
-    });
-  }
-
-  onPropertyQuestionSelected(question: AvailableQuestion, property: PlanProperty): void {
-    this.stepId$.pipe(take(1)).subscribe((iterationStepId) =>{
-      return this.store.dispatch(questionPosed({ question: { questionType: question.questionType, iterationStepId, propertyId: property._id }}))
-    });
-  }
 
   propertyAvailableQuestionTypes$(property: PlanProperty): Observable<{questionType: QuestionType, message: StructuredText}[]> {
     return this.step$.pipe(

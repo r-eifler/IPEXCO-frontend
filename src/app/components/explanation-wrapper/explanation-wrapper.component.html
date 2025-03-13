@@ -1,35 +1,36 @@
 @let interfaceType = explanationInterfaceType$ | async;
 @let isExplanationLoading = isExplanationLoading$ | async;
-@let messages = globalMessages$ | async;
 
 @if(isUnsolvable()){
   <app-question-form
     [isLoading]="isExplanationLoading"
     [availableQuestions]="globalAvalableQuestionTypes$ | async"
-    (questionSelected)="onQuestionSelected($event)"
+    (questionSelected)="answers$($event, property())"
   >
   </app-question-form>
 
-  @for(message of  messages; track message;) {
-    @if(message.message.includeComputation){
-      @if(interfaceType === ExplanationInterfaceType.MUGS_VISUALIZATION_ANSWER){
-        <app-user-study-mugs-visualization [answer]="message.conflictSets"></app-user-study-mugs-visualization>
-      }
+    @if(interfaceType === ExplanationInterfaceType.MUGS_VISUALIZATION_ANSWER){
+        <app-user-study-mugs-visualization *ngIf="globalAnswers | async as answers"
+                                           [answer]="answers"
+                                           [createUniqueIds]="false"
+        >
+        </app-user-study-mugs-visualization>
     }
-  }
+
+
 }@else{
   <app-question-form
     [isLoading]="isExplanationLoading"
     [availableQuestions]="propertyAvailableQuestionTypes$(property()) | async"
-    (questionSelected)="onPropertyQuestionSelected($event, property())"
+    (questionSelected)="answers$($event, property())"
   >
   </app-question-form>
 
-  @for(message of propertyMessages$(property()) | async; track message;) {
-    @if(message.message.includeComputation){
-      @if(interfaceType === ExplanationInterfaceType.MUGS_VISUALIZATION_ANSWER){
-        <app-user-study-mugs-visualization [answer]="message.conflictSets"></app-user-study-mugs-visualization>
-      }
+    @if(interfaceType === ExplanationInterfaceType.MUGS_VISUALIZATION_ANSWER){
+        <app-user-study-mugs-visualization *ngIf="globalAnswers | async as answers"
+                                           [answer]="answers"
+                                           [createUniqueIds]="true"
+        >
+        </app-user-study-mugs-visualization>
     }
-  }
 }
