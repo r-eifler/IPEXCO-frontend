@@ -16,7 +16,6 @@ export const DemoRunStatusZ = nativeEnum(DemoRunStatus);
 export const DemoBaseZ = ProjectBaseZ.merge(object({
   projectId: nullable(string()),
   status: DemoRunStatusZ,
-  globalExplanation: optional(GlobalExplanationZ),
 }));
 
 export type DemoBase = zinfer<typeof DemoBaseZ>;
