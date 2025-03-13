@@ -58,8 +58,8 @@ import { UserManualDialogComponent } from "../../components/user-manual-dialog/u
 import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { DemoDirective } from "../../derectives/isDemo.directive";
 import {MugsVisualizationBaseComponent} from '../visualization/mugs-visualization-base/mugs-visualization-base.component';
-import {ExplanationWrapperComponent} from '../explanation-wrapper/explanation-wrapper.component';
-import {QuestionFormComponent} from '../question-form/question-form.component';
+import {ExplanationWrapperComponent} from '../../../components/explanation-wrapper/explanation-wrapper.component';
+import {QuestionFormComponent} from '../../../components/question-form/question-form.component';
 import {tap} from 'rxjs/operators';
 
 @Component({

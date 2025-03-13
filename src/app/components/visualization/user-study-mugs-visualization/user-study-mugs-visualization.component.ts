@@ -1,11 +1,12 @@
 import {Component, inject, input} from '@angular/core';
-import {PlanProperty} from '../../../../shared/domain/plan-property/plan-property';
+import {PlanProperty} from '../../../shared/domain/plan-property/plan-property';
 import * as drawer from "./helpers/visualization-drawer.js"
 import {defaultDataObject, IDataObject} from './Types/IDataObject';
-import {Store} from '@ngrx/store';
-import {selectIterativePlanningProperties} from '../../../state/iterative-planning.selector';
+import {props, Store} from '@ngrx/store';
+import {selectIterativePlanningProperties} from '../../../iterative_planning/state/iterative-planning.selector';
 import {Observable} from 'rxjs';
 import {take} from 'rxjs/operators';
+import {prop} from 'ramda';
 
 @Component({
   selector: 'app-user-study-mugs-visualization',
@@ -65,6 +66,7 @@ export class UserStudyMugsVisualizationComponent {
     const planProperties = this.GetStepPlanProperties();
 
     this.MUGS = this.answer().map((ids: string[], index: number) => {
+
       return {
         i: index,
         l: ids.map((id) => {
@@ -80,8 +82,9 @@ export class UserStudyMugsVisualizationComponent {
 
     // Init data Set
     this.data.MUGS = this.MUGS
-    this.data.elements = planProperties;
-
+    this.data.elements = planProperties.filter((prop) => {
+      return this.MUGS.some(mug => mug.s.has(prop.name));
+    })
   }
 
 }

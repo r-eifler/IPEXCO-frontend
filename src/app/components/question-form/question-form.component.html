@@ -1,0 +1,8 @@
+<h2>Questions</h2>
+<mat-selection-list #quests (selectionChange)="onSelectionChanged($event, quests.selectedOptions.selected)" [multiple]="false">
+  @for (question of avaQuestions; track question) {
+    <mat-list-option [value]="question">
+      <div>{{question.message.mainText}}</div>
+    </mat-list-option>
+  }
+</mat-selection-list>

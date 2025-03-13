@@ -37,7 +37,7 @@ function resize() {
     .style("width", size + margin.left + margin.right + (data.MUGS.length * 30) + "px") // include the chart to the right
 
   d3.select(svgId)
-    .attr("width", size)
+    .attr("width", size >= 350 ? size : 350)
     .attr("height", size + margin.top + margin.bottom)
 
   // build scales and axes:

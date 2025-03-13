@@ -7,31 +7,31 @@ import {
   selectMessageTypes,
   selectPropertyAvailableQuestions,
   selectStepAvailableQuestions
-} from '../../state/iterative-planning.selector';
+} from '../../iterative_planning/state/iterative-planning.selector';
 import {Store} from '@ngrx/store';
-import {ExplanationInterfaceType} from '../../../project/domain/general-settings';
+import {ExplanationInterfaceType} from '../../project/domain/general-settings';
 import {QuestionFormComponent} from '../question-form/question-form.component';
 import {UserStudyMugsVisualizationComponent} from '../visualization/user-study-mugs-visualization/user-study-mugs-visualization.component';
-import {PageComponent} from '../../../shared/components/page/page/page.component';
-import {PageSectionComponent} from '../../../shared/components/page/page-section/page-section.component';
+import {PageComponent} from '../../shared/components/page/page/page.component';
+import {PageSectionComponent} from '../../shared/components/page/page-section/page-section.component';
 import {AsyncPipe} from '@angular/common';
-import {PageSectionContentComponent} from '../../../shared/components/page/page-section-content/page-section-content.component';
-import {PageContentComponent} from '../../../shared/components/page/page-content/page-content.component';
+import {PageSectionContentComponent} from '../../shared/components/page/page-section-content/page-section-content.component';
+import {PageContentComponent} from '../../shared/components/page/page-content/page-content.component';
 import {combineLatest, filter, map, Observable, switchMap, take} from 'rxjs';
-import {QuestionType} from '../../domain/explanation/explanations';
+import {QuestionType} from '../../iterative_planning/domain/explanation/explanations';
 import {
   filter as rFilter,
   includes as rIncludes,
   map as rMap,
   not as rNot
 } from 'ramda';
-import {questionFactory} from '../../domain/explanation/question-factory';
-import {explanationHash} from '../../domain/explanation/explanation-hash';
-import {AvailableQuestion} from '../../components/explanation-chat/explanation-chat.component';
-import {questionPosed} from '../../state/iterative-planning.actions';
-import {PlanProperty} from '../../../shared/domain/plan-property/plan-property';
-import {StructuredText} from '../../domain/interface/explanation-message';
-import {Message} from '../../state/iterative-planning.reducer';
+import {questionFactory} from '../../iterative_planning/domain/explanation/question-factory';
+import {explanationHash} from '../../iterative_planning/domain/explanation/explanation-hash';
+import {AvailableQuestion} from '../../iterative_planning/components/explanation-chat/explanation-chat.component';
+import {questionPosed} from '../../iterative_planning/state/iterative-planning.actions';
+import {PlanProperty} from '../../shared/domain/plan-property/plan-property';
+import {StructuredText} from '../../iterative_planning/domain/interface/explanation-message';
+import {Message} from '../../iterative_planning/state/iterative-planning.reducer';
 
 
 @Component({
@@ -41,10 +41,6 @@ import {Message} from '../../state/iterative-planning.reducer';
   imports: [
     QuestionFormComponent,
     UserStudyMugsVisualizationComponent,
-    PageComponent,
-    PageContentComponent,
-    PageSectionComponent,
-    PageSectionContentComponent,
     AsyncPipe
   ],
   standalone: true
