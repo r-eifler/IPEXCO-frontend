@@ -58,8 +58,8 @@ import {
   selectUnsatisfiedSoftGoals,
 } from "./step-detail-view.component.selector";
 import {MugsVisualizationBaseComponent} from '../visualization/mugs-visualization-base/mugs-visualization-base.component';
-import {ExplanationWrapperComponent} from '../explanation-wrapper/explanation-wrapper.component';
-import {QuestionFormComponent} from '../question-form/question-form.component';
+import {ExplanationWrapperComponent} from '../../../components/explanation-wrapper/explanation-wrapper.component';
+import {QuestionFormComponent} from '../../../components/question-form/question-form.component';
 import {tap} from 'rxjs/operators';
 
 @Component({

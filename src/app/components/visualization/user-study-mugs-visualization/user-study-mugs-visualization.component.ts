@@ -1,9 +1,9 @@
 import {Component, inject, input} from '@angular/core';
-import {PlanProperty} from '../../../../shared/domain/plan-property/plan-property';
+import {PlanProperty} from '../../../shared/domain/plan-property/plan-property';
 import * as drawer from "./helpers/visualization-drawer.js"
 import {defaultDataObject, IDataObject} from './Types/IDataObject';
 import {Store} from '@ngrx/store';
-import {selectIterativePlanningProperties} from '../../../state/iterative-planning.selector';
+import {selectIterativePlanningProperties} from '../../../iterative_planning/state/iterative-planning.selector';
 import {Observable} from 'rxjs';
 import {take} from 'rxjs/operators';
 
@@ -20,23 +20,38 @@ import {take} from 'rxjs/operators';
 export class UserStudyMugsVisualizationComponent {
   private store = inject(Store);
   answer = input.required<string[][] | null>();
+  createUniqueIds = input.required<boolean>();
 
-  containerHeaderId: string = "mugs-vis";
+  containerHeaderId: string;
+  innerContainerId: string;
   MUGS: Record<string, any>[] = []
   elements: PlanProperty[] = [];
   data: IDataObject = defaultDataObject;
 
   ngOnInit(): void {
+    this.SetContainerId();
   }
 
   ngAfterViewInit(): void {
     setTimeout(() => {
       this.CheckContainer();
       this.Initialize();
-      drawer.remove();
-      drawer.init(`#${this.containerHeaderId}`);
+      if (!this.createUniqueIds){
+        drawer.remove();
+      }
+      drawer.init(`#${this.containerHeaderId}`, this.innerContainerId);
       drawer.draw(this.data);
     }, 60);
+  }
+
+  private SetContainerId(): void {
+    if (this.createUniqueIds) {
+      this.containerHeaderId = `mugs-vis-${Math.floor((Math.random() * 100) + 1)}`;
+      this.innerContainerId = `${Math.floor((Math.random() * 100) + 87 /2 * 34)}`;
+    }else{
+      this.containerHeaderId = "mugs-vis";
+      this.innerContainerId = "";
+    }
   }
 
   private CheckContainer() :void {
@@ -65,6 +80,7 @@ export class UserStudyMugsVisualizationComponent {
     const planProperties = this.GetStepPlanProperties();
 
     this.MUGS = this.answer().map((ids: string[], index: number) => {
+
       return {
         i: index,
         l: ids.map((id) => {
@@ -80,8 +96,9 @@ export class UserStudyMugsVisualizationComponent {
 
     // Init data Set
     this.data.MUGS = this.MUGS
-    this.data.elements = planProperties;
-
+    this.data.elements = planProperties.filter((prop) => {
+      return this.MUGS.some(mug => mug.s.has(prop.name));
+    })
   }
 
 }

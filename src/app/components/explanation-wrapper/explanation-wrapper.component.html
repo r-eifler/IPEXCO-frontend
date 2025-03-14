@@ -1,0 +1,36 @@
+@let interfaceType = explanationInterfaceType$ | async;
+@let isExplanationLoading = isExplanationLoading$ | async;
+
+@if(isUnsolvable()){
+  <app-question-form
+    [isLoading]="isExplanationLoading"
+    [availableQuestions]="globalAvalableQuestionTypes$ | async"
+    (questionSelected)="answers$($event, property())"
+  >
+  </app-question-form>
+
+    @if(interfaceType === ExplanationInterfaceType.MUGS_VISUALIZATION_ANSWER){
+        <app-user-study-mugs-visualization *ngIf="globalAnswers | async as answers"
+                                           [answer]="answers"
+                                           [createUniqueIds]="false"
+        >
+        </app-user-study-mugs-visualization>
+    }
+
+
+}@else{
+  <app-question-form
+    [isLoading]="isExplanationLoading"
+    [availableQuestions]="propertyAvailableQuestionTypes$(property()) | async"
+    (questionSelected)="answers$($event, property())"
+  >
+  </app-question-form>
+
+    @if(interfaceType === ExplanationInterfaceType.MUGS_VISUALIZATION_ANSWER){
+        <app-user-study-mugs-visualization *ngIf="globalAnswers | async as answers"
+                                           [answer]="answers"
+                                           [createUniqueIds]="true"
+        >
+        </app-user-study-mugs-visualization>
+    }
+}

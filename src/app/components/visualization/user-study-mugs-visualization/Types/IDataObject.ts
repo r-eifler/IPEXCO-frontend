@@ -1,4 +1,4 @@
-import {PlanProperty} from '../../../../../shared/domain/plan-property/plan-property';
+import {PlanProperty} from '../../../../shared/domain/plan-property/plan-property';
 
 export interface IDataObject {
   MUGS: Record<string, any>[];
