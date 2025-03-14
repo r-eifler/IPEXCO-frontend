@@ -21,9 +21,11 @@ export class UserStudyMugsVisualizationComponent {
   private store = inject(Store);
   answer = input.required<string[][] | null>();
   createUniqueIds = input.required<boolean>();
+  property = input.required<PlanProperty>();
 
   containerHeaderId: string;
   innerContainerId: string;
+  showVisualization: boolean;
   MUGS: Record<string, any>[] = []
   elements: PlanProperty[] = [];
   data: IDataObject = defaultDataObject;
@@ -36,12 +38,23 @@ export class UserStudyMugsVisualizationComponent {
     setTimeout(() => {
       this.CheckContainer();
       this.Initialize();
+      this.InitVisualization();
+
+
+    }, 60);
+  }
+
+  private InitVisualization(): void {
+    if (this.showVisualization) {
       if (!this.createUniqueIds){
         drawer.remove();
       }
       drawer.init(`#${this.containerHeaderId}`, this.innerContainerId);
       drawer.draw(this.data);
-    }, 60);
+    }else{
+      document.querySelector(`#${this.containerHeaderId}`).innerHTML =
+        "The goal does not form any conflict with the currently enforced ones and can thus be safely enforced in the next step.";
+    }
   }
 
   private SetContainerId(): void {
@@ -77,6 +90,12 @@ export class UserStudyMugsVisualizationComponent {
       return;
     }
 
+    if (this.createUniqueIds && this.property() != null) {
+      this.answer().forEach((item: string[]) => {
+        item.push(this.property()._id)
+      })
+    }
+
     const planProperties = this.GetStepPlanProperties();
 
     this.MUGS = this.answer().map((ids: string[], index: number) => {
@@ -95,6 +114,7 @@ export class UserStudyMugsVisualizationComponent {
     });
 
     // Init data Set
+    this.showVisualization = this.MUGS.length > 0;
     this.data.MUGS = this.MUGS
     this.data.elements = planProperties.filter((prop) => {
       return this.MUGS.some(mug => mug.s.has(prop.name));
