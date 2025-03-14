@@ -3,7 +3,7 @@ import { ExplanationMessage } from "../domain/interface/explanation-message";
 import { Question } from "../domain/interface/question";
 import { IterationStep, IterationStepBase, ModIterationStep } from "../domain/iteration_step";
 import { LLMContext } from "src/app/LLM/domain/context";
-import { PlanProperty, PlanPropertyBase } from "src/app/shared/domain/plan-property/plan-property";
+import { PlanProperty, PlanPropertyBase, PlanPropertyOfProject } from "src/app/shared/domain/plan-property/plan-property";
 import { Project } from "src/app/shared/domain/project";
 import { DomainSpecification } from "src/app/global_specification/domain/domain_specification";
 
@@ -27,7 +27,7 @@ export const loadPlanPropertiesSuccess = createAction('[iterative-planning] load
 export const loadPlanPropertiesFailure = createAction('[iterative-planning] load plan properties failure', props<{ err: any}>());
 
 
-export const createPlanProperty = createAction('[iterative-planning] create plan property', props<{planProperty: PlanPropertyBase}>());
+export const createPlanProperty = createAction('[iterative-planning] create plan property', props<{planProperty: PlanPropertyOfProject}>());
 export const createPlanPropertySuccess = createAction('[iterative-planning] create plan property success', props<{planProperty: PlanProperty}>());
 export const createPlanPropertyFailure = createAction('[iterative-planning] create plan property failure', props<{ err: any}>());
 

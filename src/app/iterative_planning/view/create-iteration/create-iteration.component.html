@@ -94,6 +94,7 @@
 <ng-template #propertySelector>
   <app-select-property
     [properties]="availableProperties$ | async"
+    [projectId]="projectId$ | async"
     (cancel)="onCancelPropertySelection()"
     (select)="handlePropertyIdSelection?.($event)"
   ></app-select-property>

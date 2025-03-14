@@ -1,4 +1,4 @@
-import { array, infer as zinfer, nativeEnum, object, string } from "zod";
+import { array, infer as zinfer, nativeEnum, object, string, boolean, number, nullable } from "zod";
 
 export const ActionZ = object({
   name: string(),
@@ -47,25 +47,34 @@ export const PlanPropertyDefinitionZ  = object({
 
 export type PlanPropertyDefinition = zinfer<typeof PlanPropertyDefinitionZ>;
 
-export interface PlanPropertyBase {
-  name: string;
-  definition: PlanPropertyDefinition | null; 
-  naturalLanguageDescription?: string;
-  type: GoalType;
-  formula: string | null;
-  actionSets?: ActionSet[]; //LtL over actions : unsupported yet for LLM
-  isUsed: boolean;
-  globalHardGoal: boolean;
-  utility: number;
-  color: string;
-  icon: string;
-  class: string;
-}
+export const PlanPropertyBaseZ = object({
+    name: string(),
+    definition: nullable(PlanPropertyDefinitionZ),
+    type: GoalTypeZ,
+    formula: string().nullable(),
+    actionSets: array(ActionSetZ).optional(),
+    naturalLanguageDescription: string(),
+    isUsed: boolean(),
+    globalHardGoal: boolean(),
+    utility: number(),
+    color: string(),
+    icon: string(),
+    class: string()
+});
 
-export interface PlanProperty extends PlanPropertyBase{
-  _id: string;
-  project: string;
-}
+export type PlanPropertyBase = zinfer<typeof PlanPropertyBaseZ>;
+
+export const PlanPropertyOfProjectZ = PlanPropertyBaseZ.merge(object({
+  project: string()
+}));
+
+export type PlanPropertyOfProject = zinfer<typeof PlanPropertyOfProjectZ>;
+
+export const PlanPropertyZ = PlanPropertyOfProjectZ.merge(object({
+  _id: string(),
+}));
+
+export type PlanProperty = zinfer<typeof PlanPropertyZ>;
 
 export function equalPlanProperties(p1: PlanPropertyBase, p2: PlanPropertyBase): boolean {
   const res =  p1.type == p2.type && p1.formula == p2.formula &&
