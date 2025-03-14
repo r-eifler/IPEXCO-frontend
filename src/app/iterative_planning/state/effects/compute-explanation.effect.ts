@@ -22,7 +22,7 @@ export class ComputeExplanationEffect{
         ofType(registerGlobalExplanationComputation),
         switchMap(({ iterationStepId }) => this.explainerService.postComputeGlobalExplanation$(iterationStepId).pipe(
             switchMap(() => [registerGlobalExplanationComputationSuccess({iterationStepId})]),
-            catchError(() => of(registerGlobalExplanationComputationFailure()))
+            catchError((e) => of(registerGlobalExplanationComputationFailure({err: e})))
         ))
     ))
 
@@ -34,7 +34,7 @@ export class ComputeExplanationEffect{
         switchMap(([_, {_id: projectId}]) => {
             return this.monitoringService.globalExplanationComputationFinished$(projectId).pipe(
                 switchMap(() => [globalExplanationComputationRunningSuccess()]),
-                catchError(() => of(globalExplanationComputationRunningFailure())),
+                catchError((e) => of(globalExplanationComputationRunningFailure({err: e}))),
             )
         })
     ))

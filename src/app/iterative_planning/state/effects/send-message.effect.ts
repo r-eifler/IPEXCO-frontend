@@ -130,7 +130,7 @@ export class SendMessageToLLMEffect {
         ),
         switchMap(([{ question, iterationStepId }, project, properties, iterationStep, threadIdQT]) => {
             if(project === undefined || iterationStep === undefined || iterationStep == null || properties === undefined){
-                return of(sendMessageToLLMExplanationTranslatorFailure());
+                return of(sendMessageToLLMExplanationTranslatorFailure({err: "[LLM} translation failed"}));
             }
             const startTime = performance.now();
             return this.service.postMessageQT$(question, iterationStep, project, Object.values(properties), threadIdQT).pipe(
@@ -159,7 +159,7 @@ export class SendMessageToLLMEffect {
                                 ];
                             default:
                                 console.warn('Unexpected question type:', response.questionType);
-                                return of(sendMessageToLLMQuestionTranslatorFailure());
+                                return of(sendMessageToLLMQuestionTranslatorFailure({err: "[LLM] Unexpected question type"}));
                         }
                     }
                     else {
@@ -173,7 +173,7 @@ export class SendMessageToLLMEffect {
                 }),
                 catchError((error) => {
                     console.error('Error in question translator:', error);
-                    return of(sendMessageToLLMQuestionTranslatorFailure());
+                    return of(sendMessageToLLMQuestionTranslatorFailure({err: error}));
                 })
             );
         })
@@ -188,7 +188,7 @@ export class SendMessageToLLMEffect {
             this.store.select(selectIterationStepById(iterationStepId))]),
         switchMap(([{ question, explanationMUGS, explanationMGCS, question_type, questionArgument, iterationStepId }, threadIdET, project, properties, iterationStep]) => {
             if(project === undefined || iterationStep === undefined || iterationStep == null || properties === undefined){
-                return of(sendMessageToLLMExplanationTranslatorFailure());
+                return of(sendMessageToLLMExplanationTranslatorFailure({err: "LLM translation failed"}));
             }
             const startTime = performance.now();
             return this.service.postMessageET$(question, explanationMUGS, explanationMGCS, question_type as QuestionType, questionArgument, iterationStep, project, Object.values(properties), threadIdET).pipe(
@@ -196,7 +196,7 @@ export class SendMessageToLLMEffect {
                     const duration = performance.now() - startTime;
                     return [sendMessageToLLMExplanationTranslatorSuccess({ response: response.response, threadId: response.threadId, duration })];
                 }),
-                catchError(() => of(sendMessageToLLMExplanationTranslatorFailure()))
+                catchError((e) => of(sendMessageToLLMExplanationTranslatorFailure({err: e})))
             );
         })
     ))
@@ -211,7 +211,7 @@ export class SendMessageToLLMEffect {
         filter(([{ directResponse, iterationStepId }, project, iterationStep, threadIdET]) => project !== undefined),
         switchMap(([{ directResponse, iterationStepId }, project, iterationStep, threadIdET]) => {
             if(project === undefined || iterationStep == undefined ){
-                return of(sendMessageToLLMExplanationTranslatorFailure());
+                return of(sendMessageToLLMExplanationTranslatorFailure({err: "LLM translation failed"}));
             }
             const startTime = performance.now();
             return this.service.postDirectMessageET$(directResponse, project, iterationStep, threadIdET).pipe(
@@ -223,7 +223,7 @@ export class SendMessageToLLMEffect {
                         duration
                     });
                 }),
-                catchError(() => of(sendMessageToLLMExplanationTranslatorFailure()))
+                catchError((e) => of(sendMessageToLLMExplanationTranslatorFailure({err: e})))
             )
         })
     ))
@@ -232,7 +232,7 @@ export class SendMessageToLLMEffect {
         ofType(loadLLMContext),
         switchMap(({ projectId }) => this.service.getLLMContext$(projectId).pipe(
             map(LLMContext => loadLLMContextSuccess({ LLMContext })),
-            catchError(() => of(loadLLMContextFailure())),
+            catchError((e) => of(loadLLMContextFailure({err: e}))),
         ))
     ))
 }

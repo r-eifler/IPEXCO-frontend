@@ -20,7 +20,7 @@ export class DeleteIterationEffect{
         ofType(deleteIterationStep),
         switchMap(({id}) => this.service.deleteIterationStep$(id).pipe(
             switchMap(() => [deleteIterationStepSuccess()]),
-            catchError(() => of(deleteIterationStepFailure()))
+            catchError((e) => of(deleteIterationStepFailure({err: e})))
         ))
     ));
 
@@ -29,6 +29,6 @@ export class DeleteIterationEffect{
         concatLatestFrom(() => this.store.select(selectIterativePlanningProject)),
         filterListNotNullOrUndefined(),
         switchMap(([_, project]) => [loadIterationSteps({id: project._id})]),
-        catchError(() => of(deleteIterationStepFailure()))
+        catchError((e) => of(deleteIterationStepFailure({err: e})))
     ));
 }

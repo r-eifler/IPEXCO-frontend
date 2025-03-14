@@ -1,6 +1,7 @@
+import { GlobalExplanationZ } from "src/app/iterative_planning/domain/explanation/explanations";
 import { GeneralSettingsZ } from "src/app/project/domain/general-settings";
 import { PlanningTaskZ } from "src/app/shared/domain/planning-task";
-import { boolean, nullable, object, string, enum as zenum, infer as zinfer } from "zod";
+import { boolean, nullable, object, optional, string, enum as zenum, infer as zinfer } from "zod";
 
 
 export const ProjectTypeZ = zenum(['demo-project', 'general-project']);
@@ -16,6 +17,7 @@ export const ProjectBaseZ  = object({
   baseTask: PlanningTaskZ,
   settings: GeneralSettingsZ,
   summaryImage: string().nullish(),
+  globalExplanation: optional(GlobalExplanationZ),
 });
 
 export type ProjectBase = zinfer<typeof ProjectBaseZ>;
