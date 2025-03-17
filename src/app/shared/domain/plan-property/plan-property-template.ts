@@ -156,7 +156,7 @@ export function generatePlanProperty (
       utility: 1,
       color: template.color,
       icon: template.icon,
-      class: template.class
+      class: template.class,
     };
   }
 

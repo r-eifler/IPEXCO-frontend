@@ -17,7 +17,7 @@ export class IterativePlanningLoadDomainSpecificationEffect{
         ofType(loadDomainSpecification),
         switchMap(({id}) => this.service.getById$(id).pipe(
             switchMap(spec => [loadDomainSpecificationSuccess({domainSpecification: spec})] ),
-            catchError(() => of(loadDomainSpecificationFailure()))
+            catchError((e) => of(loadDomainSpecificationFailure({err: e})))
         ))
     ))
 }

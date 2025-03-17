@@ -213,6 +213,7 @@ export class SettingsComponent {
 		}
 		catch(e: any){
 			console.log('Could not initialize settings!')
+      console.log(e)
 		}
 	})
 

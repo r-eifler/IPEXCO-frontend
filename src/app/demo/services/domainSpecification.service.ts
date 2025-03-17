@@ -2,9 +2,7 @@ import { HttpClient } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
-import { DomainSpecCardComponent } from "src/app/global_specification/components/domain-spec-card/domain-spec-card.component";
 import { DomainSpecification, DomainSpecificationZ } from "src/app/global_specification/domain/domain_specification";
-import { IHTTPData } from "src/app/shared/domain/http-data.interface";
 import { environment } from "src/environments/environment";
 
 @Injectable()
@@ -19,5 +17,5 @@ export class DemoDomainSpecificationService{
       return this.http.get<unknown>(this.BASE_URL + id).pipe(
           map((data) => DomainSpecificationZ.parse(data))
       )
-  }
+    }
 }

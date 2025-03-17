@@ -102,7 +102,7 @@ export class QuestionQueueEffect {
         ]),
         switchMap(([data, threadIdET, project, properties, iterationStep]) => {
           if(iterationStep === undefined || iterationStep == null ||properties == null || project == null){
-            return of(sendMessageToLLMExplanationTranslatorFailure())
+            return of(sendMessageToLLMExplanationTranslatorFailure({err: "[LLM] translation failed"}))
           }
           return this.LLMService.postMessageET$(
             naturalLanguageQuestion, 
@@ -121,7 +121,7 @@ export class QuestionQueueEffect {
             })]),
             catchError((error) => {
               console.error('Error in postMessageET$:', error);
-              return of(sendMessageToLLMExplanationTranslatorFailure());
+              return of(sendMessageToLLMExplanationTranslatorFailure({err: "[LLM] translation failed"}));
             })
           );
         })
@@ -129,7 +129,7 @@ export class QuestionQueueEffect {
     }),
     catchError((error) => {
       console.error('Global error in postAnswerLLM$:', error);
-      return of(sendMessageToLLMExplanationTranslatorFailure());
+      return of(sendMessageToLLMExplanationTranslatorFailure({err: "[LLM] translation failed"}));
     })
   ));
 

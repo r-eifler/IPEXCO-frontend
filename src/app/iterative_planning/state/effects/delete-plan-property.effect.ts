@@ -1,13 +1,10 @@
 import { inject, Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { deletePlanProperty, deletePlanPropertyFailure, deletePlanPropertySuccess, loadPlanProperties} from "../iterative-planning.actions";
-import { catchError, switchMap } from "rxjs/operators";
-import { of } from "rxjs";
-import { PlanPropertyService } from "../../service/plan-properties.service";
 import { Store } from "@ngrx/store";
-import { concatLatestFrom } from "@ngrx/operators";
-import { selectIterativePlanningProject } from "../iterative-planning.selector";
-import { filterListNotNullOrUndefined } from "src/app/shared/common/check_null_undefined";
+import { of } from "rxjs";
+import { catchError, switchMap } from "rxjs/operators";
+import { PlanPropertyService } from "../../service/plan-properties.service";
+import { deletePlanProperty, deletePlanPropertyFailure, deletePlanPropertySuccess } from "../iterative-planning.actions";
 
 @Injectable()
 export class DeletePlanPropertyEffect{
@@ -20,7 +17,7 @@ export class DeletePlanPropertyEffect{
         ofType(deletePlanProperty),
         switchMap(({id}) => this.service.deletePLanProperty$(id).pipe(
             switchMap((res) => [deletePlanPropertySuccess({res})]),
-            catchError(() => of(deletePlanPropertyFailure()))
+            catchError((e) => of(deletePlanPropertyFailure({err: e})))
         ))
     ));
 

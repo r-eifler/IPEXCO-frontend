@@ -17,7 +17,7 @@ export class DemoLoadPromptsEffect{
         ofType(loadPrompts),
         switchMap(() => this.service.getPrompts$().pipe(
             switchMap(prompts => [loadPromptsSuccess({prompts})] ),
-            catchError(() => of(loadPromptsFailure()))
+            catchError((e) => of(loadPromptsFailure({err: e})))
         ))
     ))
 
@@ -26,7 +26,7 @@ export class DemoLoadPromptsEffect{
         ofType(loadOutputSchemas),
         switchMap(() => this.service.getOutputSchemas$().pipe(
             switchMap(schemas => [loadOutputSchemasSuccess({outputSchemas: schemas})] ),
-            catchError(() => of(loadOutputSchemasFailure()))
+            catchError((e) => of(loadOutputSchemasFailure({err: e})))
         ))
     ))
 }

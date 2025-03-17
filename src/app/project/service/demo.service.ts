@@ -1,10 +1,9 @@
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { map, tap } from "rxjs/operators";
+import { map } from "rxjs/operators";
 import { Demo, DemoBase, DemoZ } from "src/app/shared/domain/demo";
-import { IHTTPData } from "src/app/shared/domain/http-data.interface";
-import { PlanProperty, PlanPropertyBase } from "src/app/shared/domain/plan-property/plan-property";
+import { PlanPropertyBase } from "src/app/shared/domain/plan-property/plan-property";
 import { environment } from "src/environments/environment";
 import { array, boolean, string } from "zod";
 

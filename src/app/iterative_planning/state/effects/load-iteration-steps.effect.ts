@@ -21,7 +21,7 @@ export class LoadIterationStepsEffect{
         ofType(loadIterationSteps),
         switchMap(({id}) => this.service.getIterationSteps$(id).pipe(
             map(iterationSteps => loadIterationStepsSuccess({iterationSteps})),
-            catchError(() => of(loadIterationStepsFailure())),
+            catchError((e) => of(loadIterationStepsFailure({err: e}))),
         ))
     ))
 

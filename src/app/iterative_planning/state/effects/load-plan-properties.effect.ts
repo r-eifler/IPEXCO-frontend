@@ -22,7 +22,7 @@ export class LoadPlanPropertiesEffect{
         ofType(loadPlanProperties),
         switchMap(({id}) => this.service.getPlanProperties$(id).pipe(
             map(planProperties => loadPlanPropertiesSuccess({planProperties})),
-            catchError(() => of(loadPlanPropertiesFailure())),
+            catchError((e) => of(loadPlanPropertiesFailure({err: e}))),
         ))
     ))
 
@@ -31,7 +31,7 @@ export class LoadPlanPropertiesEffect{
         concatLatestFrom(() => this.store.select(selectIterativePlanningProject)),
         filterListNotNullOrUndefined(),
         switchMap(([,project]) => [loadPlanProperties({id: project._id})]),
-        catchError(() => of(deletePlanPropertyFailure()))
+        catchError((e) => of(deletePlanPropertyFailure({err: e})))
     ));
 
 

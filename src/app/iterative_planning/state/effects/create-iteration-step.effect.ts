@@ -23,7 +23,7 @@ export class CreateIterationStepEffect{
         ofType(createIterationStep),
         switchMap(({iterationStep}) => this.service.postIterationStep$(iterationStep).pipe(
             switchMap((iterationStep) => [createIterationStepSuccess({iterationStep})]),
-            catchError(() => of(createIterationStepFailure()))
+            catchError((e) => of(createIterationStepFailure({err: e})))
         )),
     ));
 

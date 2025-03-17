@@ -23,7 +23,7 @@ import { Store } from "@ngrx/store";
 import { UserRoleDirective } from "src/app/user/directives/user-role.directive";
 import { createPlanProperty } from "../../state/iterative-planning.actions";
 import { PropertyCreatorComponent } from "../../view/property-creator/property-creator.component";
-import { PlanProperty } from "src/app/shared/domain/plan-property/plan-property";
+import { PlanProperty, PlanPropertyBase, PlanPropertyOfProject } from "src/app/shared/domain/plan-property/plan-property";
 import { AsyncPipe } from "@angular/common";
 import { ProjectDirective } from "../../directives/isProject.directive";
 
@@ -55,6 +55,7 @@ export class SelectPropertyComponent {
   cancel = output<void>();
   select = output<string[]>();
 
+  projectId = input.required<string>();
   properties = input.required<PlanProperty[] | null>();
   hasProperties = computed(() => !!this.properties()?.length);
 
@@ -94,11 +95,15 @@ export class SelectPropertyComponent {
 
   createNewProperty(): void {
     const dialogRef = this.dialog.open(PropertyCreatorComponent);
-      dialogRef.afterClosed().pipe(take(1)).subscribe(newP => {
-        if(!newP){
+      dialogRef.afterClosed().pipe(take(1)).subscribe((propertyDef: PlanPropertyBase) => {
+        if(!propertyDef){
           return
         }
-        this.store.dispatch(createPlanProperty({planProperty: newP}))
+        const newProperty: PlanPropertyOfProject = {
+          ...propertyDef,
+          project: this.projectId()
+        }
+        this.store.dispatch(createPlanProperty({planProperty: newProperty}))
       }
       );
   }

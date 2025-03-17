@@ -15,7 +15,7 @@ export class DemoDemoUpdatePlanPropertyEffect{
         ofType(updatePlanProperty),
         switchMap(({planProperty}) => this.service.putPlanProperty$(planProperty).pipe(
             switchMap(planProperty => [updatePlanPropertySuccess({planProperty}),loadDemoPlanProperties({id: planProperty.project})]),
-            catchError(() => of(updatePlanPropertyFailure()))
+            catchError((e) => of(updatePlanPropertyFailure({err: e})))
         ))
     ))
 }

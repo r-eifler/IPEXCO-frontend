@@ -15,7 +15,7 @@ export class LoadDemoEffect{
         ofType(loadDemo),
         switchMap(({id}) => this.service.getDemo$(id).pipe(
             switchMap(demo => [loadDemoSuccess({demo}), loadDemoPlanProperties({id}), loadDomainSpecification({id: demo.domain})]),
-            catchError(() => of(loadDemoFailure()))
+            catchError((e) => of(loadDemoFailure({err: e})))
         ))
     ))
 }

@@ -1,16 +1,12 @@
 import { AsyncPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { sendMessageToLLMQTthenGTTranslators, sendMessageToLLMQuestionTranslator } from '../../state/iterative-planning.actions';
-import { ChatModule } from 'src/app/shared/components/chat/chat.module';
-import { selectMessages, selectLLMThreadIdET, selectLLMThreadIdGT, selectLLMThreadIdQT, selectIterativePlanningSelectedStep, selectLLMChatMessages, selectIterativePlanningSelectedStepId, selectVisibleMessagesbyId, selectIsExplanationChatLoading } from '../../state/iterative-planning.selector';
-import { createPlanProperty } from '../../state/iterative-planning.actions';
-import { take, filter, map, mergeMap, combineLatestWith, switchMap } from 'rxjs/operators';
-import { selectIterativePlanningProject } from '../../state/iterative-planning.selector';
-import { eraseLLMHistory } from '../../state/iterative-planning.actions';
-import { selectIsLLMChatLoading } from '../../state/iterative-planning.selector';
 import { combineLatest, Subscription } from 'rxjs';
+import { map, switchMap, take } from 'rxjs/operators';
 import { filterNotNullOrUndefined } from 'src/app/shared/common/check_null_undefined';
+import { ChatModule } from 'src/app/shared/components/chat/chat.module';
+import { eraseLLMHistory, sendMessageToLLMQuestionTranslator } from '../../state/iterative-planning.actions';
+import { selectIsExplanationChatLoading, selectIsLLMChatLoading, selectIterativePlanningProject, selectIterativePlanningSelectedStep, selectLLMThreadIdET, selectLLMThreadIdGT, selectLLMThreadIdQT, selectVisibleMessagesbyId } from '../../state/iterative-planning.selector';
 @Component({
     selector: 'app-explanation-chat-llm',
     imports: [AsyncPipe, ChatModule],

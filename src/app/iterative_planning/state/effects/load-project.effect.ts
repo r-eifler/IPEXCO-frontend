@@ -18,7 +18,7 @@ export class LoadIterativePlanningProjectEffect{
         ofType(loadProject),
         switchMap(({id}) => this.service.getProject$(id).pipe(
             switchMap(project => [loadProjectSuccess({project})]),
-            catchError(() => of(loadProjectFailure())),
+            catchError((e) => of(loadProjectFailure({err: e}))),
         ))
     ))
 
@@ -33,12 +33,6 @@ export class LoadIterativePlanningProjectEffect{
                 ? [createLLMContext({projectId: project._id, domain: project.domain})]
                 : [])
         ]),
-            catchError(() => of(loadProjectFailure())),
+            catchError((e) => of(loadProjectFailure({err: e}))),
     ));
-
-    // loadPlanProperties$ = createEffect(() => this.actions$.pipe(
-    //     ofType(loadProjectSuccess),
-    //     concatLatestFrom(() => this.store.select(selectIterativePlanningProject)),
-    //     map(([_, { _id: id }]) => loadPlanProperties({ id })),
-    // ));
 }

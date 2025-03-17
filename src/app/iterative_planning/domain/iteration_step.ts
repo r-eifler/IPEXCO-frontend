@@ -1,31 +1,38 @@
-import { PlanningTask } from "src/app/shared/domain/planning-task";
-import { GlobalExplanation } from "./explanation/explanations";
-import { computeUtility, Plan } from "./plan";
 import { PlanProperty } from "src/app/shared/domain/plan-property/plan-property";
+import { PlanningTaskZ } from "src/app/shared/domain/planning-task";
+import { array, coerce, nativeEnum, object, string, infer as zinfer } from "zod";
+import { GlobalExplanationZ } from "./explanation/explanations";
+import { computeUtility, PlanZ } from "./plan";
 
 export enum StepStatus{
-  UNKNOWN = "UNKNOWN",
-  SOLVABLE = "SOLVABLE",
-  UNSOLVABLE = "UNSOLVABLE",
+	UNKNOWN = "UNKNOWN",
+	SOLVABLE = "SOLVABLE",
+	UNSOLVABLE = "UNSOLVABLE",
 }
 
-export interface IterationStepBase {
-    name: string;
-    project: string;
-    status: StepStatus;
-    hardGoals: string[];
-    softGoals: string[];
-    task: PlanningTask;
-    plan?: Plan;
-    globalExplanation?: GlobalExplanation,
-    predecessorStep: string | null;
-}
+export const StepStatusZ = nativeEnum(StepStatus);
 
-export interface IterationStep extends IterationStepBase{
-    _id: string;
-    user: string;
-    createdAt: Date;
-}
+export const IterationStepBaseZ = object({
+	name: string(),
+	project: string(),
+	status: StepStatusZ,
+	hardGoals: array(string()),
+	softGoals: array(string()),
+	task: PlanningTaskZ,
+	plan: PlanZ.optional(),
+	globalExplanation: GlobalExplanationZ.optional(),
+	predecessorStep: string().nullable(),
+});
+
+export type IterationStepBase = zinfer<typeof IterationStepBaseZ>;
+
+export const IterationStepZ = IterationStepBaseZ.merge(object({
+    _id: string(),
+    user: string(),
+    createdAt: coerce.date(),
+}));
+
+export type IterationStep = zinfer<typeof IterationStepZ>;
 
 export interface ModIterationStep extends IterationStepBase {
   baseStep: string;

@@ -15,7 +15,7 @@ export class UploadDemoEffect{
         ofType(uploadDemo),
         switchMap(({demo, planProperties, domainSpecification}) => this.service.postDemo$(demo, planProperties, domainSpecification).pipe(
             switchMap(() => [uploadDemoSuccess(), loadDemos()]),
-            catchError(() => of(uploadDemoFailure()))
+            catchError((e) => of(uploadDemoFailure({err: e})))
         ))
     ))
 }

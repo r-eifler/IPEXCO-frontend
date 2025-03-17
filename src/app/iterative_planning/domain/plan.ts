@@ -2,7 +2,7 @@
 import { sum } from "ramda";
 import { factEquals, PDDLAction, PDDLFact } from "src/app/shared/domain/PDDL_task";
 import { Action, ActionZ, PlanProperty } from "src/app/shared/domain/plan-property/plan-property";
-import { array, date, nativeEnum, object, string, infer as zinfer } from "zod";
+import { array, coerce, date, nativeEnum, object, string, infer as zinfer } from "zod";
 
 
 export enum PlanRunStatus {
@@ -18,7 +18,7 @@ export enum PlanRunStatus {
 export const PlanRunStatusZ = nativeEnum(PlanRunStatus);
 
 export const PlanZ = object({
-  createdAt: date(), 
+  createdAt: coerce.date(), 
   status: PlanRunStatusZ,
   actions: array(ActionZ).nullish(),
   satisfied_properties: array(string()).optional(),

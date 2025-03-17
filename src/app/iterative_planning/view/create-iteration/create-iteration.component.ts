@@ -53,6 +53,12 @@ export class CreateIterationComponent {
 
   propertySelector = viewChild.required<TemplateRef<ElementRef>>('propertySelector');
 
+  project$ = this.store.select(selectIterativePlanningProject);
+  projectId$ = this.project$.pipe(
+    map(p => p?._id),
+    filterNotNullOrUndefined()
+  );
+
   computationRunning$ = this.store.select(selectIterativePlanningIterationStepComputationRunning);
 
   numberOfExistingSteps  = this.store.select(selectIterativePlanningNumberOfSteps);

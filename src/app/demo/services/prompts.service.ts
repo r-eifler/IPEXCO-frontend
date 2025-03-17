@@ -1,10 +1,9 @@
+import { HttpClient } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { HttpClient } from "@angular/common/http";
-import { environment } from "src/environments/environment";
 import { map } from "rxjs/operators";
-import { IHTTPData } from "src/app/shared/domain/http-data.interface";
 import { OutputSchema, OutputSchemaZ, Prompt, PromptZ } from "src/app/global_specification/domain/prompt";
+import { environment } from "src/environments/environment";
 import { array } from "zod";
 
 

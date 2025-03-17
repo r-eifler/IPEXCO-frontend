@@ -15,7 +15,7 @@ export class CancelPlanIterationStepEffect{
         ofType(cancelPlanComputationAndIterationStep),
         switchMap(({iterationStepId}) => this.service.postCancelIterationStep$(iterationStepId).pipe(
             switchMap(() => [cancelPlanComputationAndIterationStepSuccess()]),
-            catchError(() => of(cancelPlanComputationAndIterationStepFailure()))
+            catchError((e) => of(cancelPlanComputationAndIterationStepFailure({err: e})))
         )),
     ));
 
