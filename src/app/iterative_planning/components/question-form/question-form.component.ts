@@ -1,6 +1,6 @@
 import {Component, input, output, SimpleChanges} from '@angular/core';
-import {AvailableQuestion} from '../../iterative_planning/components/explanation-chat/explanation-chat.component';
 import {MatListModule, MatListOption, MatSelectionListChange} from '@angular/material/list';
+import { AvailableQuestion } from '../explanation-chat/explanation-chat.component';
 
 @Component({
   selector: 'app-question-form',

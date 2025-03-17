@@ -1,6 +1,6 @@
 import {createSelector} from '@ngrx/store';
-import {selectIterativePlanningProperties, selectIterativePlanningSelectedStep} from '../../iterative_planning/state/iterative-planning.selector';
-import {selectSolvedPropertyIds} from '../../iterative_planning/view/step-detail-view/step-detail-view.component.selector';
+import {selectIterativePlanningProperties, selectIterativePlanningSelectedStep} from '../../state/iterative-planning.selector';
+import {selectSolvedPropertyIds} from '../../view/step-detail-view/step-detail-view.component.selector';
 
 const selectSoftGoalIds = createSelector(selectIterativePlanningSelectedStep, (step) => step?.softGoals ?? []);
 const selectUnsatisfiedSoftGoalIds = createSelector(selectSoftGoalIds, selectSolvedPropertyIds, (softGoalIds, solvedIds) => softGoalIds.filter(id => !solvedIds.includes(id)));

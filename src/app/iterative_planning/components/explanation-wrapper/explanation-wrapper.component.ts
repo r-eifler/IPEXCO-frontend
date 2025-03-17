@@ -3,30 +3,32 @@ import {
   selectExplanation,
   selectIsExplanationLoading,
   selectIterativePlanningProjectExplanationInterfaceType,
+  selectIterativePlanningProperties,
   selectIterativePlanningSelectedStep,
   selectMessageTypes,
   selectPropertyAvailableQuestions,
   selectStepAvailableQuestions
-} from '../../iterative_planning/state/iterative-planning.selector';
+} from '../../state/iterative-planning.selector';
 import {Store} from '@ngrx/store';
-import {ExplanationInterfaceType} from '../../project/domain/general-settings';
-import {QuestionFormComponent} from '../question-form/question-form.component';
-import {UserStudyMugsVisualizationComponent} from '../visualization/user-study-mugs-visualization/user-study-mugs-visualization.component';
+import {ExplanationInterfaceType} from '../../../project/domain/general-settings';
+import {UserStudyMugsVisualizationComponent} from '../../../components/visualization/user-study-mugs-visualization/user-study-mugs-visualization.component';
 import {AsyncPipe, NgIf} from '@angular/common';
 import {combineLatest, filter, map, Observable, switchMap, take} from 'rxjs';
-import {ExplanationRunStatus, QuestionType} from '../../iterative_planning/domain/explanation/explanations';
+import {ExplanationRunStatus, QuestionType} from '../../domain/explanation/explanations';
 import {
   filter as rFilter,
   includes as rIncludes,
   map as rMap,
   not as rNot
 } from 'ramda';
-import {questionFactory} from '../../iterative_planning/domain/explanation/question-factory';
-import {explanationHash} from '../../iterative_planning/domain/explanation/explanation-hash';
-import {AvailableQuestion} from '../../iterative_planning/components/explanation-chat/explanation-chat.component';
-import {PlanProperty} from '../../shared/domain/plan-property/plan-property';
-import {StructuredText} from '../../iterative_planning/domain/interface/explanation-message';
-import {mapComputeBase} from '../../iterative_planning/domain/explanation/answer-factory';
+import {questionFactory} from '../../domain/explanation/question-factory';
+import {explanationHash} from '../../domain/explanation/explanation-hash';
+import {AvailableQuestion} from '../explanation-chat/explanation-chat.component';
+import {PlanProperty} from '../../../shared/domain/plan-property/plan-property';
+import {StructuredText} from '../../domain/interface/explanation-message';
+import {mapComputeBase} from '../../domain/explanation/answer-factory';
+import { QuestionFormComponent } from '../question-form/question-form.component';
+import { ConflictListsComponent } from '../conflict-lists/conflict-lists.component';
 
 
 @Component({
@@ -37,7 +39,8 @@ import {mapComputeBase} from '../../iterative_planning/domain/explanation/answer
     QuestionFormComponent,
     UserStudyMugsVisualizationComponent,
     AsyncPipe,
-    NgIf
+    NgIf,
+    ConflictListsComponent
   ],
   standalone: true
 })
@@ -52,15 +55,17 @@ export class ExplanationWrapperComponent {
   explanationInterfaceType$ = this.store.select(selectIterativePlanningProjectExplanationInterfaceType);
   step$ = this.store.select(selectIterativePlanningSelectedStep);
 
+  planProperties$ = this.store.select(selectIterativePlanningProperties);
+
   isExplanationLoading$ = this.step$.pipe(
     map(explanationHash),
     switchMap(hash => this.store.select(selectIsExplanationLoading(hash)))
   );
 
-  globalAnswers: Observable<string[][]> = new Observable();
+  globalAnswers$: Observable<string[][]> = new Observable();
 
   answers$(question: AvailableQuestion, property?: PlanProperty | null) {
-    this.globalAnswers = this.step$.pipe(
+    this.globalAnswers$ = this.step$.pipe(
       switchMap(iterationStep => {
         const hash = explanationHash(iterationStep);
         return this.store.select(selectExplanation(hash)).pipe(

@@ -27,6 +27,7 @@ import { PlanPropertyPanelComponent } from "../../../shared/components/plan-prop
 import { PlanProperty } from "../../../shared/domain/plan-property/plan-property";
 import { ExplanationChatLlmComponent } from "../../components/explanation-chat-llm/explanation-chat-llm.component";
 import { AvailableQuestion, ExplanationChatComponent } from "../../components/explanation-chat/explanation-chat.component";
+import { ExplanationWrapperComponent } from '../../components/explanation-wrapper/explanation-wrapper.component';
 import { IterationStepHeroComponent } from "../../components/iteration-step-hero/iteration-step-hero.component";
 import { UserManualDialogComponent } from "../../components/user-manual-dialog/user-manual-dialog.component";
 import { DemoDirective } from "../../directives/isDemo.directive";
@@ -52,15 +53,12 @@ import {
   selectPropertyAvailableQuestions,
   selectStepAvailableQuestions,
 } from "../../state/iterative-planning.selector";
+import { MugsVisualizationBaseComponent } from '../visualization/mugs-visualization-base/mugs-visualization-base.component';
 import {
   selectEnforcedGoals,
   selectSatisfiedSoftGoals,
   selectUnsatisfiedSoftGoals,
 } from "./step-detail-view.component.selector";
-import {MugsVisualizationBaseComponent} from '../visualization/mugs-visualization-base/mugs-visualization-base.component';
-import {ExplanationWrapperComponent} from '../../../components/explanation-wrapper/explanation-wrapper.component';
-import {QuestionFormComponent} from '../../../components/question-form/question-form.component';
-import {tap} from 'rxjs/operators';
 
 @Component({
     selector: "app-step-detail-view",

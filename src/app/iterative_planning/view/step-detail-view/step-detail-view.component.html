@@ -108,7 +108,8 @@
         </app-page-section>
       }
 
-      @if(!planComputationRunning && !isCanceled && isUnsolvable && (interfaceType == expInterfaceType.MUGS_VISUALIZATION_ANSWER)) {
+      @if(!planComputationRunning && !isCanceled && isUnsolvable && 
+        ((interfaceType == expInterfaceType.MUGS_VISUALIZATION_ANSWER) || interfaceType === expInterfaceType.CONFLICT_LIST)) {
         <app-page-section>
           <app-page-section-title>
             <mat-icon>lightbulb_2</mat-icon>
@@ -122,7 +123,9 @@
         </app-page-section>
       }
 
-      @if(!planComputationRunning && !isCanceled && !isUnsolvable && (interfaceType == expInterfaceType.MUGS_VISUALIZATION_ANSWER)) {
+      @if(!planComputationRunning && !isCanceled && !isUnsolvable && 
+        ((interfaceType == expInterfaceType.MUGS_VISUALIZATION_ANSWER) || interfaceType === expInterfaceType.CONFLICT_LIST)
+      ) {
         <app-page-section>
           <app-page-section-title>
             <span *isProject>Unsatisfied Softgoals</span>

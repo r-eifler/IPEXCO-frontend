@@ -20,7 +20,7 @@ export class DemoPlanPropertyService{
         
         return this.http.get<unknown>(this.BASE_URL,  { params: httpParams }).pipe(
             map((data) => array(PlanPropertyZ).parse(data)),
-            map(props => props.reduce((acc, cv) => ({...acc,[cv._id]: cv}), {}))
+            map(props => props.reduce((acc, cv) => ({...acc,[cv._id]: cv}), {}) as Record<string,PlanProperty>)
         )
     }
 

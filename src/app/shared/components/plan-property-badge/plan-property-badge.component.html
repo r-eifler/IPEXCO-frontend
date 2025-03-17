@@ -1,14 +1,10 @@
-<mat-card appearance="outlined">
-    <mat-card-header>
-      <mat-card-title>
-        <div class="title">
-          <div class="icon-container" [style]="'background-color: ' + property()?.color + ';'">
-            <mat-icon>{{ property()?.icon }}</mat-icon>
-          </div>
-          <span class="property-name">{{ property()?.name }}</span>
-        </div>
-      </mat-card-title>
-    </mat-card-header>
-  </mat-card>
-  
+<div class="badge">
+  <div class="title">
+    <div class="icon-container" [style]="'background-color: ' + property()?.color + ';'">
+      <mat-icon>{{ property()?.icon }}</mat-icon>
+    </div>
+    <span class="property-name">{{ property()?.name }}</span>
+  </div>
+</div>
+
   

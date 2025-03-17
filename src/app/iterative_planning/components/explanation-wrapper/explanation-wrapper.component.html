@@ -1,5 +1,6 @@
 @let interfaceType = explanationInterfaceType$ | async;
 @let isExplanationLoading = isExplanationLoading$ | async;
+@let answers = globalAnswers$ | async;
 
 @if(isUnsolvable()){
   <app-question-form
@@ -10,11 +11,17 @@
   </app-question-form>
 
     @if(interfaceType === ExplanationInterfaceType.MUGS_VISUALIZATION_ANSWER){
-        <app-user-study-mugs-visualization *ngIf="globalAnswers | async as answers"
+        <app-user-study-mugs-visualization *ngIf="answers"
                                            [answer]="answers"
                                            [createUniqueIds]="false"
         >
         </app-user-study-mugs-visualization>
+    }
+    @if(interfaceType === ExplanationInterfaceType.CONFLICT_LIST){
+      <app-conflict-lists
+        [answer]="answers"
+        [planProperties] ="planProperties$ | async"
+      ></app-conflict-lists>
     }
 
 
@@ -27,10 +34,17 @@
   </app-question-form>
 
     @if(interfaceType === ExplanationInterfaceType.MUGS_VISUALIZATION_ANSWER){
-        <app-user-study-mugs-visualization *ngIf="globalAnswers | async as answers"
+        <app-user-study-mugs-visualization *ngIf="answers"
                                            [answer]="answers"
                                            [createUniqueIds]="true"
         >
         </app-user-study-mugs-visualization>
+    }
+    @if(interfaceType === ExplanationInterfaceType.CONFLICT_LIST){
+      <app-conflict-lists
+        [questionArgument]="property()?._id"
+        [answer]="answers"
+        [planProperties] ="planProperties$ | async"
+      ></app-conflict-lists>
     }
 }
