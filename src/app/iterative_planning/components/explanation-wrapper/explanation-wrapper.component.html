@@ -1,12 +1,12 @@
 @let interfaceType = explanationInterfaceType$ | async;
 @let isExplanationLoading = isExplanationLoading$ | async;
-@let answers = globalAnswers$ | async;
+@let answers = answer$ | async;
 
 @if(isUnsolvable()){
   <app-question-form
     [isLoading]="isExplanationLoading"
     [availableQuestions]="globalAvalableQuestionTypes$ | async"
-    (questionSelected)="answers$($event, property())"
+    (questionSelected)="onQuestionSelected($event, property())"
   >
   </app-question-form>
 
@@ -29,7 +29,7 @@
   <app-question-form
     [isLoading]="isExplanationLoading"
     [availableQuestions]="propertyAvailableQuestionTypes$(property()) | async"
-    (questionSelected)="answers$($event, property())"
+    (questionSelected)="onQuestionSelected($event, property())"
   >
   </app-question-form>
 

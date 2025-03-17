@@ -13,7 +13,7 @@ import {Store} from '@ngrx/store';
 import {ExplanationInterfaceType} from '../../../project/domain/general-settings';
 import {UserStudyMugsVisualizationComponent} from '../../../components/visualization/user-study-mugs-visualization/user-study-mugs-visualization.component';
 import {AsyncPipe, NgIf} from '@angular/common';
-import {combineLatest, filter, map, Observable, switchMap, take} from 'rxjs';
+import {BehaviorSubject, combineLatest, filter, map, Observable, switchMap, take, tap} from 'rxjs';
 import {ExplanationRunStatus, QuestionType} from '../../domain/explanation/explanations';
 import {
   filter as rFilter,
@@ -29,7 +29,12 @@ import {StructuredText} from '../../domain/interface/explanation-message';
 import {mapComputeBase} from '../../domain/explanation/answer-factory';
 import { QuestionFormComponent } from '../question-form/question-form.component';
 import { ConflictListsComponent } from '../conflict-lists/conflict-lists.component';
+import { filterListNotNullOrUndefined } from 'src/app/shared/common/check_null_undefined';
 
+interface Question{
+  type: QuestionType,
+  argument: string | null;
+}
 
 @Component({
   selector: 'app-explanation-wrapper',
@@ -62,27 +67,29 @@ export class ExplanationWrapperComponent {
     switchMap(hash => this.store.select(selectIsExplanationLoading(hash)))
   );
 
-  globalAnswers$: Observable<string[][]> = new Observable();
+  selectedQuestion$: BehaviorSubject<Question> = new BehaviorSubject(null);
 
-  answers$(question: AvailableQuestion, property?: PlanProperty | null) {
-    this.globalAnswers$ = this.step$.pipe(
-      switchMap(iterationStep => {
-        const hash = explanationHash(iterationStep);
-        return this.store.select(selectExplanation(hash)).pipe(
-          filter(explanation =>
-            explanation?.status === ExplanationRunStatus.FAILED ||
-            explanation?.status === ExplanationRunStatus.FINISHED
-          ),
-          take(1),
-          map(explanation => mapComputeBase(
-            iterationStep,
-            { iterationStepId: iterationStep._id, propertyId: property?._id, questionType: question.questionType },
-            explanation.MUGS
-          ))
-          //tap(result => console.log('Computed Answer:', result))
-        );
-      })
-    );
+  answer$ = combineLatest([this.step$, this.selectedQuestion$]).pipe(
+    filterListNotNullOrUndefined(),
+    switchMap(([iterationStep, question]) => {
+      const hash = explanationHash(iterationStep);
+      return this.store.select(selectExplanation(hash)).pipe(
+        filter(explanation =>
+          explanation?.status === ExplanationRunStatus.FAILED ||
+          explanation?.status === ExplanationRunStatus.FINISHED
+        ),
+        take(1),
+        map(explanation => mapComputeBase(
+          iterationStep,
+          { iterationStepId: iterationStep._id, propertyId: question.argument, questionType: question.type },
+          explanation.MUGS
+        ))
+      );
+    })
+  )
+
+  onQuestionSelected(question: AvailableQuestion, property?: PlanProperty | null) {
+    this.selectedQuestion$.next({type: question.questionType, argument: property?._id})
   }
 
   globalAvalableQuestionTypes$ = this.step$.pipe(
