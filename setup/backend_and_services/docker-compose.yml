@@ -15,7 +15,7 @@ services:
 
   PROPERTY_CHECKER:
     container_name: property_checker
-    image: eifler/property_checker_service:latest
+    image: eifler/property_checker_service:main
     ports:
       - "3335:3335"
     network_mode: "host"
