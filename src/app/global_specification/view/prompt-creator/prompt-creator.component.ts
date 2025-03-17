@@ -47,7 +47,7 @@ export class PromptCreatorComponent {
   
     form = this.fb.group({
         name: this.fb.control<string>(null, Validators.required),
-        agent: this.fb.control<AgentType>(null, Validators.required),
+        agent: this.fb.control<AgentType>(null),
         type: this.fb.control<PromptType>(null, Validators.required),
         domain: this.fb.control<string>(null),
         explainer:  this.fb.control<string>(null),
