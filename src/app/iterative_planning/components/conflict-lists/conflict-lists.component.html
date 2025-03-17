@@ -1,9 +1,14 @@
 <div class="main-container">
     @if(hasConflict()){
-    <div>
+    <div class="sentence">
         @if(questionArgumentName() !== null){
             <p>Because to satisfy '{{questionArgumentName()}}' you must forego at least 
                 one goal in each of the following conflicts: 
+            </p>
+        }
+        @else{
+            <p>The enforced goals are not solvable because the following conflicts 
+                exist among them: 
             </p>
         }
     </div>
