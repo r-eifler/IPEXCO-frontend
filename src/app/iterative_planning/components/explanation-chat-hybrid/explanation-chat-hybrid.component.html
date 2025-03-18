@@ -1,0 +1,33 @@
+<app-chat [isSenderTyping]="isLoading()">
+  <app-chat-message role="sender">Here are some question, that I could help you with:</app-chat-message>
+
+  @for(message of messages(); track message) {
+  <app-chat-message [role]="message.role">
+    <app-structured-text
+      [message]="message"
+      [properties]="properties()"
+    ></app-structured-text>
+  </app-chat-message>
+  }
+
+  @for(question of availableQuestions(); track question) {
+  <button app-chat-action (click)="onQuestionSelected(question)">{{ question.message.mainText }}</button>
+  }
+
+  <app-chat-message [role]="'sender'">{{ "Hi! I'm here to help you to understand this planning task. You can ask me any question." }}</app-chat-message>
+  @for(message of messages$ | async; track message) {
+  <app-chat-markdown-message [role]="message.role" [rawMessage]="message.content"></app-chat-markdown-message>
+  }
+  @if((messages$ | async)?.length > 1){
+  <ng-container app-chat-action>
+    <div class="button-group">
+      <button app-chat-action (click)="onEraseHistory()">Hide previous messages</button>
+    </div>
+  </ng-container>
+  }
+  <app-chat-input 
+    (userInput)="onUserMessage($event)"
+    [disabled]="isAnyLoading$ | async"
+  ></app-chat-input>
+
+</app-chat>

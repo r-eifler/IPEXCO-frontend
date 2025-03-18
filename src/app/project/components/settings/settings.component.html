@@ -120,13 +120,15 @@
           <mat-button-toggle [value]="ExplanationTypes.TEMPLATE_QUESTION_ANSWER">Templates</mat-button-toggle>
           <mat-button-toggle [value]="ExplanationTypes.MUGS_VISUALIZATION">MUGS Visualization</mat-button-toggle>
           <mat-button-toggle [value]="ExplanationTypes.LLM_CHAT">LLM Chat</mat-button-toggle>
+          <mat-button-toggle [value]="ExplanationTypes.HYBRID">Hybrid</mat-button-toggle>
         </mat-button-toggle-group>
        
 
         </mat-card-content>
       </mat-card>
 
-      @if(form.controls.interfaces.controls.explanationInterfaceType.value == ExplanationTypes.LLM_CHAT || 
+      @if(form.controls.interfaces.controls.explanationInterfaceType.value == ExplanationTypes.LLM_CHAT ||
+       form.controls.interfaces.controls.explanationInterfaceType.value == ExplanationTypes.HYBRID ||
       form.controls.interfaces.controls.propertyCreationInterfaceType.value == PropertyCreationTypes.LLM_CHAT){
       <mat-card appearance="outlined">
         <mat-card-header>
