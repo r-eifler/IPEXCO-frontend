@@ -61,6 +61,10 @@ export class UserManualComponent {
     this.settings() ? this.settings()?.explanationInterfaceType === ExplanationInterfaceType.MUGS_VISUALIZATION : true
   );
 
+  ansMugsVisualizationManual = computed(() =>
+    this.settings() ? this.settings()?.explanationInterfaceType === ExplanationInterfaceType.MUGS_VISUALIZATION_ANSWER : true
+  );
+
   sampleDemo: Demo = {
     _id: '1',
     projectId: '',

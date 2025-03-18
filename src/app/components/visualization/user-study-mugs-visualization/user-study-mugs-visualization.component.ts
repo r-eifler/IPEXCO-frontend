@@ -38,6 +38,8 @@ export class UserStudyMugsVisualizationComponent {
     setTimeout(() => {
       this.CheckContainer();
       this.Initialize();
+      this.ComputeOrderDependentValues()
+      this.Sort()
       this.InitVisualization();
 
 
@@ -90,11 +92,11 @@ export class UserStudyMugsVisualizationComponent {
       return;
     }
 
-    if (this.createUniqueIds && this.property() != null) {
-      this.answer().forEach((item: string[]) => {
-        item.push(this.property()._id)
-      })
-    }
+    // if (this.createUniqueIds && this.property() != null) {
+    //   this.answer().forEach((item: string[]) => {
+    //     item.push(this.property()._id)
+    //   })
+    // }
 
     const planProperties = this.GetStepPlanProperties();
 
@@ -119,6 +121,37 @@ export class UserStudyMugsVisualizationComponent {
     this.data.elements = planProperties.filter((prop) => {
       return this.MUGS.some(mug => mug.s.has(prop.name));
     })
+  }
+
+  private ComputeOrderDependentValues(): void {
+    this.data.counts = {}
+    this.answer().forEach((mugs, i) => {
+      mugs.forEach(d=> {
+        if (this.data.counts[d]) {
+          this.data.counts[d] += 1;
+        } else {
+          this.data.counts[d] = 1;
+        }
+      })
+    })
+  }
+
+  private Sort(): void {
+    this.data.elements.sort((a, b) => this.data.counts[a._id] - this.data.counts[b._id]);
+    this.data.elements.reverse();
+    let list: Record<string, any> = this.data.MUGS;
+    this.data.MUGS = this.RecursiveSort(list, 0);
+  }
+
+  private RecursiveSort(listToSort: Record<string, any>, i: number){
+    if (listToSort.length <= 1) {
+      return listToSort
+    } else {
+      listToSort.sort((a, b) => b.s.has(this.data.elements[i].name) - a.s.has(this.data.elements[i].name));
+      let split = listToSort.findIndex(m => !m.s.has(this.data.elements[i].name));
+      let temp = listToSort.splice(0,split);
+      return this.RecursiveSort(temp, i+1).concat(this.RecursiveSort(listToSort, i+1));
+    }
   }
 
 }

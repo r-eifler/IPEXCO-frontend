@@ -2,7 +2,7 @@ import * as d3 from "d3";
 import * as setchart from "./setchart";
 import {constants, separateTicks} from "./utils";
 
-let parentId, svgId, uId, svg, matrixGroup, data, x, y;
+let parentId, svgId, idSet, uId, svg, matrixGroup, data, x, y;
 const OFFSET = 2
 const margin = { top: 50, right: 0, bottom: 0, left: 350 }
 
@@ -19,6 +19,7 @@ function remove() {
 function draw(_data){
   data = _data;
   data.elementsName = _data.elements.map(d => d.name);
+  idSet = _data.elements.map(d => ({ name: d.name, id: d._id }));
 
   svg = d3.select(parentId)
     .append("svg")
@@ -50,6 +51,11 @@ function resize() {
     .range([0, size])
     .domain(data.elementsName);
 
+  const getId = (name) => {
+    const match = idSet.find(el => el.name === name);
+    return match ? match.id : "";
+  };
+
   //matrixGroup.select("#matrix-y-axis").remove();
   matrixGroup.append("g")
     .attr("id", "matrix-y-axis")
@@ -59,7 +65,7 @@ function resize() {
       .tickFormat((t, i) => separateTicks(t, i, data.elementsName.length, size, 30))
       .tickSize(0)
     )
-    .selectAll("text").attr("class", d => d);
+    .selectAll("text").attr("class", d => `${getId(d)}`);
 
   matrixGroup.select("#matrix-y-axis")
     .selectAll("text")
@@ -86,5 +92,16 @@ function resize() {
   )
 }
 
+function onmousehover(id){
+  const elements = svg.selectAll(`.${id}`);
+  elements.style("color", "red");
+}
 
-export { init, remove, draw };
+function onmouseleave(){
+  matrixGroup.select("#matrix-y-axis")
+    .selectAll("text")
+    .style("color", "black")
+}
+
+
+export { init, remove, draw, onmousehover, onmouseleave };

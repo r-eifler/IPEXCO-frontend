@@ -304,6 +304,64 @@
                     </div>
                     }
 
+                  @if(ansMugsVisualizationManual()){
+                    <h3>MUGS Visualization Interface</h3>
+                    <div>
+                      <p>
+                        For each step, either <app-label color="secondary">Solved</app-label> or
+                        <app-label color="error">Unsolvable</app-label>, you have access to different questions.
+                      </p>
+
+                      <p>
+                        The questions are provided as a list. It is not possible to ask
+                        a question by typing it. Instead you can select from a list of questions.
+                        To ask a question you just have to click on it. Upon clicking on a question the
+                        corresponding MUGS Visualization associated with it will be shown as
+                        answer.
+                      </p>
+
+                      <h4>Questions</h4>
+
+                      <p>
+                        In both solvable and unsolvable step, you can only ask the questions of the form:
+                      </p>
+                      <br>
+                      <hr>
+                      <mat-selection-list [multiple]="false">
+                        @for(question of unsolvableQuestions; track question) {
+                          @if(question.questionType.toLowerCase().includes("why")){
+                            <mat-list-option>
+                              <div>{{question.message.mainText}}</div>
+                            </mat-list-option>
+                          }
+                        }
+                      </mat-selection-list>
+                      <hr>
+
+                      <p>So saying, you can only as "why" a goal is not satisfied.</p>
+
+                      <p>
+                        To access the question interface click on the goal you want to ask questions about.
+                        You can try it below:
+                      </p>
+
+                      <h4>Unsatisfied Goals</h4>
+                      <div class="property-list">
+                        <app-plan-property-panel [property]="samplePlanProperties[4]" [showFormula]="false">
+                          <mat-selection-list [multiple]="false">
+                            @for(question of solvableQuestions; track question) {
+                              @if(question.questionType.toLowerCase().includes("why")){
+                                <mat-list-option>
+                                  <div>{{question.message.mainText}}</div>
+                                </mat-list-option>
+                              }
+                            }
+                          </mat-selection-list>
+                        </app-plan-property-panel>
+                      </div>
+                    </div>
+                  }
+
                     @if(mugsVisualizationManual()){
                       <h3>MUGS Visualization Interface</h3>
                       <div>

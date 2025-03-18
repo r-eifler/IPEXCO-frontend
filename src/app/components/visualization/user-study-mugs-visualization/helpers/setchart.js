@@ -1,11 +1,17 @@
-import { separateTicks } from "./utils.js";
 import * as d3 from 'd3';
+import {onmousehover, onmouseleave} from "./visualization-drawer";
 
-let where, svg, data, margin, width, height, x, y, dataElementColors;
+let where, svg, data, idSet, margin, width, height, x, y, dataElementColors;
+
+const getId = (name) => {
+  const match = idSet.find(el => el.name === name);
+  return match ? match.id : "";
+};
 
 function draw(_data, _where, _dims){
   where = _where;
   data = _data;
+  idSet = _data.elements.map(d => ({ name: d.name, id: d._id }));
   data.elementsName = _data.elements.map(d => d.name);
   dataElementColors = _data.elements.map(d => ({ name: d.name, color: d.color }));
   margin = _dims.margin;
@@ -16,7 +22,7 @@ function draw(_data, _where, _dims){
   svg = d3.select(where)
     .append("g")
     .attr("class", "mainG-gv")
-    .attr("transform", `translate(${margin.right},${margin.top})`)
+    .attr("transform", `translate(${margin.right},${58})`)
 
   resize();
 }
@@ -71,28 +77,52 @@ function resize() {
     .data(goals)
     .enter()
     .append("circle")
-    .attr("id", d => d.x + ":" + d.goal)
+    .attr("id", d => getId(d.goal))
     .attr("class", d => `mugs mugs_${d.x} ${d.goal}`)
     .attr("cx", d => x(d.x) + (rectOffset+(rectOffset-radius)/2))
     .attr("cy", d => y(d.goal)+rectOffset)
     .attr("r", radius)
     .style("fill", d => colorMapping(d.goal))
-
-  svg.select("#setchart-x-axis").remove();
-  svg.append("g")
-    .attr("id", "setchart-x-axis")
-    .attr("class", "x axis")
-    .call(
-      d3.axisTop(x)
-        .tickFormat((t, i) => separateTicks(t, i, data.MUGS.length, width, 20))
-        .tickSize(0)
-    )
-  svg.select("#setchart-x-axis")
-    .selectAll("text")
-    .style("font-size", "10px")
-
-  svg.select("#setchart-x-axis path.domain").remove();
-
+    .on("mouseover", mouseover)
+    .on("mouseleave", mouseleave)
 }
+
+function appearanceCount(goal) {
+  let count = 0;
+
+  data.MUGS.forEach(mug => {
+    if (mug.l.includes(goal.goal)){
+      count++;
+    }
+  });
+
+  return count>0 ? count++ : count;
+}
+
+function mouseover(event, d) {
+  const id = getId(d.goal);
+  const count = appearanceCount(d);
+  console.log(count);
+  const escapedId = CSS.escape(id);
+
+  const elements = svg.selectAll(`#${escapedId}, .mugs_${d.x}, #seg_${d.i}`);
+
+  elements.classed("highlighted-hovered", true);
+  elements.style("stroke", "black");
+  elements.style("stroke-width", "2px");
+
+  onmousehover(escapedId)
+}
+
+function mouseleave(event, d) {
+  svg.selectAll("circle")
+    .style("stroke", "none")
+    .style("stroke-width", "0px")
+
+  onmouseleave()
+}
+
+
+
 
 export {draw}
