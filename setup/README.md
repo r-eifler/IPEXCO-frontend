@@ -37,6 +37,13 @@ database to store the uploaded data.
 requested API Key must and the `API_KEY` defined in the service environment 
 must match.
 
+## Setup on Macos
+
+On MacOs network mode `host` is not supported. Therefore, you need a few changes to make the docker-compose work.
+
+1. Remove all the `network_mode: "host"` lines in the `docker-compose.yml` file.
+2. In every `.env` file change the `MONGO_DB` value to `MONGO_DB=mongodb://mongo:27017/<whatever_you_want>`.
+
 #### Docker images
 
 The docker images for the back-end and the Database are available on DockerHub.
