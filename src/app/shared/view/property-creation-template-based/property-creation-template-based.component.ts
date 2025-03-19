@@ -9,10 +9,11 @@ import { MatInputModule } from '@angular/material/input';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatCardModule } from '@angular/material/card';
 import { PropertyTemplatePartComponent } from '../../../iterative_planning/components/property-template-part/property-template-part.component'
-import { PDDLObject, PlanningTask } from '../../domain/planning-task';
+import { PlanningTask, TaskObject } from '../../domain/planning-task';
 import { MatIcon } from '@angular/material/icon';
-import { generateDummyPlanProperty, generatePlanProperty, getPossibleValues, getTemplateParts, PlanPropertyTemplate, TemplatePart } from '../../domain/plan-property/plan-property-template';
-import { equalPlanProperties, PlanProperty } from 'src/app/shared/domain/plan-property/plan-property';
+import { generatePlanProperty, getPossibleValues, getTemplateParts, PlanPropertyTemplate, TemplatePart } from '../../domain/plan-property/plan-property-template';
+import { equalPlanProperties, PlanProperty, PlanPropertyBase } from 'src/app/shared/domain/plan-property/plan-property';
+import { PropertyTemplateNumericPartComponent } from 'src/app/iterative_planning/components/property-template-numeric-part/property-template-numeric-part.component';
 
 @Component({
     selector: 'app-property-creation-template-based',
@@ -28,6 +29,7 @@ import { equalPlanProperties, PlanProperty } from 'src/app/shared/domain/plan-pr
         MatExpansionModule,
         MatCardModule,
         PropertyTemplatePartComponent,
+        PropertyTemplateNumericPartComponent,
         MatIcon,
         ReactiveFormsModule,
         MatInputModule,
@@ -41,28 +43,31 @@ export class PropertyCreationTemplateBasedComponent implements OnInit{
   fb = inject(FormBuilder);
 
   cancel = output<void>();
-  created = output<PlanProperty>();
+  created = output<PlanPropertyBase>();
 
   planningTask = input.required<PlanningTask>();
   planProperties = input.required<Record<string, PlanProperty> | null>();
-  planPropertiesList = computed(() => 
-      this.planProperties() ? Object.values(this.planProperties()) : [])
+  planPropertiesList = computed(() => {
+    const properties = this.planProperties();
+    return properties !== null ? Object.values(properties) : [];
+  });
   templates = input.required<PlanPropertyTemplate[]>();
 
-  groupedTemplates:Record<string,PlanPropertyTemplate[]>;
+  groupedTemplates:Record<string,PlanPropertyTemplate[]> = {};
 
-  selectedTemplate: PlanPropertyTemplate;
+  selectedTemplate: PlanPropertyTemplate | null = null;
 
   templateParts: TemplatePart[] = [];
-  selectedVariableValue: Record<string, PDDLObject> = {};
-  possibleVariableValues: Record<string, PDDLObject[]>;
+  selectedVariableValue: Record<string, TaskObject> = {};
+  possibleVariableValues: Record<string, TaskObject[]> = {};
+  selectedNumericVariableValue: Record<string, number> = {};
 
   allSelected = false;
   propertyAlreadyExists = false;
 
   form = this.fb.group({
-    name: this.fb.control<string>(null, [Validators.required]),
-    naturalLanguageDescription: this.fb.control<string>(null, [Validators.required]),
+    name: this.fb.control<string | null>(null, [Validators.required]),
+    naturalLanguageDescription: this.fb.control<string | null>(null, [Validators.required]),
     utility: this.fb.control<number>(1, [Validators.required]),
   });
 
@@ -72,7 +77,29 @@ export class PropertyCreationTemplateBasedComponent implements OnInit{
     this.groupedTemplates = sorted;
   }
 
+  private getDisplayText(part: TemplatePart){
+    if(!part.isVar || part.var == undefined){
+      return part.text;
+    }
+    if(part.numeric){
+      if(this.selectedNumericVariableValue[part.var]){
+        return this.selectedNumericVariableValue[part.var].toString();
+      }
+      return '0';
+    }
+
+    if (this.selectedVariableValue[part.var]){
+      return this.selectedVariableValue[part.var].name
+    }
+    return part.var;
+  }
+
   private updatePossibleVariableValues(){
+
+    if(this.selectedTemplate == null){
+      return;
+    }
+
     if(this.templateParts.length == 0){
       this.templateParts = getTemplateParts(this.selectedTemplate);
     }
@@ -87,9 +114,9 @@ export class PropertyCreationTemplateBasedComponent implements OnInit{
 
     this.templateParts = this.templateParts.map(p => ({
       ...p,
-      isSelected: p.isVar ? this.selectedVariableValue[p.var] !== undefined : false,
-      text: (p.isVar && this.selectedVariableValue[p.var]) ? this.selectedVariableValue[p.var].name: p.text,
-      possibleValues: p.isVar ? this.possibleVariableValues[p.var] : []
+      isSelected: p.isVar && p.var ? this.selectedVariableValue[p.var] !== undefined : false,
+      text: this.getDisplayText(p),
+      possibleValues: p.var ? this.possibleVariableValues[p.var] : []
     }))
 
     // console.log(this.templateParts)
@@ -100,7 +127,8 @@ export class PropertyCreationTemplateBasedComponent implements OnInit{
     this.selectedVariableValue = {};
     // console.log(template)
 
-    stepper.selected.completed = true;
+    if(stepper.selected)
+      stepper.selected.completed = true;
     stepper.next();
 
 	  this.templateParts = [];
@@ -110,23 +138,49 @@ export class PropertyCreationTemplateBasedComponent implements OnInit{
     this.form.controls.naturalLanguageDescription.setValue(template.sentenceTemplate);
   }
 
-  selectVariableValue(variable: string, object: PDDLObject) {
 
+  selectNumericVariableValue(variable: string | undefined, value: number) {
+    if(variable === undefined){
+      return;
+    }
+
+    // console.log("select: " + value)
+    this.selectedNumericVariableValue[variable] = value;
+
+    // this.updatePossibleVariableValues();
+    this.checkAllSelected();
+  }
+
+  selectVariableValue(variable: string | undefined, object: TaskObject) {
+    if(variable === undefined){
+      return;
+    }
+
+    // console.log("select: " + object.name)
     this.selectedVariableValue[variable] = object;
-    // console.log("Selected Variables: " + this.selectedVariableValue)
 
-    this.updatePossibleVariableValues()
+    this.updatePossibleVariableValues();
+    this.checkAllSelected();
+  }
 
-	  this.allSelected = Object.keys(this.selectedVariableValue).length === Object.keys(this.possibleVariableValues).length
+  checkAllSelected(){
+    if(this.selectedTemplate == null){
+      return;
+    }
+
+	  this.allSelected = Object.keys(this.selectedVariableValue).length  + 
+      Object.keys(this.selectedNumericVariableValue).length === Object.keys(this.selectedTemplate.variables).length
 
     if(this.allSelected){
-      const dummy: PlanProperty = generateDummyPlanProperty(
+      const dummy: PlanPropertyBase = generatePlanProperty(
         this.selectedTemplate,
-        this.selectedVariableValue
+        this.selectedVariableValue,
+        this.selectedNumericVariableValue
       )
 
-      this.form.controls.name.setValue(dummy.name);
-      this.form.controls.naturalLanguageDescription.setValue(dummy.naturalLanguageDescription);
+      this.form.controls.name.setValue(dummy.name)
+      if(dummy.naturalLanguageDescription)
+        this.form.controls.naturalLanguageDescription.setValue(dummy.naturalLanguageDescription);
 
       this.propertyAlreadyExists = this.planPropertiesList().some(
         p => equalPlanProperties(p, dummy)
@@ -135,7 +189,10 @@ export class PropertyCreationTemplateBasedComponent implements OnInit{
   }
   
 
-  resetVariableValue(variable: string) {
+  resetVariableValue(variable: string | undefined) {
+    if(variable == undefined){
+      return
+    }
     delete this.selectedVariableValue[variable];
     this.updatePossibleVariableValues();
 	  this.allSelected = false;
@@ -147,14 +204,19 @@ export class PropertyCreationTemplateBasedComponent implements OnInit{
   }
 
   onCreateProperty(){
+    if(this.selectedTemplate == null){
+      return;
+    }
+
     let newPlanProperty = generatePlanProperty(
       this.selectedTemplate,
       this.selectedVariableValue,
+      this.selectedNumericVariableValue
     )
 
-    newPlanProperty.name = this.form.controls.name.value;
-    newPlanProperty.naturalLanguageDescription = this.form.controls.naturalLanguageDescription.value;
-    newPlanProperty.utility = this.form.controls.utility.value;
+    newPlanProperty.name = this.form.controls.name.value ?? 'TODO';
+    newPlanProperty.naturalLanguageDescription = this.form.controls.naturalLanguageDescription.value ?? 'TODO';
+    newPlanProperty.utility = this.form.controls.utility.value ?? 1;
 
     // console.log(newPlanProperty);
 

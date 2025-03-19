@@ -1,37 +1,21 @@
-import { inject, Injectable } from "@angular/core";
-import {
-  HttpEvent,
-  HttpHandler,
-  HttpInterceptor,
-  HttpRequest,
-} from "@angular/common/http";
-
-import { map, Observable, switchMap, take } from "rxjs";
-import { Store } from "@ngrx/store";
+import { HttpHandlerFn, HttpRequest,} from "@angular/common/http";
 import { selectToken } from "../user/state/user.selector";
+import { toSignal } from "@angular/core/rxjs-interop";
+import { inject } from "@angular/core";
+import { Store } from "@ngrx/store";
 
-/** Pass untouched request through to the next request handler. */
-@Injectable()
-export class AuthenticationInterceptor implements HttpInterceptor {
 
-  store = inject(Store)
+export function authInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn) {
 
-  intercept(
-    req: HttpRequest<any>,
-    next: HttpHandler
-  ): Observable<HttpEvent<any>> {
-    return this.store.select(selectToken).pipe(
-      take(1),
-      switchMap(token => {
-        if(!token){
-          return next.handle(req);
-        }
-        else{
-          return next.handle(req.clone({
-            setHeaders: {Authorization: 'Bearer ' + token},
-          }))
-        }
-      }
-    ))
+  const token =  toSignal(inject(Store).select(selectToken));
+  
+  if(!token()){
+    return next(req);
   }
+
+  const newReq = req.clone({
+    headers: req.headers.append('Authorization', 'Bearer ' + token()),
+  });
+  
+  return next(newReq);
 }

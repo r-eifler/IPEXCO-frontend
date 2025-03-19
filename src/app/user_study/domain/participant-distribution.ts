@@ -1,12 +1,15 @@
 export interface UserStudySelection {
-  userStudy?: string;
-  numberParticipants?: number;
+  userStudy: string;
+  numberParticipants: number;
 }
 
-export interface ParticipantDistribution {
-  _id?: string;
-  user?: string;
+export interface ParticipantDistributionBase {
   name: string;
   description: string;
   userStudies: UserStudySelection[];
+}
+
+export interface ParticipantDistribution extends ParticipantDistributionBase{
+  _id: string;
+  user: string;
 }

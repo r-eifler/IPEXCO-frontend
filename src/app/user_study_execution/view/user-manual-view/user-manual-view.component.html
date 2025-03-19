@@ -1,9 +1,8 @@
 @let step = step$ | async;
-@let demo = demo$ | async;
 
 <app-page>
 <app-page-title>
-    {{ step.name }}
+    {{ step?.name }}
 </app-page-title>
 <app-page-content>
       <app-page-section-list>
@@ -17,7 +16,7 @@
         </app-page-section>
         <app-page-section>
             <app-page-section-content>
-                <app-user-manual [settings]="demo?.settings"></app-user-manual>
+                <app-user-manual [settings]="settings$ | async"></app-user-manual>
             </app-page-section-content>
         </app-page-section>
     </app-page-section-list>

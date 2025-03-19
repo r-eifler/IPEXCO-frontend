@@ -13,23 +13,24 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatInputModule } from "@angular/material/input";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { filter } from "rxjs";
+import { DialogModule } from "src/app/shared/components/dialog/dialog.module";
 
 @Component({
     selector: "app-login",
     imports: [
+        DialogModule,
         MatIconModule,
         MatLabel,
         MatFormFieldModule,
         MatInputModule,
         ReactiveFormsModule,
         FormsModule,
-        MatCardModule,
         MatButtonModule,
     ],
     templateUrl: "./login.component.html",
     styleUrls: ["./login.component.scss"]
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
 
   loginForm = new UntypedFormGroup({
     name: new UntypedFormControl('',[
@@ -45,15 +46,15 @@ export class LoginComponent implements OnInit {
   });
 
   snackBar = inject(MatSnackBar);
+  dialogRef = inject(MatDialogRef<LoginComponent>);
 
   store = inject(Store)
 
-  constructor(
-    public dialogRef: MatDialogRef<LoginComponent>,
-    private router: Router,
-    private route: ActivatedRoute
-  ) {
+  loginFailed$ = this.store.select(selectUserError);
+  loginSuccessful$ = this.store.select(selectLoggedIn);
 
+  constructor(
+  ) {
     this.loginSuccessful$.pipe(
       takeUntilDestroyed(),
       filter(loggedIn => loggedIn)
@@ -61,13 +62,6 @@ export class LoginComponent implements OnInit {
       this.dialogRef.close(false)
     );
   }
-
-  ngOnInit(): void {
-    
-  }
-
-  loginFailed$ = this.store.select(selectUserError);
-  loginSuccessful$ = this.store.select(selectLoggedIn);
 
   onLogin(): void {
     

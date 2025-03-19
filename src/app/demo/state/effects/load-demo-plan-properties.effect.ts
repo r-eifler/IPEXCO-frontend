@@ -26,7 +26,7 @@ export class LoadDemoPlanPropertiesEffect{
         ofType(loadDemoPlanProperties),
         mergeMap(({id}) => this.service.getPlanPropertiesList$(id).pipe(
             map(planProperties => loadDemoPlanPropertiesSuccess({demoId: id, planProperties})),
-            catchError(() => of(loadDemoPlanPropertiesFailure())),
+            catchError((e) => of(loadDemoPlanPropertiesFailure({err: e}))),
         ))
     ))
 

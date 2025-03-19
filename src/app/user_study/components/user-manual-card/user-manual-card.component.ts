@@ -1,19 +1,16 @@
-import { AsyncPipe } from '@angular/common';
 import { Component, inject, input, output } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
-import { MatButtonModule, MatIconButton } from '@angular/material/button';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatIconButton } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
-import { MatFormField, MatFormFieldModule, MatLabel } from '@angular/material/form-field';
-import { MatIcon, MatIconModule } from '@angular/material/icon';
-import { MatInput, MatInputModule } from '@angular/material/input';
-import { MatSlider, MatSliderModule, MatSliderThumb } from '@angular/material/slider';
-import { MatTabsModule } from '@angular/material/tabs';
-import { Observable, startWith } from 'rxjs';
-import { UserStudyStep } from '../../domain/user-study';
-import { Demo } from 'src/app/project/domain/demo';
-import { MatOption, MatOptionModule } from '@angular/material/core';
+import { MatOption } from '@angular/material/core';
+import { MatFormFieldModule, MatLabel } from '@angular/material/form-field';
+import { MatIcon } from '@angular/material/icon';
+import { MatInput } from '@angular/material/input';
 import { MatSelect } from '@angular/material/select';
+import { MatSlider, MatSliderThumb } from '@angular/material/slider';
+import { UserStudyStep } from '../../domain/user-study';
+import { Demo } from 'src/app/shared/domain/demo';
 
 @Component({
   selector: 'app-tool-description-card',
@@ -38,8 +35,8 @@ export class UserManualCardComponent {
   fb = inject(FormBuilder);
 
   form = this.fb.group({
-    name: this.fb.control<string>(undefined, [Validators.required]),
-    demo: this.fb.control<string>(undefined, Validators.required),
+    name: this.fb.control<string | null>(null, [Validators.required]),
+    demo: this.fb.control<string | null>(null, Validators.required),
     time: this.fb.control<number>(1),
   })
 
@@ -47,8 +44,6 @@ export class UserManualCardComponent {
   demos = input.required<Demo[]>();
   first = input<boolean>(false);
   last = input<boolean>(false);
-
-  description$: Observable<string>;
 
   changes = output<UserStudyStep>();
   up = output<void>();
@@ -59,9 +54,9 @@ export class UserManualCardComponent {
     this.form.valueChanges.pipe(takeUntilDestroyed()).subscribe(
       data => this.changes.emit({
         type: this.step().type,
-        name: data.name,
-        time: data.time <= 60 ? data.time : (Math.floor(data.time / 60)*60) ,
-        content: data.demo
+        name: data.name ?? '',
+        time: data.time ? data.time <= 60 ? data.time : (Math.floor(data.time / 60)*60) : null,
+        content: data.demo ?? undefined,
       })
     );
   }
@@ -77,7 +72,9 @@ export class UserManualCardComponent {
   ngOnInit(): void {
     this.form.controls.name.setValue(this.step().name);
     this.form.controls.time.setValue(this.step().time);
-    this.form.controls.demo.setValue(this.step().content);
+    const content = this.step().content
+    if(content)
+      this.form.controls.demo.setValue(content);
   }
 
   moveUp() {

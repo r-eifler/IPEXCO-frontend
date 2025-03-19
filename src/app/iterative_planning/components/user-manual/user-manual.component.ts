@@ -1,26 +1,26 @@
-import { Component, computed, input, Signal } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatTabsModule } from '@angular/material/tabs';
-import { ExplanationInterfaceType, GeneralSettings } from 'src/app/project/domain/general-settings';
-import { PageModule } from 'src/app/shared/components/page/page.module';
-import { computeCurrentMaxUtility, IterationStep, StepStatus } from '../../domain/iteration_step';
-import { GoalType, PlanProperty } from 'src/app/shared/domain/plan-property/plan-property';
-import { PlanPropertyPanelComponent } from 'src/app/shared/components/plan-property-panel/plan-property-panel.component';
-import { IterationStepCardComponent } from '../iteration-step-card/iteration-step-card.component';
-import { PlanRunStatus } from '../../domain/plan';
-import { MatButtonModule } from '@angular/material/button';
+import { defaultGeneralSetting, ExplanationInterfaceType, GeneralSettings } from 'src/app/project/domain/general-settings';
 import { ActionCardComponent } from 'src/app/shared/components/action-card/action-card/action-card.component';
-import { Demo, DemoRunStatus, computeMaxPossibleUtility } from 'src/app/project/domain/demo';
-import { ExplanationRunStatus, QuestionType } from '../../domain/explanation/explanations';
-import { StepsListHeroComponent } from '../steps-list-hero/steps-list-hero.component';
-import { LabelModule } from 'src/app/shared/components/label/label.module';
+import { BreadcrumbModule } from 'src/app/shared/components/breadcrumb/breadcrumb.module';
 import { ChatModule } from 'src/app/shared/components/chat/chat.module';
 import { InfoComponent } from 'src/app/shared/components/info/info/info.component';
-import { StructuredText } from '../../domain/interface/explanation-message';
+import { LabelModule } from 'src/app/shared/components/label/label.module';
+import { PageModule } from 'src/app/shared/components/page/page.module';
+import { PlanPropertyPanelComponent } from 'src/app/shared/components/plan-property-panel/plan-property-panel.component';
+import { GoalType, PlanProperty } from 'src/app/shared/domain/plan-property/plan-property';
+import { PlanningTask } from 'src/app/shared/domain/planning-task';
+import { ExplanationRunStatus, QuestionType } from '../../domain/explanation/explanations';
 import { questionFactory } from '../../domain/explanation/question-factory';
-import { BreadcrumbComponent } from 'src/app/shared/components/breadcrumb/breadcrumb/breadcrumb.component';
-import { BreadcrumbModule } from 'src/app/shared/components/breadcrumb/breadcrumb.module';
+import { StructuredText } from '../../domain/interface/explanation-message';
+import { computeCurrentMaxUtility, IterationStep, StepStatus } from '../../domain/iteration_step';
+import { PlanRunStatus } from '../../domain/plan';
+import { IterationStepCardComponent } from '../iteration-step-card/iteration-step-card.component';
+import { StepsListHeroComponent } from '../steps-list-hero/steps-list-hero.component';
+import { computeMaxPossibleUtility, Demo, DemoRunStatus } from 'src/app/shared/domain/demo';
 
 type AvailableQuestion = {
   message: StructuredText;
@@ -49,29 +49,39 @@ type AvailableQuestion = {
 })
 export class UserManualComponent {
 
-  settings: Signal<GeneralSettings> = input(null);
+  settings = input<GeneralSettings | null>(null);
 
   templatesManual = computed(() => 
-    this.settings() ? this.settings()?.explanationInterfaceType === ExplanationInterfaceType.TEMPLATE_QUESTION_ANSWER : true
+    this.settings() ? this.settings()?.interfaces.explanationInterfaceType === ExplanationInterfaceType.TEMPLATE_QUESTION_ANSWER : true
   );
   LLMManual = computed(
-    () => this.settings() ? this.settings()?.explanationInterfaceType === ExplanationInterfaceType.LLM_CHAT : true
+    () => this.settings() ? this.settings()?.interfaces.explanationInterfaceType === ExplanationInterfaceType.LLM_CHAT : true
   );
 
   sampleDemo: Demo = {
     _id: '1',
     projectId: '',
-    status: DemoRunStatus.finished,
-    completion: 0,
+    status: DemoRunStatus.FINISHED,
     name: '',
     public: false,
-    domainSpecification: undefined,
-    settings: undefined,
+    settings: defaultGeneralSetting,
     globalExplanation: {
-      status: ExplanationRunStatus.finished,
+      status: ExplanationRunStatus.FINISHED,
       MUGS: [],
-      MGCS: [['2','5']]
-    }
+      MGCS: [['2', '5']],
+      createdAt: new Date()
+    },
+    itemType: 'demo-project',
+    user: '',
+    domain: '',
+    description: '',
+    instanceInfo: '',
+    baseTask: {
+      name: '',
+      objects: [],
+      model: {}
+    },
+    summaryImage: null
   }
 
   samplePlanProperties: PlanProperty[] = [
@@ -79,6 +89,7 @@ export class UserManualComponent {
       _id: '1',
       name: 'Go shopping',
       type: GoalType.LTL,
+      definition: null,
       formula: '',
       project: '',
       isUsed: false,
@@ -93,6 +104,7 @@ export class UserManualComponent {
       _id: '2',
       name: 'Bring groceries home',
       type: GoalType.LTL,
+      definition: null,
       formula: '',
       project: '',
       isUsed: false,
@@ -107,6 +119,7 @@ export class UserManualComponent {
       _id: '3',
       name: 'Do fitness course',
       type: GoalType.LTL,
+      definition: null,
       formula: '',
       project: '',
       isUsed: false,
@@ -121,6 +134,7 @@ export class UserManualComponent {
     _id: '4',
     name: 'Visit friend',
     type: GoalType.LTL,
+    definition: null,
     formula: '',
     project: '',
     isUsed: false,
@@ -135,6 +149,7 @@ export class UserManualComponent {
     _id: '5',
     name: 'Pick up Alice from school',
     type: GoalType.LTL,
+    definition: null,
     formula: '',
     project: '',
     isUsed: false,
@@ -160,63 +175,85 @@ export class UserManualComponent {
   solvableQuestionTypes = [QuestionType.CAN_PROPERTY, QuestionType.WHAT_IF_PROPERTY, QuestionType.WHY_NOT_PROPERTY, QuestionType.HOW_PROPERTY]
   solvableQuestions: AvailableQuestion[] = this.solvableQuestionTypes.map(t => ({message: questionFactory(t)(this.samplePlanProperties[4].name), questionType: t}));
 
+
+  dummyTask: PlanningTask = {
+    name: 'Dummy Task',
+    objects: [],
+    model: {}
+  }
+
   sampleSteps: IterationStep[] = [
     {
       _id: '1',
       name: 'Step 1',
       project: '',
-      status: StepStatus.unsolvable,
+      status: StepStatus.UNSOLVABLE,
       hardGoals: ['1','2','3'],
       softGoals: [],
-      task: undefined,
+      task: this.dummyTask,
       predecessorStep: '',
       plan: {
-        status: PlanRunStatus.not_solvable,
-        cost: 0
-      }
+        status: PlanRunStatus.UNSOLVABLE,
+        createdAt: new Date(),
+        actions: null,
+        satisfied_properties: []
+      },
+      user: '',
+      createdAt: new Date(),
     },
     {
       _id: '2',
       name: 'Step 2',
       project: '',
-      status: StepStatus.solvable,
+      status: StepStatus.SOLVABLE,
       hardGoals: ['1','3'],
       softGoals: ['4','5'],
-      task: undefined,
+      task: this.dummyTask,
       predecessorStep: '',
       plan: {
-        status: PlanRunStatus.plan_found,
-        cost: 0,
+        status: PlanRunStatus.SOLVED,
+        createdAt: new Date(),
+        actions: null,
         satisfied_properties: ['1', '3', '4']
-      }
+      },
+      user: '',
+      createdAt: new Date(),
     },
     {
       _id: '3',
       name: 'Step 3',
       project: '',
-      status: StepStatus.unknown,
+      status: StepStatus.UNKNOWN,
       hardGoals: ['1','3'],
       softGoals: [],
-      task: undefined,
+      task: this.dummyTask,
       predecessorStep: '',
       plan: {
-        status: PlanRunStatus.running,
-        cost: 0,
-      }
+        status: PlanRunStatus.RUNNING,
+        createdAt: new Date(),
+        actions: null,
+        satisfied_properties: []
+      },
+      user: '',
+      createdAt: new Date(),
     },
     {
       _id: '4',
       name: 'Step 4',
       project: '',
-      status: StepStatus.unknown,
-      hardGoals: ['1','3'],
+      status: StepStatus.UNKNOWN,
+      hardGoals: ['1', '3'],
       softGoals: [],
-      task: undefined,
+      task: this.dummyTask,
       predecessorStep: '',
       plan: {
-        status: PlanRunStatus.canceled,
-        cost: 0,
-      }
+        status: PlanRunStatus.CANCELED,
+        createdAt: new Date(),
+        actions: null,
+        satisfied_properties: []
+      },
+      user: '',
+      createdAt: new Date(),
     }
   ];
 

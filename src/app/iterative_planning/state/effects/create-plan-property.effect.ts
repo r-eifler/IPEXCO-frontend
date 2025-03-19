@@ -1,12 +1,10 @@
 import { inject, Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { createPlanProperty, createPlanPropertyFailure, createPlanPropertySuccess, loadPlanProperties} from "../iterative-planning.actions";
-import { catchError, map, switchMap } from "rxjs/operators";
-import { of } from "rxjs";
-import { PlanPropertyService } from "../../service/plan-properties.service";
 import { Store } from "@ngrx/store";
-import { concatLatestFrom } from "@ngrx/operators";
-import { selectIterativePlanningProject } from "../iterative-planning.selector";
+import { of } from "rxjs";
+import { catchError, switchMap } from "rxjs/operators";
+import { PlanPropertyService } from "../../service/plan-properties.service";
+import { createPlanProperty, createPlanPropertyFailure, createPlanPropertySuccess } from "../iterative-planning.actions";
 
 @Injectable()
 export class CreatePlanPropertyEffect{
@@ -18,9 +16,9 @@ export class CreatePlanPropertyEffect{
     public createPlanProperty$ = createEffect(() => this.actions$.pipe(
         ofType(createPlanProperty),
         switchMap(({planProperty}) => this.service.postPlanProperty$(planProperty).pipe(
-            concatLatestFrom(() => this.store.select(selectIterativePlanningProject)),
-            switchMap(([planProperty, project]) => [createPlanPropertySuccess({planProperty}), loadPlanProperties({id: project._id})]),
-            catchError(() => of(createPlanPropertyFailure()))
+            switchMap((planProperty) => [createPlanPropertySuccess({planProperty})]),
+            catchError((e) => of(createPlanPropertyFailure({err: e})))
         ))
-    ))
+    ));
+
 }

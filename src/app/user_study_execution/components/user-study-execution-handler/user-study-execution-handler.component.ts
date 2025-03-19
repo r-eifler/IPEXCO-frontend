@@ -1,22 +1,21 @@
-import {Component, inject, output} from '@angular/core';
-import {MatProgressBar} from '@angular/material/progress-bar';
-import {combineLatestAll, combineLatestWith, filter, interval, mapTo, Observable, skipWhile, startWith, switchMap, take, takeWhile, tap, withLatestFrom} from 'rxjs';
-import {selectExecutionUserStudyFinishedAllSteps, selectExecutionUserStudyStep} from '../../state/user-study-execution.selector';
-import {Store} from '@ngrx/store';
-import {combineLatest, map} from 'rxjs';
-import {AsyncPipe} from '@angular/common';
-import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
-import { MatDialog } from '@angular/material/dialog';
-import { TimeOverDialogComponent } from '../time-over-dialog/time-over-dialog.component';
-import { executionNextUserStudyStep, executionUserStudyCancel } from '../../state/user-study-execution.actions';
+import { AsyncPipe } from '@angular/common';
+import { Component, inject, output } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
-import { AskDeleteComponent } from 'src/app/shared/components/ask-delete/ask-delete.component';
+import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
+import { MatProgressBar } from '@angular/material/progress-bar';
+import { Store } from '@ngrx/store';
+import { combineLatest, filter, interval, map, startWith, switchMap, take, withLatestFrom } from 'rxjs';
+import { selectIterativePlanningCurrentMaxUtility, selectIterativePlanningMaxPossibleUtility, selectIterativePlanningProject } from 'src/app/iterative_planning/state/iterative-planning.selector';
+import { AskDeleteComponent } from 'src/app/shared/components/ask-delete/ask-delete.component';
 import { selectLoggedIn } from 'src/app/user/state/user.selector';
 import { UserStudyStepType } from 'src/app/user_study/domain/user-study';
-import { TimerStartsDialogComponent } from '../timer-starts-dialog/timer-starts-dialog.component';
+import { executionNextUserStudyStep, executionUserStudyCancel } from '../../state/user-study-execution.actions';
+import { selectExecutionUserStudyFinishedAllSteps, selectExecutionUserStudyStep } from '../../state/user-study-execution.selector';
 import { FinishDemoInfoDialogComponent } from '../finish-demo-info-dialog/finish-demo-info-dialog.component';
-import { selectIterativePlanningCurrentMaxUtility, selectIterativePlanningMaxPossibleUtility, selectIterativePlanningProject } from 'src/app/iterative_planning/state/iterative-planning.selector';
+import { TimeOverDialogComponent } from '../time-over-dialog/time-over-dialog.component';
+import { TimerStartsDialogComponent } from '../timer-starts-dialog/timer-starts-dialog.component';
 
 @Component({
     selector: 'app-user-study-execution-handler',
@@ -45,7 +44,7 @@ export class UserStudyExecutionHandlerComponent {
 
   startTime$ = this.currentStep$.pipe(
     filter(s => !!s),
-    map(step => step?.time),
+    map(step => step?.time ? step?.time : 0),
   );
 
   remainingTime$ = this.startTime$.pipe(
@@ -83,8 +82,8 @@ export class UserStudyExecutionHandlerComponent {
       filter((step) => !!step)
     ).subscribe(
       (step) => {
-        if(step.type === UserStudyStepType.demo){
-          const dialogRef = this.dialog.open(TimerStartsDialogComponent, {data: {timeout: Math.floor(step.time / 60)}})
+        if(step.type === UserStudyStepType.demo && step.time != null){
+          this.dialog.open(TimerStartsDialogComponent, {data: {timeout: Math.floor(step.time / 60)}})
         }
       }
     );
@@ -95,7 +94,7 @@ export class UserStudyExecutionHandlerComponent {
       filter(([to, step ]) => to && !!step)
     ).subscribe(
       ([_, step]) => {
-        if(step.type === UserStudyStepType.demo){
+        if(step != null && step.type === UserStudyStepType.demo){
           const dialogRef = this.dialog.open(TimeOverDialogComponent);
           dialogRef.afterClosed().pipe(take(1)).subscribe(() => this.store.dispatch((executionNextUserStudyStep())))
         }
@@ -105,12 +104,16 @@ export class UserStudyExecutionHandlerComponent {
     this.currentMaxUtility$.pipe(
       takeUntilDestroyed(),
       withLatestFrom(this.maxPossibleUtility$, this.currentStep$, this.store.select(selectIterativePlanningProject)),
-      filter(([cur, max, step, demo]) => cur && max && !!step && !!demo && cur == max),
+      filter(([, max, step, demo]) => max != undefined && !!step && !!demo),
+      filter(([cur, max, , ]) => cur == max)
     ).subscribe(
-      ([cur, max, step, demo]) => {
+      ([, , step, demo]) => {
+        if(step === null || demo === undefined){
+          return;
+        }
         if(step.type === UserStudyStepType.demo){
           let dialogRef = null;
-          if(demo.settings.introTask){
+          if(demo.settings.userStudy.introTask){
             dialogRef = this.dialog.open(AskDeleteComponent, {
               data: {
                 name: 'Maximal Possible Utility',

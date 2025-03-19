@@ -1,35 +1,52 @@
-import { PlanningTask } from "src/app/shared/domain/planning-task";
-import { GlobalExplanation } from "./explanation/explanations";
-import { computeUtility, Plan } from "./plan";
 import { PlanProperty } from "src/app/shared/domain/plan-property/plan-property";
+import { PlanningTaskZ } from "src/app/shared/domain/planning-task";
+import { array, coerce, nativeEnum, object, string, infer as zinfer } from "zod";
+import { GlobalExplanationZ } from "./explanation/explanations";
+import { computeUtility, PlanZ } from "./plan";
 
-export enum StepStatus {
-    unknown,
-    solvable,
-    unsolvable
-  }
-
-  export interface IterationStep {
-    _id?: string;
-    name: string;
-    user?: string;
-    createdAt?: Date;
-    project: string;
-    status: StepStatus;
-    hardGoals: string[];
-    softGoals: string[];
-    task: PlanningTask;
-    plan?: Plan;
-    globalExplanation?: GlobalExplanation,
-    predecessorStep: string | null;
+export enum StepStatus{
+	UNKNOWN = "UNKNOWN",
+	SOLVABLE = "SOLVABLE",
+	UNSOLVABLE = "UNSOLVABLE",
 }
 
-export interface ModIterationStep extends IterationStep {
+export const StepStatusZ = nativeEnum(StepStatus);
+
+export const IterationStepBaseZ = object({
+	name: string(),
+	project: string(),
+	status: StepStatusZ,
+	hardGoals: array(string()),
+	softGoals: array(string()),
+	task: PlanningTaskZ,
+	plan: PlanZ.optional(),
+	globalExplanation: GlobalExplanationZ.optional(),
+	predecessorStep: string().nullable(),
+});
+
+export type IterationStepBase = zinfer<typeof IterationStepBaseZ>;
+
+export const IterationStepZ = IterationStepBaseZ.merge(object({
+    _id: string(),
+    user: string(),
+    createdAt: coerce.date(),
+}));
+
+export type IterationStep = zinfer<typeof IterationStepZ>;
+
+export interface ModIterationStep extends IterationStepBase {
   baseStep: string;
 }
 
 
-export function computeCurrentMaxUtility(steps: IterationStep[], planProperties: Record<string,PlanProperty>){
-  const stepUtilities = steps?.map(s => s.status !== StepStatus.solvable ? 0 : computeUtility(s.plan, planProperties));
+export function computeCurrentMaxUtility(
+  steps: IterationStep[], 
+  planProperties: Record<string,PlanProperty>
+){
+  const stepUtilities = steps?.map(s => 
+    s.status !== StepStatus.SOLVABLE || s.plan === undefined || s.plan == null ? 
+    0 : 
+    computeUtility(s.plan, planProperties)
+  ).filter(v => v !== undefined);
   return Math.max(...stepUtilities);
 }

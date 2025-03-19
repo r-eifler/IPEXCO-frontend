@@ -1,6 +1,7 @@
 import {Component, inject} from '@angular/core';
 import {
   UserStudy,
+  UserStudyBase,
   UserStudyStep,
   UserStudyStepType,
 } from '../../domain/user-study';
@@ -67,7 +68,7 @@ export class UserStudyCreatorComponent {
   demos$ = this.store.select(selectUserStudyDemos)
 
   form = this.fb.group({
-    name: this.fb.control<string>(null, [Validators.required]),
+    name: this.fb.control<string | null>(null, [Validators.required]),
     description: this.fb.control<string>('TODO', [Validators.required]),
     relatedProject: this.fb.control<string>('TODO', [Validators.required]),
     expectation: this.fb.control<string>('TODO', [Validators.required]),
@@ -89,15 +90,17 @@ export class UserStudyCreatorComponent {
   addNewStep(type: UserStudyStepType) {
     const newPart: UserStudyStep = {
       type,
-      name: null,
+      name: '',
       time: null,
-      content: null
     };
     console.log(newPart);
     this.form.controls.steps.push(this.fb.control<UserStudyStep>(newPart, [isNoPropertyNull]));
   }
 
-  updateControl(control: FormControl<UserStudyStep>, step: UserStudyStep) {
+  updateControl(control: FormControl<UserStudyStep | null>, step: UserStudyStep | null) {
+    if(step ===null){
+      return
+    }
     control.setValue(step);
   }
 
@@ -109,7 +112,12 @@ export class UserStudyCreatorComponent {
     if(index === 0){
       return;
     }
-    const value: UserStudyStep = this.form .controls.steps.controls[index].value;
+
+    const value = this.form .controls.steps.controls[index].value;
+    if(value == null){
+      return
+    }
+
     this.form .controls.steps.removeAt(index);
     this.form.controls.steps.insert(index - 1, this.fb.control<UserStudyStep>(value));
   }
@@ -118,23 +126,29 @@ export class UserStudyCreatorComponent {
     if(index === this.form.controls.steps.length - 1) {
       return;
     }
-    const value: UserStudyStep = this.form .controls.steps.controls[index].value;
+
+    const value = this.form .controls.steps.controls[index].value;
+    if(value == null){
+      return
+    }
+
     this.form .controls.steps.removeAt(index);
     this.form.controls.steps.insert(index + 1, this.fb.control<UserStudyStep>(value));
   }
 
 
   save() {
-    const userStudy: UserStudy = {
-      name: this.form.controls.name.value,
-      description: this.form.controls.description.value,
-      relatedProject: this.form.controls.relatedProject.value,
-      expectation: this.form.controls.expectation.value,
-      confidentiality: this.form.controls.confidentiality.value,
+    const userStudy: UserStudyBase = {
+      name: this.form.controls.name.value as string ?? 'TODO',
+      description: this.form.controls.description.value as string ?? 'TODO',
+      relatedProject: this.form.controls.relatedProject.value as string ?? 'TODO',
+      expectation: this.form.controls.expectation.value as string ?? 'TODO',
+      confidentiality: this.form.controls.confidentiality.value as string ?? 'TODO',
       startDate: this.form.controls.validTimeRange.controls.start.value,
       endDate: this.form.controls.validTimeRange.controls.end.value,
       redirectUrl: this.form.controls.redirectUrl.value,
-      steps: this.form.controls.steps.value
+      steps: this.form.controls.steps.value as UserStudyStep[] ?? [],
+      available: false
     };
 
     this.store.dispatch(createUserStudy({userStudy}));

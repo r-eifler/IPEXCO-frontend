@@ -11,7 +11,7 @@ import { computeUtility } from '../plan';
 export class StepValuePipe implements PipeTransform {
 
   transform(step: IterationStep | null, planProperties: Record<string, PlanProperty> | null): number | undefined {
-    if(!step || step.status != StepStatus.solvable || !step.plan || !planProperties) {
+    if(!step || step.status != StepStatus.SOLVABLE || !step.plan || !planProperties) {
       return undefined;
     }
 

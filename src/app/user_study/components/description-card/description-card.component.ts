@@ -35,16 +35,16 @@ export class DescriptionCardComponent implements OnInit{
   fb = inject(FormBuilder);
 
   form = this.fb.group({
-    name: this.fb.control<string>(undefined, [Validators.required]),
+    name: this.fb.control<string | null>(null, [Validators.required]),
     time: this.fb.control<number>(1),
-    description: this.fb.control<string>(undefined, [Validators.required, Validators.minLength(1)])
+    description: this.fb.control<string | null>(null, [Validators.required, Validators.minLength(1)])
   })
 
   step = input.required<UserStudyStep>();
   first = input<boolean>(false);
   last = input<boolean>(false);
 
-  description$: Observable<string>;
+  description$: Observable<string | null>;
 
   changes = output<UserStudyStep>();
   up = output<void>();
@@ -55,10 +55,14 @@ export class DescriptionCardComponent implements OnInit{
     this.form.valueChanges.pipe(takeUntilDestroyed()).subscribe(
       data => this.changes.emit({
         type: this.step().type,
-        name: data.name,
-        time: data.time <= 60 ? data.time : (Math.floor(data.time / 60)*60) ,
-        content: data.description
+        name: data.name ?? '',
+        time: data.time ? data.time <= 60 ? data.time : (Math.floor(data.time / 60)*60) : null,
+        content: data.description ?? undefined
       })
+    );
+
+    this.description$ = this.form.controls.description.valueChanges.pipe(
+      startWith(this.step()?.content ?? null)
     );
   }
 
@@ -71,12 +75,11 @@ export class DescriptionCardComponent implements OnInit{
   }
 
   ngOnInit(): void {
-    this.form.controls.name.setValue(this.step().name);
-    this.form.controls.time.setValue(this.step().time);
-    this.form.controls.description.setValue(this.step().content);
-    this.description$ = this.form.controls.description.valueChanges.pipe(
-      startWith(this.step()?.content)
-    );
+    this.form.controls.name.setValue(this.step().name, {emitEvent: false});
+    this.form.controls.time.setValue(this.step().time, {emitEvent: false});
+    const content = this.step().content;
+    if(content !== undefined)
+      this.form.controls.description.setValue(content, {emitEvent: false});
   }
 
   moveUp() {

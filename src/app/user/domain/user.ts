@@ -1,7 +1,10 @@
 export type UserRole = 'admin' | 'creator' | 'user-study'
 
-export interface User {
-  _id?: string;
+export interface UserBase {
   name: string;
   role: UserRole;
+}
+
+export interface User extends UserBase{
+  _id: string;
 }

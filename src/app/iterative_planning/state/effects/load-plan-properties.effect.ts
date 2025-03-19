@@ -2,12 +2,13 @@ import { inject, Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { catchError, map, switchMap } from "rxjs/operators";
 import { of } from "rxjs";
-import { loadPlanProperties, loadPlanPropertiesFailure, loadPlanPropertiesSuccess } from "../iterative-planning.actions";
+import { createPlanPropertySuccess, deletePlanPropertyFailure, deletePlanPropertySuccess, loadPlanProperties, loadPlanPropertiesFailure, loadPlanPropertiesSuccess } from "../iterative-planning.actions";
 import { Store } from "@ngrx/store";
 import { concatLatestFrom } from "@ngrx/operators";
 import { selectProject } from "src/app/project/state/project.selector";
 import { selectIterativePlanningProject } from "../iterative-planning.selector";
 import { PlanPropertyService } from "../../service/plan-properties.service";
+import { filterListNotNullOrUndefined } from "src/app/shared/common/check_null_undefined";
 
 @Injectable()
 export class LoadPlanPropertiesEffect{
@@ -21,8 +22,17 @@ export class LoadPlanPropertiesEffect{
         ofType(loadPlanProperties),
         switchMap(({id}) => this.service.getPlanProperties$(id).pipe(
             map(planProperties => loadPlanPropertiesSuccess({planProperties})),
-            catchError(() => of(loadPlanPropertiesFailure())),
+            catchError((e) => of(loadPlanPropertiesFailure({err: e}))),
         ))
     ))
+
+    public reloadProject$ = createEffect(() => this.actions$.pipe(
+        ofType(deletePlanPropertySuccess,createPlanPropertySuccess),
+        concatLatestFrom(() => this.store.select(selectIterativePlanningProject)),
+        filterListNotNullOrUndefined(),
+        switchMap(([,project]) => [loadPlanProperties({id: project._id})]),
+        catchError((e) => of(deletePlanPropertyFailure({err: e})))
+    ));
+
 
 }

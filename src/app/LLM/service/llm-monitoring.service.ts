@@ -11,9 +11,7 @@ export interface LLMResponse {
     threadId?: string;
 }
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class LLMMonitoringService {
     private http = inject(HttpClient);
     private BASE_URL = environment.apiURL + "llm/";

@@ -15,6 +15,7 @@ import { Store } from "@ngrx/store";
 import { LLMContext } from "../domain/context";
 import { PlanProperty } from "src/app/shared/domain/plan-property/plan-property";
 import { Project } from "src/app/shared/domain/project";
+import { PDDLPlanningModel } from "src/app/shared/domain/PDDL_task";
 @Injectable()
 export class LLMService {
 
@@ -55,7 +56,7 @@ export class LLMService {
                 satisfiedGoals: properties?.filter(p => p && iterationStep.plan?.satisfied_properties?.includes(p._id)) ?? [],
                 unsatisfiedGoals: properties?.filter(p => p && !iterationStep.plan?.satisfied_properties?.includes(p._id)) ?? [],
                 existingPlanProperties: Object.values(properties ?? []),
-                solvable: iterationStep.plan?.status == PlanRunStatus.not_solvable ? "false" : "true"
+                solvable: iterationStep.plan?.status == PlanRunStatus.UNSOLVABLE ? "false" : "true"
             };
 
             const requestString = questionTranslationRequestToString(questionTranslationRequest);
@@ -81,18 +82,18 @@ export class LLMService {
         const request: ExplanationTranslationRequest = {
             question: question,
             question_type: question_type ,
-            MUGS: explanationMUGS.map(e => e.map(pid => properties.find(p => p._id == pid))),
-            MGCS: explanationMGCS.map(e => e.map(pid => properties.find(p => p._id == pid))),
+            MUGS: explanationMUGS.map(e => e.map(pid => properties.find(p => p._id == pid)).filter(pp => pp != undefined)),
+            MGCS: explanationMGCS.map(e => e.map(pid => properties.find(p => p._id == pid)).filter(pp => pp != undefined)),
             questionArgument: questionArgument,
-            predicates: project.baseTask.model.predicates,
-            objects: project.baseTask.model.objects,
+            predicates: (project.baseTask.model as  PDDLPlanningModel).predicates,
+            objects: project.baseTask.objects,
             enforcedGoals: properties.filter(p => iterationStep.hardGoals.includes(p._id)),
             satisfiedGoals: properties.filter(p => 
-                iterationStep.plan.satisfied_properties.includes(p._id) && 
+                iterationStep.plan?.satisfied_properties?.includes(p._id) && 
                 !iterationStep.hardGoals.includes(p._id)
             ),
             unsatisfiedGoals: properties.filter(p => 
-                !iterationStep.plan.satisfied_properties.includes(p._id) && 
+                !iterationStep.plan?.satisfied_properties?.includes(p._id) && 
                 !iterationStep.hardGoals.includes(p._id)
             ),
             existingPlanProperties: Object.values(properties)
@@ -114,18 +115,18 @@ export class LLMService {
     postMessageQTthenGT$(question: string, iterationStep: IterationStep, project: Project, properties: PlanProperty[], threadIdQt: string, threadIdGt: string): Observable<
         | { gtResponse: string, qtResponse: string, threadIdQt: string, threadIdGt: string, questionType: QuestionType, goal: string, question: Question, reverseTranslationQT: string, reverseTranslationGT: string }
         | { directResponse: string, questionType: QuestionType, threadIdQt: string, threadIdGt: string }
-    > {
+    >  {
         console.log("Properties", properties);
         console.log("IterationStep", iterationStep);
-        console.log("Enforced Goals", iterationStep.hardGoals.map(p => properties[p]));
+        // console.log("Enforced Goals", iterationStep.hardGoals.map(p => properties[p]));
         console.log("Hard Goals", iterationStep.hardGoals);
         const questionTranslationRequest: QuestionTranslationRequest = {
             question: question,
             enforcedGoals: properties.filter(p => iterationStep.hardGoals.includes(p._id)),
-            satisfiedGoals: properties.filter(p => iterationStep.plan.satisfied_properties.includes(p._id)),
-            unsatisfiedGoals: properties.filter(p => !iterationStep.plan.satisfied_properties.includes(p._id)),
+            satisfiedGoals: properties.filter(p => iterationStep.plan?.satisfied_properties?.includes(p._id)),
+            unsatisfiedGoals: properties.filter(p => !iterationStep.plan?.satisfied_properties?.includes(p._id)),
             existingPlanProperties: Object.values(properties),
-            solvable: iterationStep.plan.status == PlanRunStatus.not_solvable ? "false" : "true"
+            solvable: iterationStep.plan?.status == PlanRunStatus.UNSOLVABLE ? "false" : "true"
         };
         console.log(questionTranslationRequest);
         const qtRequestString = questionTranslationRequestToString(questionTranslationRequest);
@@ -133,8 +134,8 @@ export class LLMService {
         // Create and stringify Goal Translator request
         const goalTranslationRequest: GoalTranslationRequest = {
             goalDescription: "{goal_description}",
-            predicates: project.baseTask.model.predicates,
-            objects: project.baseTask.model.objects,
+            predicates: (project.baseTask.model as PDDLPlanningModel).predicates,
+            objects: project.baseTask.objects ,
             existingPlanProperties: Object.values(properties)
         };
         console.log(goalTranslationRequest);

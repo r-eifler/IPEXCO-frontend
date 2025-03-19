@@ -1,6 +1,6 @@
 import { inject, Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { catchError, filter, first, map, switchMap } from "rxjs/operators";
+import { catchError, filter, first, map, switchMap, tap } from "rxjs/operators";
 import { of } from "rxjs";
 import { LLMService } from "../../../LLM/service/llm.service";
 import { concatLatestFrom } from "@ngrx/operators";
@@ -19,6 +19,7 @@ import { Question } from "src/app/iterative_planning/domain/interface/question";
 import { getComputedBase } from "../../domain/explanation/answer-factory";
 import { mapComputeBase } from "../../domain/explanation/answer-factory";
 import { QuestionType } from "src/app/iterative_planning/domain/explanation/explanations";
+import { filterListNotNullOrUndefined, filterNotNullOrUndefined } from "src/app/shared/common/check_null_undefined";
 @Injectable()
 export class SendMessageToLLMEffect {
 
@@ -33,7 +34,7 @@ export class SendMessageToLLMEffect {
     stepId$ = this.step$.pipe(map(step => step?._id));
     isUnsolvable$ = this.step$.pipe(
         filter((step) => !!step),
-        map((step) => step.plan?.status == PlanRunStatus.not_solvable)
+        map((step) => step.plan?.status == PlanRunStatus.UNSOLVABLE)
     );
     planProperties$ = this.store.select(selectIterativePlanningProperties);
 
@@ -70,46 +71,49 @@ export class SendMessageToLLMEffect {
     //     })
     // ))
 
-    public sendMessageToQuestionAndGoalTranslator$ = createEffect(() => this.actions$.pipe(
-        ofType(sendMessageToLLMQTthenGTTranslators),
-        concatLatestFrom(({ question, iterationStepId }) => [
-            this.store.select(selectIterativePlanningProject),
-            this.store.select(selectIterativePlanningProperties),
-            this.store.select(selectIterationStepById(iterationStepId)),
-            this.store.select(selectLLMThreadIdGT),
-            this.store.select(selectLLMThreadIdQT)
-        ]),
-        switchMap(([{ question, iterationStepId }, project, properties, iterationStep, threadIdGT, threadIdQT]) => {
-            const startTime = performance.now();
-            return this.service.postMessageQTthenGT$(question, iterationStep, project, Object.values(properties), threadIdQT, threadIdGT).pipe(
-            ).pipe(
-                switchMap(response => {
-                    const duration = performance.now() - startTime;
-                    if ('directResponse' in response) {
-                        if (response.questionType === QuestionType.DIRECT_USER) {
-                            return [
-                                sendMessageToLLMQTthenGTTranslatorsSuccess({ threadIdQt: response.threadIdQt, threadIdGt: response.threadIdGt, duration }),
-                                directResponseQT({ directResponse: response.directResponse })
-                            ];
-                        } else if (response.questionType === QuestionType.DIRECT_ET) {
-                            return [
-                                sendMessageToLLMQTthenGTTranslatorsSuccess({ threadIdQt: response.threadIdQt, threadIdGt: response.threadIdGt, duration }),
-                                directMessageET({ directResponse: response.directResponse, iterationStepId })
-                            ];
-                        }
-                    }
-                    else {
-                        return [
-                            sendMessageToLLMQTthenGTTranslatorsSuccess({ threadIdQt: response.threadIdQt, threadIdGt: response.threadIdGt, duration }),
-                            ...('reverseTranslationQT' in response ? [showReverseTranslationQT({ reverseTranslation: response.reverseTranslationQT })] : []),
-                            ...('question' in response ? [questionPosedLLM({ question: response.question, naturalLanguageQuestion: question })] : [])
-                        ];
-                    }
-                }),
-                catchError(() => of(sendMessageToLLMQTthenGTTranslatorsFailure()))
-            );
-        })
-    ))
+    // public sendMessageToQuestionAndGoalTranslator$ = createEffect(() => this.actions$.pipe(
+    //     ofType(sendMessageToLLMQTthenGTTranslators),
+    //     concatLatestFrom(({ question, iterationStepId }) => [
+    //         this.store.select(selectIterativePlanningProject),
+    //         this.store.select(selectIterativePlanningProperties),
+    //         this.store.select(selectIterationStepById(iterationStepId)),
+    //         this.store.select(selectLLMThreadIdGT),
+    //         this.store.select(selectLLMThreadIdQT)
+    //     ]),
+    //     switchMap(([{ question, iterationStepId }, project, properties, iterationStep, threadIdGT, threadIdQT]) => {
+    //         if(project === undefined || iterationStep === undefined || iterationStep == null || properties === undefined){
+    //             return of(sendMessageToLLMExplanationTranslatorFailure());
+    //         }
+    //         const startTime = performance.now();
+    //         return this.service.postMessageQTthenGT$(question, iterationStep, project, Object.values(properties), threadIdQT, threadIdGT).pipe(
+    //             filterNotNullOrUndefined(),
+    //             switchMap(response => {
+    //                 const duration = performance.now() - startTime;
+    //                 if ('directResponse' in response) {
+    //                     if (response.questionType === QuestionType.DIRECT_USER) {
+    //                         return [
+    //                             sendMessageToLLMQTthenGTTranslatorsSuccess({ threadIdQt: response.threadIdQt, threadIdGt: response.threadIdGt, duration }),
+    //                             directResponseQT({ directResponse: response.directResponse })
+    //                         ];
+    //                     } else if (response.questionType === QuestionType.DIRECT_ET) {
+    //                         return [
+    //                             sendMessageToLLMQTthenGTTranslatorsSuccess({ threadIdQt: response.threadIdQt, threadIdGt: response.threadIdGt, duration }),
+    //                             directMessageET({ directResponse: response.directResponse, iterationStepId })
+    //                         ];
+    //                     }
+    //                 }
+    //                 else {
+    //                     return [
+    //                         sendMessageToLLMQTthenGTTranslatorsSuccess({ threadIdQt: response.threadIdQt, threadIdGt: response.threadIdGt, duration }),
+    //                         ...('reverseTranslationQT' in response ? [showReverseTranslationQT({ reverseTranslation: response.reverseTranslationQT })] : []),
+    //                         ...('question' in response ? [questionPosedLLM({ question: response.question, naturalLanguageQuestion: question })] : [])
+    //                     ];
+    //                 }
+    //             }),
+    //             catchError(() => of(sendMessageToLLMQTthenGTTranslatorsFailure()))
+    //         );
+    //     })
+    // ))
 
 
     public sendMessageToQuestionTranslator$ = createEffect(() => this.actions$.pipe(
@@ -125,6 +129,9 @@ export class SendMessageToLLMEffect {
             !!project && !!properties && !!iterationStep
         ),
         switchMap(([{ question, iterationStepId }, project, properties, iterationStep, threadIdQT]) => {
+            if(project === undefined || iterationStep === undefined || iterationStep == null || properties === undefined){
+                return of(sendMessageToLLMExplanationTranslatorFailure({err: "[LLM} translation failed"}));
+            }
             const startTime = performance.now();
             return this.service.postMessageQT$(question, iterationStep, project, Object.values(properties), threadIdQT).pipe(
                 map(response => {
@@ -152,7 +159,7 @@ export class SendMessageToLLMEffect {
                                 ];
                             default:
                                 console.warn('Unexpected question type:', response.questionType);
-                                return of(sendMessageToLLMQuestionTranslatorFailure());
+                                return of(sendMessageToLLMQuestionTranslatorFailure({err: "[LLM] Unexpected question type"}));
                         }
                     }
                     else {
@@ -166,7 +173,7 @@ export class SendMessageToLLMEffect {
                 }),
                 catchError((error) => {
                     console.error('Error in question translator:', error);
-                    return of(sendMessageToLLMQuestionTranslatorFailure());
+                    return of(sendMessageToLLMQuestionTranslatorFailure({err: error}));
                 })
             );
         })
@@ -180,13 +187,16 @@ export class SendMessageToLLMEffect {
             this.store.select(selectIterativePlanningProperties),
             this.store.select(selectIterationStepById(iterationStepId))]),
         switchMap(([{ question, explanationMUGS, explanationMGCS, question_type, questionArgument, iterationStepId }, threadIdET, project, properties, iterationStep]) => {
+            if(project === undefined || iterationStep === undefined || iterationStep == null || properties === undefined){
+                return of(sendMessageToLLMExplanationTranslatorFailure({err: "LLM translation failed"}));
+            }
             const startTime = performance.now();
             return this.service.postMessageET$(question, explanationMUGS, explanationMGCS, question_type as QuestionType, questionArgument, iterationStep, project, Object.values(properties), threadIdET).pipe(
                 switchMap(response => {
                     const duration = performance.now() - startTime;
                     return [sendMessageToLLMExplanationTranslatorSuccess({ response: response.response, threadId: response.threadId, duration })];
                 }),
-                catchError(() => of(sendMessageToLLMExplanationTranslatorFailure()))
+                catchError((e) => of(sendMessageToLLMExplanationTranslatorFailure({err: e})))
             );
         })
     ))
@@ -198,7 +208,11 @@ export class SendMessageToLLMEffect {
             this.store.select(selectIterationStepById(iterationStepId)),
             this.store.select(selectLLMThreadIdET)
         ]),
+        filter(([{ directResponse, iterationStepId }, project, iterationStep, threadIdET]) => project !== undefined),
         switchMap(([{ directResponse, iterationStepId }, project, iterationStep, threadIdET]) => {
+            if(project === undefined || iterationStep == undefined ){
+                return of(sendMessageToLLMExplanationTranslatorFailure({err: "LLM translation failed"}));
+            }
             const startTime = performance.now();
             return this.service.postDirectMessageET$(directResponse, project, iterationStep, threadIdET).pipe(
                 map(response => {
@@ -209,7 +223,7 @@ export class SendMessageToLLMEffect {
                         duration
                     });
                 }),
-                catchError(() => of(sendMessageToLLMExplanationTranslatorFailure()))
+                catchError((e) => of(sendMessageToLLMExplanationTranslatorFailure({err: e})))
             )
         })
     ))
@@ -218,7 +232,7 @@ export class SendMessageToLLMEffect {
         ofType(loadLLMContext),
         switchMap(({ projectId }) => this.service.getLLMContext$(projectId).pipe(
             map(LLMContext => loadLLMContextSuccess({ LLMContext })),
-            catchError(() => of(loadLLMContextFailure())),
+            catchError((e) => of(loadLLMContextFailure({err: e}))),
         ))
     ))
 }

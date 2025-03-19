@@ -14,7 +14,7 @@ import { MatToolbarModule } from "@angular/material/toolbar";
 import { AsyncPipe, NgIf } from "@angular/common";
 import { MatButtonModule } from "@angular/material/button";
 import { Store } from "@ngrx/store";
-import { selectLoggedIn, selectUserName } from "src/app/user/state/user.selector";
+import { selectIsUserStudy, selectLoggedIn, selectUserName } from "src/app/user/state/user.selector";
 import { logout } from "src/app/user/state/user.actions";
 import { LoginComponent } from "src/app/user/components/login/login.component";
 
@@ -36,33 +36,19 @@ import { LoginComponent } from "src/app/user/components/login/login.component";
     templateUrl: "./navigation.component.html",
     styleUrls: ["./navigation.component.scss"]
 })
-export class NavigationComponent implements OnInit {
+export class NavigationComponent{
 
   store = inject(Store)
 
-  isLoggedIn$ = this.store.select(selectLoggedIn)
-  name$ = this.store.select(selectUserName)
+  isLoggedIn$ = this.store.select(selectLoggedIn);
+  isUserStudy$ = this.store.select(selectIsUserStudy);
+  name$ = this.store.select(selectUserName);
 
-  constructor(
-    private router: Router,
-    private route: ActivatedRoute,
-    public userService: AuthenticationService,
-    public dialog: MatDialog,
-    private snackBar: MatSnackBar,
-    private destroyRef: DestroyRef
-  ) {}
-
-  ngOnInit() {
-  }
+  router = inject(Router);
+  dialog = inject(MatDialog);
 
   newLoginForm(): void {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.width = "200px";
-
-    const dialog: MatDialogRef<LoginComponent> = this.dialog.open(
-      LoginComponent,
-      dialogConfig
-    );
+    this.dialog.open(LoginComponent)
   }
 
   logout() {
@@ -70,8 +56,4 @@ export class NavigationComponent implements OnInit {
     this.router.navigate(['/'])
   }
 
-  userStudyPath() {
-    const regExp = new RegExp("/user-studies/[a-zA-Z0-9]*/");
-    return regExp.exec(this.router.url);
-  }
 }
