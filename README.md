@@ -3,7 +3,7 @@
 ## Front-End Install & Run
 
 1. install **npm**
-2. `npm install`
+2. `npm install --force`
 3. `npm start` 
 
 
