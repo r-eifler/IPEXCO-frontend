@@ -10,8 +10,7 @@ WORKDIR /usr/local/app
 COPY ./ /usr/local/app/
 
 # Install all the dependencies
-RUN npm install --force
-
+RUN npm install
 # Generate the build of the application
 RUN npm run build --configuration=production --force
 
