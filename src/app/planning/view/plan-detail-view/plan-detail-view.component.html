@@ -13,11 +13,21 @@
   </app-page-title>
 
   <app-page-content>
-    @if(isBeluga$ | async){
-        <app-beluga-plan-animation
-            [plan]="plan"
-            [model]="project$ | async"
-        ></app-beluga-plan-animation>
-    }
+    <app-page-section-list>
+      <app-page-section>
+        <app-page-section-content>
+          @if(isBeluga$ | async){
+            <!-- <app-beluga-plan-animation
+                [plan]="plan"
+                [model]="project$ | async"
+            ></app-beluga-plan-animation> -->
+            <app-plan-inspection
+                [plan]="plan"
+                [model]="model$ | async"
+            ></app-plan-inspection>
+          }
+        </app-page-section-content>
+      </app-page-section>
+    </app-page-section-list>
   </app-page-content>
 </app-page>
