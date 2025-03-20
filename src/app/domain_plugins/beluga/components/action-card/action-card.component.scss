@@ -1,0 +1,32 @@
+@use "../../../../../variables.scss" as vars;
+
+.action-container{
+    width: fit-content;
+    padding: var(--spacing-200);
+    border: solid;
+    border-color: gray;
+    border-radius: var(--spacing-200);
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: var(--spacing-100);
+}
+
+// .action-container:hover{
+//     border-width: 5px;
+// }
+
+.highlight{
+    border-width: 5px;
+}
+
+.icon-box {
+    display: flex;
+    flex-direction: row;
+    gap: var(--spacing-050);
+}
+
+.name{
+    margin: 0px;
+}

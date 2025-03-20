@@ -18,6 +18,12 @@ export const JigActionZ = object({
 
 export type JigAction = zinfer<typeof JigActionZ>;
 
+export const RackActionZ = object({
+    r: string(),
+});
+
+export type RackAction = zinfer<typeof RackActionZ>;
+
 export const UnloadBelugaZ = object({
     name: literal(BelugaActionType.UNLOAD_BELUGA),
     j: string(),

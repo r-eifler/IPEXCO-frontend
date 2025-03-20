@@ -1,0 +1,14 @@
+<div>
+    <!-- <p>Length: {{ displayActions()?.length}}</p> -->
+    <div class="action-layout">
+        @for(da of displayActions(); track da){
+            <app-action-card
+                [action]="da.action"
+                [highlight]="da.highlight"
+                (hovered)="onHighlight($event, da.action)"
+            >
+            </app-action-card>
+        }
+    </div>
+</div>
+

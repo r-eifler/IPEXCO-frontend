@@ -27,7 +27,6 @@ import { PlanInspectionComponent } from 'src/app/domain_plugins/beluga/component
     PageModule,
     RouterLink,
     BelugaPlanAnimationComponent,
-    PlanInspectionComponent
   ],
   templateUrl: './plan-detail-view.component.html',
   styleUrl: './plan-detail-view.component.scss'

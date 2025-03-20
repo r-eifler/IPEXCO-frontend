@@ -1,0 +1,19 @@
+<div 
+    class="action-container" 
+    [style.background-color]="actionColor.get(action()?.name)"
+    (mouseenter) ="onEnter()"  (mouseleave) ="onLeave()"
+    [class.highlight]="highlight()"
+    >
+    @if(rackName() !== null){
+        <span>{{ rackName() }}</span>
+    }
+    <div class="icon-box">
+        <mat-icon>{{ actionLocationIcon.get(action()?.name)}}</mat-icon>
+        <mat-icon>{{ actionMoveIcon.get(action()?.name)}}</mat-icon>
+    </div>
+    <!-- <p class="name">{{ action()?.name }}</p> -->
+    @if(jigName() !== null){
+        <span>{{ jigName() }}</span>
+    }
+</div>
+

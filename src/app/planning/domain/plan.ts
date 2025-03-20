@@ -1,5 +1,4 @@
 import { PlanRunStatusZ } from "src/app/iterative_planning/domain/plan";
-import { ActionZ } from "src/app/shared/domain/plan-property/plan-property";
 import { array, coerce, number, object, string, unknown, infer as zinfer } from "zod";
 
 
