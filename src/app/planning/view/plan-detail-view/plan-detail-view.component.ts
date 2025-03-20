@@ -38,6 +38,10 @@ export class PlanDetailViewComponent {
   project$ = this.store.select(selectProject);
   domainSpecification$ = this.store.select(selectDomainSpecification);
 
+  model$ = this.project$.pipe(
+    map( p => p?.baseTask?.model)
+  );
+
   isBeluga$ = this.domainSpecification$.pipe(
     map(d => d?.name.includes("Beluga") ?? false)
   );
