@@ -52,6 +52,7 @@ export const BelugaProblemZ = object({
     hangars: array(string()),
     jig_types: record(string(),JigTypeZ),
     racks: array(RackZ),
+    jigs: array(JigZ),
     production_lines: array(ProductionLineZ),
     flights: array(FlightZ)
 })
