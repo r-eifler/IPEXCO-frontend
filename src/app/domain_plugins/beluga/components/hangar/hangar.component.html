@@ -1,0 +1,11 @@
+<div class="container">
+    <div>
+        <mat-icon>warehouse</mat-icon>
+    </div>
+    <div class="hangar">
+        @if(jig()){
+            <app-jig [jig]="jig()"></app-jig>
+        }
+    </div>
+</div>
+

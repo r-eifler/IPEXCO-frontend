@@ -4,16 +4,67 @@
     (mouseenter) ="onEnter()"  (mouseleave) ="onLeave()"
     [class.highlight]="highlight()"
     >
-    @if(rackName() !== null){
-        <span>{{ rackName() }}</span>
+    @if(isSwitchAction()){
+        <div class="icon-box">
+            <button  mat-icon-button (click)="onSelect()">
+                <mat-icon>{{ actionLocationIcon() }}</mat-icon>
+            </button>
+            <mat-icon>{{ actionMoveIcon() }}</mat-icon>
+        </div>
     }
-    <div class="icon-box">
-        <mat-icon>{{ actionLocationIcon.get(action()?.name)}}</mat-icon>
-        <mat-icon>{{ actionMoveIcon.get(action()?.name)}}</mat-icon>
-    </div>
-    <!-- <p class="name">{{ action()?.name }}</p> -->
-    @if(jigName() !== null){
-        <span>{{ jigName() }}</span>
+
+    @if(isBelugaAction()){
+        <div class="icon-box">
+            <button  mat-icon-button (click)="onSelect()">
+                <mat-icon>{{ actionLocationIcon() }}</mat-icon>
+            </button>
+            <mat-icon>{{ actionMoveIcon() }}</mat-icon>
+        </div>
+        @if(jigName() !== null){
+            <span>{{ jigName() }}</span>
+        }
     }
+
+    @if(isHangarAction()){
+        @if(jigName() !== null){
+            <span>{{ jigName() }}</span>
+        }
+        <div class="icon-box">
+            <mat-icon>{{ actionMoveIcon() }}</mat-icon>
+            <button  mat-icon-button (click)="onSelect()">
+                <mat-icon>{{ actionLocationIcon() }}</mat-icon>
+            </button>
+        </div>
+    } 
+
+    @if(isBelugaRackSideAction()){
+        @if(jigName() !== null){
+            <span>{{ jigName() }}</span>
+        }
+        <div class="icon-box">
+            <mat-icon>{{ actionMoveIcon() }}</mat-icon>
+            <button  mat-icon-button (click)="onSelect()">
+                <mat-icon>{{ actionLocationIcon() }}</mat-icon>
+            </button>
+        </div>
+        @if(rackName() !== null){
+             <span>{{ rackName() }}</span>
+        }
+    } 
+
+    @if(isFactoryRackSideAction()){
+        @if(rackName() !== null){
+            <span>{{ rackName() }}</span>
+       }
+        <div class="icon-box">
+            <button  mat-icon-button (click)="onSelect()">
+                <mat-icon>{{ actionLocationIcon() }}</mat-icon>
+            </button>
+            <mat-icon>{{ actionMoveIcon() }}</mat-icon>
+        </div>
+        @if(jigName() !== null){
+            <span>{{ jigName() }}</span>
+        }
+    } 
 </div>
 

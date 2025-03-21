@@ -1,14 +1,12 @@
-<div>
-    <!-- <p>Length: {{ displayActions()?.length}}</p> -->
-    <div class="action-layout">
-        @for(da of displayActions(); track da){
-            <app-action-card
-                [action]="da.action"
-                [highlight]="da.highlight"
-                (hovered)="onHighlight($event, da.action)"
-            >
-            </app-action-card>
-        }
-    </div>
+<div class="action-layout">
+    @for(da of filteredActions(); track da.trackId){
+        <app-action-card
+            [action]="da.action"
+            [highlight]="da.highlight"
+            (hovered)="onHighlight($event, da.action)"
+            (selected)="onSelected(da.index)"
+        >
+        </app-action-card>
+    }
 </div>
 

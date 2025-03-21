@@ -1,0 +1,13 @@
+<div class="container">
+    <div>
+    <mat-icon>{{ icon() }}</mat-icon>
+    </div>
+    <div class="rack">
+        <div class="slider">
+            @for(jig of jigs(); track jig){
+                <app-jig [jig]="jig"></app-jig>
+            }
+        </div>
+    </div>
+</div>
+

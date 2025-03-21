@@ -24,6 +24,12 @@ export const RackActionZ = object({
 
 export type RackAction = zinfer<typeof RackActionZ>;
 
+export const SideActionZ = object({
+    s: string(),
+});
+
+export type SideAction = zinfer<typeof SideActionZ>;
+
 export const UnloadBelugaZ = object({
     name: literal(BelugaActionType.UNLOAD_BELUGA),
     j: string(),

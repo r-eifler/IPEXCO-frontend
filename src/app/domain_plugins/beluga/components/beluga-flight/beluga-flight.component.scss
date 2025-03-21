@@ -1,0 +1,36 @@
+@use "../../../../../variables.scss" as vars;
+
+
+.container {
+    display: grid;
+    grid-template-rows: 1fr 3fr;
+}
+
+.rack {
+    height: 80px;
+    // width: 100%;
+
+    padding-left: var(--spacing-200);
+    padding-right: var(--spacing-200);
+
+    border: solid;
+    border-width: 1px;
+    @include vars.border_color();
+    border-radius: var(--spacing-100);
+
+    background-color: rgb(175, 175, 175);
+
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+
+    overflow-x: scroll;
+}
+
+.slider {
+    display: flex;
+    flex-direction: row-reverse;
+    gap: var(--spacing-050);
+
+    overflow-x: scroll;
+}

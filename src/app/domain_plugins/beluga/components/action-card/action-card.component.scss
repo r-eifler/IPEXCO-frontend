@@ -4,7 +4,8 @@
     width: fit-content;
     padding: var(--spacing-200);
     border: solid;
-    border-color: gray;
+    border-width: 1px;
+    @include vars.border_color();
     border-radius: var(--spacing-200);
 
     display: flex;
@@ -13,18 +14,18 @@
     gap: var(--spacing-100);
 }
 
-// .action-container:hover{
-//     border-width: 5px;
-// }
-
 .highlight{
-    border-width: 5px;
+    outline: solid;
+    outline-width: 2px;
+    outline-offset: -2px;
+    @include vars.border_color();
 }
 
 .icon-box {
     display: flex;
     flex-direction: row;
     gap: var(--spacing-050);
+    align-items: center;
 }
 
 .name{

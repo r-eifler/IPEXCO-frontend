@@ -8,6 +8,7 @@
   width: auto;
 
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--spacing-500);
 
   @include devices.md {

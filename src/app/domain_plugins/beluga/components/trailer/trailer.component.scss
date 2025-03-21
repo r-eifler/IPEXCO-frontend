@@ -1,0 +1,27 @@
+@use "../../../../../variables.scss" as vars;
+
+
+.container {
+    display: grid;
+    grid-template-rows: 1fr 2fr;
+}
+
+.trailer {
+    height: 50px;
+    min-width: 100px;
+
+    padding-left: var(--spacing-200);
+    padding-right: var(--spacing-200);
+
+    border: solid;
+    border-width: 1px;
+    @include vars.border_color();
+    border-radius: var(--spacing-100);
+
+    background-color: rgb(175, 175, 175);
+
+    display: flex;
+    width: fit-content;
+    justify-content: space-around;
+    align-items: center;
+}

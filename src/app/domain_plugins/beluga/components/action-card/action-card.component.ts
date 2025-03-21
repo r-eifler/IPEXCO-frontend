@@ -1,11 +1,13 @@
 import { Component, computed, effect, input, output } from '@angular/core';
-import { BelugaAction, BelugaActionType, JigActionZ, RackActionZ } from '../../domain/beluga_plan';
+import { BelugaAction, BelugaActionType, JigActionZ, PickUpRackZ, PutDownRackZ, RackActionZ, SideActionZ } from '../../domain/beluga_plan';
 import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-action-card',
   imports: [
-    MatIconModule
+    MatIconModule,
+    MatButtonModule,
   ],
   templateUrl: './action-card.component.html',
   styleUrl: './action-card.component.scss'
@@ -14,8 +16,11 @@ export class ActionCardComponent {
   
   action = input.required<BelugaAction>();
   highlight = input.required<boolean>();
-  selfHighlight = false;
+
   hovered = output<boolean>();
+  selected = output<void>();
+
+  selfHighlight = false;
 
   jigName  = computed(() => {
     const action = this.action();
@@ -37,26 +42,74 @@ export class ActionCardComponent {
     return null
   })
 
-  actionLocationIcon = new Map<BelugaActionType, string>([
-    [BelugaActionType.UNLOAD_BELUGA, "flight"],
-    [BelugaActionType.LOAD_BELUGA, "flight"],
-    [BelugaActionType.PUT_DOWN_RACK, "menu"],
-    [BelugaActionType.PICK_UP_RACK, "menu"],
-    [BelugaActionType.DELIVER_TO_HANGAR, "warehouse"],
-    [BelugaActionType.GET_FROM_HANGAR, "warehouse"],
-    [BelugaActionType.SWITCH_TO_NEXT_BELUGA, "flight"],
-  ]);
+  isHangarAction = computed(() => 
+    this.action()?.name === BelugaActionType.DELIVER_TO_HANGAR ||
+    this.action().name === BelugaActionType.GET_FROM_HANGAR
+  );
 
-  actionMoveIcon = new Map<BelugaActionType, string>([
-    [BelugaActionType.UNLOAD_BELUGA, "arrow_forward"],
-    [BelugaActionType.LOAD_BELUGA, "arrow_back"],
-    [BelugaActionType.PUT_DOWN_RACK, "arrow_back"],
-    [BelugaActionType.PICK_UP_RACK, "arrow_forward"],
-    [BelugaActionType.DELIVER_TO_HANGAR, "arrow_back"],
-    [BelugaActionType.GET_FROM_HANGAR, "arrow_forward"],
-    [BelugaActionType.SWITCH_TO_NEXT_BELUGA, "swap_horiz"],
-  ]);
+  isBelugaAction = computed(() => 
+    this.action()?.name === BelugaActionType.UNLOAD_BELUGA ||
+    this.action().name === BelugaActionType.LOAD_BELUGA
+  );
 
+  isRackAction = computed(() => 
+    this.action()?.name === BelugaActionType.PICK_UP_RACK ||
+    this.action()?.name === BelugaActionType.PUT_DOWN_RACK
+  );
+
+  isBelugaRackSideAction = computed(() => {
+    if(this.action()?.name === BelugaActionType.PICK_UP_RACK ||
+      this.action()?.name === BelugaActionType.PUT_DOWN_RACK){
+        return SideActionZ.parse(this.action()).s === 'bside';
+    }
+    return false
+  });
+
+  isFactoryRackSideAction = computed(() => {
+    if(this.action()?.name === BelugaActionType.PICK_UP_RACK ||
+      this.action()?.name === BelugaActionType.PUT_DOWN_RACK){
+        return SideActionZ.parse(this.action()).s === 'fside';
+    }
+    return false
+  });
+
+  isSwitchAction = computed(() => 
+    this.action()?.name === BelugaActionType.SWITCH_TO_NEXT_BELUGA
+  )
+
+  actionLocationIcon = computed(() => {
+    switch (this.action().name){
+      case BelugaActionType.UNLOAD_BELUGA:
+      case BelugaActionType.LOAD_BELUGA:
+      case BelugaActionType.SWITCH_TO_NEXT_BELUGA:
+        return "flight"
+      case BelugaActionType.PUT_DOWN_RACK:
+      case BelugaActionType.PICK_UP_RACK:
+        return "menu"
+      case BelugaActionType.DELIVER_TO_HANGAR:
+      case BelugaActionType.GET_FROM_HANGAR:
+        return "warehouse"
+    }
+  })
+
+  actionMoveIcon = computed(() => {
+    switch (this.action().name){
+      case BelugaActionType.UNLOAD_BELUGA:
+      case BelugaActionType.DELIVER_TO_HANGAR:
+        return "arrow_forward"
+      case BelugaActionType.LOAD_BELUGA:
+      case BelugaActionType.GET_FROM_HANGAR:
+        return "arrow_back"
+      case BelugaActionType.SWITCH_TO_NEXT_BELUGA:
+        return "swap_horiz"
+      case BelugaActionType.PUT_DOWN_RACK:
+        return PutDownRackZ.parse(this.action()).s === 'bside' ?
+          "arrow_forward" : "arrow_back"
+      case BelugaActionType.PICK_UP_RACK:
+        return PickUpRackZ.parse(this.action()).s === 'bside' ?
+          "arrow_back" : "arrow_forward"
+    }
+  })
 
   actionColor= new Map<BelugaActionType, string>([
     [BelugaActionType.UNLOAD_BELUGA, "#ffeb99"],
@@ -75,6 +128,10 @@ export class ActionCardComponent {
   onLeave(){
     this.hovered.emit(false);
 
+  }
+
+  onSelect(){
+    this.selected.emit();
   }
 
 }

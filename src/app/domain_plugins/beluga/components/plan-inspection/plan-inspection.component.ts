@@ -1,19 +1,14 @@
-import { Component, computed, effect, inject, input, signal, WritableSignal } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { Plan } from 'src/app/iterative_planning/domain/plan';
-import { array } from 'zod';
-import { BelugaAction, BelugaActionType, BelugaActionZ, JigActionZ } from '../../domain/beluga_plan';
-import { BelugaProblemZ, Flight, Jig } from '../../domain/beluga_problem';
+import { Component, computed, input, output, signal, WritableSignal } from '@angular/core';
+import { BelugaAction, BelugaActionType, JigActionZ } from '../../domain/beluga_plan';
+import { BelugaProblemZ } from '../../domain/beluga_problem';
 import { ActionCardComponent } from '../action-card/action-card.component';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
-import { toSignal } from '@angular/core/rxjs-interop';
 import { actionsForFlight, actionsForJigs } from './plan-filters';
 
-interface DisplayAction {
+export interface DisplayAction {
+  index: number,
   action: BelugaAction,
-  highlight: boolean
+  highlight: boolean,
+  trackId: string
 }
 
 @Component({
@@ -29,13 +24,44 @@ export class PlanInspectionComponent {
   selectedJigs = input.required<string[]>();
   selectedFlight = input.required<string | null>();
   hiddenPrefix = input<number>(0);
-
-  selectedJig: WritableSignal<string | null> = signal(null);
-
   actions = input.required<BelugaAction[] | null>();
 
+  actionSelected = output<number>();
+
+  selectedJigId: WritableSignal<string | null> = signal(null);
+
+  displayActions = computed(() => {
+    const actions = this.actions();
+
+    if(actions === null){
+      return actions;
+    }
+
+    const displayActions: DisplayAction[] =  actions.map((action, index) => {
+
+      let highlight = false;
+      if (action.name !== BelugaActionType.SWITCH_TO_NEXT_BELUGA){
+        const jigAction = JigActionZ.parse(action);
+        highlight = jigAction.j === this.selectedJigId()
+      }
+
+      return {
+        index,
+        action,
+        highlight,
+        trackId: index.toString() + highlight.toString()
+      }
+    });
+
+    if(this.hiddenPrefix() !== null){
+      return displayActions.slice(this.hiddenPrefix())
+    }
+    return displayActions;
+  })
+
+
   filteredActions = computed(() => {
-    let actions = this.actions();
+    let actions = this.displayActions();
     if(actions === null){
       return null
     }
@@ -56,26 +82,6 @@ export class PlanInspectionComponent {
     return actions;
   })
 
-  displayActions = computed(() => {
-    const actions = this.filteredActions();
-    let highlight = false;
-    const displayActions =  actions?.map(a => {
-      if (a.name !== BelugaActionType.SWITCH_TO_NEXT_BELUGA){
-        const jigAction = JigActionZ.parse(a);
-        highlight = jigAction.j == this.selectedJig()
-      }
-      // if(highlight){
-      //   console.log(a.name)
-      // }
-      return {
-        action: a,
-        highlight
-      }
-    });
-    console.log("hidden prefix: " + this.hiddenPrefix())
-    return displayActions === undefined ? [] : displayActions.slice(this.hiddenPrefix());
-  })
-
 
 
 	model = input.required<unknown>();
@@ -86,17 +92,19 @@ export class PlanInspectionComponent {
 
   onHighlight(highlighted: boolean, action: BelugaAction){
     if(!highlighted){
-      this.selectedJig.update(() => null);
+      this.selectedJigId.update(() => null);
       return
     }
 
     if (action === null || action.name === BelugaActionType.SWITCH_TO_NEXT_BELUGA){
-      this.selectedJig.update(() => null);
+      this.selectedJigId.update(() => null);
       return;
     }
     const jigAction = JigActionZ.parse(action);
-    // console.log(jigAction.j);
-    this.selectedJig.update(() => jigAction.j);
+    this.selectedJigId.update(() => jigAction.j);
   }
 
+  onSelected(index: number){
+    this.actionSelected.emit(index);
+  }
 }

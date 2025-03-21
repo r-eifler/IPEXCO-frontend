@@ -1,0 +1,48 @@
+
+@if(state() !== null && state() !== undefined){
+<div class="main-container">
+    <div class="belugas">
+        <app-beluga-flight
+                [jigs]="incoming()"
+        ></app-beluga-flight>
+
+        <app-beluga-flight
+            [jigs]="outgoing()"
+            [incoming]="false"
+        ></app-beluga-flight>
+    </div>
+    <div class="trailers">
+        @for(jig of trailersBeluga(); track jig){
+            <app-trailer [jig]="jig"></app-trailer>
+        }
+    </div>
+    <div class="racks">
+        @for(rack of racks(); track rack){
+            <div class="rack">
+                @for(jig of rack; track jig){
+                    <app-jig [jig]="jig"></app-jig>
+                }
+            </div>
+        }
+    </div>
+    <div class="trailers">
+        @for(jig of trailersFactory(); track jig){
+            <app-trailer [jig]="jig"></app-trailer>
+        }
+    </div>
+    <div class="hangars">
+        @for(jig of hangars(); track jig){
+            <app-hangar [jig]="jig"></app-hangar>
+        }
+    </div>
+</div>
+    }
+    @else{
+        <div class="center">
+            <p>
+                Select action and action from the plans above by clicking on 
+                <mat-icon>menu</mat-icon> or <mat-icon>flight</mat-icon>
+            </p>
+        </div>
+    }
+
