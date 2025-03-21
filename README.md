@@ -49,13 +49,101 @@ to reset your password.
 
 ### Iterative Planning for PDDL Domain
 
+To start the iterative planning process for a classical planning problem, 
+perform the following steps:
+
+**Create a domain specification**
+
+1. Go to the Menu in the top left corner and then to Specifications.
+1. Add a domain specification for your planning problem. Give it a name and 
+select as encoding `PPDL_CLASSIC`.
+1. Edit the domain (*pencil* icon) to define goal templates. They are necessary 
+to define goals during the iterative planning process. In the file 
+`setup/example_data/blocksworld/templates.json` you can find some examples for 
+the blocksworld domain. In [Section](#goal-templates) you find detailed 
+instructions on how to define goal templates.
+1. Don't forget to **save**.
+
+
+**Register all required services**
+
+How to obtain and run the docker images of the services is the 
+[README](https://github.com/r-eifler/IPEXCO-backend) of the back-end repository.
+
+1. Add a classical PDDL planner (e.g. [FD Planning Service](https://github.com/r-eifler/planner-service)) as a service. As type select `PLANNER` as 
+URL `http:localhost:3333` (If you have not changed any of the default settings),
+and as API Key what you defined in the *env* file of the planner docker container, 
+as encoding `PPDL_CLASSIC`.
+1. Add the classical property checker [Service](https://github.com/r-eifler/property_checker_service) as a service. As type select `PROPERTY_CHECKER` as 
+URL `http:localhost:3335` (If you have not changed any of the default settings),
+and as API Key what you defined in the *env* file of the property checker docker 
+container, as encoding `PPDL_CLASSIC`.
+1. Add the classical explainer [Service](https://github.com/r-eifler/explainer-service) 
+as a service. As type select `EXPLAINER` as 
+URL `http:localhost:3335` (If you have not changed any of the default settings),
+and as API Key what you defined in the *env* file of the explainer docker 
+container, as encoding `PPDL_CLASSIC`.
+
+**Create a Project**
+
+1. Now go back to the main menu (top left corner) and select Projects.
+1. Create a new project and select as domain the one you just created.
+In the next step you can upload the PDDL domain and problem file.
+The parser might take a few seconds, but the form will indicate once the 
+problem definition has been successfully processed. Then you can create the 
+project.
+1. Click on the right arrow of the new created project.
+1. Go to Settings.
+1. Select the Planner, Explainer and Property Checker you just registered.
+1. As interfaces select *Templates* for both property creation and explanations.
+1. Save the settings.
+1. Go back to the main overview of the project (*house* icon in the top).
+
+
+**Iterative Planning**
+
+1. Start the iterative planning process.
+1. To create your first iteration step, click on the card stating 
+*Perform a new plan computation from scratch*. A side panel on the right opens.
+1. Define your first property. Click on *Add Property* in the section for 
+*Enforced Goals* and then in the dialog on *Create New Property*.
+A new dialog to create properties opens.
+(**Note**: If there are no options in the dialog, this means something is wrong 
+with the goal templates you defined in the domain specification.)
+1. Select a property class and then a property.
+1. Instantiate a property by selecting all required objects. 
+1. (optionally) In the third step you can change the name, description and 
+utility of the property if you want.
+1. Click *Create*.
+1. Select the just created property and then click *Select*.
+1. Finish the creation of the iteration by clicking *Create* in the bottom 
+right corner of the side panel.
+1. You are automatically redirected to the details' page of the new created 
+iteration step.
+
+
+You find more instructions about the interface and an introduction to the 
+explanation interface in the platform's manual. To access it click on the 
+question mark in the top right corner.
+
+### Demos
+
 **TODO**
 
+### Goal Templates
+
+**TODO**
+
+### LLM Prompts
+
+**TODO**
 
 ### Beluga Demonstrator
 
 To compute a plan for a domain dependent Beluga instance, perform the following 
 steps
+
+**Create Beluga domain and register planner**:
 
 1. Go to the Menu in the top left corner and then to Specifications.
 1. Add a Beluga Domain. Give it a name containing *Beluga* and select as encoding 
@@ -64,6 +152,9 @@ steps
 URL `http:localhost:3336` (If you have not changed any of the default settings),
 as API Key what you defined in the *env* file of the docker container, as 
 encoding `DOMAIN_DEPENDENT` and as domain the Beluga domain you just created.
+
+**Create a *Project* and compute the first plan**:
+
 1. Now go back to the main menu (top left corner) and select Projects.
 1. Create a new project and select as domain the just created Beluga domain.
 In the next step you can upload a Beluga JSON file from the competition.
