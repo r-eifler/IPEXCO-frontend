@@ -1,5 +1,5 @@
 import { Component, computed, input } from '@angular/core';
-import { Jig } from '../../domain/beluga_problem';
+import { Jig, JigType } from '../../domain/beluga_problem';
 import { MatIconModule } from '@angular/material/icon';
 import { JigComponent } from '../jig/jig.component';
 
@@ -15,6 +15,7 @@ import { JigComponent } from '../jig/jig.component';
 export class BelugaFlightComponent {
 
   jigs = input.required<Jig[]>()
+  jigTypes = input.required<Record<string,JigType>>()
 
   incoming = input<boolean>(true);
 

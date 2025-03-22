@@ -26,7 +26,10 @@ export class StateCardComponent {
 
   constructor(){
     effect(() => console.log(this.state()))
+    effect(() => console.log(this.jigTypes()))
   }
+
+  jigTypes = computed(() => this.model()?.jig_types)
 
   incoming = computed(() => {
     const state = this.state();
@@ -51,8 +54,14 @@ export class StateCardComponent {
     if(state === undefined){
       return []
     }
-    return Object.values(state.racks).map(r => r.map(j => this.model()?.jigs[j]));
-  })
+    return Object.values(state.racks).map((r,index) => 
+      ({
+        jigs: r.map(j => this.model()?.jigs[j]),
+        name: this.model()?.racks[index].name,
+        size: this.model()?.racks[index].size,
+      })
+    )
+  });
 
   hangars = computed(() => {
     const state = this.state();

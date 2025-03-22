@@ -3,9 +3,7 @@
         <mat-icon>local_shipping</mat-icon>
     </div>
     <div class="trailer">
-        @if(jig()){
-            <app-jig [jig]="jig()"></app-jig>
-        }
+        <ng-content></ng-content>
     </div>
 </div>
 

@@ -1,12 +1,9 @@
-import { Component, computed, input } from '@angular/core';
-import { Jig } from '../../domain/beluga_problem';
-import { JigComponent } from '../jig/jig.component';
+import { Component } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-trailer',
   imports: [
-    JigComponent,
     MatIconModule,
   ],
   templateUrl: './trailer.component.html',
@@ -14,8 +11,5 @@ import { MatIconModule } from '@angular/material/icon';
 })
 export class TrailerComponent {
 
-  jig = input.required<Jig>()
-
-  name = computed(() => this.jig()?.name.replace('jig',''))
 
 }

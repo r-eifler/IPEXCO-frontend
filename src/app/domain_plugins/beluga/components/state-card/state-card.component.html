@@ -4,35 +4,49 @@
     <div class="belugas">
         <app-beluga-flight
                 [jigs]="incoming()"
+                [jigTypes]="jigTypes()"
         ></app-beluga-flight>
 
         <app-beluga-flight
             [jigs]="outgoing()"
+            [jigTypes]="jigTypes()"
             [incoming]="false"
         ></app-beluga-flight>
     </div>
     <div class="trailers">
         @for(jig of trailersBeluga(); track jig){
-            <app-trailer [jig]="jig"></app-trailer>
+            <app-trailer>
+                @if(jig !== null){
+                <app-jig [jig]="jig"  [jigType]="jigTypes()?.[jig?.type]"></app-jig>
+                }
+            </app-trailer>
         }
     </div>
     <div class="racks">
         @for(rack of racks(); track rack){
-            <div class="rack">
-                @for(jig of rack; track jig){
-                    <app-jig [jig]="jig"></app-jig>
+            <div class="rack" [style.width]="(rack.size * 15) + 'px'">
+                @for(jig of rack.jigs; track jig){
+                    <app-jig [jig]="jig" [jigType]="jigTypes()?.[jig?.type]"></app-jig>
                 }
             </div>
         }
     </div>
     <div class="trailers">
         @for(jig of trailersFactory(); track jig){
-            <app-trailer [jig]="jig"></app-trailer>
+            <app-trailer>
+                @if(jig !== null){
+                    <app-jig [jig]="jig"  [jigType]="jigTypes()?.[jig?.type]"></app-jig>
+                }
+            </app-trailer>
         }
     </div>
     <div class="hangars">
         @for(jig of hangars(); track jig){
-            <app-hangar [jig]="jig"></app-hangar>
+            <app-hangar>
+                @if(jig !== null){
+                    <app-jig [jig]="jig"  [jigType]="jigTypes()?.[jig?.type]"></app-jig>
+                }
+            </app-hangar>
         }
     </div>
 </div>

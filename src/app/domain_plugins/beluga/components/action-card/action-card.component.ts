@@ -80,15 +80,17 @@ export class ActionCardComponent {
   actionLocationIcon = computed(() => {
     switch (this.action().name){
       case BelugaActionType.UNLOAD_BELUGA:
+        return 'flight_land';
       case BelugaActionType.LOAD_BELUGA:
+        return 'flight_takeoff';
       case BelugaActionType.SWITCH_TO_NEXT_BELUGA:
         return "flight"
       case BelugaActionType.PUT_DOWN_RACK:
       case BelugaActionType.PICK_UP_RACK:
-        return "menu"
+        return "menu";
       case BelugaActionType.DELIVER_TO_HANGAR:
       case BelugaActionType.GET_FROM_HANGAR:
-        return "warehouse"
+        return "warehouse";
     }
   })
 
@@ -112,13 +114,13 @@ export class ActionCardComponent {
   })
 
   actionColor= new Map<BelugaActionType, string>([
-    [BelugaActionType.UNLOAD_BELUGA, "#ffeb99"],
-    [BelugaActionType.LOAD_BELUGA, "#ffeb99"],
-    [BelugaActionType.PUT_DOWN_RACK, "#b3f0ff"],
-    [BelugaActionType.PICK_UP_RACK, "#b3f0ff"],
-    [BelugaActionType.DELIVER_TO_HANGAR, "#b3ffb3"],
-    [BelugaActionType.GET_FROM_HANGAR, "#b3ffb3"],
-    [BelugaActionType.SWITCH_TO_NEXT_BELUGA, "#ff9999"],
+    [BelugaActionType.UNLOAD_BELUGA, "#ff9900"],
+    [BelugaActionType.LOAD_BELUGA, "#ff9900"],
+    [BelugaActionType.PUT_DOWN_RACK, "#0066ff"],
+    [BelugaActionType.PICK_UP_RACK, "#0066ff"],
+    [BelugaActionType.DELIVER_TO_HANGAR, "#33cc33"],
+    [BelugaActionType.GET_FROM_HANGAR, "#33cc33"],
+    [BelugaActionType.SWITCH_TO_NEXT_BELUGA, "#ff3333"],
   ]);
 
   onEnter(){

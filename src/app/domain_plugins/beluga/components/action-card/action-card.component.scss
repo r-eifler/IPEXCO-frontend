@@ -12,6 +12,12 @@
     flex-direction: row;
     align-items: center;
     gap: var(--spacing-100);
+
+    background-color: rgb(232, 232, 232);
+}
+
+.action-container:hover {
+    cursor: pointer;
 }
 
 .highlight{

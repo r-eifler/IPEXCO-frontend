@@ -1,23 +1,23 @@
 <div 
     class="action-container" 
-    [style.background-color]="actionColor.get(action()?.name)"
     (mouseenter) ="onEnter()"  (mouseleave) ="onLeave()"
     [class.highlight]="highlight()"
+    (click)="onSelect()"
     >
     @if(isSwitchAction()){
         <div class="icon-box">
-            <button  mat-icon-button (click)="onSelect()">
-                <mat-icon>{{ actionLocationIcon() }}</mat-icon>
-            </button>
+            <mat-icon [style.color]="actionColor.get(action()?.name)">
+                {{ actionLocationIcon() }}
+            </mat-icon>
             <mat-icon>{{ actionMoveIcon() }}</mat-icon>
         </div>
     }
 
     @if(isBelugaAction()){
         <div class="icon-box">
-            <button  mat-icon-button (click)="onSelect()">
-                <mat-icon>{{ actionLocationIcon() }}</mat-icon>
-            </button>
+            <mat-icon [style.color]="actionColor.get(action()?.name)">
+                {{ actionLocationIcon() }}
+            </mat-icon>
             <mat-icon>{{ actionMoveIcon() }}</mat-icon>
         </div>
         @if(jigName() !== null){
@@ -31,9 +31,9 @@
         }
         <div class="icon-box">
             <mat-icon>{{ actionMoveIcon() }}</mat-icon>
-            <button  mat-icon-button (click)="onSelect()">
-                <mat-icon>{{ actionLocationIcon() }}</mat-icon>
-            </button>
+            <mat-icon [style.color]="actionColor.get(action()?.name)">
+                {{ actionLocationIcon() }}
+            </mat-icon>
         </div>
     } 
 
@@ -43,9 +43,9 @@
         }
         <div class="icon-box">
             <mat-icon>{{ actionMoveIcon() }}</mat-icon>
-            <button  mat-icon-button (click)="onSelect()">
-                <mat-icon>{{ actionLocationIcon() }}</mat-icon>
-            </button>
+            <mat-icon [style.color]="actionColor.get(action()?.name)">
+                {{ actionLocationIcon() }}
+            </mat-icon>
         </div>
         @if(rackName() !== null){
              <span>{{ rackName() }}</span>
@@ -57,9 +57,9 @@
             <span>{{ rackName() }}</span>
        }
         <div class="icon-box">
-            <button  mat-icon-button (click)="onSelect()">
-                <mat-icon>{{ actionLocationIcon() }}</mat-icon>
-            </button>
+            <mat-icon [style.color]="actionColor.get(action()?.name)">
+                {{ actionLocationIcon() }}
+            </mat-icon>
             <mat-icon>{{ actionMoveIcon() }}</mat-icon>
         </div>
         @if(jigName() !== null){

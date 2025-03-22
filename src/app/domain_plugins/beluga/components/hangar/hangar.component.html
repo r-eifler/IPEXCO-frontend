@@ -3,9 +3,7 @@
         <mat-icon>warehouse</mat-icon>
     </div>
     <div class="hangar">
-        @if(jig()){
-            <app-jig [jig]="jig()"></app-jig>
-        }
+       <ng-content></ng-content>
     </div>
 </div>
 

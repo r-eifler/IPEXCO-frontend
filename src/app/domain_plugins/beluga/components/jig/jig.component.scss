@@ -2,9 +2,7 @@
 
 .jig {
     height: 40px;
-
-    padding-left: var(--spacing-200);
-    padding-right: var(--spacing-200);
+    min-width: 15px;
 
     border: solid;
     border-width: 1px;

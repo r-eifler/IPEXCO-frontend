@@ -1,3 +1,7 @@
-<div class="jig" matTooltip="Info about the action">
+<div 
+    class="jig" 
+    [matTooltip]="tooltip()"
+    [style.width]="(size() * 15) + 'px'  "
+>
     <span>{{ name() }}</span>
 </div>
