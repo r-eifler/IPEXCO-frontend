@@ -67,7 +67,7 @@ instructions on how to define goal templates.
 
 **Register all required services**
 
-How to obtain and run the docker images of the services is the 
+How to obtain and run the docker images of the services is described in the 
 [README](https://github.com/r-eifler/IPEXCO-backend) of the back-end repository.
 
 1. Add a classical PDDL planner (e.g. [FD Planning Service](https://github.com/r-eifler/planner-service)) as a service. As type select `PLANNER` as 
@@ -155,7 +155,7 @@ an overview of all MUGS/MCGS and the settings of the demo.
 
 **Share Demos** In the top right corner of the demos details view, you can download
 the demo as a JSON file. This allows you to share demos between instances of 
-IPEXCO. To upload the demo go to the main demos menu in the left navigation bar 
+IPEXCO. To upload the demo go to the main demos menu in the left navigation panel 
 and click *Upload Demo*. 
 
 
