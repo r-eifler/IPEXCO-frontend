@@ -12,7 +12,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { equals } from 'ramda';
-import { BehaviorSubject, combineLatest, map, Observable, take } from 'rxjs';
+import { BehaviorSubject, combineLatest, map, take } from 'rxjs';
 import { selectDomainSpecification } from 'src/app/iterative_planning/state/iterative-planning.feature';
 import { selectComparisonPlan, selectProject, selectReferencePlan } from 'src/app/planning/state/planning.selector';
 import { BreadcrumbModule } from 'src/app/shared/components/breadcrumb/breadcrumb.module';
@@ -20,10 +20,11 @@ import { EmptyStateModule } from 'src/app/shared/components/empty-state/empty-st
 import { PageModule } from 'src/app/shared/components/page/page.module';
 import { array } from 'zod';
 import { PlanInspectionComponent } from '../../components/plan-inspection/plan-inspection.component';
+import { StateCardComponent } from '../../components/state-card/state-card.component';
+import { StepControlComponent } from '../../components/step-control/step-control.component';
 import { BelugaActionZ } from '../../domain/beluga_plan';
 import { BelugaProblemZ } from '../../domain/beluga_problem';
-import { applyActions, BelugaState, getInitialState } from '../../domain/beluga_state';
-import { StateCardComponent } from '../../components/state-card/state-card.component';
+import { applyActions, getInitialState } from '../../domain/beluga_state';
 
 
 @Component({
@@ -44,7 +45,8 @@ import { StateCardComponent } from '../../components/state-card/state-card.compo
     MatSelectModule,
     MatSliderModule,
     MatCheckboxModule,
-    StateCardComponent
+    StateCardComponent,
+    StepControlComponent,
   ],
   templateUrl: './plan-comparison.component.html',
   styleUrl: './plan-comparison.component.scss'
@@ -157,7 +159,24 @@ export class PlanComparisonComponent {
     else{
       this.selectedActionIndexComp$.next(index);
     }
-
-    
   }
+
+  onForward(){
+    combineLatest([this.selectedActionIndexRef$,this.referenceActions$]).pipe(
+      take(1)
+    ).subscribe(([currentIndex, actions]) => 
+      this.selectedActionIndexRef$.next( currentIndex === null ? 0 : Math.min(currentIndex + 1, actions?.length ?? 0))
+    )
+
+    combineLatest([this.selectedActionIndexComp$,this.comparisonActions$]).pipe(
+      take(1)
+    ).subscribe(([currentIndex, actions]) => 
+      this.selectedActionIndexComp$.next( currentIndex === null ? 0 : Math.min(currentIndex + 1, actions?.length ?? 0))
+    )
+  }
+
+  onBack(){
+
+  }
+
 }

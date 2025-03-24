@@ -16,6 +16,7 @@ export class ActionCardComponent {
   
   action = input.required<BelugaAction>();
   highlight = input.required<boolean>();
+  select = input.required<boolean>();
 
   hovered = output<boolean>();
   selected = output<void>();

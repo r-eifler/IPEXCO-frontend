@@ -2,6 +2,7 @@
     class="action-container" 
     (mouseenter) ="onEnter()"  (mouseleave) ="onLeave()"
     [class.highlight]="highlight()"
+    [class.selected]="select()"
     (click)="onSelect()"
     >
     @if(isSwitchAction()){

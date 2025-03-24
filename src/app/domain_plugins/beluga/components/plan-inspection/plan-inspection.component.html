@@ -1,8 +1,14 @@
 <div class="action-layout">
+    <app-init-card
+        [select]="initSelected()"
+        (selected)="onInitSelect()"
+    >
+    </app-init-card>
     @for(da of filteredActions(); track da.trackId){
         <app-action-card
             [action]="da.action"
             [highlight]="da.highlight"
+            [select]="da.selected"
             (hovered)="onHighlight($event, da.action)"
             (selected)="onSelected(da.index)"
         >

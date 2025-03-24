@@ -3,11 +3,13 @@ import { BelugaAction, BelugaActionType, JigActionZ } from '../../domain/beluga_
 import { BelugaProblemZ } from '../../domain/beluga_problem';
 import { ActionCardComponent } from '../action-card/action-card.component';
 import { actionsForFlight, actionsForJigs } from './plan-filters';
+import { InitCardComponent } from '../init-card/init-card.component';
 
 export interface DisplayAction {
   index: number,
   action: BelugaAction,
   highlight: boolean,
+  selected: boolean,
   trackId: string
 }
 
@@ -15,20 +17,26 @@ export interface DisplayAction {
   selector: 'app-plan-inspection',
   imports: [
     ActionCardComponent,
+    InitCardComponent,
   ],
   templateUrl: './plan-inspection.component.html',
   styleUrl: './plan-inspection.component.scss'
 })
 export class PlanInspectionComponent {
 
+  actions = input.required<BelugaAction[] | null>();
+
   selectedJigs = input.required<string[]>();
   selectedFlight = input.required<string | null>();
   hiddenPrefix = input<number>(0);
-  actions = input.required<BelugaAction[] | null>();
+  selectedAction = input.required<number | null>();
+  
 
   actionSelected = output<number>();
 
+  initSelected = computed(() => this.selectedAction() === -1)
   selectedJigId: WritableSignal<string | null> = signal(null);
+
 
   displayActions = computed(() => {
     const actions = this.actions();
@@ -49,6 +57,7 @@ export class PlanInspectionComponent {
         index,
         action,
         highlight,
+        selected: this.selectedAction() === index,
         trackId: index.toString() + highlight.toString()
       }
     });
@@ -83,12 +92,13 @@ export class PlanInspectionComponent {
   })
 
 
-
 	model = input.required<unknown>();
 	belugaProblem = computed(() => BelugaProblemZ.parse(this.model()))
 
   flights = computed(() => this.belugaProblem()?.flights)
   jigs = computed(() => Object.values(this.belugaProblem()?.jigs))
+
+
 
   onHighlight(highlighted: boolean, action: BelugaAction){
     if(!highlighted){
@@ -106,5 +116,9 @@ export class PlanInspectionComponent {
 
   onSelected(index: number){
     this.actionSelected.emit(index);
+  }
+
+  onInitSelect(){
+    this.actionSelected.emit(-1);
   }
 }

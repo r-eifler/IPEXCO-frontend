@@ -38,6 +38,10 @@
                 </mat-select>
             </mat-form-field>
             <mat-checkbox [formControl]="form.controls.hideCommonPrefix">hide common prefix</mat-checkbox>
+            <app-step-control
+              (back)="onBack()"
+              (forward)="onForward()"
+            ></app-step-control>
         </div>
         </app-page-section-content>
       </app-page-section>
@@ -49,6 +53,7 @@
               [model]="model$ | async"
               [selectedJigs] = "selectedJigs$ | async"
               [selectedFlight] = "selectedFlight$ | async"
+              [selectedAction] = "this.selectedActionIndexRef$ | async"
               [hiddenPrefix]="commonPrefixLength$ | async"
               (actionSelected)="onActionSelected(true, $event)"
             ></app-plan-inspection>
@@ -58,6 +63,7 @@
               [model]="model$ | async"
               [selectedJigs] = "selectedJigs$ | async"
               [selectedFlight] = "selectedFlight$ | async"
+              [selectedAction] = "this.selectedActionIndexComp$ | async"
               [hiddenPrefix]="commonPrefixLength$ | async"
               (actionSelected)="onActionSelected(false, $event)"
             ></app-plan-inspection>

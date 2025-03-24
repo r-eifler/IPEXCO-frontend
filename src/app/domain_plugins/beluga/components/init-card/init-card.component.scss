@@ -20,24 +20,7 @@
     cursor: pointer;
 }
 
-.highlight{
-    outline: solid;
-    outline-width: 2px;
-    outline-offset: -2px;
-    @include vars.border_color();
-}
 
 .selected{
     background-color: rgb(159, 249, 232);
-}
-
-.icon-box {
-    display: flex;
-    flex-direction: row;
-    gap: var(--spacing-050);
-    align-items: center;
-}
-
-.name{
-    margin: 0px;
 }
