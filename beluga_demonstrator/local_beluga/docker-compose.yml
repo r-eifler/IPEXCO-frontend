@@ -1,0 +1,31 @@
+version: "3"
+services:
+
+  # IPEXCO_BACKEND:
+  #   container_name: ipexco-backend-beluga
+  #   image: eifler/ipexco-backend:latest
+  #   volumes:
+  #     - /home/eifler/XPP/iter_tool/EXPLORE_backend/dist/out-tsc/data:/usr/src/app/dist/out-tsc/data
+  #   ports:
+  #     - "3000:3000"
+  #   network_mode: "host"
+  #   env_file:
+  #       - backend.env
+
+  PLANNER_BELUGA:
+    container_name: planner_beluga
+    image: simple-beluga-planner:latest
+    ports:
+      - "3336:3336"
+    network_mode: "host"
+    env_file:
+        - planner.env
+
+  DATABASE:
+    container_name: mongo_beluga
+    image: mongo
+    volumes:
+      - /home/rebecca/XPP/iter_tool/docker-iter-planning-tool/mogodb_test/mongo_data/:/data/db
+    ports:
+      - "27017:27017"
+    network_mode: "host"
