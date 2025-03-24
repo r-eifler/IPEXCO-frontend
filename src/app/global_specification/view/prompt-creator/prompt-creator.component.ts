@@ -50,7 +50,8 @@ export class PromptCreatorComponent {
         agent: this.fb.control<AgentType | null>(null),
         type: this.fb.control<PromptType | null>(null, Validators.required),
         domain: this.fb.control<string | null>(null),
-        explainer:  this.fb.control<string | null>(null),
+      explainer: this.fb.control<string | null>(null),
+      text: this.fb.control<string | null>(null),
     });
   
     onCancel(){
@@ -64,7 +65,7 @@ export class PromptCreatorComponent {
         type: this.form.controls.type.value ?? PromptType.NONE,
         domain: this.form.controls.domain.value,
         explainer: this.form.controls.explainer.value,
-        text: ''
+        text: this.form.controls.text.value ?? ''
       }
       this.dialogRef.close(prompt)
     }

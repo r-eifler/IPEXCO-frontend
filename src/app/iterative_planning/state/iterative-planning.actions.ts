@@ -120,7 +120,7 @@ export const sendMessageToLLMQTthenGTTranslators = createAction('[llm] send mess
 export const sendMessageToLLMQTthenGTTranslatorsSuccess = createAction('[llm] send message to QTthenGT translators success', props<{threadIdQt: string, threadIdGt: string, duration?: number}>());
 export const sendMessageToLLMQTthenGTTranslatorsFailure = createAction('[llm] send message to QTthenGT translators failure', props<{ err: any}>());
 
-export const createLLMContext = createAction('[llm] create LLM context', props<{ projectId: string, iterationStepId: string }>());
+export const createLLMContext = createAction('[llm] create LLM context', props<{ projectId: string, iterationStepId?: string }>());
 export const createLLMContextSuccess = createAction('[llm] create LLM context success', props<{LLMContext: LLMContext}>());
 export const createLLMContextFailure = createAction('[llm] create LLM context failure', props<{ err: any}>());
 

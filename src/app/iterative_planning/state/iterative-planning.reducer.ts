@@ -100,15 +100,18 @@ const initialState: IterativePlanningState = {
   LLMChatLoadingState: LoadingState.Initial,
   ExplanationLoadingState: LoadingState.Initial,
   LLMContext: {
-    threadIdQT: '',
-    threadIdGT: '',
-    threadIdET: '',
+    project: null,
+    user: null,
+    iterationStepId: null,
     visibleMessages: [],
     visiblePPCreationMessages: [],
     seenByGTMessages: [],
     seenByETMessages: [],
     seenByQTMessages: [],
-    project: null
+    outputFormatQT: { structured: false, schema: null },
+    outputFormatET: { structured: false, schema: null },
+    outputFormatGT: { structured: false, schema: null },
+    settings: {}
   },
 
 };

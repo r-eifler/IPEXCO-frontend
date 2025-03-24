@@ -1,7 +1,7 @@
 import { inject, Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { of } from "rxjs";
-import { catchError, switchMap, tap } from "rxjs/operators";
+import { catchError, switchMap, tap, filter } from "rxjs/operators";
 import { LLMService } from "src/app/LLM/service/llm.service";
 import { concatLatestFrom } from "@ngrx/operators";
 import { selectIterationStep } from "../iterative-planning.actions";
@@ -19,7 +19,8 @@ export class CreateLLMContextEffect{
     public createLLMContext$ = createEffect(() => this.actions$.pipe(
     ofType(selectIterationStep),
     concatLatestFrom(() => this.store.select(selectIterativePlanningProject)),
-    switchMap(([{iterationStepId}, project]) => this.llmService.createLLMContext$(project._id, iterationStepId).pipe(
+    filter(([_, project]) => !!project),
+    switchMap(([{iterationStepId}, project]) => this.llmService.createLLMContext$(project!._id, iterationStepId).pipe(
         tap(LLMContext => console.log("LLMContext: ", LLMContext)),
         switchMap(LLMContext => [
             createLLMContextSuccess({LLMContext})

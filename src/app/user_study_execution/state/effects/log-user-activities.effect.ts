@@ -236,7 +236,7 @@ export class LogUserActivitiesEffect{
             console.log('LLM Question Asked:', {
                 propertyId: question.propertyId,
                 questionType: question.questionType,
-                demoId: project._id,
+                demoId: project?._id ?? 'Missing ID',
                 stepId: iterationStepId
             });
             
@@ -263,7 +263,7 @@ export class LogUserActivitiesEffect{
             console.log('Logging LLM question translation:', {
                 originalQuestion: naturalLanguageQuestion,
                 translatedQuestion: question.questionType + 
-                    (question.propertyId && planProperties[question.propertyId]?.name 
+                    (question.propertyId && planProperties && planProperties[question.propertyId]?.name 
                         ? " " + planProperties[question.propertyId].name 
                         : "")
             });
@@ -274,7 +274,7 @@ export class LogUserActivitiesEffect{
                     demoId: project?._id ?? 'Missing ID',
                     stepId: iterationStepId,
                     translatedQuestion: question.questionType + 
-                        (question.propertyId && planProperties[question.propertyId]?.name 
+                        (question.propertyId && planProperties && planProperties[question.propertyId]?.name 
                             ? " " + planProperties[question.propertyId].name 
                             : ""),
                     originalQuestion: naturalLanguageQuestion,

@@ -12,9 +12,7 @@ export const llmStateChangeFunctions: ReducerTypes<IterativePlanningState,Action
       ...state.LLMContext,
       visiblePPCreationMessages: [],
       visibleMessages: [],
-      threadIdGT: '',
-      threadIdQT: '',
-      threadIdET: ''
+      
     }
 })),
 

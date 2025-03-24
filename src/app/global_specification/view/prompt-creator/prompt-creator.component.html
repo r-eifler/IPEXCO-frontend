@@ -19,6 +19,11 @@
                   </mat-select>
                 </mat-form-field>
 
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Prompt</mat-label>
+                    <textarea matInput [formControl]="form.controls.text"></textarea>
+                </mat-form-field>
+
                 @if(form.controls.type.value != null && form.controls.type.value != promptType.SYSTEM){
                 <mat-form-field appearance="outline" class="full-width">
                     <mat-label>Agent</mat-label>
