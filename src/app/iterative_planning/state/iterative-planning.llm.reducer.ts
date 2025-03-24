@@ -21,7 +21,7 @@ on(sendMessageToLLMGoalTranslator, (state, action): IterativePlanningState => ({
     LLMChatLoadingState: LoadingState.Loading,
     LLMContext: {
       ...state.LLMContext,
-      visiblePPCreationMessages: [...state.LLMContext.visiblePPCreationMessages, {role: 'receiver', content: action.goalDescription, iterationStepId: state.selectedIterationStepId}]
+      visiblePPCreationMessages: [...state.LLMContext.visiblePPCreationMessages, {role: 'receiver', content: action.goalDescription, iterationStepId: state.selectedIterationStepId ?? null}]
     }
 })),
 on(sendMessageToLLMGoalTranslatorSuccess, (state, action): IterativePlanningState => ({
@@ -30,7 +30,7 @@ on(sendMessageToLLMGoalTranslatorSuccess, (state, action): IterativePlanningStat
     LLMContext: {
       ...state.LLMContext,
       threadIdGT: action.threadId,
-      visiblePPCreationMessages: [...state.LLMContext.visiblePPCreationMessages, { role: 'sender', content: `${action.response.formula} ; ${action.response.shortName}`, iterationStepId: state.selectedIterationStepId }]
+      visiblePPCreationMessages: [...state.LLMContext.visiblePPCreationMessages, { role: 'sender', content: `${action.response.formula} ; ${action.response.shortName}`, iterationStepId: state.selectedIterationStepId ?? null }]
       
     }
 })),
@@ -44,7 +44,7 @@ on(sendMessageToLLMExplanationTranslatorSuccess, (state, action): IterativePlann
     LLMContext: {
       ...state.LLMContext,
       threadIdET: action.threadId,
-      visibleMessages: [...state.LLMContext.visibleMessages, {role: 'sender', content: action.response, iterationStepId: state.selectedIterationStepId}]
+      visibleMessages: [...state.LLMContext.visibleMessages, {role: 'sender', content: action.response, iterationStepId: state.selectedIterationStepId ?? null}]
     },
     LLMChatLoadingState: LoadingState.Done,
     ExplanationLoadingState: LoadingState.Done
@@ -55,7 +55,7 @@ on(sendMessageToLLMExplanationTranslatorFailure, (state): IterativePlanningState
     ExplanationLoadingState: LoadingState.Done,
     LLMContext: {
       ...state.LLMContext,
-      visibleMessages: [...state.LLMContext.visibleMessages, {role: 'sender', content: "Something went wrong. Please try again.", iterationStepId: state.selectedIterationStepId}]
+      visibleMessages: [...state.LLMContext.visibleMessages, {role: 'sender', content: "Something went wrong. Please try again.", iterationStepId: state.selectedIterationStepId ?? null}]
     }
 })),
 // on(sendMessageToLLMQTthenGTTranslators, (state, action): IterativePlanningState => ({
@@ -87,7 +87,7 @@ on(sendMessageToLLMExplanationTranslatorFailure, (state): IterativePlanningState
   ExplanationLoadingState: LoadingState.Loading,
     LLMContext: {
       ...state.LLMContext,
-      visibleMessages: [...state.LLMContext.visibleMessages, {role: 'receiver', content: action.question, iterationStepId: state.selectedIterationStepId}]
+      visibleMessages: [...state.LLMContext.visibleMessages, {role: 'receiver', content: action.question, iterationStepId: state.selectedIterationStepId ?? null}]
     }
 })),
 on(sendMessageToLLMQuestionTranslatorSuccess, (state, action): IterativePlanningState => ({
@@ -104,7 +104,7 @@ on(sendMessageToLLMQuestionTranslatorFailure, (state): IterativePlanningState =>
     ExplanationLoadingState: LoadingState.Done,
     LLMContext: {
       ...state.LLMContext,
-      visibleMessages: [...state.LLMContext.visibleMessages, {role: 'sender', content: "Something went wrong. Please try again.", iterationStepId: state.selectedIterationStepId}]
+      visibleMessages: [...state.LLMContext.visibleMessages, {role: 'sender', content: "Something went wrong. Please try again.", iterationStepId: state.selectedIterationStepId ?? null}]
     }
 })),
 on(loadLLMContextSuccess, (state,action): IterativePlanningState=> ({
@@ -124,21 +124,21 @@ on(directResponseQT, (state, action): IterativePlanningState => ({
   ExplanationLoadingState: LoadingState.Done,
   LLMContext: {
     ...state.LLMContext,
-    visibleMessages: [...state.LLMContext.visibleMessages, {role: 'sender', content: action.directResponse, iterationStepId: state.selectedIterationStepId}]
+    visibleMessages: [...state.LLMContext.visibleMessages, {role: 'sender', content: action.directResponse, iterationStepId: state.selectedIterationStepId ?? null}]
   }
 })),
 on(showReverseTranslationGT, (state, action): IterativePlanningState => ({ //TODO make it possible to disable it
   ...state,
   LLMContext: {
     ...state.LLMContext,
-    visibleMessages: [...state.LLMContext.visibleMessages, {role: 'sender', content: "I understood the goal you described as : " + action.reverseTranslation, iterationStepId: state.selectedIterationStepId}]
+    visibleMessages: [...state.LLMContext.visibleMessages, {role: 'sender', content: "I understood the goal you described as : " + action.reverseTranslation, iterationStepId: state.selectedIterationStepId ?? null}]
   }
 })),
 on(showReverseTranslationQT, (state, action): IterativePlanningState => ({ //TODO make it possible to disable it
   ...state,
   LLMContext: {
     ...state.LLMContext,
-    visibleMessages: [...state.LLMContext.visibleMessages, {role: 'sender', content: "I understood your question as : " + action.reverseTranslation, iterationStepId: state.selectedIterationStepId}]
+    visibleMessages: [...state.LLMContext.visibleMessages, {role: 'sender', content: "I understood your question as : " + action.reverseTranslation, iterationStepId: state.selectedIterationStepId ?? null}]
   }
 }))
 ]
