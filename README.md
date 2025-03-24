@@ -128,7 +128,36 @@ question mark in the top right corner.
 
 ### Demos
 
-**TODO**
+A demo is an iterative planning task with a **fixed** set of properties.
+This allows to precompute all MUGS/MCGS, resulting in an almost instant response 
+to a user question. 
+Additionally, it gives a fair evaluation environment for user studies, since 
+every participant processes the same optimization task.
+
+To compute a demo perform the following steps. 
+
+1. Go to the main menu of the project, and then to the **Demos** feature.
+1. Click on *Create a new demo based on the current project*.
+1. Define a name.
+1. Domain and instance description are shown during a user study to explain the 
+domain and the concrete instance to the user.
+1. The optional image is also used to facilitate the understanding of the domain 
+to the user during a user study.
+1. The last step is to select the goals/properties. You can choose from the 
+properties defined during the iterative planning in the domain and create new 
+properties. Make sure to rename them if necessary and that you assign the correct
+utility value.
+1. Click *save* to create the demo and start the pre-computation of all MUGS/MCGS.
+This can take some time.
+
+Once the computation of a demo finished you can click on *Details* to access 
+an overview of all MUGS/MCGS and the settings of the demo. 
+
+**Share Demos** In the top right corner of the demos details view, you can download
+the demo as a JSON file. This allows you to share demos between instances of 
+IPEXCO. To upload the demo go to the main demos menu in the left navigation bar 
+and click *Upload Demo*. 
+
 
 ### Goal Templates
 
