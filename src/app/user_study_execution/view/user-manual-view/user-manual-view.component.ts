@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { selectExecutionUserStudyStep, selectExecutionUserStudyDemo, selectExecutionUserStudyPlanProperties } from '../../state/user-study-execution.selector';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { filter } from 'rxjs';
+import { filter, map } from 'rxjs';
 import { loadUserStudyDemo } from '../../state/user-study-execution.actions';
 import { UserStudyStepType } from 'src/app/user_study/domain/user-study';
 import { PageModule } from 'src/app/shared/components/page/page.module';
@@ -30,14 +30,21 @@ export class UserManualViewComponent {
   step$ = this.store.select(selectExecutionUserStudyStep);
   demo$ = this.store.select(selectExecutionUserStudyDemo);
 
+  settings$ = this.demo$.pipe(
+    filter(demo => !!demo && !!demo?.settings),
+    map(demo => demo?.settings)
+  )
+
   constructor(){
-
-
     this.step$.pipe(
       takeUntilDestroyed(),
       filter(s => !!s && s.type == UserStudyStepType.userManual)
-    ).subscribe(s => !!s && !!s.content ? this.store.dispatch(loadUserStudyDemo({demoId: s.content})) : console.log("Cannot load demo for user manual"))
-    
+    ).subscribe(s => 
+        !!s && !!s.content ? 
+        this.store.dispatch(loadUserStudyDemo({demoId: s.content})) : 
+        console.log("Cannot load demo for user manual"
+
+      ))
   }
 
 }

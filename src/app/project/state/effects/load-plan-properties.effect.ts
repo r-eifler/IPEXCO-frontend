@@ -15,7 +15,7 @@ export class LoadProjectPlanPropertiesEffect{
         ofType(loadPlanProperties),
         switchMap(({id}) => this.service.getPlanProperties$(id).pipe(
             map(planProperties => loadPlanPropertiesSuccess({planProperties})),
-            catchError(() => of(loadPlanPropertiesFailure())),
+            catchError((e) => of(loadPlanPropertiesFailure({err: e}))),
         ))
     ))
 

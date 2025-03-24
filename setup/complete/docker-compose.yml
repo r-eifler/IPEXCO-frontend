@@ -1,0 +1,57 @@
+version: "3"
+services:
+  IPEXCO_FRONTEND:
+    container_name: ipexco-frontend
+    restart: always
+    image: eifler/ipexco-frontend:latest
+    ports:
+      - "4200:80"
+    network_mode: "host"
+
+  IPEXCO_BACKEND:
+    container_name: ipexco-backend
+    image: eifler/ipexco-backend:latest
+    volumes:
+      - <absolute path>:/usr/src/app/dist/out-tsc/data
+    ports:
+      - "3000:3000"
+    network_mode: "host"
+    env_file:
+        - backend.env
+
+
+  PROPERTY_CHECKER:
+    container_name: property_checker
+    image: eifler/property_checker_service::latest
+    ports:
+      - "33335:33335"
+    network_mode: "host"
+    env_file:
+        - property_checker.env
+
+  PLANNER_FD:
+    container_name: planner_FD
+    image: eifler/planner-service:latest
+    ports:
+      - "3333:3333"
+    network_mode: "host"
+    env_file:
+        - planner.env
+
+  EXPLAINER_C_MUGS:
+    container_name: explainer_classic_mugs
+    image: eifler/explainer-service:latest
+    ports:
+      - "3334:3334"
+    network_mode: "host"
+    env_file:
+        - explainer.env
+
+  DATABASE:
+    container_name: mongo
+    image: mongo
+    volumes:
+      - <absolute path>:/data/db
+    ports:
+      - "27017:27017"
+    network_mode: "host"

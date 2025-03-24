@@ -15,7 +15,7 @@ export class LoadProjectMetaDataListEffect{
         ofType(loadProjectMetaDataList),
         switchMap(() => this.service.getProjectList$().pipe(
             map(projects => loadProjectMetaDataListSuccess({projects})),
-            catchError(() => of(loadProjectMetaDataListFailure()))
+            catchError((e) => of(loadProjectMetaDataListFailure({err: e})))
         ))
     ))
 }

@@ -3,7 +3,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { IterationStep, StepStatus } from '../../domain/iteration_step';
 import { PlanProperty } from 'src/app/shared/domain/plan-property/plan-property';
-import { DemoDirective } from '../../derectives/isDemo.directive';
+import { DemoDirective } from '../../directives/isDemo.directive';
 import { RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
@@ -30,8 +30,8 @@ export class StepsListHeroComponent {
   maxOverallUtility = input.required<number>();
   currentMaxUtility = input.required<number>();
 
-  numSolvedSteps = computed(() => this.steps()?.filter(s => s.status === StepStatus.solvable).length)
-  umUnSolvedSteps = computed(() => this.steps()?.filter(s => s.status === StepStatus.unsolvable).length)
+  numSolvedSteps = computed(() => this.steps()?.filter(s => s.status === StepStatus.SOLVABLE).length)
+  umUnSolvedSteps = computed(() => this.steps()?.filter(s => s.status === StepStatus.UNSOLVABLE).length)
 
   openTaskInfo(){
    this.dialog.open(TaskInformationDialogComponent);

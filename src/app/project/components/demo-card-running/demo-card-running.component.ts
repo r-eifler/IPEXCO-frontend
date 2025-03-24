@@ -1,5 +1,4 @@
 import { Component, inject, input } from '@angular/core';
-import { Demo } from '../../domain/demo';
 import { PlanProperty } from 'src/app/shared/domain/plan-property/plan-property';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -12,6 +11,7 @@ import { DemoStatusNamePipe } from '../../pipe/demo-status-name.pipe';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { Store } from '@ngrx/store';
 import { cancelDemoCreation } from '../../state/project.actions';
+import { Demo } from 'src/app/shared/domain/demo';
 
 @Component({
   selector: 'app-demo-card-running',
@@ -37,7 +37,9 @@ export class DemoCardRunningComponent {
   planProperties = input.required<Record<string, PlanProperty> | null>();
 
   onCancel() {
-    this.store.dispatch(cancelDemoCreation({demoId: this.demo()?._id}))
+    const demo = this.demo();
+    if(demo !== null)
+      this.store.dispatch(cancelDemoCreation({demoId: demo._id}))
   }
 
 }

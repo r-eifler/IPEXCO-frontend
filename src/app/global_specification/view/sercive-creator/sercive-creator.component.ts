@@ -6,7 +6,7 @@ import { MatFormField } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { DialogModule } from 'src/app/shared/components/dialog/dialog.module';
-import { Encoding, Service, ServiceType } from '../../domain/services';
+import { Encoding, Service, ServiceBase, ServiceType } from '../../domain/services';
 import { domainOnlyForDomainDependentEncoding } from '../../validators/domain_dpendent.validator';
 
 @Component({
@@ -47,12 +47,12 @@ export class ServiceCreatorComponent {
   private urlRegex = /^http?:\/\/.+(:[0-9]{4,5})?.*$/;
 
   form = this.fb.group({
-      name: this.fb.control<string>(null, Validators.required),
-      type: this.fb.control<ServiceType>(null, Validators.required),
-      apiKey: this.fb.control<string>(null, Validators.required),
-      url: this.fb.control<string>(null, [Validators.required, Validators.pattern(this.urlRegex)]),
-      encoding: this.fb.control<Encoding>(null, Validators.required),
-      domainId: this.fb.control<string>(null),
+      name: this.fb.control<string | null>(null, Validators.required),
+      type: this.fb.control<ServiceType | null>(null, Validators.required),
+      apiKey: this.fb.control<string | null>(null, Validators.required),
+      url: this.fb.control<string | null>(null, [Validators.required, Validators.pattern(this.urlRegex)]),
+      encoding: this.fb.control<Encoding | null>(null, Validators.required),
+      domainId: this.fb.control<string | null>(null),
   }, { validators: domainOnlyForDomainDependentEncoding });
 
   onCancel(){
@@ -60,12 +60,12 @@ export class ServiceCreatorComponent {
   }
 
   onCreate(){
-    let service: Service = {
-      name: this.form.controls.name.value,
-      type: this.form.controls.type.value,
-      url: this.form.controls.url.value,
-      apiKey: this.form.controls.apiKey.value,
-      encoding: this.form.controls.encoding.value,
+    let service: ServiceBase = {
+      name: this.form.controls.name.value ?? 'TODO',
+      type: this.form.controls.type.value ?? ServiceType.NONE,
+      url: this.form.controls.url.value ?? 'TODO',
+      apiKey: this.form.controls.apiKey.value ?? '',
+      encoding: this.form.controls.encoding.value ?? Encoding.NONE,
       domainId: this.form.controls.encoding.value == this.encoding.DOMAIN_DEPENDENT ? this.form.controls.domainId.value : null
     }
     this.dialogRef.close(service)

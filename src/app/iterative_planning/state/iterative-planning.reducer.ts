@@ -108,7 +108,7 @@ const initialState: IterativePlanningState = {
     seenByGTMessages: [],
     seenByETMessages: [],
     seenByQTMessages: [],
-    project: undefined
+    project: null
   },
 
 };
@@ -123,7 +123,7 @@ export const iterativePlanningReducer = createReducer(
       LLMChatLoadingState: LoadingState.Initial,
       LLMContext: {
         ...initialState.LLMContext,
-        project: state.project.data?._id
+        project: state.project.data?._id ?? null
       }
     })
   ),
@@ -222,7 +222,7 @@ export const iterativePlanningReducer = createReducer(
     ExplanationLoadingState: LoadingState.Initial,
     messages: [
       ...state.messages,
-      { questionType, iterationStepId, role: 'receiver', message: questionFactory(questionType)(state.planProperties?.data?.[propertyId]?.name), propertyId },
+      { questionType, iterationStepId, role: 'receiver', message: questionFactory(questionType)(propertyId ? state.planProperties?.data?.[propertyId]?.name : undefined), propertyId },
     ],
   })),
 
@@ -246,7 +246,7 @@ function extractExplanations(iterationSteps: IterationStep[]): Record<string,Glo
   )(iterationSteps);
 }
 
-function extractExplanation(iterationStep: IterationStep): Record<string,GlobalExplanation | undefined> {
+function extractExplanation(iterationStep: IterationStep): Record<string,GlobalExplanation | undefined> | undefined{
   if(!iterationStep){
     return undefined;
   }

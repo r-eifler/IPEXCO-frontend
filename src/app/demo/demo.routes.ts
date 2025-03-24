@@ -9,9 +9,10 @@ import { demosFeature } from './state/demo.feature';
 import { demosFeatureEffects } from './state/effects/effects';
 import { DemoService } from './services/demo.service';
 import { DemoPlanPropertyService } from './services/plan-properties.service';
-import { DemoServicesService } from './services/planner.service';
+import { DemoServicesService } from './services/services.service';
 import { DemoPromptsService } from './services/prompts.service';
 import { Routes } from '@angular/router';
+import { DemoDomainSpecificationService } from './services/domainSpecification.service';
 
 
 
@@ -27,6 +28,7 @@ export const routes: Routes = [
       DemoPlanPropertyService,
       DemoServicesService,
       DemoPromptsService,
+      DemoDomainSpecificationService
     ],
     children: [
       {

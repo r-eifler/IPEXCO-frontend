@@ -134,7 +134,7 @@ export class LogUserActivitiesEffect{
             this.store.select(selectIterativePlanningProperties)
         ]),
         switchMap(([{iterationSteps}, pendingStepIdes, planProperties]) => 
-            iterationSteps.filter(step => step?._id && pendingStepIdes.includes(step._id) && step.status != StepStatus.unknown).
+            iterationSteps.filter(step => step?._id && pendingStepIdes.includes(step._id) && step.status != StepStatus.UNKNOWN).
             flatMap(step => [
                 logPlanComputationFinished({iterationStepId: step._id ?? 'Missing ID'}),
                 logAction({action: {
@@ -143,7 +143,7 @@ export class LogUserActivitiesEffect{
                         demoId: step.project,
                         stepId: step._id,
                         utility: step.plan && planProperties ? computeUtility(step?.plan, planProperties) : 0,
-                        planStatus: step.plan ? step.plan?.status : PlanRunStatus.pending
+                        planStatus: step.plan ? step.plan?.status : PlanRunStatus.PENDING
                     }
                 }})
             ]))

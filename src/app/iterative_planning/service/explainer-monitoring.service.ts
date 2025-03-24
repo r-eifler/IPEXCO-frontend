@@ -36,6 +36,6 @@ export class ExplainerMonitoringService {
 }
 
 function explanationFinished(iterationStep: IterationStep): boolean {
-    return (iterationStep.globalExplanation?.status != ExplanationRunStatus.pending) &&
-    (iterationStep.globalExplanation?.status != ExplanationRunStatus.running);
+    return (iterationStep.globalExplanation?.status != ExplanationRunStatus.PENDING) &&
+    (iterationStep.globalExplanation?.status != ExplanationRunStatus.RUNNING);
 }

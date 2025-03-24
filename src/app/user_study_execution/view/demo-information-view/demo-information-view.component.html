@@ -21,7 +21,8 @@
 
                     <mat-tab label="Domain">
                         <div class="tab-container">
-                            <div [innerHTML]="demo?.domainInfo | marked"></div>
+                            <!-- <div [innerHTML]="demo?.domainInfo | marked"></div> -->
+                             <p>TODO use description in domain specification</p>
                         </div>
                         </mat-tab>
                 
@@ -34,7 +35,9 @@
                     <mat-tab label="Visualization" class="tab-container">
                         <div class="tab-container">
                             <div class="image-container">
-                                <img [src]="host + demo?.summaryImage">
+                                @if(demo?.summaryImage){
+                                    <img [src]="host + demo?.summaryImage">
+                                }
                             </div>
                         </div>
                     </mat-tab>

@@ -1,7 +1,7 @@
 import { Component, input } from '@angular/core';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MarkedPipe } from 'src/app/pipes/marked.pipe';
-import { Demo } from 'src/app/project/domain/demo';
+import { Demo } from 'src/app/shared/domain/demo';
 
 @Component({
   selector: 'app-demo-info',

@@ -7,5 +7,6 @@ export const loadOutputSchemaResolver: ResolveFn<void> = (snapshot) => {
 
   const id = snapshot.paramMap.get('schemaId');
 
-  inject(Store).dispatch(loadOutputSchema({ id }))
+  if(id !== null)
+    inject(Store).dispatch(loadOutputSchema({ id }))
 }

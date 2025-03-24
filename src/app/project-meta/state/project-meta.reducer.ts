@@ -1,15 +1,15 @@
 import { createReducer, on } from "@ngrx/store";
-import { ProjectMetaData } from "../domain/project-meta";
-import { Loadable, LoadingState } from "src/app/shared/common/loadable.interface";
-import { createProject, createProjectFailure, createProjectSuccess, deleteProject, loadDomainSpecifications, loadDomainSpecificationsSuccess, loadProjectMetaDataList, loadProjectMetaDataListSuccess } from "./project-meta.actions";
-import { Creatable, CreationState } from "src/app/shared/common/creatable.interface";
-import { Project } from "src/app/shared/domain/project";
 import { DomainSpecification } from "src/app/global_specification/domain/domain_specification";
+import { Creatable, CreationState } from "src/app/shared/common/creatable.interface";
+import { Loadable, LoadingState } from "src/app/shared/common/loadable.interface";
+import { ProjectBase } from "src/app/shared/domain/project";
+import { ProjectMetaData } from "../domain/project-meta";
+import { createProject, createProjectFailure, createProjectSuccess, loadDomainSpecifications, loadDomainSpecificationsSuccess, loadProjectMetaDataList, loadProjectMetaDataListSuccess } from "./project-meta.actions";
 
 export interface ProjectMetaDataState {
     projects: Loadable<ProjectMetaData[]>;
     domainSpecifications: Loadable<DomainSpecification[]>;
-    createdProject: Creatable<Project>;
+    createdProject: Creatable<ProjectBase>;
 }
 
 

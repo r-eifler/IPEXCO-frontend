@@ -1,0 +1,53 @@
+<mat-card appearance="outlined">
+    <mat-card-header>
+      <mat-card-title>{{ plan()?.name }}</mat-card-title>
+      <mat-card-subtitle>
+        <app-label
+          [color]="plan()?.status | stepStatusColor"
+        >{{ plan()?.status | stepStatusName }}</app-label>
+      </mat-card-subtitle>
+    </mat-card-header>
+  
+    <mat-card-content>
+      <div class="content">
+        <div class="stats">
+          <mat-icon>explore</mat-icon>
+          <span class="property-label">Planner:</span>
+          <span class="property-value">{{ planner()?.name ?? '?'}}</span>
+
+          <mat-icon>timer</mat-icon>
+          <span class="property-label">Run Time:</span>
+          <span class="property-value">{{ plan()?.runTime ?? '?' }}</span>
+  
+          <mat-icon>attach_money</mat-icon>
+          <span class="property-label">Plan Length:</span>
+          <span class="property-value">{{ plan()?.actions?.length ?? '?'}}</span>
+        </div>
+  
+        <div class="utility">
+          <mat-icon>explore</mat-icon>
+          <!-- <div class="utility-value-container">
+            <span class="value" *isProject>{{ step() | stepValue : planProperties() | default : '-/-'}}</span>
+            <span class="value" *isDemo>{{ (step() | stepValue : planProperties() | default : '-') + '/' + maxOverallUtility() }}</span>
+            <span class="label">Utility</span>
+          </div> -->
+        </div>
+      </div>
+    </mat-card-content>
+  
+    <mat-card-actions>
+      <div class="action-container">
+        @if(! planComputationRunning()){
+          <a class="details" mat-stroked-button [routerLink]="[plan()?._id ]">Details</a>
+          }
+          @else{
+          <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+          <button mat-icon-button
+            matTooltip="Cancel plan computation of iteration step"
+            (click)="onCancel()"
+          ><mat-icon>cancel</mat-icon></button>
+          }
+      </div>
+    </mat-card-actions>
+  </mat-card>
+  

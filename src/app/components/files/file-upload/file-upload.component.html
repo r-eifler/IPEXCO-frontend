@@ -7,8 +7,10 @@
       hidden
       (change)="onUploadFileSelected()"
       #fileInput
-      type="file"
-      id="file{{ type }}"/>
-      <p>{{name}}</p>
+      type="file"/>
+    <p>{{name}}</p>
+    @if(valid()){
+      <mat-icon>check_circle</mat-icon>
+    }
 </div>
 

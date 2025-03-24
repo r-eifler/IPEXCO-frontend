@@ -2,7 +2,7 @@ import { inject, Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { catchError, switchMap } from "rxjs/operators";
 import { of } from "rxjs";
-import { DemoServicesService } from "../../services/planner.service";
+import { DemoServicesService } from "../../services/services.service";
 import { loadServices, loadServicesSuccess, loadServicesFailure } from "../demo.actions";
 
 
@@ -16,7 +16,7 @@ export class DemoLoadServicesEffect{
         ofType(loadServices),
         switchMap(() => this.service.get$().pipe(
             switchMap(services => [loadServicesSuccess({services})] ),
-            catchError(() => of(loadServicesFailure()))
+            catchError((e) => of(loadServicesFailure({err: e})))
         ))
     ));
 

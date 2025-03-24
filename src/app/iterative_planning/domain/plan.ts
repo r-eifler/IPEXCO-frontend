@@ -1,26 +1,30 @@
 
 import { sum } from "ramda";
-import { Action, PlanProperty } from "src/app/shared/domain/plan-property/plan-property";
-import { factEquals, PDDLAction, PDDLFact } from "src/app/shared/domain/planning-task";
+import { factEquals, PDDLAction, PDDLFact } from "src/app/shared/domain/PDDL_task";
+import { Action, ActionZ, PlanProperty } from "src/app/shared/domain/plan-property/plan-property";
+import { array, coerce, date, nativeEnum, object, string, infer as zinfer } from "zod";
 
 
 export enum PlanRunStatus {
-  pending,
-  running,
-  failed,
-  plan_found,
-  not_solvable,
-  canceled
+  PENDING = "PENDING",
+  RUNNING = "RUNNING",
+  SOLVED = "SOLVED",
+  UNSOLVABLE = "UNSOLVABLE",
+  NO_PLAN_FOUND = "NO_PLAN_FOUND",
+  CANCELED = "CANCELED",
+  FAILED = "FAILED",
 }
 
+export const PlanRunStatusZ = nativeEnum(PlanRunStatus);
 
-export interface Plan{
-  createdAt?: Date;
-  status: PlanRunStatus;
-  actions?: Action[];
-  satisfied_properties?: string[];
-  cost: number;
-}
+export const PlanZ = object({
+  createdAt: coerce.date(), 
+  status: PlanRunStatusZ,
+  actions: array(ActionZ).nullish(),
+  satisfied_properties: array(string()).optional(),
+});
+
+export type Plan = zinfer<typeof PlanZ>;
 
 export interface State {
   values: PDDLFact[]
@@ -41,8 +45,8 @@ export function nextState(state: State, action: PDDLAction): State {
 }
 
 
-export function computeUtility(plan: Plan, planProperties: Record<string, PlanProperty>): number {
-  if(!plan || !planProperties){
+export function computeUtility(plan: Plan, planProperties: Record<string, PlanProperty>) {
+  if(!plan || !planProperties || !plan.satisfied_properties){
     return undefined;
   }
   if(plan.satisfied_properties.some(ppId => !planProperties[ppId])){

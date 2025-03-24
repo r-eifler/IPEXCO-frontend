@@ -15,7 +15,7 @@ export class LoadProjectEffect{
         ofType(loadProject),
         switchMap(({id}) => this.service.getProject$(id).pipe(
             switchMap(project => [loadProjectSuccess({project})]),
-            catchError(() => of(loadProjectFailure()))
+            catchError((e) => of(loadProjectFailure({err: e})))
         ))
     ));
 

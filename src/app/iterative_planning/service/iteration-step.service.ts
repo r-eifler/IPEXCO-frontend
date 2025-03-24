@@ -1,10 +1,10 @@
+import { HttpClient, HttpParams } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { HttpClient, HttpParams } from "@angular/common/http";
+import { map } from "rxjs/operators";
 import { environment } from "src/environments/environment";
-import { map, tap } from "rxjs/operators";
-import { IHTTPData } from "src/app/shared/domain/http-data.interface";
-import { IterationStep } from "../domain/iteration_step";
+import { array, boolean, string } from "zod";
+import { IterationStep, IterationStepBase, IterationStepZ } from "../domain/iteration_step";
 
 
 @Injectable()
@@ -18,57 +18,32 @@ export class IterationStepService{
         let httpParams = new HttpParams();
         httpParams = httpParams.set('projectId', id);
         
-        return this.http.get<IHTTPData<IterationStep[]>>(this.BASE_URL,  { params: httpParams }).pipe(
-            map(({data}) => data),
-            map(steps => 
-                steps.map( step => (
-                {
-                    ... step,
-                    globalExplanation : step.globalExplanation ? {
-                        ...step.globalExplanation,
-                        MUGS: step.globalExplanation.MUGS ? JSON.parse(step.globalExplanation.MUGS as unknown as string) : undefined,
-                        MGCS: step.globalExplanation.MGCS ? JSON.parse(step.globalExplanation.MGCS as unknown as string) : undefined,
-                    } : undefined
-                }
-                ))
-            ),
+        return this.http.get<unknown>(this.BASE_URL,  { params: httpParams }).pipe(
+            map((data) => array(IterationStepZ).parse(data))
           )
-            
     }
 
-    // step?.plan ? {
-    //     ...step.plan, 
-    //     actions: JSON.parse(step.plan as unknown as string),
-    // } :
-
-    postIterationStep$(iterationStep: IterationStep): Observable<IterationStep> {
-
-        return this.http.post<IHTTPData<IterationStep>>(this.BASE_URL, {data: iterationStep}).pipe(
-            map(({data}) => data)
+    postIterationStep$(iterationStep: IterationStepBase): Observable<IterationStep> {
+        return this.http.post<unknown>(this.BASE_URL, iterationStep).pipe(
+            map((data) => IterationStepZ.parse(data))
         )
-
     }
 
     postCancelIterationStep$(iterationStepId: string): Observable<string> {
-        return this.http.post<IHTTPData<string>>(this.BASE_URL + 'cancel', {iterationStepId}).pipe(
-            map(({data}) => data)
+        return this.http.post<unknown>(this.BASE_URL + 'cancel', iterationStepId).pipe(
+            map((data) => string().parse(data))
         )
-
     }
 
     putIterationStep$(iterationStep: IterationStep): Observable<IterationStep> {
-
-        return this.http.put<IHTTPData<IterationStep>>(this.BASE_URL + iterationStep._id, {data: iterationStep}).pipe(
-            map(({data}) => data)
+        return this.http.put<unknown>(this.BASE_URL + iterationStep._id, iterationStep).pipe(
+            map((data) => IterationStepZ.parse(data))
         )
-
     }
 
     deleteIterationStep$(id: string): Observable<boolean> {
-
-        return this.http.delete<IHTTPData<boolean>>(this.BASE_URL + id).pipe(
-            map(({data}) => data)
+        return this.http.delete<unknown>(this.BASE_URL + id).pipe(
+            map((data) => boolean().parse(data))
         )
-
     }
 }

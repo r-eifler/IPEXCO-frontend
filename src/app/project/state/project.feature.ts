@@ -11,7 +11,6 @@ export const {
     name,
     reducer,
     selectProjectFeatureState,
-    selectDemo,
     selectDemoCreation,
     selectDemoProperties,
     selectDemos,

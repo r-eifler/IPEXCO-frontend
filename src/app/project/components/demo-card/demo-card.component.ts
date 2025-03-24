@@ -4,14 +4,14 @@ import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 
+import { DemoStatusColorPipe } from 'src/app/project/pipe/demo-status-color.pipe';
+import { DemoStatusNamePipe } from 'src/app/project/pipe/demo-status-name.pipe';
 import { LabelModule } from 'src/app/shared/components/label/label.module';
 import { PlanProperty } from '../../../shared/domain/plan-property/plan-property';
-import { Demo } from 'src/app/project/domain/demo';
-import { DemoStatusNamePipe } from 'src/app/project/pipe/demo-status-name.pipe';
-import { DemoStatusColorPipe } from 'src/app/project/pipe/demo-status-color.pipe';
+import { Demo } from 'src/app/shared/domain/demo';
 
 
 @Component({

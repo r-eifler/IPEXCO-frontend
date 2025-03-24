@@ -84,13 +84,13 @@
 				<app-page-section-title>Settings</app-page-section-title>
 				<app-page-section-content>
 					<app-settings 
-					[settings]="demo?.settings" 
-					[services]="[]"
-					[prompts]="[]"
-					[outputSchemas]="[]"
-					(update)="updateSettings($event)" 
-					[isDemo]="true">
-				</app-settings>
+						[settings]="demo?.settings" 
+						[services]="services$ | async"
+						[prompts]="prompts$ | async"
+						[outputSchemas]="outputSchemas$ | async"
+						(update)="updateSettings($event)" 
+						[isDemo]="true">
+					</app-settings>
 				</app-page-section-content>
 			</app-page-section>
 		</app-page-section-list> 

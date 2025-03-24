@@ -13,7 +13,7 @@ import { MatButtonModule } from "@angular/material/button";
 
 interface TableData extends UserStudyExecution {
   date: Date,
-  processingTime: Date
+  processingTime: Date | null
 }
 
 @Component({
@@ -32,7 +32,7 @@ interface TableData extends UserStudyExecution {
 })
 export class AcceptedTestPersonsComponent {
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
 
   
   store = inject(Store);
@@ -47,15 +47,20 @@ export class AcceptedTestPersonsComponent {
     )
   );
 
-  displayedParticipants: TableData[];
+  displayedParticipants: TableData[] = [];
 
   displayedColumns: string[] = ['user', 'date', 'processingTime', 'finished', 'payment', 'accepted'];
 
   constructor() {
     effect(() => {
+      if(this.paginator === undefined){
+        return;
+      }
       const index = this.paginator?.pageIndex;
       const size = this.paginator?.pageSize;
-      this.displayedParticipants =  this.participantsTableData() ? [...this.participantsTableData()].splice(index * size, size) : [];
+      const tableDate = this.participantsTableData();
+      if(tableDate !== undefined)
+        this.displayedParticipants =   [...tableDate].splice(index * size, size);
     })
   }
 
@@ -66,15 +71,26 @@ export class AcceptedTestPersonsComponent {
 
 
   onPage(event: PageEvent){
+    if(this.paginator === undefined){
+      return;
+    }
     const index = event.pageIndex;
     const size = event.pageSize;
-    this.displayedParticipants =  [...this.participantsTableData()].splice(index * size, size);
+    const tableDate = this.participantsTableData();
+    if(tableDate !== undefined)
+      this.displayedParticipants =  [...tableDate].splice(index * size, size);
   }
 
   announceSortChange(sortState: Sort){
-    const sorted = [...this.participantsTableData()].sort();
+    if(this.paginator === undefined){
+      return;
+    }
     const index = this.paginator.pageIndex;
     const size = this.paginator.pageSize;
-    this.displayedParticipants =  sorted ? sorted.splice(index * size, size) : [];
+    const tableDate = this.participantsTableData();
+    if(tableDate !== undefined){
+      const sorted = [...tableDate].sort();
+      this.displayedParticipants =  sorted.splice(index * size, size);
+    }
   }
 }

@@ -1,24 +1,17 @@
-import {
-  PlanningTask,
-  predicateToString,
-  FactToString,
-  PlanningModel,
-  PDDLFact,
-} from "src/app/shared/domain/planning-task";
-import { Component, OnInit, OnDestroy, inject } from "@angular/core";
-import { Subject, BehaviorSubject, Observable } from "rxjs";
-import { filter, map, tap } from "rxjs/operators";
-import { Store } from "@ngrx/store";
-import { selectProject, selectProjectPlanningTask } from "src/app/project/state/project.selector";
-import { MatListModule } from "@angular/material/list";
+
+import { AsyncPipe, NgFor } from "@angular/common";
+import { Component, inject } from "@angular/core";
 import { MatExpansionModule } from "@angular/material/expansion";
-import { AsyncPipe, NgFor, NgIf } from "@angular/common";
-import { CompleteActionComponent } from "../../components/complete-action/complete-action.component";
-import { PageModule } from "src/app/shared/components/page/page.module";
 import { MatIconModule } from "@angular/material/icon";
+import { MatListModule } from "@angular/material/list";
 import { RouterLink } from "@angular/router";
+import { Store } from "@ngrx/store";
+import { map } from "rxjs/operators";
+import { selectProject, selectProjectPlanningTask } from "src/app/project/state/project.selector";
+import { PageModule } from "src/app/shared/components/page/page.module";
 import { BreadcrumbModule } from "../../../shared/components/breadcrumb/breadcrumb.module";
-import { BreadcrumbItemComponent } from "../../../shared/components/breadcrumb/breadcrumb-item/breadcrumb-item.component";
+import { CompleteActionComponent } from "../../components/complete-action/complete-action.component";
+import { FactToString, predicateToString } from "src/app/shared/domain/PDDL_task";
 
 @Component({
     selector: "app-planning-task-view",

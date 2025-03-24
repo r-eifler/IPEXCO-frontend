@@ -1,21 +1,32 @@
-export interface Action {
-  _id?: string;
-  name: string;
-  params: string[];
-}
+import { array, infer as zinfer, nativeEnum, object, string, boolean, number, nullable } from "zod";
+
+export const ActionZ = object({
+  name: string(),
+  params: array(string()),
+});
+
+export type Action = zinfer<typeof ActionZ>;
+
+export const ActionSetZ = Object({
+  _id: string(),
+  name: string(),
+  actions: array(ActionZ),
+});
+
+export type ActionSet = zinfer<typeof ActionSetZ>;
 
 export function toAction(as: string): Action {
   const [name, ...params] = as.split(" ");
   return { name, params };
 }
 
-export interface ActionSet {
-  _id?: string;
-  name: string;
-  actions: Action[];
-}
-
-export function equalActionSets(a1: ActionSet[], a2: ActionSet[]): boolean {
+export function equalActionSets(a1: ActionSet[] | undefined, a2: ActionSet[] | undefined): boolean {
+  if(a1 === undefined && a2 == undefined){
+    return true;
+  }
+  if(a1 === undefined || a2 == undefined){
+    return false;
+  }
   // TODO
   return false;
 }
@@ -24,26 +35,48 @@ export enum GoalType {
   goalFact = "G",
   LTL = "LTL",
   AS = "AS",
+  DOMAIN_DEPENDENT = "DOMAIN_DEPENDENT",
 }
 
-export interface PlanProperty {
-  _id?: string;
-  name: string;
-  type: GoalType;
-  naturalLanguage?: string;
-  formula: string;
-  actionSets?: ActionSet[]; //LtL over actions : unsupported yet for LLM
-  naturalLanguageDescription?: string;
-  project: string;
-  isUsed: boolean;
-  globalHardGoal: boolean;
-  utility: number;
-  color: string;
-  icon: string;
-  class: string;
-}
+export const GoalTypeZ = nativeEnum(GoalType);
 
-export function equalPlanProperties(p1: PlanProperty, p2: PlanProperty): boolean {
+export const PlanPropertyDefinitionZ  = object({
+  name: string(),
+  parameters: array(string()),
+});
+
+export type PlanPropertyDefinition = zinfer<typeof PlanPropertyDefinitionZ>;
+
+export const PlanPropertyBaseZ = object({
+    name: string(),
+    definition: nullable(PlanPropertyDefinitionZ),
+    type: GoalTypeZ,
+    formula: string().nullable(),
+    actionSets: array(ActionSetZ).optional(),
+    naturalLanguageDescription: string(),
+    isUsed: boolean(),
+    globalHardGoal: boolean(),
+    utility: number(),
+    color: string(),
+    icon: string(),
+    class: string()
+});
+
+export type PlanPropertyBase = zinfer<typeof PlanPropertyBaseZ>;
+
+export const PlanPropertyOfProjectZ = PlanPropertyBaseZ.merge(object({
+  project: string()
+}));
+
+export type PlanPropertyOfProject = zinfer<typeof PlanPropertyOfProjectZ>;
+
+export const PlanPropertyZ = PlanPropertyOfProjectZ.merge(object({
+  _id: string(),
+}));
+
+export type PlanProperty = zinfer<typeof PlanPropertyZ>;
+
+export function equalPlanProperties(p1: PlanPropertyBase, p2: PlanPropertyBase): boolean {
   const res =  p1.type == p2.type && p1.formula == p2.formula &&
     equalActionSets(p1.actionSets, p2.actionSets)
   return res

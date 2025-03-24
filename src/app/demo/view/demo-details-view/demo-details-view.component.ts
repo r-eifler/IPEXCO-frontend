@@ -16,7 +16,9 @@ import { PlanPropertyBadgeComponent } from 'src/app/shared/components/plan-prope
 import { PlanPropertyUpdatePanelComponent } from 'src/app/shared/components/plan-property-update-panel/plan-property-update-panel.component';
 import { PlanProperty } from 'src/app/shared/domain/plan-property/plan-property';
 import { loadOutputSchemas, loadPrompts, loadServices, updateDemo, updatePlanProperty } from '../../state/demo.actions';
-import { selectDemo, selectExplainer, selectOutputSchemas, selectPlanners, selectPlanPropertiesListOfDemo, selectPlanPropertiesOfDemo, selectPrompts, selectServices } from '../../state/demo.selector';
+import { selectDemo, selectDomainSpecification, selectExplainer, selectOutputSchemas, selectPlanners, selectPlanPropertiesListOfDemo, selectPlanPropertiesOfDemo, selectPrompts, selectServices } from '../../state/demo.selector';
+import { filterNotNullOrUndefined } from 'src/app/shared/common/check_null_undefined';
+import { DemoBase } from 'src/app/shared/domain/demo';
 
 @Component({
     selector: 'app-demo-details-view',
@@ -44,22 +46,24 @@ export class DemoDetailsViewComponent {
   route = inject(ActivatedRoute);
   dialog = inject(MatDialog);
 
-  demo$ = this.store.select(selectDemo)
-  planProperties$ = this.store.select(selectPlanPropertiesOfDemo)
-  planPropertiesList$ = this.store.select(selectPlanPropertiesListOfDemo)
+  demo$ = this.store.select(selectDemo);
+  domainSpecification$ = this.store.select(selectDomainSpecification);
+  planProperties$ = this.store.select(selectPlanPropertiesOfDemo);
+  planPropertiesList$ = this.store.select(selectPlanPropertiesListOfDemo);
   services$ = this.store.select(selectServices);
   explainer$ = this.store.select(selectExplainer);
   prompts$ = this.store.select(selectPrompts);
   outputSchemas$ = this.store.select(selectOutputSchemas);
 
-  MUGS$: Observable<string[][]> = this.demo$.pipe(map((demo) => demo?.globalExplanation?.MUGS));
-  MGCS$: Observable<string[][]> = this.demo$.pipe(map((demo) => demo?.globalExplanation?.MGCS));
+  MUGS$ = this.demo$.pipe(map((demo) => demo?.globalExplanation?.MUGS));
+  MGCS$ = this.demo$.pipe(map((demo) => demo?.globalExplanation?.MGCS));
 
-  downloadData$ = combineLatest([this.demo$,this.planProperties$]).pipe(
-    filter(([d,pp]) => !!d && !!pp),
-    map(([d,pp]) => window.URL.createObjectURL(new Blob([JSON.stringify({
+  downloadData$ = combineLatest([this.demo$,this.planProperties$, this.domainSpecification$]).pipe(
+    filter(([d,pp,spec]) => !!d && !!pp && !!spec),
+    map(([d,pp, spec]) => window.URL.createObjectURL(new Blob([JSON.stringify({
       demo: d,
-      planProperties: pp
+      planProperties: pp,
+      domainSpecification: spec,
     })], { type: "text/json" }))))
 
 
@@ -70,16 +74,22 @@ export class DemoDetailsViewComponent {
   }
 
   onRunIterPlanning(){
-    this.demo$.pipe(take(1)).subscribe(demo => {
+    this.demo$.pipe(
+      take(1),
+      filterNotNullOrUndefined(),
+    ).subscribe(demo => {
       this.router.navigate(['/iterative-planning', demo._id]);
     })
   }
 
   updateSettings(settings: GeneralSettings){
-    this.demo$.pipe(take(1)).subscribe(demo => {
-      let newDemo = {...demo};
+    this.demo$.pipe(
+      take(1),
+      filterNotNullOrUndefined(),
+    ).subscribe(demo => {
+      let newDemo: DemoBase = {...demo};
       newDemo.settings = settings;
-      this.store.dispatch(updateDemo({demo: newDemo}))
+      this.store.dispatch(updateDemo({id: demo._id, demo: newDemo}))
     })
   }
 

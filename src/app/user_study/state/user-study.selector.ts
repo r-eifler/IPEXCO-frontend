@@ -10,7 +10,7 @@ export const selectUserStudies = createSelector(selectState, (state) => state.us
 
 export const selectUserStudyParticipants = createSelector(selectState, (state) => state.participants)
 export const selectUserStudyParticipantsOfStudy = createSelector(selectState, (state) =>
-    state.userStudy !== undefined ? state.participants?.[state.userStudy.data?._id] :  null)
+    state.userStudy !== undefined  && state.userStudy.data?._id !== undefined ? state.participants?.[state.userStudy.data?._id] :  null)
 export const selectPlanPropertiesOfParticipantsById = memoizeWith(
     (studyId: string) => studyId,
     (studyId: string) => createSelector(selectUserStudyParticipants, (participants) => participants[studyId]),

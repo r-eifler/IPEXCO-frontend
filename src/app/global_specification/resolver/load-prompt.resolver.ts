@@ -7,5 +7,6 @@ export const loadPromptResolver: ResolveFn<void> = (snapshot) => {
 
   const id = snapshot.paramMap.get('promptId');
 
-  inject(Store).dispatch(loadPrompt({ id }))
+  if(id !== null)
+    inject(Store).dispatch(loadPrompt({ id }))
 }

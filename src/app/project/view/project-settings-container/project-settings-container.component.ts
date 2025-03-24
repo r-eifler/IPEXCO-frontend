@@ -50,6 +50,9 @@ export class ProjectSettingsContainerComponent implements OnInit {
   onSaveSetting(settings: GeneralSettings): void {
     this.project$.pipe(take(1)).subscribe(
       project => {
+        if(project === undefined){
+          return
+        }
         let newProject: Project = {
           ...project,
         }

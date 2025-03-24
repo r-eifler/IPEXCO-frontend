@@ -52,9 +52,9 @@ export class DomainSpecEditorComponent {
   domainSpec$ = this.store.select(selectDomainSpecification);
 
   form = this.fb.group({
-    name: this.fb.control<string>(null, Validators.required),
-    encoding: this.fb.control<Encoding>(null, Validators.required),
-    description: this.fb.control<string>(null),
+    name: this.fb.control<string | null>(null, Validators.required),
+    encoding: this.fb.control<Encoding | null>(null, Validators.required),
+    description: this.fb.control<string | null>(null),
     templates: this.fb.control<string>("[]", [Validators.required, jsonValidator]),
   })
 
@@ -72,12 +72,15 @@ export class DomainSpecEditorComponent {
 
   onSave() {
     this.domainSpec$.pipe(take(1)).subscribe(spec => {
+      if(spec === undefined){
+        return;
+      }
       const newDomainSpec: DomainSpecification = {
         ...spec,
-        name: this.form.controls.name.value,
-        encoding: this.form.controls.encoding.value,
-        planPropertyTemplates: JSON.parse(this.form.controls.templates.value),
-        description: this.form.controls.description.value
+        name: this.form.controls.name.value ?? 'TODO',
+        encoding: this.form.controls.encoding.value ?? Encoding.NONE,
+        planPropertyTemplates: this.form.controls.templates.value !==  null ? JSON.parse(this.form.controls.templates.value) : [],
+        description: this.form.controls.description.value ?? 'TODO',
       }
       this.store.dispatch(updateDomainSpecification({domainSpecification: newDomainSpec}))
     })

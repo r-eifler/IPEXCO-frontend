@@ -1,9 +1,9 @@
 import { inject, Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { catchError, map, switchMap } from "rxjs/operators";
 import { of } from "rxjs";
+import { catchError, switchMap } from "rxjs/operators";
 import { DemoService } from "../../services/demo.service";
-import { loadDemo, loadDemoFailure, loadDemoPlanProperties, loadDemoSuccess } from "../demo.actions";
+import { loadDemo, loadDemoFailure, loadDemoPlanProperties, loadDemoSuccess, loadDomainSpecification } from "../demo.actions";
 
 @Injectable()
 export class LoadDemoEffect{
@@ -14,8 +14,8 @@ export class LoadDemoEffect{
     public loadDemo$ = createEffect(() => this.actions$.pipe(
         ofType(loadDemo),
         switchMap(({id}) => this.service.getDemo$(id).pipe(
-            switchMap(demo => [loadDemoSuccess({demo}), loadDemoPlanProperties({id})]),
-            catchError(() => of(loadDemoFailure()))
+            switchMap(demo => [loadDemoSuccess({demo}), loadDemoPlanProperties({id}), loadDomainSpecification({id: demo.domain})]),
+            catchError((e) => of(loadDemoFailure({err: e})))
         ))
     ))
 }

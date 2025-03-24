@@ -12,7 +12,7 @@ import { MatFormFieldModule, MatLabel } from "@angular/material/form-field";
 import { MatOptionModule } from "@angular/material/core";
 import { Store } from "@ngrx/store";
 import { selectUserStudies } from "../../state/user-study.selector";
-import { ParticipantDistribution, UserStudySelection } from "../../domain/participant-distribution";
+import { ParticipantDistribution, ParticipantDistributionBase, UserStudySelection } from "../../domain/participant-distribution";
 import { isNonEmptyValidator } from "src/app/validators/non-empty.validator";
 import { PageModule } from "src/app/shared/components/page/page.module";
 import { BreadcrumbModule } from "src/app/shared/components/breadcrumb/breadcrumb.module";
@@ -55,11 +55,11 @@ export class ParticipantDistributionCreatorComponent {
   userStudies$ = this.store.select(selectUserStudies)
 
   form = this.fb.group({
-    name: this.fb.control<string>(null, [Validators.required]),
+    name: this.fb.control<string | null>(null, [Validators.required]),
     description: this.fb.control<string>('TODO', [Validators.required]),
     userStudies: this.fb.array<FormGroup<{
-      userStudy: FormControl<string>,
-      numberParticipants: FormControl<number>,
+      userStudy: FormControl<string | null>,
+      numberParticipants: FormControl<number | null>,
     }>>([], isNonEmptyValidator)
   });
 
@@ -70,16 +70,21 @@ export class ParticipantDistributionCreatorComponent {
 
   onAddStudy(){
     this.form.controls.userStudies.push(this.fb.group({
-      userStudy: this.fb.control<string>(null, [Validators.required]),
-      numberParticipants: this.fb.control<number>(null, [Validators.required]),
+      userStudy: this.fb.control<string | null>(null, [Validators.required]),
+      numberParticipants: this.fb.control<number| null>(null, [Validators.required]),
     }))
   }
 
   save(){
-    const distribution: ParticipantDistribution ={
-      name: this.form.controls.name.value,
-      description: this.form.controls.description.value,
-      userStudies: this.form.controls.userStudies.controls.map(c => c.value)
+    const distribution: ParticipantDistributionBase ={
+      name: this.form.controls.name.value as string ?? 'TODO', 
+      description: this.form.controls.description.value as string ?? 'TODO',
+      userStudies: this.form.controls.userStudies.controls.
+        filter(c => c.controls.userStudy !== null && c.controls.numberParticipants !== null).
+        map(c => ({
+          userStudy: c.controls.userStudy.value as string,
+          numberParticipants: c.controls.numberParticipants.value as number,
+        }))
     }
 
     this.store.dispatch(createParticipantDistribution({distribution}));

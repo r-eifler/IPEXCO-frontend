@@ -46,17 +46,17 @@ export class OutputSchemaEditorComponent {
 
   domainName$ = combineLatest([this.schema$, this.domains$]).pipe(
     filter(([schema, domains]) => !!schema && !!domains),
-    map(([schema, domains]) => schema.domain ? domains.find(d => d._id == schema.domain).name : null)
+    map(([schema, domains]) => schema?.domain ? domains?.find(d => d._id == schema.domain)?.name : null)
   )
 
   explainerName$ = combineLatest([this.schema$, this.explainer$]).pipe(
     filter(([schema, explainers]) => !!schema && !!explainers),
-    map(([schema, explainers]) => schema.explainer ? explainers.find(e => e._id == schema.explainer) : null)
+    map(([schema, explainers]) => schema?.explainer ? explainers?.find(e => e._id == schema.explainer) : null)
   )
 
   form = this.fb.group({
-    name: this.fb.control<string>(null, Validators.required),
-    text: this.fb.control<string>(null, jsonValidator),
+    name: this.fb.control<string | null>(null, Validators.required),
+    text: this.fb.control<string | null>(null, jsonValidator),
   })
 
   constructor() {
@@ -75,10 +75,13 @@ export class OutputSchemaEditorComponent {
   
   onSave() {
     this.schema$.pipe(take(1)).subscribe(schema => {
+      if(schema === undefined){
+        return;
+      }
       const newSchema: OutputSchema = {
         ...schema,
-        name: this.form.controls.name.value,
-        text: this.form.controls.text.value,
+        name: this.form.controls.name.value ?? 'TODO',
+        text: this.form.controls.text.value ?? 'TODO',
       }
       this.store.dispatch(updateOutputSchema({outputSchema: newSchema}))
     })
