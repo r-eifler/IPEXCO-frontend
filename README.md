@@ -82,7 +82,7 @@ container, as encoding `PPDL_CLASSIC`.
 as a service. As type select `EXPLAINER` as 
 URL `http:localhost:3335` (If you have not changed any of the default settings),
 and as API Key what you defined in the *env* file of the explainer docker 
-container, as encoding `PPDL_CLASSIC`.
+container, as encoding `PDDL_CLASSIC`.
 
 **Create a Project**
 
@@ -156,44 +156,47 @@ an overview of all MUGS/MCGS and the settings of the demo.
 **Share Demos** In the top right corner of the demos details view, you can download
 the demo as a JSON file. This allows you to share demos between instances of 
 IPEXCO. To upload the demo go to the main demos menu in the left navigation panel 
-and click *Upload Demo*. 
+and click *Upload Demo*. Uploaded demos as not associated with a project and 
+are only accessible via the main demos menu.
 
 
 ### Goal Templates
 
-**TODO**
+Goal template define mappings from a natural language definition of a goal/property
+to an LTL formula. Using such templates facilitates the definition of properties 
+as the user only needs to select objects to instantiate a goal instead of 
+writing a low level formal definition.
+
+A goal templates are defined in JSON. Below you can find an example for a 
+goal template for the blocksworld domain:
+
+```
+	{
+		"class": "Block Position",
+		"color": "#ed736b",
+		"icon": "arrow_downward",
+		"type": "G",
+		"variables": {
+			"$B1": ["block"],
+			"$B2": ["block"]
+		},
+		"nameTemplate": "$B1 on $B2",
+		"definitionTemplate": {
+			"name": "on",
+			"parameters": ["$B1","$B2"]
+		},
+		"formulaTemplate": "on($B1,$B2)",
+		"actionSetsTemplates": [],
+		"sentenceTemplate": "Block $B1 is on block $B2 .",
+		"initVariableConstraints": [],
+		"goalVariableConstraints": []
+	},
+```
+- `class`: Is a string used to group the templates in the interface.
+- `color`
+
 
 ### LLM Prompts
 
 **TODO**
-
-### Beluga Demonstrator
-
-To compute a plan for a domain dependent Beluga instance, perform the following 
-steps
-
-**Create Beluga domain and register planner**:
-
-1. Go to the Menu in the top left corner and then to Specifications.
-1. Add a Beluga Domain. Give it a name containing *Beluga* and select as encoding 
-    `DOMAIN_DEPENDENT`.
-1. Add the simple Beluga planner as a service. As type select `PLANNER` as 
-URL `http:localhost:3336` (If you have not changed any of the default settings),
-as API Key what you defined in the *env* file of the docker container, as 
-encoding `DOMAIN_DEPENDENT` and as domain the Beluga domain you just created.
-
-**Create a *Project* and compute the first plan**:
-
-1. Now go back to the main menu (top left corner) and select Projects.
-1. Create a new project and select as domain the just created Beluga domain.
-In the next step you can upload a Beluga JSON file from the competition.
-An example file is given in `setup/example_data/beluga/json`.
-1. Click on the right arrow of the new created project.
-1. To test and compare different planner *start* the *Planning* feature.
-1. Create a new plan. You should be able to select the simple Beluga planner 
-you registered in the beginning.
-1. If everything works you should get a plan within a few seconds for the included 
-sample problem.
-1. The *Details* of a plan gives you for now only a list of the action names.
-
 
