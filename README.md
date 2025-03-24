@@ -193,8 +193,62 @@ goal template for the blocksworld domain:
 	},
 ```
 - `class`: Is a string used to group the templates in the interface.
-- `color`
+- `color`: Color to group and identify properties. Currently used for the background 
+    color of the property icons.
+- `icon`: Icon used to identify properties. Supported icons: [Material Icons](https://fonts.google.com/icons).
+- `type`: Supported types `G`, `LTL`
+    - `G`: simple PDDL goal fact, must be satisfied in the last state of the plan. 
+        `formulaTemplate` must be single fact.
+    - `LTL`: finite LTL property. `formulaTemplate` must be an LTLf formula over 
+        facts or action set variables. 
+- `variables`: map from variable name to list of allow types. Variable names 
+    must start with **$**.
+- `nameTemplate`: template for the name of the property. This name is used to 
+    reference the goal in the interface. It should be short but pertinent and unique.
+- `definitionTemplate`: for domain dependent planners/explainers the *definition* field
+    can be used as a more abstract option of defining a property. 
+    It consists of a name and a list of parameters. 
+- `formulaTemplate` template for the formal definition of the goal/property
+    - `G`: fact of the PDDL planning task
+    - `LTL`: LTLf formula over PDDL facts or action set variables 
+        **Attention**: must be in prefix notation
+- `actionSetsTemplates`: A set of action set templates which can be used to 
+    define LTL formulas over sets of actions. For the definition of an action
+    template see [Action Set Template](#action-set-template).
+-  `sentenceTemplate`: The sentence template is used to generate a more detailed 
+    description of the property. 
+- `initVariableConstraints`: a list of facts that must be satisfied in the initial
+    state of the PDDL task for a valid instantiation of the template. 
+- `goalVariableConstraints`: a list of facts that must be satisfied in the original 
+    goal specification of the PDDL task for a valid instantiation of the template.
 
+##### Action Set Template
+
+An action set template consist of a name and a list of action templates: 
+
+```
+{
+    name: string
+    actionTemplates: string[]
+}
+```
+
+An action template is a string of the form: 
+
+```
+action_name parameters_0 parameters_1 ... parameters_n
+```
+
+where `parameter_i` can be
+
+- a variable define din `variables`
+- an object from the PDDL planning task
+- `*` (wildcard) which means that any object matches
+
+
+The name can be used as variable in the definition of LTLf properties. 
+The variable is `true` is a state `s` if one of the actions in the actions set 
+was applied to reach state `s`.
 
 ### LLM Prompts
 
