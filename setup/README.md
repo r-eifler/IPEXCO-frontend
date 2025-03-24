@@ -1,13 +1,8 @@
-# Setup and Run full System
-
-## Beluga Test Setup
-
-The Beluga test setup only includes a domain dependent planner for the competition
-JSON encoding.
+# Back-End Docker Setup
 
 ## Docker
 
-`beluga_test` contains a docker compose and two environments. 
+`backend_end_services` contains a docker compose and four environments. 
 You must define the following parameters:
 
 `docker-compose.yml`:
@@ -23,18 +18,19 @@ database to store the uploaded data.
 - `SERVICE_KEY`: a random string that is used to authenticate any registered 
     services, e.g. planner 
 
-**Attention**: `SERVICE_KEY` in ``backend.env` and `planner.env` must match.
+**Attention**: `SERVICE_KEY` in ``backend.env` and the service environments must match.
 
 
-`planner.env`:
+`planner.env`/`explainer.env`/`property_checker.ts`:
 
 - `API_KEY`: a random string that is used to authenticate a request from the 
     back-end to a service
 - `SERVICE_KEY`: a random string that is used to authenticate any registered 
-    services, e.g. planner 
+    services, e.g. planner
+- `MONGO_DB`: a unique name for the database used by the job scheduler of the service
 
 **Attention**: If you register a new service in the web interface, then 
-requested API Key must and the `API_KEY` defined in the service environment 
+requested API Key and the `API_KEY` defined in the service environment 
 must match.
 
 ## Setup on MacOS
@@ -44,13 +40,17 @@ On MacOS network mode `host` is not supported. Therefore, you need a few changes
 1. Remove all the `network_mode: "host"` lines in the `docker-compose.yml` file.
 2. In every `.env` file change the `MONGO_DB` value to `MONGO_DB=mongodb://mongo:27017/<whatever_you_want>`.
 
+
 #### Docker images
 
-The docker images for the back-end and the Database are available on DockerHub.
+The docker images are available on [DockerHub](https://hub.docker.com/repositories/eifler).
 
-The image of the *simple Beluga Planner* you have to build. 
-See [repository](https://gitlab.aniti.fr/tuples/use-cases/beluga/simple-beluga-planner-demonstrator-service#)
+If you want to build the docker images yourself, please check out the 
+READMEs in the following repositories:
 
+- [Planner](https://github.com/r-eifler/planner-service)
+- [Property Checker](https://github.com/r-eifler/property_checker_service)
+- [Explainer](https://github.com/r-eifler/explainer-service)
 
 #### Start Docker
 
@@ -58,6 +58,6 @@ To run all containers together run:
 
     docker compose up
 
-in the folder `beluga_test`
+
 
 
