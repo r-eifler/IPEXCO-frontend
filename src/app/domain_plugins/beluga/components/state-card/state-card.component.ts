@@ -6,6 +6,8 @@ import { BelugaProblem } from '../../domain/beluga_problem';
 import { TrailerComponent } from '../trailer/trailer.component';
 import { HangarComponent } from '../hangar/hangar.component';
 import { BelugaFlightComponent } from '../beluga-flight/beluga-flight.component';
+import { RackComponent } from '../rack/rack.component';
+import { ProductionLineComponent } from '../production-line/production-line.component';
 
 @Component({
   selector: 'app-state-card',
@@ -14,7 +16,9 @@ import { BelugaFlightComponent } from '../beluga-flight/beluga-flight.component'
     JigComponent,
     TrailerComponent,
     HangarComponent,
-    BelugaFlightComponent
+    BelugaFlightComponent,
+    RackComponent,
+    ProductionLineComponent,
   ],
   templateUrl: './state-card.component.html',
   styleUrl: './state-card.component.scss'
@@ -26,17 +30,17 @@ export class StateCardComponent {
 
   constructor(){
     effect(() => console.log(this.state()))
-    effect(() => console.log(this.jigTypes()))
+    effect(() => console.log(this.outgoingSchedule()))
   }
 
   jigTypes = computed(() => this.model()?.jig_types)
+  jigs = computed(() => this.model()?.jigs)
 
   incoming = computed(() => {
     const state = this.state();
     if(state === undefined){
       return []
     }
-    console.log(state.incoming)
     return state.incoming.map(j => this.model()?.jigs[j]);
   })
 
@@ -46,6 +50,14 @@ export class StateCardComponent {
       return []
     }
     return state.outgoing.map(j => this.model()?.jigs[j]);
+  })
+
+  outgoingSchedule = computed(() => {
+    const state = this.state();
+    if(state === undefined){
+      return []
+    }
+    return this.model()?.flights[state.flightIndex].outgoing;
   })
   
 
@@ -76,7 +88,7 @@ export class StateCardComponent {
     if(state === undefined){
       return []
     }
-    return Object.values(state.trailers_beluga).map(j => j === null ? null : this.model()?.jigs[j]);
+    return Object.values(state.trailersBeluga).map(j => j === null ? null : this.model()?.jigs[j]);
   })
 
   trailersFactory = computed(() => {
@@ -84,6 +96,14 @@ export class StateCardComponent {
     if(state === undefined){
       return []
     }
-    return Object.values(state.trailers_factory).map(j => j === null ? null : this.model()?.jigs[j]);
+    return Object.values(state.trailersFactory).map(j => j === null ? null : this.model()?.jigs[j]);
+  })
+
+  productionLines = computed(() => {
+    const state = this.state();
+    if(state === undefined){
+      return []
+    }
+    return Object.values(state.productionLines);
   })
 }

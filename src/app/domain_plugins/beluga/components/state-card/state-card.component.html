@@ -11,6 +11,7 @@
             [jigs]="outgoing()"
             [jigTypes]="jigTypes()"
             [incoming]="false"
+            [schedule]="outgoingSchedule()"
         ></app-beluga-flight>
     </div>
     <div class="trailers">
@@ -24,11 +25,8 @@
     </div>
     <div class="racks">
         @for(rack of racks(); track rack){
-            <div class="rack" [style.width]="(rack.size * 15) + 'px'">
-                @for(jig of rack.jigs; track jig){
-                    <app-jig [jig]="jig" [jigType]="jigTypes()?.[jig?.type]"></app-jig>
-                }
-            </div>
+            <app-rack [rack]="rack" [jigTypes]="jigTypes()">
+            </app-rack>
         }
     </div>
     <div class="trailers">
@@ -47,6 +45,11 @@
                     <app-jig [jig]="jig"  [jigType]="jigTypes()?.[jig?.type]"></app-jig>
                 }
             </app-hangar>
+        }
+    </div>
+    <div class="hangars">
+        @for(pl of productionLines(); track pl){
+            <app-production-line [line]="pl"></app-production-line>
         }
     </div>
 </div>

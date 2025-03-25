@@ -9,5 +9,11 @@
             }
         </div>
     </div>
+    <div class="info-container">
+        @if(!incoming()){
+            <span class="font-highlight">{{ outgoingType() }}</span>
+            <span>{{ numOutgoingJigs() }}</span>
+        }
+    </div>
 </div>
 

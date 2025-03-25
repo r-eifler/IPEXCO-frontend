@@ -162,21 +162,27 @@ export class PlanComparisonComponent {
   }
 
   onForward(){
-    combineLatest([this.selectedActionIndexRef$,this.referenceActions$]).pipe(
+    this.referenceActions$.pipe(
       take(1)
-    ).subscribe(([currentIndex, actions]) => 
-      this.selectedActionIndexRef$.next( currentIndex === null ? 0 : Math.min(currentIndex + 1, actions?.length ?? 0))
+    ).subscribe((actions) => 
+      this.selectedActionIndexRef$.next( this.selectedActionIndexRef$.value === null ? 
+			0 : Math.min(this.selectedActionIndexRef$.value + 1, actions?.length ?? 0))
     )
 
-    combineLatest([this.selectedActionIndexComp$,this.comparisonActions$]).pipe(
-      take(1)
-    ).subscribe(([currentIndex, actions]) => 
-      this.selectedActionIndexComp$.next( currentIndex === null ? 0 : Math.min(currentIndex + 1, actions?.length ?? 0))
-    )
+    this.comparisonActions$.pipe(
+		take(1)
+	  ).subscribe((actions) => 
+		this.selectedActionIndexComp$.next( this.selectedActionIndexComp$.value === null ? 
+			  0 : Math.min(this.selectedActionIndexComp$.value + 1, actions?.length ?? 0))
+	  )
   }
 
   onBack(){
+    this.selectedActionIndexRef$.next( this.selectedActionIndexRef$.value === null ? 
+        0 : Math.max(this.selectedActionIndexRef$.value - 1, -1))
 
+    this.selectedActionIndexComp$.next( this.selectedActionIndexComp$.value === null ? 
+      0 : Math.max(this.selectedActionIndexComp$.value - 1, -1))
   }
 
 }
