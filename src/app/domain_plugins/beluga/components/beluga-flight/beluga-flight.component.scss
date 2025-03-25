@@ -25,11 +25,11 @@
     align-items: center;
 
     overflow-x: scroll;
+    direction: rtl;
 }
 
 .slider {
     display: flex;
-    flex-direction: row-reverse;
     gap: var(--spacing-050);
 }
 

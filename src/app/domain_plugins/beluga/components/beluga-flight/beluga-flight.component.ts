@@ -22,7 +22,6 @@ export class BelugaFlightComponent {
 
   outgoingType = computed(() => {
     const schedule = this.schedule()
-    console.log(schedule);
     if(schedule === undefined){
       return 'none';
     }
@@ -31,7 +30,6 @@ export class BelugaFlightComponent {
 
   numOutgoingJigs = computed(() => {
     const schedule = this.schedule()
-    console.log(schedule);
     if(schedule === undefined){
       return '0';
     }

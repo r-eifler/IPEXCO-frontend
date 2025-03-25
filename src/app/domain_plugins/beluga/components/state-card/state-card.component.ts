@@ -30,18 +30,17 @@ export class StateCardComponent {
 
   constructor(){
     effect(() => console.log(this.state()))
-    effect(() => console.log(this.outgoingSchedule()))
   }
 
   jigTypes = computed(() => this.model()?.jig_types)
-  jigs = computed(() => this.model()?.jigs)
+  jigs = computed(() => this.state()?.jigs)
 
   incoming = computed(() => {
     const state = this.state();
     if(state === undefined){
       return []
     }
-    return state.incoming.map(j => this.model()?.jigs[j]);
+    return state.incoming.map(j => this.jigs()?.[j]);
   })
 
   outgoing = computed(() => {
@@ -49,7 +48,7 @@ export class StateCardComponent {
     if(state === undefined){
       return []
     }
-    return state.outgoing.map(j => this.model()?.jigs[j]);
+    return state.outgoing.map(j => this.jigs()?.[j]);
   })
 
   outgoingSchedule = computed(() => {
@@ -68,7 +67,7 @@ export class StateCardComponent {
     }
     return Object.values(state.racks).map((r,index) => 
       ({
-        jigs: r.map(j => this.model()?.jigs[j]),
+        jigs: r.map(j => this.jigs()?.[j]),
         name: this.model()?.racks[index].name,
         size: this.model()?.racks[index].size,
       })
@@ -80,7 +79,7 @@ export class StateCardComponent {
     if(state === undefined){
       return []
     }
-    return Object.values(state.hangars).map(j => j === null ? null : this.model()?.jigs[j]);
+    return Object.values(state.hangars).map(j => j === null ? null : this.jigs()?.[j]);
   })
 
   trailersBeluga = computed(() => {
@@ -88,7 +87,7 @@ export class StateCardComponent {
     if(state === undefined){
       return []
     }
-    return Object.values(state.trailersBeluga).map(j => j === null ? null : this.model()?.jigs[j]);
+    return Object.values(state.trailersBeluga).map(j => j === null ? null : this.jigs()?.[j]);
   })
 
   trailersFactory = computed(() => {
@@ -96,7 +95,7 @@ export class StateCardComponent {
     if(state === undefined){
       return []
     }
-    return Object.values(state.trailersFactory).map(j => j === null ? null : this.model()?.jigs[j]);
+    return Object.values(state.trailersFactory).map(j => j === null ? null : this.jigs()?.[j]);
   })
 
   productionLines = computed(() => {

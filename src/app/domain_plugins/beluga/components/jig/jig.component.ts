@@ -12,23 +12,21 @@ import { Jig, JigType } from '../../domain/beluga_problem';
 })
 export class JigComponent {
 
-  isOpen = false;
-
   jig = input.required<Jig>()
   jigType = input.required<JigType>()
 
+  unitSize = input<boolean>(false);
+
   name = computed(() => this.jig()?.name.replace('jig',''))
 
-  size = computed(() => this.jig()?.empty ? this.jigType()?.size_empty : this.jigType()?.size_loaded)
+  jigSize = computed(() => this.jigType()?.size_empty)
+  partSize = computed(() => this.jigType()?.size_loaded)
+
+  loaded = computed(() => ! this.jig()?.empty)
 
   tooltip = computed(() => 
     "status: " + (this.jig()?.empty ? 'empty' : 'loaded') +
     ' size: ' + (this.jig()?.empty ? this.jigType()?.size_empty : this.jigType()?.size_loaded) +
     ' type: ' + this.jig()?.type
   )
-
-  showOverlay(status: boolean){
-    this.isOpen = status
-  }
-
 }

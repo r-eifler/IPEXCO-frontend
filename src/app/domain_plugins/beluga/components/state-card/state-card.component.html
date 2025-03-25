@@ -18,7 +18,7 @@
         @for(jig of trailersBeluga(); track jig){
             <app-trailer>
                 @if(jig !== null){
-                <app-jig [jig]="jig"  [jigType]="jigTypes()?.[jig?.type]"></app-jig>
+                <app-jig [jig]="jig"  [jigType]="jigTypes()?.[jig?.type]" [unitSize]="true"></app-jig>
                 }
             </app-trailer>
         }
@@ -33,7 +33,7 @@
         @for(jig of trailersFactory(); track jig){
             <app-trailer>
                 @if(jig !== null){
-                    <app-jig [jig]="jig"  [jigType]="jigTypes()?.[jig?.type]"></app-jig>
+                    <app-jig [jig]="jig"  [jigType]="jigTypes()?.[jig?.type]" [unitSize]="true"></app-jig>
                 }
             </app-trailer>
         }
@@ -42,7 +42,7 @@
         @for(jig of hangars(); track jig){
             <app-hangar>
                 @if(jig !== null){
-                    <app-jig [jig]="jig"  [jigType]="jigTypes()?.[jig?.type]"></app-jig>
+                    <app-jig [jig]="jig"  [jigType]="jigTypes()?.[jig?.type]" [unitSize]="true"></app-jig>
                 }
             </app-hangar>
         }

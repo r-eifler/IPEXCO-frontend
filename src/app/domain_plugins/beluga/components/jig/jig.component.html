@@ -1,8 +1,23 @@
-<div 
-    class="jig" 
-    [matTooltip]="tooltip()"
-    [style.width]="(size() * 15) + 'px'  "
->
-    <span>{{ name() }}</span>
+<div class="container">
+    <div 
+        class="jig" 
+        [matTooltip]="tooltip()"
+        [style.width]="((unitSize() ?? false) ? 55 : jigSize() * 15) + 'px'  "
+    >
+    @if(!loaded()) {
+        <span>{{ name() }}</span>
+    }
+    </div>
+    @if(loaded()){
+        <div
+            class="part" 
+            [matTooltip]="tooltip()"
+            [style.width]="((unitSize() ?? false) ? 55 : partSize() * 15) + 'px'  "
+        >
+            <span>{{ name() }}</span>
+        </div>
+    }
 </div>
+
+
 
