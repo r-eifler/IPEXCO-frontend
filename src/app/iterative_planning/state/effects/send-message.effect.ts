@@ -1,13 +1,10 @@
 import { inject, Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { catchError, filter, first, map, switchMap, tap } from "rxjs/operators";
-import { of } from "rxjs";
+import { of, from, concat } from "rxjs";
 import { LLMService } from "../../../LLM/service/llm.service";
 import { concatLatestFrom } from "@ngrx/operators";
 import { Store } from "@ngrx/store";
-import { selectLLMChatMessages } from "../iterative-planning.selector";
-import { questionTranslationRequestToString, explanationTranslationRequestToString } from "../../../LLM/interfaces/translators_interfaces_strings";
-import { GoalTranslationRequest, QuestionTranslationRequest, ExplanationTranslationRequest } from "../../../LLM/interfaces/translators_interfaces";
 import { selectIterativePlanningProject, selectIterativePlanningProjectExplanationInterfaceType, selectIterativePlanningProperties, selectIterativePlanningSelectedStep, selectIterationStepById } from "../../../iterative_planning/state/iterative-planning.selector";
 import { selectUnsatisfiedSoftGoals } from "src/app/iterative_planning/view/step-detail-view/step-detail-view.component.selector";
 import { selectSatisfiedSoftGoals } from "src/app/iterative_planning/view/step-detail-view/step-detail-view.component.selector";
@@ -16,8 +13,7 @@ import { ExplanationInterfaceType } from "src/app/project/domain/general-setting
 import { PlanRunStatus } from "src/app/iterative_planning/domain/plan";
 import { directMessageET, directResponseQT, loadLLMContext, loadLLMContextFailure, loadLLMContextSuccess, poseAnswer, poseAnswerLLM, questionPosed, questionPosedLLM, sendMessageToLLMExplanationTranslator, sendMessageToLLMExplanationTranslatorFailure, sendMessageToLLMExplanationTranslatorSuccess, sendMessageToLLMGoalTranslator, sendMessageToLLMGoalTranslatorFailure, sendMessageToLLMGoalTranslatorSuccess, sendMessageToLLMQTthenGTTranslators, sendMessageToLLMQTthenGTTranslatorsFailure, sendMessageToLLMQTthenGTTranslatorsSuccess, sendMessageToLLMQuestionTranslator, sendMessageToLLMQuestionTranslatorFailure, sendMessageToLLMQuestionTranslatorSuccess, showReverseTranslationGT, showReverseTranslationQT } from "src/app/iterative_planning/state/iterative-planning.actions";
 import { Question } from "src/app/iterative_planning/domain/interface/question";
-import { getComputedBase } from "../../domain/explanation/answer-factory";
-import { mapComputeBase } from "../../domain/explanation/answer-factory";
+
 import { QuestionType } from "src/app/iterative_planning/domain/explanation/explanations";
 import { filterListNotNullOrUndefined, filterNotNullOrUndefined } from "src/app/shared/common/check_null_undefined";
 @Injectable()
@@ -49,6 +45,14 @@ export class SendMessageToLLMEffect {
     hasUnsolvedSoftGoals$ = this.unsolvedSoftGoals$.pipe(
         map((goals) => !!goals?.length)
     );
+
+    project$ = this.store.select(selectIterativePlanningProject)
+    goalTranslatorEnabled$ = this.project$.pipe(
+        map(project => project?.settings?.llmConfig?.goalTranslator ?? false)
+    )
+    showReverseTranslation$ = this.project$.pipe(
+        map(project => project?.settings?.llmConfig?.showReverseTranslation ?? false)
+    )
 
 
 
@@ -123,6 +127,7 @@ export class SendMessageToLLMEffect {
             this.store.select(selectIterativePlanningProject),
             this.store.select(selectIterativePlanningProperties),
             this.store.select(selectIterationStepById(iterationStepId)),
+            this.goalTranslatorEnabled$
         ]),
         filter(([_, project, properties, iterationStep]) => 
             !!project && !!properties && !!iterationStep
@@ -132,11 +137,26 @@ export class SendMessageToLLMEffect {
                 return of(sendMessageToLLMExplanationTranslatorFailure({err: "[LLM} translation failed"}));
             }
             const startTime = performance.now();
-            return this.service.postMessageQT$(question, iterationStep, project, Object.values(properties)).pipe(
-                map(response => {
-                    const duration = performance.now() - startTime;
-                    console.log(`QT service call took ${duration}ms`);
-                    return {response, duration};
+            return this.goalTranslatorEnabled$.pipe(
+                switchMap(goalTranslatorEnabled => {
+                    if (goalTranslatorEnabled) {
+                        return this.service.postMessageQTthenGT$(question, iterationStep, project, Object.values(properties)).pipe(
+                            map(response => {
+                                const duration = performance.now() - startTime;
+                                console.log(`QT service call took ${duration}ms`);
+                                return {response, duration};
+                            })
+                        );
+                    } else {
+                        console.log("Currently not using the goal translator")
+                        return this.service.postMessageQT$(question, iterationStep, project, Object.values(properties)).pipe(
+                            map(response => {
+                                const duration = performance.now() - startTime;
+                                console.log(`QT service call took ${duration}ms`);
+                                return {response, duration};
+                            })
+                        );
+                    }
                 })
             ).pipe(
                 switchMap(({response, duration}) => {
@@ -163,11 +183,38 @@ export class SendMessageToLLMEffect {
                     }
                     else {
                         console.log('reverse translation QT');
-                        return [
-                            sendMessageToLLMQuestionTranslatorSuccess({ duration }),
-                            ...('reverseTranslationQT' in response && typeof response.reverseTranslationQT === 'string' ? [showReverseTranslationQT({ reverseTranslation: response.reverseTranslationQT })] : []),
-                            ...('question' in response ? [questionPosedLLM({ question: response.question as Question, naturalLanguageQuestion: question })] : [])
-                        ];
+                        return this.showReverseTranslation$.pipe(
+                            switchMap(showReverseTranslation => {
+                                // Base action stream
+                                const successAction = of(sendMessageToLLMQuestionTranslatorSuccess({ duration }));
+                                
+                                // Create an array of actions
+                                const actions = [];
+                                
+                                // Success action is always included
+                                actions.push(sendMessageToLLMQuestionTranslatorSuccess({ duration }));
+                                
+                                // Add reverse translation action if needed
+                                if ('reverseTranslationQT' in response && 
+                                    typeof response.reverseTranslationQT === 'string' && 
+                                    showReverseTranslation) {
+                                    actions.push(showReverseTranslationQT({ 
+                                        reverseTranslation: response.reverseTranslationQT 
+                                    }));
+                                }
+                                
+                                // Add question action if needed
+                                if ('question' in response) {
+                                    actions.push(questionPosedLLM({ 
+                                        question: response.question as Question, 
+                                        naturalLanguageQuestion: question 
+                                    }));
+                                }
+                                
+                                // Use from to emit each action individually
+                                return from(actions as any[]);
+                            })
+                        );
                     }
                 }),
                 catchError((error) => {
@@ -178,67 +225,7 @@ export class SendMessageToLLMEffect {
         })
     ))
 
-    public sendMessageToQTthenGT$ = createEffect(() => this.actions$.pipe(
-        ofType(sendMessageToLLMQuestionTranslator),
-        filter(({ question, iterationStepId }) => !!question && !!iterationStepId),
-        concatLatestFrom(({ question, iterationStepId }) => [
-            this.store.select(selectIterativePlanningProject),
-            this.store.select(selectIterativePlanningProperties),
-            this.store.select(selectIterationStepById(iterationStepId)),
-        ]),
-        filter(([_, project, properties, iterationStep]) => 
-            !!project && !!properties && !!iterationStep
-        ),
-        switchMap(([{ question, iterationStepId }, project, properties, iterationStep]) => {
-            if(project === undefined || iterationStep === undefined || iterationStep == null || properties === undefined){
-                return of(sendMessageToLLMExplanationTranslatorFailure({err: "[LLM} translation failed"}));
-            }
-            const startTime = performance.now();
-            return this.service.postMessageQTthenGT$(question, iterationStep, project, Object.values(properties)).pipe(
-                map(response => {
-                    const duration = performance.now() - startTime;
-                    console.log(`QT service call took ${duration}ms`);
-                    return {response, duration};
-                })
-            ).pipe(
-                switchMap(({response, duration}) => {
-                    if (!response) {
-                        throw new Error('Empty response from LLM service');
-                    }
-
-                    if ('directResponse' in response) {
-                        switch(response.questionType) {
-                            case QuestionType.DIRECT_USER:
-                                return [
-                                    sendMessageToLLMQuestionTranslatorSuccess({ response: response.directResponse, duration }),
-                                    directResponseQT({ directResponse: response.directResponse }),
-                                ];
-                            case QuestionType.DIRECT_ET:
-                                return [
-                                    sendMessageToLLMQuestionTranslatorSuccess({ response: response.directResponse, duration }),
-                                    directMessageET({ directResponse: response.directResponse, iterationStepId })
-                                ];
-                            default:
-                                console.warn('Unexpected question type:', response.questionType);
-                                return of(sendMessageToLLMQuestionTranslatorFailure({err: "[LLM] Unexpected question type"}));
-                        }
-                    }
-                    else {
-                        console.log('reverse translation QT');
-                        return [
-                            sendMessageToLLMQuestionTranslatorSuccess({ duration }),
-                            ...('reverseTranslationQT' in response && typeof response.reverseTranslationQT === 'string' ? [showReverseTranslationQT({ reverseTranslation: response.reverseTranslationQT })] : []),
-                            ...('question' in response ? [questionPosedLLM({ question: response.question as Question, naturalLanguageQuestion: question })] : [])
-                        ];
-                    }
-                }),
-                catchError((error) => {
-                    console.error('Error in question translator:', error);
-                    return of(sendMessageToLLMQuestionTranslatorFailure({err: error}));
-                })
-            );
-        })
-    ))
+    
 
     // public sendMessageToExplanationTranslator$ = createEffect(() => this.actions$.pipe(
     //     ofType(sendMessageToLLMExplanationTranslator),
