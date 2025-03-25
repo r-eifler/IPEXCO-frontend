@@ -1,4 +1,4 @@
-import { Component, output } from '@angular/core';
+import { Component, effect, input, output } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 
@@ -13,6 +13,8 @@ import { MatIconModule } from '@angular/material/icon';
 })
 export class StepControlComponent {
 
+  disabled = input<boolean>(false);
+
   back = output<void>();
   forward = output<void>();
 
@@ -22,5 +24,9 @@ export class StepControlComponent {
 
   onForward(){
     this.forward.emit()
+  }
+
+  constructor(){
+    effect(() => console.log(this.disabled()))
   }
 }

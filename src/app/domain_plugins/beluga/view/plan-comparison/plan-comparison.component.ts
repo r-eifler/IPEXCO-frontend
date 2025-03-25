@@ -12,7 +12,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { equals } from 'ramda';
-import { BehaviorSubject, combineLatest, map, take } from 'rxjs';
+import { BehaviorSubject, combineLatest, map, startWith, take } from 'rxjs';
 import { selectDomainSpecification } from 'src/app/iterative_planning/state/iterative-planning.feature';
 import { selectComparisonPlan, selectProject, selectReferencePlan } from 'src/app/planning/state/planning.selector';
 import { BreadcrumbModule } from 'src/app/shared/components/breadcrumb/breadcrumb.module';
@@ -63,9 +63,15 @@ export class PlanComparisonComponent {
     hideCommonPrefix: this.fb.control<boolean>(false, {nonNullable: true}),
   })
 
-  selectedJigs$ = this.form.controls.jigs.valueChanges;
-  selectedFlight$ = this.form.controls.flight.valueChanges;
+  selectedJigs$ = this.form.controls.jigs.valueChanges.pipe(startWith([]));
+  selectedFlight$ = this.form.controls.flight.valueChanges.pipe(startWith(null));
   hideCommonPrefix$ = this.form.controls.hideCommonPrefix.valueChanges;
+
+  allowStepper$ = combineLatest([this.selectedJigs$, this.selectedFlight$]).pipe(
+    map(([selectedJigs, selectedFlight]) => {
+      return selectedJigs.length == 0 && selectedFlight == null
+    })
+  );
 
   selectedActionIndexRef$ = new BehaviorSubject<number|null>(null);
   selectedActionIndexComp$ = new BehaviorSubject<number|null>(null);

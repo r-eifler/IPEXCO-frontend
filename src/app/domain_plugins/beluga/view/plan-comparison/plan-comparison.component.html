@@ -41,6 +41,7 @@
             <app-step-control
               (back)="onBack()"
               (forward)="onForward()"
+              [disabled]="! (allowStepper$ | async)"
             ></app-step-control>
         </div>
         </app-page-section-content>
