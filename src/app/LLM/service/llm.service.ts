@@ -38,7 +38,7 @@ export class LLMService {
     //     );
     // }
 
-    postMessageGT$(request: string, project: Project, properties: PlanProperty[], threadId: string): Observable<{ response: { formula: string, shortName: string, reverseTranslation: string, feedback: string }, threadId: string }> {
+    postMessageGT$(request: string, project: Project, properties: PlanProperty[]): Observable<{ response: { formula: string, shortName: string, reverseTranslation: string, feedback: string } }> {
         const goalTranslationRequest: GoalTranslationRequest = {
             goalDescription: request,
             predicates: (project.baseTask.model as PDDLPlanningModel).predicates,
@@ -52,7 +52,6 @@ export class LLMService {
             this.BASE_URL + 'gt/init', 
             { 
                 data: requestString, 
-                threadId: threadId, 
                 originalRequest: request, 
                 projectId: project._id 
             }
@@ -71,9 +70,9 @@ export class LLMService {
         );
     }
 
-    postMessageQT$(question: string, iterationStep: IterationStep, project: Project, properties: PlanProperty[], threadId: string): Observable<
-        | { directResponse: string, questionType: QuestionType, threadId: string }
-        | { response: { questionType: QuestionType, goal: string, question: Question, reverseTranslation: string }, threadId: string }
+    postMessageQT$(question: string, iterationStep: IterationStep, project: Project, properties: PlanProperty[]): Observable<
+        | { directResponse: string, questionType: QuestionType }
+        | { response: { questionType: QuestionType, goal: string, question: Question, reverseTranslation: string } }
     > {        
         const questionTranslationRequest: QuestionTranslationRequest = {
             question: question,
@@ -91,7 +90,6 @@ export class LLMService {
             this.BASE_URL + 'qt/init',
             {
                 qtRequest: requestString,
-                threadId: threadId,
                 iterationStepId: iterationStep._id,
                 projectId: project._id,
                 originalQuestion: question
@@ -111,7 +109,7 @@ export class LLMService {
         );
     }
 
-    postMessageET$(question: string, explanationMUGS: string[][], explanationMGCS: string[][], question_type: QuestionType, questionArgument: PlanProperty[], iterationStep: IterationStep, project: Project, properties: PlanProperty[], threadId: string): Observable<{ response: string, threadId: string }> {
+    postMessageET$(question: string, explanationMUGS: string[][], explanationMGCS: string[][], question_type: QuestionType, questionArgument: PlanProperty[], iterationStep: IterationStep, project: Project, properties: PlanProperty[]): Observable<{ response: string }> {
         const request: ExplanationTranslationRequest = {
             question: question,
             question_type: question_type,
@@ -138,7 +136,6 @@ export class LLMService {
             this.BASE_URL + 'et/init',
             {
                 data: requestString,
-                threadId: threadId,
                 iterationStepId: iterationStep._id,
                 projectId: project._id,
                 originalRequest: question
@@ -158,16 +155,16 @@ export class LLMService {
         );
     }
 
-    postDirectMessageET$(directResponse: string, project: Project, iterationStep: IterationStep, threadId: string): Observable<{ response: string, threadId: string }> {
-        return this.http.post<IHTTPData<{ response: string, threadId: string }>>(this.BASE_URL + 'et', { data: directResponse, threadId: threadId, projectId: project._id, iterationStepId: iterationStep._id, originalRequest: directResponse }).pipe(
+    postDirectMessageET$(directResponse: string, project: Project, iterationStep: IterationStep): Observable<{ response: string }> {
+        return this.http.post<IHTTPData<{ response: string }>>(this.BASE_URL + 'et', { data: directResponse, projectId: project._id, iterationStepId: iterationStep._id, originalRequest: directResponse }).pipe(
             map(({ data }) => data),
             tap(console.log)
         );
     }
 
-    postMessageQTthenGT$(question: string, iterationStep: IterationStep, project: Project, properties: PlanProperty[], threadIdQt: string, threadIdGt: string): Observable<
-        | { gtResponse: string, qtResponse: string, threadIdQt: string, threadIdGt: string, questionType: QuestionType, goal: string, question: Question, reverseTranslationQT: string, reverseTranslationGT: string }
-        | { directResponse: string, questionType: QuestionType, threadIdQt: string, threadIdGt: string }
+    postMessageQTthenGT$(question: string, iterationStep: IterationStep, project: Project, properties: PlanProperty[]): Observable<
+        | { gtResponse: string, qtResponse: string, questionType: QuestionType, goal: string, question: Question, reverseTranslationQT: string, reverseTranslationGT: string }
+        | { directResponse: string, questionType: QuestionType }
     >  {
         console.log("Properties", properties);
         console.log("IterationStep", iterationStep);
@@ -196,14 +193,12 @@ export class LLMService {
         const gtRequestString = "{goal_description}";
         console.log(qtRequestString, gtRequestString);
         return this.http.post<IHTTPData<
-            | { gtResponse: string, qtResponse: string, threadIdQt: string, threadIdGt: string, questionType: QuestionType, goal: string, question: Question, reverseTranslationQT: string, reverseTranslationGT: string }
-            | { directResponse: string , questionType: QuestionType, threadIdQt: string, threadIdGt: string}
+            | { gtResponse: string, qtResponse: string, questionType: QuestionType, goal: string, question: Question, reverseTranslationQT: string, reverseTranslationGT: string }
+            | { directResponse: string , questionType: QuestionType}
         >>(this.BASE_URL + 'qt-then-gt', { 
             qtRequest: qtRequestString, 
             gtRequest: gtRequestString, 
             projectId: project._id, 
-            threadIdQt, 
-            threadIdGt, 
             iterationStepId: iterationStep._id, 
             originalQuestion: question
         }).pipe(

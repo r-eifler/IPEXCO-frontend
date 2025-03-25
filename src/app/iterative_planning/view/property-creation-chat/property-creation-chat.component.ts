@@ -5,7 +5,7 @@ import { sendMessageToLLMGoalTranslator } from '../../state/iterative-planning.a
 import { ChatModule } from 'src/app/shared/components/chat/chat.module';
 import { DialogModule } from 'src/app/shared/components/dialog/dialog.module';
 import { selectIsLoading, selectMessages } from './property-creation-chat.component.selector';
-import { selectIsExplanationChatLoading, selectLLMThreadIdGT, selectVisiblePPCreationMessages } from '../../state/iterative-planning.selector';
+import { selectIsExplanationChatLoading, selectVisiblePPCreationMessages } from '../../state/iterative-planning.selector';
 import { createPlanProperty } from '../../state/iterative-planning.actions';
 import { MatDialogRef } from '@angular/material/dialog';
 import { take, filter, map, mergeMap, switchMap, combineLatestWith } from 'rxjs/operators';
@@ -32,7 +32,6 @@ export class PropertyCreationChatComponent {
   isAnyLoading$ = combineLatest([this.isLoading$, this.isExplanationChatLoading$]).pipe(
     map(([isLoading, isExplanationChatLoading]) => isLoading || isExplanationChatLoading)
   );
-  threadIdGT$ = this.store.select(selectLLMThreadIdGT);
   project$ = this.store.select(selectIterativePlanningProject);
 
 
@@ -41,9 +40,7 @@ export class PropertyCreationChatComponent {
   // }
 
   onUserMessage(request: string) {
-    this.threadIdGT$.pipe(take(1)).subscribe(threadId => {
-      this.store.dispatch(sendMessageToLLMGoalTranslator({goalDescription: request}));
-    });
+    this.store.dispatch(sendMessageToLLMGoalTranslator({goalDescription: request}));
   }
 
   onSaveProperty() {

@@ -29,7 +29,6 @@ on(sendMessageToLLMGoalTranslatorSuccess, (state, action): IterativePlanningStat
   LLMChatLoadingState: LoadingState.Done,
     LLMContext: {
       ...state.LLMContext,
-      threadIdGT: action.threadId,
       visiblePPCreationMessages: [...state.LLMContext.visiblePPCreationMessages, { role: 'sender', content: `${action.response.formula} ; ${action.response.shortName}`, iterationStepId: state.selectedIterationStepId ?? null }]
       
     }
@@ -43,7 +42,6 @@ on(sendMessageToLLMExplanationTranslatorSuccess, (state, action): IterativePlann
     ...state,
     LLMContext: {
       ...state.LLMContext,
-      threadIdET: action.threadId,
       visibleMessages: [...state.LLMContext.visibleMessages, {role: 'sender', content: action.response, iterationStepId: state.selectedIterationStepId ?? null}]
     },
     LLMChatLoadingState: LoadingState.Done,
@@ -72,8 +70,7 @@ on(sendMessageToLLMExplanationTranslatorFailure, (state): IterativePlanningState
 //     LLMChatLoadingState: LoadingState.Done,
 //     LLMContext: {
 //       ...state.LLMContext,
-//       threadIdQT: action.threadIdQt,
-//       threadIdGT: action.threadIdGt,
+
 //     }
 // })),
 // on(sendMessageToLLMQTthenGTTranslatorsFailure, (state): IterativePlanningState => ({
@@ -95,7 +92,6 @@ on(sendMessageToLLMQuestionTranslatorSuccess, (state, action): IterativePlanning
     LLMChatLoadingState: LoadingState.Done,
     LLMContext: {
       ...state.LLMContext,
-      threadIdQT: action.threadId,
     }
 })),
 on(sendMessageToLLMQuestionTranslatorFailure, (state): IterativePlanningState => ({

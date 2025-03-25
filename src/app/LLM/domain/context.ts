@@ -29,7 +29,4 @@ export interface LLMContext {
     outputFormatET: OutputFormat;
     outputFormatGT: OutputFormat;
     settings: any;
-    threadIdQT?: string;
-    threadIdGT?: string;
-    threadIdET?: string;
 }

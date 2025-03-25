@@ -5,7 +5,7 @@ import { of } from "rxjs";
 import { LLMService } from "../../../LLM/service/llm.service";
 import { concatLatestFrom } from "@ngrx/operators";
 import { Store } from "@ngrx/store";
-import { selectLLMChatMessages, selectLLMThreadIdQT, selectLLMThreadIdGT, selectLLMThreadIdET } from "../iterative-planning.selector";
+import { selectLLMChatMessages } from "../iterative-planning.selector";
 import { questionTranslationRequestToString, explanationTranslationRequestToString } from "../../../LLM/interfaces/translators_interfaces_strings";
 import { GoalTranslationRequest, QuestionTranslationRequest, ExplanationTranslationRequest } from "../../../LLM/interfaces/translators_interfaces";
 import { selectIterativePlanningProject, selectIterativePlanningProjectExplanationInterfaceType, selectIterativePlanningProperties, selectIterativePlanningSelectedStep, selectIterationStepById } from "../../../iterative_planning/state/iterative-planning.selector";
@@ -123,17 +123,16 @@ export class SendMessageToLLMEffect {
             this.store.select(selectIterativePlanningProject),
             this.store.select(selectIterativePlanningProperties),
             this.store.select(selectIterationStepById(iterationStepId)),
-            this.store.select(selectLLMThreadIdQT)
         ]),
         filter(([_, project, properties, iterationStep]) => 
             !!project && !!properties && !!iterationStep
         ),
-        switchMap(([{ question, iterationStepId }, project, properties, iterationStep, threadIdQT]) => {
+        switchMap(([{ question, iterationStepId }, project, properties, iterationStep]) => {
             if(project === undefined || iterationStep === undefined || iterationStep == null || properties === undefined){
                 return of(sendMessageToLLMExplanationTranslatorFailure({err: "[LLM} translation failed"}));
             }
             const startTime = performance.now();
-            return this.service.postMessageQT$(question, iterationStep, project, Object.values(properties), threadIdQT).pipe(
+            return this.service.postMessageQT$(question, iterationStep, project, Object.values(properties)).pipe(
                 map(response => {
                     const duration = performance.now() - startTime;
                     console.log(`QT service call took ${duration}ms`);
@@ -149,12 +148,12 @@ export class SendMessageToLLMEffect {
                         switch(response.questionType) {
                             case QuestionType.DIRECT_USER:
                                 return [
-                                    sendMessageToLLMQuestionTranslatorSuccess({ threadId: response.threadId, response: response.directResponse, duration }),
+                                    sendMessageToLLMQuestionTranslatorSuccess({ response: response.directResponse, duration }),
                                     directResponseQT({ directResponse: response.directResponse }),
                                 ];
                             case QuestionType.DIRECT_ET:
                                 return [
-                                    sendMessageToLLMQuestionTranslatorSuccess({ threadId: response.threadId, response: response.directResponse, duration }),
+                                    sendMessageToLLMQuestionTranslatorSuccess({ response: response.directResponse, duration }),
                                     directMessageET({ directResponse: response.directResponse, iterationStepId })
                                 ];
                             default:
@@ -165,7 +164,7 @@ export class SendMessageToLLMEffect {
                     else {
                         console.log('reverse translation QT');
                         return [
-                            sendMessageToLLMQuestionTranslatorSuccess({ threadId: response.threadId, duration }),
+                            sendMessageToLLMQuestionTranslatorSuccess({ duration }),
                             ...('reverseTranslationQT' in response && typeof response.reverseTranslationQT === 'string' ? [showReverseTranslationQT({ reverseTranslation: response.reverseTranslationQT })] : []),
                             ...('question' in response ? [questionPosedLLM({ question: response.question as Question, naturalLanguageQuestion: question })] : [])
                         ];
@@ -203,20 +202,18 @@ export class SendMessageToLLMEffect {
         concatLatestFrom(({ directResponse, iterationStepId }) => [
             this.store.select(selectIterativePlanningProject),
             this.store.select(selectIterationStepById(iterationStepId)),
-            this.store.select(selectLLMThreadIdET)
         ]),
-        filter(([{ directResponse, iterationStepId }, project, iterationStep, threadIdET]) => project !== undefined),
-        switchMap(([{ directResponse, iterationStepId }, project, iterationStep, threadIdET]) => {
+        filter(([{ directResponse, iterationStepId }, project, iterationStep]) => project !== undefined),
+        switchMap(([{ directResponse, iterationStepId }, project, iterationStep]) => {
             if(project === undefined || iterationStep == undefined ){
                 return of(sendMessageToLLMExplanationTranslatorFailure({err: "LLM translation failed"}));
             }
             const startTime = performance.now();
-            return this.service.postDirectMessageET$(directResponse, project, iterationStep, threadIdET).pipe(
+            return this.service.postDirectMessageET$(directResponse, project, iterationStep).pipe(
                 map(response => {
                     const duration = performance.now() - startTime;
                     return sendMessageToLLMExplanationTranslatorSuccess({ 
                         response: response.response, 
-                        threadId: response.threadId,
                         duration
                     });
                 }),
