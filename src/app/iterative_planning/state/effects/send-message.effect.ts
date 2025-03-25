@@ -132,7 +132,7 @@ export class SendMessageToLLMEffect {
                 return of(sendMessageToLLMExplanationTranslatorFailure({err: "[LLM} translation failed"}));
             }
             const startTime = performance.now();
-            return this.service.postMessageQT$(question, iterationStep, project, Object.values(properties)).pipe(
+            return this.service.postMessageQTthenGT$(question, iterationStep, project, Object.values(properties)).pipe(
                 map(response => {
                     const duration = performance.now() - startTime;
                     console.log(`QT service call took ${duration}ms`);
