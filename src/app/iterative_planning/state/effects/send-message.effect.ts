@@ -132,6 +132,68 @@ export class SendMessageToLLMEffect {
                 return of(sendMessageToLLMExplanationTranslatorFailure({err: "[LLM} translation failed"}));
             }
             const startTime = performance.now();
+            return this.service.postMessageQT$(question, iterationStep, project, Object.values(properties)).pipe(
+                map(response => {
+                    const duration = performance.now() - startTime;
+                    console.log(`QT service call took ${duration}ms`);
+                    return {response, duration};
+                })
+            ).pipe(
+                switchMap(({response, duration}) => {
+                    if (!response) {
+                        throw new Error('Empty response from LLM service');
+                    }
+
+                    if ('directResponse' in response) {
+                        switch(response.questionType) {
+                            case QuestionType.DIRECT_USER:
+                                return [
+                                    sendMessageToLLMQuestionTranslatorSuccess({ response: response.directResponse, duration }),
+                                    directResponseQT({ directResponse: response.directResponse }),
+                                ];
+                            case QuestionType.DIRECT_ET:
+                                return [
+                                    sendMessageToLLMQuestionTranslatorSuccess({ response: response.directResponse, duration }),
+                                    directMessageET({ directResponse: response.directResponse, iterationStepId })
+                                ];
+                            default:
+                                console.warn('Unexpected question type:', response.questionType);
+                                return of(sendMessageToLLMQuestionTranslatorFailure({err: "[LLM] Unexpected question type"}));
+                        }
+                    }
+                    else {
+                        console.log('reverse translation QT');
+                        return [
+                            sendMessageToLLMQuestionTranslatorSuccess({ duration }),
+                            ...('reverseTranslationQT' in response && typeof response.reverseTranslationQT === 'string' ? [showReverseTranslationQT({ reverseTranslation: response.reverseTranslationQT })] : []),
+                            ...('question' in response ? [questionPosedLLM({ question: response.question as Question, naturalLanguageQuestion: question })] : [])
+                        ];
+                    }
+                }),
+                catchError((error) => {
+                    console.error('Error in question translator:', error);
+                    return of(sendMessageToLLMQuestionTranslatorFailure({err: error}));
+                })
+            );
+        })
+    ))
+
+    public sendMessageToQTthenGT$ = createEffect(() => this.actions$.pipe(
+        ofType(sendMessageToLLMQuestionTranslator),
+        filter(({ question, iterationStepId }) => !!question && !!iterationStepId),
+        concatLatestFrom(({ question, iterationStepId }) => [
+            this.store.select(selectIterativePlanningProject),
+            this.store.select(selectIterativePlanningProperties),
+            this.store.select(selectIterationStepById(iterationStepId)),
+        ]),
+        filter(([_, project, properties, iterationStep]) => 
+            !!project && !!properties && !!iterationStep
+        ),
+        switchMap(([{ question, iterationStepId }, project, properties, iterationStep]) => {
+            if(project === undefined || iterationStep === undefined || iterationStep == null || properties === undefined){
+                return of(sendMessageToLLMExplanationTranslatorFailure({err: "[LLM} translation failed"}));
+            }
+            const startTime = performance.now();
             return this.service.postMessageQTthenGT$(question, iterationStep, project, Object.values(properties)).pipe(
                 map(response => {
                     const duration = performance.now() - startTime;
