@@ -71,7 +71,7 @@ export const userStudyExecutionReducer = createReducer(
       state.stepIndex < state.userStudy.data?.steps.length - 1 ? 
         state.stepIndex + 1 : 
         null,
-      finishedAllSteps: !!state.userStudy.data?.steps && !!state.stepIndex && (state.stepIndex == state.userStudy.data?.steps.length - 1),
+      finishedAllSteps: !!state.userStudy.data?.steps && state.stepIndex !== null && (state.stepIndex == state.userStudy.data?.steps.length - 1),
     })),
     on(loadUserStudyDemo, (state): UserStudyExecutionState => ({
       ...state,

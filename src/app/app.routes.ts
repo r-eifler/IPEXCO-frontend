@@ -15,12 +15,10 @@ import { iterativePlanningFeatureEffects } from './iterative_planning/state/effe
 import { iterativePlanningFeature } from './iterative_planning/state/iterative-planning.feature';
 import { LLMService } from './LLM/service/llm.service';
 import { AuthGuard } from './route-guards/auth-guard.guard';
+import { FailureEffect } from './shared/effects/failure.effect';
 import { AuthenticationService } from './user/services/authentication.service';
 import { userFeatureEffects } from './user/state/effects/effects';
 import { userFeature } from './user/state/user.feature';
-import { FailureEffect } from './shared/effects/failure.effect';
-import { planningFeature } from './planning/state/planning.feature';
-import { planningFeatureEffects } from './planning/state/effects/effects';
 
 export const routes: Routes = [
   {
@@ -28,6 +26,8 @@ export const routes: Routes = [
     loadChildren: () => import('./user_study_execution/user-study-execution.routes').then(m => m.routes),
     providers: [
       provideState(userFeature),
+      provideEffects([...userFeatureEffects,FailureEffect] ),
+      AuthenticationService,
     ],
   },
   {

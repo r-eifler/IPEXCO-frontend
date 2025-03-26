@@ -20,7 +20,7 @@ export class RegisterEffect{
         ofType(registerUser),
         switchMap(({name, password}) => this.service.register(name, password).pipe(
             switchMap(({user, token}) => [registerUserSuccess({user, token}), storeTokenLocalStorage({token})]),
-            catchError(() => of(registerUserFailure()))
+            catchError((e) => of(registerUserFailure({err: e})))
         ))
     ))
 }
