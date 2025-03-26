@@ -5,7 +5,9 @@ import {
   executionFinishedLastUserStudyStep,
     executionLoadUserStudy,
     executionLoadUserStudySuccess,
+    executionLockNextStep,
     executionNextUserStudyStep,
+    executionUnlockNextStep,
     executionUserStudyCancelSuccess, executionUserStudyStart, executionUserStudySubmitSuccess,
     loadUserStudyDemo,
     loadUserStudyDemoSuccess,
@@ -30,6 +32,7 @@ export interface UserStudyExecutionState {
     actionLog: UserAction[];
     runningDemo: Loadable<Demo>;
     runningDemoPlanProperties: Loadable<PlanProperty[]>;
+    continueLocked: boolean;
 }
 
 
@@ -42,6 +45,7 @@ const initialState: UserStudyExecutionState = {
     actionLog: [],
     runningDemo: {state: LoadingState.Initial, data: undefined},
     runningDemoPlanProperties: {state: LoadingState.Initial, data: undefined},
+    continueLocked: false,
 }
 
 
@@ -72,6 +76,14 @@ export const userStudyExecutionReducer = createReducer(
         state.stepIndex + 1 : 
         null,
       finishedAllSteps: !!state.userStudy.data?.steps && state.stepIndex !== null && (state.stepIndex == state.userStudy.data?.steps.length - 1),
+    })),
+    on(executionLockNextStep, (state): UserStudyExecutionState => ({
+      ...state,
+      continueLocked: true,
+    })),
+    on(executionUnlockNextStep, (state): UserStudyExecutionState => ({
+      ...state,
+      continueLocked: false,
     })),
     on(loadUserStudyDemo, (state): UserStudyExecutionState => ({
       ...state,

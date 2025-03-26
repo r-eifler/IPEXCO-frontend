@@ -10,7 +10,35 @@ export interface UserStudyStep {
   type: UserStudyStepType;
   name: string,
   time: number | null;
-  content?: string;
+  content?: unknown;
+}
+
+export interface UserStudyDescriptionStep extends UserStudyStep{
+  type: UserStudyStepType.description;
+  content: string;
+}
+
+export interface UserStudyFormStep extends UserStudyStep{
+  type: UserStudyStepType.form;
+  content: {
+    link: string,
+    code: string | null
+  };
+}
+
+export interface UserStudyDemoStep extends UserStudyStep{
+  type: UserStudyStepType.demo;
+  content: string;
+}
+
+export interface UserStudyDemoInfoStep extends UserStudyStep{
+  type: UserStudyStepType.demoInfo;
+  content: string;
+}
+
+export interface UserStudyUserManuelStep extends UserStudyStep{
+  type: UserStudyStepType.userManual;
+  content: string;
 }
 
 export interface UserStudyBase{

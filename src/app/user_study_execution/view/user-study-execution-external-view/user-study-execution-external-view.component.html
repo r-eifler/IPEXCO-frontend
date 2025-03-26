@@ -7,16 +7,32 @@
   <app-page-content>
     <app-page-section-list>
       <app-page-section>
+        <app-page-section-title>Questionnaire Link</app-page-section-title>
         <app-page-section-content>
           <p>Please follow this external link, finish the questionnaire it leads to and then continue here.</p>
           @if(!clickedLink){
-            <a mat-flat-button [href]="step?.content" target="_blank" (click)="onClickLink()">External Link</a>
+            <a mat-flat-button [href]="step?.content.link" target="_blank" (click)="onClickLink()">External Link</a>
           }
           @else {
-            <a mat-stroked-button [href]="step?.content" target="_blank" (click)="onClickLink()">External Link</a>
+            <a mat-stroked-button [href]="step?.content.link" target="_blank" (click)="onClickLink()">External Link</a>
           }
         </app-page-section-content>
       </app-page-section>
+      @if(usesCode$ | async){
+        <app-page-section>
+          <app-page-section-title>Finished Questionnaire?</app-page-section-title>
+          <app-page-section-content>
+            <p>When you finish the questionnaire you get a code, you can use to unlock the next step of the user study.</p>
+            <form class="button-container" [formGroup]="form">
+              <mat-form-field appearance="outline">
+                <mat-label>Code</mat-label>
+                <input matInput type="text" placeholder="XXXXXXXX" [formControl]="form.controls.code">
+              </mat-form-field>
+              <button mat-flat-button (click)="onUnlock()" [disabled]="!clickedLink" type="button">Unlock</button>
+            </form>
+          </app-page-section-content>
+        </app-page-section>
+      }
     </app-page-section-list>
   </app-page-content>
 </app-page>

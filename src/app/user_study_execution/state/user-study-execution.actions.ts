@@ -15,6 +15,9 @@ export const executionLoadUserStudyFailure = createAction('[UserStudyExecution] 
 export const executionNextUserStudyStep = createAction('[UserStudyExecution] next user study step');
 export const executionFinishedLastUserStudyStep = createAction('[UserStudyExecution] finish last user study step');
 
+export const executionLockNextStep = createAction('[UserStudyExecution] lock next step');
+export const executionUnlockNextStep = createAction('[UserStudyExecution] unlock next step');
+
 
 // execution
 export const executionUserStudyStart= createAction('[UserStudyExecution] start');

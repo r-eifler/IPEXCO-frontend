@@ -4,7 +4,7 @@ import { selectExecutionUserStudyStep, selectExecutionUserStudyDemo, selectExecu
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { filter, map } from 'rxjs';
 import { loadUserStudyDemo } from '../../state/user-study-execution.actions';
-import { UserStudyStepType } from 'src/app/user_study/domain/user-study';
+import { UserStudyStepType, UserStudyUserManuelStep } from 'src/app/user_study/domain/user-study';
 import { PageModule } from 'src/app/shared/components/page/page.module';
 import { UserManualComponent } from '../../../iterative_planning/components/user-manual/user-manual.component';
 import { MatIconModule } from '@angular/material/icon';
@@ -27,7 +27,9 @@ export class UserManualViewComponent {
   
   store = inject(Store);
 
-  step$ = this.store.select(selectExecutionUserStudyStep);
+  step$ = this.store.select(selectExecutionUserStudyStep).pipe(
+    map(s => s !== null && s.type === UserStudyStepType.userManual ? s as UserStudyUserManuelStep : null)
+  );
   demo$ = this.store.select(selectExecutionUserStudyDemo);
 
   settings$ = this.demo$.pipe(
