@@ -6,6 +6,8 @@ const selectState = userStudyExecutionFeature.selectUserStudyExecutionFeatureSta
 
 export const selectExecutionUserStudy = createSelector(selectState, (state) => state?.userStudy?.data)
 
+export const selectExecutionProlificId = createSelector(selectState, (state) => state?.prolificId)
+
 export const selectExecutionUserStudyStepIndex = createSelector(selectState, (state) => state.stepIndex)
 export const selectExecutionUserStudyNextStepIndex = createSelector(selectState, (state): number | null =>
     state.stepIndex !== null && state.userStudy.data?.steps && state.stepIndex  < state.userStudy.data?.steps.length ? state.stepIndex : null)
