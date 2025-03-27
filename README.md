@@ -155,12 +155,13 @@ The prompts used are also modular :
 - Explanation Translator Instructions Prompt
 
 The output schema of LLMs can also be selected : 
+For more information on structured outputs, see [OpenAI's guide on structured outputs](https://platform.openai.com/docs/guides/structured-outputs).
 
 - Goal Translator Output Schema
 - Question Classifier Output Schema
 - Explanation Translator Output Schema
 
-These can be selected from the prompts definedin the "Specification" page.
+These can be selected from the prompts defined in the "Specification" page.
 
 Examples prompts and output schemas for the Parents Afternoon domain are given in [setup/example_data/parentsafternoon/](setup/example_data/parentsafternoon/).
 
