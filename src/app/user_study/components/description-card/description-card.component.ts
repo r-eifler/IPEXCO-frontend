@@ -3,7 +3,7 @@ import {MatCardModule} from '@angular/material/card';
 import {MatFormField} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
-import {UserStudyStep} from '../../domain/user-study';
+import {UserStudyDescriptionStep, UserStudyStep} from '../../domain/user-study';
 import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
 import { MatTabsModule} from '@angular/material/tabs';
@@ -40,7 +40,7 @@ export class DescriptionCardComponent implements OnInit{
     description: this.fb.control<string | null>(null, [Validators.required, Validators.minLength(1)])
   })
 
-  step = input.required<UserStudyStep>();
+  step = input.required<UserStudyDescriptionStep>();
   first = input<boolean>(false);
   last = input<boolean>(false);
 

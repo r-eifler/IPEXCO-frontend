@@ -1,15 +1,13 @@
 import { inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { catchError, switchMap, tap } from 'rxjs/operators';
 import { of } from 'rxjs';
+import { catchError, switchMap } from 'rxjs/operators';
+import { logout } from '../../../user/state/user.actions';
+import { UserStudyExecutionService } from '../../service/user-study-execution.service';
 import {
   executionUserStudyCancel, executionUserStudyCancelFailure, executionUserStudyCancelSuccess,
-  executionUserStudySubmit, executionUserStudySubmitFailure, executionUserStudySubmitSuccess,
-  logAction,
+  executionUserStudySubmit, executionUserStudySubmitFailure, executionUserStudySubmitSuccess
 } from '../user-study-execution.actions';
-import {logout} from '../../../user/state/user.actions';
-import {UserStudyExecutionService} from '../../service/user-study-execution.service';
-import { ActionType } from '../../domain/user-action';
 
 @Injectable()
 export class FinishUserStudyEffect{

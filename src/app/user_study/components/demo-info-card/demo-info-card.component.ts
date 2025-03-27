@@ -9,7 +9,7 @@ import { MatIcon } from '@angular/material/icon';
 import { MatInput } from '@angular/material/input';
 import { MatSelect } from '@angular/material/select';
 import { MatSlider, MatSliderThumb } from '@angular/material/slider';
-import { UserStudyStep } from '../../domain/user-study';
+import { UserStudyDemoInfoStep, UserStudyStep } from '../../domain/user-study';
 import { Demo } from 'src/app/shared/domain/demo';
 
 @Component({
@@ -40,7 +40,7 @@ export class DemoInfoCardComponent {
     demo: this.fb.control<string | null>(null, Validators.required),
   })
 
-  step = input.required<UserStudyStep>();
+  step = input.required<UserStudyDemoInfoStep>();
   demos = input.required<Demo[]>();
   first = input<boolean>(false);
   last = input<boolean>(false);

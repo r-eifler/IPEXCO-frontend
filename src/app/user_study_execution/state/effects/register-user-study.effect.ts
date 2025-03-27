@@ -21,7 +21,7 @@ export class RegisterUserStudyEffect{
 
     public registerUserStudyUser$ = createEffect(() => this.actions$.pipe(
         ofType(registerUserStudyUser),
-        switchMap(({id}) => this.service.register(id).pipe(
+        switchMap(({id, prolificId}) => this.service.register(id, prolificId).pipe(
             switchMap(({user, token}) => [registerUserStudyUserSuccess({user, token}), registerUserSuccess({user, token})]),
             catchError(() => of(registerUserStudyUserFailure()))
         ))

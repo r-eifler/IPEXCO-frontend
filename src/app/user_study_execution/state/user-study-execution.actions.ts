@@ -11,9 +11,16 @@ export const executionLoadUserStudySuccess = createAction('[UserStudyExecution] 
 export const executionLoadUserStudyFailure = createAction('[UserStudyExecution] load user study failure');
 
 
+//prolific ID
+export const executionSaveProlificId = createAction('[UserStudyExecution] safe prolific id', props<{id: string}>());
+
+
 // steps
 export const executionNextUserStudyStep = createAction('[UserStudyExecution] next user study step');
 export const executionFinishedLastUserStudyStep = createAction('[UserStudyExecution] finish last user study step');
+
+export const executionLockNextStep = createAction('[UserStudyExecution] lock next step');
+export const executionUnlockNextStep = createAction('[UserStudyExecution] unlock next step');
 
 
 // execution
@@ -41,7 +48,7 @@ export const loadUserStudyPlanPropertiesFailure = createAction('[UserStudyExecut
 
 
 // user
-export const registerUserStudyUser = createAction('[UserStudyExecution] register user study user', props<{id: string}>());
+export const registerUserStudyUser = createAction('[UserStudyExecution] register user study user', props<{id: string, prolificId: string | null}>());
 export const registerUserStudyUserSuccess = createAction('[UserStudyExecution] register user study user success', props<{user: User, token: string}>());
 export const registerUserStudyUserFailure = createAction('[UserStudyExecution] register user study user failure');
 

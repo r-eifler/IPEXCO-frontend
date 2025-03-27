@@ -49,18 +49,20 @@ export class AcceptedTestPersonsComponent {
 
   displayedParticipants: TableData[] = [];
 
-  displayedColumns: string[] = ['user', 'date', 'processingTime', 'finished', 'payment', 'accepted'];
+  displayedColumns: string[] = ['user', 'prolific', 'date', 'processingTime', 'finished', 'payment', 'accepted'];
 
   constructor() {
     effect(() => {
-      if(this.paginator === undefined){
-        return;
+      let index = 0;
+      let size = 10;
+      if(this.paginator !== undefined){
+        index = this.paginator?.pageIndex;
+        size = this.paginator?.pageSize;
       }
-      const index = this.paginator?.pageIndex;
-      const size = this.paginator?.pageSize;
       const tableDate = this.participantsTableData();
-      if(tableDate !== undefined)
+      if(tableDate !== undefined){
         this.displayedParticipants =   [...tableDate].splice(index * size, size);
+      }
     })
   }
 
@@ -71,22 +73,24 @@ export class AcceptedTestPersonsComponent {
 
 
   onPage(event: PageEvent){
-    if(this.paginator === undefined){
-      return;
+    let index = 0;
+    let size = 10;
+    if(this.paginator !== undefined){
+      index = this.paginator?.pageIndex;
+      size = this.paginator?.pageSize;
     }
-    const index = event.pageIndex;
-    const size = event.pageSize;
     const tableDate = this.participantsTableData();
     if(tableDate !== undefined)
       this.displayedParticipants =  [...tableDate].splice(index * size, size);
   }
 
   announceSortChange(sortState: Sort){
-    if(this.paginator === undefined){
-      return;
+    let index = 0;
+    let size = 10;
+    if(this.paginator !== undefined){
+      index = this.paginator?.pageIndex;
+      size = this.paginator?.pageSize;
     }
-    const index = this.paginator.pageIndex;
-    const size = this.paginator.pageSize;
     const tableDate = this.participantsTableData();
     if(tableDate !== undefined){
       const sorted = [...tableDate].sort();

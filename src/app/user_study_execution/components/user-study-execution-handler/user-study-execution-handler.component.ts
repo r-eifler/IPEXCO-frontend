@@ -12,7 +12,7 @@ import { AskDeleteComponent } from 'src/app/shared/components/ask-delete/ask-del
 import { selectLoggedIn } from 'src/app/user/state/user.selector';
 import { UserStudyStepType } from 'src/app/user_study/domain/user-study';
 import { executionNextUserStudyStep, executionUserStudyCancel } from '../../state/user-study-execution.actions';
-import { selectExecutionUserStudyFinishedAllSteps, selectExecutionUserStudyStep } from '../../state/user-study-execution.selector';
+import { selectExecutionUserStudyContinueLocked, selectExecutionUserStudyFinishedAllSteps, selectExecutionUserStudyStep } from '../../state/user-study-execution.selector';
 import { FinishDemoInfoDialogComponent } from '../finish-demo-info-dialog/finish-demo-info-dialog.component';
 import { TimeOverDialogComponent } from '../time-over-dialog/time-over-dialog.component';
 import { TimerStartsDialogComponent } from '../timer-starts-dialog/timer-starts-dialog.component';
@@ -37,6 +37,7 @@ export class UserStudyExecutionHandlerComponent {
   allStepsFinished$ = this.store.select(selectExecutionUserStudyFinishedAllSteps);
   maxPossibleUtility$ = this.store.select(selectIterativePlanningMaxPossibleUtility);
   currentMaxUtility$ = this.store.select(selectIterativePlanningCurrentMaxUtility);
+  continueLocked$ = this.store.select(selectExecutionUserStudyContinueLocked);
 
   over = output();
 
@@ -61,8 +62,8 @@ export class UserStudyExecutionHandlerComponent {
 
   timeOut$ = this.remainingTime$.pipe(map((sec) => sec === 0));
 
-  allowContinue$ = combineLatest([this.remainingTime$, this.isDemoStep$]).pipe(
-    map(([rsec, isDemoStep]) => rsec <= 0 || isDemoStep)
+  allowContinue$ = combineLatest([this.remainingTime$, this.isDemoStep$, this.continueLocked$]).pipe(
+    map(([rsec, isDemoStep, locked]) => (rsec <= 0 || isDemoStep) && ! locked)
   )
   
 

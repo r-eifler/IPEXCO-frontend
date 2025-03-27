@@ -15,7 +15,7 @@ export class LoginEffect{
         ofType(login),
         switchMap(({name, password}) => this.service.login(name, password).pipe(
             switchMap(({user, token}) => [loginSuccess({user, token}), storeTokenLocalStorage({token})]),
-            catchError(() => of(loginFailure()))
+            catchError((e) => of(loginFailure({err: e})))
         ))
     ))
 }

@@ -61,7 +61,7 @@ export class SelectTestPersonsComponent {
 
   displayedParticipants: TableData[] = [];
 
-  displayedColumns: string[] = ['select', 'user', 'date', 'processingTime', 'utility', 'finished', 'payment', 'accepted'];
+  displayedColumns: string[] = ['select', 'user', 'prolific', 'date', 'processingTime', 'utility', 'finished', 'payment', 'accepted'];
 
   selection = new SelectionModel<TableData>(true, []);
 

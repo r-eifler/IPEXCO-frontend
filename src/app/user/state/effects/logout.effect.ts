@@ -15,7 +15,7 @@ export class LogoutEffect{
         ofType(logout),
         switchMap(() => this.service.logout().pipe(
             switchMap(user => [logoutSuccess()]),
-            catchError(() => of(logoutFailure()))
+            catchError((e) => of(logoutFailure({err: e})))
         ))
     ))
 

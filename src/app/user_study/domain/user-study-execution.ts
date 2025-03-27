@@ -10,4 +10,5 @@ export interface UserStudyExecution {
   accepted: boolean;
   timeLog: UserAction[];
   payment: number;
+  prolificId: string | null
 }
