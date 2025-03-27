@@ -96,6 +96,8 @@ export class SettingsComponent {
       model:  this.fb.control<string>('gpt-4o-mini', Validators.required),
       temperature:  this.fb.control<number>(0, [Validators.required, Validators.min(0), Validators.max(2)]),
       maxCompletionTokens: this.fb.control<number | null>(null, Validators.required),
+      goalTranslator: this.fb.control<boolean>(false, Validators.required),
+      showReverseTranslation: this.fb.control<boolean>(false, Validators.required),
       prompts: this.fb.group({
         system: this.fb.control<string | null>(null),
         goalTransInstructions: this.fb.control<string | null>(null),
@@ -160,6 +162,8 @@ export class SettingsComponent {
 			this.form.controls.llmConfig.controls.model.setValue(settings.llmConfig.model);
 			this.form.controls.llmConfig.controls.temperature.setValue(settings.llmConfig.temperature);
 			this.form.controls.llmConfig.controls.maxCompletionTokens.setValue(settings.llmConfig.maxCompletionTokens);
+			this.form.controls.llmConfig.controls.goalTranslator.setValue(settings.llmConfig.goalTranslator);
+			this.form.controls.llmConfig.controls.showReverseTranslation.setValue(settings.llmConfig.showReverseTranslation);
   
 			if(settings.llmConfig.prompts && settings.llmConfig.prompts.length > 0){
 
@@ -267,6 +271,8 @@ export class SettingsComponent {
           this.form.controls.llmConfig.controls.outputSchemas.controls.questionClass.value,
           this.form.controls.llmConfig.controls.outputSchemas.controls.explanationTrans.value,
         ].filter(e => e !== null),
+        goalTranslator: this.form.controls.llmConfig.controls.goalTranslator.value ?? false,
+        showReverseTranslation: this.form.controls.llmConfig.controls.showReverseTranslation.value ?? false,
       },
       userStudy: {
           introTask: this.form.controls.userStudy.controls.introTask.value ?? false,

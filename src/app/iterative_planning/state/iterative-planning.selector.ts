@@ -176,7 +176,5 @@ export const selectIsLLMChatLoading = createSelector(selectLLMChatLoadingState, 
 export const selectExplanationLoadingState = createSelector(selectState, ({ ExplanationLoadingState }) => ExplanationLoadingState);
 export const selectIsExplanationChatLoading = createSelector(selectExplanationLoadingState, (state) => state === LoadingState.Loading);
 export const selectVisibleMessagesbyId = (id: string) => createSelector(selectLLMChatMessages, (messages) => messages?.filter(m => m.iterationStepId == id));
-export const selectLLMThreadIdQT = createSelector(selectState, ({ LLMContext }) => LLMContext.threadIdQT);
-export const selectLLMThreadIdGT = createSelector(selectState, ({ LLMContext }) => LLMContext.threadIdGT);
-export const selectLLMThreadIdET = createSelector(selectState, ({ LLMContext }) => LLMContext.threadIdET);
+
 export const selectVisiblePPCreationMessages = createSelector(selectState, (state) => state.LLMContext.visiblePPCreationMessages);

@@ -30,14 +30,14 @@ export class PromptsService{
     }
 
     postPrompt$(prompt: Prompt): Observable<Prompt> {
-        return this.http.post<unknown>(this.BASE_URL + 'prompt', prompt).pipe(
+        return this.http.post<unknown>(this.BASE_URL + 'prompt', {data: prompt}).pipe(
             map(data => PromptZ.parse(data)),
         )
     }
 
 
     putPrompt$(prompt: Prompt): Observable<Prompt> {
-      return this.http.put<unknown>(this.BASE_URL  + 'prompt/' + prompt._id, prompt).pipe(
+      return this.http.put<unknown>(this.BASE_URL  + 'prompt/' + prompt._id, {data: prompt}).pipe(
         map(data => PromptZ.parse(data)),
       )
     }
@@ -65,13 +65,13 @@ export class PromptsService{
     }
 
     postOutputSchema$(schema: OutputSchema): Observable<OutputSchema> {
-        return this.http.post<unknown>(this.BASE_URL + 'output-schema', schema).pipe(
+        return this.http.post<unknown>(this.BASE_URL + 'output-schema', {data: schema}).pipe(
             map(data => OutputSchemaZ.parse(data)),
         )
     }
 
     putOutputSchema$(schema: OutputSchema): Observable<OutputSchema> {
-      return this.http.put<unknown>(this.BASE_URL  + 'output-schema/' + schema._id, schema).pipe(
+      return this.http.put<unknown>(this.BASE_URL  + 'output-schema/' + schema._id, {data: schema}).pipe(
         map(data => OutputSchemaZ.parse(data)),
       )
     }

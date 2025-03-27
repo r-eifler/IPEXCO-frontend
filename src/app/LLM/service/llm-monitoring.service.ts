@@ -8,10 +8,11 @@ import { IHTTPData } from 'src/app/shared/domain/http-data.interface';
 export interface LLMResponse {
     status: 'queued' | 'in_progress' | 'requires_action' | 'cancelling' | 'cancelled' | 'failed' | 'completed' | 'incomplete' | 'expired';
     response?: any;
-    threadId?: string;
 }
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class LLMMonitoringService {
     private http = inject(HttpClient);
     private BASE_URL = environment.apiURL + "llm/";
