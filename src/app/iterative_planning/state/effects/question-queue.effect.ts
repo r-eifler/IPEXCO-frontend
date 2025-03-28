@@ -13,7 +13,7 @@ import { ExplanationMessage } from "../../domain/interface/explanation-message";
 import { Question } from "../../domain/interface/question";
 import { IterationStep, StepStatus } from "../../domain/iteration_step";
 import { poseAnswer, questionPosed, questionPosedLLM, registerGlobalExplanationComputation, sendMessageToLLMExplanationTranslatorFailure, sendMessageToLLMExplanationTranslatorSuccess } from "../iterative-planning.actions";
-import { selectExplanation, selectIterationStepById, selectIterativePlanningProject, selectIterativePlanningProjectExplanationInterfaceType, selectIterativePlanningProperties, selectLLMThreadIdET } from "../iterative-planning.selector";
+import { selectExplanation, selectIterationStepById, selectIterativePlanningProject, selectIterativePlanningProjectExplanationInterfaceType, selectIterativePlanningProperties } from "../iterative-planning.selector";
 
 @Injectable()
 export class QuestionQueueEffect {
@@ -95,12 +95,11 @@ export class QuestionQueueEffect {
           iterationStepId: iterationStep._id
         })),
         concatLatestFrom(({question, explanationMUGS, explanationMGCS, question_type, questionArgument, iterationStepId}) => [
-          this.store.select(selectLLMThreadIdET),
           this.store.select(selectIterativePlanningProject),
           this.store.select(selectIterativePlanningProperties),
           this.store.select(selectIterationStepById(iterationStepId))
         ]),
-        switchMap(([data, threadIdET, project, properties, iterationStep]) => {
+        switchMap(([data, project, properties, iterationStep]) => {
           if(iterationStep === undefined || iterationStep == null ||properties == null || project == null){
             return of(sendMessageToLLMExplanationTranslatorFailure({err: "[LLM] translation failed"}))
           }
@@ -113,11 +112,9 @@ export class QuestionQueueEffect {
             iterationStep, 
             project, 
             Object.values(properties), 
-            threadIdET
           ).pipe(
             switchMap(response => [sendMessageToLLMExplanationTranslatorSuccess({ 
               response: response?.response || 'No response received', 
-              threadId: response?.threadId 
             })]),
             catchError((error) => {
               console.error('Error in postMessageET$:', error);

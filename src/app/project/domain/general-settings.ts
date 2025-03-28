@@ -43,6 +43,8 @@ export const GeneralSettingsZ = object({
     maxCompletionTokens: nullable(number()),
     prompts: array(string()),
     outputSchema: array(string()),
+    goalTranslator: boolean(),
+    showReverseTranslation: boolean(),
   }),
   userStudy: object({
       introTask: boolean(),
@@ -75,6 +77,8 @@ export const defaultGeneralSetting: GeneralSettings = {
     maxCompletionTokens: null,
     prompts: [],
     outputSchema: [],
+    goalTranslator: false,
+    showReverseTranslation: false,
   },
   userStudy: {
       introTask: false,

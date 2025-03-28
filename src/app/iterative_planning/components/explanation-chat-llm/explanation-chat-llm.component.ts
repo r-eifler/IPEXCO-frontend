@@ -6,7 +6,7 @@ import { map, switchMap, take } from 'rxjs/operators';
 import { filterNotNullOrUndefined } from 'src/app/shared/common/check_null_undefined';
 import { ChatModule } from 'src/app/shared/components/chat/chat.module';
 import { eraseLLMHistory, sendMessageToLLMQuestionTranslator } from '../../state/iterative-planning.actions';
-import { selectIsExplanationChatLoading, selectIsLLMChatLoading, selectIterativePlanningProject, selectIterativePlanningSelectedStep, selectLLMThreadIdET, selectLLMThreadIdGT, selectLLMThreadIdQT, selectVisibleMessagesbyId } from '../../state/iterative-planning.selector';
+import { selectIsExplanationChatLoading, selectIsLLMChatLoading, selectIterativePlanningProject, selectIterativePlanningSelectedStep, selectVisibleMessagesbyId } from '../../state/iterative-planning.selector';
 @Component({
     selector: 'app-explanation-chat-llm',
     imports: [AsyncPipe, ChatModule],
@@ -23,10 +23,8 @@ export class ExplanationChatLlmComponent implements OnInit, OnDestroy {
   isExplanationChatLoading$ = this.store.select(selectIsExplanationChatLoading);
   isAnyLoading$ = combineLatest([this.isLoading$, this.isExplanationChatLoading$]).pipe(
     map(([isLoading, isExplanationChatLoading]) => isLoading || isExplanationChatLoading)
-  );
-  threadIdGT$ = this.store.select(selectLLMThreadIdGT);
-  threadIdQT$ = this.store.select(selectLLMThreadIdQT);
-  threadIdET$ = this.store.select(selectLLMThreadIdET);
+    );
+   
   project$ = this.store.select(selectIterativePlanningProject);
   step$ = this.store.select(selectIterativePlanningSelectedStep);
   stepId$ = this.step$.pipe(map(step => step?._id));

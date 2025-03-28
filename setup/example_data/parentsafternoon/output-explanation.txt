@@ -1,0 +1,20 @@
+{
+   "type":"json_schema",
+   "json_schema":{
+      "name":"ET_feedback",
+      "strict":true,
+      "schema":{
+         "type":"object",
+         "properties":{
+            "output":{
+               "type":"string",
+               "description":"The output of the explanation translator."
+            }
+         },
+         "required":[
+            "output"
+         ],
+         "additionalProperties":false
+      }
+   }
+}

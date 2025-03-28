@@ -252,5 +252,33 @@ was applied to reach state `s`.
 
 ### LLM Prompts
 
-**TODO**
+To use one of the LLM interface, at least one of "Property Creation Interface
+Explanation Interface" or "Question Interface" should be set to "LLM Chat" in the project 
+settings.
+
+In these settings there are several parameters that can be set.
+- Model (e.g. gpt-4o)
+- Temperature (e.g. 0.0)
+- Maximal number of completion tokens (e.g. 1000)
+- Enable Goal Translator (to be automatically used in the iterative planning process when asking about unknown goals)
+- Show Reverse Translation (of how the question translator understood the user's question)
+
+The prompts used are also modular :
+
+- System Prompt (prepended to all prompts)
+- Goal Translator Instructions Prompt
+- Question Classifier Instructions Prompt
+- Explanation Translator Instructions Prompt
+
+The output schema of LLMs can also be selected : 
+For more information on structured outputs, see [OpenAI's guide on structured outputs](https://platform.openai.com/docs/guides/structured-outputs).
+
+- Goal Translator Output Schema
+- Question Classifier Output Schema
+- Explanation Translator Output Schema
+
+These can be selected from the prompts defined in the "Specification" page.
+
+Examples prompts and output schemas for the Parents Afternoon domain are given in [setup/example_data/parentsafternoon/](setup/example_data/parentsafternoon/).
+
 

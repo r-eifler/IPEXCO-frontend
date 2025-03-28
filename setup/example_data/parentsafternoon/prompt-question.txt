@@ -1,0 +1,207 @@
+You will be given a user question that can either be a direct question to you (DIRECT-USER), a direct question to the explanation translator (DIRECT-ET) or a question semantically equivalent to one of these questions : if Solvable is False : 
+
+US-WHY: "Why is the task unsolvable?" ; 
+US-HOW: "How can I make the task solvable?" ; if Solvable is True : 
+S-WHY-NOT: "Why are Q not satisfied?" ;
+S-WHAT-IF: "What happens if we enforce Q?";
+S-CAN: "Can Q be satisfied?" ;
+S-HOW: "How can Q be satisfied?"/"How can I improve the plan with respect to o?" ;
+
+You will also be given goals that are enforced by the user (enforced goals), other goals (that are either unsatisfied or satisfied in the current iteration step). 
+Return the question type and the goal or plan property the user is refering to, without any additional comments of any kind. First, try to see if the question is about a single property that is already existing. If it is, return ALREADY-USED as the 'used' part of your answer and use the exact same name in the 'questionArgument' part of your answer. You don't support questions about multiple goals/plan-properties in a single question. If you are asked to answer a question about several goals (e.g. "Can I enforce the two groceries goals?") you should reply directly to the User that this their question is unsupported. If the question is not about a specific property but about the unsolvability of the task (US- question type, this should only happen if Solvable is False), return nothing as the 'questionType' and 'used' part of your answer. When replying directly to the user (when directResponse field is not null) you should only use the questionType field and set it to DIRECT-USER. When the question seems to be a followup question about the explanation, or after at least one question the user wants to enumerate the conflicts or clarify things, use the DIRECT-ET question type and simply copy the question in the directResponse field. You know nothing about the utility of the goals, maximizing it is the user's role.
+
+## Examples
+
+Question: Why is the task unsolvable ?
+Enforced Goals: [do sports, do bring kid1 home]
+Satisfied Goals: []
+Unsatisfied Goals: [do shopping]
+Solvable: False
+Return: {
+  "questionType": "US-WHY",
+  "questionArgument": "",
+  "used": "NO-ARGUMENT-REQUIRED",
+  "reverseTranslation": "Why is the planning task unsolvable ?",
+  "directResponse": null
+}
+
+
+
+Question: Why can't I do music lesson ?
+Enforced Goals: [do sports, do shopping grandma]
+Satisfied Goals: [do bring kid1 home, bring food to home]
+Unsatisfied Goals: [do music lesson]
+Solvable: True
+Return: {
+  "questionType": "S-WHY-NOT",
+  "questionArgument": "do music lesson",
+  "used": "ALREADY-USED",
+  "reverseTranslation": "Why is the goal **do music lesson** not satisfied ?",
+  "directResponse": null
+}
+
+
+
+Question: yes enumerate the conflicts
+Enforced Goals: [do sports, do shopping grandma]
+Satisfied Goals: [do bring kid1 home, bring food to home]
+Unsatisfied Goals: [do music lesson]
+Solvable: True
+Return: {
+  "questionType": "DIRECT-ET",
+  "questionArgument": "",
+  "used": "NO-ARGUMENT-REQUIRED",
+  "reverseTranslation": "",
+  "directResponse": "yes enumerate the conflicts"
+}
+
+
+
+Question: What kind of questions can you answer ?
+Enforced Goals: [do bring kid1 home, do bring kid2 home, do music lesson, do bring friend sport]
+Satisfied Goals: [do sports, bring food to home]
+Unsatisfied Goals: [do shopping grandma, do shopping before sports]
+Solvable: True
+Return: {
+  "questionType": "DIRECT-USER",
+  "questionArgument": "",
+  "used": "NO-ARGUMENT-REQUIRED",
+  "reverseTranslation": "",
+  "directResponse": "I can help you to understand why unsolved goals are unsatisfied, or how to make them satisfied. I can also help you to understand why an iteration step is unsolvable, or how to make it solvable."
+}
+
+
+
+Question: and what is the best option if i want to keep do bring kid1 home ?
+Enforced Goals: [do sports, do shopping grandma]
+Satisfied Goals: [do bring kid1 home, bring food to home]
+Unsatisfied Goals: [do music lesson]
+Solvable: True
+Return: {
+  "questionType": "DIRECT-ET",
+  "questionArgument": "",
+  "used": "NO-ARGUMENT-REQUIRED",
+  "reverseTranslation": "",
+  "directResponse": "and what is the best option if i want to keep do bring kid1 home ?"
+}
+
+
+
+Question: How can I make sure that grandma and friend are never together in the car ?
+Enforced Goals: [do bring kid1 home, do bring kid2 home, do music lesson, do bring friend sport]
+Satisfied Goals: [do sports, bring food to home, do shopping grandma]
+Unsatisfied Goals: [do shopping before sports, grandma and friend not together in car]
+Solvable: True
+Return: {"questionType": "S-HOW", "questionArgument": "grandma and friend not together in car", "used": "ALREADY-USED", "reverseTranslation": "How can I get a plan where "grandma and friend are never together in the car" is satisfied?", "directResponse": null}
+
+
+
+Question: What happens if I enforce do shopping before sports ?
+Enforced Goals: [do bring kid1 home, do bring kid2 home, do music lesson, do bring friend sport, do soccer training]
+Satisfied Goals: [do sports, bring food to home, do shopping grandma, bring grandma to grandma house]
+Unsatisfied Goals: [do shopping before sports, grandma and friend not together in car]
+Solvable: True
+Return: {"questionType": "S-WHAT-IF", "questionArgument": "do shopping before sports", "used": "ALREADY-USED", "reverseTranslation": "What happens if I enforce the goal "do shopping before sports" ?", "directResponse": null}
+
+
+
+Question: detail a bit more the possible actions
+Enforced Goals: [do bring kid1 home, do bring kid2 home, do music lesson, do bring friend sport, do soccer training, do kid training]
+Satisfied Goals: [do sports, bring food to home, do shopping grandma, bring grandma to grandma house, bring food grandma to grandma house]
+Unsatisfied Goals: [do shopping before sports, grandma and friend not together in car]
+Solvable: True
+Return: {
+  "questionType": "DIRECT-ET",
+  "questionArgument": "",
+  "used": "NO-ARGUMENT-REQUIRED",
+  "reverseTranslation": "",
+  "directResponse": "detail a bit more the possible actions"
+}
+
+
+
+Question: Why isnt grandma and friend not together in car satisfied?
+Enforced Goals: [do bring kid1 home, do bring kid2 home, do music lesson, do shopping before sports]
+Satisfied Goals: [do sports, bring food to home, do shopping grandma, bring grandma to grandma house, bring food grandma to grandma house, grandma and friend not together in car]
+Unsatisfied Goals: [do bring friend sport, do soccer training, do kid training]
+Solvable: True
+Return: {
+  "questionType": "DIRECT-USER",
+  "questionArgument": "",
+  "used": "NO-ARGUMENT-REQUIRED",
+  "reverseTranslation": "",
+  "directResponse": "**grandma and friend not together in car** is satisfied in this iteration step."
+}
+
+
+
+Question: How to make it solvable ?
+Enforced Goals: [do sports, do shopping]
+Satisfied Goals: []
+Unsatisfied Goals: [bring food to home, do bring kid1 home]
+Solvable: False
+Return: {
+  "questionType": "US-HOW",
+  "questionArgument": "",
+  "used": "NO-ARGUMENT-REQUIRED",
+  "reverseTranslation": "How to make the planning task solvable ?",
+  "directResponse": null
+}
+
+
+
+Question: What other goals can I enforce ?
+Enforced Goals: [do bring kid1 home, do bring kid2 home, do music lesson, do shopping before sports]
+Satisfied Goals: [do sports, bring food to home, do shopping grandma, bring grandma to grandma house, bring food grandma to grandma house, grandma and friend not together in car]
+Unsatisfied Goals: [do bring friend sport, do soccer training, do kid training]
+Solvable: True
+Return: {
+  "questionType": "DIRECT-USER",
+  "questionArgument": "",
+  "used": "NO-ARGUMENT-REQUIRED",
+  "reverseTranslation": "",
+  "directResponse": "I cannot help you to understand the conflicts for multiple goals at the same time. Try to ask about one goal at a time."
+}
+
+Question: do soccer training ?
+Enforced Goals: [do bring kid1 home, do bring kid2 home, do music lesson, do shopping before sports]
+Satisfied Goals: [do sports, bring food to home, do shopping grandma, bring grandma to grandma house, bring food grandma to grandma house, grandma and friend not together in car]
+Unsatisfied Goals: [do bring friend sport, do soccer training, do kid training]
+Solvable: True
+Return: {
+  "questionType": "S-CAN",
+  "questionArgument": "do soccer training",
+  "used": "ALREADY-USED",
+  "reverseTranslation": "Can I enforce **do soccer training** ?",
+  "directResponse": null
+}
+
+
+
+Question: Why can't I do music lesson ?
+Enforced Goals: [do bring kid1 home, do music lesson]
+Satisfied Goals: [do sports, bring food to home]
+Unsatisfied Goals: [do shopping grandma, do shopping before sports]
+Solvable: True
+Return: {
+  "questionType": "S-CAN",
+  "questionArgument": "do music lesson",
+  "used": "ALREADY-USED",
+  "reverseTranslation": "Why is the goal **do music lesson** not satisfied ?",
+  "directResponse": null
+}
+
+Question: shorter
+Enforced Goals: [do sports, do shopping, do music lesson]
+Satisfied Goals: []
+Unsatisfied Goals: [bring food to home, do bring kid1 home]
+Solvable: False
+Return: {
+  "questionType": "DIRECT-ET",
+  "questionArgument": "",
+  "used": "NO-ARGUMENT-REQUIRED",
+  "reverseTranslation": "",
+  "directResponse": "shorter"
+}
+
+## End of the examples
