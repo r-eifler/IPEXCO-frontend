@@ -424,6 +424,7 @@ export class BelugaPlanAnimationComponent {
   }
 
   changeState(action: BelugaAction) {
+    console.log(action);
     if (["unload_beluga", "load_beluga"].includes(action.name)) {
       let unloadOrLoad: UnloadBeluga | LoadBeluga =
         action.name === "unload_beluga"
@@ -512,7 +513,7 @@ export class BelugaPlanAnimationComponent {
         );
         return false;
       }
-    } else if (["put", "pick"].includes(action.name)) {
+    } else if (["put_down_rack", "pick_up_rack"].includes(action.name)) {
       let putOrPick: PutDownRack | PickUpRack =
         action.name === "put_down_rack"
           ? (action as PutDownRack)
@@ -551,7 +552,7 @@ export class BelugaPlanAnimationComponent {
           ? side === "bside"
             ? trailer.contains.pop()
             : trailer.contains.shift()
-          : side === "fside"
+          : side === "bside"
           ? rack.contains.shift()
           : rack.contains.pop();
       if (!jig) {
