@@ -38,6 +38,8 @@ export const loadPlansSuccess = createAction('[planning] load plans success', pr
 export const loadPlansFailure = createAction('[planning] load plans failure',  props<{err: any}>());
 
 export const selectPlan = createAction('[planning] select plan', props<{id: string}>());
+export const selectPlanRef = createAction('[planning] select reference plan', props<{id: string}>());
+export const selectPlanComp = createAction('[planning] select compare plan', props<{id: string}>());
 
 export const registerPlanComputation = createAction('[planning] register plan computation', props<{plan: PlanBase}>());
 export const registerPlanComputationSuccess = createAction('[planning] register plan computation success', props<{plan: Plan}>());

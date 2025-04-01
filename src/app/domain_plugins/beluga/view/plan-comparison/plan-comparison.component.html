@@ -1,0 +1,94 @@
+@let refPlan = referencePlan$ | async;
+@let compPlan = comparisonPlan$ | async;
+
+<app-page>
+  <app-breadcrumb>
+    <a app-breadcrumb-item [routerLink]="['/planning/' + refPlan?.project]"><mat-icon>home</mat-icon></a>
+    <a app-breadcrumb-item [routerLink]="['/planning/' + refPlan?.project + '/plans']">All Plans</a>
+    <a app-breadcrumb-item [routerLink]="['../..']">{{ refPlan?.name }}</a>
+    <app-breadcrumb-item>{{ compPlan?.name }}</app-breadcrumb-item>
+  </app-breadcrumb>
+  <app-page-title>
+    {{ refPlan?.name }} vs {{ compPlan?.name }}
+    <app-page-title-action>
+    </app-page-title-action>
+  </app-page-title>
+
+  <app-page-content>
+    <app-page-section-list>
+      <app-page-section>
+        <app-page-section-content>
+          <div class="console">
+            <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                <mat-label>Flight</mat-label>
+                <mat-select [formControl]="form.controls.flight">
+                  <mat-option>--</mat-option>
+                  @for (flight of flights$ | async; track flight.name;) {
+                    <mat-option [value]="flight.name">{{flight.name}}</mat-option>
+                  }
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                <mat-label>Jigs</mat-label>
+                <mat-select [formControl]="form.controls.jigs" multiple>
+                  <mat-option>--</mat-option>
+                  @for (jig of jigs$ | async; track jig.name;) {
+                    <mat-option [value]="jig.name">{{jig.name}}</mat-option>
+                  }
+                </mat-select>
+            </mat-form-field>
+            <mat-checkbox [formControl]="form.controls.hideCommonPrefix">hide common prefix</mat-checkbox>
+            <app-step-control
+              (back)="onBack()"
+              (forward)="onForward()"
+              [disabled]="! (allowStepper$ | async)"
+            ></app-step-control>
+        </div>
+        </app-page-section-content>
+      </app-page-section>
+      <app-page-section>
+        <app-page-section-content>
+          <div class="plans-container">
+            <app-plan-inspection
+              [actions]="referenceActions$ | async"
+              [model]="model$ | async"
+              [selectedJigs] = "selectedJigs$ | async"
+              [selectedFlight] = "selectedFlight$ | async"
+              [selectedAction] = "this.selectedActionIndexRef$ | async"
+              [hiddenPrefix]="commonPrefixLength$ | async"
+              (actionSelected)="onActionSelected(true, $event)"
+            ></app-plan-inspection>
+
+            <app-plan-inspection
+              [actions]="comparisonActions$ | async"
+              [model]="model$ | async"
+              [selectedJigs] = "selectedJigs$ | async"
+              [selectedFlight] = "selectedFlight$ | async"
+              [selectedAction] = "this.selectedActionIndexComp$ | async"
+              [hiddenPrefix]="commonPrefixLength$ | async"
+              (actionSelected)="onActionSelected(false, $event)"
+            ></app-plan-inspection>
+          </div>
+        </app-page-section-content>
+      </app-page-section>
+
+      <app-page-section>
+        <app-page-section-content>
+          <div class="states-container">
+            <app-state-card
+              [state]="selectedStateRef$ | async"
+              [model]="model$ | async"
+            >
+            </app-state-card>
+
+            <app-state-card
+              [state]="selectedStateComp$ | async"
+              [model]="model$ | async"
+            >
+            </app-state-card>
+          </div>
+        </app-page-section-content>
+      </app-page-section>
+    </app-page-section-list>
+  </app-page-content>
+</app-page>

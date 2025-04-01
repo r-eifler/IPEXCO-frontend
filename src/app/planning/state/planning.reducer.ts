@@ -13,16 +13,21 @@ import {
     loadServices,
     loadServicesSuccess,
     selectPlan,
+    selectPlanComp,
+    selectPlanRef,
     updateProject,
     updateProjectSuccess
 } from "./planning.actions";
+import { Plan } from "../domain/plan";
 
 export interface PlanningState {
     project: Loadable<Project>;
     domainSpecification: Loadable<DomainSpecification>
     services: Loadable<Service[]>;
-    plans: Loadable<any[]>;
-    planId: string | null
+    plans: Loadable<Plan[]>;
+    planId: string | null;
+    referencePlanId: string | null;
+    comparisonPlanId: string | null;
 }
 
 
@@ -31,7 +36,9 @@ const initialState: PlanningState = {
     domainSpecification: {state: LoadingState.Initial, data: undefined},
     services: { state: LoadingState.Initial, data: undefined },
     plans: { state: LoadingState.Initial, data: undefined },
-    planId: null
+    planId: null,
+    referencePlanId: null,
+    comparisonPlanId: null,
 }
 
 
@@ -80,5 +87,14 @@ export const planningReducer = createReducer(
     on(selectPlan, (state, {id}): PlanningState => ({
         ...state,
         planId: id
+    })),
+    on(selectPlanRef, (state, {id}): PlanningState => ({
+        ...state,
+        planId: id,
+        referencePlanId: id,
+    })),
+    on(selectPlanComp, (state, {id}): PlanningState => ({
+        ...state,
+        comparisonPlanId: id
     })),
 );

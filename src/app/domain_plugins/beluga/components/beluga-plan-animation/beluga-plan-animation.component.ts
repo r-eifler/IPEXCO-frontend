@@ -239,6 +239,7 @@ export class BelugaPlanAnimationComponent {
 
   model = input.required<unknown>();
   belugaProblem = computed(() => {
+    console.log(this.model())
     return BelugaProblemZ.parse(this.model());
   });
 
