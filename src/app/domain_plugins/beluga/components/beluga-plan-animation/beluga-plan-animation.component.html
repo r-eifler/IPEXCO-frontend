@@ -1,3 +1,98 @@
-@for(a of actions(); track a){
-    <p>{{a.name}}</p>
-}
+<img
+  src="./assets/beluga/canvas-beluga.png"
+  id="beluga-image"
+  (load)="canvasBelugaLoaded()"
+/>
+<div class="scene-rendering">
+  <canvas id="renderingCanvas"></canvas>
+  <div class="canvas-view-button-row">
+    <div class="canvas-buttons-flex-container">
+      <div class="canvas-button-container">
+        <button mat-mini-fab aria-label="zoom in" (click)="onZoomIn()">
+          <mat-icon>zoom_in</mat-icon>
+        </button>
+      </div>
+      <div class="canvas-button-container">
+        <button mat-mini-fab aria-label="zoom out" (click)="onZoomOut()">
+          <mat-icon>zoom_out</mat-icon>
+        </button>
+      </div>
+      <div class="canvas-button-container">
+        <a mat-mini-fab aria-label="zoom out map" (click)="resetViewport()">
+          <mat-icon>zoom_out_map</mat-icon>
+        </a>
+      </div>
+      <div class="canvas-button-container" *ngIf="!expandedCanvas">
+        <a mat-mini-fab aria-label="expand canvas" (click)="expandCanvas()">
+          <mat-icon>unfold_more</mat-icon>
+        </a>
+      </div>
+      <div class="canvas-button-container" *ngIf="expandedCanvas">
+        <a mat-mini-fab aria-label="expand canvas" (click)="shrinkCanvas()">
+          <mat-icon>unfold_less</mat-icon>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="canvas-simulation-controls">
+    <div class="canvas-simulation-button-row">
+      <div class="canvas-buttons-flex-container">
+        <div class="canvas-button-container">
+          <button
+            mat-mini-fab
+            aria-label="play"
+            [disabled]="!simulationActivated"
+            (click)="onSimulationPlay()"
+          >
+            <mat-icon>play_arrow</mat-icon>
+          </button>
+        </div>
+        <div class="canvas-button-container">
+          <button
+            mat-mini-fab
+            aria-label="pause"
+            [disabled]="!simulationActivated"
+            (click)="onSimulationPause()"
+          >
+            <mat-icon>pause</mat-icon>
+          </button>
+        </div>
+        <div class="canvas-button-container">
+          <button
+            mat-mini-fab
+            aria-label="skip previous"
+            [disabled]="!simulationActivated || !canMoveBackward"
+            (click)="onSimulationPreviousAction()"
+          >
+            <mat-icon>skip_previous</mat-icon>
+          </button>
+        </div>
+        <div class="canvas-button-container">
+          <button
+            mat-mini-fab
+            aria-label="skip next"
+            [disabled]="!simulationActivated || !canMoveForward"
+            (click)="onSimulationNextAction()"
+          >
+            <mat-icon>skip_next</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="canvas-simulation-slider">
+      <mat-slider
+        min="0"
+        [max]="solutionPlan.length - 1"
+        step="1"
+        discrete="true"
+        [disabled]="!simulationActivated"
+      >
+        <input
+          matSliderThumb
+          value="{{ currentAction }}"
+          (dragEnd)="onSimulationGotoAction($event)"
+        />
+      </mat-slider>
+    </div>
+  </div>
+</div>

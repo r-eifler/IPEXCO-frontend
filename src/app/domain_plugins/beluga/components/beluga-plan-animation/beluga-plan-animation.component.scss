@@ -1,0 +1,64 @@
+p {
+  font-family: Lato;
+}
+
+.scene-rendering {
+  width: auto;
+  height: 100%;
+  flex-direction: column;
+  display: flex;
+  position: relative;
+}
+
+.canvas-view-button-row {
+  display: table-cell;
+  max-width: 600px;
+  float: left;
+  position: absolute;
+  top: 0px;
+  left: 15px;
+  z-index: 1000;
+}
+
+.canvas-view-button-row .mat-mdc-button-base {
+  margin: 8px 8px 8px 0;
+}
+
+.canvas-simulation-controls {
+  max-width: 600px;
+  float: right;
+  position: absolute;
+  top: 0px;
+  right: 15px;
+  z-index: 1000;
+}
+
+.canvas-simulation-button-row {
+  display: table-cell;
+}
+
+.canvas-simulation-button-row .mat-mdc-button-base {
+  margin: 8px 8px 8px 0;
+}
+
+.canvas-buttons-flex-container {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.canvas-button-container {
+  display: flex;
+  justify-content: center;
+  width: 60px;
+}
+
+.canvas-simulation-slider {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+#beluga-image {
+  display: none;
+}
