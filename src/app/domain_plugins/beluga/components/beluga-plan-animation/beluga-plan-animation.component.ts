@@ -1,4 +1,11 @@
-import { Component, computed, effect, ElementRef, input } from "@angular/core";
+import {
+  Component,
+  computed,
+  effect,
+  ElementRef,
+  input,
+  ViewChild,
+} from "@angular/core";
 import colorsys from "colorsys";
 import * as fabric from "fabric";
 import { BelugaProblem, BelugaProblemZ } from "../../domain/beluga_problem";
@@ -71,21 +78,13 @@ export interface Factory {
 
 export interface Flight {
   name: string;
-  type: string; // 'in' or 'out'
   num: number; // flight order
+  ins: Rack;
+  outs: Rack;
 }
 
 class State {
   flight: Flight | null = null;
-  belugaRack: Rack = {
-    name: "beluga",
-    length: 0,
-    type: "",
-    location: "",
-    contains: new Array<Jig>(),
-    at: null,
-    fObj: null,
-  };
   racks: Rack[] = [];
   trailers: Rack[] = [];
   factories: Factory[] = [];
@@ -93,17 +92,19 @@ class State {
 
   copy(): State {
     const state = new State();
-    if (this.flight != undefined) {
-      state.flight = { ...this.flight };
-    } else {
-      state.flight = null;
-    }
-    state.belugaRack = State._copyRack(this.belugaRack);
     state.racks = this.racks.map((r) => State._copyRack(r));
     let rackNameMap = new Map<string, Rack>(
       state.racks.map((r) => [r.name, r])
     );
-    rackNameMap.set("beluga", state.belugaRack);
+    if (this.flight != undefined) {
+      state.flight = { ...this.flight };
+      state.flight.ins = State._copyRack(this.flight.ins);
+      state.flight.outs = State._copyRack(this.flight.outs);
+      rackNameMap.set(state.flight.ins.name, state.flight.ins);
+      rackNameMap.set(state.flight.outs.name, state.flight.outs);
+    } else {
+      state.flight = null;
+    }
     state.factories = this.factories.map((f) => State._copyFactory(f));
     state.hangars = this.hangars.map((h) => State._copyHangar(h));
     let hangarNameMap = new Map<string, Hangar>(
@@ -182,11 +183,11 @@ class State {
   styleUrl: "./beluga-plan-animation.component.scss",
 })
 export class BelugaPlanAnimationComponent {
+  @ViewChild("sceneRendering") sceneRendering?: ElementRef;
   canvas: fabric.Canvas = new fabric.Canvas();
 
   site: string = "";
   dates: [startDate: Date, endDate: Date] = [new Date(), new Date()];
-  // problem: any | null;
   solutionPlan: BelugaAction[] = new Array<BelugaAction>();
   simulationActivated: boolean = false;
   canMoveForward: boolean = false;
@@ -239,7 +240,7 @@ export class BelugaPlanAnimationComponent {
 
   model = input.required<unknown>();
   belugaProblem = computed(() => {
-    console.log(this.model())
+    console.log(this.model());
     return BelugaProblemZ.parse(this.model());
   });
 
@@ -268,7 +269,8 @@ export class BelugaPlanAnimationComponent {
   resizeCanvas() {
     if (this.canvas) {
       this.canvas.setWidth(
-        document.body.clientWidth - 2 * this.canvasWindowMargin
+        this.sceneRendering?.nativeElement.clientWidth -
+          2 * this.canvasWindowMargin
       );
       if (this.expandedCanvas) {
         this.canvas.setHeight(window.innerHeight - 2 * this.canvasWindowMargin);
@@ -431,30 +433,26 @@ export class BelugaPlanAnimationComponent {
           ? (action as UnloadBeluga)
           : (action as LoadBeluga);
       let flight_name: string = unloadOrLoad.b;
-      let trailerAtBeluga: Rack | null = null;
-      for (var trailer of this.currentState.trailers) {
-        if (
-          trailer.at &&
-          trailer.at?.rack &&
-          trailer.at?.rack?.name === "beluga"
-        ) {
-          trailerAtBeluga = trailer;
-          break;
-        }
-      }
-      if (!trailerAtBeluga) {
-        console.error(`${action.name} action: no trailer at Beluga!`);
-        return false;
-      }
-      if (trailerAtBeluga.name != unloadOrLoad.t) {
+      let trailerIndex = this.trailerNameToIndex.get(unloadOrLoad.t);
+      if (trailerIndex === undefined) {
         console.error(
-          `${action.name} action: trailer at Beluga is ${trailerAtBeluga.name} but planner indicates it should be ${unloadOrLoad.t}`
+          `${action.name} action: unknown trailer ${unloadOrLoad.t}`
         );
         return false;
       }
+      let trailerAtBeluga: Rack = this.currentState.trailers[trailerIndex];
+      if (this.currentState.flight) {
+        trailerAtBeluga.at = {
+          rack: this.currentState.flight?.ins,
+          side: "beluga",
+          hangar: null,
+        };
+      } else {
+        console.error(`${action.name} action: no flight to load or unload`);
+      }
       let jig: Jig | undefined =
         action.name === "unload_beluga"
-          ? this.currentState.belugaRack.contains.shift()
+          ? this.currentState.flight?.ins.contains.shift()
           : trailerAtBeluga.contains.shift();
       if (!jig) {
         if (action.name === "unload_beluga") {
@@ -479,39 +477,28 @@ export class BelugaPlanAnimationComponent {
       if (action.name === "unload_beluga") {
         trailerAtBeluga.contains.unshift(jig);
       } else if (action.name === "load_beluga") {
-        this.currentState.belugaRack.contains.unshift(jig);
+        this.currentState.flight?.outs.contains.unshift(jig);
       }
     } else if (action.name === "switch_to_next_beluga") {
-      let flightNum: number = !this.currentState.flight
-        ? 0
-        : this.currentState.flight.num + 1;
-      this.currentState.flight = null;
-      this.currentState.belugaRack.contains = new Array<Jig>();
-      let flightBP: FlightBP = this.belugaProblem().flights[flightNum];
-      if (flightBP.outgoing.length > 0) {
-        this.currentState.flight = {
-          name: flightBP.name,
-          type: "out",
-          num: flightNum,
-        };
-      } else if (flightBP.incoming.length > 0) {
-        this.currentState.flight = {
-          name: flightBP.name,
-          type: "in",
-          num: flightNum,
-        };
-        for (let ctn of flightBP.incoming) {
+      if (
+        this.currentState.flight &&
+        this.currentState.flight.num < this.belugaProblem().flights.length - 1
+      ) {
+        this.currentState.flight.num += 1;
+        this.currentState.flight.name =
+          this.belugaProblem().flights[this.currentState.flight.num].name;
+        this.currentState.flight.ins.contains = new Array<Jig>();
+        this.currentState.flight.outs.contains = new Array<Jig>();
+        for (let ctn of this.belugaProblem().flights[
+          this.currentState.flight.num
+        ].incoming) {
           let jig: Jig | undefined = this.createAndRegisterJig(ctn);
           if (jig) {
-            this.currentState.belugaRack.contains.push(jig);
+            this.currentState.flight.ins.contains.push(jig);
           }
         }
-      }
-      if (!this.currentState.flight) {
-        console.error(
-          `${action.name} action: flight ${flightBP.name} has neither incoming nor outgoing jigs`
-        );
-        return false;
+      } else {
+        this.currentState.flight = null;
       }
     } else if (["put_down_rack", "pick_up_rack"].includes(action.name)) {
       let putOrPick: PutDownRack | PickUpRack =
@@ -531,22 +518,11 @@ export class BelugaPlanAnimationComponent {
         return false;
       }
       let trailer: Rack = this.currentState.trailers[trailerIndex];
-      if (
-        !trailer.at ||
-        !trailer.at.rack ||
-        trailer.at.rack.name != rack.name
-      ) {
-        if (!trailer.at?.rack) {
-          console.error(
-            `${action.name} action: trailer not at a rack but planner indicates it should be at rack ${rack.name}`
-          );
-        } else {
-          console.error(
-            `${action.name} action: trailer at rack ${trailer.at?.rack?.name} but planner indicates it should be at rack ${rack.name}`
-          );
-        }
-        return false;
-      }
+      trailer.at = {
+        rack: rack,
+        side: side === "bside" ? "beluga" : "factory",
+        hangar: null,
+      };
       let jig: Jig | undefined =
         action.name === "put_down_rack"
           ? side === "bside"
@@ -609,22 +585,11 @@ export class BelugaPlanAnimationComponent {
         return false;
       }
       let trailer: Rack = this.currentState.trailers[trailerIndex];
-      if (
-        !trailer.at ||
-        !trailer.at.hangar ||
-        trailer.at.hangar.name != hangar.name
-      ) {
-        if (!trailer.at?.hangar) {
-          console.error(
-            `${action.name} action: trailer not at a hangar but planner indicates it should be at hangar ${hangar.name}`
-          );
-        } else {
-          console.error(
-            `${action.name} action: trailer at hangar ${trailer.at?.hangar?.name} but planner indicates it should be at hangar ${hangar.name}`
-          );
-        }
-        return false;
-      }
+      trailer.at = {
+        rack: null,
+        side: "factory",
+        hangar: hangar,
+      };
       if (trailer.contains.length === 0) {
         console.error(
           `${action.name} action: no jig on trailer ${trailer.name}`
@@ -695,46 +660,46 @@ export class BelugaPlanAnimationComponent {
       let currentSplitOccupation: number = 0;
       let currentJigStart: number = belugaAircraft.getX();
       let maxJigHeight: number = 0;
-      let belugaJigs: Array<fabric.Group> = [];
-      for (let j = 0; j < this.currentState.belugaRack.contains.length; j++) {
-        let jj: Jig =
-          this.currentState.belugaRack.contains[
-            this.currentState.belugaRack.contains.length - 1 - j
-          ];
-        let jigLength = jj.msn === null ? jj.length : jj.msn.length;
-        if (
-          currentSplitOccupation + jigLength >
-          this.currentState.belugaRack.length
-        ) {
-          belugaRackSplit += 1;
-          currentSplitOccupation = jigLength;
-          currentJigStart = belugaAircraft.getX();
-        } else {
-          currentSplitOccupation += jigLength;
+      for (let bRack of [
+        this.currentState.flight.ins,
+        this.currentState.flight.outs,
+      ]) {
+        let belugaJigs: Array<fabric.Group> = [];
+        for (let j = 0; j < bRack.contains.length; j++) {
+          let jj: Jig = bRack.contains[bRack.contains.length - 1 - j];
+          let jigLength = jj.msn === null ? jj.length : jj.msn.length;
+          if (currentSplitOccupation + jigLength > bRack.length) {
+            belugaRackSplit += 1;
+            currentSplitOccupation = jigLength;
+            currentJigStart = belugaAircraft.getX();
+          } else {
+            currentSplitOccupation += jigLength;
+          }
+          let jig: fabric.Group = this.drawJig(jj);
+          jig.set("left", currentJigStart);
+          jig.set(
+            "top",
+            belugaAircraft.getY() +
+              belugaAircraft.height +
+              belugaRackSplit * (maxJigHeight + this.rackSpace)
+          );
+          belugaJigs.push(jig);
+          currentJigStart += jig.width + 0.1 * this.rackSpace;
+          maxJigHeight = Math.max(maxJigHeight, jig.height);
         }
-        let jig: fabric.Group = this.drawJig(jj);
-        jig.set("left", currentJigStart);
-        jig.set(
-          "top",
-          belugaAircraft.getY() +
-            belugaAircraft.height +
-            belugaRackSplit * (maxJigHeight + this.rackSpace)
+        let belugaRack: fabric.Group = new fabric.Group([...belugaJigs]);
+        this.canvas.add(belugaRack);
+        bRack.fObj = belugaRack;
+        this.sceneWidth = Math.max(
+          this.sceneWidth,
+          belugaRack.getX() + belugaRack.width
         );
-        belugaJigs.push(jig);
-        currentJigStart += jig.width + 0.1 * this.rackSpace;
-        maxJigHeight = Math.max(maxJigHeight, jig.height);
+        this.sceneHeight = Math.max(
+          this.sceneHeight,
+          belugaRack.getY() + belugaRack.height
+        );
+        belugaRackSplit += 1;
       }
-      let belugaRack: fabric.Group = new fabric.Group([...belugaJigs]);
-      this.canvas.add(belugaRack);
-      this.currentState.belugaRack.fObj = belugaRack;
-      this.sceneWidth = Math.max(
-        this.sceneWidth,
-        belugaRack.getX() + belugaRack.width
-      );
-      this.sceneHeight = Math.max(
-        this.sceneHeight,
-        belugaRack.getY() + belugaRack.height
-      );
     }
 
     // Draw Beluga Hangar
@@ -886,7 +851,7 @@ export class BelugaPlanAnimationComponent {
         let atRack: Rack | null = t.at.rack;
         let atSide: string | null = t.at.side;
         if (atRack && atSide) {
-          if (atRack.name === "beluga") {
+          if (atRack.name.includes("beluga")) {
             trailer.set("left", belugaHangar.getX() - 20);
             trailer.set(
               "top",
@@ -1067,10 +1032,6 @@ export class BelugaPlanAnimationComponent {
       left: -30,
       scaleX: 0.75,
       scaleY: 0.75,
-      flipX:
-        this.currentState.flight != undefined
-          ? this.currentState.flight.type == "out"
-          : false,
       selectable: false,
       hoverCursor: "text",
     });
@@ -1714,12 +1675,43 @@ export class BelugaPlanAnimationComponent {
     this.hangarNameToIndex.clear();
 
     this.currentState.flight = null;
-    this.currentState.belugaRack.length = 50; // hard coded
-    this.currentState.belugaRack.contains = new Array<Jig>();
     this.maxNbJigs = 0;
     this.maxNbParts = 0;
     this.registeredJigsInScene = 0;
     this.registeredPartsInScene = 0;
+
+    if (problem.flights.length > 0) {
+      this.currentState.flight = {
+        name: problem.flights[0].name,
+        ins: {
+          name: "beluga-ins",
+          length: 50, // hard coded,
+          location: "beluga",
+          contains: new Array<Jig>(),
+          at: null,
+          fObj: null,
+        },
+        outs: {
+          name: "beluga-outs",
+          length: 50, // hard coded,
+          location: "beluga",
+          contains: new Array<Jig>(),
+          at: null,
+          fObj: null,
+        },
+        num: 0,
+      } as Flight;
+      for (let ctn of problem.flights[0].incoming) {
+        let jig: Jig | undefined = this.createAndRegisterJig(ctn);
+        if (jig) {
+          this.currentState.flight.ins.contains.push(jig);
+        }
+        this.maxNbJigs += 1;
+        if (!problem.jigs[ctn].empty) {
+          this.maxNbParts += 1;
+        }
+      }
+    }
 
     for (let ri = 0; ri < problem.racks.length; ri++) {
       let rack: RackBP = problem.racks[ri];
@@ -1737,10 +1729,6 @@ export class BelugaPlanAnimationComponent {
         let jig: Jig | undefined = this.createAndRegisterJig(ctn);
         if (jig) {
           this.currentState.racks[ri].contains.push(jig);
-        }
-        this.maxNbJigs += 1;
-        if (!problem.jigs[ctn].empty) {
-          this.maxNbParts += 1;
         }
       }
     }
