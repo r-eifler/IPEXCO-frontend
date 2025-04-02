@@ -5,7 +5,7 @@ import { sendMessageToLLMGoalTranslator } from '../../state/iterative-planning.a
 import { ChatModule } from 'src/app/shared/components/chat/chat.module';
 import { DialogModule } from 'src/app/shared/components/dialog/dialog.module';
 import { selectIsLoading, selectMessages } from './property-creation-chat.component.selector';
-import { selectIsExplanationChatLoading, selectIterativePlanningSelectedStep, selectVisiblePPCreationMessages } from '../../state/iterative-planning.selector';
+import { selectIsExplanationChatLoading, selectVisiblePPCreationMessages } from '../../state/iterative-planning.selector';
 import { createPlanProperty } from '../../state/iterative-planning.actions';
 import { MatDialogRef } from '@angular/material/dialog';
 import { take, filter, map, mergeMap, switchMap, combineLatestWith } from 'rxjs/operators';
@@ -14,7 +14,6 @@ import { eraseLLMHistory } from '../../state/iterative-planning.actions';
 import { selectLLMChatMessages } from '../../state/iterative-planning.selector';
 import { combineLatest } from 'rxjs';
 import { GoalType, PlanProperty, PlanPropertyBase, PlanPropertyOfProject } from 'src/app/shared/domain/plan-property/plan-property';
-import { selectSelectedIterationStepId } from '../../state/iterative-planning.feature';
 @Component({
     selector: 'app-property-creation-chat',
     imports: [AsyncPipe, DialogModule, ChatModule],
@@ -29,8 +28,6 @@ export class PropertyCreationChatComponent {
   messages$ = this.store.select(selectVisiblePPCreationMessages);
   isLoading$ = this.store.select(selectIsLoading);
   isExplanationChatLoading$ = this.store.select(selectIsExplanationChatLoading);
-  step$ = this.store.select(selectIterativePlanningSelectedStep);
-  stepId$ = this.step$.pipe(map(step => step?._id));
 
   isAnyLoading$ = combineLatest([this.isLoading$, this.isExplanationChatLoading$]).pipe(
     map(([isLoading, isExplanationChatLoading]) => isLoading || isExplanationChatLoading)
@@ -43,36 +40,7 @@ export class PropertyCreationChatComponent {
   // }
 
   onUserMessage(request: string) {
-    console.log('onUserMessage called with request:', request);
-    
-    this.stepId$.pipe(
-      take(1),
-      filter((id): id is string => id !== null && id !== undefined),
-    ).subscribe({
-      next: (iterationStepId) => {
-        console.log('Valid iterationStepId found:', iterationStepId);
-        try {
-          console.log('Dispatching action with:', { goalDescription: request, iterationStepId });
-          this.store.dispatch(sendMessageToLLMGoalTranslator({
-            goalDescription: request,
-            iterationStepId
-          }));
-          console.log('Action dispatched successfully');
-        } catch (error) {
-          console.error('Error dispatching action:', error);
-        }
-      },
-      error: (error) => console.error('Error in stepId$ subscription:', error),
-      complete: () => console.log('stepId$ observable completed without emitting a valid ID')
-    });
-    
-    // Debug if the filter might be removing all values
-    this.stepId$.pipe(take(1)).subscribe(id => {
-      console.log('Raw stepId value before filtering:', id);
-      if (id === null || id === undefined) {
-        console.warn('stepId is null or undefined, message will not be sent');
-      }
-    });
+    this.store.dispatch(sendMessageToLLMGoalTranslator({goalDescription: request}));
   }
 
   onSaveProperty() {

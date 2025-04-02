@@ -56,25 +56,24 @@ export class SendMessageToLLMEffect {
 
 
 
-    public sendMessageToGoalTranslator$ = createEffect(() => this.actions$.pipe(
-        ofType(sendMessageToLLMGoalTranslator),
-        concatLatestFrom(({ goalDescription, iterationStepId }) => [
-            this.store.select(selectIterativePlanningProject),
-            this.store.select(selectIterativePlanningProperties),
-            this.store.select(selectIterationStepById(iterationStepId))
-        ]),
-        filter(([_, project, properties, iterationStep]) => !!project && !!properties && !!iterationStep),
-        switchMap(([{ goalDescription, iterationStepId }, project, properties, iterationStep]) => {
-            const startTime = performance.now();
-            return this.service.postMessageGT$(goalDescription, iterationStep!, project!, Object.values(properties || {})).pipe(
-                map(({ response: { formula, shortName, reverseTranslation, feedback } }) => {
-                    const duration = performance.now() - startTime;
-                    return sendMessageToLLMGoalTranslatorSuccess({ response: { formula, shortName }, duration });
-                }),
-                catchError((error) => of(sendMessageToLLMGoalTranslatorFailure({ err: error })))
-            );
-        })
-    ))
+    // public sendMessageToGoalTranslator$ = createEffect(() => this.actions$.pipe(
+    //     ofType(sendMessageToLLMGoalTranslator),
+    //     concatLatestFrom(() => [
+    //         this.store.select(selectIterativePlanningProject),
+    //         this.store.select(selectIterativePlanningProperties),
+    //         this.store.select(selectLLMThreadIdGT)
+    //     ]),
+    //     switchMap(([action, project, properties, threadIdGT]) => {
+    //         const startTime = performance.now();
+    //         return this.service.postMessageGT$(action.goalDescription, project, Object.values(properties), threadIdGT).pipe(
+    //             map(({ response: { formula, shortName, reverseTranslation, feedback }, threadId }) => {
+    //                 const duration = performance.now() - startTime;
+    //                 return sendMessageToLLMGoalTranslatorSuccess({ response: { formula, shortName }, threadId, duration });
+    //             }),
+    //             catchError(() => of(sendMessageToLLMGoalTranslatorFailure()))
+    //         );
+    //     })
+    // ))
 
     // public sendMessageToQuestionAndGoalTranslator$ = createEffect(() => this.actions$.pipe(
     //     ofType(sendMessageToLLMQTthenGTTranslators),

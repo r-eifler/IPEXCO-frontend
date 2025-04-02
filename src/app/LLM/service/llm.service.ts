@@ -174,19 +174,19 @@ export class LLMService {
 
     // TODO: Test this
 
-    postMessageGT$(request: string, iterationStep: IterationStep, project: Project, properties: PlanProperty[]): Observable<{ response: { formula: string, shortName: string, reverseTranslation: string, feedback: string }}> {
-        const goalTranslationRequest: GoalTranslationRequest = {
-            goalDescription: request,
-            predicates: (project.baseTask.model as PDDLPlanningModel).predicates,
-            objects: project.baseTask.objects,
-            existingPlanProperties: Object.values(properties)
-        };
-        const requestString = goalTranslationRequestToString(goalTranslationRequest);
-        return this.http.post<IHTTPData<{ response: { formula: string, shortName: string, reverseTranslation: string, feedback: string }}>>(this.BASE_URL + 'gt', { data: requestString, originalRequest: request, projectId: project._id, iterationStepId: iterationStep._id }).pipe(
-            map(({ data }) => data),
-            tap(console.log)
-        );
-    }
+    // postMessageGT$(request: string, project: Project, properties: PlanProperty[]): Observable<{ response: { formula: string, shortName: string, reverseTranslation: string, feedback: string }}> {
+    //     const goalTranslationRequest: GoalTranslationRequest = {
+    //         goalDescription: request,
+    //         predicates: (project.baseTask.model as PDDLPlanningModel).predicates,
+    //         objects: project.baseTask.objects,
+    //         existingPlanProperties: Object.values(properties)
+    //     };
+    //     const requestString = goalTranslationRequestToString(goalTranslationRequest);
+    //     return this.http.post<IHTTPData<{ response: { formula: string, shortName: string, reverseTranslation: string, feedback: string }}>>(this.BASE_URL + 'gt', { data: requestString, originalRequest: request, projectId: project._id }).pipe(
+    //         map(({ data }) => data),
+    //         tap(console.log)
+    //     );
+    // }
 
 
     // ------------------------------ WITH MONITORING SERVICE (POST request, then monitoring) ------------------------------
