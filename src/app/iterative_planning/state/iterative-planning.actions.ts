@@ -104,7 +104,7 @@ export const poseAnswerLLM = createAction('[iterative-planning] pose answer LLM'
 
 export const eraseLLMHistory = createAction('[llm] erase history');
 
-export const sendMessageToLLMGoalTranslator = createAction('[llm] send message to goal translator', props<{goalDescription: string}>());
+export const sendMessageToLLMGoalTranslator = createAction('[llm] send message to goal translator', props<{goalDescription: string, iterationStepId: string}>());
 export const sendMessageToLLMGoalTranslatorSuccess = createAction('[llm] send message to goal translator success', props<{response: {formula: string, shortName: string}, duration?: number}>());
 export const sendMessageToLLMGoalTranslatorFailure = createAction('[llm] send message to goal translator failure', props<{ err: any}>());
 

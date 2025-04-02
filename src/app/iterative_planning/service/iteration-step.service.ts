@@ -7,7 +7,7 @@ import { array, boolean, string } from "zod";
 import { IterationStep, IterationStepBase, IterationStepZ } from "../domain/iteration_step";
 
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class IterationStepService{
 
     private http = inject(HttpClient)
