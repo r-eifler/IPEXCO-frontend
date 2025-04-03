@@ -61,12 +61,15 @@ export interface Rack {
     side: string | null;
     hangar: Hangar | null;
   } | null; // only for trailers, depend on current state
+  bside_trailer: Rack | null; // only for static racks (i.e. not trailers)
+  fside_trailer: Rack | null; // only for static racks (i.e. not trailers)
   fObj: fabric.Object | null;
 }
 
 export interface Hangar {
   name: string;
   craning: Jig | null; // depend on current state
+  trailer: Rack | null; // depend on current state
   fObj: fabric.Object | null;
 }
 
@@ -81,6 +84,7 @@ export interface Flight {
   num: number; // flight order
   ins: Rack;
   outs: Rack;
+  trailer: Rack | null; // depend on current state
 }
 
 class State {
@@ -113,6 +117,29 @@ class State {
     state.trailers = this.trailers.map((t) =>
       State._copyTrailer(t, rackNameMap, hangarNameMap)
     );
+    let trailerNameMap = new Map<string, Rack>(
+      state.trailers.map((t) => [t.name, t])
+    );
+    for (let r of state.racks) {
+      if (r.bside_trailer) {
+        let bside_trailer = trailerNameMap.get(r.bside_trailer.name);
+        r.bside_trailer = bside_trailer ? bside_trailer : null;
+      }
+      if (r.fside_trailer) {
+        let fside_trailer = trailerNameMap.get(r.fside_trailer.name);
+        r.fside_trailer = fside_trailer ? fside_trailer : null;
+      }
+    }
+    for (let h of state.hangars) {
+      if (h.trailer) {
+        let trailer = trailerNameMap.get(h.trailer.name);
+        h.trailer = trailer ? trailer : null;
+      }
+    }
+    if (state.flight && state.flight.trailer) {
+      let trailer = trailerNameMap.get(state.flight.trailer.name);
+      state.flight.trailer = trailer ? trailer : null;
+    }
     return state;
   }
 
@@ -412,6 +439,7 @@ export class BelugaPlanAnimationComponent {
     } else {
       for (let step = this.currentAction; step <= targetAction; step++) {
         if (step >= this.stateHistory.length - 1) {
+          this.currentAction = step;
           this.changeState(this.solutionPlan[step]);
           this.stateHistory.push(this.currentState.copy());
         } else {
@@ -420,7 +448,6 @@ export class BelugaPlanAnimationComponent {
       }
     }
     this.drawScene();
-    this.currentAction = targetAction;
     this.canMoveForward = this.currentAction < this.solutionPlan.length - 1;
     this.canMoveBackward = this.currentAction > 0;
   }
@@ -442,11 +469,21 @@ export class BelugaPlanAnimationComponent {
       }
       let trailerAtBeluga: Rack = this.currentState.trailers[trailerIndex];
       if (this.currentState.flight) {
+        if (this.currentState.flight.trailer !== null) {
+          if (
+            !this.relocateTrailer(this.currentState.flight.trailer, "beluga")
+          ) {
+            console.error(
+              `Cannot relocate trailer ${this.currentState.flight.trailer.name}`
+            );
+          }
+        }
         trailerAtBeluga.at = {
           rack: this.currentState.flight?.ins,
           side: "beluga",
           hangar: null,
         };
+        this.currentState.flight.trailer = trailerAtBeluga;
       } else {
         console.error(`${action.name} action: no flight to load or unload`);
       }
@@ -512,6 +549,15 @@ export class BelugaPlanAnimationComponent {
         return false;
       }
       let rack: Rack = this.currentState.racks[rackIndex];
+      if (side === "bside" && rack.bside_trailer !== null) {
+        if (!this.relocateTrailer(rack.bside_trailer, "beluga")) {
+          console.error(`Cannot relocate trailer ${rack.bside_trailer.name}`);
+        }
+      } else if (side === "fside" && rack.fside_trailer !== null) {
+        if (!this.relocateTrailer(rack.fside_trailer, "factory")) {
+          console.error(`Cannot relocate trailer ${rack.fside_trailer.name}`);
+        }
+      }
       let trailerIndex = this.trailerNameToIndex.get(putOrPick.t);
       if (trailerIndex === undefined) {
         console.error(`${action.name} action: unknown trailer ${putOrPick.t}`);
@@ -523,6 +569,11 @@ export class BelugaPlanAnimationComponent {
         side: side === "bside" ? "beluga" : "factory",
         hangar: null,
       };
+      if (side === "bside") {
+        rack.bside_trailer = trailer;
+      } else {
+        rack.fside_trailer = trailer;
+      }
       let jig: Jig | undefined =
         action.name === "put_down_rack"
           ? side === "bside"
@@ -577,6 +628,11 @@ export class BelugaPlanAnimationComponent {
         return false;
       }
       let hangar: Hangar = this.currentState.hangars[hangarIndex];
+      if (hangar.trailer) {
+        if (!this.relocateTrailer(hangar.trailer, "factory")) {
+          console.error(`Cannot relocate trailer ${hangar.trailer.name}`);
+        }
+      }
       let trailerIndex = this.trailerNameToIndex.get(deliverOrGet.t);
       if (trailerIndex === undefined) {
         console.error(
@@ -590,6 +646,7 @@ export class BelugaPlanAnimationComponent {
         side: "factory",
         hangar: hangar,
       };
+      hangar.trailer = trailer;
       if (trailer.contains.length === 0) {
         console.error(
           `${action.name} action: no jig on trailer ${trailer.name}`
@@ -632,6 +689,142 @@ export class BelugaPlanAnimationComponent {
     }
 
     return true;
+  }
+
+  relocateTrailer(trailer: Rack, side: string) {
+    for (let a = this.currentAction + 1; a < this.solutionPlan.length; a++) {
+      switch (this.solutionPlan[a].name) {
+        case "switch_to_next_beluga":
+          continue;
+        case "unload_beluga":
+        case "load_beluga":
+          if (
+            (this.solutionPlan[a] as UnloadBeluga | LoadBeluga).t ===
+            trailer.name
+          ) {
+            if (
+              this.currentState.flight !== null &&
+              this.currentState.flight.trailer === null
+            ) {
+              this.currentState.flight.trailer = trailer;
+              trailer.at = {
+                rack: this.currentState.flight.ins,
+                side: "beluga",
+                hangar: null,
+              };
+              return true;
+            } else {
+              return this.relocateTrailerToNearestRack(trailer, side, -1);
+            }
+          }
+          break;
+        case "put_down_rack":
+        case "pick_up_rack":
+          let putOrPick = this.solutionPlan[a] as PutDownRack | PickUpRack;
+          if (putOrPick.t === trailer.name) {
+            let ri = this.rackNameToIndex.get(putOrPick.r);
+            let aside = putOrPick.s;
+            if (ri) {
+              if (
+                side === "beluga" &&
+                aside === "bside" &&
+                this.currentState.racks[ri].bside_trailer === null
+              ) {
+                this.currentState.racks[ri].bside_trailer = trailer;
+                trailer.at = {
+                  rack: this.currentState.racks[ri],
+                  side: side,
+                  hangar: null,
+                };
+                return true;
+              } else if (
+                side === "factory" &&
+                aside === "fside" &&
+                this.currentState.racks[ri].fside_trailer === null
+              ) {
+                this.currentState.racks[ri].fside_trailer = trailer;
+                trailer.at = {
+                  rack: this.currentState.racks[ri],
+                  side: side,
+                  hangar: null,
+                };
+                return true;
+              }
+              this.relocateTrailerToNearestRack(trailer, side, ri);
+            } else {
+              this.relocateTrailerToNearestRack(trailer, side, -1);
+            }
+          }
+          break;
+        case "deliver_to_hangar":
+        case "get_from_hangar":
+          let deliverOrGet = this.solutionPlan[a] as
+            | DeliverToHanger
+            | GetFromHanger;
+          if (deliverOrGet.t === trailer.name) {
+            let hi = this.hangarNameToIndex.get(deliverOrGet.h);
+            if (
+              hi &&
+              side === "factory" &&
+              this.currentState.hangars[hi].trailer === null
+            ) {
+              this.currentState.hangars[hi].trailer = trailer;
+              trailer.at = {
+                rack: null,
+                side: "factory",
+                hangar: this.currentState.hangars[hi],
+              };
+              return true;
+            } else {
+              this.relocateTrailerToNearestRack(trailer, side, -1);
+            }
+          }
+          break;
+      }
+    }
+    return false;
+  }
+
+  relocateTrailerToNearestRack(trailer: Rack, side: string, ri: number) {
+    let racks_permutation = Array<number>(
+      this.currentState.racks.length - (ri < 0 ? 0 : 1)
+    );
+    let left_index = ri - 1;
+    let right_index = ri + 1;
+    let idx = 0;
+    while (idx < racks_permutation.length) {
+      if (left_index >= 0) {
+        racks_permutation[idx] = left_index;
+        left_index--;
+        idx++;
+      }
+      if (right_index < this.currentState.racks.length) {
+        racks_permutation[idx] = right_index;
+        right_index++;
+        idx++;
+      }
+    }
+    for (let i = 0; i < racks_permutation.length; i++) {
+      let r = this.currentState.racks[racks_permutation[i]];
+      if (side === "beluga" && r.bside_trailer === null) {
+        r.bside_trailer = trailer;
+        trailer.at = {
+          rack: r,
+          side: side,
+          hangar: null,
+        };
+        return true;
+      } else if (side === "factory" && r.fside_trailer === null) {
+        r.fside_trailer = trailer;
+        trailer.at = {
+          rack: r,
+          side: side,
+          hangar: null,
+        };
+        return true;
+      }
+    }
+    return false;
   }
 
   drawScene(resetViewport: boolean = false) {
@@ -1700,6 +1893,7 @@ export class BelugaPlanAnimationComponent {
           fObj: null,
         },
         num: 0,
+        trailer: null,
       } as Flight;
       for (let ctn of problem.flights[0].incoming) {
         let jig: Jig | undefined = this.createAndRegisterJig(ctn);
@@ -1723,6 +1917,8 @@ export class BelugaPlanAnimationComponent {
         location: "outside",
         contains: [],
         at: null,
+        bside_trailer: null,
+        fside_trailer: null,
         fObj: null,
       } as Rack);
       for (let ctn of problem.racks[ri].jigs) {
@@ -1749,8 +1945,12 @@ export class BelugaPlanAnimationComponent {
           side: "beluga",
           hangar: null,
         },
+        bside_trailer: null,
+        fside_trailer: null,
         fObj: null,
       } as Rack);
+      this.currentState.racks[ti].bside_trailer =
+        this.currentState.trailers[ti];
     }
     for (let ti = 0; ti < problem.trailers_factory.length; ti++) {
       let trailer: TrailerBP = problem.trailers_factory[ti];
@@ -1769,14 +1969,19 @@ export class BelugaPlanAnimationComponent {
           side: "factory",
           hangar: null,
         },
+        bside_trailer: null,
+        fside_trailer: null,
         fObj: null,
       } as Rack);
+      this.currentState.racks[ti].fside_trailer =
+        this.currentState.trailers[ti];
     }
     for (let hi = 0; hi < problem.hangars.length; hi++) {
       this.hangarNameToIndex.set(problem.hangars[hi], hi);
       this.currentState.hangars.push({
         name: problem.hangars[hi],
         craning: null,
+        trailer: null,
         fObj: null,
       });
     }
