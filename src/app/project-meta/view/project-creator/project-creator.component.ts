@@ -21,7 +21,7 @@ import { defaultGeneralSetting } from "../../../project/domain/general-settings"
 import { PDDLService } from "../../service/pddl.service";
 import { createProject, loadDomainSpecifications } from "../../state/project-meta.actions";
 import { selectDomainSpecifications } from "../../state/project-meta.selector";
-import { TaskObject } from "src/app/shared/domain/planning-task";
+import { TaskObject, TaskObjectZ } from "src/app/shared/domain/planning-task";
 
 @Component({
     selector: "app-project-creator",
@@ -130,7 +130,35 @@ export class ProjectCreatorComponent {
           return pddlModel?.objects as TaskObject[];
         }
         case(Encoding.DOMAIN_DEPENDENT): {
-          return [];
+          let model = domainDependentModel ? JSON.parse(domainDependentModel) as any : null
+
+          let objs: TaskObject[] = [];
+          for (const tb of model.trailers_beluga) {
+            objs.push({ name: tb.name, type: "trailer"});
+          }
+          for (const tb of model.trailers_factory) {
+            objs.push({ name: tb.name, type: "trailer"});
+          }
+          for (const h of model.hangars) {
+            objs.push({ name: h, type: "hangar"});
+          }
+          for (const [jt_name, _] of Object.entries(model.jig_types)) {
+            objs.push({ name: jt_name, type: "jig_type"});
+          }
+          for (const r of model.racks) {
+            objs.push({ name: r.name, type: "rack"});
+          }
+          for (const [j_name, _] of Object.entries(model.jigs)) {
+            objs.push({ name: j_name, type: "jig"});
+          }
+          for (const pl of model.production_lines) {
+            objs.push({ name: pl.name, type: "production_line"});
+          }
+          for (const fl of model.flights) {
+            objs.push({ name: fl.name, type: "flight"});
+          }
+          // return model?.objects as TaskObject[];
+          return objs
         }
       }
     }),
