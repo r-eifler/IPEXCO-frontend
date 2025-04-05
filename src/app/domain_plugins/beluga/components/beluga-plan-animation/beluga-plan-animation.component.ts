@@ -469,7 +469,10 @@ export class BelugaPlanAnimationComponent {
       }
       let trailerAtBeluga: Rack = this.currentState.trailers[trailerIndex];
       if (this.currentState.flight) {
-        if (this.currentState.flight.trailer !== null) {
+        if (
+          this.currentState.flight.trailer !== null &&
+          this.currentState.flight.trailer.name !== trailerAtBeluga.name
+        ) {
           if (
             !this.relocateTrailer(this.currentState.flight.trailer, "beluga")
           ) {
@@ -548,22 +551,30 @@ export class BelugaPlanAnimationComponent {
         console.error(`${action.name} action: unknown rack ${putOrPick.r}`);
         return false;
       }
-      let rack: Rack = this.currentState.racks[rackIndex];
-      if (side === "bside" && rack.bside_trailer !== null) {
-        if (!this.relocateTrailer(rack.bside_trailer, "beluga")) {
-          console.error(`Cannot relocate trailer ${rack.bside_trailer.name}`);
-        }
-      } else if (side === "fside" && rack.fside_trailer !== null) {
-        if (!this.relocateTrailer(rack.fside_trailer, "factory")) {
-          console.error(`Cannot relocate trailer ${rack.fside_trailer.name}`);
-        }
-      }
       let trailerIndex = this.trailerNameToIndex.get(putOrPick.t);
       if (trailerIndex === undefined) {
         console.error(`${action.name} action: unknown trailer ${putOrPick.t}`);
         return false;
       }
       let trailer: Rack = this.currentState.trailers[trailerIndex];
+      let rack: Rack = this.currentState.racks[rackIndex];
+      if (
+        side === "bside" &&
+        rack.bside_trailer !== null &&
+        rack.bside_trailer.name !== trailer.name
+      ) {
+        if (!this.relocateTrailer(rack.bside_trailer, "beluga")) {
+          console.error(`Cannot relocate trailer ${rack.bside_trailer.name}`);
+        }
+      } else if (
+        side === "fside" &&
+        rack.fside_trailer !== null &&
+        rack.fside_trailer.name !== trailer.name
+      ) {
+        if (!this.relocateTrailer(rack.fside_trailer, "factory")) {
+          console.error(`Cannot relocate trailer ${rack.fside_trailer.name}`);
+        }
+      }
       trailer.at = {
         rack: rack,
         side: side === "bside" ? "beluga" : "factory",
@@ -627,12 +638,6 @@ export class BelugaPlanAnimationComponent {
         );
         return false;
       }
-      let hangar: Hangar = this.currentState.hangars[hangarIndex];
-      if (hangar.trailer) {
-        if (!this.relocateTrailer(hangar.trailer, "factory")) {
-          console.error(`Cannot relocate trailer ${hangar.trailer.name}`);
-        }
-      }
       let trailerIndex = this.trailerNameToIndex.get(deliverOrGet.t);
       if (trailerIndex === undefined) {
         console.error(
@@ -641,6 +646,12 @@ export class BelugaPlanAnimationComponent {
         return false;
       }
       let trailer: Rack = this.currentState.trailers[trailerIndex];
+      let hangar: Hangar = this.currentState.hangars[hangarIndex];
+      if (hangar.trailer !== null && hangar.trailer.name !== trailer.name) {
+        if (!this.relocateTrailer(hangar.trailer, "factory")) {
+          console.error(`Cannot relocate trailer ${hangar.trailer.name}`);
+        }
+      }
       trailer.at = {
         rack: null,
         side: "factory",
@@ -750,9 +761,9 @@ export class BelugaPlanAnimationComponent {
                 };
                 return true;
               }
-              this.relocateTrailerToNearestRack(trailer, side, ri);
+              return this.relocateTrailerToNearestRack(trailer, side, ri);
             } else {
-              this.relocateTrailerToNearestRack(trailer, side, -1);
+              return this.relocateTrailerToNearestRack(trailer, side, -1);
             }
           }
           break;
@@ -776,7 +787,7 @@ export class BelugaPlanAnimationComponent {
               };
               return true;
             } else {
-              this.relocateTrailerToNearestRack(trailer, side, -1);
+              return this.relocateTrailerToNearestRack(trailer, side, -1);
             }
           }
           break;
