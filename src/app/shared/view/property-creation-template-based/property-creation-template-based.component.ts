@@ -110,8 +110,6 @@ export class PropertyCreationTemplateBasedComponent implements OnInit{
       this.selectedVariableValue,
     )
 
-    // console.log(this.possibleVariableValues)
-
     this.templateParts = this.templateParts.map(p => ({
       ...p,
       isSelected: p.isVar && p.var ? this.selectedVariableValue[p.var] !== undefined : false,
