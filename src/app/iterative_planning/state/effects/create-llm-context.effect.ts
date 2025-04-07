@@ -8,6 +8,7 @@ import { selectIterationStep } from "../iterative-planning.actions";
 import { selectIterativePlanningProject } from "../iterative-planning.selector";
 import { createLLMContext, createLLMContextFailure, createLLMContextSuccess } from "../iterative-planning.actions";
 import { Store } from "@ngrx/store";
+import { PropertyCreationInterfaceType, ExplanationInterfaceType } from "src/app/project/domain/general-settings";
 
 @Injectable()
 export class CreateLLMContextEffect{
@@ -20,6 +21,10 @@ export class CreateLLMContextEffect{
     ofType(selectIterationStep),
     concatLatestFrom(() => this.store.select(selectIterativePlanningProject)),
     filter(([_, project]) => !!project),
+    filter(([_, project]) => 
+        project!.settings.interfaces.propertyCreationInterfaceType === PropertyCreationInterfaceType.LLM_CHAT || 
+        project!.settings.interfaces.explanationInterfaceType === ExplanationInterfaceType.LLM_CHAT
+    ),
     switchMap(([{iterationStepId}, project]) => this.llmService.createLLMContext$(project!._id, iterationStepId).pipe(
         tap(LLMContext => console.log("LLMContext: ", LLMContext)),
         switchMap(LLMContext => [
