@@ -1,0 +1,96 @@
+[
+	{
+		"class": "Deliver",
+		"color": "#ed736b",
+		"icon": "flight",
+		"type": "G",
+		"variables": {
+			"$J": [
+				"jig"
+			],
+			"$PL": [
+				"production_line"
+			],
+			"$I": [
+				"number"
+			]
+		},
+		"nameTemplate": "$J delivered at pos $I to production line $PL",
+		"definitionTemplate": {
+			"name": "deliver_to_production_line",
+			"parameters": [
+				"$J",
+				"$PL",
+				"$I"
+			]
+		},
+		"formulaTemplate": "",
+		"actionSetsTemplates": [],
+		"sentenceTemplate": "$J is the $I -th jig delivered to production line $PL",
+		"initVariableConstraints": [],
+		"goalVariableConstraints": []
+	},
+	{
+		"class": "Flights",
+		"color": "#ed736b",
+		"icon": "flight_land",
+		"type": "G",
+		"variables": {
+			"$J": [
+				"jig",
+				"jig_type"
+			],
+			"$BI": [
+				"number"
+			],
+			"$UI": [
+				"number"
+			]
+		},
+		"nameTemplate": "$J loaded at pos $UI from beluga n° $BI ",
+		"definitionTemplate": {
+			"name": "load_beluga",
+			"parameters": [
+				"$J",
+				"$BI",
+				"$UI"
+			]
+		},
+		"formulaTemplate": "",
+		"actionSetsTemplates": [],
+		"sentenceTemplate": "$J is the $UI -th jig loaded into beluga n° $BI",
+		"initVariableConstraints": [],
+		"goalVariableConstraints": []
+	},
+	{
+		"class": "Flights",
+		"color": "#ed736b",
+		"icon": "flight_takeoff",
+		"type": "G",
+		"variables": {
+			"$J": [
+				"jig"
+			],
+			"$BI": [
+				"number"
+			],
+			"$UI": [
+				"number"
+			]
+		},
+		"nameTemplate": "$J unloaded at pos $UI from beluga n° $BI ",
+		"definitionTemplate": {
+			"name": "unload_beluga",
+			"parameters": [
+				"$J",
+				"$BI",
+				"$UI"
+			]
+		},
+		"formulaTemplate": "",
+		"actionSetsTemplates": [],
+		"sentenceTemplate": "$J is the $UI -th jig unloaded from beluga n° $BI",
+		"initVariableConstraints": [],
+		"goalVariableConstraints": []
+	}
+]
