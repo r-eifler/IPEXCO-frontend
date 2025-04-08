@@ -7,6 +7,7 @@ import { competitionEvaluationFeatureEffects } from "./state/effects/effects";
 import { PlanDetailViewComponent } from "./view/plan-detail-view/plan-detail-view.component";
 import { PlansListViewComponent } from "./view/plans-list-view/plans-list-view.component";
 import { ShellComponent } from "./view/shell/shell.component";
+import { setInstanceResolver } from "./resolver/set-instance.resolver";
 
 export const routes: Routes = [
     {
@@ -29,9 +30,9 @@ export const routes: Routes = [
           component: PlansListViewComponent,
         },
         {
-          path: ':id/details',
+          path: 'collection/:id',
           component: PlanDetailViewComponent,
-          resolve: {  }
+          resolve: { setInstanceResolver }
         }
       ]
     }

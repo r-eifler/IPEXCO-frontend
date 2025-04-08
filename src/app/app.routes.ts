@@ -107,7 +107,7 @@ export const routes: Routes = [
       {
         path: 'competition-evaluation',
         loadChildren: () => import('./competition_evaluation/competition_evaluation.routes').then(m => m.routes),
-        canActivate: [AuthGuard],
+        canActivate: [],
       },
     ]
   }

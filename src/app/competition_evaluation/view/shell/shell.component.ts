@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { RouterOutlet } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { loadEvaluationInstances } from '../../state/competition_evaluation.actions';
 
 
 
@@ -12,5 +14,11 @@ import { RouterOutlet } from '@angular/router';
     styleUrl: './shell.component.scss'
 })
 export class ShellComponent {
+
+    store = inject(Store);
+
+    constructor() {
+        this.store.dispatch(loadEvaluationInstances());
+    }
 
 }

@@ -94,6 +94,14 @@ export class PlanInspectionComponent {
 
 	model = input.required<unknown>();
 	belugaProblem = computed(() => BelugaProblemZ.parse(this.model()))
+  // belugaProblem = computed(() => {
+  //     let raw_model = this.model()
+  //     if(raw_model != null){
+  //       return BelugaProblemZ.parse(raw_model);
+  //     }
+  //     return null
+  //   }  
+  // );
 
   flights = computed(() => this.belugaProblem()?.flights)
   jigs = computed(() => Object.values(this.belugaProblem()?.jigs))

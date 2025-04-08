@@ -6,33 +6,22 @@
   
     <mat-card-content>
       <div class="content">
-        <div class="stats">
-          <!-- <mat-icon>explore</mat-icon>
-          <span class="property-label">Planner:</span>
-          <span class="property-value">{{ planner()?.name ?? '?'}}</span>
-
-          <mat-icon>timer</mat-icon>
-          <span class="property-label">Run Time:</span>
-          <span class="property-value">{{ plan()?.runTime ?? '?' }}</span>
-  
+        <div class="stats">  
           <mat-icon>attach_money</mat-icon>
           <span class="property-label">Plan Length:</span>
-          <span class="property-value">{{ plan()?.actions?.length ?? '?'}}</span> -->
+          <span class="property-value">{{ instance()?.actions?.length ?? '?'}}</span>
         </div>
   
         <div class="utility">
-          <mat-icon>explore</mat-icon>
-          <!-- <div class="utility-value-container">
-            <span class="value" *isProject>{{ step() | stepValue : planProperties() | default : '-/-'}}</span>
-            <span class="value" *isDemo>{{ (step() | stepValue : planProperties() | default : '-') + '/' + maxOverallUtility() }}</span>
-            <span class="label">Utility</span>
-          </div> -->
+          <mat-icon>flight</mat-icon>
         </div>
       </div>
     </mat-card-content>
   
     <mat-card-actions>
-      <a class="details" mat-stroked-button [routerLink]="[instance()?._id ]">Details</a>
+      <div class="action-container">
+        <a mat-stroked-button [routerLink]="[instance()?._id ]">Details</a>
+      </div>
     </mat-card-actions>
   </mat-card>
   

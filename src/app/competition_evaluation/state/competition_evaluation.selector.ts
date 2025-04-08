@@ -6,9 +6,9 @@ const selectState = competitionEvaluationFeature.selectCompetitionEvaluationFeat
 
 // plans
 
-export const selectEvaluationInstances = createSelector(selectState, (state) => state.evaluationInstances);
+export const selectEvaluationInstances = createSelector(selectState, (state) => state.evaluationInstances.data);
 
-export const selectSelectedPlan = createSelector(selectState, (state) => 
+export const selectSelectedInstance = createSelector(selectState, (state) => 
     state.selectedId === null || state?.evaluationInstances.data === undefined ? null : 
     state?.evaluationInstances.data.find(p => p._id === state.selectedId));
 

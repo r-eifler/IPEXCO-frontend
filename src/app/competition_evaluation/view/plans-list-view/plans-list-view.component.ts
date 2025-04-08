@@ -11,9 +11,9 @@ import { BreadcrumbModule } from 'src/app/shared/components/breadcrumb/breadcrum
 import { PageModule } from 'src/app/shared/components/page/page.module';
 import { PlanCardComponent } from '../../components/plan-card/plan-card.component';
 import { loadEvaluationInstances, uploadEvaluationInstance } from '../../state/competition_evaluation.actions';
-import { selectEvaluationInstances } from '../../state/competition_evaluation.feature';
 import { EvalInstanceUploadComponent } from '../eval-instance-upload/eval-instance-upload.component';
 import { take } from 'rxjs';
+import { selectEvaluationInstances } from '../../state/competition_evaluation.selector';
 
 @Component({
   selector: 'app-plans-list-view',
@@ -38,9 +38,6 @@ export class PlansListViewComponent {
   dialog = inject(MatDialog);
 
   evaluationInstances$ = this.store.select(selectEvaluationInstances);
-  constructor() {
-    this.store.dispatch(loadEvaluationInstances());
-  }
 
   onUpload(){
     let dialogRef = this.dialog.open(EvalInstanceUploadComponent);

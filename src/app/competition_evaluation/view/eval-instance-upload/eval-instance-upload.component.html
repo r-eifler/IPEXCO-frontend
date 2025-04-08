@@ -1,0 +1,40 @@
+<app-dialog>
+    <app-dialog-header>
+        <app-dialog-title>Upload Evaluation Instance</app-dialog-title>
+    </app-dialog-header>
+    <app-dialog-content>
+        <form>
+            <div class="inputs-list">
+                <mat-form-field appearance="outline">
+                    <mat-label>Name</mat-label>
+                    <input matInput  [formControl]="form.controls.name">
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Model</mat-label>
+                    <textarea matInput  [formControl]="form.controls.model"></textarea>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Plan</mat-label>
+                    <textarea matInput  [formControl]="form.controls.actions"></textarea>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Question</mat-label>
+                    <textarea matInput  [formControl]="form.controls.question"></textarea>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Explanation</mat-label>
+                    <textarea matInput  [formControl]="form.controls.explanation"></textarea>
+                </mat-form-field>
+            </div>
+        </form>
+    </app-dialog-content>
+    <app-dialog-footer>
+        <button mat-button (click)="onCancel()">Cancel</button>
+        <button mat-flat-button (click)="onCreate()" [disabled]="!form.valid">Upload</button>
+    </app-dialog-footer>
+</app-dialog>
+
