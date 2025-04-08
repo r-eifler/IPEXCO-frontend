@@ -17,18 +17,9 @@
         <app-page-section-title>
           Explanation
         </app-page-section-title>
-        <app-page-section-content>
-          <p>Question</p>
-          <div class="text-container">
-            <p>{{ instance?.question }}</p>
-          </div>
-          <p>Answer</p>
-          <div class="text-container">
-            <div [innerHTML]="instance?.explanation | marked">
-
-            </div>
-          </div>
-
+        <app-page-section-content class="explanation-container">
+          <app-question [text]="instance?.question"></app-question>
+          <app-explanation [text]="instance?.explanation"></app-explanation>
         </app-page-section-content>
       </app-page-section>
 
@@ -36,7 +27,7 @@
         <app-page-section-title>
           Plan
         </app-page-section-title>
-        <app-page-section-content class="plan-container">
+        <app-page-section-content class="plans-container">
           <app-step-control
               (back)="onBack()"
               (forward)="onForward()"

@@ -14,6 +14,7 @@ import { loadEvaluationInstances, uploadEvaluationInstance } from '../../state/c
 import { EvalInstanceUploadComponent } from '../eval-instance-upload/eval-instance-upload.component';
 import { take } from 'rxjs';
 import { selectEvaluationInstances } from '../../state/competition_evaluation.selector';
+import { UserRoleDirective } from 'src/app/user/directives/user-role.directive';
 
 @Component({
   selector: 'app-plans-list-view',
@@ -27,7 +28,8 @@ import { selectEvaluationInstances } from '../../state/competition_evaluation.se
     MatExpansionModule,
     MatButtonModule,
     MatIconModule,
-    PlanCardComponent
+    PlanCardComponent,
+    UserRoleDirective
   ],
   templateUrl: './plans-list-view.component.html',
   styleUrl: './plans-list-view.component.scss'

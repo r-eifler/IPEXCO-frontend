@@ -11,6 +11,8 @@ import { StepStatusColorPipe } from 'src/app/iterative_planning/domain/pipe/step
 import { StepStatusNamePipe } from 'src/app/iterative_planning/domain/pipe/step-status-name.pipe';
 import { LabelModule } from 'src/app/shared/components/label/label.module';
 import { EvaluationInstance } from '../../domain/evaluation_instance';
+import { deleteEvaluationInstance } from '../../state/competition_evaluation.actions';
+import { UserRoleDirective } from 'src/app/user/directives/user-role.directive';
 
 @Component({
   selector: 'app-plan-card',
@@ -25,6 +27,7 @@ import { EvaluationInstance } from '../../domain/evaluation_instance';
     MatTooltipModule, 
     StepStatusColorPipe,
     MatProgressBarModule,
+    UserRoleDirective,
   ],
   templateUrl: './plan-card.component.html',
   styleUrl: './plan-card.component.scss'
@@ -34,5 +37,11 @@ export class PlanCardComponent {
   store = inject(Store);
   
   instance = input.required<EvaluationInstance | null>();
+
+  onDelete(){
+    let id = this.instance()?._id;
+    if(id != null)
+      this.store.dispatch(deleteEvaluationInstance({id}))
+  }
 
 }

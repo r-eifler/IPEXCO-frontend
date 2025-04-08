@@ -1,7 +1,15 @@
+.explanation-container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-600);
+    width: 100%;
+    overflow-x: scroll;
+}
+
 .plans-container {
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-300);
+    gap: var(--spacing-600);
     width: 100%;
     overflow-x: scroll;
 }

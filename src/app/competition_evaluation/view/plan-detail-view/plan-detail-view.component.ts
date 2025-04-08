@@ -21,6 +21,10 @@ import { filterNotNullOrUndefined } from 'src/app/shared/common/check_null_undef
 import { applyActions, getInitialState } from 'src/app/domain_plugins/beluga/domain/beluga_state';
 import { StateCardComponent } from 'src/app/domain_plugins/beluga/components/state-card/state-card.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { QuestionComponent } from '../../components/question/question.component';
+import { ExplanationChatComponent } from 'src/app/iterative_planning/components/explanation-chat/explanation-chat.component';
+import { ExplanationComponent } from '../../components/explanation/explanation.component';
+import { UserRoleDirective } from 'src/app/user/directives/user-role.directive';
 
 @Component({
   selector: 'app-plan-detail-view',
@@ -37,7 +41,9 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     BelugaPlanAnimationComponent,
     StepControlComponent,
     PlanInspectionComponent,
-    StateCardComponent
+    StateCardComponent,
+    QuestionComponent,
+    ExplanationComponent
   ],
   templateUrl: './plan-detail-view.component.html',
   styleUrl: './plan-detail-view.component.scss'

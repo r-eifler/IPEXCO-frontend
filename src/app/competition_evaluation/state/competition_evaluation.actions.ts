@@ -11,5 +11,11 @@ export const uploadEvaluationInstance = createAction('[competition evaluation] u
 export const uploadEvaluationInstanceSuccess = createAction('[competition evaluation] upload evaluation instance success', props<{evalInstance: EvaluationInstance}>());
 export const uploadEvaluationInstanceFailure = createAction('[competition evaluation] upload  evaluation instance failure',  props<{err: any}>());
 
+export const deleteEvaluationInstance = createAction('[competition evaluation] delete evaluation instance', props<{id: string}>());
+export const deleteEvaluationInstanceSuccess = createAction('[competition evaluation] delete evaluation instance success');
+export const deleteEvaluationInstanceFailure = createAction('[competition evaluation] delete  evaluation instance failure',  props<{err: any}>());
+
+
+
 export const selectEvaluationInstance = createAction('[competition evaluation] select evaluation instances', props<{id: string}>());
 

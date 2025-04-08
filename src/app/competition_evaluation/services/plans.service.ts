@@ -3,7 +3,7 @@ import { inject, Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { environment } from "src/environments/environment";
-import { array } from "zod";
+import { array, boolean } from "zod";
 import { EvaluationInstance, EvaluationInstanceBase, EvaluationInstanceZ } from "../domain/evaluation_instance";
 
 
@@ -28,6 +28,12 @@ export class EvalInstancesService{
     postPlan$(plan: EvaluationInstanceBase): Observable<EvaluationInstance> {
         return this.http.post<unknown>(this.BASE_URL, plan).pipe(
             map(data => EvaluationInstanceZ.parse(data)),
+        )
+    }
+
+    deletePlan$(id: string): Observable<boolean> {
+        return this.http.delete<unknown>(this.BASE_URL + id).pipe(
+            map(data => boolean().parse(data)),
         )
     }
 }

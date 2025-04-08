@@ -3,7 +3,7 @@ import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { of } from "rxjs";
 import { catchError, switchMap } from "rxjs/operators";
 import { EvalInstancesService } from "../../services/plans.service";
-import { loadEvaluationInstances, loadEvaluationInstancesFailure, loadEvaluationInstancesSuccess, uploadEvaluationInstanceSuccess } from "../competition_evaluation.actions";
+import { deleteEvaluationInstanceSuccess, loadEvaluationInstances, loadEvaluationInstancesFailure, loadEvaluationInstancesSuccess, uploadEvaluationInstanceSuccess } from "../competition_evaluation.actions";
 
 @Injectable()
 export class LoadEvaluationInstancesEffect{
@@ -20,7 +20,7 @@ export class LoadEvaluationInstancesEffect{
     ))
 
     public reloadPlans$ = createEffect(() => this.actions$.pipe(
-        ofType(uploadEvaluationInstanceSuccess),
+        ofType(uploadEvaluationInstanceSuccess,deleteEvaluationInstanceSuccess),
         switchMap(() => this.service.getPlans$().pipe(
             switchMap(evalInstances => [loadEvaluationInstancesSuccess({evalInstances})]),
             catchError((e) => of(loadEvaluationInstancesFailure({ err: e }))),

@@ -22,7 +22,7 @@
               </app-plan-card>
             }
 
-            <button app-action-card (click)="onUpload()">
+            <button app-action-card (click)="onUpload()" *userRole="['admin','creator']">
               <div class="instructions">
                 <span>Upload new instance.</span>
               </div>
