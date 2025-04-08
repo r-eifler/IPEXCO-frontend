@@ -1,0 +1,32 @@
+@use "../../../../../variables.scss" as vars;
+
+.container {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    gap: var(--spacing-100);
+
+    padding: var(--spacing-200);
+
+    border: solid;
+    border-width: 1px;
+    @include vars.border_color();
+    border-radius: var(--spacing-100);
+
+    background-color: rgb(226, 226, 226);
+
+}
+
+.list-wrapper {
+    max-height: 150px;
+    overflow-y: scroll;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-100);
+}
+

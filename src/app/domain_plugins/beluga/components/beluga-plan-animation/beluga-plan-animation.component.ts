@@ -12,16 +12,16 @@ import { Plan } from 'src/app/planning/domain/plan';
 })
 export class BelugaPlanAnimationComponent {
 
-  plan = input.required<Plan>();
-  actions = computed(() => {
-    let plan = this.plan();
-    if(plan !== null && plan.actions !== undefined && plan.actions !== null ){
-      return array(BelugaActionZ).parse(plan.actions);
-    }
-    return null;
-});
-  
-  model = input.required<unknown>();
-  belugaProblem = computed(() => BelugaProblemZ.parse(this.model()))
+	plan = input.required<Plan>();
+	actions = computed(() => {
+		let plan = this.plan();
+		if(plan !== null && plan.actions !== undefined && plan.actions !== null ){
+		return array(BelugaActionZ).parse(plan.actions);
+		}
+		return null;
+	});
+
+	model = input.required<unknown>();
+	belugaProblem = computed(() => BelugaProblemZ.parse(this.model()))
 
 }

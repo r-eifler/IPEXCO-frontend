@@ -1,0 +1,43 @@
+@use "../../../../../variables.scss" as vars;
+
+.action-container{
+    width: fit-content;
+    padding: var(--spacing-200);
+    border: solid;
+    border-width: 1px;
+    @include vars.border_color();
+    border-radius: var(--spacing-200);
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: var(--spacing-100);
+
+    background-color: rgb(232, 232, 232);
+}
+
+.action-container:hover {
+    cursor: pointer;
+}
+
+.highlight{
+    outline: solid;
+    outline-width: 2px;
+    outline-offset: -2px;
+    @include vars.border_color();
+}
+
+.selected{
+    background-color: rgb(159, 249, 232);
+}
+
+.icon-box {
+    display: flex;
+    flex-direction: row;
+    gap: var(--spacing-050);
+    align-items: center;
+}
+
+.name{
+    margin: 0px;
+}

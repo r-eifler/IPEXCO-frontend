@@ -1,0 +1,71 @@
+<div 
+    class="action-container" 
+    (mouseenter) ="onEnter()"  (mouseleave) ="onLeave()"
+    [class.highlight]="highlight()"
+    [class.selected]="select()"
+    (click)="onSelect()"
+    >
+    @if(isSwitchAction()){
+        <div class="icon-box">
+            <mat-icon [style.color]="actionColor.get(action()?.name)">
+                {{ actionLocationIcon() }}
+            </mat-icon>
+            <mat-icon>{{ actionMoveIcon() }}</mat-icon>
+        </div>
+    }
+
+    @if(isBelugaAction()){
+        <div class="icon-box">
+            <mat-icon [style.color]="actionColor.get(action()?.name)">
+                {{ actionLocationIcon() }}
+            </mat-icon>
+            <mat-icon>{{ actionMoveIcon() }}</mat-icon>
+        </div>
+        @if(jigName() !== null){
+            <span>{{ jigName() }}</span>
+        }
+    }
+
+    @if(isHangarAction()){
+        @if(jigName() !== null){
+            <span>{{ jigName() }}</span>
+        }
+        <div class="icon-box">
+            <mat-icon>{{ actionMoveIcon() }}</mat-icon>
+            <mat-icon [style.color]="actionColor.get(action()?.name)">
+                {{ actionLocationIcon() }}
+            </mat-icon>
+        </div>
+    } 
+
+    @if(isBelugaRackSideAction()){
+        @if(jigName() !== null){
+            <span>{{ jigName() }}</span>
+        }
+        <div class="icon-box">
+            <mat-icon>{{ actionMoveIcon() }}</mat-icon>
+            <mat-icon [style.color]="actionColor.get(action()?.name)">
+                {{ actionLocationIcon() }}
+            </mat-icon>
+        </div>
+        @if(rackName() !== null){
+             <span>{{ rackName() }}</span>
+        }
+    } 
+
+    @if(isFactoryRackSideAction()){
+        @if(rackName() !== null){
+            <span>{{ rackName() }}</span>
+       }
+        <div class="icon-box">
+            <mat-icon [style.color]="actionColor.get(action()?.name)">
+                {{ actionLocationIcon() }}
+            </mat-icon>
+            <mat-icon>{{ actionMoveIcon() }}</mat-icon>
+        </div>
+        @if(jigName() !== null){
+            <span>{{ jigName() }}</span>
+        }
+    } 
+</div>
+

@@ -1,0 +1,33 @@
+<app-dialog>
+    <app-dialog-header>
+        <app-dialog-title>Select plans to compare</app-dialog-title>
+    </app-dialog-header>
+    <app-dialog-content>
+        <form>
+            <div class="list-container">
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Reference Plan</mat-label>
+                    <mat-select [formControl]="form.controls.reference" required>
+                      @for (plan of data.plans; track plan._id) {
+                        <mat-option [value]="plan._id">{{plan.name}}</mat-option>
+                      }
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Comparison Plan</mat-label>
+                    <mat-select [formControl]="form.controls.comparison" required>
+                        @for (plan of data.plans; track plan._id) {
+                            <mat-option [value]="plan._id">{{plan.name}}</mat-option>
+                          }
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </form>
+    </app-dialog-content>
+    <app-dialog-footer>
+        <button mat-button (click)="onCancel()">Cancel</button>
+        <button mat-flat-button (click)="onCompare()">Compare</button>
+    </app-dialog-footer>
+</app-dialog>
+

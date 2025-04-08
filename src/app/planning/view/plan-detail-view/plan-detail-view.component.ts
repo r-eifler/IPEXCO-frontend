@@ -13,6 +13,7 @@ import { EmptyStateModule } from 'src/app/shared/components/empty-state/empty-st
 import { PageModule } from 'src/app/shared/components/page/page.module';
 import { selectDomainSpecification, selectProject, selectSelectedPlan } from '../../state/planning.selector';
 import { map } from 'rxjs';
+import { PlanInspectionComponent } from 'src/app/domain_plugins/beluga/components/plan-inspection/plan-inspection.component';
 
 @Component({
   selector: 'app-plan-detail-view',
@@ -37,6 +38,10 @@ export class PlanDetailViewComponent {
   plan$ = this.store.select(selectSelectedPlan);
   project$ = this.store.select(selectProject);
   domainSpecification$ = this.store.select(selectDomainSpecification);
+
+  model$ = this.project$.pipe(
+    map(p => p?.baseTask?.model)
+  );
 
   isBeluga$ = this.domainSpecification$.pipe(
     map(d => d?.name.includes("Beluga") ?? false)

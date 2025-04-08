@@ -4,7 +4,7 @@ import { Encoding, ServiceType } from "src/app/global_specification/domain/servi
 
 const selectState = planningFeature.selectPlanningFeatureState
 
-export const selectProject = createSelector(selectState, (state) => state.project.data)
+export const selectProject = createSelector(selectState, (state) => state.project?.data)
 
 export const selectProjectSettings = createSelector(selectState, (state) => state.project.data?.settings)
 export const selectProjectPlanningTask = createSelector(selectState, (state) => state.project.data?.baseTask)
@@ -21,6 +21,11 @@ export const selectPlans = createSelector(selectState, (state) => state.plans.da
 
 export const selectSelectedPlan = createSelector(selectState, (state) => 
     state.planId === null || state?.plans.data === undefined ? null : state?.plans.data.find(p => p._id === state.planId));
+
+export const selectReferencePlan = createSelector(selectState, (state) => 
+    state.referencePlanId === null || state?.plans.data === undefined ? null : state?.plans.data.find(p => p._id === state.referencePlanId));
+export const selectComparisonPlan = createSelector(selectState, (state) => 
+    state.comparisonPlanId === null || state?.plans.data === undefined ? null : state?.plans.data.find(p => p._id === state.comparisonPlanId));
 
 
 // services

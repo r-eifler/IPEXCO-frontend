@@ -1,0 +1,64 @@
+
+@if(state() !== null && state() !== undefined){
+<div class="main-container">
+    <div class="belugas">
+        <app-beluga-flight
+                [jigs]="incoming()"
+                [jigTypes]="jigTypes()"
+        ></app-beluga-flight>
+
+        <app-beluga-flight
+            [jigs]="outgoing()"
+            [jigTypes]="jigTypes()"
+            [incoming]="false"
+            [schedule]="outgoingSchedule()"
+        ></app-beluga-flight>
+    </div>
+    <div class="trailers">
+        @for(jig of trailersBeluga(); track jig){
+            <app-trailer>
+                @if(jig !== null){
+                <app-jig [jig]="jig"  [jigType]="jigTypes()?.[jig?.type]" [unitSize]="true"></app-jig>
+                }
+            </app-trailer>
+        }
+    </div>
+    <div class="racks">
+        @for(rack of racks(); track rack){
+            <app-rack [rack]="rack" [jigTypes]="jigTypes()">
+            </app-rack>
+        }
+    </div>
+    <div class="trailers">
+        @for(jig of trailersFactory(); track jig){
+            <app-trailer>
+                @if(jig !== null){
+                    <app-jig [jig]="jig"  [jigType]="jigTypes()?.[jig?.type]" [unitSize]="true"></app-jig>
+                }
+            </app-trailer>
+        }
+    </div>
+    <div class="hangars">
+        @for(jig of hangars(); track jig){
+            <app-hangar>
+                @if(jig !== null){
+                    <app-jig [jig]="jig"  [jigType]="jigTypes()?.[jig?.type]" [unitSize]="true"></app-jig>
+                }
+            </app-hangar>
+        }
+    </div>
+    <div class="hangars">
+        @for(pl of productionLines(); track pl){
+            <app-production-line [line]="pl"></app-production-line>
+        }
+    </div>
+</div>
+    }
+    @else{
+        <div class="center">
+            <p>
+                Select a state!
+            </p>
+        </div>
+    }
+
