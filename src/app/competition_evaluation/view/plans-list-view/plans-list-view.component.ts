@@ -10,8 +10,10 @@ import { ActionCardModule } from 'src/app/shared/components/action-card/action-c
 import { BreadcrumbModule } from 'src/app/shared/components/breadcrumb/breadcrumb.module';
 import { PageModule } from 'src/app/shared/components/page/page.module';
 import { PlanCardComponent } from '../../components/plan-card/plan-card.component';
-import { loadEvaluationInstances } from '../../state/competition_evaluation.actions';
+import { loadEvaluationInstances, uploadEvaluationInstance } from '../../state/competition_evaluation.actions';
 import { selectEvaluationInstances } from '../../state/competition_evaluation.feature';
+import { EvalInstanceUploadComponent } from '../eval-instance-upload/eval-instance-upload.component';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-plans-list-view',
@@ -40,4 +42,12 @@ export class PlansListViewComponent {
     this.store.dispatch(loadEvaluationInstances());
   }
 
+  onUpload(){
+    let dialogRef = this.dialog.open(EvalInstanceUploadComponent);
+    dialogRef.afterClosed().pipe(take(1)).subscribe(instance =>{
+      if(instance){
+        this.store.dispatch(uploadEvaluationInstance({evalInstance: instance}))
+      }
+    });
+  }
 }

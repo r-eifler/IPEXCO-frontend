@@ -5,7 +5,7 @@
   </app-breadcrumb>
   <app-page-title>
     
-    Plans
+    Evaluation Instances
 
   </app-page-title>
 
@@ -24,11 +24,11 @@
               </app-plan-card>
             } -->
 
-            <button app-action-card>
+            <button app-action-card (click)="onUpload()">
               <div class="instructions">
-                <span>Compute a new plan.</span>
+                <span>Upload new instance.</span>
               </div>
-              <mat-icon>add</mat-icon>
+              <mat-icon>cloud_upload</mat-icon>
             </button>
 
           </div>
