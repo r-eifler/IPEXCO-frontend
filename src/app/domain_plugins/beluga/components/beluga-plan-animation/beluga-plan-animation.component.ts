@@ -33,6 +33,7 @@ import { MatSliderDragEvent, MatSliderModule } from "@angular/material/slider";
 import { NgIf } from "@angular/common";
 import { Subject, takeUntil, takeWhile, timer } from "rxjs";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { color } from "d3";
 
 export interface Part {
   name: string;
@@ -233,6 +234,7 @@ export class BelugaPlanAnimationComponent {
   factoryNameToIndex: Map<string, number> = new Map<string, number>();
   hangarNameToIndex: Map<string, number> = new Map<string, number>();
 
+  trailerColors: Array<{ r: number; g: number; b: number }> = [];
   jigColors: Array<{ r: number; g: number; b: number }> = [];
   initiallyRegisteredJigsInScene: number = 0; // each jig entering scene consumes new color
   registeredJigsInScene: number = 0; // each jig entering scene consumes new color
@@ -284,6 +286,7 @@ export class BelugaPlanAnimationComponent {
     effect(() => {
       this.loadProblem();
       this.loadPlan();
+      this.resetViewport();
     });
   }
 
@@ -355,11 +358,36 @@ export class BelugaPlanAnimationComponent {
 
     canvas.on("mouse:move", function (opt) {
       if (panning && opt && opt.e) {
-        var currentPoint = canvas.getScenePoint(opt.e);
-        var delta = new fabric.Point(
-          currentPoint.x - lastPoint.x,
-          currentPoint.y - lastPoint.y
+        var currentScenePoint = canvas.getScenePoint(opt.e);
+        var currentViewportPoint = canvas.getViewportPoint(opt.e);
+        currentViewportPoint.x = Math.max(
+          0,
+          Math.min(currentViewportPoint.x, canvas.getWidth())
         );
+        currentViewportPoint.y = Math.max(
+          0,
+          Math.min(currentViewportPoint.y, canvas.getHeight())
+        );
+        var delta = new fabric.Point(
+          currentScenePoint.x - lastPoint.x,
+          currentScenePoint.y - lastPoint.y
+        );
+        if (delta.x > 0) {
+          delta.x = Math.min(
+            delta.x,
+            canvas.getWidth() - currentViewportPoint.x
+          );
+        } else {
+          delta.x = Math.max(delta.x, -currentViewportPoint.x);
+        }
+        if (delta.y > 0) {
+          delta.y = Math.min(
+            delta.y,
+            canvas.getHeight() - currentViewportPoint.y
+          );
+        } else {
+          delta.y = Math.max(delta.y, -currentViewportPoint.y);
+        }
         canvas.relativePan(delta);
       }
     });
@@ -451,7 +479,6 @@ export class BelugaPlanAnimationComponent {
   }
 
   changeState(action: BelugaAction) {
-    console.log(action);
     if (["unload_beluga", "load_beluga"].includes(action.name)) {
       let unloadOrLoad: UnloadBeluga | LoadBeluga =
         action.name === "unload_beluga"
@@ -555,15 +582,6 @@ export class BelugaPlanAnimationComponent {
         return false;
       }
       let trailer: Rack = this.currentState.trailers[trailerIndex];
-      if (
-        side === "fside" &&
-        trailer.at !== null &&
-        trailer.at.hangar !== null
-      ) {
-        let jigOnTrailer: Jig | undefined = trailer.contains.pop();
-        trailer.at.hangar.craning =
-          jigOnTrailer !== undefined ? jigOnTrailer : null;
-      }
       let rack: Rack = this.currentState.racks[rackIndex];
       if (
         side === "bside" &&
@@ -660,15 +678,6 @@ export class BelugaPlanAnimationComponent {
           console.error(`Cannot relocate trailer ${hangar.trailer.name}`);
         }
       }
-      if (
-        trailer.at !== null &&
-        trailer.at.hangar !== null &&
-        trailer.at.hangar.name !== hangar.name
-      ) {
-        let jigOnTrailer: Jig | undefined = trailer.contains.pop();
-        trailer.at.hangar.craning =
-          jigOnTrailer !== undefined ? jigOnTrailer : null;
-      }
       let trailerAlreadyInHangar =
         trailer.at !== null &&
         trailer.at.hangar !== null &&
@@ -715,6 +724,8 @@ export class BelugaPlanAnimationComponent {
         let factory: Factory = this.currentState.factories[factoryIndex];
         factory.contains.unshift(jig.msn);
         trailer.contains[trailer.contains.length - 1].msn = null;
+        let jigOnTrailer = trailer.contains.pop();
+        hangar.craning = jigOnTrailer ? jigOnTrailer : null;
       } else {
         if (!trailerAlreadyInHangar && trailer.contains.length > 0) {
           console.error(
@@ -733,11 +744,8 @@ export class BelugaPlanAnimationComponent {
                 `with planner's one (${deliverOrGet.j})`
             );
           }
-          console.log(`craning: ${hangar.craning.name}`);
           trailer.contains.push(hangar.craning);
           hangar.craning = null;
-          console.log(`trailer: ${trailer.contains.length}`);
-          console.log(trailer.contains);
         }
       }
     } else {
@@ -839,7 +847,14 @@ export class BelugaPlanAnimationComponent {
           break;
       }
     }
-    return false;
+    // No more action in the plan, relocate to nearest rack
+    return this.relocateTrailerToNearestRack(
+      trailer,
+      side,
+      trailer.at && trailer.at.rack
+        ? this.rackNameToIndex.get(trailer.at.rack.name)!
+        : -1
+    );
   }
 
   releaseTrailerLocation(trailer: Rack) {
@@ -986,7 +1001,7 @@ export class BelugaPlanAnimationComponent {
     }
     let belugaHangar = new fabric.Group([belugaHangarPart1, belugaHangarPart2]);
     this.setTooltip(belugaHangar, "Beluga hangar");
-    belugaHangar.set("left", 200);
+    belugaHangar.set("left", 300);
     belugaHangar.set("top", 50);
     this.canvas.add(belugaHangar);
     this.sceneWidth = Math.max(
@@ -1014,7 +1029,7 @@ export class BelugaPlanAnimationComponent {
     // Draw static racks
     this.currentState.racks.forEach((r: Rack) => {
       let rack: fabric.Group | null = null;
-      rack = this.drawStorageRack(r.length * this.rackScale);
+      rack = this.drawStorageRack(r.length * this.rackScale, r.name);
       rack.set(
         "left",
         belugaHangar.getX() +
@@ -1037,7 +1052,7 @@ export class BelugaPlanAnimationComponent {
 
     // Draw hangars
     for (let h: number = 0; h < this.currentState.hangars.length; h++) {
-      let hangar = this.drawHangar(otMaxLength * this.rackScale);
+      let hangar = this.drawHangar(2 * otMaxLength * this.rackScale);
       this.setTooltip(hangar, this.currentState.hangars[h].name);
       hangar.set(
         "left",
@@ -1063,9 +1078,7 @@ export class BelugaPlanAnimationComponent {
         jig.set("top", hangar.getY() + hangar.height - jig.height);
         jig.set(
           "left",
-          hangar.getX() +
-            0.5 * hangar.width -
-            0.5 * this.rackScale * craningJig.length
+          hangar.getX() + hangar.width - 40 - this.rackScale * craningJig.length
         );
         craningJig.fObj = jig;
         this.canvas.add(jig);
@@ -1079,7 +1092,7 @@ export class BelugaPlanAnimationComponent {
 
     // Draw factories
     for (let f: number = 0; f < this.currentState.factories.length; f++) {
-      let factory = this.drawFactory(otMaxLength * this.rackScale);
+      let factory = this.drawFactory(2 * otMaxLength * this.rackScale);
       this.setTooltip(factory, this.currentState.factories[f].name);
       factory.set(
         "left",
@@ -1088,7 +1101,7 @@ export class BelugaPlanAnimationComponent {
           5 * this.rackSpace +
           itMaxLength * this.rackScale +
           rMaxLength * this.rackScale +
-          2 * otMaxLength * this.rackScale
+          3 * otMaxLength * this.rackScale
       );
       factory.set(
         "top",
@@ -1122,11 +1135,11 @@ export class BelugaPlanAnimationComponent {
     // Draw mobile racks (aka trailers)
     this.currentState.trailers.forEach((t: Rack) => {
       let trailer: fabric.Group | null = null;
-      trailer = this.drawStorageRack(t.length * this.rackScale, true);
+      trailer = this.drawStorageRack(t.length * this.rackScale, t.name, true);
       if (t.at != null) {
         let atHangar: Hangar | null = t.at.hangar;
         if (atHangar && atHangar.fObj) {
-          trailer.set("left", atHangar.fObj.getX() + 20);
+          trailer.set("left", atHangar.fObj.getX() + 40);
           trailer.set(
             "top",
             atHangar.fObj.getY() + atHangar.fObj.height - trailer.height
@@ -1137,7 +1150,10 @@ export class BelugaPlanAnimationComponent {
         let atSide: string | null = t.at.side;
         if (atRack && atSide) {
           if (atRack.name.includes("beluga")) {
-            trailer.set("left", belugaHangar.getX() - 20);
+            trailer.set(
+              "left",
+              belugaHangar.getX() + belugaHangar.width - trailer.width - 5
+            );
             trailer.set(
               "top",
               belugaHangar.getY() + belugaHangar.height - trailer.height
@@ -1322,11 +1338,18 @@ export class BelugaPlanAnimationComponent {
     });
   }
 
-  drawStorageRack(length: number, mobile: boolean = false) {
+  drawStorageRack(length: number, name: string, mobile: boolean = false) {
     let supports1: Array<fabric.Circle | fabric.Triangle> = [];
     let supportShift =
       length - this.rackWheelSpace * Math.floor(length / this.rackWheelSpace);
+    let color0 = "#E8E8E8";
+    let color1 = "#808080";
     if (mobile) {
+      let trailerColor = this.trailerColors[this.trailerNameToIndex.get(name)!];
+      color0 = `rgb(${trailerColor.r}, ${trailerColor.g}, ${trailerColor.b})`;
+      color1 = `rgb(${0.5 * trailerColor.r}, ${0.5 * trailerColor.g}, ${
+        0.5 * trailerColor.b
+      })`;
       for (let i = 0; i <= Math.floor(length / this.rackWheelSpace); i++) {
         supports1.push(
           new fabric.Circle({
@@ -1338,8 +1361,8 @@ export class BelugaPlanAnimationComponent {
               gradientUnits: "percentage",
               coords: { x1: 1, y1: 1, x2: 0, y2: 0 },
               colorStops: [
-                { offset: 0, color: "#E8E8E8" },
-                { offset: 1, color: "#808080" },
+                { offset: 0, color: color0 },
+                { offset: 1, color: color1 },
               ],
             }),
             stroke: "#000000",
@@ -1360,8 +1383,8 @@ export class BelugaPlanAnimationComponent {
               gradientUnits: "percentage",
               coords: { x1: 1, y1: 1, x2: 0, y2: 0 },
               colorStops: [
-                { offset: 0, color: "#E8E8E8" },
-                { offset: 1, color: "#808080" },
+                { offset: 0, color: color0 },
+                { offset: 1, color: color1 },
               ],
             }),
             stroke: "#000000",
@@ -1381,8 +1404,8 @@ export class BelugaPlanAnimationComponent {
         gradientUnits: "percentage",
         coords: { x1: 0, y1: 0, x2: 1, y2: 1 },
         colorStops: [
-          { offset: 0, color: "#E8E8E8" },
-          { offset: 1, color: "#808080" },
+          { offset: 0, color: color0 },
+          { offset: 1, color: color1 },
         ],
       }),
       stroke: "#000000",
@@ -1404,8 +1427,8 @@ export class BelugaPlanAnimationComponent {
           gradientUnits: "percentage",
           coords: { x1: 1, y1: 0, x2: 0, y2: 1 },
           colorStops: [
-            { offset: 0, color: "#E8E8E8" },
-            { offset: 1, color: "#808080" },
+            { offset: 0, color: color0 },
+            { offset: 1, color: color1 },
           ],
         }),
         stroke: "#000000",
@@ -1428,8 +1451,8 @@ export class BelugaPlanAnimationComponent {
           gradientUnits: "percentage",
           coords: { x1: 1, y1: 0, x2: 0, y2: 1 },
           colorStops: [
-            { offset: 0, color: "#E8E8E8" },
-            { offset: 1, color: "#808080" },
+            { offset: 0, color: color0 },
+            { offset: 1, color: color1 },
           ],
         }),
         stroke: "#000000",
@@ -1447,8 +1470,8 @@ export class BelugaPlanAnimationComponent {
         gradientUnits: "percentage",
         coords: { x1: 0, y1: 0, x2: 1, y2: 1 },
         colorStops: [
-          { offset: 0, color: "#E8E8E8" },
-          { offset: 1, color: "#808080" },
+          { offset: 0, color: color0 },
+          { offset: 1, color: color1 },
         ],
       }),
       stroke: "#000000",
@@ -1475,8 +1498,8 @@ export class BelugaPlanAnimationComponent {
               gradientUnits: "percentage",
               coords: { x1: 1, y1: 1, x2: 0, y2: 0 },
               colorStops: [
-                { offset: 0, color: "#E8E8E8" },
-                { offset: 1, color: "#808080" },
+                { offset: 0, color: color0 },
+                { offset: 1, color: color1 },
               ],
             }),
             stroke: "#000000",
@@ -1500,8 +1523,8 @@ export class BelugaPlanAnimationComponent {
               gradientUnits: "percentage",
               coords: { x1: 1, y1: 1, x2: 0, y2: 0 },
               colorStops: [
-                { offset: 0, color: "#E8E8E8" },
-                { offset: 1, color: "#808080" },
+                { offset: 0, color: color0 },
+                { offset: 1, color: color1 },
               ],
             }),
             stroke: "#000000",
@@ -1523,8 +1546,8 @@ export class BelugaPlanAnimationComponent {
               gradientUnits: "percentage",
               coords: { x1: 1, y1: 1, x2: 0, y2: 0 },
               colorStops: [
-                { offset: 0, color: "#E8E8E8" },
-                { offset: 1, color: "#808080" },
+                { offset: 0, color: color0 },
+                { offset: 1, color: color1 },
               ],
             }),
             stroke: "#000000",
@@ -2005,7 +2028,7 @@ export class BelugaPlanAnimationComponent {
         length: rack.size,
         type: "Static Rack",
         location: "outside",
-        contains: [],
+        contains: new Array<Jig>(),
         at: null,
         bside_trailer: null,
         fside_trailer: null,
@@ -2030,10 +2053,10 @@ export class BelugaPlanAnimationComponent {
       this.trailerNameToIndex.set(trailer.name, ti);
       this.currentState.trailers.push({
         name: trailer.name,
-        length: 50, // hard coded
+        length: 25, // hard coded
         type: "Mobile Rack",
         location: "inside",
-        contains: [],
+        contains: new Array<Jig>(),
         at: {
           rack: this.currentState.racks[ti],
           side: "beluga",
@@ -2054,10 +2077,10 @@ export class BelugaPlanAnimationComponent {
       );
       this.currentState.trailers.push({
         name: trailer.name,
-        length: 50, // hard coded
+        length: 25, // hard coded
         type: "Mobile Rack",
         location: "outside",
-        contains: [],
+        contains: new Array<Jig>(),
         at: {
           rack: this.currentState.racks[ti],
           side: "factory",
@@ -2087,7 +2110,7 @@ export class BelugaPlanAnimationComponent {
       this.factoryNameToIndex.set(factory.name, fi);
       this.currentState.factories.push({
         name: factory.name,
-        contains: [],
+        contains: new Array<Part>(),
         fObj: null,
       });
     }
@@ -2099,13 +2122,34 @@ export class BelugaPlanAnimationComponent {
         }
       }
     }
+    this.trailerColors = [];
+    for (let t = 0; t < problem.trailers_beluga.length; t++) {
+      this.trailerColors.push(
+        colorsys.hsv2Rgb(
+          (t * 360.0) /
+            (problem.trailers_beluga.length + problem.trailers_factory.length),
+          50,
+          100
+        )
+      );
+    }
+    for (let t = 0; t < problem.trailers_factory.length; t++) {
+      this.trailerColors.push(
+        colorsys.hsv2Rgb(
+          ((t + problem.trailers_beluga.length) * 360.0) /
+            (problem.trailers_beluga.length + problem.trailers_factory.length),
+          50,
+          100
+        )
+      );
+    }
     this.jigColors = [];
     for (let c = 0; c < this.maxNbJigs; c++) {
       this.jigColors.push(
         colorsys.hsv2Rgb(
           (c * 360.0) / (this.maxNbJigs + this.maxNbParts),
-          50,
-          50
+          100,
+          75
         )
       );
     }
@@ -2114,8 +2158,8 @@ export class BelugaPlanAnimationComponent {
       this.partColors.push(
         colorsys.hsv2Rgb(
           ((c + this.maxNbJigs) * 360.0) / (this.maxNbJigs + this.maxNbParts),
-          50,
-          50
+          75,
+          75
         )
       );
     }
