@@ -1,0 +1,23 @@
+<!-- @let plan = plan$ | async;
+
+<app-page>
+  <app-breadcrumb>
+    <a app-breadcrumb-item [routerLink]="['/projects/' + plan?.project]"><mat-icon>home</mat-icon></a>
+    <a app-breadcrumb-item [routerLink]="['..']">All Plans</a>
+    <app-breadcrumb-item>{{ (plan$ | async)?.name }}</app-breadcrumb-item>
+  </app-breadcrumb>
+  <app-page-title>
+    {{ plan?.name }}
+    <app-page-title-action>
+    </app-page-title-action>
+  </app-page-title>
+
+  <app-page-content>
+    @if(isBeluga$ | async){
+        <app-beluga-plan-animation
+            [plan]="plan"
+            [model]="project$ | async"
+        ></app-beluga-plan-animation>
+    }
+  </app-page-content>
+</app-page> -->

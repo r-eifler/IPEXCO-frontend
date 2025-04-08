@@ -1,0 +1,40 @@
+
+<app-page>
+  <app-breadcrumb>
+    <app-breadcrumb-item>Evaluation Instances</app-breadcrumb-item>
+  </app-breadcrumb>
+  <app-page-title>
+    
+    Plans
+
+  </app-page-title>
+
+  <app-page-content>
+    <app-page-section-list>
+      
+      <app-page-section>
+        <app-page-section-content>
+          <div class="page-grid">
+            <!-- @for(plan of  evaluationInstances$ | async; track plan) {
+              <app-plan-card
+                [plan]="plan"
+                [planner]="plannerMap?.[plan.planner]"
+                (cancel)="onCancel(plan._id)"
+              >
+              </app-plan-card>
+            } -->
+
+            <button app-action-card>
+              <div class="instructions">
+                <span>Compute a new plan.</span>
+              </div>
+              <mat-icon>add</mat-icon>
+            </button>
+
+          </div>
+        </app-page-section-content>
+      </app-page-section> 
+
+    </app-page-section-list>
+  </app-page-content>
+</app-page>
