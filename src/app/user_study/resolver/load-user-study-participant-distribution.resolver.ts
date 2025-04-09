@@ -7,5 +7,6 @@ export const loadUserStudyParticipantDistributionResolver: ResolveFn<void> = (sn
 
   const id = snapshot.paramMap.get('participantDistributionId');
 
-  inject(Store).dispatch(loadParticipantDistribution({ id }))
+  if(id !== null)
+    inject(Store).dispatch(loadParticipantDistribution({ id }))
 }

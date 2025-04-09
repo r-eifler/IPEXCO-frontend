@@ -76,7 +76,7 @@
         </app-page-section-title>
         <app-page-section-content>
           <app-explanation-chat [isLoading]="isExplanationLoading$ | async"
-            [availableQuestions]="globalAvalableQuestionTypes$ | async" (questionSelected)="onQuestionSelected($event)"
+            [availableQuestions]="globalAvailableQuestionTypes$ | async" (questionSelected)="onQuestionSelected($event)"
             [messages]="globalMessages$ | async" [properties]="planProperties$ | async"></app-explanation-chat>
         </app-page-section-content>
       </app-page-section>

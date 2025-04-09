@@ -1,8 +1,8 @@
 import { createAction, props } from "@ngrx/store";
-import { Demo } from "src/app/project/domain/demo";
-import { UserStudy } from "../domain/user-study";
+import { UserStudy, UserStudyBase } from "../domain/user-study";
 import {UserStudyExecution} from '../domain/user-study-execution';
-import { ParticipantDistribution } from "../domain/participant-distribution";
+import { ParticipantDistribution, ParticipantDistributionBase } from "../domain/participant-distribution";
+import { Demo } from "src/app/shared/domain/demo";
 
 // User Studies
 
@@ -10,7 +10,7 @@ export const loadUserStudies = createAction('[UserStudy] load user studies');
 export const loadUserStudiesSuccess = createAction('[UserStudy] load user studies success', props<{userStudies: UserStudy[]}>());
 export const loadUserStudiesFailure = createAction('[UserStudy] load user studies failure');
 
-export const createUserStudy = createAction('[UserStudy] create user study', props<{userStudy: UserStudy}>());
+export const createUserStudy = createAction('[UserStudy] create user study', props<{userStudy: UserStudyBase}>());
 export const createUserStudySuccess = createAction('[UserStudy] create user study success', props<{userStudy: UserStudy}>());
 export const createUserStudyFailure = createAction('[UserStudy] create user study failure');
 
@@ -49,7 +49,7 @@ export const loadParticipantDistributions = createAction('[UserStudy] load user 
 export const loadParticipantDistributionsSuccess = createAction('[UserStudy] load user study participant distributions success', props<{distributions: ParticipantDistribution[]}>());
 export const loadParticipantDistributionsFailure = createAction('[UserStudy] load user study participant distributions failure');
 
-export const createParticipantDistribution = createAction('[UserStudy] create user study participant distribution', props<{distribution: ParticipantDistribution}>());
+export const createParticipantDistribution = createAction('[UserStudy] create user study participant distribution', props<{distribution: ParticipantDistributionBase}>());
 export const createParticipantDistributionSuccess = createAction('[UserStudy] create user study participant distribution success', props<{distribution: ParticipantDistribution}>());
 export const createParticipantDistributionFailure = createAction('[UserStudy] create user study participant distribution failure');
 

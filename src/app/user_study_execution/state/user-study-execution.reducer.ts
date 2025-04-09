@@ -1,24 +1,26 @@
 import { createReducer, on } from '@ngrx/store';
-import { Loadable, LoadingState } from 'src/app/shared/common/loadable.interface';
-import {UserStudy} from '../../user_study/domain/user-study';
-import {
-  executionFinishedLastUserStudyStep,
-    executionLoadUserStudy,
-    executionLoadUserStudySuccess,
-    executionNextUserStudyStep,
-    executionUserStudyCancelSuccess, executionUserStudyStart, executionUserStudySubmitSuccess,
-    loadUserStudyDemo,
-    loadUserStudyDemoSuccess,
-    loadUserStudyPlanProperties,
-    loadUserStudyPlanPropertiesSuccess,
-    logAction,
-    logPlanComputationFinished,
-    registerUserStudyUserSuccess
-} from './user-study-execution.actions';
 import { createIterationStepSuccess } from 'src/app/iterative_planning/state/iterative-planning.actions';
-import { UserAction } from '../domain/user-action';
+import { Loadable, LoadingState } from 'src/app/shared/common/loadable.interface';
 import { Demo } from 'src/app/shared/domain/demo';
 import { PlanProperty } from 'src/app/shared/domain/plan-property/plan-property';
+import { UserStudy } from '../../user_study/domain/user-study';
+import { UserAction } from '../domain/user-action';
+import {
+  executionFinishedLastUserStudyStep,
+  executionLoadUserStudy,
+  executionLoadUserStudySuccess,
+  executionLockNextStep,
+  executionNextUserStudyStep,
+  executionSaveProlificId,
+  executionUnlockNextStep,
+  executionUserStudyCancelSuccess, executionUserStudyStart, executionUserStudySubmitSuccess,
+  loadUserStudyDemo,
+  loadUserStudyDemoSuccess,
+  loadUserStudyPlanProperties,
+  loadUserStudyPlanPropertiesSuccess,
+  logAction,
+  logPlanComputationFinished
+} from './user-study-execution.actions';
 
 export interface UserStudyExecutionState {
     userStudy: Loadable<UserStudy>;
@@ -29,9 +31,10 @@ export interface UserStudyExecutionState {
     actionLog: UserAction[];
     runningDemo: Loadable<Demo>;
     runningDemoPlanProperties: Loadable<PlanProperty[]>;
+    continueLocked: boolean;
+    prolificId: string | null
 }
 
-export const userStudyExecutionFeature = 'user-study-execution';
 
 const initialState: UserStudyExecutionState = {
     userStudy: {state: LoadingState.Initial, data: undefined},
@@ -42,6 +45,8 @@ const initialState: UserStudyExecutionState = {
     actionLog: [],
     runningDemo: {state: LoadingState.Initial, data: undefined},
     runningDemoPlanProperties: {state: LoadingState.Initial, data: undefined},
+    continueLocked: false,
+    prolificId: null
 }
 
 
@@ -60,14 +65,30 @@ export const userStudyExecutionReducer = createReducer(
       ...state,
       userStudy: {state: LoadingState.Done, data: userStudy},
     })),
+    on(executionSaveProlificId, (state, {id}): UserStudyExecutionState => ({
+      ...state,
+      prolificId: id,
+    })),
     on(executionUserStudyStart, (state): UserStudyExecutionState => ({
       ...state,
       stepIndex: 0,
     })),
     on(executionNextUserStudyStep, (state): UserStudyExecutionState => ({
       ...state,
-      stepIndex: state.stepIndex < state.userStudy.data?.steps.length - 1 ? state.stepIndex + 1 : null,
-      finishedAllSteps: state.stepIndex == state.userStudy.data?.steps.length - 1,
+      stepIndex: state.stepIndex !== null && state.stepIndex !== undefined && 
+      state.userStudy.data?.steps !== null  && state.userStudy.data?.steps !== undefined && 
+      state.stepIndex < state.userStudy.data?.steps.length - 1 ? 
+        state.stepIndex + 1 : 
+        null,
+      finishedAllSteps: !!state.userStudy.data?.steps && state.stepIndex !== null && (state.stepIndex == state.userStudy.data?.steps.length - 1),
+    })),
+    on(executionLockNextStep, (state): UserStudyExecutionState => ({
+      ...state,
+      continueLocked: true,
+    })),
+    on(executionUnlockNextStep, (state): UserStudyExecutionState => ({
+      ...state,
+      continueLocked: false,
     })),
     on(loadUserStudyDemo, (state): UserStudyExecutionState => ({
       ...state,
@@ -92,16 +113,18 @@ export const userStudyExecutionReducer = createReducer(
     })),
     on(executionUserStudySubmitSuccess, (state): UserStudyExecutionState => ({
         ...state,
-        stepIndex: null
+        stepIndex: null,
+        prolificId: null
     })),
     on(executionUserStudyCancelSuccess, (state): UserStudyExecutionState => ({
         ...state,
         stepIndex: null,
-        canceled: true
+        canceled: true,
+        prolificId: null
     })),
     on(createIterationStepSuccess, (state, {iterationStep}): UserStudyExecutionState =>({
       ... state,
-      pendingIterationSteps: [...state.pendingIterationSteps, iterationStep._id]
+      pendingIterationSteps: [...state.pendingIterationSteps].concat(iterationStep._id ? [iterationStep._id] : [])
     })),
     on(logPlanComputationFinished, (state, {iterationStepId}): UserStudyExecutionState => ({
       ...state,

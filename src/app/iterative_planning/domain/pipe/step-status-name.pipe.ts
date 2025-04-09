@@ -8,23 +8,23 @@ import { PlanRunStatus } from '../plan';
 })
 export class StepStatusNamePipe implements PipeTransform {
 
-  transform(value: PlanRunStatus | undefined): string {
+  transform(value: PlanRunStatus | undefined){
     if(value === undefined || value === null) {
       return 'Unknown';
     }
 
     switch (value) {
-      case PlanRunStatus.pending:
+      case PlanRunStatus.PENDING:
         return 'Pending';
-      case PlanRunStatus.running:
+      case PlanRunStatus.RUNNING:
         return 'Running';
-      case PlanRunStatus.failed:
+      case PlanRunStatus.FAILED:
         return 'Failed';
-      case PlanRunStatus.plan_found:
+      case PlanRunStatus.SOLVED:
         return 'Solved';
-      case PlanRunStatus.not_solvable:
+      case PlanRunStatus.UNSOLVABLE:
         return 'Unsolvable';
-      case PlanRunStatus.canceled:
+      case PlanRunStatus.CANCELED:
         return 'Canceled';
     }
   }

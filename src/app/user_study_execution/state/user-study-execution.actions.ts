@@ -2,9 +2,8 @@ import { createAction, props } from '@ngrx/store';
 import {UserStudy} from '../../user_study/domain/user-study';
 import {User} from '../../user/domain/user';
 import { UserAction } from '../domain/user-action';
-import { IterationStep } from 'src/app/iterative_planning/domain/iteration_step';
-import { Demo } from 'src/app/project/domain/demo';
 import { PlanProperty } from 'src/app/shared/domain/plan-property/plan-property';
+import { Demo } from 'src/app/shared/domain/demo';
 
 // User Studies
 export const executionLoadUserStudy = createAction('[UserStudyExecution] load user study', props<{id: string}>());
@@ -12,9 +11,16 @@ export const executionLoadUserStudySuccess = createAction('[UserStudyExecution] 
 export const executionLoadUserStudyFailure = createAction('[UserStudyExecution] load user study failure');
 
 
+//prolific ID
+export const executionSaveProlificId = createAction('[UserStudyExecution] safe prolific id', props<{id: string}>());
+
+
 // steps
 export const executionNextUserStudyStep = createAction('[UserStudyExecution] next user study step');
 export const executionFinishedLastUserStudyStep = createAction('[UserStudyExecution] finish last user study step');
+
+export const executionLockNextStep = createAction('[UserStudyExecution] lock next step');
+export const executionUnlockNextStep = createAction('[UserStudyExecution] unlock next step');
 
 
 // execution
@@ -42,7 +48,7 @@ export const loadUserStudyPlanPropertiesFailure = createAction('[UserStudyExecut
 
 
 // user
-export const registerUserStudyUser = createAction('[UserStudyExecution] register user study user', props<{id: string}>());
+export const registerUserStudyUser = createAction('[UserStudyExecution] register user study user', props<{id: string, prolificId: string | null}>());
 export const registerUserStudyUserSuccess = createAction('[UserStudyExecution] register user study user success', props<{user: User, token: string}>());
 export const registerUserStudyUserFailure = createAction('[UserStudyExecution] register user study user failure');
 

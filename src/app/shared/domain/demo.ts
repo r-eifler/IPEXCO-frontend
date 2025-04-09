@@ -1,30 +1,42 @@
-import { GlobalExplanation } from '../../iterative_planning/domain/explanation/explanations';
-import { RunStatus } from '../../iterative_planning/domain/run';
-import { Project } from './project';
+import { PlanProperty } from 'src/app/shared/domain/plan-property/plan-property';
+import { ProjectBaseZ, ProjectZ } from 'src/app/shared/domain/project';
+import { nativeEnum, nullable, object, optional, string, infer as zinfer } from 'zod';
+import { GlobalExplanationZ } from '../../iterative_planning/domain/explanation/explanations';
 
 
 export enum DemoRunStatus {
-  pending,
-  running,
-  failed,
-  finished
+  PENDING = "PENDING",
+  RUNNING = "RUNNING",
+  FAILED = "FAILED",
+  FINISHED = "FINISHED"
 }
 
-export interface Demo extends Project {
-  projectId: string,
-  status: DemoRunStatus;
-  completion: number;
-  maxUtility?: { value: number; selectedPlanProperties: string[] };
-}
+export const DemoRunStatusZ = nativeEnum(DemoRunStatus);
 
-export interface DemoDefinition {
-  MUGS: string[][];
-  plans: {
-    planProperties: string[];
-    plan: string;
-  }[];
-  satPropertiesPerPlan: {
-    planProperties: string[];
-    plan: string;
-  }[];
+export const DemoBaseZ = ProjectBaseZ.merge(object({
+  projectId: nullable(string()),
+  status: DemoRunStatusZ,
+}));
+
+export type DemoBase = zinfer<typeof DemoBaseZ>;
+
+export const DemoZ = ProjectZ.merge(DemoBaseZ);
+
+export type Demo = zinfer<typeof DemoZ>;
+
+export function computeMaxPossibleUtility(demo: Demo, planProperties: PlanProperty[]): number | undefined {
+  if(!demo || ! planProperties || demo.globalExplanation === undefined || demo.globalExplanation?.MGCS == undefined){
+    return undefined;
+  }
+  let MGCS = demo.globalExplanation.MGCS 
+
+  if(MGCS == null){
+    return 0;
+  }
+
+  const utilityOfAllMSGS = MGCS.map(mgcs =>
+    planProperties.map(
+      pp => !mgcs.includes(pp._id) ? pp.utility : 0).reduce((p,c) => p + c, 0)
+    )
+  return Math.max(...utilityOfAllMSGS);
 }

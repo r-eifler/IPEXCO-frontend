@@ -5,9 +5,7 @@ import { IterationStepService } from './iteration-step.service';
 import { IterationStep } from '../domain/iteration_step';
 import { ExplanationRunStatus } from '../domain/explanation/explanations';
   
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class ExplainerMonitoringService {
 
 
@@ -38,6 +36,6 @@ export class ExplainerMonitoringService {
 }
 
 function explanationFinished(iterationStep: IterationStep): boolean {
-    return (iterationStep.globalExplanation?.status != ExplanationRunStatus.pending) &&
-    (iterationStep.globalExplanation?.status != ExplanationRunStatus.running);
+    return (iterationStep.globalExplanation?.status != ExplanationRunStatus.PENDING) &&
+    (iterationStep.globalExplanation?.status != ExplanationRunStatus.RUNNING);
 }

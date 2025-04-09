@@ -21,7 +21,7 @@
       <div >
         <p *ngFor="let action of actions$ | async" class="actions">
           <span style="font-weight: 500;">{{ action.name }}</span>(
-          @for (p of action.arguments; track p) {
+          @for (p of action.params; track p) {
           {{ p }}
           @if (!$last) {, }
           })
@@ -29,22 +29,4 @@
       </div>
     </mat-card-content>
   </ng-container>
-
-  <!-- <ng-container *ngIf="!(notSolvable$ | async) && !(solved$ | async)">
-    <button mat-flat-button color="primary" (click)="computePlan()">
-      Compute Plan
-    </button>
-  </ng-container>
-
-  <ng-container *ngIf="(hasPlan$ | async)">
-    <button mat-flat-button (click)="computePlan()">
-      Replan
-    </button>
-  </ng-container> -->
-
-  <!-- <div
-    class="compute-container"
-    *ngIf="(plannerBusy$ | async) && (isRunning$ | async)">
-    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-  </div> -->
 </mat-card>

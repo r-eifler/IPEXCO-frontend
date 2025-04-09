@@ -2,8 +2,7 @@ import { Component, computed, EventEmitter, input, Input, Output } from '@angula
 import { MatMenuModule } from '@angular/material/menu';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatIcon } from '@angular/material/icon';
-import { PDDLObject } from 'src/app/shared/domain/planning-task';
-import { boolean } from 'zod';
+import { PDDLObject } from 'src/app/shared/domain/PDDL_task';
 
 @Component({
     selector: 'app-property-template-part',

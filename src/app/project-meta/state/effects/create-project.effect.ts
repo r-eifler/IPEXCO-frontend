@@ -1,7 +1,7 @@
 import { inject, Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { catchError, map, switchMap } from "rxjs/operators";
 import { of } from "rxjs";
+import { catchError, switchMap } from "rxjs/operators";
 import { CreateProjectService } from "../../service/create-project.service";
 import { createProject, createProjectFailure, createProjectSuccess, loadProjectMetaDataList } from "../project-meta.actions";
 
@@ -15,7 +15,7 @@ export class CreateProjectEffect{
         ofType(createProject),
         switchMap(({project}) => this.service.postProject$(project).pipe(
             switchMap(_ => [createProjectSuccess(), loadProjectMetaDataList()]),
-            catchError(() => of(createProjectFailure()))
+            catchError((e) => of(createProjectFailure({err: e})))
         ))
     ))
 }

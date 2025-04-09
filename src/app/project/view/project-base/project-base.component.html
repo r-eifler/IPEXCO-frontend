@@ -22,6 +22,16 @@
           Start
         </a>
       </app-project-action-card>
+
+      <app-project-action-card>
+        <span action-title>Planning</span>
+        <span action-description>
+          Compute a single plan with different configurations.
+        </span>
+        <a mat-button [routerLink]="['/planning', (project$ | async)?._id]" action-button>
+          Start
+        </a>
+      </app-project-action-card>
   
 
       <app-project-action-card>

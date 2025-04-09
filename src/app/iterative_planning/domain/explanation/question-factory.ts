@@ -4,10 +4,10 @@ import { QuestionType } from "./explanations";
 type Factory<T extends QuestionType> =
   T extends QuestionType.WHY_PLAN ? () => StructuredText :
   T extends QuestionType.HOW_PLAN ? () => StructuredText :
-  T extends QuestionType.WHY_NOT_PROPERTY ? (propertyDescription: string) => StructuredText :
-  T extends QuestionType.WHAT_IF_PROPERTY ? (propertyDescription: string) => StructuredText :
-  T extends QuestionType.CAN_PROPERTY ? (propertyDescription: string) => StructuredText :
-  T extends QuestionType.HOW_PROPERTY ? (propertyDescription: string) => StructuredText :
+  T extends QuestionType.WHY_NOT_PROPERTY ? (propertyDescription?: string) => StructuredText :
+  T extends QuestionType.WHAT_IF_PROPERTY ? (propertyDescription?: string) => StructuredText :
+  T extends QuestionType.CAN_PROPERTY ? (propertyDescription?: string) => StructuredText :
+  T extends QuestionType.HOW_PROPERTY ? (propertyDescription?: string) => StructuredText :
   never;
 
 export function questionFactory<T extends QuestionType, R extends Factory<T> = Factory<T>>(questionType: T): R {
@@ -25,4 +25,5 @@ export function questionFactory<T extends QuestionType, R extends Factory<T> = F
     case QuestionType.HOW_PROPERTY:
       return ((p: string) => ({ mainText: `How can "${p}" be satisfied?` })) as R;
   }
+  throw new Error("Didn't expect to get here");
 }

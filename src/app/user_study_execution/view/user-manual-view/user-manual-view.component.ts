@@ -2,9 +2,9 @@ import { Component, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { selectExecutionUserStudyStep, selectExecutionUserStudyDemo, selectExecutionUserStudyPlanProperties } from '../../state/user-study-execution.selector';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { filter } from 'rxjs';
+import { filter, map } from 'rxjs';
 import { loadUserStudyDemo } from '../../state/user-study-execution.actions';
-import { UserStudyStepType } from 'src/app/user_study/domain/user-study';
+import { UserStudyStepType, UserStudyUserManuelStep } from 'src/app/user_study/domain/user-study';
 import { PageModule } from 'src/app/shared/components/page/page.module';
 import { UserManualComponent } from '../../../iterative_planning/components/user-manual/user-manual.component';
 import { MatIconModule } from '@angular/material/icon';
@@ -27,17 +27,26 @@ export class UserManualViewComponent {
   
   store = inject(Store);
 
-  step$ = this.store.select(selectExecutionUserStudyStep);
+  step$ = this.store.select(selectExecutionUserStudyStep).pipe(
+    map(s => s !== null && s.type === UserStudyStepType.userManual ? s as UserStudyUserManuelStep : null)
+  );
   demo$ = this.store.select(selectExecutionUserStudyDemo);
 
+  settings$ = this.demo$.pipe(
+    filter(demo => !!demo && !!demo?.settings),
+    map(demo => demo?.settings)
+  )
+
   constructor(){
-
-
     this.step$.pipe(
       takeUntilDestroyed(),
       filter(s => !!s && s.type == UserStudyStepType.userManual)
-    ).subscribe(s => this.store.dispatch(loadUserStudyDemo({demoId: s.content})))
-    
+    ).subscribe(s => 
+        !!s && !!s.content ? 
+        this.store.dispatch(loadUserStudyDemo({demoId: s.content})) : 
+        console.log("Cannot load demo for user manual"
+
+      ))
   }
 
 }

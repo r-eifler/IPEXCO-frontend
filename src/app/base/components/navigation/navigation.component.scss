@@ -48,6 +48,6 @@ h1.app-name {
 .entry{
   display: flex;
   align-items: center;
-  gap: 1rem;
-  padding:0.75rem;
+  gap: var(--spacing-100);
+  gap: var(--spacing-100);
 }

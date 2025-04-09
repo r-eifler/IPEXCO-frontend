@@ -10,21 +10,53 @@ export interface UserStudyStep {
   type: UserStudyStepType;
   name: string,
   time: number | null;
-  content: string | null;
+  content?: unknown;
 }
 
-export interface UserStudy {
-  _id?: string;
-  updated?: string;
+export interface UserStudyDescriptionStep extends UserStudyStep{
+  type: UserStudyStepType.description;
+  content: string;
+}
+
+export interface UserStudyFormStep extends UserStudyStep{
+  type: UserStudyStepType.form;
+  content: {
+    link: string,
+    code: string | null
+  };
+}
+
+export interface UserStudyDemoStep extends UserStudyStep{
+  type: UserStudyStepType.demo;
+  content: string;
+}
+
+export interface UserStudyDemoInfoStep extends UserStudyStep{
+  type: UserStudyStepType.demoInfo;
+  content: string;
+}
+
+export interface UserStudyUserManuelStep extends UserStudyStep{
+  type: UserStudyStepType.userManual;
+  content: string;
+}
+
+export interface UserStudyBase{
   name: string;
-  user?: string;
-  available?: boolean;
-  redirectUrl: string;
+  available: boolean;
+  redirectUrl: string | null;
   description: string;
   relatedProject: string;
   expectation: string;
   confidentiality: string;
-  startDate?: Date;
-  endDate?: Date;
-  steps?: UserStudyStep[];
+  startDate: Date | null;
+  endDate: Date | null;
+  steps: UserStudyStep[];
+}
+
+
+export interface UserStudy extends UserStudyBase{
+  _id: string;
+  updated: string;
+  user: string;
 }

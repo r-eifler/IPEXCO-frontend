@@ -39,13 +39,22 @@
                         <div class='template-container'>
                             @for(part of templateParts; track part){
                                 @if(part.isVar){
-                                    <app-property-template-part 
-                                        [values]="part.possibleValues"
-                                        [isSelected]="part.isSelected"
-                                        [selectedValue]="part.text"
-                                        (value)="selectVariableValue(part.var, $event)"
-                                        (reset)="resetVariableValue(part.var)">
-                                    </app-property-template-part>
+                                    @if(part.numeric){
+                                        <app-property-template-numeric-part 
+                                            [isSelected]="part.isSelected"
+                                            [selectedValue]="part.text"
+                                            (value)="selectNumericVariableValue(part.var, $event)">
+                                        </app-property-template-numeric-part>
+                                    }
+                                    @else {
+                                        <app-property-template-part 
+                                            [values]="part.possibleValues"
+                                            [isSelected]="part.isSelected"
+                                            [selectedValue]="part.text"
+                                            (value)="selectVariableValue(part.var, $event)"
+                                            (reset)="resetVariableValue(part.var)">
+                                        </app-property-template-part>
+                                    }
                                 }
                                 @else{
                                     <span style="font-size: large">

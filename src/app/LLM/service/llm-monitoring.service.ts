@@ -8,7 +8,6 @@ import { IHTTPData } from 'src/app/shared/domain/http-data.interface';
 export interface LLMResponse {
     status: 'queued' | 'in_progress' | 'requires_action' | 'cancelling' | 'cancelled' | 'failed' | 'completed' | 'incomplete' | 'expired';
     response?: any;
-    threadId?: string;
 }
 
 @Injectable({

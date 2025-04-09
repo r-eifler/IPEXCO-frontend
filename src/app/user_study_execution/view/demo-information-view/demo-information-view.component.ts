@@ -3,8 +3,8 @@ import { Store } from '@ngrx/store';
 import { selectExecutionUserStudyDemo, selectExecutionUserStudyPlanProperties, selectExecutionUserStudyStep } from '../../state/user-study-execution.selector';
 import { loadUserStudyDemo } from '../../state/user-study-execution.actions';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { filter } from 'rxjs';
-import { UserStudyStepType } from 'src/app/user_study/domain/user-study';
+import { filter, map } from 'rxjs';
+import { UserStudyDemoInfoStep, UserStudyStepType } from 'src/app/user_study/domain/user-study';
 import { MatTabsModule } from '@angular/material/tabs';
 import { PlanPropertyPanelComponent } from 'src/app/shared/components/plan-property-panel/plan-property-panel.component';
 import { AsyncPipe } from '@angular/common';
@@ -33,7 +33,9 @@ export class DemoInformationViewComponent {
 
   store = inject(Store);
 
-  step$ = this.store.select(selectExecutionUserStudyStep);
+  step$ = this.store.select(selectExecutionUserStudyStep).pipe(
+      map(s => s !== null && s.type === UserStudyStepType.demoInfo ? s as UserStudyDemoInfoStep : null)
+  );
   demo$ = this.store.select(selectExecutionUserStudyDemo);
   planProperties$ = this.store.select(selectExecutionUserStudyPlanProperties);
 
@@ -43,7 +45,7 @@ export class DemoInformationViewComponent {
     this.step$.pipe(
       takeUntilDestroyed(),
       filter(s => !!s && s.type == UserStudyStepType.demoInfo)
-    ).subscribe(s => this.store.dispatch(loadUserStudyDemo({demoId: s.content})))
+    ).subscribe(s => !!s && !!s.content ? this.store.dispatch(loadUserStudyDemo({demoId: s.content})) : console.log("Cannot load demo for demo information"))
     
   }
 

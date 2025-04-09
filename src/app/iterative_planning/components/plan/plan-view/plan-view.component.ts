@@ -1,15 +1,15 @@
-import { Component, DestroyRef, OnDestroy, OnInit } from "@angular/core";
+import { Component, DestroyRef, inject, OnDestroy, OnInit } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { Store } from "@ngrx/store";
 import { Observable } from "rxjs";
 import { filter, map, take, tap } from "rxjs/operators";
 import { IterationStep, StepStatus } from "src/app/iterative_planning/domain/iteration_step";
-import { PlanAction, PlanRunStatus } from "src/app/iterative_planning/domain/plan";
+import { PlanRunStatus } from "src/app/iterative_planning/domain/plan";
 import { selectIterativePlanningSelectedStep } from "src/app/iterative_planning/state/iterative-planning.selector";
-import { LogEvent, TimeLoggerService } from "../../../../user_study/service/time-logger.service";
 import { MatCardModule } from "@angular/material/card";
 import { AsyncPipe, NgFor, NgIf } from "@angular/common";
 import { MatButtonModule } from "@angular/material/button";
+import { Action } from "src/app/shared/domain/plan-property/plan-property";
 
 
 @Component({
@@ -24,64 +24,36 @@ import { MatButtonModule } from "@angular/material/button";
     templateUrl: "./plan-view.component.html",
     styleUrls: ["./plan-view.component.scss"]
 })
-export class PlanViewComponent implements OnInit, OnDestroy {
+export class PlanViewComponent {
 
-  step$: Observable<IterationStep>;
-  actions$: Observable<PlanAction[]>;
-  solved$: Observable<boolean>;
-  notSolvable$: Observable<boolean>;
-  isRunning$: Observable<boolean>;
-  hasPlan$: Observable<boolean>;
-  plannerBusy$: Observable<boolean>;
+  store = inject(Store);
 
-  constructor(
-    private store: Store,
-    private timeLogger: TimeLoggerService,
-    private destroyRef: DestroyRef
-  ) {
-    this.step$ = this.store.select(selectIterativePlanningSelectedStep);
-    // this.plannerBusy$ = this.plannerService.isPlannerBusy();
-  }
+  step$ = this.store.select(selectIterativePlanningSelectedStep);
+ 
+  actions$ = this.step$.pipe(
+    filter((step) => !!step && !!step.plan && step.plan.status == PlanRunStatus.SOLVED),
+    map((step) => step?.plan?.actions)
+  );
 
-  ngOnInit(): void {
+  solved$ = this.step$.pipe(
+    filter((step) => !!step && !!step.plan),
+    map((step) => step?.plan?.status == PlanRunStatus.SOLVED),
+  );
 
-    // this.timeLogger.log(LogEvent.START_CHECK_PLAN, {stepId: step._id});
+  notSolvable$ = this.step$.pipe(
+    filter((step) => !!step),
+    map((step) => step.status == StepStatus.UNSOLVABLE),
+  );
 
-    this.actions$ = this.step$.pipe(
-      filter((step) => !!step && !!step.plan && step.plan.status == PlanRunStatus.plan_found),
-      map((step) => step?.plan?.actions)
-    );
+  isRunning$ = this.step$.pipe(
+    filter((step) => !!step && !!step.plan),
+    map((step) => step?.plan?.status == PlanRunStatus.PENDING),
+  );
 
-    this.solved$ = this.step$.pipe(takeUntilDestroyed(this.destroyRef)).pipe(
-      filter((step) => !!step && !!step.plan),
-      map((step) => step.plan.status == PlanRunStatus.plan_found),
-    );
+  hasPlan$ = this.step$.pipe(
+    filter((step) => !!step),
+    map((step) => !!step.plan),
+  );
 
-    this.notSolvable$ = this.step$.pipe(takeUntilDestroyed(this.destroyRef)).pipe(
-      filter((step) => !!step),
-      map((step) => step.status == StepStatus.unsolvable),
-    );
 
-    this.isRunning$ = this.step$.pipe(takeUntilDestroyed(this.destroyRef)).pipe(
-      filter((step) => !!step && !!step.plan),
-      map((step) => step.plan.status == PlanRunStatus.pending),
-    );
-
-    this.hasPlan$ = this.step$.pipe(takeUntilDestroyed(this.destroyRef)).pipe(
-      filter((step) => !!step),
-      map((step) => !!step.plan),
-    );
-  }
-
-  ngOnDestroy(): void {
-    this.step$.pipe(
-      filter(s => !!s),
-      take(1)
-    ).subscribe(step => this.timeLogger.log(LogEvent.END_CHECK_PLAN, {stepId: step._id}))
-  }
-
-  computePlan(): void {
-    // this.store.dispatch(registerPlanComputation())
-    // this.timeLogger.log(LogEvent.COMPUTE_PLAN, {stepId: step._id});
-  }
 }

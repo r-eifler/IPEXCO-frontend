@@ -23,6 +23,8 @@ import {
     directResponseQT,
     eraseLLMHistory,
     initNewIterationStep,
+    loadDomainSpecification,
+    loadDomainSpecificationSuccess,
     loadIterationSteps,
     loadIterationStepsSuccess,
     loadLLMContextSuccess,
@@ -51,6 +53,8 @@ import {
 } from "./iterative-planning.actions";
 import { LLMContext } from "src/app/LLM/domain/context";
 import { Project } from "src/app/shared/domain/project";
+import { DomainSpecification } from "src/app/global_specification/domain/domain_specification";
+import { llmStateChangeFunctions } from "./iterative-planning.llm.reducer";
 
 type messageType = ExplanationMessage['message'];
 export type Message = (Omit<ExplanationMessage, 'message'> & { message?: messageType });
@@ -63,12 +67,13 @@ export interface LLMMessage{
 export interface IterativePlanningState {
   explanations: Record<string,GlobalExplanation | undefined>;
   iterationSteps: Loadable<IterationStep[]>;
-  messages?: Message[] 
+  messages: Message[] 
   newStepBase: undefined | string;
   createStepInterfaceOpen: boolean;
   createdStep: undefined | string;
   planProperties: Loadable<Record<string, PlanProperty>>;
   project: Loadable<Project>;
+  domainSpecification: Loadable<DomainSpecification>;
   propertyAvailableQuestionTypes: QuestionType[];
   selectedIterationStepId: undefined | string;
   stepAvailableQuestionTypes: QuestionType[];
@@ -78,7 +83,6 @@ export interface IterativePlanningState {
 
 }
 
-export const iterativePlanningFeature = "iterative-planning";
 
 const initialState: IterativePlanningState = {
   explanations: {},
@@ -89,21 +93,25 @@ const initialState: IterativePlanningState = {
   newStepBase: undefined,
   planProperties: { state: LoadingState.Initial, data: undefined },
   project: { state: LoadingState.Initial, data: undefined },
+  domainSpecification: { state: LoadingState.Initial, data: undefined },
   propertyAvailableQuestionTypes: [QuestionType.CAN_PROPERTY, QuestionType.WHAT_IF_PROPERTY, QuestionType.WHY_NOT_PROPERTY, QuestionType.HOW_PROPERTY],
   selectedIterationStepId: undefined,
   stepAvailableQuestionTypes: [QuestionType.HOW_PLAN, QuestionType.WHY_PLAN],
   LLMChatLoadingState: LoadingState.Initial,
   ExplanationLoadingState: LoadingState.Initial,
   LLMContext: {
-    threadIdQT: '',
-    threadIdGT: '',
-    threadIdET: '',
+    project: null,
+    user: null,
+    iterationStepId: null,
     visibleMessages: [],
     visiblePPCreationMessages: [],
     seenByGTMessages: [],
     seenByETMessages: [],
     seenByQTMessages: [],
-    project: undefined
+    outputFormatQT: { structured: false, schema: null },
+    outputFormatET: { structured: false, schema: null },
+    outputFormatGT: { structured: false, schema: null },
+    settings: {}
   },
 
 };
@@ -118,7 +126,7 @@ export const iterativePlanningReducer = createReducer(
       LLMChatLoadingState: LoadingState.Initial,
       LLMContext: {
         ...initialState.LLMContext,
-        project: state.project.data?._id
+        project: state.project.data?._id ?? null
       }
     })
   ),
@@ -129,6 +137,14 @@ export const iterativePlanningReducer = createReducer(
       project: { state: LoadingState.Done, data: project },
     })
   ),
+  on(loadDomainSpecification, (state): IterativePlanningState => ({
+          ...state,
+          domainSpecification: {state: LoadingState.Loading, data: undefined},
+  })),
+  on(loadDomainSpecificationSuccess, (state, {domainSpecification}): IterativePlanningState => ({
+      ...state,
+      domainSpecification: {state: LoadingState.Done, data: domainSpecification}
+  })),
   on(
     loadPlanProperties,
     (state): IterativePlanningState => ({
@@ -209,7 +225,7 @@ export const iterativePlanningReducer = createReducer(
     ExplanationLoadingState: LoadingState.Initial,
     messages: [
       ...state.messages,
-      { questionType, iterationStepId, role: 'receiver', message: questionFactory(questionType)(state.planProperties?.data?.[propertyId]?.name), propertyId },
+      { questionType, iterationStepId, role: 'receiver', message: questionFactory(questionType)(propertyId ? state.planProperties?.data?.[propertyId]?.name : undefined), propertyId },
     ],
   })),
 
@@ -221,148 +237,7 @@ export const iterativePlanningReducer = createReducer(
       answer,
     ],
   })),
-
-//   // LLM STUFF TO BE UPDATED
-
-
-  on(eraseLLMHistory, (state): IterativePlanningState => ({
-    ...state,
-    LLMChatLoadingState: LoadingState.Initial,
-    LLMContext: {
-      ...state.LLMContext,
-      visiblePPCreationMessages: [],
-      visibleMessages: [],
-      threadIdGT: '',
-      threadIdQT: '',
-      threadIdET: ''
-    }
-})),
-
-on(sendMessageToLLMGoalTranslator, (state, action): IterativePlanningState => ({
-    ...state,
-    LLMChatLoadingState: LoadingState.Loading,
-    LLMContext: {
-      ...state.LLMContext,
-      visiblePPCreationMessages: [...state.LLMContext.visiblePPCreationMessages, {role: 'receiver', content: action.goalDescription, iterationStepId: state.selectedIterationStepId}]
-    }
-})),
-on(sendMessageToLLMGoalTranslatorSuccess, (state, action): IterativePlanningState => ({
-  ...state,
-  LLMChatLoadingState: LoadingState.Done,
-    LLMContext: {
-      ...state.LLMContext,
-      threadIdGT: action.threadId,
-      visiblePPCreationMessages: [...state.LLMContext.visiblePPCreationMessages, { role: 'sender', content: `${action.response.formula} ; ${action.response.shortName}`, iterationStepId: state.selectedIterationStepId }]
-      
-    }
-})),
-on(sendMessageToLLMExplanationTranslator, (state, action): IterativePlanningState => ({
-    ...state,
-  LLMChatLoadingState: LoadingState.Loading,
-  ExplanationLoadingState: LoadingState.Loading
-})),
-on(sendMessageToLLMExplanationTranslatorSuccess, (state, action): IterativePlanningState => ({
-    ...state,
-    LLMContext: {
-      ...state.LLMContext,
-      threadIdET: action.threadId,
-      visibleMessages: [...state.LLMContext.visibleMessages, {role: 'sender', content: action.response, iterationStepId: state.selectedIterationStepId}]
-    },
-    LLMChatLoadingState: LoadingState.Done,
-    ExplanationLoadingState: LoadingState.Done
-})),
-on(sendMessageToLLMExplanationTranslatorFailure, (state): IterativePlanningState => ({
-    ...state,
-    LLMChatLoadingState: LoadingState.Done,
-    ExplanationLoadingState: LoadingState.Done,
-    LLMContext: {
-      ...state.LLMContext,
-      visibleMessages: [...state.LLMContext.visibleMessages, {role: 'sender', content: "Something went wrong. Please try again.", iterationStepId: state.selectedIterationStepId}]
-    }
-})),
-// on(sendMessageToLLMQTthenGTTranslators, (state, action): IterativePlanningState => ({
-//     ...state,
-//   LLMChatLoadingState: LoadingState.Loading,
-//   ExplanationLoadingState: LoadingState.Loading,
-//     LLMContext: {
-//       ...state.LLMContext,
-//       visibleMessages: [...state.LLMContext.visibleMessages, {role: 'receiver', content: action.question, iterationStepId: state.selectedIterationStepId}]
-//     }
-// })),
-// on(sendMessageToLLMQTthenGTTranslatorsSuccess, (state, action): IterativePlanningState => ({
-//     ...state,
-//     LLMChatLoadingState: LoadingState.Done,
-//     LLMContext: {
-//       ...state.LLMContext,
-//       threadIdQT: action.threadIdQt,
-//       threadIdGT: action.threadIdGt,
-//     }
-// })),
-// on(sendMessageToLLMQTthenGTTranslatorsFailure, (state): IterativePlanningState => ({
-//     ...state,
-//     LLMChatLoadingState: LoadingState.Done,
-//     ExplanationLoadingState: LoadingState.Done
-  // })),
-  on(sendMessageToLLMQuestionTranslator, (state, action): IterativePlanningState => ({
-    ...state,
-  LLMChatLoadingState: LoadingState.Loading,
-  ExplanationLoadingState: LoadingState.Loading,
-    LLMContext: {
-      ...state.LLMContext,
-      visibleMessages: [...state.LLMContext.visibleMessages, {role: 'receiver', content: action.question, iterationStepId: state.selectedIterationStepId}]
-    }
-})),
-on(sendMessageToLLMQuestionTranslatorSuccess, (state, action): IterativePlanningState => ({
-    ...state,
-    LLMChatLoadingState: LoadingState.Done,
-    LLMContext: {
-      ...state.LLMContext,
-      threadIdQT: action.threadId,
-    }
-})),
-on(sendMessageToLLMQuestionTranslatorFailure, (state): IterativePlanningState => ({
-  ...state,
-    LLMChatLoadingState: LoadingState.Done,
-    ExplanationLoadingState: LoadingState.Done,
-    LLMContext: {
-      ...state.LLMContext,
-      visibleMessages: [...state.LLMContext.visibleMessages, {role: 'sender', content: "Something went wrong. Please try again.", iterationStepId: state.selectedIterationStepId}]
-    }
-})),
-on(loadLLMContextSuccess, (state,action): IterativePlanningState=> ({
-  ...state,
-  LLMContext : action.LLMContext
-})),
-on(createLLMContext, (state, action): IterativePlanningState => ({
-  ...state,
-})),
-on(createLLMContextSuccess, (state, action): IterativePlanningState => ({
-  ...state,
-  LLMContext: action.LLMContext
-})),
-on(directResponseQT, (state, action): IterativePlanningState => ({
-  ...state,
-  LLMChatLoadingState: LoadingState.Done,
-  ExplanationLoadingState: LoadingState.Done,
-  LLMContext: {
-    ...state.LLMContext,
-    visibleMessages: [...state.LLMContext.visibleMessages, {role: 'sender', content: action.directResponse, iterationStepId: state.selectedIterationStepId}]
-  }
-})),
-on(showReverseTranslationGT, (state, action): IterativePlanningState => ({ //TODO make it possible to disable it
-  ...state,
-  LLMContext: {
-    ...state.LLMContext,
-    visibleMessages: [...state.LLMContext.visibleMessages, {role: 'sender', content: "I understood the goal you described as : " + action.reverseTranslation, iterationStepId: state.selectedIterationStepId}]
-  }
-})),
-on(showReverseTranslationQT, (state, action): IterativePlanningState => ({ //TODO make it possible to disable it
-  ...state,
-  LLMContext: {
-    ...state.LLMContext,
-    visibleMessages: [...state.LLMContext.visibleMessages, {role: 'sender', content: "I understood your question as : " + action.reverseTranslation, iterationStepId: state.selectedIterationStepId}]
-  }
-}))
+  ...llmStateChangeFunctions,
 );
 
 
@@ -374,7 +249,7 @@ function extractExplanations(iterationSteps: IterationStep[]): Record<string,Glo
   )(iterationSteps);
 }
 
-function extractExplanation(iterationStep: IterationStep): Record<string,GlobalExplanation | undefined> {
+function extractExplanation(iterationStep: IterationStep): Record<string,GlobalExplanation | undefined> | undefined{
   if(!iterationStep){
     return undefined;
   }

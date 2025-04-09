@@ -7,7 +7,7 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
 import {MatTabsModule} from '@angular/material/tabs';
 import {AsyncPipe} from '@angular/common';
-import {UserStudyStep} from '../../domain/user-study';
+import {UserStudyFormStep, UserStudyStep} from '../../domain/user-study';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {DomSanitizer} from '@angular/platform-browser';
 import {map} from 'rxjs/operators';
@@ -36,17 +36,18 @@ export class FormCardComponent implements OnInit {
   domSanitizer = inject(DomSanitizer);
 
   form = this.fb.group({
-    name: this.fb.control<string>(undefined, [Validators.required]),
+    name: this.fb.control<string | null>(null, [Validators.required]),
     time: this.fb.control<number>(1),
     url: this.fb.control<string | undefined>('', [Validators.required,  Validators.minLength(1)]),
+    code: this.fb.control<string | null>(null),
   })
 
-  step = input.required<UserStudyStep>();
+  step = input.required<UserStudyFormStep>();
   first = input<boolean>(false);
   last = input<boolean>(false);
 
   url$ = this.form.controls.url.valueChanges.pipe(
-    map(link => this.domSanitizer.sanitize(SecurityContext.URL, link))
+    map(link => link !== undefined && link !== null ? this.domSanitizer.sanitize(SecurityContext.URL, link) : null)
   )
 
   changes = output<UserStudyStep>();
@@ -58,9 +59,12 @@ export class FormCardComponent implements OnInit {
     this.form.valueChanges.pipe(takeUntilDestroyed()).subscribe(
       data => this.changes.emit({
         type: this.step().type,
-        name: data.name,
-        time: data.time <= 60 ? data.time : (Math.floor(data.time / 60)*60) ,
-        content: data.url
+        name: data.name ?? '',
+        time: data.time ? data.time <= 60 ? data.time : (Math.floor(data.time / 60)*60) : null,
+        content: {
+          link: data.url ?? undefined,
+          code: data.code
+        }
       })
     );
   }
@@ -76,7 +80,8 @@ export class FormCardComponent implements OnInit {
   ngOnInit(): void {
     this.form.controls.name.setValue(this.step().name);
     this.form.controls.time.setValue(this.step().time);
-    this.form.controls.url.setValue(this.step().content)
+    this.form.controls.url.setValue(this.step().content.link)
+    this.form.controls.code.setValue(this.step().content.code)
   }
 
   moveUp() {

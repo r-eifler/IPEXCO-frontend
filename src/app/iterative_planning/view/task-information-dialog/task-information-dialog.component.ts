@@ -1,17 +1,16 @@
+import { AsyncPipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { selectIterativePlanningProject, selectIterativePlanningPropertiesList, selectIterativePlanningSelectedStep } from '../../state/iterative-planning.selector';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialogRef } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { Demo } from 'src/app/project/domain/demo';
-import { PageModule } from 'src/app/shared/components/page/page.module';
-import { BreadcrumbModule } from 'src/app/shared/components/breadcrumb/breadcrumb.module';
-import { AsyncPipe } from '@angular/common';
-import { RouterLink } from '@angular/router';
 import { MarkedPipe } from 'src/app/pipes/marked.pipe';
-import { PlanPropertyPanelComponent } from 'src/app/shared/components/plan-property-panel/plan-property-panel.component';
+import { BreadcrumbModule } from 'src/app/shared/components/breadcrumb/breadcrumb.module';
 import { DialogModule } from 'src/app/shared/components/dialog/dialog.module';
-import { MatDialogRef } from '@angular/material/dialog';
-import { MatButtonModule } from '@angular/material/button';
+import { PageModule } from 'src/app/shared/components/page/page.module';
+import { PlanPropertyPanelComponent } from 'src/app/shared/components/plan-property-panel/plan-property-panel.component';
+import { selectIterativePlanningProject, selectIterativePlanningPropertiesList, selectIterativePlanningSelectedStep } from '../../state/iterative-planning.selector';
+import { Demo } from 'src/app/shared/domain/demo';
 
 
 @Component({

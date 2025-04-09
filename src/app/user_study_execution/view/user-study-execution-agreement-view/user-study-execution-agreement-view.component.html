@@ -1,4 +1,5 @@
 @let userStudy = userStudy$ | async;
+@let prolificId = prolificId$ | async;
 
 <app-page>
   <app-page-title>
@@ -42,7 +43,7 @@
                 <span class="highlight">I have read and understood the information above and I freely agree to participate in this research study.</span>
               </app-info>
               <div>
-                <button mat-flat-button (click)="onAccept(userStudy?._id)">Accept</button>
+                <button mat-flat-button (click)="onAccept(userStudy?._id, prolificId)">Accept</button>
               </div>
             </div>
           </app-page-section-content>

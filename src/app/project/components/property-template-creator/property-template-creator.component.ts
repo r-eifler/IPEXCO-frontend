@@ -1,5 +1,5 @@
 import { NgFor } from '@angular/common';
-import { Component, EventEmitter, inject, Input, Output, Signal, signal } from '@angular/core';
+import { Component, computed, effect, EventEmitter, inject, input, Input, output, Output, Signal, signal } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
@@ -16,18 +16,7 @@ import { color } from 'd3';
 import { PDDLType, PlanningModel } from 'src/app/shared/domain/planning-task';
 import { GoalType } from 'src/app/shared/domain/plan-property/plan-property';
 import { defaultPlanPropertyTemplate, PlanPropertyTemplate } from 'src/app/shared/domain/plan-property/plan-property-template';
-
-const jsonValidator: ValidatorFn = (control) => {
-  const value = control.value;
-
-  try{
-    JSON.parse(value);
-  } catch(e) {
-    return { invalidJson: true };
-  }
-
-  return null;
-}
+import { jsonValidator } from 'src/app/validators/json.validator';
 
 @Component({
     selector: 'app-property-template-creator',
@@ -72,78 +61,92 @@ export class PropertyTemplateCreatorComponent {
   }>>([]),
   });
 
-  variablesTypes: PDDLType[] = [];
+  variablesTypes = input.required<PDDLType[]>();
+  templates =  input.required<PlanPropertyTemplate[]>();
+  templateString = computed(() => this.templates ? JSON.stringify(this.templates(), null, '\t') : null);
 
-  @Input({required: true}) set planning_task(task: PlanningModel) {
-    if (!task){
-      return
-    }
-    this.variablesTypes = task.types;
+  updatedTemplates = output<PlanPropertyTemplate[]>();
+
+  constructor(){
+
+    effect(() => 
+      this.form.controls.planPropertyTemplatesJSON.setValue(this.templateString())
+    )
+
+    effect(() => {
+
+      if(!this.templates()){
+        return;
+      }
+
+      this.form.controls.planPropertyTemplates.clear();
+
+      for(const temp of this.templates()){
+        this.form.controls.planPropertyTemplates.push(this.buildTemplateFormControl(temp))
+      }
+    });
   }
 
-  @Input({required: true}) set templates(templates: PlanPropertyTemplate[]) {
-    if (!templates){
-      return
-    }
-
-    const templateString = JSON.stringify(templates, null, '\t');
-    this.form.controls.planPropertyTemplatesJSON.setValue(templateString);
-
-    this.form.controls.planPropertyTemplates.clear();
-
-    for(const temp of templates){
-      const tempForm = this.fb.group({
-        class: [temp.class, Validators.required],
-        color: [temp.color, Validators.required],
-        icon: [temp.icon, Validators.required],
-        type: [temp.type, Validators.required],
-        variables: this.fb.array<FormGroup<{
+  buildTemplateFormControl(temp: PlanPropertyTemplate) {
+    return this.fb.group({
+      class: [temp.class, Validators.required],
+      color: [temp.color, Validators.required],
+      icon: [temp.icon, Validators.required],
+      type: [temp.type, Validators.required],
+      variables: this.fb.array<FormGroup<{
+        name: FormControl,
+        types: FormControl
+      }>>(Object.keys(temp.variables).map(
+        n => this.fb.group<{
           name: FormControl,
           types: FormControl
-        }>>(Object.keys(temp.variables).map(
-          n => this.fb.group<{
-            name: FormControl,
-            types: FormControl
-          }>({
-            name: this.fb.control(n, Validators.required),
-            types: this.fb.control(temp.variables[n])
-        }))),
-        nameTemplate: [temp.nameTemplate, Validators.required],
-        sentenceTemplate: [temp.sentenceTemplate, Validators.required],
-        formulaTemplate: [temp.formulaTemplate, Validators.required],
-        initVariableConstraints: this.fb.array(temp.initVariableConstraints.map(c => this.fb.control(c))),
-        actionSetsTemplates: this.fb.array<FormGroup<{
+        }>({
+          name: this.fb.control(n, Validators.required),
+          types: this.fb.control(temp.variables[n])
+      }))),
+      nameTemplate: [temp.nameTemplate, Validators.required],
+      sentenceTemplate: [temp.sentenceTemplate, Validators.required],
+      formulaTemplate: [temp.formulaTemplate, Validators.required],
+      initVariableConstraints: this.fb.array(temp.initVariableConstraints.map(c => this.fb.control(c))),
+      actionSetsTemplates: this.fb.array<FormGroup<{
+        name: FormControl,
+        actionTemplates: FormArray
+      }>>(temp.actionSetsTemplates.map(
+        t => this.fb.group<{
           name: FormControl,
           actionTemplates: FormArray
-        }>>(temp.actionSetsTemplates.map(
-          t => this.fb.group<{
-            name: FormControl,
-            actionTemplates: FormArray
-          }>({
-            name: this.fb.control(t.name, Validators.required),
-            actionTemplates: this.fb.array(t.actionTemplates.map(at => this.fb.control(at)))
-        }))),
-      })
-      this.form.controls.planPropertyTemplates.push(tempForm)
-    }
+        }>({
+          name: this.fb.control(t.name, Validators.required),
+          actionTemplates: this.fb.array(t.actionTemplates.map(at => this.fb.control(at)))
+      }))),
+    });
   }
 
   goalType = GoalType;
 
-  @Output() updatedTemplates = new EventEmitter<PlanPropertyTemplate[]>();
-
-  constructor( ){
-  }
 
   addNewTemplate(){
+    const newTemp: PlanPropertyTemplate= {
+      class: '',
+      color: '',
+      icon: '',
+      type: GoalType.goalFact,
+      variables: {},
+      nameTemplate: 'new template',
+      formulaTemplate: '',
+      actionSetsTemplates: [],
+      sentenceTemplate: '',
+      initVariableConstraints: [],
+      goalVariableConstraints: []
+    }
+    // this.form.controls.planPropertyTemplates.push(this.buildTemplateFormControl(newTemp))
     let currentTemplates = JSON.parse(this.form.controls.planPropertyTemplatesJSON.value) as PlanPropertyTemplate[]
     currentTemplates.push(defaultPlanPropertyTemplate)
-    // this.form.controls.planPropertyTemplates.setValue(currentTemplates);
     this.form.controls.planPropertyTemplatesJSON.setValue(JSON.stringify(currentTemplates, null, '\t'));
   }
 
   save() {
-    this.updatedTemplates.next(JSON.parse(this.form.controls.planPropertyTemplatesJSON.value));
+    this.updatedTemplates.emit(JSON.parse(this.form.controls.planPropertyTemplatesJSON.value));
   }
 }
 

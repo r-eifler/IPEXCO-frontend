@@ -16,7 +16,7 @@ export class LoadUserEffect{
         ofType(loadUser),
         switchMap(() => this.service.loadUser().pipe(
             switchMap(user => [loadUserSuccess({user})]),
-            catchError(() => of(loadUserFailure()))
+            catchError((e) => of(loadUserFailure({err: e})))
         ))
     ))
 }

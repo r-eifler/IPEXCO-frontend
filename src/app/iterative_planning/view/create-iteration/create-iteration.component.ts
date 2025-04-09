@@ -7,22 +7,21 @@ import { MatInputModule } from "@angular/material/input";
 import { Store } from "@ngrx/store";
 import { EditableListModule } from "src/app/shared/components/editable-list/editable-list.module";
 
-import { AsyncPipe, JsonPipe, NgFor } from "@angular/common";
-import { takeUntilDestroyed, toSignal } from "@angular/core/rxjs-interop";
+import { AsyncPipe } from "@angular/common";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { MatDialog, MatDialogModule, MatDialogRef } from "@angular/material/dialog";
-import { combineLatest, filter, map, startWith, take, tap } from "rxjs";
+import { combineLatest, filter, map, startWith, take } from "rxjs";
+import { filterNotNullOrUndefined } from "src/app/shared/common/check_null_undefined";
 import { InfoModule } from "src/app/shared/components/info/info.module";
 import { SideSheetModule } from "src/app/shared/components/side-sheet/side-sheet.module";
 import { isNonEmptyValidator } from "src/app/validators/non-empty.validator";
 import { PlanPropertyPanelComponent } from "../../../shared/components/plan-property-panel/plan-property-panel.component";
 import { SelectPropertyComponent } from "../../components/select-property/select-property.component";
+import { ProjectDirective } from "../../directives/isProject.directive";
+import { IterationStepBase, StepStatus } from "../../domain/iteration_step";
 import { cancelNewIterationStep, createIterationStep } from "../../state/iterative-planning.actions";
-import { selectIterativePlanningCreatedStepId, selectIterativePlanningIsDemo, selectIterativePlanningIterationStepComputationRunning, selectIterativePlanningNewStepBase, selectIterativePlanningNumberOfSteps, selectIterativePlanningProject, selectIterativePlanningProperties } from "../../state/iterative-planning.selector";
+import { selectIterativePlanningIsDemo, selectIterativePlanningIterationStepComputationRunning, selectIterativePlanningNewStepBase, selectIterativePlanningNumberOfSteps, selectIterativePlanningProject, selectIterativePlanningProperties } from "../../state/iterative-planning.selector";
 import { selectPlanPropertyIds, selectPreselectedEnforcedGoals$, selectPreselectedSoftGoals$ } from "./create-iteration.component.selector";
-import { concatLatestFrom } from "@ngrx/operators";
-import { ActivatedRoute, Router } from "@angular/router";
-import { IterationStep, StepStatus } from "../../domain/iteration_step";
-import { ProjectDirective } from "../../derectives/isProject.directive";
 
 @Component({
     selector: "app-create-iteration",
@@ -49,10 +48,16 @@ export class CreateIterationComponent {
   private store = inject(Store);
   private dialogService = inject(MatDialog);
 
-  handlePropertyIdSelection: (ids: string[]) => void;
+  handlePropertyIdSelection: ((ids: string[]) => void) | undefined;
   dialogRef: MatDialogRef<unknown> | undefined;
 
   propertySelector = viewChild.required<TemplateRef<ElementRef>>('propertySelector');
+
+  project$ = this.store.select(selectIterativePlanningProject);
+  projectId$ = this.project$.pipe(
+    map(p => p?._id),
+    filterNotNullOrUndefined()
+  );
 
   computationRunning$ = this.store.select(selectIterativePlanningIterationStepComputationRunning);
 
@@ -68,8 +73,8 @@ export class CreateIterationComponent {
     general: this.fb.group({
       name: this.fb.control<string>("", Validators.required),
     }),
-    enforcedGoalIds: this.fb.array<FormControl<string>>([], [isNonEmptyValidator]),
-    softGoalIds: this.fb.array<FormControl<string>>([]),
+    enforcedGoalIds: this.fb.array<FormControl<string |  null>>([], [isNonEmptyValidator]),
+    softGoalIds: this.fb.array<FormControl<string | null>>([]),
   });
 
   enforcedPropertyIds$ = this.form.controls.enforcedGoalIds.valueChanges.pipe(
@@ -81,7 +86,8 @@ export class CreateIterationComponent {
     this.enforcedPropertyIds$,
   ]).pipe(
     filter(([planProperties]) => !!planProperties),
-    map(([planProperties, selectedPropertyIds]) => selectedPropertyIds?.map(id => planProperties?.[id]) ?? []),
+    map(([planProperties, selectedPropertyIds]) => selectedPropertyIds?.filter(pp => pp !== null).map(id => planProperties?.[id]) ?? []),
+    map(list => list.filter(pp => pp != undefined)),
   );
   hasEnforcedPlanProperties$ = this.enforcedPlanProperties$.pipe(map(properties => !!properties.length));
 
@@ -94,7 +100,8 @@ export class CreateIterationComponent {
     this.softPlanPropertyIds$,
   ]).pipe(
     filter(([planProperties]) => !!planProperties),
-    map(([planProperties, selectedPropertyIds]) => selectedPropertyIds?.map(id => planProperties?.[id]) ?? []),
+    map(([planProperties, selectedPropertyIds]) => selectedPropertyIds?.filter(pp => pp !== null).map(id => planProperties?.[id]) ?? []),
+    map(list => list.filter(pp => pp != undefined)),
   );
   hasSoftPlanProperties$ = this.softPlanProperties$.pipe(map(properties => !!properties.length));
 
@@ -117,7 +124,10 @@ export class CreateIterationComponent {
       this.form.controls.enforcedGoalIds.clear();
       this.addEnforcedGoalIds(enforcedGoals);
     });
-    this.numberOfExistingSteps.pipe(takeUntilDestroyed()).subscribe(numSteps => {
+    this.numberOfExistingSteps.pipe(
+      takeUntilDestroyed(),
+      filterNotNullOrUndefined(),
+    ).subscribe(numSteps => {
       this.form.controls.general.controls.name.setValue('Step ' + (numSteps + 1));
     })
   }
@@ -177,22 +187,24 @@ export class CreateIterationComponent {
       this.store.select(selectIterativePlanningIsDemo)
     ]).pipe(take(1)).subscribe(([baseStep, project, planPropertiesIds, isDemo]) => {
 
-      const enforcedGoalIds = this.form.controls.enforcedGoalIds.value;
+      if(project === undefined){
+        return;
+      }
+
+      const enforcedGoalIds = this.form.controls.enforcedGoalIds.value.filter(pp => pp !== null);
       
-      const newStep: IterationStep = {
-        name: this.form.controls.general.controls.name.value,
+      const newStep: IterationStepBase = {
+        name: this.form.controls.general.controls.name.value ?? 'TODO',
         hardGoals: enforcedGoalIds,
-        softGoals: isDemo ? planPropertiesIds.filter(ppId => ! enforcedGoalIds.includes(ppId)) : this.form.controls.softGoalIds.value,
+        softGoals: isDemo ? planPropertiesIds.filter(ppId => !enforcedGoalIds.includes(ppId)) : this.form.controls.softGoalIds.value.filter(pp => pp !== null),
         project: project._id,
-        status: StepStatus.unknown,
+        status: StepStatus.UNKNOWN,
         task: baseStep?.task ?? project.baseTask,
-        predecessorStep: baseStep?._id ?? null
+        predecessorStep: baseStep?._id ?? null,
       }
 
       console.log(newStep)
- 
- 
-     this.store.dispatch(createIterationStep({iterationStep: newStep}))
+      this.store.dispatch(createIterationStep({iterationStep: newStep}))
     });
      
   }

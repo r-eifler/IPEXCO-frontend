@@ -3,9 +3,6 @@ import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { catchError, switchMap, tap } from "rxjs/operators";
 import { of } from "rxjs";
 import {
-  login,
-  loginFailure,
-  loginSuccess,
   registerUser,
   registerUserFailure,
   registerUserSuccess,
@@ -23,7 +20,7 @@ export class RegisterEffect{
         ofType(registerUser),
         switchMap(({name, password}) => this.service.register(name, password).pipe(
             switchMap(({user, token}) => [registerUserSuccess({user, token}), storeTokenLocalStorage({token})]),
-            catchError(() => of(registerUserFailure()))
+            catchError((e) => of(registerUserFailure({err: e})))
         ))
     ))
 }

@@ -4,9 +4,11 @@ import {Store} from '@ngrx/store';
 import {selectExecutionUserStudy} from '../../state/user-study-execution.selector';
 import {AsyncPipe} from '@angular/common';
 import {MatButtonModule} from '@angular/material/button';
-import {RouterLink} from '@angular/router';
+import {ActivatedRoute, RouterLink} from '@angular/router';
 import { InfoComponent } from 'src/app/shared/components/info/info/info.component';
 import { MatIconModule } from '@angular/material/icon';
+import { take } from 'rxjs';
+import { executionSaveProlificId } from '../../state/user-study-execution.actions';
 
 @Component({
     selector: 'app-user-study-execution-start-view',
@@ -25,6 +27,17 @@ export class UserStudyExecutionStartViewComponent {
 
   store = inject(Store);
 
+  activatedRoute = inject(ActivatedRoute);
+
   userStudy$ = this.store.select(selectExecutionUserStudy);
+
+  constructor() {
+    this.activatedRoute.queryParamMap.pipe(take(1)).subscribe(paramMap => {
+      const id = paramMap.get("PROLIFIC_PID");
+      if(id !== null){
+        this.store.dispatch(executionSaveProlificId({id}));
+      }
+    })
+  }
 
 }

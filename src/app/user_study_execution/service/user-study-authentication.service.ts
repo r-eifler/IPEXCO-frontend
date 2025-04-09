@@ -5,16 +5,14 @@ import { HttpClient } from '@angular/common/http';
 import { map, Observable} from 'rxjs';
 import {User} from '../../user/domain/user';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class UserStudyAuthenticationService {
 
   private http = inject(HttpClient)
   private BASE_URL = environment.apiURL + 'users/';
 
-  register(userStudyId: string): Observable<{user: User; token: string}> {
-    return this.http.post<IHTTPData<{user: User; token: string}>>(this.BASE_URL + 'user-study', {userStudyId}).pipe(
+  register(userStudyId: string, prolificId: string | null): Observable<{user: User; token: string}> {
+    return this.http.post<IHTTPData<{user: User; token: string}>>(this.BASE_URL + 'user-study', {userStudyId, prolificId}).pipe(
       map(({data}) => data)
     )
   }

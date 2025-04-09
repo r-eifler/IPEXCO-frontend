@@ -16,7 +16,7 @@ const initialState: UserState = {
 }
 
 
-export const UserDataReducer = createReducer(
+export const userReducer = createReducer(
     initialState,
     on(loadTokenLocalStorageSuccess, (state, {token}): UserState => ({
         ...state,

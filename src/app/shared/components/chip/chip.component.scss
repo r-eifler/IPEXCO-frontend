@@ -1,0 +1,8 @@
+@use '../../../../variables' as vars;
+
+.chip {
+    padding: 7px;
+    border-radius:7px;
+    border-color: vars.$primary-lighter;
+    background-color: vars.$primary-lighter;
+}

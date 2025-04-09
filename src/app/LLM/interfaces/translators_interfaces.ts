@@ -1,7 +1,4 @@
-import { IterationStep } from "../../iterative_planning/domain/iteration_step";
-import { PDDLPredicate, PDDLObject } from "../../shared/domain/planning-task";
-import { Message } from "../domain/message";
-import { Question } from "src/app/iterative_planning/domain/interface/question";
+import { PDDLObject, PDDLPredicate } from "src/app/shared/domain/PDDL_task";
 import { PlanProperty } from "src/app/shared/domain/plan-property/plan-property";
 
 export interface GoalTranslationRequest {
@@ -25,8 +22,8 @@ export interface ExplanationTranslationRequest {
     question: string,
     question_type: string,
     questionArgument: PlanProperty[],
-    MUGS?: PlanProperty[][],
-    MGCS?: PlanProperty[][], // todo call it explanation then change it in string method
+    MUGS: PlanProperty[][],
+    MGCS: PlanProperty[][], // todo call it explanation then change it in string method
     predicates: PDDLPredicate[],
     objects: PDDLObject[],
     enforcedGoals: PlanProperty[],

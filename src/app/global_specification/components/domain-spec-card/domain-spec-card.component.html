@@ -1,0 +1,10 @@
+<app-spec-card>
+    <mat-icon>description</mat-icon>
+    <app-spec-card-title>
+        {{ spec()?.name }}
+    </app-spec-card-title>
+
+    @if(spec()?.encoding){
+        <app-spec-card-feature>{{ spec()?.encoding }}</app-spec-card-feature>
+    }
+</app-spec-card>
