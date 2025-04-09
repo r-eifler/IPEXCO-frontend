@@ -57,7 +57,6 @@ import {
 import { MatDialog } from "@angular/material/dialog";
 import { MatExpansionModule } from "@angular/material/expansion";
 import { MatProgressBarModule } from "@angular/material/progress-bar";
-import {MugsVisualizationBaseComponent} from '../visualization/mugs-visualization-base/mugs-visualization-base.component';
 import {ExplanationWrapperComponent} from '../../../components/explanation-wrapper/explanation-wrapper.component';
 import {QuestionFormComponent} from '../../../components/question-form/question-form.component';
 import {tap} from 'rxjs/operators';
@@ -79,7 +78,6 @@ import {tap} from 'rxjs/operators';
     RouterLink,
     MatExpansionModule,
     MatProgressBarModule,
-    MugsVisualizationBaseComponent,
     ExplanationWrapperComponent,
     ProjectDirective,
     DemoDirective

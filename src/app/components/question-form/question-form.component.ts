@@ -17,7 +17,7 @@ export class QuestionFormComponent {
   isLoading = input.required<boolean>();
 
   questionSelected = output<AvailableQuestion>();
-  avaQuestions: AvailableQuestion[];
+  avaQuestions: AvailableQuestion[] | undefined;
   firstChange: boolean = false;
 
   onQuestionSelected(question: AvailableQuestion): void {

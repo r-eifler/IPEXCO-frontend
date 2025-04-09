@@ -27,6 +27,7 @@ import {AvailableQuestion} from '../../iterative_planning/components/explanation
 import {PlanProperty} from '../../shared/domain/plan-property/plan-property';
 import {StructuredText} from '../../iterative_planning/domain/interface/explanation-message';
 import {mapComputeBase} from '../../iterative_planning/domain/explanation/answer-factory';
+import {IterationStep, StepStatus} from '../../iterative_planning/domain/iteration_step';
 
 
 @Component({
@@ -53,7 +54,7 @@ export class ExplanationWrapperComponent {
   step$ = this.store.select(selectIterativePlanningSelectedStep);
 
   isExplanationLoading$ = this.step$.pipe(
-    map(explanationHash),
+    map(step => step ? explanationHash(step) : ""),
     switchMap(hash => this.store.select(selectIsExplanationLoading(hash)))
   );
 
@@ -61,18 +62,19 @@ export class ExplanationWrapperComponent {
 
   answers$(question: AvailableQuestion, property?: PlanProperty | null) {
     this.globalAnswers = this.step$.pipe(
+      filter((iterationStep): iterationStep is IterationStep => iterationStep !== undefined),
       switchMap(iterationStep => {
         const hash = explanationHash(iterationStep);
         return this.store.select(selectExplanation(hash)).pipe(
           filter(explanation =>
-            explanation?.status === ExplanationRunStatus.failed ||
-            explanation?.status === ExplanationRunStatus.finished
+            explanation?.status === ExplanationRunStatus.FAILED ||
+            explanation?.status === ExplanationRunStatus.FINISHED
           ),
           take(1),
           map(explanation => mapComputeBase(
             iterationStep,
             { iterationStepId: iterationStep._id, propertyId: property?._id, questionType: question.questionType },
-            explanation.MUGS
+            explanation?.MUGS ?? []
           ))
           //tap(result => console.log('Computed Answer:', result))
         );
@@ -86,7 +88,7 @@ export class ExplanationWrapperComponent {
     switchMap((stepId) =>
       combineLatest([
         this.store.select(selectStepAvailableQuestions),
-        this.store.select(selectMessageTypes(stepId))
+        this.store.select(selectMessageTypes(stepId ?? ""))
       ]).pipe(
         map(([allQuestionTypes, alreadyAskedQuestionTypes]) => {
           const notAlreadyAskedFn = (type: QuestionType) => rNot(rIncludes(type, alreadyAskedQuestionTypes));
@@ -104,7 +106,7 @@ export class ExplanationWrapperComponent {
       switchMap((stepId) =>
         combineLatest([
           this.store.select(selectPropertyAvailableQuestions),
-          this.store.select(selectMessageTypes(stepId, property._id)),
+          this.store.select(selectMessageTypes(stepId??"", property._id)),
         ]).pipe(
           map(([allQuestionTypes, alreadyAskedQuestionTypes]) => {
             const notAlreadyAskedFn = (type: QuestionType) => rNot(rIncludes(type, alreadyAskedQuestionTypes));

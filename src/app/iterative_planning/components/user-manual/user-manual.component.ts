@@ -51,11 +51,19 @@ export class UserManualComponent {
 
   settings = input<GeneralSettings | null>(null);
 
-  templatesManual = computed(() => 
+  templatesManual = computed(() =>
     this.settings() ? this.settings()?.interfaces.explanationInterfaceType === ExplanationInterfaceType.TEMPLATE_QUESTION_ANSWER : true
   );
   LLMManual = computed(
     () => this.settings() ? this.settings()?.interfaces.explanationInterfaceType === ExplanationInterfaceType.LLM_CHAT : true
+  );
+
+  mugsVisualizationManual = computed(() =>
+    this.settings() ? this.settings()?.interfaces.explanationInterfaceType === ExplanationInterfaceType.MUGS_VISUALIZATION : true
+  );
+
+  ansMugsVisualizationManual = computed(() =>
+    this.settings() ? this.settings()?.interfaces.explanationInterfaceType === ExplanationInterfaceType.MUGS_VISUALIZATION_ANSWER : true
   );
 
   sampleDemo: Demo = {
