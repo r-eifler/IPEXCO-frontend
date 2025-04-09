@@ -18,6 +18,7 @@ export enum ExplanationInterfaceType {
   MUGS_VISUALIZATION = "MUGS_VISUALIZATION",
   LLM_CHAT = "LLM_CHAT",
   MUGS_VISUALIZATION_ANSWER = "MUGS_VISUALIZATION_ANSWER",
+  CONFLICT_LIST = "CONFLICT_LIST",
 };
 
 export const ExplanationInterfaceTypeZ = nativeEnum(ExplanationInterfaceType);
