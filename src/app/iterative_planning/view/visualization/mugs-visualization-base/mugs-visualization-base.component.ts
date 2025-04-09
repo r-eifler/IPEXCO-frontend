@@ -2,7 +2,7 @@ import {ChangeDetectorRef, Component, inject} from '@angular/core';
 import {Store} from '@ngrx/store';
 import {selectIterativePlanningProperties, selectIterativePlanningSelectedStep} from '../../../state/iterative-planning.selector';
 import {catchError, map, take} from 'rxjs/operators';
-import {filter, Observable, of} from 'rxjs';
+import {EMPTY, filter, Observable, of} from 'rxjs';
 import {registerGlobalExplanationComputation} from '../../../state/iterative-planning.actions';
 import {selectEnforcedGoals} from '../../plan-detail-view/plan-detail-view.component.selector';
 import {selectSoftGoals} from './mugs-visualization-base.component.selector';
@@ -23,6 +23,7 @@ import {MatIcon} from '@angular/material/icon';
 import {MatIconButton} from '@angular/material/button';
 import {UIControls} from './legacy/ui-controls';
 import {PlanPropertyPanelComponent} from '../../../../shared/components/plan-property-panel/plan-property-panel.component';
+import * as assert from 'node:assert';
 
 
 @Component({
@@ -47,8 +48,8 @@ import {PlanPropertyPanelComponent} from '../../../../shared/components/plan-pro
 })
 export class MugsVisualizationBaseComponent {
   private store = inject(Store);
-  private visualizationLauncher: VisualizationLauncher;
-  private uiControl: UIControls;
+  private visualizationLauncher: VisualizationLauncher | undefined;
+  private uiControl: UIControls | undefined;
 
   constructor(private cdr: ChangeDetectorRef) {}
 
@@ -65,7 +66,7 @@ export class MugsVisualizationBaseComponent {
   containerHeaderId: string = "mugs-vis";
   containerGoalInteractionSectionTest: string = "";
   stepGoals : Record<string, string> = {};
-  stepStatusType: PlanRunStatus;
+  stepStatusType: PlanRunStatus | undefined;
   MUGS : string[][] = [];
   MSGS : string[][] = [];
   enforcedGoals : PlanProperty[] = [];
@@ -77,8 +78,8 @@ export class MugsVisualizationBaseComponent {
 
   explanationDetails$ = this.stepGlobalExplanation$.pipe(
     map((explanation) => ({
-      MUGS: explanation?.MUGS,
-      MGCS: explanation?.MGCS,
+      MUGS: explanation?.MUGS ?? [],
+      MGCS: explanation?.MGCS ?? [],
     })),
     catchError(() => {
       console.error('MUG-Visualization-Base: Failed to load explanation details');
@@ -99,8 +100,10 @@ export class MugsVisualizationBaseComponent {
 
   private computeExplanations() : void{
     this.stepId$.pipe(take(1)).subscribe(stepId => {
-      console.log('MUG-Visualization-Base: Register Global Computation for StepId:', stepId);
-      this.store.dispatch(registerGlobalExplanationComputation({iterationStepId: stepId}));
+      if (stepId !== undefined){
+        console.log('MUG-Visualization-Base: Register Global Computation for StepId:', stepId);
+        this.store.dispatch(registerGlobalExplanationComputation({iterationStepId: stepId}));
+      }
     });
   }
 
@@ -112,22 +115,22 @@ export class MugsVisualizationBaseComponent {
     ).subscribe((status) => {
       this.stepStatusType = status;
       switch (status) {
-        case PlanRunStatus.not_solvable:
+        case PlanRunStatus.UNSOLVABLE:
           this.containerGoalInteractionSectionTest = "Unenforced Selection List"
           break;
 
-        case PlanRunStatus.failed:
-          this.explanationDetails$ = undefined;
+        case PlanRunStatus.FAILED:
+          this.explanationDetails$ = EMPTY;
           console.log('MUG-Visualization-Base: Unexpected Step:', status);
           break;
 
-        case PlanRunStatus.pending:
-          this.explanationDetails$ = undefined;
+        case PlanRunStatus.PENDING:
+          this.explanationDetails$ = EMPTY;
           console.log('MUG-Visualization-Base: Unexpected Step:', status);
           break;
 
-        case PlanRunStatus.running:
-          this.explanationDetails$ = undefined;
+        case PlanRunStatus.RUNNING:
+          this.explanationDetails$ = EMPTY;
           console.log('MUG-Visualization-Base: Unexpected Step:', status);
           break;
 
@@ -144,7 +147,7 @@ export class MugsVisualizationBaseComponent {
 
     this.uiControl = this.visualizationLauncher.getUIControlsInstance();
 
-    this.uiControl.selectionChanged.subscribe(change => {
+    this.uiControl?.selectionChanged.subscribe(change => {
       setTimeout(() => {
         this.planPropertiesCriticality = change.criticalityMapping
         this.selectedPlanProperties = change.planProperties;
@@ -152,8 +155,8 @@ export class MugsVisualizationBaseComponent {
       })
     });
     this.cdr.detectChanges();
-    if (this.stepStatusType != PlanRunStatus.not_solvable){
-      this.uiControl.ForceEnforceGoalsToSelection(this.enforcedGoals);
+    if (this.stepStatusType != PlanRunStatus.UNSOLVABLE){
+      this.uiControl?.ForceEnforceGoalsToSelection(this.enforcedGoals);
       // this.enforcedGoals.forEach(g => {
       //   const event = new CustomEvent("select-elements", {
       //     detail: {
@@ -172,14 +175,16 @@ export class MugsVisualizationBaseComponent {
   private computeStepGoalIntCategory(): void{
     if (Object.keys(this.stepGoals).length == 0) { return ; }
 
-    let planProperties: Observable<Record<string, PlanProperty>> = this.store.select(selectIterativePlanningProperties);
+    let planProperties: Observable<Record<string, PlanProperty> | undefined > = this.store.select(selectIterativePlanningProperties);
 
     planProperties.pipe(take(1)).subscribe(properties => {
-      Object.values(properties).forEach((property: PlanProperty) => {
-        if (property._id in this.stepGoals){
-          this.planProperties.push(property);
-        }
-      });
+      if (properties !== undefined) {
+        Object.values(properties).forEach((property: PlanProperty) => {
+          if (property._id in this.stepGoals){
+            this.planProperties.push(property);
+          }
+        });
+      }
     });
 
     // Set Enforced Goals
@@ -197,14 +202,18 @@ export class MugsVisualizationBaseComponent {
 
     this.store.select(selectEnforcedGoals).pipe(take(1)).subscribe(enforcedGoals => {
       enforcedGoals.forEach((goal) =>{
-        this.stepGoals[goal._id] = goal.name
-        this.enfGoals.push(goal.name);
+        if (goal !== undefined){
+          this.stepGoals[goal._id] = goal.name
+          this.enfGoals.push(goal.name);
+        }
       })
     });
 
     this.store.select(selectSoftGoals).pipe(take(1)).subscribe(softGoals => {
       softGoals.forEach((goal) =>{
-        this.stepGoals[goal._id] = goal.name
+        if (goal !== undefined){
+          this.stepGoals[goal._id] = goal.name
+        }
       })
     });
 
@@ -245,7 +254,7 @@ export class MugsVisualizationBaseComponent {
   protected removeselectedPlanProperty(prop: PlanProperty): void
   {
     this.selectedPlanProperties = this.selectedPlanProperties.filter((property: PlanProperty) => property._id !== prop._id);
-    this.uiControl.updateEnforcementSection(prop)
-    this.uiControl.updateGoalSelectionView()
+    this.uiControl?.updateEnforcementSection(prop)
+    this.uiControl?.updateGoalSelectionView()
   }
 }

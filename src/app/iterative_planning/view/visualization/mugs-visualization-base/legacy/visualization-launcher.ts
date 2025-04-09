@@ -1,5 +1,8 @@
+// @ts-ignore
 import state from './state.js';
+// @ts-ignore
 import * as matrix from './helpers/matrix.js';
+// @ts-ignore
 import * as setChart from './helpers/setchart.js';
 import * as d3 from 'd3';
 import {UIControls} from './ui-controls';
@@ -12,16 +15,19 @@ export class VisualizationLauncher {
   private readonly mugsData: string[][];
   private readonly msgsData: string[][];
   private readonly dataHandlerService: DataHandlerService;
-  private uiControls: UIControls;
+  private uiControls: UIControls | undefined;
 
 
-  constructor(entryMugs: string[][], entryMsgs: string[][], statusType: PlanRunStatus) {
+  constructor(entryMugs: string[][], entryMsgs: string[][], statusType: PlanRunStatus | undefined) {
     this.mugsData = entryMugs;
     this.msgsData = entryMsgs;
     this.dataHandlerService = new DataHandlerService();
-    this.dataHandlerService.stepType = statusType;
 
-    if (statusType == PlanRunStatus.not_solvable){
+    if (statusType !== undefined){
+      this.dataHandlerService.stepType = statusType;
+    }
+
+    if (statusType == PlanRunStatus.UNSOLVABLE){
       setChart.setIsStepUnsolvable(true);
       matrix.setIsStepUnsolvable(true);
     }else {
@@ -35,7 +41,8 @@ export class VisualizationLauncher {
     state.sourceData.MSGS = this.msgsData;
   }
 
-  public getUIControlsInstance(): UIControls {
+  public getUIControlsInstance(): UIControls | undefined {
+
     return this.uiControls; // Return the instance of UIControls to the component
   }
 
