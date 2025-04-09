@@ -1,4 +1,3 @@
-import { empty } from "ramda";
 import { array, boolean, number, object, record, string, infer as zinfer } from "zod";
 
 export const TrailerZ = object({
@@ -58,3 +57,19 @@ export const BelugaProblemZ = object({
 })
 
 export type BelugaProblem = zinfer<typeof BelugaProblemZ>;
+
+export function getRackSize(rackName: string, model: BelugaProblem): number | undefined {
+    return model.racks.find(r => r.name == rackName)?.size
+}
+
+export function occupiedSpace(rack: string[], jigs: Record<string,Jig>, jigTypes: Record<string,JigType>): number {
+    return rack.map(jigName => getJigSize(jigs[jigName], jigTypes[jigs[jigName].type])).reduce((sum, c) => sum + c, 0);
+}
+
+
+export function getJigSize(jig: Jig, jigType: JigType): number {
+    if (jig.empty){
+        return jigType.size_empty;
+    }
+    return jigType.size_loaded;
+}

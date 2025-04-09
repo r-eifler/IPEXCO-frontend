@@ -1,5 +1,5 @@
-import { BelugaAction, BelugaActionType, DeliverToHangerZ, GetFromHangerZ, LoadBelugaZ, PickUpRackZ, PutDownRackZ, UnloadBelugaZ } from "./beluga_plan"
-import { BelugaProblem, Jig, ProductionLine } from "./beluga_problem";
+import { BelugaAction, BelugaActionType, DeliverToHangerZ, GetFromHangerZ, LoadBelugaZ, PickUpRackZ, PutDownRackZ, UnloadBelugaZ } from "./beluga_plan";
+import { BelugaProblem, getJigSize, getRackSize, Jig, occupiedSpace, ProductionLine } from "./beluga_problem";
 
 export interface BelugaState {
     jigs: Record<string, Jig>
@@ -27,7 +27,65 @@ export function getInitialState(model: BelugaProblem) {
       }
 }
 
+export function isApplicable(state: BelugaState, action: BelugaAction, model: BelugaProblem): boolean{
+    switch(action.name){
+        case BelugaActionType.SWITCH_TO_NEXT_BELUGA:
+            return state.incoming.length == 0 && 
+                state.outgoing.length == model.flights[state.flightIndex].outgoing.length
+        case BelugaActionType.DELIVER_TO_HANGAR:
+            let da = DeliverToHangerZ.parse(action);
+            return state.hangars[da.h] == null && 
+                state.trailersFactory[da.t] == da.j &&
+                ! state.jigs[da.j].empty &&
+                state.productionLines[da.pl].schedule[0] == da.j
+        case BelugaActionType.GET_FROM_HANGAR:
+            let ga = GetFromHangerZ.parse(action);
+            return state.hangars[ga.h] == ga.j && 
+            state.trailersFactory[ga.t] == null 
+        case BelugaActionType.LOAD_BELUGA:
+            let lba = LoadBelugaZ.parse(action);
+            return state.trailersBeluga[lba.t] == lba.j &&
+                state.outgoing.length < model.flights[state.flightIndex].outgoing.length &&
+                model.flights[state.flightIndex].outgoing[0] == state.jigs[lba.j].type
+        case BelugaActionType.UNLOAD_BELUGA:
+            let uba = UnloadBelugaZ.parse(action);
+            return state.incoming.length > 0 && state.incoming[0] == uba.j &&
+                state.trailersBeluga[uba.t] == null 
+        case BelugaActionType.PICK_UP_RACK:
+            let pua = PickUpRackZ.parse(action);
+            if(pua.s === 'bside'){
+                return state.racks[pua.r].length > 0 && 
+                    state.racks[pua.r][0] == pua.j &&
+                    state.trailersBeluga[pua.t] == null
+            }
+            else{
+                return state.racks[pua.r].length > 0 && 
+                    state.racks[pua.r][state.racks[pua.r].length-1] == pua.j &&
+                    state.trailersFactory[pua.t] == null
+            }
+        case BelugaActionType.PUT_DOWN_RACK:
+            let pda = PutDownRackZ.parse(action);
+            let rackSize = getRackSize(pda.r, model);
+            let jig_size = getJigSize( state.jigs[pda.j], model.jig_types[state.jigs[pda.j].type])
+            if(pda.s === 'bside'){
+                return rackSize !== undefined && 
+                rackSize - occupiedSpace(state.racks[pda.r], state.jigs, model.jig_types) >= jig_size &&
+                state.trailersBeluga[pda.t] == pda.j
+            }
+            else{
+                return rackSize !== undefined && 
+                rackSize - occupiedSpace(state.racks[pda.r], state.jigs, model.jig_types) >= jig_size &&
+                state.trailersFactory[pda.t] == pda.j
+            }        
+    }
+}
+
+
 export function applyAction(state: BelugaState, action: BelugaAction, model: BelugaProblem): BelugaState | undefined{
+    if(!isApplicable(state, action, model)){
+        console.log("Action: " + action.name + " is not applicable!")
+        return undefined;
+    }
     switch(action.name){
         case BelugaActionType.SWITCH_TO_NEXT_BELUGA:
             return {
@@ -104,7 +162,6 @@ export function applyAction(state: BelugaState, action: BelugaAction, model: Bel
                 }
             }        
     }
-    return undefined;
 }
 
 export function applyActions(state: BelugaState, actions: BelugaAction[], model: BelugaProblem) {
