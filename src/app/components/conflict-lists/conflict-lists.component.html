@@ -1,0 +1,37 @@
+<div class="main-container">
+    @if(hasConflict()){
+    <div class="sentence">
+        @if(questionArgumentName() !== null){
+            <p>Because to satisfy '{{questionArgumentName()}}' you must forego at least
+                one goal in each of the following conflicts:
+            </p>
+        }
+        @else{
+            <p>The enforced goals are not solvable because the following conflicts
+                exist among them:
+            </p>
+        }
+    </div>
+    <div class="list-list">
+        @for(a of answer(); track $index) {
+            <div class="icon-list-item">
+                <mat-icon>report</mat-icon>
+                <div class="property-badge-list">
+                    @for(id of a; track id) {
+                    <app-plan-property-badge [property]="planProperties()?.[id]"></app-plan-property-badge>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+    }
+    @if(hasNoConflict()){
+        @if(questionArgumentName() !== null){
+            <p>You can enforce '{{questionArgumentName()}}' without forgoing any
+                enforced goal.
+            </p>
+        }@else{
+          <p>EMOTY</p>
+        }
+    }
+</div>

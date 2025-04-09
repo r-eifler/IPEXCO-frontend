@@ -1,12 +1,12 @@
 import {Component, inject, input} from '@angular/core';
 import {
-  selectExplanation,
-  selectIsExplanationLoading,
-  selectIterativePlanningProjectExplanationInterfaceType,
-  selectIterativePlanningSelectedStep,
-  selectMessageTypes,
-  selectPropertyAvailableQuestions,
-  selectStepAvailableQuestions
+    selectExplanation,
+    selectIsExplanationLoading,
+    selectIterativePlanningProjectExplanationInterfaceType, selectIterativePlanningProperties,
+    selectIterativePlanningSelectedStep,
+    selectMessageTypes,
+    selectPropertyAvailableQuestions,
+    selectStepAvailableQuestions
 } from '../../iterative_planning/state/iterative-planning.selector';
 import {Store} from '@ngrx/store';
 import {ExplanationInterfaceType} from '../../project/domain/general-settings';
@@ -28,18 +28,20 @@ import {PlanProperty} from '../../shared/domain/plan-property/plan-property';
 import {StructuredText} from '../../iterative_planning/domain/interface/explanation-message';
 import {mapComputeBase} from '../../iterative_planning/domain/explanation/answer-factory';
 import {IterationStep, StepStatus} from '../../iterative_planning/domain/iteration_step';
+import {ConflictListsComponent} from '../conflict-lists/conflict-lists.component';
 
 
 @Component({
   selector: 'app-explanation-wrapper',
   templateUrl: './explanation-wrapper.component.html',
   styleUrls: ['./explanation-wrapper.component.scss'],
-  imports: [
-    QuestionFormComponent,
-    UserStudyMugsVisualizationComponent,
-    AsyncPipe,
-    NgIf
-  ],
+    imports: [
+        QuestionFormComponent,
+        UserStudyMugsVisualizationComponent,
+        AsyncPipe,
+        NgIf,
+        ConflictListsComponent
+    ],
   standalone: true
 })
 
@@ -57,6 +59,8 @@ export class ExplanationWrapperComponent {
     map(step => step ? explanationHash(step) : ""),
     switchMap(hash => this.store.select(selectIsExplanationLoading(hash)))
   );
+
+  planProperties$ = this.store.select(selectIterativePlanningProperties);
 
   globalAnswers: Observable<string[][]> = new Observable();
 

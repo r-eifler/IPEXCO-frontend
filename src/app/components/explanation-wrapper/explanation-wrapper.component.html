@@ -18,6 +18,13 @@
         </app-user-study-mugs-visualization>
     }
 
+    @if(interfaceType === ExplanationInterfaceType.CONFLICT_LIST){
+        <app-conflict-lists *ngIf="globalAnswers | async as answers"
+                [answer]="answers"
+                [planProperties] ="planProperties$ | async"
+        ></app-conflict-lists>
+    }
+
 
 }@else{
   <app-question-form
@@ -34,5 +41,13 @@
                                            [property]="property()"
         >
         </app-user-study-mugs-visualization>
+    }
+
+    @if(interfaceType === ExplanationInterfaceType.CONFLICT_LIST){
+        <app-conflict-lists *ngIf="globalAnswers | async as answers"
+                [questionArgument]="property()?._id"
+                [answer]="answers"
+                [planProperties] ="planProperties$ | async"
+        ></app-conflict-lists>
     }
 }
