@@ -1,0 +1,41 @@
+.main-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr 3fr 1fr 1fr 1fr;
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.belugas {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    gap: var(--spacing-200);
+}
+
+.trailers {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    gap: var(--spacing-200);
+    align-items: center;
+}
+
+.racks {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    gap: var(--spacing-100);
+}
+
+.hangars {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    gap: var(--spacing-200);
+    align-items: center;
+}
+

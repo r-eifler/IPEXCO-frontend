@@ -1,0 +1,10 @@
+<div class="container">
+    <div>Line <span style="font-weight: 500;">{{ lineName() }}</span></div>
+    <div class="list-wrapper">
+        <div class="list">
+            @for(jig of jigNames(); track jig; let idx = $index){
+                <div><span>{{ idx + 1}}</span>: <span>{{ jig }}</span></div>
+            }
+        </div>
+    </div>
+</div>

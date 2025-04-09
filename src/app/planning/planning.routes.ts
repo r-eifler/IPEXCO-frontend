@@ -13,6 +13,8 @@ import { PlanningPlansService } from './service/plans.service';
 import { DomainSpecificationService } from './service/domainSpecification.service';
 import { ServicesService } from './service/services.service';
 import { PlanComputationMonitoringService } from './service/plan-computataion-monitoring.service';
+import { setComparePlansResolver } from './resolver/set-plans-compare.resolver';
+import { PlanComparisonComponent } from '../domain_plugins/beluga/view/plan-comparison/plan-comparison.component';
 
 
 export const routes: Routes = [
@@ -40,6 +42,11 @@ export const routes: Routes = [
         path: 'plans/:planId',
         component: PlanDetailViewComponent,
         resolve: { setPlanResolver },
+      },
+      {
+        path: 'plans/:planId/compare/:planIdComp',
+        component: PlanComparisonComponent,
+        resolve: { setComparePlansResolver },
       },
     ]
   }

@@ -1,0 +1,28 @@
+@use "../../../../../variables.scss" as vars;
+
+.container {
+    display: flex;
+    flex-direction: column;
+}
+
+.info-container {
+    display: flex;
+    flex-direction: row;
+    gap: var(--spacing-100);
+}
+
+.rack {
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+
+    background-color: rgb(171, 171, 171);
+    height: 50px;
+
+    border: solid;
+    border-width: 1px;
+    @include vars.border_color();
+    border-radius: var(--spacing-100);
+}

@@ -1,0 +1,47 @@
+@use "../../../../../variables.scss" as vars;
+
+
+.container {
+    display: grid;
+    align-items: center;
+    justify-items: center;
+}
+
+.jig {
+    height: 40px;
+    min-width: 15px;
+
+    border: solid;
+    border-width: 1px;
+    @include vars.border_color();
+    border-radius: var(--spacing-100);
+
+    background-color: rgb(150, 151, 255);
+
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+
+    grid-column: 1;
+    grid-row: 1;
+}
+
+.part {
+    height: 30px;
+    min-width: 15px;
+
+    border: solid;
+    border-width: 1px;
+    @include vars.border_color();
+    border-radius: var(--spacing-100);
+
+    background-color: rgb(96, 98, 248);
+
+    display: flex;
+    width: fit-content;
+    justify-content: space-around;
+    align-items: center;
+
+    grid-column: 1;
+    grid-row: 1;
+}

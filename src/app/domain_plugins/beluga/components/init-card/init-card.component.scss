@@ -1,0 +1,26 @@
+@use "../../../../../variables.scss" as vars;
+
+.action-container{
+    width: fit-content;
+    padding: var(--spacing-200);
+    border: solid;
+    border-width: 1px;
+    @include vars.border_color();
+    border-radius: var(--spacing-200);
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: var(--spacing-100);
+
+    background-color: rgb(232, 232, 232);
+}
+
+.action-container:hover {
+    cursor: pointer;
+}
+
+
+.selected{
+    background-color: rgb(159, 249, 232);
+}
