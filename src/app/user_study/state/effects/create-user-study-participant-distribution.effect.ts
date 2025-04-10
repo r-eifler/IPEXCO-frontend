@@ -20,7 +20,7 @@ export class CreateUserStudyParticipantDistributionEffect{
         ofType(createParticipantDistribution),
         switchMap(({distribution}) => this.service.postParticipantDistribution$(distribution).pipe(
             switchMap(distribution => [createParticipantDistributionSuccess({distribution})]),
-            catchError(() => of(createParticipantDistributionFailure()))
+            catchError((err) => of(createParticipantDistributionFailure(err)))
         ))
     ))
 }

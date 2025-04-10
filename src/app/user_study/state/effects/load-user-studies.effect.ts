@@ -18,7 +18,7 @@ export class LoadUserStudiesEffect{
               loadUserStudiesSuccess({userStudies}),
               ...userStudies.map((study) => loadUserStudyParticipants({id: study._id}))
             ]),
-            catchError(() => of(loadUserStudiesFailure()))
+            catchError((err) => of(loadUserStudiesFailure(err)))
         ))
     ))
 }
