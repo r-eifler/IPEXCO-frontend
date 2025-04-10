@@ -2,7 +2,8 @@ import {Component, inject, input} from '@angular/core';
 import {
     selectExplanation,
     selectIsExplanationLoading,
-    selectIterativePlanningProjectExplanationInterfaceType, selectIterativePlanningProperties,
+    selectIterativePlanningProjectExplanationInterfaceType,
+    selectIterativePlanningProperties,
     selectIterativePlanningSelectedStep,
     selectMessageTypes,
     selectPropertyAvailableQuestions,
@@ -15,21 +16,15 @@ import {UserStudyMugsVisualizationComponent} from '../visualization/user-study-m
 import {AsyncPipe, NgIf} from '@angular/common';
 import {combineLatest, filter, map, Observable, switchMap, take} from 'rxjs';
 import {ExplanationRunStatus, QuestionType} from '../../iterative_planning/domain/explanation/explanations';
-import {
-  filter as rFilter,
-  includes as rIncludes,
-  map as rMap,
-  not as rNot
-} from 'ramda';
+import {filter as rFilter, includes as rIncludes, map as rMap, not as rNot} from 'ramda';
 import {questionFactory} from '../../iterative_planning/domain/explanation/question-factory';
 import {explanationHash} from '../../iterative_planning/domain/explanation/explanation-hash';
 import {AvailableQuestion} from '../../iterative_planning/components/explanation-chat/explanation-chat.component';
 import {PlanProperty} from '../../shared/domain/plan-property/plan-property';
 import {StructuredText} from '../../iterative_planning/domain/interface/explanation-message';
 import {mapComputeBase} from '../../iterative_planning/domain/explanation/answer-factory';
-import {IterationStep, StepStatus} from '../../iterative_planning/domain/iteration_step';
+import {IterationStep} from '../../iterative_planning/domain/iteration_step';
 import {ConflictListsComponent} from '../conflict-lists/conflict-lists.component';
-
 
 @Component({
   selector: 'app-explanation-wrapper',

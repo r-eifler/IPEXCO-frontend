@@ -5,6 +5,8 @@
   <app-question-form
     [isLoading]="isExplanationLoading"
     [availableQuestions]="globalAvalableQuestionTypes$ | async"
+    [demoId]=""
+    [stepId]="(step$ | async)?._id"
     (questionSelected)="answers$($event, property())"
   >
   </app-question-form>
@@ -30,6 +32,8 @@
   <app-question-form
     [isLoading]="isExplanationLoading"
     [availableQuestions]="propertyAvailableQuestionTypes$(property()) | async"
+    [demoId]=""
+    [stepId]="(step$ | async)?._id"
     (questionSelected)="answers$($event, property())"
   >
   </app-question-form>
