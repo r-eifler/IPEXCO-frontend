@@ -15,7 +15,7 @@ export class LoadUserStudyEffect{
         ofType(loadUserStudy),
         switchMap(({id}) => this.service.getUserStudy$(id).pipe(
             switchMap(userStudy => [loadUserStudySuccess({userStudy}), loadUserStudyParticipants({id: userStudy._id})]),
-            catchError(() => of(loadUserStudyFailure()))
+            catchError((err) => of(loadUserStudyFailure(err)))
         ))
     ))
 }
