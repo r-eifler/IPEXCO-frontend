@@ -369,8 +369,8 @@ export class BelugaPlanAnimationComponent {
           Math.min(currentViewportPoint.y, canvas.getHeight())
         );
         var delta = new fabric.Point(
-          currentScenePoint.x - lastPoint.x,
-          currentScenePoint.y - lastPoint.y
+          (currentScenePoint.x - lastPoint.x) * canvas.getZoom(),
+          (currentScenePoint.y - lastPoint.y) * canvas.getZoom()
         );
         if (delta.x > 0) {
           delta.x = Math.min(
