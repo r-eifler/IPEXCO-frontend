@@ -66,6 +66,10 @@ export class UserManualComponent {
     this.settings() ? this.settings()?.interfaces.explanationInterfaceType === ExplanationInterfaceType.MUGS_VISUALIZATION_ANSWER : true
   );
 
+  conflictListManual = computed(() =>
+    this.settings() ? this.settings()?.interfaces.explanationInterfaceType === ExplanationInterfaceType.CONFLICT_LIST : true
+  );
+
   sampleDemo: Demo = {
     _id: '1',
     projectId: '',

@@ -306,6 +306,7 @@
 
                   @if(ansMugsVisualizationManual()){
                     <h3>MUGS Visualization Interface</h3>
+                    <h4>General</h4>
                     <div>
                       <p>
                         For each step, either <app-label color="secondary">Solved</app-label> or
@@ -316,16 +317,21 @@
                         The questions are provided as a list. It is not possible to ask
                         a question by typing it. Instead you can select from a list of questions.
                         To ask a question you just have to click on it. Upon clicking on a question the
-                        corresponding MUGS Visualization associated with it will be shown as
+                        corresponding visualization associated with it will be shown as
                         answer.
+                      </p>
+
+                      <p>
+                        The visualization shows different MUGS (Minimal Unsatisfiable Goal Sets) and how they relate to each other. On the left, the vertical axis lists the goal names that appear in the
+                        MUGS. Each circle in the grid represents the presence of that goal in a specific MUGS — aligned with the corresponding row. A single MUGS is shown as a horizontal line connecting
+                        all the goals (circles) it includes. So, each row of connected circles forms one complete MUGS.
                       </p>
 
                       <h4>Questions</h4>
 
-                      <p>
-                        In both solvable and unsolvable step, you can only ask the questions of the form:
-                      </p>
+                      <p>In an unsolvable step you can ask the following type of question</p>
                       <br>
+
                       <hr>
                       <mat-selection-list [multiple]="false">
                         @for(question of unsolvableQuestions; track question) {
@@ -338,14 +344,12 @@
                       </mat-selection-list>
                       <hr>
 
-                      <p>So saying, you can only as "why" a goal is not satisfied.</p>
-
+                      <br>
                       <p>
                         To access the question interface click on the goal you want to ask questions about.
                         You can try it below:
                       </p>
 
-                      <h4>Unsatisfied Goals</h4>
                       <div class="property-list">
                         <app-plan-property-panel [property]="samplePlanProperties[4]" [showFormula]="false">
                           <mat-selection-list [multiple]="false">
@@ -359,6 +363,65 @@
                           </mat-selection-list>
                         </app-plan-property-panel>
                       </div>
+
+                      <p>Note that in this case (where the visualization is shown as an answer about a specific goal), each MUGS shown is partial. To form a complete MUGS, the current goal you're asking about would be added to each column.</p>
+
+                    </div>
+                  }
+
+                  @if(conflictListManual()){
+                    <h3>Conflict List Interface</h3>
+
+                    <div>
+                      <p>
+                        For each step, either <app-label color="secondary">Solved</app-label> or
+                        <app-label color="error">Unsolvable</app-label>, you have access to different questions.
+                      </p>
+
+                      <p>
+                        The questions are provided as a list. It is not possible to ask
+                        a question by typing it. Instead you can select from a list of questions.
+                        To ask a question you just have to click on it. Upon clicking on a question the
+                        corresponding explanation associated with it will be shown as answer.
+                      </p>
+
+                      <h4>Questions</h4>
+
+                      <p>In an unsolvable step you can ask the following type of question</p>
+                      <br>
+
+                      <hr>
+                      <mat-selection-list [multiple]="false">
+                        @for(question of unsolvableQuestions; track question) {
+                          @if(question.questionType.toLowerCase().includes("why")){
+                            <mat-list-option>
+                              <div>{{question.message.mainText}}</div>
+                            </mat-list-option>
+                          }
+                        }
+                      </mat-selection-list>
+                      <hr>
+
+                      <br>
+                      <p>
+                        To access the question interface click on the goal you want to ask questions about.
+                        You can try it below:
+                      </p>
+
+                      <div class="property-list">
+                        <app-plan-property-panel [property]="samplePlanProperties[4]" [showFormula]="false">
+                          <mat-selection-list [multiple]="false">
+                            @for(question of solvableQuestions; track question) {
+                              @if(question.questionType.toLowerCase().includes("why")){
+                                <mat-list-option>
+                                  <div>{{question.message.mainText}}</div>
+                                </mat-list-option>
+                              }
+                            }
+                          </mat-selection-list>
+                        </app-plan-property-panel>
+                      </div>
+
                     </div>
                   }
 

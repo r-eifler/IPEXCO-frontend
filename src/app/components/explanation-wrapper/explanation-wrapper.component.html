@@ -5,7 +5,7 @@
   <app-question-form
     [isLoading]="isExplanationLoading"
     [availableQuestions]="globalAvalableQuestionTypes$ | async"
-    [demoId]=""
+    [demoId]="(step$ | async)?.project"
     [stepId]="(step$ | async)?._id"
     (questionSelected)="answers$($event, property())"
   >
@@ -32,7 +32,7 @@
   <app-question-form
     [isLoading]="isExplanationLoading"
     [availableQuestions]="propertyAvailableQuestionTypes$(property()) | async"
-    [demoId]=""
+    [demoId]="(step$ | async)?.project"
     [stepId]="(step$ | async)?._id"
     (questionSelected)="answers$($event, property())"
   >
