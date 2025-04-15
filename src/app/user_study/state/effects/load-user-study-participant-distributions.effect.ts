@@ -17,7 +17,7 @@ export class LoadUserStudyDistributionsEffect{
             switchMap(distributions => [
                 loadParticipantDistributionsSuccess({distributions: distributions}),
             ]),
-            catchError(() => of(loadParticipantDistributionsFailure()))
+            catchError((err) => of(loadParticipantDistributionsFailure(err)))
         ))
     ))
 }

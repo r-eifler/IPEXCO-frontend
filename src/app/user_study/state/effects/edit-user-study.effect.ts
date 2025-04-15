@@ -19,7 +19,7 @@ export class EditUserStudyEffect{
         ofType(editUserStudy),
         switchMap(({userStudy}) => this.service.putUserStudy$(userStudy).pipe(
             switchMap(userStudy => [editUserStudySuccess({userStudy})]),
-            catchError(() => of(editUserStudyFailure()))
+            catchError((err) => of(editUserStudyFailure(err)))
         ))
     ))
 }
