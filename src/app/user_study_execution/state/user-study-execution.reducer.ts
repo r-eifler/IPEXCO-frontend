@@ -14,6 +14,8 @@ import {
   executionSaveProlificId,
   executionUnlockNextStep,
   executionUserStudyCancelSuccess, executionUserStudyStart, executionUserStudySubmitSuccess,
+  loadDomainSpecification,
+  loadDomainSpecificationSuccess,
   loadUserStudyDemo,
   loadUserStudyDemoSuccess,
   loadUserStudyPlanProperties,
@@ -21,6 +23,7 @@ import {
   logAction,
   logPlanComputationFinished
 } from './user-study-execution.actions';
+import { DomainSpecification } from 'src/app/global_specification/domain/domain_specification';
 
 export interface UserStudyExecutionState {
     userStudy: Loadable<UserStudy>;
@@ -30,6 +33,7 @@ export interface UserStudyExecutionState {
     finishedAllSteps: boolean 
     actionLog: UserAction[];
     runningDemo: Loadable<Demo>;
+    runningDemoDomainSpecification: Loadable<DomainSpecification>;
     runningDemoPlanProperties: Loadable<PlanProperty[]>;
     continueLocked: boolean;
     prolificId: string | null
@@ -44,6 +48,7 @@ const initialState: UserStudyExecutionState = {
     finishedAllSteps: false,
     actionLog: [],
     runningDemo: {state: LoadingState.Initial, data: undefined},
+    runningDemoDomainSpecification: {state: LoadingState.Initial, data: undefined},
     runningDemoPlanProperties: {state: LoadingState.Initial, data: undefined},
     continueLocked: false,
     prolificId: null
@@ -133,5 +138,13 @@ export const userStudyExecutionReducer = createReducer(
     on(logAction, (state, {action}): UserStudyExecutionState => ({
       ...state,
       actionLog: [...state.actionLog, action]
+    })),
+    on(loadDomainSpecification, (state): UserStudyExecutionState => ({
+            ...state,
+            runningDemoDomainSpecification: {state: LoadingState.Loading, data: undefined},
+    })),
+    on(loadDomainSpecificationSuccess, (state, {domainSpecification}): UserStudyExecutionState => ({
+        ...state,
+        runningDemoDomainSpecification: {state: LoadingState.Done, data: domainSpecification}
     })),
   );

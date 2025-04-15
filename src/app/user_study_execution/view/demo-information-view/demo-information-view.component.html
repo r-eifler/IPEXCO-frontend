@@ -21,8 +21,7 @@
 
                     <mat-tab label="Domain">
                         <div class="tab-container">
-                            <!-- <div [innerHTML]="demo?.domainInfo | marked"></div> -->
-                             <p>TODO use description in domain specification</p>
+                            <div [innerHTML]="(domainSpec$ | async)?.description | marked"></div>
                         </div>
                         </mat-tab>
                 
