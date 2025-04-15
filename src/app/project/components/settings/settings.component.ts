@@ -1,6 +1,6 @@
 import { Component, computed, DestroyRef, effect, inject, input, output } from "@angular/core";
 import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
-import { ExplanationInterfaceType, GeneralSettings, PropertyCreationInterfaceType } from "../../domain/general-settings";
+import { ExplanationInterfaceType, GeneralSettings, LLMContextSetup, PropertyCreationInterfaceType } from "../../domain/general-settings";
 import { MatFormFieldModule, MatLabel } from "@angular/material/form-field";
 import { MatSlideToggleModule } from "@angular/material/slide-toggle";
 import { MatCardModule } from "@angular/material/card";
@@ -70,7 +70,7 @@ export class SettingsComponent {
 
   ExplanationTypes = ExplanationInterfaceType;
   PropertyCreationTypes = PropertyCreationInterfaceType;
-
+  LLMContextSetup = LLMContextSetup;
   fb = inject(FormBuilder);
 
   form = this.fb.group({
@@ -95,9 +95,10 @@ export class SettingsComponent {
     llmConfig: this.fb.group({
       model:  this.fb.control<string>('gpt-4o-mini', Validators.required),
       temperature:  this.fb.control<number>(0, [Validators.required, Validators.min(0), Validators.max(2)]),
-      maxCompletionTokens: this.fb.control<number | null>(null, Validators.required),
+      maxCompletionTokens: this.fb.control<number | null>(1000, Validators.required),
       goalTranslator: this.fb.control<boolean>(false, Validators.required),
       showReverseTranslation: this.fb.control<boolean>(false, Validators.required),
+      llmContextSetup: this.fb.control<LLMContextSetup>(LLMContextSetup.ITERATION_STEP, Validators.required),
       prompts: this.fb.group({
         system: this.fb.control<string | null>(null),
         goalTransInstructions: this.fb.control<string | null>(null),
@@ -163,7 +164,8 @@ export class SettingsComponent {
 			this.form.controls.llmConfig.controls.temperature.setValue(settings.llmConfig.temperature);
 			this.form.controls.llmConfig.controls.maxCompletionTokens.setValue(settings.llmConfig.maxCompletionTokens);
 			this.form.controls.llmConfig.controls.goalTranslator.setValue(settings.llmConfig.goalTranslator);
-			this.form.controls.llmConfig.controls.showReverseTranslation.setValue(settings.llmConfig.showReverseTranslation);
+      this.form.controls.llmConfig.controls.showReverseTranslation.setValue(settings.llmConfig.showReverseTranslation);
+      this.form.controls.llmConfig.controls.llmContextSetup.setValue(settings.llmConfig.llmContextSetup);
   
 			if(settings.llmConfig.prompts && settings.llmConfig.prompts.length > 0){
 
@@ -273,6 +275,7 @@ export class SettingsComponent {
         ].filter(e => e !== null),
         goalTranslator: this.form.controls.llmConfig.controls.goalTranslator.value ?? false,
         showReverseTranslation: this.form.controls.llmConfig.controls.showReverseTranslation.value ?? false,
+        llmContextSetup: this.form.controls.llmConfig.controls.llmContextSetup.value ?? LLMContextSetup.ITERATION_STEP,
       },
       userStudy: {
           introTask: this.form.controls.userStudy.controls.introTask.value ?? false,
