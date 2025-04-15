@@ -60,7 +60,6 @@ export class DemoCreatorComponent implements OnInit {
       description: this.fb.control<string>(""),
     }),
     taskInfo: this.fb.group({
-      domainInfo: this.fb.control<string>(""),
       instanceInfo: this.fb.control<string>(""),
     }),
     image: this.fb.control<File | null>(null),
