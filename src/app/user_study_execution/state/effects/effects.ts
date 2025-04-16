@@ -2,6 +2,7 @@ import { UserStudyCanceledEffect } from "./canceled.effect";
 import { FinishUserStudyEffect } from "./finish-user-study.effect";
 import { UserStudyFinishedAllStepsEffect } from "./finished-all-steps.effect copy";
 import { LoadUserStudyExecutionDemoEffect } from "./load-demo.effect";
+import { UserStudyExecutionLoadDomainSpecificationEffect } from "./load-domain-spec.effect";
 import { LoadUserStudyExecutionPlanPropertiesEffect } from "./load-plan-properties.effect";
 import { ExecutionLoadUserStudyEffect } from "./load-user-study.effect";
 import { LogUserActivitiesEffect } from "./log-user-activities.effect";
@@ -17,5 +18,6 @@ export const userStudyExecutionFeatureEffects = [
     ExecutionLoadUserStudyEffect,
     LogUserActivitiesEffect,
     RedirectToNextUserStudyEffect,
-    RegisterUserStudyEffect
+    RegisterUserStudyEffect,
+    UserStudyExecutionLoadDomainSpecificationEffect
 ]

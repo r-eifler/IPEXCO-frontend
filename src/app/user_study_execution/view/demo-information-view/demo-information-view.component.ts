@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { selectExecutionUserStudyDemo, selectExecutionUserStudyPlanProperties, selectExecutionUserStudyStep } from '../../state/user-study-execution.selector';
+import { selectExecutionUserStudyDemo, selectExecutionUserStudyDomainSpecification, selectExecutionUserStudyPlanProperties, selectExecutionUserStudyStep } from '../../state/user-study-execution.selector';
 import { loadUserStudyDemo } from '../../state/user-study-execution.actions';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { filter, map } from 'rxjs';
@@ -38,6 +38,7 @@ export class DemoInformationViewComponent {
   );
   demo$ = this.store.select(selectExecutionUserStudyDemo);
   planProperties$ = this.store.select(selectExecutionUserStudyPlanProperties);
+  domainSpec$ = this.store.select(selectExecutionUserStudyDomainSpecification);
 
   constructor(){
 

@@ -34,6 +34,7 @@ import { IterativePlanningProjectService } from '../iterative_planning/service/p
 import { iterativePlanningFeatureEffects } from '../iterative_planning/state/effects/effects';
 import { iterativePlanningFeature } from '../iterative_planning/state/iterative-planning.feature';
 import { LLMService } from '../LLM/service/llm.service';
+import { UserStudyExecutionDomainSpecificationService } from './service/domainSpecification.service';
 
 
 
@@ -64,6 +65,7 @@ export const routes: Routes = [
       PlannerService,
       LLMService,
       PlannerMonitoringService,
+      UserStudyExecutionDomainSpecificationService
     ],
     children: [
       {

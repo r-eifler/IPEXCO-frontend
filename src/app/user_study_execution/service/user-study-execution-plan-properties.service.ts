@@ -4,7 +4,8 @@ import { HttpClient, HttpParams } from "@angular/common/http";
 import { environment } from "src/environments/environment";
 import { map } from "rxjs/operators";
 import { IHTTPData } from "src/app/shared/domain/http-data.interface";
-import { PlanProperty } from "src/app/shared/domain/plan-property/plan-property";
+import { PlanProperty, PlanPropertyZ } from "src/app/shared/domain/plan-property/plan-property";
+import { array } from "zod";
 
 
 @Injectable()
@@ -19,8 +20,8 @@ export class UserStudyExecutionPlanPropertyService{
         let httpParams = new HttpParams();
         httpParams = httpParams.set('projectId', id);
         
-        return this.http.get<IHTTPData<PlanProperty[]>>(this.BASE_URL,  { params: httpParams }).pipe(
-            map(({data}) => data)
+        return this.http.get<IHTTPData<unknown>>(this.BASE_URL,  { params: httpParams }).pipe(
+            map((data) => array(PlanPropertyZ).parse(data))
         )
     }
 
