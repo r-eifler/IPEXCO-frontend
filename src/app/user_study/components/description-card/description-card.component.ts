@@ -61,9 +61,7 @@ export class DescriptionCardComponent implements OnInit{
       })
     );
 
-    this.description$ = this.form.controls.description.valueChanges.pipe(
-      startWith(this.step()?.content ?? null)
-    );
+    this.description$ = this.form.controls.description.valueChanges;
   }
 
   formatLabel(value: number): string {
