@@ -9,7 +9,7 @@ import { BreadcrumbModule } from 'src/app/shared/components/breadcrumb/breadcrum
 import { DialogModule } from 'src/app/shared/components/dialog/dialog.module';
 import { PageModule } from 'src/app/shared/components/page/page.module';
 import { PlanPropertyPanelComponent } from 'src/app/shared/components/plan-property-panel/plan-property-panel.component';
-import { selectIterativePlanningProject, selectIterativePlanningPropertiesList, selectIterativePlanningSelectedStep } from '../../state/iterative-planning.selector';
+import { selectIterativePlanningDomainSpecification, selectIterativePlanningProject, selectIterativePlanningPropertiesList, selectIterativePlanningSelectedStep } from '../../state/iterative-planning.selector';
 import { Demo } from 'src/app/shared/domain/demo';
 
 
@@ -37,6 +37,7 @@ export class TaskInformationDialogComponent {
   demo$ = this.store.select(selectIterativePlanningProject) as Observable<Demo>;
   step$ = this.store.select(selectIterativePlanningSelectedStep);
   planProperties$ = this.store.select(selectIterativePlanningPropertiesList);
+  domainSpec$ = this.store.select(selectIterativePlanningDomainSpecification);
 
   onClose(){
     this.dialogRef.close();
