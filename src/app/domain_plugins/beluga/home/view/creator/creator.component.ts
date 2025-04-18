@@ -40,8 +40,8 @@ import { ProjectBase } from "src/app/shared/domain/project";
         AsyncPipe,
         SpecCardFeatureComponent
     ],
-    templateUrl: "./project-creator.component.html",
-    styleUrls: ["./project-creator.component.scss"]
+    templateUrl: "./creator.component.html",
+    styleUrls: ["./creator.component.scss"]
 })
 export class ProjectCreatorComponent {
 

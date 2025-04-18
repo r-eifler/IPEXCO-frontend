@@ -1,11 +1,12 @@
 import { createReducer, on } from "@ngrx/store";
 import { Loadable, LoadingState } from "src/app/shared/common/loadable.interface";
 import { User } from "../domain/user";
-import { loadTokenLocalStorageSuccess, loadUser, loadUserSuccess, login, loginFailure, loginSuccess, logoutSuccess, registerUser, registerUserFailure, registerUserSuccess } from "./user.actions";
+import { changeLanguageSuccess, loadTokenLocalStorageSuccess, loadUser, loadUserSuccess, login, loginFailure, loginSuccess, logoutSuccess, registerUser, registerUserFailure, registerUserSuccess } from "./user.actions";
 
 export interface UserState {
     user: Loadable<User>;
     token: Loadable<String>;
+    language: string;
 }
 
 export const UserDataFeature = 'user';
@@ -13,6 +14,7 @@ export const UserDataFeature = 'user';
 const initialState: UserState = {
     user: {state: LoadingState.Initial, data: undefined},
     token: {state: LoadingState.Initial, data: undefined},
+    language: 'en'
 }
 
 
@@ -62,4 +64,8 @@ export const userReducer = createReducer(
         user: {state: LoadingState.Initial, data: undefined},
         token: {state: LoadingState.Initial, data: undefined}
     })),
+    on(changeLanguageSuccess, (state, {code}): UserState => ({
+        ...state,
+        language: code
+    }))
 );

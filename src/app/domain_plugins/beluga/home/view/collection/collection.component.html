@@ -1,5 +1,5 @@
-<app-page>
-  <app-page-title>Projects</app-page-title>
+<app-page *transloco="let t">
+  <app-page-title>{{t('h.projects')}}</app-page-title>
   <app-page-content>
     <div class="project-container">
       @for(project of (projects$ | async); track project._id){
@@ -7,7 +7,7 @@
       }
      
       <button app-action-card class="project-card" (click)="new_project_form()">
-          <span>New Project</span>
+          <span>{{t('h.new_project')}}</span>
           <mat-icon>add</mat-icon>
       </button>
 

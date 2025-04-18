@@ -6,6 +6,8 @@ import { provideHttpClient, withInterceptors } from "@angular/common/http";
 import { provideAnimations } from "@angular/platform-browser/animations";
 import { provideStoreDevtools } from "@ngrx/store-devtools";
 import { authInterceptor } from "./interceptor/authentication.interceptor";
+import { TranslocoHttpLoader } from "./domain_plugins/beluga/transloco-loader";
+import { provideTransloco } from "@jsverse/transloco";
 
 export const appConfig: ApplicationConfig = {
     providers: [
@@ -23,5 +25,14 @@ export const appConfig: ApplicationConfig = {
             withInterceptors([authInterceptor]),
         ),
         provideAnimations(),
+        provideTransloco({
+            config: { 
+              availableLangs: ['en', 'de'],
+              defaultLang: 'en',
+              reRenderOnLangChange: true,
+              prodMode: !isDevMode(),
+            },
+            loader: TranslocoHttpLoader
+        })
     ],
   };

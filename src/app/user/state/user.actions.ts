@@ -28,3 +28,8 @@ export const loginFailure = createAction('[user] login failure', props<{err: any
 export const logout = createAction('[user] logout');
 export const logoutSuccess = createAction('[user] logout success');
 export const logoutFailure = createAction('[user] logout failure', props<{err: any}>());
+
+// Languages
+export const changeLanguage = createAction('[user] change language', props<{code: string}>());
+export const changeLanguageSuccess = createAction('[user] change language success', props<{code: string}>());
+export const changeLanguageFailure = createAction('[user] change language failure', props<{err: any}>());

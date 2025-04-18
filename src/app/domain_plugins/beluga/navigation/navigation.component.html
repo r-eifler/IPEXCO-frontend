@@ -19,17 +19,25 @@
   </mat-toolbar>
 
   <mat-menu #userMenu="matMenu">
-    <!-- <p mat-menu-item>
-      Hi {{name$ | async}}
-    </p> -->
     <button mat-menu-item
       *ngIf="!(isLoggedIn$ | async)"
       (click)="newLoginForm()">
+      <mat-icon>login</mat-icon>
       Login
     </button>
     <button mat-menu-item *ngIf="isLoggedIn$ | async" (click)="logout()">
+      <mat-icon>logout</mat-icon>
       Logout
     </button>
+    <button mat-menu-item [matMenuTriggerFor]="languageMenu">
+      <mat-icon>language</mat-icon>
+      Language
+    </button>
+  </mat-menu>
+
+  <mat-menu #languageMenu="matMenu"  xPosition="before">
+    <button mat-menu-item (click)="setLanguage('en')">English</button>
+    <button mat-menu-item (click)="setLanguage('de')">German</button>
   </mat-menu>
 
   <mat-sidenav-container class="sidenav-container">
@@ -38,7 +46,7 @@
       [mode]="'side'"
       fixedTopGap="56"
       style="width: 200px">
-      <mat-nav-list>
+      <mat-nav-list *transloco="let t">
         <a
           mat-list-item
           routerLink="./home"
@@ -56,7 +64,7 @@
           (click)="sideNav.toggle()">
           <span class="entry">
             <mat-icon>design_services</mat-icon>
-            <span>Builder</span>
+            <span>{{t('builder')}}</span>
           </span>
         </a>
       </mat-nav-list>

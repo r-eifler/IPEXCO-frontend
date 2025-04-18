@@ -6,6 +6,7 @@ import { FailureEffect } from 'src/app/shared/effects/failure.effect';
 import { AuthenticationService } from 'src/app/user/services/authentication.service';
 import { userFeatureEffects } from 'src/app/user/state/effects/effects';
 import { userFeature } from 'src/app/user/state/user.feature';
+import { TranslocoHttpLoader } from './transloco-loader';
 
 export const routes: Routes = [
   {
@@ -15,6 +16,7 @@ export const routes: Routes = [
       provideState(userFeature),
       provideEffects([...userFeatureEffects,FailureEffect] ),
       AuthenticationService,
+      TranslocoHttpLoader,
     ],
     children: [
       {

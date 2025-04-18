@@ -8,9 +8,10 @@ import { MatMenuModule } from "@angular/material/menu";
 import { MatSidenavModule } from "@angular/material/sidenav";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { Router, RouterModule } from "@angular/router";
+import { provideTranslocoScope, TranslocoModule } from "@jsverse/transloco";
 import { Store } from "@ngrx/store";
 import { LoginComponent } from "src/app/user/components/login/login.component";
-import { logout } from "src/app/user/state/user.actions";
+import { changeLanguage, logout } from "src/app/user/state/user.actions";
 import { selectIsUserStudy, selectLoggedIn, selectUserName } from "src/app/user/state/user.selector";
 
 
@@ -26,8 +27,15 @@ import { selectIsUserStudy, selectLoggedIn, selectUserName } from "src/app/user/
         NgIf,
         MatButtonModule,
         AsyncPipe,
-        MatSidenavModule
+        MatSidenavModule,
+        TranslocoModule,
     ],
+    // providers: [
+    //   provideTranslocoScope({
+    //     scope: "home",
+    //     alias: "h",
+    //   }),
+    // ],
     templateUrl: "./navigation.component.html",
     styleUrls: ["./navigation.component.scss"]
 })
@@ -51,4 +59,8 @@ export class BelugaNavigationComponent{
     this.router.navigate(['/'])
   }
 
+  setLanguage(code: string){
+    console.log('Language: ' + code)
+    this.store.dispatch(changeLanguage({code}))
+  }
 }

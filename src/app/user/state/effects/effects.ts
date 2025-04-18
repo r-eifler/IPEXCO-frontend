@@ -1,3 +1,4 @@
+import { ChangeLanguageEffect } from "./change_language";
 import { LoadTokenEffect } from "./loadToken.effect";
 import { LoadUserEffect } from "./loadUser.effect";
 import { LoggedInEffect } from "./loggedIn.effect";
@@ -13,5 +14,6 @@ export const userFeatureEffects = [
     LoginEffect,
     LogoutEffect,
     RegisterEffect,
-    StoreTokenEffect
+    StoreTokenEffect,
+    ChangeLanguageEffect
 ]

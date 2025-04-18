@@ -1,4 +1,4 @@
-import { AsyncPipe, NgFor, NgIf } from "@angular/common";
+import { AsyncPipe } from "@angular/common";
 import { Component, inject } from "@angular/core";
 import { MatButtonModule } from "@angular/material/button";
 import { MatCardModule } from "@angular/material/card";
@@ -8,14 +8,14 @@ import { MatMenuModule } from "@angular/material/menu";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { RouterModule } from "@angular/router";
 import { Store } from "@ngrx/store";
-import { ActionCardComponent } from "src/app/shared/components/action-card/action-card/action-card.component";
-import { PageModule } from "src/app/shared/components/page/page.module";
-import { ProjectCreatorComponent } from "../creator/creator.component";
 import { ProjectMetaData } from "src/app/project-meta/domain/project-meta";
+import { ActionCardComponent } from "src/app/shared/components/action-card/action-card/action-card.component";
 import { AskDeleteComponent } from "src/app/shared/components/ask-delete/ask-delete.component";
-import { selectProjectsMetaData } from "../../state/home.selector";
-import { loadProjectMetaDataList } from "../../state/home.actions";
+import { PageModule } from "src/app/shared/components/page/page.module";
 import { ProjectCardComponent } from "../../components/project-card/project-card.component";
+import { loadProjectMetaDataList } from "../../state/home.actions";
+import { selectProjectsMetaData } from "../../state/home.selector";
+import { provideTranslocoScope, TranslocoModule } from "@jsverse/transloco";
 
 
 @Component({
@@ -31,6 +31,13 @@ import { ProjectCardComponent } from "../../components/project-card/project-card
         AsyncPipe,
         ActionCardComponent,
         ProjectCardComponent,
+        TranslocoModule
+    ],
+    providers: [
+      provideTranslocoScope({
+        scope: "home",
+        alias: "h",
+      }),
     ],
     templateUrl: "./collection.component.html",
     styleUrls: ["./collection.component.scss"]
@@ -48,7 +55,7 @@ export class CollectionComponent{
 
 
   new_project_form(): void {
-    this.dialog.open(ProjectCreatorComponent);
+    // this.dialog.open(ProjectCreatorComponent);
   }
 
 
