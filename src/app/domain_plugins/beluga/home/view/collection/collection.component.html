@@ -1,0 +1,16 @@
+<app-page>
+  <app-page-title>Projects</app-page-title>
+  <app-page-content>
+    <div class="project-container">
+      @for(project of (projects$ | async); track project._id){
+        <app-project-card [project]="project"></app-project-card>
+      }
+     
+      <button app-action-card class="project-card" (click)="new_project_form()">
+          <span>New Project</span>
+          <mat-icon>add</mat-icon>
+      </button>
+
+    </div>
+  </app-page-content>
+</app-page>

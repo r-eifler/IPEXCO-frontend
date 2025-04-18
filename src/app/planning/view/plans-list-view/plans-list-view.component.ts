@@ -16,7 +16,7 @@ import { cancelPlanComputation, loadServices, registerPlanComputation } from '..
 import { PlanBase } from '../../domain/plan';
 import { MatDialog } from '@angular/material/dialog';
 import { Service } from 'src/app/global_specification/domain/services';
-import { PlanComparisonSelectorComponent } from 'src/app/domain_plugins/beluga/view/plan-comparison-selector/plan-comparison-selector.component';
+import { PlanComparisonSelectorComponent } from 'src/app/domain_plugins/beluga/shared/view/plan-comparison-selector/plan-comparison-selector.component';
 import { filterNotNullOrUndefined } from 'src/app/shared/common/check_null_undefined';
 import { PlanRunStatus } from 'src/app/iterative_planning/domain/plan';
 

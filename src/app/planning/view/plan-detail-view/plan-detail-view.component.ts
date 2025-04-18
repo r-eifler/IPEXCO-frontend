@@ -5,15 +5,15 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { BelugaPlanAnimationComponent } from 'src/app/domain_plugins/beluga/components/beluga-plan-animation/beluga-plan-animation.component';
-import { BelugaDirective } from 'src/app/domain_plugins/beluga/directives/isBeluga.directive';
+import { BelugaPlanAnimationComponent } from 'src/app/domain_plugins/beluga/shared/components/beluga-plan-animation/beluga-plan-animation.component';
+import { BelugaDirective } from 'src/app/domain_plugins/beluga/shared/directives/isBeluga.directive';
 import { PlanViewComponent } from 'src/app/iterative_planning/components/plan/plan-view/plan-view.component';
 import { BreadcrumbModule } from 'src/app/shared/components/breadcrumb/breadcrumb.module';
 import { EmptyStateModule } from 'src/app/shared/components/empty-state/empty-state.module';
 import { PageModule } from 'src/app/shared/components/page/page.module';
 import { selectDomainSpecification, selectProject, selectSelectedPlan } from '../../state/planning.selector';
 import { map } from 'rxjs';
-import { PlanInspectionComponent } from 'src/app/domain_plugins/beluga/components/plan-inspection/plan-inspection.component';
+import { PlanInspectionComponent } from 'src/app/domain_plugins/beluga/shared/components/plan-inspection/plan-inspection.component';
 
 @Component({
   selector: 'app-plan-detail-view',

@@ -19,6 +19,7 @@ import { FailureEffect } from './shared/effects/failure.effect';
 import { AuthenticationService } from './user/services/authentication.service';
 import { userFeatureEffects } from './user/state/effects/effects';
 import { userFeature } from './user/state/user.feature';
+import { BelugaNavigationComponent } from './domain_plugins/beluga/navigation/navigation.component';
 
 export const routes: Routes = [
   {
@@ -29,6 +30,10 @@ export const routes: Routes = [
       provideEffects([...userFeatureEffects,FailureEffect] ),
       AuthenticationService,
     ],
+  },
+  {
+    path: 'beluga',
+    loadChildren: () => import('./domain_plugins/beluga/beluga.routes').then(m => m.routes),
   },
   {
     path: '',

@@ -1,0 +1,69 @@
+<base href="/" />
+
+<div class="main-container">
+  <mat-toolbar color="secondary" class="main-toolbar">
+    @if(!(isUserStudy$ | async)){
+    <button mat-icon-button (click)="sideNav.toggle()" [disabled]="!(isLoggedIn$ | async)">
+      <mat-icon>menu</mat-icon>
+    </button>
+    }
+    <mat-icon>connecting_airports</mat-icon>
+    <!-- <img style="height: 60%; margin: auto 10px" src="assets/iter_logo.svg" /> -->
+    <h1 style="font-weight: bold;">Beluga </h1> <h1> System</h1>
+    <span style="flex: 1 1 auto"></span>
+    @if(!(isUserStudy$ | async)){
+      <button mat-icon-button [matMenuTriggerFor]="userMenu">
+        <mat-icon>account_circle</mat-icon>
+      </button>
+    }
+  </mat-toolbar>
+
+  <mat-menu #userMenu="matMenu">
+    <!-- <p mat-menu-item>
+      Hi {{name$ | async}}
+    </p> -->
+    <button mat-menu-item
+      *ngIf="!(isLoggedIn$ | async)"
+      (click)="newLoginForm()">
+      Login
+    </button>
+    <button mat-menu-item *ngIf="isLoggedIn$ | async" (click)="logout()">
+      Logout
+    </button>
+  </mat-menu>
+
+  <mat-sidenav-container class="sidenav-container">
+    <mat-sidenav
+      #sideNav
+      [mode]="'side'"
+      fixedTopGap="56"
+      style="width: 200px">
+      <mat-nav-list>
+        <a
+          mat-list-item
+          routerLink="./home"
+          routerLinkActive="mat-list-single-selected-option"
+          (click)="sideNav.toggle()">
+          <span class="entry">
+            <mat-icon>home</mat-icon>
+            <span>Home</span>
+          </span>
+        </a>
+        <a
+          mat-list-item
+          routerLink="./builder"
+          routerLinkActive="mat-list-single-selected-option"
+          (click)="sideNav.toggle()">
+          <span class="entry">
+            <mat-icon>design_services</mat-icon>
+            <span>Builder</span>
+          </span>
+        </a>
+      </mat-nav-list>
+    </mat-sidenav>
+
+    <mat-sidenav-content>
+        <router-outlet></router-outlet>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>

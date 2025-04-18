@@ -1,0 +1,18 @@
+@use "../../../../../../variables.scss" as variables;
+
+.project-card {
+  display: grid;
+}
+
+.project-container {
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));;
+  gap: var(--spacing-200);
+}
+
+.header-container {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 0px 25px 0px 25px;
+}

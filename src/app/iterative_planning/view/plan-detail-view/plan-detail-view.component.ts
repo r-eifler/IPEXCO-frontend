@@ -19,8 +19,8 @@ import {
   selectIterativePlanningProjectExplanationInterfaceType,
   selectIterativePlanningSelectedStep
 } from "../../state/iterative-planning.selector";
-import { BelugaPlanAnimationComponent } from "src/app/domain_plugins/beluga/components/beluga-plan-animation/beluga-plan-animation.component";
-import { BelugaDirective } from "src/app/domain_plugins/beluga/directives/isBeluga.directive";
+import { BelugaPlanAnimationComponent } from "src/app/domain_plugins/beluga/shared/components/beluga-plan-animation/beluga-plan-animation.component";
+import { BelugaDirective } from "src/app/domain_plugins/beluga/shared/directives/isBeluga.directive";
 
 @Component({
     selector: "app-plan-detail-view",
