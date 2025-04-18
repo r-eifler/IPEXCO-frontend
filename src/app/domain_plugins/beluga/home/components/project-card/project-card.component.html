@@ -11,21 +11,21 @@
     <mat-card-content>
       <div class="content">
         <div class="stats">
-          <!-- <mat-icon>explore</mat-icon>
-          <span class="property-label">Planner:</span>
-          <span class="property-value">{{ planner()?.name ?? '?'}}</span>
+          <mat-icon>flight_land</mat-icon>
+          <span class="property-label">#Flights:</span>
+          <span class="property-value">{{ numFlights() ?? '?'}}</span>
 
-          <mat-icon>timer</mat-icon>
-          <span class="property-label">Run Time:</span>
-          <span class="property-value">{{ plan()?.runTime ?? '?' }}</span>
+          <mat-icon>menu</mat-icon>
+          <span class="property-label">#Racks:</span>
+          <span class="property-value">{{ numRacks() ?? '?' }}</span>
   
-          <mat-icon>attach_money</mat-icon>
-          <span class="property-label">Plan Length:</span>
-          <span class="property-value">{{ plan()?.actions?.length ?? '?'}}</span> -->
+          <mat-icon>crop_16_9</mat-icon>
+          <span class="property-label">#Jigs:</span>
+          <span class="property-value">{{ numJigs() ?? '?'}}</span>
         </div>
   
         <div class="utility">
-          <mat-icon>explore</mat-icon>
+          <mat-icon>connecting_airports</mat-icon>
           <!-- <div class="utility-value-container">
             <span class="value" *isProject>{{ step() | stepValue : planProperties() | default : '-/-'}}</span>
             <span class="value" *isDemo>{{ (step() | stepValue : planProperties() | default : '-') + '/' + maxOverallUtility() }}</span>

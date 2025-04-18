@@ -1,11 +1,10 @@
 import { createAction, props } from "@ngrx/store";
-import { ProjectBase } from "src/app/shared/domain/project";
 import { DomainSpecification } from "src/app/global_specification/domain/domain_specification";
-import { ProjectMetaData } from "src/app/project-meta/domain/project-meta";
+import { Project, ProjectBase } from "src/app/shared/domain/project";
 
-export const loadProjectMetaDataList = createAction('[beluga-home] load project meta data list');
-export const loadProjectMetaDataListSuccess = createAction('[beluga-home] load project meta data list success', props<{projects: ProjectMetaData[]}>());
-export const loadProjectMetaDataListFailure = createAction('[beluga-home] load project meta data list failure', props<{err: any}>());
+export const loadProjects = createAction('[beluga-home] load projects');
+export const loadProjectsSuccess = createAction('[beluga-home] load projects success', props<{projects: Project[]}>());
+export const loadProjectsFailure = createAction('[beluga-home] load projects failure', props<{err: any}>());
 
 export const createProject = createAction('[beluga-home] create new project', props<{project: ProjectBase}>());
 export const createProjectSuccess = createAction('[beluga-home] create new project success');

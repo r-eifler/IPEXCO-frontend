@@ -6,7 +6,8 @@ import { HomeFeature } from './state/home.feature';
 import { provideEffects } from '@ngrx/effects';
 import { homeEffects } from './state/effects/effects';
 import { CreateProjectService } from './services/create-project.service';
-import { ProjectMetaDataService } from './services/project-meta-data.service';
+import { ProjectService } from './services/project.service';
+import { HomeDomainSpecificationService } from './services/domainSpecification.service';
 
 export const routes: Routes = [
   {
@@ -17,7 +18,8 @@ export const routes: Routes = [
         provideState(HomeFeature),
         provideEffects(homeEffects),
         CreateProjectService,
-        ProjectMetaDataService,
+        ProjectService,
+        HomeDomainSpecificationService,
       ],
     children: [
       {

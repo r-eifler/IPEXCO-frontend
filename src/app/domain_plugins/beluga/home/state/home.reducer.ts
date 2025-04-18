@@ -1,29 +1,31 @@
 import { createReducer, on } from "@ngrx/store";
-import { ProjectMetaData } from "src/app/project-meta/domain/project-meta";
+import { DomainSpecification } from "src/app/global_specification/domain/domain_specification";
 import { Creatable, CreationState } from "src/app/shared/common/creatable.interface";
 import { Loadable, LoadingState } from "src/app/shared/common/loadable.interface";
-import { ProjectBase } from "src/app/shared/domain/project";
-import { createProject, createProjectFailure, createProjectSuccess, loadProjectMetaDataList, loadProjectMetaDataListSuccess } from "./home.actions";
+import { Project, ProjectBase } from "src/app/shared/domain/project";
+import { createProject, createProjectFailure, createProjectSuccess, loadDomainSpecifications, loadDomainSpecificationsSuccess, loadProjects, loadProjectsSuccess } from "./home.actions";
 
 export interface HomeState {
-    projects: Loadable<ProjectMetaData[]>;
+    projects: Loadable<Project[]>;
+    domainSpecifications: Loadable<DomainSpecification[]>;
     createdProject: Creatable<ProjectBase>;
 }
 
 
 const initialState: HomeState = {
     projects: {state: LoadingState.Initial, data: undefined},
+    domainSpecifications: {state: LoadingState.Initial, data: undefined},
     createdProject: {state: CreationState.Default, data: undefined},
 }
 
 
 export const HomeReducer = createReducer(
     initialState,
-    on(loadProjectMetaDataList, (state): HomeState => ({
+    on(loadProjects, (state): HomeState => ({
         ...state,
         projects: {state: LoadingState.Loading, data: undefined}
     })),
-    on(loadProjectMetaDataListSuccess, (state, {projects}): HomeState => ({
+    on(loadProjectsSuccess, (state, {projects}): HomeState => ({
         ...state,
         projects: {state: LoadingState.Done, data: projects},
         createdProject: {state: CreationState.Default, data: undefined}
@@ -39,5 +41,13 @@ export const HomeReducer = createReducer(
     on(createProjectFailure, (state): HomeState => ({
         ...state,
         createdProject: {state: CreationState.Error, data: undefined}
+    })),
+    on(loadDomainSpecifications, (state, ): HomeState => ({
+        ...state,
+        domainSpecifications: {state: LoadingState.Loading, data: undefined}
+    })),
+    on(loadDomainSpecificationsSuccess, (state, {domainSpecifications}): HomeState => ({
+        ...state,
+        domainSpecifications: {state: LoadingState.Done, data: domainSpecifications}
     })),
 );

@@ -19,3 +19,6 @@ export const selectProjectCreationNone = createSelector(selectState,
 
 export const selectProjectCreationError = createSelector(selectState, 
     (state) => state.createdProject.state === CreationState.Error)
+
+    export const selectDomainSpecifications = createSelector(selectState, 
+        (state) => state.domainSpecifications.data)

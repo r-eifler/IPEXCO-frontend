@@ -18,6 +18,12 @@ import { defaultGeneralSetting } from "src/app/project/domain/general-settings";
 import { DialogModule } from "src/app/shared/components/dialog/dialog.module";
 import { SpecCardFeatureComponent } from "src/app/shared/components/spec-card/spec-card-feature/spec-card-feature.component";
 import { ProjectBase } from "src/app/shared/domain/project";
+import { createProject, loadDomainSpecifications } from "../../state/home.actions";
+import { selectDomainSpecification } from "src/app/iterative_planning/state/iterative-planning.feature";
+import { selectDomainSpecifications } from "../../state/home.selector";
+import { find } from "ramda";
+import { filterNotNullOrUndefined } from "src/app/shared/common/check_null_undefined";
+import { loadDomainSpecification } from "src/app/iterative_planning/state/iterative-planning.actions";
 
 
 @Component({
@@ -38,7 +44,6 @@ import { ProjectBase } from "src/app/shared/domain/project";
         MatButtonModule,
         MatSelectModule,
         AsyncPipe,
-        SpecCardFeatureComponent
     ],
     templateUrl: "./creator.component.html",
     styleUrls: ["./creator.component.scss"]
@@ -51,13 +56,17 @@ export class ProjectCreatorComponent {
   selectedIndex = 0;
   maxStepIndex = 1
 
-  encoding = Encoding;
+  domainSpecifications$ = this.store.select(selectDomainSpecifications);
+  belugaDomainSpec$ = this.domainSpecifications$.pipe(
+    filterNotNullOrUndefined(),
+    map(specs => specs.filter(spec => spec.name == 'Beluga')),
+    map(specs => specs.length > 0 ? specs[0] : null)
+  );
   
   private fb = inject(FormBuilder);
 
   form = this.fb.group({
     name: this.fb.control<string | null>(null, Validators.required),
-    domain: this.fb.control<string | null>(null, Validators.required),
     description: this.fb.control<string | null>(null),
   });
 
@@ -107,6 +116,10 @@ export class ProjectCreatorComponent {
     shareReplay(1),
   )
 
+  constructor(){
+    this.store.dispatch(loadDomainSpecifications());
+  }
+
   onTaskSelected(model: string){
     this.domainDependentModel$.next(model);
   }
@@ -129,15 +142,15 @@ export class ProjectCreatorComponent {
 
   onSave(): void {
     console.log("onSave");
-    combineLatest([this.model$, this.objects$]).pipe(
+    combineLatest([this.model$, this.objects$, this.belugaDomainSpec$]).pipe(
       tap(console.log),
       take(1),
     ).subscribe(
-      ([model,objects]) => {
+      ([model,objects, spec]) => {
 
         const newProject: ProjectBase = {
           name: this.form.controls.name.value ?? 'TODO',
-          domain: this.form.controls.domain.value ?? 'TODO',
+          domain: spec._id,
           description: this.form.controls.description.value ? this.form.controls.description.value : "TODO",
           settings: defaultGeneralSetting,
           baseTask: {
@@ -152,7 +165,7 @@ export class ProjectCreatorComponent {
 
         console.log("create new project");
         console.log(newProject);
-        // this.store.dispatch(createProject({project: newProject}))
+        this.store.dispatch(createProject({project: newProject}))
 
         this.dialogRef.close();
       }

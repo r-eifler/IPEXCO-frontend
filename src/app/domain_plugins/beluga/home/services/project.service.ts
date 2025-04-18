@@ -1,21 +1,21 @@
 import { HttpClient } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { map, tap } from "rxjs/operators";
-import { ProjectMetaData, ProjectMetaZ } from "src/app/project-meta/domain/project-meta";
+import { map } from "rxjs/operators";
+import { Project, ProjectZ } from "src/app/shared/domain/project";
 import { environment } from "src/environments/environment";
 import { array, boolean } from "zod";
 
 
 @Injectable()
-export class ProjectMetaDataService{
+export class ProjectService{
 
     private http = inject(HttpClient)
-    private BASE_URL = environment.apiURL + "project/meta-data";
+    private BASE_URL = environment.apiURL + "project/";
 
-    getProjectList$(): Observable<ProjectMetaData[]> {
+    getProjectList$(): Observable<Project[]> {
         return this.http.get<unknown>(this.BASE_URL).pipe(
-            map((data) => array(ProjectMetaZ).parse(data)),
+            map((data) => array(ProjectZ).parse(data)),
         )
     }
 

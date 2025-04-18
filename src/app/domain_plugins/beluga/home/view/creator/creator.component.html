@@ -18,15 +18,6 @@
               <input matInput type="text" formControlName="name" />
             </mat-form-field>
 
-            <mat-form-field appearance="outline" class="full-width">
-              <mat-label>Domain</mat-label>
-              <mat-select [formControl]="form.controls.domain" required>
-                @for (domain of (domains$ | async); track domain._id) {
-                  <mat-option [value]="domain._id">{{domain.name}}</mat-option>
-                }
-              </mat-select>
-            </mat-form-field>
-
             <mat-form-field appearance="outline"  class="full-width">
               <mat-label>Description</mat-label>
               <textarea matInput formControlName="description"></textarea>
@@ -39,37 +30,11 @@
       <mat-step label="Task">
         <div class="stepper-content">
 
-          <div class="encoding">
-            <span>Encoding: </span>
-            <app-spec-card-feature>{{ (selectedDomain$ | async)?.encoding }}</app-spec-card-feature>
-          </div>
-
-          @if((selectedDomain$ | async)?.encoding == encoding.PDDL_CLASSIC ){
-            <app-template-file-upload 
-              (fileContent)="onDomainSelected($event)"
-              [valid]="pddlModelValid$ | async"
-              >
-              Upload PDDL domain File
-            </app-template-file-upload>
-            <app-template-file-upload 
-              (fileContent)="onProblemSelected($event)"
-              [valid]="pddlModelValid$ | async">
-              Upload PDDL problem File
-            </app-template-file-upload>
-          }
-
-          @if((selectedDomain$ | async)?.encoding == encoding.PDDL_NUMERIC){
-            <p>Not supported yet!</p>
-          }
-
-          @if((selectedDomain$ | async)?.encoding == encoding.DOMAIN_DEPENDENT ){
             <app-template-file-upload 
               (fileContent)="onTaskSelected($event)"
               [valid]="domainDependentModelValid$ | async">
-              Upload JSON task encoding
-            </app-template-file-upload>
-          }
-          
+              Task
+            </app-template-file-upload>        
         </div>
         <!-- <p>{{ model$ | async }}</p> -->
       </mat-step>

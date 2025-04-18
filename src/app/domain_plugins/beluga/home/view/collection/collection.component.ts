@@ -13,9 +13,10 @@ import { ActionCardComponent } from "src/app/shared/components/action-card/actio
 import { AskDeleteComponent } from "src/app/shared/components/ask-delete/ask-delete.component";
 import { PageModule } from "src/app/shared/components/page/page.module";
 import { ProjectCardComponent } from "../../components/project-card/project-card.component";
-import { loadProjectMetaDataList } from "../../state/home.actions";
 import { selectProjectsMetaData } from "../../state/home.selector";
 import { provideTranslocoScope, TranslocoModule } from "@jsverse/transloco";
+import { ProjectCreatorComponent } from "../creator/creator.component";
+import { loadProjects } from "../../state/home.actions";
 
 
 @Component({
@@ -50,12 +51,12 @@ export class CollectionComponent{
   projects$ = this.store.select(selectProjectsMetaData)
 
   constructor() {
-    this.store.dispatch(loadProjectMetaDataList())
+    this.store.dispatch(loadProjects())
   }
 
 
   new_project_form(): void {
-    // this.dialog.open(ProjectCreatorComponent);
+    this.dialog.open(ProjectCreatorComponent);
   }
 
 
