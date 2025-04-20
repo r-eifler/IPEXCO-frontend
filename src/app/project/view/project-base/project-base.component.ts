@@ -58,7 +58,7 @@ export class ProjectBaseComponent {
   }
 
   deleteProject(): void {
-    // this.projectsService.deleteObject(this.currentProject);
+    // this.project$.pipe(take(1)).subscribe(p => this.store.dispatch(deleteProject({id: p._id})));
     this.router.navigate(['/projects']);
   }
 

@@ -13,7 +13,7 @@ import { ActionCardComponent } from "src/app/shared/components/action-card/actio
 import { AskDeleteComponent } from "src/app/shared/components/ask-delete/ask-delete.component";
 import { PageModule } from "src/app/shared/components/page/page.module";
 import { ProjectCardComponent } from "../../components/project-card/project-card.component";
-import { selectProjectsMetaData } from "../../state/home.selector";
+import { selectProjects } from "../../state/home.selector";
 import { provideTranslocoScope, TranslocoModule } from "@jsverse/transloco";
 import { ProjectCreatorComponent } from "../creator/creator.component";
 import { loadProjects } from "../../state/home.actions";
@@ -48,7 +48,7 @@ export class CollectionComponent{
   store = inject(Store);
   dialog = inject(MatDialog)
 
-  projects$ = this.store.select(selectProjectsMetaData)
+  projects$ = this.store.select(selectProjects)
 
   constructor() {
     this.store.dispatch(loadProjects())

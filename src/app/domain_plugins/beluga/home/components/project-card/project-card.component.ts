@@ -10,6 +10,7 @@ import { Store } from '@ngrx/store';
 import { LabelModule } from 'src/app/shared/components/label/label.module';
 import { Project } from 'src/app/shared/domain/project';
 import { BelugaProblemZ } from '../../../shared/domain/beluga_problem';
+import { provideTranslocoScope, TranslocoModule } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-project-card',
@@ -22,6 +23,13 @@ import { BelugaProblemZ } from '../../../shared/domain/beluga_problem';
     RouterLink, 
     MatTooltipModule, 
     MatProgressBarModule,
+    TranslocoModule
+  ],
+  providers: [
+    provideTranslocoScope({
+      scope: "home",
+      alias: "h",
+    }),
   ],
   templateUrl: './project-card.component.html',
   styleUrl: './project-card.component.scss'

@@ -11,5 +11,7 @@ export const {
     name,
     reducer,
     selectHomeFeatureState,
-    selectCreatedProject,
+    selectProject,
+    selectProjects,
+    selectDomainSpecifications,
   } = HomeFeature;

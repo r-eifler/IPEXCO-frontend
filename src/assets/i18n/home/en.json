@@ -1,4 +1,10 @@
 {
     "projects": "Projects",
-    "new_project": "New Project"
+    "project": "Project",
+    "new_project": "New Project",
+    "flights": "fligts",
+    "racks": "racks",
+    "jigs": "jigs",
+    "manual_planning": "Manual Planning",
+    "manual_planning_description": "Build a plan by drag & drop."
 }

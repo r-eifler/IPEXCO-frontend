@@ -2,6 +2,12 @@ import { createAction, props } from "@ngrx/store";
 import { DomainSpecification } from "src/app/global_specification/domain/domain_specification";
 import { Project, ProjectBase } from "src/app/shared/domain/project";
 
+
+export const loadProject = createAction('[beluga-home] load project', props<{id: string}>());
+export const loadProjectSuccess = createAction('[beluga-home] load project success', props<{project: Project}>());
+export const loadProjectFailure = createAction('[beluga-home] load project failure', props<{err: any}>());
+
+
 export const loadProjects = createAction('[beluga-home] load projects');
 export const loadProjectsSuccess = createAction('[beluga-home] load projects success', props<{projects: Project[]}>());
 export const loadProjectsFailure = createAction('[beluga-home] load projects failure', props<{err: any}>());
