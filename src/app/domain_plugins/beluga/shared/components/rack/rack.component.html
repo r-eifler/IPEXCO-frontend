@@ -6,7 +6,6 @@
     <div 
         class="rack" 
         [style.width]="((rack()?.size * 15) + 2) + 'px'"
-        [matTooltip]="tooltip()"
     >
         @for(jig of rack()?.jigs; track jig){
             <app-jig [jig]="jig" [jigType]="jigTypes()?.[jig?.type]"></app-jig>

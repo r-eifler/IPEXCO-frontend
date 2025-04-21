@@ -5,6 +5,5 @@
     "flights": "Flüge",
     "racks": "Ablagen",
     "jigs": "Montagegestelle",
-    "manual_planning": "Manuelle Planung",
-    "manual_planning_description": "Bauen Sie einen Plan indem Sie die Montagegestelle auf die Ablagen ziehen."
+    "manual_planning": "Manuelle Planung"
 }

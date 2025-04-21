@@ -1,0 +1,20 @@
+<div class="main" *transloco="let t">
+    <div>
+        {{t('b.outgoing_flight')}}
+    </div>
+    <div>
+        @if(jigTypesScheduled()?.length > 0){
+            @for(jigType of jigTypesScheduled(); track jigType){
+                <p>{{jigType}}</p>
+            }
+        }
+        @else{
+            <p>{{t('b.no_jigs_scheduled')}}</p>
+        }
+        @for(jig of jigsLoaded(); track jig.name){
+            <app-jig
+                [jig]="jig"
+                [jigType]="jigTypes()?.[jig.name]"
+            ></app-jig>
+        }
+</div>

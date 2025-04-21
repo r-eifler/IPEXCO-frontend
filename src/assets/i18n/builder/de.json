@@ -1,0 +1,13 @@
+{
+    "projects": "Projekte",
+    "project": "Projekt",
+    "new_project": "Neues Projekt",
+    "flights": "Flüge",
+    "racks": "Ablagen",
+    "jigs": "Montagegestelle",
+    "manual_planning": "Manuelle Planung",
+    "incoming_flight": "ankommender Flug",
+    "outgoing_flight": "abgehender Flug",
+    "empty_flight": "Flug leer",
+    "no_jigs_scheduled": "keine Montagegestelle geplant"
+}

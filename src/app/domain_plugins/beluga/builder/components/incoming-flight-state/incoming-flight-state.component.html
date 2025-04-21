@@ -1,0 +1,18 @@
+<div class="main" *transloco="let t">
+    <div>
+        {{t('b.incoming_flight')}}
+    </div>
+    <div>
+    @if(jigs()?.length > 0){
+        @for(jig of jigs(); track jig.name){
+            <app-jig
+                [jig]="jig"
+                [jigType]="jigTypes()?.[jig.type]"
+            ></app-jig>
+        }
+    }
+    @else{
+        <p>{{t('b.empty_flight')}}</p>
+    }
+    </div>
+</div>

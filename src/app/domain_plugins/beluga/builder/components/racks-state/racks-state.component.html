@@ -1,0 +1,10 @@
+@let jigTypes = jigTypes$ | async;
+
+<div class="main">
+    @for(rack of (racks$ | async); track rack.name){
+        <app-rack
+            [rack]="rack"
+            [jigTypes]="jigTypes"
+        ></app-rack>
+    }
+</div>

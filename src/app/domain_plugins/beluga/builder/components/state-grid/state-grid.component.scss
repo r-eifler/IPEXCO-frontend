@@ -1,0 +1,20 @@
+.main{
+    display: grid;
+    grid-template-rows: 1fr 2fr auto;
+    grid-template-columns: auto;
+}
+
+.controls{
+
+}
+
+.plan{
+
+}
+
+.grid{
+    display: grid;
+    grid-template-columns: 2fr 1fr auto 1fr 1fr 1fr;
+    grid-template-rows: 1fr;
+    gap: var(--spacing-300);
+}

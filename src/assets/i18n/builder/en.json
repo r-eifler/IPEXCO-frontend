@@ -1,0 +1,13 @@
+{
+    "projects": "Projects",
+    "project": "Project",
+    "new_project": "New Project",
+    "flights": "fligts",
+    "racks": "racks",
+    "jigs": "jigs",
+    "manual_planning": "Manual Planning",
+    "incoming_flight": "incoming flight",
+    "outgoing_flight": "outgoing flight",
+    "empty_flight": "flight empty",
+    "no_jigs_scheduled": "no jigs scheduled"
+}
