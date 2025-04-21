@@ -2,7 +2,7 @@
 
 <app-page>
   <app-breadcrumb>
-    <a app-breadcrumb-item [routerLink]="['/projects/' + plan?.project]"><mat-icon>home</mat-icon></a>
+    <a app-breadcrumb-item [routerLink]="['/project/' + plan?.project]"><mat-icon>home</mat-icon></a>
     <a app-breadcrumb-item [routerLink]="['..']">All Plans</a>
     <app-breadcrumb-item>{{ (plan$ | async)?.name }}</app-breadcrumb-item>
   </app-breadcrumb>
