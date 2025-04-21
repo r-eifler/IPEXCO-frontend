@@ -9,5 +9,6 @@
     "incoming_flight": "ankommender Flug",
     "outgoing_flight": "abgehender Flug",
     "empty_flight": "Flug leer",
-    "no_jigs_scheduled": "keine Montagegestelle geplant"
+    "no_jigs_scheduled": "keine Montagegestelle geplant",
+    "line": "Linie"
 }

@@ -14,11 +14,10 @@
     padding-right: var(--spacing-200);
 
     border: solid;
-    border-width: 1px;
-    @include vars.border_color();
+    border-width: 0px;
     border-radius: var(--spacing-100);
 
-    background-color: rgb(175, 175, 175);
+    background-color: var(--hangar);
 
     display: flex;
     width: fit-content;

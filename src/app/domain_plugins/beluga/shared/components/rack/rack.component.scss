@@ -18,12 +18,11 @@
     justify-content: space-around;
     align-items: center;
 
-    background-color: rgb(193, 195, 212);
+    background-color: var(--rack);
     height: 50px;
 
     border: solid;
     border-width: 1px;
-    border-color: rgb(90, 101, 206);
-    @include vars.border_color();
+    border-color: var(--rack);
     border-radius: var(--spacing-050);
 }

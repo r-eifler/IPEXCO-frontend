@@ -1,1 +1,7 @@
-<p>production-line-state works!</p>
+<div>
+    @for(pl of (productionLines$ | async); track pl.name){
+        <app-production-line
+            [line]="pl"
+        ></app-production-line>
+    }
+</div>

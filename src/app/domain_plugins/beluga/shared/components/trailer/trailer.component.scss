@@ -2,8 +2,9 @@
 
 
 .container {
-    display: grid;
-    grid-template-rows: 1fr 2fr;
+    display: flex;
+    flex-direction: row;
+    gap: var(--spacing-100);
 }
 
 .trailer {
@@ -14,11 +15,10 @@
     padding-right: var(--spacing-200);
 
     border: solid;
-    border-width: 1px;
-    @include vars.border_color();
+    border-width: 0px;
     border-radius: var(--spacing-100);
 
-    background-color: rgb(175, 175, 175);
+    background-color: var(--trailer);
 
     display: flex;
     width: fit-content;

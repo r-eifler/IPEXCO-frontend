@@ -12,11 +12,10 @@
     min-width: 15px;
 
     border: solid;
-    border-width: 1px;
-    @include vars.border_color();
+    border-width: 0px;
     border-radius: var(--spacing-100);
 
-    background-color: rgb(150, 151, 255);
+    background-color: var(--jig);
 
     display: flex;
     justify-content: space-around;
@@ -31,11 +30,10 @@
     min-width: 15px;
 
     border: solid;
-    border-width: 1px;
-    @include vars.border_color();
+    border-width: 0px;
     border-radius: var(--spacing-100);
 
-    background-color: rgb(96, 98, 248);
+    background-color: var(--aircraft-part);
 
     display: flex;
     width: fit-content;

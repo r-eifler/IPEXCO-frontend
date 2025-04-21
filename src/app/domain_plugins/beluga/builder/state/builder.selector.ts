@@ -39,3 +39,15 @@ export const selectAvailableBelugaTrailers = createSelector(selectState,
 
 export const selectAvailableFactoryTrailers = createSelector(selectState, 
     (state) => (state.task?.trailers_factory.filter(t => state.taskState?.trailersFactory[t.name] == null) ?? []))
+
+
+// Hangars 
+
+export const selectAvailableHangars = createSelector(selectState, 
+    (state) => (state.task?.hangars.filter(h => state.taskState?.hangars[h] == null) ?? []))
+
+
+// ProductionLine 
+
+export const selectDeliverableJigs = createSelector(selectState, 
+    (state) => (state.task?.production_lines.reduce((acc,c) => c.schedule.length == 0 ? acc : {...acc, [c.schedule[0]]: c.name}, {}) as Record<string,string>));

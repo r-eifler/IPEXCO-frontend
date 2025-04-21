@@ -1,4 +1,4 @@
-@use "../../../../../variables.scss" as vars;
+@use "../../../../../../variables.scss" as vars;
 
 .container {
     display: grid;
@@ -8,17 +8,18 @@
     padding: var(--spacing-200);
 
     border: solid;
-    border-width: 1px;
+    border-width: 0px;
     @include vars.border_color();
     border-radius: var(--spacing-100);
 
-    background-color: rgb(226, 226, 226);
+    background-color: var(--production-line);
 
 }
 
 .list-wrapper {
-    max-height: 150px;
+    max-height: 100px;
     overflow-y: scroll;
+    width: fit-content;
 
     display: flex;
     flex-direction: column;

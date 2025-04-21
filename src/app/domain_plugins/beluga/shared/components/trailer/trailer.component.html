@@ -1,7 +1,7 @@
 <div class="container">
-    <div>
+    <!-- <div>
         <mat-icon>local_shipping</mat-icon>
-    </div>
+    </div> -->
     <div class="trailer" 
         cdkDropList [cdkDropListData]="[jig()]" 
         (cdkDropListDropped)="drop($event)"
@@ -11,9 +11,16 @@
             <app-jig 
                 [jig]="jig()" 
                 [jigType]="jigType()"
-                cdkDrag>
+                cdkDrag
+                [cdkDragData]="jig()"
+            >
             </app-jig>
         }
     </div>
+    @if(side() =='fside'){
+        <button mat-icon-button (click)="toHangar()" [disabled]="!(canDeliver$ | async)">
+            <mat-icon>arrow_forward</mat-icon>
+        </button>
+    }
 </div>
 

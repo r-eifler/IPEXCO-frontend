@@ -1,4 +1,7 @@
 <div class="main">
+    <app-init-card
+        [select]="false"
+    ></app-init-card>
     @for(action of (planSection | async)?.actions; track action){
         <app-action-card
             [action]="action"

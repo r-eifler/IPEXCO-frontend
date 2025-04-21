@@ -1,9 +1,18 @@
 import { Component, computed, input } from '@angular/core';
 import { ProductionLine } from '../../domain/beluga_problem';
+import { provideTranslocoScope, TranslocoModule } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-production-line',
-  imports: [],
+  imports: [
+    TranslocoModule
+  ],
+  providers: [
+    provideTranslocoScope({
+      scope: "builder",
+      alias: "b",
+    }),
+  ],
   templateUrl: './production-line.component.html',
   styleUrl: './production-line.component.scss'
 })

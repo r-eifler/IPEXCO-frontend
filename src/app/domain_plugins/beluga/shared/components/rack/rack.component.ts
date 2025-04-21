@@ -1,6 +1,6 @@
 import { Component, computed, inject, input } from '@angular/core';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { Jig, JigType, Rack } from '../../domain/beluga_problem';
+import { getJigSize, Jig, JigType, Rack } from '../../domain/beluga_problem';
 import { JigComponent } from '../jig/jig.component';
 import { sum } from 'ramda';
 import {CdkDrag, CdkDragDrop, CdkDropList} from '@angular/cdk/drag-drop';
@@ -32,6 +32,15 @@ export class RackComponent {
   )
 
   tooltip = computed(() => 'size: ' + this.rack().size);
+
+  fits = (item: CdkDrag<Jig>) => {
+    let jig = item.data;
+    if(jig == undefined){
+      return false;
+    }
+
+    return this.rack()?.size - this.occupied() >= getJigSize(jig, this.jigTypes()?.[jig?.type]);
+  }
 
   drop(event: CdkDragDrop<Jig[]>){
     if (event.previousContainer === event.container) {
