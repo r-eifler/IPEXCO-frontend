@@ -1,6 +1,9 @@
 import { empty } from "ramda";
 import { array, boolean, number, object, record, string, infer as zinfer } from "zod";
 
+
+export type Side = 'bside' | 'fside'
+
 export const TrailerZ = object({
     name: string()
 })

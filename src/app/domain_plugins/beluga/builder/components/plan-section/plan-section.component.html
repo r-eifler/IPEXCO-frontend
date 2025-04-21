@@ -1,4 +1,4 @@
-<div>
+<div class="main">
     @for(action of (planSection | async)?.actions; track action){
         <app-action-card
             [action]="action"

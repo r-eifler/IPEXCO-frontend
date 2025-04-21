@@ -5,6 +5,7 @@ import { ProductionLineStateComponent } from '../production-line-state/productio
 import { RacksStateComponent } from '../racks-state/racks-state.component';
 import { TrailersStateComponent } from '../trailers-state/trailers-state.component';
 import { PlanSectionComponent } from '../plan-section/plan-section.component';
+import { CdkDropListGroup } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-state-grid',
@@ -14,7 +15,8 @@ import { PlanSectionComponent } from '../plan-section/plan-section.component';
     ProductionLineStateComponent,
     RacksStateComponent,
     TrailersStateComponent,
-    PlanSectionComponent
+    PlanSectionComponent,
+    CdkDropListGroup,
   ],
   templateUrl: './state-grid.component.html',
   styleUrl: './state-grid.component.scss'

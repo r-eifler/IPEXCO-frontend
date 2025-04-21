@@ -87,7 +87,9 @@ export class StateCardComponent {
     if(state === undefined){
       return []
     }
-    return Object.values(state.trailersBeluga).map(j => j === null ? null : this.jigs()?.[j]);
+    return Object.keys(state.trailersBeluga).map(tn => 
+      state.trailersBeluga[tn] === null ? {name: tn, jig: null} : 
+      {name: tn, jig: this.jigs()?.[state.trailersBeluga[tn]]});
   })
 
   trailersFactory = computed(() => {
@@ -95,7 +97,9 @@ export class StateCardComponent {
     if(state === undefined){
       return []
     }
-    return Object.values(state.trailersFactory).map(j => j === null ? null : this.jigs()?.[j]);
+    return Object.keys(state.trailersFactory).map(tn => 
+      state.trailersFactory[tn] === null ? {name: tn, jig: null} : 
+      {name: tn, jig: this.jigs()?.[state.trailersFactory[tn]]});
   })
 
   productionLines = computed(() => {

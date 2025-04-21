@@ -15,11 +15,12 @@
         ></app-beluga-flight>
     </div>
     <div class="trailers">
-        @for(jig of trailersBeluga(); track jig){
-            <app-trailer>
-                @if(jig !== null){
-                <app-jig [jig]="jig"  [jigType]="jigTypes()?.[jig?.type]" [unitSize]="true"></app-jig>
-                }
+        @for(trailer of trailersBeluga(); track trailer){
+            <app-trailer
+                [name]="trailer.name"
+                [side]="'bside'"
+                [jig]="trailer.jig"
+                [jigType]="jigTypes()?.[trailer.jig?.type]">
             </app-trailer>
         }
     </div>
@@ -30,11 +31,12 @@
         }
     </div>
     <div class="trailers">
-        @for(jig of trailersFactory(); track jig){
-            <app-trailer>
-                @if(jig !== null){
-                    <app-jig [jig]="jig"  [jigType]="jigTypes()?.[jig?.type]" [unitSize]="true"></app-jig>
-                }
+        @for(trailer of trailersFactory(); track trailer){
+            <app-trailer
+                [name]="trailer.name"
+                [side]="'fside'"
+                [jig]="trailer.jig"  
+                [jigType]="jigTypes()?.[trailer.jig?.type]">
             </app-trailer>
         }
     </div>

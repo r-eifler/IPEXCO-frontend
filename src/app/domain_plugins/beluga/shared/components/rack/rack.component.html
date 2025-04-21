@@ -4,11 +4,19 @@
         <span>{{ occupied() }}/{{ rack()?.size }}</span>
     </div>
     <div 
+        cdkDropList
+        [id]="rack()?.name"
+        [cdkDropListData]="rack()?.jigs"
+        (cdkDropListDropped)="drop($event)"
         class="rack" 
         [style.width]="((rack()?.size * 15) + 2) + 'px'"
     >
         @for(jig of rack()?.jigs; track jig){
-            <app-jig [jig]="jig" [jigType]="jigTypes()?.[jig?.type]"></app-jig>
+            <app-jig 
+                [jig]="jig" 
+                [jigType]="jigTypes()?.[jig?.type]"
+                cdkDrag>
+            </app-jig>
         }
     </div>
 </div>

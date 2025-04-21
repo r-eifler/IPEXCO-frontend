@@ -26,7 +26,6 @@ export class RacksStateComponent {
       ...r,
       jigs: state?.racks[r.name].map(jn => state.jigs[jn]) ?? []
     }))),
-    tap(console.log)
   );
 
   jigTypes$ = this.task$.pipe(map(t => t?.jig_types));

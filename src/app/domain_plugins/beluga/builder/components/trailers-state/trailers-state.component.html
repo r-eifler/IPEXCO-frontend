@@ -1,12 +1,10 @@
 <div>
-    @for(jig of (jigs$ | async); track jig){
-        <app-trailer>
-            @if(jig !== null){
-                <app-jig
-                    [jig]="jig"
-                    [jigType]="(jigTypes$ | async)?.[jig.type]"
-                ></app-jig>
-            }
+    @for(trailer of (trailers$ | async); track trailer){
+        <app-trailer
+            [name]="trailer.name"
+            [side]="side()"
+            [jig]="trailer.jig"
+            [jigType]="(jigTypes$ | async)?.[trailer.jig?.type]">
         </app-trailer>
     }
 </div>
