@@ -15,3 +15,5 @@ export const initTask = createAction('[beluga-builder] init task', props<{task: 
 // Beluga actions
 
 export const createNewBelugaAction = createAction('[beluga-builder] new Beluga action', props<{action: BelugaAction}>());
+
+export const nextFlight = createAction('[beluga-builder] nextFlight');

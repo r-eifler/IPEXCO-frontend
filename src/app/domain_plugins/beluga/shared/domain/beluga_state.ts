@@ -46,7 +46,7 @@ export function isApplicable(state: BelugaState, action: BelugaAction, model: Be
             let lba = LoadBelugaZ.parse(action);
             return state.trailersBeluga[lba.t] == lba.j &&
                 state.outgoing.length < model.flights[state.flightIndex].outgoing.length &&
-                model.flights[state.flightIndex].outgoing[0] == state.jigs[lba.j].type
+                model.flights[state.flightIndex].outgoing[state.outgoing.length] == state.jigs[lba.j].type
         case BelugaActionType.UNLOAD_BELUGA:
             let uba = UnloadBelugaZ.parse(action);
             return state.incoming.length > 0 && state.incoming[0] == uba.j &&

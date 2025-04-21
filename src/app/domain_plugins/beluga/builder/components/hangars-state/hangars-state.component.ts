@@ -10,7 +10,6 @@ import { AsyncPipe } from '@angular/common';
   selector: 'app-hangars-state',
   imports: [
     HangarComponent,
-    JigComponent,
     AsyncPipe,
   ],
   templateUrl: './hangars-state.component.html',

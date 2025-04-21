@@ -13,7 +13,6 @@ import { ProductionLineComponent } from '../production-line/production-line.comp
   selector: 'app-state-card',
   imports: [
     MatIconModule,
-    JigComponent,
     TrailerComponent,
     HangarComponent,
     BelugaFlightComponent,
@@ -79,7 +78,11 @@ export class StateCardComponent {
     if(state === undefined){
       return []
     }
-    return Object.values(state.hangars).map(j => j === null ? null : this.jigs()?.[j]);
+    let hangarNames = Object.keys(state.hangars)
+    return hangarNames.map(h => ({
+      name: h,
+      jig: state.hangars[h] === null ? null : this.jigs()?.[state.hangars[h]]
+    }))
   })
 
   trailersBeluga = computed(() => {

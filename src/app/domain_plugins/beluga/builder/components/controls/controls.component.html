@@ -1,0 +1,6 @@
+<div class="main" *transloco="let t">
+    <button mat-button [disabled]="!(nextFlightAvailable$ | async)" (click)="nextFlight()">
+        <mat-icon>connecting_airports</mat-icon>
+        {{t('b.next_flight')}}
+    </button>
+</div>

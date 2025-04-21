@@ -10,5 +10,6 @@
     "outgoing_flight": "outgoing flight",
     "empty_flight": "flight empty",
     "no_jigs_scheduled": "no jigs scheduled",
-    "line": "line"
+    "line": "line",
+    "next_flight": "next flight"
 }

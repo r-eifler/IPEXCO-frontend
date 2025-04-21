@@ -41,11 +41,11 @@
         }
     </div>
     <div class="hangars">
-        @for(jig of hangars(); track jig){
-            <app-hangar>
-                @if(jig !== null){
-                    <app-jig [jig]="jig"  [jigType]="jigTypes()?.[jig?.type]" [unitSize]="true"></app-jig>
-                }
+        @for(hangar of hangars(); track hangar){
+            <app-hangar
+                [name]="hangar.name"
+                [jig]="hangar.jig"  
+                [jigType]="jigTypes()?.[hangar.jig?.type]">
             </app-hangar>
         }
     </div>

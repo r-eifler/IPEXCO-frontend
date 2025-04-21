@@ -2,6 +2,11 @@
     <!-- <div>
         <mat-icon>local_shipping</mat-icon>
     </div> -->
+    @if(side() =='bside'){
+        <button mat-icon-button (click)="load()" [disabled]="!canLoad()">
+            <mat-icon>arrow_backward</mat-icon>
+        </button>
+    }
     <div class="trailer" 
         cdkDropList [cdkDropListData]="[jig()]" 
         (cdkDropListDropped)="drop($event)"

@@ -1,9 +1,18 @@
 <div class="container">
-    <div>
+    <!-- <div>
         <mat-icon>warehouse</mat-icon>
-    </div>
+    </div> -->
+    <button mat-icon-button (click)="fromHangar()" [disabled]="!trailerAvailable()">
+        <mat-icon>arrow_backward</mat-icon>
+    </button>
     <div class="hangar">
-       <ng-content></ng-content>
+        @if(jig() != null){
+            <app-jig 
+                [jig]="jig()" 
+                [jigType]="jigType()"
+            >
+            </app-jig>
+        }
     </div>
 </div>
 

@@ -5,7 +5,7 @@
     <div>
         @if(jigTypesScheduled()?.length > 0){
             @for(jigType of jigTypesScheduled(); track jigType){
-                <p>{{jigType}}</p>
+                <p>{{jigType}}: {{remaining()}}</p>
             }
         }
         @else{

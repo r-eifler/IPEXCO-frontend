@@ -32,6 +32,32 @@ export const selectCurrentFlight = createSelector(selectState,
     (state) => (state.taskState?.flightIndex !== null && state.taskState?.flightIndex  !== undefined ? 
         state.task?.flights[state.taskState?.flightIndex ] : null))
 
+export const selectCurrentFlightName = createSelector(selectState, 
+    (state) => (state.taskState?.flightIndex !== null && state.taskState?.flightIndex  !== undefined ? 
+        state.task?.flights[state.taskState?.flightIndex ].name : null))
+
+export const selectCurrentFlightNextOutgoing = createSelector(selectState, 
+    (state) => {
+        let flightIndex = state.taskState?.flightIndex;
+        if(flightIndex === undefined){
+            return null
+        }
+        if(state.taskState?.outgoing.length === state.task?.flights[flightIndex].outgoing.length){
+            return null;
+        }
+        let nextTypeIndex = state.taskState?.outgoing.length;
+        if(nextTypeIndex == undefined){
+            return null;
+        }
+        return state.task?.flights[flightIndex].outgoing[nextTypeIndex]
+    });
+
+export const selectFlightFinished = createSelector(selectState, 
+    (state) => state.taskState?.flightIndex !== null && state.taskState?.flightIndex  !== undefined &&
+    state.taskState.incoming.length == 0 && state.taskState.outgoing.length == state.task?.flights[state.taskState.flightIndex].outgoing.length
+)
+
+
 // Trailers
 
 export const selectAvailableBelugaTrailers = createSelector(selectState, 
@@ -50,4 +76,13 @@ export const selectAvailableHangars = createSelector(selectState,
 // ProductionLine 
 
 export const selectDeliverableJigs = createSelector(selectState, 
-    (state) => (state.task?.production_lines.reduce((acc,c) => c.schedule.length == 0 ? acc : {...acc, [c.schedule[0]]: c.name}, {}) as Record<string,string>));
+    (state) => {
+        let productionLines = state.taskState?.productionLines;
+        if(productionLines == undefined){
+            return {}
+        }
+        let productionLinesList = Object.values(productionLines);
+        return productionLinesList.reduce((acc,c) => 
+            c.schedule.length == 0 ? 
+            acc : {...acc, [c.schedule[0]]: c.name}, {}) as Record<string,string>
+    });

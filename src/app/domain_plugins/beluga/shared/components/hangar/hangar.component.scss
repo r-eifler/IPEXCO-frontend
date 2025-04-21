@@ -2,8 +2,10 @@
 
 
 .container {
-    display: grid;
-    grid-template-rows: 1fr 3fr;
+    display: flex;
+    flex-direction: row;
+    gap: var(--spacing-100);
+    align-items: center;
 }
 
 .hangar {

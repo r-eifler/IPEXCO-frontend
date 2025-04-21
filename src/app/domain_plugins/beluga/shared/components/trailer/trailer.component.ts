@@ -1,15 +1,17 @@
 import { CdkDrag, CdkDragDrop, CdkDropList } from '@angular/cdk/drag-drop';
-import { Component, inject, input } from '@angular/core';
+import { AsyncPipe } from '@angular/common';
+import { Component, computed, inject, input } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { Store } from '@ngrx/store';
+import { combineLatest, map, take, tap } from 'rxjs';
+import { filterNotNullOrUndefined } from 'src/app/shared/common/check_null_undefined';
 import { createNewBelugaAction } from '../../../builder/state/builder.actions';
-import { BelugaActionType, DeliverToHanger, PickUpRack } from '../../domain/beluga_plan';
+import { selectAvailableHangars, selectCurrentFlightName, selectCurrentFlightNextOutgoing, selectDeliverableJigs } from '../../../builder/state/builder.selector';
+import { BelugaActionType, DeliverToHanger, LoadBeluga, PickUpRack } from '../../domain/beluga_plan';
 import { Jig, JigType, Side } from '../../domain/beluga_problem';
 import { JigComponent } from '../jig/jig.component';
-import { MatButtonModule } from '@angular/material/button';
-import { selectAvailableHangars, selectDeliverableJigs } from '../../../builder/state/builder.selector';
-import { combineLatest, map, take } from 'rxjs';
-import { AsyncPipe } from '@angular/common';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-trailer',
@@ -39,8 +41,12 @@ export class TrailerComponent {
 
   canDeliver$ = combineLatest([this.availableHangars$, this.deliverableJigs$]).pipe(
     map(([availableHangars, deliverableJigs]) => deliverableJigs !== undefined ? 
-    this.jig()?.name in deliverableJigs && availableHangars.length > 0 : false
-  ));
+    this.jig()?.name in deliverableJigs && availableHangars.length > 0 : false)
+  );
+
+  currentFlightName$ = this.store.select(selectCurrentFlightName);
+  nextOutgoingType = toSignal(this.store.select(selectCurrentFlightNextOutgoing));
+  canLoad = computed(() => this.nextOutgoingType() != null && this.nextOutgoingType() == this.jig().type);
 
   empty = () => {
     return this.jig() == null;
@@ -82,6 +88,28 @@ export class TrailerComponent {
         t: this.name(),
         h: availableHangars[0],
         pl: deliverableJigs[this.jig().name]
+      };
+  
+      console.log(action);
+  
+      this.store.dispatch(createNewBelugaAction({action}));
+    });
+  }
+
+
+  load(){
+
+    this.currentFlightName$.pipe(take(1)).
+    subscribe((flightName) => {
+      if(flightName == undefined || flightName == null){
+        return;
+      }
+
+      let action: LoadBeluga = {
+        name: BelugaActionType.LOAD_BELUGA,
+        j: this.jig().name,
+        b: flightName,
+        t: this.name()
       };
   
       console.log(action);
