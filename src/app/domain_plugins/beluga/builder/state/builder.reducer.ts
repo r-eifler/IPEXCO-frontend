@@ -1,19 +1,29 @@
 import { createReducer, on } from "@ngrx/store";
 import { Loadable, LoadingState } from "src/app/shared/common/loadable.interface";
 import { Project } from "src/app/shared/domain/project";
-import { initTask, loadProject, loadProjectSuccess } from "./builder.actions";
-import { BelugaState, getInitialState } from "../../shared/domain/beluga_state";
-import { BelugaProblemZ } from "../../shared/domain/beluga_problem";
+import { createNewBelugaAction, initTask, loadProject, loadProjectSuccess } from "./builder.actions";
+import { applyAction, BelugaState, getInitialState } from "../../shared/domain/beluga_state";
+import { BelugaProblem, BelugaProblemZ } from "../../shared/domain/beluga_problem";
+import { FlightSectionPlan, PlanSection } from "../domain/plan";
 
 export interface HomeState {
-    project: Loadable<Project>;
-    taskState: BelugaState | null
+    project: Loadable<Project>,
+    task: BelugaProblem | null,
+    taskState: BelugaState | null | undefined,
+    plan: FlightSectionPlan,
+    currentSection: PlanSection,
 }
 
 
 const initialState: HomeState = {
     project: {state: LoadingState.Initial, data: undefined},
-    taskState: null
+    task: null,
+    taskState: null,
+    plan: {sections: []},
+    currentSection:  {
+        actions: [],
+        finished: false
+    }
 }
 
 
@@ -23,13 +33,22 @@ export const HomeReducer = createReducer(
         ...state,
         project: {state: LoadingState.Loading, data: undefined}
     })),
-    on(loadProjectSuccess, (state, {project}): HomeState => ({
+    on(loadProjectSuccess, (state, {project}): HomeState => {
+        let task = BelugaProblemZ.parse(project?.baseTask?.model);
+        return {
+            ...state,
+            project: {state: LoadingState.Done, data: project},
+            task: BelugaProblemZ.parse(project?.baseTask?.model),
+            taskState: getInitialState(task),
+        }
+    }),
+    on(createNewBelugaAction, (state, {action}): HomeState => ({
         ...state,
-        project: {state: LoadingState.Done, data: project},
-        taskState: getInitialState(BelugaProblemZ.parse(project?.baseTask?.model)),
-    })),
-    on(initTask, (state, {task}): HomeState => ({
-        ...state,
-        taskState: getInitialState(task)
+        taskState: state.taskState !== null && state.taskState !== undefined && state.task != null ? 
+            applyAction(state.taskState, action, state.task) : null,
+        currentSection: {
+            ...state.currentSection,
+            actions: [...state.currentSection.actions, action]
+        }
     })),
 );

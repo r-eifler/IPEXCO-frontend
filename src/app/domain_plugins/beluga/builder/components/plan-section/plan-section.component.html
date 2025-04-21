@@ -1,0 +1,9 @@
+<div>
+    @for(action of (planSection | async)?.actions; track action){
+        <app-action-card
+            [action]="action"
+            [highlight]="false"
+            [select]="false"
+        ></app-action-card>
+    }
+</div>

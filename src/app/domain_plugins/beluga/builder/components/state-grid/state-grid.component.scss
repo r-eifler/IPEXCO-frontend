@@ -2,6 +2,7 @@
     display: grid;
     grid-template-rows: 1fr 2fr auto;
     grid-template-columns: auto;
+    gap: var(--spacing-500);
 }
 
 .controls{

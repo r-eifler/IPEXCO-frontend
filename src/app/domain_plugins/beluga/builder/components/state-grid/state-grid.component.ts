@@ -4,6 +4,7 @@ import { HangarsStateComponent } from '../hangars-state/hangars-state.component'
 import { ProductionLineStateComponent } from '../production-line-state/production-line-state.component';
 import { RacksStateComponent } from '../racks-state/racks-state.component';
 import { TrailersStateComponent } from '../trailers-state/trailers-state.component';
+import { PlanSectionComponent } from '../plan-section/plan-section.component';
 
 @Component({
   selector: 'app-state-grid',
@@ -12,7 +13,8 @@ import { TrailersStateComponent } from '../trailers-state/trailers-state.compone
     FlightStateComponent,
     ProductionLineStateComponent,
     RacksStateComponent,
-    TrailersStateComponent
+    TrailersStateComponent,
+    PlanSectionComponent
   ],
   templateUrl: './state-grid.component.html',
   styleUrl: './state-grid.component.scss'
