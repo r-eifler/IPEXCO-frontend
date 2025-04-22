@@ -15,7 +15,7 @@
         @for(jig of jigsLoaded(); track jig.name){
             <app-jig
                 [jig]="jig"
-                [jigType]="jigTypes()?.[jig.name]"
+                [jigType]="jigTypes()?.[jig.type]"
                 [unitSize]="true"
             ></app-jig>
         }

@@ -7,7 +7,7 @@ import { Store } from '@ngrx/store';
 import { combineLatest, map, switchMap, take, tap } from 'rxjs';
 import { filterNotNullOrUndefined } from 'src/app/shared/common/check_null_undefined';
 import { createNewBelugaAction, startDrag, stopDrag } from '../../../builder/state/builder.actions';
-import { selectAvailableHangarNames, selectCurrentFlightName, selectCurrentFlightNextOutgoing, selectDeliverableJigs, selectDragInProgress, selectIsDropTargetTrailer, selectMaxPartSize, selectSizeUnit } from '../../../builder/state/builder.selector';
+import { selectAvailableHangarNames, selectCanDeliver, selectCurrentFlightName, selectCurrentFlightNextOutgoingJigType, selectDeliverableJigs, selectDragInProgress, selectIsDropTargetTrailer, selectMaxPartSize, selectSizeUnit } from '../../../builder/state/builder.selector';
 import { BelugaActionType, DeliverToHanger, LoadBeluga, PickUpRack } from '../../domain/beluga_plan';
 import { Jig, JigType, Side, Trailer } from '../../domain/beluga_problem';
 import { JigComponent } from '../jig/jig.component';
@@ -43,13 +43,13 @@ export class TrailerComponent {
   availableHangars$ = this.store.select(selectAvailableHangarNames);
   deliverableJigs$ = this.store.select(selectDeliverableJigs);
 
-  canDeliver$ = combineLatest([this.availableHangars$, this.deliverableJigs$]).pipe(
-    map(([availableHangars, deliverableJigs]) => deliverableJigs !== undefined ? 
-    this.jig()?.name in deliverableJigs && availableHangars.length > 0 : false)
+  canDeliver$ = toObservable(this.trailer).pipe(
+    filterNotNullOrUndefined(),
+    switchMap(t => this.store.select(selectCanDeliver(t.name)))
   );
 
   currentFlightName$ = this.store.select(selectCurrentFlightName);
-  nextOutgoingType = toSignal(this.store.select(selectCurrentFlightNextOutgoing));
+  nextOutgoingType = toSignal(this.store.select(selectCurrentFlightNextOutgoingJigType));
   canLoad = computed(() => this.nextOutgoingType() != null && this.nextOutgoingType() == this.jig()?.type);
 
   dragInProgress$ = this.store.select(selectDragInProgress);

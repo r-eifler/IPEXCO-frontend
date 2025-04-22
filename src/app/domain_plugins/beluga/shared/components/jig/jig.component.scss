@@ -29,6 +29,10 @@
     }
 }
 
+.jig:hover {
+    cursor: pointer;
+}
+
 .part {
     height: var(--part-height);
     min-width: 15px;
@@ -54,4 +58,8 @@
     .name{
         font-weight: 500;
     }
+}
+
+.part:hover {
+    cursor: pointer;
 }

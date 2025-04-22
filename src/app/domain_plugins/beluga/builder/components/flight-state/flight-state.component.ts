@@ -1,10 +1,10 @@
+import { AsyncPipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { selectTask, selectTaskState } from '../../state/builder.selector';
+import { selectCurrentOutgoingFlightSchedule, selectIncomingFlightStateJigs, selectJigTypes, selectOutgoingFlightStateJigs } from '../../state/builder.selector';
 import { IncomingFlightStateComponent } from '../incoming-flight-state/incoming-flight-state.component';
 import { OutgoingFlightStateComponent } from '../outgoing-flight-state/outgoing-flight-state.component';
-import { combineLatest, map } from 'rxjs';
-import { AsyncPipe } from '@angular/common';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-flight-state',
@@ -20,21 +20,11 @@ export class FlightStateComponent {
 
     store = inject(Store);
     
-    task$ = this.store.select(selectTask);
-    taskState$ = this.store.select(selectTaskState)
+    jigTypes$ = this.store.select(selectJigTypes);
 
-    jigTypes$ = this.task$.pipe(map(t => t?.jig_types));
+    incoming$ = this.store.select(selectIncomingFlightStateJigs);
+    outgoing$ = this.store.select(selectOutgoingFlightStateJigs);
 
-    incoming$ = this.taskState$.pipe(
-      map(ts => ts?.incoming?.map(jn => ts.jigs[jn]))
-    );
-
-    outgoing$ = this.taskState$.pipe(
-      map(ts => ts?.outgoing?.map(jn => ts.jigs[jn]))
-    );
-    jigTypesScheduled$ = combineLatest([this.task$, this.taskState$]).pipe(
-      map(([task, state]) => state?.flightIndex != undefined ? 
-      task?.flights[state?.flightIndex].outgoing : null)
-    )
+    jigTypesScheduled$ = this.store.select(selectCurrentOutgoingFlightSchedule);
 
 }

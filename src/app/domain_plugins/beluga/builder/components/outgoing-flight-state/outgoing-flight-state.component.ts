@@ -1,4 +1,4 @@
-import { Component, computed, input } from '@angular/core';
+import { Component, computed, effect, input } from '@angular/core';
 import { TranslocoModule } from '@jsverse/transloco';
 import { JigComponent } from '../../../shared/components/jig/jig.component';
 import { Jig, JigType } from '../../../shared/domain/beluga_problem';
@@ -19,5 +19,4 @@ export class OutgoingFlightStateComponent {
   jigTypes = input.required<Record<string,JigType>>();
 
   remaining = computed(() => this.jigTypesScheduled()?.length - this.jigsLoaded().length)
-
 }

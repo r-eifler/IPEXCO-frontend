@@ -4,11 +4,13 @@
     </div>
     <div class="vert-con">
         @if(jigs()?.length > 0){
-            <app-jig
-                [jig]="jigs()[0]"
-                [jigType]="jigTypes()?.[jigs()[0].type]"
+            @for(jig of jigs(); track jig.name){
+                <app-jig
+                [jig]="jig"
+                [jigType]="jigTypes()?.[jig.type]"
                 [unitSize]="true"
-            ></app-jig>
+                ></app-jig>
+            }
         }
         @else{
             <p>{{t('b.empty_flight')}}</p>
