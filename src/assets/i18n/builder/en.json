@@ -11,5 +11,9 @@
     "empty_flight": "flight empty",
     "no_jigs_scheduled": "no jigs scheduled",
     "line": "line",
-    "next_flight": "next flight"
+    "next_flight": "next flight",
+    "trailers": "trailers",
+    "production_lines": "production lines",
+    "factory": "factory",
+    "hangars": "hangars"
 }

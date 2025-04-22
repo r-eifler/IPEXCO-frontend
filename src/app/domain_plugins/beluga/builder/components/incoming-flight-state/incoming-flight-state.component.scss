@@ -1,7 +1,9 @@
 .main {
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-100)
+    gap: var(--spacing-200);
+    background-color: var(--flight);
+    padding: var(--spacing-300);
 }
 
 .vert-con {
@@ -9,4 +11,9 @@
     flex-direction: row;
     gap: var(--spacing-100);
     align-items: center;
+}
+
+.header{
+    font-size: larger;
+    font-weight: 500;
 }

@@ -17,7 +17,7 @@
     <div class="trailers">
         @for(trailer of trailersBeluga(); track trailer){
             <app-trailer
-                [name]="trailer.name"
+                [trailer]="trailer"
                 [side]="'bside'"
                 [jig]="trailer.jig"
                 [jigType]="jigTypes()?.[trailer.jig?.type]">
@@ -33,7 +33,7 @@
     <div class="trailers">
         @for(trailer of trailersFactory(); track trailer){
             <app-trailer
-                [name]="trailer.name"
+                [trailer]="trailer"
                 [side]="'fside'"
                 [jig]="trailer.jig"  
                 [jigType]="jigTypes()?.[trailer.jig?.type]">

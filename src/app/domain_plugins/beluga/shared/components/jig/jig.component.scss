@@ -8,7 +8,7 @@
 }
 
 .jig {
-    height: 40px;
+    height: var(--jig-height);
     min-width: 15px;
 
     border: solid;
@@ -23,10 +23,14 @@
 
     grid-column: 1;
     grid-row: 1;
+
+    .name{
+        font-weight: 500;
+    }
 }
 
 .part {
-    height: 30px;
+    height: var(--part-height);
     min-width: 15px;
 
     border: solid;
@@ -42,4 +46,12 @@
 
     grid-column: 1;
     grid-row: 1;
+
+    .name{
+        color: white;
+    }
+
+    .name{
+        font-weight: 500;
+    }
 }

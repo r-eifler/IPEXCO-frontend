@@ -1,12 +1,11 @@
+import { AsyncPipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { selectFlightFinished } from '../../state/builder.selector';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { provideTranslocoScope, TranslocoModule } from '@jsverse/transloco';
-import { AsyncPipe } from '@angular/common';
-import { SwitchBeluga } from '../../../shared/domain/beluga_plan';
+import { TranslocoModule } from '@jsverse/transloco';
+import { Store } from '@ngrx/store';
 import { nextFlight } from '../../state/builder.actions';
+import { selectFlightFinished } from '../../state/builder.selector';
 
 @Component({
   selector: 'app-controls',
@@ -15,12 +14,6 @@ import { nextFlight } from '../../state/builder.actions';
     MatIconModule,
     TranslocoModule,
     AsyncPipe,
-  ],
-  providers: [
-    provideTranslocoScope({
-      scope: "builder",
-      alias: "b",
-    }),
   ],
   templateUrl: './controls.component.html',
   styleUrl: './controls.component.scss'

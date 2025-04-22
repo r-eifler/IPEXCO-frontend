@@ -7,7 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { Store } from '@ngrx/store';
 import { BelugaActionType, UnloadBeluga } from '../../../shared/domain/beluga_plan';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { selectAvailableBelugaTrailers, selectCurrentFlight } from '../../state/builder.selector';
+import { selectAvailableBelugaTrailers, selectCurrentFlightSchedule } from '../../state/builder.selector';
 import { createNewBelugaAction } from '../../state/builder.actions';
 
 @Component({
@@ -28,8 +28,10 @@ export class IncomingFlightStateComponent {
   jigs = input.required<Jig[]>();
   jigTypes = input.required<Record<string,JigType>>();
 
+  remainingNumJigs = computed(() => this.jigs()?.length ?? '?')
+
   availableTrailers = toSignal(this.store.select(selectAvailableBelugaTrailers));
-  currentFlight = toSignal(this.store.select(selectCurrentFlight));
+  currentFlight = toSignal(this.store.select(selectCurrentFlightSchedule));
 
   unloadAvailable = computed(() => this.currentFlight() != null && 
     (this.availableTrailers()?.length ?? 0) > 0 && 

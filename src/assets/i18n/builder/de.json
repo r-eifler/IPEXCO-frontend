@@ -11,5 +11,9 @@
     "empty_flight": "Flug leer",
     "no_jigs_scheduled": "keine Montagegestelle geplant",
     "line": "Linie",
-    "next_flight": "nächster Flug"
+    "next_flight": "nächster Flug",
+    "trailers": "Trailers",
+    "production_lines": "Produktionslinien",
+    "factory": "Fabrik",
+    "hangars": "Hangars"
 }

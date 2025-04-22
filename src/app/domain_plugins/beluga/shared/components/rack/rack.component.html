@@ -3,22 +3,28 @@
         <span style="font-weight: 500;">{{ name() }}</span>
         <span>{{ occupied() }}/{{ rack()?.size }}</span>
     </div>
-    <div 
-        cdkDropList
-        [id]="rack()?.name"
-        [cdkDropListData]="rack()?.jigs"
-        (cdkDropListDropped)="drop($event)"
-        [cdkDropListEnterPredicate]="fits"
-        class="rack" 
-        [style.width]="((rack()?.size * 15) + 2) + 'px'"
-    >
-        @for(jig of rack()?.jigs; track jig){
-            <app-jig 
-                [jig]="jig" 
-                [jigType]="jigTypes()?.[jig?.type]"
-                [cdkDragData]="jig"
-                cdkDrag>
-            </app-jig>
-        }
+    <div>
+        <div 
+            cdkDropList
+            [id]="rack()?.name"
+            [cdkDropListData]="rack()?.jigs"
+            (cdkDropListDropped)="drop($event)"
+            [cdkDropListEnterPredicate]="fits"
+            class="rack" 
+            [style.width]="((rack()?.size * 15) + 2) + 'px'"
+            [class.dragTarget]="(isDragTarget$ | async) && (dragInProgress$ | async)"
+            [class.noDragTarget]="!(isDragTarget$ | async) && (dragInProgress$ | async)"
+        >
+            @for(jig of rack()?.jigs; track jig){
+                <app-jig 
+                    [jig]="jig" 
+                    [jigType]="jigTypes()?.[jig?.type]"
+                    [cdkDragData]="jig"
+                    cdkDrag
+                    (cdkDragStarted)="onStartDrag(jig)"
+                    (cdkDragEnded)="onCancelDrag()">
+                </app-jig>
+            }
+        </div>
     </div>
 </div>

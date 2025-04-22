@@ -8,16 +8,20 @@
         </button>
     }
     <div class="trailer" 
+        [style.width]="displaySize() + 'px' "
         cdkDropList [cdkDropListData]="[jig()]" 
         (cdkDropListDropped)="drop($event)"
-        [id]="name()"
-        [cdkDropListEnterPredicate]="empty">
+        [id]="trailer()?.name"
+        [cdkDropListEnterPredicate]="empty"
+        [class.dragTarget]="(isDragTarget$ | async) && (dragInProgress$ | async)"
+        [class.noDragTarget]="!(isDragTarget$ | async) && (dragInProgress$ | async)">
         @if(jig() != null){
             <app-jig 
                 [jig]="jig()" 
                 [jigType]="jigType()"
                 cdkDrag
                 [cdkDragData]="jig()"
+                (cdkDragStarted)="onStartDrag()"
             >
             </app-jig>
         }

@@ -1,6 +1,9 @@
-import { Component, computed, input } from '@angular/core';
+import { Component, computed, effect, inject, input } from '@angular/core';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Jig, JigType } from '../../domain/beluga_problem';
+import { Store } from '@ngrx/store';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { selectSizeUnit } from '../../../builder/state/builder.selector';
 
 @Component({
   selector: 'app-jig',
@@ -12,15 +15,21 @@ import { Jig, JigType } from '../../domain/beluga_problem';
 })
 export class JigComponent {
 
+  store = inject(Store);
+  sizeUnit = toSignal(this.store.select(selectSizeUnit));
+
   jig = input.required<Jig>()
   jigType = input.required<JigType>()
 
   unitSize = input<boolean>(false);
 
-  name = computed(() => this.jig()?.name.replace('jig',''))
+  name = computed(() => this.jig()?.name?.replace('jig',''))
 
   jigSize = computed(() => this.jigType()?.size_empty)
   partSize = computed(() => this.jigType()?.size_loaded)
+
+  jigDisplaySize = computed(() => (this.unitSize() ?? false) ? 55 : this.jigSize() * (this.sizeUnit() ?? 10))
+  partDisplaySize = computed(() => (this.unitSize() ?? false) ? 55 : this.partSize() * (this.sizeUnit() ?? 10))
 
   loaded = computed(() => ! this.jig()?.empty)
 

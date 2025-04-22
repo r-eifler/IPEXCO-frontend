@@ -1,6 +1,6 @@
 <div class="main" *transloco="let t">
     <div>
-        {{t('b.outgoing_flight')}}
+        <span class="header">{{t('b.outgoing_flight')}}</span>
     </div>
     <div>
         @if(jigTypesScheduled()?.length > 0){
@@ -11,10 +11,13 @@
         @else{
             <p>{{t('b.no_jigs_scheduled')}}</p>
         }
+        <div class="jigsCon">
         @for(jig of jigsLoaded(); track jig.name){
             <app-jig
                 [jig]="jig"
                 [jigType]="jigTypes()?.[jig.name]"
+                [unitSize]="true"
             ></app-jig>
         }
+        </div>
 </div>

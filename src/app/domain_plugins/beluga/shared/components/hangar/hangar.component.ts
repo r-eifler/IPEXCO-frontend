@@ -5,7 +5,7 @@ import { JigType } from '../../domain/beluga_problem';
 import { Jig } from '../beluga-plan-animation/beluga-plan-animation.component';
 import { JigComponent } from '../jig/jig.component';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { selectAvailableFactoryTrailers } from '../../../builder/state/builder.selector';
+import { selectAvailableFactoryTrailers, selectMaxPartSize, selectSizeUnit } from '../../../builder/state/builder.selector';
 import { BelugaActionType, GetFromHanger } from '../../domain/beluga_plan';
 import { combineLatest } from 'rxjs';
 import { Store } from '@ngrx/store';
@@ -29,6 +29,10 @@ export class HangarComponent {
     name = input.required<string>();
     jig = input.required<Jig>();
     jigType = input.required<JigType>();
+
+    sizeUnit = toSignal(this.store.select(selectSizeUnit));
+    maxPartSize = toSignal(this.store.select(selectMaxPartSize));
+    displaySize = computed(() => ((this.maxPartSize() ?? 20) * (this.sizeUnit() ?? 10)));
 
     availableTrailers = toSignal(this.store.select(selectAvailableFactoryTrailers));
 

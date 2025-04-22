@@ -1,12 +1,12 @@
-import { Component, inject, input } from '@angular/core';
-import { Jig, JigType, Side } from '../../../shared/domain/beluga_problem';
-import { TrailerComponent } from '../../../shared/components/trailer/trailer.component';
-import { JigComponent } from '../../../shared/components/jig/jig.component';
-import { Store } from '@ngrx/store';
-import { selectTask, selectTaskState } from '../../state/builder.selector';
-import { combineLatest, map } from 'rxjs';
-import { filterListNotNullOrUndefined } from 'src/app/shared/common/check_null_undefined';
 import { AsyncPipe } from '@angular/common';
+import { Component, effect, inject, input } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { TrailerComponent } from '../../../shared/components/trailer/trailer.component';
+import { Side, Trailer } from '../../../shared/domain/beluga_problem';
+import { selectJigTypes, selectTrailersStateList } from '../../state/builder.selector';
+import { Observable, switchMap } from 'rxjs';
+import { toObservable } from '@angular/core/rxjs-interop';
+import { filterNotNullOrUndefined } from 'src/app/shared/common/check_null_undefined';
 
 @Component({
   selector: 'app-trailers-state',
@@ -23,17 +23,11 @@ export class TrailersStateComponent {
 
   side = input.required<Side>();
 
-  task$ = this.store.select(selectTask);
-  taskState$ = this.store.select(selectTaskState)
-  jigTypes$ = this.task$.pipe(map(t => t?.jig_types));
+  jigTypes$ = this.store.select(selectJigTypes);
 
-  trailers$ = combineLatest([this.task$, this.taskState$]).pipe(
-    filterListNotNullOrUndefined(),
-    map(([task, state]) => {
-      let jigNames = this.side() == 'bside' ? task.trailers_beluga.map(tn => ({name: tn.name, jig:state?.trailersBeluga[tn.name]})) : 
-      task.trailers_factory.map(tn => ({name: tn.name, jig:state?.trailersFactory[tn.name]}))
-      return jigNames.map(t => ({name: t.name, jig: t.jig !== null ? state.jigs[t.jig] : null}));
-    }),
+  trailerStates$ = toObservable(this.side).pipe(
+    filterNotNullOrUndefined(),
+    switchMap(s => this.store.select(selectTrailersStateList(s))),
   );
-  
+
 }

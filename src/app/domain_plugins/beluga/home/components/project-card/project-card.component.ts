@@ -25,12 +25,6 @@ import { provideTranslocoScope, TranslocoModule } from '@jsverse/transloco';
     MatProgressBarModule,
     TranslocoModule
   ],
-  providers: [
-    provideTranslocoScope({
-      scope: "home",
-      alias: "h",
-    }),
-  ],
   templateUrl: './project-card.component.html',
   styleUrl: './project-card.component.scss'
 })

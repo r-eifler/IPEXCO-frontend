@@ -4,14 +4,14 @@ import { Component, computed, inject, input } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { Store } from '@ngrx/store';
-import { combineLatest, map, take, tap } from 'rxjs';
+import { combineLatest, map, switchMap, take, tap } from 'rxjs';
 import { filterNotNullOrUndefined } from 'src/app/shared/common/check_null_undefined';
-import { createNewBelugaAction } from '../../../builder/state/builder.actions';
-import { selectAvailableHangars, selectCurrentFlightName, selectCurrentFlightNextOutgoing, selectDeliverableJigs } from '../../../builder/state/builder.selector';
+import { createNewBelugaAction, startDrag, stopDrag } from '../../../builder/state/builder.actions';
+import { selectAvailableHangarNames, selectCurrentFlightName, selectCurrentFlightNextOutgoing, selectDeliverableJigs, selectDragInProgress, selectIsDropTargetTrailer, selectMaxPartSize, selectSizeUnit } from '../../../builder/state/builder.selector';
 import { BelugaActionType, DeliverToHanger, LoadBeluga, PickUpRack } from '../../domain/beluga_plan';
-import { Jig, JigType, Side } from '../../domain/beluga_problem';
+import { Jig, JigType, Side, Trailer } from '../../domain/beluga_problem';
 import { JigComponent } from '../jig/jig.component';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-trailer',
@@ -31,12 +31,16 @@ export class TrailerComponent {
 
   store = inject(Store);
 
-  name = input.required<string>();
+  trailer = input.required<Trailer>();
   side = input.required<Side>();
   jig = input.required<Jig>();
   jigType = input.required<JigType>();
 
-  availableHangars$ = this.store.select(selectAvailableHangars);
+  sizeUnit = toSignal(this.store.select(selectSizeUnit));
+  maxPartSize = toSignal(this.store.select(selectMaxPartSize));
+  displaySize = computed(() => ((this.maxPartSize() ?? 20) * (this.sizeUnit() ?? 10)));
+
+  availableHangars$ = this.store.select(selectAvailableHangarNames);
   deliverableJigs$ = this.store.select(selectDeliverableJigs);
 
   canDeliver$ = combineLatest([this.availableHangars$, this.deliverableJigs$]).pipe(
@@ -46,7 +50,13 @@ export class TrailerComponent {
 
   currentFlightName$ = this.store.select(selectCurrentFlightName);
   nextOutgoingType = toSignal(this.store.select(selectCurrentFlightNextOutgoing));
-  canLoad = computed(() => this.nextOutgoingType() != null && this.nextOutgoingType() == this.jig().type);
+  canLoad = computed(() => this.nextOutgoingType() != null && this.nextOutgoingType() == this.jig()?.type);
+
+  dragInProgress$ = this.store.select(selectDragInProgress);
+  isDragTarget$ = toObservable(this.trailer).pipe(
+    filterNotNullOrUndefined(),
+    switchMap(t => this.store.select(selectIsDropTargetTrailer(t.name))),
+  );
 
   empty = () => {
     return this.jig() == null;
@@ -64,7 +74,7 @@ export class TrailerComponent {
     let action: PickUpRack = {
       name: BelugaActionType.PICK_UP_RACK,
       j: newJig.name,
-      t: this.name(),
+      t: this.trailer()?.name,
       r: event.previousContainer.id,
       s: s
     };
@@ -72,6 +82,7 @@ export class TrailerComponent {
     console.log(action);
 
     this.store.dispatch(createNewBelugaAction({action}));
+    this.store.dispatch(stopDrag({target: this.trailer()}))
   }
 
   toHangar(){
@@ -85,8 +96,8 @@ export class TrailerComponent {
       let action: DeliverToHanger = {
         name: BelugaActionType.DELIVER_TO_HANGAR,
         j: this.jig().name,
-        t: this.name(),
-        h: availableHangars[0],
+        t: this.trailer()?.name,
+        h: availableHangars[0].name,
         pl: deliverableJigs[this.jig().name]
       };
   
@@ -109,13 +120,17 @@ export class TrailerComponent {
         name: BelugaActionType.LOAD_BELUGA,
         j: this.jig().name,
         b: flightName,
-        t: this.name()
+        t: this.trailer()?.name
       };
   
       console.log(action);
   
       this.store.dispatch(createNewBelugaAction({action}));
     });
+  }
+
+  onStartDrag(){
+    this.store.dispatch(startDrag({source: this.trailer(), jigName: this.jig().name}))
   }
 
 }

@@ -1,4 +1,4 @@
-<div>
+<div class="main">
     @for(pl of (productionLines$ | async); track pl.name){
         <app-production-line
             [line]="pl"

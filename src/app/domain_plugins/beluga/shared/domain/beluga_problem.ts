@@ -1,11 +1,15 @@
-import { array, boolean, number, object, record, string, infer as zinfer } from "zod";
+import { array, boolean, number, object, optional, record, string, infer as zinfer } from "zod";
 
 
 export type Side = 'bside' | 'fside'
 
 export const TrailerZ = object({
-    name: string()
-})
+    name: string(),
+    jig: optional(string()),
+}).transform(o => ({
+    ...o,
+    stageType: 'trailer' as const,
+}));
 
 export type Trailer = zinfer<typeof TrailerZ>;
 
@@ -29,7 +33,10 @@ export const RackZ = object({
     name: string(),
     size: number(),
     jigs: array(string())
-})
+}).transform(o => ({
+    ...o,
+    stageType: 'rack' as const,
+}));
 
 export type Rack = zinfer<typeof RackZ>;
 
@@ -37,6 +44,16 @@ export const ProductionLineZ = object({
     name: string(),
     schedule: array(string())
 })
+
+export const HangarZ = object({
+    name: string(),
+    jig: optional(string()),
+}).transform(o => ({
+    ...o,
+    stageType: 'hangar' as const,
+}));
+
+export type Hangar = zinfer<typeof HangarZ>;
 
 export type ProductionLine = zinfer<typeof ProductionLineZ>;
 

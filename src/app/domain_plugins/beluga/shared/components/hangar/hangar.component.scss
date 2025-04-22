@@ -9,7 +9,7 @@
 }
 
 .hangar {
-    height: 80px;
+    height: var(--hangar-height);
     min-width: 100px;
 
     padding-left: var(--spacing-200);

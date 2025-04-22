@@ -9,11 +9,8 @@
 }
 
 .trailer {
-    height: 50px;
+    height: var(--trailer-height);
     min-width: 100px;
-
-    padding-left: var(--spacing-200);
-    padding-right: var(--spacing-200);
 
     border: solid;
     border-width: 0px;
@@ -25,4 +22,14 @@
     width: fit-content;
     justify-content: space-around;
     align-items: center;
+}
+
+.dragTarget{
+    outline: solid;
+    outline-width: 2px;
+    outline-offset: -2px;
+}
+
+.noDragTarget{
+    opacity: 50%;
 }

@@ -9,9 +9,10 @@ import { PageSectionComponent } from './page-section/page-section.component';
 import { PageTitleActionComponent } from './page-title-action/page-title-action.component';
 import { PageTitleComponent } from './page-title/page-title.component';
 import { PageComponent } from './page/page.component';
+import { PageFullComponent } from './page-full/page-full.component';
 
 @NgModule({
-  imports: [ PageComponent, PageTitleComponent, PageContentComponent, PageTitleActionComponent, PageHeroComponent, PageSectionComponent, PageSectionListComponent, PageSectionTitleComponent, PageSectionContentComponent ],
-  exports: [ PageComponent, PageTitleComponent, PageContentComponent, PageTitleActionComponent, PageHeroComponent, PageSectionComponent, PageSectionListComponent, PageSectionTitleComponent, PageSectionContentComponent ],
+  imports: [ PageComponent, PageFullComponent, PageTitleComponent, PageContentComponent, PageTitleActionComponent, PageHeroComponent, PageSectionComponent, PageSectionListComponent, PageSectionTitleComponent, PageSectionContentComponent ],
+  exports: [ PageComponent, PageFullComponent, PageTitleComponent, PageContentComponent, PageTitleActionComponent, PageHeroComponent, PageSectionComponent, PageSectionListComponent, PageSectionTitleComponent, PageSectionContentComponent ],
 })
 export class PageModule { }
