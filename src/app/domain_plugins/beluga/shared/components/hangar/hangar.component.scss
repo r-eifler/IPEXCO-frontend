@@ -26,3 +26,13 @@
     justify-content: space-around;
     align-items: center;
 }
+
+.dragTarget{
+    outline: solid;
+    outline-width: 2px;
+    outline-offset: -2px;
+}
+
+.noDragTarget{
+    opacity: 50%;
+}

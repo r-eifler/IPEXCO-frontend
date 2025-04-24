@@ -1,12 +1,31 @@
+@let finishedPlanSections = finishedPlanSections$ | async;
+@let planSection = (planSection$ | async);
+
 <div class="main">
-    <app-init-card
-        [select]="false"
-    ></app-init-card>
-    @for(action of (planSection | async)?.actions; track action){
-        <app-action-card
-            [action]="action"
-            [highlight]="false"
+    <div class="sections">
+        @for(section of finishedPlanSections?.sections; track section; let idx = $index){
+            <app-section-card
+                [index]="idx"
+                [section]="section">
+            </app-section-card>
+        }
+        <app-section-card
+            [index]="finishedPlanSections?.sections.length"
+            [section]="planSection"
+            [isModified]="true"
+        >
+    </app-section-card>
+    </div>
+    <div class="actions">
+        <app-init-card
             [select]="false"
-        ></app-action-card>
-    }
+        ></app-init-card>
+        @for(action of planSection?.actions; track action){
+            <app-action-card
+                [action]="action"
+                [highlight]="false"
+                [select]="false"
+            ></app-action-card>
+        }
+    </div>
 </div>

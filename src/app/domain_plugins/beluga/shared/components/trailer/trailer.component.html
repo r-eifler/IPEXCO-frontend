@@ -14,14 +14,17 @@
         [id]="trailer()?.name"
         [cdkDropListEnterPredicate]="empty"
         [class.dragTarget]="(isDragTarget$ | async) && (dragInProgress$ | async)"
-        [class.noDragTarget]="!(isDragTarget$ | async) && (dragInProgress$ | async)">
+        [class.noDragTarget]="!(isDragTarget$ | async) && (dragInProgress$ | async)"
+    >
         @if(jig() != null){
             <app-jig 
                 [jig]="jig()" 
                 [jigType]="jigType()"
+                [draggable]="true"
                 cdkDrag
                 [cdkDragData]="jig()"
                 (cdkDragStarted)="onStartDrag()"
+                (cdkDragDropped)="onCancelDrag($event)"
             >
             </app-jig>
         }

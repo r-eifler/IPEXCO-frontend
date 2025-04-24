@@ -1,25 +1,24 @@
 @use "../../../../../../variables.scss" as vars;
 
-.main {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-200);
-
+.section{
+    width: fit-content;
     padding: var(--spacing-200);
     border: solid;
     border-width: 1px;
     @include vars.border_color();
     border-radius: var(--spacing-200);
-}
 
-.sections {
     display: flex;
     flex-direction: row;
+    align-items: center;
     gap: var(--spacing-100);
+
+    background-color: var(--action);
 }
 
-.actions {
-    display: flex;
-    flex-direction: row;
-    gap: var(--spacing-100);
+.highlight{
+    outline: solid;
+    outline-width: 2px;
+    outline-offset: -2px;
+    @include vars.border_color();
 }

@@ -1,7 +1,7 @@
 @let jigTypes = jigTypes$ | async;
 
 <div class="main">
-    @for(hangar of (hangars$ | async); track hangar){
+    @for(hangar of (hangars$ | async); track hangar.name){
         <app-hangar
             [name]="hangar.name"
             [jig]="hangar.jig"

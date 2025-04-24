@@ -1,14 +1,14 @@
-import { CdkDrag, CdkDragDrop, CdkDropList } from '@angular/cdk/drag-drop';
+import { CdkDrag, CdkDragDrop, CdkDragEnd, CdkDropList } from '@angular/cdk/drag-drop';
 import { AsyncPipe } from '@angular/common';
 import { Component, computed, inject, input } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { Store } from '@ngrx/store';
 import { combineLatest, map, switchMap, take, tap } from 'rxjs';
-import { filterNotNullOrUndefined } from 'src/app/shared/common/check_null_undefined';
-import { createNewBelugaAction, startDrag, stopDrag } from '../../../builder/state/builder.actions';
-import { selectAvailableHangarNames, selectCanDeliver, selectCurrentFlightName, selectCurrentFlightNextOutgoingJigType, selectDeliverableJigs, selectDragInProgress, selectIsDropTargetTrailer, selectMaxPartSize, selectSizeUnit } from '../../../builder/state/builder.selector';
-import { BelugaActionType, DeliverToHanger, LoadBeluga, PickUpRack } from '../../domain/beluga_plan';
+import { filterListNotNullOrUndefined, filterNotNullOrUndefined } from 'src/app/shared/common/check_null_undefined';
+import { cancelDrag, createNewBelugaAction, startDrag, stopDrag } from '../../../builder/state/builder.actions';
+import { selectAvailableHangarNames, selectCanDeliver, selectCurrentFlightName, selectCurrentFlightNextOutgoingJigType, selectDeliverableJigs, selectDraggedJig, selectDragInProgress, selectDragSource, selectIsDropTargetTrailer, selectMaxPartSize, selectSizeUnit } from '../../../builder/state/builder.selector';
+import { BelugaAction, BelugaActionType, DeliverToHanger, GetFromHanger, LoadBeluga, PickUpRack, UnloadBeluga } from '../../domain/beluga_plan';
 import { Jig, JigType, Side, Trailer } from '../../domain/beluga_problem';
 import { JigComponent } from '../jig/jig.component';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
@@ -53,10 +53,13 @@ export class TrailerComponent {
   canLoad = computed(() => this.nextOutgoingType() != null && this.nextOutgoingType() == this.jig()?.type);
 
   dragInProgress$ = this.store.select(selectDragInProgress);
-  isDragTarget$ = toObservable(this.trailer).pipe(
-    filterNotNullOrUndefined(),
-    switchMap(t => this.store.select(selectIsDropTargetTrailer(t.name))),
+  isDragTarget$ = combineLatest([toObservable(this.side), toObservable(this.trailer)]).pipe(
+    filterListNotNullOrUndefined(),
+    switchMap(([s,t]) => this.store.select(selectIsDropTargetTrailer(t.name, s))),
   );
+
+  dragSource = this.store.selectSignal(selectDragSource);
+  draggedJig = this.store.selectSignal(selectDraggedJig);
 
   empty = () => {
     return this.jig() == null;
@@ -64,25 +67,60 @@ export class TrailerComponent {
 
   drop(event: CdkDragDrop<Jig[]>){
     if (event.previousContainer === event.container) {
+      this.store.dispatch(cancelDrag());
       return;
     }
 
-    let newJig = event.previousContainer.data[event.previousIndex];
-
+    let newJig = this.draggedJig();
+    let source = this.dragSource()
     let s =  this.side();
 
-    let action: PickUpRack = {
-      name: BelugaActionType.PICK_UP_RACK,
-      j: newJig.name,
-      t: this.trailer()?.name,
-      r: event.previousContainer.id,
-      s: s
-    };
+    if(newJig === null || source === null){
+      return;
+    }
 
-    console.log(action);
+    let action: BelugaAction | undefined = undefined;
+  
+    if(source?.stageType == 'flight'){
 
-    this.store.dispatch(createNewBelugaAction({action}));
-    this.store.dispatch(stopDrag({target: this.trailer()}))
+      action = {
+        name: BelugaActionType.UNLOAD_BELUGA,
+        j: newJig,
+        b: source.name,
+        t: this.trailer().name
+      } as UnloadBeluga;
+
+    }
+
+
+    if(source?.stageType == 'rack'){
+
+      action = {
+        name: BelugaActionType.PICK_UP_RACK,
+        j: newJig,
+        t: this.trailer().name,
+        r: source.name,
+        s: s
+      } as PickUpRack;
+    }
+
+
+    if(source?.stageType == 'hangar'){
+
+      action = {
+        name: BelugaActionType.GET_FROM_HANGAR,
+        j: newJig,
+        t: this.trailer().name,
+        h: source.name,
+      } as GetFromHanger;
+    }
+
+    if(action !== undefined){
+      console.log(action);
+
+      this.store.dispatch(createNewBelugaAction({action}));
+      this.store.dispatch(stopDrag({target: this.trailer()}))
+    }
   }
 
   toHangar(){
@@ -130,7 +168,13 @@ export class TrailerComponent {
   }
 
   onStartDrag(){
-    this.store.dispatch(startDrag({source: this.trailer(), jigName: this.jig().name}))
+    this.store.dispatch(startDrag({source: this.trailer(), jigName: this.jig().name, sides: [this.side()]}))
+  }
+
+  onCancelDrag(event: CdkDragDrop<Jig>){
+    if(!event.isPointerOverContainer){
+      this.store.dispatch(cancelDrag())
+    }  
   }
 
 }

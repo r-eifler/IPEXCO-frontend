@@ -2,7 +2,7 @@ import { createReducer, on } from "@ngrx/store";
 import { Loadable, LoadingState } from "src/app/shared/common/loadable.interface";
 import { Project } from "src/app/shared/domain/project";
 import { BelugaActionType, SwitchBeluga } from "../../shared/domain/beluga_plan";
-import { BelugaProblem, BelugaProblemZ } from "../../shared/domain/beluga_problem";
+import { BelugaProblem, BelugaProblemZ, Side } from "../../shared/domain/beluga_problem";
 import { applyAction, BelugaState, getInitialState } from "../../shared/domain/beluga_state";
 import { FlightSectionPlan, PlanSection } from "../domain/plan";
 import { cancelDrag, createNewBelugaAction, loadProject, loadProjectSuccess, nextFlight, startDrag, stopDrag } from "./builder.actions";
@@ -10,7 +10,7 @@ import { cancelDrag, createNewBelugaAction, loadProject, loadProjectSuccess, nex
 
 export interface DragSource{
     name: string,
-    stageType: 'rack' | 'trailer' | 'incoming' | 'hangar'
+    stageType: 'rack' | 'trailer' | 'incoming' | 'hangar' | 'flight'
 }
 
 export interface HomeState {
@@ -19,9 +19,10 @@ export interface HomeState {
     task: BelugaProblem | null,
     taskState: BelugaState | null | undefined,
     plan: FlightSectionPlan,
-    currentSection: PlanSection,
+    currentSection: PlanSection | null,
     dragSource: DragSource | null,
     draggedJig: string | null,
+    draggedSides: Side[] | null,
 }
 
 
@@ -31,12 +32,10 @@ const initialState: HomeState = {
     task: null,
     taskState: null,
     plan: {sections: []},
-    currentSection:  {
-        actions: [],
-        finished: false
-    },
+    currentSection: null,
     dragSource: null,
     draggedJig: null,
+    draggedSides: null,
 }
 
 
@@ -48,11 +47,17 @@ export const HomeReducer = createReducer(
     })),
     on(loadProjectSuccess, (state, {project}): HomeState => {
         let task = BelugaProblemZ.parse(project?.baseTask?.model);
+        let taskState = getInitialState(task);
         return {
             ...state,
             project: {state: LoadingState.Done, data: project},
             task: BelugaProblemZ.parse(project?.baseTask?.model),
-            taskState: getInitialState(task),
+            taskState,
+            currentSection: {
+                initialState: taskState,
+                actions: [],
+                finished: false
+            }
         }
     }),
     on(createNewBelugaAction, (state, {action}): HomeState => ({
@@ -60,42 +65,49 @@ export const HomeReducer = createReducer(
         taskState: state.taskState !== null && state.taskState !== undefined && state.task != null ? 
             applyAction(state.taskState, action, state.task) : null,
         currentSection: {
-            ...state.currentSection,
-            actions: [...state.currentSection.actions, action]
+            initialState: state.currentSection?.initialState,
+            finished: false,
+            actions: [...(state.currentSection?.actions ?? []), action]
         }
     })),
     on(nextFlight, (state): HomeState => {
         let switchBelugaAction : SwitchBeluga = {name: BelugaActionType.SWITCH_TO_NEXT_BELUGA};
         let finishedSection = {
+            initialState: state.currentSection?.initialState,
             finished: true,
-            actions: [...state.currentSection.actions, switchBelugaAction]
-        }
+            actions: [...(state.currentSection?.actions ?? []), switchBelugaAction]
+        };
+        let finalState = state.taskState !== null && state.taskState !== undefined && state.task != null ? 
+            applyAction(state.taskState, switchBelugaAction, state.task) : undefined
         return {
             ...state,
-            taskState: state.taskState !== null && state.taskState !== undefined && state.task != null ? 
-                applyAction(state.taskState, switchBelugaAction, state.task) : null,
+            taskState: finalState,
             plan: {
                 sections: [...state.plan.sections, finishedSection]
             },
             currentSection: {
+                initialState: finalState,
                 finished: false,
                 actions: []
             }
         }
     }),
-    on(startDrag, (state, {source, jigName}): HomeState => ({
+    on(startDrag, (state, {source, jigName, sides}): HomeState => ({
         ...state,
         dragSource: source,
         draggedJig: jigName,
+        draggedSides: sides,
     })),
     on(stopDrag, (state): HomeState => ({
         ...state,
         dragSource: null,
         draggedJig: null,
+        draggedSides: null,
     })),
     on(cancelDrag, (state): HomeState => ({
         ...state,
         dragSource: null,
         draggedJig: null,
+        draggedSides: null,
     })),
 );

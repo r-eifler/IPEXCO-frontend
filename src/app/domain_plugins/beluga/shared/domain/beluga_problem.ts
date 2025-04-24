@@ -61,7 +61,10 @@ export const FlightZ = object({
     name: string(),
     incoming: array(string()),
     outgoing: array(string())
-})
+}).transform(o => ({
+    ...o,
+    stageType: 'flight' as const,
+}));
 
 export type Flight = zinfer<typeof FlightZ>;
 

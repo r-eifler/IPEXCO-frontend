@@ -7,8 +7,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { Store } from '@ngrx/store';
 import { BelugaActionType, UnloadBeluga } from '../../../shared/domain/beluga_plan';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { selectAvailableBelugaTrailers, selectCurrentFlightSchedule } from '../../state/builder.selector';
-import { createNewBelugaAction } from '../../state/builder.actions';
+import { selectAvailableBelugaTrailers, selectCurrentFlightSchedule, selectDragInProgress } from '../../state/builder.selector';
+import { cancelDrag, createNewBelugaAction, startDrag } from '../../state/builder.actions';
+import { CdkDropList, CdkDrag, CdkDragDrop } from '@angular/cdk/drag-drop';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-incoming-flight-state',
@@ -17,6 +19,9 @@ import { createNewBelugaAction } from '../../state/builder.actions';
     TranslocoModule,
     MatButtonModule,
     MatIconModule,
+	CdkDropList,
+	CdkDrag,
+	AsyncPipe,
   ],
   templateUrl: './incoming-flight-state.component.html',
   styleUrl: './incoming-flight-state.component.scss'
@@ -32,6 +37,7 @@ export class IncomingFlightStateComponent {
 
   availableTrailers = toSignal(this.store.select(selectAvailableBelugaTrailers));
   currentFlight = toSignal(this.store.select(selectCurrentFlightSchedule));
+  dragInProgress$ = this.store.select(selectDragInProgress);
 
   unloadAvailable = computed(() => this.currentFlight() != null && 
     (this.availableTrailers()?.length ?? 0) > 0 && 
@@ -52,5 +58,30 @@ export class IncomingFlightStateComponent {
 
       this.store.dispatch(createNewBelugaAction({action: unloadAction}));
     }
+  }
+
+  
+  drop(event: CdkDragDrop<Jig[]>){
+      if (event.previousContainer === event.container) {
+        this.store.dispatch(cancelDrag());
+      }
+    }
+
+  noDrop(){
+    return false;
+  }
+
+  onStartDrag(jig: Jig){
+    let flight = this.currentFlight();
+    if(flight !== undefined && flight !== null){
+    	this.store.dispatch(startDrag({source: flight, jigName: jig.name, sides: ['bside']}))
+    }
+      
+  }
+
+  onCancelDrag(event: CdkDragDrop<Jig>){
+    if(!event.isPointerOverContainer){
+      this.store.dispatch(cancelDrag())
+    }  
   }
 }

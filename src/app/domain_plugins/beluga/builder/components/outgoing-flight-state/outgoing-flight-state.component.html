@@ -1,4 +1,9 @@
-<div class="main" *transloco="let t">
+<div class="main" *transloco="let t"
+    cdkDropList  
+    (cdkDropListDropped)="drop($event)"
+    [class.dragTarget]="(isDragTarget$ | async) && (dragInProgress$ | async)"
+    [class.noDragTarget]="!(isDragTarget$ | async) && (dragInProgress$ | async)"
+>
     <div>
         <span class="header">{{t('b.outgoing_flight')}}</span>
     </div>

@@ -5,12 +5,24 @@
     <button mat-icon-button (click)="fromHangar()" [disabled]="!trailerAvailable()">
         <mat-icon>arrow_backward</mat-icon>
     </button>
-    <div class="hangar">
+    <div class="hangar"
+        cdkDropList [cdkDropListData]="[jig()]" 
+        (cdkDropListDropped)="drop($event)"
+        [id]="name()"
+        [cdkDropListEnterPredicate]="empty"
+        [class.dragTarget]="(isDragTarget$ | async) && (dragInProgress$ | async)"
+        [class.noDragTarget]="!(isDragTarget$ | async) && (dragInProgress$ | async)"
+    >
         @if(jig() != null){
             <app-jig 
                 [jig]="jig()" 
                 [jigType]="jigType()"
                 [unitSize]="true"
+                [draggable]="true"
+                cdkDrag
+                [cdkDragData]="jig()"
+                (cdkDragStarted)="onStartDrag()"
+                (cdkDragDropped)="onCancelDrag($event)"
             >
             </app-jig>
         }

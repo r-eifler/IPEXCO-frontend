@@ -2,7 +2,8 @@
     "projects": "Projects",
     "project": "Project",
     "new_project": "New Project",
-    "flights": "fligts",
+    "flights": "flights",
+    "flight": "flight",
     "racks": "racks",
     "jigs": "jigs",
     "manual_planning": "Manual Planning",
@@ -15,5 +16,7 @@
     "trailers": "trailers",
     "production_lines": "production lines",
     "factory": "factory",
-    "hangars": "hangars"
+    "hangars": "hangars",
+    "remaining_jigs": "remaining jigs",
+    "actions": "actions"
 }

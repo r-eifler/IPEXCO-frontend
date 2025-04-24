@@ -1,6 +1,6 @@
 import { Component, computed, inject, input } from '@angular/core';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { getJigSize, Jig, JigType, Rack } from '../../domain/beluga_problem';
+import { getJigSize, Jig, JigType, Rack, Side } from '../../domain/beluga_problem';
 import { JigComponent } from '../jig/jig.component';
 import { sum } from 'ramda';
 import {CdkDrag, CdkDragDrop, CdkDragStart, CdkDropList} from '@angular/cdk/drag-drop';
@@ -8,7 +8,7 @@ import { BelugaActionType, PutDownRack } from '../../domain/beluga_plan';
 import { Store } from '@ngrx/store';
 import { cancelDrag, createNewBelugaAction, startDrag, stopDrag } from '../../../builder/state/builder.actions';
 import { DragSource } from '../../../builder/state/builder.reducer';
-import { selectDragInProgress, selectIsDropTargetRack } from '../../../builder/state/builder.selector';
+import { selectDraggedJig, selectDraggedSides, selectDragInProgress, selectDragSource, selectIsDropTargetRack } from '../../../builder/state/builder.selector';
 import { AsyncPipe } from '@angular/common';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { filterNotNullOrUndefined } from 'src/app/shared/common/check_null_undefined';
@@ -55,34 +55,55 @@ export class RackComponent {
     switchMap(r => this.store.select(selectIsDropTargetRack(r.name))),
   );
 
+  dragSource = this.store.selectSignal(selectDragSource);
+  draggedJig = this.store.selectSignal(selectDraggedJig);
+  draggedSides = this.store.selectSignal(selectDraggedSides);
+
   drop(event: CdkDragDrop<Jig[]>){
     if (event.previousContainer === event.container) {
+      this.store.dispatch(cancelDrag());
       return;
     }
 
-    console.log(event);
+    let newJig = this.draggedJig();
+    let source = this.dragSource()
+    let sides =  this.draggedSides();
 
-    let newJig = event.previousContainer.data[event.previousIndex];
-
-    let action: PutDownRack = {
-      name: BelugaActionType.PUT_DOWN_RACK,
-      j: newJig.name,
-      t: event.previousContainer.id,
-      r: this.rack()?.name,
-      s: event.distance.x >= 0 ? 'bside' : 'fside'
-    };
-
-    console.log(action);
-
-    this.store.dispatch(createNewBelugaAction({action}));
-    this.store.dispatch(stopDrag({target: this.rack()}))
+    if(source?.stageType == 'trailer' && sides?.length == 1 && newJig != null){
+      let action: PutDownRack = {
+        name: BelugaActionType.PUT_DOWN_RACK,
+        j: newJig,
+        t: source.name,
+        r: this.rack()?.name,
+        s: sides[0]
+      };
+  
+      console.log(action);
+  
+      this.store.dispatch(createNewBelugaAction({action}));
+      this.store.dispatch(stopDrag({target: this.rack()}))
+    }
   }
 
-  onStartDrag(jig: Jig){
-    this.store.dispatch(startDrag({source: this.rack(), jigName: jig.name}))
+  onStartDrag(jig: Jig, sides: Side[]){
+    this.store.dispatch(startDrag({source: this.rack(), jigName: jig.name, sides}))
   }
 
-  onCancelDrag(){
-    this.store.dispatch(cancelDrag())
+  onCancelDrag(event: CdkDragDrop<Jig>){
+    if(!event.isPointerOverContainer){
+      this.store.dispatch(cancelDrag());
+    }  
+  }
+
+  getSides(index: number){
+    if(this.rack().jigs.length <= 1){
+      return ['bside', 'fside'] as Side[];
+    }
+    if(index === 0){
+      return ['bside'] as Side[];
+    }
+    else{
+      return ['fside'] as Side[];
+    }
   }
 }

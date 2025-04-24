@@ -1,0 +1,4 @@
+<div *transloco="let t" class="section"
+    [class.highlight]="isModified()">
+    <span>{{ t('b.flight') }}: {{ index() }}</span> <span>#{{ t('b.actions') }}: {{ numActions() }}</span>
+</div>

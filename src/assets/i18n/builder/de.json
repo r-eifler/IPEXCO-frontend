@@ -3,6 +3,7 @@
     "project": "Projekt",
     "new_project": "Neues Projekt",
     "flights": "Flüge",
+    "flight": "Flug",
     "racks": "Ablagen",
     "jigs": "Montagegestelle",
     "manual_planning": "Manuelle Planung",
@@ -15,5 +16,7 @@
     "trailers": "Trailers",
     "production_lines": "Produktionslinien",
     "factory": "Fabrik",
-    "hangars": "Hangars"
+    "hangars": "Hangars",
+    "remaining_jigs": "verbleibende Montagegestelle",
+    "actions": "Aktionen",
 }

@@ -31,6 +31,9 @@ export const selectMaxPartSize = createSelector(selectTask,
 
 // Plan
 
+export const selectFinishedPlanSections = createSelector(BuilderFeature.selectPlan, 
+    (plan) => plan);
+
 export const selectCurrentPlanSection = createSelector(BuilderFeature.selectCurrentSection, 
     (section) => section);
 
@@ -205,6 +208,12 @@ export const selectHangars = createSelector(selectTask,
 export const selectHangarsState = createSelector(selectTaskState, 
     (taskState) => taskState?.hangars)
 
+export const selectHangarState = memoizeWith(
+    (name: string) => name,
+    (name: string) => createSelector(selectHangarsState,
+        (hangars => hangars?.[name])
+));
+
 export const selectHangarsStateList = createSelector(selectHangars, selectHangarsState, selectJigsState,
     (hangars, hangarsState, jigsState) => hangars?.map(h => {
         let jigName = hangarsState?.[h.name];
@@ -248,6 +257,8 @@ export const selectDragSource = createSelector(selectState,
 export const selectDraggedJig= createSelector(selectState, 
     (state) => (state.draggedJig));
 
+export const selectDraggedSides= createSelector(selectState, 
+    (state) => (state.draggedSides));
 
 export const selectDragInProgress= createSelector(selectDraggedJig, 
     (jig) => jig !== null);
@@ -256,7 +267,7 @@ export const selectIsDropTargetRack = memoizeWith(
     (name: string) => name,
     (name: string) =>  createSelector(selectDragSource, selectDraggedJig, selectJigsState, selectJigTypes, selectFreeSpaceRack(name),
         (dragSource, draggedJigName, jigs, jigTypes, freeSpace) => {
-            if(dragSource?.stageType == 'rack' || draggedJigName === null || jigs === undefined){
+            if(dragSource?.stageType !== 'trailer' || draggedJigName === null || jigs === undefined){
                 return false;
             }
             let jig = jigs[draggedJigName];
@@ -271,15 +282,58 @@ export const selectIsDropTargetRack = memoizeWith(
 
 
 export const selectIsDropTargetTrailer = memoizeWith(
-    (name: string) => name,
-    (name: string) =>  createSelector(selectDragSource, selectDraggedJig, selectTrailerState(name),
-        (dragSource, draggedJigName, trailerState) => {
-            if(dragSource?.stageType == 'trailer' || draggedJigName === null){
+    (name: string, trailerSide: Side) => name + trailerSide,
+    (name: string, trailerSide: Side) =>  createSelector(selectDragSource, selectDraggedJig, selectDraggedSides, selectTrailerState(name),
+        (dragSource, draggedJigName, sides, trailerState) => {
+            if(!sides?.includes(trailerSide)){
                 return false;
             }
-            return trailerState === null;
+
+            if(trailerSide == 'bside'){
+                if((dragSource?.stageType !== 'flight' && dragSource?.stageType !== 'rack') || draggedJigName === null){
+                    return false;
+                }
+                return trailerState === null;
+            }
+            if(trailerSide == 'fside'){
+                if((dragSource?.stageType !== 'hangar' && dragSource?.stageType !== 'rack') || draggedJigName === null){
+                    return false;
+                }
+                return trailerState === null;
+            }
         }
     )
 ); 
+
+
+export const selectIsDropTargetHangar = memoizeWith(
+    (name: string) => name,
+    (name: string) =>  createSelector(selectDragSource, selectDraggedJig, selectDraggedSides, selectDeliverableJigs, selectHangarState(name),
+        (dragSource, draggedJigName, sides, deliverableJigs, hangarState) => {
+            if(!sides?.includes('fside')){
+                return false;
+            }
+            if(dragSource?.stageType !== 'trailer' || draggedJigName === null || ! (draggedJigName in deliverableJigs)){
+                return false;
+            }
+            return hangarState === null;
+        }
+    )
+); 
+
+
+export const selectIsDropTargetFlightOutgoing = createSelector(selectDragSource, selectDraggedJig, selectDraggedSides, selectCurrentFlightNextOutgoingJigType, selectJigsState,
+    (dragSource, draggedJigName, sides, nextType, jigs) => {
+        if(!sides?.includes('bside')){
+            return false;
+        }
+        if(dragSource?.stageType !== 'trailer' || draggedJigName === null || jigs === undefined){
+            return false;
+        }
+        return nextType === jigs[draggedJigName].type;
+    }
+);
+ 
+
 
 

@@ -4,11 +4,14 @@ import { Jig, JigType } from '../../domain/beluga_problem';
 import { Store } from '@ngrx/store';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { selectSizeUnit } from '../../../builder/state/builder.selector';
+import { startDrag } from '../../../builder/state/builder.actions';
+import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-jig',
   imports: [
     MatTooltipModule,
+    NgClass
   ],
   templateUrl: './jig.component.html',
   styleUrl: './jig.component.scss'
@@ -21,6 +24,7 @@ export class JigComponent {
   jig = input.required<Jig>()
   jigType = input.required<JigType>()
 
+  draggable = input<boolean>(false);
   unitSize = input<boolean>(false);
 
   name = computed(() => this.jig()?.name?.replace('jig',''))
@@ -38,4 +42,15 @@ export class JigComponent {
     ' size: ' + (this.jig()?.empty ? this.jigType()?.size_empty : this.jigType()?.size_loaded) +
     ' type: ' + this.jig()?.type
   )
+
+  isHovering =  false;
+
+  onHover() {
+    this.isHovering = true;
+  }
+
+  onMouseOut() {
+    this.isHovering = false;
+  }
+
 }

@@ -15,16 +15,27 @@
             [class.dragTarget]="(isDragTarget$ | async) && (dragInProgress$ | async)"
             [class.noDragTarget]="!(isDragTarget$ | async) && (dragInProgress$ | async)"
         >
-            @for(jig of rack()?.jigs; track jig){
-                <app-jig 
-                    [jig]="jig" 
-                    [jigType]="jigTypes()?.[jig?.type]"
-                    [cdkDragData]="jig"
-                    cdkDrag
-                    (cdkDragStarted)="onStartDrag(jig)"
-                    (cdkDragEnded)="onCancelDrag()">
-                </app-jig>
-            }
+            @for(jig of rack()?.jigs; track jig; let idx = $index){
+                @if(idx === 0 || idx === rack()?.jigs.length - 1){
+                    <app-jig 
+                        [jig]="jig" 
+                        [jigType]="jigTypes()?.[jig?.type]"
+                        [cdkDragData]="jig"
+                        [draggable]="true"
+                        cdkDrag
+                        (cdkDragStarted)="onStartDrag(jig, getSides(idx))"
+                        (cdkDragDropped)="onCancelDrag($event)"    
+                    >
+                    </app-jig>
+                }
+                @else{
+                    <app-jig 
+                        [jig]="jig" 
+                        [jigType]="jigTypes()?.[jig?.type]"
+                    >
+                    </app-jig>
+                }
+            }   
         </div>
     </div>
 </div>
