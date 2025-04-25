@@ -6,6 +6,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { Store } from '@ngrx/store';
 import { selectSizeUnit } from '../../../builder/state/builder.selector';
 import { Jig, JigType } from '../../domain/beluga_problem';
+import { OverlayModule } from '@angular/cdk/overlay';
 
 @Component({
   selector: 'app-jig',
@@ -13,6 +14,7 @@ import { Jig, JigType } from '../../domain/beluga_problem';
     MatTooltipModule,
     NgClass,
     MatIconModule,
+    OverlayModule,
   ],
   templateUrl: './jig.component.html',
   styleUrl: './jig.component.scss'
@@ -38,6 +40,9 @@ export class JigComponent {
 
   loaded = computed(() => ! this.jig()?.empty)
 
+  status = computed(() => this.jig()?.empty ? 'empty' : 'loaded');
+  size = computed(() => this.jig()?.empty ? this.jigType()?.size_empty : this.jigType()?.size_loaded);
+  type = computed(() => this.jig()?.type);
   tooltip = computed(() => 
     "status: " + (this.jig()?.empty ? 'empty' : 'loaded') +
     ' size: ' + (this.jig()?.empty ? this.jigType()?.size_empty : this.jigType()?.size_loaded) +
@@ -53,5 +58,7 @@ export class JigComponent {
   onMouseOut() {
     this.isHovering = false;
   }
+
+  isOpen = false;
 
 }

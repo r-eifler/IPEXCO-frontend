@@ -1,7 +1,11 @@
-<div class="container" [ngClass]="{'hover': isHovering  && draggable()}" (mouseover)="onHover()" (mouseout)="onMouseOut()">
+<div 
+    class="container" 
+    [ngClass]="{'hover': isHovering  && draggable()}" 
+    (mouseover)="onHover()" (mouseout)="onMouseOut()"
+    cdkOverlayOrigin #trigger="cdkOverlayOrigin"
+>
     <div 
         class="jig" 
-        [matTooltip]="tooltip()"
         [style.width]="jigDisplaySize() + 'px'  "
         [ngClass]="{'hover': isHovering && draggable()}"
     >
@@ -12,7 +16,6 @@
     @if(loaded()){
         <div
             class="part" 
-            [matTooltip]="tooltip()"
             [style.width]="partDisplaySize() + 'px'  "
             [ngClass]="{'hover': isHovering && draggable()}"
         >
@@ -25,6 +28,19 @@
            
         </div>
     }
+    <ng-template
+        cdkConnectedOverlay
+        [cdkConnectedOverlayOrigin]="trigger"
+        [cdkConnectedOverlayOpen]="isHovering"
+    >
+        <div class="info">
+            <ul class="example-list">
+                <li>status: {{status()}}</li>
+                <li>size: {{size()}}</li>
+                <li>type: {{type()}}</li>
+            </ul>
+        </div>
+    </ng-template>
     @if(!draggable() && !unitSize()){
         <mat-icon class="icon">lock</mat-icon>
     }

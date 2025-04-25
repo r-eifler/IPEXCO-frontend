@@ -6,6 +6,7 @@ import { TranslocoModule } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 import { nextFlight } from '../../state/builder.actions';
 import { selectFlightFinished } from '../../state/builder.selector';
+import { OverlayModule } from '@angular/cdk/overlay';
 
 @Component({
   selector: 'app-controls',
@@ -27,5 +28,4 @@ export class ControlsComponent {
   nextFlight(){  
       this.store.dispatch(nextFlight());
   }
-
 }
