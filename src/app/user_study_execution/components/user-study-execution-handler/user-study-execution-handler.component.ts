@@ -2,7 +2,7 @@ import { AsyncPipe } from '@angular/common';
 import { Component, inject, output } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBar } from '@angular/material/progress-bar';
 import { Store } from '@ngrx/store';
@@ -113,7 +113,7 @@ export class UserStudyExecutionHandlerComponent {
           return;
         }
         if(step.type === UserStudyStepType.demo){
-          let dialogRef = null;
+          let dialogRef: null | MatDialogRef<AskDeleteComponent> = null;
           if(demo.settings.userStudy.introTask){
             dialogRef = this.dialog.open(AskDeleteComponent, {
               data: {

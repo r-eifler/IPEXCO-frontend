@@ -159,7 +159,7 @@ export function predicateToFact(pred: PDDLPredicate): PDDLFact {
     fact: PDDLFact,
     args: Map<string, string>
   ): PDDLFact {
-    let init_args = [];
+    let init_args: string[] = [];
     for (const arg of fact.arguments) {
       const value = args.get(arg);
       if(value === undefined){
@@ -205,12 +205,12 @@ export function predicateToFact(pred: PDDLPredicate): PDDLFact {
     }
     );
   
-    let i_precon = [];
+    let i_precon: PDDLFact[] = [];
     for (const pre of action.precondition) {
       i_precon.push(instantiateFactFromArgsMap(pre, args_map));
     }
   
-    let i_eff = [];
+    let i_eff: PDDLFact[] = [];
     for (const eff of action.effect) {
       i_eff.push(instantiateFactFromArgsMap(eff, args_map));
     }

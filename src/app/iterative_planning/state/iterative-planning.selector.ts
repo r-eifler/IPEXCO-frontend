@@ -99,21 +99,18 @@ export const selectIterativePlanningIterationStepComputationRunning = createSele
 });
 
 export const selectIterativePlanningCurrentMaxUtility = createSelector(selectState, (state) => {
-    let cmu = undefined;
     if(!state.iterationSteps.data || state.iterationSteps.data.length === 0 || state.planProperties.data == undefined){
       return 0;
     } 
-    cmu = computeCurrentMaxUtility(state.iterationSteps.data, state.planProperties.data);
-    return cmu;
+    return computeCurrentMaxUtility(state.iterationSteps.data, state.planProperties.data);
 });
 
 export const selectIterativePlanningMaxPossibleUtility = createSelector(selectState, (state) => {
-  let maxOverallUtility = undefined;
   if(state.project?.data?.itemType === 'demo-project' && state.planProperties.data !== undefined){
-    maxOverallUtility = computeMaxPossibleUtility(state.project.data as Demo, Object.values(state.planProperties.data))
+    return computeMaxPossibleUtility(state.project.data as Demo, Object.values(state.planProperties.data))
   }
 
-  return maxOverallUtility;
+  return undefined;
 });
 
 

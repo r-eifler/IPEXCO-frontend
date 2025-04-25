@@ -4,7 +4,7 @@ import { catchError, filter, first, map, switchMap, tap } from "rxjs/operators";
 import { of, from, concat } from "rxjs";
 import { LLMService } from "../../../LLM/service/llm.service";
 import { concatLatestFrom } from "@ngrx/operators";
-import { Store } from "@ngrx/store";
+import { Action, Store } from "@ngrx/store";
 import { selectIterativePlanningProject, selectIterativePlanningProjectExplanationInterfaceType, selectIterativePlanningProperties, selectIterativePlanningSelectedStep, selectIterationStepById } from "../../../iterative_planning/state/iterative-planning.selector";
 import { selectUnsatisfiedSoftGoals } from "src/app/iterative_planning/view/step-detail-view/step-detail-view.component.selector";
 import { selectSatisfiedSoftGoals } from "src/app/iterative_planning/view/step-detail-view/step-detail-view.component.selector";
@@ -188,7 +188,7 @@ export class SendMessageToLLMEffect {
                                 const successAction = of(sendMessageToLLMQuestionTranslatorSuccess({ duration }));
                                 
                                 // Create an array of actions
-                                const actions = [];
+                                const actions: Action[] = [];
                                 
                                 // Success action is always included
                                 actions.push(sendMessageToLLMQuestionTranslatorSuccess({ duration }));
