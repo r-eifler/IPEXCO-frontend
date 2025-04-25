@@ -20,7 +20,7 @@ export class AcceptUserStudyParticipantEffect{
         ofType(acceptUserStudyParticipant),
         switchMap(({userId}) => this.service.accept(userId).pipe(
             switchMap(() => [acceptUserStudyParticipantSuccess()]),
-            catchError(() => of(createUserStudyFailure()))
+            catchError((err) => of(createUserStudyFailure(err)))
         ))
     ))
 }
