@@ -8,6 +8,19 @@
     align-items: center;
 }
 
+.trailer-container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-050);
+    
+}
+
+.info-container {
+    display: flex;
+    flex-direction: row;
+    gap: var(--spacing-100);
+}
+
 .trailer {
     height: var(--trailer-height);
     min-width: 100px;

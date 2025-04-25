@@ -1,17 +1,18 @@
-import { Component, computed, effect, inject, input } from '@angular/core';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { Jig, JigType } from '../../domain/beluga_problem';
-import { Store } from '@ngrx/store';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { selectSizeUnit } from '../../../builder/state/builder.selector';
-import { startDrag } from '../../../builder/state/builder.actions';
 import { NgClass } from '@angular/common';
+import { Component, computed, inject, input } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { Store } from '@ngrx/store';
+import { selectSizeUnit } from '../../../builder/state/builder.selector';
+import { Jig, JigType } from '../../domain/beluga_problem';
 
 @Component({
   selector: 'app-jig',
   imports: [
     MatTooltipModule,
-    NgClass
+    NgClass,
+    MatIconModule,
   ],
   templateUrl: './jig.component.html',
   styleUrl: './jig.component.scss'

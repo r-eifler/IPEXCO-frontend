@@ -1,33 +1,36 @@
 <div class="container">
-    <!-- <div>
-        <mat-icon>local_shipping</mat-icon>
-    </div> -->
     @if(side() =='bside'){
         <button mat-icon-button (click)="load()" [disabled]="!canLoad()">
             <mat-icon>arrow_backward</mat-icon>
         </button>
     }
-    <div class="trailer" 
-        [style.width]="displaySize() + 'px' "
-        cdkDropList [cdkDropListData]="[jig()]" 
-        (cdkDropListDropped)="drop($event)"
-        [id]="trailer()?.name"
-        [cdkDropListEnterPredicate]="empty"
-        [class.dragTarget]="(isDragTarget$ | async) && (dragInProgress$ | async)"
-        [class.noDragTarget]="!(isDragTarget$ | async) && (dragInProgress$ | async)"
-    >
-        @if(jig() != null){
-            <app-jig 
-                [jig]="jig()" 
-                [jigType]="jigType()"
-                [draggable]="true"
-                cdkDrag
-                [cdkDragData]="jig()"
-                (cdkDragStarted)="onStartDrag()"
-                (cdkDragDropped)="onCancelDrag($event)"
-            >
-            </app-jig>
-        }
+    <div class="trailer-container">
+        <div class="info-container">
+            <span style="font-weight: 500;">{{ trailer()?.name }}</span>
+        </div>
+        <div class="trailer" 
+            [style.width]="displaySize() + 'px' "
+            cdkDropList [cdkDropListData]="[jig()]" 
+            (cdkDropListDropped)="drop($event)"
+            [id]="trailer()?.name"
+            [cdkDropListEnterPredicate]="empty"
+            [class.dragTarget]="(isDragTarget$ | async) && (dragInProgress$ | async)"
+            [class.noDragTarget]="!(isDragTarget$ | async) && (dragInProgress$ | async)"
+        >
+            @if(jig() != null){
+                <app-jig 
+                    [jig]="jig()" 
+                    [jigType]="jigType()"
+                    [draggable]="true"
+                    cdkDrag
+                    [cdkDragData]="jig()"
+                    (cdkDragStarted)="onStartDrag()"
+                    (cdkDragDropped)="onCancelDrag($event)"
+                    cdkDragBoundary=".beluga-boundary"
+                >
+                </app-jig>
+            }
+        </div>
     </div>
     @if(side() =='fside'){
         <button mat-icon-button (click)="toHangar()" [disabled]="!(canDeliver$ | async)">

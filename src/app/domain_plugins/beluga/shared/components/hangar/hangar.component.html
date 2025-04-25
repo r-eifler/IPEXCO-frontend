@@ -23,6 +23,7 @@
                 [cdkDragData]="jig()"
                 (cdkDragStarted)="onStartDrag()"
                 (cdkDragDropped)="onCancelDrag($event)"
+                cdkDragBoundary=".beluga-boundary"
             >
             </app-jig>
         }
