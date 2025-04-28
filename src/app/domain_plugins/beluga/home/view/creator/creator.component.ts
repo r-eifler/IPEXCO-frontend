@@ -24,6 +24,8 @@ import { selectDomainSpecifications } from "../../state/home.selector";
 import { find } from "ramda";
 import { filterNotNullOrUndefined } from "src/app/shared/common/check_null_undefined";
 import { loadDomainSpecification } from "src/app/iterative_planning/state/iterative-planning.actions";
+import { BelugaProblemZ } from "../../../shared/domain/beluga_problem";
+import { mode } from "d3";
 
 
 @Component({
@@ -92,9 +94,20 @@ export class ProjectCreatorComponent {
   )
 
 
-  objects$ = this.domainDependentModel$.pipe(
-    map((domainDependentModel) => {
-      return [];
+  objects$ = this.model$.pipe(
+    filterNotNullOrUndefined(),
+    map((model) => {
+      let belugaModel = BelugaProblemZ.parse(model);
+      let objects: {name: string, type: string}[] = [];
+
+      Object.values(belugaModel.jigs).forEach(jig => objects.push({name: jig.name, type: jig.type}));
+      Object.values(belugaModel.trailers_beluga).forEach(t => objects.push({name: t.name, type: 'trailer'}));
+      Object.values(belugaModel.trailers_factory).forEach(t => objects.push({name: t.name, type: 'trailer'}));
+      Object.values(belugaModel.hangars).forEach(h => objects.push({name: h, type: 'hangar'}));
+      Object.values(belugaModel.production_lines).forEach(pl => objects.push({name: pl.name, type: 'production_line'}));
+      Object.values(belugaModel.flights).forEach(f => objects.push({name: f.name, type: 'flight'}));
+
+      return objects;
     }),
     shareReplay(1),
   )
