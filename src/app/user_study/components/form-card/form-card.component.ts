@@ -78,10 +78,10 @@ export class FormCardComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.form.controls.name.setValue(this.step().name);
-    this.form.controls.time.setValue(this.step().time);
-    this.form.controls.url.setValue(this.step().content.link)
-    this.form.controls.code.setValue(this.step().content.code)
+    this.form.controls.name.setValue(this.step()?.name);
+    this.form.controls.time.setValue(this.step()?.time);
+    this.form.controls.url.setValue(this.step()?.content?.link)
+    this.form.controls.code.setValue(this.step()?.content?.code)
   }
 
   moveUp() {
