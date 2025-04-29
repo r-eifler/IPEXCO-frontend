@@ -68,4 +68,10 @@
 .info{
     background-color: white;
     padding: var(--spacing-100);
+
+    border: solid;
+    border-width: 1px;
+    border-radius: var(--spacing-100);
+
+    background-color: var(--info);
 }

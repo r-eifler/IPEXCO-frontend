@@ -31,6 +31,10 @@ export const routes: Routes = [
       {
         path: 'manual-planning',
         loadChildren: () => import('./builder/builder.routes').then(m => m.routes),
+      },
+      {
+        path: 'flight-section-planning',
+        loadChildren: () => import('./flight-section-plannig/flight-section-planning.routes').then(m => m.routes),
       }
     ]
   }

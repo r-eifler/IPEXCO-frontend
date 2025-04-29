@@ -9,9 +9,7 @@
     </div>
     <div>
         @if(jigTypesScheduled()?.length > 0){
-            @for(jigType of jigTypesScheduled(); track jigType){
-                <p>{{jigType}}: {{remaining()}}</p>
-            }
+            <p>{{jigTypesScheduled()?.[0]}}: {{remaining()}}</p>
         }
         @else{
             <p>{{t('b.no_jigs_scheduled')}}</p>

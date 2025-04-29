@@ -6,5 +6,7 @@
     "racks": "racks",
     "jigs": "jigs",
     "manual_planning": "Manual Planning",
-    "manual_planning_description": "Build a plan by drag & drop."
+    "manual_planning_description": "Build a plan by drag & drop.",
+    "flight_section_planning": "Flight Section Planning",
+    "flight_section_planning_description": "Build a plan step by step for each flight."
 }

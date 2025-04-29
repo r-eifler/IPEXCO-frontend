@@ -1,0 +1,15 @@
+<app-page-full *transloco="let t">
+    <app-page-title>
+       {{t('f.flight_sections')}}
+    </app-page-title>
+    <app-page-content>
+        <div class="main-grid">
+            @for(flight of flights(); track flight.name){
+                <app-flight-info-card
+                    [flight]="flight"
+                >
+                </app-flight-info-card>
+            }
+        </div>
+    </app-page-content>
+</app-page-full>

@@ -7,6 +7,7 @@ import { Store } from '@ngrx/store';
 import { selectSizeUnit } from '../../../builder/state/builder.selector';
 import { Jig, JigType } from '../../domain/beluga_problem';
 import { OverlayModule } from '@angular/cdk/overlay';
+import { MatListModule } from '@angular/material/list';
 
 @Component({
   selector: 'app-jig',
@@ -15,6 +16,7 @@ import { OverlayModule } from '@angular/cdk/overlay';
     NgClass,
     MatIconModule,
     OverlayModule,
+    MatListModule,
   ],
   templateUrl: './jig.component.html',
   styleUrl: './jig.component.scss'
@@ -42,6 +44,8 @@ export class JigComponent {
 
   status = computed(() => this.jig()?.empty ? 'empty' : 'loaded');
   size = computed(() => this.jig()?.empty ? this.jigType()?.size_empty : this.jigType()?.size_loaded);
+  sizeEmpty = computed(() => this.jigType()?.size_empty);
+  sizeLoaded = computed(() => this.jigType()?.size_loaded);
   type = computed(() => this.jig()?.type);
   tooltip = computed(() => 
     "status: " + (this.jig()?.empty ? 'empty' : 'loaded') +

@@ -19,6 +19,16 @@
             Start
           </a>
         </app-project-action-card>
+
+        <app-project-action-card>
+          <span action-title>{{t('h.flight_section_planning')}}</span>
+          <span action-description>
+            {{t('h.flight_section_planning_description')}}
+          </span>
+          <a mat-flat-button [routerLink]="['/beluga/flight-section-planning', (project$ | async)?._id]" action-button>
+            Start
+          </a>
+        </app-project-action-card>
   
         <!-- <app-project-action-card>
           <span action-title>Planning</span>

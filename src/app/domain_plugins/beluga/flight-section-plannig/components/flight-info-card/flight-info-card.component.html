@@ -1,0 +1,41 @@
+<mat-card appearance="outlined">
+    <mat-card-header>
+      <mat-card-title>{{ flight()?.name }}</mat-card-title>
+      <mat-card-subtitle>
+        <!-- <app-label
+          [color]="plan()?.status | stepStatusColor"
+        >{{ plan()?.status | stepStatusName }}</app-label> -->
+      </mat-card-subtitle>
+    </mat-card-header>
+  
+    <mat-card-content *transloco="let t">
+      <div class="content">
+        <div class="stats">
+          <mat-icon>flight_land</mat-icon>
+          <span class="property-label">#{{t('f.incoming')}}:</span>
+          <span class="property-value">{{ numIncoming() ?? '?'}}</span>
+
+          <mat-icon>flight_takeoff</mat-icon>
+          <span class="property-label">#{{t('f.outgoing')}}:</span>
+          <span class="property-value">{{ numOutgoing() ?? '?' }}</span>
+
+        </div>
+  
+        <div class="utility">
+          <mat-icon>flight</mat-icon>
+          <!-- <div class="utility-value-container">
+            <span class="value" *isProject>{{ step() | stepValue : planProperties() | default : '-/-'}}</span>
+            <span class="value" *isDemo>{{ (step() | stepValue : planProperties() | default : '-') + '/' + maxOverallUtility() }}</span>
+            <span class="label">Utility</span>
+          </div> -->
+        </div>
+      </div>
+    </mat-card-content>
+  
+    <mat-card-actions>
+      <div class="action-container">
+        <!-- <a class="details" mat-stroked-button [routerLink]="[project()?._id]">Details</a> -->
+      </div>
+    </mat-card-actions>
+  </mat-card>
+  

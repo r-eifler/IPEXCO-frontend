@@ -1,0 +1,19 @@
+{
+    "flights": "Flüge",
+    "flight": "Flug",
+    "racks": "Ablagen",
+    "jigs": "Montagegestelle",
+    "incoming_flight": "ankommender Flug",
+    "outgoing_flight": "abgehender Flug",
+    "incoming": "ankommend",
+    "outgoing": "abgehended",
+    "empty_flight": "Flug leer",
+    "line": "Linie",
+    "trailers": "Trailers",
+    "production_lines": "Produktionslinien",
+    "factory": "Fabrik",
+    "hangars": "Hangars",
+    "remaining_jigs": "verbleibende Montagegestelle",
+    "actions": "Aktionen",
+    "flight_sections": "Flugabschnitte"
+}

@@ -1,17 +1,20 @@
 import { BelugaAction, BelugaActionType, DeliverToHangerZ, GetFromHangerZ, LoadBelugaZ, PickUpRackZ, PutDownRackZ, UnloadBelugaZ } from "./beluga_plan";
-import { BelugaProblem, getJigSize, getRackSize, Jig, occupiedSpace, ProductionLine } from "./beluga_problem";
+import { BelugaProblem, getJigSize, getRackSize, Jig, JigZ, occupiedSpace, ProductionLine, ProductionLineZ } from "./beluga_problem";
+import { array, boolean, nullable, number, object, optional, record, string, infer as zinfer } from "zod";
 
-export interface BelugaState {
-    jigs: Record<string, Jig>
-    flightIndex: number,
-    incoming: string[],
-    outgoing: string[],
-    racks: Record<string, string[]>,
-    trailersBeluga: Record<string, string|null>,
-    trailersFactory: Record<string, string|null>,
-    hangars: Record<string, string|null>,
-    productionLines: Record<string, ProductionLine>,
-}
+export const BelugaStateZ = object({
+    jigs: record(string(), JigZ),
+    flightIndex: number(),
+    incoming: array(string()),
+    outgoing: array(string()),
+    racks: record(string(),  array(string())),
+    trailersBeluga: record(string(),  nullable(string())),
+    trailersFactory: record(string(),  nullable(string())),
+    hangars: record(string(),  nullable(string())),
+    productionLines: record(string(),  ProductionLineZ),
+})
+
+export type BelugaState = zinfer<typeof BelugaStateZ>;
 
 export function getInitialState(model: BelugaProblem) {
     return {

@@ -10,6 +10,7 @@ import { ProjectService } from './services/project.service';
 import { HomeDomainSpecificationService } from './services/domainSpecification.service';
 import { ProjectDetailsComponent } from './view/project-details/project-details.component';
 import { LoadProjectResolver } from './resolver/load-project.resolver';
+import { PlanPropertyService } from './services/plan-properties.service';
 
 export const routes: Routes = [
   {
@@ -22,6 +23,7 @@ export const routes: Routes = [
         CreateProjectService,
         ProjectService,
         HomeDomainSpecificationService,
+        PlanPropertyService
       ],
     children: [
       {

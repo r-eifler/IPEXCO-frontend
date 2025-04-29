@@ -1,3 +1,5 @@
+import { CreateDefaultPropertiesEffect } from "./create-default-properties.effect";
+import { CreatePlanPropertyEffect } from "./create-plan-property.effect";
 import { CreateProjectEffect } from "./create-project.effect";
 import { DeleteProjectEffect } from "./delete-project.effect";
 import { HomeLoadDomainSpecificationsEffect } from "./load-domain-specs.effect";
@@ -9,5 +11,7 @@ export const homeEffects = [
     DeleteProjectEffect,
     LoadProjectsEffect,
     HomeLoadDomainSpecificationsEffect,
-    LoadProjectEffect
+    LoadProjectEffect,
+    CreatePlanPropertyEffect,
+    CreateDefaultPropertiesEffect,
 ]

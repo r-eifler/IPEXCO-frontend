@@ -5,5 +5,8 @@
     "flights": "Flüge",
     "racks": "Ablagen",
     "jigs": "Montagegestelle",
-    "manual_planning": "Manuelle Planung"
+    "manual_planning": "Manuelle Planung",
+    "manual_planning_description": "Baue einen Plan mit drag & drop.",
+    "flight_section_planning": "Flugabschnittsplanung",
+    "flight_section_planning_description": "Baue einen Plan Schritt für Schritt für jeden Flug."
 }
