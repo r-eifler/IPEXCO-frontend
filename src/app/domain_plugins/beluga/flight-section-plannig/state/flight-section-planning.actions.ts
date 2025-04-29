@@ -33,12 +33,18 @@ export const loadFlightPlanForestSuccess = createAction('[beluga-flight-section-
 export const loadFlightPlanForestFailure = createAction('[beluga-flight-section-planning] load flight plan forest failure', props<{err: any}>());
 
 
-export const addSectionToFlightPlanForest = createAction('[beluga-flight-section-planning] add section to flight plan forest', props<{section: FlightSection}>());
+
+export const newFlightPlanTree = createAction('[beluga-flight-section-planning] new flight plan tree');
+export const newFlightPlanTreeSuccess = createAction('[beluga-flight-section-planning] new flight plan tree success');
+export const newFlightPlanTreeFailure = createAction('[beluga-flight-section-planning] new flight plan tree failure', props<{err: any}>());
+
+
+export const addSectionToFlightPlanForest = createAction('[beluga-flight-section-planning] add section to flight plan forest', props<{section: FlightSection, treeIndex: number}>());
 export const addSectionToFlightPlanForestSuccess = createAction('[beluga-flight-section-planning] add section to flight plan forest success', props<{section: FlightSection}>());
 export const addSectionToFlightPlanForestFailure = createAction('[beluga-flight-section-planning] add section to flight plan forest failure', props<{err: any}>());
 
 
-export const addRootSectionToFlightPlanForest = createAction('[beluga-flight-section-planning] add root section load flight plan forest', props<{section: FlightSection}>());
+export const addRootSectionToFlightPlanForest = createAction('[beluga-flight-section-planning] add root section load flight plan forest', props<{section: FlightSection, treeIndex: number}>());
 export const addRootSectionToFlightPlanForestSuccess = createAction('[beluga-flight-section-planning] add root section load flight plan forest', props<{section: FlightSection}>());
 export const addRootSectionToFlightPlanForestFailure = createAction('[beluga-flight-section-planning] add root section load flight plan forest', props<{err: any}>());
 
@@ -47,3 +53,6 @@ export const addRootSectionToFlightPlanForestFailure = createAction('[beluga-fli
 
 export const setFlightStartIndex = createAction('[beluga-flight-section-planning] set flight start index', props<{index: number}>());
 export const setFlightEndIndex = createAction('[beluga-flight-section-planning] set flight end index', props<{index: number}>());
+
+export const increaseFlightIndex = createAction('[beluga-flight-section-planning] increase flight index', props<{offset: number}>());
+export const decreaseFlightIndex = createAction('[beluga-flight-section-planning] decrease flight index', props<{offset: number}>());

@@ -1,11 +1,10 @@
 @use '../../../../../../variables' as vars;
 
 .content {
-  padding-block: var(--spacing-300);
+  padding-block: var(--spacing-100);
 
   display: grid;
   grid-template-columns: auto auto;
-  justify-content: space-between;
   align-items: end;
 
   gap: var(--spacing-100);
@@ -44,7 +43,7 @@
     grid-column: 1;
 
     opacity: 0.075;
-    --icon-size: 96px;
+    --icon-size: 50px;
     font-size: var(--icon-size);
     width: var(--icon-size);
     height: var(--icon-size);

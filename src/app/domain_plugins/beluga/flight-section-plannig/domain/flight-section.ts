@@ -5,7 +5,7 @@ import { BelugaStateZ } from "../../shared/domain/beluga_state";
 
 
 export const FlightSectionZ = object({
-    treeId: string(),
+    nodeId: string(),
     flightIndex: number(),
     startState: optional(BelugaStateZ),
     finished: boolean(),
@@ -19,11 +19,17 @@ export const FlightSectionZ = object({
 
 export type FlightSection = zinfer<typeof FlightSectionZ>;
 
+export const FlightPlanTreeZ = object({
+    root: nullable(string()),
+    sections: record(string(),FlightSectionZ),
+    selectedLeave: nullable(string()),
+})
+
+export type FlightPlanTree = zinfer<typeof FlightPlanTreeZ>;
+
 
 export const FlightPlanForestZ = object({
-    roots: array(string()),
-    sections: record(string(),FlightSectionZ),
-    selectedLeave: string(),
+    trees: array(FlightPlanTreeZ),
     project: string()
 })
 

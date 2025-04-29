@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, input } from '@angular/core';
+import { FlightPlanForest, FlightPlanForestZ } from '../../domain/flight-section';
 
 @Component({
   selector: 'app-section-tree',
@@ -8,4 +9,9 @@ import { Component } from '@angular/core';
 })
 export class SectionTreeComponent {
 
+  
+  root = input.required<string>();
+  forest = input.required<FlightPlanForest>();
+
+  
 }

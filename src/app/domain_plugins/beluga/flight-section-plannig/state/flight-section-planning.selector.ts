@@ -13,8 +13,7 @@ export const selectProject = createSelector(selectState, (state) => state.projec
 // Model general
 
 export const selectTask = createSelector(selectState, 
-    (state) => (state.project.data?.baseTask?.model != null ? 
-    BelugaProblemZ.parse(state.project.data?.baseTask?.model) : null)
+    (state) => (state.task.data)
 );
 
 export const selectFlights = createSelector(selectTask, 
@@ -35,5 +34,5 @@ export const selectFlightEndIndex = createSelector(selectState,
 
 // model tree
 
-// export const selectFlightInRange = createSelector(selectFlights, selectFlightStartIndex, selectFlightEndIndex,
-//     (flights, start, end) => start !== null && end !== null ? flights?.split())
+export const selectFlightInRange = createSelector(selectFlights, selectFlightStartIndex, selectFlightEndIndex,
+    (flights, start, end) => start !== null && end !== null ? flights?.slice(start,end) : []);
