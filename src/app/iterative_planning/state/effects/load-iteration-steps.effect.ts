@@ -32,7 +32,7 @@ export class LoadIterationStepsEffect{
             registerPlanComputationSuccess,
             globalExplanationComputationRunningSuccess,
             registerGlobalExplanationComputationSuccess,
-            cancelPlanComputationAndIterationStepSuccess
+            cancelPlanComputationAndIterationStepSuccess,
         ),
         concatLatestFrom(() => this.store.select(selectIterativePlanningProject)),
         filterListNotNullOrUndefined(),
