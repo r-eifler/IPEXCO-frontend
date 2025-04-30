@@ -24,23 +24,23 @@
                             <div [innerHTML]="(domainSpec$ | async)?.description | marked"></div>
                         </div>
                         </mat-tab>
-                
-                    <mat-tab label="Instance" class="tab-container"> 
+
+                    <mat-tab label="Instance" class="tab-container">
                         <div class="tab-container">
                             <div [innerHTML]="demo?.instanceInfo | marked"></div>
                         </div>
                     </mat-tab>
-                
+
                     <mat-tab label="Visualization" class="tab-container">
                         <div class="tab-container">
                             <div class="image-container">
                                 @if(demo?.summaryImage){
-                                    <img [src]="host + demo?.summaryImage">
+                                    <img [src]="host + demo?.summaryImage" style="width: 100%">
                                 }
                             </div>
                         </div>
                     </mat-tab>
-                
+
                     <mat-tab label="Goals" class="tab-container">
                         <div class="tab-container">
                             <app-info>
@@ -56,11 +56,10 @@
                             }
                         </div>
                     </mat-tab>
-                    
+
                 </mat-tab-group>
             </app-page-section-content>
         </app-page-section>
     </app-page-section-list>
 </app-page-content>
 </app-page>
-  
