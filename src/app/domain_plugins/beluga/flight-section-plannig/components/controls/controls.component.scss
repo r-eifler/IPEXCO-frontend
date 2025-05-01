@@ -1,0 +1,14 @@
+.main{
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    gap: var(--spacing-100);
+    align-items: center;
+}
+
+.divider{
+    height: 100%;
+    width: 2px;
+    background-color: var(--jig);
+    opacity: 60%;
+}

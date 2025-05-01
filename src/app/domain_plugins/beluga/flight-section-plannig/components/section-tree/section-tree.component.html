@@ -1,1 +1,9 @@
-<p>section-tree works!</p>
+<div class="list">
+    <app-new-section-action></app-new-section-action>
+    @for(section of sections(); track section._id){
+        <app-section-card
+            [section]="section"
+        >
+        </app-section-card>
+    }
+</div>

@@ -1,0 +1,70 @@
+import { HttpClient, HttpParams } from "@angular/common/http";
+import { inject, Injectable } from "@angular/core";
+import { Observable } from "rxjs";
+import { map } from "rxjs/operators";
+import { environment } from "src/environments/environment";
+import { array } from "zod";
+import { FlightPlanTree, FlightPlanTreeBase, FlightPlanTreeZ, FlightSection, FlightSectionBase, FlightSectionZ } from "../domain/flight-section";
+
+
+@Injectable()
+export class FlightPlanTreeService{
+
+    private http = inject(HttpClient)
+    private BASE_URL = environment.apiURL + "flight-plan-forest/";
+
+    
+    getTree$(projectId: string): Observable<FlightPlanTree | null> {
+
+        let httpParams = new HttpParams();
+        httpParams = httpParams.set('projectId', projectId);
+
+        return this.http.get<unknown>(this.BASE_URL,  { params: httpParams }).pipe(
+            map(data => data !== null ? FlightPlanTreeZ.parse(data) : null),
+        )
+    }
+
+    getSections$(treeId: string): Observable<Record<string,FlightSection>> {
+
+      let httpParams = new HttpParams();
+      httpParams = httpParams.set('treeId', treeId);
+
+      return this.http.get<unknown>(this.BASE_URL + 'section/',  { params: httpParams }).pipe(
+          map(data => array(FlightSectionZ).parse(data)),
+          map(sections => sections.reduce((acc, c) => ({...acc,[c._id]: c}), {}))
+      )
+    }
+
+
+    postTree$(tree: FlightPlanTreeBase): Observable<FlightPlanTree> {
+      return this.http.post<unknown>(this.BASE_URL, tree).pipe(
+        map(data => FlightPlanTreeZ.parse(data)),
+      )
+    }
+
+    initTree$(projectId): Observable<FlightPlanTree> {
+      return this.http.post<unknown>(this.BASE_URL + 'init', {projectId: projectId}).pipe(
+        map(data => FlightPlanTreeZ.parse(data)),
+      )
+    }
+
+    postSection$(section: FlightSectionBase): Observable<FlightSection> {
+      return this.http.post<unknown>(this.BASE_URL + 'section', section).pipe(
+        map(data => FlightSectionZ.parse(data)),
+      )
+    }
+
+    putTree$(tree: FlightPlanTreeBase): Observable<FlightPlanTree> {
+      return this.http.put<unknown>(this.BASE_URL, tree).pipe(
+        map(data => FlightPlanTreeZ.parse(data)),
+      )
+    }
+
+    putSection$(section: FlightSectionBase): Observable<FlightSection> {
+      return this.http.put<unknown>(this.BASE_URL + 'section', section).pipe(
+        map(data => FlightSectionZ.parse(data)),
+      )
+    }
+
+    
+}

@@ -4,33 +4,52 @@ import { BelugaActionZ } from "../../shared/domain/beluga_plan";
 import { BelugaStateZ } from "../../shared/domain/beluga_state";
 
 
-export const FlightSectionZ = object({
-    nodeId: string(),
+export const FlightSectionBaseZ = object({
     flightIndex: number(),
     startState: optional(BelugaStateZ),
     finished: boolean(),
-    predecessor: nullable(string()),
-    successor: nullable(string()),
+    predecessorId: nullable(string()),
+    treeId: string(),
 
     actions: array(BelugaActionZ),
     status: PlanRunStatusZ,
     satisfiedProperties: array(string()).optional(),
 })
 
+export type FlightSectionBase = zinfer<typeof FlightSectionBaseZ>;
+
+export const FlightSectionZ = FlightSectionBaseZ.merge(object({
+        _id: string(),
+        user: string(),
+    })
+);
+
 export type FlightSection = zinfer<typeof FlightSectionZ>;
 
-export const FlightPlanTreeZ = object({
-    root: nullable(string()),
-    sections: record(string(),FlightSectionZ),
-    selectedLeave: nullable(string()),
+export const FlightPlanBranchZ = object({
+    name: string(),
+    sectionIdHead: string(),
 })
 
-export type FlightPlanTree = zinfer<typeof FlightPlanTreeZ>;
+export type FlightPlanBranch = zinfer<typeof FlightPlanBranchZ>;
 
 
-export const FlightPlanForestZ = object({
-    trees: array(FlightPlanTreeZ),
+export const FlightPlanTreeBaseZ = object({
+    // sections: record(string(), FlightSectionZ),
+    branches: array(FlightPlanBranchZ),
+    selectedBranch: number(),
+    selectedSectionId: nullable(string()),
+
     project: string()
 })
 
-export type FlightPlanForest = zinfer<typeof FlightPlanForestZ>;
+export type FlightPlanTreeBase = zinfer<typeof FlightPlanTreeBaseZ>;
+
+
+export const FlightPlanTreeZ = FlightPlanTreeBaseZ.merge(object({
+        _id: string(),
+        user: string(),
+    })
+);
+
+export type FlightPlanTree = zinfer<typeof FlightPlanTreeZ>;

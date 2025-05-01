@@ -15,5 +15,7 @@
     "hangars": "hangars",
     "remaining_jigs": "remaining jigs",
     "actions": "actions",
-    "flight_sections": "Flight Sections"
+    "flight_section_plans": "Flight Section Plans",
+    "new_plan": "new plan",
+    "new_plan_info": "No plan available. Start a new plan with the button \"new plan\" in the top."
 }

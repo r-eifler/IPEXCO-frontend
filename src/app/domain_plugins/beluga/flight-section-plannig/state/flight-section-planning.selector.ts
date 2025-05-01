@@ -1,6 +1,6 @@
 import { createSelector } from "@ngrx/store";
+import { LoadingState } from "src/app/shared/common/loadable.interface";
 import { FlightSectionPlanningFeature } from "./flight-section-planning.feature";
-import { BelugaProblemZ } from "../../shared/domain/beluga_problem";
 
 
 const selectState = FlightSectionPlanningFeature.selectFlightSectionPlanningState
@@ -19,20 +19,43 @@ export const selectTask = createSelector(selectState,
 export const selectFlights = createSelector(selectTask, 
     (task) => task?.flights)
 
-// Forest
-
-export const selectFlightSectionForest = createSelector(selectState, 
-    (state) => (state.forest.data))
+export const selectNumFlightsFlights = createSelector(selectTask, 
+    (task) => task?.flights?.length ?? 0)
 
 
-export const selectFlightStartIndex = createSelector(selectState, 
-    (state) => (state.flightStartIndex))
+// Tree
 
-export const selectFlightEndIndex = createSelector(selectState, 
-    (state) => (state.flightEndIndex))
+export const selectTree = createSelector(selectState, 
+    (state) => (state.tree.data));
+
+export const selectHasTree = createSelector(selectState, 
+    (state) => (state.tree.state == LoadingState.Done && state.tree.data !== null));
+    
+export const selectSections = createSelector(selectState, 
+    (state) => (state.sections.data))
+
+export const selectActiveBranchSections = createSelector(selectTree, selectSections,
+    (tree, sections) => {
+        let sectionId = tree?.branches[tree.selectedBranch].sectionIdHead;
+        if(sectionId === undefined || sections === undefined){
+            return undefined;
+        }
+        let branchSections = [sections[sectionId]];
+        while(branchSections[0].predecessorId !== null){
+            sectionId = branchSections[0].predecessorId;
+            branchSections = [sections[sectionId], ...branchSections]
+        }
+        return branchSections;
+    }
+);
+
+export const selectBranches = createSelector(selectTree, 
+    (tree) => (tree?.branches));
 
 
-// model tree
+export const selectBranchIndex = createSelector(selectTree, 
+    (tree) => (tree?.selectedBranch));
 
-export const selectFlightInRange = createSelector(selectFlights, selectFlightStartIndex, selectFlightEndIndex,
-    (flights, start, end) => start !== null && end !== null ? flights?.slice(start,end) : []);
+
+export const selectTreeHead= createSelector(selectTree, 
+    (tree) => (tree?.selectedSectionId));

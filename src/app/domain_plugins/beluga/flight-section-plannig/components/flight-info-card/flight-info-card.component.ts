@@ -18,7 +18,6 @@ import { MatIconModule } from '@angular/material/icon';
     MatIconModule, 
     LabelModule, 
     MatButtonModule, 
-    RouterLink, 
     MatTooltipModule, 
     MatProgressBarModule,
     TranslocoModule

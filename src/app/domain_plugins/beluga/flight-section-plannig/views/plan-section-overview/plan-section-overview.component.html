@@ -1,0 +1,43 @@
+<app-page *transloco="let t">
+    <app-page-title>
+       {{t('f.flight_section_plans')}}
+    </app-page-title>
+    <app-page-content>
+        <app-page-section-list>
+            <app-page-section>
+                <app-page-section-content>
+                    <app-controls
+                        [disabled]="! hasTree()"
+                    ></app-controls>
+                </app-page-section-content>
+            </app-page-section>
+            <!-- <app-page-section>
+                <app-page-section-content>
+                    <div class="main-grid">
+                        @for(flight of flights(); track flight.name){
+                            <app-flight-info-card
+                                [flight]="flight"
+                            >
+                            </app-flight-info-card>
+                        }
+                    </div>
+                </app-page-section-content>
+            </app-page-section> -->
+            <app-page-section>
+                <app-page-section-content>
+                    @if(hasTree()){
+                        <app-section-tree></app-section-tree>
+                    }
+                    @else{
+                        <div class="new-forest">
+                            <button mat-flat-button (click)="newTree()">
+                                <mat-icon>play_arrow</mat-icon>
+                                Start Planning
+                            </button>
+                        </div>
+                    }
+                </app-page-section-content>
+            </app-page-section>
+        </app-page-section-list>
+    </app-page-content>
+</app-page>

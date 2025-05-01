@@ -1,8 +1,13 @@
-<div>
-    <button mat-icon-button (click)="prevFlight()">
+<div class="main" *transloco="let t">
+    <!-- <button mat-icon-button (click)="prevFlight()" [disabled]="disabled()">
         <mat-icon>arrow_back</mat-icon>
     </button>
-    <button mat-icon-button (click)="nextFlight()">
+    <button mat-icon-button (click)="nextFlight()" [disabled]="disabled()">
         <mat-icon>arrow_forward</mat-icon>
     </button>
+    <div class="divider"></div>
+    <button mat-button (click)="newTree()" [disabled]="disabled()">
+        <mat-icon>add</mat-icon>
+        {{t('f.new_plan')}}
+    </button> -->
 </div>

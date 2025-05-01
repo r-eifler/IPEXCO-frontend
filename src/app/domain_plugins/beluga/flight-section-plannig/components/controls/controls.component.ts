@@ -1,16 +1,20 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatIconModule } from '@angular/material/icon';
 import { TranslocoModule } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
-import { decreaseFlightIndex, increaseFlightIndex } from '../../state/flight-section-planning.actions';
-import { MatIconModule } from '@angular/material/icon';
+import { createFlightPlanTree, decreaseFlightIndex, increaseFlightIndex } from '../../state/flight-section-planning.actions';
+import { selectNumFlightsFlights, selectProject } from '../../state/flight-section-planning.selector';
+import { FlightPlanTree } from '../../domain/flight-section';
 
 @Component({
   selector: 'app-controls',
   imports: [
     TranslocoModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
+    MatDividerModule,
   ],
   templateUrl: './controls.component.html',
   styleUrl: './controls.component.scss'
@@ -18,13 +22,9 @@ import { MatIconModule } from '@angular/material/icon';
 export class ControlsComponent {
 
   store = inject(Store);
+  project = this.store.selectSignal(selectProject);
+  numFlights = this.store.selectSignal(selectNumFlightsFlights);
 
-  prevFlight(){
-    this.store.dispatch(decreaseFlightIndex({offset: 1}));
-  }
-
-  nextFlight(){
-    this.store.dispatch(increaseFlightIndex({offset: 1}));
-  }
+  disabled = input<boolean>(false);
 
 }

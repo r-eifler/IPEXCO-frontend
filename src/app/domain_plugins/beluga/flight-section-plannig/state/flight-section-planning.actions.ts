@@ -2,7 +2,7 @@ import { createAction, props } from "@ngrx/store";
 import { DomainSpecification } from "src/app/global_specification/domain/domain_specification";
 import { PlanProperty, PlanPropertyOfProject } from "src/app/shared/domain/plan-property/plan-property";
 import { Project } from "src/app/shared/domain/project";
-import { FlightPlanForest, FlightSection } from "../domain/flight-section";
+import { FlightPlanTree, FlightPlanTreeBase, FlightSection, FlightSectionBase } from "../domain/flight-section";
 
 
 export const loadProject = createAction('[beluga-flight-section-planning] load project', props<{id: string}>());
@@ -26,27 +26,37 @@ export const createPlanPropertyFailure = createAction('[beluga-flight-section-pl
 export const createDefaultPlanProperties = createAction('[beluga-flight-section-planning]  create default plan properties', props<{project: Project}>());
 
 
-// Flight section forest
+// Flight section tree
 
-export const loadFlightPlanForest = createAction('[beluga-flight-section-planning] load flight plan forest', props<{id: FlightPlanForest}>());
-export const loadFlightPlanForestSuccess = createAction('[beluga-flight-section-planning] load flight plan forest success', props<{project: Project}>());
-export const loadFlightPlanForestFailure = createAction('[beluga-flight-section-planning] load flight plan forest failure', props<{err: any}>());
+export const loadFlightPlanTree= createAction('[beluga-flight-section-planning] load flight plan tree', props<{projectId: string}>());
+export const loadFlightPlanTreeSuccess = createAction('[beluga-flight-section-planning] load flight plan tree success', props<{tree: FlightPlanTree| null}>());
+export const loadFlightPlanTreeNotNullSuccess = createAction('[beluga-flight-section-planning] load flight plan tree not null success', props<{tree: FlightPlanTree}>());
+export const loadFlightPlanTreeFailure = createAction('[beluga-flight-section-planning] load flight plan tree failure', props<{err: any}>());
 
+export const initFlightPlanTree = createAction('[beluga-flight-section-planning] init flight plan tree', props<{projectId: string}>());
+export const initFlightPlanTreeSuccess = createAction('[beluga-flight-section-planning] init flight plan tree success', props<{tree: FlightPlanTree}>());
+export const initFlightPlanTreeFailure = createAction('[beluga-flight-section-planning] init flight plan tree failure', props<{err: any}>());
 
+export const createFlightPlanTree = createAction('[beluga-flight-section-planning] new flight plan tree', props<{tree: FlightPlanTreeBase}>());
+export const createFlightPlanTreeSuccess = createAction('[beluga-flight-section-planning] new flight plan tree success', props<{tree: FlightPlanTree}>());
+export const createFlightPlanTreeFailure = createAction('[beluga-flight-section-planning] new flight plan tree failure', props<{err: any}>());
 
-export const newFlightPlanTree = createAction('[beluga-flight-section-planning] new flight plan tree');
-export const newFlightPlanTreeSuccess = createAction('[beluga-flight-section-planning] new flight plan tree success');
-export const newFlightPlanTreeFailure = createAction('[beluga-flight-section-planning] new flight plan tree failure', props<{err: any}>());
+export const updateFlightPlanTree = createAction('[beluga-flight-section-planning] update flight plan tree', props<{tree: FlightPlanTree}>());
+export const updateFlightPlanTreeSuccess = createAction('[beluga-flight-section-planning] update flight plan tree success', props<{tree: FlightPlanTree}>());
+export const updateFlightPlanTreeFailure = createAction('[beluga-flight-section-planning] update flight plan tree failure', props<{err: any}>());
 
+// sections
+export const loadFlightSections = createAction('[beluga-flight-section-planning] load flight plan sections', props<{treeId: string}>());
+export const loadFlightSectionsSuccess = createAction('[beluga-flight-section-planning] load flight plan sections success', props<{sections: Record<string,FlightSection>}>());
+export const loadFlightSectionsFailure = createAction('[beluga-flight-section-planning] load flight plan sections failure', props<{err: any}>());
 
-export const addSectionToFlightPlanForest = createAction('[beluga-flight-section-planning] add section to flight plan forest', props<{section: FlightSection, treeIndex: number}>());
-export const addSectionToFlightPlanForestSuccess = createAction('[beluga-flight-section-planning] add section to flight plan forest success', props<{section: FlightSection}>());
-export const addSectionToFlightPlanForestFailure = createAction('[beluga-flight-section-planning] add section to flight plan forest failure', props<{err: any}>());
+export const createFlightSection = createAction('[beluga-flight-section-planning] new flight plan section', props<{section: FlightSectionBase}>());
+export const createFlightSectionSuccess = createAction('[beluga-flight-section-planning] new flight plan section success', props<{section: FlightSection}>());
+export const createFlightSectionFailure = createAction('[beluga-flight-section-planning] new flight plan section failure', props<{err: any}>());
 
-
-export const addRootSectionToFlightPlanForest = createAction('[beluga-flight-section-planning] add root section load flight plan forest', props<{section: FlightSection, treeIndex: number}>());
-export const addRootSectionToFlightPlanForestSuccess = createAction('[beluga-flight-section-planning] add root section load flight plan forest', props<{section: FlightSection}>());
-export const addRootSectionToFlightPlanForestFailure = createAction('[beluga-flight-section-planning] add root section load flight plan forest', props<{err: any}>());
+export const updateFlightSection = createAction('[beluga-flight-section-planning] update flight plan section', props<{section: FlightSection}>());
+export const updateFlightSectionSuccess = createAction('[beluga-flight-section-planning] update flight plan section success', props<{section: FlightSection}>());
+export const updateFlightSectionFailure = createAction('[beluga-flight-section-planning] update flight plan section failure', props<{err: any}>());
 
 
 // interface navigation

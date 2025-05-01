@@ -1,5 +1,4 @@
 import { Routes } from '@angular/router';
-import { SectionForestComponent } from './views/section-tree/section-forest.component';
 import { ShellComponent } from './views/shell/shell.component';
 import { FlightSectionPlanningFeature } from './state/flight-section-planning.feature';
 import { provideState } from '@ngrx/store';
@@ -7,6 +6,8 @@ import { flightSectionPlanningEffects } from './state/effects/effects';
 import { ProjectService } from './services/project.service';
 import { provideEffects } from '@ngrx/effects';
 import { LoadProjectResolver } from './resolver/load-project.resolver';
+import { FlightPlanTreeService } from './services/flight-plan-tree.service';
+import { PlanSectionsOverview } from './views/plan-section-overview/plan-section-overview.component';
 
 export const routes: Routes = [
   {
@@ -18,6 +19,7 @@ export const routes: Routes = [
       provideState(FlightSectionPlanningFeature),
       provideEffects(flightSectionPlanningEffects),
       ProjectService,
+      FlightPlanTreeService,
     ],
     children: [
       {
@@ -27,7 +29,7 @@ export const routes: Routes = [
       },
       {
         path: 'flight-sections',
-        component: SectionForestComponent,
+        component: PlanSectionsOverview,
       },
 
     ]
