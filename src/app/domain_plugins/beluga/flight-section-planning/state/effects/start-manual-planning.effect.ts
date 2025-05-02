@@ -24,10 +24,9 @@ export class StartManualPlanningEffect{
         concatLatestFrom(() => [this.store.select(selectTask), this.store.select(selectProject)]),
         switchMap(([{section, method}, task, project]) => {
             if(task !== undefined &&  section.startState !== undefined && project !== undefined){
-                let projection = projectTaskToSection(task, section);
                 this.router.navigate(["beluga/flight-section-planning/" + project._id + "/planning/manual/section/" + section._id])
                 return [
-                    initBuilder({task: projection, initState: section.startState}),
+                    initBuilder({task, initState: section.startState}),
                     selectSection({id: section._id}),
                     updateFlightSection({section: {
                         ...section,

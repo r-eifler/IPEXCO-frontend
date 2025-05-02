@@ -25,6 +25,12 @@ export class FlightPlanTreeService{
         )
     }
 
+    getTreeById$(id: string): Observable<FlightPlanTree> {
+      return this.http.get<unknown>(this.BASE_URL + id).pipe(
+          map(data => FlightPlanTreeZ.parse(data)),
+      )
+    }
+
     getSections$(treeId: string): Observable<Record<string,FlightSection>> {
 
       let httpParams = new HttpParams();

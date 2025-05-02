@@ -73,7 +73,8 @@ export class SectionCardComponent {
     if(task === undefined || startState === undefined){
       return undefined;
     }
-    return computeRackOccupancyRate(task, startState, this.section()?.actions);
+    const v = computeRackOccupancyRate(task, startState, this.section()?.actions ?? []);
+    return v !== undefined ? v.toFixed(2) : undefined;
   });
 
   onBranch(){

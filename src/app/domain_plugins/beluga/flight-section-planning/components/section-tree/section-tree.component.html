@@ -1,15 +1,17 @@
 <div class="list" *transloco="let t">
-    <button mat-stroked-button 
-        (click)="onNextFlightPlan()"
-        [disabled]="!lastSectionFinished()"
-    >
-        {{t('f.plan_next_flight')}}
-    </button>
-    @for(section of sections(); track section._id; let idx = $index){
+    @for(section of sections(); track section._id; let last = $last; let idx = $index){
         <app-section-card
             [section]="section"
             [flight]="flights()?.[idx]"
         >
         </app-section-card>
+        @if(last){
+            <button mat-stroked-button 
+            (click)="onNextFlightPlan(section)"
+            [disabled]="!lastSectionFinished()"
+            >
+                {{t('f.plan_next_flight')}}
+            </button>
+        }
     }
 </div>

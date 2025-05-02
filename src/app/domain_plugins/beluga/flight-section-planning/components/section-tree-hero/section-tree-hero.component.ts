@@ -45,7 +45,8 @@ export class SectionTreeHeroComponent {
     if(task === undefined || startState === undefined){
       return undefined;
     }
-    return computeRackOccupancyRate(task, startState, this.activeBranchActions() ?? []);
+    const v = computeRackOccupancyRate(task, startState, this.activeBranchActions() ?? [])
+    return v !== undefined ? v.toFixed(2) : undefined;
   });
 
 }

@@ -25,4 +25,5 @@ export const flightSectionPlanningEffects = [
     StartManualPlanningEffect,
     CancelManualPlanningEffect,
     FinishManualPlanningEffect,
+    CreateFlightSectionEffect,
 ]

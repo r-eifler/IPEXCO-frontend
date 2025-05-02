@@ -1,14 +1,14 @@
-import { PlanRunStatusZ } from "src/app/iterative_planning/domain/plan";
+import { PlanRunStatus, PlanRunStatusZ } from "src/app/iterative_planning/domain/plan";
 import { array, boolean, nullable, number, object, optional, record, string, infer as zinfer } from "zod";
 import { BelugaActionZ } from "../../shared/domain/beluga_plan";
-import { BelugaStateZ } from "../../shared/domain/beluga_state";
+import { applyActions, BelugaStateZ } from "../../shared/domain/beluga_state";
 import { PlanMethodTypeZ, PlanMethodZ } from "./plan_method";
 import { BelugaProblem } from "../../shared/domain/beluga_problem";
 
 
 export const FlightSectionBaseZ = object({
     flightIndex: number(),
-    startState: optional(BelugaStateZ),
+    startState: BelugaStateZ,
     finished: boolean(),
     predecessorId: nullable(string()),
     treeId: string(),
@@ -59,6 +59,64 @@ export type FlightPlanTree = zinfer<typeof FlightPlanTreeZ>;
 
 
 export function projectTaskToSection(task: BelugaProblem, section: FlightSection){
-    console.log("TODO");
+    if(section.startState === undefined){
+        return undefined;
+    }
+
+    const state = section.startState;
+
+    const consideredJigs = new Set<string>();
+    task.flights[section.flightIndex].incoming.forEach(j => consideredJigs.add(j))
+    Object.values(state.racks).forEach(r => r.forEach(j => consideredJigs));
+    Object.values(state.trailersBeluga).forEach(j => {if(j !== null){consideredJigs.add(j)}});
+    Object.values(state.trailersFactory).forEach(j => {if(j !== null){consideredJigs.add(j)}});
+    Object.values(state.hangars).forEach(j => {if(j !== null){consideredJigs.add(j)}});
+
+    let productionLineProjections =  Object.values(state.productionLines).map(
+        pl => ({...pl, schedule: filterUpTo(pl.schedule, consideredJigs)})
+    );
+
+    // let projection: BelugaProblem = {
+    //     jigs: Object.values(state.jigs).reduce((jigs, jig) => jig.name in consideredJigs ? {...jigs, [jig.name]: jig} : jigs, {}),
+    //     racks: task.racks.map(r => ({...r, jigs: state.racks[r.name]})),
+    //     hangars: [],
+    //     trailers_beluga: [],
+    //     trailers_factory: [],
+    //     jig_types: task.jig_types,
+    //     production_lines: [],
+    //     flights: []
+    // 
+    console.log('TODO');
+
     return task;
+}
+
+function filterUpTo(collection: string[], considered: Set<string>){
+    let res: string[] = [];
+    for(let s of collection){
+        if(s in considered){
+            res.push(s)
+        }
+        else{
+            break;
+        }
+    }
+    return res;
+}
+
+export function deriveSuccessor(section: FlightSection, task: BelugaProblem){
+    let newStartState = applyActions(section.startState, section.actions, task);
+    if (newStartState == undefined){
+        return undefined;
+    }
+    let suc: FlightSectionBase = {
+        flightIndex: section.flightIndex + 1,
+        startState: newStartState,
+        status: PlanRunStatus.PENDING,
+        finished: false,
+        predecessorId: section._id,
+        treeId: section.treeId,
+        actions: []
+    }
+    return suc;
 }

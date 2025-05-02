@@ -37,6 +37,10 @@ export const loadFlightPlanTreeSuccess = createAction('[beluga-flight-section-pl
 export const loadFlightPlanTreeNotNullSuccess = createAction('[beluga-flight-section-planning] load flight plan tree not null success', props<{tree: FlightPlanTree}>());
 export const loadFlightPlanTreeFailure = createAction('[beluga-flight-section-planning] load flight plan tree failure', props<{err: any}>());
 
+export const reloadFlightPlanTree= createAction('[beluga-flight-section-planning] reload flight plan tree', props<{id: string}>());
+export const reloadFlightPlanTreeSuccess = createAction('[beluga-flight-section-planning] reload flight plan tree success', props<{tree: FlightPlanTree}>());
+export const reloadFlightPlanTreeFailure = createAction('[beluga-flight-section-planning] reload flight plan tree failure', props<{err: any}>());
+
 export const initFlightPlanTree = createAction('[beluga-flight-section-planning] init flight plan tree', props<{projectId: string, initialState: BelugaState}>());
 export const initFlightPlanTreeSuccess = createAction('[beluga-flight-section-planning] init flight plan tree success', props<{tree: FlightPlanTree}>());
 export const initFlightPlanTreeFailure = createAction('[beluga-flight-section-planning] init flight plan tree failure', props<{err: any}>());
@@ -49,10 +53,14 @@ export const updateFlightPlanTree = createAction('[beluga-flight-section-plannin
 export const updateFlightPlanTreeSuccess = createAction('[beluga-flight-section-planning] update flight plan tree success', props<{tree: FlightPlanTree}>());
 export const updateFlightPlanTreeFailure = createAction('[beluga-flight-section-planning] update flight plan tree failure', props<{err: any}>());
 
+export const updateFlightPlanTreeSelected = createAction('[beluga-flight-section-planning] update flight plan tree selected', props<{id: string}>());
+
 // sections
 export const loadFlightSections = createAction('[beluga-flight-section-planning] load flight plan sections', props<{treeId: string}>());
 export const loadFlightSectionsSuccess = createAction('[beluga-flight-section-planning] load flight plan sections success', props<{sections: Record<string,FlightSection>}>());
 export const loadFlightSectionsFailure = createAction('[beluga-flight-section-planning] load flight plan sections failure', props<{err: any}>());
+
+export const createSuccessorFlightSection = createAction('[beluga-flight-section-planning] create successor flight plan section', props<{section: FlightSection}>());
 
 export const createFlightSection = createAction('[beluga-flight-section-planning] new flight plan section', props<{section: FlightSectionBase}>());
 export const createFlightSectionSuccess = createAction('[beluga-flight-section-planning] new flight plan section success', props<{section: FlightSection}>());

@@ -103,7 +103,7 @@ export class ProjectCreatorComponent {
       Object.values(belugaModel.jigs).forEach(jig => objects.push({name: jig.name, type: jig.type}));
       Object.values(belugaModel.trailers_beluga).forEach(t => objects.push({name: t.name, type: 'trailer'}));
       Object.values(belugaModel.trailers_factory).forEach(t => objects.push({name: t.name, type: 'trailer'}));
-      Object.values(belugaModel.hangars).forEach(h => objects.push({name: h, type: 'hangar'}));
+      Object.values(belugaModel.hangars).forEach(h => objects.push({name: h.name, type: 'hangar'}));
       Object.values(belugaModel.production_lines).forEach(pl => objects.push({name: pl.name, type: 'production_line'}));
       Object.values(belugaModel.flights).forEach(f => objects.push({name: f.name, type: 'flight'}));
 

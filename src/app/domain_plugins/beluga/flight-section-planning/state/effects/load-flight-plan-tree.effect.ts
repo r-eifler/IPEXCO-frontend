@@ -4,7 +4,7 @@ import { Action } from "@ngrx/store";
 import { of } from "rxjs";
 import { catchError, switchMap } from "rxjs/operators";
 import { FlightPlanTreeService } from "../../services/flight-plan-tree.service";
-import { loadFlightPlanTree, loadFlightPlanTreeFailure, loadFlightPlanTreeNotNullSuccess, loadFlightPlanTreeSuccess, loadFlightSections } from "../flight-section-planning.actions";
+import { loadFlightPlanTree, loadFlightPlanTreeFailure, loadFlightPlanTreeNotNullSuccess, loadFlightPlanTreeSuccess, loadFlightSections, reloadFlightPlanTree, reloadFlightPlanTreeFailure, reloadFlightPlanTreeSuccess } from "../flight-section-planning.actions";
 
 @Injectable()
 export class LoadFlightPlanTreeEffect{
@@ -23,6 +23,14 @@ export class LoadFlightPlanTreeEffect{
                 return actions;
             }),
             catchError((e) => of(loadFlightPlanTreeFailure({err: e}))),
+        ))
+    ))
+
+    public reload$ = createEffect(() => this.actions$.pipe(
+        ofType(reloadFlightPlanTree),
+        switchMap(({id}) => this.service.getTreeById$(id).pipe(
+            switchMap(tree => [reloadFlightPlanTreeSuccess({tree})]),
+            catchError((e) => of(reloadFlightPlanTreeFailure({err: e}))),
         ))
     ))
 

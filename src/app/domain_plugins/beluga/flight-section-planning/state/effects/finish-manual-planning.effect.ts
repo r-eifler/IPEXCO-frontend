@@ -5,6 +5,7 @@ import { concatLatestFrom } from "@ngrx/operators";
 import { Store } from "@ngrx/store";
 import { switchMap, tap } from "rxjs";
 import { PlanRunStatus } from "src/app/iterative_planning/domain/plan";
+import { BelugaActionType, SwitchBeluga } from "../../../shared/domain/beluga_plan";
 import { finishManualPlanning, finishManualPlanningFailure, updateFlightSection } from "../flight-section-planning.actions";
 import { selectProject, selectSelectedSection } from "../flight-section-planning.selector";
 
@@ -26,7 +27,7 @@ export class FinishManualPlanningEffect{
                 return [
                     updateFlightSection({section:{
                         ...section,
-                        actions,
+                        actions: [...actions, {name: BelugaActionType.SWITCH_TO_NEXT_BELUGA} as SwitchBeluga],
                         finished: true,
                         status: PlanRunStatus.SOLVED,
                     }}),

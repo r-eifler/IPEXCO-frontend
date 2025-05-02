@@ -202,7 +202,7 @@ export const selectCanDeliver = memoizeWith(
 // Hangars 
 
 export const selectHangars = createSelector(selectTask, 
-    (task) => task?.hangars.map(name => HangarZ.parse({name})))
+    (task) => task?.hangars)
 
 export const selectHangarsState = createSelector(selectTaskState, 
     (taskState) => taskState?.hangars)

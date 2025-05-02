@@ -5,7 +5,7 @@ import { applyAction, BelugaState } from "../../shared/domain/beluga_state";
 
 export function computeSwaps(actions: BelugaAction[]){
     let num_swaps = 0;
-    let candidates = new Set();
+    let candidates = new Set<string>();
     for(let action of actions){
         if(action.name == BelugaActionType.PICK_UP_RACK){
             candidates.add(action.j)

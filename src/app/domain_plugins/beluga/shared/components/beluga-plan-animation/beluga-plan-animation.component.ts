@@ -2094,9 +2094,9 @@ export class BelugaPlanAnimationComponent {
         this.currentState.trailers[ti];
     }
     for (let hi = 0; hi < problem.hangars.length; hi++) {
-      this.hangarNameToIndex.set(problem.hangars[hi], hi);
+      this.hangarNameToIndex.set(problem.hangars[hi].name, hi);
       this.currentState.hangars.push({
-        name: problem.hangars[hi],
+        name: problem.hangars[hi].name,
         craning: null,
         trailer: null,
         fObj: null,

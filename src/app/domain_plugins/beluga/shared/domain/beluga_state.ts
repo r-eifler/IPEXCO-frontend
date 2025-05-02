@@ -25,7 +25,7 @@ export function getInitialState(model: BelugaProblem) {
         trailersBeluga: model.trailers_beluga.reduce((acc,c) => ({...acc, [c.name]: null}), {}),
         trailersFactory: model.trailers_factory.reduce((acc,c) => ({...acc, [c.name]: null}), {}),
         racks: model.racks.reduce((acc,c) => ({...acc, [c.name]: [...c.jigs]}), {}),
-        hangars: model.hangars.reduce((acc,c) => ({...acc, [c]: null}), {}),
+        hangars: model.hangars.reduce((acc,c) => ({...acc, [c.name]: null}), {}),
         productionLines: model.production_lines.reduce((acc,c) => ({...acc,[c.name]: c}), {})
       }
 }
