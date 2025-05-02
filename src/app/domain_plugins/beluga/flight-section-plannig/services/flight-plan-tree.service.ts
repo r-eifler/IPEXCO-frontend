@@ -5,6 +5,7 @@ import { map } from "rxjs/operators";
 import { environment } from "src/environments/environment";
 import { array } from "zod";
 import { FlightPlanTree, FlightPlanTreeBase, FlightPlanTreeZ, FlightSection, FlightSectionBase, FlightSectionZ } from "../domain/flight-section";
+import { BelugaState } from "../../shared/domain/beluga_state";
 
 
 @Injectable()
@@ -42,8 +43,8 @@ export class FlightPlanTreeService{
       )
     }
 
-    initTree$(projectId): Observable<FlightPlanTree> {
-      return this.http.post<unknown>(this.BASE_URL + 'init', {projectId: projectId}).pipe(
+    initTree$(projectId: string, initialState: BelugaState): Observable<FlightPlanTree> {
+      return this.http.post<unknown>(this.BASE_URL + 'init', {projectId, initialState}).pipe(
         map(data => FlightPlanTreeZ.parse(data)),
       )
     }

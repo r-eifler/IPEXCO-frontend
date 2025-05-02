@@ -4,6 +4,7 @@ import { PlanProperty, PlanPropertyOfProject } from "src/app/shared/domain/plan-
 import { Project } from "src/app/shared/domain/project";
 import { FlightPlanTree, FlightPlanTreeBase, FlightSection, FlightSectionBase } from "../domain/flight-section";
 import { Service } from "src/app/global_specification/domain/services";
+import { BelugaState } from "../../shared/domain/beluga_state";
 
 
 export const loadProject = createAction('[beluga-flight-section-planning] load project', props<{id: string}>());
@@ -34,7 +35,7 @@ export const loadFlightPlanTreeSuccess = createAction('[beluga-flight-section-pl
 export const loadFlightPlanTreeNotNullSuccess = createAction('[beluga-flight-section-planning] load flight plan tree not null success', props<{tree: FlightPlanTree}>());
 export const loadFlightPlanTreeFailure = createAction('[beluga-flight-section-planning] load flight plan tree failure', props<{err: any}>());
 
-export const initFlightPlanTree = createAction('[beluga-flight-section-planning] init flight plan tree', props<{projectId: string}>());
+export const initFlightPlanTree = createAction('[beluga-flight-section-planning] init flight plan tree', props<{projectId: string, initialState: BelugaState}>());
 export const initFlightPlanTreeSuccess = createAction('[beluga-flight-section-planning] init flight plan tree success', props<{tree: FlightPlanTree}>());
 export const initFlightPlanTreeFailure = createAction('[beluga-flight-section-planning] init flight plan tree failure', props<{err: any}>());
 
