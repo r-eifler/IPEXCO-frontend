@@ -1,22 +1,37 @@
+import { CdkDropListGroup } from '@angular/cdk/drag-drop';
 import { Component, inject } from '@angular/core';
+import { MatIconModule } from '@angular/material/icon';
+import { RouterLink } from '@angular/router';
 import { provideTranslocoScope, TranslocoModule } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 import { BreadcrumbModule } from 'src/app/shared/components/breadcrumb/breadcrumb.module';
 import { PageModule } from 'src/app/shared/components/page/page.module';
+import { FlightStateComponent } from '../../components/flight-state/flight-state.component';
+import { HangarsStateComponent } from '../../components/hangars-state/hangars-state.component';
+import { PlanSectionComponent } from '../../components/plan-section/plan-section.component';
+import { ProductionLineStateComponent } from '../../components/production-line-state/production-line-state.component';
+import { RacksStateComponent } from '../../components/racks-state/racks-state.component';
+import { SectionControlsComponent } from '../../components/section-controls/section-controls.component';
 import { StateGridComponent } from '../../components/state-grid/state-grid.component';
+import { TrailersStateComponent } from '../../components/trailers-state/trailers-state.component';
 import { selectTask } from '../../state/builder.feature';
-import { RouterLink } from '@angular/router';
-import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-section-builder-base',
   imports: [
       PageModule,
       TranslocoModule,
-      StateGridComponent,
       BreadcrumbModule,
       MatIconModule,
       RouterLink,
+      HangarsStateComponent,
+      FlightStateComponent,
+      ProductionLineStateComponent,
+      RacksStateComponent,
+      TrailersStateComponent,
+      PlanSectionComponent,
+      CdkDropListGroup,
+      SectionControlsComponent,
     ],
   providers: [
       provideTranslocoScope({

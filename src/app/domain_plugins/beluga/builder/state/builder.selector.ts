@@ -34,6 +34,8 @@ export const selectFinishedPlanSections = createSelector(BuilderFeature.selectPl
 export const selectCurrentPlanSection = createSelector(BuilderFeature.selectCurrentSection, 
     (section) => section);
 
+export const selectCurrentSectionActions = createSelector(selectCurrentPlanSection, 
+    (section) => section?.actions);
 
 // Task State
 

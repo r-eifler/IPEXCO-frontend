@@ -3,7 +3,7 @@ import { Loadable, LoadingState } from "src/app/shared/common/loadable.interface
 import { Project } from "src/app/shared/domain/project";
 import { BelugaProblem, BelugaProblemZ } from "../../shared/domain/beluga_problem";
 import { FlightPlanTree, FlightSection } from "../domain/flight-section";
-import { loadDomainSpecification, loadDomainSpecificationSuccess, loadFlightPlanTree, loadFlightPlanTreeSuccess, loadFlightSections, loadFlightSectionsSuccess, loadProject, loadProjectSuccess, loadServices, loadServicesSuccess } from "./flight-section-planning.actions";
+import { loadDomainSpecification, loadDomainSpecificationSuccess, loadFlightPlanTree, loadFlightPlanTreeSuccess, loadFlightSections, loadFlightSectionsSuccess, loadProject, loadProjectSuccess, loadServices, loadServicesSuccess, selectSection } from "./flight-section-planning.actions";
 import { BelugaState, getInitialState } from "../../shared/domain/beluga_state";
 import { DomainSpecification } from "src/app/global_specification/domain/domain_specification";
 import { Service } from "src/app/global_specification/domain/services";
@@ -16,6 +16,7 @@ export interface FlightSectionPlanningState {
     services: Loadable<Service[]>;
     tree: Loadable<FlightPlanTree | null>;
     sections: Loadable<Record<string,FlightSection>>;
+    selectedSectionId: null | string;
 }
 
 
@@ -27,6 +28,7 @@ const initialState: FlightSectionPlanningState = {
     services: { state: LoadingState.Initial, data: undefined },
     tree: {state: LoadingState.Initial, data: undefined},
     sections: {state: LoadingState.Initial, data: undefined},
+    selectedSectionId: null,
 }
 
 
@@ -76,5 +78,9 @@ export const FlightSectionPlanningReducer = createReducer(
     on(loadFlightSectionsSuccess, (state, {sections}): FlightSectionPlanningState => ({
         ...state,
         sections: {state: LoadingState.Done, data: sections},
+    })),
+    on(selectSection, (state, {id}): FlightSectionPlanningState => ({
+        ...state,
+        selectedSectionId: id
     })),
 );

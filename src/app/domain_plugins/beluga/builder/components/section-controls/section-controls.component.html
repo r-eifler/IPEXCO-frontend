@@ -1,0 +1,11 @@
+<div class="main" *transloco="let t">
+    <button mat-flat-button [disabled]="!(nextFlightAvailable$ | async)" (click)="onSave()">
+        <mat-icon>save</mat-icon>
+        {{t('b.save')}}
+    </button>
+    <button mat-button (click)="onCancel()">
+        <mat-icon>cancel</mat-icon>
+        {{t('b.cancel')}}
+    </button>
+</div>
+

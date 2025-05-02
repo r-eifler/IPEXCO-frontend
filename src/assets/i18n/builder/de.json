@@ -19,5 +19,7 @@
     "hangars": "Hangars",
     "remaining_jigs": "verbleibende Montagegestelle",
     "actions": "Aktionen",
-    "flight_sections_overview": "Flugabschnitte Übersicht"
+    "flight_sections_overview": "Flugabschnitte Übersicht",
+    "save": "speichern",
+    "cancel": "abbrechen"
 }

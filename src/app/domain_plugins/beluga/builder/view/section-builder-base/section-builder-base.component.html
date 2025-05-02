@@ -7,6 +7,28 @@
        {{t('b.manual_planning')}}
     </app-page-title>
     <app-page-content>
-        <app-state-grid></app-state-grid>
+        <div class="main" *transloco="let t">
+            <div class="controls">
+                <app-section-controls></app-section-controls>
+            </div>
+            <div class="plan">
+                <app-plan-section></app-plan-section>
+            </div>
+            <div class="grid beluga-boundary" cdkDropListGroup>
+                <p class="header">{{t('b.flights')}}</p>
+                <p class="header">{{t('b.trailers')}} Beluga</p>
+                <p class="header">{{t('b.racks')}}</p>
+                <p class="header">{{t('b.trailers')}} {{t('b.factory')}}</p>
+                <p class="header">{{t('b.hangars')}}</p>
+                <p class="header">{{t('b.production_lines')}}</p>
+        
+                <app-flight-state class="full-height"></app-flight-state>
+                <app-trailers-state class="full-height" [side]="'bside'"></app-trailers-state>
+                <app-racks-state class="full-height"></app-racks-state>
+                <app-trailers-state class="full-height" [side]="'fside'"></app-trailers-state>
+                <app-hangars-state class="full-height"></app-hangars-state>
+                <app-production-line-state class="full-height"></app-production-line-state>
+            </div>
+        </div>
     </app-page-content>
 </app-page-full>

@@ -14,7 +14,7 @@ export class UpdateFlightPlanTreeEffect{
 
     public update$ = createEffect(() => this.actions$.pipe(
         ofType(updateFlightPlanTree),
-        switchMap(({tree}) => this.service.postTree$(tree).pipe(
+        switchMap(({tree}) => this.service.putTree$(tree).pipe(
             switchMap(tree => [updateFlightPlanTreeSuccess({tree})]),
             catchError((e) => of(updateFlightPlanTreeFailure({err: e})))
         ))

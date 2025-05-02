@@ -5,6 +5,8 @@ import { Project } from "src/app/shared/domain/project";
 import { FlightPlanTree, FlightPlanTreeBase, FlightSection, FlightSectionBase } from "../domain/flight-section";
 import { Service } from "src/app/global_specification/domain/services";
 import { BelugaState } from "../../shared/domain/beluga_state";
+import { BelugaAction } from "../../shared/domain/beluga_plan";
+import { PlanMethod } from "../domain/plan_method";
 
 
 export const loadProject = createAction('[beluga-flight-section-planning] load project', props<{id: string}>());
@@ -60,6 +62,7 @@ export const updateFlightSection = createAction('[beluga-flight-section-planning
 export const updateFlightSectionSuccess = createAction('[beluga-flight-section-planning] update flight plan section success', props<{section: FlightSection}>());
 export const updateFlightSectionFailure = createAction('[beluga-flight-section-planning] update flight plan section failure', props<{err: any}>());
 
+export const selectSection = createAction('[beluga-flight-section-planning] select section', props<{id: string}>());
 
 // services
 export const loadServices = createAction('[beluga-flight-section-planning] load  services');
@@ -69,5 +72,11 @@ export const loadServicesFailure = createAction('[beluga-flight-section-planning
 
 // planning methods
 
-export const startManualPlanning = createAction('[beluga-flight-section-planning] start manual planning', props<{section: FlightSection}>());
+export const startManualPlanning = createAction('[beluga-flight-section-planning] start manual planning', props<{section: FlightSection, method: PlanMethod}>());
 export const startManualPlanningFailure = createAction('[beluga-flight-section-planning] start manual planning failure', props<{err: any}>());
+
+export const finishManualPlanning = createAction('[beluga-flight-section-planning] finish manual planning', props<{actions: BelugaAction[]}>());
+export const finishManualPlanningFailure = createAction('[beluga-flight-section-planning] finish manual planning failure', props<{err: any}>());
+
+export const cancelManualPlanning = createAction('[beluga-flight-section-planning] cancel manual planning');
+export const cancelManualPlanningFailure = createAction('[beluga-flight-section-planning] cancel manual planning failure', props<{err: any}>());

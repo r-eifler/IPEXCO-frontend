@@ -89,7 +89,7 @@ export class SectionCardComponent {
       if (result !== undefined) {
         console.log(result);
         if(result.method.type == PlanMethodType.MANUAL){
-          this.store.dispatch(startManualPlanning({section: this.section()}))
+          this.store.dispatch(startManualPlanning({section: this.section(), method: result.method}))
         }
       }
     });

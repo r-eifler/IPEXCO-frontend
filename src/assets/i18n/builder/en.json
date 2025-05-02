@@ -19,5 +19,7 @@
     "hangars": "hangars",
     "remaining_jigs": "remaining jigs",
     "actions": "actions",
-    "flight_sections_overview": "Flight Sections Overview"
+    "flight_sections_overview": "Flight Sections Overview",
+    "save": "save",
+    "cancel": "cancel"
 }

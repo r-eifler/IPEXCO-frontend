@@ -13,7 +13,7 @@ export class UpdateFlightSectionEffect{
 
     public update$ = createEffect(() => this.actions$.pipe(
         ofType(updateFlightSection),
-        switchMap(({section}) => this.service.postSection$(section).pipe(
+        switchMap(({section}) => this.service.putSection$(section).pipe(
             switchMap(section => [updateFlightSectionSuccess({section}), loadFlightSections({treeId: section.treeId})]),
             catchError((e) => of(updateFlightSectionFailure({err: e})))
         ))

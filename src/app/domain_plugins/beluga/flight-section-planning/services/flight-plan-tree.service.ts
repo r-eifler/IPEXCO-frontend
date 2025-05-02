@@ -55,14 +55,14 @@ export class FlightPlanTreeService{
       )
     }
 
-    putTree$(tree: FlightPlanTreeBase): Observable<FlightPlanTree> {
-      return this.http.put<unknown>(this.BASE_URL, tree).pipe(
+    putTree$(tree: FlightPlanTree): Observable<FlightPlanTree> {
+      return this.http.put<unknown>(this.BASE_URL + tree._id, tree).pipe(
         map(data => FlightPlanTreeZ.parse(data)),
       )
     }
 
-    putSection$(section: FlightSectionBase): Observable<FlightSection> {
-      return this.http.put<unknown>(this.BASE_URL + 'section', section).pipe(
+    putSection$(section: FlightSection): Observable<FlightSection> {
+      return this.http.put<unknown>(this.BASE_URL + 'section/' + section._id, section).pipe(
         map(data => FlightSectionZ.parse(data)),
       )
     }

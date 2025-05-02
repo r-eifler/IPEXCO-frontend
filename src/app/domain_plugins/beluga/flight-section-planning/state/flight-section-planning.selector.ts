@@ -13,10 +13,8 @@ const selectState = FlightSectionPlanningFeature.selectFlightSectionPlanningStat
 
 export const selectProject = createSelector(selectState, (state) => state.project.data)
 
-
-// Project
-
 export const selectDomainSpecification = createSelector(selectState, (state) => state.domainSpecification.data)
+
 
 // Task general
 
@@ -33,6 +31,7 @@ export const selectFlights = createSelector(selectTask,
 
 export const selectNumFlightsFlights = createSelector(selectTask, 
     (task) => task?.flights?.length ?? 0)
+
 
 // Services
 
@@ -54,6 +53,12 @@ export const selectHasTree = createSelector(selectState,
     
 export const selectSections = createSelector(selectState, 
     (state) => (state.sections.data))
+
+export const selectSelectedSectionId = createSelector(selectState, 
+    (state) => (state.selectedSectionId))
+
+export const selectSelectedSection = createSelector(selectSections, selectSelectedSectionId,  
+    (sections, id) => id !== null ? sections?.[id] : undefined);
 
 export const selectActiveBranchSections = createSelector(selectTree, selectSections,
     (tree, sections) => {
@@ -82,10 +87,8 @@ export const selectActiveBranchLastSectionFinished= createSelector(selectActiveB
 export const selectBranches = createSelector(selectTree, 
     (tree) => (tree?.branches));
 
-
 export const selectBranchIndex = createSelector(selectTree, 
     (tree) => (tree?.selectedBranch));
-
 
 export const selectTreeHead = createSelector(selectTree, 
     (tree) => (tree?.selectedSectionId));
@@ -93,3 +96,4 @@ export const selectTreeHead = createSelector(selectTree,
 export const selectRemainingNumberFlights = createSelector(selectActiveBranchNumberFinishedFlights, selectNumFlightsFlights,
     (numFinishedFlights, numFLights) => numFLights - (numFinishedFlights ?? 0)
 )
+
