@@ -1,0 +1,56 @@
+<mat-card appearance="outlined" *transloco="let t">
+    <mat-card-header>
+      <mat-card-title>
+        <!-- <app-label
+          [color]="step()?.plan?.status | stepStatusColor"
+        >{{ step()?.plan?.status | stepStatusName }}</app-label> -->
+      </mat-card-title>
+    </mat-card-header>
+  
+    <mat-card-content>
+      <div class="content">
+        <div class="stats-main">
+          <div class="stats-container">
+              <span>{{t('f.task')}}</span>
+              <div class="stats"> 
+                  <mat-icon>flight</mat-icon>
+                  <span class="property-label">{{t('f.flights')}}:</span>
+                  <span class="property-value">{{ numFlights() ?? '?'}}</span>
+
+                  <mat-icon>menu</mat-icon>
+                  <span class="property-label">{{t('f.racks')}}:</span>
+                  <span class="property-value">{{ numRacks() ?? '?' }}</span>
+          
+                  <mat-icon>crop_16_9</mat-icon>
+                  <span class="property-label">{{t('f.jigs')}}:</span>
+                  <span class="property-value">{{ numJigs() ?? '?'}}</span>
+              </div>
+          </div>
+    
+          <div class="stats-container">
+              <span>{{t('f.plan')}}</span>
+              <div class="stats"> 
+                  <mat-icon>euro</mat-icon>
+                  <span class="property-label">{{t('f.length')}}:</span>
+                  <span class="property-value">{{ length() ?? '?'}}</span>
+                  <mat-icon>swap_vert</mat-icon>
+                  <span class="property-label">{{t('f.swaps')}}:</span>
+                  <span class="property-value">{{ swaps() ?? '?' }}</span>
+                  <mat-icon>menu</mat-icon>
+                  <span class="property-label">{{t('f.rack_occupancy_rate')}}:</span>
+                  <span class="property-value">{{ rackOccupancyRate() ?? '?' }}</span>
+              </div>
+          </div>
+        </div>
+  
+        <div class="utility">
+          <mat-icon>connecting_airports</mat-icon>
+          <div class="utility-value-container">
+            <span class="value">{{ numFinishedFlights() + '/' + numFlights() }}</span>
+            <span class="label">{{t('f.flights')}}</span>
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+  

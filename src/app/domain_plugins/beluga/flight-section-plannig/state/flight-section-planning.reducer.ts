@@ -4,10 +4,12 @@ import { Project } from "src/app/shared/domain/project";
 import { BelugaProblem, BelugaProblemZ } from "../../shared/domain/beluga_problem";
 import { FlightPlanTree, FlightSection } from "../domain/flight-section";
 import { loadFlightPlanTree, loadFlightPlanTreeSuccess, loadFlightSections, loadFlightSectionsSuccess, loadProject, loadProjectSuccess } from "./flight-section-planning.actions";
+import { BelugaState, getInitialState } from "../../shared/domain/beluga_state";
 
 export interface FlightSectionPlanningState {
     project: Loadable<Project>;
     task: Loadable<BelugaProblem>;
+    initialState: Loadable<BelugaState>;
     tree: Loadable<FlightPlanTree | null>;
     sections: Loadable<Record<string,FlightSection>>;
 }
@@ -16,6 +18,7 @@ export interface FlightSectionPlanningState {
 const initialState: FlightSectionPlanningState = {
     project: {state: LoadingState.Initial, data: undefined},
     task: {state: LoadingState.Initial, data: undefined},
+    initialState: {state: LoadingState.Initial, data: undefined},
     tree: {state: LoadingState.Initial, data: undefined},
     sections: {state: LoadingState.Initial, data: undefined},
 }
@@ -27,11 +30,15 @@ export const FlightSectionPlanningReducer = createReducer(
         ...state,
         project: {state: LoadingState.Loading, data: undefined}
     })),
-    on(loadProjectSuccess, (state, {project}): FlightSectionPlanningState => ({
-        ...state,
-        project: {state: LoadingState.Done, data: project},
-        task:   {state: LoadingState.Done, data: BelugaProblemZ.parse(project?.baseTask?.model)}
-    })),
+    on(loadProjectSuccess, (state, {project}): FlightSectionPlanningState => {
+        const task = BelugaProblemZ.parse(project?.baseTask?.model);
+        return {
+            ...state,
+            project: {state: LoadingState.Done, data: project},
+            task: {state: LoadingState.Done, data: task},
+            initialState: {state: LoadingState.Done, data: getInitialState(task)},
+        }
+    }),
     on(loadFlightPlanTree, (state): FlightSectionPlanningState => ({
         ...state,
         tree: {state: LoadingState.Loading, data: undefined},

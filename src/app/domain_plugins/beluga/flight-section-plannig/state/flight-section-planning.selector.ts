@@ -1,6 +1,8 @@
 import { createSelector } from "@ngrx/store";
 import { LoadingState } from "src/app/shared/common/loadable.interface";
 import { FlightSectionPlanningFeature } from "./flight-section-planning.feature";
+import { PlanRunStatus } from "src/app/iterative_planning/domain/plan";
+import { BelugaAction } from "../../shared/domain/beluga_plan";
 
 
 const selectState = FlightSectionPlanningFeature.selectFlightSectionPlanningState
@@ -14,6 +16,10 @@ export const selectProject = createSelector(selectState, (state) => state.projec
 
 export const selectTask = createSelector(selectState, 
     (state) => (state.task.data)
+);
+
+export const selectInitialState = createSelector(selectState, 
+    (state) => (state.initialState.data)
 );
 
 export const selectFlights = createSelector(selectTask, 
@@ -48,6 +54,15 @@ export const selectActiveBranchSections = createSelector(selectTree, selectSecti
         return branchSections;
     }
 );
+
+export const selectActiveBranchActions= createSelector(selectActiveBranchSections, 
+    (sections) => sections?.reduce((actions, s) => s.status == PlanRunStatus.SOLVED ? [...actions,...s.actions] : actions, [] as BelugaAction[]));
+
+export const selectActiveBranchFinishedFlights= createSelector(selectActiveBranchSections, 
+    (sections) => sections?.filter(s => s.status == PlanRunStatus.SOLVED).length);
+
+export const selectActiveBranchLastSectionFinished= createSelector(selectActiveBranchSections, 
+    (sections) => sections?.[sections?.length - 1].status == PlanRunStatus.SOLVED);
 
 export const selectBranches = createSelector(selectTree, 
     (tree) => (tree?.branches));

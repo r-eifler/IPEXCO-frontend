@@ -17,5 +17,13 @@
     "actions": "actions",
     "flight_section_plans": "Flight Section Plans",
     "new_plan": "new plan",
-    "new_plan_info": "No plan available. Start a new plan with the button \"new plan\" in the top."
+    "new_plan_info": "No plan available. Start a new plan with the button \"new plan\" in the top.",
+    "generate_plan": "generate plan",
+    "inspect_plan": "inspect plan",
+    "length": "length",
+    "swaps": "swaps",
+    "rack_occupancy_rate": "rack occupancy rate",
+    "plan_next_flight": "plan next flight",
+    "plan": "Plan",
+    "task": "Auftrag"
 }

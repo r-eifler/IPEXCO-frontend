@@ -9,7 +9,8 @@ import { ControlsComponent } from '../../components/controls/controls.component'
 import { FlightInfoCardComponent } from '../../components/flight-info-card/flight-info-card.component';
 import { SectionTreeComponent } from '../../components/section-tree/section-tree.component';
 import { initFlightPlanTree } from '../../state/flight-section-planning.actions';
-import { selectFlights, selectHasTree, selectProject } from '../../state/flight-section-planning.selector';
+import { selectActiveBranchLastSectionFinished, selectFlights, selectHasTree, selectProject } from '../../state/flight-section-planning.selector';
+import { SectionTreeHeroComponent } from '../../components/section-tree-hero/section-tree-hero.component';
 
 @Component({
   selector: 'app-section-forest',
@@ -22,6 +23,7 @@ import { selectFlights, selectHasTree, selectProject } from '../../state/flight-
     MatIconModule,
     MatButtonModule,
     InfoComponent,
+    SectionTreeHeroComponent,
   ],
   providers: [
       provideTranslocoScope({
@@ -39,7 +41,7 @@ export class PlanSectionsOverview {
   project = this.store.selectSignal(selectProject);
   flights = this.store.selectSignal(selectFlights);
   hasTree = this.store.selectSignal(selectHasTree);
-  
+
 
   newTree(){
     let projectId = this.project()?._id;

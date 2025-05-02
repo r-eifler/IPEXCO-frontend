@@ -1,11 +1,12 @@
 @use '../../../../../../variables' as vars;
 
 .content {
-  padding-block: var(--spacing-100);
+  padding-top: var(--spacing-100);
 
   display: grid;
-  grid-template-columns: auto auto;
-  align-items: start;
+  grid-template-columns: 1fr auto;
+  justify-content: space-between;
+  align-items: end;
 
   gap: var(--spacing-100);
 }
@@ -26,7 +27,7 @@
 
   display: grid;
   grid-template-columns: auto auto minmax(0, 1fr);
-  align-items: start;
+  align-items: end;
 
   column-gap: var(--spacing-100);
 }
@@ -37,24 +38,10 @@
   gap: var(--spacing-100);
 }
 
-.action-container {
-  width: 100%;
 
+.plan-link-container {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: var(--spacing-100);
-  align-items: center;
-
-  .details {
-    display: grid;
-  }
-}
-
-.title{
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: var(--spacing-100);
-  align-items: center;
+  justify-content: center;
 }
 
 .utility {
@@ -66,8 +53,8 @@
     grid-row: 1;
     grid-column: 1;
 
-    opacity: 0.075;
-    --icon-size: 50px;
+    opacity: 0.1;
+    --icon-size: 96px;
     font-size: var(--icon-size);
     width: var(--icon-size);
     height: var(--icon-size);

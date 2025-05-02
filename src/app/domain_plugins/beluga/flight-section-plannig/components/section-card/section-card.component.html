@@ -1,1 +1,56 @@
-<p>section-card works!</p>
+<mat-card appearance="outlined" *transloco="let t">
+    <mat-card-header>
+        <mat-card-title class="title">
+            <app-label [color]="section()?.status | stepStatusColor">{{ section()?.status | stepStatusName }}</app-label> 
+            {{ flight()?.name }}
+        </mat-card-title>
+    </mat-card-header>
+  
+    <mat-card-content>
+      <div class="content">
+        <div class="stats-main">
+            <div class="stats-container">
+                <span>{{t('f.flug')}}</span>
+                <div class="stats"> 
+                    <mat-icon>flight_land</mat-icon>
+                    <span class="property-label">{{t('f.incoming')}}:</span>
+                    <span class="property-value">{{ numIncoming() ?? '?'}}</span>
+                    <mat-icon>flight_takeoff</mat-icon>
+                    <span class="property-label">{{t('f.outgoing')}}:</span>
+                    <span class="property-value">{{ numOutgoing() ?? '?' }}</span>
+                </div>
+            </div>
+    
+            <div class="stats-container">
+                <span>{{t('f.plan')}}</span>
+                <div class="stats"> 
+                    <mat-icon>euro</mat-icon>
+                    <span class="property-label">{{t('f.length')}}:</span>
+                    <span class="property-value">{{ length() ?? '?'}}</span>
+                    <mat-icon>swap_vert</mat-icon>
+                    <span class="property-label">{{t('f.swaps')}}:</span>
+                    <span class="property-value">{{ swaps() ?? '?' }}</span>
+                    <mat-icon>menu</mat-icon>
+                    <span class="property-label">{{t('f.rack_occupancy_rate')}}:</span>
+                    <span class="property-value">{{ rackOccupancyRate() ?? '?' }}</span>
+                </div>
+            </div>
+        </div>
+      </div>
+    </mat-card-content>
+    <mat-card-actions>
+        <div class="action-container">
+            @if(hasNoPlan()){
+                <a class="details" mat-flat-button (click)="onCreatePlan()">{{t('f.generate_plan')}}</a>
+            }
+            @else{
+                <a class="details" mat-stroked-button [routerLink]="[section()?._id ]">{{t('f.inspect_plan')}}</a>
+                <button mat-icon-button
+                    matTooltip="Creates a different plan for this flight."
+                    (click)="onBranch()"
+                ><mat-icon>call_split</mat-icon></button>
+            }
+        </div>
+    </mat-card-actions>
+</mat-card>
+  

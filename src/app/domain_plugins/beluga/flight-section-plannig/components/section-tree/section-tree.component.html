@@ -1,8 +1,14 @@
-<div class="list">
-    <app-new-section-action></app-new-section-action>
-    @for(section of sections(); track section._id){
+<div class="list" *transloco="let t">
+    <button mat-stroked-button 
+        (click)="onNextFlightPlan()"
+        [disabled]="!lastSectionFinished()"
+    >
+        {{t('f.plan_next_flight')}}
+    </button>
+    @for(section of sections(); track section._id; let idx = $index){
         <app-section-card
             [section]="section"
+            [flight]="flights()?.[idx]"
         >
         </app-section-card>
     }

@@ -16,6 +16,14 @@
     "remaining_jigs": "verbleibende Montagegestelle",
     "actions": "Aktionen",
     "flight_section_plans": "Flugabschnittespläne",
-     "new_plan": "neuer Plan",
-     "new_plan_info": "Es ist kein Plan verfügbar. Starte einen neun Plan mit dem Button \"neuer Plan\"."
+    "new_plan": "neuer Plan",
+    "new_plan_info": "Es ist kein Plan verfügbar. Starte einen neun Plan mit dem Button \"neuer Plan\".",
+    "generate_plan": "erstelle Plan",
+    "inspect_plan": "prüfe Plan",
+    "length": "Länge",
+    "swaps": "Swaps",
+    "rack_occupancy_rate": "Rackbelegungsrate",
+    "plan_next_flight": "plane nächsten Flug",
+    "plan": "Plan",
+    "task": "Auftrag"
 }
