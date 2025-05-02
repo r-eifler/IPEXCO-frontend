@@ -3,15 +3,18 @@ import { Project } from "src/app/shared/domain/project";
 import { BelugaProblem, Side } from "../../shared/domain/beluga_problem";
 import { BelugaAction } from "../../shared/domain/beluga_plan";
 import { DragSource } from "./builder.reducer";
+import { BelugaState } from "../../shared/domain/beluga_state";
 
+// project
 
 export const loadProject = createAction('[beluga-builder] load project', props<{id: string}>());
 export const loadProjectSuccess = createAction('[beluga-builder] load project success', props<{project: Project}>());
 export const loadProjectFailure = createAction('[beluga-builder] load project failure', props<{err: any}>());
 
+// init builder
 
-// builder state
-export const initTask = createAction('[beluga-builder] init task', props<{task: BelugaProblem}>());
+export const initBuilder = createAction('[beluga-builder] init task', props<{task: BelugaProblem, initState: BelugaState}>());
+
 
 // Beluga actions
 

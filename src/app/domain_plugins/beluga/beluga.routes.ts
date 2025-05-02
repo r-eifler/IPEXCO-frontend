@@ -34,7 +34,7 @@ export const routes: Routes = [
       },
       {
         path: 'flight-section-planning',
-        loadChildren: () => import('./flight-section-plannig/flight-section-planning.routes').then(m => m.routes),
+        loadChildren: () => import('./flight-section-planning/flight-section-planning.routes').then(m => m.routes),
       }
     ]
   }

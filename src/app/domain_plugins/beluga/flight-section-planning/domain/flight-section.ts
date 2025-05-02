@@ -3,6 +3,7 @@ import { array, boolean, nullable, number, object, optional, record, string, inf
 import { BelugaActionZ } from "../../shared/domain/beluga_plan";
 import { BelugaStateZ } from "../../shared/domain/beluga_state";
 import { PlanMethodTypeZ } from "./plan_method";
+import { BelugaProblem } from "../../shared/domain/beluga_problem";
 
 
 export const FlightSectionBaseZ = object({
@@ -55,3 +56,9 @@ export const FlightPlanTreeZ = FlightPlanTreeBaseZ.merge(object({
 );
 
 export type FlightPlanTree = zinfer<typeof FlightPlanTreeZ>;
+
+
+export function projectTaskToSection(task: BelugaProblem, section: FlightSection){
+    console.log("TODO");
+    return task;
+}

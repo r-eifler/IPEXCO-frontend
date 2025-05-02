@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { BuilderShellComponent } from './shell.component';
+import { PlanningShellComponent } from './planning-shell.component';
 
-describe('ShellComponent', () => {
-  let component: BuilderShellComponent;
-  let fixture: ComponentFixture<BuilderShellComponent>;
+describe('PlanningShellComponent', () => {
+  let component: PlanningShellComponent;
+  let fixture: ComponentFixture<PlanningShellComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [BuilderShellComponent]
+      imports: [PlanningShellComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(BuilderShellComponent);
+    fixture = TestBed.createComponent(PlanningShellComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

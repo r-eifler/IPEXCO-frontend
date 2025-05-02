@@ -17,6 +17,9 @@
                         <mat-chip>{{selectedPlanner()?.name}}</mat-chip>
                     }
                 }
+                @if(selectedMethodType() === types.MANUAL){
+                    <mat-chip>{{t('f.manual')}}</mat-chip>
+                }
                 @if(finished()){
                     <mat-chip>{{t('f.num_optimized_flights')}}: {{numOptimizedFlights}}</mat-chip>
                 }

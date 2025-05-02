@@ -1,11 +1,9 @@
 import { createReducer, on } from "@ngrx/store";
-import { Loadable, LoadingState } from "src/app/shared/common/loadable.interface";
-import { Project } from "src/app/shared/domain/project";
 import { BelugaActionType, SwitchBeluga } from "../../shared/domain/beluga_plan";
 import { BelugaProblem, BelugaProblemZ, Side } from "../../shared/domain/beluga_problem";
 import { applyAction, BelugaState, getInitialState } from "../../shared/domain/beluga_state";
 import { FlightSectionPlan, PlanSection } from "../domain/plan";
-import { cancelDrag, createNewBelugaAction, loadProject, loadProjectSuccess, nextFlight, startDrag, stopDrag } from "./builder.actions";
+import { cancelDrag, createNewBelugaAction, initBuilder, loadProject, loadProjectSuccess, nextFlight, startDrag, stopDrag } from "./builder.actions";
 
 
 export interface DragSource{
@@ -13,9 +11,8 @@ export interface DragSource{
     stageType: 'rack' | 'trailer' | 'incoming' | 'hangar' | 'flight'
 }
 
-export interface HomeState {
+export interface BuilderState {
     sizeUnit: number;
-    project: Loadable<Project>,
     task: BelugaProblem | null,
     taskState: BelugaState | null | undefined,
     plan: FlightSectionPlan,
@@ -26,9 +23,8 @@ export interface HomeState {
 }
 
 
-const initialState: HomeState = {
+const initialState: BuilderState = {
     sizeUnit: 15,
-    project: {state: LoadingState.Initial, data: undefined},
     task: null,
     taskState: null,
     plan: {sections: []},
@@ -39,20 +35,16 @@ const initialState: HomeState = {
 }
 
 
-export const HomeReducer = createReducer(
+export const BuilderReducer = createReducer(
     initialState,
-    on(loadProject, (state): HomeState => ({
-        ...state,
-        project: {state: LoadingState.Loading, data: undefined}
-    })),
-    on(loadProjectSuccess, (state, {project}): HomeState => {
+    on(loadProject, (): BuilderState => initialState),
+    on(loadProjectSuccess, (state, {project}): BuilderState => {
         let task = BelugaProblemZ.parse(project?.baseTask?.model);
         let taskState = getInitialState(task);
         return {
             ...state,
-            project: {state: LoadingState.Done, data: project},
             task: BelugaProblemZ.parse(project?.baseTask?.model),
-            taskState,
+            taskState: taskState,
             currentSection: {
                 initialState: taskState,
                 actions: [],
@@ -60,7 +52,12 @@ export const HomeReducer = createReducer(
             }
         }
     }),
-    on(createNewBelugaAction, (state, {action}): HomeState => ({
+    on(initBuilder, (_, {task, initState}): BuilderState => ({
+        ...initialState,
+        task: task,
+        taskState: initState,
+    })),
+    on(createNewBelugaAction, (state, {action}): BuilderState => ({
         ...state,
         taskState: state.taskState !== null && state.taskState !== undefined && state.task != null ? 
             applyAction(state.taskState, action, state.task) : null,
@@ -70,7 +67,7 @@ export const HomeReducer = createReducer(
             actions: [...(state.currentSection?.actions ?? []), action]
         }
     })),
-    on(nextFlight, (state): HomeState => {
+    on(nextFlight, (state): BuilderState => {
         let switchBelugaAction : SwitchBeluga = {name: BelugaActionType.SWITCH_TO_NEXT_BELUGA};
         let finishedSection = {
             initialState: state.currentSection?.initialState,
@@ -92,19 +89,19 @@ export const HomeReducer = createReducer(
             }
         }
     }),
-    on(startDrag, (state, {source, jigName, sides}): HomeState => ({
+    on(startDrag, (state, {source, jigName, sides}): BuilderState => ({
         ...state,
         dragSource: source,
         draggedJig: jigName,
         draggedSides: sides,
     })),
-    on(stopDrag, (state): HomeState => ({
+    on(stopDrag, (state): BuilderState => ({
         ...state,
         dragSource: null,
         draggedJig: null,
         draggedSides: null,
     })),
-    on(cancelDrag, (state): HomeState => ({
+    on(cancelDrag, (state): BuilderState => ({
         ...state,
         dragSource: null,
         draggedJig: null,

@@ -18,5 +18,6 @@
     "factory": "Fabrik",
     "hangars": "Hangars",
     "remaining_jigs": "verbleibende Montagegestelle",
-    "actions": "Aktionen"
+    "actions": "Aktionen",
+    "flight_sections_overview": "Flugabschnitte Übersicht"
 }

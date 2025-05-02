@@ -9,12 +9,9 @@ const selectState = BuilderFeature.selectBuilderFeatureState
 
 // Project/Task
 
-export const selectProject = createSelector(selectState, 
-    (state) => (state.project.data));
 
 export const selectTask = createSelector(selectState, 
-    (state) => (state.project.data?.baseTask?.model != null ? 
-    BelugaProblemZ.parse(state.project.data?.baseTask?.model) : null)
+    (state) => state.task
 );
 
 export const selectJigTypes= createSelector(selectTask, 

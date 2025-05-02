@@ -37,7 +37,7 @@ export const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: '/user',
+    redirectTo: 'beluga',
     pathMatch: 'full'
   },
   {

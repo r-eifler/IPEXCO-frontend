@@ -18,5 +18,6 @@
     "factory": "factory",
     "hangars": "hangars",
     "remaining_jigs": "remaining jigs",
-    "actions": "actions"
+    "actions": "actions",
+    "flight_sections_overview": "Flight Sections Overview"
 }

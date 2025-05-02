@@ -4,11 +4,10 @@ import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { Project, ProjectZ } from "src/app/shared/domain/project";
 import { environment } from "src/environments/environment";
-import { array, boolean } from "zod";
 
 
 @Injectable()
-export class ProjectService{
+export class BuilderProjectService{
 
     private http = inject(HttpClient)
     private BASE_URL = environment.apiURL + "project/";

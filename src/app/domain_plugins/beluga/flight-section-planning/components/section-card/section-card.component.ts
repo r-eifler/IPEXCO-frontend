@@ -11,13 +11,16 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatIconModule } from '@angular/material/icon';
 import { StepStatusColorPipe } from 'src/app/iterative_planning/domain/pipe/step-status-color.pipe';
 import { StepStatusNamePipe } from 'src/app/iterative_planning/domain/pipe/step-status-name.pipe';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { PlanRunStatus } from 'src/app/iterative_planning/domain/plan';
 import { computeSwaps, computeRackOccupancyRate } from '../../domain/metrics';
 import { Store } from '@ngrx/store';
 import { selectRemainingNumberFlights, selectSupportedPlanners, selectTask } from '../../state/flight-section-planning.selector';
 import { MatDialog } from '@angular/material/dialog';
 import { SectionPlanMethodDialogComponent } from '../section-plan-method-dialog/section-plan-method-dialog.component';
+import { PlanMethod, PlanMethodType } from '../../domain/plan_method';
+import { startManualPlanning } from '../../state/flight-section-planning.actions';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-section-card',
@@ -40,9 +43,11 @@ import { SectionPlanMethodDialogComponent } from '../section-plan-method-dialog/
 export class SectionCardComponent {
 
   store = inject(Store);
-  supportedPlanners= this.store.selectSignal(selectSupportedPlanners);
   readonly dialog = inject(MatDialog);
+  router = inject(Router);
+  activatedRoute = inject(ActivatedRoute)
 
+  supportedPlanners= this.store.selectSignal(selectSupportedPlanners);
   task = this.store.selectSignal(selectTask);
   remainingNUmberFlights = this.store.selectSignal(selectRemainingNumberFlights);
 
@@ -80,10 +85,12 @@ export class SectionCardComponent {
       data: {maxNumFlights: this.remainingNUmberFlights(), planners: this.supportedPlanners()},
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().pipe(take(1)).subscribe((result: {method: PlanMethod, numFlights: number}) => {
       if (result !== undefined) {
         console.log(result);
-        //TODO
+        if(result.method.type == PlanMethodType.MANUAL){
+          this.store.dispatch(startManualPlanning({section: this.section()}))
+        }
       }
     });
   }

@@ -1,16 +1,15 @@
 import { createFeature } from "@ngrx/store";
-import { HomeReducer } from "./builder.reducer";
+import { BuilderReducer } from "./builder.reducer";
 
 
 export const BuilderFeature = createFeature({
-    name: 'builderFeature',
-    reducer: HomeReducer
+    name: 'BuilderFeature',
+    reducer: BuilderReducer
 });
 
 export const {
     name,
     reducer,
-    selectProject,
     selectBuilderFeatureState,
     selectCurrentSection,
     selectDraggedJig,

@@ -1,16 +1,14 @@
-import { Component, computed, inject, signal, Signal, WritableSignal } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { DialogModule } from 'src/app/shared/components/dialog/dialog.module';
-import { Flight } from '../../../shared/domain/beluga_problem';
-import { FlightSection } from '../../domain/flight-section';
+import { Component, computed, inject, signal, WritableSignal } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import { TranslocoModule } from '@jsverse/transloco';
-import { PlanMethodType } from '../../domain/plan_method';
-import { Service } from 'src/app/global_specification/domain/services';
 import { MatChipsModule } from '@angular/material/chips';
-import { MatInputModule } from '@angular/material/input';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { FormBuilder, MinValidator, MaxValidator, ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
+import { TranslocoModule } from '@jsverse/transloco';
+import { Service } from 'src/app/global_specification/domain/services';
+import { DialogModule } from 'src/app/shared/components/dialog/dialog.module';
+import { PlanMethodType } from '../../domain/plan_method';
 
 @Component({
   selector: 'app-section-plan-method-dialog',
