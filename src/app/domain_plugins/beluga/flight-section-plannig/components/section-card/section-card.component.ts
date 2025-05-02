@@ -15,7 +15,9 @@ import { RouterLink } from '@angular/router';
 import { PlanRunStatus } from 'src/app/iterative_planning/domain/plan';
 import { computeSwaps, computeRackOccupancyRate } from '../../domain/metrics';
 import { Store } from '@ngrx/store';
-import { selectTask } from '../../state/flight-section-planning.selector';
+import { selectRemainingNumberFlights, selectSupportedPlanners, selectTask } from '../../state/flight-section-planning.selector';
+import { MatDialog } from '@angular/material/dialog';
+import { SectionPlanMethodDialogComponent } from '../section-plan-method-dialog/section-plan-method-dialog.component';
 
 @Component({
   selector: 'app-section-card',
@@ -38,8 +40,11 @@ import { selectTask } from '../../state/flight-section-planning.selector';
 export class SectionCardComponent {
 
   store = inject(Store);
+  supportedPlanners= this.store.selectSignal(selectSupportedPlanners);
+  readonly dialog = inject(MatDialog);
 
   task = this.store.selectSignal(selectTask);
+  remainingNUmberFlights = this.store.selectSignal(selectRemainingNumberFlights);
 
   section = input.required<FlightSection>();
   flight = input.required<Flight>();
@@ -71,6 +76,15 @@ export class SectionCardComponent {
   }
 
   onCreatePlan(){
+    const dialogRef = this.dialog.open(SectionPlanMethodDialogComponent, {
+      data: {maxNumFlights: this.remainingNUmberFlights(), planners: this.supportedPlanners()},
+    });
 
+    dialogRef.afterClosed().subscribe(result => {
+      if (result !== undefined) {
+        console.log(result);
+        //TODO
+      }
+    });
   }
 }

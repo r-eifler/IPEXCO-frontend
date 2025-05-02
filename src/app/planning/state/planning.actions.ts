@@ -16,13 +16,13 @@ export const updateProjectSuccess = createAction('[planning]update project succe
 export const updateProjectFailure = createAction('[planning]update project failure',  props<{err: any}>());
 
 // domain spec
-export const loadDomainSpecification = createAction('[planning]load  domain specification', props<{id: string}>());
-export const loadDomainSpecificationSuccess = createAction('[planning]load  domain specification success', props<{domainSpecification: DomainSpecification}>());
-export const loadDomainSpecificationFailure = createAction('[planning]load  domain specification failure',  props<{err: any}>());
+export const loadDomainSpecification = createAction('[planning] load  domain specification', props<{id: string}>());
+export const loadDomainSpecificationSuccess = createAction('[planning] load  domain specification success', props<{domainSpecification: DomainSpecification}>());
+export const loadDomainSpecificationFailure = createAction('[planning] load  domain specification failure',  props<{err: any}>());
 
-export const loadDomainSpecifications = createAction('[project-meta] load domain specifications');
-export const loadDomainSpecificationsSuccess = createAction('[project-meta] load domain specifications success', props<{domainSpecifications: DomainSpecification[]}>());
-export const loadDomainSpecificationsFailure = createAction('[project-meta] load domain specifications failure', props<{err: any}>());
+export const loadDomainSpecifications = createAction('[planning] load domain specifications');
+export const loadDomainSpecificationsSuccess = createAction('[planning] load domain specifications success', props<{domainSpecifications: DomainSpecification[]}>());
+export const loadDomainSpecificationsFailure = createAction('[planning] load domain specifications failure', props<{err: any}>());
 
 
 // services

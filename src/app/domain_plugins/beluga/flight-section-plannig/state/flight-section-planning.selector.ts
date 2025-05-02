@@ -3,6 +3,7 @@ import { LoadingState } from "src/app/shared/common/loadable.interface";
 import { FlightSectionPlanningFeature } from "./flight-section-planning.feature";
 import { PlanRunStatus } from "src/app/iterative_planning/domain/plan";
 import { BelugaAction } from "../../shared/domain/beluga_plan";
+import { Encoding, ServiceType } from "src/app/global_specification/domain/services";
 
 
 const selectState = FlightSectionPlanningFeature.selectFlightSectionPlanningState
@@ -12,7 +13,12 @@ const selectState = FlightSectionPlanningFeature.selectFlightSectionPlanningStat
 
 export const selectProject = createSelector(selectState, (state) => state.project.data)
 
-// Model general
+
+// Project
+
+export const selectDomainSpecification = createSelector(selectState, (state) => state.domainSpecification.data)
+
+// Task general
 
 export const selectTask = createSelector(selectState, 
     (state) => (state.task.data)
@@ -27,6 +33,15 @@ export const selectFlights = createSelector(selectTask,
 
 export const selectNumFlightsFlights = createSelector(selectTask, 
     (task) => task?.flights?.length ?? 0)
+
+// Services
+
+export const selectAllPlanners = createSelector(selectState,  (state) => 
+        state.services.data === undefined ? [] : state.services.data.filter(s => s.type === ServiceType.PLANNER));
+
+export const selectSupportedPlanners = createSelector(selectAllPlanners, selectDomainSpecification, (planners, domainSpec) => 
+    planners.filter(p => (domainSpec?.encoding === p.encoding) && (domainSpec?.encoding !== Encoding.DOMAIN_DEPENDENT || p.domainId === domainSpec._id))
+);
 
 
 // Tree
@@ -58,7 +73,7 @@ export const selectActiveBranchSections = createSelector(selectTree, selectSecti
 export const selectActiveBranchActions= createSelector(selectActiveBranchSections, 
     (sections) => sections?.reduce((actions, s) => s.status == PlanRunStatus.SOLVED ? [...actions,...s.actions] : actions, [] as BelugaAction[]));
 
-export const selectActiveBranchFinishedFlights= createSelector(selectActiveBranchSections, 
+export const selectActiveBranchNumberFinishedFlights= createSelector(selectActiveBranchSections, 
     (sections) => sections?.filter(s => s.status == PlanRunStatus.SOLVED).length);
 
 export const selectActiveBranchLastSectionFinished= createSelector(selectActiveBranchSections, 
@@ -72,5 +87,9 @@ export const selectBranchIndex = createSelector(selectTree,
     (tree) => (tree?.selectedBranch));
 
 
-export const selectTreeHead= createSelector(selectTree, 
+export const selectTreeHead = createSelector(selectTree, 
     (tree) => (tree?.selectedSectionId));
+
+export const selectRemainingNumberFlights = createSelector(selectActiveBranchNumberFinishedFlights, selectNumFlightsFlights,
+    (numFinishedFlights, numFLights) => numFLights - (numFinishedFlights ?? 0)
+)

@@ -5,7 +5,7 @@ import { TranslocoModule } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 import { LabelModule } from 'src/app/shared/components/label/label.module';
 import { computeRackOccupancyRate, computeSwaps } from '../../domain/metrics';
-import { selectActiveBranchActions, selectActiveBranchFinishedFlights, selectActiveBranchSections, selectInitialState, selectNumFlightsFlights, selectTask } from '../../state/flight-section-planning.selector';
+import { selectActiveBranchActions, selectActiveBranchNumberFinishedFlights, selectActiveBranchSections, selectInitialState, selectNumFlightsFlights, selectTask } from '../../state/flight-section-planning.selector';
 import { MatIconModule } from '@angular/material/icon';
 
 @Component({
@@ -29,7 +29,7 @@ export class SectionTreeHeroComponent {
 
   sections = this.store.selectSignal(selectActiveBranchSections);
   activeBranchActions =  this.store.selectSignal(selectActiveBranchActions);
-  numFinishedFlights = this.store.selectSignal(selectActiveBranchFinishedFlights);
+  numFinishedFlights = this.store.selectSignal(selectActiveBranchNumberFinishedFlights);
 
   numFlights = this.store.selectSignal(selectNumFlightsFlights);
   numRacks = computed(() => this.task()?.racks.length)

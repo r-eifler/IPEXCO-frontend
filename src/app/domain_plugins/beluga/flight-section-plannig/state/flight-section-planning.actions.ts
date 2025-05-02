@@ -3,6 +3,7 @@ import { DomainSpecification } from "src/app/global_specification/domain/domain_
 import { PlanProperty, PlanPropertyOfProject } from "src/app/shared/domain/plan-property/plan-property";
 import { Project } from "src/app/shared/domain/project";
 import { FlightPlanTree, FlightPlanTreeBase, FlightSection, FlightSectionBase } from "../domain/flight-section";
+import { Service } from "src/app/global_specification/domain/services";
 
 
 export const loadProject = createAction('[beluga-flight-section-planning] load project', props<{id: string}>());
@@ -12,9 +13,9 @@ export const loadProjectFailure = createAction('[beluga-flight-section-planning]
 
 // domain specifications
 
-export const loadDomainSpecifications = createAction('[beluga-flight-section-planning] load domain specifications');
-export const loadDomainSpecificationsSuccess = createAction('[beluga-flight-section-planning] load domain specifications success', props<{domainSpecifications: DomainSpecification[]}>());
-export const loadDomainSpecificationsFailure = createAction('[beluga-flight-section-planning] load domain specifications failure', props<{err: any}>());
+export const loadDomainSpecification = createAction('[beluga-flight-section-planning] load domain specification', props<{id: string}>());
+export const loadDomainSpecificationSuccess = createAction('[beluga-flight-section-planning] load domain specification success', props<{domainSpecification: DomainSpecification}>());
+export const loadDomainSpecificationFailure = createAction('[beluga-flight-section-planning] load domain specification failure', props<{err: any}>());
 
 
 // plan properties
@@ -59,10 +60,7 @@ export const updateFlightSectionSuccess = createAction('[beluga-flight-section-p
 export const updateFlightSectionFailure = createAction('[beluga-flight-section-planning] update flight plan section failure', props<{err: any}>());
 
 
-// interface navigation
-
-export const setFlightStartIndex = createAction('[beluga-flight-section-planning] set flight start index', props<{index: number}>());
-export const setFlightEndIndex = createAction('[beluga-flight-section-planning] set flight end index', props<{index: number}>());
-
-export const increaseFlightIndex = createAction('[beluga-flight-section-planning] increase flight index', props<{offset: number}>());
-export const decreaseFlightIndex = createAction('[beluga-flight-section-planning] decrease flight index', props<{offset: number}>());
+// services
+export const loadServices = createAction('[beluga-flight-section-planning] load  services');
+export const loadServicesSuccess = createAction('[beluga-flight-section-planning] load  services success', props<{services: Service[]}>());
+export const loadServicesFailure = createAction('[beluga-flight-section-planning] load  services failure',  props<{err: any}>());

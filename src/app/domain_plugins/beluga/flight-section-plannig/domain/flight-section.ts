@@ -2,6 +2,7 @@ import { PlanRunStatusZ } from "src/app/iterative_planning/domain/plan";
 import { array, boolean, nullable, number, object, optional, record, string, infer as zinfer } from "zod";
 import { BelugaActionZ } from "../../shared/domain/beluga_plan";
 import { BelugaStateZ } from "../../shared/domain/beluga_state";
+import { PlanMethodTypeZ } from "./plan_method";
 
 
 export const FlightSectionBaseZ = object({
@@ -11,6 +12,7 @@ export const FlightSectionBaseZ = object({
     predecessorId: nullable(string()),
     treeId: string(),
 
+    planMethod: optional(PlanMethodTypeZ),
     actions: array(BelugaActionZ),
     status: PlanRunStatusZ,
     satisfiedProperties: array(string()).optional(),

@@ -1,0 +1,52 @@
+<app-dialog *transloco="let t">
+    <app-dialog-header>
+        <app-dialog-title>{{t('f.select_plan_configuration')}}</app-dialog-title>
+    </app-dialog-header>
+    <app-dialog-content>
+        <div class="main">
+            <mat-chip-set>
+                @if(selectedMethodType() === null){
+                    <mat-chip>{{t('f.method_type')}} ?</mat-chip>
+                }
+                @if(selectedMethodType() === types.AUTOMATIC_SEARCH_PLANNER){
+                    <mat-chip>{{t('f.automatic')}}</mat-chip>
+                    @if(selectedPlanner() === null){
+                        <mat-chip>{{t('f.planning_service')}} ?</mat-chip>
+                    }
+                    @if(selectedPlanner() !== null){
+                        <mat-chip>{{selectedPlanner()?.name}}</mat-chip>
+                    }
+                }
+                @if(finished()){
+                    <mat-chip>{{t('f.num_optimized_flights')}}: {{numOptimizedFlights}}</mat-chip>
+                }
+            </mat-chip-set>
+            @if(selectedMethodType() === null){
+                <div class="button-container">
+                    <button mat-flat-button class="full-width" (click)="onAutomatic()">{{t('f.automatic')}}</button>
+                    <button mat-stroked-button class="full-width" (click)="onManual()">{{t('f.manual')}}</button>
+                </div>
+            }
+            @if(selectedMethodType() === types.AUTOMATIC_SEARCH_PLANNER && selectedPlanner() == null){
+                <div class="button-container">
+                    @for(planner of planners; track planner._id){
+                        <button mat-button class="full-width" (click)="onSelectPlanner(planner)">{{planner.name}}</button>
+                    }
+                </div>
+            }
+
+            @if(finished()){
+                <form class="button-container">
+                    <mat-form-field class="full-width">
+                        <mat-label>{{t('f.num_optimized_flights')}}</mat-label>
+                        <input matInput type="number" [(ngModel)]="numOptimizedFlights" min="1" [max]="maxNumFlights" name="numOptimizedFlights">
+                    </mat-form-field>
+                </form>
+            }
+        </div>
+    </app-dialog-content>
+    <app-dialog-footer>
+        <button mat-button (click)="onCancel()">{{t('f.cancel')}}</button>
+        <button mat-flat-button (click)="onStart()" [disabled]="!finished()">{{t('f.start')}}</button>
+    </app-dialog-footer>
+</app-dialog>

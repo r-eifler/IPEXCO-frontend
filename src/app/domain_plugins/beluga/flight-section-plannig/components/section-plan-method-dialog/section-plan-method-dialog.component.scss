@@ -1,0 +1,17 @@
+.button-container{
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-100);
+    align-items: center;
+    justify-content: space-around;
+}
+
+.full-width{
+    width: 100%;
+}
+
+.main{
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-300);
+}

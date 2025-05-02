@@ -4,9 +4,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslocoModule } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
-import { createFlightPlanTree, decreaseFlightIndex, increaseFlightIndex } from '../../state/flight-section-planning.actions';
 import { selectNumFlightsFlights, selectProject } from '../../state/flight-section-planning.selector';
-import { FlightPlanTree } from '../../domain/flight-section';
 
 @Component({
   selector: 'app-controls',

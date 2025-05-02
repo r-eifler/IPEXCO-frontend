@@ -8,6 +8,8 @@ import { provideEffects } from '@ngrx/effects';
 import { LoadProjectResolver } from './resolver/load-project.resolver';
 import { FlightPlanTreeService } from './services/flight-plan-tree.service';
 import { PlanSectionsOverview } from './views/plan-section-overview/plan-section-overview.component';
+import { ServicesService } from './services/services.service';
+import { DomainSpecificationService } from './services/domainSpecification.service';
 
 export const routes: Routes = [
   {
@@ -20,6 +22,8 @@ export const routes: Routes = [
       provideEffects(flightSectionPlanningEffects),
       ProjectService,
       FlightPlanTreeService,
+      ServicesService,
+      DomainSpecificationService,
     ],
     children: [
       {

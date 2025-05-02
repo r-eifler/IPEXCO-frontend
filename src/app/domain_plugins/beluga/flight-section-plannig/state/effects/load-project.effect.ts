@@ -3,7 +3,7 @@ import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { of } from "rxjs";
 import { catchError, switchMap } from "rxjs/operators";
 import { ProjectService } from "../../services/project.service";
-import { loadFlightPlanTree, loadProject, loadProjectFailure, loadProjectSuccess } from "../flight-section-planning.actions";
+import { loadDomainSpecification, loadFlightPlanTree, loadProject, loadProjectFailure, loadProjectSuccess, loadServices } from "../flight-section-planning.actions";
 
 
 @Injectable()
@@ -18,6 +18,8 @@ export class LoadProjectEffect{
             switchMap(project => [
                 loadProjectSuccess({project}), 
                 loadFlightPlanTree({projectId: project._id}),
+                loadServices(),
+                loadDomainSpecification({id: project.domain})
             ]),
             catchError((e) => of(loadProjectFailure({err: e})))
         ))

@@ -25,5 +25,13 @@
     "rack_occupancy_rate": "Rackbelegungsrate",
     "plan_next_flight": "plane nächsten Flug",
     "plan": "Plan",
-    "task": "Auftrag"
+    "task": "Auftrag",
+    "select_plan_method": "Wähle Plankonfiguration",
+    "manual": "manuell ",
+    "automatic": "automatisch",
+    "method_type": "Methodentyp",
+    "planning_service": "Planungsservice",
+    "num_optimized_flights": "Anzahl beachteter Flüge",
+    "start": "Starten",
+    "cancel": "Abbrechen"
 }

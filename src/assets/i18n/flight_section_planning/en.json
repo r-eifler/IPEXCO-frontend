@@ -24,6 +24,14 @@
     "swaps": "swaps",
     "rack_occupancy_rate": "rack occupancy rate",
     "plan_next_flight": "plan next flight",
-    "plan": "Plan",
-    "task": "Auftrag"
+    "plan": "plan",
+    "task": "task",
+    "select_plan_configuration": "Select plan configuration",
+    "manual": "manual",
+    "automatic": "automatic",
+    "method_type": "method type",
+    "planning_service": "planning service",
+    "num_optimized_flights": "number of considered flights",
+    "start": "Start",
+    "cancel": "Cancel"
 }
