@@ -5,7 +5,7 @@ import { TranslocoModule } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 import { LabelModule } from 'src/app/shared/components/label/label.module';
 import { computeRackOccupancyRate, computeSwaps } from '../../domain/metrics';
-import { selectActiveBranchActions, selectActiveBranchNumberFinishedFlights, selectActiveBranchSections, selectInitialState, selectNumFlightsFlights, selectTask } from '../../state/flight-section-planning.selector';
+import { selectActiveBranchActions, selectActiveBranchNumberFinishedFlights, selectActiveBranchSections, selectInitialState, selectNumFlights, selectNumJigs, selectNumRacks, selectTask } from '../../state/flight-section-planning.selector';
 import { MatIconModule } from '@angular/material/icon';
 
 @Component({
@@ -31,12 +31,9 @@ export class SectionTreeHeroComponent {
   activeBranchActions =  this.store.selectSignal(selectActiveBranchActions);
   numFinishedFlights = this.store.selectSignal(selectActiveBranchNumberFinishedFlights);
 
-  numFlights = this.store.selectSignal(selectNumFlightsFlights);
-  numRacks = computed(() => this.task()?.racks.length)
-  numJigs= computed(() => {
-    let jigs = this.task()?.jigs
-    return jigs != undefined ? Object.keys(jigs).length : null
-  })
+  numFlights = this.store.selectSignal(selectNumFlights);
+  numRacks = this.store.selectSignal(selectNumRacks);
+  numJigs= this.store.selectSignal(selectNumJigs);
 
   length = computed(() => this.activeBranchActions()?.length);
   swaps = computed(() => computeSwaps(this.activeBranchActions() ?? []));

@@ -60,7 +60,7 @@ export const PutDownRackZ = object({
   j: string(),
   t: string(),
   r: string(),
-  s: string(),
+  s: union([literal('fside'), literal('bside')]),
 });
 
 export type PutDownRack = zinfer<typeof PutDownRackZ>;
@@ -70,7 +70,7 @@ export const PickUpRackZ = object({
     j: string(),
     t: string(),
     r: string(),
-    s: string()
+    s: union([literal('fside'), literal('bside')]),
 });
 
 export type PickUpRack = zinfer<typeof PickUpRackZ>;

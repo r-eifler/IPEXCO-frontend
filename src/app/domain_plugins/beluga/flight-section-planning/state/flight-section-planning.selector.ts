@@ -29,9 +29,14 @@ export const selectInitialState = createSelector(selectState,
 export const selectFlights = createSelector(selectTask, 
     (task) => task?.flights)
 
-export const selectNumFlightsFlights = createSelector(selectTask, 
+export const selectNumFlights = createSelector(selectTask, 
     (task) => task?.flights?.length ?? 0)
 
+export const selectNumRacks = createSelector(selectTask, 
+    (task) => task?.racks?.length ?? 0)
+
+export const selectNumJigs= createSelector(selectTask, 
+    (task) => task?.jigs !== undefined ? Object.keys(task?.jigs).length : undefined)
 
 // Services
 
@@ -93,7 +98,7 @@ export const selectBranchIndex = createSelector(selectTree,
 export const selectTreeHead = createSelector(selectTree, 
     (tree) => (tree?.selectedSectionId));
 
-export const selectRemainingNumberFlights = createSelector(selectActiveBranchNumberFinishedFlights, selectNumFlightsFlights,
+export const selectRemainingNumberFlights = createSelector(selectActiveBranchNumberFinishedFlights, selectNumFlights,
     (numFinishedFlights, numFLights) => numFLights - (numFinishedFlights ?? 0)
 )
 
