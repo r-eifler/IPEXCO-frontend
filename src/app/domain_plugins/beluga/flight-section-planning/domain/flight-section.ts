@@ -58,7 +58,7 @@ export const FlightPlanTreeZ = FlightPlanTreeBaseZ.merge(object({
 export type FlightPlanTree = zinfer<typeof FlightPlanTreeZ>;
 
 
-export function projectTaskToSection(task: BelugaProblem, section: FlightSection){
+export function projectTaskToSection(task: BelugaProblem, section: FlightSection, numFlights = 1){
     if(section.startState === undefined){
         return undefined;
     }
@@ -66,8 +66,12 @@ export function projectTaskToSection(task: BelugaProblem, section: FlightSection
     const state = section.startState;
 
     const consideredJigs = new Set<string>();
-    task.flights[section.flightIndex].incoming.forEach(j => consideredJigs.add(j))
-    Object.values(state.racks).forEach(r => r.forEach(j => consideredJigs));
+
+    for(let indexOffset = 0; indexOffset < numFlights; indexOffset++){
+        task.flights[section.flightIndex + indexOffset].incoming.forEach(j => consideredJigs.add(j))
+    }
+    
+    Object.values(state.racks).forEach(r => r.forEach(j => consideredJigs.add(j)));
     Object.values(state.trailersBeluga).forEach(j => {if(j !== null){consideredJigs.add(j)}});
     Object.values(state.trailersFactory).forEach(j => {if(j !== null){consideredJigs.add(j)}});
     Object.values(state.hangars).forEach(j => {if(j !== null){consideredJigs.add(j)}});
@@ -76,25 +80,24 @@ export function projectTaskToSection(task: BelugaProblem, section: FlightSection
         pl => ({...pl, schedule: filterUpTo(pl.schedule, consideredJigs)})
     );
 
-    // let projection: BelugaProblem = {
-    //     jigs: Object.values(state.jigs).reduce((jigs, jig) => jig.name in consideredJigs ? {...jigs, [jig.name]: jig} : jigs, {}),
-    //     racks: task.racks.map(r => ({...r, jigs: state.racks[r.name]})),
-    //     hangars: [],
-    //     trailers_beluga: [],
-    //     trailers_factory: [],
-    //     jig_types: task.jig_types,
-    //     production_lines: [],
-    //     flights: []
-    // 
-    console.log('TODO');
+    let projection: BelugaProblem = {
+        jigs: Object.values(state.jigs).reduce((jigs, jig) => jig.name in consideredJigs ? {...jigs, [jig.name]: jig} : jigs, {}),
+        racks: task.racks.map(r => ({...r, jigs: state.racks[r.name]})),
+        hangars: task.hangars.map(h => ({...h, jig: state.hangars[h.name]})),
+        trailers_beluga: task.trailers_beluga.map(t => ({...t, jig: state.trailersBeluga[t.name]})),
+        trailers_factory: task.trailers_factory.map(t => ({...t, jig: state.trailersFactory[t.name]})),
+        jig_types: task.jig_types,
+        production_lines: productionLineProjections,
+        flights: task.flights.slice(section.flightIndex, section.flightIndex + numFlights)
+    }
 
-    return task;
+    return projection;
 }
 
 function filterUpTo(collection: string[], considered: Set<string>){
     let res: string[] = [];
     for(let s of collection){
-        if(s in considered){
+        if(considered.has(s)){
             res.push(s)
         }
         else{

@@ -4,12 +4,24 @@ import { BelugaProblem, Side } from "../../shared/domain/beluga_problem";
 import { BelugaAction } from "../../shared/domain/beluga_plan";
 import { DragSource } from "./builder.reducer";
 import { BelugaState } from "../../shared/domain/beluga_state";
+import { FlightSection, FlightSectionBase } from "../../flight-section-planning/domain/flight-section";
 
 // project
 
 export const loadProject = createAction('[beluga-builder] load project', props<{id: string}>());
 export const loadProjectSuccess = createAction('[beluga-builder] load project success', props<{project: Project}>());
 export const loadProjectFailure = createAction('[beluga-builder] load project failure', props<{err: any}>());
+
+// sections
+export const loadFlightSection = createAction('[beluga-builder] load flight plan section', props<{id: string}>());
+export const loadFlightSectionSuccess = createAction('[beluga-builder] load flight plan section success', props<{section: FlightSection}>());
+export const loadFlightSectionFailure = createAction('[beluga-builder] load flight plan section failure', props<{err: any}>());
+
+export const createSuccessorFlightSection = createAction('[beluga-builder] create successor flight plan section', props<{section: FlightSection}>());
+
+export const createFlightSection = createAction('[beluga-builder] new flight plan section', props<{section: FlightSectionBase}>());
+export const createFlightSectionSuccess = createAction('[beluga-builder] new flight plan section success', props<{section: FlightSection}>());
+export const createFlightSectionFailure = createAction('[beluga-builder] new flight plan section failure', props<{err: any}>());
 
 // init builder
 

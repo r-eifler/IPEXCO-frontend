@@ -1,4 +1,4 @@
-import { nativeEnum, object, optional, string, infer as zinfer } from "zod";
+import { nativeEnum, number, object, optional, string, infer as zinfer } from "zod";
 
 export enum PlanMethodType {
   MANUAL = "MANUAL",
@@ -12,6 +12,7 @@ export const PlanMethodZ = object({
   type: PlanMethodTypeZ,
   name: string(),
   serviceId: optional(string()),
+  numOptimizedFlights: number()
 });
 
 export type PlanMethod = zinfer<typeof PlanMethodZ>

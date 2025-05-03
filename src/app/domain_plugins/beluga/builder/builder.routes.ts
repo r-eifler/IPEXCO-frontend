@@ -8,6 +8,8 @@ import { BuilderFeature } from './state/builder.feature';
 import { builderEffects } from './state/effects/effects';
 import { provideState } from '@ngrx/store';
 import { SectionBuilderBaseComponent } from './view/section-builder-base/section-builder-base.component';
+import { LoadFlightSectionResolver } from './resolver/load-section.resolver';
+import { FlightPlanTreeService } from './services/flight-plan-tree.service';
 
 
 
@@ -16,11 +18,12 @@ export const routes: Routes = [
     path: '',
     component: BuilderShellComponent,
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
-    // providers: [
-    //   provideState(BuilderFeature),
-    //   provideEffects(builderEffects),
-    //   BuilderProjectService,
-    // ],
+    providers: [
+      provideState(BuilderFeature),
+      provideEffects(builderEffects),
+      BuilderProjectService,
+      FlightPlanTreeService,
+    ],
     children: [
       // {
       //   path: '',
@@ -28,8 +31,9 @@ export const routes: Routes = [
       //   redirectTo: 'builder'
       // },
       {
-        path: 'section/:sectionId',
+        path: 'project/:projectId/section/:sectionId',
         component: SectionBuilderBaseComponent,
+        resolve: [LoadProjectResolver, LoadFlightSectionResolver],
       },
       {
         path: 'project/:projectId',

@@ -29,7 +29,7 @@ export const routes: Routes = [
       ServicesService,
       DomainSpecificationService,
       // builder
-      provideState(BuilderFeature),
+      // provideState(BuilderFeature),
       // provideEffects(builderEffects),
       // BuilderProjectService,
     ],

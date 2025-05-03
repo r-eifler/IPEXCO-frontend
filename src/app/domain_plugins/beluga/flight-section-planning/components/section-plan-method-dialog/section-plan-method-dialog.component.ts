@@ -57,9 +57,9 @@ export class SectionPlanMethodDialogComponent {
       method: {
         name: this.selectedMethodType() === PlanMethodType.MANUAL  ? 'Human Planner' : this.selectedPlanner()?.name,
         type: this.selectedMethodType(),
-        serviceId: this.selectedMethodType() !== PlanMethodType.MANUAL ? this.selectedPlanner()?._id : undefined
-      },
-      numFlights: this.numOptimizedFlights
+        serviceId: this.selectedMethodType() !== PlanMethodType.MANUAL ? this.selectedPlanner()?._id : undefined,
+        numOptimizedFlights: this.numOptimizedFlights
+      }
     })
   }
 

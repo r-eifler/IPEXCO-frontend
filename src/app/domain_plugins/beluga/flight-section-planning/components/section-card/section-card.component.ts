@@ -19,7 +19,7 @@ import { selectRemainingNumberFlights, selectSupportedPlanners, selectTask } fro
 import { MatDialog } from '@angular/material/dialog';
 import { SectionPlanMethodDialogComponent } from '../section-plan-method-dialog/section-plan-method-dialog.component';
 import { PlanMethod, PlanMethodType } from '../../domain/plan_method';
-import { startManualPlanning } from '../../state/flight-section-planning.actions';
+import { registerManualPlanning } from '../../state/flight-section-planning.actions';
 import { take } from 'rxjs';
 
 @Component({
@@ -86,11 +86,11 @@ export class SectionCardComponent {
       data: {maxNumFlights: this.remainingNUmberFlights(), planners: this.supportedPlanners()},
     });
 
-    dialogRef.afterClosed().pipe(take(1)).subscribe((result: {method: PlanMethod, numFlights: number}) => {
+    dialogRef.afterClosed().pipe(take(1)).subscribe((result: {method: PlanMethod}) => {
       if (result !== undefined) {
         console.log(result);
         if(result.method.type == PlanMethodType.MANUAL){
-          this.store.dispatch(startManualPlanning({section: this.section(), method: result.method}))
+          this.store.dispatch(registerManualPlanning({section: this.section(), method: result.method}))
         }
       }
     });

@@ -1,14 +1,12 @@
 import { inject, Injectable } from "@angular/core";
-import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { selectSection, startManualPlanning, startManualPlanningFailure, updateFlightSection } from "../flight-section-planning.actions";
-import { Store } from "@ngrx/store";
-import { concatLatestFrom } from "@ngrx/operators";
-import { switchMap, tap } from "rxjs";
-import { projectTaskToSection } from "../../domain/flight-section";
-import { initBuilder } from "../../../builder/state/builder.actions";
 import { Router } from "@angular/router";
-import { selectProject, selectTask } from "../flight-section-planning.selector";
+import { Actions, createEffect } from "@ngrx/effects";
+import { concatLatestFrom } from "@ngrx/operators";
+import { Store } from "@ngrx/store";
+import { map, tap } from "rxjs";
 import { PlanRunStatus } from "src/app/iterative_planning/domain/plan";
+import { PlanMethodType } from "../../domain/plan_method";
+import { selectProject, selectSelectedSection } from "../flight-section-planning.selector";
 
 
 @Injectable()
@@ -18,25 +16,19 @@ export class StartManualPlanningEffect{
     private store = inject(Store);
     private router = inject(Router);
 
-    public start$ = createEffect(() => this.actions$.pipe(
-        ofType(startManualPlanning),
-        tap(console.log),
-        concatLatestFrom(() => [this.store.select(selectTask), this.store.select(selectProject)]),
-        switchMap(([{section, method}, task, project]) => {
-            if(task !== undefined &&  section.startState !== undefined && project !== undefined){
-                this.router.navigate(["beluga/flight-section-planning/" + project._id + "/planning/manual/section/" + section._id])
-                return [
-                    initBuilder({task, initState: section.startState}),
-                    selectSection({id: section._id}),
-                    updateFlightSection({section: {
-                        ...section,
-                        planMethod: method,
-                        status: PlanRunStatus.RUNNING
-                    }})
-                ]
+    public start$ = createEffect(() => this.store.select(selectSelectedSection).pipe(
+        tap(() => console.log("Effect check start manual planning")),
+        concatLatestFrom(() => [this.store.select(selectProject)]),
+        map(([section, project]) => {
+            if(section?.startState !== undefined && project !== undefined){
+                if(section.status == PlanRunStatus.RUNNING && section.planMethod?.type == PlanMethodType.MANUAL){
+                    this.router.navigate(["beluga/flight-section-planning/" + project._id + "/planning/manual/project/" + project._id + "/section/" + section._id])
+                    // return [startManualPlanningSuccess()]
+                }
+                // return [startManualPlanningFailure({err: {message: "Section not marked as running and manual"}})]
             }
-            return [startManualPlanningFailure({err: {message: "Task or section not available"}})]
+            // return [startManualPlanningFailure({err: {message: "Task or section not available"}})]
         })
         
-    ))
+    ), {dispatch: false})
 }

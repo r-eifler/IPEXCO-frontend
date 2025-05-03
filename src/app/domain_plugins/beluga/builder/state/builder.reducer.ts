@@ -3,8 +3,10 @@ import { BelugaActionType, SwitchBeluga } from "../../shared/domain/beluga_plan"
 import { BelugaProblem, BelugaProblemZ, Side } from "../../shared/domain/beluga_problem";
 import { applyAction, BelugaState, getInitialState } from "../../shared/domain/beluga_state";
 import { FlightSectionPlan, PlanSection } from "../domain/plan";
-import { cancelDrag, createNewBelugaAction, initBuilder, loadProject, loadProjectSuccess, nextFlight, startDrag, stopDrag } from "./builder.actions";
-
+import { cancelDrag, createNewBelugaAction, initBuilder, loadFlightSectionSuccess, loadProject, loadProjectSuccess, nextFlight, startDrag, stopDrag } from "./builder.actions";
+import { Loadable, LoadingState } from "src/app/shared/common/loadable.interface";
+import { FlightSection } from "../../flight-section-planning/domain/flight-section";
+import { projectTaskToSection } from "../../flight-section-planning/domain/flight-section";
 
 export interface DragSource{
     name: string,
@@ -12,6 +14,9 @@ export interface DragSource{
 }
 
 export interface BuilderState {
+    section: Loadable<FlightSection>,
+    numToProcessFlights: number,
+
     sizeUnit: number;
     task: BelugaProblem | null,
     taskState: BelugaState | null | undefined,
@@ -24,6 +29,9 @@ export interface BuilderState {
 
 
 const initialState: BuilderState = {
+    section: {state: LoadingState.Initial, data: undefined},
+    numToProcessFlights: 1,
+
     sizeUnit: 15,
     task: null,
     taskState: null,
@@ -37,21 +45,39 @@ const initialState: BuilderState = {
 
 export const BuilderReducer = createReducer(
     initialState,
-    on(loadProject, (): BuilderState => initialState),
+    on(loadProject, (state): BuilderState => ({
+        ...state,
+        task: null,
+        taskState: null
+    })),
     on(loadProjectSuccess, (state, {project}): BuilderState => {
         let task = BelugaProblemZ.parse(project?.baseTask?.model);
-        let taskState = getInitialState(task);
-        return {
-            ...state,
-            task: BelugaProblemZ.parse(project?.baseTask?.model),
-            taskState: taskState,
-            currentSection: {
-                initialState: taskState,
-                actions: [],
-                finished: false
+        if(state.section.data !== undefined){
+            return {
+                ...state,
+                task: projectTaskToSection(task, state.section.data, state.numToProcessFlights) ?? null,
+            }
+        }
+        else{
+            let taskState = getInitialState(task);
+            return {
+                ...state,
+                task: task,
+                taskState: taskState,
+                currentSection: {
+                    initialState: taskState,
+                    actions: [],
+                    finished: false
+                }
             }
         }
     }),
+    on(loadFlightSectionSuccess, (state, {section}): BuilderState => ({
+        ...state,
+        section: {state: LoadingState.Done, data: section},
+        taskState: section.startState,
+        task: state.task !== null ? projectTaskToSection(state.task, section, state.numToProcessFlights) ?? null : null,
+    })),
     on(initBuilder, (_, {task, initState}): BuilderState => ({
         ...initialState,
         task: task,
