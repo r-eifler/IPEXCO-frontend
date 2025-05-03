@@ -1,0 +1,23 @@
+<div>
+    <div>
+        <app-step-control
+            (back)="onBack()"
+            (forward)="onForward()"
+        ></app-step-control>
+    </div>
+    <div>
+        <app-plan-action-list
+            [actions]="actions()"
+            [task]="task()"
+            [selectedAction] = "selectedActionIndex()"
+            (actionSelected)="onActionSelected($event)"
+        ></app-plan-action-list>
+    </div>
+    <div>
+        <app-state-card
+            [state]="selectedState()"
+            [task]="task()"
+        >
+        </app-state-card>
+    </div>
+</div>

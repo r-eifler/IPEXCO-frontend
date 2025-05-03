@@ -49,7 +49,7 @@
       <app-page-section>
         <app-page-section-content>
           <div class="plans-container">
-            <app-plan-inspection
+            <app-plan-action-list
               [actions]="referenceActions$ | async"
               [task]="task$ | async"
               [selectedJigs] = "selectedJigs$ | async"
@@ -57,9 +57,9 @@
               [selectedAction] = "this.selectedActionIndexRef$ | async"
               [hiddenPrefix]="commonPrefixLength$ | async"
               (actionSelected)="onActionSelected(true, $event)"
-            ></app-plan-inspection>
+            ></app-plan-action-list>
 
-            <app-plan-inspection
+            <app-plan-action-list
               [actions]="comparisonActions$ | async"
               [task]="task$ | async"
               [selectedJigs] = "selectedJigs$ | async"
@@ -67,7 +67,7 @@
               [selectedAction] = "this.selectedActionIndexComp$ | async"
               [hiddenPrefix]="commonPrefixLength$ | async"
               (actionSelected)="onActionSelected(false, $event)"
-            ></app-plan-inspection>
+            ></app-plan-action-list>
           </div>
         </app-page-section-content>
       </app-page-section>

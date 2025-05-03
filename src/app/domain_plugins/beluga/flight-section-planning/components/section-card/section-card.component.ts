@@ -1,26 +1,27 @@
 import { Component, computed, inject, input } from '@angular/core';
-import { FlightSection } from '../../domain/flight-section';
+import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
-import { LabelModule } from 'src/app/shared/components/label/label.module';
-import { MatButtonModule } from '@angular/material/button';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { TranslocoModule } from '@jsverse/transloco';
-import { Flight } from '../../../shared/domain/beluga_problem';
-import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { TranslocoModule } from '@jsverse/transloco';
+import { Store } from '@ngrx/store';
+import { take } from 'rxjs';
 import { StepStatusColorPipe } from 'src/app/iterative_planning/domain/pipe/step-status-color.pipe';
 import { StepStatusNamePipe } from 'src/app/iterative_planning/domain/pipe/step-status-name.pipe';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { PlanRunStatus } from 'src/app/iterative_planning/domain/plan';
-import { computeSwaps, computeRackOccupancyRate } from '../../domain/metrics';
-import { Store } from '@ngrx/store';
-import { selectRemainingNumberFlights, selectSupportedPlanners, selectTask } from '../../state/flight-section-planning.selector';
-import { MatDialog } from '@angular/material/dialog';
-import { SectionPlanMethodDialogComponent } from '../section-plan-method-dialog/section-plan-method-dialog.component';
+import { LabelModule } from 'src/app/shared/components/label/label.module';
+import { Flight } from '../../../shared/domain/beluga_problem';
+import { FlightSection } from '../../domain/flight-section';
+import { computeRackOccupancyRate, computeSwaps } from '../../domain/metrics';
 import { PlanMethod, PlanMethodType } from '../../domain/plan_method';
-import { registerManualPlanning } from '../../state/flight-section-planning.actions';
-import { take } from 'rxjs';
+import { registerManualPlanning, startAutomaticPlanning } from '../../state/flight-section-planning.actions';
+import { selectRemainingNumberFlights, selectSupportedPlanners, selectTask } from '../../state/flight-section-planning.selector';
+import { PlanInspectorComponent } from '../../views/plan-inspector/plan-inspector.component';
+import { SectionPlanMethodDialogComponent } from '../section-plan-method-dialog/section-plan-method-dialog.component';
 
 @Component({
   selector: 'app-section-card',
@@ -35,7 +36,8 @@ import { take } from 'rxjs';
     TranslocoModule,
     StepStatusColorPipe,
     StepStatusNamePipe,
-    RouterLink
+    RouterLink,
+    MatProgressBarModule,
   ],
   templateUrl: './section-card.component.html',
   styleUrl: './section-card.component.scss'
@@ -56,6 +58,8 @@ export class SectionCardComponent {
 
   numOutgoing = computed(() => this.flight()?.outgoing.length ?? 0)
   numIncoming = computed(() => this.flight()?.incoming.length ?? 0)
+
+  isRunning = computed(() => this.section()?.status == PlanRunStatus.RUNNING);
 
   highlighted = input<boolean>(false);
 
@@ -81,6 +85,12 @@ export class SectionCardComponent {
 
   }
 
+  onInspectPlan(){
+    const dialogRef = this.dialog.open(PlanInspectorComponent, {
+      data: {task: this.task, section: this.section()},
+    });
+  }
+
   onCreatePlan(){
     const dialogRef = this.dialog.open(SectionPlanMethodDialogComponent, {
       data: {maxNumFlights: this.remainingNUmberFlights(), planners: this.supportedPlanners()},
@@ -92,7 +102,14 @@ export class SectionCardComponent {
         if(result.method.type == PlanMethodType.MANUAL){
           this.store.dispatch(registerManualPlanning({section: this.section(), method: result.method}))
         }
+        if(result.method.type == PlanMethodType.AUTOMATIC_SEARCH_PLANNER){
+          this.store.dispatch(startAutomaticPlanning({section: this.section(), method: result.method}))
+        }
       }
     });
+  }
+
+  onCancel(){
+
   }
 }

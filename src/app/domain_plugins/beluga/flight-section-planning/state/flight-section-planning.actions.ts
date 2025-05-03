@@ -7,6 +7,7 @@ import { Service } from "src/app/global_specification/domain/services";
 import { BelugaState } from "../../shared/domain/beluga_state";
 import { BelugaAction } from "../../shared/domain/beluga_plan";
 import { PlanMethod } from "../domain/plan_method";
+import { BelugaProblem } from "../../shared/domain/beluga_problem";
 
 
 export const loadProject = createAction('[beluga-flight-section-planning] load project', props<{id: string}>());
@@ -83,3 +84,12 @@ export const loadServicesFailure = createAction('[beluga-flight-section-planning
 export const registerManualPlanning = createAction('[beluga-flight-section-planning] register manual planning', props<{section: FlightSection, method: PlanMethod}>());
 export const startManualPlanningSuccess= createAction('[beluga-flight-section-planning] start manual planning success');
 export const startManualPlanningFailure = createAction('[beluga-flight-section-planning] start manual planning failure', props<{err: any}>());
+
+// planning automatic
+
+export const startAutomaticPlanning = createAction('[beluga-flight-section-planning] start automatic planning', props<{section: FlightSection, method: PlanMethod}>());
+export const startAutomaticPlanningSuccess = createAction('[beluga-flight-section-planning] start automatic planning success', props<{section: FlightSection}>());
+export const startAutomaticPlanningFailure = createAction('[beluga-flight-section-planning] start automatic planning failure', props<{err: any}>());
+
+export const automaticPlanningFinishedSuccess = createAction('[beluga-flight-section-planning] automatic planning finished success', props<{id: string}>());
+export const automaticPlanningFinishedFailure = createAction('[beluga-flight-section-planning] automatic planning finished failure', props<{err: any}>());

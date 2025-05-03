@@ -1,5 +1,5 @@
 import { BelugaActionType, JigActionZ } from "../../domain/beluga_plan";
-import { DisplayAction } from "./plan-inspection.component";
+import { DisplayAction } from "./plan-action-list.component";
 
 export function actionsForFlight(actions: DisplayAction[], flight: number){
     const switchIndices: number[] = []

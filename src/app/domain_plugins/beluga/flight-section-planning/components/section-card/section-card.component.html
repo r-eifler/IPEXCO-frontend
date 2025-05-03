@@ -41,10 +41,25 @@
     <mat-card-actions>
         <div class="action-container">
             @if(hasNoPlan()){
-                <a class="details" mat-flat-button (click)="onCreatePlan()">{{t('f.generate_plan')}}</a>
+                @if(isRunning()){
+                    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+                    <button mat-icon-button
+                        matTooltip="Cancel plan computation of flight section"
+                        (click)="onCancel()"
+                    >
+                        <mat-icon>cancel</mat-icon>
+                    </button>
+                }
+                @else{
+                    <a class="details" mat-flat-button (click)="onCreatePlan()">{{t('f.generate_plan')}}</a>
+                }
             }
             @else{
-                <a class="details" mat-stroked-button [routerLink]="[section()?._id ]">{{t('f.inspect_plan')}}</a>
+                <a class="details" mat-stroked-button 
+                    [routerLink]="['../plan-inspection/' + section()?._id ]"
+                >
+                    {{t('f.inspect_plan')}}
+                </a>
                 <button mat-icon-button
                     matTooltip="Creates a different plan for this flight."
                     (click)="onBranch()"

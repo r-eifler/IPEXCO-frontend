@@ -7,6 +7,7 @@ import { LoadFlightSectionsEffect } from "./load-flight-sections.effect";
 import { LoadProjectEffect } from "./load-project.effect";
 import { LoadServicesEffect } from "./load-services.effect";
 import { RegisterManualPlanningEffect } from "./register-manual-planning.effect";
+import { StartAutomaticPlanningEffect } from "./start-automatic-plannig.effect";
 import { StartManualPlanningEffect } from "./start-manual-planning.effect";
 import { UpdateFlightPlanTreeEffect } from "./update-flight-plan-tree.effect";
 import { UpdateFlightSectionEffect } from "./update-flight-section.effect";
@@ -26,4 +27,5 @@ export const flightSectionPlanningEffects = [
     RegisterManualPlanningEffect,
     StartManualPlanningEffect,
     CreateFlightSectionEffect,
+    StartAutomaticPlanningEffect,
 ]

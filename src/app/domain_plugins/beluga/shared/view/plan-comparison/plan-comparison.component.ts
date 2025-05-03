@@ -19,7 +19,7 @@ import { BreadcrumbModule } from 'src/app/shared/components/breadcrumb/breadcrum
 import { EmptyStateModule } from 'src/app/shared/components/empty-state/empty-state.module';
 import { PageModule } from 'src/app/shared/components/page/page.module';
 import { array } from 'zod';
-import { PlanInspectionComponent } from '../../components/plan-inspection/plan-inspection.component';
+import { PlanActionListComponent } from '../../components/plan-action-list/plan-action-list.component';
 import { StateCardComponent } from '../../components/state-card/state-card.component';
 import { StepControlComponent } from '../../components/step-control/step-control.component';
 import { BelugaActionZ } from '../../domain/beluga_plan';
@@ -38,7 +38,7 @@ import { applyActions, getInitialState } from '../../domain/beluga_state';
     MatTooltipModule,
     PageModule,
     RouterLink,
-    PlanInspectionComponent,
+    PlanActionListComponent,
     MatFormFieldModule,
     ReactiveFormsModule,
     MatInputModule,

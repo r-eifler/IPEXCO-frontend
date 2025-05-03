@@ -1,6 +1,6 @@
 import { Component, computed, input, output, signal, WritableSignal } from '@angular/core';
 import { BelugaAction, BelugaActionType, JigActionZ } from '../../domain/beluga_plan';
-import { BelugaProblemZ } from '../../domain/beluga_problem';
+import { BelugaProblem, BelugaProblemZ } from '../../domain/beluga_problem';
 import { ActionCardComponent } from '../action-card/action-card.component';
 import { actionsForFlight, actionsForJigs } from './plan-filters';
 import { InitCardComponent } from '../init-card/init-card.component';
@@ -14,20 +14,20 @@ export interface DisplayAction {
 }
 
 @Component({
-  selector: 'app-plan-inspection',
+  selector: 'app-plan-action-list',
   imports: [
     ActionCardComponent,
     InitCardComponent,
   ],
-  templateUrl: './plan-inspection.component.html',
-  styleUrl: './plan-inspection.component.scss'
+  templateUrl: './plan-action-list.component.html',
+  styleUrl: './plan-action-list.component.scss'
 })
-export class PlanInspectionComponent {
+export class PlanActionListComponent {
 
   actions = input.required<BelugaAction[] | null>();
 
-  selectedJigs = input.required<string[]>();
-  selectedFlight = input.required<string | null>();
+  selectedJigs = input<string[]>([]);
+  selectedFlight = input<string | null>(null);
   hiddenPrefix = input<number>(0);
   selectedAction = input.required<number | null>();
   
@@ -92,11 +92,10 @@ export class PlanInspectionComponent {
   })
 
 
-	task = input.required<unknown>();
-	belugaProblem = computed(() => BelugaProblemZ.parse(this.task()))
+	task = input.required<BelugaProblem>();
 
-  flights = computed(() => this.belugaProblem()?.flights)
-  jigs = computed(() => Object.values(this.belugaProblem()?.jigs))
+  flights = computed(() => this.task()?.flights)
+  jigs = computed(() => Object.values(this.task()?.jigs))
 
 
 

@@ -81,7 +81,7 @@ export function projectTaskToSection(task: BelugaProblem, section: FlightSection
     );
 
     let projection: BelugaProblem = {
-        jigs: Object.values(state.jigs).reduce((jigs, jig) => jig.name in consideredJigs ? {...jigs, [jig.name]: jig} : jigs, {}),
+        jigs: Object.values(state.jigs).reduce((jigs, jig) => consideredJigs.has(jig.name) ? {...jigs, [jig.name]: jig} : jigs, {}),
         racks: task.racks.map(r => ({...r, jigs: state.racks[r.name]})),
         hangars: task.hangars.map(h => ({...h, jig: state.hangars[h.name]})),
         trailers_beluga: task.trailers_beluga.map(t => ({...t, jig: state.trailersBeluga[t.name]})),

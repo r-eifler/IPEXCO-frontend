@@ -13,7 +13,7 @@ import { EmptyStateModule } from 'src/app/shared/components/empty-state/empty-st
 import { PageModule } from 'src/app/shared/components/page/page.module';
 import { selectDomainSpecification, selectProject, selectSelectedPlan } from '../../state/planning.selector';
 import { map } from 'rxjs';
-import { PlanInspectionComponent } from 'src/app/domain_plugins/beluga/shared/components/plan-inspection/plan-inspection.component';
+import { PlanActionListComponent } from 'src/app/domain_plugins/beluga/shared/components/plan-action-list/plan-action-list.component';
 
 @Component({
   selector: 'app-plan-detail-view',

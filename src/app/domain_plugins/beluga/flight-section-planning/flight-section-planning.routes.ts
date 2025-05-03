@@ -15,6 +15,10 @@ import { PlanSectionsOverview } from './views/plan-section-overview/plan-section
 import { PlanningShellComponent } from './views/planning-shell/planning-shell.component';
 import { ShellComponent } from './views/shell/shell.component';
 import { LoadFlightPlanTreeResolver } from './resolver/load-flight-plan-tree.resolver';
+import { FlightSectionPlanService } from './services/flight-section-plan.service';
+import { SectionPlanComputationMonitoringService } from './services/plan-computataion-monitoring.service';
+import { SelectSectionResolver } from './resolver/select-section.resolver';
+import { PlanInspectorComponent } from './views/plan-inspector/plan-inspector.component';
 
 export const routes: Routes = [
   {
@@ -29,10 +33,8 @@ export const routes: Routes = [
       FlightPlanTreeService,
       ServicesService,
       DomainSpecificationService,
-      // builder
-      // provideState(BuilderFeature),
-      // provideEffects(builderEffects),
-      // BuilderProjectService,
+      FlightSectionPlanService,
+      SectionPlanComputationMonitoringService,
     ],
     children: [
       {
@@ -44,6 +46,14 @@ export const routes: Routes = [
         path: 'flight-sections',
         component: PlanSectionsOverview,
         resolve: [LoadFlightPlanTreeResolver],
+      },
+      {
+        path: 'plan-inspection/:sectionId',
+        component: PlanInspectorComponent,
+        resolve: {
+          sectionId: SelectSectionResolver,
+          tree: LoadFlightPlanTreeResolver
+        },
       },
       {
         path: 'planning',
