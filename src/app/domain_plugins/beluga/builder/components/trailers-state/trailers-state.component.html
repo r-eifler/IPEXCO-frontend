@@ -1,10 +1,10 @@
 <div class="main">
     @for(trailer of (trailerStates$ | async); track trailer.name){
-        <app-trailer
+        <app-trailer-wrapper
             [trailer]="trailer"
             [side]="side()"
             [jig]="trailer.jig"
             [jigType]="(jigTypes$ | async)?.[trailer.jig?.type]">
-        </app-trailer>
+        </app-trailer-wrapper>
     }
 </div>

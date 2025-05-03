@@ -1,41 +1,18 @@
 <div class="container">
-    @if(side() =='bside'){
-        <button mat-icon-button (click)="load()" [disabled]="!canLoad()">
-            <mat-icon>arrow_backward</mat-icon>
-        </button>
-    }
+    <ng-content  select="[id=bside]"></ng-content>
     <div class="trailer-container">
         <div class="info-container">
-            <span style="font-weight: 500;">{{ trailer()?.name }}</span>
+            <span style="font-weight: 500;">{{ name() }}</span>
         </div>
-        <div class="trailer" 
-            [style.width]="displaySize() + 'px' "
-            cdkDropList [cdkDropListData]="[jig()]" 
-            (cdkDropListDropped)="drop($event)"
-            [id]="trailer()?.name"
-            [cdkDropListEnterPredicate]="empty"
-            [class.dragTarget]="(isDragTarget$ | async) && (dragInProgress$ | async)"
-            [class.noDragTarget]="!(isDragTarget$ | async) && (dragInProgress$ | async)"
+        <div 
+            class="trailer"  
+            [style.width]="size() + 'px' "
+            [class.dragTarget]="dragTarget()"
+            [class.noDragTarget]="noDragTarget()"
         >
-            @if(jig() != null){
-                <app-jig 
-                    [jig]="jig()" 
-                    [jigType]="jigType()"
-                    [draggable]="true"
-                    cdkDrag
-                    [cdkDragData]="jig()"
-                    (cdkDragStarted)="onStartDrag()"
-                    (cdkDragDropped)="onCancelDrag($event)"
-                    cdkDragBoundary=".beluga-boundary"
-                >
-                </app-jig>
-            }
+            <ng-content select="app-jig,app-drop-target"></ng-content>  
         </div>
     </div>
-    @if(side() =='fside'){
-        <button mat-icon-button (click)="toHangar()" [disabled]="!(canDeliver$ | async)">
-            <mat-icon>arrow_forward</mat-icon>
-        </button>
-    }
+    <ng-content select="[id=fside]"></ng-content>
 </div>
 

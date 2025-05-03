@@ -1,15 +1,15 @@
 import { AsyncPipe } from '@angular/common';
-import { Component, effect, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { combineLatest, map, tap } from 'rxjs';
 import { RackComponent } from '../../../shared/components/rack/rack.component';
-import { selectJigTypes, selectRacksStateList, selectTask, selectTaskState } from '../../state/builder.selector';
+import { selectJigTypes, selectRacksStateList } from '../../state/builder.selector';
+import { RackWrapperComponent } from '../rack-wrapper/rack-wrapper.component';
 
 @Component({
   selector: 'app-racks-state',
   imports: [
     AsyncPipe,
-    RackComponent
+    RackWrapperComponent
   ],
   templateUrl: './racks-state.component.html',
   styleUrl: './racks-state.component.scss'

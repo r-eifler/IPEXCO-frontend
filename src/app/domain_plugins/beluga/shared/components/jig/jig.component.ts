@@ -23,11 +23,9 @@ import { MatListModule } from '@angular/material/list';
 })
 export class JigComponent {
 
-  store = inject(Store);
-  sizeUnit = toSignal(this.store.select(selectSizeUnit));
-
   jig = input.required<Jig>()
   jigType = input.required<JigType>()
+  sizeUnit = input<number>(15)
 
   draggable = input<boolean>(false);
   unitSize = input<boolean>(false);

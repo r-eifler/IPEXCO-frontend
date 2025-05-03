@@ -1,5 +1,5 @@
 import { Component, computed, effect, input } from '@angular/core';
-import { TranslocoModule } from '@jsverse/transloco';
+import { provideTranslocoScope, TranslocoModule } from '@jsverse/transloco';
 import { ProductionLine } from '../../domain/beluga_problem';
 
 @Component({
@@ -7,6 +7,12 @@ import { ProductionLine } from '../../domain/beluga_problem';
   imports: [
     TranslocoModule
   ],
+   providers: [
+      provideTranslocoScope({
+        scope: "shared",
+        alias: "s",
+      }),
+    ],
   templateUrl: './production-line.component.html',
   styleUrl: './production-line.component.scss'
 })

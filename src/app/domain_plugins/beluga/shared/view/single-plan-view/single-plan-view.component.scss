@@ -1,0 +1,10 @@
+.main{
+    display: grid;
+    grid-template-rows: auto auto auto;
+    gap: var(--spacing-300)
+}
+
+.plan{
+    width: 100;
+    overflow-x: scroll;
+}

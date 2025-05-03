@@ -1,0 +1,35 @@
+<app-rack
+    [name]="name()"
+    [size]="rack()?.size"
+    [occupied]="[occupied()]"
+    [dragTarget]="(isDragTarget$ | async) && (dragInProgress$ | async)"
+    [noDragTarget]="!(isDragTarget$ | async) && (dragInProgress$ | async)"
+>
+    <app-drop-target
+        cdkDropList
+        [cdkDropListData]="rack()?.jigs"
+        (cdkDropListDropped)="drop($event)"
+        [cdkDropListEnterPredicate]="fits"
+    >
+        <ng-container *ngFor="let jig of rack()?.jigs; index as idx" ngProjectAs="app-jig">
+            <app-jig 
+                *ngIf="idx === 0 || idx === rack()?.jigs.length - 1"
+                [jig]="jig" 
+                [jigType]="jigTypes()?.[jig?.type]"
+                [cdkDragData]="jig"
+                [draggable]="true"
+                cdkDrag
+                (cdkDragStarted)="onStartDrag(jig, getSides(idx))"
+                (cdkDragDropped)="onCancelDrag($event)"    
+                cdkDragBoundary=".beluga-boundary"
+            >
+            </app-jig>
+            <app-jig 
+                *ngIf="!(idx === 0 || idx === rack()?.jigs.length - 1)"
+                [jig]="jig" 
+                [jigType]="jigTypes()?.[jig?.type]"
+            >
+            </app-jig>
+        </ng-container>
+    </app-drop-target>
+</app-rack>

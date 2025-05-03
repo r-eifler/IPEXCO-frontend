@@ -2,10 +2,10 @@
 
 <div class="main">
     @for(hangar of (hangars$ | async); track hangar.name){
-        <app-hangar
+        <app-hangar-wrapper
             [name]="hangar.name"
             [jig]="hangar.jig"
             [jigType]="jigTypes?.[hangar.jig?.type]">
-        </app-hangar>
+        </app-hangar-wrapper>
     }
 </div>

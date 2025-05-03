@@ -18,6 +18,7 @@ import { ProductionLineComponent } from '../production-line/production-line.comp
     BelugaFlightComponent,
     RackComponent,
     ProductionLineComponent,
+    JigComponent,
   ],
   templateUrl: './state-card.component.html',
   styleUrl: './state-card.component.scss'

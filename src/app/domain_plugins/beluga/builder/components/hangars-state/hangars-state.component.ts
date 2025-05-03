@@ -1,13 +1,13 @@
 import { AsyncPipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { HangarComponent } from '../../../shared/components/hangar/hangar.component';
 import { selectHangarsStateList, selectJigTypes } from '../../state/builder.selector';
+import { HangarWrapperComponent } from '../hangar-wrapper/hangar-wrapper.component';
 
 @Component({
   selector: 'app-hangars-state',
   imports: [
-    HangarComponent,
+    HangarWrapperComponent,
     AsyncPipe,
   ],
   templateUrl: './hangars-state.component.html',

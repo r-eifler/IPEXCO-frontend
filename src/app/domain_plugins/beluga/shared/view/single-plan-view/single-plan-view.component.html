@@ -1,11 +1,11 @@
-<div>
-    <div>
+<div class="main">
+    <div class="controls">
         <app-step-control
             (back)="onBack()"
             (forward)="onForward()"
         ></app-step-control>
     </div>
-    <div>
+    <div class="plan">
         <app-plan-action-list
             [actions]="actions()"
             [task]="task()"
@@ -13,7 +13,7 @@
             (actionSelected)="onActionSelected($event)"
         ></app-plan-action-list>
     </div>
-    <div>
+    <div class="state">
         <app-state-card
             [state]="selectedState()"
             [task]="task()"

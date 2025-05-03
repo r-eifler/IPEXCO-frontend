@@ -1,6 +1,6 @@
-<app-page *transloco="let t">
+<app-page-full *transloco="let t">
     <app-breadcrumb>
-        <a app-breadcrumb-item [routerLink]="['../../flight-section']"><mat-icon>home</mat-icon></a>
+        <a app-breadcrumb-item [routerLink]="['../../flight-sections']"><mat-icon>home</mat-icon></a>
         <app-breadcrumb-item>{{ name() }}</app-breadcrumb-item>
       </app-breadcrumb>
     <app-page-title>
@@ -22,4 +22,4 @@
             </app-page-section>
         </app-page-section-list>
     </app-page-content>
-</app-page>
+</app-page-full>

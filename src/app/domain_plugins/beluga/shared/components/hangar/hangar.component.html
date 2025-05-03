@@ -1,32 +1,10 @@
 <div class="container">
-    <!-- <div>
-        <mat-icon>warehouse</mat-icon>
-    </div> -->
-    <button mat-icon-button (click)="fromHangar()" [disabled]="!trailerAvailable()">
-        <mat-icon>arrow_backward</mat-icon>
-    </button>
+    <ng-content select="button"></ng-content>
     <div class="hangar"
-        cdkDropList [cdkDropListData]="[jig()]" 
-        (cdkDropListDropped)="drop($event)"
-        [id]="name()"
-        [cdkDropListEnterPredicate]="empty"
-        [class.dragTarget]="(isDragTarget$ | async) && (dragInProgress$ | async)"
-        [class.noDragTarget]="!(isDragTarget$ | async) && (dragInProgress$ | async)"
+        [class.dragTarget]="dragTarget()"
+        [class.noDragTarget]="noDragTarget()"
     >
-        @if(jig() != null){
-            <app-jig 
-                [jig]="jig()" 
-                [jigType]="jigType()"
-                [unitSize]="true"
-                [draggable]="true"
-                cdkDrag
-                [cdkDragData]="jig()"
-                (cdkDragStarted)="onStartDrag()"
-                (cdkDragDropped)="onCancelDrag($event)"
-                cdkDragBoundary=".beluga-boundary"
-            >
-            </app-jig>
-        }
+        <ng-content select="app-jig,app-drop-target"></ng-content>
     </div>
 </div>
 

@@ -2,9 +2,9 @@
 
 <div class="main">
     @for(rack of (racks$ | async); track rack.name){
-        <app-rack
+        <app-rack-wrapper
             [rack]="rack"
             [jigTypes]="jigTypes"
-        ></app-rack>
+        ></app-rack-wrapper>
     }
 </div>

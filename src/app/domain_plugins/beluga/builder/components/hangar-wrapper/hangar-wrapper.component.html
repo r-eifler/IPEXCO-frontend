@@ -1,0 +1,31 @@
+<app-hangar
+    [name]="name()"
+    [dragTarget]="(isDragTarget$ | async) && (dragInProgress$ | async)"
+    [noDragTarget]="!(isDragTarget$ | async) && (dragInProgress$ | async)"
+>
+    <button mat-icon-button (click)="fromHangar()" [disabled]="!trailerAvailable()">
+        <mat-icon>arrow_backward</mat-icon>
+    </button>
+    <app-drop-target
+        cdkDropList 
+        [cdkDropListData]="[jig()]" 
+        (cdkDropListDropped)="drop($event)"
+        [cdkDropListEnterPredicate]="empty"   
+    >
+        <app-jig 
+            *ngIf="jig() != null"
+            [jig]="jig()" 
+            [jigType]="jigType()"
+            [unitSize]="true"
+            [draggable]="true"
+            
+            cdkDrag
+            [cdkDragData]="jig()"
+            (cdkDragStarted)="onStartDrag()"
+            (cdkDragDropped)="onCancelDrag($event)"
+            cdkDragBoundary=".beluga-boundary"
+        >
+        </app-jig>
+    </app-drop-target>
+</app-hangar>
+
