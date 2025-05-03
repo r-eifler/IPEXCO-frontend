@@ -8,6 +8,7 @@ import { HangarComponent } from '../hangar/hangar.component';
 import { BelugaFlightComponent } from '../beluga-flight/beluga-flight.component';
 import { RackComponent } from '../rack/rack.component';
 import { ProductionLineComponent } from '../production-line/production-line.component';
+import { NgFor, NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-state-card',
@@ -19,6 +20,8 @@ import { ProductionLineComponent } from '../production-line/production-line.comp
     RackComponent,
     ProductionLineComponent,
     JigComponent,
+    NgIf,
+    NgFor,
   ],
   templateUrl: './state-card.component.html',
   styleUrl: './state-card.component.scss'

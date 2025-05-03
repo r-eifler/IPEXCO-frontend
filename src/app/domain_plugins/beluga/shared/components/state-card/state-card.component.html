@@ -17,52 +17,48 @@
     <div class="trailers">
         @for(trailer of trailersBeluga(); track trailer){
             <app-trailer [name]="trailer.name" size="30">
-                @if(trailer.jig){
-                    <app-jig
-                        [jig]="trailer.jig"  
-                        [jigType]="jigTypes()?.[trailer.jig?.type]"
-                    >
-                    </app-jig>
-                }
+                <app-jig
+                    *ngIf="trailer.jig"
+                    [jig]="trailer.jig"  
+                    [jigType]="jigTypes()?.[trailer.jig?.type]"
+                >
+                </app-jig>
             </app-trailer>
         }
     </div>
     <div class="racks">
         @for(rack of racks(); track rack){
             <app-rack [name]="rack.name" [size]="rack.size" occupied="-1000">
-                @for(jig of rack.jigs; track jig.name){
-                    <app-jig
-                        [jig]="jig"  
-                        [jigType]="jigTypes()?.[jig?.type]"
-                    >
-                    </app-jig>
-                }
+                <app-jig
+                    *ngFor="let jig of rack.jigs"
+                    [jig]="jig"  
+                    [jigType]="jigTypes()?.[jig?.type]"
+                >
+                </app-jig>
             </app-rack>
         }
     </div>
     <div class="trailers">
         @for(trailer of trailersFactory(); track trailer){
             <app-trailer [name]="trailer.name" size="30">
-                @if(trailer.jig){
-                    <app-jig
-                        [jig]="trailer.jig"  
-                        [jigType]="jigTypes()?.[trailer.jig?.type]"
-                    >
-                    </app-jig>
-                }
+                <app-jig
+                    *ngIf="trailer.jig"
+                    [jig]="trailer.jig"  
+                    [jigType]="jigTypes()?.[trailer.jig?.type]"
+                >
+                </app-jig>
             </app-trailer>
         }
     </div>
     <div class="hangars">
         @for(hangar of hangars(); track hangar){
             <app-hangar [name]="hangar.name">
-                @if(hangar.jig){
-                    <app-jig
-                        [jig]="hangar.jig"  
-                        [jigType]="jigTypes()?.[hangar.jig?.type]"
-                    >
-                    </app-jig>
-                }
+                <app-jig
+                    *ngIf="hangar.jig"
+                    [jig]="hangar.jig"  
+                    [jigType]="jigTypes()?.[hangar.jig?.type]"
+                >
+                </app-jig>
             </app-hangar>
         }
     </div>

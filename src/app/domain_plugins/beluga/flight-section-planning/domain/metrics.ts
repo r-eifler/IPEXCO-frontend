@@ -32,7 +32,7 @@ export function computeRackOccupancyRate(task: BelugaProblem, initState: BelugaS
         numUsedRacks.push(computeRackOccupancyRateForState(cs));
         cs = applyAction(cs, action, task);
     }
-    return sum(numUsedRacks)/(actions.length + 1)
+    return sum(numUsedRacks)/(numUsedRacks.length)
 }
 
 export function computeRackOccupancyRateForState(state: BelugaState){

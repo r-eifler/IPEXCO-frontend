@@ -32,7 +32,10 @@ export class SinglePlanViewComponent {
       if(endIndex == null){
         return undefined;
       }
-      return applyActions(startState, this.actions().splice(0, endIndex),this.task())
+      endIndex += 1;
+      const allActions = this.actions()
+      const actions = allActions.slice(0, endIndex);
+      return applyActions(startState, actions,this.task())
     })
 
 
