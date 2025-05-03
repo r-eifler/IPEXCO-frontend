@@ -9,6 +9,9 @@ const selectState = BuilderFeature.selectBuilderFeatureState
 
 // Project/Task
 
+export const selectProject = createSelector(selectState, 
+    (state) => state.project.data
+);
 
 export const selectTask = createSelector(selectState, 
     (state) => state.task
@@ -16,6 +19,13 @@ export const selectTask = createSelector(selectState,
 
 export const selectJigTypes= createSelector(selectTask, 
     (task) => task?.jig_types);
+
+// Sections
+
+export const selectSection = createSelector(selectState, 
+    (state) => state.section.data
+);
+
 
 // Units
 
@@ -235,15 +245,14 @@ export const selectProductionLines = createSelector(selectTask,
 export const selectProductionLinesState = createSelector(selectTaskState, 
     (taskState) => taskState?.productionLines)
 
-export const selectDeliverableJigs = createSelector(selectProductionLinesState,
-    (selectProductionLinesState) => {
-        if(selectProductionLinesState == undefined){
+export const selectDeliverableJigs = createSelector(selectProductionLinesState, selectProductionLines,
+    (plsState, pls) => {
+        if(plsState === undefined || pls === undefined){
             return {}
         }
-        let productionLinesList = Object.values(selectProductionLinesState);
-        return productionLinesList.reduce((acc,c) => 
+        return pls.reduce((acc,c) => 
             c.schedule.length == 0 ? 
-            acc : {...acc, [c.schedule[0]]: c.name}, {}) as Record<string,string>
+            acc : {...acc, [c.schedule[plsState[c.name].length]]: c.name}, {} as Record<string,string>) 
     });
 
 

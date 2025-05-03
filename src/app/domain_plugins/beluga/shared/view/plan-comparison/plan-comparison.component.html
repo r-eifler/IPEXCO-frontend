@@ -51,7 +51,7 @@
           <div class="plans-container">
             <app-plan-inspection
               [actions]="referenceActions$ | async"
-              [model]="model$ | async"
+              [task]="task$ | async"
               [selectedJigs] = "selectedJigs$ | async"
               [selectedFlight] = "selectedFlight$ | async"
               [selectedAction] = "this.selectedActionIndexRef$ | async"
@@ -61,7 +61,7 @@
 
             <app-plan-inspection
               [actions]="comparisonActions$ | async"
-              [model]="model$ | async"
+              [task]="task$ | async"
               [selectedJigs] = "selectedJigs$ | async"
               [selectedFlight] = "selectedFlight$ | async"
               [selectedAction] = "this.selectedActionIndexComp$ | async"
@@ -77,13 +77,13 @@
           <div class="states-container">
             <app-state-card
               [state]="selectedStateRef$ | async"
-              [model]="model$ | async"
+              [task]="task$ | async"
             >
             </app-state-card>
 
             <app-state-card
               [state]="selectedStateComp$ | async"
-              [model]="model$ | async"
+              [task]="task$ | async"
             >
             </app-state-card>
           </div>

@@ -76,8 +76,8 @@ export function projectTaskToSection(task: BelugaProblem, section: FlightSection
     Object.values(state.trailersFactory).forEach(j => {if(j !== null){consideredJigs.add(j)}});
     Object.values(state.hangars).forEach(j => {if(j !== null){consideredJigs.add(j)}});
 
-    let productionLineProjections =  Object.values(state.productionLines).map(
-        pl => ({...pl, schedule: filterUpTo(pl.schedule, consideredJigs)})
+    let productionLineProjections =  task.production_lines.map(
+        pl => ({...pl, schedule: filterUpTo(pl.schedule.filter(j => ! state.productionLines[pl.name].includes(j)), consideredJigs)})
     );
 
     let projection: BelugaProblem = {

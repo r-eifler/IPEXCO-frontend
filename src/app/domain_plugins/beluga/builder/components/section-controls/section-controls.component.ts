@@ -5,7 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslocoModule } from '@jsverse/transloco';
 import { AsyncPipe } from '@angular/common';
-import { cancelManualPlanning, finishManualPlanning } from '../../../flight-section-planning/state/flight-section-planning.actions';
+import { cancelManualPlanning, finishManualPlanning } from '../../state/builder.actions';
 
 @Component({
   selector: 'app-section-controls',

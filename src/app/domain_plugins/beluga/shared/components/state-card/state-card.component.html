@@ -50,8 +50,12 @@
         }
     </div>
     <div class="hangars">
-        @for(pl of productionLines(); track pl){
-            <app-production-line [line]="pl"></app-production-line>
+        @for(pl of productionLines(); track pl;){
+            <app-production-line 
+                [line]="pl"
+                [delivered]="productionLinesDelivered()?.[pl.name]"
+            >
+            </app-production-line>
         }
     </div>
 </div>

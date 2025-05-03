@@ -11,12 +11,12 @@ export const BelugaStateZ = object({
     trailersBeluga: record(string(),  nullable(string())),
     trailersFactory: record(string(),  nullable(string())),
     hangars: record(string(),  nullable(string())),
-    productionLines: record(string(),  ProductionLineZ),
+    productionLines: record(string(),  array(string())),
 })
 
 export type BelugaState = zinfer<typeof BelugaStateZ>;
 
-export function getInitialState(model: BelugaProblem) {
+export function getInitialState(model: BelugaProblem): BelugaState {
     return {
         jigs: model.jigs,
         flightIndex: 0,
@@ -26,7 +26,7 @@ export function getInitialState(model: BelugaProblem) {
         trailersFactory: model.trailers_factory.reduce((acc,c) => ({...acc, [c.name]: null}), {}),
         racks: model.racks.reduce((acc,c) => ({...acc, [c.name]: [...c.jigs]}), {}),
         hangars: model.hangars.reduce((acc,c) => ({...acc, [c.name]: null}), {}),
-        productionLines: model.production_lines.reduce((acc,c) => ({...acc,[c.name]: c}), {})
+        productionLines: model.production_lines.reduce((acc,c) => ({...acc,[c.name]: []}), {})
       }
 }
 
@@ -40,7 +40,7 @@ export function isApplicable(state: BelugaState, action: BelugaAction, model: Be
             return state.hangars[da.h] == null && 
                 state.trailersFactory[da.t] == da.j &&
                 ! state.jigs[da.j].empty &&
-                state.productionLines[da.pl].schedule[0] == da.j
+                model.production_lines.find(pl => pl.name == da.pl)?.schedule[state.productionLines[da.pl].length] == da.j
         case BelugaActionType.GET_FROM_HANGAR:
             let ga = GetFromHangerZ.parse(action);
             return state.hangars[ga.h] == ga.j && 
@@ -105,10 +105,8 @@ export function applyAction(state: BelugaState, action: BelugaAction, model: Bel
                 hangars: {...state.hangars, [da.h]: da.j},
                 jigs: {...state.jigs, [da.j]: {...state.jigs[da.j], empty: true}},
                 productionLines: {...state.productionLines, [da.pl]: 
-                    {
-                        ...state.productionLines[da.pl],
-                        schedule: state.productionLines[da.pl].schedule.filter(e => e !== da.j)
-                }}
+                    [...state.productionLines[da.pl], da.j]
+                }
 
             }
         case BelugaActionType.GET_FROM_HANGAR:

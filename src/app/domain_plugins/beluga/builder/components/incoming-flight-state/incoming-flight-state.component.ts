@@ -44,6 +44,13 @@ export class IncomingFlightStateComponent {
     this.jigs()?.length > 0
   );
 
+  constructor(){
+    effect(() => console.log(this.availableTrailers()))
+    effect(() => console.log(this.jigs()))
+    effect(() => console.log(this.currentFlight()))
+    effect(() => console.log(this.unloadAvailable()))
+  }
+
   onUnload(){
     let flightName = this.currentFlight()?.name;
     let nextTrailer = this.availableTrailers()?.[0]?.name;

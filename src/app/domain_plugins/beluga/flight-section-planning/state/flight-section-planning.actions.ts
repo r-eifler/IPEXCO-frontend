@@ -83,9 +83,3 @@ export const loadServicesFailure = createAction('[beluga-flight-section-planning
 export const registerManualPlanning = createAction('[beluga-flight-section-planning] register manual planning', props<{section: FlightSection, method: PlanMethod}>());
 export const startManualPlanningSuccess= createAction('[beluga-flight-section-planning] start manual planning success');
 export const startManualPlanningFailure = createAction('[beluga-flight-section-planning] start manual planning failure', props<{err: any}>());
-
-export const finishManualPlanning = createAction('[beluga-flight-section-planning] finish manual planning', props<{actions: BelugaAction[]}>());
-export const finishManualPlanningFailure = createAction('[beluga-flight-section-planning] finish manual planning failure', props<{err: any}>());
-
-export const cancelManualPlanning = createAction('[beluga-flight-section-planning] cancel manual planning');
-export const cancelManualPlanningFailure = createAction('[beluga-flight-section-planning] cancel manual planning failure', props<{err: any}>());

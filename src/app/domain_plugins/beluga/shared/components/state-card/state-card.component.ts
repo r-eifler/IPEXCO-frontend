@@ -25,13 +25,13 @@ import { ProductionLineComponent } from '../production-line/production-line.comp
 export class StateCardComponent {
 
   state = input.required<BelugaState>();
-  model = input.required<BelugaProblem>();
+  task = input.required<BelugaProblem>();
 
   constructor(){
     effect(() => console.log(this.state()))
   }
 
-  jigTypes = computed(() => this.model()?.jig_types)
+  jigTypes = computed(() => this.task()?.jig_types)
   jigs = computed(() => this.state()?.jigs)
 
   incoming = computed(() => {
@@ -55,7 +55,7 @@ export class StateCardComponent {
     if(state === undefined){
       return []
     }
-    return this.model()?.flights[state.flightIndex].outgoing;
+    return this.task()?.flights[state.flightIndex].outgoing;
   })
   
 
@@ -67,8 +67,8 @@ export class StateCardComponent {
     return Object.values(state.racks).map((r,index) => 
       ({
         jigs: r.map(j => this.jigs()?.[j]),
-        name: this.model()?.racks[index].name,
-        size: this.model()?.racks[index].size,
+        name: this.task()?.racks[index].name,
+        size: this.task()?.racks[index].size,
       })
     )
   });
@@ -106,10 +106,18 @@ export class StateCardComponent {
   })
 
   productionLines = computed(() => {
-    const state = this.state();
-    if(state === undefined){
+    const task = this.task();
+    if(task === undefined){
       return []
     }
-    return Object.values(state.productionLines);
+    return task.production_lines;
+  })
+
+  productionLinesDelivered = computed(() => {
+    const state = this.state();
+    if(state === undefined){
+      return {}
+    }
+    return state.productionLines;
   })
 }

@@ -3,10 +3,11 @@ import { BelugaActionType, SwitchBeluga } from "../../shared/domain/beluga_plan"
 import { BelugaProblem, BelugaProblemZ, Side } from "../../shared/domain/beluga_problem";
 import { applyAction, BelugaState, getInitialState } from "../../shared/domain/beluga_state";
 import { FlightSectionPlan, PlanSection } from "../domain/plan";
-import { cancelDrag, createNewBelugaAction, initBuilder, loadFlightSectionSuccess, loadProject, loadProjectSuccess, nextFlight, startDrag, stopDrag } from "./builder.actions";
+import { cancelDrag, createNewBelugaAction, initBuilder, loadFlightSectionSuccess, loadProject, loadProjectSuccess, nextFlight, startDrag, stopDrag, updateFlightSectionSuccess } from "./builder.actions";
 import { Loadable, LoadingState } from "src/app/shared/common/loadable.interface";
 import { FlightSection } from "../../flight-section-planning/domain/flight-section";
 import { projectTaskToSection } from "../../flight-section-planning/domain/flight-section";
+import { Project } from "src/app/shared/domain/project";
 
 export interface DragSource{
     name: string,
@@ -14,6 +15,7 @@ export interface DragSource{
 }
 
 export interface BuilderState {
+    project: Loadable<Project>,
     section: Loadable<FlightSection>,
     numToProcessFlights: number,
 
@@ -29,6 +31,7 @@ export interface BuilderState {
 
 
 const initialState: BuilderState = {
+    project: {state: LoadingState.Initial, data: undefined},
     section: {state: LoadingState.Initial, data: undefined},
     numToProcessFlights: 1,
 
@@ -55,6 +58,7 @@ export const BuilderReducer = createReducer(
         if(state.section.data !== undefined){
             return {
                 ...state,
+                project: {state: LoadingState.Done, data: project},
                 task: projectTaskToSection(task, state.section.data, state.numToProcessFlights) ?? null,
             }
         }
@@ -62,6 +66,7 @@ export const BuilderReducer = createReducer(
             let taskState = getInitialState(task);
             return {
                 ...state,
+                project: {state: LoadingState.Done, data: project},
                 task: task,
                 taskState: taskState,
                 currentSection: {
@@ -75,8 +80,20 @@ export const BuilderReducer = createReducer(
     on(loadFlightSectionSuccess, (state, {section}): BuilderState => ({
         ...state,
         section: {state: LoadingState.Done, data: section},
-        taskState: section.startState,
+        taskState: {
+            ...section.startState,
+            flightIndex: 0
+        },
         task: state.task !== null ? projectTaskToSection(state.task, section, state.numToProcessFlights) ?? null : null,
+        plan: {sections: []},
+        currentSection: null,
+        dragSource: null,
+        draggedJig: null,
+        draggedSides: null,
+    })),
+    on(updateFlightSectionSuccess, (state, {section}): BuilderState => ({
+        ...state,
+        section: {state: LoadingState.Done, data: section},
     })),
     on(initBuilder, (_, {task, initState}): BuilderState => ({
         ...initialState,

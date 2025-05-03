@@ -11,7 +11,7 @@ export function computeSwaps(actions: BelugaAction[]){
             candidates.add(action.j)
         }
         if(action.name == BelugaActionType.PUT_DOWN_RACK){
-            if(action.j in candidates){
+            if(candidates.has(action.j)){
                 num_swaps += 1;
             }
         }

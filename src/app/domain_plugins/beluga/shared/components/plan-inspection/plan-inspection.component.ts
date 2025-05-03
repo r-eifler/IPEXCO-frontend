@@ -92,8 +92,8 @@ export class PlanInspectionComponent {
   })
 
 
-	model = input.required<unknown>();
-	belugaProblem = computed(() => BelugaProblemZ.parse(this.model()))
+	task = input.required<unknown>();
+	belugaProblem = computed(() => BelugaProblemZ.parse(this.task()))
 
   flights = computed(() => this.belugaProblem()?.flights)
   jigs = computed(() => Object.values(this.belugaProblem()?.jigs))

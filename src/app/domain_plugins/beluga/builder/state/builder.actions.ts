@@ -23,9 +23,19 @@ export const createFlightSection = createAction('[beluga-builder] new flight pla
 export const createFlightSectionSuccess = createAction('[beluga-builder] new flight plan section success', props<{section: FlightSection}>());
 export const createFlightSectionFailure = createAction('[beluga-builder] new flight plan section failure', props<{err: any}>());
 
-// init builder
+export const updateFlightSection = createAction('[beluga-builder] update flight plan section', props<{section: FlightSection}>());
+export const updateFlightSectionSuccess = createAction('[beluga-builder] update flight plan section success', props<{section: FlightSection}>());
+export const updateFlightSectionFailure = createAction('[beluga-builder] update flight plan section failure', props<{err: any}>());
+
+// builder
 
 export const initBuilder = createAction('[beluga-builder] init task', props<{task: BelugaProblem, initState: BelugaState}>());
+
+export const finishManualPlanning = createAction('[beluga-builder] finish manual planning', props<{actions: BelugaAction[]}>());
+export const finishManualPlanningFailure = createAction('[beluga-builder] finish manual planning failure', props<{err: any}>());
+
+export const cancelManualPlanning = createAction('[beluga-builder] cancel manual planning');
+export const cancelManualPlanningFailure = createAction('[beluga-builder] cancel manual planning failure', props<{err: any}>());
 
 
 // Beluga actions

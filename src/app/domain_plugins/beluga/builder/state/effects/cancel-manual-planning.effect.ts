@@ -5,8 +5,8 @@ import { concatLatestFrom } from "@ngrx/operators";
 import { Store } from "@ngrx/store";
 import { switchMap, tap } from "rxjs";
 import { PlanRunStatus } from "src/app/iterative_planning/domain/plan";
-import { cancelManualPlanning, cancelManualPlanningFailure, updateFlightSection } from "../flight-section-planning.actions";
-import { selectProject, selectSelectedSection } from "../flight-section-planning.selector";
+import { cancelManualPlanning, cancelManualPlanningFailure, updateFlightSection } from "../builder.actions";
+import { selectProject, selectSection } from "../builder.selector";
 
 
 @Injectable()
@@ -19,13 +19,14 @@ export class CancelManualPlanningEffect{
     public start$ = createEffect(() => this.actions$.pipe(
         ofType(cancelManualPlanning),
         tap(console.log),
-        concatLatestFrom(() => [this.store.select(selectSelectedSection), this.store.select(selectProject)]),
+        concatLatestFrom(() => [this.store.select(selectSection), this.store.select(selectProject)]),
         switchMap(([_, section, project]) => {
             if(section !== undefined && project !== undefined){
-                this.router.navigate(["beluga/flight-section-planning/" + project._id + "/flight-sections"])
                 return [
                     updateFlightSection({section:{
                         ...section,
+                        actions: [],
+                        finished: false,
                         status: PlanRunStatus.CANCELED,
                     }}),
                 ]

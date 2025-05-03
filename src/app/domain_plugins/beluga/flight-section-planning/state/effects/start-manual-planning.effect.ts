@@ -22,13 +22,10 @@ export class StartManualPlanningEffect{
         map(([section, project]) => {
             if(section?.startState !== undefined && project !== undefined){
                 if(section.status == PlanRunStatus.RUNNING && section.planMethod?.type == PlanMethodType.MANUAL){
-                    this.router.navigate(["beluga/flight-section-planning/" + project._id + "/planning/manual/project/" + project._id + "/section/" + section._id])
-                    // return [startManualPlanningSuccess()]
+                    this.router.navigate(["beluga/flight-section-planning/" + project._id + "/planning/manual/section/" + section._id])
                 }
-                // return [startManualPlanningFailure({err: {message: "Section not marked as running and manual"}})]
             }
-            // return [startManualPlanningFailure({err: {message: "Task or section not available"}})]
         })
         
-    ), {dispatch: false})
+    ), {dispatch: false});
 }

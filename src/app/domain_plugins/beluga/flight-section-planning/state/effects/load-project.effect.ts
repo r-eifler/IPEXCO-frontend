@@ -17,7 +17,6 @@ export class LoadProjectEffect{
         switchMap(({id}) => this.service.getProject$(id).pipe(
             switchMap(project => [
                 loadProjectSuccess({project}), 
-                loadFlightPlanTree({projectId: project._id}),
                 loadServices(),
                 loadDomainSpecification({id: project.domain})
             ]),

@@ -2,6 +2,7 @@
     @for(pl of (productionLines$ | async); track pl.name){
         <app-production-line
             [line]="pl"
+            [delivered]="(productionLineStates$ | async)?.[pl.name]"
         ></app-production-line>
     }
 </div>

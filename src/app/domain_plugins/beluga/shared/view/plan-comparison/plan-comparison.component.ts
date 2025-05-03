@@ -79,7 +79,7 @@ export class PlanComparisonComponent {
   project$ = this.store.select(selectProject);
   domainSpecification$ = this.store.select(selectDomainSpecification);
 
-  model$ = this.project$.pipe(
+  task$ = this.project$.pipe(
     map(p => {
       const model = p?.baseTask?.model;
       if(model !== null && model !== undefined){
@@ -88,10 +88,10 @@ export class PlanComparisonComponent {
       return null;
   }));
 
-  jigs$ = this.model$.pipe(map(m => m !== null ? Object.values(m.jigs) : []))
-  flights$ = this.model$.pipe(map(m => m !== null ? Object.values(m.flights) : []))
+  jigs$ = this.task$.pipe(map(m => m !== null ? Object.values(m.jigs) : []))
+  flights$ = this.task$.pipe(map(m => m !== null ? Object.values(m.flights) : []))
 
-  initialState$ = this.model$.pipe(
+  initialState$ = this.task$.pipe(
     map(model => model === null ? null : getInitialState(model))
   );
 
@@ -134,7 +134,7 @@ export class PlanComparisonComponent {
     })
   );
 
-  selectedStateRef$ = combineLatest([this.initialState$, this.referenceActions$, this.selectedActionIndexRef$, this.model$]).pipe(
+  selectedStateRef$ = combineLatest([this.initialState$, this.referenceActions$, this.selectedActionIndexRef$, this.task$]).pipe(
     map(([init, refActions, index, model]) => {
 
       if(init === null || refActions === null || index === null || model == null){
@@ -145,7 +145,7 @@ export class PlanComparisonComponent {
     })
   );
 
-  selectedStateComp$ = combineLatest([this.initialState$, this.comparisonActions$, this.selectedActionIndexComp$, this.model$]).pipe(
+  selectedStateComp$ = combineLatest([this.initialState$, this.comparisonActions$, this.selectedActionIndexComp$, this.task$]).pipe(
     map(([init, compActions, index, model]) => {
 
       if(init === null || compActions === null || index === null || model == null){

@@ -1,7 +1,6 @@
 import { CdkDropListGroup } from '@angular/cdk/drag-drop';
 import { Component, inject } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
-import { RouterLink } from '@angular/router';
 import { provideTranslocoScope, TranslocoModule } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 import { BreadcrumbModule } from 'src/app/shared/components/breadcrumb/breadcrumb.module';
@@ -12,7 +11,6 @@ import { PlanSectionComponent } from '../../components/plan-section/plan-section
 import { ProductionLineStateComponent } from '../../components/production-line-state/production-line-state.component';
 import { RacksStateComponent } from '../../components/racks-state/racks-state.component';
 import { SectionControlsComponent } from '../../components/section-controls/section-controls.component';
-import { StateGridComponent } from '../../components/state-grid/state-grid.component';
 import { TrailersStateComponent } from '../../components/trailers-state/trailers-state.component';
 import { selectTask } from '../../state/builder.feature';
 
@@ -23,7 +21,6 @@ import { selectTask } from '../../state/builder.feature';
       TranslocoModule,
       BreadcrumbModule,
       MatIconModule,
-      RouterLink,
       HangarsStateComponent,
       FlightStateComponent,
       ProductionLineStateComponent,

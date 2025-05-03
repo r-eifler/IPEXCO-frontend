@@ -24,5 +24,11 @@ export class FlightPlanTreeService{
         map(data => FlightSectionZ.parse(data)),
       )
     }
+
+    putSection$(section: FlightSection): Observable<FlightSection> {
+      return this.http.put<unknown>(this.BASE_URL + 'section/' + section._id, section).pipe(
+        map(data => FlightSectionZ.parse(data)),
+      )
+    }
     
 }

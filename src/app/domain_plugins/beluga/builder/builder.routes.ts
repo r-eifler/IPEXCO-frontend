@@ -31,7 +31,7 @@ export const routes: Routes = [
       //   redirectTo: 'builder'
       // },
       {
-        path: 'project/:projectId/section/:sectionId',
+        path: 'section/:sectionId',
         component: SectionBuilderBaseComponent,
         resolve: [LoadProjectResolver, LoadFlightSectionResolver],
       },

@@ -1,7 +1,6 @@
-import { CancelManualPlanningEffect } from "./cancel-manual-planning.effect";
+
 import { CreateFlightPlanTreeEffect } from "./create-flight-plan-tree.effect";
 import { CreateFlightSectionEffect } from "./create-flight-section.effect";
-import { FinishManualPlanningEffect } from "./finish-manual-planning.effect";
 import { LoadDomainSpecificationEffect } from "./load-domain-spec.effect";
 import { LoadFlightPlanTreeEffect } from "./load-flight-plan-tree.effect";
 import { LoadFlightSectionsEffect } from "./load-flight-sections.effect";
@@ -26,7 +25,5 @@ export const flightSectionPlanningEffects = [
 
     RegisterManualPlanningEffect,
     StartManualPlanningEffect,
-    CancelManualPlanningEffect,
-    FinishManualPlanningEffect,
     CreateFlightSectionEffect,
 ]

@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { map } from 'rxjs';
-import { selectTaskState } from '../../state/builder.selector';
+import { selectProductionLines, selectProductionLinesState, selectTaskState } from '../../state/builder.selector';
 import { AsyncPipe } from '@angular/common';
 import { ProductionLineComponent } from '../../../shared/components/production-line/production-line.component';
 
@@ -18,10 +18,6 @@ export class ProductionLineStateComponent {
 
   store = inject(Store);
   
-  taskState$ = this.store.select(selectTaskState)
-
-  productionLines$ = this.taskState$.pipe(
-    map(state => state?.productionLines !== undefined ? Object.values(state?.productionLines) : [])
-  );
-
+  productionLines$ = this.store.select(selectProductionLines)
+  productionLineStates$  = this.store.select(selectProductionLinesState)
 }

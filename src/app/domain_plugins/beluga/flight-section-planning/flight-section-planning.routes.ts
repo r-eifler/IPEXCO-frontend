@@ -14,13 +14,14 @@ import { FlightSectionPlanningFeature } from './state/flight-section-planning.fe
 import { PlanSectionsOverview } from './views/plan-section-overview/plan-section-overview.component';
 import { PlanningShellComponent } from './views/planning-shell/planning-shell.component';
 import { ShellComponent } from './views/shell/shell.component';
+import { LoadFlightPlanTreeResolver } from './resolver/load-flight-plan-tree.resolver';
 
 export const routes: Routes = [
   {
     path: ':projectId',
     component: ShellComponent,
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
-    resolve: [LoadProjectResolver],
+    resolve: {projectId: LoadProjectResolver},
     providers: [
       provideState(FlightSectionPlanningFeature),
       provideEffects(flightSectionPlanningEffects),
@@ -42,6 +43,7 @@ export const routes: Routes = [
       {
         path: 'flight-sections',
         component: PlanSectionsOverview,
+        resolve: [LoadFlightPlanTreeResolver],
       },
       {
         path: 'planning',
