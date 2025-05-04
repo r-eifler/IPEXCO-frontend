@@ -6,7 +6,7 @@ import { of } from "rxjs";
 import { catchError, switchMap, tap } from "rxjs/operators";
 import { filterListNotNullOrUndefined } from "src/app/shared/common/check_null_undefined";
 import { FlightSectionPlanService } from "../../services/flight-section-plan.service";
-import { automaticPlanningFinishedFailure, automaticPlanningFinishedSuccess, loadFlightSections, startAutomaticPlanning, startAutomaticPlanningFailure, startAutomaticPlanningSuccess } from "../flight-section-planning.actions";
+import { automaticPlanningFinishedFailure, automaticPlanningFinishedSuccess, loadFlightSections, reloadFlightPlanTree, startAutomaticPlanning, startAutomaticPlanningFailure, startAutomaticPlanningSuccess } from "../flight-section-planning.actions";
 import { selectTask } from "../flight-section-planning.selector";
 import { SectionPlanComputationMonitoringService } from "../../services/plan-computataion-monitoring.service";
 
@@ -35,7 +35,8 @@ export class StartAutomaticPlanningEffect{
                 return this.monitoringService.planComputationFinished$(section._id).pipe(
                     switchMap(() => [
                         automaticPlanningFinishedSuccess({id: section._id}),
-                        loadFlightSections({treeId: section.treeId})
+                        loadFlightSections({treeId: section.treeId}),
+                        reloadFlightPlanTree({id: section.treeId})
                     ]),
                     catchError((e) => of(automaticPlanningFinishedFailure({err: e}))),
                 )

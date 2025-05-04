@@ -17,6 +17,7 @@ export class SectionPlanComputationMonitoringService {
                 map((section) => planFinished(section)),
             )),
             tap(console.log),
+            filter(allFinished => allFinished),
             take(1),
             map(() => void undefined),
         );        
