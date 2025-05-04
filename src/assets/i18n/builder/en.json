@@ -21,5 +21,6 @@
     "actions": "actions",
     "flight_sections_overview": "Flight Sections Overview",
     "save": "save",
-    "cancel": "cancel"
+    "cancel": "cancel",
+    "plan_version": "plan version"
 }

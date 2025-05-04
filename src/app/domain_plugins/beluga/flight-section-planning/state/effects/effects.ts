@@ -1,6 +1,7 @@
 
+import { CreateFlightPlanTreeBranchEffect } from "./create-branch.effect";
 import { CreateFlightPlanTreeEffect } from "./create-flight-plan-tree.effect";
-import { CreateFlightSectionEffect } from "./create-flight-section.effect";
+import { CreateFlightSectionEffect } from "./create-flight-section.effect copy";
 import { LoadDomainSpecificationEffect } from "./load-domain-spec.effect";
 import { LoadFlightPlanTreeEffect } from "./load-flight-plan-tree.effect";
 import { LoadFlightSectionsEffect } from "./load-flight-sections.effect";
@@ -13,14 +14,18 @@ import { UpdateFlightPlanTreeEffect } from "./update-flight-plan-tree.effect";
 import { UpdateFlightSectionEffect } from "./update-flight-section.effect";
 
 
+
 export const flightSectionPlanningEffects = [
     LoadProjectEffect,
     LoadServicesEffect,
     LoadDomainSpecificationEffect,
     LoadFlightPlanTreeEffect,
     LoadFlightSectionsEffect,
+
     CreateFlightPlanTreeEffect,
     CreateFlightSectionEffect,
+    CreateFlightPlanTreeBranchEffect,
+    
     UpdateFlightPlanTreeEffect,
     UpdateFlightSectionEffect,
 

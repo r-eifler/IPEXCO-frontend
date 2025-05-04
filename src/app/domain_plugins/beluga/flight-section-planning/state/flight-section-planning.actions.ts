@@ -54,7 +54,15 @@ export const updateFlightPlanTree = createAction('[beluga-flight-section-plannin
 export const updateFlightPlanTreeSuccess = createAction('[beluga-flight-section-planning] update flight plan tree success', props<{tree: FlightPlanTree}>());
 export const updateFlightPlanTreeFailure = createAction('[beluga-flight-section-planning] update flight plan tree failure', props<{err: any}>());
 
-export const updateFlightPlanTreeSelected = createAction('[beluga-flight-section-planning] update flight plan tree selected', props<{id: string}>());
+export const updateFlightPlanTreeSelectedSection = createAction('[beluga-flight-section-planning] update flight plan tree selected', props<{id: string}>());
+
+export const selectDifferentBranch = createAction('[beluga-flight-section-planning] select different branch', props<{index: number}>());
+export const selectDifferentBranchSuccess = createAction('[beluga-flight-section-planning] select different branch success', props<{tree: FlightPlanTree}>());
+export const selectDifferentBranchFailure = createAction('[beluga-flight-section-planning]  select different branch failure', props<{err: any}>());
+
+export const createNewBranch = createAction('[beluga-flight-section-planning] create new branch', props<{sectionId: string, name: string}>());
+export const createNewBranchSuccess = createAction('[beluga-flight-section-planning] create new branch success', props<{tree: FlightPlanTree}>());
+export const createNewBranchFailure = createAction('[beluga-flight-section-planning] create new branch failure', props<{err: any}>());
 
 // sections
 export const loadFlightSections = createAction('[beluga-flight-section-planning] load flight plan sections', props<{treeId: string}>());

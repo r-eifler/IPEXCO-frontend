@@ -61,6 +61,12 @@ export class FlightPlanTreeService{
       )
     }
 
+    newBranch$(sectionId: string, branchName: string): Observable<FlightPlanTree> {
+      return this.http.post<unknown>(this.BASE_URL + 'branch', {sectionId, branchName}).pipe(
+        map(data => FlightPlanTreeZ.parse(data)),
+      )
+    }
+
     postSection$(section: FlightSectionBase): Observable<FlightSection> {
       return this.http.post<unknown>(this.BASE_URL + 'section', section).pipe(
         map(data => FlightSectionZ.parse(data)),

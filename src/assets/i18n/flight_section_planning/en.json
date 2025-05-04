@@ -33,5 +33,9 @@
     "planning_service": "planning service",
     "num_optimized_flights": "number of considered flights",
     "start": "Start",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "plan_version": "plan version",
+    "new": "new",
+    "name_new_plan_version": "Name of new plan version",
+    "name": "name"
 }

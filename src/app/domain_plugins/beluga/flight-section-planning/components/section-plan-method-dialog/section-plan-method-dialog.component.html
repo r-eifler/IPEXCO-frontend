@@ -40,7 +40,7 @@
 
             @if(finished()){
                 <form class="button-container">
-                    <mat-form-field class="full-width">
+                    <mat-form-field class="full-width" appearance="outline">
                         <mat-label>{{t('f.num_optimized_flights')}}</mat-label>
                         <input matInput type="number" [(ngModel)]="numOptimizedFlights" min="1" [max]="maxNumFlights" name="numOptimizedFlights">
                     </mat-form-field>

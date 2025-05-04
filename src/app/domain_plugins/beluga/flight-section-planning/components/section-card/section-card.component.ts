@@ -18,10 +18,11 @@ import { Flight } from '../../../shared/domain/beluga_problem';
 import { FlightSection } from '../../domain/flight-section';
 import { computeRackOccupancyRate, computeSwaps } from '../../domain/metrics';
 import { PlanMethod, PlanMethodType } from '../../domain/plan_method';
-import { registerManualPlanning, startAutomaticPlanning } from '../../state/flight-section-planning.actions';
+import { createNewBranch, registerManualPlanning, startAutomaticPlanning } from '../../state/flight-section-planning.actions';
 import { selectRemainingNumberFlights, selectSupportedPlanners, selectTask } from '../../state/flight-section-planning.selector';
 import { PlanInspectorComponent } from '../../views/plan-inspector/plan-inspector.component';
 import { SectionPlanMethodDialogComponent } from '../section-plan-method-dialog/section-plan-method-dialog.component';
+import { BranchNameDialogComponent } from '../branch-name-dialog/branch-name-dialog.component';
 
 @Component({
   selector: 'app-section-card',
@@ -82,7 +83,14 @@ export class SectionCardComponent {
   });
 
   onBranch(){
+    const dialogRef = this.dialog.open(BranchNameDialogComponent);
 
+    dialogRef.afterClosed().pipe(take(1)).subscribe((result: {name: string}) => {
+      if (result !== undefined) {
+        console.log(result);
+        this.store.dispatch(createNewBranch({sectionId: this.section()._id, name: result.name}));
+      }
+    });
   }
 
   onInspectPlan(){

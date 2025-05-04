@@ -1,10 +1,16 @@
-import { Component, inject, input } from '@angular/core';
+import { Component, effect, inject, input } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslocoModule } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
-import { selectNumFlights, selectProject } from '../../state/flight-section-planning.selector';
+import { selectBranches, selectBranchIndex } from '../../state/flight-section-planning.selector';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { selectDifferentBranch } from '../../state/flight-section-planning.actions';
+
 
 @Component({
   selector: 'app-controls',
@@ -13,16 +19,45 @@ import { selectNumFlights, selectProject } from '../../state/flight-section-plan
     MatButtonModule,
     MatIconModule,
     MatDividerModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatFormFieldModule, 
+    MatSelectModule, 
+    FormsModule, 
+    ReactiveFormsModule
   ],
   templateUrl: './controls.component.html',
   styleUrl: './controls.component.scss'
 })
 export class ControlsComponent {
 
-  store = inject(Store);
-  project = this.store.selectSignal(selectProject);
-  numFlights = this.store.selectSignal(selectNumFlights);
-
   disabled = input<boolean>(false);
+
+  store = inject(Store);
+  fb = inject(FormBuilder);
+
+  form  = this.fb.group({
+    branch: this.fb.control<number | undefined>(0)
+  })
+  
+  selectedBranch = this.store.selectSignal(selectBranchIndex);
+  branches = this.store.selectSignal(selectBranches);
+
+  constructor(){
+    effect(() => {
+      console.log(this.selectedBranch());
+      this.form.controls.branch.setValue(this.selectedBranch())
+    })
+
+    this.form.controls.branch.valueChanges.pipe(takeUntilDestroyed()).subscribe(
+      newIndex => {
+        if(newIndex !== undefined && newIndex !== null){
+          this.store.dispatch(selectDifferentBranch({index: newIndex}))
+        }
+      }
+    );
+  }
+
+
 
 }
