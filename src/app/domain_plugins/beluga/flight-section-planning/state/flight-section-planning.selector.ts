@@ -4,6 +4,7 @@ import { FlightSectionPlanningFeature } from "./flight-section-planning.feature"
 import { PlanRunStatus } from "src/app/iterative_planning/domain/plan";
 import { BelugaAction } from "../../shared/domain/beluga_plan";
 import { Encoding, ServiceType } from "src/app/global_specification/domain/services";
+import { memoizeWith } from "ramda";
 
 
 const selectState = FlightSectionPlanningFeature.selectFlightSectionPlanningState
@@ -36,7 +37,8 @@ export const selectNumRacks = createSelector(selectTask,
     (task) => task?.racks?.length ?? 0)
 
 export const selectNumJigs= createSelector(selectTask, 
-    (task) => task?.jigs !== undefined ? Object.keys(task?.jigs).length : undefined)
+    (task) => task?.jigs !== undefined ? Object.keys(task?.jigs).length : undefined)  
+    
 
 // Services
 
@@ -89,6 +91,10 @@ export const selectActiveBranchNumberFinishedFlights= createSelector(selectActiv
 export const selectActiveBranchLastSectionFinished= createSelector(selectActiveBranchSections, 
     (sections) => sections?.[sections?.length - 1].status == PlanRunStatus.SOLVED);
 
+export const selectActiveBranchRemainingNumberFlights = createSelector(selectActiveBranchNumberFinishedFlights, selectNumFlights,
+    (numFinishedFlights, numFLights) => numFLights - (numFinishedFlights ?? 0)
+)
+
 export const selectBranches = createSelector(selectTree, 
     (tree) => (tree?.branches));
 
@@ -98,7 +104,22 @@ export const selectBranchIndex = createSelector(selectTree,
 export const selectTreeHead = createSelector(selectTree, 
     (tree) => (tree?.selectedSectionId));
 
-export const selectRemainingNumberFlights = createSelector(selectActiveBranchNumberFinishedFlights, selectNumFlights,
-    (numFinishedFlights, numFLights) => numFLights - (numFinishedFlights ?? 0)
-)
+    
+
+export const selectBranchSections = memoizeWith(
+    (index: number) => index.toString(),
+    (index: number) => createSelector(selectTree, selectSections,
+        (tree, sections) => {
+            let sectionId = tree?.branches[index].sectionIdHead;
+            if(tree === undefined || sections === undefined || sectionId === undefined){
+                return undefined;
+            }   
+            let branchSections = [sections[sectionId]];
+            while(branchSections[0].predecessorId !== null){
+                sectionId = branchSections[0].predecessorId;
+                branchSections = [sections[sectionId], ...branchSections]
+            }
+            return branchSections;
+    })
+);
 

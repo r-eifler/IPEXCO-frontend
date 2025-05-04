@@ -21,12 +21,6 @@ import { selectFlights, selectHasTree, selectInitialState, selectProject } from 
     MatButtonModule,
     SectionTreeHeroComponent,
   ],
-  providers: [
-      provideTranslocoScope({
-        scope: "flight_section_planning",
-        alias: "f",
-      }),
-    ],
   templateUrl: './plan-section-overview.component.html',
   styleUrl: './plan-section-overview.component.scss'
 })

@@ -12,7 +12,6 @@ import { MatIconModule } from '@angular/material/icon';
 @Component({
   selector: 'app-plan-inspector',
   imports: [
-    DialogModule,
     TranslocoModule,
     SinglePlanViewComponent,
     PageModule,

@@ -27,7 +27,6 @@ export class FinishManualPlanningEffect{
                     updateFlightSection({section:{
                         ...section,
                         actions: [...actions, {name: BelugaActionType.SWITCH_TO_NEXT_BELUGA} as SwitchBeluga],
-                        finished: true,
                         status: PlanRunStatus.SOLVED,
                     }}),
                 ]

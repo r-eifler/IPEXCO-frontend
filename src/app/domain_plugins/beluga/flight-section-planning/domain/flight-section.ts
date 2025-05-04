@@ -1,15 +1,14 @@
 import { PlanRunStatus, PlanRunStatusZ } from "src/app/iterative_planning/domain/plan";
-import { array, boolean, nullable, number, object, optional, record, string, infer as zinfer } from "zod";
+import { array, nullable, number, object, optional, string, infer as zinfer } from "zod";
 import { BelugaActionZ } from "../../shared/domain/beluga_plan";
-import { applyActions, BelugaStateZ } from "../../shared/domain/beluga_state";
-import { PlanMethodTypeZ, PlanMethodZ } from "./plan_method";
 import { BelugaProblem } from "../../shared/domain/beluga_problem";
+import { applyActions, BelugaStateZ } from "../../shared/domain/beluga_state";
+import { PlanMethodZ } from "./plan_method";
 
 
 export const FlightSectionBaseZ = object({
     flightIndex: number(),
     startState: BelugaStateZ,
-    finished: boolean(),
     predecessorId: nullable(string()),
     treeId: string(),
 
@@ -116,7 +115,6 @@ export function deriveSuccessor(section: FlightSection, task: BelugaProblem){
         flightIndex: section.flightIndex + 1,
         startState: newStartState,
         status: PlanRunStatus.PENDING,
-        finished: false,
         predecessorId: section._id,
         treeId: section.treeId,
         actions: []

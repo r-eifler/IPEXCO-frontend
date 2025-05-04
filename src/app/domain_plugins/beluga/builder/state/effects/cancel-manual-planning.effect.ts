@@ -26,7 +26,6 @@ export class CancelManualPlanningEffect{
                     updateFlightSection({section:{
                         ...section,
                         actions: [],
-                        finished: false,
                         status: PlanRunStatus.CANCELED,
                     }}),
                 ]

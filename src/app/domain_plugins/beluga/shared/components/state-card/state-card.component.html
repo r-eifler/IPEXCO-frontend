@@ -16,11 +16,12 @@
     </div>
     <div class="trailers">
         @for(trailer of trailersBeluga(); track trailer){
-            <app-trailer [name]="trailer.name" size="30">
+            <app-trailer [name]="trailer.name" [size]="20 * 15">
                 <app-jig
                     *ngIf="trailer.jig"
                     [jig]="trailer.jig"  
                     [jigType]="jigTypes()?.[trailer.jig?.type]"
+                    draggable="false"
                 >
                 </app-jig>
             </app-trailer>
@@ -33,6 +34,7 @@
                     *ngFor="let jig of rack.jigs"
                     [jig]="jig"  
                     [jigType]="jigTypes()?.[jig?.type]"
+                    draggable="false"
                 >
                 </app-jig>
             </app-rack>
@@ -40,11 +42,12 @@
     </div>
     <div class="trailers">
         @for(trailer of trailersFactory(); track trailer){
-            <app-trailer [name]="trailer.name" size="30">
+            <app-trailer [name]="trailer.name" [size]="20 * 15">
                 <app-jig
                     *ngIf="trailer.jig"
                     [jig]="trailer.jig"  
                     [jigType]="jigTypes()?.[trailer.jig?.type]"
+                    draggable="false"
                 >
                 </app-jig>
             </app-trailer>
@@ -57,6 +60,7 @@
                     *ngIf="hangar.jig"
                     [jig]="hangar.jig"  
                     [jigType]="jigTypes()?.[hangar.jig?.type]"
+                    unitSize="true"
                 >
                 </app-jig>
             </app-hangar>

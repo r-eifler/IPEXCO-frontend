@@ -19,7 +19,7 @@ import { FlightSection } from '../../domain/flight-section';
 import { computeRackOccupancyRate, computeSwaps } from '../../domain/metrics';
 import { PlanMethod, PlanMethodType } from '../../domain/plan_method';
 import { createNewBranch, registerManualPlanning, startAutomaticPlanning } from '../../state/flight-section-planning.actions';
-import { selectRemainingNumberFlights, selectSupportedPlanners, selectTask } from '../../state/flight-section-planning.selector';
+import { selectActiveBranchRemainingNumberFlights, selectSupportedPlanners, selectTask } from '../../state/flight-section-planning.selector';
 import { PlanInspectorComponent } from '../../views/plan-inspector/plan-inspector.component';
 import { SectionPlanMethodDialogComponent } from '../section-plan-method-dialog/section-plan-method-dialog.component';
 import { BranchNameDialogComponent } from '../branch-name-dialog/branch-name-dialog.component';
@@ -56,7 +56,7 @@ export class SectionCardComponent {
 
   supportedPlanners= this.store.selectSignal(selectSupportedPlanners);
   task = this.store.selectSignal(selectTask);
-  remainingNUmberFlights = this.store.selectSignal(selectRemainingNumberFlights);
+  remainingNUmberFlights = this.store.selectSignal(selectActiveBranchRemainingNumberFlights);
 
   section = input.required<FlightSection>();
   flight = input.required<Flight>();

@@ -1,0 +1,34 @@
+<app-page *transloco="let t">
+    <app-breadcrumb>
+        <a app-breadcrumb-item [routerLink]="['../flight-sections']"><mat-icon>home</mat-icon></a>
+        <app-breadcrumb-item>{{ t('f.metrics')}}</app-breadcrumb-item>
+      </app-breadcrumb>
+    <app-page-title>
+      {{ t('f.metrics') }}
+    </app-page-title>
+    <!-- <app-page-hero>
+        <app-section-tree-hero></app-section-tree-hero>
+    </app-page-hero>     -->
+    <app-page-content>
+        <app-page-section-list>
+            <app-page-section>
+                <app-page-section-content>
+                  <app-metrics-controls
+                    (selectedBranches)="onChangeSelection($event)"
+                    (selectedMetric)="onChangeMetric($event)"
+                  ></app-metrics-controls>
+                </app-page-section-content>
+            </app-page-section>
+            <app-page-section>
+                <app-page-section-content>
+                  <app-section-metric-graph
+                    [task]="task()"
+                    [branchSections]="branchSections()"
+                    [metric]="selectedMetric()"
+                  >
+                  </app-section-metric-graph>
+                </app-page-section-content>
+            </app-page-section>
+        </app-page-section-list>
+    </app-page-content>
+</app-page>

@@ -35,8 +35,11 @@
     "start": "Start",
     "cancel": "Cancel",
     "plan_version": "plan version",
+    "plan_versions": "plan versions",
     "new": "new",
     "name_new_plan_version": "Name of new plan version",
     "name": "name",
-    "planning_method": "planning method"
+    "planning_method": "planning method",
+    "metrics": "Metrics",
+    "metric": "Metric"
 }

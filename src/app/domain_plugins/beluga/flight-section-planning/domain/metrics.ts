@@ -2,6 +2,13 @@ import { sum } from "ramda";
 import { BelugaAction, BelugaActionType } from "../../shared/domain/beluga_plan";
 import { BelugaProblem } from "../../shared/domain/beluga_problem";
 import { applyAction, BelugaState } from "../../shared/domain/beluga_state";
+import { FlightSection } from "./flight-section";
+
+export enum MetricType {
+    PLAN_LENGTH = "plan length",
+    NUM_SWAPS = "number of swaps",
+    RACK_OCCUPANCY = "rack occupancy"
+}
 
 export function computeSwaps(actions: BelugaAction[]){
     let num_swaps = 0;
@@ -37,4 +44,14 @@ export function computeRackOccupancyRate(task: BelugaProblem, initState: BelugaS
 
 export function computeRackOccupancyRateForState(state: BelugaState){
     return Object.values(state.racks).reduce((numUsed, jigs) => jigs.length == 0 ? numUsed : numUsed + 1, 0);
+}
+
+export function computePlanLength(actions: BelugaAction[]){
+    return actions?.length ?? 0
+}
+
+export const metricsFunctionMap = {
+    [MetricType.PLAN_LENGTH]: (section: FlightSection, task: BelugaProblem) => computePlanLength(section.actions),
+    [MetricType.NUM_SWAPS]: (section: FlightSection, task: BelugaProblem) => computeSwaps(section.actions),
+    [MetricType.RACK_OCCUPANCY]: (section: FlightSection, task: BelugaProblem) => computeRackOccupancyRate(task, section.startState, section.actions),
 }

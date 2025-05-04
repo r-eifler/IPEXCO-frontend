@@ -19,6 +19,7 @@ import { FlightSectionPlanService } from './services/flight-section-plan.service
 import { SectionPlanComputationMonitoringService } from './services/plan-computataion-monitoring.service';
 import { SelectSectionResolver } from './resolver/select-section.resolver';
 import { PlanInspectorComponent } from './views/plan-inspector/plan-inspector.component';
+import { MetricsOverviewComponent } from './views/metrics-overview/metrics-overview.component';
 
 export const routes: Routes = [
   {
@@ -45,6 +46,11 @@ export const routes: Routes = [
       {
         path: 'flight-sections',
         component: PlanSectionsOverview,
+        resolve: [LoadFlightPlanTreeResolver],
+      },
+      {
+        path: 'metrics',
+        component: MetricsOverviewComponent,
         resolve: [LoadFlightPlanTreeResolver],
       },
       {

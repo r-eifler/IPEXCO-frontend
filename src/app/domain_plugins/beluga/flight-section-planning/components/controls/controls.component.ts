@@ -10,6 +10,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { selectDifferentBranch } from '../../state/flight-section-planning.actions';
+import { Router, RouterLink } from '@angular/router';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 
 @Component({
@@ -24,7 +26,9 @@ import { selectDifferentBranch } from '../../state/flight-section-planning.actio
     MatFormFieldModule, 
     MatSelectModule, 
     FormsModule, 
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    RouterLink,
+    MatTooltipModule,
   ],
   templateUrl: './controls.component.html',
   styleUrl: './controls.component.scss'
