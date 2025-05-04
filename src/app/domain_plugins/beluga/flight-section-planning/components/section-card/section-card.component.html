@@ -36,6 +36,15 @@
                 </div>
             </div>
         </div>
+
+        <div class="utility">
+            <mat-icon>{{ section()?.planMethod?.type | planMethodTypeIcon }}</mat-icon>
+            <div class="utility-value-container">
+              <span>{{ section()?.planMethod?.type | planMethodTypeName }}</span>
+              <span class="value">{{ section()?.planMethod?.name }}</span>
+              <span class="label">{{t('f.planning_method')}}</span>
+            </div>
+          </div>
       </div>
     </mat-card-content>
     <mat-card-actions>

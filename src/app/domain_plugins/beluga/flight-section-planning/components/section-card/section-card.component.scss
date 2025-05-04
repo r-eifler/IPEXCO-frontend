@@ -60,6 +60,7 @@
 .utility {
   display: grid;
   justify-content: center;
+  justify-items: center;
   align-items: end;
 
   mat-icon {
@@ -67,7 +68,7 @@
     grid-column: 1;
 
     opacity: 0.075;
-    --icon-size: 50px;
+    --icon-size: 90px;
     font-size: var(--icon-size);
     width: var(--icon-size);
     height: var(--icon-size);

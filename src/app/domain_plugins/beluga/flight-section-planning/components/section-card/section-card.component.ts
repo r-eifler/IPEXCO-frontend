@@ -23,6 +23,8 @@ import { selectRemainingNumberFlights, selectSupportedPlanners, selectTask } fro
 import { PlanInspectorComponent } from '../../views/plan-inspector/plan-inspector.component';
 import { SectionPlanMethodDialogComponent } from '../section-plan-method-dialog/section-plan-method-dialog.component';
 import { BranchNameDialogComponent } from '../branch-name-dialog/branch-name-dialog.component';
+import { PlanMethodTypeNamePipe } from '../../pipe/plan-method-type-name.pipe';
+import { PlanMethodTypeIconPipe } from '../../pipe/plan-method-type-icon.pipe';
 
 @Component({
   selector: 'app-section-card',
@@ -39,6 +41,8 @@ import { BranchNameDialogComponent } from '../branch-name-dialog/branch-name-dia
     StepStatusNamePipe,
     RouterLink,
     MatProgressBarModule,
+    PlanMethodTypeNamePipe,
+    PlanMethodTypeIconPipe,
   ],
   templateUrl: './section-card.component.html',
   styleUrl: './section-card.component.scss'

@@ -37,5 +37,6 @@
     "plan_version": "Planversion",
     "new": "Neu",
     "name_new_plan_version": "Name der neuen PlanVersion",
-    "name": "Name"
+    "name": "Name",
+    "planning_method": "Planungsmethode"
 }
