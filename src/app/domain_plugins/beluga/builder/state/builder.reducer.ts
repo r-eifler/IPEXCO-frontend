@@ -1,14 +1,13 @@
 import { createReducer, on } from "@ngrx/store";
-import { BelugaActionType, SwitchBeluga } from "../../shared/domain/beluga_plan";
-import { BelugaProblem, BelugaProblemZ, Flight, ProductionLine, Side } from "../../shared/domain/beluga_problem";
-import { applyAction, BelugaState, getInitialState } from "../../shared/domain/beluga_state";
-import { FlightSectionPlan, PlanSection } from "../domain/plan";
-import { cancelDrag, createNewBelugaAction, initBuilder, loadFlightSectionSuccess, loadProject, loadProjectSuccess, nextFlight, startDrag, stopDrag, updateFlightSectionSuccess } from "./builder.actions";
 import { Loadable, LoadingState } from "src/app/shared/common/loadable.interface";
-import { FlightSection, getFullState } from "../../flight-section-planning/domain/flight-section";
-import { projectTaskToSection } from "../../flight-section-planning/domain/flight-section";
 import { Project } from "src/app/shared/domain/project";
+import { FlightSection, FlightTargetSchedule, getFlightSchedule, getFullState, getProductionSchedule, GoalStatus, ProductionLineTargetSchedule } from "../../flight-section-planning/domain/flight-section";
+import { BelugaActionType, SwitchBeluga } from "../../shared/domain/beluga_plan";
+import { BelugaProblemZ, Side } from "../../shared/domain/beluga_problem";
+import { applyAction, BelugaState, getInitialState } from "../../shared/domain/beluga_state";
 import { BelugaSightSetUp, getSightSetUp } from "../../shared/domain/sight_set_up";
+import { FlightSectionPlan, PlanSection } from "../domain/plan";
+import { cancelDrag, createNewBelugaAction, loadFlightSectionSuccess, loadProject, loadProjectSuccess, nextFlight, startDrag, stopDrag, updateFlightSectionSuccess } from "./builder.actions";
 
 export interface DragSource{
     name: string,
@@ -20,9 +19,11 @@ export interface BuilderState {
 
     section: Loadable<FlightSection>,
     numToProcessFlights: number,
+
     sightSetUp: BelugaSightSetUp | null,
-    flightsScheduled: Flight[] | null,
-    productionLinesScheduled: ProductionLine[] | null,
+    flightsTargetSchedule: FlightTargetSchedule[] | null,
+    productionLinesTargetSchedule: ProductionLineTargetSchedule[] | null,
+
     taskState: BelugaState | null | undefined,
 
     plan: FlightSectionPlan,
@@ -42,8 +43,8 @@ const initialState: BuilderState = {
     section: {state: LoadingState.Initial, data: undefined},
     numToProcessFlights: 1,
     sightSetUp: null,
-    flightsScheduled: null,
-    productionLinesScheduled: null,
+    flightsTargetSchedule: null,
+    productionLinesTargetSchedule: null,
     taskState: null,
 
     plan: {sections: []},
@@ -80,8 +81,18 @@ export const BuilderReducer = createReducer(
                 ...state,
                 project: {state: LoadingState.Done, data: project},
                 sightSetUp: getSightSetUp(task),
-                flightsScheduled:task.flights,
-                productionLinesScheduled: task.production_lines,
+                flightsTargetSchedule: task.flights.map(f => ({
+                    name: f.name, 
+                    incoming: f.incoming.map(j => ({jig: j, status: GoalStatus.HARD})), 
+                    outgoing: f.outgoing.map(j => ({jigType: j, status: GoalStatus.HARD})),
+                })),
+                productionLinesTargetSchedule: task.production_lines.map(pl => ({
+                    name: pl.name,
+                    schedule: pl.schedule.map(j => ({
+                        jig: j,
+                        status: GoalStatus.HARD
+                    }))
+                })),
                 taskState: taskState,
                 currentSection: {
                     initialState: taskState,
@@ -97,8 +108,8 @@ export const BuilderReducer = createReducer(
             ...state,
             section: {state: LoadingState.Done, data: section},
             taskState: fullState,
-            flightsScheduled: section.flightScheduled ? [section.flightScheduled] : null,
-            productionLinesScheduled: section.productionLinesScheduled ?? null,
+            flightsTargetSchedule: section.flightTargetSchedule ? [section.flightTargetSchedule] : null,
+            productionLinesTargetSchedule: section.productionLinesTargetSchedule ?? null,
             plan: {sections: []},
             currentSection: null,
             dragSource: null,
@@ -112,8 +123,14 @@ export const BuilderReducer = createReducer(
     })),
     on(createNewBelugaAction, (state, {action}): BuilderState => ({
         ...state,
-        taskState: state.taskState !== null && state.taskState !== undefined && state.flightsScheduled !== null  &&  state.productionLinesScheduled !== null  && state.sightSetUp !== null ?
-            applyAction(state.taskState, action, state.flightsScheduled, state.productionLinesScheduled, state.sightSetUp) : null,
+        taskState: state.taskState !== null && state.taskState !== undefined && state.flightsTargetSchedule !== null  &&  state.productionLinesTargetSchedule !== null  && state.sightSetUp !== null ?
+        applyAction(
+            state.taskState, 
+            action, 
+            state.flightsTargetSchedule.map(s => getFlightSchedule(s, GoalStatus.HARD)), 
+            getProductionSchedule(state.productionLinesTargetSchedule, GoalStatus.HARD), 
+            state.sightSetUp
+        ) : null,
         currentSection: {
             initialState: state.currentSection?.initialState,
             finished: false,
@@ -127,8 +144,14 @@ export const BuilderReducer = createReducer(
             finished: true,
             actions: [...(state.currentSection?.actions ?? []), switchBelugaAction]
         };
-        let finalState = state.taskState !== null && state.taskState !== undefined && state.flightsScheduled !== null  &&  state.productionLinesScheduled !== null  && state.sightSetUp !== null ?
-        applyAction(state.taskState, switchBelugaAction, state.flightsScheduled, state.productionLinesScheduled, state.sightSetUp) : undefined;
+        let finalState = state.taskState !== null && state.taskState !== undefined && state.flightsTargetSchedule !== null  &&  state.productionLinesTargetSchedule !== null  && state.sightSetUp !== null ?
+        applyAction(
+            state.taskState, 
+            switchBelugaAction, 
+            state.flightsTargetSchedule.map(s => getFlightSchedule(s, GoalStatus.HARD)), 
+            getProductionSchedule(state.productionLinesTargetSchedule, GoalStatus.HARD), 
+            state.sightSetUp
+        ) : undefined;
         return {
             ...state,
             taskState: finalState,

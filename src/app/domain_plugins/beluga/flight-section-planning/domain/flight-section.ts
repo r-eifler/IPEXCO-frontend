@@ -1,21 +1,72 @@
 import { PlanRunStatus, PlanRunStatusZ } from "src/app/iterative_planning/domain/plan";
-import { array, boolean, nullable, number, object, optional, record, string, infer as zinfer } from "zod";
+import { array, boolean, nativeEnum, nullable, number, object, optional, record, string, infer as zinfer } from "zod";
 import { BelugaActionZ } from "../../shared/domain/beluga_plan";
-import { BelugaProblem, Flight, FlightZ, ProductionLine, ProductionLineZ } from "../../shared/domain/beluga_problem";
+import { BelugaProblem, Flight, ProductionLine, ProductionLineZ } from "../../shared/domain/beluga_problem";
 import { applyActions } from "../../shared/domain/beluga_state";
-import { BelugaSightSetUpZ, BelugaSightStateZ, getSightSetUp } from "../../shared/domain/sight_set_up";
+import { BelugaSightSetUpZ, BelugaSightStateZ } from "../../shared/domain/sight_set_up";
 import { PlanMethodZ } from "./plan_method";
+
+
+export enum GoalStatus {
+    SOFT = "SOFT",
+    HARD = "HARD"
+  }
+  
+export const GoalStatusZ = nativeEnum(GoalStatus);
+
+export const FlightTargetScheduleZ = object({
+    name: string(),
+    incoming: array(object({
+        jig: string(),
+        status: GoalStatusZ
+    })),
+    outgoing: array(object({
+        jigType: string(),
+        status: GoalStatusZ
+    })),
+})
+
+export type FlightTargetSchedule = zinfer<typeof FlightTargetScheduleZ>;
+
+export function getFlightSchedule(flight: FlightTargetSchedule, status: GoalStatus | null){
+    return {
+        name: flight.name,
+        incoming: flight.incoming.filter(j => j.status === status).map(j => j.jig),
+        outgoing: flight.outgoing.filter(j => status === null || j.status === status).map(j => j.jigType),
+        stageType: 'flight' as const
+    }
+}
+
+export const ProductionLineTargetScheduleZ = object({
+    name: string(),
+    schedule: array(object({
+        jig: string(),
+        status: GoalStatusZ
+    }))
+})
+
+
+export type ProductionLineTargetSchedule = zinfer<typeof ProductionLineTargetScheduleZ>;
+
+export function getProductionSchedule(productionLines: ProductionLineTargetSchedule[], status: GoalStatus | null){
+    return productionLines.map(pl => ({
+        name: pl.name,
+        schedule: pl.schedule.filter(j => status === null || j.status === status).map(j => j.jig),
+    }));
+}
 
 
 export const FlightSectionBaseZ = object({
     flightIndex: number(),
     sightSetUp: BelugaSightSetUpZ,
     sightState: BelugaSightStateZ,
-    flightScheduled: optional(FlightZ),
-    productionLinesScheduled: optional(array(ProductionLineZ)),
+
     incomingRemaining: array(string()),
     outgoingLoaded: array(string()),
     productionLinesDelivered: record(string(),  array(string())),
+
+    flightTargetSchedule: optional(FlightTargetScheduleZ),
+    productionLinesTargetSchedule: optional(array(ProductionLineTargetScheduleZ)),
 
     predecessorId: nullable(string()),
     treeId: string(),
@@ -133,8 +184,8 @@ export function deriveSuccessor(section: FlightSection, flight: Flight, producti
     let newStartState = applyActions(
         getFullState(section), 
         section.actions, 
-        section.flightScheduled !== undefined ? [section.flightScheduled] : [],  
-        section.productionLinesScheduled ?? [], 
+        section.flightTargetSchedule !== undefined ? [getFlightSchedule(section.flightTargetSchedule, GoalStatus.HARD)] : [],  
+        getProductionSchedule(section.productionLinesTargetSchedule ?? [], GoalStatus.HARD) , 
         section.sightSetUp
     );
     if (newStartState == undefined){
@@ -149,8 +200,8 @@ export function deriveSuccessor(section: FlightSection, flight: Flight, producti
             trailers: newStartState.trailers,
             hangars: newStartState.hangars,
         },
-        flightScheduled: flight,
-        productionLinesScheduled: productionSchedule,
+        flightTargetSchedule: {name: flight.name, incoming: flight.incoming.map(jn => ({jig: jn, status: GoalStatus.HARD})), outgoing: flight.outgoing.map(jn => ({jigType: jn, status: GoalStatus.HARD}))},
+        productionLinesTargetSchedule: productionSchedule.map(pl => ({name: pl.name, schedule: pl.schedule.map(j => ({jig: j, status: GoalStatus.HARD}))})),
         productionLinesDelivered: newStartState.productionLines,
 
         actions: [],

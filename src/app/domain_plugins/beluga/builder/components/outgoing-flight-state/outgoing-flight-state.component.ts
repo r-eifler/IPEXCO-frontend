@@ -62,7 +62,7 @@ export class OutgoingFlightStateComponent {
         };
   
         this.store.dispatch(createNewBelugaAction({action}));
-        this.store.dispatch(stopDrag({target: flight}));  
+        this.store.dispatch(stopDrag({target: {...flight, stageType: "flight"}}));  
       }
 
     }

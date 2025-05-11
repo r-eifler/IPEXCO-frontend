@@ -81,7 +81,7 @@ export class IncomingFlightStateComponent {
   onStartDrag(jig: Jig){
     let flight = this.currentFlight();
     if(flight !== undefined && flight !== null){
-    	this.store.dispatch(startDrag({source: flight, jigName: jig.name, sides: ['bside']}))
+    	this.store.dispatch(startDrag({source: {...flight, stageType: "flight"}, jigName: jig.name, sides: ['bside']}))
     }
       
   }

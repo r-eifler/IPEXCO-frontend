@@ -2,6 +2,7 @@ import { createSelector } from "@ngrx/store";
 import { BuilderFeature } from "./builder.feature";
 import { BelugaProblemZ, getJigSize, HangarZ, occupiedSpace, Side } from "../../shared/domain/beluga_problem";
 import { memoizeWith } from "ramda";
+import { GoalStatus } from "../../flight-section-planning/domain/flight-section";
 
 
 const selectState = BuilderFeature.selectBuilderFeatureState
@@ -58,7 +59,7 @@ export const selectJigsState = createSelector(selectTaskState,
 // flight
 
 export const selectFlightSchedule= createSelector(selectState, 
-    (state) => state.flightsScheduled
+    (state) => state.flightsTargetSchedule
 );
 
 export const selectCurrentFlightIndex = createSelector(selectTaskState, 
@@ -88,14 +89,15 @@ export const selectCurrentFlightName = createSelector(selectCurrentFlightSchedul
 
 export const selectCurrentFlightNextOutgoingJigType = createSelector(selectCurrentFlightSchedule, selectOutgoingFlightState,
     (schedule, outgoing) => {
-        if(outgoing === undefined || schedule === undefined  || schedule === null || outgoing.length === schedule.outgoing.length){
+        if(outgoing === undefined || schedule === undefined  || schedule === null){
             return null;
         }
+        let hardGoalsOutgoing = schedule.outgoing.filter(j => j.status == GoalStatus.HARD)
         let nextTypeIndex = outgoing.length;
-        if(nextTypeIndex == undefined){
+        if(nextTypeIndex == undefined || hardGoalsOutgoing.length === nextTypeIndex){
             return null;
         }
-        return schedule.outgoing[nextTypeIndex]
+        return schedule.outgoing[nextTypeIndex].jigType
     });
 
 export const selectFlightFinished = createSelector(selectIncomingFlightState, selectOutgoingFlightState, selectCurrentFlightSchedule,
@@ -246,7 +248,7 @@ export const selectAvailableHangarNames = createSelector(selectHangars, selectHa
 // ProductionLine 
 
 export const selectProductionLineSchedule = createSelector(selectState, 
-    (state) => state.productionLinesScheduled
+    (state) => state.productionLinesTargetSchedule
 );
 
 export const selectProductionLinesState = createSelector(selectTaskState, 
@@ -259,7 +261,7 @@ export const selectDeliverableJigs = createSelector(selectProductionLinesState, 
         }
         return pls.reduce((acc,c) => 
             c.schedule.length == 0 ? 
-            acc : {...acc, [c.schedule[plsState[c.name].length]]: c.name}, {} as Record<string,string>) 
+            acc : {...acc, [c.schedule[plsState[c.name].length].jig]: c.name}, {} as Record<string,string>) 
     });
 
 
