@@ -1,6 +1,6 @@
 import { Component, computed, input, signal, WritableSignal } from '@angular/core';
 import { BelugaProblem } from '../../domain/beluga_problem';
-import { FlightSection } from '../../../flight-section-planning/domain/flight-section';
+import { FlightSection, getFullState } from '../../../flight-section-planning/domain/flight-section';
 import { PlanActionListComponent } from '../../components/plan-action-list/plan-action-list.component';
 import { StateCardComponent } from '../../components/state-card/state-card.component';
 import { StepControlComponent } from '../../components/step-control/step-control.component';
@@ -20,22 +20,23 @@ import { applyAction, applyActions } from '../../domain/beluga_state';
 })
 export class SinglePlanViewComponent {
 
-    task = input.required<BelugaProblem>();
     sections = input.required<FlightSection[]>();
 
     selectedActionIndex: WritableSignal<number | null> = signal(null);
     actions = computed(() => this.sections()?.reduce((actions, section) => ([...actions, ...section.actions]), [] as BelugaAction[]))
 
     selectedState = computed(() => {
-      let startState = this.sections()[0]?.startState;
+      const firstSection = this.sections()?.[0]
+      let startState = getFullState(firstSection);
       let endIndex  = this.selectedActionIndex();
-      if(endIndex == null){
+      if(endIndex === null || startState === undefined){
         return undefined;
       }
       endIndex += 1;
       const allActions = this.actions()
       const actions = allActions.slice(0, endIndex);
-      return applyActions(startState, actions,this.task())
+      // TODO
+      // return applyActions(startState, actions, firstSection.)
     })
 
 

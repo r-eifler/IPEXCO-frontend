@@ -1,13 +1,14 @@
 import { createReducer, on } from "@ngrx/store";
 import { BelugaActionType, SwitchBeluga } from "../../shared/domain/beluga_plan";
-import { BelugaProblem, BelugaProblemZ, Side } from "../../shared/domain/beluga_problem";
+import { BelugaProblem, BelugaProblemZ, Flight, ProductionLine, Side } from "../../shared/domain/beluga_problem";
 import { applyAction, BelugaState, getInitialState } from "../../shared/domain/beluga_state";
 import { FlightSectionPlan, PlanSection } from "../domain/plan";
 import { cancelDrag, createNewBelugaAction, initBuilder, loadFlightSectionSuccess, loadProject, loadProjectSuccess, nextFlight, startDrag, stopDrag, updateFlightSectionSuccess } from "./builder.actions";
 import { Loadable, LoadingState } from "src/app/shared/common/loadable.interface";
-import { FlightSection } from "../../flight-section-planning/domain/flight-section";
+import { FlightSection, getFullState } from "../../flight-section-planning/domain/flight-section";
 import { projectTaskToSection } from "../../flight-section-planning/domain/flight-section";
 import { Project } from "src/app/shared/domain/project";
+import { BelugaSightSetUp, getSightSetUp } from "../../shared/domain/sight_set_up";
 
 export interface DragSource{
     name: string,
@@ -16,14 +17,19 @@ export interface DragSource{
 
 export interface BuilderState {
     project: Loadable<Project>,
+
     section: Loadable<FlightSection>,
     numToProcessFlights: number,
-
-    sizeUnit: number;
-    task: BelugaProblem | null,
+    sightSetUp: BelugaSightSetUp | null,
+    flightsScheduled: Flight[] | null,
+    productionLinesScheduled: ProductionLine[] | null,
     taskState: BelugaState | null | undefined,
+
     plan: FlightSectionPlan,
     currentSection: PlanSection | null,
+
+    sizeUnit: number;
+
     dragSource: DragSource | null,
     draggedJig: string | null,
     draggedSides: Side[] | null,
@@ -32,14 +38,18 @@ export interface BuilderState {
 
 const initialState: BuilderState = {
     project: {state: LoadingState.Initial, data: undefined},
+
     section: {state: LoadingState.Initial, data: undefined},
     numToProcessFlights: 1,
-
-    sizeUnit: 15,
-    task: null,
+    sightSetUp: null,
+    flightsScheduled: null,
+    productionLinesScheduled: null,
     taskState: null,
+
     plan: {sections: []},
     currentSection: null,
+
+    sizeUnit: 15,
     dragSource: null,
     draggedJig: null,
     draggedSides: null,
@@ -50,16 +60,18 @@ export const BuilderReducer = createReducer(
     initialState,
     on(loadProject, (state): BuilderState => ({
         ...state,
-        task: null,
+        sightSetUp: null,
         taskState: null
     })),
     on(loadProjectSuccess, (state, {project}): BuilderState => {
-        let task = BelugaProblemZ.parse(project?.baseTask?.model);
+        const task = BelugaProblemZ.parse(project?.baseTask?.model);
         if(state.section.data !== undefined){
+            const fullState = getFullState(state.section.data)
             return {
                 ...state,
                 project: {state: LoadingState.Done, data: project},
-                task: projectTaskToSection(task, state.section.data, state.numToProcessFlights) ?? null,
+                sightSetUp: getSightSetUp(task),
+                taskState: fullState
             }
         }
         else{
@@ -67,7 +79,9 @@ export const BuilderReducer = createReducer(
             return {
                 ...state,
                 project: {state: LoadingState.Done, data: project},
-                task: task,
+                sightSetUp: getSightSetUp(task),
+                flightsScheduled:task.flights,
+                productionLinesScheduled: task.production_lines,
                 taskState: taskState,
                 currentSection: {
                     initialState: taskState,
@@ -77,33 +91,29 @@ export const BuilderReducer = createReducer(
             }
         }
     }),
-    on(loadFlightSectionSuccess, (state, {section}): BuilderState => ({
-        ...state,
-        section: {state: LoadingState.Done, data: section},
-        taskState: {
-            ...section.startState,
-            flightIndex: 0
-        },
-        task: state.task !== null ? projectTaskToSection(state.task, section, state.numToProcessFlights) ?? null : null,
-        plan: {sections: []},
-        currentSection: null,
-        dragSource: null,
-        draggedJig: null,
-        draggedSides: null,
-    })),
+    on(loadFlightSectionSuccess, (state, {section}): BuilderState => {
+        const fullState = getFullState(state.section.data)
+        return {
+            ...state,
+            section: {state: LoadingState.Done, data: section},
+            taskState: fullState,
+            flightsScheduled: section.flightScheduled ? [section.flightScheduled] : null,
+            productionLinesScheduled: section.productionLinesScheduled ?? null,
+            plan: {sections: []},
+            currentSection: null,
+            dragSource: null,
+            draggedJig: null,
+            draggedSides: null,
+        }
+    }),
     on(updateFlightSectionSuccess, (state, {section}): BuilderState => ({
         ...state,
         section: {state: LoadingState.Done, data: section},
     })),
-    on(initBuilder, (_, {task, initState}): BuilderState => ({
-        ...initialState,
-        task: task,
-        taskState: initState,
-    })),
     on(createNewBelugaAction, (state, {action}): BuilderState => ({
         ...state,
-        taskState: state.taskState !== null && state.taskState !== undefined && state.task != null ? 
-            applyAction(state.taskState, action, state.task) : null,
+        taskState: state.taskState !== null && state.taskState !== undefined && state.flightsScheduled !== null  &&  state.productionLinesScheduled !== null  && state.sightSetUp !== null ?
+            applyAction(state.taskState, action, state.flightsScheduled, state.productionLinesScheduled, state.sightSetUp) : null,
         currentSection: {
             initialState: state.currentSection?.initialState,
             finished: false,
@@ -117,8 +127,8 @@ export const BuilderReducer = createReducer(
             finished: true,
             actions: [...(state.currentSection?.actions ?? []), switchBelugaAction]
         };
-        let finalState = state.taskState !== null && state.taskState !== undefined && state.task != null ? 
-            applyAction(state.taskState, switchBelugaAction, state.task) : undefined
+        let finalState = state.taskState !== null && state.taskState !== undefined && state.flightsScheduled !== null  &&  state.productionLinesScheduled !== null  && state.sightSetUp !== null ?
+        applyAction(state.taskState, switchBelugaAction, state.flightsScheduled, state.productionLinesScheduled, state.sightSetUp) : undefined;
         return {
             ...state,
             taskState: finalState,

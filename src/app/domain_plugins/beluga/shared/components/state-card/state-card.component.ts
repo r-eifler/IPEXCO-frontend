@@ -2,13 +2,14 @@ import { Component, computed, effect, input } from '@angular/core';
 import { BelugaState } from '../../domain/beluga_state';
 import { MatIconModule } from '@angular/material/icon';
 import { JigComponent } from '../jig/jig.component';
-import { BelugaProblem } from '../../domain/beluga_problem';
+import { BelugaProblem, Flight, ProductionLine } from '../../domain/beluga_problem';
 import { TrailerComponent } from '../trailer/trailer.component';
 import { HangarComponent } from '../hangar/hangar.component';
 import { BelugaFlightComponent } from '../beluga-flight/beluga-flight.component';
 import { RackComponent } from '../rack/rack.component';
 import { ProductionLineComponent } from '../production-line/production-line.component';
 import { NgFor, NgIf } from '@angular/common';
+import { BelugaSightSetUp } from '../../domain/sight_set_up';
 
 @Component({
   selector: 'app-state-card',
@@ -29,13 +30,16 @@ import { NgFor, NgIf } from '@angular/common';
 export class StateCardComponent {
 
   state = input.required<BelugaState>();
-  task = input.required<BelugaProblem>();
+  sightSetUp = input.required<BelugaSightSetUp>();
+  flight = input.required<Flight>();
+  productionSchedule = input.required<ProductionLine[]>;
+
 
   constructor(){
     effect(() => console.log(this.state()))
   }
 
-  jigTypes = computed(() => this.task()?.jig_types)
+  jigTypes = computed(() => this.sightSetUp()?.jig_types)
   jigs = computed(() => this.state()?.jigs)
 
   incoming = computed(() => {
@@ -43,7 +47,7 @@ export class StateCardComponent {
     if(state === undefined){
       return []
     }
-    return state.incoming.map(j => this.jigs()?.[j]);
+    return state.incomingRemaining.map(j => this.jigs()?.[j]);
   })
 
   outgoing = computed(() => {
@@ -51,16 +55,10 @@ export class StateCardComponent {
     if(state === undefined){
       return []
     }
-    return state.outgoing.map(j => this.jigs()?.[j]);
+    return state.outgoingLoaded.map(j => this.jigs()?.[j]);
   })
 
-  outgoingSchedule = computed(() => {
-    const state = this.state();
-    if(state === undefined){
-      return []
-    }
-    return this.task()?.flights[state.flightIndex].outgoing;
-  })
+  outgoingSchedule = computed(() => this.flight()?.outgoing)
   
 
   racks = computed(() => {
@@ -68,11 +66,11 @@ export class StateCardComponent {
     if(state === undefined){
       return []
     }
-    return Object.values(state.racks).map((r,index) => 
+    return this.sightSetUp()?.racks.map((r) => 
       ({
-        jigs: r.map(j => this.jigs()?.[j]),
-        name: this.task()?.racks[index].name,
-        size: this.task()?.racks[index].size,
+        jigs: state.racks?.[r.name]?.map(j => this.jigs()?.[j]),
+        name: r.name,
+        size: r.size,
       })
     )
   });
@@ -94,9 +92,15 @@ export class StateCardComponent {
     if(state === undefined){
       return []
     }
-    return Object.keys(state.trailersBeluga).map(tn => 
-      state.trailersBeluga[tn] === null ? {name: tn, jig: null} : 
-      {name: tn, jig: this.jigs()?.[state.trailersBeluga[tn]]});
+    return this.sightSetUp()?.belugaTrailers.map(tn => {
+      const trailerState  = state.trailers[tn.name];
+      if(trailerState === null){
+        return {name: tn, jig: null}
+      }
+      else{
+        return {name: tn.name, jig: this.jigs()?.[trailerState]}
+      }
+    })
   })
 
   trailersFactory = computed(() => {
@@ -104,18 +108,18 @@ export class StateCardComponent {
     if(state === undefined){
       return []
     }
-    return Object.keys(state.trailersFactory).map(tn => 
-      state.trailersFactory[tn] === null ? {name: tn, jig: null} : 
-      {name: tn, jig: this.jigs()?.[state.trailersFactory[tn]]});
+    return this.sightSetUp()?.factoryTrailers.map(tn => {
+      const trailerState  = state.trailers[tn.name];
+      if(trailerState === null){
+        return {name: tn, jig: null}
+      }
+      else{
+        return {name: tn.name, jig: this.jigs()?.[trailerState]}
+      }
+    })
   })
 
-  productionLines = computed(() => {
-    const task = this.task();
-    if(task === undefined){
-      return []
-    }
-    return task.production_lines;
-  })
+  productionLines = computed(() => this.productionLines ?? [])
 
   productionLinesDelivered = computed(() => {
     const state = this.state();

@@ -20,7 +20,7 @@ export class StartManualPlanningEffect{
         tap(() => console.log("Effect check start manual planning")),
         concatLatestFrom(() => [this.store.select(selectProject)]),
         map(([section, project]) => {
-            if(section?.startState !== undefined && project !== undefined){
+            if(section?.sightState !== undefined && project !== undefined){
                 if(section.status == PlanRunStatus.RUNNING && section.planMethod?.type == PlanMethodType.MANUAL){
                     this.router.navigate(["beluga/flight-section-planning/" + project._id + "/planning/manual/section/" + section._id])
                 }

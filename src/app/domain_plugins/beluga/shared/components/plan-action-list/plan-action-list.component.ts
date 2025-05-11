@@ -27,8 +27,6 @@ export class PlanActionListComponent {
   actions = input.required<BelugaAction[] | null>();
 
   selectedJigs = input<string[]>([]);
-  selectedFlight = input<string | null>(null);
-  hiddenPrefix = input<number>(0);
   selectedAction = input.required<number | null>();
   
 
@@ -62,41 +60,8 @@ export class PlanActionListComponent {
       }
     });
 
-    if(this.hiddenPrefix() !== null){
-      return displayActions.slice(this.hiddenPrefix())
-    }
     return displayActions;
   })
-
-
-  filteredActions = computed(() => {
-    let actions = this.displayActions();
-    if(actions === null){
-      return null
-    }
-    const flight = this.selectedFlight();
-    if(flight !== null && flight !== undefined) {
-      actions = actionsForFlight(actions, this.flights().findIndex(f => f.name === flight) + 1)
-    }
-
-    if(actions === null){
-      return null;
-    }
-
-    const jigs = this.selectedJigs();
-    if(jigs !== null && jigs.length > 0) {
-      actions = actionsForJigs(actions, jigs)
-    }
-
-    return actions;
-  })
-
-
-	task = input.required<BelugaProblem>();
-
-  flights = computed(() => this.task()?.flights)
-  jigs = computed(() => Object.values(this.task()?.jigs))
-
 
 
   onHighlight(highlighted: boolean, action: BelugaAction){

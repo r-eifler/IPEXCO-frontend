@@ -8,16 +8,15 @@
     <div class="plan">
         <app-plan-action-list
             [actions]="actions()"
-            [task]="task()"
             [selectedAction] = "selectedActionIndex()"
             (actionSelected)="onActionSelected($event)"
         ></app-plan-action-list>
     </div>
     <div class="state">
-        <app-state-card
+        <h1>TODO</h1>
+        <!-- <app-state-card
             [state]="selectedState()"
-            [task]="task()"
         >
-        </app-state-card>
+        </app-state-card> -->
     </div>
 </div>

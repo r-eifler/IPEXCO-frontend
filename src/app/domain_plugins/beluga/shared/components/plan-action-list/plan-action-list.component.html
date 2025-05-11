@@ -4,7 +4,7 @@
         (selected)="onInitSelect()"
     >
     </app-init-card>
-    @for(da of filteredActions(); track da.trackId){
+    @for(da of displayActions(); track da.trackId){
         <app-action-card
             [action]="da.action"
             [highlight]="da.highlight"

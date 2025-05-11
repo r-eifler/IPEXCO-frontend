@@ -51,21 +51,15 @@
           <div class="plans-container">
             <app-plan-action-list
               [actions]="referenceActions$ | async"
-              [task]="task$ | async"
               [selectedJigs] = "selectedJigs$ | async"
-              [selectedFlight] = "selectedFlight$ | async"
               [selectedAction] = "this.selectedActionIndexRef$ | async"
-              [hiddenPrefix]="commonPrefixLength$ | async"
               (actionSelected)="onActionSelected(true, $event)"
             ></app-plan-action-list>
 
             <app-plan-action-list
               [actions]="comparisonActions$ | async"
-              [task]="task$ | async"
               [selectedJigs] = "selectedJigs$ | async"
-              [selectedFlight] = "selectedFlight$ | async"
               [selectedAction] = "this.selectedActionIndexComp$ | async"
-              [hiddenPrefix]="commonPrefixLength$ | async"
               (actionSelected)="onActionSelected(false, $event)"
             ></app-plan-action-list>
           </div>
@@ -75,17 +69,16 @@
       <app-page-section>
         <app-page-section-content>
           <div class="states-container">
-            <app-state-card
+            <h1>TODO</h1>
+            <!-- <app-state-card
               [state]="selectedStateRef$ | async"
-              [task]="task$ | async"
             >
             </app-state-card>
 
             <app-state-card
               [state]="selectedStateComp$ | async"
-              [task]="task$ | async"
             >
-            </app-state-card>
+            </app-state-card> -->
           </div>
         </app-page-section-content>
       </app-page-section>

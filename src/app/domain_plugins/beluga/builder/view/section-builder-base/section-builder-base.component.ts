@@ -12,7 +12,6 @@ import { ProductionLineStateComponent } from '../../components/production-line-s
 import { RacksStateComponent } from '../../components/racks-state/racks-state.component';
 import { SectionControlsComponent } from '../../components/section-controls/section-controls.component';
 import { TrailersStateComponent } from '../../components/trailers-state/trailers-state.component';
-import { selectTask } from '../../state/builder.feature';
 
 @Component({
   selector: 'app-section-builder-base',
@@ -42,8 +41,6 @@ import { selectTask } from '../../state/builder.feature';
 export class SectionBuilderBaseComponent {
 
     store = inject(Store);
-  
-    task$ = this.store.select(selectTask);
 
     constructor(){
       console.log("SectionBuilderBaseComponent")

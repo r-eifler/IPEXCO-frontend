@@ -13,11 +13,11 @@ export const selectProject = createSelector(selectState,
     (state) => state.project.data
 );
 
-export const selectTask = createSelector(selectState, 
-    (state) => state.task
+export const selectSightSetUp = createSelector(selectState, 
+    (state) => state.sightSetUp
 );
 
-export const selectJigTypes= createSelector(selectTask, 
+export const selectJigTypes= createSelector(selectSightSetUp, 
     (task) => task?.jig_types);
 
 // Sections
@@ -32,8 +32,8 @@ export const selectSection = createSelector(selectState,
 export const selectSizeUnit = createSelector(BuilderFeature.selectSizeUnit, 
     (unite) => unite);
 
-export const selectMaxPartSize = createSelector(selectTask, 
-    (task) => task == undefined ? undefined : Math.max(...Object.values(task.jig_types).map(jt => jt.size_loaded)));
+export const selectMaxPartSize = createSelector(selectSightSetUp, 
+    (setup) => setup == undefined ? undefined : Math.max(...Object.values(setup.jig_types).map(jt => jt.size_loaded)));
 
 
 // Plan
@@ -57,24 +57,28 @@ export const selectJigsState = createSelector(selectTaskState,
 
 // flight
 
+export const selectFlightSchedule= createSelector(selectState, 
+    (state) => state.flightsScheduled
+);
+
 export const selectCurrentFlightIndex = createSelector(selectTaskState, 
     (taskState) => taskState?.flightIndex);
 
 export const selectIncomingFlightState = createSelector(selectTaskState, 
-    (taskState) => taskState?.incoming);
+    (taskState) => taskState?.incomingRemaining);
 
 export const selectIncomingFlightStateJigs = createSelector(selectIncomingFlightState, selectJigsState, 
     (incoming, jigs) => incoming?.map(jn => jigs?.[jn]));
 
 export const selectOutgoingFlightState = createSelector(selectTaskState, 
-    (taskState) => taskState?.outgoing);
+    (taskState) => taskState?.outgoingLoaded);
 
 export const selectOutgoingFlightStateJigs = createSelector(selectOutgoingFlightState, selectJigsState, 
     (outgoing, jigs) => outgoing?.map(jn => jigs?.[jn]));
 
-export const selectCurrentFlightSchedule = createSelector(selectCurrentFlightIndex, selectTask, 
-    (flightIndex, task) => (flightIndex !== null && flightIndex  !== undefined ? 
-        task?.flights[flightIndex ] : null));
+export const selectCurrentFlightSchedule = createSelector(selectCurrentFlightIndex, selectFlightSchedule, 
+    (flightIndex, flights) => (flightIndex !== null && flightIndex  !== undefined ? 
+       flights?.[flightIndex ] : null));
 
 export const selectCurrentOutgoingFlightSchedule = createSelector(selectCurrentFlightSchedule, 
     (schedule) => schedule?.outgoing);
@@ -101,7 +105,7 @@ export const selectFlightFinished = createSelector(selectIncomingFlightState, se
 
 // Racks
 
-export const selectRacks = createSelector(selectTask, 
+export const selectRacks = createSelector(selectSightSetUp, 
     (task) => task?.racks)
 
 export const selectRacksState = createSelector(selectTaskState, 
@@ -142,21 +146,23 @@ export const selectFreeSpaceRack = memoizeWith(
 
 // Trailers
 
-export const selectBelugaTrailers = createSelector(selectTask, 
-    (task) => task?.trailers_beluga)
+export const selectBelugaTrailers = createSelector(selectSightSetUp, 
+    (setup) => setup?.belugaTrailers)
 
-export const selectBelugaTrailersState = createSelector(selectTaskState, 
-    (taskState) => taskState?.trailersBeluga)
+export const selectBelugaTrailersState = createSelector(selectTaskState, selectBelugaTrailers,
+    (taskState, trailers) => trailers?.reduce((acc,c) => ({...acc, [c.name]: taskState?.trailers[c.name]}), {})
+)
 
 export const selectAvailableBelugaTrailers = createSelector(selectBelugaTrailers, selectBelugaTrailersState,
     (trailers, trailersState) => (trailers?.filter(t => trailersState?.[t.name] == null) ?? []));
 
 
-export const selectFactoryTrailers = createSelector(selectTask, 
-    (task) => task?.trailers_factory)
+export const selectFactoryTrailers = createSelector(selectSightSetUp, 
+    (setup) => setup?.factoryTrailers)
 
-export const selectFactoryTrailersState = createSelector(selectTaskState, 
-    (taskState) => taskState?.trailersFactory)
+export const selectFactoryTrailersState = createSelector(selectTaskState, selectFactoryTrailers,
+    (taskState, trailers) => trailers?.reduce((acc,c) => ({...acc, [c.name]: taskState?.trailers[c.name]}), {})
+)
 
 export const selectAvailableFactoryTrailers = createSelector(selectFactoryTrailers, selectFactoryTrailersState,
     (trailers, trailersState) => (trailers?.filter(t => trailersState?.[t.name] == null) ?? []));
@@ -211,7 +217,7 @@ export const selectCanDeliver = memoizeWith(
 
 // Hangars 
 
-export const selectHangars = createSelector(selectTask, 
+export const selectHangars = createSelector(selectSightSetUp, 
     (task) => task?.hangars)
 
 export const selectHangarsState = createSelector(selectTaskState, 
@@ -239,15 +245,16 @@ export const selectAvailableHangarNames = createSelector(selectHangars, selectHa
 
 // ProductionLine 
 
-export const selectProductionLines = createSelector(selectTask, 
-    (task) => task?.production_lines)
+export const selectProductionLineSchedule = createSelector(selectState, 
+    (state) => state.productionLinesScheduled
+);
 
 export const selectProductionLinesState = createSelector(selectTaskState, 
     (taskState) => taskState?.productionLines)
 
-export const selectDeliverableJigs = createSelector(selectProductionLinesState, selectProductionLines,
+export const selectDeliverableJigs = createSelector(selectProductionLinesState, selectProductionLineSchedule,
     (plsState, pls) => {
-        if(plsState === undefined || pls === undefined){
+        if(plsState === undefined || pls === undefined || pls === null){
             return {}
         }
         return pls.reduce((acc,c) => 
