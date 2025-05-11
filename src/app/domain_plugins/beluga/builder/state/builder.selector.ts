@@ -14,11 +14,11 @@ export const selectProject = createSelector(selectState,
     (state) => state.project.data
 );
 
-export const selectSightSetUp = createSelector(selectState, 
-    (state) => state.sightSetUp
+export const selectSiteSetUp = createSelector(selectState, 
+    (state) => state.siteSetUp
 );
 
-export const selectJigTypes= createSelector(selectSightSetUp, 
+export const selectJigTypes= createSelector(selectSiteSetUp, 
     (task) => task?.jig_types);
 
 // Sections
@@ -33,7 +33,7 @@ export const selectSection = createSelector(selectState,
 export const selectSizeUnit = createSelector(BuilderFeature.selectSizeUnit, 
     (unite) => unite);
 
-export const selectMaxPartSize = createSelector(selectSightSetUp, 
+export const selectMaxPartSize = createSelector(selectSiteSetUp, 
     (setup) => setup == undefined ? undefined : Math.max(...Object.values(setup.jig_types).map(jt => jt.size_loaded)));
 
 
@@ -107,7 +107,7 @@ export const selectFlightFinished = createSelector(selectIncomingFlightState, se
 
 // Racks
 
-export const selectRacks = createSelector(selectSightSetUp, 
+export const selectRacks = createSelector(selectSiteSetUp, 
     (task) => task?.racks)
 
 export const selectRacksState = createSelector(selectTaskState, 
@@ -148,7 +148,7 @@ export const selectFreeSpaceRack = memoizeWith(
 
 // Trailers
 
-export const selectBelugaTrailers = createSelector(selectSightSetUp, 
+export const selectBelugaTrailers = createSelector(selectSiteSetUp, 
     (setup) => setup?.belugaTrailers)
 
 export const selectBelugaTrailersState = createSelector(selectTaskState, selectBelugaTrailers,
@@ -159,7 +159,7 @@ export const selectAvailableBelugaTrailers = createSelector(selectBelugaTrailers
     (trailers, trailersState) => (trailers?.filter(t => trailersState?.[t.name] == null) ?? []));
 
 
-export const selectFactoryTrailers = createSelector(selectSightSetUp, 
+export const selectFactoryTrailers = createSelector(selectSiteSetUp, 
     (setup) => setup?.factoryTrailers)
 
 export const selectFactoryTrailersState = createSelector(selectTaskState, selectFactoryTrailers,
@@ -219,7 +219,7 @@ export const selectCanDeliver = memoizeWith(
 
 // Hangars 
 
-export const selectHangars = createSelector(selectSightSetUp, 
+export const selectHangars = createSelector(selectSiteSetUp, 
     (task) => task?.hangars)
 
 export const selectHangarsState = createSelector(selectTaskState, 

@@ -5,7 +5,7 @@ import { FlightSection, FlightTargetSchedule, getFlightSchedule, getFullState, g
 import { BelugaActionType, SwitchBeluga } from "../../shared/domain/beluga_plan";
 import { BelugaProblemZ, Side } from "../../shared/domain/beluga_problem";
 import { applyAction, BelugaState, getInitialState } from "../../shared/domain/beluga_state";
-import { BelugaSightSetUp, getSightSetUp } from "../../shared/domain/sight_set_up";
+import { BelugaSiteSetUp, getSiteSetUp } from "../../shared/domain/site_set_up";
 import { FlightSectionPlan, PlanSection } from "../domain/plan";
 import { cancelDrag, createNewBelugaAction, loadFlightSectionSuccess, loadProject, loadProjectSuccess, nextFlight, startDrag, stopDrag, updateFlightSectionSuccess } from "./builder.actions";
 
@@ -20,7 +20,7 @@ export interface BuilderState {
     section: Loadable<FlightSection>,
     numToProcessFlights: number,
 
-    sightSetUp: BelugaSightSetUp | null,
+    siteSetUp: BelugaSiteSetUp | null,
     flightsTargetSchedule: FlightTargetSchedule[] | null,
     productionLinesTargetSchedule: ProductionLineTargetSchedule[] | null,
 
@@ -42,7 +42,7 @@ const initialState: BuilderState = {
 
     section: {state: LoadingState.Initial, data: undefined},
     numToProcessFlights: 1,
-    sightSetUp: null,
+    siteSetUp: null,
     flightsTargetSchedule: null,
     productionLinesTargetSchedule: null,
     taskState: null,
@@ -61,7 +61,7 @@ export const BuilderReducer = createReducer(
     initialState,
     on(loadProject, (state): BuilderState => ({
         ...state,
-        sightSetUp: null,
+        siteSetUp: null,
         taskState: null
     })),
     on(loadProjectSuccess, (state, {project}): BuilderState => {
@@ -71,7 +71,7 @@ export const BuilderReducer = createReducer(
             return {
                 ...state,
                 project: {state: LoadingState.Done, data: project},
-                sightSetUp: getSightSetUp(task),
+                siteSetUp: getSiteSetUp(task),
                 taskState: fullState
             }
         }
@@ -80,7 +80,7 @@ export const BuilderReducer = createReducer(
             return {
                 ...state,
                 project: {state: LoadingState.Done, data: project},
-                sightSetUp: getSightSetUp(task),
+                siteSetUp: getSiteSetUp(task),
                 flightsTargetSchedule: task.flights.map(f => ({
                     name: f.name, 
                     incoming: f.incoming.map(j => ({jig: j, status: GoalStatus.HARD})), 
@@ -123,13 +123,13 @@ export const BuilderReducer = createReducer(
     })),
     on(createNewBelugaAction, (state, {action}): BuilderState => ({
         ...state,
-        taskState: state.taskState !== null && state.taskState !== undefined && state.flightsTargetSchedule !== null  &&  state.productionLinesTargetSchedule !== null  && state.sightSetUp !== null ?
+        taskState: state.taskState !== null && state.taskState !== undefined && state.flightsTargetSchedule !== null  &&  state.productionLinesTargetSchedule !== null  && state.siteSetUp !== null ?
         applyAction(
             state.taskState, 
             action, 
             state.flightsTargetSchedule.map(s => getFlightSchedule(s, GoalStatus.HARD)), 
             getProductionSchedule(state.productionLinesTargetSchedule, GoalStatus.HARD), 
-            state.sightSetUp
+            state.siteSetUp
         ) : null,
         currentSection: {
             initialState: state.currentSection?.initialState,
@@ -144,13 +144,13 @@ export const BuilderReducer = createReducer(
             finished: true,
             actions: [...(state.currentSection?.actions ?? []), switchBelugaAction]
         };
-        let finalState = state.taskState !== null && state.taskState !== undefined && state.flightsTargetSchedule !== null  &&  state.productionLinesTargetSchedule !== null  && state.sightSetUp !== null ?
+        let finalState = state.taskState !== null && state.taskState !== undefined && state.flightsTargetSchedule !== null  &&  state.productionLinesTargetSchedule !== null  && state.siteSetUp !== null ?
         applyAction(
             state.taskState, 
             switchBelugaAction, 
             state.flightsTargetSchedule.map(s => getFlightSchedule(s, GoalStatus.HARD)), 
             getProductionSchedule(state.productionLinesTargetSchedule, GoalStatus.HARD), 
-            state.sightSetUp
+            state.siteSetUp
         ) : undefined;
         return {
             ...state,

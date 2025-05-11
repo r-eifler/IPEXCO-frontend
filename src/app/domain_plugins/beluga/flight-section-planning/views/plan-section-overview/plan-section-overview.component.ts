@@ -9,7 +9,7 @@ import { SectionTreeHeroComponent } from '../../components/section-tree-hero/sec
 import { SectionTreeComponent } from '../../components/section-tree/section-tree.component';
 import { initFlightPlanTree } from '../../state/flight-section-planning.actions';
 import { selectFlights, selectHasTree, selectInitialState, selectProject, selectTask } from '../../state/flight-section-planning.selector';
-import { getSightSetUp } from '../../../shared/domain/sight_set_up';
+import { getSiteSetUp } from '../../../shared/domain/site_set_up';
 import { selectTaskState } from '../../../builder/state/builder.selector';
 
 @Component({
@@ -41,8 +41,8 @@ export class PlanSectionsOverview {
     const task = this.task();
     let initialState = this.initialState()
     if(projectId !== undefined && initialState !== undefined && task !== undefined){
-      let sightSetUp = getSightSetUp(task);
-      this.store.dispatch(initFlightPlanTree({projectId, sightState: initialState, sightSetUp}));
+      let siteSetUp = getSiteSetUp(task);
+      this.store.dispatch(initFlightPlanTree({projectId, siteState: initialState, siteSetUp}));
     }
   } 
 }

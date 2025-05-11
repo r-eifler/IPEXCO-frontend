@@ -9,7 +9,7 @@ import { BelugaFlightComponent } from '../beluga-flight/beluga-flight.component'
 import { RackComponent } from '../rack/rack.component';
 import { ProductionLineComponent } from '../production-line/production-line.component';
 import { NgFor, NgIf } from '@angular/common';
-import { BelugaSightSetUp } from '../../domain/sight_set_up';
+import { BelugaSiteSetUp } from '../../domain/site_set_up';
 
 @Component({
   selector: 'app-state-card',
@@ -30,7 +30,7 @@ import { BelugaSightSetUp } from '../../domain/sight_set_up';
 export class StateCardComponent {
 
   state = input.required<BelugaState>();
-  sightSetUp = input.required<BelugaSightSetUp>();
+  siteSetUp = input.required<BelugaSiteSetUp>();
   flight = input.required<Flight>();
   productionSchedule = input.required<ProductionLine[]>;
 
@@ -39,7 +39,7 @@ export class StateCardComponent {
     effect(() => console.log(this.state()))
   }
 
-  jigTypes = computed(() => this.sightSetUp()?.jig_types)
+  jigTypes = computed(() => this.siteSetUp()?.jig_types)
   jigs = computed(() => this.state()?.jigs)
 
   incoming = computed(() => {
@@ -66,7 +66,7 @@ export class StateCardComponent {
     if(state === undefined){
       return []
     }
-    return this.sightSetUp()?.racks.map((r) => 
+    return this.siteSetUp()?.racks.map((r) => 
       ({
         jigs: state.racks?.[r.name]?.map(j => this.jigs()?.[j]),
         name: r.name,
@@ -92,7 +92,7 @@ export class StateCardComponent {
     if(state === undefined){
       return []
     }
-    return this.sightSetUp()?.belugaTrailers.map(tn => {
+    return this.siteSetUp()?.belugaTrailers.map(tn => {
       const trailerState  = state.trailers[tn.name];
       if(trailerState === null){
         return {name: tn, jig: null}
@@ -108,7 +108,7 @@ export class StateCardComponent {
     if(state === undefined){
       return []
     }
-    return this.sightSetUp()?.factoryTrailers.map(tn => {
+    return this.siteSetUp()?.factoryTrailers.map(tn => {
       const trailerState  = state.trailers[tn.name];
       if(trailerState === null){
         return {name: tn, jig: null}

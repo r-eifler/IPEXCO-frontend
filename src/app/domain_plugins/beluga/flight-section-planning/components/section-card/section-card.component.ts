@@ -1,4 +1,4 @@
-import { Component, computed, inject, input } from '@angular/core';
+import { Component, computed, effect, inject, input } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
@@ -25,6 +25,7 @@ import { SectionPlanMethodDialogComponent } from '../section-plan-method-dialog/
 import { BranchNameDialogComponent } from '../branch-name-dialog/branch-name-dialog.component';
 import { PlanMethodTypeNamePipe } from '../../pipe/plan-method-type-name.pipe';
 import { PlanMethodTypeIconPipe } from '../../pipe/plan-method-type-icon.pipe';
+import { sum } from 'ramda';
 
 @Component({
   selector: 'app-section-card',
@@ -59,12 +60,18 @@ export class SectionCardComponent {
   remainingNUmberFlights = this.store.selectSignal(selectActiveBranchRemainingNumberFlights);
 
   section = input.required<FlightSection>();
-  flight = input.required<Flight>();
+  originalFlight = input.required<Flight>();
 
-  numOutgoing = computed(() => this.flight()?.outgoing.length ?? 0)
-  numIncoming = computed(() => this.flight()?.incoming.length ?? 0)
+  numOutgoing = computed(() => this.section()?.flightTargetSchedule?.outgoing.length ?? undefined)
+  numIncoming = computed(() => this.section()?.flightTargetSchedule?.incoming.length ?? undefined)
+  numDeliveries = computed(() => sum(this.section()?.productionLinesTargetSchedule?.map(pl => pl.schedule.length) ?? []))
 
+  goalsDefined = computed(() => this.section()?.flightTargetSchedule !== undefined && this.section()?.productionLinesTargetSchedule !== undefined)
   isRunning = computed(() => this.section()?.status == PlanRunStatus.RUNNING);
+
+  constructor(){
+    effect(() => console.log(this.goalsDefined()))
+  }
 
   highlighted = input<boolean>(false);
 

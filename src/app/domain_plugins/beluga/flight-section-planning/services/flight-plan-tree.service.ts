@@ -6,7 +6,7 @@ import { environment } from "src/environments/environment";
 import { array } from "zod";
 import { FlightPlanTree, FlightPlanTreeBase, FlightPlanTreeZ, FlightSection, FlightSectionBase, FlightSectionZ } from "../domain/flight-section";
 import { BelugaState } from "../../shared/domain/beluga_state";
-import { BelugaSightSetUp, BelugaSightState } from "../../shared/domain/sight_set_up";
+import { BelugaSiteSetUp, BelugaSiteState } from "../../shared/domain/site_set_up";
 
 
 @Injectable()
@@ -56,8 +56,8 @@ export class FlightPlanTreeService{
       )
     }
 
-    initTree$(projectId: string,  sightState: BelugaSightState, sightSetUp: BelugaSightSetUp): Observable<FlightPlanTree> {
-      return this.http.post<unknown>(this.BASE_URL + 'init', {projectId, sightState, sightSetUp}).pipe(
+    initTree$(projectId: string,  siteState: BelugaSiteState, siteSetUp: BelugaSiteSetUp): Observable<FlightPlanTree> {
+      return this.http.post<unknown>(this.BASE_URL + 'init', {projectId, siteState, siteSetUp}).pipe(
         map(data => FlightPlanTreeZ.parse(data)),
       )
     }

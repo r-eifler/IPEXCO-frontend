@@ -25,7 +25,7 @@ import { StepControlComponent } from '../../components/step-control/step-control
 import { BelugaActionZ } from '../../domain/beluga_plan';
 import { BelugaProblemZ } from '../../domain/beluga_problem';
 import { applyActions, getInitialState } from '../../domain/beluga_state';
-import { getSightSetUp } from '../../domain/sight_set_up';
+import { getSiteSetUp } from '../../domain/site_set_up';
 
 
 @Component({
@@ -142,7 +142,7 @@ export class PlanComparisonComponent {
         return;
       }
       const actions = refActions?.slice(0,index+1)
-      return applyActions(init, actions, model.flights, model.production_lines, getSightSetUp(model));
+      return applyActions(init, actions, model.flights, model.production_lines, getSiteSetUp(model));
     })
   );
 
@@ -153,7 +153,7 @@ export class PlanComparisonComponent {
         return;
       }
       const actions = compActions?.slice(0,index+1)
-      return applyActions(init, actions, model.flights, model.production_lines, getSightSetUp(model));
+      return applyActions(init, actions, model.flights, model.production_lines, getSiteSetUp(model));
     })
   );
 

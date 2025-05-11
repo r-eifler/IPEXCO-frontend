@@ -1,5 +1,5 @@
 import { array, boolean, nullable, number, object, optional, record, string, infer as zinfer } from "zod";
-import { BelugaSightSetUp } from "./sight_set_up";
+import { BelugaSiteSetUp } from "./site_set_up";
 
 
 export type Side = 'bside' | 'fside'
@@ -82,8 +82,8 @@ export const BelugaProblemZ = object({
 
 export type BelugaProblem = zinfer<typeof BelugaProblemZ>;
 
-export function getRackSize(rackName: string, sightSetUp: BelugaSightSetUp): number | undefined {
-    return sightSetUp.racks.find(r => r.name == rackName)?.size
+export function getRackSize(rackName: string, siteSetUp: BelugaSiteSetUp): number | undefined {
+    return siteSetUp.racks.find(r => r.name == rackName)?.size
 }
 
 export function occupiedSpace(rack: string[], jigs: Record<string,Jig>, jigTypes: Record<string,JigType>): number {

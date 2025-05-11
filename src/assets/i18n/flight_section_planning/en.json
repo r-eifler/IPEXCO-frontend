@@ -41,5 +41,7 @@
     "name": "name",
     "planning_method": "planning method",
     "metrics": "Metrics",
-    "metric": "Metric"
+    "metric": "Metric",
+    "deliveries": "deliveries",
+    "fix_objectives_and_site": "fix flight and production schedules and site set-up"
 }

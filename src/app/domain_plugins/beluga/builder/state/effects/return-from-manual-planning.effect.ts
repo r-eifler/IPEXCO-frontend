@@ -17,7 +17,7 @@ export class ReturnFromManualPlanningEffect{
     public return$ = createEffect(() => this.store.select(selectSection).pipe(
         concatLatestFrom(() => [this.store.select(selectProject)]),
         map(([section, project]) => {
-            if(section?.sightState !== undefined && project !== undefined){
+            if(section?.siteState !== undefined && project !== undefined){
                 if(section.status !== PlanRunStatus.RUNNING){
                     console.log("return fum manual planning");
                     this.router.navigate(["beluga/flight-section-planning/" + project._id + "/flight-sections"])

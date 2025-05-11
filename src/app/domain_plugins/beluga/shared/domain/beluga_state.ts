@@ -1,7 +1,7 @@
 import { BelugaAction, BelugaActionType, DeliverToHangerZ, GetFromHangerZ, LoadBelugaZ, PickUpRackZ, PutDownRackZ, UnloadBelugaZ } from "./beluga_plan";
 import { BelugaProblem, Flight, getJigSize, getRackSize, Jig, JigZ, occupiedSpace, ProductionLine, ProductionLineZ } from "./beluga_problem";
 import { array, boolean, nullable, number, object, optional, record, string, infer as zinfer } from "zod";
-import { BelugaSightSetUp } from "./sight_set_up";
+import { BelugaSiteSetUp } from "./site_set_up";
 
 export const BelugaStateZ = object({
     jigs: record(string(), JigZ),
@@ -31,7 +31,7 @@ export function getInitialState(model: BelugaProblem): BelugaState {
       }
 }
 
-export function isApplicable(state: BelugaState, action: BelugaAction, flights: Flight[], productionSchedule: ProductionLine[], sightSetUp: BelugaSightSetUp): boolean{
+export function isApplicable(state: BelugaState, action: BelugaAction, flights: Flight[], productionSchedule: ProductionLine[], siteSetUp: BelugaSiteSetUp): boolean{
     switch(action.name){
         case BelugaActionType.SWITCH_TO_NEXT_BELUGA:
             return state.incomingRemaining.length == 0 && 
@@ -69,24 +69,24 @@ export function isApplicable(state: BelugaState, action: BelugaAction, flights: 
             }
         case BelugaActionType.PUT_DOWN_RACK:
             let pda = PutDownRackZ.parse(action);
-            let rackSize = getRackSize(pda.r, sightSetUp);
-            let jig_size = getJigSize( state.jigs[pda.j], sightSetUp.jig_types[state.jigs[pda.j].type])
+            let rackSize = getRackSize(pda.r, siteSetUp);
+            let jig_size = getJigSize( state.jigs[pda.j], siteSetUp.jig_types[state.jigs[pda.j].type])
             if(pda.s === 'bside'){
                 return rackSize !== undefined && 
-                rackSize - occupiedSpace(state.racks[pda.r], state.jigs, sightSetUp.jig_types) >= jig_size &&
+                rackSize - occupiedSpace(state.racks[pda.r], state.jigs, siteSetUp.jig_types) >= jig_size &&
                 state.trailers[pda.t] == pda.j
             }
             else{
                 return rackSize !== undefined && 
-                rackSize - occupiedSpace(state.racks[pda.r], state.jigs, sightSetUp.jig_types) >= jig_size &&
+                rackSize - occupiedSpace(state.racks[pda.r], state.jigs, siteSetUp.jig_types) >= jig_size &&
                 state.trailers[pda.t] == pda.j
             }        
     }
 }
 
 
-export function applyAction(state: BelugaState, action: BelugaAction, flights: Flight[], productionSchedule: ProductionLine[], sightSetUp: BelugaSightSetUp): BelugaState | undefined{
-    if(!isApplicable(state, action, flights, productionSchedule, sightSetUp)){
+export function applyAction(state: BelugaState, action: BelugaAction, flights: Flight[], productionSchedule: ProductionLine[], siteSetUp: BelugaSiteSetUp): BelugaState | undefined{
+    if(!isApplicable(state, action, flights, productionSchedule, siteSetUp)){
         console.log("Action: " + action.name + " is not applicable!")
         return undefined;
     }
@@ -166,13 +166,13 @@ export function applyAction(state: BelugaState, action: BelugaAction, flights: F
     }
 }
 
-export function applyActions(state: BelugaState | undefined, actions: BelugaAction[],  flights: Flight[], productionSchedule: ProductionLine[], sightSetUp: BelugaSightSetUp) {
+export function applyActions(state: BelugaState | undefined, actions: BelugaAction[],  flights: Flight[], productionSchedule: ProductionLine[], siteSetUp: BelugaSiteSetUp) {
     let cs: BelugaState | undefined = state;
     for(let action of actions){
         if(cs == undefined){
             return undefined
         }
-        cs = applyAction(cs,action, flights, productionSchedule, sightSetUp);
+        cs = applyAction(cs,action, flights, productionSchedule, siteSetUp);
     }
     return cs
 }

@@ -2,7 +2,7 @@
     <mat-card-header>
         <mat-card-title class="title">
             <app-label [color]="section()?.status | stepStatusColor">{{ section()?.status | stepStatusName }}</app-label> 
-            {{ flight()?.name }}
+            {{ originalFlight()?.name }}
         </mat-card-title>
     </mat-card-header>
   
@@ -18,6 +18,9 @@
                     <mat-icon>flight_takeoff</mat-icon>
                     <span class="property-label">{{t('f.outgoing')}}:</span>
                     <span class="property-value">{{ numOutgoing() ?? '?' }}</span>
+                    <mat-icon>warehouse</mat-icon>
+                    <span class="property-label">{{t('f.deliveries')}}:</span>
+                    <span class="property-value">{{ numDeliveries() ?? '?' }}</span>
                 </div>
             </div>
     
@@ -60,7 +63,12 @@
                     </button>
                 }
                 @else{
-                    <a class="details" mat-flat-button (click)="onCreatePlan()">{{t('f.generate_plan')}}</a>
+                    @if(goalsDefined()){
+                        <button class="details" mat-flat-button (click)="onCreatePlan()">{{t('f.generate_plan')}}</button>
+                    }
+                    @else{
+                        <a class="details" mat-flat-button [routerLink]="['../select-targets/' + section()?._id ]">{{t('f.fix_objectives_and_site')}}</a>
+                    }
                 }
             }
             @else{

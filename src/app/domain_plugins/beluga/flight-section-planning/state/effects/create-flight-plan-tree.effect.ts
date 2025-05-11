@@ -14,7 +14,7 @@ export class CreateFlightPlanTreeEffect{
 
     public loadProject$ = createEffect(() => this.actions$.pipe(
         ofType(initFlightPlanTree),
-        switchMap(({projectId, sightState, sightSetUp}) => this.service.initTree$(projectId,  sightState, sightSetUp).pipe(
+        switchMap(({projectId, siteState, siteSetUp}) => this.service.initTree$(projectId,  siteState, siteSetUp).pipe(
             switchMap(tree => [
                 initFlightPlanTreeSuccess({tree}), 
                 loadFlightPlanTreeSuccess({tree}),

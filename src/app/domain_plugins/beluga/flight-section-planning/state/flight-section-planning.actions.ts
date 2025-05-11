@@ -8,7 +8,7 @@ import { BelugaState } from "../../shared/domain/beluga_state";
 import { BelugaAction } from "../../shared/domain/beluga_plan";
 import { PlanMethod } from "../domain/plan_method";
 import { BelugaProblem, Flight, ProductionLine } from "../../shared/domain/beluga_problem";
-import { BelugaSightSetUp, BelugaSightState } from "../../shared/domain/sight_set_up";
+import { BelugaSiteSetUp, BelugaSiteState } from "../../shared/domain/site_set_up";
 
 
 export const loadProject = createAction('[beluga-flight-section-planning] load project', props<{id: string}>());
@@ -45,8 +45,8 @@ export const reloadFlightPlanTreeFailure = createAction('[beluga-flight-section-
 
 export const initFlightPlanTree = createAction('[beluga-flight-section-planning] init flight plan tree', props<{
     projectId: string, 
-    sightState: BelugaSightState, 
-    sightSetUp: BelugaSightSetUp
+    siteState: BelugaSiteState, 
+    siteSetUp: BelugaSiteSetUp
 }>());
 export const initFlightPlanTreeSuccess = createAction('[beluga-flight-section-planning] init flight plan tree success', props<{tree: FlightPlanTree}>());
 export const initFlightPlanTreeFailure = createAction('[beluga-flight-section-planning] init flight plan tree failure', props<{err: any}>());

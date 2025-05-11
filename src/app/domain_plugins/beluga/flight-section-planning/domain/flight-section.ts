@@ -3,7 +3,7 @@ import { array, boolean, nativeEnum, nullable, number, object, optional, record,
 import { BelugaActionZ } from "../../shared/domain/beluga_plan";
 import { BelugaProblem, Flight, ProductionLine, ProductionLineZ } from "../../shared/domain/beluga_problem";
 import { applyActions } from "../../shared/domain/beluga_state";
-import { BelugaSightSetUpZ, BelugaSightStateZ } from "../../shared/domain/sight_set_up";
+import { BelugaSiteSetUpZ, BelugaSiteStateZ } from "../../shared/domain/site_set_up";
 import { PlanMethodZ } from "./plan_method";
 
 
@@ -58,8 +58,8 @@ export function getProductionSchedule(productionLines: ProductionLineTargetSched
 
 export const FlightSectionBaseZ = object({
     flightIndex: number(),
-    sightSetUp: BelugaSightSetUpZ,
-    sightState: BelugaSightStateZ,
+    siteSetUp: BelugaSiteSetUpZ,
+    siteState: BelugaSiteStateZ,
 
     incomingRemaining: array(string()),
     outgoingLoaded: array(string()),
@@ -122,7 +122,7 @@ export function getFullState(section: FlightSection | undefined | null){
         return undefined;
     }
     return {
-        ...section.sightState,
+        ...section.siteState,
         flightIndex: section.flightIndex,
         incomingRemaining: section.incomingRemaining,
         outgoingLoaded: section.outgoingLoaded,
@@ -180,21 +180,21 @@ function filterUpTo(collection: string[], considered: Set<string>){
     return res;
 }
 
-export function deriveSuccessor(section: FlightSection, flight: Flight, productionSchedule: ProductionLine[], sightSetUp){
+export function deriveSuccessor(section: FlightSection, flight: Flight, productionSchedule: ProductionLine[], siteSetUp){
     let newStartState = applyActions(
         getFullState(section), 
         section.actions, 
         section.flightTargetSchedule !== undefined ? [getFlightSchedule(section.flightTargetSchedule, GoalStatus.HARD)] : [],  
         getProductionSchedule(section.productionLinesTargetSchedule ?? [], GoalStatus.HARD) , 
-        section.sightSetUp
+        section.siteSetUp
     );
     if (newStartState == undefined){
         return undefined;
     }
     let suc: FlightSectionBase = {
         flightIndex: section.flightIndex + 1,
-        sightSetUp,
-        sightState: {
+        siteSetUp: siteSetUp,
+        siteState: {
             jigs: newStartState.jigs,
             racks: newStartState.racks,
             trailers: newStartState.trailers,

@@ -7,7 +7,7 @@ import { catchError, switchMap } from "rxjs/operators";
 import { filterListNotNullOrUndefined } from "src/app/shared/common/check_null_undefined";
 import { deriveSuccessor } from "../../../flight-section-planning/domain/flight-section";
 import { FlightPlanTreeService } from "../../services/flight-plan-tree.service";
-import { selectSightSetUp } from "../builder.selector";
+import { selectSiteSetUp } from "../builder.selector";
 import { createFlightSectionFailure, createFlightSectionSuccess, createSuccessorFlightSection } from "../builder.actions";
 
 
@@ -20,7 +20,7 @@ export class CreateFlightSectionEffect{
 
     public createSuccessor$ = createEffect(() => this.actions$.pipe(
         ofType(createSuccessorFlightSection),
-        concatLatestFrom(() => this.store.select(selectSightSetUp)),
+        concatLatestFrom(() => this.store.select(selectSiteSetUp)),
         filterListNotNullOrUndefined(),
         switchMap(([{section}, task]) => {
                 let sucSection = deriveSuccessor(section, task);

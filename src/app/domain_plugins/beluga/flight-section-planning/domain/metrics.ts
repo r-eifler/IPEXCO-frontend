@@ -3,7 +3,7 @@ import { BelugaAction, BelugaActionType } from "../../shared/domain/beluga_plan"
 import { BelugaProblem } from "../../shared/domain/beluga_problem";
 import { applyAction, BelugaState } from "../../shared/domain/beluga_state";
 import { FlightSection, getFullState } from "./flight-section";
-import { getSightSetUp } from "../../shared/domain/sight_set_up";
+import { getSiteSetUp } from "../../shared/domain/site_set_up";
 
 export enum MetricType {
     PLAN_LENGTH = "plan length",
@@ -38,7 +38,7 @@ export function computeRackOccupancyRate(task: BelugaProblem, initState: BelugaS
             return undefined;
         }
         numUsedRacks.push(computeRackOccupancyRateForState(cs));
-        cs = applyAction(cs, action, task.flights, task.production_lines,getSightSetUp(task));
+        cs = applyAction(cs, action, task.flights, task.production_lines,getSiteSetUp(task));
     }
     return sum(numUsedRacks)/(numUsedRacks.length)
 }

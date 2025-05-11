@@ -3,7 +3,7 @@ import { provideTranslocoScope, TranslocoModule } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 import { PageModule } from 'src/app/shared/components/page/page.module';
 import { StateGridComponent } from '../../components/state-grid/state-grid.component';
-import { selectSightSetUp } from '../../state/builder.selector';
+import { selectSiteSetUp } from '../../state/builder.selector';
 
 @Component({
   selector: 'app-builder-base',
@@ -25,6 +25,6 @@ export class BuilderBaseComponent {
 
   store = inject(Store);
 
-  task$ = this.store.select(selectSightSetUp);
+  task$ = this.store.select(selectSiteSetUp);
 
 }

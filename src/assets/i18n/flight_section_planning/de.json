@@ -41,5 +41,7 @@
     "name": "Name",
     "planning_method": "Planungsmethode",
     "metrics": "Metriken",
-    "metric": "Metrik"
+    "metric": "Metrik",
+    "deliveries": "Lieferungen",
+    "fix_objectives_and_site": "Lege Flug- und Produktionsplänen und Einrichtung des Standorts fest"
 }

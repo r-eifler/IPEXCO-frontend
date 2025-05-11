@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { selectCurrentPlanSection, selectFinishedPlanSections, selectSightSetUp } from '../../state/builder.selector';
+import { selectCurrentPlanSection, selectFinishedPlanSections, selectSiteSetUp } from '../../state/builder.selector';
 import { ActionCardComponent } from '../../../shared/components/action-card/action-card.component';
 import { AsyncPipe } from '@angular/common';
 import { InitCardComponent } from '../../../shared/components/init-card/init-card.component';
