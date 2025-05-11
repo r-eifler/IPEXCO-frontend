@@ -338,7 +338,7 @@ export const selectIsDropTargetFlightOutgoing = createSelector(selectDragSource,
         if(dragSource?.stageType !== 'trailer' || draggedJigName === null || jigs === undefined){
             return false;
         }
-        return nextType === jigs[draggedJigName].type;
+        return jigs[draggedJigName].empty && nextType === jigs[draggedJigName].type;
     }
 );
  
