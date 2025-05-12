@@ -31,7 +31,7 @@
     <ng-template
         cdkConnectedOverlay
         [cdkConnectedOverlayOrigin]="trigger"
-        [cdkConnectedOverlayOpen]="isHovering"
+        [cdkConnectedOverlayOpen]="isHovering && showTooltip()"
     >
         <div class="info">
             <mat-list>

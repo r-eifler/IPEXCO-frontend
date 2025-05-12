@@ -1,5 +1,5 @@
 import { BelugaAction, BelugaActionType, DeliverToHangerZ, GetFromHangerZ, LoadBelugaZ, PickUpRackZ, PutDownRackZ, UnloadBelugaZ } from "./beluga_plan";
-import { BelugaProblem, Flight, getJigSize, getRackSize, Jig, JigZ, occupiedSpace, ProductionLine, ProductionLineZ } from "./beluga_problem";
+import { BelugaProblem, Flight, getJigSize, getRackSize, Jig, JigZ, occupiedRackSpace, ProductionLine, ProductionLineZ } from "./beluga_problem";
 import { array, boolean, nullable, number, object, optional, record, string, infer as zinfer } from "zod";
 import { BelugaSiteSetUp } from "./site_set_up";
 
@@ -73,12 +73,12 @@ export function isApplicable(state: BelugaState, action: BelugaAction, flights: 
             let jig_size = getJigSize( state.jigs[pda.j], siteSetUp.jig_types[state.jigs[pda.j].type])
             if(pda.s === 'bside'){
                 return rackSize !== undefined && 
-                rackSize - occupiedSpace(state.racks[pda.r], state.jigs, siteSetUp.jig_types) >= jig_size &&
+                rackSize - occupiedRackSpace(state.racks[pda.r], state.jigs, siteSetUp.jig_types) >= jig_size &&
                 state.trailers[pda.t] == pda.j
             }
             else{
                 return rackSize !== undefined && 
-                rackSize - occupiedSpace(state.racks[pda.r], state.jigs, siteSetUp.jig_types) >= jig_size &&
+                rackSize - occupiedRackSpace(state.racks[pda.r], state.jigs, siteSetUp.jig_types) >= jig_size &&
                 state.trailers[pda.t] == pda.j
             }        
     }

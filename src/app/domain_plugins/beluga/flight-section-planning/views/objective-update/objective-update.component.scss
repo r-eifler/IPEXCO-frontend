@@ -1,0 +1,51 @@
+.main-container {
+    display: grid;
+    grid-template-columns: 1fr 2fr 2fr 2fr auto auto;
+    gap: var(--spacing-300);
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.belugas {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    gap: var(--spacing-200);
+}
+
+.trailers {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    gap: var(--spacing-200);
+    align-items: center;
+}
+
+.racks {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    gap: var(--spacing-100);
+}
+
+.hangars {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    gap: var(--spacing-200);
+    align-items: center;
+}
+
+.production {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    gap: var(--spacing-200);
+    align-items: center;
+}
+
+

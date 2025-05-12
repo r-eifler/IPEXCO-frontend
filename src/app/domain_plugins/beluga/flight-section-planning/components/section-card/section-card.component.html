@@ -54,20 +54,23 @@
         <div class="action-container">
             @if(hasNoPlan()){
                 @if(isRunning()){
-                    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-                    <button mat-icon-button
-                        matTooltip="Cancel plan computation of flight section"
-                        (click)="onCancel()"
-                    >
-                        <mat-icon>cancel</mat-icon>
-                    </button>
+                    <div class="action-running">
+                        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+                        <button mat-icon-button
+                            matTooltip="Cancel plan computation of flight section"
+                            (click)="onCancel()"
+                        >
+                            <mat-icon>cancel</mat-icon>
+                        </button>
+                    </div>
                 }
                 @else{
                     @if(goalsDefined()){
+                        <a class="details" mat-stroked-button [routerLink]="['../objective-site-update/' + section()?._id ]">{{t('f.fix_objectives_and_site')}}</a>
                         <button class="details" mat-flat-button (click)="onCreatePlan()">{{t('f.generate_plan')}}</button>
-                    }
+                    }   
                     @else{
-                        <a class="details" mat-flat-button [routerLink]="['../select-targets/' + section()?._id ]">{{t('f.fix_objectives_and_site')}}</a>
+                        <a class="details" mat-flat-button [routerLink]="['../objective-site-update/' + section()?._id ]">{{t('f.fix_objectives_and_site')}}</a>
                     }
                 }
             }

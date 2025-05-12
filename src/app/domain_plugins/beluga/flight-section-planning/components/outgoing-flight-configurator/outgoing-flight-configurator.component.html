@@ -1,0 +1,25 @@
+<div class="container" cdkDropList (cdkDropListDropped)="drop($event)">
+    @for(elem of schedule(); track elem; let idx = $index){
+        <div cdkDrag [class.notUsed]="elem.status == status.SOFT" class="jig">
+            @if(elem.status == status.HARD){
+                <button mat-icon-button (click)="setStatus(idx, status.SOFT)">
+                    <mat-icon>step_over</mat-icon>
+                </button>
+            }
+            @else{
+                <button mat-icon-button (click)="setStatus(idx, status.HARD)">
+                    <mat-icon>check</mat-icon>
+                </button>
+            }
+            <app-jig
+                [jig]="elem.jig"  
+                [jigType]="jigTypes()?.[elem.jig?.type]"
+                [unitSize]="true"
+                [draggable]="true"
+                [showTooltip]="false"
+            >
+            </app-jig>
+            <div class="custom-placeholder" *cdkDragPlaceholder></div>
+        </div>  
+    }
+</div>

@@ -37,7 +37,7 @@
   gap: var(--spacing-100);
 }
 
-.action-container {
+.action-running{
   width: 100%;
 
   display: grid;
@@ -45,9 +45,19 @@
   gap: var(--spacing-100);
   align-items: center;
 
-  .details {
-    display: grid;
-  }
+  // .details {
+  //   display: grid;
+  // }
+}
+
+.action-container {
+  width: 100%;
+
+  display: flex;
+  flex-direction: row;
+  gap: var(--spacing-100);
+  align-items: center;
+  justify-content: end;
 }
 
 .title{

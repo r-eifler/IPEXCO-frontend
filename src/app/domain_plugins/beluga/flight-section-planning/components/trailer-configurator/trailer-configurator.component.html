@@ -1,0 +1,27 @@
+<div 
+    class="container"
+>
+    @if(!isUsed()){
+        <button mat-icon-button (click)="onUnlock()">
+            <mat-icon>lock_open</mat-icon>
+        </button>
+    }
+    @else{
+        <button mat-icon-button (click)="onLock()" [disabled]="isLoaded()">
+            <mat-icon>lock</mat-icon>
+        </button>
+    }
+    <app-trailer
+        [size] = "20 * 15"
+        [class.notUsed]="!isUsed()"
+        [name]="trailer().name">
+        @if(jig()){
+            <app-jig
+                [jig]="jig()"  
+                [jigType]="jigTypes()?.[jig()?.type]"
+                draggable="false"
+            >
+            </app-jig>
+        }
+    </app-trailer>
+</div>

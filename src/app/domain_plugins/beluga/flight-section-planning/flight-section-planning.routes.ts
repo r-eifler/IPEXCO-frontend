@@ -20,6 +20,7 @@ import { SectionPlanComputationMonitoringService } from './services/plan-computa
 import { SelectSectionResolver } from './resolver/select-section.resolver';
 import { PlanInspectorComponent } from './views/plan-inspector/plan-inspector.component';
 import { MetricsOverviewComponent } from './views/metrics-overview/metrics-overview.component';
+import { ObjectiveUpdateComponent } from './views/objective-update/objective-update.component';
 
 export const routes: Routes = [
   {
@@ -56,6 +57,14 @@ export const routes: Routes = [
       {
         path: 'plan-inspection/:sectionId',
         component: PlanInspectorComponent,
+        resolve: {
+          sectionId: SelectSectionResolver,
+          tree: LoadFlightPlanTreeResolver
+        },
+      },
+      {
+        path: 'objective-site-update/:sectionId',
+        component: ObjectiveUpdateComponent,
         resolve: {
           sectionId: SelectSectionResolver,
           tree: LoadFlightPlanTreeResolver

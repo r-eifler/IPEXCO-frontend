@@ -1,0 +1,26 @@
+<div 
+    class="container"
+>
+    @if(!isUsed()){
+        <button mat-icon-button (click)="onUnlock()">
+            <mat-icon>lock_open</mat-icon>
+        </button>
+    }
+    @else{
+        <button mat-icon-button (click)="onLock()">
+            <mat-icon>lock</mat-icon>
+        </button>
+    }
+    <app-rack 
+        [class.notUsed]="!isUsed()"
+        [name]="rack().name" [size]="rack().size" [occupied]="occupied()">
+        @for(jig of rack().jigs; track jig.name){
+            <app-jig
+                [jig]="jig"  
+                [jigType]="jigTypes()?.[jig?.type]"
+                draggable="false"
+            >
+            </app-jig>
+        }
+    </app-rack>
+</div>

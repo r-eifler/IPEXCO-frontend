@@ -43,5 +43,6 @@
     "metrics": "Metriken",
     "metric": "Metrik",
     "deliveries": "Lieferungen",
-    "fix_objectives_and_site": "Lege Flug- und Produktionsplänen und Einrichtung des Standorts fest"
+    "fix_objectives_and_site": "Lege Flug- und Produktionsplänen und Einrichtung des Standorts fest",
+    "objectives_and_site": "Flug- und Produktionsplänen und Einrichtung des Standorts"
 }

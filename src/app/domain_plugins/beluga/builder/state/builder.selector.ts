@@ -1,6 +1,6 @@
 import { createSelector } from "@ngrx/store";
 import { BuilderFeature } from "./builder.feature";
-import { BelugaProblemZ, getJigSize, HangarZ, occupiedSpace, Side } from "../../shared/domain/beluga_problem";
+import { BelugaProblemZ, getJigSize, HangarZ, occupiedRackSpace, Side } from "../../shared/domain/beluga_problem";
 import { memoizeWith } from "ramda";
 import { GoalStatus } from "../../flight-section-planning/domain/flight-section";
 
@@ -142,7 +142,7 @@ export const selectFreeSpaceRack = memoizeWith(
             if(racksState === undefined || jigsState === undefined || jigTypes === undefined || rack === undefined){
                 return 0;
             }
-            return rack.size - occupiedSpace(racksState, jigsState, jigTypes);
+            return rack.size - occupiedRackSpace(racksState, jigsState, jigTypes);
     })
 );
 

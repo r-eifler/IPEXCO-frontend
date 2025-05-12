@@ -123,3 +123,10 @@ export const selectBranchSections = memoizeWith(
     })
 );
 
+
+// Flights
+
+
+export const selectCurrentFlightSchedule = createSelector(selectSelectedSection, selectFlights, 
+    (section, flights) => (section?.flightIndex !== null && section?.flightIndex  !== undefined ? 
+       flights?.[section?.flightIndex] : null));

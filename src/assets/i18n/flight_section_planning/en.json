@@ -43,5 +43,6 @@
     "metrics": "Metrics",
     "metric": "Metric",
     "deliveries": "deliveries",
-    "fix_objectives_and_site": "fix flight and production schedules and site set-up"
+    "fix_objectives_and_site": "fix flight and production schedules and site set-up",
+    "objectives_and_site": "Flight and Production Schedules and Site Set-Up"
 }
