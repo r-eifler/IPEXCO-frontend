@@ -5,6 +5,7 @@ import { Rack, SiteStatus } from '../../../shared/domain/site_set_up';
 import { Jig, JigType, occupiedSpace } from '../../../shared/domain/beluga_problem';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { TooltipModule } from '@swimlane/ngx-charts';
 
 @Component({
   selector: 'app-rack-configurator',
@@ -13,6 +14,7 @@ import { MatIconModule } from '@angular/material/icon';
     JigComponent,
     MatButtonModule,
     MatIconModule,
+    TooltipModule,
   ],
   templateUrl: './rack-configurator.component.html',
   styleUrl: './rack-configurator.component.scss'
@@ -26,6 +28,7 @@ export class RackConfiguratorComponent {
   statusChanged = output<SiteStatus>();
 
   occupied = computed(() => occupiedSpace(this.rack()?.jigs, this.jigTypes()))
+  isLoaded = computed(() => this.rack()?.jigs.length > 0)
   isUsed = computed(() => this.rack()?.status === SiteStatus.IN_USE)
 
   onLock(){

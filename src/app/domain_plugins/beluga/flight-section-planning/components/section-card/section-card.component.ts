@@ -15,7 +15,7 @@ import { StepStatusNamePipe } from 'src/app/iterative_planning/domain/pipe/step-
 import { PlanRunStatus } from 'src/app/iterative_planning/domain/plan';
 import { LabelModule } from 'src/app/shared/components/label/label.module';
 import { Flight } from '../../../shared/domain/beluga_problem';
-import { FlightSection, getFullState } from '../../domain/flight-section';
+import { FlightSection, getFullState, getTaskFromSection } from '../../domain/flight-section';
 import { computeRackOccupancyRate, computeSwaps } from '../../domain/metrics';
 import { PlanMethod, PlanMethodType } from '../../domain/plan_method';
 import { createNewBranch, registerManualPlanning, startAutomaticPlanning } from '../../state/flight-section-planning.actions';
@@ -84,7 +84,7 @@ export class SectionCardComponent {
     if(this.hasNoPlan()){
       return undefined;
     }
-    const task = this.task();
+    const task = getTaskFromSection(this.section());
     const startState  = getFullState(this.section());
     if(task === undefined || startState === undefined){
       return undefined;

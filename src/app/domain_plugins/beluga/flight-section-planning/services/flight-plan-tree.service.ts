@@ -4,10 +4,20 @@ import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { environment } from "src/environments/environment";
 import { array } from "zod";
-import { FlightPlanTree, FlightPlanTreeBase, FlightPlanTreeZ, FlightSection, FlightSectionBase, FlightSectionZ } from "../domain/flight-section";
-import { BelugaState } from "../../shared/domain/beluga_state";
-import { BelugaSiteSetUp, BelugaSiteState } from "../../shared/domain/site_set_up";
+import { FlightPlanTree, FlightPlanTreeBase, FlightPlanTreeZ, FlightSection, FlightSectionBase, FlightSectionZ, FlightTargetSchedule, GoalStatus, ProductionLineTargetSchedule, projectTaskToSection, projectTaskToState } from "../domain/flight-section";
+import { BelugaState, getInitialState } from "../../shared/domain/beluga_state";
+import { BelugaSiteSetUp, BelugaSiteState, getSiteSetUp } from "../../shared/domain/site_set_up";
+import { BelugaProblem } from "../../shared/domain/beluga_problem";
+import { state } from "@angular/animations/animation_player.d-CTCg5nkL";
 
+
+interface initData {
+  projectId: string, 
+  siteState: BelugaSiteState,
+  siteSetUp: BelugaSiteSetUp,
+  flightTargetSchedule: FlightTargetSchedule,
+  productionLinesTargetSchedule: ProductionLineTargetSchedule[],
+}
 
 @Injectable()
 export class FlightPlanTreeService{
@@ -56,8 +66,30 @@ export class FlightPlanTreeService{
       )
     }
 
-    initTree$(projectId: string,  siteState: BelugaSiteState, siteSetUp: BelugaSiteSetUp): Observable<FlightPlanTree> {
-      return this.http.post<unknown>(this.BASE_URL + 'init', {projectId, siteState, siteSetUp}).pipe(
+    initTree$(projectId: string, task: BelugaProblem): Observable<FlightPlanTree> {
+
+      const siteState = getInitialState(task);
+      const siteSetUp = getSiteSetUp(task);
+      const flight = task.flights[0];
+
+      const projection = projectTaskToState(task, siteState, 0, 1)
+
+      const data: initData = {
+        projectId, 
+        siteState, 
+        siteSetUp,
+        flightTargetSchedule: {
+          name: flight.name,
+          incoming: flight.incoming.map(jn => ({jig: jn, status: GoalStatus.HARD})),
+          outgoing: flight.outgoing.map(jt => ({jigType: jt, status: GoalStatus.HARD})),
+        },
+        productionLinesTargetSchedule: projection.production_lines.map(pl => ({
+          name: pl.name,
+          schedule: pl.schedule.map(jn => ({jig: jn, status: GoalStatus.HARD})) 
+        })),
+      }
+
+      return this.http.post<unknown>(this.BASE_URL + 'init', data).pipe(
         map(data => FlightPlanTreeZ.parse(data)),
       )
     }

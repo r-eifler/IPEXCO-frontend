@@ -6,6 +6,7 @@ import { Flight, Jig, JigType } from '../../../shared/domain/beluga_problem';
 import { GoalStatus, FlightTargetSchedule } from '../../domain/flight-section';
 import { MatIconModule } from '@angular/material/icon';
 import { empty } from 'ramda';
+import { JigConfiguratorComponent } from '../jig-configurator/jig-configurator.component';
 
 @Component({
   selector: 'app-outgoing-flight-configurator',
@@ -16,6 +17,7 @@ import { empty } from 'ramda';
     CdkDragPlaceholder,
     MatButtonModule,
     MatIconModule,
+    JigConfiguratorComponent,
   ],
   templateUrl: './outgoing-flight-configurator.component.html',
   styleUrl: './outgoing-flight-configurator.component.scss'

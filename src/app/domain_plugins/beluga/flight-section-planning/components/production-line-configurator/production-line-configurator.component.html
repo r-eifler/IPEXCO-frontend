@@ -5,9 +5,10 @@
             [jig]="elem.jig"  
             [jigType]="jigTypes()?.[elem.jig?.type]"
             [status]="elem.status"
+            [showOnlyPart]="true"
             (statusChange)="setStatus(idx, $event)"
         >
         <div class="custom-placeholder" *cdkDragPlaceholder></div>
-        </app-jig-configurator>  
+        </app-jig-configurator>
     }
 </div>

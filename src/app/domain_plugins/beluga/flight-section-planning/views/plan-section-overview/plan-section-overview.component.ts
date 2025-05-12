@@ -34,15 +34,10 @@ export class PlanSectionsOverview {
   task = this.store.selectSignal(selectTask);
   hasTree = this.store.selectSignal(selectHasTree);
 
-  initialState = this.store.selectSignal(selectInitialState);
-
   newTree(){
     let projectId = this.project()?._id;
-    const task = this.task();
-    let initialState = this.initialState()
-    if(projectId !== undefined && initialState !== undefined && task !== undefined){
-      let siteSetUp = getSiteSetUp(task);
-      this.store.dispatch(initFlightPlanTree({projectId, siteState: initialState, siteSetUp}));
+    if(projectId !== undefined ){
+      this.store.dispatch(initFlightPlanTree({projectId}));
     }
   } 
 }

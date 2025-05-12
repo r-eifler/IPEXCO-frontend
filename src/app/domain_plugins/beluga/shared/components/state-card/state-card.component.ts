@@ -42,12 +42,15 @@ export class StateCardComponent {
   jigTypes = computed(() => this.siteSetUp()?.jig_types)
   jigs = computed(() => this.state()?.jigs)
 
+  incomingSchedule = computed(() => this.flight()?.incoming)
+
   incoming = computed(() => {
     const state = this.state();
     if(state === undefined){
       return []
     }
-    return state.incomingRemaining.map(j => this.jigs()?.[j]);
+    const numUnloaded = state.incomingUnloaded.length
+    return this.incomingSchedule()?.slice(0,numUnloaded).map(j => this.jigs()?.[j]);
   })
 
   outgoing = computed(() => {

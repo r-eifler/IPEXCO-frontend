@@ -1,6 +1,6 @@
 import { Component, computed, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { selectCurrentFlightSchedule, selectSelectedSection } from '../../state/flight-section-planning.selector';
+import { selectCurrentFlightSchedule, selectProductionLines, selectSelectedSection } from '../../state/flight-section-planning.selector';
 import { PageModule } from 'src/app/shared/components/page/page.module';
 import { TranslocoModule } from '@jsverse/transloco';
 import { BreadcrumbModule } from 'src/app/shared/components/breadcrumb/breadcrumb.module';
@@ -12,10 +12,12 @@ import { updateFlightSection } from '../../state/flight-section-planning.actions
 import { TrailerConfiguratorComponent } from '../../components/trailer-configurator/trailer-configurator.component';
 import { Side } from '../../../shared/domain/beluga_problem';
 import { IncomingFlightConfiguratorComponent } from '../../components/incoming-flight-configurator/incoming-flight-configurator.component';
-import { FlightTargetSchedule } from '../../domain/flight-section';
+import { FlightSection, FlightTargetSchedule, ProductionLineTargetSchedule } from '../../domain/flight-section';
 import { OutgoingFlightConfiguratorComponent } from '../../components/outgoing-flight-configurator/outgoing-flight-configurator.component';
 import { HangarConfiguratorComponent } from '../../components/hangar-configurator/hangar-configurator.component';
 import { ProductionLinesConfiguratorComponent } from '../../components/production-lines-configurator/production-lines-configurator.component';
+import { SwapConfiguratorComponent } from '../../components/swap-configurator/swap-configurator.component';
+import { ObjectiveConfiguratorComponent } from '../../components/objective-configurator/objective-configurator.component';
 
 @Component({
   selector: 'app-objective-update',
@@ -31,6 +33,7 @@ import { ProductionLinesConfiguratorComponent } from '../../components/productio
     OutgoingFlightConfiguratorComponent,
     HangarConfiguratorComponent,
     ProductionLinesConfiguratorComponent,
+    ObjectiveConfiguratorComponent,
   ],
   templateUrl: './objective-update.component.html',
   styleUrl: './objective-update.component.scss'
@@ -42,7 +45,7 @@ export class ObjectiveUpdateComponent {
   section = this.store.selectSignal(selectSelectedSection);
 
   name = computed(() => {
-      let name = this.section()?.flightTargetSchedule?.name;
+      let name = this.originalFlight()?.name;
       return name ?? "Unknown"
     });
 
@@ -83,6 +86,9 @@ export class ObjectiveUpdateComponent {
 
   originalFlight = this.store.selectSignal(selectCurrentFlightSchedule);
   flightTargetSchedule = computed(() => this.section()?.flightTargetSchedule);
+
+  originalProductionLines = this.store.selectSignal(selectProductionLines);
+  productionLineTargetSchedules = computed(() => this.section()?.productionLinesTargetSchedule);
 
   onChangeRackStatus(status: SiteStatus, index: number){
     const oldSection = this.section();
@@ -183,5 +189,23 @@ export class ObjectiveUpdateComponent {
       flightTargetSchedule: newSchedule
     }
     this.store.dispatch(updateFlightSection({section: newSection}));
+  }
+
+  onChangeProductionTarget(newSchedule: ProductionLineTargetSchedule[]){
+    const oldSection = this.section();
+    if(oldSection == undefined){
+      return;
+    }
+    let newSection: FlightSection= {
+      ...oldSection,
+      productionLinesTargetSchedule: newSchedule
+    }
+    console.log(newSection)
+    this.store.dispatch(updateFlightSection({section: newSection}));
+  }
+
+  updateSection(section: FlightSection){
+    console.log(section);
+    this.store.dispatch(updateFlightSection({section}));
   }
 }

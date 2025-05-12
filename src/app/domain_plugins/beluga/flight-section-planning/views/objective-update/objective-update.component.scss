@@ -1,6 +1,6 @@
 .main-container {
     display: grid;
-    grid-template-columns: 1fr 2fr 2fr 2fr auto auto;
+    grid-template-columns: auto 2fr 2fr 2fr auto auto;
     gap: var(--spacing-300);
 }
 

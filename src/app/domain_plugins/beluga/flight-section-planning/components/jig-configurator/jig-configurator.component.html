@@ -1,0 +1,23 @@
+<div [class.notUsed]="status() == statusTypes.SOFT" class="container">
+    @if(index() !== null){
+        <span class="index">{{ (index() ?? 0) + 1}}</span>
+    }
+    <app-jig
+        [jig]="jig()"  
+        [jigType]="jigType()"
+        [unitSize]="true"
+        [draggable]="true"
+        [showOnlyPart]="showOnlyPart()"
+    >
+    </app-jig>
+    @if(status() == statusTypes.HARD){
+        <button mat-icon-button (click)="onStatusChanged(statusTypes.SOFT)">
+            <mat-icon>step_over</mat-icon>
+        </button>
+    }
+    @else{
+        <button mat-icon-button (click)="onStatusChanged(statusTypes.HARD)">
+            <mat-icon>check</mat-icon>
+        </button>
+    }
+</div> 

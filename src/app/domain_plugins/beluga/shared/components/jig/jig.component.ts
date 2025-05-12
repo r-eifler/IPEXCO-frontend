@@ -30,6 +30,7 @@ export class JigComponent {
   draggable = input<boolean>(false);
   showTooltip = input<boolean>(true);
   unitSize = input<boolean>(false);
+  showOnlyPart = input<boolean>(false);
 
   name = computed(() => this.jig()?.name?.replace('jig',''))
 

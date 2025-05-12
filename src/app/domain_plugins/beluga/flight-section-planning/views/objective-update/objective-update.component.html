@@ -1,6 +1,6 @@
 <app-page-full *transloco="let t">
     <app-breadcrumb>
-        <a app-breadcrumb-item [routerLink]="['../../flight-sections']"><mat-icon>home</mat-icon></a>
+        <a app-breadcrumb-item [routerLink]="['../../flight-sections']">Plan Overview</a>
         <app-breadcrumb-item>{{ name() }}</app-breadcrumb-item>
       </app-breadcrumb>
     <app-page-title>
@@ -10,7 +10,11 @@
         <app-page-section-list>
             <app-page-section>
                 <app-page-section-content>
-                    
+                    <app-objective-configurator
+                        [section]="section()"
+                        (changeObjective)="updateSection($event)"
+                    >
+                    </app-objective-configurator>
                 </app-page-section-content>
             </app-page-section>               
             <app-page-section>
@@ -77,6 +81,11 @@
                         </div>
                         <div class="production">
                             <app-production-lines-configurator
+                                [originalSchedules]="originalProductionLines()"
+                                [productionLineTargetSchedules]="productionLineTargetSchedules()"
+                                [jigTypes]="jigTypes()"
+                                [jigs]="jigs()"
+                                (targetSchedules)="onChangeProductionTarget($event)"
                             >
                             </app-production-lines-configurator>
                         </div> 

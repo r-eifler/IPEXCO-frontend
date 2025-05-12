@@ -1,0 +1,25 @@
+@use "../../../../../../variables.scss" as vars;
+
+.notUsed {
+    opacity: 50%;
+}
+
+.container{
+    display: flex;
+    flex-direction: row;
+    gap: var(--spacing-100);
+    align-items: center;
+
+    padding: var(--spacing-100);
+    border: solid;
+    border-width: 1px;
+    @include vars.border_color();
+    border-radius: var(--spacing-200);
+}
+
+.index {
+    font-weight: 500;
+    font-size: x-large;
+    margin-right: var(--spacing-100);
+    margin-left: var(--spacing-100);
+}

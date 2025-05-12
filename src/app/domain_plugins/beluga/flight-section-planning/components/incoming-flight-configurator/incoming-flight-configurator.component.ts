@@ -5,6 +5,7 @@ import { JigComponent } from '../../../shared/components/jig/jig.component';
 import { CdkDrag, CdkDragDrop, CdkDragPlaceholder, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { JigConfiguratorComponent } from '../jig-configurator/jig-configurator.component';
 
 @Component({
   selector: 'app-incoming-flight-configurator',
@@ -15,6 +16,7 @@ import { MatIconModule } from '@angular/material/icon';
     CdkDragPlaceholder,
     MatButtonModule,
     MatIconModule,
+    JigConfiguratorComponent,
   ],
   templateUrl: './incoming-flight-configurator.component.html',
   styleUrl: './incoming-flight-configurator.component.scss'
@@ -22,7 +24,6 @@ import { MatIconModule } from '@angular/material/icon';
 export class IncomingFlightConfiguratorComponent {
 
   status = GoalStatus;
-
 
   originalFlight = input.required<Flight>();
   flightTargetSchedule = input.required<FlightTargetSchedule>();

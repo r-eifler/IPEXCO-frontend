@@ -66,7 +66,7 @@ export const selectCurrentFlightIndex = createSelector(selectTaskState,
     (taskState) => taskState?.flightIndex);
 
 export const selectIncomingFlightState = createSelector(selectTaskState, 
-    (taskState) => taskState?.incomingRemaining);
+    (taskState) => taskState?.incomingUnloaded);
 
 export const selectIncomingFlightStateJigs = createSelector(selectIncomingFlightState, selectJigsState, 
     (incoming, jigs) => incoming?.map(jn => jigs?.[jn]));

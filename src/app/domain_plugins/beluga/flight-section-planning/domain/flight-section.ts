@@ -2,8 +2,8 @@ import { PlanRunStatus, PlanRunStatusZ } from "src/app/iterative_planning/domain
 import { array, boolean, nativeEnum, nullable, number, object, optional, record, string, infer as zinfer } from "zod";
 import { BelugaActionZ } from "../../shared/domain/beluga_plan";
 import { BelugaProblem, Flight, ProductionLine, ProductionLineZ } from "../../shared/domain/beluga_problem";
-import { applyActions } from "../../shared/domain/beluga_state";
-import { BelugaSiteSetUpZ, BelugaSiteStateZ } from "../../shared/domain/site_set_up";
+import { applyActions, BelugaState } from "../../shared/domain/beluga_state";
+import { BelugaSiteSetUpZ, BelugaSiteStateZ, SiteStatus } from "../../shared/domain/site_set_up";
 import { PlanMethodZ } from "./plan_method";
 
 
@@ -61,12 +61,14 @@ export const FlightSectionBaseZ = object({
     siteSetUp: BelugaSiteSetUpZ,
     siteState: BelugaSiteStateZ,
 
-    incomingRemaining: array(string()),
+    incomingUnloaded: array(string()),
     outgoingLoaded: array(string()),
     productionLinesDelivered: record(string(),  array(string())),
 
-    flightTargetSchedule: optional(FlightTargetScheduleZ),
-    productionLinesTargetSchedule: optional(array(ProductionLineTargetScheduleZ)),
+    flightTargetSchedule: FlightTargetScheduleZ,
+    productionLinesTargetSchedule: array(ProductionLineTargetScheduleZ),
+    maxSwaps: nullable(number()),
+    minEmptyRacks: nullable(number()),
 
     predecessorId: nullable(string()),
     treeId: string(),
@@ -124,14 +126,55 @@ export function getFullState(section: FlightSection | undefined | null){
     return {
         ...section.siteState,
         flightIndex: section.flightIndex,
-        incomingRemaining: section.incomingRemaining,
+        incomingUnloaded: section.incomingUnloaded,
         outgoingLoaded: section.outgoingLoaded,
         productionLines: section.productionLinesDelivered
     }
 }
 
+export function getTaskFromSection(section: FlightSection){
 
-export function projectTaskToSection(task: BelugaProblem, section: FlightSection | undefined, numFlights = 1){
+    const state = section.siteState;
+    const setUp = section.siteSetUp;
+
+    let task: BelugaProblem = {
+        jigs: state.jigs,
+        racks: setUp.racks.filter(r => r.status == SiteStatus.IN_USE).map(r => ({
+            ...r, 
+            jigs: state.racks[r.name],
+            stageType: "rack",
+        })),
+        hangars: setUp.hangars.filter(h => h.status == SiteStatus.IN_USE).map(h => ({
+            ...h, 
+            jig: state.hangars[h.name],
+            stageType: "hangar",
+        })),
+        trailers_beluga: setUp.belugaTrailers.filter(h => h.status == SiteStatus.IN_USE).map(t => ({
+            ...t, 
+            jig: state.trailers[t.name],
+            stageType: "trailer",
+        })),
+        trailers_factory: setUp.factoryTrailers.filter(h => h.status == SiteStatus.IN_USE).map(t => ({
+            ...t, 
+            jig: state.trailers[t.name],
+            stageType: "trailer",
+        })),
+        jig_types: setUp.jig_types,
+        production_lines: section.productionLinesTargetSchedule.map(pl => ({
+            ...pl,
+            schedule: pl.schedule.filter(j => j.status == GoalStatus.HARD).map(j => j.jig),
+        })),
+        flights: [{
+            ...section.flightTargetSchedule,
+            incoming: section.flightTargetSchedule.incoming.filter(j => j.status == GoalStatus.HARD).map(j => j.jig),
+            outgoing: section.flightTargetSchedule.outgoing.filter(j => j.status == GoalStatus.HARD).map(j => j.jigType),
+            stageType: 'flight'
+        }]
+    }
+    return task;
+}
+
+export function projectTaskToSection(task: BelugaProblem, section: FlightSection, numFlights = 1){
 
     const state = getFullState(section);
 
@@ -139,10 +182,16 @@ export function projectTaskToSection(task: BelugaProblem, section: FlightSection
         return undefined;
     }
 
+    projectTaskToState(task, state, section.flightIndex, numFlights = 1);
+}
+
+
+export function projectTaskToState(task: BelugaProblem, state: BelugaState, flightIndex: number, numFlights = 1){
+
     const consideredJigs = new Set<string>();
 
     for(let indexOffset = 0; indexOffset < numFlights; indexOffset++){
-        task.flights[section.flightIndex + indexOffset].incoming.forEach(j => consideredJigs.add(j))
+        task.flights[flightIndex + indexOffset].incoming.forEach(j => consideredJigs.add(j))
     }
     
     Object.values(state.racks).forEach(r => r.forEach(j => consideredJigs.add(j)));
@@ -161,7 +210,7 @@ export function projectTaskToSection(task: BelugaProblem, section: FlightSection
         trailers_factory: task.trailers_factory.map(t => ({...t, jig: state.trailers[t.name]})),
         jig_types: task.jig_types,
         production_lines: productionLineProjections,
-        flights: task.flights.slice(section.flightIndex, section.flightIndex + numFlights)
+        flights: task.flights.slice(flightIndex, flightIndex + numFlights)
     }
 
     return projection;
@@ -200,18 +249,23 @@ export function deriveSuccessor(section: FlightSection, flight: Flight, producti
             trailers: newStartState.trailers,
             hangars: newStartState.hangars,
         },
-        flightTargetSchedule: {name: flight.name, incoming: flight.incoming.map(jn => ({jig: jn, status: GoalStatus.HARD})), outgoing: flight.outgoing.map(jn => ({jigType: jn, status: GoalStatus.HARD}))},
-        productionLinesTargetSchedule: productionSchedule.map(pl => ({name: pl.name, schedule: pl.schedule.map(j => ({jig: j, status: GoalStatus.HARD}))})),
-        productionLinesDelivered: newStartState.productionLines,
+        
+        
+        flightTargetSchedule: { name: flight.name, incoming: flight.incoming.map(jn => ({ jig: jn, status: GoalStatus.HARD })), outgoing: flight.outgoing.map(jn => ({ jigType: jn, status: GoalStatus.HARD })) },
+        productionLinesTargetSchedule: productionSchedule.map(pl => ({ name: pl.name, schedule: pl.schedule.map(j => ({ jig: j, status: GoalStatus.HARD })) })),
+        maxSwaps: null,
+        minEmptyRacks: null,
 
         actions: [],
-        incomingRemaining: [],
+
+        productionLinesDelivered: newStartState.productionLines,
+        incomingUnloaded: [],
         outgoingLoaded: [],
 
         status: PlanRunStatus.PENDING,
         predecessorId: section._id,
         treeId: section.treeId,
-        finished: false,
+        finished: false
     }
     return suc;
 }

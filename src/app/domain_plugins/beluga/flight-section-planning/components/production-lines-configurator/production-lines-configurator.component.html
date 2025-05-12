@@ -1,1 +1,12 @@
-<p>production-lines-configurator works!</p>
+<div class="container">
+    @for(plTS of displaySchedules(); track plTS.name; let idx = $index){
+        <app-production-line-configurator
+            [originalSchedule]="originalSchedules()?.[idx]"
+            [productionLineTargetSchedule]="plTS"
+            [jigTypes]="jigTypes()"
+            [jigs]="jigs()"
+            (targetSchedule)="onChangeProductionTarget($event, idx)"
+        >
+        </app-production-line-configurator>
+    }
+</div>

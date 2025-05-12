@@ -30,6 +30,9 @@ export const selectInitialState = createSelector(selectState,
 export const selectFlights = createSelector(selectTask, 
     (task) => task?.flights)
 
+export const selectProductionLines = createSelector(selectTask, 
+    (task) => task?.production_lines)
+
 export const selectNumFlights = createSelector(selectTask, 
     (task) => task?.flights?.length ?? 0)
 

@@ -4,15 +4,17 @@
     (mouseover)="onHover()" (mouseout)="onMouseOut()"
     cdkOverlayOrigin #trigger="cdkOverlayOrigin"
 >
-    <div 
-        class="jig" 
-        [style.width]="jigDisplaySize() + 'px'  "
-        [ngClass]="{'hover': isHovering && draggable()}"
-    >
-    @if(!loaded()) {
-        <span class="name">{{ jigType()?.name }}</span>
+    @if(!showOnlyPart()){
+        <div 
+            class="jig" 
+            [style.width]="jigDisplaySize() + 'px'  "
+            [ngClass]="{'hover': isHovering && draggable()}"
+        >
+            @if(!loaded()) {
+                <span class="name">{{ jigType()?.name }}</span>
+            }
+        </div>
     }
-    </div>
     @if(loaded()){
         <div
             class="part" 

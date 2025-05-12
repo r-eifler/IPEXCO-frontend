@@ -16,15 +16,15 @@ export class FlightSectionPlanService{
 
     postPlanRequest$(section: FlightSection, method: PlanMethod, baseTask: BelugaProblem): Observable<FlightSection> {
 
-      let projection = projectTaskToSection(baseTask, section, method.numOptimizedFlights);
-      console.log(projection);
+      // let projection = projectTaskToSection(baseTask, section, method.numOptimizedFlights);
+      // console.log(projection);
 
       let data = {
         section: {
           ...section,
           planMethod: method, 
         },
-        task: projection
+        // task: projection
       }
 
       return this.http.post<unknown>(this.BASE_URL, data).pipe(
