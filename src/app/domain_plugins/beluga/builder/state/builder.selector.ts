@@ -2,7 +2,7 @@ import { createSelector } from "@ngrx/store";
 import { BuilderFeature } from "./builder.feature";
 import { BelugaProblemZ, getJigSize, HangarZ, occupiedRackSpace, Side } from "../../shared/domain/beluga_problem";
 import { memoizeWith } from "ramda";
-import { GoalStatus } from "../../flight-section-planning/domain/flight-section";
+import { GoalConsiderationStatus } from "../../flight-section-planning/domain/flight-section";
 
 
 const selectState = BuilderFeature.selectBuilderFeatureState
@@ -92,7 +92,7 @@ export const selectCurrentFlightNextOutgoingJigType = createSelector(selectCurre
         if(outgoing === undefined || schedule === undefined  || schedule === null){
             return null;
         }
-        let hardGoalsOutgoing = schedule.outgoing.filter(j => j.status == GoalStatus.HARD)
+        let hardGoalsOutgoing = schedule.outgoing.filter(j => j.considerationStatus == GoalConsiderationStatus.CONSIDER)
         let nextTypeIndex = outgoing.length;
         if(nextTypeIndex == undefined || hardGoalsOutgoing.length === nextTypeIndex){
             return null;

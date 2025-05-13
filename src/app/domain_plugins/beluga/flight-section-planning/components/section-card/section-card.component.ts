@@ -15,7 +15,7 @@ import { StepStatusNamePipe } from 'src/app/iterative_planning/domain/pipe/step-
 import { PlanRunStatus } from 'src/app/iterative_planning/domain/plan';
 import { LabelModule } from 'src/app/shared/components/label/label.module';
 import { Flight } from '../../../shared/domain/beluga_problem';
-import { FlightSection, getFullState, getTaskFromSection } from '../../domain/flight-section';
+import { FlightSection, getFullState, getTaskFromSection, GoalConsiderationStatus } from '../../domain/flight-section';
 import { computeRackOccupancyRate, computeSwaps } from '../../domain/metrics';
 import { PlanMethod, PlanMethodType } from '../../domain/plan_method';
 import { createNewBranch, registerManualPlanning, startAutomaticPlanning } from '../../state/flight-section-planning.actions';
@@ -64,7 +64,10 @@ export class SectionCardComponent {
 
   numOutgoing = computed(() => this.section()?.flightTargetSchedule?.outgoing.length ?? undefined)
   numIncoming = computed(() => this.section()?.flightTargetSchedule?.incoming.length ?? undefined)
-  numDeliveries = computed(() => sum(this.section()?.productionLinesTargetSchedule?.map(pl => pl.schedule.length) ?? []))
+  numPossibleDeliveries = computed(() => sum(this.section()?.productionLinesTargetSchedule?.
+    map(pl => ({...pl, schedule: pl.schedule.filter(e => e.considerationStatus == GoalConsiderationStatus.CONSIDER)})).
+    map(pl => pl.schedule.length) ?? []))
+  numOverallDeliveries = computed(() => sum(this.section()?.productionLinesTargetSchedule?.map(pl => pl.schedule.length) ?? []))
 
   goalsDefined = computed(() => this.section()?.flightTargetSchedule !== undefined && this.section()?.productionLinesTargetSchedule !== undefined)
   isRunning = computed(() => this.section()?.status == PlanRunStatus.RUNNING);

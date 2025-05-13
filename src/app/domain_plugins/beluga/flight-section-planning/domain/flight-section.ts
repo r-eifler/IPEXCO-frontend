@@ -3,36 +3,47 @@ import { array, boolean, nativeEnum, nullable, number, object, optional, record,
 import { BelugaActionZ } from "../../shared/domain/beluga_plan";
 import { BelugaProblem, Flight, ProductionLine, ProductionLineZ } from "../../shared/domain/beluga_problem";
 import { applyActions, BelugaState } from "../../shared/domain/beluga_state";
-import { BelugaSiteSetUpZ, BelugaSiteStateZ, SiteStatus } from "../../shared/domain/site_set_up";
+import { BelugaSiteSetUp, BelugaSiteSetUpZ, BelugaSiteState, BelugaSiteStateZ, SiteStatus } from "../../shared/domain/site_set_up";
 import { PlanMethodZ } from "./plan_method";
 
 
-export enum GoalStatus {
-    SOFT = "SOFT",
-    HARD = "HARD"
-  }
+export enum GoalConsiderationStatus {
+    SKIP = "SKIP",
+    CONSIDER = "CONSIDER",
+}
+
+export enum GoalSolvabilityStatus {
+    UNKNOWN = "UNKNOWN",
+    BLOCKED = "BLOCKED",
+    NOT_ON_SITE = "NOT_ON_SITE",
+    UNSOLVABLE = "UNSOLVABLE",
+    SOLVABLE = "SOLVABLE"
+}
   
-export const GoalStatusZ = nativeEnum(GoalStatus);
+export const GoalConsiderationStatusZ = nativeEnum(GoalConsiderationStatus);
+export const GoalSolvabilityStatusZ = nativeEnum(GoalSolvabilityStatus);
 
 export const FlightTargetScheduleZ = object({
     name: string(),
     incoming: array(object({
         jig: string(),
-        status: GoalStatusZ
+        considerationStatus: GoalConsiderationStatusZ,
+        solvabilityStatus: GoalSolvabilityStatusZ,
     })),
     outgoing: array(object({
         jigType: string(),
-        status: GoalStatusZ
+        considerationStatus: GoalConsiderationStatusZ,
+        solvabilityStatus: GoalSolvabilityStatusZ,
     })),
 })
 
 export type FlightTargetSchedule = zinfer<typeof FlightTargetScheduleZ>;
 
-export function getFlightSchedule(flight: FlightTargetSchedule, status: GoalStatus | null){
+export function getFlightSchedule(flight: FlightTargetSchedule, status: GoalConsiderationStatus | null){
     return {
         name: flight.name,
-        incoming: flight.incoming.filter(j => j.status === status).map(j => j.jig),
-        outgoing: flight.outgoing.filter(j => status === null || j.status === status).map(j => j.jigType),
+        incoming: flight.incoming.filter(j => j.considerationStatus === status).map(j => j.jig),
+        outgoing: flight.outgoing.filter(j => status === null || j.considerationStatus === status).map(j => j.jigType),
         stageType: 'flight' as const
     }
 }
@@ -41,17 +52,72 @@ export const ProductionLineTargetScheduleZ = object({
     name: string(),
     schedule: array(object({
         jig: string(),
-        status: GoalStatusZ
+        considerationStatus: GoalConsiderationStatusZ,
+        solvabilityStatus: GoalSolvabilityStatusZ,
     }))
 })
+
+export function initialDeliveryStatuses(jigName: string, jigsOnSite: Set<string>, notBlocked: String[]){
+    let solveStatus = jigsOnSite.has(jigName) ? 
+    (notBlocked.includes(jigName) ? GoalSolvabilityStatus.UNKNOWN : GoalSolvabilityStatus.BLOCKED) : 
+    GoalSolvabilityStatus.NOT_ON_SITE
+    return {
+        considerationStatus: solveStatus == GoalSolvabilityStatus.UNKNOWN ? 
+            GoalConsiderationStatus.CONSIDER : GoalConsiderationStatus.SKIP,
+        solvabilityStatus: solveStatus
+    }
+}
+
+interface StatusScheduleElem {
+    jig: string,
+    considerationStatus: GoalConsiderationStatus,
+    solvabilityStatus: GoalSolvabilityStatus,
+}
+
+// considered in reverse order, jig not on side should initially not be considered
+export function initConsiderationStatusesNotOnSiteReverse(schedule: StatusScheduleElem[]){
+
+    let res: StatusScheduleElem[] = []
+    let allOnSite = true;
+
+    for(let i = schedule.length - 1; i >= 0; i--){
+        allOnSite = allOnSite && schedule[i].solvabilityStatus !== GoalSolvabilityStatus.NOT_ON_SITE 
+        if(!allOnSite){
+            res = [schedule[i], ...res]
+            continue;
+        }
+        res = [{
+            ...schedule[i],
+            considerationStatus: GoalConsiderationStatus.SKIP,
+        }, ...res]
+    }
+    return res
+}
+
+export function updateDeliveryStatuses(schedule: StatusScheduleElem[], jigsOnSite: Set<string>){
+
+    return schedule.map(sse => {
+        const wantToDeliver = schedule.
+        filter(e => e.considerationStatus == GoalConsiderationStatus.CONSIDER || e.jig == sse.jig).
+        map(e => e.jig);
+        const notBlocked = filterUpTo(wantToDeliver, jigsOnSite)
+
+        return {
+            ...sse,
+            solvabilityStatus: jigsOnSite.has(sse.jig) ? 
+                (notBlocked.includes(sse.jig) ? GoalSolvabilityStatus.UNKNOWN : GoalSolvabilityStatus.BLOCKED) : 
+                GoalSolvabilityStatus.NOT_ON_SITE
+        }
+    });
+}
 
 
 export type ProductionLineTargetSchedule = zinfer<typeof ProductionLineTargetScheduleZ>;
 
-export function getProductionSchedule(productionLines: ProductionLineTargetSchedule[], status: GoalStatus | null){
+export function getProductionSchedule(productionLines: ProductionLineTargetSchedule[], status: GoalConsiderationStatus | null){
     return productionLines.map(pl => ({
         name: pl.name,
-        schedule: pl.schedule.filter(j => status === null || j.status === status).map(j => j.jig),
+        schedule: pl.schedule.filter(j => status === null || j.considerationStatus === status).map(j => j.jig),
     }));
 }
 
@@ -162,12 +228,12 @@ export function getTaskFromSection(section: FlightSection){
         jig_types: setUp.jig_types,
         production_lines: section.productionLinesTargetSchedule.map(pl => ({
             ...pl,
-            schedule: pl.schedule.filter(j => j.status == GoalStatus.HARD).map(j => j.jig),
+            schedule: pl.schedule.filter(j => j.considerationStatus == GoalConsiderationStatus.CONSIDER).map(j => j.jig),
         })),
         flights: [{
             ...section.flightTargetSchedule,
-            incoming: section.flightTargetSchedule.incoming.filter(j => j.status == GoalStatus.HARD).map(j => j.jig),
-            outgoing: section.flightTargetSchedule.outgoing.filter(j => j.status == GoalStatus.HARD).map(j => j.jigType),
+            incoming: section.flightTargetSchedule.incoming.filter(j => j.considerationStatus == GoalConsiderationStatus.CONSIDER).map(j => j.jig),
+            outgoing: section.flightTargetSchedule.outgoing.filter(j => j.considerationStatus == GoalConsiderationStatus.CONSIDER).map(j => j.jigType),
             stageType: 'flight'
         }]
     }
@@ -186,17 +252,37 @@ export function projectTaskToSection(task: BelugaProblem, section: FlightSection
 }
 
 
-export function projectTaskToState(task: BelugaProblem, state: BelugaState, flightIndex: number, numFlights = 1){
+export function getJigsOnSiteFromState(state: BelugaSiteState, flights: Flight[]){
 
     const consideredJigs = new Set<string>();
 
-    for(let indexOffset = 0; indexOffset < numFlights; indexOffset++){
-        task.flights[flightIndex + indexOffset].incoming.forEach(j => consideredJigs.add(j))
-    }
+    flights.forEach(f => f.incoming.forEach(j => consideredJigs.add(j)))
     
     Object.values(state.racks).forEach(r => r.forEach(j => consideredJigs.add(j)));
     Object.values(state.trailers).forEach(j => {if(j !== null){consideredJigs.add(j)}});
     Object.values(state.hangars).forEach(j => {if(j !== null){consideredJigs.add(j)}});
+
+    return consideredJigs;
+}
+
+export function getJigsOnSiteFromSection(section: FlightSection){
+
+    const consideredJigs = new Set<string>();
+
+    section.flightTargetSchedule.incoming.
+        filter(e => e.considerationStatus === GoalConsiderationStatus.CONSIDER).
+        forEach(e => consideredJigs.add(e.jig));
+    
+    Object.values(section.siteState.racks).forEach(r => r.forEach(j => consideredJigs.add(j)));
+    Object.values(section.siteState.trailers).forEach(j => {if(j !== null){consideredJigs.add(j)}});
+    Object.values(section.siteState.hangars).forEach(j => {if(j !== null){consideredJigs.add(j)}});
+
+    return consideredJigs;
+}
+
+export function projectTaskToState(task: BelugaProblem, state: BelugaState, flightIndex: number, numFlights = 1){
+
+    const consideredJigs = getJigsOnSiteFromState(state, task.flights.slice(flightIndex, flightIndex + numFlights));
 
     let productionLineProjections =  task.production_lines.map(
         pl => ({...pl, schedule: filterUpTo(pl.schedule.filter(j => ! state.productionLines[pl.name].includes(j)), consideredJigs)})
@@ -216,7 +302,7 @@ export function projectTaskToState(task: BelugaProblem, state: BelugaState, flig
     return projection;
 }
 
-function filterUpTo(collection: string[], considered: Set<string>){
+export function filterUpTo(collection: string[], considered: Set<string>){
     let res: string[] = [];
     for(let s of collection){
         if(considered.has(s)){
@@ -229,17 +315,21 @@ function filterUpTo(collection: string[], considered: Set<string>){
     return res;
 }
 
-export function deriveSuccessor(section: FlightSection, flight: Flight, productionSchedule: ProductionLine[], siteSetUp){
+export function deriveSuccessor(section: FlightSection, flight: Flight, siteSetUp: BelugaSiteSetUp){
+
     let newStartState = applyActions(
         getFullState(section), 
         section.actions, 
-        section.flightTargetSchedule !== undefined ? [getFlightSchedule(section.flightTargetSchedule, GoalStatus.HARD)] : [],  
-        getProductionSchedule(section.productionLinesTargetSchedule ?? [], GoalStatus.HARD) , 
+        section.flightTargetSchedule !== undefined ? [getFlightSchedule(section.flightTargetSchedule, GoalConsiderationStatus.CONSIDER)] : [],  
+        getProductionSchedule(section.productionLinesTargetSchedule ?? [], GoalConsiderationStatus.CONSIDER) , 
         section.siteSetUp
     );
     if (newStartState == undefined){
         return undefined;
     }
+
+    const jigsOnSite = getJigsOnSiteFromState(newStartState, [flight])
+
     let suc: FlightSectionBase = {
         flightIndex: section.flightIndex + 1,
         siteSetUp: siteSetUp,
@@ -251,10 +341,31 @@ export function deriveSuccessor(section: FlightSection, flight: Flight, producti
         },
         
         
-        flightTargetSchedule: { name: flight.name, incoming: flight.incoming.map(jn => ({ jig: jn, status: GoalStatus.HARD })), outgoing: flight.outgoing.map(jn => ({ jigType: jn, status: GoalStatus.HARD })) },
-        productionLinesTargetSchedule: productionSchedule.map(pl => ({ name: pl.name, schedule: pl.schedule.map(j => ({ jig: j, status: GoalStatus.HARD })) })),
-        maxSwaps: null,
-        minEmptyRacks: null,
+        flightTargetSchedule: { 
+            name: flight.name, 
+            incoming: flight.incoming.map(jn => ({ 
+                jig: jn, 
+                considerationStatus: GoalConsiderationStatus.CONSIDER,
+                solvabilityStatus: GoalSolvabilityStatus.UNKNOWN
+            })), 
+            outgoing: flight.outgoing.map(jn => ({ 
+                jigType: jn, 
+                considerationStatus: GoalConsiderationStatus.CONSIDER,
+                solvabilityStatus: GoalSolvabilityStatus.UNKNOWN
+            })) },
+        productionLinesTargetSchedule: section.productionLinesTargetSchedule.map(tpl => { 
+            const toDeliver = tpl.schedule.filter(e => !section.productionLinesDelivered[tpl.name].includes(e.jig)).map(e => e.jig)
+            const notBlocked = filterUpTo(toDeliver, jigsOnSite)
+            return {
+                name: tpl.name, 
+                schedule: updateDeliveryStatuses(tpl.schedule.map(e => ({ 
+                    jig: e.jig, 
+                    ...initialDeliveryStatuses(e.jig, jigsOnSite, notBlocked)
+                })), jigsOnSite)
+            }
+        }),
+        maxSwaps: 0,
+        minEmptyRacks: 0,
 
         actions: [],
 

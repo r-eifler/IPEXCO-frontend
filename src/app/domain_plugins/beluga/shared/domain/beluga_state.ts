@@ -17,8 +17,8 @@ export const BelugaStateZ = object({
 export type BelugaState = zinfer<typeof BelugaStateZ>;
 
 export function getInitialState(model: BelugaProblem): BelugaState {
-    const trailers = model.trailers_beluga.reduce((acc,c) => ({...acc, [c.name]: c.jig}), {})
-    model.trailers_factory.reduce((acc,c) => ({...acc, [c.name]: null}), trailers)
+    let trailers = model.trailers_beluga.reduce((acc,c) => ({...acc, [c.name]: c.jig}), {})
+    trailers = model.trailers_factory.reduce((acc,c) => ({...acc, [c.name]: null}), trailers)
     return {
         jigs: model.jigs,
         flightIndex: 0,

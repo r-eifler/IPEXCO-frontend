@@ -5,9 +5,9 @@
 }
 
 .container{
-    display: flex;
-    flex-direction: row;
-    gap: var(--spacing-100);
+    display: grid;
+    grid-template-columns: 30px auto auto auto;
+    gap: var(--spacing-200);
     align-items: center;
 
     padding: var(--spacing-100);
@@ -20,6 +20,14 @@
 .index {
     font-weight: 500;
     font-size: x-large;
-    margin-right: var(--spacing-100);
+    // margin-right: var(--spacing-100);
     margin-left: var(--spacing-100);
+}
+
+.error {
+    color: red;
+}
+
+.info {
+    color: gray;
 }

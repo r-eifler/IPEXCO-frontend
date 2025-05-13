@@ -4,7 +4,7 @@ import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { environment } from "src/environments/environment";
 import { array } from "zod";
-import { FlightPlanTree, FlightPlanTreeBase, FlightPlanTreeZ, FlightSection, FlightSectionBase, FlightSectionZ, FlightTargetSchedule, GoalStatus, ProductionLineTargetSchedule, projectTaskToSection, projectTaskToState } from "../domain/flight-section";
+import { initialDeliveryStatuses, filterUpTo, FlightPlanTree, FlightPlanTreeBase, FlightPlanTreeZ, FlightSection, FlightSectionBase, FlightSectionZ, FlightTargetSchedule, getJigsOnSiteFromState, GoalConsiderationStatus, GoalSolvabilityStatus, ProductionLineTargetSchedule, projectTaskToSection, projectTaskToState, initConsiderationStatusesNotOnSiteReverse, updateDeliveryStatuses } from "../domain/flight-section";
 import { BelugaState, getInitialState } from "../../shared/domain/beluga_state";
 import { BelugaSiteSetUp, BelugaSiteState, getSiteSetUp } from "../../shared/domain/site_set_up";
 import { BelugaProblem } from "../../shared/domain/beluga_problem";
@@ -72,7 +72,7 @@ export class FlightPlanTreeService{
       const siteSetUp = getSiteSetUp(task);
       const flight = task.flights[0];
 
-      const projection = projectTaskToState(task, siteState, 0, 1)
+      const jigsOnSite = getJigsOnSiteFromState(siteState, [task.flights[0]])
 
       const data: initData = {
         projectId, 
@@ -80,13 +80,27 @@ export class FlightPlanTreeService{
         siteSetUp,
         flightTargetSchedule: {
           name: flight.name,
-          incoming: flight.incoming.map(jn => ({jig: jn, status: GoalStatus.HARD})),
-          outgoing: flight.outgoing.map(jt => ({jigType: jt, status: GoalStatus.HARD})),
+          incoming: flight.incoming.map(jn => ({
+            jig: jn, 
+            considerationStatus: GoalConsiderationStatus.CONSIDER,
+            solvabilityStatus: GoalSolvabilityStatus.UNKNOWN
+          })),
+          outgoing: flight.outgoing.map(jt => ({
+            jigType: jt, 
+            considerationStatus: GoalConsiderationStatus.CONSIDER,
+            solvabilityStatus: GoalSolvabilityStatus.UNKNOWN,
+          })),
         },
-        productionLinesTargetSchedule: projection.production_lines.map(pl => ({
-          name: pl.name,
-          schedule: pl.schedule.map(jn => ({jig: jn, status: GoalStatus.HARD})) 
-        })),
+        productionLinesTargetSchedule: task.production_lines.map(pl => {
+          const notBlocked = filterUpTo(pl.schedule, jigsOnSite);
+          return {
+            name: pl.name,
+            schedule: updateDeliveryStatuses(pl.schedule.map(jn => ({
+              jig: jn, 
+              ...initialDeliveryStatuses(jn, jigsOnSite, notBlocked),
+            })), jigsOnSite)
+          }
+        }),
       }
 
       return this.http.post<unknown>(this.BASE_URL + 'init', data).pipe(

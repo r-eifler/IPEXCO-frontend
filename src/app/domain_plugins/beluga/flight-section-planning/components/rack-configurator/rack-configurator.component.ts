@@ -1,4 +1,4 @@
-import { Component, computed, effect, input, output } from '@angular/core';
+import { Component, computed, effect, inject, input, output } from '@angular/core';
 import { RackComponent } from '../../../shared/components/rack/rack.component';
 import { JigComponent } from '../../../shared/components/jig/jig.component';
 import { Rack, SiteStatus } from '../../../shared/domain/site_set_up';
@@ -6,6 +6,8 @@ import { Jig, JigType, occupiedSpace } from '../../../shared/domain/beluga_probl
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { TooltipModule } from '@swimlane/ngx-charts';
+import { Store } from '@ngrx/store';
+import { selectJigMapIncomingFlight } from '../../state/flight-section-planning.selector';
 
 @Component({
   selector: 'app-rack-configurator',
@@ -21,6 +23,9 @@ import { TooltipModule } from '@swimlane/ngx-charts';
 })
 export class RackConfiguratorComponent {
 
+  store = inject(Store);
+
+  incomingFlightJigMap = this.store.selectSignal(selectJigMapIncomingFlight);
 
   rack = input.required<Rack & {jigs: Jig[]}>();
   jigTypes = input.required<Record<string,JigType>>();

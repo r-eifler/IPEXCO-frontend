@@ -1,7 +1,7 @@
 import { createReducer, on } from "@ngrx/store";
 import { Loadable, LoadingState } from "src/app/shared/common/loadable.interface";
 import { Project } from "src/app/shared/domain/project";
-import { FlightSection, FlightTargetSchedule, getFlightSchedule, getFullState, getProductionSchedule, GoalStatus, ProductionLineTargetSchedule } from "../../flight-section-planning/domain/flight-section";
+import { FlightSection, FlightTargetSchedule, getFlightSchedule, getFullState, getProductionSchedule, GoalConsiderationStatus, GoalSolvabilityStatus, ProductionLineTargetSchedule } from "../../flight-section-planning/domain/flight-section";
 import { BelugaActionType, SwitchBeluga } from "../../shared/domain/beluga_plan";
 import { BelugaProblemZ, Side } from "../../shared/domain/beluga_problem";
 import { applyAction, BelugaState, getInitialState } from "../../shared/domain/beluga_state";
@@ -83,14 +83,23 @@ export const BuilderReducer = createReducer(
                 siteSetUp: getSiteSetUp(task),
                 flightsTargetSchedule: task.flights.map(f => ({
                     name: f.name, 
-                    incoming: f.incoming.map(j => ({jig: j, status: GoalStatus.HARD})), 
-                    outgoing: f.outgoing.map(j => ({jigType: j, status: GoalStatus.HARD})),
+                    incoming: f.incoming.map(j => ({
+                        jig: j, 
+                        considerationStatus: GoalConsiderationStatus.CONSIDER,
+                        solvabilityStatus: GoalSolvabilityStatus.UNKNOWN
+                    })), 
+                    outgoing: f.outgoing.map(j => ({
+                        jigType: j, 
+                        considerationStatus: GoalConsiderationStatus.CONSIDER,
+                        solvabilityStatus: GoalSolvabilityStatus.UNKNOWN
+                    })),
                 })),
                 productionLinesTargetSchedule: task.production_lines.map(pl => ({
                     name: pl.name,
                     schedule: pl.schedule.map(j => ({
                         jig: j,
-                        status: GoalStatus.HARD
+                        considerationStatus: GoalConsiderationStatus.CONSIDER,
+                        solvabilityStatus: GoalSolvabilityStatus.UNKNOWN
                     }))
                 })),
                 taskState: taskState,
@@ -127,8 +136,8 @@ export const BuilderReducer = createReducer(
         applyAction(
             state.taskState, 
             action, 
-            state.flightsTargetSchedule.map(s => getFlightSchedule(s, GoalStatus.HARD)), 
-            getProductionSchedule(state.productionLinesTargetSchedule, GoalStatus.HARD), 
+            state.flightsTargetSchedule.map(s => getFlightSchedule(s, GoalConsiderationStatus.CONSIDER)), 
+            getProductionSchedule(state.productionLinesTargetSchedule, GoalConsiderationStatus.CONSIDER), 
             state.siteSetUp
         ) : null,
         currentSection: {
@@ -148,8 +157,8 @@ export const BuilderReducer = createReducer(
         applyAction(
             state.taskState, 
             switchBelugaAction, 
-            state.flightsTargetSchedule.map(s => getFlightSchedule(s, GoalStatus.HARD)), 
-            getProductionSchedule(state.productionLinesTargetSchedule, GoalStatus.HARD), 
+            state.flightsTargetSchedule.map(s => getFlightSchedule(s, GoalConsiderationStatus.CONSIDER)), 
+            getProductionSchedule(state.productionLinesTargetSchedule, GoalConsiderationStatus.CONSIDER), 
             state.siteSetUp
         ) : undefined;
         return {

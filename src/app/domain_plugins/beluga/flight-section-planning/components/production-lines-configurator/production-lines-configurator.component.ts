@@ -1,6 +1,6 @@
 import { Component, computed, effect, input, output } from '@angular/core';
 import { ProductionLine, Jig, JigType } from '../../../shared/domain/beluga_problem';
-import { GoalStatus, ProductionLineTargetSchedule } from '../../domain/flight-section';
+import { GoalConsiderationStatus, ProductionLineTargetSchedule } from '../../domain/flight-section';
 import { ProductionLineConfiguratorComponent } from '../production-line-configurator/production-line-configurator.component';
 import { scheduled } from 'rxjs';
 
@@ -16,6 +16,7 @@ export class ProductionLinesConfiguratorComponent {
 
   originalSchedules = input.required<ProductionLine[]>();
   productionLineTargetSchedules = input.required<ProductionLineTargetSchedule[]>();
+  jigsOnSite = input.required<Set<string>>();
   jigs = input.required<Record<string,Jig>>();
   jigTypes = input.required<Record<string,JigType>>();
 
@@ -28,7 +29,7 @@ export class ProductionLinesConfiguratorComponent {
       return existingSchedule !== undefined ? existingSchedule :
       {
         name: pl.name,
-        schedule: pl.schedule.map(jigName => ({jig: jigName, status: GoalStatus.HARD}))
+        schedule: pl.schedule.map(jigName => ({jig: jigName, status: GoalConsiderationStatus.CONSIDER}))
       }
     })
   })

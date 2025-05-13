@@ -3,6 +3,7 @@
         <app-production-line-configurator
             [originalSchedule]="originalSchedules()?.[idx]"
             [productionLineTargetSchedule]="plTS"
+            [jigsOnSite]="jigsOnSite()"
             [jigTypes]="jigTypes()"
             [jigs]="jigs()"
             (targetSchedule)="onChangeProductionTarget($event, idx)"

@@ -1,6 +1,6 @@
 import { Component, computed, input, output } from '@angular/core';
 import { Flight, Jig, JigType } from '../../../shared/domain/beluga_problem';
-import { FlightTargetSchedule, GoalStatus } from '../../domain/flight-section';
+import { FlightTargetSchedule, GoalConsiderationStatus } from '../../domain/flight-section';
 import { JigComponent } from '../../../shared/components/jig/jig.component';
 import { CdkDrag, CdkDragDrop, CdkDragPlaceholder, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
 import { MatButtonModule } from '@angular/material/button';
@@ -23,7 +23,7 @@ import { JigConfiguratorComponent } from '../jig-configurator/jig-configurator.c
 })
 export class IncomingFlightConfiguratorComponent {
 
-  status = GoalStatus;
+  status = GoalConsiderationStatus;
 
   originalFlight = input.required<Flight>();
   flightTargetSchedule = input.required<FlightTargetSchedule>();
@@ -32,45 +32,40 @@ export class IncomingFlightConfiguratorComponent {
 
   targetSchedule = output<FlightTargetSchedule>();
 
-  schedule = computed(() => {
-    if(this.flightTargetSchedule() && this.flightTargetSchedule().incoming.length > 0){
-      return this.flightTargetSchedule().incoming.map(j => ({
-        jig: this.jigs()?.[j.jig],
-        status: j.status
+  schedule = computed(() => this.flightTargetSchedule()?.incoming.map(e => ({
+        jig: this.jigs()?.[e.jig],
+        status: {
+          considerationStatus: e.considerationStatus,
+          solvabilityStatus: e.solvabilityStatus
+        }
       }))
-    }
+  )
+    
 
-    return this.originalFlight()?.incoming.map(name => ({
-      jig: this.jigs()?.[name],
-      status: GoalStatus.HARD,
-    }))
-  })
+  // drop(event: CdkDragDrop<string[]>) {
+  //   const schedule = this.schedule();
+  //   moveItemInArray(schedule, event.previousIndex, event.currentIndex);
+  //   console.log(schedule)
 
-  drop(event: CdkDragDrop<string[]>) {
-    const schedule = this.schedule();
-    moveItemInArray(schedule, event.previousIndex, event.currentIndex);
-    console.log(schedule)
+  //   const newFlightSchedule = {
+  //     name: this.originalFlight().name,
+  //     incoming: schedule.map(e => ({jig: e.jig.name, status: e.status})),
+  //     outgoing: this.flightTargetSchedule()?.outgoing ?? []
+  //   }
 
-    const newFlightSchedule = {
-      name: this.originalFlight().name,
-      incoming: schedule.map(e => ({jig: e.jig.name, status: e.status})),
-      outgoing: this.flightTargetSchedule()?.outgoing ?? []
-    }
-
-    this.targetSchedule.emit(newFlightSchedule);
-  }
+  //   this.targetSchedule.emit(newFlightSchedule);
+  // }
   
-  setStatus(index: number, status: GoalStatus){
-    const schedule = this.schedule().map(e => ({jig: e.jig.name, status: e.status}));
+  setStatus(index: number, status: GoalConsiderationStatus){
     const newFlightSchedule = {
-      name: this.originalFlight().name,
+      name: this.flightTargetSchedule().name,
       incoming: [
-        ...schedule.slice(0,index),
+        ...this.flightTargetSchedule().incoming.slice(0,index),
         {
-          ...schedule[index],
-          status
+          ...this.flightTargetSchedule().incoming[index],
+          considerationStatus: status
         },
-        ...schedule.slice(index + 1)
+        ...this.flightTargetSchedule().incoming.slice(index + 1)
       ],
       outgoing: this.flightTargetSchedule()?.outgoing ?? []
     }

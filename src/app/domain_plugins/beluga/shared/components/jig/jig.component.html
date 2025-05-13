@@ -38,10 +38,6 @@
         <div class="info">
             <mat-list>
                 <mat-list-item>
-                    <mat-icon matListItemIcon>crop_16_9</mat-icon>
-                    <div matListItemTitle>{{status()}}</div>
-                </mat-list-item>
-                <mat-list-item>
                     <mat-icon matListItemIcon>fit_screen</mat-icon>
                     <div matListItemTitle>{{sizeEmpty()}}/{{sizeLoaded()}}</div>
                 </mat-list-item>
@@ -49,6 +45,12 @@
                     <mat-icon matListItemIcon>category</mat-icon>
                     <div matListItemTitle>{{type()}}</div>
                 </mat-list-item>
+                @if(incomingFlight() !== undefined){
+                <mat-list-item>
+                    <mat-icon matListItemIcon>flight_land</mat-icon>
+                    <div matListItemTitle>{{incomingFlight() ?? 'none'}}</div>
+                </mat-list-item>
+                }
             </mat-list>
         </div>
     </ng-template>

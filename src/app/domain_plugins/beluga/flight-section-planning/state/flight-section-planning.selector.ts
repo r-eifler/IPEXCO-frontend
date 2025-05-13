@@ -5,6 +5,7 @@ import { PlanRunStatus } from "src/app/iterative_planning/domain/plan";
 import { BelugaAction } from "../../shared/domain/beluga_plan";
 import { Encoding, ServiceType } from "src/app/global_specification/domain/services";
 import { memoizeWith } from "ramda";
+import { getJigsOnSiteFromSection } from "../domain/flight-section";
 
 
 const selectState = FlightSectionPlanningFeature.selectFlightSectionPlanningState
@@ -28,20 +29,33 @@ export const selectInitialState = createSelector(selectState,
 );
 
 export const selectFlights = createSelector(selectTask, 
-    (task) => task?.flights)
+    (task) => task?.flights
+)
 
 export const selectProductionLines = createSelector(selectTask, 
-    (task) => task?.production_lines)
+    (task) => task?.production_lines
+)
 
 export const selectNumFlights = createSelector(selectTask, 
-    (task) => task?.flights?.length ?? 0)
+    (task) => task?.flights?.length ?? 0
+)
 
 export const selectNumRacks = createSelector(selectTask, 
-    (task) => task?.racks?.length ?? 0)
+    (task) => task?.racks?.length ?? 0
+)
 
 export const selectNumJigs= createSelector(selectTask, 
-    (task) => task?.jigs !== undefined ? Object.keys(task?.jigs).length : undefined)  
-    
+    (task) => task?.jigs !== undefined ? Object.keys(task?.jigs).length : undefined
+)
+
+export const selectTypeJigMap = createSelector(selectTask, 
+    (task) => task?.jigs !== undefined ? 
+        Object.values(task?.jigs).reduce((acc,c) => ({
+            ...acc, 
+            [c.type]: c.type in acc ? [...acc[c.type],c.name] :  [c.name]
+        }), {}) : 
+        undefined
+)
 
 // Services
 
@@ -126,10 +140,21 @@ export const selectBranchSections = memoizeWith(
     })
 );
 
+// Section dependent site state / setup
+
+export const selectJigsOnSite = createSelector(selectSelectedSection,  
+    (section) => section === undefined ? undefined : getJigsOnSiteFromSection(section));
+
 
 // Flights
-
 
 export const selectCurrentFlightSchedule = createSelector(selectSelectedSection, selectFlights, 
     (section, flights) => (section?.flightIndex !== null && section?.flightIndex  !== undefined ? 
        flights?.[section?.flightIndex] : null));
+
+export const selectJigMapIncomingFlight= createSelector(selectFlights, 
+    (flights) => flights?.reduce((acc1,c1) => ({
+        ...acc1,
+        ...c1.incoming.reduce((acc2,c2) =>({...acc2, [c2]: c1.name}), {})
+    }), {})
+);

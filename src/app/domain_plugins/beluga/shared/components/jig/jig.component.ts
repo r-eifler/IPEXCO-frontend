@@ -25,6 +25,9 @@ export class JigComponent {
 
   jig = input.required<Jig>()
   jigType = input.required<JigType>()
+  incomingFlight = input<string | undefined | null>(undefined)
+
+
   sizeUnit = input<number>(15)
 
   draggable = input<boolean>(false);

@@ -1,4 +1,4 @@
-<div class="container" cdkDropList (cdkDropListDropped)="drop($event)">
+<div class="container">
     @for(elem of schedule(); track elem.jig.name; let idx = $index){
         <app-jig-configurator 
             [index]="idx"

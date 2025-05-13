@@ -1,5 +1,5 @@
 import { Component, computed, effect, input, output } from '@angular/core';
-import { GoalStatus, ProductionLineTargetSchedule } from '../../domain/flight-section';
+import { GoalConsiderationStatus, ProductionLineTargetSchedule, updateDeliveryStatuses } from '../../domain/flight-section';
 import { Jig, JigType, ProductionLine } from '../../../shared/domain/beluga_problem';
 import { CdkDropList, CdkDrag, CdkDragPlaceholder, CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { MatButtonModule } from '@angular/material/button';
@@ -23,10 +23,11 @@ import { JigConfiguratorComponent } from '../jig-configurator/jig-configurator.c
 })
 export class ProductionLineConfiguratorComponent {
   
-  status = GoalStatus;
+  status = GoalConsiderationStatus;
 
   originalSchedule = input.required<ProductionLine>();
   productionLineTargetSchedule = input.required<ProductionLineTargetSchedule>();
+  jigsOnSite = input.required<Set<string>>();
   jigs = input.required<Record<string,Jig>>();
   jigTypes = input.required<Record<string,JigType>>();
 
@@ -34,40 +35,40 @@ export class ProductionLineConfiguratorComponent {
 
   schedule = computed(() => {
     if(this.productionLineTargetSchedule() && this.jigs() !== undefined){
-      return this.productionLineTargetSchedule().schedule.map(j => ({
-        jig: this.jigs()?.[j.jig],
-        status: j.status
+      return this.productionLineTargetSchedule().schedule.map(e => ({
+        jig: this.jigs()?.[e.jig],
+        status: {
+          considerationStatus: e.considerationStatus,
+          solvabilityStatus: e.solvabilityStatus
+        }
       }))
     }
     return []
   })
 
-  drop(event: CdkDragDrop<string[]>) {
-    const schedule = this.schedule();
-    moveItemInArray(schedule, event.previousIndex, event.currentIndex);
-    console.log(schedule)
+  // drop(event: CdkDragDrop<string[]>) {
+  //   const schedule = this.schedule();
+  //   moveItemInArray(schedule, event.previousIndex, event.currentIndex);
+  //   console.log(schedule)
 
-    const newProductionSchedule = {
-      name: this.originalSchedule().name,
-      schedule: schedule.map(e => ({jig: e.jig.name, status: e.status})),
-    }
-
-    this.targetSchedule.emit(newProductionSchedule);
-  }
+  //   this.targetSchedule.emit(schedule);
+  // }
   
-  setStatus(index: number, status: GoalStatus){
-    const schedule = this.schedule().map(e => ({jig: e.jig.name, status: e.status}));
+  setStatus(index: number, status: GoalConsiderationStatus){
+    const schedule = this.productionLineTargetSchedule().schedule;
     const newProductionSchedule = {
-      name: this.originalSchedule().name,
+      name: this.productionLineTargetSchedule().name,
       schedule: [
         ...schedule.slice(0,index),
         {
           ...schedule[index],
-          status
+          considerationStatus: status,
         },
         ...schedule.slice(index + 1)
       ],
     }
+
+    newProductionSchedule.schedule = updateDeliveryStatuses(newProductionSchedule.schedule, this.jigsOnSite())
 
     this.targetSchedule.emit(newProductionSchedule);
   }

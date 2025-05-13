@@ -18,6 +18,7 @@
             <app-jig
                 [jig]="jig"  
                 [jigType]="jigTypes()?.[jig?.type]"
+                [incomingFlight]="incomingFlightJigMap()?.[jig.name] ?? null"
                 draggable="false"
             >
             </app-jig>

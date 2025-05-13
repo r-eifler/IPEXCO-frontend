@@ -1,22 +1,35 @@
-<div [class.notUsed]="status() == statusTypes.SOFT" class="container">
+<div  class="container">
     @if(index() !== null){
         <span class="index">{{ (index() ?? 0) + 1}}</span>
     }
     <app-jig
+        [class.notUsed]="status()?.considerationStatus == considerationStatuses.SKIP"
         [jig]="jig()"  
         [jigType]="jigType()"
+        [incomingFlight]="incomingFlightJigMap()?.[jig().name] ?? null"
         [unitSize]="true"
         [draggable]="true"
         [showOnlyPart]="showOnlyPart()"
     >
     </app-jig>
-    @if(status() == statusTypes.HARD){
-        <button mat-icon-button (click)="onStatusChanged(statusTypes.SOFT)">
+    @switch (status()?.solvabilityStatus) {
+        @case (solvabilityStatuses.BLOCKED) {
+            <mat-icon class="error">block</mat-icon>
+        }
+        @case (solvabilityStatuses.NOT_ON_SITE) {
+            <mat-icon class="error">wrong_location</mat-icon>
+        }
+        @case (solvabilityStatuses.UNKNOWN) {
+            <mat-icon class="info">question_mark</mat-icon>
+        }
+    }
+    @if(status()?.considerationStatus == considerationStatuses.CONSIDER){
+        <button mat-icon-button (click)="onStatusChanged(considerationStatuses.SKIP)">
             <mat-icon>step_over</mat-icon>
         </button>
     }
-    @else{
-        <button mat-icon-button (click)="onStatusChanged(statusTypes.HARD)">
+    @if(status()?.considerationStatus == considerationStatuses.SKIP){
+        <button mat-icon-button (click)="onStatusChanged(considerationStatuses.CONSIDER)">
             <mat-icon>check</mat-icon>
         </button>
     }

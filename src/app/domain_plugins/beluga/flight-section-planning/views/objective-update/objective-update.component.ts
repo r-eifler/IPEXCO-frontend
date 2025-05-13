@@ -1,23 +1,22 @@
 import { Component, computed, inject } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { selectCurrentFlightSchedule, selectProductionLines, selectSelectedSection } from '../../state/flight-section-planning.selector';
-import { PageModule } from 'src/app/shared/components/page/page.module';
-import { TranslocoModule } from '@jsverse/transloco';
-import { BreadcrumbModule } from 'src/app/shared/components/breadcrumb/breadcrumb.module';
-import { RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
-import { RackConfiguratorComponent } from '../../components/rack-configurator/rack-configurator.component';
-import { SiteStatus } from '../../../shared/domain/site_set_up';
-import { updateFlightSection } from '../../state/flight-section-planning.actions';
-import { TrailerConfiguratorComponent } from '../../components/trailer-configurator/trailer-configurator.component';
+import { RouterLink } from '@angular/router';
+import { TranslocoModule } from '@jsverse/transloco';
+import { Store } from '@ngrx/store';
+import { BreadcrumbModule } from 'src/app/shared/components/breadcrumb/breadcrumb.module';
+import { PageModule } from 'src/app/shared/components/page/page.module';
 import { Side } from '../../../shared/domain/beluga_problem';
-import { IncomingFlightConfiguratorComponent } from '../../components/incoming-flight-configurator/incoming-flight-configurator.component';
-import { FlightSection, FlightTargetSchedule, ProductionLineTargetSchedule } from '../../domain/flight-section';
-import { OutgoingFlightConfiguratorComponent } from '../../components/outgoing-flight-configurator/outgoing-flight-configurator.component';
+import { SiteStatus } from '../../../shared/domain/site_set_up';
 import { HangarConfiguratorComponent } from '../../components/hangar-configurator/hangar-configurator.component';
-import { ProductionLinesConfiguratorComponent } from '../../components/production-lines-configurator/production-lines-configurator.component';
-import { SwapConfiguratorComponent } from '../../components/swap-configurator/swap-configurator.component';
+import { IncomingFlightConfiguratorComponent } from '../../components/incoming-flight-configurator/incoming-flight-configurator.component';
 import { ObjectiveConfiguratorComponent } from '../../components/objective-configurator/objective-configurator.component';
+import { OutgoingFlightConfiguratorComponent } from '../../components/outgoing-flight-configurator/outgoing-flight-configurator.component';
+import { ProductionLinesConfiguratorComponent } from '../../components/production-lines-configurator/production-lines-configurator.component';
+import { RackConfiguratorComponent } from '../../components/rack-configurator/rack-configurator.component';
+import { TrailerConfiguratorComponent } from '../../components/trailer-configurator/trailer-configurator.component';
+import { FlightSection, FlightTargetSchedule, ProductionLineTargetSchedule } from '../../domain/flight-section';
+import { updateFlightSection } from '../../state/flight-section-planning.actions';
+import { selectCurrentFlightSchedule, selectJigsOnSite, selectProductionLines, selectSelectedSection } from '../../state/flight-section-planning.selector';
 
 @Component({
   selector: 'app-objective-update',
@@ -43,6 +42,7 @@ export class ObjectiveUpdateComponent {
   store = inject(Store);
 
   section = this.store.selectSignal(selectSelectedSection);
+  jigsOnSite = this.store.selectSignal(selectJigsOnSite);
 
   name = computed(() => {
       let name = this.originalFlight()?.name;
