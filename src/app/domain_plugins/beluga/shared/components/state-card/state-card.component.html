@@ -15,12 +15,12 @@
         ></app-beluga-flight>
     </div>
     <div class="trailers">
-        @for(trailer of trailersBeluga(); track trailer){
-            <app-trailer [name]="trailer.name" [size]="20 * 15">
+        @for(elem of trailersBeluga(); track elem.trailer.name){
+            <app-trailer [name]="elem.trailer.name" [size]="20 * 15">
                 <app-jig
-                    *ngIf="trailer.jig"
-                    [jig]="trailer.jig"  
-                    [jigType]="jigTypes()?.[trailer.jig?.type]"
+                    *ngIf="elem.jig"
+                    [jig]="elem.jig"  
+                    [jigType]="jigTypes()?.[elem.jig?.type]"
                     draggable="false"
                 >
                 </app-jig>
@@ -41,12 +41,12 @@
         }
     </div>
     <div class="trailers">
-        @for(trailer of trailersFactory(); track trailer){
-            <app-trailer [name]="trailer.name" [size]="20 * 15">
+        @for(elem of trailersFactory(); track elem.trailer.name){
+            <app-trailer [name]="elem.trailer.name" [size]="20 * 15">
                 <app-jig
-                    *ngIf="trailer.jig"
-                    [jig]="trailer.jig"  
-                    [jigType]="jigTypes()?.[trailer.jig?.type]"
+                    *ngIf="elem.jig"
+                    [jig]="elem.jig"  
+                    [jigType]="jigTypes()?.[elem.jig?.type]"
                     draggable="false"
                 >
                 </app-jig>

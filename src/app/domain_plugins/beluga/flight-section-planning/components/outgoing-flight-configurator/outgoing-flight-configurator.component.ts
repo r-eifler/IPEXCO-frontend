@@ -1,8 +1,6 @@
-import { CdkDrag, CdkDragPlaceholder, CdkDropList } from '@angular/cdk/drag-drop';
 import { Component, computed, input, output } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { JigComponent } from '../../../shared/components/jig/jig.component';
 import { Flight, Jig, JigType } from '../../../shared/domain/beluga_problem';
 import { FlightTargetSchedule, GoalConsiderationStatus } from '../../domain/flight-section';
 import { JigConfiguratorComponent } from '../jig-configurator/jig-configurator.component';
@@ -10,10 +8,6 @@ import { JigConfiguratorComponent } from '../jig-configurator/jig-configurator.c
 @Component({
   selector: 'app-outgoing-flight-configurator',
   imports: [
-    JigComponent,
-    CdkDropList, 
-    CdkDrag, 
-    CdkDragPlaceholder,
     MatButtonModule,
     MatIconModule,
     JigConfiguratorComponent,

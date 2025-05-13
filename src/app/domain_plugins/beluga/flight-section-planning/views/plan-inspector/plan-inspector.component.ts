@@ -8,12 +8,13 @@ import { PageModule } from 'src/app/shared/components/page/page.module';
 import { BreadcrumbModule } from 'src/app/shared/components/breadcrumb/breadcrumb.module';
 import { RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
+import { SectionPlanComponent } from '../../../shared/view/section-plan/section-plan.component';
 
 @Component({
   selector: 'app-plan-inspector',
   imports: [
     TranslocoModule,
-    SinglePlanViewComponent,
+    SectionPlanComponent,
     PageModule,
     BreadcrumbModule,
     MatIconModule,
@@ -26,21 +27,14 @@ export class PlanInspectorComponent {
 
   store = inject(Store);
 
-  task = this.store.selectSignal(selectTask);
   section = this.store.selectSignal(selectSelectedSection);
 
-  sections = computed(() => this.section() !== undefined ? [this.section()] : [])
-
   name = computed(() => {
-    let index = this.section()?.flightIndex;
-    if(index == undefined){
+    let section = this.section();
+    if(section == undefined){
       return "Unknown"
     }
-    return this.task()?.flights[index].name
+    return section.flightTargetSchedule.name;
   });
-
-  constructor(){
-    effect(() => console.log(this.sections()))
-  }
 
 }

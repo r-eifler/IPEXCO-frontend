@@ -20,7 +20,6 @@ import { EmptyStateModule } from 'src/app/shared/components/empty-state/empty-st
 import { PageModule } from 'src/app/shared/components/page/page.module';
 import { array } from 'zod';
 import { PlanActionListComponent } from '../../components/plan-action-list/plan-action-list.component';
-import { StateCardComponent } from '../../components/state-card/state-card.component';
 import { StepControlComponent } from '../../components/step-control/step-control.component';
 import { BelugaActionZ } from '../../domain/beluga_plan';
 import { BelugaProblemZ } from '../../domain/beluga_problem';
@@ -46,7 +45,6 @@ import { getSiteSetUp } from '../../domain/site_set_up';
     MatSelectModule,
     MatSliderModule,
     MatCheckboxModule,
-    StateCardComponent,
     StepControlComponent,
   ],
   templateUrl: './plan-comparison.component.html',

@@ -1,19 +1,13 @@
-import { Component, computed, effect, input, output } from '@angular/core';
-import { GoalConsiderationStatus, ProductionLineTargetSchedule, updateDeliveryStatuses } from '../../domain/flight-section';
-import { Jig, JigType, ProductionLine } from '../../../shared/domain/beluga_problem';
-import { CdkDropList, CdkDrag, CdkDragPlaceholder, CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { Component, computed, input, output } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { JigComponent } from '../../../shared/components/jig/jig.component';
 import { MatIconModule } from '@angular/material/icon';
+import { Jig, JigType, ProductionLine } from '../../../shared/domain/beluga_problem';
+import { GoalConsiderationStatus, ProductionLineTargetSchedule, updateDeliveryStatuses } from '../../domain/flight-section';
 import { JigConfiguratorComponent } from '../jig-configurator/jig-configurator.component';
 
 @Component({
   selector: 'app-production-line-configurator',
   imports: [
-    JigComponent,
-    CdkDropList, 
-    CdkDrag, 
-    CdkDragPlaceholder,
     MatButtonModule,
     MatIconModule,
     JigConfiguratorComponent,

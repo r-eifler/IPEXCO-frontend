@@ -12,7 +12,6 @@ import { applyAction, applyActions } from '../../domain/beluga_state';
   selector: 'app-single-plan-view',
   imports: [
     PlanActionListComponent,
-    StateCardComponent,
     StepControlComponent
   ],
   templateUrl: './single-plan-view.component.html',

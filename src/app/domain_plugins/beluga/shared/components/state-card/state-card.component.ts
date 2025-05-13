@@ -10,6 +10,7 @@ import { RackComponent } from '../rack/rack.component';
 import { ProductionLineComponent } from '../production-line/production-line.component';
 import { NgFor, NgIf } from '@angular/common';
 import { BelugaSiteSetUp } from '../../domain/site_set_up';
+import { FlightTargetSchedule, GoalConsiderationStatus, ProductionLineTargetSchedule } from '../../../flight-section-planning/domain/flight-section';
 
 @Component({
   selector: 'app-state-card',
@@ -31,9 +32,8 @@ export class StateCardComponent {
 
   state = input.required<BelugaState>();
   siteSetUp = input.required<BelugaSiteSetUp>();
-  flight = input.required<Flight>();
-  productionSchedule = input.required<ProductionLine[]>;
-
+  targetFlightSchedule = input.required<FlightTargetSchedule>();
+  targetProductionSchedule = input.required<ProductionLineTargetSchedule[]>();
 
   constructor(){
     effect(() => console.log(this.state()))
@@ -42,7 +42,9 @@ export class StateCardComponent {
   jigTypes = computed(() => this.siteSetUp()?.jig_types)
   jigs = computed(() => this.state()?.jigs)
 
-  incomingSchedule = computed(() => this.flight()?.incoming)
+  incomingSchedule = computed(() => this.targetFlightSchedule()?.incoming.
+    filter(e => e.considerationStatus == GoalConsiderationStatus.CONSIDER)
+  )
 
   incoming = computed(() => {
     const state = this.state();
@@ -50,7 +52,8 @@ export class StateCardComponent {
       return []
     }
     const numUnloaded = state.incomingUnloaded.length
-    return this.incomingSchedule()?.slice(0,numUnloaded).map(j => this.jigs()?.[j]);
+    const fullSchedule = this.incomingSchedule()?.map(j => this.jigs()?.[j.jig])
+    return fullSchedule.slice(numUnloaded);
   })
 
   outgoing = computed(() => {
@@ -61,7 +64,7 @@ export class StateCardComponent {
     return state.outgoingLoaded.map(j => this.jigs()?.[j]);
   })
 
-  outgoingSchedule = computed(() => this.flight()?.outgoing)
+  outgoingSchedule = computed(() => this.targetFlightSchedule()?.outgoing)
   
 
   racks = computed(() => {
@@ -96,12 +99,12 @@ export class StateCardComponent {
       return []
     }
     return this.siteSetUp()?.belugaTrailers.map(tn => {
-      const trailerState  = state.trailers[tn.name];
-      if(trailerState === null){
-        return {name: tn, jig: null}
+      const loadedJigName  = state.trailers[tn.name];
+      if(loadedJigName === null){
+        return {trailer: tn, jig: null}
       }
       else{
-        return {name: tn.name, jig: this.jigs()?.[trailerState]}
+        return {trailer: tn, jig: this.jigs()?.[loadedJigName]}
       }
     })
   })
@@ -112,17 +115,17 @@ export class StateCardComponent {
       return []
     }
     return this.siteSetUp()?.factoryTrailers.map(tn => {
-      const trailerState  = state.trailers[tn.name];
-      if(trailerState === null){
-        return {name: tn, jig: null}
+      const loadedJigName  = state.trailers[tn.name];
+      if(loadedJigName === null){
+        return {trailer: tn, jig: null}
       }
       else{
-        return {name: tn.name, jig: this.jigs()?.[trailerState]}
+        return {trailer: tn, jig: this.jigs()?.[loadedJigName]}
       }
     })
   })
 
-  productionLines = computed(() => this.productionLines ?? [])
+  productionLines = computed(() => this.targetProductionSchedule() ?? [])
 
   productionLinesDelivered = computed(() => {
     const state = this.state();
