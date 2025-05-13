@@ -8,14 +8,14 @@
         <span class="header">{{t('b.outgoing_flight')}}</span>
     </div>
     <div>
-        @if(jigTypesScheduled()?.length > 0){
-            <p>{{jigTypesScheduled()?.[0]}}: {{remaining()}}</p>
+        @if(numRemaining() > 0){
+            <p>{{ remainingJigTypes()?.[0] }}: {{numRemaining()}}</p>
         }
         @else{
             <p>{{t('b.no_jigs_scheduled')}}</p>
         }
         <div class="jigsCon">
-        @for(jig of jigsLoaded(); track jig.name){
+        @for(jig of loaded(); track jig.name){
             <app-jig
                 [jig]="jig"
                 [jigType]="jigTypes()?.[jig.type]"

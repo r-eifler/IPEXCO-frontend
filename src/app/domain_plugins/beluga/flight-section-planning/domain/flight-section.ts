@@ -68,7 +68,7 @@ export function initialDeliveryStatuses(jigName: string, jigsOnSite: Set<string>
     }
 }
 
-interface StatusScheduleElem {
+export interface StatusScheduleElem {
     jig: string,
     considerationStatus: GoalConsiderationStatus,
     solvabilityStatus: GoalSolvabilityStatus,

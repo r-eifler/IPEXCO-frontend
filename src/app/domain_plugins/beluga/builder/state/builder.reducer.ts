@@ -21,7 +21,7 @@ export interface BuilderState {
     numToProcessFlights: number,
 
     siteSetUp: BelugaSiteSetUp | null,
-    flightsTargetSchedule: FlightTargetSchedule[] | null,
+    flightTargetSchedule: FlightTargetSchedule | null,
     productionLinesTargetSchedule: ProductionLineTargetSchedule[] | null,
 
     taskState: BelugaState | null | undefined,
@@ -43,7 +43,7 @@ const initialState: BuilderState = {
     section: {state: LoadingState.Initial, data: undefined},
     numToProcessFlights: 1,
     siteSetUp: null,
-    flightsTargetSchedule: null,
+    flightTargetSchedule: null,
     productionLinesTargetSchedule: null,
     taskState: null,
 
@@ -64,60 +64,60 @@ export const BuilderReducer = createReducer(
         siteSetUp: null,
         taskState: null
     })),
-    on(loadProjectSuccess, (state, {project}): BuilderState => {
-        const task = BelugaProblemZ.parse(project?.baseTask?.model);
-        if(state.section.data !== undefined){
-            const fullState = getFullState(state.section.data)
-            return {
-                ...state,
-                project: {state: LoadingState.Done, data: project},
-                siteSetUp: getSiteSetUp(task),
-                taskState: fullState
-            }
-        }
-        else{
-            let taskState = getInitialState(task);
-            return {
-                ...state,
-                project: {state: LoadingState.Done, data: project},
-                siteSetUp: getSiteSetUp(task),
-                flightsTargetSchedule: task.flights.map(f => ({
-                    name: f.name, 
-                    incoming: f.incoming.map(j => ({
-                        jig: j, 
-                        considerationStatus: GoalConsiderationStatus.CONSIDER,
-                        solvabilityStatus: GoalSolvabilityStatus.UNKNOWN
-                    })), 
-                    outgoing: f.outgoing.map(j => ({
-                        jigType: j, 
-                        considerationStatus: GoalConsiderationStatus.CONSIDER,
-                        solvabilityStatus: GoalSolvabilityStatus.UNKNOWN
-                    })),
-                })),
-                productionLinesTargetSchedule: task.production_lines.map(pl => ({
-                    name: pl.name,
-                    schedule: pl.schedule.map(j => ({
-                        jig: j,
-                        considerationStatus: GoalConsiderationStatus.CONSIDER,
-                        solvabilityStatus: GoalSolvabilityStatus.UNKNOWN
-                    }))
-                })),
-                taskState: taskState,
-                currentSection: {
-                    initialState: taskState,
-                    actions: [],
-                    finished: false
-                }
-            }
-        }
-    }),
+    // on(loadProjectSuccess, (state, {project}): BuilderState => {
+    //     const task = BelugaProblemZ.parse(project?.baseTask?.model);
+    //     if(state.section.data !== undefined){
+    //         const fullState = getFullState(state.section.data)
+    //         return {
+    //             ...state,
+    //             project: {state: LoadingState.Done, data: project},
+    //             siteSetUp: getSiteSetUp(task),
+    //             taskState: fullState
+    //         }
+    //     }
+    //     else{
+    //         let taskState = getInitialState(task);
+    //         return {
+    //             ...state,
+    //             project: {state: LoadingState.Done, data: project},
+    //             siteSetUp: getSiteSetUp(task),
+    //             flightTargetSchedule: task.flights.map(f => ({
+    //                 name: f.name, 
+    //                 incoming: f.incoming.map(j => ({
+    //                     jig: j, 
+    //                     considerationStatus: GoalConsiderationStatus.CONSIDER,
+    //                     solvabilityStatus: GoalSolvabilityStatus.UNKNOWN
+    //                 })), 
+    //                 outgoing: f.outgoing.map(j => ({
+    //                     jigType: j, 
+    //                     considerationStatus: GoalConsiderationStatus.CONSIDER,
+    //                     solvabilityStatus: GoalSolvabilityStatus.UNKNOWN
+    //                 })),
+    //             })),
+    //             productionLinesTargetSchedule: task.production_lines.map(pl => ({
+    //                 name: pl.name,
+    //                 schedule: pl.schedule.map(j => ({
+    //                     jig: j,
+    //                     considerationStatus: GoalConsiderationStatus.CONSIDER,
+    //                     solvabilityStatus: GoalSolvabilityStatus.UNKNOWN
+    //                 }))
+    //             })),
+    //             taskState: taskState,
+    //             currentSection: {
+    //                 initialState: taskState,
+    //                 actions: [],
+    //                 finished: false
+    //             }
+    //         }
+    //     }
+    // }),
     on(loadFlightSectionSuccess, (state, {section}): BuilderState => {
-        const fullState = getFullState(state.section.data)
+        const fullState = getFullState(section)
         return {
             ...state,
             section: {state: LoadingState.Done, data: section},
             taskState: fullState,
-            flightsTargetSchedule: section.flightTargetSchedule ? [section.flightTargetSchedule] : null,
+            flightTargetSchedule: section.flightTargetSchedule ? section.flightTargetSchedule : null,
             productionLinesTargetSchedule: section.productionLinesTargetSchedule ?? null,
             plan: {sections: []},
             currentSection: null,
@@ -132,11 +132,11 @@ export const BuilderReducer = createReducer(
     })),
     on(createNewBelugaAction, (state, {action}): BuilderState => ({
         ...state,
-        taskState: state.taskState !== null && state.taskState !== undefined && state.flightsTargetSchedule !== null  &&  state.productionLinesTargetSchedule !== null  && state.siteSetUp !== null ?
+        taskState: state.taskState !== null && state.taskState !== undefined && state.flightTargetSchedule !== null  &&  state.productionLinesTargetSchedule !== null  && state.siteSetUp !== null ?
         applyAction(
             state.taskState, 
             action, 
-            state.flightsTargetSchedule.map(s => getFlightSchedule(s, GoalConsiderationStatus.CONSIDER)), 
+            [getFlightSchedule( state.flightTargetSchedule, GoalConsiderationStatus.CONSIDER)], 
             getProductionSchedule(state.productionLinesTargetSchedule, GoalConsiderationStatus.CONSIDER), 
             state.siteSetUp
         ) : null,
@@ -153,11 +153,11 @@ export const BuilderReducer = createReducer(
             finished: true,
             actions: [...(state.currentSection?.actions ?? []), switchBelugaAction]
         };
-        let finalState = state.taskState !== null && state.taskState !== undefined && state.flightsTargetSchedule !== null  &&  state.productionLinesTargetSchedule !== null  && state.siteSetUp !== null ?
+        let finalState = state.taskState !== null && state.taskState !== undefined && state.flightTargetSchedule !== null  &&  state.productionLinesTargetSchedule !== null  && state.siteSetUp !== null ?
         applyAction(
             state.taskState, 
             switchBelugaAction, 
-            state.flightsTargetSchedule.map(s => getFlightSchedule(s, GoalConsiderationStatus.CONSIDER)), 
+            [getFlightSchedule(state.flightTargetSchedule, GoalConsiderationStatus.CONSIDER)], 
             getProductionSchedule(state.productionLinesTargetSchedule, GoalConsiderationStatus.CONSIDER), 
             state.siteSetUp
         ) : undefined;

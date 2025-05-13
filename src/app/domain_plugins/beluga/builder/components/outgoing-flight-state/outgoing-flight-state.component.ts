@@ -1,13 +1,13 @@
-import { Component, computed, effect, inject, input } from '@angular/core';
-import { TranslocoModule } from '@jsverse/transloco';
-import { JigComponent } from '../../../shared/components/jig/jig.component';
-import { Jig, JigType } from '../../../shared/domain/beluga_problem';
-import { Store } from '@ngrx/store';
-import { selectCurrentFlightSchedule, selectDraggedJig, selectDragInProgress, selectDragSource, selectIsDropTargetFlightOutgoing } from '../../state/builder.selector';
-import { AsyncPipe } from '@angular/common';
 import { CdkDragDrop, CdkDropList } from '@angular/cdk/drag-drop';
-import { BelugaActionType, LoadBeluga, UnloadBeluga } from '../../../shared/domain/beluga_plan';
+import { AsyncPipe } from '@angular/common';
+import { Component, computed, inject } from '@angular/core';
+import { TranslocoModule } from '@jsverse/transloco';
+import { Store } from '@ngrx/store';
+import { JigComponent } from '../../../shared/components/jig/jig.component';
+import { BelugaActionType, LoadBeluga } from '../../../shared/domain/beluga_plan';
+import { Jig } from '../../../shared/domain/beluga_problem';
 import { cancelDrag, createNewBelugaAction, stopDrag } from '../../state/builder.actions';
+import { selectDraggedJig, selectDragInProgress, selectDragSource, selectFlightSchedule, selectIsDropTargetFlightOutgoing, selectJigTypes, selectOutgoingFlightSchedule, selectOutgoingLoadedJigs, selectRemainingOutgoingJigTypes } from '../../state/builder.selector';
 
 @Component({
   selector: 'app-outgoing-flight-state',
@@ -24,13 +24,16 @@ export class OutgoingFlightStateComponent {
 
   store = inject(Store);
 
-  jigsLoaded = input.required<Jig[]>();
-  jigTypesScheduled = input.required<string[]>();
-  jigTypes = input.required<Record<string,JigType>>();
+  jigTypes = this.store.selectSignal(selectJigTypes);
+  
+  schedule = this.store.selectSignal(selectOutgoingFlightSchedule);
+  loaded = this.store.selectSignal(selectOutgoingLoadedJigs);
 
-  remaining = computed(() => this.jigTypesScheduled()?.length - this.jigsLoaded().length)
+  remainingJigTypes = this.store.selectSignal(selectRemainingOutgoingJigTypes);
 
-  currentFlight = this.store.selectSignal(selectCurrentFlightSchedule);
+  numRemaining = computed(() => this.remainingJigTypes()?.length ?? 0)
+
+  currentFlight = this.store.selectSignal(selectFlightSchedule);
 
   dragInProgress$ = this.store.select(selectDragInProgress);
   isDragTarget$ = this.store.select(selectIsDropTargetFlightOutgoing)

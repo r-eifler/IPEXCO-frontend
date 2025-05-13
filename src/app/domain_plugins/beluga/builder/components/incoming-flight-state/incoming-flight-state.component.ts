@@ -1,16 +1,16 @@
-import { Component, computed, effect, inject, input } from '@angular/core';
-import { Jig, JigType } from '../../../shared/domain/beluga_problem';
-import { JigComponent } from '../../../shared/components/jig/jig.component';
-import { TranslocoModule } from '@jsverse/transloco';
+import { CdkDrag, CdkDragDrop, CdkDropList } from '@angular/cdk/drag-drop';
+import { AsyncPipe } from '@angular/common';
+import { Component, computed, inject, input } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { TranslocoModule } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
+import { JigComponent } from '../../../shared/components/jig/jig.component';
 import { BelugaActionType, UnloadBeluga } from '../../../shared/domain/beluga_plan';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { selectAvailableBelugaTrailers, selectCurrentFlightSchedule, selectDragInProgress } from '../../state/builder.selector';
+import { Jig, JigType } from '../../../shared/domain/beluga_problem';
 import { cancelDrag, createNewBelugaAction, startDrag } from '../../state/builder.actions';
-import { CdkDropList, CdkDrag, CdkDragDrop } from '@angular/cdk/drag-drop';
-import { AsyncPipe } from '@angular/common';
+import { selectAvailableBelugaTrailers, selectDragInProgress, selectFlightSchedule, selectIncomingFlightSchedule, selectIncomingUnloaded, selectJigTypes, selectRemainingIncomingJigs } from '../../state/builder.selector';
 
 @Component({
   selector: 'app-incoming-flight-state',
@@ -30,35 +30,33 @@ export class IncomingFlightStateComponent {
 
   store = inject(Store);
 
-  jigs = input.required<Jig[]>();
-  jigTypes = input.required<Record<string,JigType>>();
+  jigTypes = this.store.selectSignal(selectJigTypes);
 
-  remainingNumJigs = computed(() => this.jigs()?.length ?? '?')
+  schedule = this.store.selectSignal(selectIncomingFlightSchedule);
+  loaded = this.store.selectSignal(selectIncomingUnloaded);
 
-  availableTrailers = toSignal(this.store.select(selectAvailableBelugaTrailers));
-  currentFlight = toSignal(this.store.select(selectCurrentFlightSchedule));
+  remainingJigs = this.store.selectSignal(selectRemainingIncomingJigs);
+
+  availableTrailers = this.store.selectSignal(selectAvailableBelugaTrailers);
+  currentFlight = this.store.selectSignal(selectFlightSchedule);
   dragInProgress$ = this.store.select(selectDragInProgress);
+
+  remainingNumJigs = computed(() => this.remainingJigs()?.length ?? '?')
 
   unloadAvailable = computed(() => this.currentFlight() != null && 
     (this.availableTrailers()?.length ?? 0) > 0 && 
-    this.jigs()?.length > 0
+    (this.remainingJigs()?.length ?? 0) > 0
   );
-
-  constructor(){
-    effect(() => console.log(this.availableTrailers()))
-    effect(() => console.log(this.jigs()))
-    effect(() => console.log(this.currentFlight()))
-    effect(() => console.log(this.unloadAvailable()))
-  }
 
   onUnload(){
     let flightName = this.currentFlight()?.name;
     let nextTrailer = this.availableTrailers()?.[0]?.name;
+    let jigName = this.remainingJigs()?.[0].name;
 
-    if(flightName != null && nextTrailer !== undefined){
+    if(flightName != null && nextTrailer !== undefined && jigName !== undefined){
       let unloadAction: UnloadBeluga = {
         name: BelugaActionType.UNLOAD_BELUGA,
-        j: this.jigs()?.[0].name,
+        j: jigName,
         b: flightName,
         t: nextTrailer
       }

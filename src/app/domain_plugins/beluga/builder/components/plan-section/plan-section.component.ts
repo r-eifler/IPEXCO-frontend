@@ -12,7 +12,6 @@ import { SectionCardComponent } from '../../../shared/components/section-card/se
     ActionCardComponent,
     AsyncPipe,
     InitCardComponent,
-    SectionCardComponent,
   ],
   templateUrl: './plan-section.component.html',
   styleUrl: './plan-section.component.scss'
@@ -22,7 +21,6 @@ export class PlanSectionComponent {
 
   store = inject(Store);
 
-  finishedPlanSections$ = this.store.select(selectFinishedPlanSections);
   planSection$ = this.store.select(selectCurrentPlanSection);
 
 }

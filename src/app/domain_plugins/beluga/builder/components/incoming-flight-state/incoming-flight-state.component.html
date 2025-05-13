@@ -11,13 +11,13 @@
     <div class="vert-con"
         cdkDropList
         id="incoming"
-        [cdkDropListData]="jigs()"
+        [cdkDropListData]="remainingJigs()"
         [cdkDropListEnterPredicate]="noDrop">
         <button mat-icon-button (click)="onUnload()" [disabled]="!unloadAvailable()">
             <mat-icon>arrow_forward</mat-icon>
         </button>
-        @if(jigs()?.length > 0){
-            @for(jig of jigs(); track jig.name; let idx = $index){
+        @if(remainingJigs()?.length > 0){
+            @for(jig of remainingJigs(); track jig.name; let idx = $index){
                 @if(idx == 0){
                     <app-jig
                         [jig]="jig"

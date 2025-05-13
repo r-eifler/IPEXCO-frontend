@@ -1,11 +1,4 @@
 <div class="main">
-    <app-incoming-flight-state
-        [jigs]="incoming$ | async"
-        [jigTypes]="jigTypes$ | async"
-    ></app-incoming-flight-state>
-    <app-outgoing-flight-state
-        [jigsLoaded]="outgoing$ | async"
-        [jigTypesScheduled]="jigTypesScheduled$ | async"
-        [jigTypes]="jigTypes$ | async"
-    ></app-outgoing-flight-state>
+    <app-incoming-flight-state></app-incoming-flight-state>
+    <app-outgoing-flight-state></app-outgoing-flight-state>
 </div>

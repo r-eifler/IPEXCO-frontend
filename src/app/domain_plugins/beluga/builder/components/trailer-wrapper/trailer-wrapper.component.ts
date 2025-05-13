@@ -7,7 +7,7 @@ import { Store } from '@ngrx/store';
 import { combineLatest, map, switchMap, take, tap } from 'rxjs';
 import { filterListNotNullOrUndefined, filterNotNullOrUndefined } from 'src/app/shared/common/check_null_undefined';
 import { cancelDrag, createNewBelugaAction, startDrag, stopDrag } from '../../state/builder.actions';
-import { selectAvailableHangarNames, selectCanDeliver, selectCurrentFlightName, selectCurrentFlightNextOutgoingJigType, selectDeliverableJigs, selectDraggedJig, selectDragInProgress, selectDragSource, selectIsDropTargetTrailer, selectMaxPartSize, selectSizeUnit } from '../../state/builder.selector';
+import { selectAvailableHangarNames, selectCanDeliver, selectFlightName, selectCurrentFlightNextOutgoingJigType, selectDeliverableJigs, selectDraggedJig, selectDragInProgress, selectDragSource, selectIsDropTargetTrailer, selectMaxPartSize, selectSizeUnit } from '../../state/builder.selector';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { JigComponent } from '../../../shared/components/jig/jig.component';
 import { Jig, JigType, Side, Trailer } from '../../../shared/domain/beluga_problem';
@@ -53,7 +53,7 @@ export class TrailerWrapperComponent {
     switchMap(t => this.store.select(selectCanDeliver(t.name)))
   );
 
-  currentFlightName$ = this.store.select(selectCurrentFlightName);
+  currentFlightName$ = this.store.select(selectFlightName);
   nextOutgoingType = toSignal(this.store.select(selectCurrentFlightNextOutgoingJigType));
   canLoad = computed(() => this.nextOutgoingType() != null && this.nextOutgoingType() == this.jig()?.type);
 

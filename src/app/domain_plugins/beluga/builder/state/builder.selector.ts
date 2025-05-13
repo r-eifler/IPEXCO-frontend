@@ -56,38 +56,54 @@ export const selectTaskState = createSelector(BuilderFeature.selectTaskState,
 export const selectJigsState = createSelector(selectTaskState, 
     (taskState) => taskState?.jigs);
 
+
+//##########################################
 // flight
 
 export const selectFlightSchedule= createSelector(selectState, 
-    (state) => state.flightsTargetSchedule
-);
+    (state) => state.flightTargetSchedule);
 
-export const selectCurrentFlightIndex = createSelector(selectTaskState, 
-    (taskState) => taskState?.flightIndex);
+export const selectFlightName = createSelector(selectFlightSchedule, 
+    (flight) => flight?.name);
+    
 
-export const selectIncomingFlightState = createSelector(selectTaskState, 
+// Incoming
+
+export const selectIncomingFlightSchedule= createSelector(selectFlightSchedule, 
+    (schedule) => schedule?.incoming);
+
+export const selectIncomingUnloaded = createSelector(selectTaskState, 
     (taskState) => taskState?.incomingUnloaded);
 
-export const selectIncomingFlightStateJigs = createSelector(selectIncomingFlightState, selectJigsState, 
-    (incoming, jigs) => incoming?.map(jn => jigs?.[jn]));
+export const selectRemainingIncomingJigs = createSelector(selectIncomingFlightSchedule, selectIncomingUnloaded, selectJigsState,
+    (schedule, unloaded, jigs) => schedule?.
+        filter(e => e.considerationStatus == GoalConsiderationStatus.CONSIDER && ! unloaded?.includes(e.jig)).
+        map(e => jigs?.[e.jig]).
+        filter(j => j !== undefined)
+);
+ 
+// Outgoing
 
-export const selectOutgoingFlightState = createSelector(selectTaskState, 
-    (taskState) => taskState?.outgoingLoaded);
-
-export const selectOutgoingFlightStateJigs = createSelector(selectOutgoingFlightState, selectJigsState, 
-    (outgoing, jigs) => outgoing?.map(jn => jigs?.[jn]));
-
-export const selectCurrentFlightSchedule = createSelector(selectCurrentFlightIndex, selectFlightSchedule, 
-    (flightIndex, flights) => (flightIndex !== null && flightIndex  !== undefined ? 
-       flights?.[flightIndex ] : null));
-
-export const selectCurrentOutgoingFlightSchedule = createSelector(selectCurrentFlightSchedule, 
+export const selectOutgoingFlightSchedule= createSelector(selectFlightSchedule, 
     (schedule) => schedule?.outgoing);
 
-export const selectCurrentFlightName = createSelector(selectCurrentFlightSchedule, 
-    (flight) => flight?.name);
+export const selectOutgoingLoaded = createSelector(selectTaskState, 
+    (taskState) => taskState?.outgoingLoaded);
 
-export const selectCurrentFlightNextOutgoingJigType = createSelector(selectCurrentFlightSchedule, selectOutgoingFlightState,
+export const selectOutgoingLoadedJigs = createSelector(selectOutgoingLoaded, selectJigsState,
+    (loaded, jigs) => loaded?.map(jn => jigs?.[jn]).filter(j => j !== undefined));
+
+export const selectRemainingOutgoingJigTypes = createSelector(selectOutgoingFlightSchedule, selectOutgoingLoaded,
+    (schedule, loaded) => {
+        const considered = schedule?.filter(e => e.considerationStatus == GoalConsiderationStatus.CONSIDER);
+        if(considered === undefined){
+            return undefined;
+        }
+        return considered.slice(loaded?.length).map(e => e.jigType)
+    }
+);
+
+export const selectCurrentFlightNextOutgoingJigType = createSelector(selectFlightSchedule, selectOutgoingLoaded,
     (schedule, outgoing) => {
         if(outgoing === undefined || schedule === undefined  || schedule === null){
             return null;
@@ -100,8 +116,11 @@ export const selectCurrentFlightNextOutgoingJigType = createSelector(selectCurre
         return schedule.outgoing[nextTypeIndex].jigType
     });
 
-export const selectFlightFinished = createSelector(selectIncomingFlightState, selectOutgoingFlightState, selectCurrentFlightSchedule,
-    (incomingState, outgoingState, schedule) => incomingState?.length == 0  && outgoingState?.length == schedule?.outgoing.length
+
+// general
+
+export const selectFlightFinished = createSelector(selectRemainingIncomingJigs, selectOutgoingLoaded, selectFlightSchedule,
+    (remainingIncoming, outgoingState, schedule) => remainingIncoming?.length == 0  && outgoingState?.length == schedule?.outgoing.length
 )
 
 
