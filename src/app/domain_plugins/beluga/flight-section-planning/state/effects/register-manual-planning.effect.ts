@@ -18,21 +18,17 @@ export class RegisterManualPlanningEffect{
 
     public start$ = createEffect(() => this.actions$.pipe(
         ofType(registerManualPlanning),
-        tap(console.log),
-        concatLatestFrom(() => [this.store.select(selectTask), this.store.select(selectProject)]),
-        switchMap(([{section, method}, task, project]) => {
-            if(task !== undefined &&  section.startState !== undefined && project !== undefined){
-                return [
-                    selectSection({id: section._id}),
-                    updateFlightSection({section: {
+        switchMap(({section, method}) => [
+                selectSection({id: section._id}),
+                updateFlightSection({section: 
+                    {
                         ...section,
                         planMethod: method,
                         status: PlanRunStatus.RUNNING
-                    }})
-                ]
-            }
-            return [startManualPlanningFailure({err: {message: "Task or section not available"}})]
-        })
+                    }
+                })
+            ]
+        )
         
     ))
 }
