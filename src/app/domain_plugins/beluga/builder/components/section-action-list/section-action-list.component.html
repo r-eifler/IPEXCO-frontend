@@ -1,11 +1,9 @@
-@let planSection = (planSection$ | async);
-
 <div class="main">
     <div class="actions">
         <app-init-card
             [select]="false"
         ></app-init-card>
-        @for(action of planSection?.actions; track action){
+        @for(action of actions(); track action){
             <app-action-card
                 [action]="action"
                 [highlight]="false"

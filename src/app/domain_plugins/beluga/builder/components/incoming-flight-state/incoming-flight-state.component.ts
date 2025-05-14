@@ -1,27 +1,28 @@
-import { CdkDrag, CdkDragDrop, CdkDropList } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, CdkDropList } from '@angular/cdk/drag-drop';
 import { AsyncPipe } from '@angular/common';
-import { Component, computed, inject, input } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { Component, computed, effect, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslocoModule } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
-import { JigComponent } from '../../../shared/components/jig/jig.component';
 import { BelugaActionType, UnloadBeluga } from '../../../shared/domain/beluga_plan';
-import { Jig, JigType } from '../../../shared/domain/beluga_problem';
-import { cancelDrag, createNewBelugaAction, startDrag } from '../../state/builder.actions';
-import { selectAvailableBelugaTrailers, selectDragInProgress, selectFlightSchedule, selectIncomingFlightSchedule, selectIncomingUnloaded, selectJigTypes, selectRemainingIncomingJigs } from '../../state/builder.selector';
+import { Jig } from '../../../shared/domain/beluga_problem';
+import { cancelDrag, createNewBelugaAction, skipIncomingJig } from '../../state/builder.actions';
+import { selectAvailableBelugaTrailers, selectDragInProgress, selectFlightSchedule, selectIncomingUnloadFinished, selectJigTypes } from '../../state/builder.selector';
+import { JigStatusIncomingComponent } from '../jig-status-incoming/jig-status-incoming.component';
+import { selectIncomingJigsStatusSchedule, selectNextIncomingJigToUnload } from './incoming-flight-state.selector';
 
 @Component({
   selector: 'app-incoming-flight-state',
   imports: [
-    JigComponent,
+    MatCardModule,
     TranslocoModule,
     MatButtonModule,
     MatIconModule,
-	CdkDropList,
-	CdkDrag,
-	AsyncPipe,
+    JigStatusIncomingComponent,
+    CdkDropList,
+    AsyncPipe,
   ],
   templateUrl: './incoming-flight-state.component.html',
   styleUrl: './incoming-flight-state.component.scss'
@@ -32,26 +33,40 @@ export class IncomingFlightStateComponent {
 
   jigTypes = this.store.selectSignal(selectJigTypes);
 
-  schedule = this.store.selectSignal(selectIncomingFlightSchedule);
-  loaded = this.store.selectSignal(selectIncomingUnloaded);
+  incomingJigsStatusSchedule = this.store.selectSignal(selectIncomingJigsStatusSchedule);
 
-  remainingJigs = this.store.selectSignal(selectRemainingIncomingJigs);
+  nextJig = this.store.selectSignal(selectNextIncomingJigToUnload);
+  finished = this.store.selectSignal(selectIncomingUnloadFinished);
 
   availableTrailers = this.store.selectSignal(selectAvailableBelugaTrailers);
   currentFlight = this.store.selectSignal(selectFlightSchedule);
   dragInProgress$ = this.store.select(selectDragInProgress);
 
-  remainingNumJigs = computed(() => this.remainingJigs()?.length ?? '?')
+  flightIsEmpty = computed(() => this.incomingJigsStatusSchedule()?.length == 0)
 
   unloadAvailable = computed(() => this.currentFlight() != null && 
     (this.availableTrailers()?.length ?? 0) > 0 && 
-    (this.remainingJigs()?.length ?? 0) > 0
+    ! this.finished()
   );
+
+  skipPossible = computed(() => this.nextJig() !== null) 
+
+  constructor(){
+    effect(() => console.log(this.incomingJigsStatusSchedule()))
+    effect(() => console.log(this.jigTypes()))
+  }
+
+  onSkip(){
+    let jigName = this.nextJig()?.name;
+    if(jigName !== undefined){
+      this.store.dispatch(skipIncomingJig({jigName}))
+    }
+  }
 
   onUnload(){
     let flightName = this.currentFlight()?.name;
     let nextTrailer = this.availableTrailers()?.[0]?.name;
-    let jigName = this.remainingJigs()?.[0].name;
+    let jigName = this.nextJig()?.name;
 
     if(flightName != null && nextTrailer !== undefined && jigName !== undefined){
       let unloadAction: UnloadBeluga = {
@@ -76,17 +91,4 @@ export class IncomingFlightStateComponent {
     return false;
   }
 
-  onStartDrag(jig: Jig){
-    let flight = this.currentFlight();
-    if(flight !== undefined && flight !== null){
-    	this.store.dispatch(startDrag({source: {...flight, stageType: "flight"}, jigName: jig.name, sides: ['bside']}))
-    }
-      
-  }
-
-  onCancelDrag(event: CdkDragDrop<Jig>){
-    if(!event.isPointerOverContainer){
-      this.store.dispatch(cancelDrag())
-    }  
-  }
 }

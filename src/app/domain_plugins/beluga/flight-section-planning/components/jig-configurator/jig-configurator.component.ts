@@ -1,6 +1,6 @@
 import { Component, effect, inject, input, output } from '@angular/core';
 import { Jig, JigType } from '../../../shared/domain/beluga_problem';
-import { GoalConsiderationStatus, GoalSolvabilityStatus } from '../../domain/flight-section';
+import { GoalSolvabilityStatus } from '../../domain/flight-section';
 import { JigComponent } from '../../../shared/components/jig/jig.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -19,7 +19,6 @@ import { selectJigMapIncomingFlight } from '../../state/flight-section-planning.
 })
 export class JigConfiguratorComponent {
 
-  considerationStatuses = GoalConsiderationStatus;
   solvabilityStatuses = GoalSolvabilityStatus
 
   store = inject(Store);
@@ -30,15 +29,15 @@ export class JigConfiguratorComponent {
   jig = input.required<Jig>();
   jigType = input.required<JigType>();
   status = input.required<{
-    considerationStatus: GoalConsiderationStatus,
+    skip: boolean,
     solvabilityStatus: GoalSolvabilityStatus
   }>();
 
   showOnlyPart = input<boolean>(false);
 
-  statusChange = output<GoalConsiderationStatus>();
+  statusChange = output<boolean>();
 
-  onStatusChanged(status: GoalConsiderationStatus){
-    this.statusChange.emit(status)
+  onStatusChanged(skip: boolean){
+    this.statusChange.emit(skip)
   }
 }

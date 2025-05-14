@@ -10,7 +10,7 @@ import { RackComponent } from '../rack/rack.component';
 import { ProductionLineComponent } from '../production-line/production-line.component';
 import { NgFor, NgIf } from '@angular/common';
 import { BelugaSiteSetUp } from '../../domain/site_set_up';
-import { FlightTargetSchedule, GoalConsiderationStatus, ProductionLineTargetSchedule } from '../../../flight-section-planning/domain/flight-section';
+import { FlightTargetSchedule, ProductionLineTargetSchedule } from '../../../flight-section-planning/domain/flight-section';
 
 @Component({
   selector: 'app-state-card',
@@ -43,7 +43,7 @@ export class StateCardComponent {
   jigs = computed(() => this.state()?.jigs)
 
   incomingSchedule = computed(() => this.targetFlightSchedule()?.incoming.
-    filter(e => e.considerationStatus == GoalConsiderationStatus.CONSIDER)
+    filter(e => !e.skip)
   )
 
   incoming = computed(() => {

@@ -7,7 +7,7 @@ import { BreadcrumbModule } from 'src/app/shared/components/breadcrumb/breadcrum
 import { PageModule } from 'src/app/shared/components/page/page.module';
 import { FlightStateComponent } from '../../components/flight-state/flight-state.component';
 import { HangarsStateComponent } from '../../components/hangars-state/hangars-state.component';
-import { PlanSectionComponent } from '../../components/plan-section/plan-section.component';
+import { SectionActionListComponent } from '../../components/section-action-list/section-action-list.component';
 import { ProductionLineStateComponent } from '../../components/production-line-state/production-line-state.component';
 import { RacksStateComponent } from '../../components/racks-state/racks-state.component';
 import { SectionControlsComponent } from '../../components/section-controls/section-controls.component';
@@ -25,7 +25,7 @@ import { TrailersStateComponent } from '../../components/trailers-state/trailers
       ProductionLineStateComponent,
       RacksStateComponent,
       TrailersStateComponent,
-      PlanSectionComponent,
+      SectionActionListComponent,
       CdkDropListGroup,
       SectionControlsComponent,
     ],
@@ -41,9 +41,5 @@ import { TrailersStateComponent } from '../../components/trailers-state/trailers
 export class SectionBuilderBaseComponent {
 
     store = inject(Store);
-
-    constructor(){
-      console.log("SectionBuilderBaseComponent")
-    }
 
 }

@@ -7,8 +7,8 @@
     "racks": "racks",
     "jigs": "jigs",
     "manual_planning": "Manual Planning",
-    "incoming_flight": "incoming flight",
-    "outgoing_flight": "outgoing flight",
+    "incoming_flight": "Incoming Flight",
+    "outgoing_flight": "Outgoing Flight",
     "empty_flight": "flight empty",
     "no_jigs_scheduled": "no jigs scheduled",
     "line": "line",
@@ -22,5 +22,9 @@
     "flight_sections_overview": "Flight Sections Overview",
     "save": "save",
     "cancel": "cancel",
-    "plan_version": "plan version"
+    "plan_version": "plan version",
+    "unload_next_jig": "unload next jig",
+    "skip_next_jig": "skip next jig",
+    "skip": "Skip",
+    "unload": "Unload"
 }

@@ -2,7 +2,7 @@ import { Component, computed, input, output } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { Jig, JigType, ProductionLine } from '../../../shared/domain/beluga_problem';
-import { GoalConsiderationStatus, ProductionLineTargetSchedule, updateDeliveryStatuses } from '../../domain/flight-section';
+import { ProductionLineTargetSchedule, updateDeliveryStatuses } from '../../domain/flight-section';
 import { JigConfiguratorComponent } from '../jig-configurator/jig-configurator.component';
 
 @Component({
@@ -16,8 +16,6 @@ import { JigConfiguratorComponent } from '../jig-configurator/jig-configurator.c
   styleUrl: './production-line-configurator.component.scss'
 })
 export class ProductionLineConfiguratorComponent {
-  
-  status = GoalConsiderationStatus;
 
   originalSchedule = input.required<ProductionLine>();
   productionLineTargetSchedule = input.required<ProductionLineTargetSchedule>();
@@ -32,7 +30,7 @@ export class ProductionLineConfiguratorComponent {
       return this.productionLineTargetSchedule().schedule.map(e => ({
         jig: this.jigs()?.[e.jig],
         status: {
-          considerationStatus: e.considerationStatus,
+          skip: e.skip,
           solvabilityStatus: e.solvabilityStatus
         }
       }))
@@ -48,7 +46,7 @@ export class ProductionLineConfiguratorComponent {
   //   this.targetSchedule.emit(schedule);
   // }
   
-  setStatus(index: number, status: GoalConsiderationStatus){
+  setStatus(index: number, skip: boolean){
     const schedule = this.productionLineTargetSchedule().schedule;
     const newProductionSchedule = {
       name: this.productionLineTargetSchedule().name,
@@ -56,7 +54,7 @@ export class ProductionLineConfiguratorComponent {
         ...schedule.slice(0,index),
         {
           ...schedule[index],
-          considerationStatus: status,
+          skip,
         },
         ...schedule.slice(index + 1)
       ],

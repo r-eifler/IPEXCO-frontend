@@ -1,11 +1,17 @@
 import { createSelector } from "@ngrx/store";
-import { BuilderFeature } from "./builder.feature";
-import { BelugaProblemZ, getJigSize, HangarZ, occupiedRackSpace, Side } from "../../shared/domain/beluga_problem";
 import { memoizeWith } from "ramda";
-import { GoalConsiderationStatus } from "../../flight-section-planning/domain/flight-section";
+import { getJigSize, occupiedRackSpace, Side } from "../../shared/domain/beluga_problem";
+import { BuilderFeature } from "./builder.feature";
 
 
 const selectState = BuilderFeature.selectBuilderFeatureState
+
+
+// Sections
+
+export const selectSection = createSelector(selectState, 
+    (state) => state.section.data
+);
 
 
 // Project/Task
@@ -14,19 +20,12 @@ export const selectProject = createSelector(selectState,
     (state) => state.project.data
 );
 
-export const selectSiteSetUp = createSelector(selectState, 
-    (state) => state.siteSetUp
+export const selectSiteSetUp = createSelector(selectSection, 
+    (section) => section?.siteSetUp
 );
 
 export const selectJigTypes= createSelector(selectSiteSetUp, 
-    (task) => task?.jig_types);
-
-// Sections
-
-export const selectSection = createSelector(selectState, 
-    (state) => state.section.data
-);
-
+    (siteSetUp) => siteSetUp?.jig_types);
 
 // Units
 
@@ -39,13 +38,10 @@ export const selectMaxPartSize = createSelector(selectSiteSetUp,
 
 // Plan
 
-export const selectFinishedPlanSections = createSelector(BuilderFeature.selectPlan, 
-    (plan) => plan);
-
-export const selectCurrentPlanSection = createSelector(BuilderFeature.selectCurrentSection, 
+export const selectCurrentPlanSection = createSelector(BuilderFeature.selectSection, 
     (section) => section);
 
-export const selectCurrentSectionActions = createSelector(selectCurrentPlanSection, 
+export const selectActions = createSelector(selectSection, 
     (section) => section?.actions);
 
 // Task State
@@ -60,8 +56,8 @@ export const selectJigsState = createSelector(selectTaskState,
 //##########################################
 // flight
 
-export const selectFlightSchedule= createSelector(selectState, 
-    (state) => state.flightTargetSchedule);
+export const selectFlightSchedule= createSelector(selectSection, 
+    (section) => section?.flightTargetSchedule);
 
 export const selectFlightName = createSelector(selectFlightSchedule, 
     (flight) => flight?.name);
@@ -77,11 +73,14 @@ export const selectIncomingUnloaded = createSelector(selectTaskState,
 
 export const selectRemainingIncomingJigs = createSelector(selectIncomingFlightSchedule, selectIncomingUnloaded, selectJigsState,
     (schedule, unloaded, jigs) => schedule?.
-        filter(e => e.considerationStatus == GoalConsiderationStatus.CONSIDER && ! unloaded?.includes(e.jig)).
+        filter(e => !e.skip && ! unloaded?.includes(e.jig)).
         map(e => jigs?.[e.jig]).
         filter(j => j !== undefined)
 );
  
+export const selectIncomingUnloadFinished = createSelector(selectRemainingIncomingJigs, 
+    (remaining) => remaining?.length == 0);
+
 // Outgoing
 
 export const selectOutgoingFlightSchedule= createSelector(selectFlightSchedule, 
@@ -95,7 +94,7 @@ export const selectOutgoingLoadedJigs = createSelector(selectOutgoingLoaded, sel
 
 export const selectRemainingOutgoingJigTypes = createSelector(selectOutgoingFlightSchedule, selectOutgoingLoaded,
     (schedule, loaded) => {
-        const considered = schedule?.filter(e => e.considerationStatus == GoalConsiderationStatus.CONSIDER);
+        const considered = schedule?.filter(e => !e.skip);
         if(considered === undefined){
             return undefined;
         }
@@ -108,7 +107,7 @@ export const selectCurrentFlightNextOutgoingJigType = createSelector(selectFligh
         if(outgoing === undefined || schedule === undefined  || schedule === null){
             return null;
         }
-        let hardGoalsOutgoing = schedule.outgoing.filter(j => j.considerationStatus == GoalConsiderationStatus.CONSIDER)
+        let hardGoalsOutgoing = schedule.outgoing.filter(j => !j.skip)
         let nextTypeIndex = outgoing.length;
         if(nextTypeIndex == undefined || hardGoalsOutgoing.length === nextTypeIndex){
             return null;
@@ -119,8 +118,8 @@ export const selectCurrentFlightNextOutgoingJigType = createSelector(selectFligh
 
 // general
 
-export const selectFlightFinished = createSelector(selectRemainingIncomingJigs, selectOutgoingLoaded, selectFlightSchedule,
-    (remainingIncoming, outgoingState, schedule) => remainingIncoming?.length == 0  && outgoingState?.length == schedule?.outgoing.length
+export const selectFlightFinished = createSelector(selectIncomingUnloadFinished, selectOutgoingLoaded, selectFlightSchedule,
+    (incomingFinished, outgoingState, schedule) => incomingFinished && outgoingState?.length == schedule?.outgoing.length
 )
 
 
@@ -266,8 +265,8 @@ export const selectAvailableHangarNames = createSelector(selectHangars, selectHa
 
 // ProductionLine 
 
-export const selectProductionLineSchedule = createSelector(selectState, 
-    (state) => state.productionLinesTargetSchedule
+export const selectProductionLineSchedule = createSelector(selectSection, 
+    (section) => section?.productionLinesTargetSchedule
 );
 
 export const selectProductionLinesState = createSelector(selectTaskState, 

@@ -1,14 +1,12 @@
-import { Component, computed, effect, inject } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
+import { MatIconModule } from '@angular/material/icon';
+import { RouterLink } from '@angular/router';
 import { TranslocoModule } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
-import { DialogModule } from 'src/app/shared/components/dialog/dialog.module';
-import { selectSelectedSection, selectTask } from '../../state/flight-section-planning.selector';
-import { SinglePlanViewComponent } from '../../../shared/view/single-plan-view/single-plan-view.component';
-import { PageModule } from 'src/app/shared/components/page/page.module';
 import { BreadcrumbModule } from 'src/app/shared/components/breadcrumb/breadcrumb.module';
-import { RouterLink } from '@angular/router';
-import { MatIconModule } from '@angular/material/icon';
+import { PageModule } from 'src/app/shared/components/page/page.module';
 import { SectionPlanComponent } from '../../../shared/view/section-plan/section-plan.component';
+import { selectSelectedSection } from '../../state/flight-section-planning.selector';
 
 @Component({
   selector: 'app-plan-inspector',

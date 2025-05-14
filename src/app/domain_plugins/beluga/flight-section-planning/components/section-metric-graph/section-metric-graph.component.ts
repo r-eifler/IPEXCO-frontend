@@ -40,7 +40,7 @@ export class SectionMetricGraphComponent {
       name: bs.name,
       series: bs.sections?.filter(s => s.status === PlanRunStatus.SOLVED).
         map((s, index) => ({
-            value: metricsFunctionMap[this.metric()](s, this.task()),
+            value: metricsFunctionMap[this.metric()](s),
             name: index
         })) ?? []
     }))

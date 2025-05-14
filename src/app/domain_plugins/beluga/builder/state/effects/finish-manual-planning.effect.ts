@@ -19,14 +19,13 @@ export class FinishManualPlanningEffect{
 
     public start$ = createEffect(() => this.actions$.pipe(
         ofType(finishManualPlanning),
-        tap(console.log),
         concatLatestFrom(() => [this.store.select(selectSection), this.store.select(selectProject)]),
-        switchMap(([{actions}, section, project]) => {
-            if(actions !== undefined &&  section !== undefined && project !== undefined){
+        switchMap(([{actions}, section]) => {
+            if(actions !== undefined &&  section !== undefined){
                 return [
                     updateFlightSection({section:{
                         ...section,
-                        actions: [...actions, {name: BelugaActionType.SWITCH_TO_NEXT_BELUGA} as SwitchBeluga],
+                        // actions: [...actions, {name: BelugaActionType.SWITCH_TO_NEXT_BELUGA} as SwitchBeluga],
                         status: PlanRunStatus.SOLVED,
                     }}),
                 ]

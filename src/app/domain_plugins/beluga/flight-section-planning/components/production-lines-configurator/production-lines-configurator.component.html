@@ -1,5 +1,5 @@
 <div class="container">
-    @for(plTS of displaySchedules(); track plTS.name; let idx = $index){
+    @for(plTS of productionLineTargetSchedules(); track plTS.name; let idx = $index){
         <app-production-line-configurator
             [originalSchedule]="originalSchedules()?.[idx]"
             [productionLineTargetSchedule]="plTS"

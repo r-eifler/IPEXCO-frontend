@@ -2,7 +2,7 @@ import { Component, computed, input, output } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { Flight, Jig, JigType } from '../../../shared/domain/beluga_problem';
-import { FlightTargetSchedule, GoalConsiderationStatus } from '../../domain/flight-section';
+import { FlightTargetSchedule } from '../../domain/flight-section';
 import { JigConfiguratorComponent } from '../jig-configurator/jig-configurator.component';
 
 @Component({
@@ -17,8 +17,6 @@ import { JigConfiguratorComponent } from '../jig-configurator/jig-configurator.c
 })
 export class IncomingFlightConfiguratorComponent {
 
-  status = GoalConsiderationStatus;
-
   originalFlight = input.required<Flight>();
   flightTargetSchedule = input.required<FlightTargetSchedule>();
   jigs = input.required<Record<string,Jig>>();
@@ -29,7 +27,7 @@ export class IncomingFlightConfiguratorComponent {
   schedule = computed(() => this.flightTargetSchedule()?.incoming.map(e => ({
         jig: this.jigs()?.[e.jig],
         status: {
-          considerationStatus: e.considerationStatus,
+          skip: e.skip,
           solvabilityStatus: e.solvabilityStatus
         }
       }))
@@ -50,14 +48,14 @@ export class IncomingFlightConfiguratorComponent {
   //   this.targetSchedule.emit(newFlightSchedule);
   // }
   
-  setStatus(index: number, status: GoalConsiderationStatus){
+  setStatus(index: number, skip: boolean){
     const newFlightSchedule = {
       name: this.flightTargetSchedule().name,
       incoming: [
         ...this.flightTargetSchedule().incoming.slice(0,index),
         {
           ...this.flightTargetSchedule().incoming[index],
-          considerationStatus: status
+          skip,
         },
         ...this.flightTargetSchedule().incoming.slice(index + 1)
       ],

@@ -7,6 +7,7 @@ import { LabelModule } from 'src/app/shared/components/label/label.module';
 import { computeRackOccupancyRate, computeSwaps } from '../../domain/metrics';
 import { selectActiveBranchActions, selectActiveBranchNumberFinishedFlights, selectActiveBranchSections, selectInitialState, selectNumFlights, selectNumJigs, selectNumRacks, selectTask } from '../../state/flight-section-planning.selector';
 import { MatIconModule } from '@angular/material/icon';
+import { sum } from 'ramda';
 
 @Component({
   selector: 'app-section-tree-hero',
@@ -39,14 +40,17 @@ export class SectionTreeHeroComponent {
   swaps = computed(() => computeSwaps(this.activeBranchActions() ?? []));
 
   rackOccupancyRate = computed(() => {
-
-    const task = this.task();
-    const startState  = this.initialState();
-    if(task === undefined || startState === undefined){
+    const sections = this.sections();
+    if(sections == undefined){
       return undefined;
     }
-    const v = computeRackOccupancyRate(task, startState, this.activeBranchActions() ?? [])
-    return v !== undefined ? v.toFixed(2) : undefined;
+    const occRates: (number | undefined)[] = []
+    this.sections()?.forEach(
+      section => occRates.push(computeRackOccupancyRate(section, section.actions))
+    )
+    const sumRates = sum(occRates.filter(v => v !== undefined));
+    const res = sumRates / sections.length
+    return res.toFixed(2);
   });
 
 }

@@ -4,11 +4,10 @@ import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { environment } from "src/environments/environment";
 import { array } from "zod";
-import { initialDeliveryStatuses, filterUpTo, FlightPlanTree, FlightPlanTreeBase, FlightPlanTreeZ, FlightSection, FlightSectionBase, FlightSectionZ, FlightTargetSchedule, getJigsOnSiteFromState, GoalConsiderationStatus, GoalSolvabilityStatus, ProductionLineTargetSchedule, projectTaskToSection, projectTaskToState, initConsiderationStatusesNotOnSiteReverse, updateDeliveryStatuses } from "../domain/flight-section";
-import { BelugaState, getInitialState } from "../../shared/domain/beluga_state";
-import { BelugaSiteSetUp, BelugaSiteState, getSiteSetUp } from "../../shared/domain/site_set_up";
 import { BelugaProblem } from "../../shared/domain/beluga_problem";
-import { state } from "@angular/animations/animation_player.d-CTCg5nkL";
+import { getInitialState } from "../../shared/domain/beluga_state";
+import { BelugaSiteSetUp, BelugaSiteState, getSiteSetUp } from "../../shared/domain/site_set_up";
+import { filterUpTo, FlightPlanTree, FlightPlanTreeBase, FlightPlanTreeZ, FlightSection, FlightSectionBase, FlightSectionZ, FlightTargetSchedule, getJigsOnSiteFromState, GoalSolvabilityStatus, initialDeliveryStatuses, ProductionLineTargetSchedule, updateDeliveryStatuses } from "../domain/flight-section";
 
 
 interface initData {
@@ -82,12 +81,12 @@ export class FlightPlanTreeService{
           name: flight.name,
           incoming: flight.incoming.map(jn => ({
             jig: jn, 
-            considerationStatus: GoalConsiderationStatus.CONSIDER,
+            skip: false,
             solvabilityStatus: GoalSolvabilityStatus.UNKNOWN
           })),
           outgoing: flight.outgoing.map(jt => ({
             jigType: jt, 
-            considerationStatus: GoalConsiderationStatus.CONSIDER,
+            skip: false,
             solvabilityStatus: GoalSolvabilityStatus.UNKNOWN,
           })),
         },

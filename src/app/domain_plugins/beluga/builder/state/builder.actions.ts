@@ -38,6 +38,10 @@ export const cancelManualPlanning = createAction('[beluga-builder] cancel manual
 export const cancelManualPlanningFailure = createAction('[beluga-builder] cancel manual planning failure', props<{err: any}>());
 
 
+// Flight Schedule updates
+
+export const skipIncomingJig = createAction('[beluga-builder] skipIncomingJig', props<{jigName: string}>());
+
 // Beluga actions
 
 export const createNewBelugaAction = createAction('[beluga-builder] new Beluga action', props<{action: BelugaAction}>());

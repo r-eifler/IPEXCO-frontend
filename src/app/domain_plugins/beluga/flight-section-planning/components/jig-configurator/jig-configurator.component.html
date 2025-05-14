@@ -3,7 +3,7 @@
         <span class="index">{{ (index() ?? 0) + 1}}</span>
     }
     <app-jig
-        [class.notUsed]="status()?.considerationStatus == considerationStatuses.SKIP"
+        [class.notUsed]="status()?.skip"
         [jig]="jig()"  
         [jigType]="jigType()"
         [incomingFlight]="incomingFlightJigMap()?.[jig().name] ?? null"
@@ -23,13 +23,13 @@
             <mat-icon class="info">question_mark</mat-icon>
         }
     }
-    @if(status()?.considerationStatus == considerationStatuses.CONSIDER){
-        <button mat-icon-button (click)="onStatusChanged(considerationStatuses.SKIP)">
+    @if(!status()?.skip){
+        <button mat-icon-button (click)="onStatusChanged(true)">
             <mat-icon>step_over</mat-icon>
         </button>
     }
-    @if(status()?.considerationStatus == considerationStatuses.SKIP){
-        <button mat-icon-button (click)="onStatusChanged(considerationStatuses.CONSIDER)">
+    @else{
+        <button mat-icon-button (click)="onStatusChanged(false)">
             <mat-icon>check</mat-icon>
         </button>
     }

@@ -9,23 +9,23 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { TranslocoModule } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
+import { sum } from 'ramda';
 import { take } from 'rxjs';
 import { StepStatusColorPipe } from 'src/app/iterative_planning/domain/pipe/step-status-color.pipe';
 import { StepStatusNamePipe } from 'src/app/iterative_planning/domain/pipe/step-status-name.pipe';
 import { PlanRunStatus } from 'src/app/iterative_planning/domain/plan';
 import { LabelModule } from 'src/app/shared/components/label/label.module';
 import { Flight } from '../../../shared/domain/beluga_problem';
-import { FlightSection, getFullState, getTaskFromSection, GoalConsiderationStatus } from '../../domain/flight-section';
+import { FlightSection } from '../../domain/flight-section';
 import { computeRackOccupancyRate, computeSwaps } from '../../domain/metrics';
 import { PlanMethod, PlanMethodType } from '../../domain/plan_method';
+import { PlanMethodTypeIconPipe } from '../../pipe/plan-method-type-icon.pipe';
+import { PlanMethodTypeNamePipe } from '../../pipe/plan-method-type-name.pipe';
 import { createNewBranch, registerManualPlanning, startAutomaticPlanning } from '../../state/flight-section-planning.actions';
 import { selectActiveBranchRemainingNumberFlights, selectSupportedPlanners, selectTask } from '../../state/flight-section-planning.selector';
 import { PlanInspectorComponent } from '../../views/plan-inspector/plan-inspector.component';
-import { SectionPlanMethodDialogComponent } from '../section-plan-method-dialog/section-plan-method-dialog.component';
 import { BranchNameDialogComponent } from '../branch-name-dialog/branch-name-dialog.component';
-import { PlanMethodTypeNamePipe } from '../../pipe/plan-method-type-name.pipe';
-import { PlanMethodTypeIconPipe } from '../../pipe/plan-method-type-icon.pipe';
-import { sum } from 'ramda';
+import { SectionPlanMethodDialogComponent } from '../section-plan-method-dialog/section-plan-method-dialog.component';
 
 @Component({
   selector: 'app-section-card',
@@ -63,9 +63,13 @@ export class SectionCardComponent {
   originalFlight = input.required<Flight>();
 
   numOutgoing = computed(() => this.section()?.flightTargetSchedule?.outgoing.length ?? undefined)
+  numOutgoingConsidered = computed(() => this.section()?.flightTargetSchedule?.outgoing.filter(e => !e.skip).length ?? undefined)
+
   numIncoming = computed(() => this.section()?.flightTargetSchedule?.incoming.length ?? undefined)
+  numIncomingConsidered = computed(() => this.section()?.flightTargetSchedule?.incoming.filter(e => !e.skip).length ?? undefined)
+
   numPossibleDeliveries = computed(() => sum(this.section()?.productionLinesTargetSchedule?.
-    map(pl => ({...pl, schedule: pl.schedule.filter(e => e.considerationStatus == GoalConsiderationStatus.CONSIDER)})).
+    map(pl => ({...pl, schedule: pl.schedule.filter(e => !e.skip)})).
     map(pl => pl.schedule.length) ?? []))
   numOverallDeliveries = computed(() => sum(this.section()?.productionLinesTargetSchedule?.map(pl => pl.schedule.length) ?? []))
 
@@ -87,12 +91,7 @@ export class SectionCardComponent {
     if(this.hasNoPlan()){
       return undefined;
     }
-    const task = getTaskFromSection(this.section());
-    const startState  = getFullState(this.section());
-    if(task === undefined || startState === undefined){
-      return undefined;
-    }
-    const v = computeRackOccupancyRate(task, startState, this.section()?.actions ?? []);
+    const v = computeRackOccupancyRate(this.section(), this.section()?.actions ?? []);
     return v !== undefined ? v.toFixed(2) : undefined;
   });
 

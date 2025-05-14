@@ -1,9 +1,15 @@
+@use "../../../../../../variables.scss" as vars;
+
 .container{
     display: flex;
     flex-direction: column;
     gap: var(--spacing-100);
-    border: solid 1px #999;
     padding: var(--spacing-100);
+
+    border: solid;
+    border-width: 1px;
+    @include vars.border_color();
+    border-radius: var(--spacing-200);
 }
 
 .container.cdk-drop-list-dragging .example-box:not(.cdk-drag-placeholder) {

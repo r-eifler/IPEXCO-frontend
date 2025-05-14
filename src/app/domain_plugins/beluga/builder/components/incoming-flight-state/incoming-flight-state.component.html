@@ -1,49 +1,41 @@
-<div class="main" *transloco="let t"
-    [class.noDragTarget]="(dragInProgress$ | async)"
-    (cdkDropListDropped)="drop($event)"
->
-    <div>
-        <p><span class="header">{{t('b.incoming_flight')}}</span></p>
-    </div>
-    <div>
-        <span>{{ t('b.remaining_jigs') }}: {{remainingNumJigs()}}</span>
-    </div>
-    <div class="vert-con"
+<mat-card appearance="outlined" *transloco="let t">
+    <mat-card-header>
+        <mat-icon mat-card-avatar>flight_land</mat-icon>
+        <mat-card-title>{{t('b.incoming_flight')}}</mat-card-title>
+    </mat-card-header>
+    <mat-card-content
+        class="content"
         cdkDropList
         id="incoming"
-        [cdkDropListData]="remainingJigs()"
-        [cdkDropListEnterPredicate]="noDrop">
-        <button mat-icon-button (click)="onUnload()" [disabled]="!unloadAvailable()">
-            <mat-icon>arrow_forward</mat-icon>
-        </button>
-        @if(remainingJigs()?.length > 0){
-            @for(jig of remainingJigs(); track jig.name; let idx = $index){
-                @if(idx == 0){
-                    <app-jig
-                        [jig]="jig"
-                        [jigType]="jigTypes()?.[jig.type]"
-                        [unitSize]="true"
-                        [draggable]="true"
-                        cdkDrag
-                        [cdkDragData]="jig"
-                        (cdkDragStarted)="onStartDrag(jig)"
-                        (cdkDragDropped)="onCancelDrag($event)"
-                        cdkDragBoundary=".beluga-boundary"
-                    >
-                    </app-jig>
-                }
-                @else{
-                    <app-jig
-                    [jig]="jig"
-                    [jigType]="jigTypes()?.[jig.type]"
-                    [unitSize]="true"
-                >
-                </app-jig>
-                }
+        [cdkDropListData]="incomingJigsStatusSchedule()"
+        [cdkDropListEnterPredicate]="noDrop"
+        [class.noDragTarget]="(dragInProgress$ | async)"
+        (cdkDropListDropped)="drop($event)"
+    >
+        @if(!flightIsEmpty()){
+            @for(e of incomingJigsStatusSchedule(); track e.jig?.name; let idx = $index){ 
+                <app-jig-status-incoming
+                    [index]="idx"
+                    [jig]="e.jig"
+                    [jigType]="jigTypes()?.[e.jig?.type]"
+                    [status]="e.status"
+                    [flight]="currentFlight()"
+                ></app-jig-status-incoming>
             }
         }
         @else{
             <p>{{t('b.empty_flight')}}</p>
         }
-    </div>
-</div>
+    </mat-card-content>
+    <mat-card-actions class="actions">
+        <button mat-button (click)="onSkip()" [disabled]="!skipPossible()">
+            {{t('b.skip')}}
+            <mat-icon>step_over</mat-icon>
+        </button>
+        <button mat-flat-button (click)="onUnload()" [disabled]="!unloadAvailable()">
+            {{t('b.unload')}}
+            <mat-icon>arrow_forward</mat-icon>
+        </button>
+    </mat-card-actions>
+</mat-card>
+

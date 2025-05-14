@@ -4,7 +4,7 @@ import { TranslocoModule } from '@jsverse/transloco';
 import { ControlsComponent } from '../controls/controls.component';
 import { FlightStateComponent } from '../flight-state/flight-state.component';
 import { HangarsStateComponent } from '../hangars-state/hangars-state.component';
-import { PlanSectionComponent } from '../plan-section/plan-section.component';
+import { SectionActionListComponent } from '../section-action-list/section-action-list.component';
 import { ProductionLineStateComponent } from '../production-line-state/production-line-state.component';
 import { RacksStateComponent } from '../racks-state/racks-state.component';
 import { TrailersStateComponent } from '../trailers-state/trailers-state.component';
@@ -17,7 +17,7 @@ import { TrailersStateComponent } from '../trailers-state/trailers-state.compone
     ProductionLineStateComponent,
     RacksStateComponent,
     TrailersStateComponent,
-    PlanSectionComponent,
+    SectionActionListComponent,
     CdkDropListGroup,
     ControlsComponent,
     TranslocoModule

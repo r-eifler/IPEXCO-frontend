@@ -7,8 +7,8 @@
     "racks": "Ablagen",
     "jigs": "Montagegestelle",
     "manual_planning": "Manuelle Planung",
-    "incoming_flight": "ankommender Flug",
-    "outgoing_flight": "abgehender Flug",
+    "incoming_flight": "Ankommender Flug",
+    "outgoing_flight": "Abgehender Flug",
     "empty_flight": "Flug leer",
     "no_jigs_scheduled": "keine Montagegestelle geplant",
     "line": "Linie",
@@ -21,5 +21,9 @@
     "actions": "Aktionen",
     "flight_sections_overview": "Flugabschnitte Übersicht",
     "save": "speichern",
-    "cancel": "abbrechen"
+    "cancel": "abbrechen",
+    "unload_next_jig": "lade nächstes Montagegestelle ab",
+    "skip_next_jig": "überspringe nächstes Montagegestelle",
+    "skip": "Überspringen",
+    "unload": "Abladen"
 }
