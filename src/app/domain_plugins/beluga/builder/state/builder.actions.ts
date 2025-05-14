@@ -41,7 +41,7 @@ export const cancelManualPlanningFailure = createAction('[beluga-builder] cancel
 // Flight Schedule updates
 
 export const skipIncomingJig = createAction('[beluga-builder] skipIncomingJig', props<{jigName: string}>());
-export const skipOutgoingJigType = createAction('[beluga-builder] skipIncomingJig', props<{jigType: string}>());
+export const skipOutgoingJigType = createAction('[beluga-builder] skipIncomingJig', props<{jigType: string, index: number}>());
 
 // Beluga actions
 

@@ -7,10 +7,7 @@ export type Side = 'bside' | 'fside'
 export const TrailerZ = object({
     name: string(),
     jig: nullable(string()),
-}).transform(o => ({
-    ...o,
-    stageType: 'trailer' as const,
-}));
+});
 
 export type Trailer = zinfer<typeof TrailerZ>;
 
@@ -34,10 +31,7 @@ export const RackZ = object({
     name: string(),
     size: number(),
     jigs: array(string())
-}).transform(o => ({
-    ...o,
-    stageType: 'rack' as const,
-}));
+});
 
 export type Rack = zinfer<typeof RackZ>;
 
@@ -49,10 +43,7 @@ export const ProductionLineZ = object({
 export const HangarZ = object({
     name: string(),
     jig: nullable(string()),
-}).transform(o => ({
-    ...o,
-    stageType: 'hangar' as const,
-}));
+});
 
 export type Hangar = zinfer<typeof HangarZ>;
 
@@ -62,10 +53,7 @@ export const FlightZ = object({
     name: string(),
     incoming: array(string()),
     outgoing: array(string())
-}).transform(o => ({
-    ...o,
-    stageType: 'flight' as const,
-}));
+});
 
 export type Flight = zinfer<typeof FlightZ>;
 

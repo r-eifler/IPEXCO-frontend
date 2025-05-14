@@ -209,22 +209,18 @@ export function getTaskFromSection(section: FlightSection){
         racks: setUp.racks.filter(r => r.status == SiteStatus.IN_USE).map(r => ({
             ...r, 
             jigs: state.racks[r.name],
-            stageType: "rack",
         })),
         hangars: setUp.hangars.filter(h => h.status == SiteStatus.IN_USE).map(h => ({
             ...h, 
             jig: state.hangars[h.name],
-            stageType: "hangar",
         })),
         trailers_beluga: setUp.belugaTrailers.filter(h => h.status == SiteStatus.IN_USE).map(t => ({
             ...t, 
             jig: state.trailers[t.name],
-            stageType: "trailer",
         })),
         trailers_factory: setUp.factoryTrailers.filter(h => h.status == SiteStatus.IN_USE).map(t => ({
             ...t, 
             jig: state.trailers[t.name],
-            stageType: "trailer",
         })),
         jig_types: setUp.jig_types,
         production_lines: section.productionLinesTargetSchedule.map(pl => ({
@@ -235,7 +231,6 @@ export function getTaskFromSection(section: FlightSection){
             ...section.flightTargetSchedule,
             incoming: section.flightTargetSchedule.incoming.filter(j => !j.skip).map(j => j.jig),
             outgoing: section.flightTargetSchedule.outgoing.filter(j => !j.skip).map(j => j.jigType),
-            stageType: 'flight'
         }]
     }
     return task;

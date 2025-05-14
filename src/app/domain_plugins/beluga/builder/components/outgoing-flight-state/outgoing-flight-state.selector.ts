@@ -1,5 +1,6 @@
 import { createSelector } from "@ngrx/store";
 import { selectJigsState, selectJigTypes, selectOutgoingFlightSchedule, selectOutgoingLoaded, selectRemainingOutgoingJigTypes } from "../../state/builder.selector";
+import { truncate } from "fs";
 
 export const selectNextOutgoingJigTypeToLoad = createSelector(selectRemainingOutgoingJigTypes, 
     (remaining) => (remaining?.length ?? 0 >= 0 ? remaining?.[0] : null) ?? null
@@ -29,7 +30,13 @@ export const selectOutGoingStatusSchedule = createSelector(selectOutgoingFlightS
             if(loaded){
               loadedIndex++;
             }
-            nextFound = elem.status.next;
+            if(elem.status.next){
+              nextFound = true;
+            }
             return elem
         })
 });
+
+export const selectNextOutgoingJigTypeIndex = createSelector(selectOutGoingStatusSchedule, 
+  (statusSchedule) => statusSchedule?.findIndex(e => e.status.next)
+);

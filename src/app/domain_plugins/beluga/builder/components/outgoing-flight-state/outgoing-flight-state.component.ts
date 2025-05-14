@@ -13,7 +13,7 @@ import { MatCardModule } from '@angular/material/card';
 import { InfoComponent } from 'src/app/shared/components/info/info/info.component';
 import { MatIconModule } from '@angular/material/icon';
 import { JigTypeStatusOutgoingComponent } from '../jig-type-status-outgoing/jig-type-status-outgoing.component';
-import { selectNextOutgoingJigTypeToLoad, selectOutGoingStatusSchedule } from './outgoing-flight-state.selector';
+import { selectNextOutgoingJigTypeIndex, selectNextOutgoingJigTypeToLoad, selectOutGoingStatusSchedule } from './outgoing-flight-state.selector';
 
 @Component({
   selector: 'app-outgoing-flight-state',
@@ -35,6 +35,8 @@ export class OutgoingFlightStateComponent {
   store = inject(Store);
 
   nextJigType = this.store.selectSignal(selectNextOutgoingJigTypeToLoad);
+  nextJigTypeIndex = this.store.selectSignal(selectNextOutgoingJigTypeIndex);
+
   outgoingJigsStatusSchedule = this.store.selectSignal(selectOutGoingStatusSchedule);
   
   currentFlight = this.store.selectSignal(selectFlightSchedule);
@@ -58,8 +60,9 @@ export class OutgoingFlightStateComponent {
 
   onSkip(){
     let jigType = this.nextJigType();
-    if(jigType !== null){
-      this.store.dispatch(skipOutgoingJigType({jigType}))
+    let index = this.nextJigTypeIndex();
+    if(jigType !== null && index !== undefined){
+      this.store.dispatch(skipOutgoingJigType({jigType, index}))
     }
   }
 

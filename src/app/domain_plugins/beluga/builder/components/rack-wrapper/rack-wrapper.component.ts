@@ -36,7 +36,7 @@ export class RackWrapperComponent {
 
   store = inject(Store);
 
-  rack = input.required<{size: number, jigs: Jig[]} & DragSource>();
+  rack = input.required<{name: string, size: number, jigs: Jig[]}>();
   jigTypes = input.required<Record<string,JigType>>();
 
   name = computed(() => this.rack()?.name.replace('rack',''))
@@ -66,6 +66,7 @@ export class RackWrapperComponent {
   draggedSides = this.store.selectSignal(selectDraggedSides);
 
   drop(event: CdkDragDrop<Jig[]>){
+    console.log("Drop Rack")
     if (event.previousContainer === event.container) {
       this.store.dispatch(cancelDrag());
       return;
@@ -87,12 +88,12 @@ export class RackWrapperComponent {
       console.log(action);
   
       this.store.dispatch(createNewBelugaAction({action}));
-      this.store.dispatch(stopDrag({target: this.rack()}))
+      this.store.dispatch(stopDrag({target: {...this.rack(), stageType: 'rack'}}))
     }
   }
 
   onStartDrag(jig: Jig, sides: Side[]){
-    this.store.dispatch(startDrag({source: this.rack(), jigName: jig.name, sides}))
+    this.store.dispatch(startDrag({source: {...this.rack(), stageType: 'rack'}, jigName: jig.name, sides}))
   }
 
   onCancelDrag(event: CdkDragDrop<Jig>){

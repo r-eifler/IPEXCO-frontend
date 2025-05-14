@@ -124,7 +124,7 @@ export class TrailerWrapperComponent {
       console.log(action);
 
       this.store.dispatch(createNewBelugaAction({action}));
-      this.store.dispatch(stopDrag({target: this.trailer()}))
+      this.store.dispatch(stopDrag({target: {...this.trailer(), stageType: 'trailer'}}))
     }
   }
 
@@ -173,7 +173,8 @@ export class TrailerWrapperComponent {
   }
 
   onStartDrag(){
-    this.store.dispatch(startDrag({source: this.trailer(), jigName: this.jig().name, sides: [this.side()]}))
+    console.log(this.trailer)
+    this.store.dispatch(startDrag({source: {...this.trailer(), stageType: 'trailer'}, jigName: this.jig().name, sides: [this.side()]}))
   }
 
   onCancelDrag(event: CdkDragDrop<Jig>){

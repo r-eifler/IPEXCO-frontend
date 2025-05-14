@@ -26,11 +26,11 @@ export function updateConsiderIncomingJig(jigName: string, schedule: FlightTarge
     return updateIncomingJigConsiderationStatus(jigName, schedule, false)
 }
 
-export function updateSkipOutgoingJigType(jigType: string, schedule: FlightTargetSchedule){
-    const index = schedule.outgoing.findIndex(e => e.jigType == jigType && !e.skip);
-    if(index === -1){
-        return schedule;
-    }
+export function updateSkipOutgoingJigType(jigType: string, index: number, schedule: FlightTargetSchedule){
+    // const index = schedule.outgoing.findIndex(e => e.jigType == jigType && !e.skip);
+    // if(index === -1){
+    //     return schedule;
+    // }
     return {
         ...schedule,
         outgoing: [

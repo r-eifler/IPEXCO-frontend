@@ -89,13 +89,13 @@ export const BuilderReducer = createReducer(
             }
         } : state.section
     })),
-    on(skipOutgoingJigType, (state, {jigType}): BuilderState => ({
+    on(skipOutgoingJigType, (state, {jigType, index}): BuilderState => ({
         ...state,
         section:  state.section.data !== undefined ? {
             state: LoadingState.Done,
             data: {
                 ...state.section.data,
-                flightTargetSchedule: updateSkipOutgoingJigType(jigType, state.section.data.flightTargetSchedule)
+                flightTargetSchedule: updateSkipOutgoingJigType(jigType, index, state.section.data.flightTargetSchedule)
             }
         } : state.section
     })),

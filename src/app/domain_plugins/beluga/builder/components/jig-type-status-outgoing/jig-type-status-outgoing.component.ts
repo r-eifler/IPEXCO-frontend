@@ -1,4 +1,4 @@
-import { Component, inject, input } from '@angular/core';
+import { Component, effect, inject, input } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { GoalSolvabilityStatus } from '../../../flight-section-planning/domain/flight-section';
 import { Jig, JigType, Flight } from '../../../shared/domain/beluga_problem';
@@ -23,8 +23,8 @@ export class JigTypeStatusOutgoingComponent {
   
     store = inject(Store);
   
-    index = input<null | number>(null);
-    jig = input.required<Jig>();
+    index = input<number | null>(null);
+    jig = input.required<Jig | null>();
     jigType = input.required<JigType>();
     status = input.required<{
       skip: boolean,
@@ -34,5 +34,5 @@ export class JigTypeStatusOutgoingComponent {
     }>();
     
     flight = input.required<Flight>()
-
+  
 }
