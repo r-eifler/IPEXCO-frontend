@@ -1,21 +1,31 @@
 import { CdkDragDrop, CdkDropList } from '@angular/cdk/drag-drop';
 import { AsyncPipe } from '@angular/common';
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, effect, inject } from '@angular/core';
 import { TranslocoModule } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 import { JigComponent } from '../../../shared/components/jig/jig.component';
 import { BelugaActionType, LoadBeluga } from '../../../shared/domain/beluga_plan';
 import { Jig } from '../../../shared/domain/beluga_problem';
-import { cancelDrag, createNewBelugaAction, stopDrag } from '../../state/builder.actions';
+import { cancelDrag, createNewBelugaAction, skipIncomingJig, skipOutgoingJigType, stopDrag } from '../../state/builder.actions';
 import { selectDraggedJig, selectDragInProgress, selectDragSource, selectFlightSchedule, selectIsDropTargetFlightOutgoing, selectJigTypes, selectOutgoingFlightSchedule, selectOutgoingLoadedJigs, selectRemainingOutgoingJigTypes } from '../../state/builder.selector';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { InfoComponent } from 'src/app/shared/components/info/info/info.component';
+import { MatIconModule } from '@angular/material/icon';
+import { JigTypeStatusOutgoingComponent } from '../jig-type-status-outgoing/jig-type-status-outgoing.component';
+import { selectNextOutgoingJigTypeToLoad, selectOutGoingStatusSchedule } from './outgoing-flight-state.selector';
 
 @Component({
   selector: 'app-outgoing-flight-state',
   imports: [
-    JigComponent,
+    MatCardModule,
     TranslocoModule,
-    AsyncPipe,
+    MatButtonModule,
+    MatIconModule,
     CdkDropList,
+    AsyncPipe,
+    InfoComponent,
+    JigTypeStatusOutgoingComponent,
   ],
   templateUrl: './outgoing-flight-state.component.html',
   styleUrl: './outgoing-flight-state.component.scss'
@@ -24,15 +34,9 @@ export class OutgoingFlightStateComponent {
 
   store = inject(Store);
 
-  jigTypes = this.store.selectSignal(selectJigTypes);
+  nextJigType = this.store.selectSignal(selectNextOutgoingJigTypeToLoad);
+  outgoingJigsStatusSchedule = this.store.selectSignal(selectOutGoingStatusSchedule);
   
-  schedule = this.store.selectSignal(selectOutgoingFlightSchedule);
-  loaded = this.store.selectSignal(selectOutgoingLoadedJigs);
-
-  remainingJigTypes = this.store.selectSignal(selectRemainingOutgoingJigTypes);
-
-  numRemaining = computed(() => this.remainingJigTypes()?.length ?? 0)
-
   currentFlight = this.store.selectSignal(selectFlightSchedule);
 
   dragInProgress$ = this.store.select(selectDragInProgress);
@@ -40,6 +44,24 @@ export class OutgoingFlightStateComponent {
 
   dragSource = this.store.selectSignal(selectDragSource);
   draggedJig = this.store.selectSignal(selectDraggedJig);
+
+  skipPossible = computed(() => this.nextJigType() !== null)
+  flightIsEmpty = computed(() => this.outgoingJigsStatusSchedule()?.length == 0)
+
+  constructor(){
+    effect(() => console.log(this.outgoingJigsStatusSchedule()))
+  }
+
+  dropPossible(){
+    return false;
+  }
+
+  onSkip(){
+    let jigType = this.nextJigType();
+    if(jigType !== null){
+      this.store.dispatch(skipOutgoingJigType({jigType}))
+    }
+  }
 
   drop(event: CdkDragDrop<Jig[]>){
       if (event.previousContainer === event.container) {

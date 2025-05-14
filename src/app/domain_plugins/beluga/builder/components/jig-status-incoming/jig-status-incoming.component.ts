@@ -15,7 +15,6 @@ import { MatIconModule } from '@angular/material/icon';
     CdkDrag,
     MatButtonModule,
     MatIconModule,
-
   ],
   templateUrl: './jig-status-incoming.component.html',
   styleUrl: './jig-status-incoming.component.scss'
@@ -38,9 +37,6 @@ export class JigStatusIncomingComponent {
   
   flight = input.required<Flight>()
 
-  canSkip = computed(() => ! this.status().unloaded && this.status()?.next)
-  canConsider = computed(() => ! this.status().unloaded && ! this.status()?.next)
-
   onCancelDrag(event: CdkDragDrop<Jig>){
     if(!event.isPointerOverContainer){
       this.store.dispatch(cancelDrag())
@@ -53,13 +49,5 @@ export class JigStatusIncomingComponent {
       this.store.dispatch(startDrag({source: {...flight, stageType: "flight"}, jigName: this.jig().name, sides: ['bside']}))
     }
       
-  }
-
-  onSkip(){
-
-  }
-
-  onConsider(){
-
   }
 }

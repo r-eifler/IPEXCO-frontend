@@ -1,26 +1,42 @@
-<div class="main" *transloco="let t"
-    cdkDropList  
-    (cdkDropListDropped)="drop($event)"
-    [class.dragTarget]="(isDragTarget$ | async) && (dragInProgress$ | async)"
-    [class.noDragTarget]="!(isDragTarget$ | async) && (dragInProgress$ | async)"
->
-    <div>
-        <span class="header">{{t('b.outgoing_flight')}}</span>
-    </div>
-    <div>
-        @if(numRemaining() > 0){
-            <p>{{ remainingJigTypes()?.[0] }}: {{numRemaining()}}</p>
+<mat-card appearance="outlined" *transloco="let t">
+    <mat-card-header>
+        <mat-icon mat-card-avatar>flight_takeoff</mat-icon>
+        <mat-card-title>{{t('b.outgoing_flight')}}</mat-card-title>
+    </mat-card-header>
+    <mat-card-content
+        class="content"
+        cdkDropList  
+        (cdkDropListDropped)="drop($event)"
+        [class.dragTarget]="(isDragTarget$ | async) && (dragInProgress$ | async)"
+        [class.noDragTarget]="!(isDragTarget$ | async) && (dragInProgress$ | async)"
+    >
+        @if(!flightIsEmpty()){
+            @for(e of outgoingJigsStatusSchedule(); track e; let idx = $index){ 
+                <app-jig-type-status-outgoing
+                    [index]="idx"
+                    [jig]="e.jig"
+                    [jigType]="e.type"
+                    [status]="e.status"
+                    [flight]="currentFlight()"
+                ></app-jig-type-status-outgoing>
+            }
         }
         @else{
-            <p>{{t('b.no_jigs_scheduled')}}</p>
+            <app-info>
+                <mat-icon>info</mat-icon>
+                {{t('b.no_jigs_scheduled')}}
+            </app-info>
         }
-        <div class="jigsCon">
-        @for(jig of loaded(); track jig.name){
-            <app-jig
-                [jig]="jig"
-                [jigType]="jigTypes()?.[jig.type]"
-                [unitSize]="true"
-            ></app-jig>
-        }
-        </div>
-</div>
+    </mat-card-content>
+    <mat-card-actions class="actions">
+        <button mat-button (click)="onSkip()" [disabled]="!skipPossible()">
+            {{t('b.skip')}}
+            <mat-icon>step_over</mat-icon>
+        </button>
+        <!-- <button mat-flat-button (click)="onUnload()" [disabled]="!loadAvailable()">
+            {{t('b.unload')}}
+            <mat-icon>arrow_forward</mat-icon>
+        </button> -->
+    </mat-card-actions>
+</mat-card>
+

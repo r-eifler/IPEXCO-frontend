@@ -10,12 +10,7 @@
         [jig]="jig()"
         [jigType]="jigType()"
         [unitSize]="true"
-        [draggable]="status().next"
-        cdkDrag
-        [cdkDragData]="jig()"
-        (cdkDragStarted)="onStartDrag()"
-        (cdkDragDropped)="onCancelDrag($event)"
-        cdkDragBoundary=".beluga-boundary"
+        [draggable]="false"
     >
     </app-jig>
     @if (status()?.unloaded) {

@@ -4,8 +4,8 @@ import { Project } from "src/app/shared/domain/project";
 import { FlightSection, getFlightSchedule, getFullState, getProductionSchedule } from "../../flight-section-planning/domain/flight-section";
 import { Side } from "../../shared/domain/beluga_problem";
 import { applyAction, BelugaState } from "../../shared/domain/beluga_state";
-import { updateSkipIncomingJig } from "../domain/schedule_utils";
-import { cancelDrag, createNewBelugaAction, loadFlightSectionSuccess, loadProject, loadProjectSuccess, skipIncomingJig, startDrag, stopDrag, updateFlightSectionSuccess } from "./builder.actions";
+import { updateSkipIncomingJig, updateSkipOutgoingJigType } from "../domain/schedule_utils";
+import { cancelDrag, createNewBelugaAction, loadFlightSectionSuccess, loadProject, loadProjectSuccess, skipIncomingJig, skipOutgoingJigType, startDrag, stopDrag, updateFlightSectionSuccess } from "./builder.actions";
 
 export interface DragSource{
     name: string,
@@ -89,7 +89,16 @@ export const BuilderReducer = createReducer(
             }
         } : state.section
     })),
-
+    on(skipOutgoingJigType, (state, {jigType}): BuilderState => ({
+        ...state,
+        section:  state.section.data !== undefined ? {
+            state: LoadingState.Done,
+            data: {
+                ...state.section.data,
+                flightTargetSchedule: updateSkipOutgoingJigType(jigType, state.section.data.flightTargetSchedule)
+            }
+        } : state.section
+    })),
     on(startDrag, (state, {source, jigName, sides}): BuilderState => ({
         ...state,
         dragSource: source,

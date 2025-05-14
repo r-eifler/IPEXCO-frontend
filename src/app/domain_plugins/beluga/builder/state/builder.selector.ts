@@ -102,6 +102,9 @@ export const selectRemainingOutgoingJigTypes = createSelector(selectOutgoingFlig
     }
 );
 
+export const selectOutgoingLoadFinished = createSelector(selectRemainingOutgoingJigTypes, 
+    (remaining) => remaining?.length == 0);
+
 export const selectCurrentFlightNextOutgoingJigType = createSelector(selectFlightSchedule, selectOutgoingLoaded,
     (schedule, outgoing) => {
         if(outgoing === undefined || schedule === undefined  || schedule === null){
@@ -118,8 +121,8 @@ export const selectCurrentFlightNextOutgoingJigType = createSelector(selectFligh
 
 // general
 
-export const selectFlightFinished = createSelector(selectIncomingUnloadFinished, selectOutgoingLoaded, selectFlightSchedule,
-    (incomingFinished, outgoingState, schedule) => incomingFinished && outgoingState?.length == schedule?.outgoing.length
+export const selectFlightFinished = createSelector(selectIncomingUnloadFinished, selectOutgoingLoadFinished,
+    (incomingFinished, outgoingFinished) => incomingFinished && outgoingFinished
 )
 
 

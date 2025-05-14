@@ -25,3 +25,21 @@ export function updateSkipIncomingJig(jigName: string, schedule: FlightTargetSch
 export function updateConsiderIncomingJig(jigName: string, schedule: FlightTargetSchedule){
     return updateIncomingJigConsiderationStatus(jigName, schedule, false)
 }
+
+export function updateSkipOutgoingJigType(jigType: string, schedule: FlightTargetSchedule){
+    const index = schedule.outgoing.findIndex(e => e.jigType == jigType && !e.skip);
+    if(index === -1){
+        return schedule;
+    }
+    return {
+        ...schedule,
+        outgoing: [
+            ...schedule.outgoing.slice(0,index),
+            {
+                ...schedule.outgoing[index],
+                skip: true
+            },
+            ...schedule.outgoing.slice(index+1),
+        ]
+    }
+}

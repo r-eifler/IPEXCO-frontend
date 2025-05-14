@@ -24,7 +24,10 @@
             }
         }
         @else{
-            <p>{{t('b.empty_flight')}}</p>
+            <app-info>
+                <mat-icon>info</mat-icon>
+                {{t('b.empty_flight')}}
+            </app-info>
         }
     </mat-card-content>
     <mat-card-actions class="actions">

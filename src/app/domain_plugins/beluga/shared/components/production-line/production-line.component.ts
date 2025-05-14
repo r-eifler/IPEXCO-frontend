@@ -27,7 +27,4 @@ export class ProductionLineComponent {
   lineName = computed(() => this.line()?.name.replace('pl',''))
   jigNames = computed(() => this.remainingJigs().map(js => js.jig.replace('jig', '')))
 
-  constructor(){
-    effect(() => console.log(this.delivered()))
-  }
 }

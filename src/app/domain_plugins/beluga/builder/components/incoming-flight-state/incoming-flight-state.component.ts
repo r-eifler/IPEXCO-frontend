@@ -12,6 +12,7 @@ import { cancelDrag, createNewBelugaAction, skipIncomingJig } from '../../state/
 import { selectAvailableBelugaTrailers, selectDragInProgress, selectFlightSchedule, selectIncomingUnloadFinished, selectJigTypes } from '../../state/builder.selector';
 import { JigStatusIncomingComponent } from '../jig-status-incoming/jig-status-incoming.component';
 import { selectIncomingJigsStatusSchedule, selectNextIncomingJigToUnload } from './incoming-flight-state.selector';
+import { InfoComponent } from 'src/app/shared/components/info/info/info.component';
 
 @Component({
   selector: 'app-incoming-flight-state',
@@ -23,6 +24,7 @@ import { selectIncomingJigsStatusSchedule, selectNextIncomingJigToUnload } from 
     JigStatusIncomingComponent,
     CdkDropList,
     AsyncPipe,
+    InfoComponent,
   ],
   templateUrl: './incoming-flight-state.component.html',
   styleUrl: './incoming-flight-state.component.scss'

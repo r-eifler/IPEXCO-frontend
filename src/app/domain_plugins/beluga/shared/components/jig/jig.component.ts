@@ -23,7 +23,7 @@ import { MatListModule } from '@angular/material/list';
 })
 export class JigComponent {
 
-  jig = input.required<Jig>()
+  jig = input.required<Jig | null>()
   jigType = input.required<JigType>()
   incomingFlight = input<string | undefined | null>(undefined)
 
@@ -43,13 +43,13 @@ export class JigComponent {
   jigDisplaySize = computed(() => (this.unitSize() ?? false) ? 55 : this.jigSize() * (this.sizeUnit() ?? 10))
   partDisplaySize = computed(() => (this.unitSize() ?? false) ? 55 : this.partSize() * (this.sizeUnit() ?? 10))
 
-  loaded = computed(() => ! this.jig()?.empty)
+  loaded = computed(() => this.jig() === null ? false : ! this.jig()?.empty)
 
   status = computed(() => this.jig()?.empty ? 'empty' : 'loaded');
   size = computed(() => this.jig()?.empty ? this.jigType()?.size_empty : this.jigType()?.size_loaded);
   sizeEmpty = computed(() => this.jigType()?.size_empty);
   sizeLoaded = computed(() => this.jigType()?.size_loaded);
-  type = computed(() => this.jig()?.type);
+  type = computed(() => this.jigType()?.name);
   tooltip = computed(() => 
     "status: " + (this.jig()?.empty ? 'empty' : 'loaded') +
     ' size: ' + (this.jig()?.empty ? this.jigType()?.size_empty : this.jigType()?.size_loaded) +
