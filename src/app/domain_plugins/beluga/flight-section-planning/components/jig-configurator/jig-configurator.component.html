@@ -29,7 +29,7 @@
         </button>
     }
     @else{
-        <button mat-icon-button (click)="onStatusChanged(false)">
+        <button mat-icon-button (click)="onStatusChanged(false)" [disabled]="mustBeSkipped()">
             <mat-icon>check</mat-icon>
         </button>
     }

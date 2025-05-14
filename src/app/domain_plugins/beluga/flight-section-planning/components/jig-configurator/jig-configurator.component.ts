@@ -1,4 +1,4 @@
-import { Component, effect, inject, input, output } from '@angular/core';
+import { Component, computed, effect, inject, input, output } from '@angular/core';
 import { Jig, JigType } from '../../../shared/domain/beluga_problem';
 import { GoalSolvabilityStatus } from '../../domain/flight-section';
 import { JigComponent } from '../../../shared/components/jig/jig.component';
@@ -34,6 +34,8 @@ export class JigConfiguratorComponent {
   }>();
 
   showOnlyPart = input<boolean>(false);
+
+  mustBeSkipped = computed(() => this.status()?.solvabilityStatus == GoalSolvabilityStatus.NOT_ON_SITE)
 
   statusChange = output<boolean>();
 

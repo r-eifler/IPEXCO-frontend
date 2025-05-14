@@ -128,10 +128,6 @@ export const FlightSectionBaseZ = object({
     siteSetUp: BelugaSiteSetUpZ,
     siteState: BelugaSiteStateZ,
 
-    incomingUnloaded: array(string()),
-    outgoingLoaded: array(string()),
-    productionLinesDelivered: record(string(),  array(string())),
-
     flightTargetSchedule: FlightTargetScheduleZ,
     productionLinesTargetSchedule: array(ProductionLineTargetScheduleZ),
     maxSwaps: nullable(number()),
@@ -186,16 +182,16 @@ export const FlightPlanTreeZ = FlightPlanTreeBaseZ.merge(object({
 export type FlightPlanTree = zinfer<typeof FlightPlanTreeZ>;
 
 
-export function getFullState(section: FlightSection | undefined | null){
+export function getFullStartState(section: FlightSection | undefined | null){
     if(section === undefined || section === null){
         return undefined;
     }
     return {
         ...section.siteState,
         flightIndex: section.flightIndex,
-        incomingUnloaded: section.incomingUnloaded,
-        outgoingLoaded: section.outgoingLoaded,
-        productionLines: section.productionLinesDelivered
+        incomingUnloaded: [],
+        outgoingLoaded: [],
+        productionLines: section.productionLinesTargetSchedule.reduce((acc,c) => ({...acc, [c.name]: []}),{})
     }
 }
 
@@ -238,7 +234,7 @@ export function getTaskFromSection(section: FlightSection){
 
 export function projectTaskToSection(task: BelugaProblem, section: FlightSection, numFlights = 1){
 
-    const state = getFullState(section);
+    const state = getFullStartState(section);
 
     if(section === undefined || state === undefined){
         return undefined;
@@ -314,9 +310,9 @@ export function filterUpTo(collection: string[], considered: Set<string>){
 export function deriveSuccessor(section: FlightSection, flight: Flight, siteSetUp: BelugaSiteSetUp){
 
     let newStartState = applyActions(
-        getFullState(section), 
+        getFullStartState(section), 
         section.actions, 
-        section.flightTargetSchedule !== undefined ? [getFlightSchedule(section.flightTargetSchedule, false)] : [],  
+        getFlightSchedule(section.flightTargetSchedule, false),  
         getProductionSchedule(section.productionLinesTargetSchedule ?? [],false) , 
         section.siteSetUp
     );
@@ -350,11 +346,13 @@ export function deriveSuccessor(section: FlightSection, flight: Flight, siteSetU
                 solvabilityStatus: GoalSolvabilityStatus.UNKNOWN
             })) },
         productionLinesTargetSchedule: section.productionLinesTargetSchedule.map(tpl => { 
-            const toDeliver = tpl.schedule.filter(e => !section.productionLinesDelivered[tpl.name].includes(e.jig)).map(e => e.jig)
+            const endDelivery = tpl.schedule.findLastIndex(e => newStartState.productionLines[tpl.name].includes(e.jig))
+            const remainingSchedule = tpl.schedule.slice(endDelivery + 1)
+            const toDeliver = remainingSchedule.map(e => e.jig)
             const notBlocked = filterUpTo(toDeliver, jigsOnSite)
             return {
                 name: tpl.name, 
-                schedule: updateDeliveryStatuses(tpl.schedule.map(e => ({ 
+                schedule: updateDeliveryStatuses(remainingSchedule.map(e => ({ 
                     jig: e.jig, 
                     ...initialDeliveryStatuses(e.jig, jigsOnSite, notBlocked)
                 })), jigsOnSite)
@@ -364,10 +362,6 @@ export function deriveSuccessor(section: FlightSection, flight: Flight, siteSetU
         minEmptyRacks: 0,
 
         actions: [],
-
-        productionLinesDelivered: newStartState.productionLines,
-        incomingUnloaded: [],
-        outgoingLoaded: [],
 
         status: PlanRunStatus.PENDING,
         predecessorId: section._id,

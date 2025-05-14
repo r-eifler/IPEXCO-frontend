@@ -6,6 +6,7 @@ import { environment } from "src/environments/environment";
 import { BelugaProblem } from "../../shared/domain/beluga_problem";
 import { FlightSection, FlightSectionZ, projectTaskToSection } from "../domain/flight-section";
 import { PlanMethod } from "../domain/plan_method";
+import { boolean } from "zod";
 
 
 @Injectable()
@@ -29,6 +30,17 @@ export class FlightSectionPlanService{
 
       return this.http.post<unknown>(this.BASE_URL, data).pipe(
         map(data => FlightSectionZ.parse(data)),
+      )
+    }
+
+    cancel$(sectionId: string): Observable<boolean> {
+
+      let data = {
+        sectionId
+      }
+
+      return this.http.post<unknown>(this.BASE_URL + 'cancel', data).pipe(
+        map(data => boolean().parse(data)),
       )
     }
 

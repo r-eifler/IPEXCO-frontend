@@ -1,4 +1,6 @@
 
+import { CancelAutomaticPlanningEffect } from "./cancel-automatic-planning.effect";
+import { CancelPlanningEffect } from "./cancel-planning.effect";
 import { CreateFlightPlanTreeBranchEffect } from "./create-branch.effect";
 import { CreateFlightPlanTreeEffect } from "./create-flight-plan-tree.effect";
 import { CreateFlightSectionEffect } from "./create-flight-section.effect";
@@ -33,4 +35,7 @@ export const flightSectionPlanningEffects = [
     StartManualPlanningEffect,
     CreateFlightSectionEffect,
     StartAutomaticPlanningEffect,
+
+    CancelAutomaticPlanningEffect,
+    CancelPlanningEffect
 ]

@@ -140,7 +140,7 @@ export class PlanComparisonComponent {
         return;
       }
       const actions = refActions?.slice(0,index+1)
-      return applyActions(init, actions, model.flights, model.production_lines, getSiteSetUp(model));
+      return applyActions(init, actions, model.flights[0], model.production_lines, getSiteSetUp(model));
     })
   );
 
@@ -151,7 +151,7 @@ export class PlanComparisonComponent {
         return;
       }
       const actions = compActions?.slice(0,index+1)
-      return applyActions(init, actions, model.flights, model.production_lines, getSiteSetUp(model));
+      return applyActions(init, actions, model.flights[0], model.production_lines, getSiteSetUp(model));
     })
   );
 

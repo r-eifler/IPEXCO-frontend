@@ -1,8 +1,7 @@
 <div class="container">
-    @for(plTS of productionLineTargetSchedules(); track plTS.name; let idx = $index){
+    @for(schedule of productionLineTargetSchedules(); track schedule.name; let idx = $index){
         <app-production-line-configurator
-            [originalSchedule]="originalSchedules()?.[idx]"
-            [productionLineTargetSchedule]="plTS"
+            [productionLineTargetSchedule]="schedule"
             [jigsOnSite]="jigsOnSite()"
             [jigTypes]="jigTypes()"
             [jigs]="jigs()"

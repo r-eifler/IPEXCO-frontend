@@ -13,17 +13,12 @@ import { ProductionLineConfiguratorComponent } from '../production-line-configur
 })
 export class ProductionLinesConfiguratorComponent {
 
-  originalSchedules = input.required<ProductionLine[]>();
   productionLineTargetSchedules = input.required<ProductionLineTargetSchedule[]>();
   jigsOnSite = input.required<Set<string>>();
   jigs = input.required<Record<string,Jig>>();
   jigTypes = input.required<Record<string,JigType>>();
 
   targetSchedules = output<ProductionLineTargetSchedule[]>();
-
-  constructor(){
-    effect(() => console.log("Num production lines: " + this.originalSchedules().length))
-  }
 
   onChangeProductionTarget(newSchedule: ProductionLineTargetSchedule, index: number){
     const oldSchedules = this.productionLineTargetSchedules();

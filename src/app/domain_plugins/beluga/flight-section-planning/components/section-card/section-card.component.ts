@@ -21,7 +21,7 @@ import { computeRackOccupancyRate, computeSwaps } from '../../domain/metrics';
 import { PlanMethod, PlanMethodType } from '../../domain/plan_method';
 import { PlanMethodTypeIconPipe } from '../../pipe/plan-method-type-icon.pipe';
 import { PlanMethodTypeNamePipe } from '../../pipe/plan-method-type-name.pipe';
-import { createNewBranch, registerManualPlanning, startAutomaticPlanning } from '../../state/flight-section-planning.actions';
+import { cancelPlanning, createNewBranch, registerManualPlanning, startAutomaticPlanning } from '../../state/flight-section-planning.actions';
 import { selectActiveBranchRemainingNumberFlights, selectSupportedPlanners, selectTask } from '../../state/flight-section-planning.selector';
 import { PlanInspectorComponent } from '../../views/plan-inspector/plan-inspector.component';
 import { BranchNameDialogComponent } from '../branch-name-dialog/branch-name-dialog.component';
@@ -131,6 +131,6 @@ export class SectionCardComponent {
   }
 
   onCancel(){
-
+    this.store.dispatch(cancelPlanning({section: this.section()}))
   }
 }

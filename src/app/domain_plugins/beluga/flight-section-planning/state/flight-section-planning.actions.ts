@@ -90,11 +90,17 @@ export const loadServicesFailure = createAction('[beluga-flight-section-planning
 
 // planning methods
 
+export const cancelPlanning = createAction('[beluga-flight-section-planning] cancel planning', props<{section: FlightSection}>());
+export const cancelPlanningSuccess = createAction('[beluga-flight-section-planning] cancel planning success', props<{section: FlightSection}>());
+export const cancelPlanningFailure = createAction('[beluga-flight-section-planning] cancel planning failure', props<{err: any}>());
+
+// manual
+
 export const registerManualPlanning = createAction('[beluga-flight-section-planning] register manual planning', props<{section: FlightSection, method: PlanMethod}>());
 export const startManualPlanningSuccess= createAction('[beluga-flight-section-planning] start manual planning success');
 export const startManualPlanningFailure = createAction('[beluga-flight-section-planning] start manual planning failure', props<{err: any}>());
 
-// planning automatic
+// automatic
 
 export const startAutomaticPlanning = createAction('[beluga-flight-section-planning] start automatic planning', props<{section: FlightSection, method: PlanMethod}>());
 export const startAutomaticPlanningSuccess = createAction('[beluga-flight-section-planning] start automatic planning success', props<{section: FlightSection}>());
@@ -102,3 +108,7 @@ export const startAutomaticPlanningFailure = createAction('[beluga-flight-sectio
 
 export const automaticPlanningFinishedSuccess = createAction('[beluga-flight-section-planning] automatic planning finished success', props<{id: string}>());
 export const automaticPlanningFinishedFailure = createAction('[beluga-flight-section-planning] automatic planning finished failure', props<{err: any}>());
+
+export const cancelAutomaticPlanning = createAction('[beluga-flight-section-planning] cancel automatic planning', props<{section: FlightSection}>());
+export const cancelAutomaticPlanningSuccess = createAction('[beluga-flight-section-planning] cancel planning automatic success');
+export const cancelAutomaticPlanningFailure = createAction('[beluga-flight-section-planning] cancel planning automatic failure', props<{err: any}>());

@@ -2,7 +2,7 @@ import { sum } from "ramda";
 import { BelugaAction, BelugaActionType } from "../../shared/domain/beluga_plan";
 import { BelugaProblem } from "../../shared/domain/beluga_problem";
 import { applyAction, BelugaState } from "../../shared/domain/beluga_state";
-import { FlightSection, getConsideredFlightSchedule, getConsideredProductionSchedule, getFlightSchedule, getFullState, getProductionSchedule } from "./flight-section";
+import { FlightSection, getConsideredFlightSchedule, getConsideredProductionSchedule, getFlightSchedule, getFullStartState, getProductionSchedule } from "./flight-section";
 import { getSiteSetUp } from "../../shared/domain/site_set_up";
 
 export enum MetricType {
@@ -31,7 +31,7 @@ export function computeSwaps(actions: BelugaAction[]){
 }
 
 export function computeRackOccupancyRate(section: FlightSection, actions: BelugaAction[]){
-    let cs: BelugaState | undefined = getFullState(section);
+    let cs: BelugaState | undefined = getFullStartState(section);
     const flightSchedule = getConsideredFlightSchedule(section.flightTargetSchedule)
     const productionSchedule = getConsideredProductionSchedule(section.productionLinesTargetSchedule)
 
@@ -41,7 +41,7 @@ export function computeRackOccupancyRate(section: FlightSection, actions: Beluga
             return undefined;
         }
         numUsedRacks.push(computeRackOccupancyRateForState(cs));
-        cs = applyAction(cs, action, [flightSchedule], productionSchedule, section.siteSetUp);
+        cs = applyAction(cs, action, flightSchedule, productionSchedule, section.siteSetUp);
     }
     return sum(numUsedRacks)/(numUsedRacks.length)
 }

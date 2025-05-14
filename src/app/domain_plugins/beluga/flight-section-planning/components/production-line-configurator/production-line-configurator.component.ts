@@ -17,8 +17,8 @@ import { JigConfiguratorComponent } from '../jig-configurator/jig-configurator.c
 })
 export class ProductionLineConfiguratorComponent {
 
-  originalSchedule = input.required<ProductionLine>();
   productionLineTargetSchedule = input.required<ProductionLineTargetSchedule>();
+
   jigsOnSite = input.required<Set<string>>();
   jigs = input.required<Record<string,Jig>>();
   jigTypes = input.required<Record<string,JigType>>();
@@ -38,13 +38,6 @@ export class ProductionLineConfiguratorComponent {
     return []
   })
 
-  // drop(event: CdkDragDrop<string[]>) {
-  //   const schedule = this.schedule();
-  //   moveItemInArray(schedule, event.previousIndex, event.currentIndex);
-  //   console.log(schedule)
-
-  //   this.targetSchedule.emit(schedule);
-  // }
   
   setStatus(index: number, skip: boolean){
     const schedule = this.productionLineTargetSchedule().schedule;

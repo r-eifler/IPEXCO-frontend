@@ -1,5 +1,5 @@
 import { Component, computed, input, signal, WritableSignal } from '@angular/core';
-import { FlightSection, getFlightSchedule, getFullState, getProductionSchedule } from '../../../flight-section-planning/domain/flight-section';
+import { FlightSection, getFlightSchedule, getFullStartState, getProductionSchedule } from '../../../flight-section-planning/domain/flight-section';
 import { PlanActionListComponent } from '../../components/plan-action-list/plan-action-list.component';
 import { StateCardComponent } from '../../components/state-card/state-card.component';
 import { StepControlComponent } from '../../components/step-control/step-control.component';
@@ -25,7 +25,7 @@ export class SectionPlanComponent {
 
   selectedState = computed(() => {
     const section = this.section();
-    const startState = getFullState(this.section());
+    const startState = getFullStartState(this.section());
     let endIndex  = this.selectedActionIndex();
     if(endIndex === null || startState === undefined){
       return undefined;
@@ -37,7 +37,7 @@ export class SectionPlanComponent {
     return applyActions(
       startState, 
       actions, 
-      [getFlightSchedule(section.flightTargetSchedule, false)],
+      getFlightSchedule(section.flightTargetSchedule, false),
       getProductionSchedule(section.productionLinesTargetSchedule, false),
       section.siteSetUp
     )

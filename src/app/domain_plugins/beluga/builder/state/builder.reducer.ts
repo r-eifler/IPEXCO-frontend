@@ -1,7 +1,7 @@
 import { createReducer, on } from "@ngrx/store";
 import { Loadable, LoadingState } from "src/app/shared/common/loadable.interface";
 import { Project } from "src/app/shared/domain/project";
-import { FlightSection, getFlightSchedule, getFullState, getProductionSchedule } from "../../flight-section-planning/domain/flight-section";
+import { FlightSection, getFlightSchedule, getFullStartState, getProductionSchedule } from "../../flight-section-planning/domain/flight-section";
 import { Side } from "../../shared/domain/beluga_problem";
 import { applyAction, BelugaState } from "../../shared/domain/beluga_state";
 import { updateSkipIncomingJig, updateSkipOutgoingJigType } from "../domain/schedule_utils";
@@ -52,7 +52,7 @@ export const BuilderReducer = createReducer(
     on(loadFlightSectionSuccess, (state, {section}): BuilderState => ({
         ...state,
         section: {state: LoadingState.Done, data: section},
-        taskState:  getFullState(section),
+        taskState:  getFullStartState(section),
         dragSource: null,
         draggedJig: null,
         draggedSides: null,
@@ -67,7 +67,7 @@ export const BuilderReducer = createReducer(
         applyAction(
             state.taskState, 
             action, 
-            [getFlightSchedule( state.section.data.flightTargetSchedule, false)], 
+            getFlightSchedule( state.section.data.flightTargetSchedule, false), 
             getProductionSchedule(state.section.data.productionLinesTargetSchedule, false), 
             state.section.data.siteSetUp
         ) : null,
