@@ -12,7 +12,6 @@ export const selectIncomingJigsStatusSchedule = createSelector(selectIncomingFli
             jig: jigs?.[e.jig],
             status: {
                 skip: e.skip,
-                solvability: e.solvabilityStatus,
                 unloaded: unloaded?.includes(e.jig),
                 next: remaining?.[0]?.name === e.jig
             }

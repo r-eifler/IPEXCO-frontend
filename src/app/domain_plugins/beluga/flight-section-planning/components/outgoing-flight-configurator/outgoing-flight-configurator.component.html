@@ -1,13 +1,19 @@
-<div class="container">
-    @for(elem of schedule(); track elem; let idx = $index){
-        <app-jig-configurator 
-            [index]="idx"
-            [jig]="elem.jig"  
-            [jigType]="jigTypes()?.[elem.jig?.type]"
-            [status]="elem.status"
-            (statusChange)="setStatus(idx, $event)"
-        >
-        <div class="custom-placeholder" *cdkDragPlaceholder></div>
-        </app-jig-configurator>  
-    }
-</div>
+<mat-card appearance="outlined" *transloco="let t">
+    <mat-card-header>
+        <mat-icon mat-card-avatar>flight_takeoff</mat-icon>
+        <mat-card-title>{{t('f.outgoing_flight')}}</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+        @for(elem of schedule(); track elem; let idx = $index){
+            <app-jig-configurator 
+                [index]="idx"
+                [jig]="elem.jig"  
+                [jigType]="jigTypes()?.[elem.jig?.type]"
+                [status]="elem.status"
+                (statusChange)="setStatus(idx, $event)"
+            >
+            <div class="custom-placeholder" *cdkDragPlaceholder></div>
+            </app-jig-configurator>  
+        }
+    </mat-card-content>
+</mat-card>

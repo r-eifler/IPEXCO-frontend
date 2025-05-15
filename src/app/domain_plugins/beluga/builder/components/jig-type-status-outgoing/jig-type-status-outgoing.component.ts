@@ -1,6 +1,5 @@
 import { Component, effect, inject, input } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { GoalSolvabilityStatus } from '../../../flight-section-planning/domain/flight-section';
 import { Jig, JigType, Flight } from '../../../shared/domain/beluga_problem';
 import { CdkDrag } from '@angular/cdk/drag-drop';
 import { MatButtonModule } from '@angular/material/button';
@@ -18,8 +17,6 @@ import { MatIconModule } from '@angular/material/icon';
   styleUrl: './jig-type-status-outgoing.component.scss'
 })
 export class JigTypeStatusOutgoingComponent {
-
-  solvabilityStatuses = GoalSolvabilityStatus
   
     store = inject(Store);
   
@@ -28,7 +25,6 @@ export class JigTypeStatusOutgoingComponent {
     jigType = input.required<JigType>();
     status = input.required<{
       skip: boolean,
-      solvability: GoalSolvabilityStatus,
       loaded: boolean,
       next: boolean,
     }>();

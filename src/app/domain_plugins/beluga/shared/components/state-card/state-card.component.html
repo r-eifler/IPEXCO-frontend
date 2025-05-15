@@ -29,7 +29,7 @@
     </div>
     <div class="racks">
         @for(rack of racks(); track rack){
-            <app-rack [name]="rack.name" [size]="rack.size" occupied="-1000">
+            <app-rack [name]="rack.name" [size]="rack.size" [occupied]="rack.occupied" [maintenance]="rack.maintenance">
                 <app-jig
                     *ngFor="let jig of rack.jigs"
                     [jig]="jig"  

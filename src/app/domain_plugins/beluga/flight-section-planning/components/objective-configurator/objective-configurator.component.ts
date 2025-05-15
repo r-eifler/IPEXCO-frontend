@@ -2,6 +2,7 @@ import { Component, computed, input, output } from '@angular/core';
 import { SwapConfiguratorComponent } from '../swap-configurator/swap-configurator.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { FlightSection } from '../../domain/flight-section';
+import { sum } from 'ramda';
 
 @Component({
   selector: 'app-objective-configurator',
@@ -15,6 +16,7 @@ import { FlightSection } from '../../domain/flight-section';
 export class ObjectiveConfiguratorComponent {
 
   section = input.required<FlightSection>();
+  numEmptyRacks = computed(() => sum(this.section()?.siteSetUp.racks.map(r => this.section()?.siteState.racks[r.name].length == 0 ? 1 : 0)))
 
   changeObjective = output<FlightSection>();
 

@@ -2,7 +2,6 @@ import { CdkDrag, CdkDragDrop } from '@angular/cdk/drag-drop';
 import { Component, computed, effect, inject, input } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { Store } from '@ngrx/store';
-import { GoalSolvabilityStatus } from '../../../flight-section-planning/domain/flight-section';
 import { JigComponent } from '../../../shared/components/jig/jig.component';
 import { Flight, Jig, JigType } from '../../../shared/domain/beluga_problem';
 import { cancelDrag, startDrag } from '../../state/builder.actions';
@@ -21,8 +20,6 @@ import { MatIconModule } from '@angular/material/icon';
 })
 export class JigStatusIncomingComponent {
 
-  solvabilityStatuses = GoalSolvabilityStatus
-
   store = inject(Store);
 
   index = input<null | number>(null);
@@ -30,7 +27,6 @@ export class JigStatusIncomingComponent {
   jigType = input.required<JigType>();
   status = input.required<{
     skip: boolean,
-    solvability: GoalSolvabilityStatus,
     unloaded: boolean,
     next: boolean,
   }>();

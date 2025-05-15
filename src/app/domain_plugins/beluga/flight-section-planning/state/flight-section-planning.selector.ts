@@ -4,7 +4,7 @@ import { FlightSectionPlanningFeature } from "./flight-section-planning.feature"
 import { PlanRunStatus } from "src/app/iterative_planning/domain/plan";
 import { BelugaAction } from "../../shared/domain/beluga_plan";
 import { Encoding, ServiceType } from "src/app/global_specification/domain/services";
-import { memoizeWith } from "ramda";
+import { memoizeWith, sum } from "ramda";
 import { getJigsOnSiteFromSection } from "../domain/flight-section";
 
 
@@ -145,6 +145,9 @@ export const selectBranchSections = memoizeWith(
 export const selectJigsOnSite = createSelector(selectSelectedSection,  
     (section) => section === undefined ? undefined : getJigsOnSiteFromSection(section));
 
+export const selectInitiallyNumEmptyRacks = createSelector(selectSelectedSection,  
+    (section) => section === undefined ? undefined : sum(section.siteSetUp.racks.map(r => section.siteState.racks[r.name].length == 0 ? 1 : 0))
+);
 
 // Flights
 

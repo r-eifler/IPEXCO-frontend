@@ -15,16 +15,8 @@
         [showOnlyPart]="true"
     >
     </app-jig>
-    @switch (status()?.solvability) {
-        @case (solvabilityStatuses.BLOCKED) {
-            <mat-icon class="error">block</mat-icon>
-        }
-        @case (solvabilityStatuses.NOT_ON_SITE) {
-            <mat-icon class="error">wrong_location</mat-icon>
-        }
-        @case (solvabilityStatuses.UNKNOWN) {
-            <mat-icon class="info">question_mark</mat-icon>
-        }
+    @if (!status()?.onSite) {
+        <mat-icon class="error">wrong_location</mat-icon>
     }
     @if (status()?.delivered) {
         <mat-icon>check</mat-icon>

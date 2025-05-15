@@ -1,11 +1,15 @@
-<div class="container">
+<div class="container" >
     <div class="info-container">
         <span style="font-weight: 500;">{{ name() }}</span>
         <span>{{ occupied() }}/{{ size() }}</span>
+        @if(maintenance()){
+            <span class="error">maintenance</span>
+        }
     </div>
     <div>
         <div 
             class="rack"  
+            [class.maintenance]="maintenance()"
             [class.dragTarget]="dragTarget()"
             [class.noDragTarget]="noDragTarget()"
             [style.width]="((size() * 15) + 2) + 'px'"

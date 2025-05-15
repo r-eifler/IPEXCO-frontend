@@ -2,7 +2,6 @@ import { Component, inject, input } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { JigComponent } from '../../../shared/components/jig/jig.component';
 import { MatIconModule } from '@angular/material/icon';
-import { GoalSolvabilityStatus } from '../../../flight-section-planning/domain/flight-section';
 import { Store } from '@ngrx/store';
 import { Jig, JigType } from '../../../shared/domain/beluga_problem';
 import { selectJigMapIncomingFlight } from '../../state/builder.selector';
@@ -19,7 +18,6 @@ import { selectJigMapIncomingFlight } from '../../state/builder.selector';
 })
 export class JigStatusProductionLineComponent {
 
-  solvabilityStatuses = GoalSolvabilityStatus
 
   store = inject(Store);
 
@@ -30,7 +28,6 @@ export class JigStatusProductionLineComponent {
   jigType = input.required<JigType>();
   status = input.required<{
     skip: boolean,
-    solvability: GoalSolvabilityStatus,
     delivered: boolean,
     next: boolean,
   }>();

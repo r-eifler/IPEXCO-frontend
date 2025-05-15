@@ -11,10 +11,6 @@
     gap: var(--spacing-100);
 }
 
-.max-rack{
-    
-}
-
 .rack {
 
     display: flex;
@@ -39,4 +35,13 @@
 
 .noDragTarget{
     opacity: 50%;
+}
+
+.maintenance{
+    opacity: 30%;
+}
+
+.error{
+    font-weight: 600;
+    color: red
 }

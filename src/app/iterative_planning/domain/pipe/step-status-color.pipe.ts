@@ -1,7 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-import { Color } from 'src/app/shared/components/label/label/label.component';
-
 import { PlanRunStatus } from '../plan';
 
 @Pipe({
@@ -26,6 +24,8 @@ export class StepStatusColorPipe implements PipeTransform {
         return 'error';
       case PlanRunStatus.SOLVED:
         return 'secondary';
+      case PlanRunStatus.NO_PLAN_FOUND:
+        return 'error';
       case PlanRunStatus.UNSOLVABLE:
         return 'error';
     }

@@ -2,14 +2,14 @@ import { Component, computed, effect, input } from '@angular/core';
 import { BelugaState } from '../../domain/beluga_state';
 import { MatIconModule } from '@angular/material/icon';
 import { JigComponent } from '../jig/jig.component';
-import { BelugaProblem, Flight, ProductionLine } from '../../domain/beluga_problem';
+import { BelugaProblem, Flight, occupiedRackSpace, ProductionLine } from '../../domain/beluga_problem';
 import { TrailerComponent } from '../trailer/trailer.component';
 import { HangarComponent } from '../hangar/hangar.component';
 import { BelugaFlightComponent } from '../beluga-flight/beluga-flight.component';
 import { RackComponent } from '../rack/rack.component';
 import { ProductionLineComponent } from '../production-line/production-line.component';
 import { NgFor, NgIf } from '@angular/common';
-import { BelugaSiteSetUp } from '../../domain/site_set_up';
+import { BelugaSiteSetUp, SiteStatus } from '../../domain/site_set_up';
 import { FlightTargetSchedule, ProductionLineTargetSchedule } from '../../../flight-section-planning/domain/flight-section';
 
 @Component({
@@ -77,6 +77,8 @@ export class StateCardComponent {
         jigs: state.racks?.[r.name]?.map(j => this.jigs()?.[j]),
         name: r.name,
         size: r.size,
+        maintenance: r.status == SiteStatus.MAINTENANCE,
+        occupied: occupiedRackSpace(state.racks?.[r.name], this.jigs(), this.jigTypes())
       })
     )
   });

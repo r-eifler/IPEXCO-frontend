@@ -1,14 +1,20 @@
-<div class="container">
-    @for(elem of schedule(); track elem.jig?.name; let idx = $index){
-        <app-jig-configurator 
-            [index]="idx"
-            [jig]="elem.jig"  
-            [jigType]="jigTypes()?.[elem.jig?.type]"
-            [status]="elem.status"
-            [showOnlyPart]="true"
-            (statusChange)="setStatus(idx, $event)"
-        >
-        <div class="custom-placeholder" *cdkDragPlaceholder></div>
-        </app-jig-configurator>
-    }
-</div>
+<mat-card appearance="outlined" *transloco="let t">
+    <mat-card-header>
+        <mat-icon mat-card-avatar>factory</mat-icon>
+        <mat-card-title>{{name()}}</mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="container">
+        @for(elem of schedule(); track elem.jig?.name; let idx = $index){
+            <app-jig-configurator 
+                [index]="idx"
+                [jig]="elem.jig"  
+                [jigType]="jigTypes()?.[elem.jig?.type]"
+                [status]="elem.status"
+                [showOnlyPart]="true"
+                (statusChange)="setStatus(idx, $event)"
+            >
+            <div class="custom-placeholder" *cdkDragPlaceholder></div>
+            </app-jig-configurator>
+        }
+    </mat-card-content>
+</mat-card>

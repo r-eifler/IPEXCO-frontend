@@ -13,7 +13,7 @@ export const selectProductionLinesStatusSchedule = memoizeWith(
               jig: jigs?.[e.jig],
               status: {
                   skip: e.skip,
-                  solvability: e.solvabilityStatus,
+                  onSite: e.onSite,
                   delivered: delivered?.includes(e.jig) ?? false,
                   next: false,
               }

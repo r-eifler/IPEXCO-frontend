@@ -2,8 +2,10 @@ import { Component, computed, input, output } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { Jig, JigType, ProductionLine } from '../../../shared/domain/beluga_problem';
-import { ProductionLineTargetSchedule, updateDeliveryStatuses } from '../../domain/flight-section';
+import { ProductionLineTargetSchedule } from '../../domain/flight-section';
 import { JigConfiguratorComponent } from '../jig-configurator/jig-configurator.component';
+import { MatCardModule } from '@angular/material/card';
+import { TranslocoModule } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-production-line-configurator',
@@ -11,6 +13,8 @@ import { JigConfiguratorComponent } from '../jig-configurator/jig-configurator.c
     MatButtonModule,
     MatIconModule,
     JigConfiguratorComponent,
+    MatCardModule,
+    TranslocoModule,
   ],
   templateUrl: './production-line-configurator.component.html',
   styleUrl: './production-line-configurator.component.scss'
@@ -18,6 +22,7 @@ import { JigConfiguratorComponent } from '../jig-configurator/jig-configurator.c
 export class ProductionLineConfiguratorComponent {
 
   productionLineTargetSchedule = input.required<ProductionLineTargetSchedule>();
+  name = computed(() => this.productionLineTargetSchedule().name)
 
   jigsOnSite = input.required<Set<string>>();
   jigs = input.required<Record<string,Jig>>();
@@ -31,7 +36,7 @@ export class ProductionLineConfiguratorComponent {
         jig: this.jigs()?.[e.jig],
         status: {
           skip: e.skip,
-          solvabilityStatus: e.solvabilityStatus
+          onSite: e.onSite,
         }
       }))
     }
@@ -53,7 +58,7 @@ export class ProductionLineConfiguratorComponent {
       ],
     }
 
-    newProductionSchedule.schedule = updateDeliveryStatuses(newProductionSchedule.schedule, this.jigsOnSite())
+    // newProductionSchedule.schedule = updateDeliveryStatuses(newProductionSchedule.schedule, this.jigsOnSite())
 
     this.targetSchedule.emit(newProductionSchedule);
   }

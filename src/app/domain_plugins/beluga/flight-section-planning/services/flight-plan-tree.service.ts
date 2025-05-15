@@ -7,7 +7,7 @@ import { array } from "zod";
 import { BelugaProblem } from "../../shared/domain/beluga_problem";
 import { getInitialState } from "../../shared/domain/beluga_state";
 import { BelugaSiteSetUp, BelugaSiteState, getSiteSetUp } from "../../shared/domain/site_set_up";
-import { filterUpTo, FlightPlanTree, FlightPlanTreeBase, FlightPlanTreeZ, FlightSection, FlightSectionBase, FlightSectionZ, FlightTargetSchedule, getJigsOnSiteFromState, GoalSolvabilityStatus, initialDeliveryStatuses, ProductionLineTargetSchedule, updateDeliveryStatuses } from "../domain/flight-section";
+import { filterUpTo, FlightPlanTree, FlightPlanTreeBase, FlightPlanTreeZ, FlightSection, FlightSectionBase, FlightSectionZ, FlightTargetSchedule, getJigsOnSiteFromState, initialDeliveryStatuses, ProductionLineTargetSchedule } from "../domain/flight-section";
 
 
 interface initData {
@@ -72,6 +72,7 @@ export class FlightPlanTreeService{
       const flight = task.flights[0];
 
       const jigsOnSite = getJigsOnSiteFromState(siteState, [task.flights[0]])
+      const jigTypesOnSite = [...jigsOnSite].map(jn => task.jigs[jn].type)
 
       const data: initData = {
         projectId, 
@@ -82,22 +83,27 @@ export class FlightPlanTreeService{
           incoming: flight.incoming.map(jn => ({
             jig: jn, 
             skip: false,
-            solvabilityStatus: GoalSolvabilityStatus.UNKNOWN
           })),
-          outgoing: flight.outgoing.map(jt => ({
-            jigType: jt, 
-            skip: false,
-            solvabilityStatus: GoalSolvabilityStatus.UNKNOWN,
-          })),
+          outgoing: flight.outgoing.map(jt => {
+            const index = jigTypesOnSite.findIndex(t => t === jt);
+            if(index !== -1){
+                jigTypesOnSite.splice(index,1)
+            }
+            return { 
+                jigType: jt, 
+                skip: false,
+                onSite: index !== -1,
+            }
+          }) 
         },
         productionLinesTargetSchedule: task.production_lines.map(pl => {
           const notBlocked = filterUpTo(pl.schedule, jigsOnSite);
           return {
             name: pl.name,
-            schedule: updateDeliveryStatuses(pl.schedule.map(jn => ({
+            schedule: pl.schedule.map(jn => ({
               jig: jn, 
               ...initialDeliveryStatuses(jn, jigsOnSite, notBlocked),
-            })), jigsOnSite)
+            }))
           }
         }),
       }

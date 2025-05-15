@@ -7,27 +7,17 @@ import { BelugaSiteSetUp, BelugaSiteSetUpZ, BelugaSiteState, BelugaSiteStateZ, S
 import { PlanMethodZ } from "./plan_method";
 
 
-export enum GoalSolvabilityStatus {
-    UNKNOWN = "UNKNOWN",
-    BLOCKED = "BLOCKED",
-    NOT_ON_SITE = "NOT_ON_SITE",
-    UNSOLVABLE = "UNSOLVABLE",
-    SOLVABLE = "SOLVABLE"
-}
-  
-export const GoalSolvabilityStatusZ = nativeEnum(GoalSolvabilityStatus);
 
 export const FlightTargetScheduleZ = object({
     name: string(),
     incoming: array(object({
         jig: string(),
         skip: boolean(),
-        solvabilityStatus: GoalSolvabilityStatusZ,
     })),
     outgoing: array(object({
         jigType: string(),
         skip: boolean(),
-        solvabilityStatus: GoalSolvabilityStatusZ,
+        onSite: boolean(),
     })),
 })
 
@@ -51,24 +41,22 @@ export const ProductionLineTargetScheduleZ = object({
     schedule: array(object({
         jig: string(),
         skip: boolean(),
-        solvabilityStatus: GoalSolvabilityStatusZ,
+        onSite: boolean(),
     }))
 })
 
 export function initialDeliveryStatuses(jigName: string, jigsOnSite: Set<string>, notBlocked: String[]){
-    let solveStatus = jigsOnSite.has(jigName) ? 
-    (notBlocked.includes(jigName) ? GoalSolvabilityStatus.UNKNOWN : GoalSolvabilityStatus.BLOCKED) : 
-    GoalSolvabilityStatus.NOT_ON_SITE
+    let onSite = jigsOnSite.has(jigName);
     return {
-        skip: solveStatus !== GoalSolvabilityStatus.UNKNOWN,
-        solvabilityStatus: solveStatus
+        skip: !onSite || ! notBlocked.includes(jigName),
+        onSite
     }
 }
 
 export interface StatusScheduleElem {
     jig: string,
     skip: boolean,
-    solvabilityStatus: GoalSolvabilityStatus,
+    onSite: boolean,
 }
 
 // considered in reverse order, jig not on side should initially not be considered
@@ -78,7 +66,7 @@ export function initConsiderationStatusesNotOnSiteReverse(schedule: StatusSchedu
     let allOnSite = true;
 
     for(let i = schedule.length - 1; i >= 0; i--){
-        allOnSite = allOnSite && schedule[i].solvabilityStatus !== GoalSolvabilityStatus.NOT_ON_SITE 
+        allOnSite = allOnSite && schedule[i].onSite
         if(!allOnSite){
             res = [schedule[i], ...res]
             continue;
@@ -91,22 +79,22 @@ export function initConsiderationStatusesNotOnSiteReverse(schedule: StatusSchedu
     return res
 }
 
-export function updateDeliveryStatuses(schedule: StatusScheduleElem[], jigsOnSite: Set<string>){
+// export function updateDeliveryStatuses(schedule: StatusScheduleElem[], jigsOnSite: Set<string>){
 
-    return schedule.map(sse => {
-        const wantToDeliver = schedule.
-        filter(e => !e.skip || e.jig == sse.jig).
-        map(e => e.jig);
-        const notBlocked = filterUpTo(wantToDeliver, jigsOnSite)
+//     return schedule.map(sse => {
+//         const wantToDeliver = schedule.
+//         filter(e => !e.skip || e.jig == sse.jig).
+//         map(e => e.jig);
+//         const notBlocked = filterUpTo(wantToDeliver, jigsOnSite)
 
-        return {
-            ...sse,
-            solvabilityStatus: jigsOnSite.has(sse.jig) ? 
-                (notBlocked.includes(sse.jig) ? GoalSolvabilityStatus.UNKNOWN : GoalSolvabilityStatus.BLOCKED) : 
-                GoalSolvabilityStatus.NOT_ON_SITE
-        }
-    });
-}
+//         return {
+//             ...sse,
+//             solvabilityStatus: jigsOnSite.has(sse.jig) ? 
+//                 (notBlocked.includes(sse.jig) ? GoalSolvabilityStatus.UNKNOWN : GoalSolvabilityStatus.BLOCKED) : 
+//                 GoalSolvabilityStatus.NOT_ON_SITE
+//         }
+//     });
+// }
 
 
 export type ProductionLineTargetSchedule = zinfer<typeof ProductionLineTargetScheduleZ>;
@@ -321,6 +309,7 @@ export function deriveSuccessor(section: FlightSection, flight: Flight, siteSetU
     }
 
     const jigsOnSite = getJigsOnSiteFromState(newStartState, [flight])
+    const jigTypesOnSite = [...jigsOnSite].map(jn => section.siteState.jigs[jn].type)
 
     let suc: FlightSectionBase = {
         flightIndex: section.flightIndex + 1,
@@ -338,13 +327,19 @@ export function deriveSuccessor(section: FlightSection, flight: Flight, siteSetU
             incoming: flight.incoming.map(jn => ({ 
                 jig: jn, 
                 skip: false,
-                solvabilityStatus: GoalSolvabilityStatus.UNKNOWN
             })), 
-            outgoing: flight.outgoing.map(jn => ({ 
-                jigType: jn, 
-                skip: false,
-                solvabilityStatus: GoalSolvabilityStatus.UNKNOWN
-            })) },
+            outgoing: flight.outgoing.map(jt => {
+                const index = jigTypesOnSite.findIndex(t => t === jt);
+                if(index !== -1){
+                    jigTypesOnSite.splice(index,1)
+                }
+                return { 
+                    jigType: jt, 
+                    skip: false,
+                    onSite: index !== -1,
+                }
+            }) 
+        },
         productionLinesTargetSchedule: section.productionLinesTargetSchedule.map(tpl => { 
             const endDelivery = tpl.schedule.findLastIndex(e => newStartState.productionLines[tpl.name].includes(e.jig))
             const remainingSchedule = tpl.schedule.slice(endDelivery + 1)
@@ -352,10 +347,10 @@ export function deriveSuccessor(section: FlightSection, flight: Flight, siteSetU
             const notBlocked = filterUpTo(toDeliver, jigsOnSite)
             return {
                 name: tpl.name, 
-                schedule: updateDeliveryStatuses(remainingSchedule.map(e => ({ 
+                schedule: remainingSchedule.map(e => ({ 
                     jig: e.jig, 
                     ...initialDeliveryStatuses(e.jig, jigsOnSite, notBlocked)
-                })), jigsOnSite)
+                }))
             }
         }),
         maxSwaps: 0,

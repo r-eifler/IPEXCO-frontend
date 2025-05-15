@@ -4,6 +4,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { Flight, Jig, JigType } from '../../../shared/domain/beluga_problem';
 import { FlightTargetSchedule } from '../../domain/flight-section';
 import { JigConfiguratorComponent } from '../jig-configurator/jig-configurator.component';
+import { MatCardModule } from '@angular/material/card';
+import { TranslocoModule } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-incoming-flight-configurator',
@@ -11,6 +13,8 @@ import { JigConfiguratorComponent } from '../jig-configurator/jig-configurator.c
     MatButtonModule,
     MatIconModule,
     JigConfiguratorComponent,
+    MatCardModule,
+    TranslocoModule,
   ],
   templateUrl: './incoming-flight-configurator.component.html',
   styleUrl: './incoming-flight-configurator.component.scss'
@@ -28,7 +32,7 @@ export class IncomingFlightConfiguratorComponent {
         jig: this.jigs()?.[e.jig],
         status: {
           skip: e.skip,
-          solvabilityStatus: e.solvabilityStatus
+          onSite: true
         }
       }))
   )

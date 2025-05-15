@@ -8,6 +8,7 @@ import { computeRackOccupancyRate, computeSwaps } from '../../domain/metrics';
 import { selectActiveBranchActions, selectActiveBranchNumberFinishedFlights, selectActiveBranchSections, selectInitialState, selectNumFlights, selectNumJigs, selectNumRacks, selectTask } from '../../state/flight-section-planning.selector';
 import { MatIconModule } from '@angular/material/icon';
 import { sum } from 'ramda';
+import { PlanRunStatus } from 'src/app/iterative_planning/domain/plan';
 
 @Component({
   selector: 'app-section-tree-hero',
@@ -46,7 +47,7 @@ export class SectionTreeHeroComponent {
     }
     const occRates: (number | undefined)[] = []
     this.sections()?.forEach(
-      section => occRates.push(computeRackOccupancyRate(section, section.actions))
+      section => section.status == PlanRunStatus.SOLVED ? occRates.push(computeRackOccupancyRate(section, section.actions)) : undefined
     )
     const sumRates = sum(occRates.filter(v => v !== undefined));
     const res = sumRates / sections.length

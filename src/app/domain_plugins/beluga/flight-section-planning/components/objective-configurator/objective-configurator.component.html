@@ -1,4 +1,12 @@
 <div class="container">
-    <app-swap-configurator [value]="maxSwaps()" (valueChange)="onSwapChange($event)"></app-swap-configurator>
-    <mat-slide-toggle [checked]="keepRackEmpty()" (change)="onToggleRack()">Keep at lest one rack empty</mat-slide-toggle>
+    <app-swap-configurator 
+        [value]="maxSwaps()" 
+        (valueChange)="onSwapChange($event)"
+    ></app-swap-configurator>
+    <mat-slide-toggle 
+        [checked]="keepRackEmpty()" 
+        (change)="onToggleRack()"
+        [disabled]="numEmptyRacks() == 0">
+            Keep at lest one rack empty
+    </mat-slide-toggle>
 </div>

@@ -22,7 +22,6 @@ export const selectOutGoingStatusSchedule = createSelector(selectOutgoingFlightS
               type: jigTypes?.[e.jigType],
               status: {
                   skip: e.skip,
-                  solvability: e.solvabilityStatus,
                   loaded,
                   next: !e.skip && loadedIndex == loadedJigs.length && !nextFound
               }
