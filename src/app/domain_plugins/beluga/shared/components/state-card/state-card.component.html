@@ -16,7 +16,7 @@
     </div>
     <div class="trailers">
         @for(elem of trailersBeluga(); track elem.trailer.name){
-            <app-trailer [name]="elem.trailer.name" [size]="20 * 15">
+            <app-trailer [name]="elem.trailer.name" [size]="20 * 15" [maintenance]="elem.maintenance">
                 <app-jig
                     *ngIf="elem.jig"
                     [jig]="elem.jig"  
@@ -42,7 +42,7 @@
     </div>
     <div class="trailers">
         @for(elem of trailersFactory(); track elem.trailer.name){
-            <app-trailer [name]="elem.trailer.name" [size]="20 * 15">
+            <app-trailer [name]="elem.trailer.name" [size]="20 * 15" [maintenance]="elem.maintenance">
                 <app-jig
                     *ngIf="elem.jig"
                     [jig]="elem.jig"  
@@ -55,7 +55,7 @@
     </div>
     <div class="hangars">
         @for(hangar of hangars(); track hangar){
-            <app-hangar [name]="hangar.name">
+            <app-hangar [name]="hangar.name" [maintenance]="hangar.maintenance">
                 <app-jig
                     *ngIf="hangar.jig"
                     [jig]="hangar.jig"  
@@ -71,6 +71,7 @@
             <app-production-line 
                 [line]="pl"
                 [delivered]="productionLinesDelivered()?.[pl.name]"
+                [jigTypes]="jigTypes()"
             >
             </app-production-line>
         }

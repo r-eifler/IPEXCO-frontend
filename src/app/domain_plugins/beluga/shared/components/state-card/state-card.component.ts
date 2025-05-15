@@ -42,9 +42,7 @@ export class StateCardComponent {
   jigTypes = computed(() => this.siteSetUp()?.jig_types)
   jigs = computed(() => this.state()?.jigs)
 
-  incomingSchedule = computed(() => this.targetFlightSchedule()?.incoming.
-    filter(e => !e.skip)
-  )
+  incomingSchedule = computed(() => this.targetFlightSchedule()?.incoming.filter(e => !e.skip))
 
   incoming = computed(() => {
     const state = this.state();
@@ -64,7 +62,7 @@ export class StateCardComponent {
     return state.outgoingLoaded.map(j => this.jigs()?.[j]);
   })
 
-  outgoingSchedule = computed(() => this.targetFlightSchedule()?.outgoing)
+  outgoingSchedule = computed(() => this.targetFlightSchedule()?.outgoing.filter(e => !e.skip))
   
 
   racks = computed(() => {
@@ -88,11 +86,15 @@ export class StateCardComponent {
     if(state === undefined){
       return []
     }
-    let hangarNames = Object.keys(state.hangars)
-    return hangarNames.map(h => ({
-      name: h,
-      jig: state.hangars[h] === null ? null : this.jigs()?.[state.hangars[h]]
-    }))
+    return  this.siteSetUp()?.hangars.map(h => {
+      const loadedJigName  = state.hangars[h.name];
+      if(loadedJigName === null){
+        return {name: h.name, jig: null, maintenance: h.status == SiteStatus.MAINTENANCE}
+      }
+      else{
+        return {name: h.name, jig: this.jigs()?.[loadedJigName], maintenance: h.status == SiteStatus.MAINTENANCE}
+      }
+    })
   })
 
   trailersBeluga = computed(() => {
@@ -103,10 +105,10 @@ export class StateCardComponent {
     return this.siteSetUp()?.belugaTrailers.map(tn => {
       const loadedJigName  = state.trailers[tn.name];
       if(loadedJigName === null){
-        return {trailer: tn, jig: null}
+        return {trailer: tn, jig: null, maintenance: tn.status == SiteStatus.MAINTENANCE}
       }
       else{
-        return {trailer: tn, jig: this.jigs()?.[loadedJigName]}
+        return {trailer: tn, jig: this.jigs()?.[loadedJigName], maintenance: tn.status == SiteStatus.MAINTENANCE}
       }
     })
   })
@@ -119,15 +121,18 @@ export class StateCardComponent {
     return this.siteSetUp()?.factoryTrailers.map(tn => {
       const loadedJigName  = state.trailers[tn.name];
       if(loadedJigName === null){
-        return {trailer: tn, jig: null}
+        return {trailer: tn, jig: null, maintenance: tn.status == SiteStatus.MAINTENANCE}
       }
       else{
-        return {trailer: tn, jig: this.jigs()?.[loadedJigName]}
+        return {trailer: tn, jig: this.jigs()?.[loadedJigName], maintenance: tn.status == SiteStatus.MAINTENANCE}
       }
     })
   })
 
-  productionLines = computed(() => this.targetProductionSchedule() ?? [])
+  productionLines = computed(() => this.targetProductionSchedule().map(pl => ({
+    name: pl.name,
+    schedule: pl.schedule.filter(e => !e.skip).map(e => this.jigs()?.[e.jig])
+  })))
 
   productionLinesDelivered = computed(() => {
     const state = this.state();

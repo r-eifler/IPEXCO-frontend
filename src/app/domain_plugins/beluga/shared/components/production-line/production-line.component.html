@@ -1,10 +1,22 @@
-<div class="container" *transloco="let t">
-    <div>{{t('s.line')}} <span style="font-weight: 500;">{{ lineName() }}</span></div>
-    <div class="list-wrapper">
-        <div class="list">
-            @for(jig of jigNames(); track jig; let idx = $index){
-                <div><span>{{ idx + 1}}</span>: <span>{{ jig }}</span></div>
-            }
-        </div>
-    </div>
-</div>
+<mat-card appearance="outlined" *transloco="let t">
+    <mat-card-header>
+        <mat-icon mat-card-avatar>factory</mat-icon>
+        <div>{{t('s.line')}} <span style="font-weight: 500;">{{ lineName() }}</span></div>
+    </mat-card-header>
+    <mat-card-content class="content">
+        @for(jig of remainingJigs(); track jig.name; let idx = $index){
+            <app-jig-status 
+                [index]="idx"
+                [jig]="jig"  
+                [jigType]="jigTypes()?.[jig?.type]"
+            >
+            </app-jig-status>
+        }
+        @if(remainingJigs().length == 0){
+            <app-info>
+                <mat-icon>check_circle</mat-icon>
+                Everything delivered.
+            </app-info>
+        }
+    </mat-card-content>
+</mat-card>

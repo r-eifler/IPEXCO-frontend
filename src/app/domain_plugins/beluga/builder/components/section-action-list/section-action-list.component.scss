@@ -1,25 +1,13 @@
 @use "../../../../../../variables.scss" as vars;
 
-.main {
+.actions {
     display: flex;
-    flex-direction: column;
-    gap: var(--spacing-200);
+    flex-direction: row;
+    gap: var(--spacing-100);
 
     padding: var(--spacing-200);
     border: solid;
     border-width: 1px;
     @include vars.border_color();
     border-radius: var(--spacing-200);
-}
-
-.sections {
-    display: flex;
-    flex-direction: row;
-    gap: var(--spacing-100);
-}
-
-.actions {
-    display: flex;
-    flex-direction: row;
-    gap: var(--spacing-100);
 }

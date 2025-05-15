@@ -1,12 +1,19 @@
-import { Component, computed, effect, input } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
 import { provideTranslocoScope, TranslocoModule } from '@jsverse/transloco';
-import { ProductionLine } from '../../domain/beluga_problem';
-import { ProductionLineTargetSchedule } from '../../../flight-section-planning/domain/flight-section';
+import { InfoComponent } from 'src/app/shared/components/info/info/info.component';
+import { Jig, JigType } from '../../domain/beluga_problem';
+import { JigStatusComponent } from '../jig-status/jig-status.component';
 
 @Component({
   selector: 'app-production-line',
   imports: [
-    TranslocoModule
+    TranslocoModule,
+    MatIconModule,
+    MatCardModule,
+    InfoComponent,
+    JigStatusComponent,
   ],
    providers: [
       provideTranslocoScope({
@@ -19,12 +26,13 @@ import { ProductionLineTargetSchedule } from '../../../flight-section-planning/d
 })
 export class ProductionLineComponent {
 
-  line = input.required<ProductionLineTargetSchedule>();
+  line = input.required<{name: string, schedule: Jig[]}>();
   delivered = input.required<string[]>();
+  jigTypes = input.required<Record<string,JigType>>();
 
-  remainingJigs = computed(() => this.line().schedule.filter(js => !this.delivered()?.includes(js.jig)))
+  remainingJigs = computed(() => this.line().schedule.filter(j => !this.delivered()?.includes(j.name)))
 
   lineName = computed(() => this.line()?.name.replace('pl',''))
-  jigNames = computed(() => this.remainingJigs().map(js => js.jig.replace('jig', '')))
+  jigNames = computed(() => this.remainingJigs().map(j => j.name.replace('jig', '')))
 
 }

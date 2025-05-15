@@ -7,7 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { TooltipModule } from '@swimlane/ngx-charts';
 import { Store } from '@ngrx/store';
-import { selectJigMapIncomingFlight } from '../../state/flight-section-planning.selector';
+import { selectAllowObjectiveModification, selectJigMapIncomingFlight } from '../../state/flight-section-planning.selector';
 
 @Component({
   selector: 'app-rack-configurator',
@@ -25,6 +25,7 @@ export class RackConfiguratorComponent {
 
   store = inject(Store);
 
+  allowModifications = this.store.selectSignal(selectAllowObjectiveModification);
   incomingFlightJigMap = this.store.selectSignal(selectJigMapIncomingFlight);
 
   rack = input.required<Rack & {jigs: Jig[]}>();

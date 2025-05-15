@@ -2,11 +2,12 @@
     <app-swap-configurator 
         [value]="maxSwaps()" 
         (valueChange)="onSwapChange($event)"
+        [disabled]="!allowModifications()"
     ></app-swap-configurator>
     <mat-slide-toggle 
         [checked]="keepRackEmpty()" 
         (change)="onToggleRack()"
-        [disabled]="numEmptyRacks() == 0">
+        [disabled]="numEmptyRacks() == 0 || !allowModifications()">
             Keep at lest one rack empty
     </mat-slide-toggle>
 </div>

@@ -2,12 +2,19 @@ import { Component, computed, effect, input } from '@angular/core';
 import { Jig, JigType } from '../../domain/beluga_problem';
 import { MatIconModule } from '@angular/material/icon';
 import { JigComponent } from '../jig/jig.component';
+import { MatCardModule } from '@angular/material/card';
+import { TranslocoModule } from '@jsverse/transloco';
+import { JigStatusComponent } from '../jig-status/jig-status.component';
+import { InfoComponent } from 'src/app/shared/components/info/info/info.component';
 
 @Component({
   selector: 'app-beluga-flight',
   imports: [
     MatIconModule,
-    JigComponent,
+    MatCardModule,
+    TranslocoModule,
+    JigStatusComponent,
+    InfoComponent
   ],
   templateUrl: './beluga-flight.component.html',
   styleUrl: './beluga-flight.component.scss'

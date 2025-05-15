@@ -1,6 +1,6 @@
 <div>
     <span class="label">Swaps: </span>
-    <mat-slider min="0" max="20" step="1" showTickMarks discrete [displayWith]="formatLabel" class="slider">
+    <mat-slider min="0" max="20" step="1" showTickMarks discrete [displayWith]="formatLabel" class="slider" [disabled]="disabled()">
         <input matSliderThumb [value]="value()" (valueChange)="onValueChanged($event)">
     </mat-slider>
     <span class="label">{{ currentValue() }}</span>

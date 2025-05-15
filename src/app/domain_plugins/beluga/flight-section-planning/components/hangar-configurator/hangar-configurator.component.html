@@ -2,22 +2,23 @@
     class="container"
 >
     @if(!isUsed()){
-        <button mat-icon-button (click)="onUnlock()">
+        <button mat-icon-button (click)="onUnlock()" [disabled]="! allowModifications()">
             <mat-icon>lock_open</mat-icon>
         </button>
     }
     @else{
-        <button mat-icon-button (click)="onLock()" [disabled]="isLoaded()">
+        <button mat-icon-button (click)="onLock()" [disabled]="isLoaded() || ! allowModifications()">
             <mat-icon>lock</mat-icon>
         </button>
     }
     <app-hangar
-        [class.notUsed]="!isUsed()"
+        [maintenance]="!isUsed()"
         [name]="hangar().name">
         @if(jig()){
             <app-jig
                 [jig]="jig()"  
                 [jigType]="jigTypes()?.[jig()?.type]"
+                [incomingFlight]="incomingFlightJigMap()?.[jig().name]"
                 draggable="false"
             >
             </app-jig>

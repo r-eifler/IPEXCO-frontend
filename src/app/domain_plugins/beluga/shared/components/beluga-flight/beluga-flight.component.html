@@ -1,19 +1,43 @@
-<div class="container">
-    <div>
-    <mat-icon>{{ icon() }}</mat-icon>
-    </div>
-    <div class="rack">
-        <div class="slider">
-            @for(jig of jigs(); track jig){
-                <app-jig [jig]="jig" [jigType]="jigTypes()?.[jig?.name]" [unitSize]="true"></app-jig>
-            }
-        </div>
-    </div>
-    <div class="info-container">
-        @if(!incoming()){
-            <span class="font-highlight">{{ outgoingType() }}</span>
-            <span>{{ numOutgoingJigs() }}</span>
+<mat-card appearance="outlined" *transloco="let t">
+    <mat-card-header>
+        <mat-icon mat-card-avatar>{{ icon() }}</mat-icon>
+        @if(incoming()){
+            <mat-card-title>{{t('f.incoming_flight')}}</mat-card-title>
         }
-    </div>
-</div>
+        @else{
+            <mat-card-title>{{t('f.outgoing_flight')}}</mat-card-title>
+        }
+    </mat-card-header>
+    <mat-card-content class="content">
+        @for(jig of jigs(); track jig; let idx = $index){
+            <app-jig-status 
+                [index]="idx"
+                [jig]="jig"  
+                [jigType]="jigTypes()?.[jig?.type]"
+            >
+            </app-jig-status>
+        }
+        @if(incoming() && jigs().length == 0){
+            <app-info>
+                <mat-icon>check_circle</mat-icon>
+                Everything unloaded.
+            </app-info>
+        }
+        @if(!incoming() && jigs().length == 0){
+            @if(numOutgoingJigs() == 0){
+                <app-info>
+                    <mat-icon>assignment</mat-icon>
+                    No jigs scheduled.
+                </app-info>
+            }
+            @else{
+                <app-info>
+                    <mat-icon>info</mat-icon>
+                    No jigs loaded yet.
+                </app-info>
+            }
+            
+        }
+    </mat-card-content>
+</mat-card>
 

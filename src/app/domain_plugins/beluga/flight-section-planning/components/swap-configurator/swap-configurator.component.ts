@@ -12,6 +12,7 @@ import { MatSliderModule } from '@angular/material/slider';
 export class SwapConfiguratorComponent {
 
   value = input.required<number>();
+  disabled = input<false>();
   valueChange = output<number>();
 
   currentValue: WritableSignal<string> = signal('?')

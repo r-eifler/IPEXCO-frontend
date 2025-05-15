@@ -76,6 +76,10 @@
             }
             @else{
                 <a class="details" mat-stroked-button 
+                    [routerLink]="['../objective-site-update/' + section()?._id ]">
+                    {{t('f.check_objectives_and_site')}}
+                </a>
+                <a class="details" mat-stroked-button 
                     [routerLink]="['../plan-inspection/' + section()?._id ]"
                 >
                     {{t('f.inspect_plan')}}

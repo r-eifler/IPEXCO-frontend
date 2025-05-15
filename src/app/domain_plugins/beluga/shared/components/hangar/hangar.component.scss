@@ -6,6 +6,21 @@
     flex-direction: row;
     gap: var(--spacing-100);
     align-items: center;
+    align-items: flex-end;
+}
+
+.info-container {
+    display: flex;
+    flex-direction: row;
+    gap: var(--spacing-100);
+    align-items: flex-end;
+}
+
+.hangar-container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-050);
+    
 }
 
 .hangar {
@@ -35,4 +50,13 @@
 
 .noDragTarget{
     opacity: 50%;
+}
+
+.maintenance{
+    opacity: 30%;
+}
+
+.error{
+    font-weight: 600;
+    color: red
 }

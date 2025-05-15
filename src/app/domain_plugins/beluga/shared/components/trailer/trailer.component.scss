@@ -12,13 +12,13 @@
     display: flex;
     flex-direction: column;
     gap: var(--spacing-050);
-    
 }
 
 .info-container {
     display: flex;
     flex-direction: row;
     gap: var(--spacing-100);
+    align-items: flex-end;
 }
 
 .trailer {
@@ -45,4 +45,13 @@
 
 .noDragTarget{
     opacity: 50%;
+}
+
+.maintenance{
+    opacity: 30%;
+}
+
+.error{
+    font-weight: 600;
+    color: red
 }

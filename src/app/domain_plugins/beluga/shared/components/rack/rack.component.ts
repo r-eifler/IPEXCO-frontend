@@ -1,8 +1,10 @@
 import { Component, input } from '@angular/core';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-rack',
   imports: [
+    MatIconModule
   ],
   templateUrl: './rack.component.html',
   styleUrl: './rack.component.scss'

@@ -16,12 +16,12 @@
         <mat-icon class="error">wrong_location</mat-icon>
     }
     @if(!status()?.skip){
-        <button mat-icon-button (click)="onStatusChanged(true)">
+        <button mat-icon-button (click)="onStatusChanged(true)" [disabled]="!allowModifications()">
             <mat-icon>step_over</mat-icon>
         </button>
     }
     @else{
-        <button mat-icon-button (click)="onStatusChanged(false)" [disabled]="mustBeSkipped()">
+        <button mat-icon-button (click)="onStatusChanged(false)" [disabled]="mustBeSkipped() || !allowModifications()">
             <mat-icon>check</mat-icon>
         </button>
     }

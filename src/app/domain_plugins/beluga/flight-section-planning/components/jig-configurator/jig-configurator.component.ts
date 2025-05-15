@@ -4,7 +4,7 @@ import { JigComponent } from '../../../shared/components/jig/jig.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { Store } from '@ngrx/store';
-import { selectJigMapIncomingFlight } from '../../state/flight-section-planning.selector';
+import { selectAllowObjectiveModification, selectJigMapIncomingFlight } from '../../state/flight-section-planning.selector';
 
 @Component({
   selector: 'app-jig-configurator',
@@ -20,6 +20,7 @@ export class JigConfiguratorComponent {
 
   store = inject(Store);
 
+  allowModifications = this.store.selectSignal(selectAllowObjectiveModification);
   incomingFlightJigMap = this.store.selectSignal(selectJigMapIncomingFlight);
 
   index = input<null | number>(null);
