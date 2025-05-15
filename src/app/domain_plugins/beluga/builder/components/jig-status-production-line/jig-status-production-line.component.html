@@ -1,0 +1,36 @@
+<div  
+    class="container"
+    [class.next]="status().next"    
+>
+    @if(index() !== null){
+        <span class="index">{{ (index() ?? 0) + 1}}</span>
+    }
+    <app-jig
+        [class.skipped]="status()?.skip"
+        [jig]="jig()"  
+        [jigType]="jigType()"
+        [incomingFlight]="incomingFlightJigMap()?.[jig().name] ?? null"
+        [unitSize]="true"
+        [draggable]="true"
+        [showOnlyPart]="true"
+    >
+    </app-jig>
+    @switch (status()?.solvability) {
+        @case (solvabilityStatuses.BLOCKED) {
+            <mat-icon class="error">block</mat-icon>
+        }
+        @case (solvabilityStatuses.NOT_ON_SITE) {
+            <mat-icon class="error">wrong_location</mat-icon>
+        }
+        @case (solvabilityStatuses.UNKNOWN) {
+            <mat-icon class="info">question_mark</mat-icon>
+        }
+    }
+    @if (status()?.delivered) {
+        <mat-icon>check</mat-icon>
+    }
+    @else{
+        <mat-icon>close</mat-icon>
+    }
+
+</div> 

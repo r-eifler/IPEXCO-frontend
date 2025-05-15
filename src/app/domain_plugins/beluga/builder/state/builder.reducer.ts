@@ -2,10 +2,10 @@ import { createReducer, on } from "@ngrx/store";
 import { Loadable, LoadingState } from "src/app/shared/common/loadable.interface";
 import { Project } from "src/app/shared/domain/project";
 import { FlightSection, getFlightSchedule, getFullStartState, getProductionSchedule } from "../../flight-section-planning/domain/flight-section";
-import { Side } from "../../shared/domain/beluga_problem";
+import { BelugaProblem, BelugaProblemZ, Flight, Side } from "../../shared/domain/beluga_problem";
 import { applyAction, BelugaState } from "../../shared/domain/beluga_state";
-import { updateSkipIncomingJig, updateSkipOutgoingJigType } from "../domain/schedule_utils";
-import { cancelDrag, createNewBelugaAction, loadFlightSectionSuccess, loadProject, loadProjectSuccess, skipIncomingJig, skipOutgoingJigType, startDrag, stopDrag, updateFlightSectionSuccess } from "./builder.actions";
+import { updateSkipIncomingJig, updateSkipOutgoingJigType, updateSkipProductionLineJig } from "../domain/schedule_utils";
+import { cancelDrag, createNewBelugaAction, loadFlightSection, loadFlightSectionSuccess, loadProject, loadProjectSuccess, skipIncomingJig, skipOutgoingJigType, skipProductionJig, startDrag, stopDrag, updateFlightSectionSuccess } from "./builder.actions";
 
 export interface DragSource{
     name: string,
@@ -14,6 +14,7 @@ export interface DragSource{
 
 export interface BuilderState {
     project: Loadable<Project>,
+    flights: Loadable<Flight[]>,
     section: Loadable<FlightSection>,
 
     taskState: BelugaState | null | undefined,
@@ -28,6 +29,7 @@ export interface BuilderState {
 
 const initialState: BuilderState = {
     project: {state: LoadingState.Initial, data: undefined},
+    flights: {state: LoadingState.Initial, data: undefined},
     section: {state: LoadingState.Initial, data: undefined},
 
     taskState: null,
@@ -43,11 +45,16 @@ export const BuilderReducer = createReducer(
     initialState,
     on(loadProject, (state): BuilderState => ({
         ...state,
-        taskState: null
+        project: {state: LoadingState.Loading, data: undefined},
     })),
     on(loadProjectSuccess, (state, {project}): BuilderState => ({
         ...state,
         project: {state: LoadingState.Done, data: project},
+        flights: {state: LoadingState.Done, data: BelugaProblemZ.parse(project.baseTask.model).flights},
+    })),
+    on(loadFlightSection, (state, ): BuilderState => ({
+        ...state,
+        section: {state: LoadingState.Loading, data: undefined},
     })),
     on(loadFlightSectionSuccess, (state, {section}): BuilderState => ({
         ...state,
@@ -96,6 +103,16 @@ export const BuilderReducer = createReducer(
             data: {
                 ...state.section.data,
                 flightTargetSchedule: updateSkipOutgoingJigType(jigType, index, state.section.data.flightTargetSchedule)
+            }
+        } : state.section
+    })),
+    on(skipProductionJig, (state, {jigName, productionLine}): BuilderState => ({
+        ...state,
+        section:  state.section.data !== undefined ? {
+            state: LoadingState.Done,
+            data: {
+                ...state.section.data,
+                productionLinesTargetSchedule: updateSkipProductionLineJig(jigName, productionLine, state.section.data.productionLinesTargetSchedule)
             }
         } : state.section
     })),

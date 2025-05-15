@@ -15,7 +15,7 @@
             }
         </div>
     }
-    @if(loaded()){
+    @if(loaded() || showOnlyPart()){
         <div
             class="part" 
             [style.width]="partDisplaySize() + 'px'  "

@@ -1,8 +1,32 @@
-<div class="main">
-    @for(pl of (productionLines$ | async); track pl.name){
-        <app-production-line
-            [line]="pl"
-            [delivered]="(productionLineStates$ | async)?.[pl.name]"
-        ></app-production-line>
-    }
-</div>
+<mat-card appearance="outlined" *transloco="let t">
+    <mat-card-header>
+        <mat-icon mat-card-avatar>factory</mat-icon>
+        <mat-card-title>{{productionLineName()}}</mat-card-title>
+    </mat-card-header>
+    <mat-card-content
+        class="content"
+    >
+        @if(!lineEmpty()){
+            @for(e of schedule(); track e.jig?.name; let idx = $index){ 
+                <app-jig-status-production-line
+                    [index]="idx"
+                    [jig]="e.jig"
+                    [jigType]="jigTypes()?.[e.jig?.type]"
+                    [status]="e.status"
+                ></app-jig-status-production-line>
+            }
+        }
+        @else{
+            <app-info>
+                <mat-icon>info</mat-icon>
+                {{t('b.empty_line')}}
+            </app-info>
+        }
+    </mat-card-content>
+    <mat-card-actions class="actions">
+        <button mat-button (click)="onSkip()" [disabled]="!skipPossible()">
+            {{t('b.skip')}}
+            <mat-icon>step_over</mat-icon>
+        </button>
+    </mat-card-actions>
+</mat-card>

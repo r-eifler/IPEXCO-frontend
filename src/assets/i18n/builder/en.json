@@ -26,5 +26,6 @@
     "unload_next_jig": "unload next jig",
     "skip_next_jig": "skip next jig",
     "skip": "Skip",
-    "unload": "Unload"
+    "unload": "Unload",
+    "empty_line": "production line is empty"
 }

@@ -1,7 +1,7 @@
 import { createSelector } from "@ngrx/store";
 import { memoizeWith } from "ramda";
 import { getJigSize, occupiedRackSpace, Side } from "../../shared/domain/beluga_problem";
-import { BuilderFeature } from "./builder.feature";
+import { BuilderFeature, selectFlights } from "./builder.feature";
 
 
 const selectState = BuilderFeature.selectBuilderFeatureState
@@ -18,6 +18,10 @@ export const selectSection = createSelector(selectState,
 
 export const selectProject = createSelector(selectState, 
     (state) => state.project.data
+);
+
+export const selectAllFlights = createSelector(selectFlights, 
+    (flights) => flights.data
 );
 
 export const selectSiteSetUp = createSelector(selectSection, 
@@ -124,6 +128,13 @@ export const selectCurrentFlightNextOutgoingJigType = createSelector(selectFligh
 export const selectFlightFinished = createSelector(selectIncomingUnloadFinished, selectOutgoingLoadFinished,
     (incomingFinished, outgoingFinished) => incomingFinished && outgoingFinished
 )
+
+export const selectJigMapIncomingFlight= createSelector(selectAllFlights, 
+    (flights) => flights?.reduce((acc1,c1) => ({
+        ...acc1,
+        ...c1.incoming.reduce((acc2,c2) =>({...acc2, [c2]: c1.name}), {})
+    }), {})
+);
 
 
 // Racks
@@ -272,17 +283,34 @@ export const selectProductionLineSchedule = createSelector(selectSection,
     (section) => section?.productionLinesTargetSchedule
 );
 
+export const selectProductionLineScheduleFor = memoizeWith(
+    (name: string) => name,
+    (name: string) =>  createSelector(selectProductionLineSchedule,
+        (targetSchedules) => targetSchedules?.find(pl => pl.name == name)
+    )
+); 
+
 export const selectProductionLinesState = createSelector(selectTaskState, 
     (taskState) => taskState?.productionLines)
 
-export const selectDeliverableJigs = createSelector(selectProductionLinesState, selectProductionLineSchedule,
-    (plsState, pls) => {
-        if(plsState === undefined || pls === undefined || pls === null){
-            return {}
+export const selectProductionLinesStateFor = memoizeWith(
+    (name: string) => name,
+    (name: string) =>  createSelector(selectProductionLinesState,
+        (deliveryState) => deliveryState?.[name]
+    )
+); 
+
+export const selectDeliverableJigs = createSelector(selectProductionLineSchedule, selectProductionLinesState,
+    (pls, delivered) => {
+        if(pls === undefined || pls === null || delivered === undefined){
+            return []
         }
-        return pls.reduce((acc,c) => 
-            c.schedule.length == 0 ? 
-            acc : {...acc, [c.schedule[plsState[c.name].length].jig]: c.name}, {} as Record<string,string>) 
+        return pls.reduce((acc, pl) => (
+            {
+                ...acc, 
+                [pl.schedule.find(e => !e.skip && !delivered[pl.name].includes(e.jig))?.jig ?? 'none']: pl.name
+            }), {} as Record<string, string>
+        )
     });
 
 

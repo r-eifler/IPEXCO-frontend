@@ -4,9 +4,9 @@ import { TranslocoModule } from '@jsverse/transloco';
 import { ControlsComponent } from '../controls/controls.component';
 import { FlightStateComponent } from '../flight-state/flight-state.component';
 import { HangarsStateComponent } from '../hangars-state/hangars-state.component';
-import { SectionActionListComponent } from '../section-action-list/section-action-list.component';
-import { ProductionLineStateComponent } from '../production-line-state/production-line-state.component';
+import { ProductionLinesStateComponent } from '../production-lines-state/production-lines-state.component';
 import { RacksStateComponent } from '../racks-state/racks-state.component';
+import { SectionActionListComponent } from '../section-action-list/section-action-list.component';
 import { TrailersStateComponent } from '../trailers-state/trailers-state.component';
 
 @Component({
@@ -14,7 +14,7 @@ import { TrailersStateComponent } from '../trailers-state/trailers-state.compone
   imports: [
     HangarsStateComponent,
     FlightStateComponent,
-    ProductionLineStateComponent,
+    ProductionLinesStateComponent,
     RacksStateComponent,
     TrailersStateComponent,
     SectionActionListComponent,

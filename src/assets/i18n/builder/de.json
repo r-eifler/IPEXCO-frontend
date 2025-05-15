@@ -25,5 +25,6 @@
     "unload_next_jig": "lade nächstes Montagegestelle ab",
     "skip_next_jig": "überspringe nächstes Montagegestelle",
     "skip": "Überspringen",
-    "unload": "Abladen"
+    "unload": "Abladen",
+    "empty_line": "Produktionslinie ist leer"
 }

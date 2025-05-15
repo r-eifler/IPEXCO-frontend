@@ -1,7 +1,20 @@
-.main{
-    height: 100%;
+@use "../../../../../../variables.scss" as vars;
+
+.actions{
+    display: flex;
+    flex-direction: row;
+    gap: var(--spacing-100);
+    justify-content: end;
+}
+
+.content{
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
     gap: var(--spacing-100);
+    max-height: 200px;
+    overflow-y: scroll;
+}
+
+.noDragTarget{
+    opacity: 50%;
 }

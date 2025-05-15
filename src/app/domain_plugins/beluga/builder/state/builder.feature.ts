@@ -16,4 +16,5 @@ export const {
     selectSizeUnit,
     selectTaskState,
     selectDragSource,
+    selectFlights
   } = BuilderFeature;

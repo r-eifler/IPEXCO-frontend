@@ -1,4 +1,4 @@
-import { FlightTargetSchedule} from "../../flight-section-planning/domain/flight-section";
+import { FlightTargetSchedule, ProductionLineTargetSchedule} from "../../flight-section-planning/domain/flight-section";
 
 function updateIncomingJigConsiderationStatus(jigName: string, schedule: FlightTargetSchedule, skip: boolean){
     const index = schedule.incoming.findIndex(e => e.jig == jigName);
@@ -27,10 +27,6 @@ export function updateConsiderIncomingJig(jigName: string, schedule: FlightTarge
 }
 
 export function updateSkipOutgoingJigType(jigType: string, index: number, schedule: FlightTargetSchedule){
-    // const index = schedule.outgoing.findIndex(e => e.jigType == jigType && !e.skip);
-    // if(index === -1){
-    //     return schedule;
-    // }
     return {
         ...schedule,
         outgoing: [
@@ -42,4 +38,32 @@ export function updateSkipOutgoingJigType(jigType: string, index: number, schedu
             ...schedule.outgoing.slice(index+1),
         ]
     }
+}
+
+
+export function updateSkipProductionLineJig(jigName: string, productionLine: string, schedule: ProductionLineTargetSchedule[]){
+    const plIndex = schedule.findIndex(pl => pl.name == productionLine);
+    // if(plIndex === -1){
+    //     return undefined
+    // }
+    const jigIndex = schedule[plIndex].schedule.findIndex(e => e.jig == jigName);
+    // if(jigIndex === -1){
+    //     return undefined
+    // }
+    const toChangeSchedule = schedule[plIndex];
+    return [
+        ...schedule.slice(0,plIndex),
+        {
+            name: toChangeSchedule.name,
+            schedule: [
+                ...toChangeSchedule.schedule.slice(0,jigIndex),
+            {
+                ...toChangeSchedule.schedule[jigIndex],
+                skip: true
+            },
+            ...toChangeSchedule.schedule.slice(jigIndex+1),
+            ]
+        },
+        ...schedule.slice(plIndex+1),
+    ]
 }

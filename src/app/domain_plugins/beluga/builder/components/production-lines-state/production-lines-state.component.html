@@ -1,0 +1,9 @@
+<div class="container">
+    @for(pl of productionLinesTargetSchedules(); track pl.name){
+        <app-production-line-state
+            [jigs]="jigs()"
+            [jigTypes]="jigTypes()"
+            [productionLineName]="pl.name"
+        ></app-production-line-state>
+    }
+</div>
