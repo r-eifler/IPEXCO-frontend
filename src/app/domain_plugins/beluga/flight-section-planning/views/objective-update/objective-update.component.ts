@@ -42,6 +42,13 @@ export class ObjectiveUpdateComponent {
   store = inject(Store);
 
   section = this.store.selectSignal(selectSelectedSection);
+  configuration = computed(() => {
+    const index = this.section()?.configurationIndex;
+    if(index === undefined){
+      return undefined;
+    }
+    return this.section()?.configurations[index];
+  })
   jigsOnSite = this.store.selectSignal(selectJigsOnSite);
 
   name = computed(() => {
@@ -50,16 +57,16 @@ export class ObjectiveUpdateComponent {
     });
 
   
-  jigTypes = computed(() => this.section()?.siteSetUp.jig_types);
+  jigTypes = computed(() => this.configuration()?.siteSetUp.jig_types);
   jigs = computed(() => this.section()?.siteState.jigs);
 
-  racks = computed(() => this.section()?.siteSetUp.racks.map(r => ({
+  racks = computed(() => this.configuration()?.siteSetUp.racks.map(r => ({
     ...r,
     jigs: this.section()?.siteState.racks[r.name].map(j => this.section()?.siteState.jigs[j])
   })));
 
 
-  belugaTrailers = computed(() => this.section()?.siteSetUp.belugaTrailers.map(t => {
+  belugaTrailers = computed(() => this.configuration()?.siteSetUp.belugaTrailers.map(t => {
     const jigName = this.section()?.siteState.trailers[t.name]; 
     return {
       ...t,
@@ -67,7 +74,7 @@ export class ObjectiveUpdateComponent {
     }
   }));
 
-  factoryTrailers = computed(() => this.section()?.siteSetUp.factoryTrailers.map(t => {
+  factoryTrailers = computed(() => this.configuration()?.siteSetUp.factoryTrailers.map(t => {
     const jigName = this.section()?.siteState.trailers[t.name]; 
     return {
       ...t,
@@ -75,7 +82,7 @@ export class ObjectiveUpdateComponent {
     }
   }));
 
-  hangars = computed(() => this.section()?.siteSetUp.hangars.map(t => {
+  hangars = computed(() => this.configuration()?.siteSetUp.hangars.map(t => {
     const jigName = this.section()?.siteState.hangars[t.name]; 
     return {
       ...t,
@@ -85,10 +92,10 @@ export class ObjectiveUpdateComponent {
 
 
   originalFlight = this.store.selectSignal(selectCurrentFlightSchedule);
-  flightTargetSchedule = computed(() => this.section()?.flightTargetSchedule);
+  flightTargetSchedule = computed(() => this.configuration()?.flightTargetSchedule);
 
   originalProductionLines = this.store.selectSignal(selectProductionLines);
-  productionLineTargetSchedules = computed(() => this.section()?.productionLinesTargetSchedule);
+  productionLineTargetSchedules = computed(() => this.configuration()?.productionLinesTargetSchedule);
 
   onChangeRackStatus(status: SiteStatus, index: number){
     const oldSection = this.section();
@@ -97,18 +104,19 @@ export class ObjectiveUpdateComponent {
     }
     let newSection = {
       ...oldSection,
-      siteSetUp: {
-        ...oldSection?.siteSetUp,
-        racks: [
-          ...oldSection.siteSetUp.racks.slice(0,index),
-          {
-            ...oldSection.siteSetUp.racks[index],
-            status
-          },
-          ...oldSection.siteSetUp.racks.slice(index + 1)
-        ]
-      }
+      // siteSetUp: {
+      //   ...oldSection?.siteSetUp,
+      //   racks: [
+      //     ...oldSection.siteSetUp.racks.slice(0,index),
+      //     {
+      //       ...oldSection.siteSetUp.racks[index],
+      //       status
+      //     },
+      //     ...oldSection.siteSetUp.racks.slice(index + 1)
+      //   ]
+      // }
     }
+    newSection.configurations[newSection.configurationIndex].siteSetUp.racks[index].status = status;
     this.store.dispatch(updateFlightSection({section: newSection}));
   }
 
@@ -121,18 +129,19 @@ export class ObjectiveUpdateComponent {
     if(side == 'bside'){
       let newSection = {
         ...oldSection,
-        siteSetUp: {
-          ...oldSection?.siteSetUp,
-          belugaTrailers: [
-            ...oldSection.siteSetUp.belugaTrailers.slice(0,index),
-            {
-              ...oldSection.siteSetUp.belugaTrailers[index],
-              status
-            },
-            ...oldSection.siteSetUp.belugaTrailers.slice(index + 1)
-          ]
-        }
+        // siteSetUp: {
+        //   ...oldSection?.siteSetUp,
+        //   belugaTrailers: [
+        //     ...oldSection.siteSetUp.belugaTrailers.slice(0,index),
+        //     {
+        //       ...oldSection.siteSetUp.belugaTrailers[index],
+        //       status
+        //     },
+        //     ...oldSection.siteSetUp.belugaTrailers.slice(index + 1)
+        //   ]
+        // }
       }
+      newSection.configurations[newSection.configurationIndex].siteSetUp.belugaTrailers[index].status = status 
       this.store.dispatch(updateFlightSection({section: newSection}));
       return 
     }
@@ -140,18 +149,19 @@ export class ObjectiveUpdateComponent {
     if(side == 'fside'){
       let newSection = {
         ...oldSection,
-        siteSetUp: {
-          ...oldSection?.siteSetUp,
-          factoryTrailers: [
-            ...oldSection.siteSetUp.factoryTrailers.slice(0,index),
-            {
-              ...oldSection.siteSetUp.factoryTrailers[index],
-              status
-            },
-            ...oldSection.siteSetUp.factoryTrailers.slice(index + 1)
-          ]
-        }
+        // siteSetUp: {
+        //   ...oldSection?.siteSetUp,
+        //   factoryTrailers: [
+        //     ...oldSection.siteSetUp.factoryTrailers.slice(0,index),
+        //     {
+        //       ...oldSection.siteSetUp.factoryTrailers[index],
+        //       status
+        //     },
+        //     ...oldSection.siteSetUp.factoryTrailers.slice(index + 1)
+        //   ]
+        // }
       }
+      newSection.configurations[newSection.configurationIndex].siteSetUp.factoryTrailers[index].status = status 
       this.store.dispatch(updateFlightSection({section: newSection}));
       return 
     }
@@ -164,18 +174,19 @@ export class ObjectiveUpdateComponent {
     }
     let newSection = {
       ...oldSection,
-      siteSetUp: {
-        ...oldSection?.siteSetUp,
-        hangars: [
-          ...oldSection.siteSetUp.hangars.slice(0,index),
-          {
-            ...oldSection.siteSetUp.hangars[index],
-            status
-          },
-          ...oldSection.siteSetUp.hangars.slice(index + 1)
-        ]
-      }
+      // siteSetUp: {
+      //   ...oldSection?.siteSetUp,
+      //   hangars: [
+      //     ...oldSection.siteSetUp.hangars.slice(0,index),
+      //     {
+      //       ...oldSection.siteSetUp.hangars[index],
+      //       status
+      //     },
+      //     ...oldSection.siteSetUp.hangars.slice(index + 1)
+      //   ]
+      // }
     }
+    newSection.configurations[newSection.configurationIndex].siteSetUp.hangars[index].status = status 
     this.store.dispatch(updateFlightSection({section: newSection}));
   }
 
@@ -198,8 +209,9 @@ export class ObjectiveUpdateComponent {
     }
     let newSection: FlightSection= {
       ...oldSection,
-      productionLinesTargetSchedule: newSchedule
+      // productionLinesTargetSchedule: newSchedule
     }
+    newSection.configurations[newSection.configurationIndex].productionLinesTargetSchedule = newSchedule;
     console.log(newSection)
     this.store.dispatch(updateFlightSection({section: newSection}));
   }

@@ -25,7 +25,7 @@ export const selectAllFlights = createSelector(selectFlights,
 );
 
 export const selectSiteSetUp = createSelector(selectSection, 
-    (section) => section?.siteSetUp
+    (section) => section === undefined ? undefined : section.configurations[section.configurationIndex].siteSetUp
 );
 
 export const selectJigTypes= createSelector(selectSiteSetUp, 
@@ -61,7 +61,7 @@ export const selectJigsState = createSelector(selectTaskState,
 // flight
 
 export const selectFlightSchedule= createSelector(selectSection, 
-    (section) => section?.flightTargetSchedule);
+    (section) => section === undefined ? undefined : section.configurations[section.configurationIndex].flightTargetSchedule);
 
 export const selectFlightName = createSelector(selectFlightSchedule, 
     (flight) => flight?.name);
@@ -280,7 +280,7 @@ export const selectAvailableHangarNames = createSelector(selectHangars, selectHa
 // ProductionLine 
 
 export const selectProductionLineSchedule = createSelector(selectSection, 
-    (section) => section?.productionLinesTargetSchedule
+    (section) => section === undefined ? undefined : section.configurations[section.configurationIndex].productionLinesTargetSchedule
 );
 
 export const selectProductionLineScheduleFor = memoizeWith(

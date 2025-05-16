@@ -19,12 +19,12 @@ import { applyActions } from '../../domain/beluga_state';
 export class SectionPlanComponent {
 
   section = input.required<FlightSection>();
+  configuration = computed(() => this.section()?.configurations[this.section()?.configurationIndex])
 
   selectedActionIndex: WritableSignal<number | null> = signal(-1);
   actions = computed(() => this.section()?.actions.filter(a => a.name !== BelugaActionType.SWITCH_TO_NEXT_BELUGA) ?? [])
 
   selectedState = computed(() => {
-    const section = this.section();
     const startState = getFullStartState(this.section());
     let endIndex  = this.selectedActionIndex();
     if(endIndex === null || startState === undefined){
@@ -37,9 +37,9 @@ export class SectionPlanComponent {
     return applyActions(
       startState, 
       actions, 
-      getFlightSchedule(section.flightTargetSchedule, false),
-      getProductionSchedule(section.productionLinesTargetSchedule, false),
-      section.siteSetUp
+      getFlightSchedule(this.configuration().flightTargetSchedule, false),
+      getProductionSchedule(this.configuration().productionLinesTargetSchedule, false),
+      this.configuration().siteSetUp
     )
   })
 

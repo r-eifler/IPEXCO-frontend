@@ -155,7 +155,7 @@ export const selectJigsOnSite = createSelector(selectSelectedSection,
     (section) => section === undefined ? undefined : getJigsOnSiteFromSection(section));
 
 export const selectInitiallyNumEmptyRacks = createSelector(selectSelectedSection,  
-    (section) => section === undefined ? undefined : sum(section.siteSetUp.racks.map(r => section.siteState.racks[r.name].length == 0 ? 1 : 0))
+    (section) => section === undefined ? undefined : sum(section.configurations[section.configurationIndex].siteSetUp.racks.map(r => section.siteState.racks[r.name].length == 0 ? 1 : 0))
 );
 
 // Flights

@@ -81,23 +81,6 @@ export function initConsiderationStatusesNotOnSiteReverse(schedule: StatusSchedu
     return res
 }
 
-// export function updateDeliveryStatuses(schedule: StatusScheduleElem[], jigsOnSite: Set<string>){
-
-//     return schedule.map(sse => {
-//         const wantToDeliver = schedule.
-//         filter(e => !e.skip || e.jig == sse.jig).
-//         map(e => e.jig);
-//         const notBlocked = filterUpTo(wantToDeliver, jigsOnSite)
-
-//         return {
-//             ...sse,
-//             solvabilityStatus: jigsOnSite.has(sse.jig) ? 
-//                 (notBlocked.includes(sse.jig) ? GoalSolvabilityStatus.UNKNOWN : GoalSolvabilityStatus.BLOCKED) : 
-//                 GoalSolvabilityStatus.NOT_ON_SITE
-//         }
-//     });
-// }
-
 
 export type ProductionLineTargetSchedule = zinfer<typeof ProductionLineTargetScheduleZ>;
 
@@ -120,29 +103,33 @@ export const ExplanationsZ = object({
     goals: record(string(), SimplePlanPropertyZ)
 })
 
+export type Explanations = zinfer<typeof ExplanationsZ>;
 
-export const FlightSectionBaseZ = object({
-    flightIndex: number(),
+export const BelugaConfigurationZ = object({
     siteSetUp: BelugaSiteSetUpZ,
-    siteState: BelugaSiteStateZ,
-
     flightTargetSchedule: FlightTargetScheduleZ,
     productionLinesTargetSchedule: array(ProductionLineTargetScheduleZ),
     maxSwaps: nullable(number()),
     minEmptyRacks: nullable(number()),
+    explanations: nullable(ExplanationsZ),
+    explanationStatus: ExplanationRunStatusZ
+})
 
+export type BelugaConfiguration = zinfer<typeof BelugaConfigurationZ>;
+
+export const FlightSectionBaseZ = object({
     predecessorId: nullable(string()),
     treeId: string(),
 
+    flightIndex: number(),
+    siteState: BelugaSiteStateZ,
+    configurationIndex: number(),
+    configurations: array(BelugaConfigurationZ),
+    
     planMethod: optional(PlanMethodZ),
     actions: array(BelugaActionZ),
     status: PlanRunStatusZ,
-    satisfiedProperties: array(string()).optional(),
     finished: boolean(),
-
-    explainMethod: optional(ExplainMethodZ),
-    explanations: nullable(ExplanationsZ),
-    explanationStatus: ExplanationRunStatusZ
 })
 
 export type FlightSectionBase = zinfer<typeof FlightSectionBaseZ>;
@@ -188,19 +175,21 @@ export function getFullStartState(section: FlightSection | undefined | null){
     if(section === undefined || section === null){
         return undefined;
     }
+    const config = section.configurations[section.configurationIndex];
     return {
         ...section.siteState,
         flightIndex: section.flightIndex,
         incomingUnloaded: [],
         outgoingLoaded: [],
-        productionLines: section.productionLinesTargetSchedule.reduce((acc,c) => ({...acc, [c.name]: []}),{})
+        productionLines: config.productionLinesTargetSchedule.reduce((acc,c) => ({...acc, [c.name]: []}),{})
     }
 }
 
 export function getTaskFromSection(section: FlightSection){
 
     const state = section.siteState;
-    const setUp = section.siteSetUp;
+    const config = section.configurations[section.configurationIndex];
+    const setUp = config.siteSetUp;
 
     let task: BelugaProblem = {
         jigs: state.jigs,
@@ -221,14 +210,14 @@ export function getTaskFromSection(section: FlightSection){
             jig: state.trailers[t.name],
         })),
         jig_types: setUp.jig_types,
-        production_lines: section.productionLinesTargetSchedule.map(pl => ({
+        production_lines: config.productionLinesTargetSchedule.map(pl => ({
             ...pl,
             schedule: pl.schedule.filter(j => !j.skip).map(j => j.jig),
         })),
         flights: [{
-            ...section.flightTargetSchedule,
-            incoming: section.flightTargetSchedule.incoming.filter(j => !j.skip).map(j => j.jig),
-            outgoing: section.flightTargetSchedule.outgoing.filter(j => !j.skip).map(j => j.jigType),
+            ...config.flightTargetSchedule,
+            incoming: config.flightTargetSchedule.incoming.filter(j => !j.skip).map(j => j.jig),
+            outgoing: config.flightTargetSchedule.outgoing.filter(j => !j.skip).map(j => j.jigType),
         }]
     }
     return task;
@@ -261,9 +250,10 @@ export function getJigsOnSiteFromState(state: BelugaSiteState, flights: Flight[]
 
 export function getJigsOnSiteFromSection(section: FlightSection){
 
+    const config = section.configurations[section.configurationIndex];
     const consideredJigs = new Set<string>();
 
-    section.flightTargetSchedule.incoming.
+    config.flightTargetSchedule.incoming.
         filter(e => !e.skip).
         forEach(e => consideredJigs.add(e.jig));
     
@@ -309,14 +299,16 @@ export function filterUpTo(collection: string[], considered: Set<string>){
     return res;
 }
 
-export function deriveSuccessor(section: FlightSection, flight: Flight, siteSetUp: BelugaSiteSetUp){
+export function deriveSuccessor(section: FlightSection, flight: Flight){
+
+    const config = section.configurations[section.configurationIndex];
 
     let newStartState = applyActions(
         getFullStartState(section), 
         section.actions, 
-        getFlightSchedule(section.flightTargetSchedule, false),  
-        getProductionSchedule(section.productionLinesTargetSchedule ?? [],false) , 
-        section.siteSetUp
+        getFlightSchedule(config.flightTargetSchedule, false),  
+        getProductionSchedule(config.productionLinesTargetSchedule ?? [],false) , 
+        config.siteSetUp
     );
     if (newStartState == undefined){
         return undefined;
@@ -326,8 +318,10 @@ export function deriveSuccessor(section: FlightSection, flight: Flight, siteSetU
     const jigTypesOnSite = [...jigsOnSite].map(jn => section.siteState.jigs[jn].type)
 
     let suc: FlightSectionBase = {
+        predecessorId: section._id,
+        treeId: section.treeId,
+
         flightIndex: section.flightIndex + 1,
-        siteSetUp: siteSetUp,
         siteState: {
             jigs: newStartState.jigs,
             racks: newStartState.racks,
@@ -335,51 +329,49 @@ export function deriveSuccessor(section: FlightSection, flight: Flight, siteSetU
             hangars: newStartState.hangars,
         },
         
-        
-        flightTargetSchedule: { 
-            name: flight.name, 
-            incoming: flight.incoming.map(jn => ({ 
-                jig: jn, 
-                skip: false,
-            })), 
-            outgoing: flight.outgoing.map(jt => {
-                const index = jigTypesOnSite.findIndex(t => t === jt);
-                if(index !== -1){
-                    jigTypesOnSite.splice(index,1)
-                }
-                return { 
-                    jigType: jt, 
+        configurationIndex: 0,
+        configurations: [{
+            siteSetUp: config.siteSetUp,
+            flightTargetSchedule: { 
+                name: flight.name, 
+                incoming: flight.incoming.map(jn => ({ 
+                    jig: jn, 
                     skip: false,
-                    onSite: index !== -1,
+                })), 
+                outgoing: flight.outgoing.map(jt => {
+                    const index = jigTypesOnSite.findIndex(t => t === jt);
+                    if(index !== -1){
+                        jigTypesOnSite.splice(index,1)
+                    }
+                    return { 
+                        jigType: jt, 
+                        skip: false,
+                        onSite: index !== -1,
+                    }
+                }) 
+            },
+            productionLinesTargetSchedule: config.productionLinesTargetSchedule.map(tpl => { 
+                const endDelivery = tpl.schedule.findLastIndex(e => newStartState.productionLines[tpl.name].includes(e.jig))
+                const remainingSchedule = tpl.schedule.slice(endDelivery + 1)
+                const toDeliver = remainingSchedule.map(e => e.jig)
+                const notBlocked = filterUpTo(toDeliver, jigsOnSite)
+                return {
+                    name: tpl.name, 
+                    schedule: remainingSchedule.map(e => ({ 
+                        jig: e.jig, 
+                        ...initialDeliveryStatuses(e.jig, jigsOnSite, notBlocked)
+                    }))
                 }
-            }) 
-        },
-        productionLinesTargetSchedule: section.productionLinesTargetSchedule.map(tpl => { 
-            const endDelivery = tpl.schedule.findLastIndex(e => newStartState.productionLines[tpl.name].includes(e.jig))
-            const remainingSchedule = tpl.schedule.slice(endDelivery + 1)
-            const toDeliver = remainingSchedule.map(e => e.jig)
-            const notBlocked = filterUpTo(toDeliver, jigsOnSite)
-            return {
-                name: tpl.name, 
-                schedule: remainingSchedule.map(e => ({ 
-                    jig: e.jig, 
-                    ...initialDeliveryStatuses(e.jig, jigsOnSite, notBlocked)
-                }))
-            }
-        }),
-        maxSwaps: 0,
-        minEmptyRacks: 0,
-
+            }),
+            maxSwaps: config.maxSwaps,
+            minEmptyRacks: config.minEmptyRacks,
+            explanations: null,
+            explanationStatus: ExplanationRunStatus.PENDING
+        }],
+        
         actions: [],
-
         status: PlanRunStatus.PENDING,
-        predecessorId: section._id,
-        treeId: section.treeId,
         finished: false,
-
-        explainMethod: undefined,
-        explanations: null,
-        explanationStatus: ExplanationRunStatus.PENDING,
 
     }
 

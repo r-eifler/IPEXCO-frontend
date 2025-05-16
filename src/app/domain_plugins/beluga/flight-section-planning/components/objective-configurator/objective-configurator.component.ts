@@ -21,14 +21,15 @@ export class ObjectiveConfiguratorComponent {
   allowModifications = this.store.selectSignal(selectAllowObjectiveModification);
 
   section = input.required<FlightSection>();
-  numEmptyRacks = computed(() => sum(this.section()?.siteSetUp.racks.map(r => this.section()?.siteState.racks[r.name].length == 0 ? 1 : 0)))
+  config = computed(() => this.section().configurations[this.section().configurationIndex]);
+  numEmptyRacks = computed(() => sum(this.config()?.siteSetUp.racks.map(r => this.section()?.siteState.racks[r.name].length == 0 ? 1 : 0)))
 
   changeObjective = output<FlightSection>();
 
 
-  maxSwaps = computed(() => this.section()?.maxSwaps)
+  maxSwaps = computed(() => this.config()?.maxSwaps)
 
-  keepRackEmpty = computed(() => (this.section()?.minEmptyRacks ?? 0) >= 1)
+  keepRackEmpty = computed(() => (this.config()?.minEmptyRacks ?? 0) >= 1)
 
   onSwapChange(v: number){
     console.log("Change Swaps")

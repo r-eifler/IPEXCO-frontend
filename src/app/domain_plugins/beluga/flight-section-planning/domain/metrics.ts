@@ -31,9 +31,10 @@ export function computeSwaps(actions: BelugaAction[]){
 }
 
 export function computeRackOccupancyRate(section: FlightSection, actions: BelugaAction[]){
+    const config = section.configurations[section.configurationIndex];
     let cs: BelugaState | undefined = getFullStartState(section);
-    const flightSchedule = getConsideredFlightSchedule(section.flightTargetSchedule)
-    const productionSchedule = getConsideredProductionSchedule(section.productionLinesTargetSchedule)
+    const flightSchedule = getConsideredFlightSchedule(config.flightTargetSchedule)
+    const productionSchedule = getConsideredProductionSchedule(config.productionLinesTargetSchedule)
 
     if(cs == undefined){
         return undefined;
@@ -41,7 +42,7 @@ export function computeRackOccupancyRate(section: FlightSection, actions: Beluga
     let numUsedRacks: number[] = [computeRackOccupancyRateForState(cs)]
 
     for(let action of actions){
-        cs = applyAction(cs, action, flightSchedule, productionSchedule, section.siteSetUp);
+        cs = applyAction(cs, action, flightSchedule, productionSchedule, config.siteSetUp);
         if(cs == undefined){
             return undefined;
         }

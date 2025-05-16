@@ -26,13 +26,20 @@ export class PlanInspectorComponent {
   store = inject(Store);
 
   section = this.store.selectSignal(selectSelectedSection);
+  configuration = computed(() => {
+    const index = this.section()?.configurationIndex;
+    if(index === undefined){
+      return undefined;
+    }
+    return this.section()?.configurations[index];
+  })
 
   name = computed(() => {
-    let section = this.section();
-    if(section == undefined){
+    let config = this.configuration();
+    if(config == undefined){
       return "Unknown"
     }
-    return section.flightTargetSchedule.name;
+    return config.flightTargetSchedule.name;
   });
 
 }

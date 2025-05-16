@@ -31,7 +31,7 @@ export class CreateFlightSectionEffect{
         concatLatestFrom(() => this.store.select(selectTask)),
         filterListNotNullOrUndefined(),
         switchMap(([{section}, task]) => {
-                let sucSection = deriveSuccessor(section, task.flights[section.flightIndex + 1], section.siteSetUp);
+                let sucSection = deriveSuccessor(section, task.flights[section.flightIndex + 1]);
                 if(sucSection === undefined){
                     return [createFlightSectionFailure({err: {message: "Successor section could not be derived!"}})]
                 }

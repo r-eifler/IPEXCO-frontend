@@ -74,9 +74,9 @@ export const BuilderReducer = createReducer(
         applyAction(
             state.taskState, 
             action, 
-            getFlightSchedule( state.section.data.flightTargetSchedule, false), 
-            getProductionSchedule(state.section.data.productionLinesTargetSchedule, false), 
-            state.section.data.siteSetUp
+            getFlightSchedule( state.section.data.configurations[state.section.data.configurationIndex].flightTargetSchedule, false), 
+            getProductionSchedule(state.section.data.configurations[state.section.data.configurationIndex].productionLinesTargetSchedule, false), 
+            state.section.data.configurations[state.section.data.configurationIndex].siteSetUp
         ) : null,
         section:  state.section.data !== undefined ? {
             state: LoadingState.Done,
@@ -92,7 +92,14 @@ export const BuilderReducer = createReducer(
             state: LoadingState.Done,
             data: {
                 ...state.section.data,
-                flightTargetSchedule: updateSkipIncomingJig(jigName, state.section.data.flightTargetSchedule)
+                configurations:[
+                    ...state.section.data.configurations.slice(0, state.section.data.configurationIndex),
+                    {
+                        ...state.section.data.configurations[state.section.data.configurationIndex],
+                        flightTargetSchedule: updateSkipIncomingJig(jigName, state.section.data.configurations[state.section.data.configurationIndex].flightTargetSchedule)
+                    },
+                    ...state.section.data.configurations.slice(state.section.data.configurationIndex + 1),
+                ]
             }
         } : state.section
     })),
@@ -102,7 +109,14 @@ export const BuilderReducer = createReducer(
             state: LoadingState.Done,
             data: {
                 ...state.section.data,
-                flightTargetSchedule: updateSkipOutgoingJigType(jigType, index, state.section.data.flightTargetSchedule)
+                configurations:[
+                    ...state.section.data.configurations.slice(0, state.section.data.configurationIndex),
+                    {
+                        ...state.section.data.configurations[state.section.data.configurationIndex],
+                        flightTargetSchedule: updateSkipOutgoingJigType(jigType, index, state.section.data.configurations[state.section.data.configurationIndex].flightTargetSchedule)
+                    },
+                    ...state.section.data.configurations.slice(state.section.data.configurationIndex + 1),
+                ]
             }
         } : state.section
     })),
@@ -112,7 +126,14 @@ export const BuilderReducer = createReducer(
             state: LoadingState.Done,
             data: {
                 ...state.section.data,
-                productionLinesTargetSchedule: updateSkipProductionLineJig(jigName, productionLine, state.section.data.productionLinesTargetSchedule)
+                configurations:[
+                    ...state.section.data.configurations.slice(0, state.section.data.configurationIndex),
+                    {
+                        ...state.section.data.configurations[state.section.data.configurationIndex],
+                        productionLinesTargetSchedule: updateSkipProductionLineJig(jigName, productionLine, state.section.data.configurations[state.section.data.configurationIndex].productionLinesTargetSchedule)
+                    },
+                    ...state.section.data.configurations.slice(state.section.data.configurationIndex + 1),
+                ]
             }
         } : state.section
     })),

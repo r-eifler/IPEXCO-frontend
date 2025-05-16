@@ -62,16 +62,18 @@ export class SectionCardComponent {
   section = input.required<FlightSection>();
   originalFlight = input.required<Flight>();
 
-  numOutgoing = computed(() => this.section()?.flightTargetSchedule?.outgoing.length ?? undefined)
-  numOutgoingConsidered = computed(() => this.section()?.flightTargetSchedule?.outgoing.filter(e => !e.skip).length ?? undefined)
+  config = computed(() => this.section().configurations[this.section().configurationIndex]);
 
-  numIncoming = computed(() => this.section()?.flightTargetSchedule?.incoming.length ?? undefined)
-  numIncomingConsidered = computed(() => this.section()?.flightTargetSchedule?.incoming.filter(e => !e.skip).length ?? undefined)
+  numOutgoing = computed(() => this.config()?.flightTargetSchedule?.outgoing.length ?? undefined)
+  numOutgoingConsidered = computed(() => this.config()?.flightTargetSchedule?.outgoing.filter(e => !e.skip).length ?? undefined)
 
-  numPossibleDeliveries = computed(() => sum(this.section()?.productionLinesTargetSchedule?.
+  numIncoming = computed(() => this.config()?.flightTargetSchedule?.incoming.length ?? undefined)
+  numIncomingConsidered = computed(() => this.config()?.flightTargetSchedule?.incoming.filter(e => !e.skip).length ?? undefined)
+
+  numPossibleDeliveries = computed(() => sum(this.config()?.productionLinesTargetSchedule?.
     map(pl => ({...pl, schedule: pl.schedule.filter(e => !e.skip)})).
     map(pl => pl.schedule.length) ?? []))
-  numOverallDeliveries = computed(() => sum(this.section()?.productionLinesTargetSchedule?.map(pl => pl.schedule.length) ?? []))
+  numOverallDeliveries = computed(() => sum(this.config()?.productionLinesTargetSchedule?.map(pl => pl.schedule.length) ?? []))
 
   highlighted = input<boolean>(false);
 
