@@ -16,3 +16,12 @@ export const PlanMethodZ = object({
 });
 
 export type PlanMethod = zinfer<typeof PlanMethodZ>
+
+
+export const ExplainMethodZ = object({
+  name: string(),
+  serviceId: optional(string()),
+});
+
+export type ExplainMethod = zinfer<typeof ExplainMethodZ>
+

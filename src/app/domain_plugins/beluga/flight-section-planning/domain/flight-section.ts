@@ -4,7 +4,9 @@ import { BelugaActionZ } from "../../shared/domain/beluga_plan";
 import { BelugaProblem, Flight, ProductionLine, ProductionLineZ } from "../../shared/domain/beluga_problem";
 import { applyActions, BelugaState } from "../../shared/domain/beluga_state";
 import { BelugaSiteSetUp, BelugaSiteSetUpZ, BelugaSiteState, BelugaSiteStateZ, SiteStatus } from "../../shared/domain/site_set_up";
-import { PlanMethodZ } from "./plan_method";
+import { ExplainMethodZ, PlanMethodZ } from "./plan_method";
+import { SimplePlanPropertyZ } from "./plan_properties";
+import { ExplanationRunStatus, ExplanationRunStatusZ } from "src/app/iterative_planning/domain/explanation/explanations";
 
 
 
@@ -110,6 +112,14 @@ export function getProductionSchedule(productionLines: ProductionLineTargetSched
     }));
 }
 
+export const ExplanationsZ = object({
+    MUGS: array(array(string())),
+    MUGScomplete: boolean(),
+    MGCS: array(array(string())),
+    MGCScomplete: boolean(),
+    goals: record(string(), SimplePlanPropertyZ)
+})
+
 
 export const FlightSectionBaseZ = object({
     flightIndex: number(),
@@ -129,6 +139,10 @@ export const FlightSectionBaseZ = object({
     status: PlanRunStatusZ,
     satisfiedProperties: array(string()).optional(),
     finished: boolean(),
+
+    explainMethod: optional(ExplainMethodZ),
+    explanations: nullable(ExplanationsZ),
+    explanationStatus: ExplanationRunStatusZ
 })
 
 export type FlightSectionBase = zinfer<typeof FlightSectionBaseZ>;
@@ -361,7 +375,14 @@ export function deriveSuccessor(section: FlightSection, flight: Flight, siteSetU
         status: PlanRunStatus.PENDING,
         predecessorId: section._id,
         treeId: section.treeId,
-        finished: false
+        finished: false,
+
+        explainMethod: undefined,
+        explanations: null,
+        explanationStatus: ExplanationRunStatus.PENDING,
+
     }
+
+    console.log(suc);
     return suc;
 }

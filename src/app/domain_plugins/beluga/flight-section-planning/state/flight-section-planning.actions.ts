@@ -112,3 +112,17 @@ export const automaticPlanningFinishedFailure = createAction('[beluga-flight-sec
 export const cancelAutomaticPlanning = createAction('[beluga-flight-section-planning] cancel automatic planning', props<{section: FlightSection}>());
 export const cancelAutomaticPlanningSuccess = createAction('[beluga-flight-section-planning] cancel planning automatic success');
 export const cancelAutomaticPlanningFailure = createAction('[beluga-flight-section-planning] cancel planning automatic failure', props<{err: any}>());
+
+
+// explanations
+
+export const startExplanations = createAction('[beluga-flight-section-planning] start explanations', props<{section: FlightSection}>());
+export const startExplanationsSuccess = createAction('[beluga-flight-section-planning] start explanations success', props<{section: FlightSection}>());
+export const startExplanationsFailure = createAction('[beluga-flight-section-planning] start explanations failure', props<{err: any}>());
+
+export const explanationsFinishedSuccess = createAction('[beluga-flight-section-planning] explanations finished success', props<{id: string}>());
+export const explanationsFinishedFailure = createAction('[beluga-flight-section-planning] explanations finished failure', props<{err: any}>());
+
+export const cancelExplanations= createAction('[beluga-flight-section-planning] cancel explanations', props<{section: FlightSection}>());
+export const cancelExplanationsSuccess = createAction('[beluga-flight-section-planning] cancel explanations success');
+export const cancelExplanationsFailure = createAction('[beluga-flight-section-planning] cancel explanations failure', props<{err: any}>());

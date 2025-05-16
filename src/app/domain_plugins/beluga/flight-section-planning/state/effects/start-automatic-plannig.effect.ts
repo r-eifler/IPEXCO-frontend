@@ -20,10 +20,7 @@ export class StartAutomaticPlanningEffect{
 
     public start$ = createEffect(() => this.actions$.pipe(
         ofType(startAutomaticPlanning),
-        tap(console.log),
-        concatLatestFrom(() => this.store.select(selectTask)),
-        filterListNotNullOrUndefined(),
-        switchMap(([{section, method}, task]) => this.service.postPlanRequest$(section, method, task).pipe(
+        switchMap(({section, method}) => this.service.postPlanRequest$(section, method).pipe(
             switchMap(section => [startAutomaticPlanningSuccess({section}), loadFlightSections({treeId: section.treeId})]),
             catchError((e) => of(startAutomaticPlanningFailure({err: e})))
         ))

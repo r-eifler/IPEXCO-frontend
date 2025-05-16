@@ -35,13 +35,17 @@ export function computeRackOccupancyRate(section: FlightSection, actions: Beluga
     const flightSchedule = getConsideredFlightSchedule(section.flightTargetSchedule)
     const productionSchedule = getConsideredProductionSchedule(section.productionLinesTargetSchedule)
 
-    let numUsedRacks: number[] = []
+    if(cs == undefined){
+        return undefined;
+    }
+    let numUsedRacks: number[] = [computeRackOccupancyRateForState(cs)]
+
     for(let action of actions){
+        cs = applyAction(cs, action, flightSchedule, productionSchedule, section.siteSetUp);
         if(cs == undefined){
             return undefined;
         }
         numUsedRacks.push(computeRackOccupancyRateForState(cs));
-        cs = applyAction(cs, action, flightSchedule, productionSchedule, section.siteSetUp);
     }
     return sum(numUsedRacks)/(numUsedRacks.length)
 }

@@ -21,7 +21,7 @@ import { computeRackOccupancyRate, computeSwaps } from '../../domain/metrics';
 import { PlanMethod, PlanMethodType } from '../../domain/plan_method';
 import { PlanMethodTypeIconPipe } from '../../pipe/plan-method-type-icon.pipe';
 import { PlanMethodTypeNamePipe } from '../../pipe/plan-method-type-name.pipe';
-import { cancelPlanning, createNewBranch, registerManualPlanning, startAutomaticPlanning } from '../../state/flight-section-planning.actions';
+import { cancelPlanning, createNewBranch, registerManualPlanning, startAutomaticPlanning, startExplanations } from '../../state/flight-section-planning.actions';
 import { selectActiveBranchRemainingNumberFlights, selectSupportedPlanners, selectTask } from '../../state/flight-section-planning.selector';
 import { PlanInspectorComponent } from '../../views/plan-inspector/plan-inspector.component';
 import { BranchNameDialogComponent } from '../branch-name-dialog/branch-name-dialog.component';
@@ -73,22 +73,20 @@ export class SectionCardComponent {
     map(pl => pl.schedule.length) ?? []))
   numOverallDeliveries = computed(() => sum(this.section()?.productionLinesTargetSchedule?.map(pl => pl.schedule.length) ?? []))
 
-  goalsDefined = computed(() => this.section()?.flightTargetSchedule !== undefined && this.section()?.productionLinesTargetSchedule !== undefined)
-  isRunning = computed(() => this.section()?.status == PlanRunStatus.RUNNING);
-
-  constructor(){
-    effect(() => console.log(this.goalsDefined()))
-  }
-
   highlighted = input<boolean>(false);
 
-  hasNoPlan = computed(() => this.section()?.status !== PlanRunStatus.SOLVED && this.section()?.status !== PlanRunStatus.UNSOLVABLE)
 
+  isRunning = computed(() => this.section()?.status == PlanRunStatus.RUNNING);
+  isPending = computed(() => this.section()?.status == PlanRunStatus.PENDING);
 
-  length = computed(() => this.hasNoPlan() ? undefined : this.section()?.actions.length);
-  swaps = computed(() => this.hasNoPlan() ? undefined : computeSwaps(this.section()?.actions));
+  solved = computed(() => this.section()?.status == PlanRunStatus.SOLVED)
+  notSolvable = computed(() => this.section()?.status === PlanRunStatus.NO_PLAN_FOUND || this.section()?.status === PlanRunStatus.UNSOLVABLE)
+  failed = computed(() => this.section()?.status === PlanRunStatus.FAILED || this.section()?.status === PlanRunStatus.CANCELED)
+
+  length = computed(() => ! this.solved() ? undefined : this.section()?.actions.length);
+  swaps = computed(() => ! this.solved() ? undefined : computeSwaps(this.section()?.actions));
   rackOccupancyRate = computed(() => {
-    if(this.hasNoPlan()){
+    if(!this.solved()){
       return undefined;
     }
     const v = computeRackOccupancyRate(this.section(), this.section()?.actions ?? []);
@@ -128,6 +126,10 @@ export class SectionCardComponent {
         }
       }
     });
+  }
+
+  onComputeExplanations(){
+    this.store.dispatch(startExplanations({section: this.section()}))
   }
 
   onCancel(){

@@ -49,8 +49,12 @@ export class SectionTreeHeroComponent {
     this.sections()?.forEach(
       section => section.status == PlanRunStatus.SOLVED ? occRates.push(computeRackOccupancyRate(section, section.actions)) : undefined
     )
-    const sumRates = sum(occRates.filter(v => v !== undefined));
-    const res = sumRates / sections.length
+    const validValues = occRates.filter(v => v !== undefined);
+    if(validValues.length == 0){
+      return undefined;
+    }
+    const sumRates = sum(validValues);
+    const res = sumRates / validValues.length
     return res.toFixed(2);
   });
 

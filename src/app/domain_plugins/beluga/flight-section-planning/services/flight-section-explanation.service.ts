@@ -5,22 +5,18 @@ import { map } from "rxjs/operators";
 import { environment } from "src/environments/environment";
 import { boolean } from "zod";
 import { FlightSection, FlightSectionZ } from "../domain/flight-section";
-import { PlanMethod } from "../domain/plan_method";
 
 
 @Injectable()
-export class FlightSectionPlanService{
+export class FlightSectionExplanationService{
 
     private http = inject(HttpClient)
-    private BASE_URL = environment.apiURL + "flight-section-plan/";
+    private BASE_URL = environment.apiURL + "flight-section-explanation/";
 
-    postPlanRequest$(section: FlightSection, method: PlanMethod): Observable<FlightSection> {
+    postExplanationRequest$(section: FlightSection): Observable<FlightSection> {
 
       let data = {
-        section: {
-          ...section,
-          planMethod: method, 
-        },
+        section
       }
 
       return this.http.post<unknown>(this.BASE_URL, data).pipe(

@@ -142,11 +142,14 @@ export const selectBranchSections = memoizeWith(
 
 // Section dependent site state / setup
 
-export const selectSiteSolved= createSelector(selectSelectedSection,  
+export const selectSectionSolved= createSelector(selectSelectedSection,  
     (section) => section === undefined ? undefined : section.status == PlanRunStatus.SOLVED);
 
-export const selectAllowObjectiveModification= createSelector(selectSiteSolved,  
-    (solved) => !solved);
+export const selectSectionPending= createSelector(selectSelectedSection,  
+    (section) => section === undefined ? undefined : section.status == PlanRunStatus.PENDING);
+
+export const selectAllowObjectiveModification= createSelector(selectSectionPending,  
+    (pending) => pending);
 
 export const selectJigsOnSite = createSelector(selectSelectedSection,  
     (section) => section === undefined ? undefined : getJigsOnSiteFromSection(section));

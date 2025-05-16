@@ -1,26 +1,24 @@
 import { Routes } from '@angular/router';
 import { provideEffects } from '@ngrx/effects';
 import { provideState } from '@ngrx/store';
-import { BuilderProjectService } from '../builder/services/project.service';
-import { BuilderFeature } from '../builder/state/builder.feature';
-import { builderEffects } from '../builder/state/effects/effects';
+import { LoadFlightPlanTreeResolver } from './resolver/load-flight-plan-tree.resolver';
 import { LoadProjectResolver } from './resolver/load-project.resolver';
+import { SelectSectionResolver } from './resolver/select-section.resolver';
 import { DomainSpecificationService } from './services/domainSpecification.service';
 import { FlightPlanTreeService } from './services/flight-plan-tree.service';
+import { FlightSectionExplanationService } from './services/flight-section-explanation.service';
+import { FlightSectionPlanService } from './services/flight-section-plan.service';
+import { SectionPlanComputationMonitoringService } from './services/plan-computataion-monitoring.service';
 import { ProjectService } from './services/project.service';
 import { ServicesService } from './services/services.service';
 import { flightSectionPlanningEffects } from './state/effects/effects';
 import { FlightSectionPlanningFeature } from './state/flight-section-planning.feature';
+import { MetricsOverviewComponent } from './views/metrics-overview/metrics-overview.component';
+import { ObjectiveUpdateComponent } from './views/objective-update/objective-update.component';
+import { PlanInspectorComponent } from './views/plan-inspector/plan-inspector.component';
 import { PlanSectionsOverview } from './views/plan-section-overview/plan-section-overview.component';
 import { PlanningShellComponent } from './views/planning-shell/planning-shell.component';
 import { ShellComponent } from './views/shell/shell.component';
-import { LoadFlightPlanTreeResolver } from './resolver/load-flight-plan-tree.resolver';
-import { FlightSectionPlanService } from './services/flight-section-plan.service';
-import { SectionPlanComputationMonitoringService } from './services/plan-computataion-monitoring.service';
-import { SelectSectionResolver } from './resolver/select-section.resolver';
-import { PlanInspectorComponent } from './views/plan-inspector/plan-inspector.component';
-import { MetricsOverviewComponent } from './views/metrics-overview/metrics-overview.component';
-import { ObjectiveUpdateComponent } from './views/objective-update/objective-update.component';
 
 export const routes: Routes = [
   {
@@ -37,6 +35,7 @@ export const routes: Routes = [
       DomainSpecificationService,
       FlightSectionPlanService,
       SectionPlanComputationMonitoringService,
+      FlightSectionExplanationService,
     ],
     children: [
       {

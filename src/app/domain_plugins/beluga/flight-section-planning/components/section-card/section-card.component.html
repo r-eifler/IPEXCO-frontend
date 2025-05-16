@@ -52,29 +52,23 @@
     </mat-card-content>
     <mat-card-actions>
         <div class="action-container">
-            @if(hasNoPlan()){
-                @if(isRunning()){
-                    <div class="action-running">
-                        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-                        <button mat-icon-button
-                            matTooltip="Cancel plan computation of flight section"
-                            (click)="onCancel()"
-                        >
-                            <mat-icon>cancel</mat-icon>
-                        </button>
-                    </div>
-                }
-                @else{
-                    @if(goalsDefined()){
-                        <a class="details" mat-stroked-button [routerLink]="['../objective-site-update/' + section()?._id ]">{{t('f.fix_objectives_and_site')}}</a>
-                        <button class="details" mat-flat-button (click)="onCreatePlan()">{{t('f.generate_plan')}}</button>
-                    }   
-                    @else{
-                        <a class="details" mat-flat-button [routerLink]="['../objective-site-update/' + section()?._id ]">{{t('f.fix_objectives_and_site')}}</a>
-                    }
-                }
+            @if(isRunning()){
+                <div class="action-running">
+                    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+                    <button mat-icon-button
+                        matTooltip="Cancel plan computation of flight section"
+                        (click)="onCancel()"
+                    >
+                        <mat-icon>cancel</mat-icon>
+                    </button>
+                </div>
             }
-            @else{
+            @if(isPending()){
+                <a class="details" mat-stroked-button [routerLink]="['../objective-site-update/' + section()?._id ]">{{t('f.fix_objectives_and_site')}}</a>
+                <button class="details" mat-flat-button (click)="onCreatePlan()">{{t('f.generate_plan')}}</button>
+
+            }
+            @if(solved()){
                 <a class="details" mat-stroked-button 
                     [routerLink]="['../objective-site-update/' + section()?._id ]">
                     {{t('f.check_objectives_and_site')}}
@@ -89,6 +83,17 @@
                     (click)="onBranch()"
                 ><mat-icon>call_split</mat-icon></button>
             }
+            @if(notSolvable() || failed()){
+                <a class="details" mat-stroked-button 
+                    [routerLink]="['../objective-site-update/' + section()?._id ]">
+                    {{t('f.check_objectives_and_site')}}
+                </a>
+                <button mat-icon-button
+                    matTooltip="Creates a different plan for this flight."
+                    (click)="onBranch()"
+                ><mat-icon>call_split</mat-icon></button>
+            }
+            <button mat-button (click)="onComputeExplanations()">Explanations</button>
         </div>
     </mat-card-actions>
 </mat-card>
