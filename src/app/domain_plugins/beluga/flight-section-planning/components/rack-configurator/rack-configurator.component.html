@@ -12,8 +12,8 @@
         </button>
     }
     <app-rack 
-        [name]="rack().name" 
-        [size]="rack().size" 
+        [name]="rack()?.name" 
+        [size]="rack()?.size" 
         [occupied]="occupied()"
         [maintenance]="!isUsed()"
     >

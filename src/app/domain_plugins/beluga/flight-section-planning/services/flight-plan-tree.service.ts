@@ -7,7 +7,7 @@ import { array } from "zod";
 import { BelugaProblem } from "../../shared/domain/beluga_problem";
 import { getInitialState } from "../../shared/domain/beluga_state";
 import { BelugaSiteSetUp, BelugaSiteState, getSiteSetUp } from "../../shared/domain/site_set_up";
-import { filterUpTo, FlightPlanTree, FlightPlanTreeBase, FlightPlanTreeZ, FlightSection, FlightSectionBase, FlightSectionZ, FlightTargetSchedule, getJigsOnSiteFromState, initialDeliveryStatuses, ProductionLineTargetSchedule } from "../domain/flight-section";
+import { BelugaConfiguration, filterUpTo, FlightPlanTree, FlightPlanTreeBase, FlightPlanTreeZ, FlightSection, FlightSectionBase, FlightSectionZ, FlightTargetSchedule, getJigsOnSiteFromState, initialDeliveryStatuses, ProductionLineTargetSchedule } from "../domain/flight-section";
 
 
 interface initData {
@@ -137,5 +137,15 @@ export class FlightPlanTreeService{
       )
     }
 
+    addConfiguration$(section: FlightSection, config: BelugaConfiguration): Observable<FlightSection> {
+      let newSection: FlightSection = {
+        ...section,
+        configurations: [...section.configurations, config],
+        configurationIndex: section.configurations.length,
+      }
+      return this.http.put<unknown>(this.BASE_URL + 'section/' + section._id, newSection).pipe(
+        map(data => FlightSectionZ.parse(data)),
+      )
+    }
     
 }

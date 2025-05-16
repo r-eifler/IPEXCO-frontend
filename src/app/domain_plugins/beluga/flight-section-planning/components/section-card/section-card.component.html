@@ -64,7 +64,7 @@
                 </div>
             }
             @if(isPending()){
-                <a class="details" mat-stroked-button [routerLink]="['../objective-site-update/' + section()?._id ]">{{t('f.fix_objectives_and_site')}}</a>
+                <a class="details" mat-stroked-button [routerLink]="['../configuration-update/' + section()?._id ]">{{t('f.fix_objectives_and_site')}}</a>
                 <button class="details" mat-flat-button (click)="onCreatePlan()">{{t('f.generate_plan')}}</button>
 
             }
@@ -93,7 +93,7 @@
                     (click)="onBranch()"
                 ><mat-icon>call_split</mat-icon></button>
             }
-            <button mat-button (click)="onComputeExplanations()">Explanations</button>
+            <button mat-button [routerLink]="['../configuration-explanations/' + section()?._id ]">Explanations</button>
         </div>
     </mat-card-actions>
 </mat-card>

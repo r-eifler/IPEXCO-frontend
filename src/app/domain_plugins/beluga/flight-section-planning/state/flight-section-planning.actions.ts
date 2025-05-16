@@ -7,8 +7,8 @@ import { Service } from "src/app/global_specification/domain/services";
 import { BelugaState } from "../../shared/domain/beluga_state";
 import { BelugaAction } from "../../shared/domain/beluga_plan";
 import { PlanMethod } from "../domain/plan_method";
-import { BelugaProblem, Flight, ProductionLine } from "../../shared/domain/beluga_problem";
-import { BelugaSiteSetUp, BelugaSiteState } from "../../shared/domain/site_set_up";
+import { BelugaProblem, Flight, ProductionLine, Side } from "../../shared/domain/beluga_problem";
+import { BelugaSiteSetUp, BelugaSiteState, SiteStatus } from "../../shared/domain/site_set_up";
 
 
 export const loadProject = createAction('[beluga-flight-section-planning] load project', props<{id: string}>());
@@ -113,6 +113,21 @@ export const cancelAutomaticPlanning = createAction('[beluga-flight-section-plan
 export const cancelAutomaticPlanningSuccess = createAction('[beluga-flight-section-planning] cancel planning automatic success');
 export const cancelAutomaticPlanningFailure = createAction('[beluga-flight-section-planning] cancel planning automatic failure', props<{err: any}>());
 
+
+// Configuration updates
+
+export const newConfiguration = createAction('[beluga-flight-section-planning] new configuration');
+export const skipIncomingJig = createAction('[beluga-flight-section-planning] skip incoming jig', props<{index: number, skip: boolean}>());
+export const skipOutgoingJigType = createAction('[beluga-flight-section-planning] skip outgoing jig type', props<{index: number, skip: boolean}>());
+export const skipProductionJig = createAction('[beluga-flight-section-planning] skip production jig', props<{productionLineName: string, index: number, skip: boolean}>());
+export const updateRackStatus = createAction('[beluga-flight-section-planning] update rack status', props<{index: number, status: SiteStatus}>());
+export const updateTrailerStatus = createAction('[beluga-flight-section-planning] update rack status', props<{index: number, side: Side, status: SiteStatus}>());
+export const updateHangarStatus = createAction('[beluga-flight-section-planning] update rack status', props<{index: number, status: SiteStatus}>());
+export const updateFlightSchedule= createAction('[beluga-flight-section-planning] update flight Schedule status', props<{schedule: FlightTargetSchedule}>());
+export const updateProductionSchedule= createAction('[beluga-flight-section-planning] update production Schedule status', props<{schedule: ProductionLineTargetSchedule[]}>());
+export const updateMaxSwaps = createAction('[beluga-flight-section-planning] update max swaps', props<{value: number}>());
+export const updateEmptyRacks = createAction('[beluga-flight-section-planning] update empty racks', props<{value: number}>());
+export const saveConfiguration = createAction('[beluga-flight-section-planning] save configuration');
 
 // explanations
 

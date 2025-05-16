@@ -14,11 +14,12 @@ import { ServicesService } from './services/services.service';
 import { flightSectionPlanningEffects } from './state/effects/effects';
 import { FlightSectionPlanningFeature } from './state/flight-section-planning.feature';
 import { MetricsOverviewComponent } from './views/metrics-overview/metrics-overview.component';
-import { ObjectiveUpdateComponent } from './views/objective-update/objective-update.component';
+import { ConfigurationUpdateViewComponent } from './views/configuration-update-view/configuration-update-view.component';
 import { PlanInspectorComponent } from './views/plan-inspector/plan-inspector.component';
 import { PlanSectionsOverview } from './views/plan-section-overview/plan-section-overview.component';
 import { PlanningShellComponent } from './views/planning-shell/planning-shell.component';
 import { ShellComponent } from './views/shell/shell.component';
+import { ConfigurationExplanationViewComponent } from './views/configuration-explanation-view/configuration-explanation-view.component';
 
 export const routes: Routes = [
   {
@@ -62,8 +63,16 @@ export const routes: Routes = [
         },
       },
       {
-        path: 'objective-site-update/:sectionId',
-        component: ObjectiveUpdateComponent,
+        path: 'configuration-update/:sectionId',
+        component: ConfigurationUpdateViewComponent,
+        resolve: {
+          sectionId: SelectSectionResolver,
+          tree: LoadFlightPlanTreeResolver
+        },
+      },
+      {
+        path: 'configuration-explanations/:sectionId',
+        component: ConfigurationExplanationViewComponent,
         resolve: {
           sectionId: SelectSectionResolver,
           tree: LoadFlightPlanTreeResolver

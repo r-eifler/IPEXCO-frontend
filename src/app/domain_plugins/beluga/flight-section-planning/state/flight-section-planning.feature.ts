@@ -10,4 +10,5 @@ export const FlightSectionPlanningFeature = createFeature({
 export const {
     name,
     reducer,
+    selectUpdatedConfiguration
   } = FlightSectionPlanningFeature;

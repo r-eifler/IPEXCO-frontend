@@ -34,7 +34,7 @@ export class RackConfiguratorComponent {
   statusChanged = output<SiteStatus>();
 
   occupied = computed(() => occupiedSpace(this.rack()?.jigs, this.jigTypes()))
-  isLoaded = computed(() => this.rack()?.jigs.length > 0)
+  isLoaded = computed(() => this.rack()?.jigs?.length > 0)
   isUsed = computed(() => this.rack()?.status === SiteStatus.IN_USE)
 
   onLock(){

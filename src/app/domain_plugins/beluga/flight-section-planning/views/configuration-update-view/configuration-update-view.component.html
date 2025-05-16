@@ -1,8 +1,8 @@
 <app-page-full *transloco="let t">
-    <app-breadcrumb>
+    <!-- <app-breadcrumb>
         <a app-breadcrumb-item [routerLink]="['../../flight-sections']">Plan Overview</a>
         <app-breadcrumb-item>{{ name() }}</app-breadcrumb-item>
-      </app-breadcrumb>
+      </app-breadcrumb> -->
     <app-page-title>
        {{t('f.objectives_and_site')}}
     </app-page-title>  
@@ -12,7 +12,6 @@
                 <app-page-section-content>
                     <app-objective-configurator
                         [section]="section()"
-                        (changeObjective)="updateSection($event)"
                     >
                     </app-objective-configurator>
                 </app-page-section-content>

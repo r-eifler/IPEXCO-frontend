@@ -130,10 +130,6 @@ export class SectionCardComponent {
     });
   }
 
-  onComputeExplanations(){
-    this.store.dispatch(startExplanations({section: this.section()}))
-  }
-
   onCancel(){
     this.store.dispatch(cancelPlanning({section: this.section()}))
   }

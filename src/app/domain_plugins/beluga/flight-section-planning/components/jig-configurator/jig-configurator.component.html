@@ -6,7 +6,7 @@
         [class.notUsed]="status()?.skip"
         [jig]="jig()"  
         [jigType]="jigType()"
-        [incomingFlight]="incomingFlightJigMap()?.[jig().name] ?? null"
+        [incomingFlight]="incomingFlightJigMap()?.[jig()?.name] ?? null"
         [unitSize]="true"
         [draggable]="true"
         [showOnlyPart]="showOnlyPart()"
