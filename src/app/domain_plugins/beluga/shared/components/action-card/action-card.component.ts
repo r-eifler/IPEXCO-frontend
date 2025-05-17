@@ -1,4 +1,4 @@
-import { Component, computed, effect, input, output } from '@angular/core';
+import { Component, computed, effect, input, output, Signal } from '@angular/core';
 import { BelugaAction, BelugaActionType, JigActionZ, PickUpRackZ, PutDownRackZ, RackActionZ, SideActionZ } from '../../domain/beluga_plan';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -13,7 +13,7 @@ import { MatButtonModule } from '@angular/material/button';
   styleUrl: './action-card.component.scss'
 })
 export class ActionCardComponent {
-  
+
   action = input.required<BelugaAction>();
   highlight = input.required<boolean>();
   select = input.required<boolean>();
@@ -43,17 +43,17 @@ export class ActionCardComponent {
     return null
   })
 
-  isHangarAction = computed(() => 
+  isHangarAction = computed(() =>
     this.action()?.name === BelugaActionType.DELIVER_TO_HANGAR ||
     this.action().name === BelugaActionType.GET_FROM_HANGAR
   );
 
-  isBelugaAction = computed(() => 
+  isBelugaAction = computed(() =>
     this.action()?.name === BelugaActionType.UNLOAD_BELUGA ||
     this.action().name === BelugaActionType.LOAD_BELUGA
   );
 
-  isRackAction = computed(() => 
+  isRackAction = computed(() =>
     this.action()?.name === BelugaActionType.PICK_UP_RACK ||
     this.action()?.name === BelugaActionType.PUT_DOWN_RACK
   );
@@ -74,9 +74,28 @@ export class ActionCardComponent {
     return false
   });
 
-  isSwitchAction = computed(() => 
+  isSwitchAction = computed(() =>
     this.action()?.name === BelugaActionType.SWITCH_TO_NEXT_BELUGA
   )
+
+  moveIconLocation: Signal<'left' | 'right'> = computed(() => {
+    if (
+      this.isHangarAction() ||
+      this.isBelugaRackSideAction()
+    ) {
+      return 'left';
+    }
+
+    return 'right';
+  })
+
+  locationName = computed(() => {
+    if (this.isFactoryRackSideAction() || this.isBelugaRackSideAction()) {
+      return this.rackName();
+    }
+
+    return undefined;
+  })
 
   actionLocationIcon = computed(() => {
     switch (this.action().name){
@@ -115,12 +134,12 @@ export class ActionCardComponent {
   })
 
   actionColor= new Map<BelugaActionType, string>([
-    [BelugaActionType.UNLOAD_BELUGA, "#ff9900"],
-    [BelugaActionType.LOAD_BELUGA, "#ff9900"],
-    [BelugaActionType.PUT_DOWN_RACK, "#0066ff"],
-    [BelugaActionType.PICK_UP_RACK, "#0066ff"],
-    [BelugaActionType.DELIVER_TO_HANGAR, "#33cc33"],
-    [BelugaActionType.GET_FROM_HANGAR, "#33cc33"],
+    [BelugaActionType.UNLOAD_BELUGA, "oklch(90.1% 0.076 70.697)"],
+    [BelugaActionType.LOAD_BELUGA, "oklch(90.1% 0.076 70.697)"],
+    [BelugaActionType.PUT_DOWN_RACK, "oklch(88.2% 0.059 254.128)"],
+    [BelugaActionType.PICK_UP_RACK, "oklch(88.2% 0.059 254.128)"],
+    [BelugaActionType.DELIVER_TO_HANGAR, "oklch(92.5% 0.084 155.995)"],
+    [BelugaActionType.GET_FROM_HANGAR, "oklch(92.5% 0.084 155.995)"],
     [BelugaActionType.SWITCH_TO_NEXT_BELUGA, "#ff3333"],
   ]);
 
