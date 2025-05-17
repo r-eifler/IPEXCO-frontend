@@ -3,10 +3,10 @@
 @use "../ipexco-theme" as ipexco-theme;
 
 :root {
-    --aircraft-part: #{mat.get-theme-color(ipexco-theme.$light-theme, tertiary)};
-    --on-aircraft-part: #{mat.get-theme-color(ipexco-theme.$light-theme, on-tertiary)};
-    --jig: #{mat.get-theme-color(ipexco-theme.$light-theme, tertiary-container)};
-    --on-jig: #{mat.get-theme-color(ipexco-theme.$light-theme, on-tertiary-container)};
+    --aircraft-part: #{mat.get-theme-color(ipexco-theme.$light-theme, tertiary-container)};
+    --on-aircraft-part: #{mat.get-theme-color(ipexco-theme.$light-theme, on-tertiary-container)};
+    --jig: #{mat.get-theme-color(ipexco-theme.$light-theme, tertiary-fixed-dim)};
+    --on-jig: #{mat.get-theme-color(ipexco-theme.$light-theme, on-tertiary-fixed-variant)};
     --rack: #{mat.get-theme-color(ipexco-theme.$light-theme, surface-container)};
     --trailer: #{mat.get-theme-color(ipexco-theme.$light-theme, surface-container)};
     --production-line: #{mat.get-theme-color(ipexco-theme.$light-theme, surface-container)};
@@ -16,8 +16,8 @@
 
     --action: rgb(226, 234, 255);
 
-    --jig-height: var(--sizing-600);
-    --part-height: var(--sizing-400);
+    --jig-height: var(--sizing-700);
+    --part-height: var(--sizing-500);
 
     --rack-height: var(--sizing-900);
     --trailer-height: var(--sizing-900);

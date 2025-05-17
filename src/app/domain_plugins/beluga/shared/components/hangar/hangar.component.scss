@@ -20,15 +20,12 @@
     display: flex;
     flex-direction: column;
     gap: var(--spacing-050);
-    
+
 }
 
 .hangar {
     height: var(--hangar-height);
     min-width: 100px;
-
-    padding-left: var(--spacing-200);
-    padding-right: var(--spacing-200);
 
     border: solid;
     border-width: 0px;

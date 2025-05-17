@@ -6,6 +6,8 @@
 .container {
     display: flex;
     flex-direction: column;
+
+    transition: scale 200ms;
 }
 
 .info-container {
@@ -28,8 +30,6 @@
     border-width: 1px;
     border-color: var(--rack);
     border-radius: var(--spacing-050);
-
-    transition: scale 200ms;
 }
 
 .dragTarget{
@@ -37,6 +37,9 @@
     outline-color: #{mat.get-theme-color(ipexco-theme.$light-theme, outline-variant)};;
     outline-width: 4px;
     outline-offset: -4px;
+}
+
+.dragScale {
     scale: 1.02;
 }
 

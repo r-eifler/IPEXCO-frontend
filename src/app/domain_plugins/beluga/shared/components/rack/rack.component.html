@@ -1,4 +1,4 @@
-<div class="container" >
+<div class="container" [class.dragScale]="dragTarget()">
     <div class="info-container">
         <span style="font-weight: 500;">{{ name() }}</span>
         <span>{{ occupied() }}/{{ size() }}</span>
@@ -7,15 +7,15 @@
         }
     </div>
     <div>
-        <div 
-            class="rack"  
+        <div
+            class="rack"
             [class.maintenance]="maintenance()"
             [class.dragTarget]="dragTarget()"
             [class.noDragTarget]="noDragTarget()"
             [style.width]="((size() * 15) + 2) + 'px'"
             [class.inConflict]="inConflict()"
         >
-            <ng-content select="app-jig,app-drop-target"></ng-content>  
+            <ng-content select="app-jig,app-drop-target"></ng-content>
         </div>
     </div>
 </div>

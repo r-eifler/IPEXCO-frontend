@@ -52,10 +52,12 @@
 .name {
   width: 100%;
 
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    text-align: center
+  @include vars.typography(title-medium);
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: center
 }
 
 .part {

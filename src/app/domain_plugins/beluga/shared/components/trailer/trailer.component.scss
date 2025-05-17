@@ -1,4 +1,7 @@
-@use "../../../../../../variables.scss" as vars;
+@use "@angular/material" as mat;
+
+@use "../../../../../../variables" as vars;
+@use "../../../../../../ipexco-theme" as ipexco-theme;
 
 
 .container {
@@ -6,6 +9,8 @@
     flex-direction: row;
     gap: var(--spacing-100);
     align-items: center;
+
+    transition: scale 200ms;
 }
 
 .trailer-container {
@@ -37,10 +42,15 @@
     align-items: center;
 }
 
+.dragScale {
+    scale: 1.02;
+}
+
 .dragTarget{
-    outline: solid;
-    outline-width: 2px;
-    outline-offset: -2px;
+    outline: dashed;
+    outline-color: #{mat.get-theme-color(ipexco-theme.$light-theme, outline-variant)};;
+    outline-width: 4px;
+    outline-offset: -4px;
 }
 
 .noDragTarget{
