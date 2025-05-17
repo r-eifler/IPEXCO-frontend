@@ -1,3 +1,5 @@
+@use '../../../../../../variables.scss' as vars;
+
 .main{
   overflow: auto;
 }
@@ -26,6 +28,5 @@
 }
 
 .header{
-    font-size: larger;
-    font-weight: 500;
+  @include vars.typography(headline-small);
 }

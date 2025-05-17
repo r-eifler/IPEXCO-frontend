@@ -1,12 +1,12 @@
-<div 
-    class="container" 
-    [ngClass]="{'hover': isHovering  && draggable()}" 
+<div
+    class="container"
+    [ngClass]="{'hover': isHovering  && draggable()}"
     (mouseover)="onHover()" (mouseout)="onMouseOut()"
     cdkOverlayOrigin #trigger="cdkOverlayOrigin"
 >
     @if(!showOnlyPart()){
-        <div 
-            class="jig" 
+        <div
+            class="jig"
             [style.width]="jigDisplaySize() + 'px'  "
             [ngClass]="{'hover': isHovering && draggable()}"
         >
@@ -17,7 +17,7 @@
     }
     @if(loaded() || showOnlyPart()){
         <div
-            class="part" 
+            class="part"
             [style.width]="partDisplaySize() + 'px'  "
             [ngClass]="{'hover': isHovering && draggable()}"
         >
@@ -27,7 +27,7 @@
             @else{
                 <span class="name"><span class="bold">{{ name() }}</span></span>
             }
-           
+
         </div>
     }
     <ng-template

@@ -1,3 +1,5 @@
+@use "@angular/material" as mat;
+
 @use "../../../../../../variables.scss" as vars;
 
 
@@ -17,6 +19,7 @@
     border-radius: var(--spacing-100);
 
     background-color: var(--jig);
+    color: var(--on-jig);
 
     display: flex;
     justify-content: space-around;
@@ -24,6 +27,8 @@
 
     grid-column: 1;
     grid-row: 1;
+
+    padding: var(--spacing-100);
 
     .name{
         font-weight: 500;
@@ -43,6 +48,7 @@
     border-radius: var(--spacing-100);
 
     background-color: var(--aircraft-part);
+    color: var(--on-aircraft-part);
 
     display: flex;
     width: fit-content;
@@ -52,8 +58,9 @@
     grid-column: 1;
     grid-row: 1;
 
+    padding: var(--spacing-100);
+
     .name{
-        color: white;
         font-weight: 500;
     }
 
@@ -66,12 +73,10 @@
 }
 
 .info{
-    background-color: white;
-    padding: var(--spacing-100);
+  border-radius: var(--radius-200);
 
-    border: solid;
-    border-width: 1px;
-    border-radius: var(--spacing-100);
+  @include vars.background-color(surface-container-lowest);
+  @include vars.color(on-surface);
 
-    background-color: var(--info);
+  @include mat.elevation(2);
 }

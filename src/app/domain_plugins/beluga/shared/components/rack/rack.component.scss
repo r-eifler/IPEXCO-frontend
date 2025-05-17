@@ -1,4 +1,7 @@
-@use "../../../../../../variables.scss" as vars;
+@use "@angular/material" as mat;
+
+@use "../../../../../../variables" as vars;
+@use "../../../../../../ipexco-theme" as ipexco-theme;
 
 .container {
     display: flex;
@@ -13,25 +16,28 @@
 }
 
 .rack {
-
     display: flex;
     flex-direction: row;
     justify-content: space-around;
     align-items: center;
 
     background-color: var(--rack);
-    height: 50px;
+    height: var(--rack-height);
 
     border: solid;
     border-width: 1px;
     border-color: var(--rack);
     border-radius: var(--spacing-050);
+
+  transition: scale 200ms;
 }
 
 .dragTarget{
-    outline: solid;
-    outline-width: 2px;
-    outline-offset: -2px;
+    outline: dashed;
+    outline-color: #{mat.get-theme-color(ipexco-theme.$light-theme, outline-variant)};;
+    outline-width: 4px;
+    outline-offset: -4px;
+    scale: 1.02;
 }
 
 .noDragTarget{
