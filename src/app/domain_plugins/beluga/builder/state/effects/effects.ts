@@ -1,3 +1,4 @@
+import { UndoStackEffect } from "src/app/shared/state/undo/undo-stack.effect";
 import { CancelManualPlanningEffect } from "./cancel-manual-planning.effect";
 import { FinishManualPlanningEffect } from "./finish-manual-planning.effect";
 import { LoadFlightSectionEffect } from "./load-flight-sections.effect";
@@ -13,5 +14,7 @@ export const builderEffects = [
 
     FinishManualPlanningEffect,
     CancelManualPlanningEffect,
-    ReturnFromManualPlanningEffect
+    ReturnFromManualPlanningEffect,
+
+    UndoStackEffect,
 ]

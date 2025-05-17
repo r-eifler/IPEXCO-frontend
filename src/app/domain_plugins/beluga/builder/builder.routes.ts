@@ -10,7 +10,9 @@ import { provideState } from '@ngrx/store';
 import { SectionBuilderBaseComponent } from './view/section-builder-base/section-builder-base.component';
 import { LoadFlightSectionResolver } from './resolver/load-section.resolver';
 import { FlightPlanTreeService } from './services/flight-plan-tree.service';
-
+import { UndoStackService } from 'src/app/shared/state/undo/undo-stack.service';
+import { UndoStackActions } from 'src/app/shared/state/undo/undo-stack.effect';
+import { createNewBelugaAction, skipIncomingJig, skipOutgoingJigType, skipProductionJig } from './state/builder.actions';
 
 
 export const routes: Routes = [
@@ -20,9 +22,11 @@ export const routes: Routes = [
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
     providers: [
       provideState(BuilderFeature),
-      provideEffects(builderEffects),
+      provideEffects(builderEffects,),
       BuilderProjectService,
       FlightPlanTreeService,
+      UndoStackService,
+      { provide: UndoStackActions, useValue: [createNewBelugaAction, skipIncomingJig, skipOutgoingJigType, skipProductionJig]}
     ],
     children: [
       // {

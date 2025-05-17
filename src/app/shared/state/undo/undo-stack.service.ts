@@ -7,12 +7,13 @@ export const UndoStackBufferSize = new InjectionToken<number>('UNDO_STACK_BUFFER
 export class UndoStackService {
   private stack: Action[] = [];
 
-  private bufferSize = inject(UndoStackService, { optional: true }) ?? 100;
+  private bufferSize = inject(UndoStackBufferSize, { optional: true }) ?? 100;
 
   push(action: Action) {
     this.stack.push(action);
 
     this.adjustBuffer();
+    console.log(this.stack)
   }
 
   pop() {

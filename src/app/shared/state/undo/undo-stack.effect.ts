@@ -23,9 +23,6 @@ export class UndoStackEffect {
   undoLastAction$ = createEffect(() => this.actions$.pipe(
     ofType(undoLastAction),
     map(() => this.undoStack.pop()),
-    switchMap(actionToUndo => actionToUndo ?
-      [undoAction({actionToUndo})] :
-      []
-    ),
+    switchMap(actionToUndo => actionToUndo ? [undoAction({actionToUndo})] : []),
   ));
 }
