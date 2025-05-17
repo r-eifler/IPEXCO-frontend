@@ -82,6 +82,12 @@ export const updateFlightSectionFailure = createAction('[beluga-flight-section-p
 
 export const selectSection = createAction('[beluga-flight-section-planning] select section', props<{id: string}>());
 
+
+// configurations
+
+export const selectConfiguration= createAction('[beluga-flight-section-planning] select configuration', props<{index: number}>());
+
+
 // services
 export const loadServices = createAction('[beluga-flight-section-planning] load  services');
 export const loadServicesSuccess = createAction('[beluga-flight-section-planning] load  services success', props<{services: Service[]}>());
@@ -115,6 +121,8 @@ export const cancelAutomaticPlanningFailure = createAction('[beluga-flight-secti
 
 
 // Configuration updates
+
+export const updateConfiguration = createAction('[beluga-flight-section-planning] update configuration');
 
 export const newConfiguration = createAction('[beluga-flight-section-planning] new configuration');
 export const skipIncomingJig = createAction('[beluga-flight-section-planning] skip incoming jig', props<{index: number, skip: boolean}>());

@@ -25,11 +25,11 @@ export class RackConfiguratorComponent {
 
   store = inject(Store);
 
-  allowModifications = this.store.selectSignal(selectAllowObjectiveModification);
   incomingFlightJigMap = this.store.selectSignal(selectJigMapIncomingFlight);
 
   rack = input.required<Rack & {jigs: Jig[]}>();
   jigTypes = input.required<Record<string,JigType>>();
+  disabled = input<boolean>(false);
 
   statusChanged = output<SiteStatus>();
 

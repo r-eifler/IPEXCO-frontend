@@ -4,6 +4,7 @@ import { CancelPlanningEffect } from "./cancel-planning.effect";
 import { CreateFlightPlanTreeBranchEffect } from "./create-branch.effect";
 import { CreateFlightPlanTreeEffect } from "./create-flight-plan-tree.effect";
 import { CreateFlightSectionEffect } from "./create-flight-section.effect";
+import { GoToConfigurationUpdateEffect } from "./go-to-configuration-update.effect";
 import { LoadDomainSpecificationEffect } from "./load-domain-spec.effect";
 import { LoadFlightPlanTreeEffect } from "./load-flight-plan-tree.effect";
 import { LoadFlightSectionsEffect } from "./load-flight-sections.effect";
@@ -38,6 +39,8 @@ export const flightSectionPlanningEffects = [
     StartAutomaticPlanningEffect,
 
     StartExplanationEffect,
+
+    GoToConfigurationUpdateEffect,
 
     CancelAutomaticPlanningEffect,
     CancelPlanningEffect

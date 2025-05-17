@@ -20,7 +20,6 @@ export class JigConfiguratorComponent {
 
   store = inject(Store);
 
-  allowModifications = this.store.selectSignal(selectAllowObjectiveModification);
   incomingFlightJigMap = this.store.selectSignal(selectJigMapIncomingFlight);
 
   index = input<null | number>(null);
@@ -29,11 +28,14 @@ export class JigConfiguratorComponent {
   status = input.required<{
     skip: boolean,
     onSite: boolean,
+    inConflict: boolean
   }>();
+  disabled = input<boolean>(false);
 
   showOnlyPart = input<boolean>(false);
 
   mustBeSkipped = computed(() => !this.status()?.onSite)
+  inConflict = computed(() => this.status()?.inConflict)
 
   statusChange = output<boolean>();
 

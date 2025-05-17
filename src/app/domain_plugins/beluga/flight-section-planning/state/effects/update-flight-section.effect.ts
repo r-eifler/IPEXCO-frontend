@@ -33,10 +33,13 @@ export class UpdateFlightSectionEffect{
             if(section === undefined || configuration === null || project === undefined){
                 return of(updateFlightSectionFailure({err: "Section or configuration undefined"}))
             }
-            this.router.navigate(["/beluga/flight-section-planning/" + project._id + "/configuration-explanations/" + section._id])
             return this.service.addConfiguration$(section, configuration).pipe(
-            switchMap(section => [updateFlightSectionSuccess({section}), loadFlightSections({treeId: section.treeId})]),
+            switchMap(section => {
+                this.router.navigate(["/beluga/flight-section-planning/" + project._id + "/configuration-explanations/" + section._id + "/" + section.configurationIndex])
+                return [updateFlightSectionSuccess({section}), loadFlightSections({treeId: section.treeId})] 
+            }),
             catchError((e) => of(updateFlightSectionFailure({err: e})))
         )})
     ));
 }
+

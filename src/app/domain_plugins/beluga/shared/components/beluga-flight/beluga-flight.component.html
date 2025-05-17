@@ -17,13 +17,13 @@
             >
             </app-jig-status>
         }
-        @if(incoming() && jigs().length == 0){
+        @if(incoming() && jigs()?.length == 0){
             <app-info>
                 <mat-icon>check_circle</mat-icon>
                 Everything unloaded.
             </app-info>
         }
-        @if(!incoming() && jigs().length == 0){
+        @if(!incoming() && jigs()?.length == 0){
             @if(numOutgoingJigs() == 0){
                 <app-info>
                     <mat-icon>assignment</mat-icon>

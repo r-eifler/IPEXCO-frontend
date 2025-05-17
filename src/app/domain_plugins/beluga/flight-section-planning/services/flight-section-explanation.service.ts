@@ -13,10 +13,11 @@ export class FlightSectionExplanationService{
     private http = inject(HttpClient)
     private BASE_URL = environment.apiURL + "flight-section-explanation/";
 
-    postExplanationRequest$(section: FlightSection): Observable<FlightSection> {
+    postExplanationRequest$(section: FlightSection, configIndex: number): Observable<FlightSection> {
 
       let data = {
-        section
+        section,
+        configIndex,
       }
 
       return this.http.post<unknown>(this.BASE_URL, data).pipe(

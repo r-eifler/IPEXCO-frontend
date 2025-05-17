@@ -51,7 +51,7 @@ export class StateCardComponent {
     }
     const numUnloaded = state.incomingUnloaded.length
     const fullSchedule = this.incomingSchedule()?.map(j => this.jigs()?.[j.jig])
-    return fullSchedule.slice(numUnloaded);
+    return fullSchedule?.slice(numUnloaded);
   })
 
   outgoing = computed(() => {
@@ -129,7 +129,7 @@ export class StateCardComponent {
     })
   })
 
-  productionLines = computed(() => this.targetProductionSchedule().map(pl => ({
+  productionLines = computed(() => this.targetProductionSchedule()?.map(pl => ({
     name: pl.name,
     schedule: pl.schedule.filter(e => !e.skip).map(e => this.jigs()?.[e.jig])
   })))

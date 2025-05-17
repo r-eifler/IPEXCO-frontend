@@ -1,6 +1,6 @@
 import { createSelector } from "@ngrx/store";
 import { LoadingState } from "src/app/shared/common/loadable.interface";
-import { FlightSectionPlanningFeature, selectUpdatedConfiguration } from "./flight-section-planning.feature";
+import { FlightSectionPlanningFeature, selectSelectedConfigIndex, selectUpdatedConfiguration } from "./flight-section-planning.feature";
 import { PlanRunStatus } from "src/app/iterative_planning/domain/plan";
 import { BelugaAction } from "../../shared/domain/beluga_plan";
 import { Encoding, ServiceType } from "src/app/global_specification/domain/services";
@@ -84,8 +84,11 @@ export const selectSelectedSectionId = createSelector(selectState,
 export const selectSelectedSection = createSelector(selectSections, selectSelectedSectionId,  
     (sections, id) => id !== null ? sections?.[id] : undefined);
 
-export const selectSelectedConfiguration = createSelector(selectSelectedSection,  
+export const selectUsedConfiguration = createSelector(selectSelectedSection,  
     (section) => section !== undefined ? section.configurations[section.configurationIndex] : undefined);
+
+export const selectSelectedConfiguration = createSelector(selectSelectedSection,  selectSelectedConfigIndex, 
+    (section, index) => section !== undefined  && index !== null ? section.configurations[index] : undefined);
 
 export const selectActiveBranchSections = createSelector(selectTree, selectSections,
     (tree, sections) => {

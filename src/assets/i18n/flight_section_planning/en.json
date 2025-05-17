@@ -1,6 +1,6 @@
 {
     "flights": "flights",
-    "flight": "flight",
+    "flight": "Flight",
     "racks": "racks",
     "jigs": "jigs",
     "incoming_flight": "incoming flight",
@@ -18,13 +18,13 @@
     "flight_section_plans": "Flight Section Plans",
     "new_plan": "new plan",
     "new_plan_info": "No plan available. Start a new plan with the button \"new plan\" in the top.",
-    "generate_plan": "generate plan",
-    "inspect_plan": "inspect plan",
+    "generate_plan": "Generate Plan",
+    "inspect_plan": "Inspect Plan",
     "length": "length",
     "swaps": "swaps",
     "rack_occupancy_rate": "rack occupancy rate",
     "plan_next_flight": "plan next flight",
-    "plan": "plan",
+    "plan": "Plan",
     "task": "task",
     "select_plan_configuration": "Select plan configuration",
     "manual": "manual",
@@ -43,7 +43,8 @@
     "metrics": "Metrics",
     "metric": "Metric",
     "deliveries": "deliveries",
-    "fix_objectives_and_site": "fix flight and production schedules and site set-up",
-    "check_objectives_and_site": "flight and production schedules and site set-up",
-    "objectives_and_site": "Flight and Production Schedules and Site Set-Up"
+    "check_configurations": "Check Configurations",
+    "update_configurations": "Update Configurations",
+    "configurations": "Configurations",
+    "update_configuration": "Update Configuration"
 }

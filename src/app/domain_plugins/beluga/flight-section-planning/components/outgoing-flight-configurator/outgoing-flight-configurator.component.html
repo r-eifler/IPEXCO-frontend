@@ -3,13 +3,14 @@
         <mat-icon mat-card-avatar>flight_takeoff</mat-icon>
         <mat-card-title>{{t('f.outgoing_flight')}}</mat-card-title>
     </mat-card-header>
-    <mat-card-content>
+    <mat-card-content class="content">
         @for(elem of schedule(); track elem; let idx = $index){
             <app-jig-configurator 
                 [index]="idx"
                 [jig]="elem.jig"  
                 [jigType]="jigTypes()?.[elem.jig?.type]"
                 [status]="elem.status"
+                [disabled]="disabled()"
                 (statusChange)="setStatus(idx, $event)"
             >
             <div class="custom-placeholder" *cdkDragPlaceholder></div>

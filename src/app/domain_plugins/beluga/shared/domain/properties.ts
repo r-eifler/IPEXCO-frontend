@@ -1,5 +1,30 @@
 import { GoalType } from "src/app/shared/domain/plan-property/plan-property";
 import { generatePlanProperty, PlanPropertyTemplate } from "src/app/shared/domain/plan-property/plan-property-template";
+import { array, nativeEnum, object, string, infer as zinfer, ZodLiteral} from "zod";
+
+
+export enum BelugaGoalType {
+    NUM_SWAPS_USED_LEQ = "num_swaps_used_leq",
+    AT_LEAST_ONE_RACK_ALWAYS_EMPTY = "at_least_one_rack_always_empty",
+    LOAD_BELUGA = "load_beluga",
+    UNLOAD_BELUGA = "unload_beluga",
+    DELIVER_TO_PRODUCTION_LINE = "deliver_to_production_line",
+    RACK_MAINTENANCE = "rack_maintenance",
+    TRAILER_MAINTENANCE = "trailer_maintenance" 
+}
+
+export const BelugaGoalTypeZ = nativeEnum(BelugaGoalType);
+
+export const BelugaGoalZ = object({
+    _id: string(),
+    name: string(),
+    definition: object({
+        name: BelugaGoalTypeZ,
+        parameters: array(string())
+    }),
+  });
+  
+export type BelugaGoal = zinfer<typeof BelugaGoalZ>;
 
 let deliverJigTemplate: PlanPropertyTemplate = {
     class: "deliver",

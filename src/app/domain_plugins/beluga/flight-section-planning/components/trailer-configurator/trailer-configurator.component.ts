@@ -23,11 +23,11 @@ export class TrailerConfiguratorComponent {
 
     store = inject(Store);
   
-    allowModifications = this.store.selectSignal(selectAllowObjectiveModification);
     incomingFlightJigMap = this.store.selectSignal(selectJigMapIncomingFlight);
 
     trailer = input.required<Trailer & {jig: Jig}>();
     jigTypes = input.required<Record<string,JigType>>();
+    disabled = input<boolean>(false);
   
     statusChanged = output<SiteStatus>();
   

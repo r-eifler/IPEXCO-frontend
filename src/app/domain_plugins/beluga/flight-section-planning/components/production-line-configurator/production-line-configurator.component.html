@@ -11,6 +11,7 @@
                 [jigType]="jigTypes()?.[elem.jig?.type]"
                 [status]="elem.status"
                 [showOnlyPart]="true"
+                [disabled]="disabled()"
                 (statusChange)="setStatus(idx, $event)"
             >
             <div class="custom-placeholder" *cdkDragPlaceholder></div>

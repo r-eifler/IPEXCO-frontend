@@ -1,0 +1,9 @@
+<a mat-icon-button
+    class="label"
+    [ngClass]="color()"
+    [class.notSelected]="!selected()"
+    [class.selected]="selected()"
+    [routerLink]="routerLink()" 
+>
+    <mat-icon>{{ icon() }}</mat-icon>
+</a>

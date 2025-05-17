@@ -7,6 +7,7 @@ import { BelugaSiteSetUp, BelugaSiteSetUpZ, BelugaSiteState, BelugaSiteStateZ, S
 import { ExplainMethodZ, PlanMethodZ } from "./plan_method";
 import { SimplePlanPropertyZ } from "./plan_properties";
 import { ExplanationRunStatus, ExplanationRunStatusZ } from "src/app/iterative_planning/domain/explanation/explanations";
+import { BelugaGoalZ } from "../../shared/domain/properties";
 
 
 
@@ -95,12 +96,21 @@ export function getProductionSchedule(productionLines: ProductionLineTargetSched
     }));
 }
 
+export const SimplePlanPropertyBaseZ = object({
+    name: string(),
+    definition: object({
+
+    }),
+  });
+  
+export type SimplePlanPropertyBase = zinfer<typeof SimplePlanPropertyBaseZ>;
+
 export const ExplanationsZ = object({
     MUGS: array(array(string())),
     MUGScomplete: boolean(),
     MGCS: array(array(string())),
     MGCScomplete: boolean(),
-    goals: record(string(), SimplePlanPropertyZ)
+    goals: record(string(), BelugaGoalZ)
 })
 
 export type Explanations = zinfer<typeof ExplanationsZ>;

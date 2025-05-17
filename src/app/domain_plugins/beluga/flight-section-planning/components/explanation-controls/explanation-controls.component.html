@@ -1,23 +1,30 @@
-<div class="container">
+<div class="container"  *transloco="let t">
+        <div class="buttons">             
+            <app-swap-configurator 
+            [value]="maxSwaps()" 
+            [disabled]="disabled()"
+            ></app-swap-configurator>
+            <mat-slide-toggle 
+                [checked]="keepRackEmpty()" 
+                [disabled]="numEmptyRacks() == 0 || disabled()">
+                    Keep at lest one rack empty
+            </mat-slide-toggle>               
+        </div>
+
     <div class="buttons">
-        <app-swap-configurator 
-        [value]="maxSwaps()" 
-        [disabled]="!allowModifications()"
-        ></app-swap-configurator>
-        <mat-slide-toggle 
-            [checked]="keepRackEmpty()" 
-            [disabled]="numEmptyRacks() == 0 || !allowModifications()">
-                Keep at lest one rack empty
-        </mat-slide-toggle>
-    </div>
-    <div class="buttons">
-        <a mat-button [routerLink]="['../../flight-sections']">
+        <a mat-button [routerLink]="['../../../flight-sections']">
             <mat-icon>chevron_left</mat-icon>
             Back
         </a>
-        <button mat-flat-button (click)="onExplain()" [disabled]="hasExplanation()">
-            <mat-icon>contact_support</mat-icon>
-            Is solvable?
-        </button>
+        @if(pending()){
+            <button 
+                mat-button (click)="onUpdateConfiguration()">
+                {{t('f.update_configurations')}}
+            </button>
+            <button mat-flat-button (click)="onExplain()" [disabled]="hasExplanation()">
+                <mat-icon>contact_support</mat-icon>
+                Is solvable?
+            </button>
+        }
     </div>
 </div>

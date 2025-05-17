@@ -2,12 +2,12 @@
     class="container"
 >
     @if(!isUsed()){
-        <button mat-icon-button (click)="onUnlock()" [disabled]="! allowModifications()">
+        <button mat-icon-button (click)="onUnlock()" [disabled]="disabled()">
             <mat-icon>lock_open</mat-icon>
         </button>
     }
     @else{
-        <button mat-icon-button (click)="onLock()" [disabled]="isLoaded() || ! allowModifications()">
+        <button mat-icon-button (click)="onLock()" [disabled]="isLoaded() || disabled()">
             <mat-icon>lock</mat-icon>
         </button>
     }

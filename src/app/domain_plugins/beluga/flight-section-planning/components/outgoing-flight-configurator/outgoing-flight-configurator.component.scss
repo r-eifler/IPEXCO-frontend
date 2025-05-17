@@ -1,43 +1,8 @@
 @use "../../../../../../variables.scss" as vars;
 
-.container{
+.content{
     display: flex;
     flex-direction: column;
     gap: var(--spacing-100);
-    border: solid 1px #999;
-    padding: var(--spacing-100);
 }
 
-.container.cdk-drop-list-dragging .example-box:not(.cdk-drag-placeholder) {
-    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
-}
-
-.custom-placeholder {
-    height: 60px;
-    width: 100%;
-    padding: var(--spacing-100);
-
-    border: dotted;
-    border-width: 1px;
-    @include vars.border_color();
-    border-radius: var(--spacing-200);
-
-    background: #ccc;
-
-    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
-
-  }
-
-cdk-drag-animating {
-    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
-}
-  
-.notUsed {
-    opacity: 50%;
-}
-
-.jig{
-    display: flex;
-    flex-direction: row;
-    gap: var(--spacing-100)
-}

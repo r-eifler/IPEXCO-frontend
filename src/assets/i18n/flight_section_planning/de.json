@@ -43,7 +43,8 @@
     "metrics": "Metriken",
     "metric": "Metrik",
     "deliveries": "Lieferungen",
-    "fix_objectives_and_site": "Lege Flug- und Produktionsplänen und Einrichtung des Standorts fest",
-    "check_objectives_and_site": "Flug- und Produktionsplänen und Einrichtung des Standorts",
-    "objectives_and_site": "Flug- und Produktionsplänen und Einrichtung des Standorts"
+    "check_configurations": "Konfigurationen prüfen",
+    "update_configurations": "Konfigurationen aktualisieren",
+    "configurations": "Konfigurationen",
+    "update_configuration": "Konfiguration aktualisieren"
 }

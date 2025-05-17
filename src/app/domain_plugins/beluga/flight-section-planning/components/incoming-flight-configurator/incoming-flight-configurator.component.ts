@@ -25,6 +25,13 @@ export class IncomingFlightConfiguratorComponent {
   flightTargetSchedule = input.required<FlightTargetSchedule>();
   jigs = input.required<Record<string,Jig>>();
   jigTypes = input.required<Record<string,JigType>>();
+  disabled = input<boolean>(false);
+
+  conflictMembers = input<{
+    jigName: string,
+    flightName: string,
+    position: number
+  }[]>([]);
 
   targetSchedule = output<FlightTargetSchedule>();
 
@@ -32,7 +39,8 @@ export class IncomingFlightConfiguratorComponent {
         jig: this.jigs()?.[e.jig],
         status: {
           skip: e.skip,
-          onSite: true
+          onSite: true,
+          inConflict: this.conflictMembers()?.find(g => g.jigName == e.jig)
         }
       }))
   )

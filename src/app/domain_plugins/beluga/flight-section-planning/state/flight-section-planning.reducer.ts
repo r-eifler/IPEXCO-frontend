@@ -3,7 +3,7 @@ import { Loadable, LoadingState } from "src/app/shared/common/loadable.interface
 import { Project } from "src/app/shared/domain/project";
 import { BelugaProblem, BelugaProblemZ } from "../../shared/domain/beluga_problem";
 import { BelugaConfiguration, FlightPlanTree, FlightSection } from "../domain/flight-section";
-import { loadDomainSpecification, loadDomainSpecificationSuccess, loadFlightPlanTree, loadFlightPlanTreeSuccess, loadFlightSections, loadFlightSectionsSuccess, loadProject, loadProjectSuccess, loadServices, loadServicesSuccess, newConfiguration, reloadFlightPlanTreeSuccess, selectSection, skipIncomingJig, skipOutgoingJigType, skipProductionJig, updateEmptyRacks, updateFlightPlanTreeSuccess, updateFlightSchedule, updateHangarStatus, updateMaxSwaps, updateProductionSchedule, updateRackStatus, updateTrailerStatus } from "./flight-section-planning.actions";
+import { loadDomainSpecification, loadDomainSpecificationSuccess, loadFlightPlanTree, loadFlightPlanTreeSuccess, loadFlightSections, loadFlightSectionsSuccess, loadProject, loadProjectSuccess, loadServices, loadServicesSuccess, newConfiguration, reloadFlightPlanTreeSuccess, selectConfiguration, selectSection, skipIncomingJig, skipOutgoingJigType, skipProductionJig, updateConfiguration, updateEmptyRacks, updateFlightPlanTreeSuccess, updateFlightSchedule, updateHangarStatus, updateMaxSwaps, updateProductionSchedule, updateRackStatus, updateTrailerStatus } from "./flight-section-planning.actions";
 import { BelugaState, getInitialState } from "../../shared/domain/beluga_state";
 import { DomainSpecification } from "src/app/global_specification/domain/domain_specification";
 import { Service } from "src/app/global_specification/domain/services";
@@ -18,6 +18,7 @@ export interface FlightSectionPlanningState {
     tree: Loadable<FlightPlanTree | null>;
     sections: Loadable<Record<string,FlightSection>>;
     selectedSectionId: null | string;
+    selectedConfigIndex: null | number;
     updatedConfiguration: BelugaConfiguration | null;
 }
 
@@ -31,6 +32,7 @@ const initialState: FlightSectionPlanningState = {
     tree: {state: LoadingState.Initial, data: undefined},
     sections: {state: LoadingState.Initial, data: undefined},
     selectedSectionId: null,
+    selectedConfigIndex: null,
     updatedConfiguration: null
 }
 
@@ -88,25 +90,33 @@ export const FlightSectionPlanningReducer = createReducer(
     })),
     on(loadFlightSectionsSuccess, (state, {sections}): FlightSectionPlanningState => ({
         ...state,
-        sections: {state: LoadingState.Done, data: sections},
-        updatedConfiguration: state.selectedSectionId !== null ? 
-            {
-                ...sections[state.selectedSectionId].configurations[sections[state.selectedSectionId].configurationIndex],
-                explanations: null,
-                explanationStatus: ExplanationRunStatus.PENDING
-            } : null
+        sections: {state: LoadingState.Done, data: sections}
     })),
     on(selectSection, (state, {id}): FlightSectionPlanningState => ({
         ...state,
         selectedSectionId: id
     })),
+    on(selectConfiguration, (state, {index}): FlightSectionPlanningState => ({
+        ...state,
+        selectedConfigIndex: index
+    })),
 
 
     on(newConfiguration, (state): FlightSectionPlanningState => ({
         ...state,
-        updatedConfiguration: state.selectedSectionId !== null && state.sections.data !== undefined ? 
+        updatedConfiguration: state.selectedSectionId !== null && state.selectedConfigIndex !== null && state.sections.data !== undefined ? 
             {
-                ...state.sections.data[state.selectedSectionId].configurations[state.sections.data[state.selectedSectionId].configurationIndex],
+                ...state.sections.data[state.selectedSectionId].configurations[state.selectedConfigIndex],
+                explanations: null,
+                explanationStatus: ExplanationRunStatus.PENDING
+            } : null
+    })),
+
+    on(updateConfiguration, (state): FlightSectionPlanningState => ({
+        ...state,
+        updatedConfiguration: state.selectedSectionId !== null && state.selectedConfigIndex !== null && state.sections.data !== undefined? 
+            {
+                ...state.sections.data?.[state.selectedSectionId].configurations[state.selectedConfigIndex],
                 explanations: null,
                 explanationStatus: ExplanationRunStatus.PENDING
             } : null

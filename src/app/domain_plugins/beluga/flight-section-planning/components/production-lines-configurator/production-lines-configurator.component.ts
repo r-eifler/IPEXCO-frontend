@@ -17,6 +17,13 @@ export class ProductionLinesConfiguratorComponent {
   jigsOnSite = input.required<Set<string>>();
   jigs = input.required<Record<string,Jig>>();
   jigTypes = input.required<Record<string,JigType>>();
+  disabled = input<boolean>(false);
+
+  conflictMembers = input<{
+    jigName: string,
+    productionLineName: string,
+    position: number
+  }[]>([]);
 
   targetSchedules = output<ProductionLineTargetSchedule[]>();
 

@@ -20,6 +20,9 @@ import { PlanSectionsOverview } from './views/plan-section-overview/plan-section
 import { PlanningShellComponent } from './views/planning-shell/planning-shell.component';
 import { ShellComponent } from './views/shell/shell.component';
 import { ConfigurationExplanationViewComponent } from './views/configuration-explanation-view/configuration-explanation-view.component';
+import { selectConfiguration } from './state/flight-section-planning.actions';
+import { SelectConfigurationResolver } from './resolver/select-config.resolver';
+import { SectionExplanationComputationMonitoringService } from './services/explanation-computataion-monitoring.service';
 
 export const routes: Routes = [
   {
@@ -37,6 +40,7 @@ export const routes: Routes = [
       FlightSectionPlanService,
       SectionPlanComputationMonitoringService,
       FlightSectionExplanationService,
+      SectionExplanationComputationMonitoringService,
     ],
     children: [
       {
@@ -67,14 +71,16 @@ export const routes: Routes = [
         component: ConfigurationUpdateViewComponent,
         resolve: {
           sectionId: SelectSectionResolver,
+          configIndex: SelectConfigurationResolver,
           tree: LoadFlightPlanTreeResolver
         },
       },
       {
-        path: 'configuration-explanations/:sectionId',
+        path: 'configuration-explanations/:sectionId/:configIndex',
         component: ConfigurationExplanationViewComponent,
         resolve: {
           sectionId: SelectSectionResolver,
+          configIndex: SelectConfigurationResolver,
           tree: LoadFlightPlanTreeResolver
         },
       },

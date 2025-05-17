@@ -4,88 +4,121 @@
         <app-breadcrumb-item>{{ name() }}</app-breadcrumb-item>
       </app-breadcrumb> -->
     <app-page-title>
-       {{t('f.objectives_and_site')}}
+       {{t('f.configurations')}}
     </app-page-title>  
     <app-page-content>
         <app-page-section-list>
             <app-page-section>
                 <app-page-section-content>
+                    <div class="configs-container">
+                        <span>{{t('f.configurations')}}:</span>
+                        @for(config of configurations(); track config; let idx = $index){
+                            <app-configuration-selector
+                                [configuration]="config"
+                                [routerLink]="'../' + idx"
+                                [selected]="selectedConfigId() == idx"
+                            ></app-configuration-selector>
+                        }
+                    </div>
+                </app-page-section-content>
+            </app-page-section>    
+            <app-page-section>
+                <app-page-section-content>
                     <app-explanation-controls
                         [section]="section()"
+                        [config]="configuration()"
+                        [disabled]="true"
                     ></app-explanation-controls>
                 </app-page-section-content>
             </app-page-section>     
-            <app-page-section>
+            <!-- <app-page-section>
                 <app-page-section-content>
                     {{ conflicts() }}
                 </app-page-section-content>
-            </app-page-section>            
+            </app-page-section>             -->
             <app-page-section>
                 <app-page-section-content>
-                    <div class="main-container">
-                        <div class="belugas">
-                           <app-incoming-flight-configurator
-                            [originalFlight]="originalFlight()"
-                            [flightTargetSchedule]="flightTargetSchedule()"
-                            [jigTypes]="jigTypes()"
-                            [jigs]="jigs()"
-                           >
-                           </app-incoming-flight-configurator>
-
-                           <app-outgoing-flight-configurator
-                            [originalFlight]="originalFlight()"
-                            [flightTargetSchedule]="flightTargetSchedule()"
-                            [jigTypes]="jigTypes()"
-                            [jigs]="jigs()"
-                           >
-                           </app-outgoing-flight-configurator>
+                    @if(explanationsComputationRunning()){
+                        <div>
+                            <mat-progress-bar mode="indeterminate"></mat-progress-bar>
                         </div>
-                        <div class="trailers">
-                            @for(trailer of belugaTrailers(); track trailer.name; let idx = $index){
-                                <app-trailer-configurator
-                                 [trailer]="trailer"
-                                 [jigTypes]="jigTypes()"
-                                >
-                                </app-trailer-configurator>
-                             }
-                        </div>
-                        <div class="racks">
-                            @for(rack of racks(); track rack.name; let idx = $index){
-                                <app-rack-configurator
-                                 [rack]="rack"
-                                 [jigTypes]="jigTypes()"
-                                >
-                                </app-rack-configurator>
-                             }
-                        </div>
-                        <div class="trailers">
-                            @for(trailer of factoryTrailers(); track trailer.name; let idx = $index){
-                                <app-trailer-configurator
-                                 [trailer]="trailer"
-                                 [jigTypes]="jigTypes()"
-                                >
-                                </app-trailer-configurator>
-                             }
-                        </div>
-                        <div class="hangars">
-                            @for(hangar of hangars(); track hangar.name; let idx = $index){
-                                <app-hangar-configurator
-                                    [hangar]="hangar"
-                                    [jigTypes]="jigTypes()"
-                                >
-                                </app-hangar-configurator>
-                             }
-                        </div>
-                        <div class="production">
-                            <app-production-lines-configurator
-                                [productionLineTargetSchedules]="productionLineTargetSchedules()"
-                                [jigsOnSite]="jigsOnSite()"
+                    }
+                    @else{
+                        <div class="main-container">
+                            <div class="belugas">
+                            <app-incoming-flight-configurator
+                                [originalFlight]="originalFlight()"
+                                [flightTargetSchedule]="flightTargetSchedule()"
                                 [jigTypes]="jigTypes()"
                                 [jigs]="jigs()"
+                                [conflictMembers]="unloadConflictMembers()"
+                                [disabled]="true"
                             >
-                            </app-production-lines-configurator>
-                        </div> 
-                    </div>                   
+                            </app-incoming-flight-configurator>
+
+                            <app-outgoing-flight-configurator
+                                [originalFlight]="originalFlight()"
+                                [flightTargetSchedule]="flightTargetSchedule()"
+                                [jigTypes]="jigTypes()"
+                                [jigs]="jigs()"
+                                [conflictMembers]="loadConflictMembers()"
+                                [disabled]="true"
+                            >
+                            </app-outgoing-flight-configurator>
+                            </div>
+                            <div class="trailers">
+                                @for(trailer of belugaTrailers(); track trailer.name; let idx = $index){
+                                    <app-trailer-configurator
+                                        [trailer]="trailer"
+                                        [jigTypes]="jigTypes()"
+                                        [disabled]="true"
+                                    >
+                                    </app-trailer-configurator>
+                                }
+                            </div>
+                            <div class="racks">
+                                @for(rack of racks(); track rack.name; let idx = $index){
+                                    <app-rack-configurator
+                                        [rack]="rack"
+                                        [jigTypes]="jigTypes()"
+                                        [disabled]="true"
+                                    >
+                                    </app-rack-configurator>
+                                }
+                            </div>
+                            <div class="trailers">
+                                @for(trailer of factoryTrailers(); track trailer.name; let idx = $index){
+                                    <app-trailer-configurator
+                                        [trailer]="trailer"
+                                        [jigTypes]="jigTypes()"
+                                        [disabled]="true"
+                                    >
+                                    </app-trailer-configurator>
+                                }
+                            </div>
+                            <div class="hangars">
+                                @for(hangar of hangars(); track hangar.name; let idx = $index){
+                                    <app-hangar-configurator
+                                        [hangar]="hangar"
+                                        [jigTypes]="jigTypes()"
+                                        [disabled]="true"
+                                    >
+                                    </app-hangar-configurator>
+                                }
+                            </div>
+                            <div class="production">
+                                <app-production-lines-configurator
+                                    [productionLineTargetSchedules]="productionLineTargetSchedules()"
+                                    [jigsOnSite]="jigsOnSite()"
+                                    [jigTypes]="jigTypes()"
+                                    [jigs]="jigs()"
+                                    [conflictMembers]="deliverConflictMembers()"
+                                    [disabled]="true"
+                                >
+                                </app-production-lines-configurator>
+                            </div> 
+                        </div>  
+                    }                 
                 </app-page-section-content>
             </app-page-section>
         </app-page-section-list>

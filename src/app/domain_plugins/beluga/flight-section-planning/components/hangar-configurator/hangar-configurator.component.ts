@@ -23,11 +23,11 @@ export class HangarConfiguratorComponent {
 
   store = inject(Store);
 
-  allowModifications = this.store.selectSignal(selectAllowObjectiveModification);
   incomingFlightJigMap = this.store.selectSignal(selectJigMapIncomingFlight);
 
   hangar = input.required<Trailer & {jig: Jig}>();
   jigTypes = input.required<Record<string,JigType>>();
+  disabled = input<boolean>(false);
 
   statusChanged = output<SiteStatus>();
 

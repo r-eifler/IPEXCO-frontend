@@ -26,6 +26,7 @@ import { selectActiveBranchRemainingNumberFlights, selectSupportedPlanners, sele
 import { PlanInspectorComponent } from '../../views/plan-inspector/plan-inspector.component';
 import { BranchNameDialogComponent } from '../branch-name-dialog/branch-name-dialog.component';
 import { SectionPlanMethodDialogComponent } from '../section-plan-method-dialog/section-plan-method-dialog.component';
+import { ConfigurationSelectorComponent } from '../configuration-selector/configuration-selector.component';
 
 @Component({
   selector: 'app-section-card',
@@ -44,6 +45,7 @@ import { SectionPlanMethodDialogComponent } from '../section-plan-method-dialog/
     MatProgressBarModule,
     PlanMethodTypeNamePipe,
     PlanMethodTypeIconPipe,
+    ConfigurationSelectorComponent,
   ],
   templateUrl: './section-card.component.html',
   styleUrl: './section-card.component.scss'
@@ -63,6 +65,8 @@ export class SectionCardComponent {
   originalFlight = input.required<Flight>();
 
   config = computed(() => this.section().configurations[this.section().configurationIndex]);
+  selectedConfigId = computed(() => this.section()?.configurationIndex);
+  configurations = computed(() => this.section()?.configurations);
 
   numOutgoing = computed(() => this.config()?.flightTargetSchedule?.outgoing.length ?? undefined)
   numOutgoingConsidered = computed(() => this.config()?.flightTargetSchedule?.outgoing.filter(e => !e.skip).length ?? undefined)

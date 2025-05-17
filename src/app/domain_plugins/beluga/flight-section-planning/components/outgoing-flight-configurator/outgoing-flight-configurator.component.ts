@@ -25,10 +25,17 @@ export class OutgoingFlightConfiguratorComponent {
     flightTargetSchedule = input.required<FlightTargetSchedule>();
     jigs = input.required<Record<string,Jig>>();
     jigTypes = input.required<Record<string,JigType>>();
+    disabled = input<boolean>(false);
+
+    conflictMembers = input<{
+      jigType: string,
+      flightName: string,
+      position: number
+    }[]>();
   
     targetSchedule = output<FlightTargetSchedule>();
   
-    schedule = computed(() => this.flightTargetSchedule()?.outgoing.map(elem => ({
+    schedule = computed(() => this.flightTargetSchedule()?.outgoing.map((elem, index) => ({
         jig: {
           name: 'XXX',
           empty: true,
@@ -37,6 +44,7 @@ export class OutgoingFlightConfiguratorComponent {
         status: {
           skip: elem.skip,
           onSite: elem.onSite,
+          inConflict: this.conflictMembers()?.find(g => g.position == index)
         }
       }))
     )
