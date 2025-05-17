@@ -114,7 +114,7 @@ export class ActionCardComponent {
         return "flight"
       case BelugaActionType.PUT_DOWN_RACK:
       case BelugaActionType.PICK_UP_RACK:
-        return "menu";
+        return "shelves";
       case BelugaActionType.DELIVER_TO_HANGAR:
       case BelugaActionType.GET_FROM_HANGAR:
         return "warehouse";
