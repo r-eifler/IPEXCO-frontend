@@ -33,6 +33,10 @@ $warn: mat.get-theme-color(ipexco-theme.$light-theme, error, 50);
   border-color: mat.get-theme-color(ipexco-theme.$light-theme, outline);
 }
 
+@mixin border-color-variant() {
+  border-color: mat.get-theme-color(ipexco-theme.$light-theme, outline-variant);
+}
+
 :root {
   @include mat.all-component-themes(ipexco-theme.$light-theme);
 }

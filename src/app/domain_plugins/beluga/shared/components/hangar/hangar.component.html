@@ -13,6 +13,10 @@
             [class.maintenance]="maintenance()"
         >
             <ng-content select="app-jig,app-drop-target"></ng-content>
+
+            @if(dragTarget()) {
+              <mat-icon class="dragIcon">place_item</mat-icon>
+            }
         </div>
     </div>
 </div>

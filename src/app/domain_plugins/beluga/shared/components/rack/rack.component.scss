@@ -29,7 +29,12 @@
     border: solid;
     border-width: 1px;
     border-color: var(--rack);
-    border-radius: var(--spacing-050);
+    border-radius: var(--spacing-100);
+}
+
+.dragIcon {
+  position: absolute;
+  @include vars.color(outline);
 }
 
 .dragTarget{

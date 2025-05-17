@@ -15,7 +15,11 @@
             [style.width]="((size() * 15) + 2) + 'px'"
             [class.inConflict]="inConflict()"
         >
-            <ng-content select="app-jig,app-drop-target"></ng-content>
+          <ng-content select="app-jig,app-drop-target"></ng-content>
+
+          @if(dragTarget()) {
+            <mat-icon class="dragIcon">place_item</mat-icon>
+          }
         </div>
     </div>
 </div>

@@ -46,6 +46,11 @@
     scale: 1.02;
 }
 
+.dragIcon {
+  position: absolute;
+  @include vars.color(outline);
+}
+
 .dragTarget{
     outline: dashed;
     outline-color: #{mat.get-theme-color(ipexco-theme.$light-theme, outline-variant)};;

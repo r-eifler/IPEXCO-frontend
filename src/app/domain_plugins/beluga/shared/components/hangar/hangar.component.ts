@@ -4,7 +4,7 @@ import { MatIconModule } from '@angular/material/icon';
 @Component({
   selector: 'app-hangar',
   imports: [
-    MatIconModule
+    MatIconModule,
   ],
   templateUrl: './hangar.component.html',
   styleUrl: './hangar.component.scss'

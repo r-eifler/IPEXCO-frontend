@@ -7,10 +7,10 @@
     --on-aircraft-part: #{mat.get-theme-color(ipexco-theme.$light-theme, on-tertiary-container)};
     --jig: #{mat.get-theme-color(ipexco-theme.$light-theme, tertiary-fixed-dim)};
     --on-jig: #{mat.get-theme-color(ipexco-theme.$light-theme, on-tertiary-fixed-variant)};
-    --rack: #{mat.get-theme-color(ipexco-theme.$light-theme, surface-container)};
-    --trailer: #{mat.get-theme-color(ipexco-theme.$light-theme, surface-container)};
-    --production-line: #{mat.get-theme-color(ipexco-theme.$light-theme, surface-container)};
-    --hangar: #{mat.get-theme-color(ipexco-theme.$light-theme, surface-container)};
+    --rack: #{mat.get-theme-color(ipexco-theme.$light-theme, surface-container-high)};
+    --trailer: #{mat.get-theme-color(ipexco-theme.$light-theme, surface-container-high)};
+    --production-line: #{mat.get-theme-color(ipexco-theme.$light-theme, surface-container-high)};
+    --hangar: #{mat.get-theme-color(ipexco-theme.$light-theme, surface-container-high)};
     --flight: rgb(232, 240, 255);
 
 
