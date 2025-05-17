@@ -12,6 +12,10 @@ export class UndoStackService {
 
   hasStackItems = computed(() => any(() => true ,this.stack()));
 
+  clear() {
+    this.stack.set([]);
+  }
+
   push(action: Action) {
     this.stack.update(oldStack => [...oldStack, action]);
 

@@ -24,6 +24,10 @@ export class SectionControlsComponent {
   store = inject(Store);
   undoStack = inject(UndoStackService);
 
+  constructor() {
+    this.undoStack.clear();
+  }
+
   nextFlightAvailable$ = this.store.select(selectFlightFinished);
   actions = this.store.selectSignal(selectActions);
 
