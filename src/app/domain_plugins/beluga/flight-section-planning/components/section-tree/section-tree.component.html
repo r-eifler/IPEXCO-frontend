@@ -5,7 +5,7 @@
             [originalFlight]="flights()?.[idx]"
         >
         </app-section-card>
-        @if(last){
+        @if(last && hasNextFlight()){
             <button mat-flat-button 
             (click)="onNextFlightPlan(section)"
             [disabled]="!lastSectionFinished()"
