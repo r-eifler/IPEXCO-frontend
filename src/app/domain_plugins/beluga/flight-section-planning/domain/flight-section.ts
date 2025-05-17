@@ -249,7 +249,7 @@ export function getJigsOnSiteFromState(state: BelugaSiteState, flights: Flight[]
 
     const consideredJigs = new Set<string>();
 
-    flights.forEach(f => f.incoming.forEach(j => consideredJigs.add(j)))
+    flights?.forEach(f => f.incoming.forEach(j => consideredJigs.add(j)))
     
     Object.values(state.racks).forEach(r => r.forEach(j => consideredJigs.add(j)));
     Object.values(state.trailers).forEach(j => {if(j !== null){consideredJigs.add(j)}});

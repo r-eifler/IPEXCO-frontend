@@ -30,6 +30,11 @@ export class RackConfiguratorComponent {
   rack = input.required<Rack & {jigs: Jig[]}>();
   jigTypes = input.required<Record<string,JigType>>();
   disabled = input<boolean>(false);
+  conflictMembers = input<{
+      rackName: string
+    }[]>([]);
+
+  inConflict = computed(() => this.conflictMembers()?.find(e => e.rackName == this.rack().name) !== undefined)
 
   statusChanged = output<SiteStatus>();
 

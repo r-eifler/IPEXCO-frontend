@@ -38,4 +38,8 @@ export class ProductionLinesConfiguratorComponent {
     this.targetSchedules.emit(newProductionSchedules);
   }
 
+  constructor(){
+    effect(() => console.log(this.conflictMembers()));
+  }
+
 }

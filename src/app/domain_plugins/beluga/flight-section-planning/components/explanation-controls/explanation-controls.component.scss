@@ -1,3 +1,5 @@
+@use "../../../../../../variables.scss" as vars;
+
 .container {
     display: flex;
     flex-direction: row;
@@ -10,4 +12,8 @@
     flex-direction: row;
     gap: var(--spacing-300);
     align-items: center;
+}
+
+.inConflict {
+    @include vars.color(on-error-container);
 }

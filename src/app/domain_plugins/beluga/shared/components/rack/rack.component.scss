@@ -46,3 +46,12 @@
     font-weight: 600;
     color: red
 }
+
+.inConflict {
+    outline: solid;
+    outline-width: 3px;
+    outline-offset: -3px;
+    @include vars.color(on-error-container);
+    @include vars.background-color(error-container);
+    opacity: 80%;
+}

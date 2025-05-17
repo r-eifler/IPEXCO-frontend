@@ -3,9 +3,9 @@ import { Router } from "@angular/router";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { concatLatestFrom } from "@ngrx/operators";
 import { Store } from "@ngrx/store";
-import { map } from "rxjs";
+import { map, switchMap } from "rxjs";
 import { PlanRunStatus } from "src/app/iterative_planning/domain/plan";
-import { updateConfiguration } from "../flight-section-planning.actions";
+import { selectSection, updateConfiguration, updateConfigurationOfSectionAndConfigIndex } from "../flight-section-planning.actions";
 import { selectProject, selectSelectedSection } from "../flight-section-planning.selector";
 
 
@@ -24,6 +24,17 @@ export class GoToConfigurationUpdateEffect{
                 if(section.status == PlanRunStatus.PENDING){
                     this.router.navigate(["beluga/flight-section-planning/" + project._id + "/configuration-update/" + section._id])
                 }
+            }
+        })
+        
+    ), {dispatch: false});
+
+     public startForSection$ = createEffect(() => this.actions$.pipe(
+        ofType(updateConfigurationOfSectionAndConfigIndex),
+        concatLatestFrom(() => [this.store.select(selectProject)]),
+        map(([{section, index}, project]) => {
+            if(project !== undefined){
+                this.router.navigate(["beluga/flight-section-planning/" + project._id + "/configuration-update/" + section._id])
             }
         })
         

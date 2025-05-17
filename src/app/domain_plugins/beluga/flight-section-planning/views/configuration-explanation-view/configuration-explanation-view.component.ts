@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, effect, inject } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslocoModule } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
@@ -68,6 +68,10 @@ export class ConfigurationExplanationViewComponent {
     hasEmptyRackConflictMember = this.store.selectSignal(selectHasEmptyRackConflictMember);
     rackMaintenanceConflictMembers = this.store.selectSignal(selectRackMaintenanceConflictMembers);
     trailerMaintenanceConflictMembers = this.store.selectSignal(selectTrailerMaintenanceConflictMembers);
+
+    constructor(){
+      effect(() => console.log(this.hasEmptyRackConflictMember()));
+    }
 
     // site elements
   

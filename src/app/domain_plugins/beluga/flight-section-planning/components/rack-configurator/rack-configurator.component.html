@@ -16,6 +16,7 @@
         [size]="rack()?.size" 
         [occupied]="occupied()"
         [maintenance]="!isUsed()"
+        [inConflict]="inConflict()"
     >
         @for(jig of rack().jigs; track jig.name){
             <app-jig

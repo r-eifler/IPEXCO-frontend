@@ -38,12 +38,14 @@ export class ProductionLineConfiguratorComponent {
   targetSchedule = output<ProductionLineTargetSchedule>();
 
   schedule = computed(() => {
-    if(this.productionLineTargetSchedule() && this.jigs() !== undefined){
-      return this.productionLineTargetSchedule().schedule.map(e => ({
+    const schedule = this.productionLineTargetSchedule().schedule;
+    if(schedule !== undefined && this.jigs() !== undefined){
+      return schedule?.map(e => ({
         jig: this.jigs()?.[e.jig],
         status: {
           skip: e.skip,
           onSite: e.onSite,
+          inConflict: this.conflictMembers()?.find(c => c.jigName == e.jig && c.productionLineName == this.productionLineTargetSchedule().name) 
         }
       }))
     }

@@ -28,6 +28,12 @@ export class TrailerConfiguratorComponent {
     trailer = input.required<Trailer & {jig: Jig}>();
     jigTypes = input.required<Record<string,JigType>>();
     disabled = input<boolean>(false);
+
+    conflictMembers = input<{
+          trailerName: string
+        }[]>([]);
+    
+    inConflict = computed(() => this.conflictMembers()?.find(e => e.trailerName == this.trailer().name) !== undefined)
   
     statusChanged = output<SiteStatus>();
   

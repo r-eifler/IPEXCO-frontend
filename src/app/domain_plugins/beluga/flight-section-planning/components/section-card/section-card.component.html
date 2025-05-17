@@ -76,7 +76,7 @@
                 </div>
             }
             @if(isPending()){
-                <a class="details" mat-button [routerLink]="['../configuration-update/' + section()?._id ]">{{t('f.update_configurations')}}</a>
+                <button class="details" mat-button (click)="onUpdateConfiguration()">{{t('f.update_configurations')}}</button>
                 <button class="details" mat-flat-button (click)="onCreatePlan()">{{t('f.generate_plan')}}</button>
 
             }
@@ -97,7 +97,7 @@
             }
             @if(notSolvable() || failed()){
                 <a class="details" mat-button 
-                    [routerLink]="['../configuration-explanations/' + section()?._id]">
+                    [routerLink]="['../configuration-explanations/' + section()?._id + '/' + section()?.configurationIndex]">
                     {{t('f.check_configurations')}}
                 </a>
                 <button mat-icon-button

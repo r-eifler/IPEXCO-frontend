@@ -2,19 +2,20 @@
     class="container"
 >
     @if(!isUsed()){
-        <button mat-icon-button (click)="onUnlock()" [disabled]="! disabled">
+        <button mat-icon-button (click)="onUnlock()" [disabled]="disabled()">
             <mat-icon>lock_open</mat-icon>
         </button>
     }
     @else{
-        <button mat-icon-button (click)="onLock()" [disabled]="isLoaded() || disabled">
+        <button mat-icon-button (click)="onLock()" [disabled]="isLoaded() || disabled()">
             <mat-icon>lock</mat-icon>
         </button>
     }
     <app-trailer
         [size] = "20 * 15"
         [maintenance]="!isUsed()"
-        [name]="trailer().name">
+        [name]="trailer().name"
+        [inConflict]="inConflict()">
         @if(jig()){
             <app-jig
                 [jig]="jig()"  

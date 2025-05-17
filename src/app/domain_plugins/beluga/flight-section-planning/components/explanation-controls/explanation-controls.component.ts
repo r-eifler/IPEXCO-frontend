@@ -33,6 +33,11 @@ export class ExplanationControlsComponent {
   section = input.required<FlightSection>();
   config = input.required<BelugaConfiguration>();
   disabled = input<boolean>(false);
+
+  rackEmptyConflict = input<boolean>(false);
+  swapConflictMembers = input<{
+    numSwaps: number,
+  }[]>([]);
   
   numEmptyRacks = computed(() => sum(this.config()?.siteSetUp.racks.map(r => this.section()?.siteState.racks[r.name].length == 0 ? 1 : 0)))
 
@@ -47,7 +52,7 @@ export class ExplanationControlsComponent {
   keepRackEmpty = computed(() => (this.config()?.minEmptyRacks ?? 0) >= 1)
 
   constructor(){
-    effect(() => console.log(this.config()));
+    effect(() => console.log(this.rackEmptyConflict()));
   }
 
   onExplain(){

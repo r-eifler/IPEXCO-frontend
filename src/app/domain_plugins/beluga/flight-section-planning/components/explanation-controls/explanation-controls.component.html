@@ -1,14 +1,20 @@
 <div class="container"  *transloco="let t">
         <div class="buttons">             
             <app-swap-configurator 
-            [value]="maxSwaps()" 
-            [disabled]="disabled()"
+                [value]="maxSwaps()" 
+                [disabled]="disabled()"
             ></app-swap-configurator>
+            @if(swapConflictMembers()?.length > 0){
+                <mat-icon class="inConflict">warning</mat-icon>
+            }
             <mat-slide-toggle 
                 [checked]="keepRackEmpty()" 
                 [disabled]="numEmptyRacks() == 0 || disabled()">
                     Keep at lest one rack empty
-            </mat-slide-toggle>               
+            </mat-slide-toggle>    
+            @if(rackEmptyConflict()){
+                <mat-icon class="inConflict">warning</mat-icon>
+            }     
         </div>
 
     <div class="buttons">

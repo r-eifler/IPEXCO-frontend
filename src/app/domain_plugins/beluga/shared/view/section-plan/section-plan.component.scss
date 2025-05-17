@@ -18,3 +18,8 @@
      width: 100%;
      overflow-x: scroll;
 }
+
+.controls {
+    display: flex;
+    justify-content: space-between;
+}

@@ -4,6 +4,10 @@
             (back)="onBack()"
             (forward)="onForward()"
         ></app-step-control>
+        <a mat-button [routerLink]="['../../flight-sections']">
+            <mat-icon>chevron_left</mat-icon>
+            Back
+        </a>
     </div>
     <div class="plan">
         <app-plan-action-list
@@ -15,9 +19,9 @@
     <div class="state">
         <app-state-card
             [state]="selectedState()"
-            [siteSetUp]="section()?.siteSetUp"
-            [targetFlightSchedule]="section()?.flightTargetSchedule"
-            [targetProductionSchedule]="section()?.productionLinesTargetSchedule"
+            [siteSetUp]="configuration()?.siteSetUp"
+            [targetFlightSchedule]="configuration()?.flightTargetSchedule"
+            [targetProductionSchedule]="configuration()?.productionLinesTargetSchedule"
         >
         </app-state-card>
     </div>

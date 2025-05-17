@@ -6,7 +6,7 @@ import { selectSelectedConfiguration, selectUsedConfiguration } from "../../stat
 
 export const selectConflicts= createSelector(selectSelectedConfiguration, 
     (configuration) => configuration?.explanations?.MUGS.
-    map(cn => configuration?.explanations?.goals[cn[0]]).
+    flatMap(cn => cn.map(g => configuration?.explanations?.goals[g])).
     filter(g => g !== undefined)
 );
 

@@ -16,7 +16,6 @@ import { selectSelectedSection } from '../../state/flight-section-planning.selec
     PageModule,
     BreadcrumbModule,
     MatIconModule,
-    RouterLink,
   ],
   templateUrl: './plan-inspector.component.html',
   styleUrl: './plan-inspector.component.scss'

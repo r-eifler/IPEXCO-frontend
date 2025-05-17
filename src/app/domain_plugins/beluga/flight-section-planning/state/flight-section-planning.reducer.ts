@@ -3,7 +3,7 @@ import { Loadable, LoadingState } from "src/app/shared/common/loadable.interface
 import { Project } from "src/app/shared/domain/project";
 import { BelugaProblem, BelugaProblemZ } from "../../shared/domain/beluga_problem";
 import { BelugaConfiguration, FlightPlanTree, FlightSection } from "../domain/flight-section";
-import { loadDomainSpecification, loadDomainSpecificationSuccess, loadFlightPlanTree, loadFlightPlanTreeSuccess, loadFlightSections, loadFlightSectionsSuccess, loadProject, loadProjectSuccess, loadServices, loadServicesSuccess, newConfiguration, reloadFlightPlanTreeSuccess, selectConfiguration, selectSection, skipIncomingJig, skipOutgoingJigType, skipProductionJig, updateConfiguration, updateEmptyRacks, updateFlightPlanTreeSuccess, updateFlightSchedule, updateHangarStatus, updateMaxSwaps, updateProductionSchedule, updateRackStatus, updateTrailerStatus } from "./flight-section-planning.actions";
+import { loadDomainSpecification, loadDomainSpecificationSuccess, loadFlightPlanTree, loadFlightPlanTreeSuccess, loadFlightSections, loadFlightSectionsSuccess, loadProject, loadProjectSuccess, loadServices, loadServicesSuccess, newConfiguration, reloadFlightPlanTreeSuccess, selectConfiguration, selectSection, skipIncomingJig, skipOutgoingJigType, skipProductionJig, updateConfiguration, updateConfigurationOfSectionAndConfigIndex, updateEmptyRacks, updateFlightPlanTreeSuccess, updateFlightSchedule, updateHangarStatus, updateMaxSwaps, updateProductionSchedule, updateRackStatus, updateTrailerStatus } from "./flight-section-planning.actions";
 import { BelugaState, getInitialState } from "../../shared/domain/beluga_state";
 import { DomainSpecification } from "src/app/global_specification/domain/domain_specification";
 import { Service } from "src/app/global_specification/domain/services";
@@ -121,89 +121,155 @@ export const FlightSectionPlanningReducer = createReducer(
                 explanationStatus: ExplanationRunStatus.PENDING
             } : null
     })),
-    on(skipIncomingJig, (state, {index, skip}): FlightSectionPlanningState => {
-        if(state.updatedConfiguration === null){
-            return state
-        }
-
-        const newConfig: BelugaConfiguration = {...state.updatedConfiguration};
-        newConfig.flightTargetSchedule.incoming[index].skip = skip
-
-        return {
-            ...state,
-            updatedConfiguration: newConfig
-        }
-    }),
-    on(skipOutgoingJigType, (state, {index, skip}): FlightSectionPlanningState => {
-        if(state.updatedConfiguration === null){
-            return state
-        }
-
-        const newConfig: BelugaConfiguration = {...state.updatedConfiguration};
-        newConfig.flightTargetSchedule.outgoing[index].skip = skip
-
-        return {
-            ...state,
-            updatedConfiguration: newConfig
-        }
-    }),
-    on(skipProductionJig, (state, {productionLineName, index, skip}): FlightSectionPlanningState => {
-        if(state.updatedConfiguration === null){
-            return state
-        }
-
-        const newConfig: BelugaConfiguration = {...state.updatedConfiguration};
-        newConfig.productionLinesTargetSchedule[productionLineName].schedule[index].skip = skip
-
-        return {
-            ...state,
-            updatedConfiguration: newConfig
-        }
-    }),
-    on(updateRackStatus, (state, {index, status}): FlightSectionPlanningState => {
-        if(state.updatedConfiguration === null){
-            return state
-        }
-
-        const newConfig: BelugaConfiguration = {...state.updatedConfiguration};
-        newConfig.siteSetUp.racks[index].status = status;
-
-        return {
-            ...state,
-            updatedConfiguration: newConfig
-        }
-    }),
+    on(updateConfigurationOfSectionAndConfigIndex, (state, {section, index}): FlightSectionPlanningState => ({
+        ...state,
+        selectedSectionId: section._id,
+        selectedConfigIndex: index,
+        updatedConfiguration: state.sections.data !== undefined? 
+            {
+                ...state.sections.data?.[section._id].configurations[index],
+                explanations: null,
+                explanationStatus: ExplanationRunStatus.PENDING
+            } : null
+    })),
+    on(skipIncomingJig, (state, {index, skip}): FlightSectionPlanningState =>  ({
+        ...state,
+        updatedConfiguration: state.updatedConfiguration !== null ? {
+            ...state.updatedConfiguration,
+            flightTargetSchedule: {
+                ...state.updatedConfiguration.flightTargetSchedule,
+                incoming: [
+                    ...state.updatedConfiguration.flightTargetSchedule.incoming.slice(0,index),
+                    {
+                        ...state.updatedConfiguration.flightTargetSchedule.incoming[index],
+                        skip
+                    },
+                    ...state.updatedConfiguration.flightTargetSchedule.incoming.slice(index + 1),
+                ]
+            }
+        } : null
+        
+    })),
+    on(skipOutgoingJigType, (state, {index, skip}): FlightSectionPlanningState => ({
+        ...state,
+        updatedConfiguration: state.updatedConfiguration !== null ? {
+            ...state.updatedConfiguration,
+            flightTargetSchedule: {
+                ...state.updatedConfiguration.flightTargetSchedule,
+                outgoing: [
+                    ...state.updatedConfiguration.flightTargetSchedule.outgoing.slice(0,index),
+                    {
+                        ...state.updatedConfiguration.flightTargetSchedule.outgoing[index],
+                        skip
+                    },
+                    ...state.updatedConfiguration.flightTargetSchedule.outgoing.slice(index + 1),
+                ]
+            }
+        } : null
+        
+    })),
+    on(skipProductionJig, (state, {productionLineName, index, skip}): FlightSectionPlanningState => ({
+        ...state,
+        updatedConfiguration: state.updatedConfiguration !== null ? {
+            ...state.updatedConfiguration,
+            productionLinesTargetSchedule: {
+                ...state.updatedConfiguration.productionLinesTargetSchedule,
+                [productionLineName]: {
+                    ...state.updatedConfiguration.productionLinesTargetSchedule[productionLineName],
+                    schedule: [
+                        ...state.updatedConfiguration.productionLinesTargetSchedule[productionLineName].schedule.slice(0,index),
+                        {
+                            ...state.updatedConfiguration.productionLinesTargetSchedule[productionLineName].schedule[index],
+                            skip
+                        },
+                        ...state.updatedConfiguration.productionLinesTargetSchedule[productionLineName].schedule.slice(index + 1)
+                    ]
+                }
+            }
+        } : null
+        
+    })),
+    on(updateRackStatus, (state, {index, status}): FlightSectionPlanningState => ({
+        ...state,
+        updatedConfiguration: state.updatedConfiguration !== null ? {
+            ...state.updatedConfiguration,
+            siteSetUp: {
+                ...state.updatedConfiguration.siteSetUp,
+                racks: [
+                    ...state.updatedConfiguration.siteSetUp.racks.slice(0,index),
+                    {
+                        ...state.updatedConfiguration.siteSetUp.racks[index],
+                        status
+                    },
+                    ...state.updatedConfiguration.siteSetUp.racks.slice(index + 1),
+                ]
+            }
+        } : null
+        
+    })),
     on(updateTrailerStatus, (state, {index, side, status}): FlightSectionPlanningState => {
         if(state.updatedConfiguration === null){
             return state
         }
 
-        const newConfig: BelugaConfiguration = {...state.updatedConfiguration};
         if(side === 'bside'){
-            newConfig.siteSetUp.belugaTrailers[index].status = status;
-        }
-        if(side === 'fside'){
-            newConfig.siteSetUp.factoryTrailers[index].status = status;
-        }
+            return {
+                ...state,
+                updatedConfiguration: {
+                    ...state.updatedConfiguration,
+                    siteSetUp: {
+                        ...state.updatedConfiguration.siteSetUp,
+                        belugaTrailers: [
+                            ...state.updatedConfiguration.siteSetUp.belugaTrailers.slice(0,index),
+                            {
+                                ...state.updatedConfiguration.siteSetUp.belugaTrailers[index],
+                                status
+                            },
+                            ...state.updatedConfiguration.siteSetUp.belugaTrailers.slice(index + 1),
+                        ]
+                    }
+                }
         
-        return {
-            ...state,
-            updatedConfiguration: newConfig
+             }
+        }
+        else{
+            return {
+                ...state,
+                updatedConfiguration: {
+                    ...state.updatedConfiguration,
+                    siteSetUp: {
+                        ...state.updatedConfiguration.siteSetUp,
+                        factoryTrailers: [
+                            ...state.updatedConfiguration.siteSetUp.factoryTrailers.slice(0,index),
+                            {
+                                ...state.updatedConfiguration.siteSetUp.factoryTrailers[index],
+                                status
+                            },
+                            ...state.updatedConfiguration.siteSetUp.factoryTrailers.slice(index + 1),
+                        ]
+                    }
+                }
+        
+            }
         }
     }),
-    on(updateHangarStatus, (state, {index, status}): FlightSectionPlanningState => {
-        if(state.updatedConfiguration === null){
-            return state
-        }
-
-        const newConfig: BelugaConfiguration = {...state.updatedConfiguration};
-        newConfig.siteSetUp.hangars[index].status = status;
-
-        return {
-            ...state,
-            updatedConfiguration: newConfig
-        }
-    }),
+    on(updateHangarStatus, (state, {index, status}): FlightSectionPlanningState => ({
+        ...state,
+        updatedConfiguration: state.updatedConfiguration !== null ?{
+            ...state.updatedConfiguration,
+            siteSetUp: {
+                ...state.updatedConfiguration.siteSetUp,
+                hangars: [
+                    ...state.updatedConfiguration.siteSetUp.hangars.slice(0,index),
+                    {
+                        ...state.updatedConfiguration.siteSetUp.hangars[index],
+                        status
+                    },
+                    ...state.updatedConfiguration.siteSetUp.hangars.slice(index + 1),
+                ]
+            }
+        } : null
+    })),
     on(updateFlightSchedule, (state, {schedule}): FlightSectionPlanningState => {
         if(state.updatedConfiguration === null){
             return state

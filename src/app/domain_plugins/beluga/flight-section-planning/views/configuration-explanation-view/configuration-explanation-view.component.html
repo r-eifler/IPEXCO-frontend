@@ -28,14 +28,16 @@
                         [section]="section()"
                         [config]="configuration()"
                         [disabled]="true"
+                        [rackEmptyConflict]="hasEmptyRackConflictMember()"
+                        [swapConflictMembers]="swapConflictMembers()"
                     ></app-explanation-controls>
                 </app-page-section-content>
             </app-page-section>     
-            <!-- <app-page-section>
+            <app-page-section>
                 <app-page-section-content>
                     {{ conflicts() }}
                 </app-page-section-content>
-            </app-page-section>             -->
+            </app-page-section>            
             <app-page-section>
                 <app-page-section-content>
                     @if(explanationsComputationRunning()){
@@ -72,6 +74,7 @@
                                         [trailer]="trailer"
                                         [jigTypes]="jigTypes()"
                                         [disabled]="true"
+                                        [conflictMembers]="trailerMaintenanceConflictMembers()"
                                     >
                                     </app-trailer-configurator>
                                 }
@@ -82,6 +85,7 @@
                                         [rack]="rack"
                                         [jigTypes]="jigTypes()"
                                         [disabled]="true"
+                                        [conflictMembers]="rackMaintenanceConflictMembers()"
                                     >
                                     </app-rack-configurator>
                                 }
@@ -92,6 +96,7 @@
                                         [trailer]="trailer"
                                         [jigTypes]="jigTypes()"
                                         [disabled]="true"
+                                        [conflictMembers]="trailerMaintenanceConflictMembers()"
                                     >
                                     </app-trailer-configurator>
                                 }

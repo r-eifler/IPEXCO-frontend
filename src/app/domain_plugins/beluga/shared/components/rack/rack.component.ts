@@ -19,4 +19,6 @@ export class RackComponent {
 
   dragTarget = input<boolean>(false);
   noDragTarget = input<boolean>(false);
+
+  inConflict = input<boolean>(false);
 }

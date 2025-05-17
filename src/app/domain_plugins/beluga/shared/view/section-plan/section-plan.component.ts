@@ -5,13 +5,19 @@ import { StateCardComponent } from '../../components/state-card/state-card.compo
 import { StepControlComponent } from '../../components/step-control/step-control.component';
 import { BelugaAction, BelugaActionType } from '../../domain/beluga_plan';
 import { applyActions } from '../../domain/beluga_state';
+import { MatIconModule } from '@angular/material/icon';
+import { RouterLink } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-section-plan',
   imports: [
     PlanActionListComponent,
     StateCardComponent,
-    StepControlComponent
+    StepControlComponent,
+    MatIconModule,
+    RouterLink,
+    MatButtonModule,
   ],
   templateUrl: './section-plan.component.html',
   styleUrl: './section-plan.component.scss'
@@ -34,13 +40,14 @@ export class SectionPlanComponent {
     const allActions = this.actions()
     const actions = allActions.slice(0, endIndex);
 
-    return applyActions(
+    const resState = applyActions(
       startState, 
       actions, 
       getFlightSchedule(this.configuration().flightTargetSchedule, false),
       getProductionSchedule(this.configuration().productionLinesTargetSchedule, false),
       this.configuration().siteSetUp
     )
+    return resState;
   })
 
 
