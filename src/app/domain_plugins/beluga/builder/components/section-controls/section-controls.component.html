@@ -1,4 +1,5 @@
 <div class="main" *transloco="let t">
+  <div class="group">
     <button mat-flat-button [disabled]="!(nextFlightAvailable$ | async)" (click)="onSave()">
         <mat-icon>save</mat-icon>
         {{t('b.save')}}
@@ -7,5 +8,13 @@
         <mat-icon>cancel</mat-icon>
         {{t('b.cancel')}}
     </button>
+  </div>
+
+  <div class="group">
+    <button mat-button (click)="onUndo()" [disabled]="!this.undoStack.hasStackItems()">
+        <mat-icon>undo</mat-icon>
+        {{t('b.undo')}}
+    </button>
+  </div>
 </div>
 
