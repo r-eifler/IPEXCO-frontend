@@ -7,6 +7,7 @@
     "racks": "racks",
     "jigs": "jigs",
     "manual_planning": "Manual Planning",
+    "plan": "Plan",
     "incoming_flight": "Incoming Flight",
     "outgoing_flight": "Outgoing Flight",
     "empty_flight": "flight empty",
