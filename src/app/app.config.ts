@@ -1,4 +1,5 @@
 import { ApplicationConfig, isDevMode } from "@angular/core";
+import {provideAnimationsAsync} from '@angular/platform-browser/animations/async'
 import { provideRouter } from "@angular/router";
 import { routes } from "./app.routes";
 import { provideStore } from "@ngrx/store";
@@ -12,6 +13,7 @@ import { createUndoReducer } from "./shared/state/undo/handle-undo";
 
 export const appConfig: ApplicationConfig = {
     providers: [
+        provideAnimationsAsync(),
         provideRouter(routes),
         provideStore([], { metaReducers: [createUndoReducer(1000)] }),
         provideStoreDevtools({

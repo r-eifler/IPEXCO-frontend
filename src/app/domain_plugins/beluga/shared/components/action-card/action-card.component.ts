@@ -2,6 +2,7 @@ import { Component, computed, effect, input, output, Signal } from '@angular/cor
 import { BelugaAction, BelugaActionType, JigActionZ, PickUpRackZ, PutDownRackZ, RackActionZ, SideActionZ } from '../../domain/beluga_plan';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { animate, style, transition, trigger } from '@angular/animations';
 
 @Component({
   selector: 'app-action-card',
@@ -10,7 +11,13 @@ import { MatButtonModule } from '@angular/material/button';
     MatButtonModule,
   ],
   templateUrl: './action-card.component.html',
-  styleUrl: './action-card.component.scss'
+  styleUrl: './action-card.component.scss',
+  animations: [
+    trigger('zoomInOut', [
+      transition(':enter', [style({scale: 0}), animate('100ms', style({scale: 1}))]),
+      transition(':leave', [style({scale: 1}), animate('100ms', style({scale: 0}))]),
+    ]),
+  ],
 })
 export class ActionCardComponent {
 
