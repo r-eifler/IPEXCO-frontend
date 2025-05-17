@@ -22,7 +22,7 @@ import { PlanMethod, PlanMethodType } from '../../domain/plan_method';
 import { PlanMethodTypeIconPipe } from '../../pipe/plan-method-type-icon.pipe';
 import { PlanMethodTypeNamePipe } from '../../pipe/plan-method-type-name.pipe';
 import { cancelPlanning, createNewBranch, registerManualPlanning, startAutomaticPlanning, startExplanations, updateConfiguration, updateConfigurationOfSectionAndConfigIndex, } from '../../state/flight-section-planning.actions';
-import { selectActiveBranchRemainingNumberFlights, selectSupportedPlanners, selectTask } from '../../state/flight-section-planning.selector';
+import { selectActiveBranchRemainingNumberFlights, selectIsAutomatic, selectIsManual, selectSupportedPlanners, selectTask } from '../../state/flight-section-planning.selector';
 import { PlanInspectorComponent } from '../../views/plan-inspector/plan-inspector.component';
 import { BranchNameDialogComponent } from '../branch-name-dialog/branch-name-dialog.component';
 import { SectionPlanMethodDialogComponent } from '../section-plan-method-dialog/section-plan-method-dialog.component';
@@ -57,8 +57,9 @@ export class SectionCardComponent {
   router = inject(Router);
   activatedRoute = inject(ActivatedRoute)
 
+  isAutomatic = this.store.selectSignal(selectIsAutomatic);
+  isManual = this.store.selectSignal(selectIsManual);
   supportedPlanners= this.store.selectSignal(selectSupportedPlanners);
-  task = this.store.selectSignal(selectTask);
   remainingNUmberFlights = this.store.selectSignal(selectActiveBranchRemainingNumberFlights);
 
   section = input.required<FlightSection>();
@@ -110,13 +111,30 @@ export class SectionCardComponent {
     });
   }
 
-  onInspectPlan(){
-    const dialogRef = this.dialog.open(PlanInspectorComponent, {
-      data: {task: this.task, section: this.section()},
-    });
-  }
 
   onCreatePlan(){
+
+    if(this.isAutomatic()){
+      let method: PlanMethod = {
+        name: 'AI Planner',
+        type: PlanMethodType.AUTOMATIC_SEARCH_PLANNER,
+        serviceId: this.supportedPlanners()[0]._id,
+        numOptimizedFlights: 1
+      }
+      this.store.dispatch(startAutomaticPlanning({section: this.section(), method: method}))
+      return;
+    }
+
+    if(this.isManual()){
+      let method: PlanMethod = {
+        name: 'Human Planner',
+        type: PlanMethodType.MANUAL,
+        numOptimizedFlights: 1
+      }
+      this.store.dispatch(registerManualPlanning({section: this.section(), method: method}))
+      return;
+    }
+
     const dialogRef = this.dialog.open(SectionPlanMethodDialogComponent, {
       data: {maxNumFlights: this.remainingNUmberFlights(), planners: this.supportedPlanners()},
     });

@@ -12,6 +12,7 @@ import { selectAllowObjectiveModification } from '../../state/flight-section-pla
 import { SwapConfiguratorComponent } from '../swap-configurator/swap-configurator.component';
 import { TranslocoModule } from '@jsverse/transloco';
 import { PlanRunStatus } from 'src/app/iterative_planning/domain/plan';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 @Component({
   selector: 'app-explanation-controls',
@@ -22,6 +23,7 @@ import { PlanRunStatus } from 'src/app/iterative_planning/domain/plan';
     MatIcon,
     RouterLink,
     TranslocoModule,
+    MatProgressBarModule,
   ],
   templateUrl: './explanation-controls.component.html',
   styleUrl: './explanation-controls.component.scss'
@@ -45,6 +47,7 @@ export class ExplanationControlsComponent {
   changeEmptyRacks= output<number>();
 
   hasExplanation = computed(() => this.config()?.explanationStatus == ExplanationRunStatus.FINISHED)
+  explanationRunning = computed(() => this.config()?.explanationStatus == ExplanationRunStatus.RUNNING)
   maxSwaps = computed(() => this.config()?.maxSwaps)
 
   pending = computed(() => this.section()?.status == PlanRunStatus.PENDING)

@@ -52,16 +52,18 @@
     </mat-card-content>
     <mat-card-actions class="actions-container">
         <div class="configs-main-container">
-            <span>{{t('f.configurations')}}:</span>
-            <div class="configs-container">
-                @for(config of configurations(); track config; let idx = $index){
-                    <app-configuration-selector
-                        [configuration]="config"
-                        [selected]="selectedConfigId() == idx"
-                        [routerLink]="'../configuration-explanations/' + section()?._id + '/' + idx"
-                    ></app-configuration-selector>
-                }
-            </div>
+            @if(isAutomatic()){
+                <span>{{t('f.configurations')}}:</span>
+                <div class="configs-container">
+                    @for(config of configurations(); track config; let idx = $index){
+                        <app-configuration-selector
+                            [configuration]="config"
+                            [selected]="selectedConfigId() == idx"
+                            [routerLink]="'../configuration-explanations/' + section()?._id + '/' + idx"
+                        ></app-configuration-selector>
+                    }
+                </div>
+            }
         </div>
         <div class="buttons-container">
             @if(isRunning()){
@@ -76,15 +78,19 @@
                 </div>
             }
             @if(isPending()){
-                <button class="details" mat-button (click)="onUpdateConfiguration()">{{t('f.update_configurations')}}</button>
+                @if(isAutomatic()){
+                    <button class="details" mat-button (click)="onUpdateConfiguration()">{{t('f.update_configurations')}}</button>
+                }
                 <button class="details" mat-flat-button (click)="onCreatePlan()">{{t('f.generate_plan')}}</button>
 
             }
             @if(solved()){
-                <a class="details" mat-button 
-                    [routerLink]="['../configuration-explanations/' + section()?._id + '/' + section()?.configurationIndex]">
-                    {{t('f.check_configurations')}}
-                </a>
+                @if(isAutomatic()){
+                    <a class="details" mat-button 
+                        [routerLink]="['../configuration-explanations/' + section()?._id + '/' + section()?.configurationIndex]">
+                        {{t('f.check_configurations')}}
+                    </a>
+                }
                 <a class="details" mat-button 
                     [routerLink]="['../plan-inspection/' + section()?._id]"
                 >
@@ -96,10 +102,12 @@
                 ><mat-icon>call_split</mat-icon></button>
             }
             @if(notSolvable() || failed()){
-                <a class="details" mat-button 
-                    [routerLink]="['../configuration-explanations/' + section()?._id + '/' + section()?.configurationIndex]">
-                    {{t('f.check_configurations')}}
-                </a>
+                @if(isAutomatic()){
+                    <a class="details" mat-button 
+                        [routerLink]="['../configuration-explanations/' + section()?._id + '/' + section()?.configurationIndex]">
+                        {{t('f.check_configurations')}}
+                    </a>
+                }
                 <button mat-icon-button
                     matTooltip="Creates a different plan for this flight."
                     (click)="onBranch()"

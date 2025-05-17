@@ -6,6 +6,7 @@ import { BelugaAction } from "../../shared/domain/beluga_plan";
 import { Encoding, ServiceType } from "src/app/global_specification/domain/services";
 import { memoizeWith, sum } from "ramda";
 import { getJigsOnSiteFromSection } from "../domain/flight-section";
+import { ExplanationInterfaceType } from "src/app/project/domain/general-settings";
 
 
 const selectState = FlightSectionPlanningFeature.selectFlightSectionPlanningState
@@ -14,6 +15,9 @@ const selectState = FlightSectionPlanningFeature.selectFlightSectionPlanningStat
 // Project
 
 export const selectProject = createSelector(selectState, (state) => state.project.data)
+
+export const selectIsManual = createSelector(selectProject, (project) => project?.settings.interfaces.explanationInterfaceType == ExplanationInterfaceType.MANUAL)
+export const selectIsAutomatic = createSelector(selectProject, (project) => project?.settings.interfaces.explanationInterfaceType == ExplanationInterfaceType.AUTOMATIC)
 
 export const selectDomainSpecification = createSelector(selectState, (state) => state.domainSpecification.data)
 

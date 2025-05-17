@@ -33,19 +33,13 @@
                     ></app-explanation-controls>
                 </app-page-section-content>
             </app-page-section>     
-            <app-page-section>
+            <!-- <app-page-section>
                 <app-page-section-content>
                     {{ conflicts() }}
                 </app-page-section-content>
-            </app-page-section>            
+            </app-page-section>             -->
             <app-page-section>
                 <app-page-section-content>
-                    @if(explanationsComputationRunning()){
-                        <div>
-                            <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-                        </div>
-                    }
-                    @else{
                         <div class="main-container">
                             <div class="belugas">
                             <app-incoming-flight-configurator
@@ -123,7 +117,7 @@
                                 </app-production-lines-configurator>
                             </div> 
                         </div>  
-                    }                 
+                                     
                 </app-page-section-content>
             </app-page-section>
         </app-page-section-list>

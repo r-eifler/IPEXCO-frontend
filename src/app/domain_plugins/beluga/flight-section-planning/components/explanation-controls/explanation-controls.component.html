@@ -1,33 +1,40 @@
-<div class="container"  *transloco="let t">
-        <div class="buttons">             
-            <app-swap-configurator 
-                [value]="maxSwaps()" 
-                [disabled]="disabled()"
-            ></app-swap-configurator>
-            @if(swapConflictMembers()?.length > 0){
-                <mat-icon class="inConflict">warning</mat-icon>
-            }
-            <mat-slide-toggle 
-                [checked]="keepRackEmpty()" 
-                [disabled]="numEmptyRacks() == 0 || disabled()">
-                    Keep at lest one rack empty
-            </mat-slide-toggle>    
-            @if(rackEmptyConflict()){
-                <mat-icon class="inConflict">warning</mat-icon>
-            }     
-        </div>
+<div 
+    [class.container]="!explanationRunning()"
+    [class.container-running]="explanationRunning()"
+    *transloco="let t">
+    <div class="goals">             
+        <app-swap-configurator 
+            [value]="maxSwaps()" 
+            [disabled]="disabled()"
+        ></app-swap-configurator>
+        @if(swapConflictMembers()?.length > 0){
+            <mat-icon class="inConflict">warning</mat-icon>
+        }
+        <mat-slide-toggle 
+            [checked]="keepRackEmpty()" 
+            [disabled]="numEmptyRacks() == 0 || disabled()">
+                Keep at lest one rack empty
+        </mat-slide-toggle>    
+        @if(rackEmptyConflict()){
+            <mat-icon class="inConflict">warning</mat-icon>
+        }     
+    </div>
+
+    @if(explanationRunning()){
+        <mat-progress-bar mode="indeterminate" class="progress"></mat-progress-bar>
+    }
 
     <div class="buttons">
-        <a mat-button [routerLink]="['../../../flight-sections']">
+        <a mat-button [routerLink]="['../../../flight-sections']" [disabled]="explanationRunning()">
             <mat-icon>chevron_left</mat-icon>
             Back
         </a>
         @if(pending()){
             <button 
-                mat-button (click)="onUpdateConfiguration()">
+                mat-button (click)="onUpdateConfiguration()" [disabled]="explanationRunning()">
                 {{t('f.update_configurations')}}
             </button>
-            <button mat-flat-button (click)="onExplain()" [disabled]="hasExplanation()">
+            <button mat-flat-button (click)="onExplain()" [disabled]="hasExplanation() || explanationRunning()">
                 <mat-icon>contact_support</mat-icon>
                 Is solvable?
             </button>
