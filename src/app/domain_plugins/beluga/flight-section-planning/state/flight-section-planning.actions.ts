@@ -2,7 +2,7 @@ import { createAction, props } from "@ngrx/store";
 import { DomainSpecification } from "src/app/global_specification/domain/domain_specification";
 import { PlanProperty, PlanPropertyOfProject } from "src/app/shared/domain/plan-property/plan-property";
 import { Project } from "src/app/shared/domain/project";
-import { FlightPlanTree, FlightPlanTreeBase, FlightSection, FlightSectionBase, FlightTargetSchedule, ProductionLineTargetSchedule } from "../domain/flight-section";
+import { BelugaConfiguration, FlightPlanTree, FlightPlanTreeBase, FlightSection, FlightSectionBase, FlightTargetSchedule, ProductionLineTargetSchedule } from "../domain/flight-section";
 import { Service } from "src/app/global_specification/domain/services";
 import { BelugaState } from "../../shared/domain/beluga_state";
 import { BelugaAction } from "../../shared/domain/beluga_plan";
@@ -121,31 +121,37 @@ export const cancelAutomaticPlanningFailure = createAction('[beluga-flight-secti
 
 // Configuration updates
 
-export const updateConfiguration = createAction('[beluga-flight-section-planning] update configuration');
 export const updateConfigurationOfSectionAndConfigIndex = createAction('[beluga-flight-section-planning] update configuration of section', props<{section: FlightSection, index: number}>());
-
 export const newConfiguration = createAction('[beluga-flight-section-planning] new configuration');
+
 export const skipIncomingJig = createAction('[beluga-flight-section-planning] skip incoming jig', props<{index: number, skip: boolean}>());
 export const skipOutgoingJigType = createAction('[beluga-flight-section-planning] skip outgoing jig type', props<{index: number, skip: boolean}>());
 export const skipProductionJig = createAction('[beluga-flight-section-planning] skip production jig', props<{productionLineName: string, index: number, skip: boolean}>());
 export const updateRackStatus = createAction('[beluga-flight-section-planning] update rack status', props<{index: number, status: SiteStatus}>());
 export const updateTrailerStatus = createAction('[beluga-flight-section-planning] update trailer status', props<{index: number, side: Side, status: SiteStatus}>());
 export const updateHangarStatus = createAction('[beluga-flight-section-planning] update hangar status', props<{index: number, status: SiteStatus}>());
-export const updateFlightSchedule= createAction('[beluga-flight-section-planning] update flight Schedule status', props<{schedule: FlightTargetSchedule}>());
-export const updateProductionSchedule= createAction('[beluga-flight-section-planning] update production Schedule status', props<{schedule: ProductionLineTargetSchedule[]}>());
 export const updateMaxSwaps = createAction('[beluga-flight-section-planning] update max swaps', props<{value: number}>());
 export const updateEmptyRacks = createAction('[beluga-flight-section-planning] update empty racks', props<{value: number}>());
 export const saveConfiguration = createAction('[beluga-flight-section-planning] save configuration');
 
 // explanations
 
-export const startExplanations = createAction('[beluga-flight-section-planning] start explanations', props<{section: FlightSection}>());
-export const startExplanationsSuccess = createAction('[beluga-flight-section-planning] start explanations success', props<{section: FlightSection}>());
+export const startExplanations = createAction('[beluga-flight-section-planning] start explanations', props<{section: FlightSection, configIndex: number}>());
+export const startExplanationsSuccess = createAction('[beluga-flight-section-planning] start explanations success', props<{section: FlightSection, configIndex: number}>());
 export const startExplanationsFailure = createAction('[beluga-flight-section-planning] start explanations failure', props<{err: any}>());
 
-export const explanationsFinishedSuccess = createAction('[beluga-flight-section-planning] explanations finished success', props<{id: string}>());
+export const explanationsFinishedSuccess = createAction('[beluga-flight-section-planning] explanations finished success', props<{sectionId: string, configIndex: number}>());
 export const explanationsFinishedFailure = createAction('[beluga-flight-section-planning] explanations finished failure', props<{err: any}>());
 
 export const cancelExplanations= createAction('[beluga-flight-section-planning] cancel explanations', props<{section: FlightSection}>());
 export const cancelExplanationsSuccess = createAction('[beluga-flight-section-planning] cancel explanations success');
 export const cancelExplanationsFailure = createAction('[beluga-flight-section-planning] cancel explanations failure', props<{err: any}>());
+
+
+// Actions to log user interactions
+
+export const inspectPlan = createAction('[beluga-flight-section-planning] inspect plan', props<{sectionId: string}>());
+export const stopInspectPlan = createAction('[beluga-flight-section-planning] stop inspect plan', props<{sectionId: string}>());
+export const cancelConfigurationUpdate = createAction('[beluga-flight-section-planning] cancel configuration update');
+export const inspectConfig = createAction('[beluga-flight-section-planning] inspect config', props<{sectionId: string, configIndex: number}>());
+export const stopInspectConfig = createAction('[beluga-flight-section-planning] stop inspect config', props<{sectionId: string, configIndex: number}>());

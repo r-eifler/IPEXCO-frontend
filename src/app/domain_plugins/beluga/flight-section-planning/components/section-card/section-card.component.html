@@ -107,6 +107,7 @@
                     </a>
                 }
                 <a class="details" mat-button 
+                    (click)="onInspectPlan()"
                     [routerLink]="['../plan-inspection/' + section()?._id]"
                 >
                     {{t('f.inspect_plan')}}

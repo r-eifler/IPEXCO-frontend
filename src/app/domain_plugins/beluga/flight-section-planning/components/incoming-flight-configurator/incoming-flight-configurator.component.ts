@@ -33,7 +33,8 @@ export class IncomingFlightConfiguratorComponent {
     position: number
   }[]>([]);
 
-  targetSchedule = output<FlightTargetSchedule>();
+  // targetSchedule = output<FlightTargetSchedule>();
+  change = output<{index: number, skip: boolean}>();
 
   schedule = computed(() => this.flightTargetSchedule()?.incoming.map(e => ({
         jig: this.jigs()?.[e.jig],
@@ -61,20 +62,7 @@ export class IncomingFlightConfiguratorComponent {
   // }
   
   setStatus(index: number, skip: boolean){
-    const newFlightSchedule = {
-      name: this.flightTargetSchedule().name,
-      incoming: [
-        ...this.flightTargetSchedule().incoming.slice(0,index),
-        {
-          ...this.flightTargetSchedule().incoming[index],
-          skip,
-        },
-        ...this.flightTargetSchedule().incoming.slice(index + 1)
-      ],
-      outgoing: this.flightTargetSchedule()?.outgoing ?? []
-    }
-
-    this.targetSchedule.emit(newFlightSchedule);
+    this.change.emit({index, skip})
   }
 
 }

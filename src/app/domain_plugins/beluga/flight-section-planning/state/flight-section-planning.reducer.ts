@@ -1,13 +1,13 @@
 import { createReducer, on } from "@ngrx/store";
-import { Loadable, LoadingState } from "src/app/shared/common/loadable.interface";
-import { Project } from "src/app/shared/domain/project";
-import { BelugaProblem, BelugaProblemZ } from "../../shared/domain/beluga_problem";
-import { BelugaConfiguration, FlightPlanTree, FlightSection } from "../domain/flight-section";
-import { loadDomainSpecification, loadDomainSpecificationSuccess, loadFlightPlanTree, loadFlightPlanTreeSuccess, loadFlightSections, loadFlightSectionsSuccess, loadProject, loadProjectSuccess, loadServices, loadServicesSuccess, newConfiguration, reloadFlightPlanTreeSuccess, selectConfiguration, selectSection, skipIncomingJig, skipOutgoingJigType, skipProductionJig, updateConfiguration, updateConfigurationOfSectionAndConfigIndex, updateEmptyRacks, updateFlightPlanTreeSuccess, updateFlightSchedule, updateHangarStatus, updateMaxSwaps, updateProductionSchedule, updateRackStatus, updateTrailerStatus } from "./flight-section-planning.actions";
-import { BelugaState, getInitialState } from "../../shared/domain/beluga_state";
 import { DomainSpecification } from "src/app/global_specification/domain/domain_specification";
 import { Service } from "src/app/global_specification/domain/services";
 import { ExplanationRunStatus } from "src/app/iterative_planning/domain/explanation/explanations";
+import { Loadable, LoadingState } from "src/app/shared/common/loadable.interface";
+import { Project } from "src/app/shared/domain/project";
+import { BelugaProblem, BelugaProblemZ } from "../../shared/domain/beluga_problem";
+import { BelugaState, getInitialState } from "../../shared/domain/beluga_state";
+import { BelugaConfiguration, FlightPlanTree, FlightSection } from "../domain/flight-section";
+import { loadDomainSpecification, loadDomainSpecificationSuccess, loadFlightPlanTree, loadFlightPlanTreeSuccess, loadFlightSections, loadFlightSectionsSuccess, loadProject, loadProjectSuccess, loadServices, loadServicesSuccess, newConfiguration, reloadFlightPlanTreeSuccess, selectConfiguration, selectSection, skipIncomingJig, skipOutgoingJigType, skipProductionJig, updateConfigurationOfSectionAndConfigIndex, updateEmptyRacks, updateFlightPlanTreeSuccess, updateHangarStatus, updateMaxSwaps, updateRackStatus, updateTrailerStatus } from "./flight-section-planning.actions";
 
 export interface FlightSectionPlanningState {
     project: Loadable<Project>;
@@ -107,16 +107,6 @@ export const FlightSectionPlanningReducer = createReducer(
         updatedConfiguration: state.selectedSectionId !== null && state.selectedConfigIndex !== null && state.sections.data !== undefined ? 
             {
                 ...state.sections.data[state.selectedSectionId].configurations[state.selectedConfigIndex],
-                explanations: null,
-                explanationStatus: ExplanationRunStatus.PENDING
-            } : null
-    })),
-
-    on(updateConfiguration, (state): FlightSectionPlanningState => ({
-        ...state,
-        updatedConfiguration: state.selectedSectionId !== null && state.selectedConfigIndex !== null && state.sections.data !== undefined? 
-            {
-                ...state.sections.data?.[state.selectedSectionId].configurations[state.selectedConfigIndex],
                 explanations: null,
                 explanationStatus: ExplanationRunStatus.PENDING
             } : null
@@ -270,32 +260,6 @@ export const FlightSectionPlanningReducer = createReducer(
             }
         } : null
     })),
-    on(updateFlightSchedule, (state, {schedule}): FlightSectionPlanningState => {
-        if(state.updatedConfiguration === null){
-            return state
-        }
-
-        return {
-            ...state,
-            updatedConfiguration: {
-                ...state.updatedConfiguration,
-                flightTargetSchedule: schedule
-            }
-        }
-    }),
-    on(updateProductionSchedule, (state, {schedule}): FlightSectionPlanningState => {
-        if(state.updatedConfiguration === null){
-            return state
-        }
-
-        return {
-            ...state,
-            updatedConfiguration: {
-                ...state.updatedConfiguration,
-                productionLinesTargetSchedule: schedule
-            }
-        }
-    }),
     on(updateMaxSwaps, (state, {value}): FlightSectionPlanningState => {
         if(state.updatedConfiguration === null){
             return state

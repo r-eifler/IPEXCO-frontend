@@ -1,6 +1,6 @@
 import { ApplicationRef, Component, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { selectActions, selectFlightFinished } from '../../state/builder.selector';
+import { selectActions, selectCurrentConfiguration, selectFlightFinished, selectSection } from '../../state/builder.selector';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslocoModule } from '@jsverse/transloco';
@@ -33,6 +33,8 @@ export class SectionControlsComponent {
 
   nextFlightAvailable$ = this.store.select(selectFlightFinished);
   actions = this.store.selectSignal(selectActions);
+  section = this.store.selectSignal(selectSection);
+  config = this.store.selectSignal(selectCurrentConfiguration);
 
   onSave() {
       const actions = this.actions();
@@ -42,7 +44,12 @@ export class SectionControlsComponent {
   }
 
   onCancel() {
-    this.store.dispatch(cancelManualPlanning())
+    const sectionId = this.section()?._id;
+    const config = this.config();
+    const planAttempt = this.actions();
+    if(sectionId !== undefined && planAttempt !== undefined && config !== undefined){
+      this.store.dispatch(cancelManualPlanning({sectionId, planAttempt, config}))
+    }
   }
 
   onUndo() {

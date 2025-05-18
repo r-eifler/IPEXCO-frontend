@@ -7,7 +7,7 @@
             [jigs]="jigs()"
             [conflictMembers]="conflictMembers()"
             [disabled]="disabled()"
-            (targetSchedule)="onChangeProductionTarget($event, idx)"
+            (change)="onChangeProductionTarget($event, schedule.name)"
         >
         </app-production-line-configurator>
     }

@@ -43,7 +43,10 @@ export const selectMaxPartSize = createSelector(selectSiteSetUp,
 // Plan
 
 export const selectCurrentPlanSection = createSelector(BuilderFeature.selectSection, 
-    (section) => section);
+    (section) => section.data);
+
+export const selectCurrentConfiguration = createSelector(selectCurrentPlanSection, 
+    (section) => section !== undefined ? section.configurations[section.configurationIndex] : undefined);
 
 export const selectActions = createSelector(selectSection, 
     (section) => section?.actions);

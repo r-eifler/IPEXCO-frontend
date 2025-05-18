@@ -13,7 +13,9 @@
         </mat-slide-toggle>
     </div>
     <div class="buttons">
-        <a mat-button [routerLink]="['../../flight-sections']">
+        <a mat-button 
+            (click)="onCancel()"
+            [routerLink]="['../../flight-sections']">
             <mat-icon>cancel</mat-icon>
             {{t('f.cancel')}}
         </a>

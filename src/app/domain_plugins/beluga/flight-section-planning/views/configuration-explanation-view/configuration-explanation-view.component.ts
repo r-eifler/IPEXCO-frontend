@@ -18,6 +18,7 @@ import { selectCurrentFlightSchedule, selectJigsOnSite, selectProductionLines, s
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { selectHasEmptyRackConflictMember, selectIncomingFlightConflictMembers, selectOutgoingFlightConflictMembers, selectProductionConflictMembers, selectRackMaintenanceConflictMembers, selectSwapsConflictMembers, selectTrailerMaintenanceConflictMembers } from './configuration-explanation-view.selectors';
 import { MatLabel } from '@angular/material/input';
+import { inspectConfig } from '../../state/flight-section-planning.actions';
 
 
 @Component({
@@ -73,7 +74,13 @@ export class ConfigurationExplanationViewComponent {
     trailerMaintenanceConflictMembers = this.store.selectSignal(selectTrailerMaintenanceConflictMembers);
 
     constructor(){
-      effect(() => console.log(this.hasEmptyRackConflictMember()));
+      effect(() => {
+        const sectionId = this.section()?._id;
+        const configIndex = this.selectedConfigId();
+        if(sectionId !== undefined && configIndex !== null){
+          this.store.dispatch(inspectConfig({sectionId, configIndex}))
+        }
+      });
     }
 
     // site elements

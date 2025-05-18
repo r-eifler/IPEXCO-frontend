@@ -35,7 +35,7 @@ export class ProductionLineConfiguratorComponent {
     position: number
   }[]>([]);
 
-  targetSchedule = output<ProductionLineTargetSchedule>();
+  change = output<{index: number, skip: boolean}>();
 
   schedule = computed(() => {
     const schedule = this.productionLineTargetSchedule().schedule;
@@ -54,21 +54,6 @@ export class ProductionLineConfiguratorComponent {
 
   
   setStatus(index: number, skip: boolean){
-    const schedule = this.productionLineTargetSchedule().schedule;
-    const newProductionSchedule = {
-      name: this.productionLineTargetSchedule().name,
-      schedule: [
-        ...schedule.slice(0,index),
-        {
-          ...schedule[index],
-          skip,
-        },
-        ...schedule.slice(index + 1)
-      ],
-    }
-
-    // newProductionSchedule.schedule = updateDeliveryStatuses(newProductionSchedule.schedule, this.jigsOnSite())
-
-    this.targetSchedule.emit(newProductionSchedule);
+    this.change.emit({index, skip})
   }
 }

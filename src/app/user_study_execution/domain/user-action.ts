@@ -1,3 +1,6 @@
+import { BelugaConfiguration, FlightSection } from "src/app/domain_plugins/beluga/flight-section-planning/domain/flight-section"
+import { BelugaAction } from "src/app/domain_plugins/beluga/shared/domain/beluga_plan"
+import { BelugaSiteSetUp } from "src/app/domain_plugins/beluga/shared/domain/site_set_up"
 import { QuestionType } from "src/app/iterative_planning/domain/explanation/explanations"
 import { PlanRunStatus } from "src/app/iterative_planning/domain/plan"
 
@@ -36,6 +39,33 @@ export enum ActionType {
     ASK_QUESTION_LLM = 'ASK_QUESTION_LLM',
     DIRECT_RESPONSE_QT = 'DIRECT_RESPONSE_QT',
     DIRECT_QUESTION_ET = 'DIRECT_QUESTION_ET',
+
+    // Beluga
+    START_TASK = 'START_TASK',
+    END_TASK = 'END_TASK',
+    //Both
+    NEXT_FLIGHT_SECTION = 'NEXT_FLIGHT_SECTION',
+    START_INSPECT_PLAN = 'START_INSPECT_PLAN',
+    STOP_INSPECT_PLAN = 'STOP_INSPECT_PLAN',
+    //Automatic
+    CALL_PLANNER = 'CALL_PLANNER',
+    GET_PLANNER_RESULT = 'GET_PLANNER_RESULT',
+    START_NEW_CONFIGURATION = 'START_NEW_CONFIGURATION',
+    UPDATE_CONFIGURATION = 'START_NEW_CONFIGURATION',
+    FINISH_NEW_CONFIGURATION = 'FINISH_NEW_CONFIGURATION',
+    CANCEL_NEW_CONFIGURATION = 'CANCEL_NEW_CONFIGURATION',
+    REQUEST_UNSOLVABLE_EXPLANATION = 'REQUEST_UNSOLVABLE_EXPLANATION',
+    RECEIVE_UNSOLVABLE_EXPLANATION = 'RECEIVE_UNSOLVABLE_EXPLANATION',
+    INSPECT_CONFIGURATION = 'INSPECT_CONFIGURATION',
+
+    //Manual
+    START_MANUAL_PLANNING = 'START_MANUAL_PLANNING',
+    FINISH_MANUAL_PLANNING = 'FINISH_MANUAL_PLANNING',
+    CANCEL_MANUAL_PLANNING = 'CANCEL_MANUAL_PLANNING',
+    PERFORM_BELUGA_ACTION = 'PERFORM_BELUGA_ACTION',
+    UNDO_BELUGA_ACTION = 'UNDO_BELUGA_ACTION',
+    UPDATE_CONFIGURATION_MANUAL_PLANNING = 'UPDATE_CONFIGURATION_MANUAL_PLANNING',
+    UNDO_UPDATE_CONFIGURATION_MANUAL_PLANNING = 'UNDO_UPDATE_CONFIGURATION_MANUAL_PLANNING',
 }
 
 
@@ -174,3 +204,191 @@ export interface ExplanationUserAction extends UserAction {
         subSets?: string[][];
     }
 } 
+
+
+// Beluga
+
+export interface StartTaskUserAction extends UserAction {
+    type: ActionType.START_TASK
+    data: {
+         stepIndex: number,
+        stepName: string,
+        projectId: string
+    }
+}
+
+export interface EndTaskUserAction extends UserAction {
+    type: ActionType.END_TASK
+    data: {
+        stepIndex: number,
+        stepName: string,
+        projectId: string
+    }
+}
+
+
+
+export interface NextFlightSectionUserAction extends UserAction {
+    type: ActionType.NEXT_FLIGHT_SECTION
+    data: {
+        section: FlightSection;
+    }
+}
+
+export interface StartInspectPlanUserAction extends UserAction {
+    type: ActionType.START_INSPECT_PLAN,
+    data: {
+        sectionId: string;
+    }
+}
+
+export interface StopInspectPlanUserAction extends UserAction {
+    type: ActionType.STOP_INSPECT_PLAN,
+    data: {
+        sectionId: string;
+    }
+}
+
+
+export interface CallPlannerUserAction extends UserAction {
+    type: ActionType.CALL_PLANNER,
+    data: {
+        sectionId: string;
+    }
+}
+
+
+export interface GetPlannerResultUserAction extends UserAction {
+    type: ActionType.GET_PLANNER_RESULT,
+    data: {
+        sectionId: string;
+    }
+}
+
+
+export interface StartNewConfigurationUserAction extends UserAction {
+    type: ActionType.START_NEW_CONFIGURATION,
+    data: {
+        sectionId: string | undefined;
+        baseConfigIndex: number;
+    }
+}
+
+export interface UpdateNewConfigurationUserAction extends UserAction {
+    type: ActionType.UPDATE_CONFIGURATION,
+    data: {
+        sectionId: string;
+        baseConfigIndex: number;
+        update: {
+            type: 'rack' | 'trailer'| 'hangar'| 'incoming' | 'outgoing' | 'production' | 'swaps' | 'rack_empty',
+            name: string | undefined,
+            index: number | undefined,
+            value: any,
+        }
+    }
+}
+
+export interface FinishNewConfigurationUserAction extends UserAction {
+    type: ActionType.FINISH_NEW_CONFIGURATION,
+    data: {
+        sectionId: string;
+        baseConfigIndex: number;
+        newConfigIndex: number;
+        newConfig: BelugaConfiguration;
+    }
+}
+
+export interface CancelNewConfigurationUserAction extends UserAction {
+    type: ActionType.CANCEL_NEW_CONFIGURATION,
+    data: {
+        sectionId: string;
+        baseConfigIndex: number;
+    }
+}
+
+export interface RequestUnsolvableExplanationUserAction extends UserAction {
+    type: ActionType.REQUEST_UNSOLVABLE_EXPLANATION,
+    data: {
+        sectionId: string;
+        configIndex: number;
+    }
+}
+
+export interface ReceiveUnsolvableExplanationUserAction extends UserAction {
+    type: ActionType.RECEIVE_UNSOLVABLE_EXPLANATION,
+    data: {
+        sectionInd: string;
+        configIndex: number;
+    }
+}
+
+export interface InspectConfigurationUserAction extends UserAction {
+    type: ActionType.INSPECT_CONFIGURATION,
+    data: {
+        sectionId: string;
+        configIndex: number;
+    }
+}
+
+export interface StartManualPlanningUserAction extends UserAction {
+    type: ActionType.START_MANUAL_PLANNING,
+    data: {
+        sectionId: string;
+    }
+}
+
+export interface FinishManualPlanningUserAction extends UserAction {
+    type: ActionType.FINISH_MANUAL_PLANNING,
+    data: {
+        sectionId: string;
+    }
+}
+
+export interface CancelManualPlanningUserAction extends UserAction {
+    type: ActionType.CANCEL_MANUAL_PLANNING,
+    data: {
+        sectionId: string;
+        planAttempt: BelugaAction[],
+        config: BelugaConfiguration,
+    }
+}
+
+export interface PerformBelugaActionUserAction extends UserAction {
+    type: ActionType.PERFORM_BELUGA_ACTION,
+    data: {
+        action: BelugaAction;
+    }
+}
+
+export interface UndoBelugaActionUserAction extends UserAction {
+    type: ActionType.UNDO_BELUGA_ACTION,
+    data: {
+        action: BelugaAction;
+    }
+}
+
+export interface UpdateConfigurationManualPlanningUserAction extends UserAction {
+    type: ActionType.UPDATE_CONFIGURATION_MANUAL_PLANNING,
+    data: {
+        sectionId: string;
+        baseConfigIndex: number;
+        updatingConfig: BelugaConfiguration;
+        update: {
+            type: 'incoming' | 'outgoing' | 'production',
+            ident: any,
+        }
+    }
+}
+
+export interface UndoUpdateConfigurationManualPlanningUserAction extends UserAction {
+    type: ActionType.UNDO_UPDATE_CONFIGURATION_MANUAL_PLANNING,
+    data: {
+        sectionId: string;
+        baseConfigIndex: number;
+        updatingConfig: BelugaConfiguration;
+        update: {
+            type: 'incoming' | 'outgoing' | 'production',
+            ident: any,
+        }
+    }
+}

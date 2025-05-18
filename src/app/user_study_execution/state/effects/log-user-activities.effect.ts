@@ -15,6 +15,7 @@ import { structuredTextToString } from 'src/app/iterative_planning/domain/interf
 import { selectIsUserStudy, selectUserRole } from 'src/app/user/state/user.selector';
 import { UserStudyExecutionService } from '../../service/user-study-execution.service';
 import { QuestionType } from 'src/app/iterative_planning/domain/explanation/explanations';
+import { UserStudyStepType } from 'src/app/user_study/domain/user-study';
 
 
 @Injectable()
@@ -61,6 +62,16 @@ export class LogUserActivitiesEffect{
                         stepIndex: index,
                         stepName: step.name,
                         demoId: step.content
+                    }
+                }})]
+            }
+            if(step?.type == UserStudyStepType.project){
+                return [logAction({action: {
+                    type: ActionType.START_TASK, 
+                    data: {
+                        stepIndex: index,
+                        stepName: step.name,
+                        projectId: step.content
                     }
                 }})]
             }

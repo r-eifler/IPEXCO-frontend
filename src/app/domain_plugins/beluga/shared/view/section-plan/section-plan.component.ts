@@ -8,6 +8,8 @@ import { applyActions } from '../../domain/beluga_state';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
+import { Store } from '@ngrx/store';
+import { stopInspectPlan } from '../../../flight-section-planning/state/flight-section-planning.actions';
 
 @Component({
   selector: 'app-section-plan',
@@ -23,6 +25,8 @@ import { MatButtonModule } from '@angular/material/button';
   styleUrl: './section-plan.component.scss'
 })
 export class SectionPlanComponent {
+
+  store = inject(Store);
   appRef = inject(ApplicationRef);
 
   section = input.required<FlightSection>();
@@ -51,6 +55,9 @@ export class SectionPlanComponent {
     return resState;
   })
 
+  onCancel(){
+    this.store.dispatch(stopInspectPlan({sectionId: this.section()?._id}))
+  }
 
   onActionSelected(index: number){
     document.startViewTransition(() => {
