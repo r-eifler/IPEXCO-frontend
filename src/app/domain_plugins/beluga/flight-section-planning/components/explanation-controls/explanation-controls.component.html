@@ -13,7 +13,7 @@
         <mat-slide-toggle 
             [checked]="keepRackEmpty()" 
             [disabled]="numEmptyRacks() == 0 || disabled()">
-                Keep at lest one rack empty
+                {{t('f.one_rack_empty')}}
         </mat-slide-toggle>    
         @if(rackEmptyConflict()){
             <mat-icon class="inConflict">warning</mat-icon>
@@ -27,16 +27,16 @@
     <div class="buttons">
         <a mat-button [routerLink]="['../../../flight-sections']" [disabled]="explanationRunning()">
             <mat-icon>chevron_left</mat-icon>
-            Back
+            {{t('f.back')}}
         </a>
         @if(pending()){
             <button 
                 mat-button (click)="onUpdateConfiguration()" [disabled]="explanationRunning()">
-                {{t('f.update_configurations')}}
+                {{t('f.update_configuration')}}
             </button>
             <button mat-flat-button (click)="onExplain()" [disabled]="hasExplanation() || explanationRunning()">
                 <mat-icon>contact_support</mat-icon>
-                Is solvable?
+                {{t('f.solvable')}} ?
             </button>
         }
     </div>

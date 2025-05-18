@@ -5,8 +5,8 @@
     "jigs": "Montagegestelle",
     "incoming_flight": "ankommender Flug",
     "outgoing_flight": "abgehender Flug",
-    "incoming": "ankommend",
-    "outgoing": "abgehended",
+    "incoming": "Ankommend",
+    "outgoing": "Abgehended",
     "empty_flight": "Flug leer",
     "line": "Linie",
     "trailers": "Trailers",
@@ -46,5 +46,12 @@
     "check_configurations": "Konfigurationen prüfen",
     "update_configurations": "Konfigurationen aktualisieren",
     "configurations": "Konfigurationen",
-    "update_configuration": "Konfiguration aktualisieren"
+    "update_configuration": "Konfiguration aktualisieren",
+    "new_configuration": "Neue Konfiguration",
+    "solvability_status": "Solvability Status",
+    "solvable": "Lösbar",
+    "back": "Zurück",
+    "one_rack_empty": "Ein Rack leer lassen",
+    "planned": "Geplant",
+    "plan_statistics": "Planstatistiken"
 }

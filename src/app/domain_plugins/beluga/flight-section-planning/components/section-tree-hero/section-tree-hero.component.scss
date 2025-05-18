@@ -27,7 +27,7 @@
 
   display: grid;
   grid-template-columns: auto auto minmax(0, 1fr);
-  align-items: end;
+  align-items: center;
 
   column-gap: var(--spacing-100);
 }

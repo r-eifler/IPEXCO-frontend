@@ -27,6 +27,7 @@ import { PlanInspectorComponent } from '../../views/plan-inspector/plan-inspecto
 import { BranchNameDialogComponent } from '../branch-name-dialog/branch-name-dialog.component';
 import { SectionPlanMethodDialogComponent } from '../section-plan-method-dialog/section-plan-method-dialog.component';
 import { ConfigurationSelectorComponent } from '../configuration-selector/configuration-selector.component';
+import { ExplanationRunStatus } from 'src/app/iterative_planning/domain/explanation/explanations';
 
 @Component({
   selector: 'app-section-card',
@@ -66,6 +67,7 @@ export class SectionCardComponent {
   originalFlight = input.required<Flight>();
 
   config = computed(() => this.section().configurations[this.section().configurationIndex]);
+  selectedConfigSolvable = computed(() => this.config().explanationStatus == ExplanationRunStatus.FINISHED && this.config().explanations?.MUGS.length == 0);
   selectedConfigId = computed(() => this.section()?.configurationIndex);
   configurations = computed(() => this.section()?.configurations);
 

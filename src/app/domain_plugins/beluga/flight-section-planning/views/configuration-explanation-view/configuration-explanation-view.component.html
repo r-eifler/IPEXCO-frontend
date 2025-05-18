@@ -11,7 +11,7 @@
             <app-page-section>
                 <app-page-section-content>
                     <div class="configs-container">
-                        <span>{{t('f.configurations')}}:</span>
+                        <mat-label>{{t('f.solvability_status')}}:</mat-label>
                         @for(config of configurations(); track config; let idx = $index){
                             <app-configuration-selector
                                 [configuration]="config"

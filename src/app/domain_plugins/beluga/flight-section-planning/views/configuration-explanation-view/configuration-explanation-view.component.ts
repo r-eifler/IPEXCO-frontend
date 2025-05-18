@@ -17,6 +17,8 @@ import { selectSelectedConfigIndex } from '../../state/flight-section-planning.f
 import { selectCurrentFlightSchedule, selectJigsOnSite, selectProductionLines, selectSelectedConfiguration, selectSelectedSection } from '../../state/flight-section-planning.selector';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { selectHasEmptyRackConflictMember, selectIncomingFlightConflictMembers, selectOutgoingFlightConflictMembers, selectProductionConflictMembers, selectRackMaintenanceConflictMembers, selectSwapsConflictMembers, selectTrailerMaintenanceConflictMembers } from './configuration-explanation-view.selectors';
+import { MatLabel } from '@angular/material/input';
+
 
 @Component({
   selector: 'app-configuration-explanation-view',
@@ -34,6 +36,7 @@ import { selectHasEmptyRackConflictMember, selectIncomingFlightConflictMembers, 
         ExplanationControlsComponent,
         ConfigurationSelectorComponent,
         MatProgressBarModule,
+        MatLabel,
   ],
   templateUrl: './configuration-explanation-view.component.html',
   styleUrl: './configuration-explanation-view.component.scss'
