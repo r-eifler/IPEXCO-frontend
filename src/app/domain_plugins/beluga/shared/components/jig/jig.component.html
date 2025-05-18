@@ -1,34 +1,36 @@
-<div 
-    class="container" 
-    [ngClass]="{'hover': isHovering  && draggable()}" 
+<div
+    class="container"
+    [ngClass]="{'hover': isHovering  && draggable()}"
     (mouseover)="onHover()" (mouseout)="onMouseOut()"
     cdkOverlayOrigin #trigger="cdkOverlayOrigin"
 >
     @if(!showOnlyPart()){
-        <div 
-            class="jig" 
-            [style.width]="jigDisplaySize() + 'px'  "
+      <div class="jig-container" [style.width]="jigDisplaySize() + 'px'">
+        <div
+            class="jig"
             [ngClass]="{'hover': isHovering && draggable()}"
         >
             @if(!loaded()) {
                 <span class="name">{{ jigType()?.name }}</span>
             }
         </div>
+      </div>
     }
     @if(loaded() || showOnlyPart()){
+      <div class="part-container" [style.width]="partDisplaySize() + 'px'">
         <div
-            class="part" 
-            [style.width]="partDisplaySize() + 'px'  "
+            class="part"
             [ngClass]="{'hover': isHovering && draggable()}"
         >
             @if(!unitSize()){
-                <span class="name"><span class="bold">{{ name() }}</span> ({{ jigType()?.name }})</span>
+                <span class="name">{{ name() }} ({{ jigType()?.name }})</span>
             }
             @else{
-                <span class="name"><span class="bold">{{ name() }}</span></span>
+                <span class="name"><span>{{ name() }}</span></span>
             }
-           
+
         </div>
+      </div>
     }
     <ng-template
         cdkConnectedOverlay

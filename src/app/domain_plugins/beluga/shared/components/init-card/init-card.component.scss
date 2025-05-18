@@ -1,19 +1,22 @@
 @use "../../../../../../variables.scss" as vars;
 
+:host {
+  display: grid;
+  align-items: center;
+}
+
 .action-container{
     width: fit-content;
     padding: var(--spacing-200);
-    border: solid;
-    border-width: 1px;
-    @include vars.border_color();
-    border-radius: var(--spacing-200);
+
+    border-radius: var(--radius-full);
 
     display: flex;
     flex-direction: row;
     align-items: center;
     gap: var(--spacing-100);
 
-    background-color: var(--action);
+    @include vars.background-color(surface-container);
 }
 
 .action-container:hover {

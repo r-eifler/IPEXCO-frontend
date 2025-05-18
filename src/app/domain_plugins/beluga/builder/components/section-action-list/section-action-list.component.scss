@@ -3,11 +3,6 @@
 .actions {
     display: flex;
     flex-direction: row;
-    gap: var(--spacing-100);
-
-    padding: var(--spacing-200);
-    border: solid;
-    border-width: 1px;
-    @include vars.border_color();
-    border-radius: var(--spacing-200);
+    gap: var(--spacing-200);
+  overflow: auto;
 }

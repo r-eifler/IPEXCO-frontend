@@ -1,8 +1,7 @@
+@use '../../../../../../variables.scss' as vars;
+
 .main{
-    display: grid;
-    grid-template-rows: 1fr 2fr auto;
-    grid-template-columns: auto;
-    gap: var(--spacing-500);
+  overflow: auto;
 }
 
 .controls{
@@ -24,17 +23,16 @@
     min-height: 200px;
 }
 
-.beluga-boundary {
-    width: 100%;
-    height: 100%;
-    border: dotted #ccc 2px;
-}
-
 .full-height{
     height: 100%;
+  padding: var(--spacing-200);
+}
+
+.full-height:nth-child(2n+1){
+  @include vars.background-color(surface-container-low);
+  border-radius: var(--radius-100);
 }
 
 .header{
-    font-size: larger;
-    font-weight: 500;
+  @include vars.typography(headline-small);
 }

@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" [class.dragScale]="dragTarget()">
     <ng-content  select="[id=bside]"></ng-content>
     <div class="trailer-container">
         <div class="info-container">
@@ -7,15 +7,19 @@
                 <mat-icon class="error">construction</mat-icon>
             }
         </div>
-        <div 
-            class="trailer"  
+        <div
+            class="trailer"
             [style.width]="size() + 'px' "
             [class.dragTarget]="dragTarget()"
             [class.noDragTarget]="noDragTarget()"
             [class.maintenance]="maintenance()"
              [class.inConflict]="inConflict()"
         >
-            <ng-content select="app-jig,app-drop-target"></ng-content>  
+            <ng-content select="app-jig,app-drop-target"></ng-content>
+
+            @if(dragTarget()) {
+              <mat-icon class="dragIcon">place_item</mat-icon>
+            }
         </div>
     </div>
     <ng-content select="[id=fside]"></ng-content>

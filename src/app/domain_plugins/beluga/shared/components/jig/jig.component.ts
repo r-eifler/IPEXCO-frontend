@@ -27,7 +27,6 @@ export class JigComponent {
   jigType = input.required<JigType>()
   incomingFlight = input<string | undefined | null>(undefined)
 
-
   sizeUnit = input<number>(15)
 
   draggable = input<boolean>(false);
@@ -50,7 +49,7 @@ export class JigComponent {
   sizeEmpty = computed(() => this.jigType()?.size_empty);
   sizeLoaded = computed(() => this.jigType()?.size_loaded);
   type = computed(() => this.jigType()?.name);
-  tooltip = computed(() => 
+  tooltip = computed(() =>
     "status: " + (this.jig()?.empty ? 'empty' : 'loaded') +
     ' size: ' + (this.jig()?.empty ? this.jigType()?.size_empty : this.jigType()?.size_loaded) +
     ' type: ' + this.jig()?.type

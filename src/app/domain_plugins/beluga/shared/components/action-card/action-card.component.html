@@ -1,71 +1,39 @@
-<div 
-    class="action-container" 
-    (mouseenter) ="onEnter()"  (mouseleave) ="onLeave()"
-    [class.highlight]="highlight()"
-    [class.selected]="select()"
-    (click)="onSelect()"
-    >
-    @if(isSwitchAction()){
-        <div class="icon-box">
-            <mat-icon [style.color]="actionColor.get(action()?.name)">
-                {{ actionLocationIcon() }}
-            </mat-icon>
-            <mat-icon>{{ actionMoveIcon() }}</mat-icon>
-        </div>
-    }
+<div
+  @zoomInOut
+  class="action-container"
+  (mouseenter)="onEnter()"
+  (mouseleave)="onLeave()"
+  [class.highlight]="highlight()"
+  [class.selected]="select()" (click)="onSelect()"
+>
+  <div class="location-container">
+    <div class="location-header">
+      <div class="move-icon">
+        @if (moveIconLocation() === "left") {
+          <mat-icon [inline]="true" class="inline-icon">{{ actionMoveIcon() }}</mat-icon>
+        }
+      </div>
 
-    @if(isBelugaAction()){
-        <div class="icon-box">
-            <mat-icon [style.color]="actionColor.get(action()?.name)">
-                {{ actionLocationIcon() }}
-            </mat-icon>
-            <mat-icon>{{ actionMoveIcon() }}</mat-icon>
+        <div class="location-icon" [style.background-color]="actionColor.get(action()?.name)">
+          <mat-icon [inline]="true" class="inline-icon">
+            {{ actionLocationIcon() }}
+          </mat-icon>
         </div>
-        @if(jigName() !== null){
-            <span>{{ jigName() }}</span>
-        }
-    }
 
-    @if(isHangarAction()){
-        @if(jigName() !== null){
-            <span>{{ jigName() }}</span>
-        }
-        <div class="icon-box">
-            <mat-icon>{{ actionMoveIcon() }}</mat-icon>
-            <mat-icon [style.color]="actionColor.get(action()?.name)">
-                {{ actionLocationIcon() }}
-            </mat-icon>
-        </div>
-    } 
 
-    @if(isBelugaRackSideAction()){
-        @if(jigName() !== null){
-            <span>{{ jigName() }}</span>
+      <div class="move-icon">
+        @if (moveIconLocation() === "right") {
+          <mat-icon [inline]="true" class="inline-icon">{{ actionMoveIcon() }}</mat-icon>
         }
-        <div class="icon-box">
-            <mat-icon>{{ actionMoveIcon() }}</mat-icon>
-            <mat-icon [style.color]="actionColor.get(action()?.name)">
-                {{ actionLocationIcon() }}
-            </mat-icon>
-        </div>
-        @if(rackName() !== null){
-             <span>{{ rackName() }}</span>
-        }
-    } 
+      </div>
+    </div>
 
-    @if(isFactoryRackSideAction()){
-        @if(rackName() !== null){
-            <span>{{ rackName() }}</span>
-       }
-        <div class="icon-box">
-            <mat-icon [style.color]="actionColor.get(action()?.name)">
-                {{ actionLocationIcon() }}
-            </mat-icon>
-            <mat-icon>{{ actionMoveIcon() }}</mat-icon>
-        </div>
-        @if(jigName() !== null){
-            <span>{{ jigName() }}</span>
-        }
-    } 
+    <span>
+      {{ locationName() }}
+    </span>
+  </div>
+
+  <div class="jig-container">
+    {{ jigName() }}
+  </div>
 </div>
-

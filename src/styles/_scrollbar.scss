@@ -1,14 +1,18 @@
 @use '../variables' as variables;
 
-* {
-  scrollbar-color: red;
-}
-
 ::-webkit-scrollbar {
   width: 4px;
 
   &:hover {
-    width: 8px;
+    width: 4px;
+  }
+}
+
+::-webkit-scrollbar:horizontal {
+  height: 4px;
+
+  &:hover {
+    height: 4px;
   }
 }
 
@@ -17,10 +21,8 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  @include variables.background-color(on-surface-variant);
+  @include variables.background-color(outline);
   border-radius: var(--radius-full);
 
   cursor: pointer;
-
-  margin: var(--spacing-050);
 }

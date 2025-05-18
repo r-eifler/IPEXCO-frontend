@@ -1,5 +1,7 @@
-@use "../../../../../../variables.scss" as vars;
+@use "@angular/material" as mat;
 
+@use "../../../../../../variables" as vars;
+@use "../../../../../../ipexco-theme" as ipexco-theme;
 
 .container {
     display: flex;
@@ -7,6 +9,8 @@
     gap: var(--spacing-100);
     align-items: center;
     align-items: flex-end;
+
+  position: relative;
 }
 
 .info-container {
@@ -20,15 +24,11 @@
     display: flex;
     flex-direction: column;
     gap: var(--spacing-050);
-    
 }
 
 .hangar {
     height: var(--hangar-height);
     min-width: 100px;
-
-    padding-left: var(--spacing-200);
-    padding-right: var(--spacing-200);
 
     border: solid;
     border-width: 0px;
@@ -42,10 +42,16 @@
     align-items: center;
 }
 
+.dragIcon {
+  position: absolute;
+  @include vars.color(outline);
+}
+
 .dragTarget{
-    outline: solid;
-    outline-width: 2px;
-    outline-offset: -2px;
+    outline: dashed;
+    outline-color: #{mat.get-theme-color(ipexco-theme.$light-theme, outline-variant)};;
+    outline-width: 4px;
+    outline-offset: -4px;
 }
 
 .noDragTarget{
