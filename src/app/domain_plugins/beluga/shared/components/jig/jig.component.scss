@@ -2,6 +2,9 @@
 
 @use "../../../../../../variables.scss" as vars;
 
+:host {
+  overflow: visible;
+}
 
 .container {
     display: grid;
@@ -63,9 +66,6 @@
 
   @include vars.typography(title-medium);
 
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
   text-align: center
 }
 

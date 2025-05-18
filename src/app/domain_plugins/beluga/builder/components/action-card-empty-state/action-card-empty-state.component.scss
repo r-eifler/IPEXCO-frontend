@@ -1,0 +1,19 @@
+
+@use "@angular/material" as mat;
+
+@use "../../../../../../variables" as vars;
+@use "../../../../../../ipexco-theme" as ipexco-theme;
+
+.container {
+  padding: var(--spacing-200);
+
+  border-radius: var(--radius-100);
+
+  display: grid;
+  align-items: center;
+
+  @include vars.background-color(surface-container);
+  @include vars.color(outline);
+
+  min-height: var(--sizing-2300);
+}
