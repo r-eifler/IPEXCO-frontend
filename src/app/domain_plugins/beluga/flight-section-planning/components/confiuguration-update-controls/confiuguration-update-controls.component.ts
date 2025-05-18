@@ -7,7 +7,7 @@ import { TranslocoModule } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 import { sum } from 'ramda';
 import { FlightSection } from '../../domain/flight-section';
-import { saveConfiguration, updateEmptyRacks, updateMaxSwaps } from '../../state/flight-section-planning.actions';
+import { cancelConfigurationUpdate, saveConfiguration, updateEmptyRacks, updateMaxSwaps } from '../../state/flight-section-planning.actions';
 import { selectAllowObjectiveModification } from '../../state/flight-section-planning.selector';
 import { SwapConfiguratorComponent } from '../swap-configurator/swap-configurator.component';
 
@@ -52,5 +52,9 @@ export class ConfiugurationUpdateControlsComponent {
 
   onSave(){
     this.store.dispatch(saveConfiguration());
+  }
+
+  onCancel(){
+    this.store.dispatch(cancelConfigurationUpdate());
   }
 }

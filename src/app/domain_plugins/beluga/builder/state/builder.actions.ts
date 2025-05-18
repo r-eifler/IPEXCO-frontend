@@ -4,7 +4,7 @@ import { BelugaProblem, Side } from "../../shared/domain/beluga_problem";
 import { BelugaAction } from "../../shared/domain/beluga_plan";
 import { DragSource } from "./builder.reducer";
 import { BelugaState } from "../../shared/domain/beluga_state";
-import { FlightSection, FlightSectionBase } from "../../flight-section-planning/domain/flight-section";
+import { BelugaConfiguration, FlightSection, FlightSectionBase } from "../../flight-section-planning/domain/flight-section";
 
 // project
 
@@ -34,7 +34,7 @@ export const initBuilder = createAction('[beluga-builder] init task', props<{tas
 export const finishManualPlanning = createAction('[beluga-builder] finish manual planning', props<{actions: BelugaAction[]}>());
 export const finishManualPlanningFailure = createAction('[beluga-builder] finish manual planning failure', props<{err: any}>());
 
-export const cancelManualPlanning = createAction('[beluga-builder] cancel manual planning');
+export const cancelManualPlanning = createAction('[beluga-builder] cancel manual planning', props<{sectionId: string, planAttempt: BelugaAction[], config: BelugaConfiguration}>());
 export const cancelManualPlanningFailure = createAction('[beluga-builder] cancel manual planning failure', props<{err: any}>());
 
 

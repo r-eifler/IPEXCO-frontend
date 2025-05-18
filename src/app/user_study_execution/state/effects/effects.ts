@@ -5,6 +5,7 @@ import { LoadUserStudyExecutionDemoEffect } from "./load-demo.effect";
 import { UserStudyExecutionLoadDomainSpecificationEffect } from "./load-domain-spec.effect";
 import { LoadUserStudyExecutionPlanPropertiesEffect } from "./load-plan-properties.effect";
 import { ExecutionLoadUserStudyEffect } from "./load-user-study.effect";
+import { LogUserActivitiesBelugaEffect } from "./log-user-activities-beluga.effect";
 import { LogUserActivitiesEffect } from "./log-user-activities.effect";
 import { RegisterUserStudyEffect } from "./register-user-study.effect";
 import { RedirectToNextUserStudyEffect } from "./select-user-study.effect";
@@ -16,7 +17,10 @@ export const userStudyExecutionFeatureEffects = [
     LoadUserStudyExecutionDemoEffect,
     LoadUserStudyExecutionPlanPropertiesEffect,
     ExecutionLoadUserStudyEffect,
+
     LogUserActivitiesEffect,
+    LogUserActivitiesBelugaEffect,
+
     RedirectToNextUserStudyEffect,
     RegisterUserStudyEffect,
     UserStudyExecutionLoadDomainSpecificationEffect

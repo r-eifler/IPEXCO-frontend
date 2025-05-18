@@ -1,5 +1,5 @@
-import { Component, computed, effect, input, output } from '@angular/core';
-import { ProductionLine, Jig, JigType } from '../../../shared/domain/beluga_problem';
+import { Component, input, output } from '@angular/core';
+import { Jig, JigType } from '../../../shared/domain/beluga_problem';
 import { ProductionLineTargetSchedule } from '../../domain/flight-section';
 import { ProductionLineConfiguratorComponent } from '../production-line-configurator/production-line-configurator.component';
 
@@ -25,21 +25,14 @@ export class ProductionLinesConfiguratorComponent {
     position: number
   }[]>([]);
 
-  targetSchedules = output<ProductionLineTargetSchedule[]>();
+  change = output<{name: string, index: number, skip: boolean}>();
 
-  onChangeProductionTarget(newSchedule: ProductionLineTargetSchedule, index: number){
-    const oldSchedules = this.productionLineTargetSchedules();
-    const newProductionSchedules = [
-        ...oldSchedules.slice(0,index),
-        newSchedule,
-        ...oldSchedules.slice(index + 1)
-      ];
-
-    this.targetSchedules.emit(newProductionSchedules);
-  }
-
-  constructor(){
-    effect(() => console.log(this.conflictMembers()));
+  onChangeProductionTarget(change: {index: number, skip: boolean}, name: string){
+    this.change.emit({
+      name,
+      index: change.index,
+      skip: change.skip
+    });
   }
 
 }

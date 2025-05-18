@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, input } from '@angular/core';
+import { Component, computed, inject, input } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
@@ -11,6 +11,7 @@ import { TranslocoModule } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 import { sum } from 'ramda';
 import { take } from 'rxjs';
+import { ExplanationRunStatus } from 'src/app/iterative_planning/domain/explanation/explanations';
 import { StepStatusColorPipe } from 'src/app/iterative_planning/domain/pipe/step-status-color.pipe';
 import { StepStatusNamePipe } from 'src/app/iterative_planning/domain/pipe/step-status-name.pipe';
 import { PlanRunStatus } from 'src/app/iterative_planning/domain/plan';
@@ -21,13 +22,11 @@ import { computeRackOccupancyRate, computeSwaps } from '../../domain/metrics';
 import { PlanMethod, PlanMethodType } from '../../domain/plan_method';
 import { PlanMethodTypeIconPipe } from '../../pipe/plan-method-type-icon.pipe';
 import { PlanMethodTypeNamePipe } from '../../pipe/plan-method-type-name.pipe';
-import { cancelPlanning, createNewBranch, registerManualPlanning, startAutomaticPlanning, startExplanations, updateConfiguration, updateConfigurationOfSectionAndConfigIndex, } from '../../state/flight-section-planning.actions';
-import { selectActiveBranchRemainingNumberFlights, selectBranchNames, selectIsAutomatic, selectIsManual, selectSupportedPlanners, selectTask } from '../../state/flight-section-planning.selector';
-import { PlanInspectorComponent } from '../../views/plan-inspector/plan-inspector.component';
+import { cancelPlanning, createNewBranch, inspectPlan, registerManualPlanning, startAutomaticPlanning, updateConfigurationOfSectionAndConfigIndex } from '../../state/flight-section-planning.actions';
+import { selectActiveBranchRemainingNumberFlights, selectBranchNames, selectIsAutomatic, selectIsManual, selectSupportedPlanners } from '../../state/flight-section-planning.selector';
 import { BranchNameDialogComponent } from '../branch-name-dialog/branch-name-dialog.component';
-import { SectionPlanMethodDialogComponent } from '../section-plan-method-dialog/section-plan-method-dialog.component';
 import { ConfigurationSelectorComponent } from '../configuration-selector/configuration-selector.component';
-import { ExplanationRunStatus } from 'src/app/iterative_planning/domain/explanation/explanations';
+import { SectionPlanMethodDialogComponent } from '../section-plan-method-dialog/section-plan-method-dialog.component';
 
 @Component({
   selector: 'app-section-card',
@@ -155,8 +154,12 @@ export class SectionCardComponent {
     });
   }
 
+  onInspectPlan(){
+    this.store.dispatch(inspectPlan({sectionId: this.section()?._id}));
+  }
+
   onCancel(){
-    this.store.dispatch(cancelPlanning({section: this.section()}))
+    this.store.dispatch(cancelPlanning({section: this.section()}));
   }
 
   onUpdateConfiguration(){

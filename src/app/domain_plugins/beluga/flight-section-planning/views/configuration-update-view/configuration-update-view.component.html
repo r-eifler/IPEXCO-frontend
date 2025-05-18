@@ -25,7 +25,7 @@
                             [flightTargetSchedule]="flightTargetSchedule()"
                             [jigTypes]="jigTypes()"
                             [jigs]="jigs()"
-                            (targetSchedule)="onChangeFlightTarget($event)"
+                            (change)="onChangeIncomingFlight($event)"
                            >
                            </app-incoming-flight-configurator>
 
@@ -34,7 +34,7 @@
                             [flightTargetSchedule]="flightTargetSchedule()"
                             [jigTypes]="jigTypes()"
                             [jigs]="jigs()"
-                            (targetSchedule)="onChangeFlightTarget($event)"
+                            (change)="onChangeOutgoingFlight($event)"
                            >
                            </app-outgoing-flight-configurator>
                         </div>
@@ -84,7 +84,7 @@
                                 [jigsOnSite]="jigsOnSite()"
                                 [jigTypes]="jigTypes()"
                                 [jigs]="jigs()"
-                                (targetSchedules)="onChangeProductionTarget($event)"
+                                (change)="onChangeProductionTarget($event)"
                             >
                             </app-production-lines-configurator>
                         </div> 

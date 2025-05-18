@@ -4,7 +4,9 @@
             (back)="onBack()"
             (forward)="onForward()"
         ></app-step-control>
-        <a mat-button [routerLink]="['../../flight-sections']">
+        <a mat-button 
+            (click)="onCancel()"
+            [routerLink]="['../../flight-sections']">
             <mat-icon>chevron_left</mat-icon>
             Back
         </a>
