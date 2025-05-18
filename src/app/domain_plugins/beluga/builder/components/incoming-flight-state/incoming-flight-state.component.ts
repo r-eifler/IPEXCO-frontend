@@ -1,6 +1,6 @@
 import { CdkDragDrop, CdkDropList } from '@angular/cdk/drag-drop';
 import { AsyncPipe } from '@angular/common';
-import { ApplicationRef, Component, computed, effect, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, computed, effect, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -30,7 +30,7 @@ import { InfoComponent } from 'src/app/shared/components/info/info/info.componen
   styleUrl: './incoming-flight-state.component.scss'
 })
 export class IncomingFlightStateComponent {
-  appRef = inject(ApplicationRef);
+  cd = inject(ChangeDetectorRef);
   store = inject(Store);
 
   jigTypes = this.store.selectSignal(selectJigTypes);
@@ -80,7 +80,7 @@ export class IncomingFlightStateComponent {
 
       document.startViewTransition(() => {
         this.store.dispatch(createNewBelugaAction({action: unloadAction}));
-        this.appRef.tick();
+        this.cd.detectChanges();
       });
     }
   }

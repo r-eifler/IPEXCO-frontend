@@ -1,9 +1,9 @@
-import { ApplicationRef, Component, computed, inject, input, signal, WritableSignal } from '@angular/core';
+import { ChangeDetectorRef, Component, computed, inject, input, signal, WritableSignal } from '@angular/core';
 import { FlightSection, getFlightSchedule, getFullStartState, getProductionSchedule } from '../../../flight-section-planning/domain/flight-section';
 import { PlanActionListComponent } from '../../components/plan-action-list/plan-action-list.component';
 import { StateCardComponent } from '../../components/state-card/state-card.component';
 import { StepControlComponent } from '../../components/step-control/step-control.component';
-import { BelugaAction, BelugaActionType } from '../../domain/beluga_plan';
+import { BelugaActionType } from '../../domain/beluga_plan';
 import { applyActions } from '../../domain/beluga_state';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
@@ -25,9 +25,8 @@ import { stopInspectPlan } from '../../../flight-section-planning/state/flight-s
   styleUrl: './section-plan.component.scss'
 })
 export class SectionPlanComponent {
-
+  cd = inject(ChangeDetectorRef);
   store = inject(Store);
-  appRef = inject(ApplicationRef);
 
   section = input.required<FlightSection>();
   configuration = computed(() => this.section()?.configurations[this.section()?.configurationIndex])
@@ -62,21 +61,21 @@ export class SectionPlanComponent {
   onActionSelected(index: number){
     document.startViewTransition(() => {
       this.selectedActionIndex.set(index);
-      this.appRef.tick();
+      this.cd.detectChanges();
     });
   }
 
   onForward(){
     document.startViewTransition(() => {
       this.selectedActionIndex.update((current) =>  Math.min(this.actions()?.length, (current ?? 0) + 1));
-      this.appRef.tick();
+      this.cd.detectChanges();
     });
   }
 
   onBack(){
     document.startViewTransition(() => {
       this.selectedActionIndex.update((current) =>  Math.max(0, (current ?? 0) - 1))
-      this.appRef.tick();
+      this.cd.detectChanges();
     });
   }
 

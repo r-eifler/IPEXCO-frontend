@@ -1,4 +1,4 @@
-import { ApplicationRef, Component, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { selectActions, selectCurrentConfiguration, selectFlightFinished, selectSection } from '../../state/builder.selector';
 import { MatButtonModule } from '@angular/material/button';
@@ -23,7 +23,7 @@ import { RouterLink, RouterModule } from '@angular/router';
   styleUrl: './section-controls.component.scss'
 })
 export class SectionControlsComponent {
-  appRef = inject(ApplicationRef);
+  cd = inject(ChangeDetectorRef);
   store = inject(Store);
   undoStack = inject(UndoStackService);
 
@@ -55,7 +55,7 @@ export class SectionControlsComponent {
   onUndo() {
     document.startViewTransition(() => {
       this.store.dispatch(undoLastAction());
-      this.appRef.tick();
+      this.cd.detectChanges();
     });
   }
 }

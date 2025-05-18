@@ -1,6 +1,6 @@
 import { CdkDrag, CdkDragDrop, CdkDragEnd, CdkDropList } from '@angular/cdk/drag-drop';
 import { AsyncPipe, NgIf } from '@angular/common';
-import { ApplicationRef, Component, computed, inject, input } from '@angular/core';
+import { ChangeDetectorRef, Component, computed, inject, input } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { Store } from '@ngrx/store';
@@ -33,7 +33,7 @@ import { DropTargetComponent } from '../drop-target/drop-target.component';
   styleUrl: './trailer-wrapper.component.scss'
 })
 export class TrailerWrapperComponent {
-  appRef = inject(ApplicationRef);
+  cd = inject(ChangeDetectorRef);
   store = inject(Store);
 
   trailer = input.required<Trailer>();
@@ -146,7 +146,7 @@ export class TrailerWrapperComponent {
 
       document.startViewTransition(() => {
         this.store.dispatch(createNewBelugaAction({action}));
-        this.appRef.tick();
+        this.cd.detectChanges();
       });
     });
   }
@@ -170,7 +170,7 @@ export class TrailerWrapperComponent {
 
       document.startViewTransition(() => {
         this.store.dispatch(createNewBelugaAction({action}));
-        this.appRef.tick();
+        this.cd.detectChanges();
       });
     });
   }

@@ -1,4 +1,4 @@
-import { ApplicationRef, Component, effect, inject, input, output } from '@angular/core';
+import { Component, effect, inject, input, output } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 

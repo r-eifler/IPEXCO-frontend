@@ -1,6 +1,6 @@
 import { CdkDrag, CdkDragDrop, CdkDropList } from '@angular/cdk/drag-drop';
 import { AsyncPipe, NgIf } from '@angular/common';
-import { ApplicationRef, Component, computed, inject, input } from '@angular/core';
+import { ChangeDetectorRef, Component, computed, inject, input } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -34,7 +34,7 @@ import { DropTargetComponent } from '../drop-target/drop-target.component';
   styleUrl: './hangar-wrapper.component.scss'
 })
 export class HangarWrapperComponent {
-    appRef = inject(ApplicationRef);
+    cd = inject(ChangeDetectorRef);
     store = inject(Store);
 
     name = input.required<string>();
@@ -75,7 +75,7 @@ export class HangarWrapperComponent {
 
         document.startViewTransition(() => {
           this.store.dispatch(createNewBelugaAction({action}));
-          this.appRef.tick();
+          this.cd.detectChanges();
         });
       }
     }
