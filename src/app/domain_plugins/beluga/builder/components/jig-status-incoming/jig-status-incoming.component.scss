@@ -3,11 +3,6 @@
 @use "../../../../../../variables" as vars;
 @use "../../../../../../ipexco-theme" as ipexco-theme;
 
-
-.skipped {
-    opacity: 50%;
-}
-
 .container{
     display: grid;
     grid-template-columns: 1fr auto;
