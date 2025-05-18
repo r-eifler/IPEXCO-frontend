@@ -6,6 +6,8 @@ import { JigComponent } from '../../../shared/components/jig/jig.component';
 import { Flight, Jig, JigType } from '../../../shared/domain/beluga_problem';
 import { cancelDrag, startDrag } from '../../state/builder.actions';
 import { MatIconModule } from '@angular/material/icon';
+import { TranslocoDirective } from '@jsverse/transloco';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-jig-status-incoming',
@@ -14,6 +16,8 @@ import { MatIconModule } from '@angular/material/icon';
     CdkDrag,
     MatButtonModule,
     MatIconModule,
+    TranslocoDirective,
+    MatTooltipModule,
   ],
   templateUrl: './jig-status-incoming.component.html',
   styleUrl: './jig-status-incoming.component.scss'

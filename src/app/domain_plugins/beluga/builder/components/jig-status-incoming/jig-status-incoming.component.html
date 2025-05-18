@@ -1,6 +1,7 @@
 <div
     class="container"
     [class.next]="status().next"
+   *transloco="let t"
 >
     <app-jig
         [jig]="jig()"
@@ -19,8 +20,19 @@
 
     <div class="button-container">
       @if (status()?.next) {
-        <button mat-icon-button (click)="onSkip()" [disabled]="!isSkipPossible()"><mat-icon>step_over</mat-icon></button>
-        <button mat-flat-button class="primary" (click)="onUnload()" [disabled]="!isUnloadPossible()"><mat-icon>arrow_forward</mat-icon></button>
+        <button
+          mat-icon-button
+          (click)="onSkip()"
+          [disabled]="!isSkipPossible()"
+          [matTooltip]="t('b.skip')"
+        ><mat-icon>step_over</mat-icon></button>
+        <button
+          mat-flat-button
+          class="primary"
+          (click)="onUnload()"
+          [disabled]="!isUnloadPossible()"
+          [matTooltip]="t('b.unload')"
+        ><mat-icon>arrow_forward</mat-icon></button>
       }
     </div>
 </div>
