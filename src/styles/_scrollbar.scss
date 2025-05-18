@@ -1,18 +1,18 @@
 @use '../variables' as variables;
 
 ::-webkit-scrollbar {
-  width: 4px;
+  width: 8px;
 
   &:hover {
-    width: 4px;
+    width: 8px;
   }
 }
 
 ::-webkit-scrollbar:horizontal {
-  height: 4px;
+  height: 8px;
 
   &:hover {
-    height: 4px;
+    height: 8px;
   }
 }
 
