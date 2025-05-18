@@ -1,6 +1,6 @@
 import { CdkDrag, CdkDragDrop, CdkDropList } from '@angular/cdk/drag-drop';
 import { AsyncPipe, NgIf } from '@angular/common';
-import { Component, computed, inject, input } from '@angular/core';
+import { ApplicationRef, Component, computed, inject, input } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -34,7 +34,7 @@ import { DropTargetComponent } from '../drop-target/drop-target.component';
   styleUrl: './hangar-wrapper.component.scss'
 })
 export class HangarWrapperComponent {
-
+    appRef = inject(ApplicationRef);
     store = inject(Store);
 
     name = input.required<string>();
@@ -70,10 +70,13 @@ export class HangarWrapperComponent {
           h: this.name(),
           t: nextTrailer
         };
-    
+
         console.log(action);
-    
-        this.store.dispatch(createNewBelugaAction({action}));
+
+        document.startViewTransition(() => {
+          this.store.dispatch(createNewBelugaAction({action}));
+          this.appRef.tick();
+        });
       }
     }
 
@@ -86,11 +89,11 @@ export class HangarWrapperComponent {
         this.store.dispatch(cancelDrag());
         return;
       }
-  
+
       let newJig = this.draggedJig();
       let source = this.dragSource();
-      
-  
+
+
       if(newJig === null || source === null){
         return;
       }
@@ -100,9 +103,9 @@ export class HangarWrapperComponent {
       if(productionLine === null || productionLine === undefined){
         return;
       }
-    
+
       if(source?.stageType == 'trailer'){
-  
+
         let action: DeliverToHanger = {
           name: BelugaActionType.DELIVER_TO_HANGAR,
           j: newJig,
@@ -110,8 +113,8 @@ export class HangarWrapperComponent {
           h: this.name(),
           pl: productionLine
         }
-  
-  
+
+
         this.store.dispatch(createNewBelugaAction({action}));
         this.store.dispatch(stopDrag({target: {name: this.name(), stageType: 'hangar'}}))
       }
@@ -120,11 +123,11 @@ export class HangarWrapperComponent {
     onStartDrag(){
       this.store.dispatch(startDrag({source: {name: this.name(), stageType: 'hangar'}, jigName: this.jig().name, sides: ['fside']}))
     }
-  
+
     onCancelDrag(event: CdkDragDrop<Jig>){
       if(!event.isPointerOverContainer){
         this.store.dispatch(cancelDrag())
-      }  
+      }
     }
 
 }

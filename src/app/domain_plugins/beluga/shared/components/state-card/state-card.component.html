@@ -1,7 +1,14 @@
 
 @if(state() !== null && state() !== undefined){
-<div class="main-container">
-    <div class="belugas">
+<div class="main-container" *transloco="let t">
+    <div class="header">{{t('f.flights')}}</div>
+    <div class="header">{{t('f.trailers')}} Beluga</div>
+    <div class="header">{{t('f.racks')}}</div>
+    <div class="header">{{t('f.trailers')}} {{t('f.factory')}}</div>
+    <div class="header">{{t('f.hangars')}}</div>
+    <div class="header">{{t('f.production_lines')}}</div>
+
+    <div class="belugas column">
         <app-beluga-flight
                 [jigs]="incoming()"
                 [jigTypes]="jigTypes()"
@@ -28,7 +35,7 @@
             </app-trailer>
         }
     </div>
-    <div class="racks">
+    <div class="racks column">
         @for(rack of racks(); track rack){
             <app-rack [name]="rack.name" [size]="rack.size" [occupied]="rack.occupied" [maintenance]="rack.maintenance">
                 <app-jig
@@ -42,7 +49,7 @@
             </app-rack>
         }
     </div>
-    <div class="trailers">
+    <div class="trailers column">
         @for(elem of trailersFactory(); track elem.trailer.name){
             <app-trailer [name]="elem.trailer.name" [size]="20 * 15" [maintenance]="elem.maintenance">
                 <app-jig
@@ -56,7 +63,7 @@
             </app-trailer>
         }
     </div>
-    <div class="hangars">
+    <div class="hangars column">
         @for(hangar of hangars(); track hangar){
             <app-hangar [name]="hangar.name" [maintenance]="hangar.maintenance">
                 <app-jig
@@ -70,7 +77,7 @@
             </app-hangar>
         }
     </div>
-    <div class="hangars">
+    <div class="hangars column">
         @for(pl of productionLines(); track pl;){
             <app-production-line
                 [line]="pl"

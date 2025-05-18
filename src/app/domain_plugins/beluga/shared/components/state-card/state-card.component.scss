@@ -1,7 +1,12 @@
+@use '../../../../../../variables.scss' as vars;
+
 .main-container {
     display: grid;
     grid-template-columns: 1fr 2fr 2fr 2fr auto auto;
     gap: var(--spacing-300);
+
+    overflow: auto;
+    padding-block: var(--spacing-200);
 }
 
 .center {
@@ -40,3 +45,15 @@
     align-items: center;
 }
 
+.header{
+  @include vars.typography(headline-small);
+}
+
+.column {
+  padding: var(--spacing-200);
+}
+
+.column:nth-child(2n+1){
+  @include vars.background-color(surface-container-low);
+  border-radius: var(--radius-100);
+}

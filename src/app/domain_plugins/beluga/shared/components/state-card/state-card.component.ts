@@ -11,6 +11,7 @@ import { ProductionLineComponent } from '../production-line/production-line.comp
 import { NgFor, NgIf } from '@angular/common';
 import { BelugaSiteSetUp, SiteStatus } from '../../domain/site_set_up';
 import { FlightTargetSchedule, ProductionLineTargetSchedule } from '../../../flight-section-planning/domain/flight-section';
+import { TranslocoDirective } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-state-card',
@@ -24,6 +25,7 @@ import { FlightTargetSchedule, ProductionLineTargetSchedule } from '../../../fli
     JigComponent,
     NgIf,
     NgFor,
+    TranslocoDirective,
   ],
   templateUrl: './state-card.component.html',
   styleUrl: './state-card.component.scss'
@@ -63,14 +65,14 @@ export class StateCardComponent {
   })
 
   outgoingSchedule = computed(() => this.targetFlightSchedule()?.outgoing.filter(e => !e.skip))
-  
+
 
   racks = computed(() => {
     const state = this.state();
     if(state === undefined){
       return []
     }
-    return this.siteSetUp()?.racks.map((r) => 
+    return this.siteSetUp()?.racks.map((r) =>
       ({
         jigs: state.racks?.[r.name]?.map(j => this.jigs()?.[j]),
         name: r.name,

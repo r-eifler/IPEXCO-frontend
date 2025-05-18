@@ -95,7 +95,7 @@
 .info{
   border-radius: var(--radius-200);
 
-  @include vars.background-color(surface-container-lowest);
+  @include vars.background-color(surface-container-low);
   @include vars.color(on-surface);
 
   @include mat.elevation(2);
