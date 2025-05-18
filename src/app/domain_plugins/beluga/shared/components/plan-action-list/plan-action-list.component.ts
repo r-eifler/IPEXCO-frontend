@@ -1,8 +1,6 @@
 import { Component, computed, input, output, signal, WritableSignal } from '@angular/core';
 import { BelugaAction, BelugaActionType, JigActionZ } from '../../domain/beluga_plan';
-import { BelugaProblem, BelugaProblemZ } from '../../domain/beluga_problem';
 import { ActionCardComponent } from '../action-card/action-card.component';
-import { actionsForFlight, actionsForJigs } from './plan-filters';
 import { InitCardComponent } from '../init-card/init-card.component';
 
 export interface DisplayAction {

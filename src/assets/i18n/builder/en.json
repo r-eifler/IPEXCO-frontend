@@ -1,6 +1,7 @@
 {
     "projects": "Projects",
     "project": "Project",
+    "actionCardEmpty": "No actions planned yet.",
     "new_project": "New Project",
     "flights": "Flights",
     "flight": "flight",
