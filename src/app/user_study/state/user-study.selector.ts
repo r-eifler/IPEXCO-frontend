@@ -17,6 +17,8 @@ export const selectPlanPropertiesOfParticipantsById = memoizeWith(
 );
 
 export const selectUserStudyDemos = createSelector(selectState, (state) => state.demos.data)
+export const selectUserStudyProjects= createSelector(selectState, (state) => state.projects.data)
+
 
 export const selectUserStudy = createSelector(selectState, (state) => state.userStudy?.data)
 

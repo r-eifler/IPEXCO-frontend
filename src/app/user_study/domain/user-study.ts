@@ -1,6 +1,7 @@
 export enum UserStudyStepType {
   description = 'description',
   form = 'form',
+  project = 'project',
   demo = 'demo',
   demoInfo = 'demoInfo',
   userManual = 'userManual'
@@ -24,6 +25,11 @@ export interface UserStudyFormStep extends UserStudyStep{
     link: string,
     code: string | null
   };
+}
+
+export interface UserStudyProjectStep extends UserStudyStep{
+  type: UserStudyStepType.project;
+  content: string;
 }
 
 export interface UserStudyDemoStep extends UserStudyStep{

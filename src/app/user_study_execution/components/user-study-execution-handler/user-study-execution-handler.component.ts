@@ -41,7 +41,7 @@ export class UserStudyExecutionHandlerComponent {
 
   over = output();
 
-  isDemoStep$ = this.currentStep$.pipe(map(step => step?.type === 'demo'));
+  isTimeRestrictedStep$ = this.currentStep$.pipe(map(step => step?.type === UserStudyStepType.demo || step?.type === UserStudyStepType.project));
 
   startTime$ = this.currentStep$.pipe(
     filter(s => !!s),
@@ -62,8 +62,8 @@ export class UserStudyExecutionHandlerComponent {
 
   timeOut$ = this.remainingTime$.pipe(map((sec) => sec === 0));
 
-  allowContinue$ = combineLatest([this.remainingTime$, this.isDemoStep$, this.continueLocked$]).pipe(
-    map(([rsec, isDemoStep, locked]) => (rsec <= 0 || isDemoStep) && ! locked)
+  allowContinue$ = combineLatest([this.remainingTime$, this.isTimeRestrictedStep$, this.continueLocked$]).pipe(
+    map(([rsec, isTimeRestricted, locked]) => (rsec <= 0 || isTimeRestricted) && ! locked)
   )
   
 
@@ -83,7 +83,7 @@ export class UserStudyExecutionHandlerComponent {
       filter((step) => !!step)
     ).subscribe(
       (step) => {
-        if(step.type === UserStudyStepType.demo && step.time != null){
+        if((step.type === UserStudyStepType.demo || step.type === UserStudyStepType.project) && step.time != null){
           this.dialog.open(TimerStartsDialogComponent, {data: {timeout: Math.floor(step.time / 60)}})
         }
       }
@@ -95,7 +95,7 @@ export class UserStudyExecutionHandlerComponent {
       filter(([to, step ]) => to && !!step)
     ).subscribe(
       ([_, step]) => {
-        if(step != null && step.type === UserStudyStepType.demo){
+        if(step != null && (step.type === UserStudyStepType.demo || step.type === UserStudyStepType.project)){
           const dialogRef = this.dialog.open(TimeOverDialogComponent);
           dialogRef.afterClosed().pipe(take(1)).subscribe(() => this.store.dispatch((executionNextUserStudyStep())))
         }
@@ -105,7 +105,7 @@ export class UserStudyExecutionHandlerComponent {
     this.currentMaxUtility$.pipe(
       takeUntilDestroyed(),
       withLatestFrom(this.maxPossibleUtility$, this.currentStep$, this.store.select(selectIterativePlanningProject)),
-      filter(([, max, step, demo]) => max != undefined && !!step && !!demo),
+      filter(([, max, step, demo]) => max != undefined && max > 0 && !!step && !!demo),
       filter(([cur, max, , ]) => cur == max)
     ).subscribe(
       ([, , step, demo]) => {
@@ -170,6 +170,21 @@ export class UserStudyExecutionHandlerComponent {
           const dialogRef = this.dialog.open(FinishDemoInfoDialogComponent)
           dialogRef.afterClosed().pipe(take(1)).subscribe((nextUserStudyStep) => {
             if(nextUserStudyStep){
+              this.store.dispatch((executionNextUserStudyStep()));
+            }
+          })
+        }
+        if(step.type === UserStudyStepType.project){
+          const dialogRef = this.dialog.open(AskDeleteComponent, {
+            data: {
+              name: 'Finish Task and Continue',
+              text: 'Are you sure you want to finish and continue with the next step? There is still some time left.',
+              buttonDisagree: 'Continue with Next Step',
+              buttonAgree: 'Continue with Task'
+            },
+          })
+          dialogRef.afterClosed().pipe(take(1)).subscribe((stay) => {
+            if(!stay){
               this.store.dispatch((executionNextUserStudyStep()));
             }
           })

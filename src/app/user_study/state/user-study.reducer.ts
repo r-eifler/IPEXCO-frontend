@@ -13,17 +13,21 @@ import {
   loadUserStudy,
   loadUserStudyDemos,
   loadUserStudyDemosSuccess, loadUserStudyParticipantsSuccess,
+  loadUserStudyProjects,
+  loadUserStudyProjectsSuccess,
   loadUserStudySuccess
 } from './user-study.actions';
 import {UserStudyExecution} from '../domain/user-study-execution';
 import { ParticipantDistribution } from '../domain/participant-distribution';
 import { Demo } from 'src/app/shared/domain/demo';
+import { Project } from 'src/app/shared/domain/project';
 
 export interface UserStudyState {
     userStudies: Loadable<UserStudy[]>;
     participants: Record<string, UserStudyExecution[]>;
     createdUserStudy: Creatable<UserStudy>;
     demos: Loadable<Demo[]>;
+    projects: Loadable<Project[]>;
     userStudy: Loadable<UserStudy>;
     participantDistributions: Loadable<ParticipantDistribution[]>;
     participantDistribution: Loadable<ParticipantDistribution>;
@@ -35,6 +39,7 @@ const initialState: UserStudyState = {
     participants: {},
     createdUserStudy: {state: CreationState.Default, data: undefined},
     demos: {state: LoadingState.Initial, data: undefined},
+    projects: {state: LoadingState.Initial, data: undefined},
     userStudy: {state: LoadingState.Initial, data: undefined},
     participantDistributions:  {state: LoadingState.Initial, data: undefined},
     participantDistribution:  {state: LoadingState.Initial, data: undefined},
@@ -58,6 +63,14 @@ export const userStudyReducer = createReducer(
     on(loadUserStudyDemosSuccess, (state, {demos}): UserStudyState => ({
       ...state,
       demos: {state: LoadingState.Done, data: demos},
+    })),
+    on(loadUserStudyProjects, (state): UserStudyState => ({
+      ...state,
+      projects: {state: LoadingState.Loading, data: undefined},
+    })),
+    on(loadUserStudyProjectsSuccess, (state, {projects}): UserStudyState => ({
+      ...state,
+      projects: {state: LoadingState.Done, data: projects},
     })),
     on(loadUserStudyParticipantsSuccess, (state, {userStudyId, participants}): UserStudyState => ({
       ...state,

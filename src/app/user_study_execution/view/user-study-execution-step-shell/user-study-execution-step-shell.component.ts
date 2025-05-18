@@ -9,6 +9,7 @@ import { UserManualViewComponent } from '../user-manual-view/user-manual-view.co
 import { UserStudyExecutionDemoViewComponent } from '../user-study-execution-demo-view/user-study-execution-demo-view.component';
 import { UserStudyExecutionDescriptionViewComponent } from '../user-study-execution-description-view/user-study-execution-description-view.component';
 import { UserStudyExecutionExternalViewComponent } from '../user-study-execution-external-view/user-study-execution-external-view.component';
+import { ProjectViewComponent } from '../project-view/project-view.component';
 
 @Component({
     selector: 'app-user-study-execution-step-shell',
@@ -18,7 +19,8 @@ import { UserStudyExecutionExternalViewComponent } from '../user-study-execution
         UserStudyExecutionExternalViewComponent,
         UserStudyExecutionDemoViewComponent,
         UserManualViewComponent,
-        DemoInformationViewComponent
+        DemoInformationViewComponent,
+        ProjectViewComponent,
     ],
     templateUrl: './user-study-execution-step-shell.component.html',
     styleUrl: './user-study-execution-step-shell.component.scss'

@@ -14,7 +14,7 @@ import {MatInput} from '@angular/material/input';
 import {UserStudy, UserStudyStep, UserStudyStepType} from '../../domain/user-study';
 import {Store} from '@ngrx/store';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
-import {selectUserStudy, selectUserStudyDemos} from '../../state/user-study.selector';
+import {selectUserStudy, selectUserStudyDemos, selectUserStudyProjects} from '../../state/user-study.selector';
 import {selectedAtLeastOne} from '../../../validators/selected-at-least-one.validator';
 import { editUserStudy, loadUserStudyDemos} from '../../state/user-study.actions';
 import {isNoPropertyNull} from '../../../validators/no-property-null.validator';
@@ -24,6 +24,7 @@ import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {filter, take} from 'rxjs/operators';
 import { UserManualCardComponent } from '../../components/user-manual-card/user-manual-card.component';
 import { DemoInfoCardComponent } from '../../components/demo-info-card/demo-info-card.component';
+import { ProjectCardComponent } from '../../components/project-card/project-card.component';
 
 @Component({
     selector: 'app-user-study-editor',
@@ -33,6 +34,7 @@ import { DemoInfoCardComponent } from '../../components/demo-info-card/demo-info
         BreadcrumbComponent,
         BreadcrumbItemComponent,
         DemoCardComponent,
+        ProjectCardComponent,
         DescriptionCardComponent,
         FormCardComponent,
         FormsModule,
@@ -67,6 +69,7 @@ export class UserStudyEditorComponent {
 
   userStudy$ = this.store.select(selectUserStudy);
   demos$ = this.store.select(selectUserStudyDemos);
+  projects$ = this.store.select(selectUserStudyProjects)
 
   form = this.fb.group({
     name: this.fb.control<string>('', [Validators.required]),

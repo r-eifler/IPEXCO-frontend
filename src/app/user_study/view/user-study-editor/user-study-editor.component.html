@@ -90,6 +90,18 @@
                     (down)="moveDown(idx)"
                   ></app-tool-description-card>
                 }
+                @case (userStudyStepType.project){
+                  <app-project-card
+                    [step]="control.value"
+                    [first]="first"
+                    [last]="last"
+                    [projects]="projects$ | async"
+                    (changes)="updateControl(control,$event)"
+                    (delete)="deleteStep(idx)"
+                    (up)="moveUp(idx)"
+                    (down)="moveDown(idx)"
+                  ></app-project-card>
+                }
                 @case (userStudyStepType.demoInfo){
                   <app-demo-info-card
                     [step]="control.value"
@@ -130,6 +142,7 @@
             <div class="button-container">
               <button mat-stroked-button type="button" (click)="addNewStep(userStudyStepType.description)">New Description Step</button>
               <button mat-stroked-button type="button" (click)="addNewStep(userStudyStepType.userManual)">New User Manual Step</button>
+              <button mat-stroked-button type="button" (click)="addNewStep(userStudyStepType.project)">New Project Step</button>
               <button mat-stroked-button type="button" (click)="addNewStep(userStudyStepType.demoInfo)">New Demo Information Step</button>
               <button mat-stroked-button type="button" (click)="addNewStep(userStudyStepType.demo)">New Demo Step</button>
               <button mat-stroked-button type="button" (click)="addNewStep(userStudyStepType.form)">New Form Step</button>
