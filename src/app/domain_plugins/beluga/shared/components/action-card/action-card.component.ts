@@ -39,7 +39,7 @@ export class ActionCardComponent {
         return;
       }
 
-      this.root().nativeElement.scrollIntoView({behavior: 'smooth', block: "end", inline: "nearest"});
+      this.root().nativeElement.scrollIntoView({behavior: 'smooth', block: "nearest", inline: "nearest"});
     })
   }
 
