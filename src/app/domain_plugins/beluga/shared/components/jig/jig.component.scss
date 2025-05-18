@@ -43,6 +43,10 @@
     cursor: pointer;
 }
 
+.non-draggable {
+    cursor: not-allowed;
+}
+
 .part-container {
     height: var(--part-height);
     min-width: 15px;

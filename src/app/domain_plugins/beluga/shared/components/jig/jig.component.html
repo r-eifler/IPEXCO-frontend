@@ -1,6 +1,9 @@
 <div
     class="container"
-    [ngClass]="{'hover': isHovering  && draggable()}"
+    [ngClass]="{
+      'hover': isHovering  && draggable(),
+      'non-draggable': !draggable() && !unitSize()
+    }"
     (mouseover)="onHover()" (mouseout)="onMouseOut()"
     cdkOverlayOrigin #trigger="cdkOverlayOrigin"
 >
