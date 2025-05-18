@@ -16,6 +16,7 @@ import { selectExecutionUserStudyContinueLocked, selectExecutionUserStudyFinishe
 import { FinishDemoInfoDialogComponent } from '../finish-demo-info-dialog/finish-demo-info-dialog.component';
 import { TimeOverDialogComponent } from '../time-over-dialog/time-over-dialog.component';
 import { TimerStartsDialogComponent } from '../timer-starts-dialog/timer-starts-dialog.component';
+import { TranslocoModule } from '@jsverse/transloco';
 
 @Component({
     selector: 'app-user-study-execution-handler',
@@ -24,6 +25,7 @@ import { TimerStartsDialogComponent } from '../timer-starts-dialog/timer-starts-
         AsyncPipe,
         MatButtonModule,
         MatIconModule,
+        TranslocoModule,
     ],
     templateUrl: './user-study-execution-handler.component.html',
     styleUrl: './user-study-execution-handler.component.scss'

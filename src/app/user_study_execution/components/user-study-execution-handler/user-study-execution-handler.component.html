@@ -3,7 +3,7 @@
 @let remainingMinutes = remainingMinutes$ | async;
 
 @if((loggedIn$ | async) && (!(allStepsFinished$ | async))){
-<div class="container">
+<div class="container" *transloco="let t">
     @if(remainingMinutes &&  remainingMinutes >= 1){
       <span>{{ remainingMinutes ?? '?'}} min</span>
     }
@@ -11,8 +11,8 @@
       <span>{{ remainingSeconds ?? '?'}} sec</span>
     }
   <mat-progress-bar mode="determinate" [value]="remainingTimeFraction$ | async"></mat-progress-bar>
-  <button mat-stroked-button (click)="onCancel()"><mat-icon>cancel</mat-icon>Cancel</button>
-  <button mat-flat-button (click)="onNext()" [disabled]="!(allowContinue$  | async)"><mat-icon>play_arrow</mat-icon>Continue</button>
+  <button mat-stroked-button (click)="onCancel()"><mat-icon>cancel</mat-icon>{{t('use.cancel')}}</button>
+  <button mat-flat-button (click)="onNext()" [disabled]="!(allowContinue$  | async)"><mat-icon>play_arrow</mat-icon>{{t('use.continue')}}</button>
 </div>
 }
 

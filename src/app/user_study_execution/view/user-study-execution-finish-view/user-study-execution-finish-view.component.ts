@@ -1,14 +1,15 @@
 import { AsyncPipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { MatButton, MatButtonModule } from '@angular/material/button';
+import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { TranslocoModule } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
+import { map } from 'rxjs';
+import { filterNotNullOrUndefined } from 'src/app/shared/common/check_null_undefined';
 import { PageModule } from '../../../shared/components/page/page.module';
 import { selectLoggedOut } from '../../../user/state/user.selector';
 import { executionUserStudyCancel, executionUserStudySubmit } from '../../state/user-study-execution.actions';
 import { selectExecutionUserStudy } from '../../state/user-study-execution.selector';
-import { map } from 'rxjs';
-import { filterNotNullOrUndefined } from 'src/app/shared/common/check_null_undefined';
 
 @Component({
     selector: 'app-user-study-execution-finish-view',
@@ -16,7 +17,8 @@ import { filterNotNullOrUndefined } from 'src/app/shared/common/check_null_undef
         MatButtonModule,
         PageModule,
         AsyncPipe,
-        MatIconModule
+        MatIconModule,
+        TranslocoModule
     ],
     templateUrl: './user-study-execution-finish-view.component.html',
     styleUrl: './user-study-execution-finish-view.component.scss'

@@ -1,32 +1,44 @@
 @let userStudy = userStudy$ | async;
 
-<app-page>
+<app-page *transloco="let t">
 <app-page-content>
   <app-page-section-list>
     @if(userStudy){
     <app-page-section>
       <app-page-section-title>
-        <h1>Welcome!</h1>
+        <h1>{{t('use.user_study')}}</h1>
       </app-page-section-title>
       <app-page-section-content>
-        Thank you very much for participating in our study.
+        {{t('use.thankyou_welcome')}}
       </app-page-section-content>
     </app-page-section>
     }
     @else{
       <app-page-section>
         <app-page-section-title>
-          <h1>Welcome!</h1>
+          <h1>{{t('use.user_study')}}</h1>
         </app-page-section-title>
         <app-page-section-content>
-          This user study is not available anymore.
+          {{t('use.study_not_available')}}
         </app-page-section-content>
       </app-page-section>
     }
+    <app-page-section>
+      <app-page-section-title>
+        {{t('use.language')}}
+      </app-page-section-title>
+      <app-page-section-content>
+        {{t('use.choose_language')}}
+        <div class="language-buttons">
+          <button mat-button (click)="setLanguage('en')">{{t('use.english')}}</button>
+          <button mat-button (click)="setLanguage('de')">{{t('use.german')}}</button>
+        </div>
+      </app-page-section-content>
+    </app-page-section>
     @if(userStudy){
     <app-page-section>
       <app-page-section-title>
-        What is the study about?
+        {{t('use.study_about')}}
       </app-page-section-title>
       <app-page-section-content>
         {{ userStudy?.description}}
@@ -38,7 +50,7 @@
         <app-page-section-content>
           <app-info>
             <mat-icon>schedule</mat-icon>
-            The user study takes about 30 minutes to complete. It is not possible to take a break. Therefore, please make sure that you have enough time and are undisturbed to concentrate on the study.
+            {{t('use.time_info')}}
           </app-info>
         </app-page-section-content>
       </app-page-section>
@@ -46,7 +58,7 @@
     @if(userStudy){
     <app-page-section>
       <app-page-section-content>
-        <a mat-flat-button [routerLink]="['..', 'agreement']">Let's start!</a>
+        <a mat-flat-button [routerLink]="['..', 'agreement']">{{t('use.lets_start')}}</a>
       </app-page-section-content>
     </app-page-section>
     }

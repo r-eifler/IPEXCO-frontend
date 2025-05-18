@@ -1,7 +1,7 @@
-<div class="main-container">
+<div class="main-container" *transloco="let t">
   <mat-toolbar class="spacer">
     <mat-toolbar-row class="top-row">
-      <span>User Study</span>
+      <span>{{t('use.user_study')}}</span>
       <app-user-study-execution-progress class="full-width"></app-user-study-execution-progress>
     </mat-toolbar-row>
     <mat-toolbar-row>

@@ -9,6 +9,8 @@ import { InfoComponent } from 'src/app/shared/components/info/info/info.componen
 import { MatIconModule } from '@angular/material/icon';
 import { take } from 'rxjs';
 import { executionSaveProlificId } from '../../state/user-study-execution.actions';
+import { TranslocoModule } from '@jsverse/transloco';
+import { changeLanguage } from 'src/app/user/state/user.actions';
 
 @Component({
     selector: 'app-user-study-execution-start-view',
@@ -18,7 +20,8 @@ import { executionSaveProlificId } from '../../state/user-study-execution.action
         MatButtonModule,
         RouterLink,
         InfoComponent,
-        MatIconModule
+        MatIconModule,
+        TranslocoModule,
     ],
     templateUrl: './user-study-execution-start-view.component.html',
     styleUrl: './user-study-execution-start-view.component.scss'
@@ -38,6 +41,11 @@ export class UserStudyExecutionStartViewComponent {
         this.store.dispatch(executionSaveProlificId({id}));
       }
     })
+  }
+  
+  setLanguage(code: string){
+    console.log('Language: ' + code)
+    this.store.dispatch(changeLanguage({code}))
   }
 
 }

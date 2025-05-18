@@ -9,6 +9,7 @@ import { InfoComponent } from 'src/app/shared/components/info/info/info.componen
 import { PageModule } from '../../../shared/components/page/page.module';
 import { registerUserStudyUser } from '../../state/user-study-execution.actions';
 import { selectExecutionProlificId, selectExecutionUserStudy } from '../../state/user-study-execution.selector';
+import { TranslocoModule } from '@jsverse/transloco';
 
 @Component({
     selector: 'app-user-study-execution-agreement-view',
@@ -18,7 +19,8 @@ import { selectExecutionProlificId, selectExecutionUserStudy } from '../../state
         PageModule,
         InfoComponent,
         MatIconModule,
-        MarkedPipe
+        MarkedPipe,
+        TranslocoModule,
     ],
     templateUrl: './user-study-execution-agreement-view.component.html',
     styleUrl: './user-study-execution-agreement-view.component.scss'
