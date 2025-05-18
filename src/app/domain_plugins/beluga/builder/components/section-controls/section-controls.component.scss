@@ -3,3 +3,9 @@
     flex-direction: row;
     gap: var(--spacing-200);
 }
+
+.group {
+    display: flex;
+    flex-direction: row;
+    gap: var(--spacing-100);
+}

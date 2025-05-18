@@ -8,11 +8,12 @@ import { provideStoreDevtools } from "@ngrx/store-devtools";
 import { authInterceptor } from "./interceptor/authentication.interceptor";
 import { TranslocoHttpLoader } from "./domain_plugins/beluga/transloco-loader";
 import { provideTransloco } from "@jsverse/transloco";
+import { createUndoReducer } from "./shared/state/undo/handle-undo";
 
 export const appConfig: ApplicationConfig = {
     providers: [
         provideRouter(routes),
-        provideStore(),
+        provideStore([], { metaReducers: [createUndoReducer(1000)] }),
         provideStoreDevtools({
             maxAge: 25, // Retains last 25 states
             logOnly: !isDevMode(), // Restrict extension to log-only mode
@@ -26,7 +27,7 @@ export const appConfig: ApplicationConfig = {
         ),
         provideAnimations(),
         provideTransloco({
-            config: { 
+            config: {
               availableLangs: ['en', 'de'],
               defaultLang: 'en',
               reRenderOnLangChange: true,
