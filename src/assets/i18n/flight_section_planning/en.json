@@ -54,5 +54,6 @@
     "one_rack_empty": "Keep One Rack Empty",
     "planned": "Planned",
     "plan_statistics": "Plan Statistics",
-    "plan_version_already_exists": "A plan version with this name already exists."
+    "plan_version_already_exists": "A plan version with this name already exists.",
+    "save": "Save"
 }
