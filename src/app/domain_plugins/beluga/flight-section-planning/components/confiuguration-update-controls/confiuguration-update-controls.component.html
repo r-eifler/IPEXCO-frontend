@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" *transloco="let t">
     <div class="buttons">
         <app-swap-configurator 
         [value]="maxSwaps()" 
@@ -9,17 +9,19 @@
             [checked]="keepRackEmpty()" 
             (change)="onToggleRack()"
             [disabled]="numEmptyRacks() == 0 || !allowModifications()">
-                Keep at lest one rack empty
+                {{t('f.one_rack_empty')}}
         </mat-slide-toggle>
     </div>
     <div class="buttons">
         <a mat-button [routerLink]="['../../flight-sections']">
             <mat-icon>cancel</mat-icon>
-            Cancel
+            {{t('f.cancel')}}
         </a>
-        <button mat-flat-button (click)="onSave()">
+        <a mat-flat-button 
+            [routerLink]="['../../configuration-explanations/' + section()?._id + '/' +  (section()?.configurationIndex + 1)]"
+            (click)="onSave()">
             <mat-icon>save</mat-icon>
-            Save
-        </button>
+            {{t('f.save')}}
+        </a>
     </div>
 </div>

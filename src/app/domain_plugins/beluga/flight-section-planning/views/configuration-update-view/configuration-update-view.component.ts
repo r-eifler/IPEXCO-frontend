@@ -9,7 +9,7 @@ import { Side } from '../../../shared/domain/beluga_problem';
 import { SiteStatus } from '../../../shared/domain/site_set_up';
 import { HangarConfiguratorComponent } from '../../components/hangar-configurator/hangar-configurator.component';
 import { IncomingFlightConfiguratorComponent } from '../../components/incoming-flight-configurator/incoming-flight-configurator.component';
-import { ObjectiveConfiguratorComponent } from '../../components/objective-configurator/objective-configurator.component';
+import { ConfiugurationUpdateControlsComponent } from '../../components/confiuguration-update-controls/confiuguration-update-controls.component';
 import { OutgoingFlightConfiguratorComponent } from '../../components/outgoing-flight-configurator/outgoing-flight-configurator.component';
 import { ProductionLinesConfiguratorComponent } from '../../components/production-lines-configurator/production-lines-configurator.component';
 import { RackConfiguratorComponent } from '../../components/rack-configurator/rack-configurator.component';
@@ -31,7 +31,7 @@ import { selectCurrentFlightSchedule, selectJigsOnSite, selectProductionLines, s
     OutgoingFlightConfiguratorComponent,
     HangarConfiguratorComponent,
     ProductionLinesConfiguratorComponent,
-    ObjectiveConfiguratorComponent,
+    ConfiugurationUpdateControlsComponent,
   ],
   templateUrl: './configuration-update-view.component.html',
   styleUrl: './configuration-update-view.component.scss'

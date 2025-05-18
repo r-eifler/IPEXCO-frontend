@@ -1,29 +1,31 @@
-import { Component, computed, effect, inject, input, output } from '@angular/core';
-import { SwapConfiguratorComponent } from '../swap-configurator/swap-configurator.component';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { FlightSection } from '../../domain/flight-section';
-import { sum } from 'ramda';
-import { Store } from '@ngrx/store';
-import { selectAllowObjectiveModification } from '../../state/flight-section-planning.selector';
-import { saveConfiguration, updateEmptyRacks, updateMaxSwaps } from '../../state/flight-section-planning.actions';
+import { Component, computed, inject, input, output } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { RouterLink } from '@angular/router';
+import { TranslocoModule } from '@jsverse/transloco';
+import { Store } from '@ngrx/store';
+import { sum } from 'ramda';
+import { FlightSection } from '../../domain/flight-section';
+import { saveConfiguration, updateEmptyRacks, updateMaxSwaps } from '../../state/flight-section-planning.actions';
+import { selectAllowObjectiveModification } from '../../state/flight-section-planning.selector';
+import { SwapConfiguratorComponent } from '../swap-configurator/swap-configurator.component';
 
 
 @Component({
-  selector: 'app-objective-configurator',
+  selector: 'app-confiuguration-update-controls',
   imports: [
     SwapConfiguratorComponent,
     MatSlideToggleModule,
     MatButtonModule,
     MatIcon,
-    RouterLink
+    RouterLink,
+    TranslocoModule,
   ],
-  templateUrl: './objective-configurator.component.html',
-  styleUrl: './objective-configurator.component.scss'
+  templateUrl: './confiuguration-update-controls.component.html',
+  styleUrl: './confiuguration-update-controls.component.scss'
 })
-export class ObjectiveConfiguratorComponent {
+export class ConfiugurationUpdateControlsComponent {
 
   store = inject(Store);
   allowModifications = this.store.selectSignal(selectAllowObjectiveModification);

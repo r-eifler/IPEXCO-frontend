@@ -40,8 +40,6 @@ export const flightSectionPlanningEffects = [
 
     StartExplanationEffect,
 
-    GoToConfigurationUpdateEffect,
-
     CancelAutomaticPlanningEffect,
     CancelPlanningEffect
 ]

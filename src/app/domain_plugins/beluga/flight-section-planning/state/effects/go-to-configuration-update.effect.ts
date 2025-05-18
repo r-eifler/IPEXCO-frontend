@@ -1,5 +1,5 @@
 import { inject, Injectable } from "@angular/core";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { concatLatestFrom } from "@ngrx/operators";
 import { Store } from "@ngrx/store";
@@ -15,6 +15,7 @@ export class GoToConfigurationUpdateEffect{
     private actions$ = inject(Actions);
     private store = inject(Store);
     private router = inject(Router);
+    private activatedRoute = inject(ActivatedRoute);
 
     public start$ = createEffect(() => this.actions$.pipe(
         ofType(updateConfiguration),
@@ -22,7 +23,8 @@ export class GoToConfigurationUpdateEffect{
         map(([_, project, section]) => {
             if(section !== undefined && project !== undefined){
                 if(section.status == PlanRunStatus.PENDING){
-                    this.router.navigate(["beluga/flight-section-planning/" + project._id + "/configuration-update/" + section._id])
+                    console.log('Activated route: ' + this.activatedRoute)
+                    this.router.navigate(["../configuration-update/" + section._id], {relativeTo: this.activatedRoute})
                 }
             }
         })
@@ -33,8 +35,9 @@ export class GoToConfigurationUpdateEffect{
         ofType(updateConfigurationOfSectionAndConfigIndex),
         concatLatestFrom(() => [this.store.select(selectProject)]),
         map(([{section, index}, project]) => {
-            if(project !== undefined){
-                this.router.navigate(["beluga/flight-section-planning/" + project._id + "/configuration-update/" + section._id])
+            if(project !== undefined && section.status == PlanRunStatus.PENDING){
+                console.log('Activated route: ' + this.activatedRoute)
+                this.router.navigate(["../configuration-update/" + section._id], {relativeTo: this.activatedRoute})
             }
         })
         

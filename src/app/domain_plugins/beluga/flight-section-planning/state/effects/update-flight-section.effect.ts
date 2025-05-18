@@ -35,7 +35,6 @@ export class UpdateFlightSectionEffect{
             }
             return this.service.addConfiguration$(section, configuration).pipe(
             switchMap(section => {
-                this.router.navigate(["/beluga/flight-section-planning/" + project._id + "/configuration-explanations/" + section._id + "/" + section.configurationIndex])
                 return [updateFlightSectionSuccess({section}), loadFlightSections({treeId: section.treeId})] 
             }),
             catchError((e) => of(updateFlightSectionFailure({err: e})))
