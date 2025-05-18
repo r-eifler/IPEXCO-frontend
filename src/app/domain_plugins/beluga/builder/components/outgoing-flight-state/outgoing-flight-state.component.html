@@ -5,19 +5,21 @@
     </mat-card-header>
     <mat-card-content
         class="content"
-        cdkDropList  
+        cdkDropList
         (cdkDropListDropped)="drop($event)"
         [class.dragTarget]="(isDragTarget$ | async) && (dragInProgress$ | async)"
         [class.noDragTarget]="!(isDragTarget$ | async) && (dragInProgress$ | async)"
     >
         @if(!flightIsEmpty()){
-            @for(e of outgoingJigsStatusSchedule(); track e; let idx = $index){ 
+            @for(e of outgoingJigsStatusSchedule(); track e; let idx = $index){
                 <app-jig-type-status-outgoing
                     [index]="idx"
                     [jig]="e.jig"
                     [jigType]="e.type"
                     [status]="e.status"
                     [flight]="currentFlight()"
+                    [isSkipPossible]="skipPossible()"
+                    (skip)="onSkip()"
                 ></app-jig-type-status-outgoing>
             }
         }
@@ -28,15 +30,5 @@
             </app-info>
         }
     </mat-card-content>
-    <mat-card-actions class="actions">
-        <button mat-button (click)="onSkip()" [disabled]="!skipPossible()">
-            {{t('b.skip')}}
-            <mat-icon>step_over</mat-icon>
-        </button>
-        <!-- <button mat-flat-button (click)="onUnload()" [disabled]="!loadAvailable()">
-            {{t('b.unload')}}
-            <mat-icon>arrow_forward</mat-icon>
-        </button> -->
-    </mat-card-actions>
 </mat-card>
 

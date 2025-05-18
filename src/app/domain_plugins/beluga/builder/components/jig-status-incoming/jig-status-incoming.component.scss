@@ -50,18 +50,3 @@
 .container:not(.next) {
   pointer-events: none;
 }
-
-.index {
-    font-weight: 500;
-    font-size: large;
-    // margin-right: var(--spacing-100);
-    margin-left: var(--spacing-100);
-}
-
-.error {
-    color: red;
-}
-
-.info {
-    color: gray;
-}
