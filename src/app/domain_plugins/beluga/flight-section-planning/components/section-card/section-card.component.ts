@@ -22,7 +22,7 @@ import { PlanMethod, PlanMethodType } from '../../domain/plan_method';
 import { PlanMethodTypeIconPipe } from '../../pipe/plan-method-type-icon.pipe';
 import { PlanMethodTypeNamePipe } from '../../pipe/plan-method-type-name.pipe';
 import { cancelPlanning, createNewBranch, registerManualPlanning, startAutomaticPlanning, startExplanations, updateConfiguration, updateConfigurationOfSectionAndConfigIndex, } from '../../state/flight-section-planning.actions';
-import { selectActiveBranchRemainingNumberFlights, selectIsAutomatic, selectIsManual, selectSupportedPlanners, selectTask } from '../../state/flight-section-planning.selector';
+import { selectActiveBranchRemainingNumberFlights, selectBranchNames, selectIsAutomatic, selectIsManual, selectSupportedPlanners, selectTask } from '../../state/flight-section-planning.selector';
 import { PlanInspectorComponent } from '../../views/plan-inspector/plan-inspector.component';
 import { BranchNameDialogComponent } from '../branch-name-dialog/branch-name-dialog.component';
 import { SectionPlanMethodDialogComponent } from '../section-plan-method-dialog/section-plan-method-dialog.component';
@@ -58,6 +58,7 @@ export class SectionCardComponent {
   router = inject(Router);
   activatedRoute = inject(ActivatedRoute)
 
+  existingBranchNames = this.store.selectSignal(selectBranchNames);
   isAutomatic = this.store.selectSignal(selectIsAutomatic);
   isManual = this.store.selectSignal(selectIsManual);
   supportedPlanners= this.store.selectSignal(selectSupportedPlanners);
@@ -103,7 +104,7 @@ export class SectionCardComponent {
   });
 
   onBranch(){
-    const dialogRef = this.dialog.open(BranchNameDialogComponent);
+    const dialogRef = this.dialog.open(BranchNameDialogComponent, {data: {existingBranchNames: this.existingBranchNames()}});
 
     dialogRef.afterClosed().pipe(take(1)).subscribe((result: {name: string}) => {
       if (result !== undefined) {

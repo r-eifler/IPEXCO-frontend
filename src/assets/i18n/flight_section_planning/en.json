@@ -34,11 +34,11 @@
     "num_optimized_flights": "number of considered flights",
     "start": "Start",
     "cancel": "Cancel",
-    "plan_version": "plan version",
-    "plan_versions": "plan versions",
-    "new": "new",
-    "name_new_plan_version": "Name of new plan version",
-    "name": "name",
+    "plan_version": "Plan Version",
+    "plan_versions": "Plan Versions",
+    "new": "New",
+    "name_new_plan_version": "Name of New Plan Version",
+    "name": "Name",
     "planning_method": "planning method",
     "metrics": "Metrics",
     "metric": "Metric",
@@ -53,5 +53,6 @@
     "back": "Back",
     "one_rack_empty": "Keep One Rack Empty",
     "planned": "Planned",
-    "plan_statistics": "Plan Statistics"
+    "plan_statistics": "Plan Statistics",
+    "plan_version_already_exists": "A plan version with this name already exists."
 }

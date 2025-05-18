@@ -53,5 +53,6 @@
     "back": "Zurück",
     "one_rack_empty": "Ein Rack leer lassen",
     "planned": "Geplant",
-    "plan_statistics": "Planstatistiken"
+    "plan_statistics": "Planstatistiken",
+    "plan_version_already_exists": "Eine Planversion mit diesem Namen existiert bereits."
 }
