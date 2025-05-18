@@ -10,7 +10,7 @@
       <div class="content">
         <div class="stats-main">
             <div class="stats-container">
-                <span>{{t('f.flight')}}</span>
+                <span>{{t('f.planned')}}</span>
                 <div class="stats"> 
                     <mat-icon>flight_land</mat-icon>
                     <span class="property-label">{{t('f.incoming')}}:</span>
@@ -25,15 +25,15 @@
             </div>
     
             <div class="stats-container">
-                <span>{{t('f.plan')}}</span>
+                <span>{{t('f.plan_statistics')}}</span>
                 <div class="stats"> 
-                    <mat-icon>euro</mat-icon>
+                    <mat-icon>arrow_range</mat-icon>
                     <span class="property-label">{{t('f.length')}}:</span>
                     <span class="property-value">{{ length() ?? '?'}}</span>
                     <mat-icon>swap_vert</mat-icon>
                     <span class="property-label">{{t('f.swaps')}}:</span>
                     <span class="property-value">{{ swaps() ?? '?' }}</span>
-                    <mat-icon>menu</mat-icon>
+                    <mat-icon>shelves</mat-icon>
                     <span class="property-label">{{t('f.rack_occupancy_rate')}}:</span>
                     <span class="property-value">{{ rackOccupancyRate() ?? '?' }}</span>
                 </div>
@@ -79,9 +79,15 @@
             }
             @if(isPending()){
                 @if(isAutomatic()){
-                    <button class="details" mat-button (click)="onUpdateConfiguration()">{{t('f.update_configurations')}}</button>
+                    <button class="details" mat-button (click)="onUpdateConfiguration()">{{t('f.new_configuration')}}</button>
                 }
-                <button class="details" mat-flat-button (click)="onCreatePlan()">{{t('f.generate_plan')}}</button>
+                @if(selectedConfigSolvable()){
+                    <button class="details" mat-flat-button (click)="onCreatePlan()">{{t('f.generate_plan')}}</button>
+                }
+                @else{
+                    <button class="details" mat-button (click)="onCreatePlan()">{{t('f.generate_plan')}}</button>
+                }
+                
 
             }
             @if(solved()){

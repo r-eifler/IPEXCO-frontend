@@ -125,6 +125,9 @@ export const selectActiveBranchRemainingNumberFlights = createSelector(selectAct
 export const selectBranches = createSelector(selectTree, 
     (tree) => (tree?.branches));
 
+export const selectBranchNames = createSelector(selectTree, 
+    (tree) => tree?.branches.map(b => b.name));
+
 export const selectBranchIndex = createSelector(selectTree, 
     (tree) => (tree?.selectedBranch));
 

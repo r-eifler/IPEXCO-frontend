@@ -35,11 +35,11 @@ export const routes: Routes = [
     path: 'beluga',
     loadChildren: () => import('./domain_plugins/beluga/beluga.routes').then(m => m.routes),
   },
-  {
-    path: '',
-    redirectTo: 'beluga',
-    pathMatch: 'full'
-  },
+  // {
+  //   path: '',
+  //   redirectTo: 'beluga',
+  //   pathMatch: 'full'
+  // },
   {
     path: '',
     component: NavigationComponent,

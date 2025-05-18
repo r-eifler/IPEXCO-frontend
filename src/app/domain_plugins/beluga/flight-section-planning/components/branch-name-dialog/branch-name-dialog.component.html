@@ -6,12 +6,15 @@
         <div class="main">
             <mat-form-field class="full-width" appearance="outline">
                 <mat-label>{{ t('f.name') }}</mat-label>
-                <input matInput [(ngModel)]="name">
+                <input matInput [formControl]="control">
+                @if(control.hasError('notUnique')){
+                    <mat-error>{{t('f.plan_version_already_exists')}}</mat-error>
+                }
             </mat-form-field>
         </div>
     </app-dialog-content>
     <app-dialog-footer>
         <button mat-button (click)="onCancel()">{{t('f.cancel')}}</button>
-        <button mat-flat-button (click)="onStart()" [disabled]="!nameSet()">{{t('f.new')}}</button>
+        <button mat-flat-button (click)="onStart()" [disabled]="!control.valid">{{t('f.new')}}</button>
     </app-dialog-footer>
 </app-dialog>
