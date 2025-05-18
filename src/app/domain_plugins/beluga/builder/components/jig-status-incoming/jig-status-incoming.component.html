@@ -1,16 +1,15 @@
-<div 
-    class="container" 
+<div
+    class="container"
     [class.next]="status().next"
     [class.skipped]="status()?.skip"
 >
-    @if(index() !== null){
-        <span class="index">{{ (index() ?? 0) + 1}}</span>
-    }
     <app-jig
         [jig]="jig()"
         [jigType]="jigType()"
         [unitSize]="true"
         [draggable]="status().next"
+        [isGhost]="status()?.unloaded"
+        [animate]="true"
         cdkDrag
         [cdkDragData]="jig()"
         (cdkDragStarted)="onStartDrag()"
@@ -18,10 +17,11 @@
         cdkDragBoundary=".beluga-boundary"
     >
     </app-jig>
-    @if (status()?.unloaded) {
-        <mat-icon>check</mat-icon>
-    }
-    @else{
-        <mat-icon>close</mat-icon>
-    }
+
+    <div class="button-container">
+      @if (status()?.next) {
+        <button mat-icon-button (click)="onSkip()" [disabled]="!isSkipPossible()"><mat-icon>step_over</mat-icon></button>
+        <button mat-flat-button class="primary" (click)="onUnload()" [disabled]="!isUnloadPossible()"><mat-icon>arrow_forward</mat-icon></button>
+      }
+    </div>
 </div>

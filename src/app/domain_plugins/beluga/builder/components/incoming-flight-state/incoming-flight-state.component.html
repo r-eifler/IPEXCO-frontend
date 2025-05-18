@@ -13,13 +13,17 @@
         (cdkDropListDropped)="drop($event)"
     >
         @if(!flightIsEmpty()){
-            @for(e of incomingJigsStatusSchedule(); track e.jig?.name; let idx = $index){ 
+            @for(e of incomingJigsStatusSchedule(); track e.jig?.name; let idx = $index){
                 <app-jig-status-incoming
                     [index]="idx"
                     [jig]="e.jig"
                     [jigType]="jigTypes()?.[e.jig?.type]"
                     [status]="e.status"
                     [flight]="currentFlight()"
+                    [isSkipPossible]="skipPossible()"
+                    [isUnloadPossible]="unloadAvailable()"
+                    (skip)="onSkip()"
+                    (unload)="onUnload()"
                 ></app-jig-status-incoming>
             }
         }
@@ -30,15 +34,5 @@
             </app-info>
         }
     </mat-card-content>
-    <mat-card-actions class="actions">
-        <button mat-button (click)="onSkip()" [disabled]="!skipPossible()">
-            {{t('b.skip')}}
-            <mat-icon>step_over</mat-icon>
-        </button>
-        <button mat-flat-button (click)="onUnload()" [disabled]="!unloadAvailable()">
-            {{t('b.unload')}}
-            <mat-icon>arrow_forward</mat-icon>
-        </button>
-    </mat-card-actions>
 </mat-card>
 

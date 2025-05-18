@@ -1,6 +1,6 @@
 import { CdkDragDrop, CdkDropList } from '@angular/cdk/drag-drop';
 import { AsyncPipe } from '@angular/common';
-import { Component, computed, effect, inject } from '@angular/core';
+import { ApplicationRef, Component, computed, effect, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -30,7 +30,7 @@ import { InfoComponent } from 'src/app/shared/components/info/info/info.componen
   styleUrl: './incoming-flight-state.component.scss'
 })
 export class IncomingFlightStateComponent {
-
+  appRef = inject(ApplicationRef);
   store = inject(Store);
 
   jigTypes = this.store.selectSignal(selectJigTypes);
@@ -46,12 +46,12 @@ export class IncomingFlightStateComponent {
 
   flightIsEmpty = computed(() => this.incomingJigsStatusSchedule()?.length == 0)
 
-  unloadAvailable = computed(() => this.currentFlight() != null && 
-    (this.availableTrailers()?.length ?? 0) > 0 && 
+  unloadAvailable = computed(() => this.currentFlight() != null &&
+    (this.availableTrailers()?.length ?? 0) > 0 &&
     ! this.finished()
   );
 
-  skipPossible = computed(() => this.nextJig() !== null) 
+  skipPossible = computed(() => this.nextJig() !== null)
 
   constructor(){
     effect(() => console.log(this.incomingJigsStatusSchedule()))
@@ -78,11 +78,14 @@ export class IncomingFlightStateComponent {
         t: nextTrailer
       }
 
-      this.store.dispatch(createNewBelugaAction({action: unloadAction}));
+      document.startViewTransition(() => {
+        this.store.dispatch(createNewBelugaAction({action: unloadAction}));
+        this.appRef.tick();
+      });
     }
   }
 
-  
+
   drop(event: CdkDragDrop<Jig[]>){
       if (event.previousContainer === event.container) {
         this.store.dispatch(cancelDrag());

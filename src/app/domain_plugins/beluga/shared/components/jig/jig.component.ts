@@ -27,7 +27,16 @@ export class JigComponent {
   jigType = input.required<JigType>()
   incomingFlight = input<string | undefined | null>(undefined)
 
+  isGhost = input(false);
   animate = input(false);
+
+  viewTransitionName = computed(() => {
+    if (!this.animate() || this.isGhost()) {
+      return 'none';
+    }
+
+    return `jig-container-${this.name()}`;
+  });
 
   sizeUnit = input<number>(15)
 
@@ -41,8 +50,8 @@ export class JigComponent {
   jigSize = computed(() => this.jigType()?.size_empty)
   partSize = computed(() => this.jigType()?.size_loaded)
 
-  jigDisplaySize = computed(() => (this.unitSize() ?? false) ? 55 : this.jigSize() * (this.sizeUnit() ?? 10))
-  partDisplaySize = computed(() => (this.unitSize() ?? false) ? 55 : this.partSize() * (this.sizeUnit() ?? 10))
+  jigDisplaySize = computed(() => (this.unitSize() ?? false) ? 75 : this.jigSize() * (this.sizeUnit() ?? 10))
+  partDisplaySize = computed(() => (this.unitSize() ?? false) ? 75 : this.partSize() * (this.sizeUnit() ?? 10))
 
   loaded = computed(() => this.jig() === null ? false : ! this.jig()?.empty)
 
