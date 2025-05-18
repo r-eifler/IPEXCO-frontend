@@ -38,5 +38,9 @@
     "finish_task": "Finish Task or Continue",
     "finish_task_text": "Are you sure you want to continue with the next step? There is still some time left.",
     "continue_next_step": "Continue with Next Step",
-    "continue_with_task": "Finish Task"
+    "continue_with_task": "Finish Task",
+    "limited_time": "Limited Time",
+    "time_info_part_one": "The time to work on this task is limited. You have",
+    "time_info_part_two": " min.",
+    "start": "Start"
 }

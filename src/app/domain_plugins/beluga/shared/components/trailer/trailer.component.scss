@@ -99,6 +99,7 @@
 .status {
   display: inline-grid;
   aspect-ratio: 1/1;
+  align-items: center;
 
   border-radius: var(--radius-full);
   padding: var(--spacing-050);

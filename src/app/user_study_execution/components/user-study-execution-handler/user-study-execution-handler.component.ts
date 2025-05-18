@@ -16,7 +16,7 @@ import { selectExecutionUserStudyContinueLocked, selectExecutionUserStudyFinishe
 import { FinishDemoInfoDialogComponent } from '../finish-demo-info-dialog/finish-demo-info-dialog.component';
 import { TimeOverDialogComponent } from '../time-over-dialog/time-over-dialog.component';
 import { TimerStartsDialogComponent } from '../timer-starts-dialog/timer-starts-dialog.component';
-import { translateSignal, TranslocoModule } from '@jsverse/transloco';
+import { provideTranslocoScope, TranslocoModule, TranslocoService } from '@jsverse/transloco';
 
 @Component({
     selector: 'app-user-study-execution-handler',
@@ -31,6 +31,8 @@ import { translateSignal, TranslocoModule } from '@jsverse/transloco';
     styleUrl: './user-study-execution-handler.component.scss'
 })
 export class UserStudyExecutionHandlerComponent {
+
+  transloco = inject(TranslocoService)
 
   store = inject(Store);
   dialog = inject(MatDialog);
@@ -149,10 +151,10 @@ export class UserStudyExecutionHandlerComponent {
   onCancel() {
     const dialogRef = this.dialog.open(AskDeleteComponent, {
       data: {
-        name: translateSignal('cancel_study'),
-        text: translateSignal('cancel_text'),
-        buttonAgree: translateSignal('cancel'),
-        buttonDisagree: translateSignal('continue_with_study'),
+        name: this.transloco.translate('use.cancel_study'),
+        text: this.transloco.translate('use.cancel_text'),
+        buttonAgree: this.transloco.translate('use.cancel'),
+        buttonDisagree: this.transloco.translate('use.continue_with_study'),
       },
     });
     dialogRef.afterClosed().subscribe(result => {
@@ -179,10 +181,10 @@ export class UserStudyExecutionHandlerComponent {
         if(step.type === UserStudyStepType.project){
           const dialogRef = this.dialog.open(AskDeleteComponent, {
             data: {
-              name: translateSignal('finish_task'),
-              text: translateSignal('finish_task_text'),
-              buttonDisagree:  translateSignal('continue_next_step'),
-              buttonAgree:  translateSignal('continue_with_task'),
+              name: this.transloco.translate('use.finish_task'),
+              text: this.transloco.translate('use.finish_task_text'),
+              buttonDisagree:  this.transloco.translate('use.continue_next_step'),
+              buttonAgree:  this.transloco.translate('use.continue_with_task'),
             },
           })
           dialogRef.afterClosed().pipe(take(1)).subscribe((stay) => {

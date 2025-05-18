@@ -3,21 +3,32 @@
     [class.container-running]="explanationRunning()"
     *transloco="let t">
     <div class="goals">             
-        <app-swap-configurator 
-            [value]="maxSwaps()" 
-            [disabled]="disabled()"
-        ></app-swap-configurator>
-        @if(swapConflictMembers()?.length > 0){
-            <mat-icon class="inConflict">warning</mat-icon>
-        }
-        <mat-slide-toggle 
-            [checked]="keepRackEmpty()" 
-            [disabled]="numEmptyRacks() == 0 || disabled()">
-                {{t('f.one_rack_empty')}}
-        </mat-slide-toggle>    
-        @if(rackEmptyConflict()){
-            <mat-icon class="inConflict">warning</mat-icon>
-        }     
+        <div class="goal">
+            <mat-icon>swap_vert</mat-icon>
+            <span class="label">{{t('f.max_allowed_swaps')}}:</span>
+            <span class="value">{{ maxSwaps() }}</span>
+            @if(swapConflictMembers()?.length > 0){
+                <div class="status error">
+                    <mat-icon [inline]="true">warning</mat-icon>
+                </div>
+            }
+        </div>
+
+        <div class="goal">
+            <mat-icon>shelves</mat-icon>
+            <span class="label">{{t('f.keep_rack_empty')}}:</span>
+            @if(numEmptyRacks() == 0){
+                <span class="value">{{t('f.yes')}}</span>
+            }
+            @else{
+                <span class="value">{{t('f.no')}}</span>
+            }          
+            @if(rackEmptyConflict()){
+                <div class="status error">
+                    <mat-icon [inline]="true">warning</mat-icon>
+                </div>
+            }
+        </div>     
     </div>
 
     @if(explanationRunning()){
@@ -29,17 +40,57 @@
             <mat-icon>chevron_left</mat-icon>
             {{t('f.back')}}
         </a>
-        @if(pending()){
-            <a mat-button 
-                [routerLink]="['../../../configuration-update/' + section()?._id]"
-                (click)="onUpdateConfiguration()" 
-                [disabled]="explanationRunning()">
-                {{t('f.update_configuration')}}
-            </a>
+        @if(sectionPending()){
+            @if(isSolvable()){
+                <a mat-flat-button 
+                    [routerLink]="['../../../flight-sections']"
+                    (click)="onUseConfiguration()" 
+                    [disabled]="explanationRunning()">
+                    {{t('f.use_configuration')}} 
+                </a>
+                <a mat-button 
+                    [routerLink]="['../../../configuration-update/' + section()?._id]"
+                    (click)="onUpdateConfiguration()" 
+                    [disabled]="explanationRunning()">
+                    {{t('f.explore_new_configuration')}}
+                </a>
+            }
+            @if(!isSolvable() && hasExplanation()){
+                <a mat-button 
+                    [routerLink]="['../../../flight-sections']"
+                    (click)="onUseConfiguration()" 
+                    [disabled]="explanationRunning()">
+                    {{t('f.use_configuration')}}
+                </a>
+                <a mat-flat-button 
+                    [routerLink]="['../../../configuration-update/' + section()?._id]"
+                    (click)="onUpdateConfiguration()" 
+                    [disabled]="explanationRunning()">
+                    {{t('f.explore_new_configuration')}}
+                </a>
+            }
+
+            @if(!hasExplanation()){
+                <a mat-button 
+                    [routerLink]="['../../../flight-sections']"
+                    (click)="onUseConfiguration()" 
+                    [disabled]="explanationRunning()">
+                    {{t('f.use_configuration')}}
+                </a>
+                <a mat-button 
+                    [routerLink]="['../../../configuration-update/' + section()?._id]"
+                    (click)="onUpdateConfiguration()" 
+                    [disabled]="explanationRunning()">
+                    {{t('f.explore_new_configuration')}}
+                </a>
+            }
+
             <button mat-flat-button (click)="onExplain()" [disabled]="hasExplanation() || explanationRunning()">
                 <mat-icon>contact_support</mat-icon>
                 {{t('f.solvable')}} ?
             </button>
+            
+            
         }
     </div>
 </div>

@@ -1,16 +1,16 @@
-<app-dialog>
+<app-dialog *transloco="let t">
     <app-dialog-header>
       <app-dialog-title>
         <div class="icon-title">
-          <mat-icon>timer</mat-icon> Limited Time!
+          <mat-icon>timer</mat-icon>{{t('use.limited_time')}}!
         </div> 
       </app-dialog-title>
         </app-dialog-header>
       <app-dialog-content>
-        The time to work on this task is limited. You have {{ (data.timeout )}} min.
+        {{t('use.time_info_part_one')}} {{ (data.timeout )}} {{t('use.time_info_part_two')}}
       </app-dialog-content>
       <app-dialog-footer>
-        <button mat-flat-button (click)="onContinue()">Start</button>
+        <button mat-flat-button (click)="onContinue()">{{t('use.start')}}</button>
       </app-dialog-footer>
 </app-dialog>
   

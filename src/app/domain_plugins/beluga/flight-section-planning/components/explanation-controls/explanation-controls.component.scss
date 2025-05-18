@@ -27,7 +27,7 @@
     width: 100%;
     display: flex;
     flex-direction: row;
-    gap: var(--spacing-300);
+    gap: var(--spacing-500);
     align-items: center;
     justify-content: start;
 }
@@ -38,4 +38,32 @@
 
 .progress{
     max-width: 100%;
+}
+
+.goal{
+    display: flex;
+    gap: var(--spacing-100);
+}
+
+.label{
+    font-size: larger;
+}
+
+.value{
+    font-weight: 500;
+    font-size: larger;
+}
+
+.status {
+  display: inline-grid;
+  aspect-ratio: 1/1;
+  align-items: center;
+
+  border-radius: var(--radius-full);
+  padding: var(--spacing-050);
+}
+
+.error{
+    @include vars.background-color(error);
+    @include vars.color(on-error);
 }

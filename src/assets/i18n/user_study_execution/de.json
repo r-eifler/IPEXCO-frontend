@@ -38,6 +38,9 @@
     "finish_task": "Aufgabe beenden oder fortsetzen",
     "finish_task_text": "Sind Sie sicher, dass Sie mit dem nächsten Schritt fortfahren wollen? Es ist noch etwas Zeit übrig",
     "continue_next_step": "Weiter mit nächstem Schritt",
-    "continue_with_task": "Aufgabe beenden"
-
+    "continue_with_task": "Aufgabe beenden",
+    "limited_time": "Begrenzte Zeit",
+    "time_info_part_one": " Die Zeit für die Bearbeitung dieser Aufgabe ist begrenzt. Sie haben ",
+    "time_info_part_two": " min.",
+    "start": "Starten"
 }

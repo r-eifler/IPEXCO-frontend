@@ -147,5 +147,15 @@ export class FlightPlanTreeService{
         map(data => FlightSectionZ.parse(data)),
       )
     }
+
+    changeUsedConfiguration$(section: FlightSection, index: number): Observable<FlightSection> {
+      let newSection: FlightSection = {
+        ...section,
+        configurationIndex: index,
+      }
+      return this.http.put<unknown>(this.BASE_URL + 'section/' + section._id, newSection).pipe(
+        map(data => FlightSectionZ.parse(data)),
+      )
+    }
     
 }

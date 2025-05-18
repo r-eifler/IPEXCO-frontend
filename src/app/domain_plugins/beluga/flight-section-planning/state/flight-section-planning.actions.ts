@@ -85,7 +85,7 @@ export const selectSection = createAction('[beluga-flight-section-planning] sele
 // configurations
 
 export const selectConfiguration= createAction('[beluga-flight-section-planning] select configuration', props<{index: number}>());
-
+export const useConfiguration= createAction('[beluga-flight-section-planning] use configuration', props<{index: number}>());
 
 // services
 export const loadServices = createAction('[beluga-flight-section-planning] load  services');

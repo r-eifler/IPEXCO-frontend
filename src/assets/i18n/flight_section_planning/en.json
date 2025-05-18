@@ -55,5 +55,11 @@
     "planned": "Planned",
     "plan_statistics": "Plan Statistics",
     "plan_version_already_exists": "A plan version with this name already exists.",
-    "save": "Save"
+    "save": "Save",
+    "max_allowed_swaps": "Maximal Allowed Swaps",
+    "keep_rack_empty": "Keep one Rack Empty",
+    "yes": "Yes",
+    "no": "No",
+    "use_configuration": "Use Configuration",
+    "explore_new_configuration": "Try Out a New Configuration"
 }

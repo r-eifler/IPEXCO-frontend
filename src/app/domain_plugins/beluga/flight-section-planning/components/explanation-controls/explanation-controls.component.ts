@@ -9,14 +9,12 @@ import { Store } from '@ngrx/store';
 import { sum } from 'ramda';
 import { ExplanationRunStatus } from 'src/app/iterative_planning/domain/explanation/explanations';
 import { PlanRunStatus } from 'src/app/iterative_planning/domain/plan';
-import { BelugaConfiguration, FlightSection } from '../../domain/flight-section';
-import { newConfiguration, startExplanations } from '../../state/flight-section-planning.actions';
-import { SwapConfiguratorComponent } from '../swap-configurator/swap-configurator.component';
+import { FlightSection } from '../../domain/flight-section';
+import { newConfiguration, selectConfiguration, startExplanations, useConfiguration } from '../../state/flight-section-planning.actions';
 
 @Component({
   selector: 'app-explanation-controls',
   imports: [
-    SwapConfiguratorComponent,
     MatSlideToggleModule,
     MatButtonModule,
     MatIcon,
@@ -33,7 +31,7 @@ export class ExplanationControlsComponent {
 
   section = input.required<FlightSection>();
   configIndex = input.required<number>();
-  config = computed(() => this.section()?.[this.configIndex()])
+  config = computed(() => this.section()?.configurations[this.configIndex()])
   disabled = input<boolean>(false);
 
   rackEmptyConflict = input<boolean>(false);
@@ -50,12 +48,14 @@ export class ExplanationControlsComponent {
   explanationRunning = computed(() => this.config()?.explanationStatus == ExplanationRunStatus.RUNNING)
   maxSwaps = computed(() => this.config()?.maxSwaps)
 
-  pending = computed(() => this.section()?.status == PlanRunStatus.PENDING)
+  sectionPending = computed(() => this.section()?.status == PlanRunStatus.PENDING)
 
   keepRackEmpty = computed(() => (this.config()?.minEmptyRacks ?? 0) >= 1)
 
+  isSolvable = computed(() => this.config()?.explanationStatus == ExplanationRunStatus.FINISHED && this.config()?.explanations?.MUGS.length == 0)
+
   constructor(){
-    effect(() => console.log(this.rackEmptyConflict()));
+    effect(() => console.log(this.config()));
   }
 
   onExplain(){
@@ -64,6 +64,10 @@ export class ExplanationControlsComponent {
 
   onUpdateConfiguration(){
     this.store.dispatch(newConfiguration())
+  }
+
+  onUseConfiguration(){
+    this.store.dispatch(useConfiguration({index: this.configIndex()}))
   }
 
 }
