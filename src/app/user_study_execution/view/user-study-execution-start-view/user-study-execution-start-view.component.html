@@ -38,6 +38,19 @@
     @if(userStudy){
     <app-page-section>
       <app-page-section-title>
+        {{t('use.user_code')}}
+      </app-page-section-title>
+      <app-page-section-content>
+          <mat-form-field appearance="outline">
+            <mat-label>{{t('use.code')}}</mat-label>
+            <input type="text" matInput [(ngModel)]="userCode" placeholder="XXXXXXXX">
+        </mat-form-field>
+      </app-page-section-content>
+    </app-page-section>
+    }
+    @if(userStudy){
+    <app-page-section>
+      <app-page-section-title>
         {{t('use.study_about')}}
       </app-page-section-title>
       <app-page-section-content>
@@ -58,7 +71,12 @@
     @if(userStudy){
     <app-page-section>
       <app-page-section-content>
-        <a mat-flat-button [routerLink]="['..', 'agreement']">{{t('use.lets_start')}}</a>
+        <a mat-flat-button 
+          [disabled]="!hasCode()"
+          (click)="storeCode()"
+          [routerLink]="['..', 'agreement']">
+          {{t('use.lets_start')}}
+        </a>
       </app-page-section-content>
     </app-page-section>
     }

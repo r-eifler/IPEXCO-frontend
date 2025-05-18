@@ -20,7 +20,7 @@
     "consent_info": "Ich habe die obigen Informationen gelesen und verstanden und bin mit der Teilnahme an dieser Studie einverstanden.",
     "accept": "Zustimmen",
     "welcome": "Herzlich willkommen!",
-    "thankyou_welcome": "Vielen Dank, dass Sie an unserer Studie teilgenommen haben.",
+    "thankyou_welcome": "Vielen Dank, dass Sie an unserer Studie teilnehmen.",
     "study_not_available": "Diese Nutzerstudie ist nicht mehr verfügbar.",
     "study_about": "Worum geht es in dieser Studie?",
     "time_info": "Die Benutzerstudie dauert etwa 30 Minuten. Es ist nicht möglich, eine Pause zu machen. Achten Sie daher darauf, dass Sie genügend Zeit haben und ungestört sind, um sich auf die Studie zu konzentrieren.",
@@ -29,6 +29,8 @@
     "choose_language" : "Bitte wählen Sie eine Sprache aus:",
     "german": "Deutsch",
     "english": "Enlisch",
-     "continue": "Weiter"
+     "continue": "Weiter",
+    "user_code": "Benutzer-Code",
+    "code": "Code"
 
 }

@@ -29,5 +29,7 @@
     "choose_language" : "Please select a language",
     "german": "German",
     "english": "English",
-    "continue": "Continue"
+    "continue": "Continue",
+    "user_code": "User Code",
+    "code": "Code"
 }
