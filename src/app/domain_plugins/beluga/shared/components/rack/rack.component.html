@@ -2,11 +2,12 @@
   class="container"
   [class.dragScale]="dragTarget()"
   [class.noDragTarget]="noDragTarget()"
-  [class.maintenance]="maintenance()"
   [style.width]="((size() * 15) + 2) + 'px'"
 >
   <div class="header">
-    <div class="info-container">
+    <div class="info-container"
+      [class.maintenance]="maintenance()"
+    >
         <mat-icon>shelves</mat-icon>
         <span>{{ name() }}</span>
     </div>
@@ -20,11 +21,13 @@
           }
           @if(inConflict()){
               <div class="status error">
-                <mat-icon [inline]="true">error</mat-icon>
+                <mat-icon [inline]="true">warning</mat-icon>
               </div>
           }
       </div>
-      <div class="capacity-container">
+      <div class="capacity-container"
+        [class.maintenance]="maintenance()"
+      >
         <mat-icon>fit_screen</mat-icon>
         <span>
           <span class="occupied">{{ occupied() }}</span>
@@ -34,7 +37,9 @@
     </div>
   </div>
 
-  <div>
+  <div
+    [class.maintenance]="maintenance()"
+  >
       <div
           class="rack"
           [class.dragTarget]="dragTarget()"

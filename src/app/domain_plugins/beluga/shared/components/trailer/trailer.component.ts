@@ -20,5 +20,4 @@ export class TrailerComponent {
   noDragTarget = input<boolean>(false);
 
   inConflict = input<boolean>(false);
-
 }

@@ -1,12 +1,25 @@
-<div class="container">
+<div
+  class="container"
+>
     <ng-content select="button"></ng-content>
     <div class="hangar-container">
-        <div class="info-container">
-            <span style="font-weight: 500;">{{ name() }}</span>
-            @if(maintenance()){
-                <mat-icon class="error">construction</mat-icon>
-            }
-        </div>
+      <div class="header">
+          <div class="info-container"
+            [class.maintenance]="maintenance()"
+          >
+              <mat-icon>warehouse</mat-icon>
+              <span>{{ name() }}</span>
+          </div>
+
+          <div class="status-container">
+              @if(maintenance()){
+                  <div class="status error">
+                    <mat-icon [inline]="true">construction</mat-icon>
+                  </div>
+              }
+          </div>
+      </div>
+
         <div class="hangar"
             [class.dragTarget]="dragTarget()"
             [class.noDragTarget]="noDragTarget()"
