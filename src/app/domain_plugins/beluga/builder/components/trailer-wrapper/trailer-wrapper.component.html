@@ -10,6 +10,7 @@
         <mat-icon>arrow_backward</mat-icon>
     </button>
     <app-drop-target
+        [centerContent]="true"
         cdkDropList
         [cdkDropListData]="[jig()]"
         (cdkDropListDropped)="drop($event)"
