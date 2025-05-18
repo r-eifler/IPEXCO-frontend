@@ -1,28 +1,23 @@
-<div  
+<div
     class="container"
-    [class.next]="status().next"    
+    [class.next]="status().next"
 >
-    @if(index() !== null){
-        <span class="index">{{ (index() ?? 0) + 1}}</span>
-    }
     <app-jig
         [class.skipped]="status()?.skip"
-        [jig]="jig()"  
+        [jig]="jig()"
         [jigType]="jigType()"
+        [isGhost]="!status()?.delivered"
+        [animate]="true"
         [incomingFlight]="incomingFlightJigMap()?.[jig().name] ?? null"
         [unitSize]="true"
         [draggable]="true"
         [showOnlyPart]="true"
     >
     </app-jig>
+
+    <div>
     @if (!status()?.onSite) {
         <mat-icon class="error">wrong_location</mat-icon>
     }
-    @if (status()?.delivered) {
-        <mat-icon>check</mat-icon>
-    }
-    @else{
-        <mat-icon>close</mat-icon>
-    }
-
-</div> 
+    </div>
+</div>

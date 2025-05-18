@@ -30,12 +30,20 @@ export class JigComponent {
   isGhost = input(false);
   animate = input(false);
 
-  viewTransitionName = computed(() => {
+  jigViewTransitionName = computed(() => {
     if (!this.animate() || this.isGhost()) {
       return 'none';
     }
 
     return `jig-container-${this.name()}`;
+  });
+
+  partViewTransitionName = computed(() => {
+    if (!this.animate() || this.isGhost()) {
+      return 'none';
+    }
+
+    return `part-container-${this.name()}`;
   });
 
   sizeUnit = input<number>(15)
