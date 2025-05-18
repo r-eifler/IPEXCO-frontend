@@ -10,8 +10,6 @@ import { MatIconModule } from '@angular/material/icon';
   styleUrl: './rack.component.scss'
 })
 export class RackComponent {
-
- 
   name = input.required<string>();
   occupied = input.required<number>();
   size = input.required<number>();

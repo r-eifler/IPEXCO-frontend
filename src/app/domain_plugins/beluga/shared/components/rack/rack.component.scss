@@ -10,12 +10,49 @@
     transition: scale 200ms;
 }
 
-.info-container {
-    display: flex;
-    flex-direction: row;
-    gap: var(--spacing-100);
-    align-items: flex-end;
+.header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
+
+.info-container {
+  padding: var(--spacing-100) var(--spacing-200);
+
+  width: fit-content;
+
+  display: inline-flex;
+  flex-direction: row;
+  gap: var(--spacing-100);
+  align-items: center;
+
+  background-color: var(--trailer);
+
+  border-top-left-radius: var(--radius-100);
+  border-top-right-radius: var(--radius-100);
+
+  @include vars.typography(label-large);
+}
+
+.capacity-container {
+  padding: var(--spacing-100) var(--spacing-200);
+
+  width: fit-content;
+
+  display: inline-flex;
+  flex-direction: row;
+  gap: var(--spacing-100);
+  align-items: center;
+
+  background-color: var(--trailer);
+
+  border-top-left-radius: var(--radius-100);
+  border-top-right-radius: var(--radius-100);
+
+  @include vars.typography(label-large);
+}
+
+
 
 .rack {
     display: flex;
@@ -30,6 +67,8 @@
     border-width: 1px;
     border-color: var(--rack);
     border-radius: var(--spacing-100);
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
 }
 
 .dragIcon {
@@ -53,7 +92,7 @@
 }
 
 .maintenance{
-    opacity: 30%;
+    opacity: 50%;
 }
 
 .error{
@@ -61,11 +100,40 @@
     color: red
 }
 
-.inConflict {
-    outline: solid;
-    outline-width: 3px;
-    outline-offset: -3px;
-    @include vars.color(on-error-container);
-    @include vars.background-color(error-container);
-    opacity: 80%;
+.status-container {
+    padding: var(--spacing-100);
+
+    align-self: flex-end;
+
+    width: fit-content;
+
+    display: inline-flex;
+    flex-direction: row;
+    gap: var(--spacing-100);
+    align-items: flex-end;
+}
+
+.header-end {
+    display: inline-flex;
+    flex-direction: row;
+    gap: var(--spacing-100);
+    align-items: flex-end;
+}
+
+.status {
+  display: inline-grid;
+  align-items: center;
+  aspect-ratio: 1/1;
+
+  border-radius: var(--radius-full);
+  padding: var(--spacing-050);
+}
+
+.occupied {
+  @include vars.typography(title-large);
+}
+
+.error{
+    @include vars.background-color(error);
+    @include vars.color(on-error);
 }

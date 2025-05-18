@@ -1,25 +1,49 @@
-<div class="container" [class.dragScale]="dragTarget()">
+<div
+  class="container"
+  [class.dragScale]="dragTarget()"
+  [class.noDragTarget]="noDragTarget()"
+  [class.maintenance]="maintenance()"
+  [style.width]="((size() * 15) + 2) + 'px'"
+>
+  <div class="header">
     <div class="info-container">
-        <span style="font-weight: 500;">{{ name() }}</span>
-        <span>{{ occupied() }}/{{ size() }}</span>
-        @if(maintenance()){
-            <mat-icon class="error">construction</mat-icon>
-        }
+        <mat-icon>shelves</mat-icon>
+        <span>{{ name() }}</span>
     </div>
-    <div>
-        <div
-            class="rack"
-            [class.maintenance]="maintenance()"
-            [class.dragTarget]="dragTarget()"
-            [class.noDragTarget]="noDragTarget()"
-            [style.width]="((size() * 15) + 2) + 'px'"
-            [class.inConflict]="inConflict()"
-        >
-          <ng-content select="app-jig,app-drop-target"></ng-content>
 
-          @if(dragTarget()) {
-            <mat-icon class="dragIcon">place_item</mat-icon>
+    <div class="header-end">
+      <div class="status-container">
+          @if(maintenance()){
+              <div class="status error">
+                <mat-icon [inline]="true">construction</mat-icon>
+              </div>
           }
-        </div>
+          @if(inConflict()){
+              <div class="status error">
+                <mat-icon [inline]="true">error</mat-icon>
+              </div>
+          }
+      </div>
+      <div class="capacity-container">
+        <mat-icon>fit_screen</mat-icon>
+        <span>
+          <span class="occupied">{{ occupied() }}</span>
+          <span>/{{ size() }}</span>
+        </span>
+      </div>
     </div>
+  </div>
+
+  <div>
+      <div
+          class="rack"
+          [class.dragTarget]="dragTarget()"
+      >
+        <ng-content select="app-jig,app-drop-target"></ng-content>
+
+        @if(dragTarget()) {
+          <mat-icon class="dragIcon">place_item</mat-icon>
+        }
+      </div>
+  </div>
 </div>
