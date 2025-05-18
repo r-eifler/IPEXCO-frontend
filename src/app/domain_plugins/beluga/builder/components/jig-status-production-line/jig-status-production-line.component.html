@@ -1,6 +1,7 @@
 <div
     class="container"
     [class.next]="status().next"
+   *transloco="let t"
 >
     <app-jig
         [class.skipped]="status()?.skip"
@@ -15,9 +16,17 @@
     >
     </app-jig>
 
-    <div>
+    <div class="button-container">
     @if (!status()?.onSite) {
         <mat-icon class="error">wrong_location</mat-icon>
+    }
+    @if (status()?.next) {
+      <button
+        mat-icon-button
+        (click)="onSkip()"
+        [disabled]="!isSkipPossible()"
+        [matTooltip]="t('b.skip')"
+      ><mat-icon>step_over</mat-icon></button>
     }
     </div>
 </div>

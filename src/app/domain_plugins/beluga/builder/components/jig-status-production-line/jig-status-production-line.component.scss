@@ -32,3 +32,12 @@
 .container:not(.next) {
   pointer-events: none;
 }
+
+.button-container {
+  display: flex;
+  flex-direction: row;
+  gap: var(--spacing-100);
+  justify-content: flex-end;
+
+  min-width: var(--sizing-1100);
+}
