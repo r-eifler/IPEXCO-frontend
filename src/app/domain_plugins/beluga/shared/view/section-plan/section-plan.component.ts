@@ -53,14 +53,17 @@ export class SectionPlanComponent {
 
 
   onActionSelected(index: number){
-    this.selectedActionIndex.set(index)
+    document.startViewTransition(() => {
+      this.selectedActionIndex.set(index);
+      this.appRef.tick();
+    });
   }
 
   onForward(){
     document.startViewTransition(() => {
       this.selectedActionIndex.update((current) =>  Math.min(this.actions()?.length, (current ?? 0) + 1));
       this.appRef.tick();
-    })
+    });
   }
 
   onBack(){

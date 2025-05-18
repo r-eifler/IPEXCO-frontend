@@ -19,3 +19,11 @@ body {
 .mat-mdc-tab-body-wrapper{
   flex-grow: 1;
 }
+
+::view-transition-group(*) {
+  animation-duration: 200ms;
+}
+
+::view-transition-group(root) {
+  animation-duration: 0s;
+}
