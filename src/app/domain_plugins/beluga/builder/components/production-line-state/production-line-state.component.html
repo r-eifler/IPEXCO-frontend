@@ -7,12 +7,14 @@
         class="content"
     >
         @if(!lineEmpty()){
-            @for(e of schedule(); track e.jig?.name; let idx = $index){ 
+            @for(e of schedule(); track e.jig?.name; let idx = $index){
                 <app-jig-status-production-line
                     [index]="idx"
                     [jig]="e.jig"
                     [jigType]="jigTypes()?.[e.jig?.type]"
                     [status]="e.status"
+                    [isSkipPossible]="skipPossible()"
+                    (skip)="onSkip()"
                 ></app-jig-status-production-line>
             }
         }
@@ -23,10 +25,4 @@
             </app-info>
         }
     </mat-card-content>
-    <mat-card-actions class="actions">
-        <button mat-button (click)="onSkip()" [disabled]="!skipPossible()">
-            {{t('b.skip')}}
-            <mat-icon>step_over</mat-icon>
-        </button>
-    </mat-card-actions>
 </mat-card>

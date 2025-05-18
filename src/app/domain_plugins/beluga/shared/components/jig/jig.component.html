@@ -3,10 +3,13 @@
     [ngClass]="{'hover': isHovering  && draggable()}"
     (mouseover)="onHover()" (mouseout)="onMouseOut()"
     cdkOverlayOrigin #trigger="cdkOverlayOrigin"
-    [style.view-transition-name]="viewTransitionName()"
 >
     @if(!showOnlyPart()){
-      <div class="jig-container" [style.width]="jigDisplaySize() + 'px'">
+      <div
+        class="jig-container"
+        [style.width]="jigDisplaySize() + 'px'"
+        [style.view-transition-name]="jigViewTransitionName()"
+      >
         <div
             class="jig"
             [ngClass]="{'hover': isHovering && draggable(), 'ghost': isGhost()}"
@@ -18,7 +21,11 @@
       </div>
     }
     @if(loaded() || showOnlyPart()){
-      <div class="part-container" [style.width]="partDisplaySize() + 'px'">
+      <div
+        class="part-container"
+        [style.width]="partDisplaySize() + 'px'"
+        [style.view-transition-name]="partViewTransitionName()"
+      >
         <div
             class="part"
             [ngClass]="{'hover': isHovering && draggable(), 'ghost': isGhost()}"
@@ -57,9 +64,6 @@
             </mat-list>
         </div>
     </ng-template>
-    @if(!draggable() && !unitSize()){
-        <mat-icon class="icon">lock</mat-icon>
-    }
 </div>
 
 

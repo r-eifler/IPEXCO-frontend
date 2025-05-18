@@ -11,6 +11,7 @@
         [cdkDropListData]="[jig()]"
         (cdkDropListDropped)="drop($event)"
         [cdkDropListEnterPredicate]="empty"
+        [centerContent]="true"
     >
         <app-jig
             *ngIf="jig() != null"
