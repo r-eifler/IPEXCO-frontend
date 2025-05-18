@@ -17,9 +17,11 @@
             <mat-icon>cancel</mat-icon>
             Cancel
         </a>
-        <button mat-flat-button (click)="onSave()">
+        <a mat-flat-button 
+            [routerLink]="['../../configuration-explanations/' + section()?._id + '/' +  (section()?.configurationIndex + 1)]"
+            (click)="onSave()">
             <mat-icon>save</mat-icon>
             Save
-        </button>
+        </a>
     </div>
 </div>

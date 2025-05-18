@@ -79,7 +79,11 @@
             }
             @if(isPending()){
                 @if(isAutomatic()){
-                    <button class="details" mat-button (click)="onUpdateConfiguration()">{{t('f.new_configuration')}}</button>
+                    <a class="details" mat-button 
+                        [routerLink]="['../configuration-update/' + section()?._id]"
+                        (click)="onUpdateConfiguration()">
+                        {{t('f.new_configuration')}}
+                    </a>
                 }
                 @if(selectedConfigSolvable()){
                     <button class="details" mat-flat-button (click)="onCreatePlan()">{{t('f.generate_plan')}}</button>

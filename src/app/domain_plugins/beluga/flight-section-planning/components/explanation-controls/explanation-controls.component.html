@@ -30,10 +30,12 @@
             {{t('f.back')}}
         </a>
         @if(pending()){
-            <button 
-                mat-button (click)="onUpdateConfiguration()" [disabled]="explanationRunning()">
+            <a mat-button 
+                [routerLink]="['../../../configuration-update/' + section()?._id]"
+                (click)="onUpdateConfiguration()" 
+                [disabled]="explanationRunning()">
                 {{t('f.update_configuration')}}
-            </button>
+            </a>
             <button mat-flat-button (click)="onExplain()" [disabled]="hasExplanation() || explanationRunning()">
                 <mat-icon>contact_support</mat-icon>
                 {{t('f.solvable')}} ?
