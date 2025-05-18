@@ -13,6 +13,12 @@
     transition: scale 200ms;
 }
 
+.header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
 .trailer-container {
     display: flex;
     flex-direction: column;
@@ -64,13 +70,7 @@
     flex-direction: row;
     gap: var(--spacing-100);
     align-items: flex-end;
-
-    background-color: var(--trailer);
-
-    border-bottom-left-radius: var(--radius-100);
-    border-bottom-right-radius: var(--radius-100);
 }
-
 
 .dragScale {
     scale: 1.02;

@@ -6,24 +6,13 @@
 >
     <ng-content  select="[id=bside]"></ng-content>
     <div class="trailer-container">
-        <div class="info-container">
-            <mat-icon>trolley</mat-icon>
-            <span>{{ name() }}</span>
-        </div>
-        <div
-            class="trailer"
-            [style.width]="size() + 'px' "
-            [class.dragTarget]="dragTarget()"
-             [class.inConflict]="inConflict()"
-        >
-            <ng-content select="app-jig,app-drop-target"></ng-content>
+      <div class="header">
 
-            @if(dragTarget()) {
-              <mat-icon class="dragIcon">place_item</mat-icon>
-            }
-        </div>
+          <div class="info-container">
+              <mat-icon>trolley</mat-icon>
+              <span>{{ name() }}</span>
+          </div>
 
-        @if(maintenance()){
           <div class="status-container">
               @if(maintenance()){
                   <div class="status error">
@@ -31,7 +20,20 @@
                   </div>
               }
           </div>
-        }
+      </div>
+
+      <div
+          class="trailer"
+          [style.width]="size() + 'px' "
+          [class.dragTarget]="dragTarget()"
+           [class.inConflict]="inConflict()"
+      >
+          <ng-content select="app-jig,app-drop-target"></ng-content>
+
+          @if(dragTarget()) {
+            <mat-icon class="dragIcon">place_item</mat-icon>
+          }
+      </div>
     </div>
     <ng-content select="[id=fside]"></ng-content>
 </div>
