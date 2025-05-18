@@ -48,7 +48,7 @@
     "configurations": "Konfigurationen",
     "update_configuration": "Konfiguration aktualisieren",
     "new_configuration": "Neue Konfiguration",
-    "solvability_status": "Solvability Status",
+    "solvability_status": "Lösbarkeits-Status",
     "solvable": "Lösbar",
     "back": "Zurück",
     "one_rack_empty": "Ein Rack leer lassen",

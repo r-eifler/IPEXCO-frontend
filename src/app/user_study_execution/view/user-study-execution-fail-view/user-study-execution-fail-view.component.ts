@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
+import { TranslocoModule } from '@jsverse/transloco';
 import { PageModule } from 'src/app/shared/components/page/page.module';
 
 @Component({
     selector: 'app-user-study-execution-fail-view',
     imports: [
-        PageModule
+        PageModule,
+        TranslocoModule,
     ],
     templateUrl: './user-study-execution-fail-view.component.html',
     styleUrl: './user-study-execution-fail-view.component.scss'

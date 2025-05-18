@@ -1,64 +1,61 @@
 @let submitted = submitted$ | async;
 @let isProlificStudy = isProlificStudy$ | async;
 
-<app-page>
+<app-page *transloco="let t">
   <app-page-title>
-    Finished!
+    {{t('use.finished')}}!
   </app-page-title>
   <app-page-content>
     <app-page-section-list>
       @if(!submitted){
       <app-page-section>
         <app-page-section-content>
-          Thank you for your participation!
+          {{t('use.thanks_participation')}}
         </app-page-section-content>
       </app-page-section>
       }
       @if(!submitted){
       <app-page-section>
         <app-page-section-title>
-          Submit
+          {{t('use.Submit')}}
         </app-page-section-title>
         <app-page-section-content>
           <p>
-            By clicking the submit button you agree irrevocable that your results can be used for the research purposes
-            stated in the initial consent form. It is no longer possible to  associated your data with you and
-            your browser.
+            {{t('use.submit_info')}}
           </p>
-          <button mat-flat-button (click)="onSubmit()"><mat-icon>send</mat-icon>Submit</button>
+          <button mat-flat-button (click)="onSubmit()"><mat-icon>send</mat-icon>{{t('use.Submit')}}</button>
         </app-page-section-content>
       </app-page-section>
       }
       @if(!submitted){
       <app-page-section>
         <app-page-section-title>
-          Cancel
+           {{t('use.cancel')}}
         </app-page-section-title>
         <app-page-section-content>
           <p>
-            In case you want to take back your consent, this is the last possibility. By clicking the cancel
-            button all data related to this run will be deleted.
+            {{t('use.cancel_info')}}
           </p>
-          <button mat-stroked-button (click)="onCancel()"><mat-icon>cancel</mat-icon>Cancel</button>
+          <button mat-stroked-button (click)="onCancel()"><mat-icon>cancel</mat-icon>{{t('use.cancel')}}</button>
         </app-page-section-content>
       </app-page-section>
       }
       @if(submitted){
         <app-page-section>
           <app-page-section-title>
-            Submitted <mat-icon>done_all</mat-icon>
+            {{t('use.submitted')}} <mat-icon>done_all</mat-icon>
           </app-page-section-title>
-          @if(isProlificStudy){
+          <!-- @if(isProlificStudy){
             <app-page-section-content>
               <p>Thank you for your participation. All your data was submitted. To return to Prolific please click the following button:</p>
               <a mat-flat-button [href]="redirectLink$ | async">Back to Prolific</a>
             </app-page-section-content>
           }
-          @else{
+          @else{ -->
             <app-page-section-content>
-              Thank you for your participation. All your data was submitted. You can now close the browser.
+              {{t('use.thankyou_end')}}
             </app-page-section-content>
-          }
+          <!-- } -->
         </app-page-section>
       }
     </app-page-section-list>

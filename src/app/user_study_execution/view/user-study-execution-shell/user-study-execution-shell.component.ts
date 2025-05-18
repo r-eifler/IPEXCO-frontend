@@ -7,6 +7,7 @@ import {MatButtonModule} from '@angular/material/button';
 import {UserStudyExecutionProgressComponent} from '../../components/user-study-execution-progress/user-study-execution-progress.component';
 import {UserStudyExecutionHandlerComponent} from '../../components/user-study-execution-handler/user-study-execution-handler.component';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { provideTranslocoScope, TranslocoModule } from '@jsverse/transloco';
 
 
 @Component({
@@ -18,7 +19,14 @@ import { MatSidenavModule } from '@angular/material/sidenav';
         MatIconModule,
         UserStudyExecutionProgressComponent,
         UserStudyExecutionHandlerComponent,
-        MatSidenavModule
+        MatSidenavModule,
+        TranslocoModule,
+    ],
+    providers: [
+      provideTranslocoScope({
+        scope: "user_study_execution",
+        alias: "use",
+      }),
     ],
     templateUrl: './user-study-execution-shell.component.html',
     styleUrl: './user-study-execution-shell.component.scss'

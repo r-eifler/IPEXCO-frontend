@@ -84,15 +84,20 @@
                         (click)="onUpdateConfiguration()">
                         {{t('f.new_configuration')}}
                     </a>
-                }
-                @if(selectedConfigSolvable()){
+                    @if(selectedConfigSolvable()){
                     <button class="details" mat-flat-button (click)="onCreatePlan()">{{t('f.generate_plan')}}</button>
+                    }
+                    @else{
+                        <button class="details" mat-button (click)="onCreatePlan()">{{t('f.generate_plan')}}</button>
+                    }
                 }
-                @else{
-                    <button class="details" mat-button (click)="onCreatePlan()">{{t('f.generate_plan')}}</button>
+                @if(isManual()){
+                    <a class="details" mat-flat-button 
+                    [routerLink]="['../planning/manual/section/' +  section()?._id]"
+                    (click)="onCreatePlan()">
+                        {{t('f.generate_plan')}}
+                    </a>
                 }
-                
-
             }
             @if(solved()){
                 @if(isAutomatic()){

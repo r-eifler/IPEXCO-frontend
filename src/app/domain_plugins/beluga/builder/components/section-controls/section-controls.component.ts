@@ -8,6 +8,7 @@ import { AsyncPipe } from '@angular/common';
 import { cancelManualPlanning, finishManualPlanning } from '../../state/builder.actions';
 import { UndoStackService } from 'src/app/shared/state/undo/undo-stack.service';
 import { undoLastAction } from 'src/app/shared/state/undo/undo-stack.effect';
+import { RouterLink, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-section-controls',
@@ -16,6 +17,7 @@ import { undoLastAction } from 'src/app/shared/state/undo/undo-stack.effect';
     MatIconModule,
     TranslocoModule,
     AsyncPipe,
+    RouterModule,
   ],
   templateUrl: './section-controls.component.html',
   styleUrl: './section-controls.component.scss'

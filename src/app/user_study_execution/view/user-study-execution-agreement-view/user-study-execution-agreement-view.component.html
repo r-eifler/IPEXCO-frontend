@@ -1,15 +1,15 @@
 @let userStudy = userStudy$ | async;
 @let prolificId = prolificId$ | async;
 
-<app-page>
+<app-page *transloco="let t">
   <app-page-title>
-    Informed Consent
+    {{t('use.informed_consent')}}
   </app-page-title>
   <app-page-content>
     <app-page-section-list>
         <app-page-section>
           <app-page-section-title>
-            Related Project
+            {{t('use.related_project')}}
           </app-page-section-title>
           <app-page-section-content>
             <div [innerHTML]="userStudy?.relatedProject | marked"></div>
@@ -17,7 +17,7 @@
         </app-page-section>
         <app-page-section>
           <app-page-section-title>
-            Expectations
+            {{t('use.expectations')}}
           </app-page-section-title>
           <app-page-section-content>
             <div [innerHTML]="userStudy?.expectation | marked"></div>
@@ -25,7 +25,7 @@
         </app-page-section>
         <app-page-section>
           <app-page-section-title>
-            Withdraw & Confidentiality
+            {{t('use.withdraw')}}
           </app-page-section-title>
           <app-page-section-content>
             <div [innerHTML]="userStudy?.confidentiality | marked"></div>
@@ -33,17 +33,17 @@
         </app-page-section>
         <app-page-section>
           <app-page-section-title>
-            Consent
+            {{t('use.consent')}}
           </app-page-section-title>
           <app-page-section-content>
             <div class="consent-box">
               
               <app-info>
                 <mat-icon>handshake</mat-icon>
-                <span class="highlight">I have read and understood the information above and I freely agree to participate in this research study.</span>
+                <span class="highlight">{{t('use.consent_info')}}</span>
               </app-info>
               <div>
-                <button mat-flat-button (click)="onAccept(userStudy?._id, prolificId)">Accept</button>
+                <button mat-flat-button (click)="onAccept(userStudy?._id, prolificId)">{{t('use.accept')}}</button>
               </div>
             </div>
           </app-page-section-content>

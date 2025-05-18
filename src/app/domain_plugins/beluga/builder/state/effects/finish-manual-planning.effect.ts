@@ -3,9 +3,8 @@ import { Router } from "@angular/router";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { concatLatestFrom } from "@ngrx/operators";
 import { Store } from "@ngrx/store";
-import { switchMap, tap } from "rxjs";
+import { switchMap } from "rxjs";
 import { PlanRunStatus } from "src/app/iterative_planning/domain/plan";
-import { BelugaActionType, SwitchBeluga } from "../../../shared/domain/beluga_plan";
 import { finishManualPlanning, finishManualPlanningFailure, updateFlightSection } from "../builder.actions";
 import { selectProject, selectSection } from "../builder.selector";
 

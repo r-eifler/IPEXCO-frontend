@@ -1,10 +1,9 @@
-<app-page>
+<app-page *transloco="let t">
     <app-page-title>
-      Sorry an error occurred!
+      {{t('use.error_occurred')}}
     </app-page-title>
     <app-page-content>
-      Thank your for your participation. 
-      Please do <span style="font-weight: 700;">not</span> restart the user study.
+      {{t('use.thankyou_fail')}}
     </app-page-content>
 </app-page>
   
