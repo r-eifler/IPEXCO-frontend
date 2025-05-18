@@ -2,5 +2,6 @@
     display: flex;
     flex-direction: row;
     gap: var(--spacing-200);
-    // overflow: scroll;
+    overflow: auto;
+    padding-block: var(--spacing-200);
 }

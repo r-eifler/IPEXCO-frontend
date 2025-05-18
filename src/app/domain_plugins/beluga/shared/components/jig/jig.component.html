@@ -3,6 +3,7 @@
     [ngClass]="{'hover': isHovering  && draggable()}"
     (mouseover)="onHover()" (mouseout)="onMouseOut()"
     cdkOverlayOrigin #trigger="cdkOverlayOrigin"
+    [style.view-transition-name]="animate() ? 'jig-container-' + name() : 'none'"
 >
     @if(!showOnlyPart()){
       <div class="jig-container" [style.width]="jigDisplaySize() + 'px'">

@@ -1,4 +1,4 @@
-import { Component, computed, input, signal, WritableSignal } from '@angular/core';
+import { ApplicationRef, Component, computed, inject, input, signal, WritableSignal } from '@angular/core';
 import { FlightSection, getFlightSchedule, getFullStartState, getProductionSchedule } from '../../../flight-section-planning/domain/flight-section';
 import { PlanActionListComponent } from '../../components/plan-action-list/plan-action-list.component';
 import { StateCardComponent } from '../../components/state-card/state-card.component';
@@ -23,6 +23,7 @@ import { MatButtonModule } from '@angular/material/button';
   styleUrl: './section-plan.component.scss'
 })
 export class SectionPlanComponent {
+  appRef = inject(ApplicationRef);
 
   section = input.required<FlightSection>();
   configuration = computed(() => this.section()?.configurations[this.section()?.configurationIndex])
@@ -41,8 +42,8 @@ export class SectionPlanComponent {
     const actions = allActions.slice(0, endIndex);
 
     const resState = applyActions(
-      startState, 
-      actions, 
+      startState,
+      actions,
       getFlightSchedule(this.configuration().flightTargetSchedule, false),
       getProductionSchedule(this.configuration().productionLinesTargetSchedule, false),
       this.configuration().siteSetUp
@@ -56,11 +57,17 @@ export class SectionPlanComponent {
   }
 
   onForward(){
-    this.selectedActionIndex.update((current) =>  Math.min(this.actions()?.length, (current ?? 0) + 1))
+    document.startViewTransition(() => {
+      this.selectedActionIndex.update((current) =>  Math.min(this.actions()?.length, (current ?? 0) + 1));
+      this.appRef.tick();
+    })
   }
-  
+
   onBack(){
-    this.selectedActionIndex.update((current) =>  Math.max(0, (current ?? 0) - 1))
+    document.startViewTransition(() => {
+      this.selectedActionIndex.update((current) =>  Math.max(0, (current ?? 0) - 1))
+      this.appRef.tick();
+    });
   }
 
 }

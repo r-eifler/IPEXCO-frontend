@@ -9,13 +9,11 @@
             Back
         </a>
     </div>
-    <div class="plan">
-        <app-plan-action-list
-            [actions]="actions()"
-            [selectedAction] = "selectedActionIndex()"
-            (actionSelected)="onActionSelected($event)"
-        ></app-plan-action-list>
-    </div>
+    <app-plan-action-list
+        [actions]="actions()"
+        [selectedAction] = "selectedActionIndex()"
+        (actionSelected)="onActionSelected($event)"
+    ></app-plan-action-list>
     <div class="state">
         <app-state-card
             [state]="selectedState()"
