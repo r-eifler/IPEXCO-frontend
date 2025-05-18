@@ -19,6 +19,7 @@ export class JigStatusComponent {
     index = input<null | number>(null);
     jig = input.required<Jig>();
     jigType = input.required<JigType>();
+    animate = input(false);
     // status = input.required<{
     //   skip: boolean,
     //   unloaded: boolean,

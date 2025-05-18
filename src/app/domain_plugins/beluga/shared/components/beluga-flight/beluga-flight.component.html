@@ -10,10 +10,11 @@
     </mat-card-header>
     <mat-card-content class="content">
         @for(jig of jigs(); track jig; let idx = $index){
-            <app-jig-status 
+            <app-jig-status
                 [index]="idx"
-                [jig]="jig"  
+                [jig]="jig"
                 [jigType]="jigTypes()?.[jig?.type]"
+                [animate]="true"
             >
             </app-jig-status>
         }
@@ -36,7 +37,7 @@
                     No jigs loaded yet.
                 </app-info>
             }
-            
+
         }
     </mat-card-content>
 </mat-card>
