@@ -39,7 +39,7 @@
         <div class="utility">
           <mat-icon>connecting_airports</mat-icon>
           <div class="utility-value-container">
-            <span class="value">{{ numFinishedFlights() + '/' + numFlights() }}</span>
+            <span class="value">{{ (numFinishedFlights() ?? '?') + '/' + numFlights() }}</span>
             <span class="label">{{t('f.flights')}}</span>
           </div>
         </div>
