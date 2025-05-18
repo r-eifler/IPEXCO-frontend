@@ -55,6 +55,8 @@
 
 
 .rack {
+    position: relative;
+
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -73,6 +75,9 @@
 .dragIcon {
   position: absolute;
   @include vars.color(outline);
+  left: 50%;
+  top: 50%;
+  translate: -50% -50%;
 }
 
 .dragTarget{
