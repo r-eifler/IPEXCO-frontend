@@ -3,6 +3,7 @@ import { UserStudy, UserStudyBase } from "../domain/user-study";
 import {UserStudyExecution} from '../domain/user-study-execution';
 import { ParticipantDistribution, ParticipantDistributionBase } from "../domain/participant-distribution";
 import { Demo } from "src/app/shared/domain/demo";
+import { Project } from "src/app/shared/domain/project";
 
 // User Studies
 
@@ -41,6 +42,12 @@ export const acceptUserStudyParticipantFailure = createAction('[UserStudy] accep
 export const loadUserStudyDemos = createAction('[UserStudy] load user study demos');
 export const loadUserStudyDemosSuccess = createAction('[UserStudy] load user study demos success', props<{demos: Demo[]}>());
 export const loadUserStudyDemosFailure = createAction('[UserStudy] load user study demos failure',  props<{err: any}>());
+
+// Demos
+
+export const loadUserStudyProjects = createAction('[UserStudy] load user study projects');
+export const loadUserStudyProjectsSuccess = createAction('[UserStudy] load user study projects success', props<{projects: Project[]}>());
+export const loadUserStudyProjectsFailure = createAction('[UserStudy] load user study projects failure',  props<{err: any}>());
 
 
 // User Studies Participant Distribution

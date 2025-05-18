@@ -4,6 +4,7 @@ import { CreateUserStudyEffect } from "./create-user-study.effect";
 import { EditUserStudyParticipantDistributionEffect } from "./edit-user-study-participant-distribution.effect ";
 import { EditUserStudyEffect } from "./edit-user-study.effect";
 import { LoadUserStudyDemosEffect } from "./load-demos.effect";
+import { LoadUserStudyProjectsEffect } from "./load-projects.effect";
 import { LoadUserStudiesEffect } from "./load-user-studies.effect";
 import { LoadUserStudyDistributionEffect } from "./load-user-study-participant-distribution.effect";
 import { LoadUserStudyDistributionsEffect } from "./load-user-study-participant-distributions.effect";
@@ -17,6 +18,7 @@ export const userStudyFeatureEffects = [
     EditUserStudyParticipantDistributionEffect,
     EditUserStudyEffect,
     LoadUserStudyDemosEffect,
+    LoadUserStudyProjectsEffect,
     LoadUserStudiesEffect,
     LoadUserStudyDistributionEffect,
     LoadUserStudyDistributionsEffect,

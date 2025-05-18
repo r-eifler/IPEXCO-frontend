@@ -18,8 +18,8 @@ import {PageModule} from '../../../shared/components/page/page.module';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {BreadcrumbModule} from '../../../shared/components/breadcrumb/breadcrumb.module';
 import {Store} from '@ngrx/store';
-import {selectUserStudyDemos} from '../../state/user-study.selector';
-import {createUserStudy, loadUserStudyDemos} from '../../state/user-study.actions';
+import {selectUserStudyDemos, selectUserStudyProjects} from '../../state/user-study.selector';
+import {createUserStudy, loadUserStudyDemos, loadUserStudyProjects} from '../../state/user-study.actions';
 import {AsyncPipe} from '@angular/common';
 import {DescriptionCardComponent} from '../../components/description-card/description-card.component';
 import {DemoCardComponent} from '../../components/demo-card/demo-card.component';
@@ -28,6 +28,8 @@ import {selectedAtLeastOne} from '../../../validators/selected-at-least-one.vali
 import {isNoPropertyNull} from '../../../validators/no-property-null.validator';
 import { UserManualCardComponent } from '../../components/user-manual-card/user-manual-card.component';
 import { DemoInfoCardComponent } from '../../components/demo-info-card/demo-info-card.component';
+import { ProjectCardComponent } from '../../components/project-card/project-card.component';
+
 
 
 @Component({
@@ -50,6 +52,7 @@ import { DemoInfoCardComponent } from '../../components/demo-info-card/demo-info
         AsyncPipe,
         DescriptionCardComponent,
         DemoCardComponent,
+        ProjectCardComponent,
         FormCardComponent,
         UserManualCardComponent,
         DemoInfoCardComponent,
@@ -66,6 +69,7 @@ export class UserStudyCreatorComponent {
   route = inject(ActivatedRoute);
 
   demos$ = this.store.select(selectUserStudyDemos)
+  projects$ = this.store.select(selectUserStudyProjects)
 
   form = this.fb.group({
     name: this.fb.control<string | null>(null, [Validators.required]),
@@ -85,6 +89,7 @@ export class UserStudyCreatorComponent {
 
   constructor() {
     this.store.dispatch(loadUserStudyDemos());
+    this.store.dispatch(loadUserStudyProjects());
   }
 
   addNewStep(type: UserStudyStepType) {

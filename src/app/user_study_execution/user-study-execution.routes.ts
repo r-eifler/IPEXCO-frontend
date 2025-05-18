@@ -109,6 +109,10 @@ export const routes: Routes = [
                 path: 'iterative-planning',
                 loadChildren: () => import('../iterative_planning/iterative-planning.routes').then(m => m.routes),
               },
+              {
+                path: 'beluga-planning',
+                loadChildren: () => import('../domain_plugins/beluga/flight-section-planning/flight-section-planning.routes').then(m => m.routes),
+              },
             ]
           },
           {

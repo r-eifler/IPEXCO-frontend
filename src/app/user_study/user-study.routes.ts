@@ -18,6 +18,7 @@ import { UserStudyParticipantDistributionService } from './service/user-study-pa
 import { UserStudyDemoService } from './service/user-study-demo.service';
 import { UserStudyExecutionEvalService } from './service/user-study-execution-eval.service';
 import { UserStudyService } from './service/user-study.service';
+import { UserStudyProjectService } from './service/user-study-project.service';
 
 
 
@@ -33,7 +34,8 @@ export const routes: Routes = [
       UserStudyDemoService,
       UserStudyExecutionEvalService,
       UserStudyParticipantDistributionService,
-      UserStudyService
+      UserStudyService,
+      UserStudyProjectService
     ],
     children: [
       {
