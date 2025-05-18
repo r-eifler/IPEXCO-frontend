@@ -1,4 +1,4 @@
-import { Component, computed, effect, input, output, Signal } from '@angular/core';
+import { Component, computed, effect, ElementRef, input, output, Signal, viewChild } from '@angular/core';
 import { BelugaAction, BelugaActionType, JigActionZ, PickUpRackZ, PutDownRackZ, RackActionZ, SideActionZ } from '../../domain/beluga_plan';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -20,6 +20,7 @@ import { animate, style, transition, trigger } from '@angular/animations';
   ],
 })
 export class ActionCardComponent {
+  root = viewChild.required<ElementRef<HTMLDivElement>>('root');
 
   action = input.required<BelugaAction>();
   highlight = input.required<boolean>();
@@ -29,6 +30,18 @@ export class ActionCardComponent {
   selected = output<void>();
 
   selfHighlight = false;
+
+  constructor() {
+    effect(() => {
+      const isSelected = this.select();
+
+      if (!isSelected || !this.root()) {
+        return;
+      }
+
+      this.root().nativeElement.scrollIntoView({behavior: 'smooth', block: "end", inline: "nearest"});
+    })
+  }
 
   jigName  = computed(() => {
     const action = this.action();

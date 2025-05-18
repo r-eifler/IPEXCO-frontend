@@ -28,7 +28,7 @@ export class PlanActionListComponent {
 
   selectedJigs = input<string[]>([]);
   selectedAction = input.required<number | null>();
-  
+
 
   actionSelected = output<number>();
 
@@ -56,7 +56,7 @@ export class PlanActionListComponent {
         action,
         highlight,
         selected: this.selectedAction() === index,
-        trackId: index.toString() + highlight.toString()
+        trackId: index.toString(),
       }
     });
 

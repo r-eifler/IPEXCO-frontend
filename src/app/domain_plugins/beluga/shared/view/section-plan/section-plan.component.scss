@@ -9,14 +9,8 @@
 
 
 .plan {
-    padding: var(--spacing-200);
-    border: solid;
-    border-width: 1px;
-    @include vars.border_color();
-    border-radius: var(--spacing-200);
-
-     width: 100%;
-     overflow-x: scroll;
+  padding-block: var(--spacing-200);
+  overflow-x: scroll;
 }
 
 .controls {
