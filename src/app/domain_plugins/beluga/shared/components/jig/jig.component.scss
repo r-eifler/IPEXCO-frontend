@@ -8,6 +8,8 @@
     align-items: center;
     justify-items: center;
     position: relative;
+
+    cursor: not-allowed;
 }
 
 .jig-container {
@@ -32,6 +34,11 @@
     display: flex;
     justify-content: space-around;
     align-items: center;
+
+    &.ghost {
+      @include vars.background-color(surface-container-high);
+      @include vars.color(outline);
+    }
 }
 
 .hover {
@@ -72,6 +79,11 @@
     justify-content: center;
     gap: var(--spacing-050);
     align-items: center;
+
+    &.ghost {
+      @include vars.background-color(surface-container);
+      @include vars.color(outline);
+    }
 }
 
 .icon{

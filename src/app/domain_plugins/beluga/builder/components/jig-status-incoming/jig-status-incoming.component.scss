@@ -1,41 +1,52 @@
-@use "../../../../../../variables.scss" as vars;
+@use "@angular/material" as mat;
 
-.skipped {
-    opacity: 50%;
-}
+@use "../../../../../../variables" as vars;
+@use "../../../../../../ipexco-theme" as ipexco-theme;
 
 .container{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    justify-content: space-between;
     gap: var(--spacing-200);
     align-items: center;
 
     padding: var(--spacing-100);
-    border: solid;
-    border-width: 1px;
-    @include vars.border_color();
-    border-radius: var(--spacing-200);
-}
+    border-radius: var(--radius-100);
 
-.next{
+    @include vars.background-color(surface-container-low);
+
     outline: solid;
     outline-width: 3px;
     outline-offset: -3px;
-    @include vars.border_color();
+    outline-color: transparent;
+
+    transition: outline-color 100ms;
 }
 
-.index {
-    font-weight: 500;
-    font-size: large;
-    // margin-right: var(--spacing-100);
-    margin-left: var(--spacing-100);
+.button-container {
+  display: flex;
+  flex-direction: row;
+  gap: var(--spacing-100);
+  justify-content: flex-end;
+
+  min-width: var(--sizing-1100);
 }
 
-.error {
-    color: red;
+.primary {
+  padding: 10px;
+  min-width: 0px;
+
+  &>mat-icon {
+    margin-inline: 0px;
+  }
 }
 
-.info {
-    color: gray;
+.next{
+    outline-color: #{mat.get-theme-color(ipexco-theme.$light-theme, outline-variant)};;
+
+    @include vars.background-color(surface-container);
+}
+
+.container:not(.next) {
+  pointer-events: none;
 }

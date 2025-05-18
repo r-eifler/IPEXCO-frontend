@@ -1,6 +1,6 @@
 import { CdkDrag, CdkDragDrop, CdkDragEnd, CdkDropList } from '@angular/cdk/drag-drop';
 import { AsyncPipe, NgIf } from '@angular/common';
-import { Component, computed, inject, input } from '@angular/core';
+import { ApplicationRef, Component, computed, inject, input } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { Store } from '@ngrx/store';
@@ -33,7 +33,7 @@ import { DropTargetComponent } from '../drop-target/drop-target.component';
   styleUrl: './trailer-wrapper.component.scss'
 })
 export class TrailerWrapperComponent {
-
+  appRef = inject(ApplicationRef);
   store = inject(Store);
 
   trailer = input.required<Trailer>();
@@ -85,7 +85,7 @@ export class TrailerWrapperComponent {
     }
 
     let action: BelugaAction | undefined = undefined;
-  
+
     if(source?.stageType == 'flight'){
 
       action = {
@@ -143,10 +143,11 @@ export class TrailerWrapperComponent {
         h: availableHangars[0].name,
         pl: deliverableJigs[this.jig().name]
       };
-  
-      console.log(action);
-  
-      this.store.dispatch(createNewBelugaAction({action}));
+
+      document.startViewTransition(() => {
+        this.store.dispatch(createNewBelugaAction({action}));
+        this.appRef.tick();
+      });
     });
   }
 
@@ -165,10 +166,12 @@ export class TrailerWrapperComponent {
         b: flightName,
         t: this.trailer()?.name
       };
-  
-      console.log(action);
-  
-      this.store.dispatch(createNewBelugaAction({action}));
+
+
+      document.startViewTransition(() => {
+        this.store.dispatch(createNewBelugaAction({action}));
+        this.appRef.tick();
+      });
     });
   }
 
@@ -180,7 +183,7 @@ export class TrailerWrapperComponent {
   onCancelDrag(event: CdkDragDrop<Jig>){
     if(!event.isPointerOverContainer){
       this.store.dispatch(cancelDrag())
-    }  
+    }
   }
 
 }
