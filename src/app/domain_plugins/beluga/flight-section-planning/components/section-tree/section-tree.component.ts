@@ -37,7 +37,4 @@ export class SectionTreeComponent {
 
   hasNextFlight = computed(() => this.numFlights() > (this.numFinishedFlights() ?? 0))
 
-  constructor(){
-    effect(() => console.log("hasNext:" + this.hasNextFlight()))
-  }
 }

@@ -240,12 +240,12 @@ export const selectTrailerState = memoizeWith(
 
 export const selectCanDeliver = memoizeWith(
     (name: string) => name,
-    (name: string) => createSelector(selectTrailerState(name), selectAvailableHangarNames, selectDeliverableJigs,
-        (trailerState, availableHangars, deliverableJigs) => {
-            if(trailerState === null || availableHangars?.length == 0){
+    (name: string) => createSelector(selectTrailerState(name), selectAvailableHangarNames, selectDeliverableJigs, selectJigsState,
+        (trailerState, availableHangars, deliverableJigs, jigs) => {
+            if(trailerState === null || availableHangars?.length == 0 || jigs === undefined){
                 return false;
             };
-            return trailerState in deliverableJigs;
+            return trailerState in deliverableJigs  && !jigs[trailerState].empty;
         })
 );
 

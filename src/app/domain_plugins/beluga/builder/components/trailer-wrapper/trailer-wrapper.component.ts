@@ -55,7 +55,7 @@ export class TrailerWrapperComponent {
 
   currentFlightName$ = this.store.select(selectFlightName);
   nextOutgoingType = toSignal(this.store.select(selectCurrentFlightNextOutgoingJigType));
-  canLoad = computed(() => this.nextOutgoingType() != null && this.nextOutgoingType() == this.jig()?.type);
+  canLoad = computed(() => this.nextOutgoingType() != null && this.nextOutgoingType() == this.jig()?.type && this.jig().empty);
 
   dragInProgress$ = this.store.select(selectDragInProgress);
   isDragTarget$ = combineLatest([toObservable(this.side), toObservable(this.trailer)]).pipe(

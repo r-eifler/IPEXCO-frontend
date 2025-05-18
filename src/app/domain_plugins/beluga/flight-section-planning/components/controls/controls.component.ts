@@ -49,7 +49,6 @@ export class ControlsComponent {
 
   constructor(){
     effect(() => {
-      console.log(this.selectedBranch());
       this.form.controls.branch.setValue(this.selectedBranch())
     })
 
