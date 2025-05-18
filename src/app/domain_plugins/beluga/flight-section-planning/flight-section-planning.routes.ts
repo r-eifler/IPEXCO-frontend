@@ -3,8 +3,10 @@ import { provideEffects } from '@ngrx/effects';
 import { provideState } from '@ngrx/store';
 import { LoadFlightPlanTreeResolver } from './resolver/load-flight-plan-tree.resolver';
 import { LoadProjectResolver } from './resolver/load-project.resolver';
+import { SelectConfigurationResolver } from './resolver/select-config.resolver';
 import { SelectSectionResolver } from './resolver/select-section.resolver';
 import { DomainSpecificationService } from './services/domainSpecification.service';
+import { SectionExplanationComputationMonitoringService } from './services/explanation-computataion-monitoring.service';
 import { FlightPlanTreeService } from './services/flight-plan-tree.service';
 import { FlightSectionExplanationService } from './services/flight-section-explanation.service';
 import { FlightSectionPlanService } from './services/flight-section-plan.service';
@@ -13,16 +15,13 @@ import { ProjectService } from './services/project.service';
 import { ServicesService } from './services/services.service';
 import { flightSectionPlanningEffects } from './state/effects/effects';
 import { FlightSectionPlanningFeature } from './state/flight-section-planning.feature';
-import { MetricsOverviewComponent } from './views/metrics-overview/metrics-overview.component';
+import { ConfigurationExplanationViewComponent } from './views/configuration-explanation-view/configuration-explanation-view.component';
 import { ConfigurationUpdateViewComponent } from './views/configuration-update-view/configuration-update-view.component';
+import { MetricsOverviewComponent } from './views/metrics-overview/metrics-overview.component';
 import { PlanInspectorComponent } from './views/plan-inspector/plan-inspector.component';
 import { PlanSectionsOverview } from './views/plan-section-overview/plan-section-overview.component';
 import { PlanningShellComponent } from './views/planning-shell/planning-shell.component';
 import { ShellComponent } from './views/shell/shell.component';
-import { ConfigurationExplanationViewComponent } from './views/configuration-explanation-view/configuration-explanation-view.component';
-import { selectConfiguration } from './state/flight-section-planning.actions';
-import { SelectConfigurationResolver } from './resolver/select-config.resolver';
-import { SectionExplanationComputationMonitoringService } from './services/explanation-computataion-monitoring.service';
 
 export const routes: Routes = [
   {

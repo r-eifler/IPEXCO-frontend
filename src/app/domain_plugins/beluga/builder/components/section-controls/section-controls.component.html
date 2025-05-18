@@ -1,13 +1,18 @@
 <div class="main" *transloco="let t">
   <div class="group">
-    <button mat-flat-button [disabled]="!(nextFlightAvailable$ | async)" (click)="onSave()">
+    <a mat-flat-button 
+        [routerLink]="['../../../../flight-sections']"  
+        [disabled]="!(nextFlightAvailable$ | async)" 
+        (click)="onSave()">
         <mat-icon>save</mat-icon>
         {{t('b.save')}}
-    </button>
-    <button mat-button (click)="onCancel()">
+    </a>
+    <a mat-button 
+      [routerLink]="['../../../../flight-sections']"
+      (click)="onCancel()">
         <mat-icon>cancel</mat-icon>
         {{t('b.cancel')}}
-    </button>
+    </a>
   </div>
 
   <div class="group">

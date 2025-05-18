@@ -102,6 +102,13 @@
                   <div matListItemLine>Description</div>
                 </mat-list-item>
               }
+              @case (userStudyStepType.project){
+                <mat-list-item>
+                  <mat-icon matListItemIcon>repeat</mat-icon>
+                  <div matListItemTitle>{{ step.name }}</div>
+                  <div matListItemLine>Task</div>
+                </mat-list-item>
+              }
               @case (userStudyStepType.demo){
                 <mat-list-item>
                   <mat-icon matListItemIcon>repeat</mat-icon>
