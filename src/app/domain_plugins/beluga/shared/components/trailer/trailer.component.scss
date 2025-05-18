@@ -16,14 +16,24 @@
 .trailer-container {
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-050);
 }
 
 .info-container {
-    display: flex;
+  padding: var(--spacing-100) var(--spacing-200);
+
+  width: fit-content;
+
+    display: inline-flex;
     flex-direction: row;
     gap: var(--spacing-100);
-    align-items: flex-end;
+    align-items: center;
+
+    background-color: var(--trailer);
+
+    border-top-left-radius: var(--radius-100);
+    border-top-right-radius: var(--radius-100);
+
+  @include vars.typography(label-large);
 }
 
 .trailer {
@@ -33,6 +43,7 @@
     border: solid;
     border-width: 0px;
     border-radius: var(--spacing-100);
+  border-top-left-radius: 0px;
 
     background-color: var(--trailer);
 
@@ -41,6 +52,25 @@
     justify-content: space-around;
     align-items: center;
 }
+
+.status-container {
+    padding: var(--spacing-100);
+
+    align-self: flex-end;
+
+    width: fit-content;
+
+    display: inline-flex;
+    flex-direction: row;
+    gap: var(--spacing-100);
+    align-items: flex-end;
+
+    background-color: var(--trailer);
+
+    border-bottom-left-radius: var(--radius-100);
+    border-bottom-right-radius: var(--radius-100);
+}
+
 
 .dragScale {
     scale: 1.02;
@@ -63,12 +93,20 @@
 }
 
 .maintenance{
-    opacity: 30%;
+    opacity: 50%;
+}
+
+.status {
+  display: inline-grid;
+  aspect-ratio: 1/1;
+
+  border-radius: var(--radius-full);
+  padding: var(--spacing-050);
 }
 
 .error{
-    font-weight: 600;
-    color: red
+    @include vars.background-color(error);
+    @include vars.color(on-error);
 }
 
 .inConflict {

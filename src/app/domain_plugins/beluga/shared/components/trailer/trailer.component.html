@@ -1,18 +1,19 @@
-<div class="container" [class.dragScale]="dragTarget()">
+<div
+  class="container"
+  [class.dragScale]="dragTarget()"
+  [class.maintenance]="maintenance()"
+  [class.noDragTarget]="noDragTarget()"
+>
     <ng-content  select="[id=bside]"></ng-content>
     <div class="trailer-container">
         <div class="info-container">
-            <span style="font-weight: 500;">{{ name() }}</span>
-            @if(maintenance()){
-                <mat-icon class="error">construction</mat-icon>
-            }
+            <mat-icon>trolley</mat-icon>
+            <span>{{ name() }}</span>
         </div>
         <div
             class="trailer"
             [style.width]="size() + 'px' "
             [class.dragTarget]="dragTarget()"
-            [class.noDragTarget]="noDragTarget()"
-            [class.maintenance]="maintenance()"
              [class.inConflict]="inConflict()"
         >
             <ng-content select="app-jig,app-drop-target"></ng-content>
@@ -21,6 +22,16 @@
               <mat-icon class="dragIcon">place_item</mat-icon>
             }
         </div>
+
+        @if(maintenance()){
+          <div class="status-container">
+              @if(maintenance()){
+                  <div class="status error">
+                    <mat-icon [inline]="true">construction</mat-icon>
+                  </div>
+              }
+          </div>
+        }
     </div>
     <ng-content select="[id=fside]"></ng-content>
 </div>
