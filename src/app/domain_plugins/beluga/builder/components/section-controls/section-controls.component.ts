@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ApplicationRef, Component, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { selectActions, selectFlightFinished } from '../../state/builder.selector';
 import { MatButtonModule } from '@angular/material/button';
@@ -21,6 +21,7 @@ import { undoLastAction } from 'src/app/shared/state/undo/undo-stack.effect';
   styleUrl: './section-controls.component.scss'
 })
 export class SectionControlsComponent {
+  appRef = inject(ApplicationRef);
   store = inject(Store);
   undoStack = inject(UndoStackService);
 
@@ -43,6 +44,9 @@ export class SectionControlsComponent {
   }
 
   onUndo() {
-    this.store.dispatch(undoLastAction());
+    document.startViewTransition(() => {
+      this.store.dispatch(undoLastAction());
+      this.appRef.tick();
+    });
   }
 }

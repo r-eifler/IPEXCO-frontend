@@ -27,8 +27,6 @@ export class UndoStackService {
 
     this.stack.update(oldStack => slice(0, oldStack.length - 1, oldStack));
 
-    console.log(this.stack())
-
     return lastAction;
   }
 
@@ -39,5 +37,4 @@ export class UndoStackService {
 
       this.stack.update(oldStack => slice(1, this.bufferSize + 1, oldStack));
   }
-
 }

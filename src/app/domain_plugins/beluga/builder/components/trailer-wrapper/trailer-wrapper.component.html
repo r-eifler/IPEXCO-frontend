@@ -1,24 +1,25 @@
-<app-trailer 
+<app-trailer
     [name]="trailer()?.name"
     [size]="displaySize()"
     [dragTarget]="(isDragTarget$ | async) && (dragInProgress$ | async)"
     [noDragTarget]="!(isDragTarget$ | async) && (dragInProgress$ | async)"
 >
     <button
-        *ngIf="side() =='bside'" 
+        *ngIf="side() =='bside'"
         id="bside" mat-icon-button (click)="load()" [disabled]="!canLoad()">
         <mat-icon>arrow_backward</mat-icon>
     </button>
     <app-drop-target
-        cdkDropList 
-        [cdkDropListData]="[jig()]" 
+        cdkDropList
+        [cdkDropListData]="[jig()]"
         (cdkDropListDropped)="drop($event)"
         [cdkDropListEnterPredicate]="empty"
     >
-        <app-jig 
+        <app-jig
             *ngIf="jig() != null"
-            [jig]="jig()" 
+            [jig]="jig()"
             [jigType]="jigType()"
+            [animate]="true"
             [draggable]="true"
             cdkDrag
             [cdkDragData]="jig()"
@@ -26,9 +27,9 @@
             (cdkDragDropped)="onCancelDrag($event)"
             cdkDragBoundary=".beluga-boundary"
         >
-        </app-jig>   
+        </app-jig>
     </app-drop-target>
-    <button 
+    <button
         *ngIf="side() =='fside'"
         id="fside" mat-icon-button (click)="toHangar()" [disabled]="!(canDeliver$ | async)">
         <mat-icon>arrow_forward</mat-icon>
