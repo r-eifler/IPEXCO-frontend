@@ -31,5 +31,12 @@
     "english": "English",
     "continue": "Continue",
     "user_code": "User Code",
-    "code": "Code"
+    "code": "Code",
+    "cancel_study": "Cancel User Study",
+    "cancel_text": "Are you sure you want to cancel the user study? By clicking the cancel button all data related to this run will be delete.",
+    "continue_with_study": "Continue with user study",
+    "finish_task": "Finish Task or Continue",
+    "finish_task_text": "Are you sure you want to continue with the next step? There is still some time left.",
+    "continue_next_step": "Continue with Next Step",
+    "continue_with_task": "Finish Task"
 }

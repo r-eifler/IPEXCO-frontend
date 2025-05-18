@@ -16,7 +16,7 @@ import { selectExecutionUserStudyContinueLocked, selectExecutionUserStudyFinishe
 import { FinishDemoInfoDialogComponent } from '../finish-demo-info-dialog/finish-demo-info-dialog.component';
 import { TimeOverDialogComponent } from '../time-over-dialog/time-over-dialog.component';
 import { TimerStartsDialogComponent } from '../timer-starts-dialog/timer-starts-dialog.component';
-import { TranslocoModule } from '@jsverse/transloco';
+import { translateSignal, TranslocoModule } from '@jsverse/transloco';
 
 @Component({
     selector: 'app-user-study-execution-handler',
@@ -149,10 +149,10 @@ export class UserStudyExecutionHandlerComponent {
   onCancel() {
     const dialogRef = this.dialog.open(AskDeleteComponent, {
       data: {
-        name: 'Cancel User Study',
-        text: 'Are you sure you want to cancel the user study? By clicking the cancel button all data related to this run will be delete.',
-        buttonAgree: 'Cancel',
-        buttonDisagree: 'Continue with user study'
+        name: translateSignal('cancel_study'),
+        text: translateSignal('cancel_text'),
+        buttonAgree: translateSignal('cancel'),
+        buttonDisagree: translateSignal('continue_with_study'),
       },
     });
     dialogRef.afterClosed().subscribe(result => {
@@ -179,10 +179,10 @@ export class UserStudyExecutionHandlerComponent {
         if(step.type === UserStudyStepType.project){
           const dialogRef = this.dialog.open(AskDeleteComponent, {
             data: {
-              name: 'Finish Task and Continue',
-              text: 'Are you sure you want to finish and continue with the next step? There is still some time left.',
-              buttonDisagree: 'Continue with Next Step',
-              buttonAgree: 'Continue with Task'
+              name: translateSignal('finish_task'),
+              text: translateSignal('finish_task_text'),
+              buttonDisagree:  translateSignal('continue_next_step'),
+              buttonAgree:  translateSignal('continue_with_task'),
             },
           })
           dialogRef.afterClosed().pipe(take(1)).subscribe((stay) => {

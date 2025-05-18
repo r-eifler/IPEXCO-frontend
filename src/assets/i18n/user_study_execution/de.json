@@ -31,6 +31,13 @@
     "english": "Enlisch",
      "continue": "Weiter",
     "user_code": "Benutzer-Code",
-    "code": "Code"
+    "code": "Code",
+    "cancel_study": "Benutzerstudie abbrechen",
+    "cancel_text": "Sind Sie sicher, dass Sie die Benutzerstudie abbrechen möchten? Wenn Sie auf den BUtton Abbrechen klicken, werden alle Daten zu diesem Lauf gelöscht.",
+    "continue_with_study": "Weiter mit der Nutzerstudie",
+    "finish_task": "Aufgabe beenden oder fortsetzen",
+    "finish_task_text": "Sind Sie sicher, dass Sie mit dem nächsten Schritt fortfahren wollen? Es ist noch etwas Zeit übrig",
+    "continue_next_step": "Weiter mit nächstem Schritt",
+    "continue_with_task": "Aufgabe beenden"
 
 }
