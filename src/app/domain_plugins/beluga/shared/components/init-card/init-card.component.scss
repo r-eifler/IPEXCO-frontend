@@ -1,4 +1,7 @@
-@use "../../../../../../variables.scss" as vars;
+@use "@angular/material" as mat;
+
+@use "../../../../../../variables" as vars;
+@use "../../../../../../ipexco-theme" as ipexco-theme;
 
 :host {
   display: grid;
@@ -17,6 +20,14 @@
     gap: var(--spacing-100);
 
     @include vars.background-color(surface-container);
+
+    outline: solid;
+    outline-width: 2px;
+    outline-offset: -2px;
+    outline-color: transparent;
+
+    transition: outline-color 100ms, background-color 100ms, scale 100ms;
+    scale: 0.9;
 }
 
 .action-container:hover {
@@ -25,5 +36,6 @@
 
 
 .selected{
-    background-color: rgb(159, 249, 232);
+  outline-color: #{mat.get-theme-color(ipexco-theme.$light-theme, outline-variant)};
+  scale: 1;
 }
