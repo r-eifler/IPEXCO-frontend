@@ -3,10 +3,10 @@
 @use "../ipexco-theme" as ipexco-theme;
 
 :root {
-    --aircraft-part: #{mat.get-theme-color(ipexco-theme.$light-theme, tertiary-container)};
-    --on-aircraft-part: #{mat.get-theme-color(ipexco-theme.$light-theme, on-tertiary-container)};
-    --jig: #{mat.get-theme-color(ipexco-theme.$light-theme, tertiary-fixed-dim)};
-    --on-jig: #{mat.get-theme-color(ipexco-theme.$light-theme, on-tertiary-fixed-variant)};
+    --aircraft-part: #00aec7;
+    --on-aircraft-part: #010e27;
+    --jig: #00205b;
+    --on-jig: #ededed;
     --rack: #{mat.get-theme-color(ipexco-theme.$light-theme, surface-container-high)};
     --trailer: #{mat.get-theme-color(ipexco-theme.$light-theme, surface-container-high)};
     --production-line: #{mat.get-theme-color(ipexco-theme.$light-theme, surface-container-high)};
@@ -22,5 +22,7 @@
     --rack-height: var(--sizing-900);
     --trailer-height: var(--sizing-900);
     --hangar-height:  var(--sizing-900);
+
+     --maintenance: #00aec7;
   }
 

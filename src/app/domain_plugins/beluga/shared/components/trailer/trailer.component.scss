@@ -109,3 +109,8 @@
     @include vars.background-color(error);
     @include vars.color(on-error);
 }
+
+.highlight{
+    @include vars.background-color(secondary);
+    @include vars.color(on-secondary);
+}

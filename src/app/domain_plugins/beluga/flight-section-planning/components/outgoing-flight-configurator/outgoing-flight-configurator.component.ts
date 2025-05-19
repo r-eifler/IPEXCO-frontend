@@ -38,7 +38,7 @@ export class OutgoingFlightConfiguratorComponent {
   
     schedule = computed(() => this.flightTargetSchedule()?.outgoing.map((elem, index) => ({
         jig: {
-          name: 'XXX',
+          name: undefined,
           empty: true,
           type: elem.jigType,
         },

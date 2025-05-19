@@ -33,12 +33,12 @@
             class="part"
             [ngClass]="{'hover': isHovering && draggable(), 'ghost': isGhost()}"
         >
-            @if(!unitSize()){
+            <!-- @if(!unitSize()){
                 <span class="name">{{ name() }} ({{ jigType()?.name }})</span>
             }
-            @else{
+            @else{ -->
                 <span class="name"><span>{{ name() }}</span></span>
-            }
+            <!-- } -->
 
         </div>
       </div>
@@ -58,10 +58,16 @@
                     <mat-icon matListItemIcon>category</mat-icon>
                     <div matListItemTitle>{{type()}}</div>
                 </mat-list-item>
-                @if(incomingFlight() !== undefined){
+                @if(incomingFlight() !== undefined && incomingFlight() !== null){
                 <mat-list-item>
                     <mat-icon matListItemIcon>flight_land</mat-icon>
                     <div matListItemTitle>{{incomingFlight() ?? 'none'}}</div>
+                </mat-list-item>
+                }
+                @if(!loaded() && name() !== undefined){
+                <mat-list-item>
+                    <mat-icon matListItemIcon>system_update_alt</mat-icon>
+                    <div matListItemTitle>{{name() ?? 'none'}}</div>
                 </mat-list-item>
                 }
             </mat-list>
