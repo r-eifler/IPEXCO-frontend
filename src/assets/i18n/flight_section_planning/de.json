@@ -2,7 +2,7 @@
     "flights": "Flüge",
     "flight": "Flug",
     "racks": "Ablagen",
-    "jigs": "Montagegestelle",
+    "jigs": "Jig",
     "incoming_flight": "ankommender Flug",
     "outgoing_flight": "abgehender Flug",
     "incoming": "Ankommend",
@@ -13,7 +13,7 @@
     "production_lines": "Produktionslinien",
     "factory": "Fabrik",
     "hangars": "Hangars",
-    "remaining_jigs": "verbleibende Montagegestelle",
+    "remaining_jigs": "verbleibende Jig",
     "actions": "Aktionen",
     "flight_section_plans": "Flugabschnittespläne",
     "new_plan": "neuer Plan",
@@ -61,5 +61,13 @@
     "yes": "Ja",
     "no": "Nein",
     "use_configuration": "Nutze Konfiguration",
-    "explore_new_configuration": "Neue Konfiguration ausprobieren"
+    "explore_new_configuration": "Neue Konfiguration ausprobieren",
+    "everything_unloaded": "Alles entladen.",
+    "no_jigs_scheduled": "Keine Jigs geplant.",
+    "no_jigs_loaded_yet": "Noch keine Jigs geladen.",
+    "everything_delivered": "Alles wurde geliefert.",
+    "plan_length": "Planlänge",
+    "number_of_swaps": "Anzahl von Swaps",
+    "rack_occupancy": "Rackbelegung",
+    "flight_sections": "Flugabschnitte"
 }

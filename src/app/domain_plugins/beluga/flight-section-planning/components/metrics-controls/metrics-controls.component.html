@@ -1,19 +1,25 @@
 <div class="main" *transloco="let t" >
-    <mat-form-field appearance="outline" subscriptSizing="dynamic">
-        <mat-label>{{ t('f.plan_versions') }}</mat-label>
-        <mat-select [formControl]="form.controls.branches" multiple>
-          @for (branch of branches(); track branch.name;  let idx = $index) {
-            <mat-option [value]="idx">{{ branch.name }}</mat-option>
+    <div class="controls">
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+          <mat-label>{{ t('f.plan_versions') }}</mat-label>
+          <mat-select [formControl]="form.controls.branches" multiple>
+            @for (branch of branches(); track branch.name;  let idx = $index) {
+              <mat-option [value]="idx">{{ branch.name }}</mat-option>
+            }
+          </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>{{ t('f.metric') }}</mat-label>
+        <mat-select [formControl]="form.controls.metric">
+          @for (metric of metrics; track metric) {
+            <mat-option [value]="metric">{{ 'f.' + metric | transloco }}</mat-option>
           }
         </mat-select>
     </mat-form-field>
-
-    <mat-form-field appearance="outline" subscriptSizing="dynamic">
-      <mat-label>{{ t('f.metric') }}</mat-label>
-      <mat-select [formControl]="form.controls.metric">
-        @for (metric of metrics; track metric) {
-          <mat-option [value]="metric">{{ metric }}</mat-option>
-        }
-      </mat-select>
-  </mat-form-field>
+  </div>
+  <a mat-button [routerLink]="['../flight-sections']">
+    <mat-icon>chevron_left</mat-icon>
+    {{ t('f.back') }}
+  </a>
 </div>

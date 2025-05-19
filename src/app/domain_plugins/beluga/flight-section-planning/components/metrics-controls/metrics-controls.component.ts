@@ -6,8 +6,8 @@ import { selectDifferentBranch } from '../../state/flight-section-planning.actio
 import { selectBranchIndex, selectBranches } from '../../state/flight-section-planning.selector';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
-import { RouterLink } from '@angular/router';
-import { TranslocoModule } from '@jsverse/transloco';
+import { RouterLink, RouterModule } from '@angular/router';
+import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -28,6 +28,7 @@ import { MetricType } from '../../domain/metrics';
     FormsModule, 
     ReactiveFormsModule,
     MatTooltipModule,
+    RouterModule,
   ],
   templateUrl: './metrics-controls.component.html',
   styleUrl: './metrics-controls.component.scss'

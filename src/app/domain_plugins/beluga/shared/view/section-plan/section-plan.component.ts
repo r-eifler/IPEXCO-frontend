@@ -67,14 +67,14 @@ export class SectionPlanComponent {
 
   onForward(){
     document.startViewTransition(() => {
-      this.selectedActionIndex.update((current) =>  Math.min(this.actions()?.length, (current ?? 0) + 1));
+      this.selectedActionIndex.update((current) =>  Math.min(this.actions()?.length -1, (current ?? 0) + 1));
       this.cd.detectChanges();
     });
   }
 
   onBack(){
     document.startViewTransition(() => {
-      this.selectedActionIndex.update((current) =>  Math.max(0, (current ?? 0) - 1))
+      this.selectedActionIndex.update((current) =>  Math.max(-1, (current ?? 0) - 1))
       this.cd.detectChanges();
     });
   }

@@ -17,7 +17,6 @@ import { MetricType } from '../../domain/metrics';
       PageModule,
       BreadcrumbModule,
       MatIconModule,
-      RouterLink,
       MetricsControlsComponent,
       SectionMetricGraphComponent,
   ],

@@ -4,16 +4,20 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { PlanRunStatus } from 'src/app/iterative_planning/domain/plan';
 import { metricsFunctionMap, MetricType } from '../../domain/metrics';
 import { BelugaProblem } from '../../../shared/domain/beluga_problem';
+import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-section-metric-graph',
   imports: [
     NgxChartsModule,
+    TranslocoModule,
   ],
   templateUrl: './section-metric-graph.component.html',
   styleUrl: './section-metric-graph.component.scss'
 })
 export class SectionMetricGraphComponent {
+
+  transloco = inject(TranslocoService);
 
   // options
   legend: boolean = true;

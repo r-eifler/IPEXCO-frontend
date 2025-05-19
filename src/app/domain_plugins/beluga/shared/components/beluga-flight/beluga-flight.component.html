@@ -21,20 +21,20 @@
         @if(incoming() && jigs()?.length == 0){
             <app-info>
                 <mat-icon>check_circle</mat-icon>
-                Everything unloaded.
+                {{t('f.everything_unloaded')}}
             </app-info>
         }
         @if(!incoming() && jigs()?.length == 0){
             @if(numOutgoingJigs() == 0){
                 <app-info>
                     <mat-icon>assignment</mat-icon>
-                    No jigs scheduled.
+                    {{t('f.no_jigs_scheduled')}}
                 </app-info>
             }
             @else{
                 <app-info>
                     <mat-icon>info</mat-icon>
-                    No jigs loaded yet.
+                    {{t('f.no_jigs_loaded_yet')}}
                 </app-info>
             }
 

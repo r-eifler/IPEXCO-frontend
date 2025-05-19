@@ -1,14 +1,12 @@
 import { sum } from "ramda";
 import { BelugaAction, BelugaActionType } from "../../shared/domain/beluga_plan";
-import { BelugaProblem } from "../../shared/domain/beluga_problem";
 import { applyAction, BelugaState } from "../../shared/domain/beluga_state";
-import { FlightSection, getConsideredFlightSchedule, getConsideredProductionSchedule, getFlightSchedule, getFullStartState, getProductionSchedule } from "./flight-section";
-import { getSiteSetUp } from "../../shared/domain/site_set_up";
+import { FlightSection, getConsideredFlightSchedule, getConsideredProductionSchedule, getFullStartState } from "./flight-section";
 
 export enum MetricType {
-    PLAN_LENGTH = "plan length",
-    NUM_SWAPS = "number of swaps",
-    RACK_OCCUPANCY = "rack occupancy"
+    PLAN_LENGTH = "plan_length",
+    NUM_SWAPS = "number_of_swaps",
+    RACK_OCCUPANCY = "rack_occupancy"
 }
 
 export function computeSwaps(actions: BelugaAction[]){

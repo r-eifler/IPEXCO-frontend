@@ -5,8 +5,8 @@
         [showYAxisLabel]="showYAxisLabel"
         [xAxis]="xAxis"
         [yAxis]="yAxis"
-        [xAxisLabel]="xAxisLabel"
-        [yAxisLabel]="metric()"
+        [xAxisLabel]="'f.flight_sections' | transloco"
+        [yAxisLabel]=" 'f.' + metric() | transloco"
         [results]="data()"
     >
     </ngx-charts-line-chart>
