@@ -348,7 +348,7 @@ export class LogUserActivitiesBelugaEffect{
             if (actionToUndo.type === createNewBelugaAction.type) {
                 return [
                     logAction({action: {
-                        type: ActionType.PERFORM_BELUGA_ACTION, 
+                        type: ActionType.UNDO_BELUGA_ACTION, 
                         data: {
                             action: (actionToUndo as Action & { action: BelugaAction }).action
                         }
