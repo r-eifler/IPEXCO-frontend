@@ -25,11 +25,11 @@ export class ProductionLinesConfiguratorComponent {
     position: number
   }[]>([]);
 
-  change = output<{name: string, index: number, skip: boolean}>();
+  change = output<{productionLineIndex: number, index: number, skip: boolean}>();
 
-  onChangeProductionTarget(change: {index: number, skip: boolean}, name: string){
+  onChangeProductionTarget(change: {index: number, skip: boolean}, productionLineIndex: number){
     this.change.emit({
-      name,
+      productionLineIndex,
       index: change.index,
       skip: change.skip
     });

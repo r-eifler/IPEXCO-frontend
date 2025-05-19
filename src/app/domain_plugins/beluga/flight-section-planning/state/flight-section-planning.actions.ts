@@ -126,7 +126,7 @@ export const newConfiguration = createAction('[beluga-flight-section-planning] n
 
 export const skipIncomingJig = createAction('[beluga-flight-section-planning] skip incoming jig', props<{index: number, skip: boolean}>());
 export const skipOutgoingJigType = createAction('[beluga-flight-section-planning] skip outgoing jig type', props<{index: number, skip: boolean}>());
-export const skipProductionJig = createAction('[beluga-flight-section-planning] skip production jig', props<{productionLineName: string, index: number, skip: boolean}>());
+export const skipProductionJig = createAction('[beluga-flight-section-planning] skip production jig', props<{productionLineIndex: number, index: number, skip: boolean}>());
 export const updateRackStatus = createAction('[beluga-flight-section-planning] update rack status', props<{index: number, status: SiteStatus}>());
 export const updateTrailerStatus = createAction('[beluga-flight-section-planning] update trailer status', props<{index: number, side: Side, status: SiteStatus}>());
 export const updateHangarStatus = createAction('[beluga-flight-section-planning] update hangar status', props<{index: number, status: SiteStatus}>());

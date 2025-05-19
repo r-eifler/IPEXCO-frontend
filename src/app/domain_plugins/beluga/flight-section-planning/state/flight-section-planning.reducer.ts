@@ -158,24 +158,25 @@ export const FlightSectionPlanningReducer = createReducer(
         } : null
         
     })),
-    on(skipProductionJig, (state, {productionLineName, index, skip}): FlightSectionPlanningState => ({
+    on(skipProductionJig, (state, {productionLineIndex, index, skip}): FlightSectionPlanningState => ({
         ...state,
         updatedConfiguration: state.updatedConfiguration !== null ? {
             ...state.updatedConfiguration,
-            productionLinesTargetSchedule: {
-                ...state.updatedConfiguration.productionLinesTargetSchedule,
-                [productionLineName]: {
-                    ...state.updatedConfiguration.productionLinesTargetSchedule[productionLineName],
+            productionLinesTargetSchedule: [
+                ...state.updatedConfiguration.productionLinesTargetSchedule.slice(0,productionLineIndex),
+                {
+                    ...state.updatedConfiguration.productionLinesTargetSchedule[productionLineIndex],
                     schedule: [
-                        ...state.updatedConfiguration.productionLinesTargetSchedule[productionLineName].schedule.slice(0,index),
+                        ...state.updatedConfiguration.productionLinesTargetSchedule[productionLineIndex].schedule.slice(0,index),
                         {
-                            ...state.updatedConfiguration.productionLinesTargetSchedule[productionLineName].schedule[index],
+                            ...state.updatedConfiguration.productionLinesTargetSchedule[productionLineIndex].schedule[index],
                             skip
                         },
-                        ...state.updatedConfiguration.productionLinesTargetSchedule[productionLineName].schedule.slice(index + 1)
+                        ...state.updatedConfiguration.productionLinesTargetSchedule[productionLineIndex].schedule.slice(index + 1)
                     ]
-                }
-            }
+                },
+                ...state.updatedConfiguration.productionLinesTargetSchedule.slice(productionLineIndex + 1),
+            ]
         } : null
         
     })),

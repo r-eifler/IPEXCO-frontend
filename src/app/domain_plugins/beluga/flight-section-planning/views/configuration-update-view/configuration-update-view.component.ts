@@ -113,7 +113,7 @@ export class ConfigurationUpdateViewComponent {
     this.store.dispatch(skipOutgoingJigType({index: change.index, skip: change.skip}));
   }
 
-  onChangeProductionTarget(change: {name: string, index: number, skip:boolean}){
-    this.store.dispatch(skipProductionJig({productionLineName: change.name, index: change.index, skip: change.skip}));
+  onChangeProductionTarget(change: {productionLineIndex: number, index: number, skip:boolean}){
+    this.store.dispatch(skipProductionJig({productionLineIndex: change.productionLineIndex, index: change.index, skip: change.skip}));
   }
 }

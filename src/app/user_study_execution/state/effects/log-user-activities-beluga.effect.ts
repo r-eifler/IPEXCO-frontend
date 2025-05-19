@@ -139,12 +139,12 @@ export class LogUserActivitiesBelugaEffect{
 
     public updateConfigProductionAction$ = createEffect(() => this.actions$.pipe(
         ofType(skipProductionJig),
-        switchMap(({productionLineName, index, skip}) => [
+        switchMap(({productionLineIndex, index, skip}) => [
             logAction({action: {
                 type: ActionType.UPDATE_CONFIGURATION, 
                 data: {
                     type: 'production',
-                    name: productionLineName,
+                    productionLineIndex,
                     index,
                     value: skip,
                 }
