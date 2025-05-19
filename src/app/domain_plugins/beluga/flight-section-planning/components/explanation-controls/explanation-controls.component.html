@@ -18,10 +18,10 @@
             <mat-icon>shelves</mat-icon>
             <span class="label">{{t('f.keep_rack_empty')}}:</span>
             @if(numEmptyRacks() == 0){
-                <span class="value">{{t('f.yes')}}</span>
+                <span class="value">{{t('f.no')}}</span>
             }
             @else{
-                <span class="value">{{t('f.no')}}</span>
+                <span class="value">{{t('f.yes')}}</span>
             }          
             @if(rackEmptyConflict()){
                 <div class="status error">
