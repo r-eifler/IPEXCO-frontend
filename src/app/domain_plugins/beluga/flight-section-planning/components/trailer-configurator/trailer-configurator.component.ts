@@ -1,12 +1,15 @@
 import { Component, computed, inject, input, output } from '@angular/core';
-import { SiteStatus, Trailer } from '../../../shared/domain/site_set_up';
-import { TrailerComponent } from '../../../shared/components/trailer/trailer.component';
-import { JigComponent } from '../../../shared/components/jig/jig.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { Jig, JigType } from '../../../shared/domain/beluga_problem';
 import { Store } from '@ngrx/store';
-import { selectAllowObjectiveModification, selectJigMapIncomingFlight } from '../../state/flight-section-planning.selector';
+import { JigComponent } from '../../../shared/components/jig/jig.component';
+import { TrailerComponent } from '../../../shared/components/trailer/trailer.component';
+import { Jig, JigType } from '../../../shared/domain/beluga_problem';
+import { SiteStatus, Trailer } from '../../../shared/domain/site_set_up';
+import { selectJigMapIncomingFlight, selectMaxJigSize } from '../../state/flight-section-planning.selector';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { TranslocoModule } from '@jsverse/transloco';
+
 
 @Component({
   selector: 'app-trailer-configurator',
@@ -15,6 +18,8 @@ import { selectAllowObjectiveModification, selectJigMapIncomingFlight } from '..
     JigComponent,
     MatButtonModule,
     MatIconModule,
+    MatTooltipModule,
+    TranslocoModule,
   ],
   templateUrl: './trailer-configurator.component.html',
   styleUrl: './trailer-configurator.component.scss'
@@ -24,6 +29,7 @@ export class TrailerConfiguratorComponent {
     store = inject(Store);
   
     incomingFlightJigMap = this.store.selectSignal(selectJigMapIncomingFlight);
+    maxJigSize = this.store.selectSignal(selectMaxJigSize);
 
     trailer = input.required<Trailer & {jig: Jig}>();
     jigTypes = input.required<Record<string,JigType>>();

@@ -1,13 +1,14 @@
-import { Component, computed, effect, inject, input, output } from '@angular/core';
-import { RackComponent } from '../../../shared/components/rack/rack.component';
-import { JigComponent } from '../../../shared/components/jig/jig.component';
-import { Rack, SiteStatus } from '../../../shared/domain/site_set_up';
-import { Jig, JigType, occupiedSpace } from '../../../shared/domain/beluga_problem';
+import { Component, computed, inject, input, output } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { TooltipModule } from '@swimlane/ngx-charts';
+import { TranslocoModule } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
-import { selectAllowObjectiveModification, selectJigMapIncomingFlight } from '../../state/flight-section-planning.selector';
+import { JigComponent } from '../../../shared/components/jig/jig.component';
+import { RackComponent } from '../../../shared/components/rack/rack.component';
+import { Jig, JigType, occupiedSpace } from '../../../shared/domain/beluga_problem';
+import { Rack, SiteStatus } from '../../../shared/domain/site_set_up';
+import { selectJigMapIncomingFlight } from '../../state/flight-section-planning.selector';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-rack-configurator',
@@ -16,7 +17,8 @@ import { selectAllowObjectiveModification, selectJigMapIncomingFlight } from '..
     JigComponent,
     MatButtonModule,
     MatIconModule,
-    TooltipModule,
+    TranslocoModule,
+    MatTooltipModule,
   ],
   templateUrl: './rack-configurator.component.html',
   styleUrl: './rack-configurator.component.scss'

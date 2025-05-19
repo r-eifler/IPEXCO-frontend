@@ -42,6 +42,13 @@ export class StateCardComponent {
   }
 
   jigTypes = computed(() => this.siteSetUp()?.jig_types)
+  maxJigSize = computed(() => {
+    const jigTypes = this.jigTypes();
+    if(jigTypes === undefined){
+            return undefined;
+    }
+    return Math.max(...Object.values(jigTypes).map(jt => jt.size_loaded))
+  })
   jigs = computed(() => this.state()?.jigs)
 
   incomingSchedule = computed(() => this.targetFlightSchedule()?.incoming.filter(e => !e.skip))

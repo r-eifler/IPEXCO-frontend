@@ -4,7 +4,7 @@ import { FlightSectionPlanningFeature, selectSelectedConfigIndex, selectUpdatedC
 import { PlanRunStatus } from "src/app/iterative_planning/domain/plan";
 import { BelugaAction } from "../../shared/domain/beluga_plan";
 import { Encoding, ServiceType } from "src/app/global_specification/domain/services";
-import { memoizeWith, sum } from "ramda";
+import { max, memoizeWith, sum } from "ramda";
 import { getJigsOnSiteFromSection } from "../domain/flight-section";
 import { ExplanationInterfaceType } from "src/app/project/domain/general-settings";
 
@@ -50,6 +50,15 @@ export const selectNumRacks = createSelector(selectTask,
 
 export const selectNumJigs= createSelector(selectTask, 
     (task) => task?.jigs !== undefined ? Object.keys(task?.jigs).length : undefined
+)
+
+export const selectMaxJigSize= createSelector(selectTask, 
+    (task) => {
+        if(task === undefined){
+            return undefined;
+        }
+        return Math.max(...Object.values(task.jig_types).map(jt => jt.size_loaded))
+    }
 )
 
 export const selectTypeJigMap = createSelector(selectTask, 

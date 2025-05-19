@@ -1,14 +1,19 @@
 <div 
     class="container"
+    *transloco="let t"
 >
     @if(!isUsed()){
-        <button mat-icon-button (click)="onUnlock()" [disabled]="disabled()">
-            <mat-icon>lock_open</mat-icon>
+        <button mat-icon-button (click)="onUnlock()" 
+        [disabled]="disabled()"
+        [matTooltip]="t('f.release_maintenance')">
+            <mat-icon>check_circle</mat-icon>
         </button>
     }
     @else{
-        <button mat-icon-button (click)="onLock()" [disabled]="isLoaded() || disabled()">
-            <mat-icon>lock</mat-icon>
+        <button mat-icon-button (click)="onLock()" 
+        [disabled]="isLoaded() || disabled()"
+        [matTooltip]="t('f.block_maintenance')">
+            <mat-icon>construction</mat-icon>
         </button>
     }
     <app-rack 

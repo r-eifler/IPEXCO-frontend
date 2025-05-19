@@ -69,5 +69,7 @@
     "plan_length": "Plan Length",
     "number_of_swaps": "Number of Swaps",
     "rack_occupancy": "Rack Occupancy",
-    "flight_sections": "Flight Sections"
+    "flight_sections": "Flight Sections",
+    "release_maintenance": "Release from maintenance",
+    "block_maintenance": "Block for maintenance"
 }
