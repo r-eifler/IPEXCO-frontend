@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { selectActions, selectCurrentConfiguration, selectFlightFinished, selectSection } from '../../state/builder.selector';
+import { selectCurrentActions, selectCurrentConfiguration, selectFlightFinished, selectSection } from '../../state/builder.selector';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslocoModule } from '@jsverse/transloco';
@@ -32,7 +32,7 @@ export class SectionControlsComponent {
   }
 
   nextFlightAvailable$ = this.store.select(selectFlightFinished);
-  actions = this.store.selectSignal(selectActions);
+  actions = this.store.selectSignal(selectCurrentActions);
   section = this.store.selectSignal(selectSection);
   config = this.store.selectSignal(selectCurrentConfiguration);
 
@@ -47,7 +47,7 @@ export class SectionControlsComponent {
     const sectionId = this.section()?._id;
     const config = this.config();
     const planAttempt = this.actions();
-    if(sectionId !== undefined && planAttempt !== undefined && config !== undefined){
+    if(sectionId !== undefined && planAttempt !== undefined && config !== null){
       this.store.dispatch(cancelManualPlanning({sectionId, planAttempt, config}))
     }
   }

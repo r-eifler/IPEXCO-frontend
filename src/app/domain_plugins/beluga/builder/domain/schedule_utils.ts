@@ -1,4 +1,5 @@
 import { FlightTargetSchedule, ProductionLineTargetSchedule} from "../../flight-section-planning/domain/flight-section";
+import { ProductionLine } from "../../shared/domain/beluga_problem";
 
 function updateIncomingJigConsiderationStatus(jigName: string, schedule: FlightTargetSchedule, skip: boolean){
     const index = schedule.incoming.findIndex(e => e.jig == jigName);
@@ -66,4 +67,18 @@ export function updateSkipProductionLineJig(jigName: string, productionLine: str
         },
         ...schedule.slice(plIndex+1),
     ]
+}
+
+
+export function unskipNotDelivered(schedules: ProductionLineTargetSchedule[], state: Record<string,ProductionLine>){
+    return schedules.map((s) => {
+        const indexLastDelivered = s.schedule.findIndex(e => e.jig === state[s.name][-1]);
+        return {
+            ...s,
+            schedule: s.schedule.map((e, index) => ({
+                ...e,
+                skip: index <= indexLastDelivered ? e.skip : false 
+            }))
+        }
+    })
 }

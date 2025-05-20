@@ -1,7 +1,7 @@
 import { createSelector } from "@ngrx/store";
 import { memoizeWith } from "ramda";
 import { getJigSize, occupiedRackSpace, Side } from "../../shared/domain/beluga_problem";
-import { BuilderFeature, selectFlights } from "./builder.feature";
+import { BuilderFeature, selectActions, selectConfig, selectFlights } from "./builder.feature";
 
 
 const selectState = BuilderFeature.selectBuilderFeatureState
@@ -12,7 +12,6 @@ const selectState = BuilderFeature.selectBuilderFeatureState
 export const selectSection = createSelector(selectState, 
     (state) => state.section.data
 );
-
 
 // Project/Task
 
@@ -45,11 +44,11 @@ export const selectMaxPartSize = createSelector(selectSiteSetUp,
 export const selectCurrentPlanSection = createSelector(BuilderFeature.selectSection, 
     (section) => section.data);
 
-export const selectCurrentConfiguration = createSelector(selectCurrentPlanSection, 
-    (section) => section !== undefined ? section.configurations[section.configurationIndex] : undefined);
+export const selectCurrentConfiguration = createSelector(selectConfig, 
+    (config) => config);
 
-export const selectActions = createSelector(selectSection, 
-    (section) => section?.actions);
+export const selectCurrentActions = createSelector(selectActions, 
+    (actions) => actions);
 
 // Task State
 
@@ -63,8 +62,8 @@ export const selectJigsState = createSelector(selectTaskState,
 //##########################################
 // flight
 
-export const selectFlightSchedule= createSelector(selectSection, 
-    (section) => section === undefined ? undefined : section.configurations[section.configurationIndex].flightTargetSchedule);
+export const selectFlightSchedule= createSelector(selectConfig, 
+    (config) => config === null ? undefined : config?.flightTargetSchedule);
 
 export const selectFlightName = createSelector(selectFlightSchedule, 
     (flight) => flight?.name);
@@ -282,8 +281,8 @@ export const selectAvailableHangarNames = createSelector(selectHangars, selectHa
 
 // ProductionLine 
 
-export const selectProductionLineSchedule = createSelector(selectSection, 
-    (section) => section === undefined ? undefined : section.configurations[section.configurationIndex].productionLinesTargetSchedule
+export const selectProductionLineSchedule = createSelector(selectConfig, 
+    (config) => config === null ? undefined : config.productionLinesTargetSchedule
 );
 
 export const selectProductionLineScheduleFor = memoizeWith(

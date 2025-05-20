@@ -1,11 +1,13 @@
 import { createReducer, on } from "@ngrx/store";
 import { Loadable, LoadingState } from "src/app/shared/common/loadable.interface";
 import { Project } from "src/app/shared/domain/project";
-import { FlightSection, getFlightSchedule, getFullStartState, getProductionSchedule } from "../../flight-section-planning/domain/flight-section";
+import { BelugaConfiguration, FlightSection, getFlightSchedule, getFullStartState, getProductionSchedule } from "../../flight-section-planning/domain/flight-section";
 import { BelugaProblem, BelugaProblemZ, Flight, Side } from "../../shared/domain/beluga_problem";
 import { applyAction, BelugaState } from "../../shared/domain/beluga_state";
-import { updateSkipIncomingJig, updateSkipOutgoingJigType, updateSkipProductionLineJig } from "../domain/schedule_utils";
+import { unskipNotDelivered, updateSkipIncomingJig, updateSkipOutgoingJigType, updateSkipProductionLineJig } from "../domain/schedule_utils";
 import { cancelDrag, createNewBelugaAction, loadFlightSection, loadFlightSectionSuccess, loadProject, loadProjectSuccess, skipIncomingJig, skipOutgoingJigType, skipProductionJig, startDrag, stopDrag, updateFlightSectionSuccess } from "./builder.actions";
+import { BelugaAction } from "../../shared/domain/beluga_plan";
+import { none } from "ramda";
 
 export interface DragSource{
     name: string,
@@ -17,7 +19,9 @@ export interface BuilderState {
     flights: Loadable<Flight[]>,
     section: Loadable<FlightSection>,
 
+    config: BelugaConfiguration | null,
     taskState: BelugaState | null | undefined,
+    actions: BelugaAction[]
 
     sizeUnit: number;
 
@@ -32,7 +36,9 @@ const initialState: BuilderState = {
     flights: {state: LoadingState.Initial, data: undefined},
     section: {state: LoadingState.Initial, data: undefined},
 
+    config: null,
     taskState: null,
+    actions: [],
 
     sizeUnit: 15,
     dragSource: null,
@@ -56,14 +62,25 @@ export const BuilderReducer = createReducer(
         ...state,
         section: {state: LoadingState.Loading, data: undefined},
     })),
-    on(loadFlightSectionSuccess, (state, {section}): BuilderState => ({
-        ...state,
-        section: {state: LoadingState.Done, data: section},
-        taskState:  getFullStartState(section),
-        dragSource: null,
-        draggedJig: null,
-        draggedSides: null,
-    })),
+    on(loadFlightSectionSuccess, (state, {section}): BuilderState => {
+        const taskState = getFullStartState(section);
+        if(taskState == undefined){
+            return {...state};
+        }
+        return {
+            ...state,
+            section: {state: LoadingState.Done, data: section},
+            taskState,
+            config: {
+                ...section.configurations[section.configurationIndex],
+                productionLinesTargetSchedule: unskipNotDelivered(section.configurations[section.configurationIndex].productionLinesTargetSchedule, taskState?.productionLines)
+            },
+            actions: [],
+            dragSource: null,
+            draggedJig: null,
+            draggedSides: null,
+        }
+    }),
     on(updateFlightSectionSuccess, (state, {section}): BuilderState => ({
         ...state,
         section: {state: LoadingState.Done, data: section},
@@ -78,64 +95,28 @@ export const BuilderReducer = createReducer(
             getProductionSchedule(state.section.data.configurations[state.section.data.configurationIndex].productionLinesTargetSchedule, false), 
             state.section.data.configurations[state.section.data.configurationIndex].siteSetUp
         ) : null,
-        section:  state.section.data !== undefined ? {
-            state: LoadingState.Done,
-            data: {
-                ...state.section.data,
-                actions: [...(state.section.data?.actions ?? []), action],
-            }
-        } : state.section
+        actions: [...(state.actions ?? []), action]
     })),
     on(skipIncomingJig, (state, {jigName}): BuilderState => ({
         ...state,
-        section:  state.section.data !== undefined ? {
-            state: LoadingState.Done,
-            data: {
-                ...state.section.data,
-                configurations:[
-                    ...state.section.data.configurations.slice(0, state.section.data.configurationIndex),
-                    {
-                        ...state.section.data.configurations[state.section.data.configurationIndex],
-                        flightTargetSchedule: updateSkipIncomingJig(jigName, state.section.data.configurations[state.section.data.configurationIndex].flightTargetSchedule)
-                    },
-                    ...state.section.data.configurations.slice(state.section.data.configurationIndex + 1),
-                ]
-            }
-        } : state.section
+        config: state.config !== null ? {
+            ...state.config,
+            flightTargetSchedule: updateSkipIncomingJig(jigName, state.config?.flightTargetSchedule)
+        } : null,
     })),
     on(skipOutgoingJigType, (state, {jigType, index}): BuilderState => ({
         ...state,
-        section:  state.section.data !== undefined ? {
-            state: LoadingState.Done,
-            data: {
-                ...state.section.data,
-                configurations:[
-                    ...state.section.data.configurations.slice(0, state.section.data.configurationIndex),
-                    {
-                        ...state.section.data.configurations[state.section.data.configurationIndex],
-                        flightTargetSchedule: updateSkipOutgoingJigType(jigType, index, state.section.data.configurations[state.section.data.configurationIndex].flightTargetSchedule)
-                    },
-                    ...state.section.data.configurations.slice(state.section.data.configurationIndex + 1),
-                ]
-            }
-        } : state.section
+        config: state.config !== null ? {
+            ...state.config,
+            flightTargetSchedule: updateSkipOutgoingJigType(jigType, index, state.config?.flightTargetSchedule)
+        } : null
     })),
     on(skipProductionJig, (state, {jigName, productionLine}): BuilderState => ({
         ...state,
-        section:  state.section.data !== undefined ? {
-            state: LoadingState.Done,
-            data: {
-                ...state.section.data,
-                configurations:[
-                    ...state.section.data.configurations.slice(0, state.section.data.configurationIndex),
-                    {
-                        ...state.section.data.configurations[state.section.data.configurationIndex],
-                        productionLinesTargetSchedule: updateSkipProductionLineJig(jigName, productionLine, state.section.data.configurations[state.section.data.configurationIndex].productionLinesTargetSchedule)
-                    },
-                    ...state.section.data.configurations.slice(state.section.data.configurationIndex + 1),
-                ]
-            }
-        } : state.section
+        config: state.config !== null ? {
+            ...state.config,
+            productionLinesTargetSchedule: updateSkipProductionLineJig(jigName, productionLine, state.config?.productionLinesTargetSchedule)
+        } : null
     })),
     on(startDrag, (state, {source, jigName, sides}): BuilderState => ({
         ...state,

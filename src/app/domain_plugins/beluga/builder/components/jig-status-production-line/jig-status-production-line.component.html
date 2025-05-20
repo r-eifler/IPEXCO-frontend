@@ -17,9 +17,12 @@
     </app-jig>
 
     <div class="button-container">
-    @if (!status()?.onSite) {
+    <!-- @if (!status()?.onSite) {
         <mat-icon class="error">wrong_location</mat-icon>
     }
+    @else{
+        <mat-icon >location_on</mat-icon>
+    } -->
     @if (status()?.next) {
       <button
         mat-icon-button

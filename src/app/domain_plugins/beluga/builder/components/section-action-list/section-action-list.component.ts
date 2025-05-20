@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { ActionCardComponent } from '../../../shared/components/action-card/action-card.component';
 import { InitCardComponent } from '../../../shared/components/init-card/init-card.component';
-import { selectActions } from '../../state/builder.selector';
+import { selectCurrentActions } from '../../state/builder.selector';
 import { ActionCardEmptyStateComponent } from '../action-card-empty-state/action-card-empty-state.component';
 
 @Component({
@@ -18,6 +18,6 @@ import { ActionCardEmptyStateComponent } from '../action-card-empty-state/action
 export class SectionActionListComponent {
 
   store = inject(Store);
-  actions = this.store.selectSignal(selectActions);
+  actions = this.store.selectSignal(selectCurrentActions);
 
 }

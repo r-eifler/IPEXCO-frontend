@@ -5,7 +5,7 @@
 
 .container{
     display: grid;
-    grid-template-columns: 1fr auto;
+    grid-template-columns: 1fr auto auto;
     justify-content: space-between;
     gap: var(--spacing-200);
     align-items: center;
