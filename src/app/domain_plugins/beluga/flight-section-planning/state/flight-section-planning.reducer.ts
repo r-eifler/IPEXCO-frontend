@@ -40,8 +40,16 @@ const initialState: FlightSectionPlanningState = {
 export const FlightSectionPlanningReducer = createReducer(
     initialState,
     on(loadProject, (state): FlightSectionPlanningState => ({
-        ...state,
-        project: {state: LoadingState.Loading, data: undefined}
+        project: {state: LoadingState.Loading, data: undefined},
+        task: {state: LoadingState.Initial, data: undefined},
+        initialState: {state: LoadingState.Initial, data: undefined},
+        domainSpecification: {state: LoadingState.Initial, data: undefined},
+        services: { state: LoadingState.Initial, data: undefined },
+        tree: {state: LoadingState.Initial, data: undefined},
+        sections: {state: LoadingState.Initial, data: undefined},
+        selectedSectionId: null,
+        selectedConfigIndex: null,
+        updatedConfiguration: null
     })),
     on(loadProjectSuccess, (state, {project}): FlightSectionPlanningState => {
         const task = BelugaProblemZ.parse(project?.baseTask?.model);
@@ -82,7 +90,8 @@ export const FlightSectionPlanningReducer = createReducer(
     })),
     on(updateFlightPlanTreeSuccess, (state, {tree}): FlightSectionPlanningState => ({
         ...state,
-        tree: {state: LoadingState.Done, data: tree},
+        tree: state.project.data !== undefined && state.project.data._id == tree.project ? 
+            {state: LoadingState.Done, data: tree} : state.tree,
     })),
     on(loadFlightSections, (state): FlightSectionPlanningState => ({
         ...state,

@@ -55,6 +55,7 @@ export class ControlsComponent {
     this.form.controls.branch.valueChanges.pipe(takeUntilDestroyed()).subscribe(
       newIndex => {
         if(newIndex !== undefined && newIndex !== null){
+          console.log("Change branch Index: " + newIndex);
           this.store.dispatch(selectDifferentBranch({index: newIndex}))
         }
       }

@@ -16,7 +16,7 @@ import {Store} from '@ngrx/store';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {selectUserStudy, selectUserStudyDemos, selectUserStudyProjects} from '../../state/user-study.selector';
 import {selectedAtLeastOne} from '../../../validators/selected-at-least-one.validator';
-import { editUserStudy, loadUserStudyDemos} from '../../state/user-study.actions';
+import { editUserStudy, loadUserStudyDemos, loadUserStudyProjects} from '../../state/user-study.actions';
 import {isNoPropertyNull} from '../../../validators/no-property-null.validator';
 import {PageModule} from '../../../shared/components/page/page.module';
 import {provideNativeDateAdapter} from '@angular/material/core';
@@ -89,6 +89,7 @@ export class UserStudyEditorComponent {
 
   constructor() {
     this.store.dispatch(loadUserStudyDemos());
+    this.store.dispatch(loadUserStudyProjects());
 
     this.userStudy$.pipe(
       takeUntilDestroyed(),
