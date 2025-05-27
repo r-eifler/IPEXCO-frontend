@@ -33,15 +33,15 @@ export class LLMService {
     // ------------------------------ GENERAL SERVICES ------------------------------
 
 
-    getLLMContext$(id: string): Observable<LLMContext> {
+    // getLLMContext$(id: string): Observable<LLMContext> {
 
-        let httpParams = new HttpParams();
-        httpParams = httpParams.set('projectId', id);
+    //     let httpParams = new HttpParams();
+    //     httpParams = httpParams.set('projectId', id);
 
-        return this.http.get<IHTTPData<LLMContext>>(this.BASE_URL + "llm-context", { params: httpParams }).pipe(
-            map(({ data }) => data)
-        )
-    }
+    //     return this.http.get<IHTTPData<LLMContext>>(this.BASE_URL + "llm-context", { params: httpParams }).pipe(
+    //         map(({ data }) => data)
+    //     )
+    // }
 
     createLLMContext$(projectId: string, iterationStepId?: string): Observable<LLMContext> {
         console.log("Creating LLM context for projectId: ", projectId, "and iterationStepId: ", iterationStepId);

@@ -3,7 +3,7 @@ import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { catchError, switchMap } from "rxjs/operators";
 import { of } from "rxjs";
 import { IterativePlanningProjectService } from "../../service/project.service";
-import { createLLMContext, loadDomainSpecification, loadIterationSteps, loadLLMContext, loadPlanProperties, loadProject, loadProjectFailure, loadProjectSuccess } from "../iterative-planning.actions";
+import { createLLMContext, loadDomainSpecification, loadIterationSteps, loadPlanProperties, loadProject, loadProjectFailure, loadProjectSuccess } from "../iterative-planning.actions";
 import { Store } from "@ngrx/store";
 
 @Injectable()

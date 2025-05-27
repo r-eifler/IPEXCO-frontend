@@ -27,7 +27,7 @@ export enum LLMContextSetup {
   PROJECT = 'PROJECT',
 }
 
-export const LLMContextSetupZ = nativeEnum(LLMContextSetup);
+export const LLMContextSetupZ = nativeEnum(LLMContextSetup).optional();
 
 export const GeneralSettingsZ = object({
   main: object({

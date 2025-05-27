@@ -165,7 +165,7 @@ export class SettingsComponent {
 			this.form.controls.llmConfig.controls.maxCompletionTokens.setValue(settings.llmConfig.maxCompletionTokens);
 			this.form.controls.llmConfig.controls.goalTranslator.setValue(settings.llmConfig.goalTranslator);
       this.form.controls.llmConfig.controls.showReverseTranslation.setValue(settings.llmConfig.showReverseTranslation);
-      this.form.controls.llmConfig.controls.llmContextSetup.setValue(settings.llmConfig.llmContextSetup);
+      this.form.controls.llmConfig.controls.llmContextSetup.setValue(settings.llmConfig.llmContextSetup ?? LLMContextSetup.ITERATION_STEP);
   
 			if(settings.llmConfig.prompts && settings.llmConfig.prompts.length > 0){
 
