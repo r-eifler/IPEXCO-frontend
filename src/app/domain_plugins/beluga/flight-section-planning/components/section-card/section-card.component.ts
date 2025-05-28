@@ -23,7 +23,7 @@ import { PlanMethod, PlanMethodType } from '../../domain/plan_method';
 import { PlanMethodTypeIconPipe } from '../../pipe/plan-method-type-icon.pipe';
 import { PlanMethodTypeNamePipe } from '../../pipe/plan-method-type-name.pipe';
 import { cancelPlanning, createNewBranch, inspectPlan, registerManualPlanning, startAutomaticPlanning, updateConfigurationOfSectionAndConfigIndex } from '../../state/flight-section-planning.actions';
-import { selectActiveBranchRemainingNumberFlights, selectBranchNames, selectIsAutomatic, selectIsManual, selectSupportedPlanners } from '../../state/flight-section-planning.selector';
+import { selectActiveBranchRemainingNumberFlights, selectBranchNames, selectIsAutomatic, selectIsManual, selectIsMixed, selectSupportedPlanners } from '../../state/flight-section-planning.selector';
 import { BranchNameDialogComponent } from '../branch-name-dialog/branch-name-dialog.component';
 import { ConfigurationSelectorComponent } from '../configuration-selector/configuration-selector.component';
 import { SectionPlanMethodDialogComponent } from '../section-plan-method-dialog/section-plan-method-dialog.component';
@@ -60,6 +60,7 @@ export class SectionCardComponent {
   existingBranchNames = this.store.selectSignal(selectBranchNames);
   isAutomatic = this.store.selectSignal(selectIsAutomatic);
   isManual = this.store.selectSignal(selectIsManual);
+  isMixed = this.store.selectSignal(selectIsMixed);
   supportedPlanners= this.store.selectSignal(selectSupportedPlanners);
   remainingNUmberFlights = this.store.selectSignal(selectActiveBranchRemainingNumberFlights);
 

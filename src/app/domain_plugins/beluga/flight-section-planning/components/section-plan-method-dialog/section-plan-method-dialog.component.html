@@ -1,10 +1,10 @@
 <app-dialog *transloco="let t">
     <app-dialog-header>
-        <app-dialog-title>{{t('f.select_plan_configuration')}}</app-dialog-title>
+        <app-dialog-title>Select Panning Process</app-dialog-title>
     </app-dialog-header>
     <app-dialog-content>
         <div class="main">
-            <mat-chip-set>
+            <!-- <mat-chip-set>
                 @if(selectedMethodType() === null){
                     <mat-chip>{{t('f.method_type')}} ?</mat-chip>
                 }
@@ -23,7 +23,7 @@
                 @if(finished()){
                     <mat-chip>{{t('f.num_optimized_flights')}}: {{numOptimizedFlights}}</mat-chip>
                 }
-            </mat-chip-set>
+            </mat-chip-set> -->
             @if(selectedMethodType() === null){
                 <div class="button-container">
                     <button mat-flat-button class="full-width" (click)="onAutomatic()">{{t('f.automatic')}}</button>
@@ -38,18 +38,18 @@
                 </div>
             }
 
-            @if(finished()){
+            <!-- @if(finished()){
                 <form class="button-container">
                     <mat-form-field class="full-width" appearance="outline">
                         <mat-label>{{t('f.num_optimized_flights')}}</mat-label>
                         <input matInput type="number" [(ngModel)]="numOptimizedFlights" min="1" [max]="maxNumFlights" name="numOptimizedFlights">
                     </mat-form-field>
                 </form>
-            }
+            } -->
         </div>
     </app-dialog-content>
     <app-dialog-footer>
         <button mat-button (click)="onCancel()">{{t('f.cancel')}}</button>
-        <button mat-flat-button (click)="onStart()" [disabled]="!finished()">{{t('f.start')}}</button>
+        <!-- <button mat-flat-button (click)="onStart()" [disabled]="!finished()">{{t('f.start')}}</button> -->
     </app-dialog-footer>
 </app-dialog>

@@ -52,7 +52,7 @@
     </mat-card-content>
     <mat-card-actions class="actions-container">
         <div class="configs-main-container">
-            @if(isAutomatic()){
+            @if(isAutomatic() || isMixed()){
                 <span>{{t('f.configurations')}}:</span>
                 <div class="configs-container">
                     @for(config of configurations(); track config; let idx = $index){
@@ -97,9 +97,21 @@
                         {{t('f.generate_plan')}}
                     </a>
                 }
+                @if(isMixed()){
+                    <a class="details" mat-button 
+                        [routerLink]="['../configuration-explanations/' + section()?._id + '/' + section()?.configurationIndex]">
+                        {{t('f.check_configurations')}}
+                    </a>
+                    @if(selectedConfigSolvable()){
+                    <button class="details" mat-flat-button (click)="onCreatePlan()">{{t('f.generate_plan')}}</button>
+                    }
+                    @else{
+                        <button class="details" mat-button (click)="onCreatePlan()">{{t('f.generate_plan')}}</button>
+                    }
+                }
             }
             @if(solved()){
-                @if(isAutomatic()){
+                @if(isAutomatic() || isMixed()){
                     <a class="details" mat-button 
                         [routerLink]="['../configuration-explanations/' + section()?._id + '/' + section()?.configurationIndex]">
                         {{t('f.check_configurations')}}
@@ -117,7 +129,7 @@
                 ><mat-icon>call_split</mat-icon></button>
             }
             @if(notSolvable() || failed()){
-                @if(isAutomatic()){
+                @if(isAutomatic() || isMixed()){
                     <a class="details" mat-button 
                         [routerLink]="['../configuration-explanations/' + section()?._id + '/' + section()?.configurationIndex]">
                         {{t('f.check_configurations')}}

@@ -80,6 +80,7 @@
     <div class="hangars column">
         @for(pl of productionLines(); track pl;){
             <app-production-line
+                style="width: 100%;"
                 [line]="pl"
                 [delivered]="productionLinesDelivered()?.[pl.name]"
                 [jigTypes]="jigTypes()"

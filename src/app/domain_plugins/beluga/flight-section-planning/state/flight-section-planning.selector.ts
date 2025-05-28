@@ -18,6 +18,9 @@ export const selectProject = createSelector(selectState, (state) => state.projec
 
 export const selectIsManual = createSelector(selectProject, (project) => project?.settings.interfaces.explanationInterfaceType == ExplanationInterfaceType.MANUAL)
 export const selectIsAutomatic = createSelector(selectProject, (project) => project?.settings.interfaces.explanationInterfaceType == ExplanationInterfaceType.AUTOMATIC)
+export const selectIsMixed= createSelector(selectProject, (project) => project?.settings.interfaces.explanationInterfaceType == ExplanationInterfaceType.MIXED)
+
+
 
 export const selectDomainSpecification = createSelector(selectState, (state) => state.domainSpecification.data)
 

@@ -1,7 +1,7 @@
 <mat-card appearance="outlined" *transloco="let t">
     <mat-card-header>
-        <mat-icon mat-card-avatar>factory</mat-icon>
-        <div>{{t('s.line')}} <span style="font-weight: 500;">{{ lineName() }}</span></div>
+        <mat-icon mat-card-avatar>flight</mat-icon>
+        <mat-card-title>Line <span style="font-weight: 500;">{{ lineName() }}</span></mat-card-title>
     </mat-card-header>
     <mat-card-content class="content">
         @for(jig of remainingJigs(); track jig.name; let idx = $index){

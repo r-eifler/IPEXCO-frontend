@@ -19,7 +19,8 @@ export enum ExplanationInterfaceType {
   LLM_CHAT = "LLM_CHAT",
   MUGS_VISUALIZATION_ANSWER = "MUGS_VISUALIZATION_ANSWER",
   MANUAL = "MANUAL",
-  AUTOMATIC = "AUTOMATIC"
+  AUTOMATIC = "AUTOMATIC",
+  MIXED = "MIXED"
 };
 
 export const ExplanationInterfaceTypeZ = nativeEnum(ExplanationInterfaceType);
