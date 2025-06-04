@@ -5,7 +5,7 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { Store } from "@ngrx/store";
-import { Observable, combineLatest, filter, map, switchMap, take } from "rxjs";
+import { Observable, combineLatest, filter, map, of, switchMap, take } from "rxjs";
 
 import { BreadcrumbModule } from "src/app/shared/components/breadcrumb/breadcrumb.module";
 import { EmptyStateModule } from "src/app/shared/components/empty-state/empty-state.module";
@@ -57,6 +57,7 @@ import {
   selectSatisfiedSoftGoals,
   selectUnsatisfiedSoftGoals,
 } from "./step-detail-view.component.selector";
+import { ExplanationChatHybridComponent } from "../../components/explanation-chat-hybrid/explanation-chat-hybrid.component";
 
 @Component({
     selector: "app-step-detail-view",
@@ -66,6 +67,7 @@ import {
         EmptyStateModule,
         ExplanationChatComponent,
         ExplanationChatLlmComponent,
+        ExplanationChatHybridComponent,
         IterationStepHeroComponent,
         MatButtonModule,
         MatIconModule,
@@ -191,6 +193,16 @@ export class StepDetailViewComponent {
     );
   }
 
+  combinedPropertyAvailableQuestionTypes$: Observable<AvailableQuestion[]> = this.unsolvedSoftGoals$.pipe(
+    map(properties => properties.slice(0, 3)), // Take the first 3 properties
+    switchMap(properties => {
+      if (properties.length === 0) {
+        return of([]); // If no properties, return an empty array
+      }
+      // Take the available questions from the first property
+      return this.propertyAvailableQuestionTypes$(properties[0]);
+    })
+  );
 
   createNewIteration(baseStepId?: string) {
     this.store.dispatch(initNewIterationStep({ baseStepId }));
