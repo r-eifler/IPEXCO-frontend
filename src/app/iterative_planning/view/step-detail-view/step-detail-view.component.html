@@ -101,11 +101,16 @@
           <app-page-section-title>
             <mat-icon>lightbulb_2</mat-icon>
             Insights
+            @if (hasUnsolvedSoftGoals) {
+            <button mat-icon-button matTooltip="Refresh suggested questions." (click)="onRefreshSuggestedQuestions()">
+              <mat-icon>refresh</mat-icon>
+            </button>
+            }
           </app-page-section-title>
           <app-page-section-content>
             @if(hasUnsolvedSoftGoals) {
               <app-explanation-chat-hybrid
-              [availableQuestions]="combinedPropertyAvailableQuestionTypes$ | async" (questionSelected)="onQuestionSelected($event)"
+              [availableQuestions]="selectedCombinedPropertyAvailableQuestionTypes$ | async" (questionSelected)="onQuestionSelected($event)"
               [properties]="planProperties$ | async">
               </app-explanation-chat-hybrid>
             } @else if (isUnsolvable) {
