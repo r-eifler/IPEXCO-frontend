@@ -100,6 +100,15 @@ export const poseAnswer = createAction('[iterative-planning] pose answer', props
 export const questionPosedLLM = createAction('[iterative-planning] question posed LLM', props<{ question: Question, naturalLanguageQuestion: string }>());
 export const poseAnswerLLM = createAction('[iterative-planning] pose answer LLM', props<{ answer: ExplanationMessage }>());
 
+export const multipleQuestionsPosedLLM = createAction(
+    '[iterative-planning] multiple questions posed LLM',
+    props<{
+        questions: Array<{
+            question: Question,
+            naturalLanguageQuestion: string
+        }>
+    }>()
+);
 // LLM
 
 export const eraseLLMHistory = createAction('[llm] erase history');

@@ -12,7 +12,7 @@ import { DefinedGlobalExplanation, ExplanationRunStatus, QuestionType } from "..
 import { ExplanationMessage } from "../../domain/interface/explanation-message";
 import { Question } from "../../domain/interface/question";
 import { IterationStep, StepStatus } from "../../domain/iteration_step";
-import { poseAnswer, questionPosed, questionPosedLLM, registerGlobalExplanationComputation, sendMessageToLLMExplanationTranslatorFailure, sendMessageToLLMExplanationTranslatorSuccess } from "../iterative-planning.actions";
+import { poseAnswer, questionPosed, questionPosedLLM, multipleQuestionsPosedLLM, registerGlobalExplanationComputation, sendMessageToLLMExplanationTranslatorFailure, sendMessageToLLMExplanationTranslatorSuccess } from "../iterative-planning.actions";
 import { selectExplanation, selectIterationStepById, selectIterativePlanningProject, selectIterativePlanningProjectExplanationInterfaceType, selectIterativePlanningProperties } from "../iterative-planning.selector";
 
 @Injectable()
@@ -36,6 +36,27 @@ export class QuestionQueueEffect {
         take(1),
         map((explanation) => !explanation),
         tap( needsComputation => console.log('registerGlobalExplanationComputation: ' + needsComputation)),
+        switchMap(needsComputation => needsComputation ? [registerGlobalExplanationComputation({ iterationStepId })] : []),
+      );
+    }),
+  ));
+
+
+  computeMultipleExplanations$ = createEffect(() => this.actions$.pipe(
+    ofType(multipleQuestionsPosedLLM),
+    map(action => ({
+      question: action.questions[0].question,
+      naturalLanguageQuestion: action.questions[0].naturalLanguageQuestion
+    })),
+    concatLatestFrom(({ question: { iterationStepId }}) => this.store.select(selectIterationStepById(iterationStepId))),
+    filterListNotNullOrUndefined(),
+    mergeMap(([{ question: {iterationStepId } }, iterationStep]) => {
+      const hash = explanationHash(iterationStep);
+
+      return this.store.select(selectExplanation(hash)).pipe(
+        take(1),
+        map((explanation) => !explanation),
+        tap(needsComputation => console.log('registerGlobalExplanationComputation: ' + needsComputation)),
         switchMap(needsComputation => needsComputation ? [registerGlobalExplanationComputation({ iterationStepId })] : []),
       );
     }),
