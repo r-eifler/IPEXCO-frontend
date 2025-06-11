@@ -46,19 +46,14 @@ export class SectionPlanMethodDialogComponent {
 
   onManual(){
     this.selectedMethodType.set(PlanMethodType.MANUAL);
+
+    this.onStart()
   }
 
   onSelectPlanner(planner: Service){
     this.selectedPlanner.set(planner)
 
-    this.dialogRef.close({
-      method: {
-        name: this.selectedMethodType() === PlanMethodType.MANUAL  ? 'Human Planner' : this.selectedPlanner()?.name,
-        type: this.selectedMethodType(),
-        serviceId: this.selectedMethodType() !== PlanMethodType.MANUAL ? this.selectedPlanner()?._id : undefined,
-        numOptimizedFlights: this.numOptimizedFlights
-      }
-    })
+   this.onStart()
   }
 
   onStart(){

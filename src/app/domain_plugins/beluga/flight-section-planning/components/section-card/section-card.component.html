@@ -52,7 +52,7 @@
     </mat-card-content>
     <mat-card-actions class="actions-container">
         <div class="configs-main-container">
-            @if(isAutomatic() || isMixed()){
+            @if(isAutomatic() || isMixed() && ! hasManualPlan()){
                 <span>{{t('f.configurations')}}:</span>
                 <div class="configs-container">
                     @for(config of configurations(); track config; let idx = $index){
@@ -111,7 +111,7 @@
                 }
             }
             @if(solved()){
-                @if(isAutomatic() || isMixed()){
+                @if(isAutomatic() || isMixed() && ! hasManualPlan()){
                     <a class="details" mat-button 
                         [routerLink]="['../configuration-explanations/' + section()?._id + '/' + section()?.configurationIndex]">
                         {{t('f.check_configurations')}}

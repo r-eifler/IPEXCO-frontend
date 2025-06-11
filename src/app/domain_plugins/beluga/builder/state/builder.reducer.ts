@@ -4,7 +4,7 @@ import { Project } from "src/app/shared/domain/project";
 import { BelugaConfiguration, FlightSection, getFlightSchedule, getFullStartState, getProductionSchedule } from "../../flight-section-planning/domain/flight-section";
 import { BelugaProblem, BelugaProblemZ, Flight, Side } from "../../shared/domain/beluga_problem";
 import { applyAction, BelugaState } from "../../shared/domain/beluga_state";
-import { unskipNotDelivered, updateSkipIncomingJig, updateSkipOutgoingJigType, updateSkipProductionLineJig } from "../domain/schedule_utils";
+import { unSkipNotDelivered, updateSkipIncomingJig, updateSkipOutgoingJigType, updateSkipProductionLineJig } from "../domain/schedule_utils";
 import { cancelDrag, createNewBelugaAction, loadFlightSection, loadFlightSectionSuccess, loadProject, loadProjectSuccess, skipIncomingJig, skipOutgoingJigType, skipProductionJig, startDrag, stopDrag, updateFlightSectionSuccess } from "./builder.actions";
 import { BelugaAction } from "../../shared/domain/beluga_plan";
 import { none } from "ramda";
@@ -73,7 +73,7 @@ export const BuilderReducer = createReducer(
             taskState,
             config: {
                 ...section.configurations[section.configurationIndex],
-                productionLinesTargetSchedule: unskipNotDelivered(section.configurations[section.configurationIndex].productionLinesTargetSchedule, taskState?.productionLines)
+                productionLinesTargetSchedule: unSkipNotDelivered(section.configurations[section.configurationIndex].productionLinesTargetSchedule, taskState?.productionLines)
             },
             actions: [],
             dragSource: null,

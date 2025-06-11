@@ -89,6 +89,8 @@ export class SectionCardComponent {
   isRunning = computed(() => this.section()?.status == PlanRunStatus.RUNNING);
   isPending = computed(() => this.section()?.status == PlanRunStatus.PENDING);
 
+  hasManualPlan = computed(() => this.section()?.planMethod?.type == PlanMethodType.MANUAL);
+
   solved = computed(() => this.section()?.status == PlanRunStatus.SOLVED)
   notSolvable = computed(() => this.section()?.status === PlanRunStatus.NO_PLAN_FOUND || this.section()?.status === PlanRunStatus.UNSOLVABLE)
   failed = computed(() => this.section()?.status === PlanRunStatus.FAILED || this.section()?.status === PlanRunStatus.CANCELED)
@@ -147,6 +149,7 @@ export class SectionCardComponent {
         console.log(result);
         if(result.method.type == PlanMethodType.MANUAL){
           this.store.dispatch(registerManualPlanning({section: this.section(), method: result.method}))
+          this.router.navigate(['../planning/manual/section/' +  this.section()?._id], {relativeTo: this.activatedRoute})
         }
         if(result.method.type == PlanMethodType.AUTOMATIC_SEARCH_PLANNER){
           this.store.dispatch(startAutomaticPlanning({section: this.section(), method: result.method}))

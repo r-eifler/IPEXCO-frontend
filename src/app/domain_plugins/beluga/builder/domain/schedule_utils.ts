@@ -70,7 +70,7 @@ export function updateSkipProductionLineJig(jigName: string, productionLine: str
 }
 
 
-export function unskipNotDelivered(schedules: ProductionLineTargetSchedule[], state: Record<string,ProductionLine>){
+export function unSkipNotDelivered(schedules: ProductionLineTargetSchedule[], state: Record<string,string[]>){
     return schedules.map((s) => {
         const indexLastDelivered = s.schedule.findIndex(e => e.jig === state[s.name][-1]);
         return {
@@ -78,6 +78,19 @@ export function unskipNotDelivered(schedules: ProductionLineTargetSchedule[], st
             schedule: s.schedule.map((e, index) => ({
                 ...e,
                 skip: index <= indexLastDelivered ? e.skip : false 
+            }))
+        }
+    })
+}
+
+export function skipNotDelivered(schedules: ProductionLineTargetSchedule[], state: Record<string,string[]>){
+    return schedules.map((s) => {
+        const delivered = state[s.name];
+        return {
+            ...s,
+            schedule: s.schedule.map(e => ({
+                ...e,
+                skip: ! delivered.includes(e.jig)
             }))
         }
     })
