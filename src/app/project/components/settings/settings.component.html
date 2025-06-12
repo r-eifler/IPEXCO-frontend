@@ -120,13 +120,15 @@
           <mat-button-toggle [value]="ExplanationTypes.TEMPLATE_QUESTION_ANSWER">Templates</mat-button-toggle>
           <mat-button-toggle [value]="ExplanationTypes.MUGS_VISUALIZATION">MUGS Visualization</mat-button-toggle>
           <mat-button-toggle [value]="ExplanationTypes.LLM_CHAT">LLM Chat</mat-button-toggle>
+          <mat-button-toggle [value]="ExplanationTypes.HYBRID">Hybrid</mat-button-toggle>
         </mat-button-toggle-group>
        
 
         </mat-card-content>
       </mat-card>
 
-      @if(form.controls.interfaces.controls.explanationInterfaceType.value == ExplanationTypes.LLM_CHAT || 
+      @if(form.controls.interfaces.controls.explanationInterfaceType.value == ExplanationTypes.LLM_CHAT ||
+       form.controls.interfaces.controls.explanationInterfaceType.value == ExplanationTypes.HYBRID ||
       form.controls.interfaces.controls.propertyCreationInterfaceType.value == PropertyCreationTypes.LLM_CHAT){
       <mat-card appearance="outlined">
         <mat-card-header>
@@ -162,6 +164,13 @@
           <mat-checkbox [formControl]="form.controls.llmConfig.controls.showReverseTranslation">
             Show Reverse Translation
           </mat-checkbox>
+
+          <mat-label matTooltip="Iteration Step: LLM Context is created for each iteration step. Project: LLM Context is shared across iteration steps.">LLM Context Setup</mat-label>
+          <mat-button-toggle-group  [formControl]="form.controls.llmConfig.controls.llmContextSetup">
+            <mat-button-toggle [value]="LLMContextSetup.ITERATION_STEP">Iteration Step</mat-button-toggle>
+            <mat-button-toggle [value]="LLMContextSetup.PROJECT">Project</mat-button-toggle>
+          </mat-button-toggle-group>
+          
 
           <mat-label>Prompts</mat-label>
 

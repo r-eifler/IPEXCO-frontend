@@ -124,9 +124,9 @@ export const createLLMContext = createAction('[llm] create LLM context', props<{
 export const createLLMContextSuccess = createAction('[llm] create LLM context success', props<{LLMContext: LLMContext}>());
 export const createLLMContextFailure = createAction('[llm] create LLM context failure', props<{ err: any}>());
 
-export const loadLLMContext = createAction('[llm] load LLM context', props<{projectId: string}>());
-export const loadLLMContextSuccess = createAction('[llm] load LLM context success', props<{LLMContext: LLMContext}>());
-export const loadLLMContextFailure = createAction('[llm] load LLM context failure', props<{ err: any}>());
+// export const loadLLMContext = createAction('[llm] load LLM context', props<{projectId: string}>());
+// export const loadLLMContextSuccess = createAction('[llm] load LLM context success', props<{LLMContext: LLMContext}>());
+// export const loadLLMContextFailure = createAction('[llm] load LLM context failure', props<{ err: any}>());
 
 export const directResponseQT = createAction('[llm] direct response QT', props<{ directResponse: string }>());
 export const directMessageET = createAction('[llm] direct message ET', props<{ directResponse: string, iterationStepId: string }>());

@@ -18,9 +18,17 @@ export enum ExplanationInterfaceType {
   MUGS_VISUALIZATION = "MUGS_VISUALIZATION",
   LLM_CHAT = "LLM_CHAT",
   MUGS_VISUALIZATION_ANSWER = "MUGS_VISUALIZATION_ANSWER",
+  HYBRID = "HYBRID",
 };
 
 export const ExplanationInterfaceTypeZ = nativeEnum(ExplanationInterfaceType);
+
+export enum LLMContextSetup {
+  ITERATION_STEP = 'ITERATION_STEP',
+  PROJECT = 'PROJECT',
+}
+
+export const LLMContextSetupZ = nativeEnum(LLMContextSetup).optional();
 
 export const GeneralSettingsZ = object({
   main: object({
@@ -45,6 +53,7 @@ export const GeneralSettingsZ = object({
     outputSchema: array(string()),
     goalTranslator: boolean(),
     showReverseTranslation: boolean(),
+    llmContextSetup: LLMContextSetupZ,
   }),
   userStudy: object({
       introTask: boolean(),
@@ -79,6 +88,7 @@ export const defaultGeneralSetting: GeneralSettings = {
     outputSchema: [],
     goalTranslator: false,
     showReverseTranslation: false,
+    llmContextSetup: LLMContextSetup.ITERATION_STEP,
   },
   userStudy: {
       introTask: false,

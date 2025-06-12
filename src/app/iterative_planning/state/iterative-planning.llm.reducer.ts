@@ -1,10 +1,17 @@
 import { LoadingState } from "src/app/shared/common/loadable.interface";
-import { eraseLLMHistory, sendMessageToLLMGoalTranslator, sendMessageToLLMGoalTranslatorSuccess, sendMessageToLLMExplanationTranslator, sendMessageToLLMExplanationTranslatorSuccess, sendMessageToLLMExplanationTranslatorFailure, sendMessageToLLMQuestionTranslator, sendMessageToLLMQuestionTranslatorSuccess, sendMessageToLLMQuestionTranslatorFailure, loadLLMContextSuccess, createLLMContext, createLLMContextSuccess, directResponseQT, showReverseTranslationGT, showReverseTranslationQT } from "./iterative-planning.actions";
+import {
+  eraseLLMHistory,
+  sendMessageToLLMGoalTranslator, sendMessageToLLMGoalTranslatorSuccess,
+  sendMessageToLLMExplanationTranslator, sendMessageToLLMExplanationTranslatorSuccess, sendMessageToLLMExplanationTranslatorFailure,
+  sendMessageToLLMQuestionTranslator, sendMessageToLLMQuestionTranslatorSuccess, sendMessageToLLMQuestionTranslatorFailure,
+  createLLMContext, createLLMContextSuccess,
+  directResponseQT, showReverseTranslationGT, showReverseTranslationQT
+} from "./iterative-planning.actions";
 import { IterativePlanningState } from "./iterative-planning.reducer";
 import { ActionCreator, on, ReducerTypes } from "@ngrx/store";
 
 export const llmStateChangeFunctions: ReducerTypes<IterativePlanningState,ActionCreator[]>[] = [
-    //   // LLM STUFF TO BE UPDATED
+    
   on(eraseLLMHistory, (state): IterativePlanningState => ({
     ...state,
     LLMChatLoadingState: LoadingState.Initial,
@@ -103,10 +110,10 @@ on(sendMessageToLLMQuestionTranslatorFailure, (state): IterativePlanningState =>
       visibleMessages: [...state.LLMContext.visibleMessages, {role: 'sender', content: "Something went wrong. Please try again.", iterationStepId: state.selectedIterationStepId ?? null}]
     }
 })),
-on(loadLLMContextSuccess, (state,action): IterativePlanningState=> ({
-  ...state,
-  LLMContext : action.LLMContext
-})),
+// on(loadLLMContextSuccess, (state,action): IterativePlanningState=> ({
+//   ...state,
+//   LLMContext : action.LLMContext
+// })),
 on(createLLMContext, (state, action): IterativePlanningState => ({
   ...state,
 })),
