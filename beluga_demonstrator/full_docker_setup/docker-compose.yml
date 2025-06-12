@@ -1,23 +1,26 @@
-version: "3"
 services:
 
-  IPEXCO_BACKEND:
-    container_name: ipexco-backend
-    image: eifler/ipexco-backend:latest
+  DEMO_FRONTEND:
+      container_name: beluga-demo-frontend
+      image: eifler/beluga-demo-frontend:latest
+      ports:
+        - "<open port>:80"
+
+  DEMO_BACKEND:
+    container_name: beluga-demo-backend
+    image: eifler/beluga-demo-backend:latest
     volumes:
       - <absolute bath to local folder>:/usr/src/app/dist/out-tsc/data
     ports:
       - "3000:3000"
-    network_mode: "host"
     env_file:
         - backend.env
 
   PLANNER_BELUGA:
     container_name: planner_beluga
-    image: simple-beluga-planner:latest
+    image: eifler/simple-beluga-planner:latest
     ports:
       - "3336:3336"
-    network_mode: "host"
     env_file:
         - planner.env
 
@@ -28,4 +31,3 @@ services:
       - <absolute bath to local folder>:/data/db
     ports:
       - "27017:27017"
-    network_mode: "host"

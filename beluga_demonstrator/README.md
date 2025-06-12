@@ -2,12 +2,13 @@
 
 For the general setup of IPEXCO please check out the main README.
 
-The Beluga test setup only includes a domain dependent planner for the competition
-JSON encoding.
+For a setup using docker images for all components (front-end, back-end, services and database)
+use the docker compose file in the folder `full_docker_setup`
+This setup only includes a domain dependent planner for the competition JSON encoding.
 
-## Back-End Docker
+## General Setup
 
-`beluga_test` contains a docker compose and two environments. 
+`full_docker_setup` contains a docker compose and two environments. 
 You must define the following parameters:
 
 `docker-compose.yml`:
@@ -15,6 +16,12 @@ You must define the following parameters:
 Replace `<absolute bath to local folder>` with absolute paths to two **different** 
 folders on your home system. These folders are used by the back-end and the 
 database to store the uploaded data.
+
+The front-end container is running an nginx on port `80`. You must map it to the 
+port (replace `<open port>`) you want to serve the application to.
+The nginx already implements a reverse proxy for the API calls to the back-end
+container.
+
 
 `backend.env`:
 
@@ -34,11 +41,26 @@ database to store the uploaded data.
     services, e.g. planner 
 - `MONGO_DB`: a unique name for the database used by the job scheduler of the service
 
-**Attention**: If you register a new service in the web interface, then 
+**Attention**: If you register a new service in the web interface, then the
 requested API Key and the `API_KEY` defined in the service environment 
 must match.
 
-## Setup on MacOS
+### Partial Docker Setup
+
+If you want to run for example the front-end natively, then you can comment
+it out from the docker compose. 
+
+For the docker containers and the natively running font-end server to communicate 
+add the option 
+
+```
+network_mode: "host"
+```
+
+to all remaining components in the docker compose. In this case the port mapping 
+is no longer used.
+
+#### Setup on MacOS
 
 On MacOS network mode `host` is not supported. Therefore, you need a few changes to make the docker-compose work.
 
@@ -49,9 +71,6 @@ On MacOS network mode `host` is not supported. Therefore, you need a few changes
 
 The docker images for the back-end and the Database are available on DockerHub.
 
-The image of the *simple Beluga Planner* you have to build. 
-See [repository](https://gitlab.aniti.fr/tuples/use-cases/beluga/simple-beluga-planner-demonstrator-service#)
-
 
 #### Start Docker
 
@@ -59,17 +78,15 @@ To run all containers together run:
 
     docker compose up
 
-in the folder `beluga_test`
+in the folder `full_docker_setup`
 
 ## Front-End Configuration
 
-### Basic Plan Generation Use Case
+To initialize the demonstrator, perform the following steps:
 
-To compute a plan for a domain dependent Beluga instance, perform the following 
-steps
+**Create Beluga domain and register planner and explainer**:
 
-**Create Beluga domain and register planner**:
-
+1. Go to the Menu in the top left corner and then to IPEXCO.
 1. Go to the Menu in the top left corner and then to Specifications.
 1. Add a Beluga Domain. Give it a name containing *Beluga* and select as encoding 
     `DOMAIN_DEPENDENT`.
@@ -77,17 +94,16 @@ steps
 URL `http://localhost:3336` (If you have not changed any of the default settings),
 as API Key what you defined in the *env* file of the simple beluga docker container, as 
 encoding `DOMAIN_DEPENDENT` and as domain the Beluga domain you just created.
+1. Add the simple Beluga planner as a service. As type select `EXPLAINER` as 
+URL `http://localhost:3336` (If you have not changed any of the default settings),
+as API Key what you defined in the *env* file of the simple beluga docker container, as 
+encoding `DOMAIN_DEPENDENT` and as domain the Beluga domain you just created.
 
-**Create a *Project* and compute the first plan**:
 
+**Create a Project**:
+
+1. Now go back to the main menu (top left corner) and select Beluga System.
 1. Now go back to the main menu (top left corner) and select Projects.
-1. Create a new project and select as domain the just created Beluga domain.
-In the next step you can upload a Beluga JSON file from the competition.
+1. Create a new project by uploading upload a Beluga JSON file from the competition.
 An example file is given in `beluga/example_data/beluga/json`.
-1. Click on the right arrow of the new created project.
-1. To test and compare different planner *start* the *Planning* feature.
-1. Create a new plan. You should be able to select the simple Beluga planner 
-you registered in the beginning.
-1. If everything works you should get a plan within a few seconds for the included 
-sample problem.
-1. The *Details* of a plan gives you for now only a list of the action names.
+
