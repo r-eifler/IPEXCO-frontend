@@ -4,20 +4,20 @@ services:
       container_name: beluga-demo-frontend
       image: eifler/beluga-demo-frontend:latest
       ports:
-        - "<open port>:80"
+        - "4080:80"
 
   DEMO_BACKEND:
     container_name: beluga-demo-backend
     image: eifler/beluga-demo-backend:latest
     volumes:
-      - <absolute bath to local folder>:/usr/src/app/dist/out-tsc/data
+      - ./backend_data:/usr/src/app/dist/out-tsc/data
     ports:
       - "3000:3000"
     env_file:
         - backend.env
 
   PLANNER_BELUGA:
-    container_name: planner_beluga
+    container_name: test_planner_beluga
     image: eifler/simple-beluga-planner:latest
     ports:
       - "3336:3336"
@@ -25,9 +25,9 @@ services:
         - planner.env
 
   DATABASE:
-    container_name: mongo_beluga
+    container_name: test_mongo_beluga
     image: mongo
     volumes:
-      - <absolute bath to local folder>:/data/db
+      - ./db_data:/data/db
     ports:
       - "27017:27017"

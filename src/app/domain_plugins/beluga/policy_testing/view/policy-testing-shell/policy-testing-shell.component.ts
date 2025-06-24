@@ -4,9 +4,9 @@ import { RouterOutlet } from '@angular/router';
 @Component({
   selector: 'app-builder-policy-testing-shell',
   imports: [RouterOutlet],
-  templateUrl: './shell.component.html',
-  styleUrl: './shell.component.scss'
+  templateUrl: './policy-testing-shell.component.html',
+  styleUrl: './policy-testing-shell.component.scss'
 })
-export class BuilderShellComponent {
+export class PolicyTestingShellComponent {
 
 }

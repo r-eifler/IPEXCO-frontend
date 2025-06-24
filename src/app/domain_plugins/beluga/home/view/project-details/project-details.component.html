@@ -29,6 +29,16 @@
             Start
           </a>
         </app-project-action-card>
+
+        <app-project-action-card>
+          <span action-title>Policy Testing</span>
+          <span action-description>
+            Test a policy for sub-optimality
+          </span>
+          <a mat-flat-button [routerLink]="['/beluga/policy-testing', (project$ | async)?._id]" action-button>
+            Start
+          </a>
+        </app-project-action-card>
   
         <!-- <app-project-action-card>
           <span action-title>Planning</span>
