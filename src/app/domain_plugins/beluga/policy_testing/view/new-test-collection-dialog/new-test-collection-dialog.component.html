@@ -1,0 +1,35 @@
+<app-dialog>
+  <app-dialog-header>
+    <app-dialog-title>New Test Collection</app-dialog-title>
+  </app-dialog-header>
+  <app-dialog-content>
+        <form
+            class="main-form"
+            [formGroup]="form">
+
+            <mat-form-field class="full-width" appearance="outline">
+              <mat-label>Name</mat-label>
+              <input matInput type="text" formControlName="name" />
+            </mat-form-field>
+
+            <!-- <mat-form-field appearance="outline"  class="full-width">
+              <mat-label>Description</mat-label>
+              <textarea matInput formControlName="description"></textarea>
+            </mat-form-field> -->
+
+            <app-template-file-upload 
+              (file)="onPolicySelected($event)"
+              (fileName)="onFileName($event)"
+              [valid]="policyIsValid$ | async">
+              Policy
+            </app-template-file-upload>        
+
+        </form>
+  </app-dialog-content>
+  <app-dialog-footer>
+    <button mat-button (click)="onCancel()">Cancel</button>
+    <button mat-flat-button color="primary" (click)="onSave()" [disabled]="!((policyIsValid$ | async) && form.valid)">
+        Create
+    </button>
+  </app-dialog-footer>
+</app-dialog>
