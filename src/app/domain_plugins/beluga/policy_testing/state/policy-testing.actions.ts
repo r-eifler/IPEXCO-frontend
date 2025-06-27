@@ -20,3 +20,11 @@ export const createTestCollectionsSuccess = createAction('[policy-testing] creat
 export const createTestCollectionsFailure = createAction('[policy-testing] create test collections failure', props<{err: any}>());
 
 export const selectTestSuite = createAction('[policy-testing] select test suite', props<{testSuiteId: string}>());
+
+
+export const startTestStateFuzzing = createAction('[policy-testing] start test state fuzzing', props<{testSuiteId: string, numberOfFuzzedStates: number}>());
+export const startTestStateFuzzingSuccess = createAction('[policy-testing] start test state fuzzing success', props<{testCollection: TestCollection}>());
+export const startTestStateFuzzingFailure = createAction('[policy-testing] start test state fuzzing failure', props<{err: any}>());
+
+export const finishedTestStateFuzzingSuccess = createAction('[policy-testing] finished test state fuzzing success', props<{id: string}>());
+export const finishedTestStateFuzzingFailure = createAction('[policy-testing] finished test state fuzzing failure', props<{err: any}>());

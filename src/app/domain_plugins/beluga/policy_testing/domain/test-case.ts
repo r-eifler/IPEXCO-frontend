@@ -1,6 +1,7 @@
 import { array, boolean, nativeEnum, number, object, string, unknown, infer as zinfer } from "zod";
 import { BelugaActionZ } from "../../shared/domain/beluga_plan";
 import { BelugaStateZ } from "../../shared/domain/beluga_state";
+import { BelugaProblemZ } from "../../shared/domain/beluga_problem";
 
 
 export const FileUploadZ = object({
@@ -29,14 +30,22 @@ export enum TestRunStatus {
 
 export const TestRunStatusZ = nativeEnum(TestRunStatus);
 
+export enum TestStateGenerationMethod{
+    MANUAL = "MANUAL",
+    FUZZING = "FUZZING"
+}
+
+export const TestStateGenerationMethodZ = nativeEnum(TestStateGenerationMethod);
+
 export const TestCaseZ = object({
     stateID: number(),
     testID: number(),
-    state: BelugaStateZ,
+    state: BelugaProblemZ,
     policyTrace: array(BelugaActionZ),
-    policyCost: number(),
+    policyCost: number().nullable(),
     classifiedAdBug: boolean(),
     status: TestRunStatusZ,
+    method: TestStateGenerationMethodZ,
 })
 
 export type TestCase = zinfer<typeof TestCaseZ>;
@@ -48,6 +57,7 @@ export const TestCollectionBaseZ = object({
    project: string(),
    policy: PolicyZ,
    numFuzzStates: number(),
+   status: TestRunStatusZ,
    testCases: array(TestCaseZ)
 })
 

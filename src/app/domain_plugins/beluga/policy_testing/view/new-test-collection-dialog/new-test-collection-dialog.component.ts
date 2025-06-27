@@ -10,7 +10,7 @@ import { Store } from '@ngrx/store';
 import { BehaviorSubject, combineLatest, filter, map, take } from 'rxjs';
 import { TemplateFileUploadComponent } from 'src/app/components/files/file-upload/file-upload.component';
 import { DialogModule } from 'src/app/shared/components/dialog/dialog.module';
-import { FileUpload, TestCollectionBase } from '../../domain/test-case';
+import { FileUpload, TestCollectionBase, TestRunStatus } from '../../domain/test-case';
 import { AsyncPipe } from '@angular/common';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule, MatLabel } from '@angular/material/form-field';
@@ -91,7 +91,8 @@ export class NewTestCollectionDialogComponent {
 						},
 						project: '',
 						numFuzzStates: 0,
-						testCases: []
+						testCases: [],
+						status: TestRunStatus.PENDING
 					};
 
 					console.log(newTestCollection);

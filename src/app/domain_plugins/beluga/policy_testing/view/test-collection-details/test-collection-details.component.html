@@ -1,1 +1,49 @@
-<p>test-collection-details works!</p>
+<app-page>
+    <app-breadcrumb>
+		<a app-breadcrumb-item [routerLink]="['/beluga/policy-testing']"><mat-icon>bug_report</mat-icon></a>
+		<app-breadcrumb-item>{{ testSuite()?.name }}</app-breadcrumb-item>
+	</app-breadcrumb>
+
+    <app-page-title>
+        Test Suite: {{testSuite()?.name}}
+    </app-page-title>
+
+    <app-page-hero>
+        <app-test-suite-hero [testSuite]="testSuite()"></app-test-suite-hero>
+    </app-page-hero>
+
+    <app-page-content>
+         <app-page-section-list>
+            <app-page-section>
+                <app-page-section-content class="main-controls">
+                    <div class="button-controls">
+                        <a  mat-button [routerLink]="['./new-test-case']" [disabled]="!isIdle()"><mat-icon>add</mat-icon>New Test Case</a>
+                        <button  mat-button (click)="startFuzzing()" [disabled]="!isIdle()"><mat-icon>alt_route</mat-icon>Start Test State Fuzzing</button>
+                        <mat-form-field appearance="outline" class="state-input">
+                        <mat-label>#states</mat-label>
+                            <input matInput type="number" [(ngModel)]="numberOfFuzzedStates">
+                        </mat-form-field>
+                    </div>
+                    @if(isRunning()){
+                        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+                    }
+                </app-page-section-content>
+            </app-page-section>
+            <app-page-section>
+                <app-page-section-content>
+                    <mat-accordion class="accordion">
+                        @for(case of testCases(); track case){
+                            <app-test-case-panel [testCase]="case"></app-test-case-panel>
+                        }
+                        @if(testCases()?.length === 0){
+                            <app-info>
+                                <mat-icon>info</mat-icon>
+                                There are no test cases available. 
+                            </app-info>
+                        }
+                    </mat-accordion>
+                </app-page-section-content>
+            </app-page-section>
+         </app-page-section-list>
+    </app-page-content>
+</app-page>

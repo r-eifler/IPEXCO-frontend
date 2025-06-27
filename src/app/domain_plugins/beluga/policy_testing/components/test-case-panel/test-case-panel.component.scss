@@ -1,0 +1,10 @@
+.mat-expansion-panel-header-description {
+  justify-content: space-between;
+  align-items: center;
+}
+
+.actions {
+  display: flex;
+  flex-direction: row;
+  gap: var(--spacing-100);
+}

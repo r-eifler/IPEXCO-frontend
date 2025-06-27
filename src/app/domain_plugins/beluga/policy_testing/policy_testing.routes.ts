@@ -10,6 +10,8 @@ import { PolicyTestingProjectService } from './services/project.service';
 import { PolicyTestingTestCollectionsService } from './services/tests.service';
 import { TestCollectionDetailsComponent } from './view/test-collection-details/test-collection-details.component';
 import { SelectTestSuiteResolver } from './resolver/select-test-suite.resolver';
+import { NewTestCaseComponent } from './view/new-test-case/new-test-case.component';
+import { FuzzingMonitoringService } from './services/fuzzing-monitoring.service';
 
 
 export const routes: Routes = [
@@ -22,6 +24,7 @@ export const routes: Routes = [
       provideEffects(policyTestingEffects),
       PolicyTestingProjectService,
       PolicyTestingTestCollectionsService,
+      FuzzingMonitoringService,
     ],
     children: [
       {
@@ -32,6 +35,11 @@ export const routes: Routes = [
       {
         path: ':projectId/:testId',
         component: TestCollectionDetailsComponent,
+        resolve: [LoadProjectResolver, SelectTestSuiteResolver],
+      },
+      {
+        path: ':projectId/:testId/new-test-case',
+        component: NewTestCaseComponent,
         resolve: [LoadProjectResolver, SelectTestSuiteResolver],
       },
     ]

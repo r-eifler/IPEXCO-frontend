@@ -15,12 +15,18 @@ export class PolicyTestingTestCollectionsService{
     private http = inject(HttpClient)
     private BASE_URL = environment.apiURL + "policy-testing/";
 
-    getTestCollections$(id: string): Observable<TestCollection[]> {
+    getTestCollections$(projectId: string): Observable<TestCollection[]> {
         let httpParams = new HttpParams();
-        httpParams = httpParams.set('projectId', id);
+        httpParams = httpParams.set('projectId', projectId);
 
         return this.http.get<unknown>(this.BASE_URL, { params: httpParams }).pipe(
             map((data) => array(TestCollectionZ).parse(data)),
+        )
+    }
+
+    getTestCollection$(id: string): Observable<TestCollection> {
+        return this.http.get<unknown>(this.BASE_URL + id).pipe(
+            map((data) => TestCollectionZ.parse(data)),
         )
     }
 
@@ -39,6 +45,12 @@ export class PolicyTestingTestCollectionsService{
 
     postTestCollection$(testCollection: TestCollectionBase): Observable<TestCollection> {
         return this.http.post<unknown>(this.BASE_URL, testCollection).pipe(
+            map((data) => TestCollectionZ.parse(data)),
+        )
+    }
+
+    startFuzzing$(testSuiteId: string, numberOfFuzzedStates: number): Observable<TestCollection> {
+        return this.http.post<unknown>(this.BASE_URL + testSuiteId + '/start-fuzzing', {numberOfFuzzedStates}).pipe(
             map((data) => TestCollectionZ.parse(data)),
         )
     }
