@@ -1,0 +1,23 @@
+<app-page-full *transloco="let t">
+    <app-breadcrumb>
+		<a app-breadcrumb-item [routerLink]="['../../..']"><mat-icon>bug_report</mat-icon></a>
+        <a app-breadcrumb-item [routerLink]="['../..']">{{ testSuite()?.name }}</a>
+		<app-breadcrumb-item>{{ 'Test Case ' + testCase()?.stateID }}</app-breadcrumb-item>
+	</app-breadcrumb>
+
+    <app-page-title>
+        Test Case: State {{testCase()?.stateID}}
+    </app-page-title>
+
+    <app-page-content>
+        <app-trace-inspector
+            [configuration]="configuration()"
+            [startState]="startState()"
+            [actions]="actions()"
+            [siteSetUp]="siteSetUp()"
+            [flightSchedule]="flightSchedule()"
+            [productionSchedule]="productionSchedule()"
+        >
+        </app-trace-inspector>
+    </app-page-content>
+</app-page-full>

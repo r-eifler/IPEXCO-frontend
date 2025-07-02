@@ -5,14 +5,16 @@ import { TranslocoModule } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 import { BreadcrumbModule } from 'src/app/shared/components/breadcrumb/breadcrumb.module';
 import { PageModule } from 'src/app/shared/components/page/page.module';
-import { SectionPlanComponent } from '../../../shared/view/section-plan/section-plan.component';
+import { TraceInspectorComponent } from '../../../shared/components/trace-inspector/trace-inspector.component';
 import { selectSelectedSection } from '../../state/flight-section-planning.selector';
+import { BelugaActionType } from '../../../shared/domain/beluga_plan';
+import { getFullStartState } from '../../domain/flight-section';
 
 @Component({
   selector: 'app-plan-inspector',
   imports: [
     TranslocoModule,
-    SectionPlanComponent,
+    TraceInspectorComponent,
     PageModule,
     BreadcrumbModule,
     MatIconModule,
@@ -32,6 +34,10 @@ export class PlanInspectorComponent {
     }
     return this.section()?.configurations[index];
   })
+
+  actions = computed(() => this.section()?.actions.filter(a => a.name !== BelugaActionType.SWITCH_TO_NEXT_BELUGA) ?? [])
+
+  startState = computed(() => getFullStartState(this.section()))
 
   name = computed(() => {
     let config = this.configuration();

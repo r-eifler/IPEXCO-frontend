@@ -33,7 +33,7 @@ export class TestResultsPlotsComponent {
           "value": num_finished_and_not_bug
         },
         {
-          "name": "pending",
+          "name": "no result",
           "value": num_pending
         },
       ]

@@ -21,9 +21,16 @@ export const selectSelectedTestSuiteId= createSelector(selectState,
     (state) => state.selectedTestSuiteId
 );
 
-
 export const selectSelectedTestSuite = createSelector(selectSelectedTestSuiteId, selectTestCollections, 
     (id, testCollections) => id !== null && testCollections !== undefined ? testCollections.find(e => e._id === id) : undefined
+);
+
+export const selectSelectedTestCaseIndex = createSelector(selectState, 
+    (state) => state.selectedTestCaseIndex
+);
+
+export const selectSelectedTestCase = createSelector(selectSelectedTestCaseIndex, selectSelectedTestSuite, 
+    (index, suite) => index !== null && suite !== undefined ? suite.testCases[index] : undefined
 );
 
 
@@ -79,4 +86,11 @@ export const selectBranchSections = memoizeWith(
             }
             return branchSections;
     })
+);
+
+
+export const selectSection = memoizeWith(
+    (id: string) => id,
+    (id: string) => createSelector(selectSections,
+        (sections) => sections?.[id] ?? undefined)
 );

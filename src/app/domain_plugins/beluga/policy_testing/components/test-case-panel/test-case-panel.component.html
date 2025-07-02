@@ -6,13 +6,18 @@
         <mat-icon>{{icon()}}</mat-icon>
     </mat-panel-description>
     </mat-expansion-panel-header>
-    <div class="actions">
-        @for(action of actions(); track action;){
-           <app-action-card
-            [action]="action"
-            [highlight]="false"
-            [select]="false"
-           ></app-action-card> 
-        }
+    <div class="main">
+        <div class="actions">
+            @for(action of actions(); track action;){
+            <app-action-card
+                [action]="action"
+                [highlight]="false"
+                [select]="false"
+            ></app-action-card> 
+            }
+        </div>
+        <div class="buttons">
+            <a mat-flat-button [routerLink]="'./trace-inspection/' + testCase().stateID">Inspect Trace</a>
+        </div>
     </div>
 </mat-expansion-panel>

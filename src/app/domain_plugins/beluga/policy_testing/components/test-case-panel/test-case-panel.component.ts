@@ -3,6 +3,8 @@ import { TestCase, TestRunStatus } from '../../domain/tests';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { ActionCardComponent } from '../../../shared/components/action-card/action-card.component';
+import { RouterLink } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
 
 
 @Component({
@@ -11,6 +13,8 @@ import { ActionCardComponent } from '../../../shared/components/action-card/acti
     MatExpansionModule,
     MatIconModule,
     ActionCardComponent,
+    RouterLink,
+    MatButtonModule
   ],
   templateUrl: './test-case-panel.component.html',
   styleUrl: './test-case-panel.component.scss'

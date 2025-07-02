@@ -39,6 +39,8 @@ export class StateCardComponent {
 
   constructor(){
     effect(() => console.log(this.state()))
+    effect(() => console.log(this.siteSetUp()))
+    //  effect(() => console.log(this.jigs()))
   }
 
   jigTypes = computed(() => this.siteSetUp()?.jig_types)
@@ -49,7 +51,7 @@ export class StateCardComponent {
     }
     return Math.max(...Object.values(jigTypes).map(jt => jt.size_loaded))
   })
-  jigs = computed(() => this.state()?.jigs)
+  // jigs = computed(() => this.state()?.jigs)
 
   incomingSchedule = computed(() => this.targetFlightSchedule()?.incoming.filter(e => !e.skip))
 
@@ -59,7 +61,7 @@ export class StateCardComponent {
       return []
     }
     const numUnloaded = state.incomingUnloaded.length
-    const fullSchedule = this.incomingSchedule()?.map(j => this.jigs()?.[j.jig])
+    const fullSchedule = this.incomingSchedule()?.map(j => state.jigs[j.jig])
     return fullSchedule?.slice(numUnloaded);
   })
 
@@ -68,7 +70,7 @@ export class StateCardComponent {
     if(state === undefined){
       return []
     }
-    return state.outgoingLoaded.map(j => this.jigs()?.[j]);
+    return state.outgoingLoaded.map(j => state.jigs[j]);
   })
 
   outgoingSchedule = computed(() => this.targetFlightSchedule()?.outgoing.filter(e => !e.skip))
@@ -76,18 +78,22 @@ export class StateCardComponent {
 
   racks = computed(() => {
     const state = this.state();
-    if(state === undefined){
+    const jigTypes = this.jigTypes();
+    const siteSetUp = this.siteSetUp();
+    if(state === undefined || jigTypes === undefined || siteSetUp === undefined){
       return []
     }
-    return this.siteSetUp()?.racks.map((r) =>
+
+    const racks =  siteSetUp.racks.map((r) =>
       ({
-        jigs: state.racks?.[r.name]?.map(j => this.jigs()?.[j]),
+        jigs: state.racks?.[r.name]?.map(j => state.jigs[j]),
         name: r.name,
         size: r.size,
         maintenance: r.status == SiteStatus.MAINTENANCE,
-        occupied: occupiedRackSpace(state.racks?.[r.name], this.jigs(), this.jigTypes())
+        occupied: occupiedRackSpace(state.racks?.[r.name], state.jigs, jigTypes)
       })
     )
+    return racks;
   });
 
   hangars = computed(() => {
@@ -101,7 +107,7 @@ export class StateCardComponent {
         return {name: h.name, jig: null, maintenance: h.status == SiteStatus.MAINTENANCE}
       }
       else{
-        return {name: h.name, jig: this.jigs()?.[loadedJigName], maintenance: h.status == SiteStatus.MAINTENANCE}
+        return {name: h.name, jig: state.jigs[loadedJigName], maintenance: h.status == SiteStatus.MAINTENANCE}
       }
     })
   })
@@ -117,7 +123,7 @@ export class StateCardComponent {
         return {trailer: tn, jig: null, maintenance: tn.status == SiteStatus.MAINTENANCE}
       }
       else{
-        return {trailer: tn, jig: this.jigs()?.[loadedJigName], maintenance: tn.status == SiteStatus.MAINTENANCE}
+        return {trailer: tn, jig: state.jigs[loadedJigName], maintenance: tn.status == SiteStatus.MAINTENANCE}
       }
     })
   })
@@ -133,15 +139,21 @@ export class StateCardComponent {
         return {trailer: tn, jig: null, maintenance: tn.status == SiteStatus.MAINTENANCE}
       }
       else{
-        return {trailer: tn, jig: this.jigs()?.[loadedJigName], maintenance: tn.status == SiteStatus.MAINTENANCE}
+        return {trailer: tn, jig: state.jigs[loadedJigName], maintenance: tn.status == SiteStatus.MAINTENANCE}
       }
     })
   })
 
-  productionLines = computed(() => this.targetProductionSchedule()?.map(pl => ({
-    name: pl.name,
-    schedule: pl.schedule.filter(e => !e.skip).map(e => this.jigs()?.[e.jig])
-  })))
+  productionLines = computed(() => {
+    const state = this.state();
+    if (state === undefined){
+      return []
+    }
+    return this.targetProductionSchedule()?.map(pl => ({
+      name: pl.name,
+      schedule: pl.schedule.filter(e => !e.skip).map(e => state.jigs[e.jig])
+    }))
+  })
 
   productionLinesDelivered = computed(() => {
     const state = this.state();

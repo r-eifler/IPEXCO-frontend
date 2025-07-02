@@ -13,6 +13,8 @@ import { SelectTestSuiteResolver } from './resolver/select-test-suite.resolver';
 import { NewTestCaseComponent } from './view/new-test-case/new-test-case.component';
 import { FuzzingMonitoringService } from './services/fuzzing-monitoring.service';
 import { TestingFlightPlanTreeService } from './services/flight-plan-tree.service';
+import { SelectTestCaseResolver } from './resolver/select-test-case.resolver copy';
+import { PolicyTraceInspectionComponent } from './view/policy-trace-inspection/policy-trace-inspection.component';
 
 
 export const routes: Routes = [
@@ -43,6 +45,11 @@ export const routes: Routes = [
         path: ':projectId/:testId/new-test-case',
         component: NewTestCaseComponent,
         resolve: [LoadProjectResolver, SelectTestSuiteResolver],
+      },
+       {
+        path: ':projectId/:testId/trace-inspection/:testCaseIndex',
+        component: PolicyTraceInspectionComponent,
+        resolve: [LoadProjectResolver, SelectTestSuiteResolver, SelectTestCaseResolver],
       },
     ]
   }

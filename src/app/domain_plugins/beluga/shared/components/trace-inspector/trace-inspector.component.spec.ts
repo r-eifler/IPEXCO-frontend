@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SectionPlanComponent } from './section-plan.component';
+import { TraceInspectorComponent } from './trace-inspector.component';
 
-describe('SectionPlanComponent', () => {
-  let component: SectionPlanComponent;
-  let fixture: ComponentFixture<SectionPlanComponent>;
+describe('TraceInspectorComponent', () => {
+  let component: TraceInspectorComponent;
+  let fixture: ComponentFixture<TraceInspectorComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SectionPlanComponent]
+      imports: [TraceInspectorComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(SectionPlanComponent);
+    fixture = TestBed.createComponent(TraceInspectorComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
