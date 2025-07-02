@@ -1,6 +1,6 @@
 <app-page>
     <app-breadcrumb>
-		<a app-breadcrumb-item [routerLink]="['/beluga/policy-testing']"><mat-icon>bug_report</mat-icon></a>
+		<a app-breadcrumb-item [routerLink]="['..']"><mat-icon>bug_report</mat-icon></a>
 		<app-breadcrumb-item>{{ testSuite()?.name }}</app-breadcrumb-item>
 	</app-breadcrumb>
 
@@ -29,13 +29,50 @@
                     }
                 </app-page-section-content>
             </app-page-section>
+
             <app-page-section>
                 <app-page-section-content>
+                    @if(allTestCases()?.length === 0){
+                        <app-info>
+                            <mat-icon>info</mat-icon>
+                            There are no test cases available. 
+                        </app-info>
+                    }
+                    @else{
+                        <app-test-results-plots [testSuite]="testSuite()"></app-test-results-plots>
+                    }
+                </app-page-section-content>
+            </app-page-section>
+
+            <app-page-section>
+                <app-page-section-title>
+                    Bugs
+                </app-page-section-title>
+                <app-page-section-content>
                     <mat-accordion class="accordion">
-                        @for(case of testCases(); track case){
+                        @for(case of bugs(); track case){
                             <app-test-case-panel [testCase]="case"></app-test-case-panel>
                         }
-                        @if(testCases()?.length === 0){
+                        @if(bugs()?.length === 0){
+                            <app-info>
+                                <mat-icon>info</mat-icon>
+                                No bugs have been found yet. 
+                            </app-info>
+                        }
+                    </mat-accordion>
+                </app-page-section-content>
+            </app-page-section>
+
+            <app-page-section>
+                <app-page-section-title>
+                    Test Cases
+                </app-page-section-title>
+                <app-page-section-content>
+                    <mat-accordion class="accordion">
+                        @for(case of nonBugs(); track case){
+                            <app-test-case-panel [testCase]="case"></app-test-case-panel>
+                        }
+                        @if(nonBugs()?.length === 0){
                             <app-info>
                                 <mat-icon>info</mat-icon>
                                 There are no test cases available. 

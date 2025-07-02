@@ -11,6 +11,8 @@ import { HomeDomainSpecificationService } from './services/domainSpecification.s
 import { ProjectDetailsComponent } from './view/project-details/project-details.component';
 import { LoadProjectResolver } from './resolver/load-project.resolver';
 import { PlanPropertyService } from './services/plan-properties.service';
+import { SettingsComponent } from './view/settings/settings.component';
+import { BelugaProjectServicesService } from './services/services.service';
 
 export const routes: Routes = [
   {
@@ -23,21 +25,22 @@ export const routes: Routes = [
         CreateProjectService,
         ProjectService,
         HomeDomainSpecificationService,
-        PlanPropertyService
+        PlanPropertyService,
+        BelugaProjectServicesService
       ],
     children: [
       {
         path: '',
-        pathMatch: 'full',
-        redirectTo: 'projects'
-      },
-      {
-        path: 'projects',
         component: CollectionComponent,
       },
       {
-        path: 'projects/:projectId',
+        path: ':projectId',
         component: ProjectDetailsComponent,
+        resolve: [LoadProjectResolver]
+      },
+      {
+        path: ':projectId/settings',
+        component: SettingsComponent,
         resolve: [LoadProjectResolver]
       }
 

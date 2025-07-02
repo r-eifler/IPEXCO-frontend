@@ -1,4 +1,11 @@
 <app-page *transloco="let t">
+
+    <app-breadcrumb>
+      <a app-breadcrumb-item [routerLink]="['..']"><mat-icon>connecting_airports</mat-icon></a>
+      <app-breadcrumb-item>{{(project$ | async)?.name}}</app-breadcrumb-item>
+    </app-breadcrumb>
+
+
     <app-page-title>{{t('h.project')}} {{(project$ | async)?.name}}
       <app-page-title-action>
         <button  mat-icon-button (click)="deleteProject()">
@@ -9,16 +16,6 @@
   
     <app-page-content>
       <div class="page-grid">
-  
-        <app-project-action-card>
-          <span action-title>{{t('h.manual_planning')}}</span>
-          <span action-description>
-            {{t('h.manual_planning_description')}}
-          </span>
-          <a mat-flat-button [routerLink]="['/beluga/manual-planning', (project$ | async)?._id]" action-button>
-            Start
-          </a>
-        </app-project-action-card>
 
         <app-project-action-card>
           <span action-title>{{t('h.flight_section_planning')}}</span>
@@ -33,54 +30,22 @@
         <app-project-action-card>
           <span action-title>Policy Testing</span>
           <span action-description>
-            Test a policy for sub-optimality
+            Test a policy for sub-optimality.
           </span>
           <a mat-flat-button [routerLink]="['/beluga/policy-testing', (project$ | async)?._id]" action-button>
             Start
           </a>
         </app-project-action-card>
-  
-        <!-- <app-project-action-card>
-          <span action-title>Planning</span>
-          <span action-description>
-            Compute a single plan with different configurations.
-          </span>
-          <a mat-button [routerLink]="['/planning', (project$ | async)?._id]" action-button>
-            Start
-          </a>
-        </app-project-action-card>
-    
-  
-        <app-project-action-card>
-          <span action-title>Planning Task</span>
-          <span action-description>
-            Inspect planning task of the project.
-          </span>
-          <a mat-button (click)="onPlanningTask()" action-button>
-            Show
-          </a>
-        </app-project-action-card>
-       
-        <app-project-action-card>
-          <span action-title>Demos</span>
-          <span action-description>
-            Copies of the project with limited features but precomputed explanations. 
-          </span>
-          <button mat-button (click)="onDemos()" action-button>
-            Show
-          </button>
-        </app-project-action-card>
-  
-  
+
         <app-project-action-card>
           <span action-title>Settings</span>
           <span action-description>
-            Change project settings and update domain dependent information. 
+            Select the services and features.
           </span>
-          <button mat-button (click)="onSettings()" action-button>
-            Show
-          </button>
-        </app-project-action-card> -->
+          <a mat-button [routerLink]="['/beluga/projects/', (project$ | async)?._id, 'settings']" action-button>
+            Open
+          </a>
+        </app-project-action-card>
   
       </div>
     </app-page-content>

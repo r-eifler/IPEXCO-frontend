@@ -30,4 +30,10 @@ export class ProjectService{
             map((data) => boolean().parse(data)),
         )
     }
+
+    putProject$(project: Project): Observable<Project> {
+        return this.http.put<unknown>(this.BASE_URL + project._id, project).pipe(
+            map(data => ProjectZ.parse(data)),
+        )
+    }
 }

@@ -2,12 +2,14 @@ import { createReducer, on } from "@ngrx/store";
 import { DomainSpecification } from "src/app/global_specification/domain/domain_specification";
 import { Loadable, LoadingState } from "src/app/shared/common/loadable.interface";
 import { Project } from "src/app/shared/domain/project";
-import { loadDomainSpecifications, loadDomainSpecificationsSuccess, loadProject, loadProjects, loadProjectsSuccess, loadProjectSuccess } from "./home.actions";
+import { loadDomainSpecifications, loadDomainSpecificationsSuccess, loadProject, loadProjects, loadProjectsSuccess, loadProjectSuccess, loadServices, loadServicesSuccess } from "./home.actions";
+import { Service } from "src/app/global_specification/domain/services";
 
 export interface HomeState {
     projects: Loadable<Project[]>;
     domainSpecifications: Loadable<DomainSpecification[]>;
     project: Loadable<Project>;
+    services: Loadable<Service[]>;
 }
 
 
@@ -15,6 +17,7 @@ const initialState: HomeState = {
     projects: {state: LoadingState.Initial, data: undefined},
     domainSpecifications: {state: LoadingState.Initial, data: undefined},
     project: {state: LoadingState.Initial, data: undefined},
+    services: {state: LoadingState.Initial, data: undefined},
 }
 
 
@@ -43,5 +46,13 @@ export const HomeReducer = createReducer(
     on(loadProjectSuccess, (state, {project}): HomeState => ({
         ...state,
         project: {state: LoadingState.Done, data: project},
+    })),
+    on(loadServices, (state): HomeState => ({
+        ...state,
+        services: {state: LoadingState.Loading, data: undefined}
+    })),
+    on(loadServicesSuccess, (state, {services}): HomeState => ({
+        ...state,
+        services: {state: LoadingState.Done, data: services}
     })),
 );

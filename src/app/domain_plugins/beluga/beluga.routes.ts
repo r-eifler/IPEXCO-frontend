@@ -22,10 +22,10 @@ export const routes: Routes = [
       {
         path: '',
         pathMatch: 'full',
-        redirectTo: 'home'
+        redirectTo: 'projects'
       },
       {
-        path: 'home',
+        path: 'projects',
         loadChildren: () => import('./home/home.routes').then(m => m.routes),
       },
       {

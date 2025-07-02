@@ -15,6 +15,7 @@ import { TestRunStatus } from '../../domain/test-case';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatFormField, MatInputModule, MatLabel } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
+import { TestResultsPlotsComponent } from '../../components/test-results-plots/test-results-plots.component';
 
 @Component({
   selector: 'app-test-collection-details',
@@ -32,7 +33,8 @@ import { FormsModule } from '@angular/forms';
     MatFormField,
     MatLabel,
     MatInputModule,
-    FormsModule
+    FormsModule,
+    TestResultsPlotsComponent
   ],
   templateUrl: './test-collection-details.component.html',
   styleUrl: './test-collection-details.component.scss'
@@ -42,9 +44,12 @@ export class TestCollectionDetailsComponent {
   store = inject(Store)
   testSuite = this.store.selectSignal(selectSelectedTestSuite)
 
-  testCases = computed(() => this.testSuite()?.testCases)
+  allTestCases = computed(() => this.testSuite()?.testCases)
 
-  isIdle = computed(() => this.testSuite()?.status === TestRunStatus.FINISHED)
+  bugs = computed(() => this.allTestCases()?.filter(tc => tc.classifiedAdBug))
+  nonBugs = computed(() => this.allTestCases()?.filter(tc => ! tc.classifiedAdBug))
+
+  isIdle = computed(() => this.testSuite()?.status === TestRunStatus.FINISHED || this.testSuite()?.status === TestRunStatus.PENDING)
   isRunning = computed(() => this.testSuite()?.status === TestRunStatus.RUNNING)
 
   numberOfFuzzedStates = 5;
