@@ -52,19 +52,20 @@ export type TestCase = zinfer<typeof TestCaseZ>;
 
 
 
-export const TestCollectionBaseZ = object({
+export const TestSuiteBaseZ = object({
    name: string(),
    project: string(),
    policy: PolicyZ,
    numFuzzStates: number(),
    status: TestRunStatusZ,
+   flightSection: string(),
    testCases: array(TestCaseZ)
 })
 
-export type TestCollectionBase = zinfer<typeof TestCollectionBaseZ>;
+export type TestSuiteBase = zinfer<typeof TestSuiteBaseZ>;
 
-export const TestCollectionZ = TestCollectionBaseZ.merge(object({
+export const TestSuiteZ = TestSuiteBaseZ.merge(object({
   _id: string(),
 }));
 
-export type TestCollection = zinfer<typeof TestCollectionZ>;
+export type TestSuite = zinfer<typeof TestSuiteZ>;

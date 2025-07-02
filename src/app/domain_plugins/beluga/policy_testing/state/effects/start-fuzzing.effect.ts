@@ -28,10 +28,17 @@ export class StartTestStateFuzzingEffect{
         ofType(startTestStateFuzzingSuccess),
         switchMap(({ testCollection }) => {
             return this.monitoringService.planComputationFinished$(testCollection._id).pipe(
-                switchMap(() => [
-                    finishedTestStateFuzzingSuccess({id: testCollection._id}),
-                    loadTestCollections({projectId: testCollection.project})
-                ]),
+                switchMap((finished) => {
+                    if(finished){
+                        return [
+                            finishedTestStateFuzzingSuccess({id: testCollection._id}),
+                            loadTestCollections({projectId: testCollection.project})
+                        ]
+                    }else{
+                        return [loadTestCollections({projectId: testCollection.project})]
+                    }
+                        
+                }),
                 catchError((e) => of(finishedTestStateFuzzingFailure({err: e}))),
             )
         })

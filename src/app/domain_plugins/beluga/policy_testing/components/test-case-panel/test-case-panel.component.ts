@@ -1,5 +1,5 @@
 import { Component, computed, input } from '@angular/core';
-import { TestCase, TestRunStatus } from '../../domain/test-case';
+import { TestCase, TestRunStatus } from '../../domain/tests';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { ActionCardComponent } from '../../../shared/components/action-card/action-card.component';

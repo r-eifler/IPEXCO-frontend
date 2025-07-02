@@ -1,6 +1,6 @@
 <mat-card appearance="outlined">
     <mat-card-header>
-      <mat-card-title>{{ testCollection()?.name }}</mat-card-title>
+      <mat-card-title>{{ testSuite()?.name }}</mat-card-title>
       <mat-card-subtitle>
         <!-- <app-label
           [color]="plan()?.status | stepStatusColor"
@@ -11,9 +11,13 @@
     <mat-card-content *transloco="let t">
       <div class="content">
         <div class="stats">
+          <mat-icon>flight</mat-icon>
+          <span class="property-label">Flight:</span>
+          <span class="property-value">{{ flightIndex() ?? '?'}}</span>
+
           <mat-icon>rule</mat-icon>
           <span class="property-label">Policy:</span>
-          <span class="property-value">{{ testCollection()?.policy.name ?? '?'}}</span>
+          <span class="property-value">{{ testSuite()?.policy.name ?? '?'}}</span>
 
           <mat-icon>check</mat-icon>
           <span class="property-label">#test states:</span>
@@ -37,7 +41,7 @@
   
     <mat-card-actions>
       <div class="action-container">
-        <a class="details" mat-stroked-button [routerLink]="[testCollection()?._id]">Details</a>
+        <a class="details" mat-stroked-button [routerLink]="[testSuite()?._id]">Details</a>
       </div>
     </mat-card-actions>
   </mat-card>

@@ -1,5 +1,5 @@
 import { Component, computed, input } from '@angular/core';
-import { TestCollection, TestRunStatus } from '../../domain/test-case';
+import { TestSuite, TestRunStatus } from '../../domain/tests';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 @Component({
@@ -16,7 +16,7 @@ export class TestResultsPlotsComponent {
       domain: ['#f03a49', '#3a8cf0', '#9a9b9c']
     };
 
-    testSuite = input.required<TestCollection>();
+    testSuite = input.required<TestSuite>();
 
     data = computed(() => {
       const num_bugs = this.testSuite()?.testCases.filter(tc => tc.classifiedAdBug)?.length ?? 0;

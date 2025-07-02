@@ -1,5 +1,5 @@
 import { Component, computed, input } from '@angular/core';
-import { TestCollection } from '../../domain/test-case';
+import { TestSuite } from '../../domain/tests';
 import { getNumberOfBugs } from '../../domain/utils';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -28,7 +28,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 })
 export class TestSuiteHeroComponent {
 
-  testSuite = input.required<TestCollection>();
+  testSuite = input.required<TestSuite>();
   
   numBugs = computed(() => getNumberOfBugs(this.testSuite()))
   numTestStates = computed(() => this.testSuite()?.testCases?.length)

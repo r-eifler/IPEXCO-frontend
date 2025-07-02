@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, effect, inject } from '@angular/core';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -7,14 +7,17 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatStepperModule } from '@angular/material/stepper';
 import { Store } from '@ngrx/store';
-import { BehaviorSubject, combineLatest, filter, map, take } from 'rxjs';
+import { BehaviorSubject, combineLatest, filter, map, switchMap, take } from 'rxjs';
 import { TemplateFileUploadComponent } from 'src/app/components/files/file-upload/file-upload.component';
 import { DialogModule } from 'src/app/shared/components/dialog/dialog.module';
-import { FileUpload, TestCollectionBase, TestRunStatus } from '../../domain/test-case';
+import { FileUpload, TestSuiteBase, TestRunStatus } from '../../domain/tests';
 import { AsyncPipe } from '@angular/common';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule, MatLabel } from '@angular/material/form-field';
 import { PolicyTestingTestCollectionsService } from '../../services/tests.service';
+import { selectBranchNames, selectBranchSections, selectTree } from '../../state/policy-testing.selector';
+import { loadFlightPlanTree } from '../../state/policy-testing.actions';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-new-test-collection-dialog',
@@ -40,6 +43,7 @@ import { PolicyTestingTestCollectionsService } from '../../services/tests.servic
 export class NewTestCollectionDialogComponent {
 
 	store = inject(Store);
+
 	uploadService = inject(PolicyTestingTestCollectionsService);
 	dialogRef = inject(MatDialogRef<NewTestCollectionDialogComponent>);
 
@@ -47,14 +51,37 @@ export class NewTestCollectionDialogComponent {
 
 	form = this.fb.group({
 		name: this.fb.control<string | null>(null, Validators.required),
+		branchIndex: this.fb.control<number>(0, {validators: [Validators.required], nonNullable: true}),
+		section: this.fb.control<string | null>(null, Validators.required),
 		// description: this.fb.control<string | null>(null),
 	});
+
+	tree = this.store.selectSignal(selectTree);
+	branchNames = this.store.selectSignal(selectBranchNames);
+
+	branchIndex$  =this.form.controls.branchIndex.valueChanges
+
+	sections$ = this.branchIndex$.pipe(
+		switchMap((index) => this.store.select(selectBranchSections(index)))
+	)
 
 	policyName$ = new BehaviorSubject<string | null>(null);
 	policyFileUpload$ = new BehaviorSubject<FileUpload | null>(null);
 	policyIsValid$ = this.policyFileUpload$.pipe(
 		map(m => m !== null),
 	)
+
+	constructor(){
+		// this.store.dispatch(loadFlightPlanTree());
+
+		effect(() => {
+			const selectedBranchIndex = this.tree()?.selectedBranch;
+			if(selectedBranchIndex !== undefined){
+				this.form.controls.branchIndex.setValue(selectedBranchIndex)	
+			}
+		})
+			
+	}
 
 	onPolicySelected(policy: File){
 		console.log(policy)
@@ -83,7 +110,7 @@ export class NewTestCollectionDialogComponent {
 
 				if(fileUpload !== null){
 
-					const newTestCollection: TestCollectionBase = {
+					const newTestCollection: TestSuiteBase = {
 						name: this.form.controls.name.value ?? 'TODO',
 						policy: {
 							name: name ?? 'unknown',
@@ -92,6 +119,7 @@ export class NewTestCollectionDialogComponent {
 						project: '',
 						numFuzzStates: 0,
 						testCases: [],
+						flightSection: this.form.controls.section.value ?? 'TODO',
 						status: TestRunStatus.PENDING
 					};
 

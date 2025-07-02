@@ -1,5 +1,5 @@
-import { TestCollection } from "./test-case";
+import { TestSuite } from "./tests";
 
-export function getNumberOfBugs(testCol: TestCollection){
+export function getNumberOfBugs(testCol: TestSuite){
     return testCol?.testCases?.filter(tc => tc.classifiedAdBug).length
 }

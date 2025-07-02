@@ -4,7 +4,7 @@ import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { environment } from "src/environments/environment";
 import { array, boolean } from "zod";
-import { FileUpload, FileUploadZ, TestCollection, TestCollectionBase, TestCollectionZ } from "../domain/test-case";
+import { FileUpload, FileUploadZ, TestSuite, TestSuiteBase, TestSuiteZ } from "../domain/tests";
 
 
 @Injectable({
@@ -15,18 +15,18 @@ export class PolicyTestingTestCollectionsService{
     private http = inject(HttpClient)
     private BASE_URL = environment.apiURL + "policy-testing/";
 
-    getTestCollections$(projectId: string): Observable<TestCollection[]> {
+    getTestCollections$(projectId: string): Observable<TestSuite[]> {
         let httpParams = new HttpParams();
         httpParams = httpParams.set('projectId', projectId);
 
         return this.http.get<unknown>(this.BASE_URL, { params: httpParams }).pipe(
-            map((data) => array(TestCollectionZ).parse(data)),
+            map((data) => array(TestSuiteZ).parse(data)),
         )
     }
 
-    getTestCollection$(id: string): Observable<TestCollection> {
+    getTestCollection$(id: string): Observable<TestSuite> {
         return this.http.get<unknown>(this.BASE_URL + id).pipe(
-            map((data) => TestCollectionZ.parse(data)),
+            map((data) => TestSuiteZ.parse(data)),
         )
     }
 
@@ -43,15 +43,21 @@ export class PolicyTestingTestCollectionsService{
         )
     }
 
-    postTestCollection$(testCollection: TestCollectionBase): Observable<TestCollection> {
+    postTestCollection$(testCollection: TestSuiteBase): Observable<TestSuite> {
         return this.http.post<unknown>(this.BASE_URL, testCollection).pipe(
-            map((data) => TestCollectionZ.parse(data)),
+            map((data) => TestSuiteZ.parse(data)),
         )
     }
 
-    startFuzzing$(testSuiteId: string, numberOfFuzzedStates: number): Observable<TestCollection> {
+    resetTestSuite$(tesSuiteId: string): Observable<TestSuite> {
+        return this.http.put<unknown>(this.BASE_URL + tesSuiteId + '/reset', {}).pipe(
+            map((data) => TestSuiteZ.parse(data)),
+        )
+    }
+
+    startFuzzing$(testSuiteId: string, numberOfFuzzedStates: number): Observable<TestSuite> {
         return this.http.post<unknown>(this.BASE_URL + testSuiteId + '/start-fuzzing', {numberOfFuzzedStates}).pipe(
-            map((data) => TestCollectionZ.parse(data)),
+            map((data) => TestSuiteZ.parse(data)),
         )
     }
 }

@@ -1,0 +1,21 @@
+import { inject, Injectable } from "@angular/core";
+import { Actions, createEffect, ofType } from "@ngrx/effects";
+import { of } from "rxjs";
+import { catchError, map, switchMap } from "rxjs/operators";
+import { TestingFlightPlanTreeService } from "../../services/flight-plan-tree.service";
+import { loadFlightSections, loadFlightSectionsFailure, loadFlightSectionsSuccess } from "../policy-testing.actions";
+
+@Injectable()
+export class LoadFlightSectionsEffect{
+
+    private actions$ = inject(Actions)
+    private service = inject(TestingFlightPlanTreeService)
+
+    public load$ = createEffect(() => this.actions$.pipe(
+        ofType(loadFlightSections),
+        switchMap(({treeId}) => this.service.getSections$(treeId).pipe(
+            map(sections => loadFlightSectionsSuccess({sections})),
+            catchError((e) => of(loadFlightSectionsFailure({err: e})))
+        ))
+    ))
+}

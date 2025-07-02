@@ -9,9 +9,9 @@ import { PageModule } from 'src/app/shared/components/page/page.module';
 import { TestCasePanelComponent } from '../../components/test-case-panel/test-case-panel.component';
 import { selectSelectedTestSuite } from '../../state/policy-testing.selector';
 import { MatButtonModule } from '@angular/material/button';
-import { startTestStateFuzzing } from '../../state/policy-testing.actions';
+import { resetTestCollection, startTestStateFuzzing } from '../../state/policy-testing.actions';
 import { TestSuiteHeroComponent } from '../../components/test-suite-hero/test-suite-hero.component';
-import { TestRunStatus } from '../../domain/test-case';
+import { TestRunStatus } from '../../domain/tests';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatFormField, MatInputModule, MatLabel } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
@@ -59,6 +59,13 @@ export class TestCollectionDetailsComponent {
     const num = this.numberOfFuzzedStates;
     if(testSuiteId !== undefined){
       this.store.dispatch(startTestStateFuzzing({testSuiteId, numberOfFuzzedStates: num}))
+    }
+  }
+
+  reset(){
+    const suiteId = this.testSuite()?._id
+    if(suiteId !== undefined){
+      this.store.dispatch(resetTestCollection({suiteId}))
     }
   }
 

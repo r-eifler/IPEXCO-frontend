@@ -4,8 +4,11 @@
     </app-page-title>
     <app-page-content>
          <div class="page-grid">
-            @for(testCollection of testCollections(); track testCollection._id){
-                <app-test-collection-card [testCollection]="testCollection"></app-test-collection-card>
+            @for(testSuite of testSuites(); track testSuite._id){
+                <app-test-collection-card 
+                    [testSuite]="testSuite"
+                    [flightSection]="flightSections()?.[testSuite.flightSection]"
+                ></app-test-collection-card>
             }
             
             <button app-action-card (click)="open_test_collection_dialog()">

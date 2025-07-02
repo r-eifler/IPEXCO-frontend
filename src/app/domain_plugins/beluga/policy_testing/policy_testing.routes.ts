@@ -12,6 +12,7 @@ import { TestCollectionDetailsComponent } from './view/test-collection-details/t
 import { SelectTestSuiteResolver } from './resolver/select-test-suite.resolver';
 import { NewTestCaseComponent } from './view/new-test-case/new-test-case.component';
 import { FuzzingMonitoringService } from './services/fuzzing-monitoring.service';
+import { TestingFlightPlanTreeService } from './services/flight-plan-tree.service';
 
 
 export const routes: Routes = [
@@ -25,6 +26,7 @@ export const routes: Routes = [
       PolicyTestingProjectService,
       PolicyTestingTestCollectionsService,
       FuzzingMonitoringService,
+      TestingFlightPlanTreeService,
     ],
     children: [
       {
