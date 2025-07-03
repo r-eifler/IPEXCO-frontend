@@ -8,7 +8,7 @@ import { PageModule } from 'src/app/shared/components/page/page.module';
 import { TraceInspectorComponent } from '../../../shared/components/trace-inspector/trace-inspector.component';
 import { selectSelectedSection } from '../../state/flight-section-planning.selector';
 import { BelugaActionType } from '../../../shared/domain/beluga_plan';
-import { getFullStartState } from '../../domain/flight-section';
+import { getFlightSchedule, getFullStartState, getProductionSchedule } from '../../domain/flight-section';
 
 @Component({
   selector: 'app-plan-inspector',
@@ -38,6 +38,24 @@ export class PlanInspectorComponent {
   actions = computed(() => this.section()?.actions.filter(a => a.name !== BelugaActionType.SWITCH_TO_NEXT_BELUGA) ?? [])
 
   startState = computed(() => getFullStartState(this.section()))
+  
+  siteSetUp = computed(() => this.configuration()?.siteSetUp)
+
+  flightSchedule = computed(() => {
+    const targetSchedule = this.configuration()?.flightTargetSchedule
+    if(targetSchedule !== undefined){
+      return getFlightSchedule(targetSchedule, false)
+    }
+    return []
+  })
+
+  productionSchedule = computed(() => {
+    const targetSchedule = this.configuration()?.productionLinesTargetSchedule
+    if(targetSchedule !== undefined){
+      return getProductionSchedule(targetSchedule, false)
+    }
+    return []
+  })
 
   name = computed(() => {
     let config = this.configuration();
