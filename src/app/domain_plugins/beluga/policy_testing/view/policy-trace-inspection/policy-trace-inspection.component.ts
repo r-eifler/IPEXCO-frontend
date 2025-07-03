@@ -14,7 +14,7 @@ import { TestResultsPlotsComponent } from '../../components/test-results-plots/t
 import { TestSuiteHeroComponent } from '../../components/test-suite-hero/test-suite-hero.component';
 import { MatIconModule } from '@angular/material/icon';
 import { Store } from '@ngrx/store';
-import { selectSection, selectSelectedTestCase, selectSelectedTestSuite } from '../../state/policy-testing.selector';
+import { selectProjectId, selectSection, selectSelectedTestCase, selectSelectedTestSuite } from '../../state/policy-testing.selector';
 import { TraceInspectorComponent } from '../../../shared/components/trace-inspector/trace-inspector.component';
 import { getFullStartState } from '../../../flight-section-planning/domain/flight-section';
 import { BelugaActionType } from '../../../shared/domain/beluga_plan';
@@ -45,6 +45,7 @@ export class PolicyTraceInspectionComponent {
 
 	store = inject(Store)
 
+	 projectId = this.store.selectSignal(selectProjectId);
 	testSuite = this.store.selectSignal(selectSelectedTestSuite);
 	testCase = this.store.selectSignal(selectSelectedTestCase)
 

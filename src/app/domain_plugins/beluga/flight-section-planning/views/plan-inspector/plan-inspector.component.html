@@ -1,8 +1,9 @@
 <app-page-full *transloco="let t">
-    <!-- <app-breadcrumb>
-        <a app-breadcrumb-item [routerLink]="['../../flight-sections']"><mat-icon>home</mat-icon></a>
-        <app-breadcrumb-item>{{ name() }}</app-breadcrumb-item>
-      </app-breadcrumb> -->
+    <app-breadcrumb>
+        <a app-breadcrumb-item [routerLink]="['/beluga/projects/' + project()?._id]"><mat-icon>home</mat-icon></a>
+        <a app-breadcrumb-item [routerLink]="['/beluga/flight-section-planning/' + project()?._id]"><mat-icon>connecting_airports</mat-icon></a>
+        <app-breadcrumb-item>Plan {{ name() }}</app-breadcrumb-item>
+    </app-breadcrumb>
     <app-page-title>
       Plan Inspector: {{ name() }}
     </app-page-title>

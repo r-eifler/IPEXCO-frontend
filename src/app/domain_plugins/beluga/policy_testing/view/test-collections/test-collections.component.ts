@@ -9,6 +9,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { NewTestCollectionDialogComponent } from '../new-test-collection-dialog/new-test-collection-dialog.component';
 import { TestSuiteBase } from '../../domain/tests';
 import { createTestCollections, loadFlightPlanTree, loadTestCollections } from '../../state/policy-testing.actions';
+import { BreadcrumbModule } from 'src/app/shared/components/breadcrumb/breadcrumb.module';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-test-collections',
@@ -16,7 +18,9 @@ import { createTestCollections, loadFlightPlanTree, loadTestCollections } from '
     PageModule,
     ActionCardComponent,
     TestCollectionCardComponent,
-    MatIconModule
+    MatIconModule,
+	BreadcrumbModule,
+	RouterLink,
   ],
   templateUrl: './test-collections.component.html',
   styleUrl: './test-collections.component.scss'

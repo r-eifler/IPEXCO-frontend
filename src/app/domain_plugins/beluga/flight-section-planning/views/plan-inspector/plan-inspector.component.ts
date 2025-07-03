@@ -6,7 +6,7 @@ import { Store } from '@ngrx/store';
 import { BreadcrumbModule } from 'src/app/shared/components/breadcrumb/breadcrumb.module';
 import { PageModule } from 'src/app/shared/components/page/page.module';
 import { TraceInspectorComponent } from '../../../shared/components/trace-inspector/trace-inspector.component';
-import { selectSelectedSection } from '../../state/flight-section-planning.selector';
+import { selectProject, selectSelectedSection } from '../../state/flight-section-planning.selector';
 import { BelugaActionType } from '../../../shared/domain/beluga_plan';
 import { getFlightSchedule, getFullStartState, getProductionSchedule } from '../../domain/flight-section';
 
@@ -18,6 +18,7 @@ import { getFlightSchedule, getFullStartState, getProductionSchedule } from '../
     PageModule,
     BreadcrumbModule,
     MatIconModule,
+    RouterLink
   ],
   templateUrl: './plan-inspector.component.html',
   styleUrl: './plan-inspector.component.scss'
@@ -27,6 +28,9 @@ export class PlanInspectorComponent {
   store = inject(Store);
 
   section = this.store.selectSignal(selectSelectedSection);
+
+  project = this.store.selectSignal(selectProject);
+
   configuration = computed(() => {
     const index = this.section()?.configurationIndex;
     if(index === undefined){

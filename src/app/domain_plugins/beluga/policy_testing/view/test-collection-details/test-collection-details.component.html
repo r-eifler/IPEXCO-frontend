@@ -1,5 +1,6 @@
 <app-page>
     <app-breadcrumb>
+        <a app-breadcrumb-item [routerLink]="['/beluga/projects/' + projectId()]"><mat-icon>home</mat-icon></a>
 		<a app-breadcrumb-item [routerLink]="['..']"><mat-icon>bug_report</mat-icon></a>
 		<app-breadcrumb-item>{{ testSuite()?.name }}</app-breadcrumb-item>
 	</app-breadcrumb>

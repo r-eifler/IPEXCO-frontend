@@ -1,4 +1,8 @@
 <app-page>
+    <app-breadcrumb>
+        <a app-breadcrumb-item [routerLink]="['/beluga/projects/' + project()?._id]"><mat-icon>home</mat-icon></a>
+        <app-breadcrumb-item><mat-icon>bug_report</mat-icon></app-breadcrumb-item>
+    </app-breadcrumb>
     <app-page-title>
         Test Suites
     </app-page-title>

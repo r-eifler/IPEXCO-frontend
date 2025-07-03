@@ -1,5 +1,6 @@
 <app-page-full *transloco="let t">
     <app-breadcrumb>
+        <a app-breadcrumb-item [routerLink]="['/beluga/projects/' + projectId()]"><mat-icon>home</mat-icon></a>
 		<a app-breadcrumb-item [routerLink]="['../../..']"><mat-icon>bug_report</mat-icon></a>
         <a app-breadcrumb-item [routerLink]="['../..']">{{ testSuite()?.name }}</a>
 		<app-breadcrumb-item>{{ 'Test Case ' + testCase()?.stateID }}</app-breadcrumb-item>

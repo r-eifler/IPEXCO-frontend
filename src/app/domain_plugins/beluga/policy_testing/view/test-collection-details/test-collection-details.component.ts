@@ -7,7 +7,7 @@ import { BreadcrumbModule } from 'src/app/shared/components/breadcrumb/breadcrum
 import { InfoComponent } from 'src/app/shared/components/info/info/info.component';
 import { PageModule } from 'src/app/shared/components/page/page.module';
 import { TestCasePanelComponent } from '../../components/test-case-panel/test-case-panel.component';
-import { selectSelectedTestSuite } from '../../state/policy-testing.selector';
+import { selectProjectId, selectSelectedTestSuite } from '../../state/policy-testing.selector';
 import { MatButtonModule } from '@angular/material/button';
 import { resetTestCollection, startTestStateFuzzing } from '../../state/policy-testing.actions';
 import { TestSuiteHeroComponent } from '../../components/test-suite-hero/test-suite-hero.component';
@@ -42,6 +42,9 @@ import { TestResultsPlotsComponent } from '../../components/test-results-plots/t
 export class TestCollectionDetailsComponent {
 
   store = inject(Store)
+
+  projectId = this.store.selectSignal(selectProjectId);
+
   testSuite = this.store.selectSignal(selectSelectedTestSuite)
 
   allTestCases = computed(() => this.testSuite()?.testCases)
