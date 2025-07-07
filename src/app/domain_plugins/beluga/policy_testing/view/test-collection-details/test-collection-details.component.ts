@@ -16,6 +16,8 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatFormField, MatInputModule, MatLabel } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
 import { TestResultsPlotsComponent } from '../../components/test-results-plots/test-results-plots.component';
+import { number } from 'zod';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-test-collection-details',
@@ -34,7 +36,8 @@ import { TestResultsPlotsComponent } from '../../components/test-results-plots/t
     MatLabel,
     MatInputModule,
     FormsModule,
-    TestResultsPlotsComponent
+    TestResultsPlotsComponent,
+    MatProgressSpinnerModule,
   ],
   templateUrl: './test-collection-details.component.html',
   styleUrl: './test-collection-details.component.scss'
@@ -52,14 +55,25 @@ export class TestCollectionDetailsComponent {
   bugs = computed(() => this.allTestCases()?.filter(tc => tc.classifiedAdBug))
   nonBugs = computed(() => this.allTestCases()?.filter(tc => ! tc.classifiedAdBug))
 
+  hasRun = computed(() => this.testSuite()?.status === TestRunStatus.FINISHED || this.testSuite()?.status === TestRunStatus.FAILED)
   isIdle = computed(() => this.testSuite()?.status === TestRunStatus.FINISHED || this.testSuite()?.status === TestRunStatus.PENDING)
   isRunning = computed(() => this.testSuite()?.status === TestRunStatus.RUNNING)
 
-  numberOfFuzzedStates = 5;
+  fractionFuzzedStates = computed(() => {
+    const toFuzz = this.testSuite()?.numFuzzStates;
+    const fuzzedAndFinishedTestCases =  this.testSuite()?.testCases.length
+    if(toFuzz === undefined || fuzzedAndFinishedTestCases === undefined){
+      return 0
+    }
+    const res = Math.round((fuzzedAndFinishedTestCases / toFuzz) * 100)
+    return res;
+  })
+
+  numberToFuzzStates = 5;
 
   startFuzzing(){
     const testSuiteId = this.testSuite()?._id
-    const num = this.numberOfFuzzedStates;
+    const num = this.numberToFuzzStates;
     if(testSuiteId !== undefined){
       this.store.dispatch(startTestStateFuzzing({testSuiteId, numberOfFuzzedStates: num}))
     }
