@@ -16,6 +16,8 @@ export class TestResultsPlotsComponent {
       domain: ['#f03a49', '#3a8cf0', '#9a9b9c']
     };
 
+    view: number[] = [700, 200];
+
     testSuite = input.required<TestSuite>();
 
     data = computed(() => {
