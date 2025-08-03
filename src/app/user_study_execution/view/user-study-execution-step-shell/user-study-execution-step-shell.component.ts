@@ -8,17 +8,20 @@ import { DemoInformationViewComponent } from '../demo-information-view/demo-info
 import { UserManualViewComponent } from '../user-manual-view/user-manual-view.component';
 import { UserStudyExecutionDemoViewComponent } from '../user-study-execution-demo-view/user-study-execution-demo-view.component';
 import { UserStudyExecutionDescriptionViewComponent } from '../user-study-execution-description-view/user-study-execution-description-view.component';
+import { UserStudyExecutionVideoViewComponent } from '../user-study-execution-video-view/user-study-execution-video-view.component';
 import { UserStudyExecutionExternalViewComponent } from '../user-study-execution-external-view/user-study-execution-external-view.component';
+import {AllowUrlPipe} from 'src/app/project/service/allow-url.service';
 
 @Component({
     selector: 'app-user-study-execution-step-shell',
     imports: [
         AsyncPipe,
         UserStudyExecutionDescriptionViewComponent,
+        UserStudyExecutionVideoViewComponent,
         UserStudyExecutionExternalViewComponent,
         UserStudyExecutionDemoViewComponent,
         UserManualViewComponent,
-        DemoInformationViewComponent
+        DemoInformationViewComponent,
     ],
     templateUrl: './user-study-execution-step-shell.component.html',
     styleUrl: './user-study-execution-step-shell.component.scss'
