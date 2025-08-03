@@ -26,9 +26,27 @@
         (click)="createNewIteration(step?._id)"><mat-icon>call_split</mat-icon></button>
     </app-page-title-action>
   </app-page-title>
+
+
+  <app-page-hero *isDemo>
+    <app-steps-list-hero
+      [maxOverallUtility]="maxOverAllUtility$ | async"
+      [currentMaxUtility]="currentMaxUtility$ | async"
+      [showPaymentInfo]="showPaymentInfo$ | async"
+      [minPayment]="minPayment$ | async"
+      [maxPayment]="maxPayment$ | async"
+      [steps]="steps$ | async"
+      [planPropertiesMap]="planProperties$ | async"
+    ></app-steps-list-hero>
+  </app-page-hero>
+
+
   <app-page-hero>
     <app-iteration-step-hero
-      [maxOverallUtility]="maxOverAllUtility$ | async" 
+      [maxOverallUtility]="maxOverAllUtility$ | async"
+      [showPaymentInfo]="showPaymentInfo$ | async"
+      [minPayment]="minPayment$ | async"
+      [maxPayment]="maxPayment$ | async"
       [step]="step$ | async"
       [planProperties]="planProperties$ | async">
     </app-iteration-step-hero>
