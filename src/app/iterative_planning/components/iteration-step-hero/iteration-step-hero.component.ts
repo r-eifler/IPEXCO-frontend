@@ -19,22 +19,26 @@ import { StepValuePipe } from '../../domain/pipe/step-value.pipe';
 import { TaskInformationDialogComponent } from '../../view/task-information-dialog/task-information-dialog.component';
 import { PlanRunStatus } from '../../domain/plan';
 
+import { CommonModule } from '@angular/common';
+import { MonetaryRewardEvaluatorService } from '../../service/monetary-reward-evaluator';
+
 @Component({
     selector: 'app-iteration-step-hero',
     imports: [
-      MatCardModule, 
-      MatChipsModule, 
-      StepStatusNamePipe, 
-      MatIconModule, 
-      LabelModule, 
-      StepValuePipe, 
-      DefaultPipe, 
-      MatButtonModule, 
-      MatTooltipModule, 
+      MatCardModule,
+      MatChipsModule,
+      StepStatusNamePipe,
+      MatIconModule,
+      LabelModule,
+      StepValuePipe,
+      DefaultPipe,
+      MatButtonModule,
+      MatTooltipModule,
       StepStatusColorPipe,
-      RouterLink, 
+      RouterLink,
       ProjectDirective,
-      DemoDirective
+      DemoDirective,
+      CommonModule
     ],
     templateUrl: './iteration-step-hero.component.html',
     styleUrl: './iteration-step-hero.component.scss'
@@ -42,15 +46,39 @@ import { PlanRunStatus } from '../../domain/plan';
 export class IterationStepHeroComponent {
 
   dialog = inject(MatDialog);
-  
+  rewardEvaluator = inject(MonetaryRewardEvaluatorService);
+  stepValuePipe = inject(StepValuePipe);
+
   step = input.required<IterationStep | null>();
   planProperties = input.required<Record<string, PlanProperty> | null>();
 
   maxOverallUtility = input.required<number>();
+  minPayment = input<number>();
+  maxPayment = input<number>();
 
   solved = computed(() => this.step()?.plan?.status === PlanRunStatus.SOLVED)
 
   openTaskInfo(){
      this.dialog.open(TaskInformationDialogComponent);
   }
+
+  currentUtility(): number | undefined {
+    return this.stepValuePipe.transform(this.step(), this.planProperties());
+  }
+
+  computeCurrentUtilityProportion(): number {
+    return this.rewardEvaluator.computeUtilityProportion(
+      this.currentUtility(),
+      this.maxOverallUtility()
+    );
+  }
+
+  computeCurrentPayment(): number {
+    return this.rewardEvaluator.computePayment(
+      this.computeCurrentUtilityProportion(),
+      this.minPayment(),
+      this.maxPayment()
+    );
+  }
+
 }

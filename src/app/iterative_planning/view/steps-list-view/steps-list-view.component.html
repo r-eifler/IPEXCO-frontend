@@ -6,7 +6,7 @@
     <app-breadcrumb-item>All Iterations</app-breadcrumb-item>
   </app-breadcrumb>
   <app-page-title>
-    
+
     Plan Iterations
 
     <app-page-title-action>
@@ -22,6 +22,8 @@
     <app-steps-list-hero
       [maxOverallUtility]="maxOverallUtility$ | async"
       [currentMaxUtility]="currentMaxUtility$ | async"
+      [minPayment]="minPayment$ | async"
+      [maxPayment]="maxPayment$ | async"
       [steps]="steps$ | async"
       [planPropertiesMap]="planProperties"
     ></app-steps-list-hero>
@@ -29,15 +31,17 @@
 
   <app-page-content>
     <app-page-section-list>
-      
+
       <app-page-section>
         <app-page-section-content>
           <div class="page-grid">
             @for(step of steps$ | async; track step) {
-              <app-iteration-step-card 
-                [step]="step" 
-                [planProperties]="planProperties" 
+              <app-iteration-step-card
+                [step]="step"
+                [planProperties]="planProperties"
                 [maxOverallUtility]="maxOverallUtility$ | async"
+                [minPayment]="minPayment$ | async"
+                [maxPayment]="maxPayment$ | async"
                 (fork)="createNewIteration(step._id)"
                 (cancel)="cancelIterationStep(step._id)">
               </app-iteration-step-card>
@@ -54,7 +58,7 @@
 
           </div>
         </app-page-section-content>
-      </app-page-section> 
+      </app-page-section>
 
     </app-page-section-list>
   </app-page-content>

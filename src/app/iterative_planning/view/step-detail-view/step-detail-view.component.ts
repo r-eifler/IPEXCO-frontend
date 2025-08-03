@@ -25,6 +25,7 @@ import { PlanProperty } from "../../../shared/domain/plan-property/plan-property
 import { ExplanationChatLlmComponent } from "../../components/explanation-chat-llm/explanation-chat-llm.component";
 import { AvailableQuestion, ExplanationChatComponent } from "../../components/explanation-chat/explanation-chat.component";
 import { IterationStepHeroComponent } from "../../components/iteration-step-hero/iteration-step-hero.component";
+import { StepsListHeroComponent } from '../../components/steps-list-hero/steps-list-hero.component';
 import { UserManualDialogComponent } from "../../components/user-manual-dialog/user-manual-dialog.component";
 import { DemoDirective } from "../../directives/isDemo.directive";
 import { ProjectDirective } from "../../directives/isProject.directive";
@@ -39,7 +40,10 @@ import {
   selectIsExplanationLoading,
   selectIterativePlanningIsIntroTask,
   selectIterativePlanningLoadingFinished,
+  selectIterativePlanningCurrentMaxUtility,
+  selectIterativePlanningMaxPayment,
   selectIterativePlanningMaxPossibleUtility,
+  selectIterativePlanningMinPayment,
   selectIterativePlanningProject,
   selectIterativePlanningProjectExplanationInterfaceType,
   selectIterativePlanningProperties,
@@ -48,6 +52,7 @@ import {
   selectMessages,
   selectPropertyAvailableQuestions,
   selectStepAvailableQuestions,
+  selectIterativePlanningIterationSteps,
 } from "../../state/iterative-planning.selector";
 import {
   selectEnforcedGoals,
@@ -70,6 +75,7 @@ import {tap} from 'rxjs/operators';
     ExplanationChatComponent,
     ExplanationChatLlmComponent,
     IterationStepHeroComponent,
+    StepsListHeroComponent,
     MatButtonModule,
     MatIconModule,
     MatTooltipModule,
@@ -103,8 +109,13 @@ export class StepDetailViewComponent {
 
   project$ = this.store.select(selectIterativePlanningProject);
   maxOverAllUtility$ = this.store.select(selectIterativePlanningMaxPossibleUtility);
+  currentMaxUtility$ = this.store.select(selectIterativePlanningCurrentMaxUtility);
+  minPayment$ = this.store.select(selectIterativePlanningMinPayment);
+  maxPayment$ = this.store.select(selectIterativePlanningMaxPayment);
   image$ = this.project$.pipe(map(p => p?.summaryImage));
   instanceInfo$ = this.project$.pipe(map(p => p?.instanceInfo));
+
+  steps$ = this.store.select(selectIterativePlanningIterationSteps);
 
   step$ = this.store.select(selectIterativePlanningSelectedStep);
   stepId$ = this.step$.pipe(map(step => step?._id));

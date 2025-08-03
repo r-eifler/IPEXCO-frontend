@@ -20,23 +20,27 @@ import { DemoDirective } from '../../directives/isDemo.directive';
 import { Store } from '@ngrx/store';
 import { selectIterativePlanningLoadingFinished } from '../../state/iterative-planning.selector';
 
+import { CommonModule } from '@angular/common';
+import { MonetaryRewardEvaluatorService } from '../../service/monetary-reward-evaluator';
+
 @Component({
     selector: 'app-iteration-step-card',
     imports: [
-      MatCardModule, 
-      MatChipsModule, 
-      StepStatusNamePipe, 
-      MatIconModule, 
-      LabelModule, 
-      StepValuePipe, 
-      DefaultPipe, 
-      MatButtonModule, 
-      RouterLink, 
-      MatTooltipModule, 
+      MatCardModule,
+      MatChipsModule,
+      StepStatusNamePipe,
+      MatIconModule,
+      LabelModule,
+      StepValuePipe,
+      DefaultPipe,
+      MatButtonModule,
+      RouterLink,
+      MatTooltipModule,
       StepStatusColorPipe,
       MatProgressBarModule,
       ProjectDirective,
-      DemoDirective
+      DemoDirective,
+      CommonModule
     ],
     templateUrl: './iteration-step-card.component.html',
     styleUrl: './iteration-step-card.component.scss'
@@ -44,19 +48,23 @@ import { selectIterativePlanningLoadingFinished } from '../../state/iterative-pl
 export class IterationStepCardComponent {
 
   store = inject(Store);
+  rewardEvaluator = inject(MonetaryRewardEvaluatorService);
+  stepValuePipe = inject(StepValuePipe);
 
   step = input.required<IterationStep | null>();
   planProperties = input.required<Record<string, PlanProperty> | null>();
 
   anabelCreationInterface = this.store.select(selectIterativePlanningLoadingFinished);
 
-  planComputationRunning = computed(() => 
+  planComputationRunning = computed(() =>
     ! this.step()?.plan ||
-    this.step()?.plan?.status == PlanRunStatus.PENDING || 
+    this.step()?.plan?.status == PlanRunStatus.PENDING ||
     this.step()?.plan?.status == PlanRunStatus.RUNNING
   )
 
   maxOverallUtility = input.required<number>();
+  minPayment = input<number>();
+  maxPayment = input<number>();
 
   fork = output<void>();
   cancel = output<void>();
@@ -68,4 +76,24 @@ export class IterationStepCardComponent {
   onCancel(): void {
     this.cancel.emit();
   }
+
+  currentUtility(): number | undefined {
+    return this.stepValuePipe.transform(this.step(), this.planProperties());
+  }
+
+  computeCurrentUtilityProportion(): number {
+    return this.rewardEvaluator.computeUtilityProportion(
+      this.currentUtility(),
+      this.maxOverallUtility()
+    );
+  }
+
+  computeCurrentPayment(): number {
+    return this.rewardEvaluator.computePayment(
+      this.computeCurrentUtilityProportion(),
+      (this.minPayment() ?? 0),
+      (this.maxPayment() ?? 0)
+    );
+  }
+
 }

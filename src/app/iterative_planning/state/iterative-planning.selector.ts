@@ -45,8 +45,8 @@ export const selectIterativePlanningProjectExplanationInterfaceType = createSele
 export const selectIterativePlanningProperties = createSelector(selectState,
     (state) => state.planProperties?.data)
 export const selectIterativePlanningPropertiesList = createSelector(selectState,
-    (state) => state.planProperties.state === LoadingState.Done && state.planProperties?.data !== undefined? 
-    Object.values(state.planProperties?.data) 
+    (state) => state.planProperties.state === LoadingState.Done && state.planProperties?.data !== undefined?
+    Object.values(state.planProperties?.data)
     : null
   )
 
@@ -74,7 +74,7 @@ export const selectIterationStepIds = createSelector(selectIterativePlanningIter
 
 export const selectIterationStepById = memoizeWith(
   (stepId: string) => stepId,
-  (stepId: string) => createSelector(selectIterativePlanningIterationSteps, 
+  (stepId: string) => createSelector(selectIterativePlanningIterationSteps,
     (steps) => steps ? steps.find(({_id}) => _id === stepId) : null
 ));
 export const selectIterativePlanningIterationStepsLoadingState = createSelector(selectState,
@@ -102,7 +102,7 @@ export const selectIterativePlanningCurrentMaxUtility = createSelector(selectSta
     let cmu = undefined;
     if(!state.iterationSteps.data || state.iterationSteps.data.length === 0 || state.planProperties.data == undefined){
       return 0;
-    } 
+    }
     cmu = computeCurrentMaxUtility(state.iterationSteps.data, state.planProperties.data);
     return cmu;
 });
@@ -116,8 +116,24 @@ export const selectIterativePlanningMaxPossibleUtility = createSelector(selectSt
   return maxOverallUtility;
 });
 
+export const selectIterativePlanningMinPayment = createSelector(selectState, (state) => {
+  if(state.project?.data?.itemType === 'demo-project' && state.project.data.settings.userStudy.paymentInfo.min !== undefined){
+    return state.project.data.settings.userStudy.paymentInfo.min;
+  }
 
-// Messages    
+  return 0;
+});
+
+export const selectIterativePlanningMaxPayment = createSelector(selectState, (state) => {
+  if(state.project?.data?.itemType === 'demo-project' && state.project.data.settings.userStudy.paymentInfo.max !== undefined){
+    return state.project.data.settings.userStudy.paymentInfo.max;
+  }
+
+  return 0;
+});
+
+
+// Messages
 
 const selectAllMessages = createSelector(selectState, ({messages}) => messages);
 export const selectMessages = memoizeWith(

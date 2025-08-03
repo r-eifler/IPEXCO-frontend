@@ -10,7 +10,7 @@ import { PageModule } from 'src/app/shared/components/page/page.module';
 
 import { IterationStepCardComponent } from '../../components/iteration-step-card/iteration-step-card.component';
 import { cancelPlanComputationAndIterationStep, initNewIterationStep } from '../../state/iterative-planning.actions';
-import { selectIterativePlanningCurrentMaxUtility, selectIterativePlanningIterationSteps, selectIterativePlanningIterationStepsLoadingState, selectIterativePlanningLoadingFinished, selectIterativePlanningMaxPossibleUtility, selectIterativePlanningProject, selectIterativePlanningProperties } from '../../state/iterative-planning.selector';
+import { selectIterativePlanningCurrentMaxUtility, selectIterativePlanningIterationSteps, selectIterativePlanningIterationStepsLoadingState, selectIterativePlanningLoadingFinished, selectIterativePlanningMaxPayment, selectIterativePlanningMaxPossibleUtility, selectIterativePlanningMinPayment, selectIterativePlanningProject, selectIterativePlanningProperties } from '../../state/iterative-planning.selector';
 import { ProjectDirective } from '../../directives/isProject.directive';
 import { DemoDirective } from '../../directives/isDemo.directive';
 import { StepsListHeroComponent } from '../../components/steps-list-hero/steps-list-hero.component';
@@ -59,6 +59,8 @@ export class StepsListViewComponent{
 
   maxOverallUtility$ = this.store.select(selectIterativePlanningMaxPossibleUtility);
   currentMaxUtility$ = this.store.select(selectIterativePlanningCurrentMaxUtility);
+  minPayment$ = this.store.select(selectIterativePlanningMinPayment);
+  maxPayment$ = this.store.select(selectIterativePlanningMaxPayment);
 
   createNewIteration(baseStepId?: string) {
     this.store.dispatch(initNewIterationStep({baseStepId}));

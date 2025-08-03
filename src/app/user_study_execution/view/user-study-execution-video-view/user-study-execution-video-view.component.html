@@ -1,0 +1,24 @@
+@let step = step$ | async;
+
+<app-page>
+  <app-page-title>
+    {{ step?.name }}
+  </app-page-title>
+  <app-page-content>
+    <app-page-section-list>
+      <app-page-section>
+        <app-page-section-content>
+          <div class="video-container">
+            <iframe
+              [src]="step?.content | allowUrl"
+              title="Embedded video"
+              allowfullscreen
+              loading="lazy"
+              frameborder="0"
+            ></iframe>
+          </div>
+        </app-page-section-content>
+      </app-page-section>
+    </app-page-section-list>
+  </app-page-content>
+</app-page>

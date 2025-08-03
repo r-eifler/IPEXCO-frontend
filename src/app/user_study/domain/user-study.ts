@@ -1,5 +1,6 @@
 export enum UserStudyStepType {
   description = 'description',
+  video = 'video',
   form = 'form',
   demo = 'demo',
   demoInfo = 'demoInfo',
@@ -17,6 +18,12 @@ export interface UserStudyDescriptionStep extends UserStudyStep{
   type: UserStudyStepType.description;
   content: string;
 }
+
+export interface UserStudyVideoStep extends UserStudyStep{
+  type: UserStudyStepType.video;
+  content: string;
+}
+
 
 export interface UserStudyFormStep extends UserStudyStep{
   type: UserStudyStepType.form;
