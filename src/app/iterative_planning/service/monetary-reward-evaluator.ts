@@ -93,5 +93,39 @@ export class MonetaryRewardEvaluatorService{
 
     return currentUtility / maxUtility;
   }
+  
+  //
+  // Input:
+  // - utility proportion
+  // - max possible utility
+  //
+  // Output:
+  // - the utility corresponding to the proportion, e.g. 0.5 with maxUtility = 12 returns 6
+  //
+  computeUtilityFromProportion(
+    utilityProportion: number | undefined,
+    maxUtility: number | undefined
+  ): number {
+    
+    //
+    // Handle possible issues with input parameters
+    //
+    // NOTE: the fall-back value is 0.0
+    //
+    if (utilityProportion === undefined || utilityProportion < 0.0 || utilityProportion > 1.0) {
+      console.error("bad utilityProportion");
+      return 0.0;
+    }
+    if (maxUtility === undefined) {
+      console.error("maxUtility undefined");
+      return 0.0;
+    }
+    if (maxUtility == 0) {
+      return 0.0;
+    }
+
+    return utilityProportion * maxUtility;
+
+  }
 
 }

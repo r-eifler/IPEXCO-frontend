@@ -42,17 +42,34 @@
 }
 
 .progress-bar-background {
-  background-color: #e0e0e0;
+  @include vars.color(secondary);
+  // below: workaround to set opacity -- doing so directly affects children which we don't want
+  background-color: color-mix(in srgb, currentColor 10%, transparent); 
   height: 10px;
   border-radius: 0px; // use bigger number for rounded edges, e.g., 5px;
   overflow: hidden;
 }
 
 .progress-bar-fill {
-  background-color: #4caf50;
+  @include vars.color(secondary);
+  background-color: currentColor; 
+  opacity: 0.9;
   height: 100%;
   width: 0%;
   transition: width 0.3s ease;
+}
+
+.progress-container {
+  position: relative; 
+  width: 100%;
+}
+
+.utility-markers {
+  position: absolute;
+  bottom: 10px; // just above the progress bar
+  left: 0;
+  width: 100%;
+  height: 20px;
 }
 
 .payment-markers {
@@ -68,7 +85,21 @@
   transform: translateX(-50%);
   font-size: 0.75rem;
   white-space: nowrap;
-  color: #666;
+  @include vars.typography(label-small);
+}
+
+.progress-label {
+  // font-weight: bold;
+  @include vars.typography(label-small);
+  text-align: center;
+
+  &.top-label {
+    margin-bottom: 24px;
+  }
+
+  &.bottom-label {
+    margin-top: 24px;
+  }
 }
 
 .utility-group {

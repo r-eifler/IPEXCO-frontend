@@ -71,5 +71,12 @@ export class StepsListHeroComponent {
       this.maxPayment()
     );
   }
+  
+  computeUtilityFromProportion(utilityProportion: number): number {
+    return this.rewardEvaluator.computeUtilityFromProportion(
+      utilityProportion,
+      this.maxOverallUtility() 
+    );
+  }
 
 }

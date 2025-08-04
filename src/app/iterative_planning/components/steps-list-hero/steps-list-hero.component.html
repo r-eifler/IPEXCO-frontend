@@ -32,29 +32,47 @@
 
           <!-- Progress bar for utility & reward -->
           <div class="progress-wrapper">
-            <div class="progress-bar-background">
-              <!-- The progress bar itself -->
-              <div
-                class="progress-bar-fill"
-                [style.width.%]="computeCurrentUtilityProportion() * 100"
-              ></div>
-              <!-- Ticks that indicate where payment transitions are -->
-              <div
-                *ngFor="let marker of markerPayments"
-                class="tick"
-                [style.left.%]="marker * 100"
-              ></div>
-            </div>
-            <!-- The number values indicating reward at each transition -->
-            <div class="payment-markers">
-              <div
-                *ngFor="let marker of markerPayments"
-                class="marker"
-                [style.left.%]="marker * 100"
-              >
-                {{ computePayment(marker) | currency: 'GBP':'symbol':'1.0-0' }}
+            
+            <div class="progress-label top-label">Utility</div>
+
+            <div class="progress-container">
+              <div class="progress-bar-background">
+                <!-- The progress bar itself -->
+                <div
+                  class="progress-bar-fill"
+                  [style.width.%]="computeCurrentUtilityProportion() * 100"
+                ></div>
+                <!-- Ticks that indicate where payment transitions are -->
+                <div
+                  *ngFor="let marker of markerPayments"
+                  class="tick"
+                  [style.left.%]="marker * 100"
+                ></div>
+              </div>
+              <!-- The number values indicating UTILITY at each transition -->
+              <div class="utility-markers">
+                <div
+                  *ngFor="let marker of markerPayments"
+                  class="marker"
+                  [style.left.%]="marker * 100"
+                >
+                  {{ computeUtilityFromProportion(marker) }}
+                </div>
+              </div>
+              <!-- The number values indicating REWARD at each transition -->
+              <div class="payment-markers">
+                <div
+                  *ngFor="let marker of markerPayments"
+                  class="marker"
+                  [style.left.%]="marker * 100"
+                >
+                  {{ computePayment(marker) | currency: 'GBP':'symbol':'1.0-0' }}
+                </div>
               </div>
             </div>
+            
+            <div class="progress-label bottom-label">Bonus Reward</div>
+
           </div>
 
           <!-- Monetary reward X / Y -->
