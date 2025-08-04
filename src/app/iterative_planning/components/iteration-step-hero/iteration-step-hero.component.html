@@ -5,6 +5,14 @@
         [color]="step()?.plan?.status | stepStatusColor"
       >{{ step()?.plan?.status | stepStatusName }}</app-label>
     </mat-card-title>
+    
+    <!-- absolute position so that title is properly centered, even with step status -->
+    <div style="position: absolute; left: 50%; transform: translateX(-50%);">
+      <mat-card-title>
+        Information for {{ step()?.name ?? 'Step ?' }}
+      </mat-card-title>
+    </div>
+    
   </mat-card-header>
 
   <mat-card-content>
