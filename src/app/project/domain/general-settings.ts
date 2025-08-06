@@ -85,6 +85,6 @@ export const defaultGeneralSetting: GeneralSettings = {
       introTask: false,
       checkMaxUtility: true,
       showPaymentInfo: false,
-      paymentInfo: { min: 0, max: 10, steps: [0.5, 0.75, 1] }
+      paymentInfo: { min: 0, max: 3, steps: [0.5, 0.75, 1] }
   }
 };

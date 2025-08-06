@@ -271,6 +271,8 @@ export class UserManualComponent {
 
   maxOverallUtility = computeMaxPossibleUtility(this.sampleDemo, this.samplePlanProperties);
   currentMaxUtility = computeCurrentMaxUtility(this.sampleSteps, this.samplePlanPropertiesMap);
+  minPayment = this.sampleDemo.settings.userStudy.paymentInfo.min;
+  maxPayment = this.sampleDemo.settings.userStudy.paymentInfo.max;
 
 
   userMessage: string = '';
