@@ -3,23 +3,13 @@
   <mat-card-header>
     <div style="width: 100%; display: flex; justify-content: center;">
       <mat-card-title>
-        Overview of All Steps
+        Utility Over All Steps
       </mat-card-title>
     </div>
   </mat-card-header>
 
     <mat-card-content>
       <div class="content">
-        <div class="stats">
-            <mat-icon>check</mat-icon>
-            <span class="property-label">Solvable:</span>
-            <span class="property-value">{{ numSolvedSteps() }}</span>
-
-            <mat-icon>report</mat-icon>
-            <span class="property-label">Unsolvable:</span>
-            <span class="property-value">{{ umUnSolvedSteps() }}</span>
-        </div>
-
 
         <div class="utility-group">
 
@@ -34,7 +24,7 @@
 
           <!-- Progress bar for utility & reward -->
           <div class="progress-wrapper">
-            
+
             <div class="progress-label top-label">Utility</div>
 
             <div class="progress-container">
@@ -72,7 +62,7 @@
                 </div>
               </div>
             </div>
-            
+
             <div class="progress-label bottom-label">Bonus Reward</div>
 
           </div>
@@ -86,15 +76,6 @@
             </div>
           </div>
 
-        </div>
-      </div>
-
-      <div class="task-info">
-        <div class="plan-link-container">
-          <button mat-button (click)="openTaskInfo()" *isDemo>
-            <mat-icon>info</mat-icon>
-            Show Task Information
-          </button>
         </div>
       </div>
 

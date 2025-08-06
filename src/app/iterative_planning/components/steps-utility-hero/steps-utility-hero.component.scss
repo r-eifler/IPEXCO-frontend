@@ -14,37 +14,11 @@
   padding-top: var(--spacing-100);
 
   display: grid;
-  grid-template-columns: auto auto;
-  justify-content: space-between;
-  align-items: end;
-
-  gap: var(--spacing-100);
-}
-
-.task-info {
-  padding-top: var(--spacing-100);
-
-  display: grid;
   grid-template-columns: auto;
-  justify-content: center;
-  align-items: center;
+  justify-content: right;
+  align-items: right;
 
   gap: var(--spacing-100);
-}
-
-.stats {
-  height: fit-content;
-
-  display: grid;
-  grid-template-columns: auto auto minmax(0, 1fr);
-  align-items: end;
-
-  column-gap: var(--spacing-100);
-}
-
-.plan-link-container {
-  display: grid;
-  justify-content: center;
 }
 
 .progress-wrapper {
@@ -55,7 +29,7 @@
 .progress-bar-background {
   @include vars.color(secondary);
   // below: workaround to set opacity -- doing so directly affects children which we don't want
-  background-color: color-mix(in srgb, currentColor 10%, transparent); 
+  background-color: color-mix(in srgb, currentColor 10%, transparent);
   height: 10px;
   border-radius: 0px; // use bigger number for rounded edges, e.g., 5px;
   overflow: hidden;
@@ -63,7 +37,7 @@
 
 .progress-bar-fill {
   @include vars.color(secondary);
-  background-color: currentColor; 
+  background-color: currentColor;
   opacity: 0.9;
   height: 100%;
   width: 0%;
@@ -71,7 +45,7 @@
 }
 
 .progress-container {
-  position: relative; 
+  position: relative;
   width: 100%;
 }
 

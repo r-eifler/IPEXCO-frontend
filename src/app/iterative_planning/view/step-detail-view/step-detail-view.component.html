@@ -29,14 +29,14 @@
 
 
   <app-page-hero *isDemo>
-    <app-steps-list-hero
+    <app-steps-utility-hero
       [maxOverallUtility]="maxOverAllUtility$ | async"
       [currentMaxUtility]="currentMaxUtility$ | async"
       [minPayment]="minPayment$ | async"
       [maxPayment]="maxPayment$ | async"
       [steps]="steps$ | async"
       [planPropertiesMap]="planProperties$ | async"
-    ></app-steps-list-hero>
+    ></app-steps-utility-hero>
   </app-page-hero>
 
 

@@ -4,9 +4,20 @@
   padding-top: var(--spacing-100);
 
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-columns: auto auto;
   justify-content: space-between;
   align-items: end;
+
+  gap: var(--spacing-100);
+}
+
+.task-info {
+  padding-top: var(--spacing-100);
+
+  display: grid;
+  grid-template-columns: auto;
+  justify-content: center;
+  align-items: center;
 
   gap: var(--spacing-100);
 }

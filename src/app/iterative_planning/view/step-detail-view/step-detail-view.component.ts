@@ -25,7 +25,7 @@ import { PlanProperty } from "../../../shared/domain/plan-property/plan-property
 import { ExplanationChatLlmComponent } from "../../components/explanation-chat-llm/explanation-chat-llm.component";
 import { AvailableQuestion, ExplanationChatComponent } from "../../components/explanation-chat/explanation-chat.component";
 import { IterationStepHeroComponent } from "../../components/iteration-step-hero/iteration-step-hero.component";
-import { StepsListHeroComponent } from '../../components/steps-list-hero/steps-list-hero.component';
+import { StepsUtilityHeroComponent } from '../../components/steps-utility-hero/steps-utility-hero.component';
 import { UserManualDialogComponent } from "../../components/user-manual-dialog/user-manual-dialog.component";
 import { DemoDirective } from "../../directives/isDemo.directive";
 import { ProjectDirective } from "../../directives/isProject.directive";
@@ -75,7 +75,7 @@ import {tap} from 'rxjs/operators';
     ExplanationChatComponent,
     ExplanationChatLlmComponent,
     IterationStepHeroComponent,
-    StepsListHeroComponent,
+    StepsUtilityHeroComponent,
     MatButtonModule,
     MatIconModule,
     MatTooltipModule,

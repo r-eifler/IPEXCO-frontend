@@ -27,26 +27,6 @@
         <span class="property-value" *isProject>{{ step()?.softGoals?.length }}</span>
       </div>
 
-      <div class="plan-link-container">
-        @if(solved()){
-          <a mat-button [routerLink]="['plan']" *isProject>
-            <mat-icon>explore</mat-icon>
-            Show Plan
-          </a>
-        }
-        @else{
-          <a mat-button [routerLink]="['plan']" *isProject [disabled]="true">
-            <mat-icon>explore</mat-icon>
-            No Plan available
-          </a>
-        }
-        <button mat-button (click)="openTaskInfo()" *isDemo>
-          <mat-icon>info</mat-icon>
-          Show Task Information
-        </button>
-      </div>
-
-
       <div class="utility-group" *isDemo>
         <div class="utility">
           <mat-icon>workspace_premium</mat-icon>
@@ -74,5 +54,27 @@
         </div>
       </div>
     </div>
+
+    <div class="task-info">
+       <div class="plan-link-container">
+        @if(solved()){
+          <a mat-button [routerLink]="['plan']" *isProject>
+            <mat-icon>explore</mat-icon>
+            Show Plan
+          </a>
+        }
+        @else{
+          <a mat-button [routerLink]="['plan']" *isProject [disabled]="true">
+            <mat-icon>explore</mat-icon>
+            No Plan available
+          </a>
+        }
+        <button mat-button (click)="openTaskInfo()" *isDemo>
+          <mat-icon>info</mat-icon>
+          Show Task Information
+        </button>
+      </div>
+    </div>
+
   </mat-card-content>
 </mat-card>
