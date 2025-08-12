@@ -9,6 +9,7 @@ import { UserManualViewComponent } from '../user-manual-view/user-manual-view.co
 import { UserStudyExecutionDemoViewComponent } from '../user-study-execution-demo-view/user-study-execution-demo-view.component';
 import { UserStudyExecutionDescriptionViewComponent } from '../user-study-execution-description-view/user-study-execution-description-view.component';
 import { UserStudyExecutionVideoViewComponent } from '../user-study-execution-video-view/user-study-execution-video-view.component';
+import { UserStudyExecutionComprehensionCheckViewComponent } from '../user-study-execution-comprehension-check-view/user-study-execution-comprehension-check-view.component';
 import { UserStudyExecutionExternalViewComponent } from '../user-study-execution-external-view/user-study-execution-external-view.component';
 import {AllowUrlPipe} from 'src/app/project/service/allow-url.service';
 
@@ -18,6 +19,7 @@ import {AllowUrlPipe} from 'src/app/project/service/allow-url.service';
         AsyncPipe,
         UserStudyExecutionDescriptionViewComponent,
         UserStudyExecutionVideoViewComponent,
+        UserStudyExecutionComprehensionCheckViewComponent,
         UserStudyExecutionExternalViewComponent,
         UserStudyExecutionDemoViewComponent,
         UserManualViewComponent,

@@ -1,6 +1,7 @@
 export enum UserStudyStepType {
   description = 'description',
   video = 'video',
+  comprehensionCheck = 'comprehensionCheck',
   form = 'form',
   demo = 'demo',
   demoInfo = 'demoInfo',
@@ -24,6 +25,10 @@ export interface UserStudyVideoStep extends UserStudyStep{
   content: string;
 }
 
+export interface UserStudyComprehensionCheckStep extends UserStudyStep{
+  type: UserStudyStepType.comprehensionCheck;
+  content: string;
+}
 
 export interface UserStudyFormStep extends UserStudyStep{
   type: UserStudyStepType.form;

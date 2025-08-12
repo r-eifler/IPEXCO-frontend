@@ -23,6 +23,7 @@ import {createUserStudy, loadUserStudyDemos} from '../../state/user-study.action
 import {AsyncPipe} from '@angular/common';
 import {DescriptionCardComponent} from '../../components/description-card/description-card.component';
 import {VideoCardComponent} from '../../components/video-card/video-card.component';
+import {ComprehensionCheckCardComponent} from '../../components/comprehension-check-card/comprehension-check.component';
 import {DemoCardComponent} from '../../components/demo-card/demo-card.component';
 import {FormCardComponent} from '../../components/form-card/form-card.component';
 import {selectedAtLeastOne} from '../../../validators/selected-at-least-one.validator';
@@ -51,6 +52,7 @@ import { DemoInfoCardComponent } from '../../components/demo-info-card/demo-info
         AsyncPipe,
         DescriptionCardComponent,
         VideoCardComponent,
+        ComprehensionCheckCardComponent,
         DemoCardComponent,
         FormCardComponent,
         UserManualCardComponent,

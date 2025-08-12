@@ -1,0 +1,60 @@
+@let step = step$ | async;
+
+<app-page>
+  <app-page-title>
+    {{ step?.name }}
+  </app-page-title>
+  <app-page-content>
+
+    <label>
+      asdfas
+    </label>
+
+
+    <app-page-section-content>
+      <form (ngSubmit)="onSubmit()" #questionForm="ngForm">
+        <!-- Question 1 -->
+        <div>
+          <label>Question 1: Is your name Sir Lancelot?</label><br />
+          <label>
+            <input type="radio" name="q1" value="yes" [(ngModel)]="answers.q1" required /> Yes
+          </label>
+          <label>
+            <input type="radio" name="q1" value="no" [(ngModel)]="answers.q1" required /> No
+          </label>
+        </div>
+        <br />
+
+        <!-- Question 2 -->
+        <div>
+          <label>Question 2: Is the holy grail your quest?</label><br />
+          <label>
+            <input type="radio" name="q2" value="yes" [(ngModel)]="answers.q2" required /> Yes
+          </label>
+          <label>
+            <input type="radio" name="q2" value="no" [(ngModel)]="answers.q2" required /> No
+          </label>
+        </div>
+        <br />
+
+        <!-- Question 3 -->
+        <div>
+          <label>Question 3: Is your favourite colour blue?</label><br />
+          <label>
+            <input type="radio" name="q3" value="yes" [(ngModel)]="answers.q3" required /> Yes
+          </label>
+          <label>
+            <input type="radio" name="q3" value="no" [(ngModel)]="answers.q3" required /> No
+          </label>
+        </div>
+        <br />
+
+        <!-- Submit Button -->
+        <button type="submit">Submit</button>
+      </form>
+    </app-page-section-content>
+
+
+
+  </app-page-content>
+</app-page>

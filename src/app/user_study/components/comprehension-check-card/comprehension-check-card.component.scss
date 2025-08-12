@@ -1,0 +1,32 @@
+.video-container {
+  position: relative;
+  width: 100%;            /* full width of the parent */
+  padding-bottom: 56.25%; /* 16:9 aspect ratio (9/16 = 0.5625) */
+  height: 0;              /* height controlled by padding-bottom */
+  overflow: hidden;       /* clip overflow */
+}
+
+.video-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.button-container {
+  display: flex;
+  flex-direction: row;
+  gap: var(--spacing-200);
+}
+
+.full-width {
+  width: 100%;
+  margin-top: var(--sizing-200);
+}
+
+.content {
+  box-sizing: border-box;
+  margin-top: var(--sizing-200);
+}
