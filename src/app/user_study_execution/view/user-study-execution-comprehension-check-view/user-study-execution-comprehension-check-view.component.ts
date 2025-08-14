@@ -63,9 +63,11 @@ export class UserStudyExecutionComprehensionCheckViewComponent {
   }
 
   readonly questions: ReadonlyArray<ComprehensionCheckQuestion> = [
-    { id: "q1", text: "Is your name Sir Lancelot of the Lake?", correctAnswer: "yes", userAnswer: undefined },
-    { id: "q2", text: "Do you seek the Holy Grail?", correctAnswer: "yes", userAnswer: undefined },
-    { id: "q3", text: "Is your favourite colour blue?", correctAnswer: "yes", userAnswer: undefined }
+    { id: "q1", text: "Your job is to select which tasks the rover should perform.", correctAnswer: "true" },
+    { id: "q2", text: "Some of the rover's tasks are more valuable than others, i.e., they have higher utility.", correctAnswer: "true" },
+    { id: "q3", text: "Once tasks are selected you must manually make plans that achieve the chosen tasks.", correctAnswer: "false" },
+    { id: "q4", text: "The utility of a step is only available if the selected tasks can all be achieved.", correctAnswer: "true" },
+    { id: "q5", text: "If it is impossible to achieve all selected tasks then you receive information that helps you select tasks for the next step.", correctAnswer: "true" }
   ];
 
   buildForm(): FormGroup {
@@ -74,10 +76,10 @@ export class UserStudyExecutionComprehensionCheckViewComponent {
     return this.fb.group(group);
   }
 
-  // HACK: variables are hard-coded to support 2 attempts.
+  // HACK: variables are hard-coded to support 2 attempts
   currentAttempt: number = 0;
   finalAttempt: number = 1;
-  passingScore = 3;
+  passingScore = this.questions.length;
   attemptForms: FormGroup[] = [this.buildForm(), this.buildForm()];
   questionAnswers: ComprehensionCheckQuestionAnswer[][] = [
     this.questions.map(q => ({ ...q, userAnswer: undefined })),
@@ -95,6 +97,7 @@ export class UserStudyExecutionComprehensionCheckViewComponent {
     const currentQuestionAnswers = this.questionAnswers[this.currentAttempt];
 
     currentForm.disable();
+    this.submittedForm[this.currentAttempt] = true;
 
     // Extract answers from form and put them into currentQuestionAnswers
     Object.keys(currentForm.value).forEach(id => {

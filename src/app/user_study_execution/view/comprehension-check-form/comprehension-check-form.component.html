@@ -5,10 +5,10 @@
     <div class="question" *ngFor="let q of questions">
       <p>{{ q.text }}</p>
       <label>
-        <input type="radio" [formControlName]="q.id" value="yes" [disabled]="submitted"> Yes
+        <input type="radio" [formControlName]="q.id" value="true" [disabled]="submitted"> True
       </label>
       <label>
-        <input type="radio" [formControlName]="q.id" value="no" [disabled]="submitted"> No
+        <input type="radio" [formControlName]="q.id" value="false" [disabled]="submitted"> False
       </label>
     </div>
     <button type="submit" [disabled]="form.invalid || submitted">Submit</button>

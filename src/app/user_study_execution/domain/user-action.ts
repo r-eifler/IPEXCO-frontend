@@ -49,7 +49,6 @@ export interface ComprehensionCheckQuestion {
     id: string
     text: string
     correctAnswer: string
-    userAnswer: string | undefined
 }
 
 export interface ComprehensionCheckQuestionAnswer extends ComprehensionCheckQuestion {
