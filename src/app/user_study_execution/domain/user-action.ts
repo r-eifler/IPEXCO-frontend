@@ -45,17 +45,28 @@ export interface UserAction {
     data?: unknown
 }
 
+export interface ComprehensionCheckQuestion {
+    id: string
+    text: string
+    correctAnswer: string
+    userAnswer: string | undefined
+}
+
+export interface ComprehensionCheckQuestionAnswer extends ComprehensionCheckQuestion {
+  userAnswer: string | undefined;
+}
+
 export interface OtherUserAction extends UserAction {
     type: ActionType.OTHER,
 }
 
 export interface StartStudyUserAction extends UserAction {
     type: ActionType.START_STUDY,
-} 
+}
 
 export interface EndStudyUserAction extends UserAction {
     type: ActionType.END_STUDY,
-} 
+}
 
 
 export interface StartDescriptionUserAction extends UserAction {
@@ -64,7 +75,7 @@ export interface StartDescriptionUserAction extends UserAction {
         stepIndex: number,
         stepName: string,
     }
-} 
+}
 
 export interface EndDescriptionUserAction extends UserAction {
     type: ActionType.END_DESCRIPTION,
@@ -72,7 +83,7 @@ export interface EndDescriptionUserAction extends UserAction {
         stepIndex: number,
         stepName: string,
     }
-} 
+}
 
 
 export interface StartExternalUserAction extends UserAction {
@@ -81,7 +92,7 @@ export interface StartExternalUserAction extends UserAction {
         stepIndex: number,
         stepName: string,
     }
-} 
+}
 
 export interface OpenExternalLinkUserAction extends UserAction {
     type: ActionType.OPEN_EXTERNAL_LINK,
@@ -89,7 +100,7 @@ export interface OpenExternalLinkUserAction extends UserAction {
         stepIndex: number,
         stepName: string,
     }
-} 
+}
 
 export interface EndExternalUserAction extends UserAction {
     type: ActionType.END_EXTERNAL,
@@ -97,7 +108,7 @@ export interface EndExternalUserAction extends UserAction {
         stepIndex: number,
         stepName: string,
     }
-} 
+}
 
 
 export interface StartDemoUserAction extends UserAction {
@@ -107,7 +118,7 @@ export interface StartDemoUserAction extends UserAction {
         demoId: string,
         stepName: string,
     }
-} 
+}
 
 export interface EndDemoUserAction extends UserAction {
     type: ActionType.END_DEMO,
@@ -116,7 +127,7 @@ export interface EndDemoUserAction extends UserAction {
         demoId: string,
         stepName: string,
     }
-} 
+}
 
 
 export interface CreateIterationStepUserAction extends UserAction {
@@ -132,7 +143,7 @@ export interface PlanForIterationStepUserAction extends UserAction {
     data: {
         demoId: string,
         stepId: string,
-        planStatus: PlanRunStatus, 
+        planStatus: PlanRunStatus,
         utility: number | null,
     }
 }
@@ -161,7 +172,7 @@ export interface AskQuestionUserAction extends UserAction {
         propertyId?: string;
         questionType: QuestionType;
     }
-} 
+}
 
 export interface ExplanationUserAction extends UserAction {
     type: ActionType.EXPLANATION
@@ -173,4 +184,4 @@ export interface ExplanationUserAction extends UserAction {
         questionType: QuestionType;
         subSets?: string[][];
     }
-} 
+}

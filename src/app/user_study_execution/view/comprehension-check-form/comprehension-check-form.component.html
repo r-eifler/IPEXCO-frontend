@@ -1,0 +1,16 @@
+<!-- comprehension-check-form.component.html -->
+<div class="attempt-form">
+  <h2>{{ title }}</h2>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="question" *ngFor="let q of questions">
+      <p>{{ q.text }}</p>
+      <label>
+        <input type="radio" [formControlName]="q.id" value="yes" [disabled]="submitted"> Yes
+      </label>
+      <label>
+        <input type="radio" [formControlName]="q.id" value="no" [disabled]="submitted"> No
+      </label>
+    </div>
+    <button type="submit" [disabled]="form.invalid || submitted">Submit</button>
+  </form>
+</div>

@@ -6,54 +6,56 @@
   </app-page-title>
   <app-page-content>
 
-    <label>
-      asdfas
-    </label>
+    <p>{{ preVideoText }}</p>
 
+    <!-- Instructions video -->
+    <div class="video-container">
+      <iframe
+        [src]="videoEmbedUrl | allowUrl"
+        title="Embedded video"
+        allowfullscreen
+        loading="lazy"
+        frameborder="0"
+      ></iframe>
+    </div>
 
-    <app-page-section-content>
-      <form (ngSubmit)="onSubmit()" #questionForm="ngForm">
-        <!-- Question 1 -->
-        <div>
-          <label>Question 1: Is your name Sir Lancelot?</label><br />
-          <label>
-            <input type="radio" name="q1" value="yes" [(ngModel)]="answers.q1" required /> Yes
-          </label>
-          <label>
-            <input type="radio" name="q1" value="no" [(ngModel)]="answers.q1" required /> No
-          </label>
-        </div>
-        <br />
+    <p>{{ preComprehensionCheckText }}</p>
 
-        <!-- Question 2 -->
-        <div>
-          <label>Question 2: Is the holy grail your quest?</label><br />
-          <label>
-            <input type="radio" name="q2" value="yes" [(ngModel)]="answers.q2" required /> Yes
-          </label>
-          <label>
-            <input type="radio" name="q2" value="no" [(ngModel)]="answers.q2" required /> No
-          </label>
-        </div>
-        <br />
+    <app-page-section-list>
+      <app-page-section>
+        <app-page-section-content>
 
-        <!-- Question 3 -->
-        <div>
-          <label>Question 3: Is your favourite colour blue?</label><br />
-          <label>
-            <input type="radio" name="q3" value="yes" [(ngModel)]="answers.q3" required /> Yes
-          </label>
-          <label>
-            <input type="radio" name="q3" value="no" [(ngModel)]="answers.q3" required /> No
-          </label>
-        </div>
-        <br />
+          <!-- First attempt -- always visible -->
+          <app-comprehension-check-form
+            [title]="'First Attempt'"
+            [form]="attemptForms[0]"
+            [questions]="questions"
+            [submitted]="submittedForm[0]"
+            (submitForm)="submitAttempt()">
+          </app-comprehension-check-form>
 
-        <!-- Submit Button -->
-        <button type="submit">Submit</button>
-      </form>
-    </app-page-section-content>
+          <!-- Second attempt -- only visible if user fails first attempt -->
+          <p *ngIf="currentAttempt >= 1"> {{ preSecondAttemptText }}</p>
+          <app-comprehension-check-form
+            *ngIf="currentAttempt >= 1"
+            [title]="'Second Attempt'"
+            [form]="attemptForms[1]"
+            [questions]="questions"
+            [submitted]="submittedForm[1]"
+            (submitForm)="submitAttempt()">
+          </app-comprehension-check-form>
 
+          <!-- Show pass/fail -->
+          <div *ngIf="passed">
+            <p>You have <b>passed</b> the comprehension check. You can now continue with the study.</p>
+          </div>
+          <div *ngIf="!passed && currentAttempt > finalAttempt">
+            <p>You have <b>failed</b> the comprehension check. Please return your submission through prolific. You may be reimbursed for your time spent so far.</p>
+          </div>
+
+        </app-page-section-content>
+      </app-page-section>
+    </app-page-section-list>
 
 
   </app-page-content>

@@ -1,7 +1,7 @@
 import { createAction, props } from '@ngrx/store';
 import {UserStudy} from '../../user_study/domain/user-study';
 import {User} from '../../user/domain/user';
-import { UserAction } from '../domain/user-action';
+import { ComprehensionCheckQuestion, ComprehensionCheckQuestionAnswer, UserAction } from '../domain/user-action';
 import { PlanProperty } from 'src/app/shared/domain/plan-property/plan-property';
 import { Demo } from 'src/app/shared/domain/demo';
 import { DomainSpecification } from 'src/app/global_specification/domain/domain_specification';
@@ -36,7 +36,7 @@ export const executionUserStudyCancel = createAction('[UserStudyExecution] cance
 export const executionUserStudyCancelSuccess = createAction('[UserStudyExecution] cancel success');
 export const executionUserStudyCancelFailure = createAction('[UserStudyExecution] cancel failure');
 
-// demo 
+// demo
 export const loadUserStudyDemo = createAction('[UserStudyExecution] load user study demo', props<{demoId: string}>());
 export const loadUserStudyDemoSuccess = createAction('[UserStudyExecution] load user study demo success', props<{demo: Demo}>());
 export const loadUserStudyDemoFailure = createAction('[UserStudyExecution] load user study demo failure');
@@ -47,7 +47,7 @@ export const loadDomainSpecificationSuccess = createAction('[UserStudyExecution]
 export const loadDomainSpecificationFailure = createAction('[UserStudyExecution] load  domain specification failure',  props<{err: any}>());
 
 
-// planProperties 
+// planProperties
 export const loadUserStudyPlanProperties = createAction('[UserStudyExecution] load user study Plan Properties', props<{demoId: string}>());
 export const loadUserStudyPlanPropertiesSuccess = createAction('[UserStudyExecution] load user study Plan Properties success', props<{planProperties: PlanProperty[]}>());
 export const loadUserStudyPlanPropertiesFailure = createAction('[UserStudyExecution] load user study Plan Properties failure');
@@ -58,10 +58,13 @@ export const registerUserStudyUser = createAction('[UserStudyExecution] register
 export const registerUserStudyUserSuccess = createAction('[UserStudyExecution] register user study user success', props<{user: User, token: string}>());
 export const registerUserStudyUserFailure = createAction('[UserStudyExecution] register user study user failure');
 
-// 
+//
 export const distributeParticipant = createAction('[UserStudyExecution] distribute participant', props<{distributionId: string}>());
 export const distributeParticipantSuccess = createAction('[UserStudyExecution] distribute participant success');
 export const distributeParticipantFailure = createAction('[UserStudyExecution] distribute participant failure');
+
+// comprehension check
+export const submitComprehensionCheck = createAction('[COMPREHENSION-CHECK] submitted', props<{submission: ComprehensionCheckQuestionAnswer[]}>());
 
 // User action logging
 
