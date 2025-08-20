@@ -30,13 +30,13 @@ export class FinishDemoInfoDialogComponent {
   planPropertiesMap = toSignal(this.store.select(selectIterativePlanningProperties)) ;
   planPropertiesList = computed(() => {
     const propMap =  this.planPropertiesMap();
-    return propMap !== undefined ? 
-    Object.values(propMap) : 
+    return propMap !== undefined ?
+    Object.values(propMap) :
     undefined
   });
   steps = toSignal(this.store.select(selectIterativePlanningIterationSteps));
-  
-  
+
+
   maxOverallUtility = computed(() => {
     const demo  = this.demo();
     const properties = this.planPropertiesList();
@@ -53,17 +53,17 @@ export class FinishDemoInfoDialogComponent {
     if(steps === undefined || properties == undefined || steps.length === 0){
       return 0
     }
- 
-    const stepUtilities = steps.map(s => 
-      s.status !== StepStatus.SOLVABLE || s.plan === undefined || s.plan === null ? 
-      0 : 
+
+    const stepUtilities = steps.map(s =>
+      s.status !== StepStatus.SOLVABLE || s.plan === undefined || s.plan === null ?
+      0 :
       computeUtility(s.plan, properties)
     ).filter(v => v !== undefined);
     return Math.max(...stepUtilities);
   })
 
   missingUtility = computed(() => {
-    const maxOverallUtility = this.currentMaxUtility();
+    const maxOverallUtility = this.maxOverallUtility();
     const currentMaxUtility = this.currentMaxUtility();
 
     if(maxOverallUtility === undefined){
