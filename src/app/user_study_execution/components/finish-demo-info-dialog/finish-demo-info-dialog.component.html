@@ -9,14 +9,14 @@
     <app-dialog-content>
         @if(currentMaxUtility() == maxOverallUtility()){
             <span>
-                Congratulation you achieved the maximal possible utility. 
+                Congratulation you achieved the maximal possible utility.
                 Please continue with the next part of the user study.
             </span>
         }
         @else{
             <span>
-                You are still missing a utility of {{ missingUtility() }} and the time is not over yet. 
-                Please try to find a solvable selection of goals with a higher utility.
+                You have only attained a utility of {{ currentMaxUtility() }} and can still get {{ missingUtility() }} more.
+                Your time is not over yet, please try to find a solvable selection of goals with a higher utility.
             </span>
         }
     </app-dialog-content>
@@ -30,4 +30,3 @@
         }
     </app-dialog-footer>
 </app-dialog>
-  
