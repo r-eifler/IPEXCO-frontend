@@ -102,6 +102,20 @@
                   <div matListItemLine>Description</div>
                 </mat-list-item>
               }
+              @case (userStudyStepType.video){
+                <mat-list-item>
+                  <mat-icon matListItemIcon>videocam</mat-icon>
+                  <div matListItemTitle>{{ step.name }}</div>
+                  <div matListItemLine>Video</div>
+                </mat-list-item>
+              }
+              @case (userStudyStepType.comprehensionCheck){
+                <mat-list-item>
+                  <mat-icon matListItemIcon>psychology</mat-icon>
+                  <div matListItemTitle>{{ step.name }}</div>
+                  <div matListItemLine>Comprehension Check</div>
+                </mat-list-item>
+              }
               @case (userStudyStepType.demo){
                 <mat-list-item>
                   <mat-icon matListItemIcon>repeat</mat-icon>
