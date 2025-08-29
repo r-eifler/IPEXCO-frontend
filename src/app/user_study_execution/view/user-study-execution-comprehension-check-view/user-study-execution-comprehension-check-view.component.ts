@@ -55,19 +55,17 @@ export class UserStudyExecutionComprehensionCheckViewComponent {
   If you fail again, you will be asked to return your submission.
   Remember that you can rewatch the instructions if needed.`
 
-  videoEmbedUrl = "https://www.youtube.com/embed/dQw4w9WgXcQ?si=M08h7PQJUUbhavTV";
-
   constructor(private fb: FormBuilder) {
     // do not allow user to move on (until they pass the comprehension check)
     this.store.dispatch(executionLockNextStep());
   }
 
   readonly questions: ReadonlyArray<ComprehensionCheckQuestion> = [
-    { id: "q1", text: "Your job is to select which tasks the rover should perform.", correctAnswer: "true" },
-    { id: "q2", text: "Some of the rover's tasks are more valuable than others, i.e., they have higher utility.", correctAnswer: "true" },
-    { id: "q3", text: "Once tasks are selected you must manually make plans that achieve the chosen tasks.", correctAnswer: "false" },
-    { id: "q4", text: "The utility of a step is only available if the selected tasks can all be achieved.", correctAnswer: "true" },
-    { id: "q5", text: "If it is impossible to achieve all selected tasks then you receive information that helps you select tasks for the next step.", correctAnswer: "true" }
+    { id: "q1", text: "Your job is to select goals for the rover to achieve.", correctAnswer: "true" },
+    { id: "q2", text: "Some of the rover's goals are more valuable than others, i.e., they have higher utility.", correctAnswer: "true" },
+    { id: "q3", text: "Once goals are enforced you must manually make plans that achieve the chosen goals.", correctAnswer: "false" },
+    { id: "q4", text: "The utility of a step is only available if the enforced goals can all be achieved.", correctAnswer: "true" },
+    { id: "q5", text: "If it is impossible to achieve all selected goals then you receive information that helps you select goals for the next step.", correctAnswer: "true" }
   ];
 
   buildForm(): FormGroup {

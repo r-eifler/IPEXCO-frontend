@@ -11,7 +11,7 @@
     <!-- Instructions video -->
     <div class="video-container">
       <iframe
-        [src]="videoEmbedUrl | allowUrl"
+        [src]="step?.content | allowUrl"
         title="Embedded video"
         allowfullscreen
         loading="lazy"
