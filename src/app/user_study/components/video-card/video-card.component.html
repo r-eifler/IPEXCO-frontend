@@ -1,7 +1,7 @@
   <mat-card appearance="outlined">
     <mat-card-header>
-      <mat-card-title
-        >Description
+      <mat-card-title>
+        Video
       </mat-card-title>
     </mat-card-header>
 
@@ -25,7 +25,7 @@
 
             <div [innerHTML]="'Your text: ' + ((description$ | async) ?? '') | marked" class="content">
             </div>
-             
+
             <div class="video-container">
               <iframe
                 [src]="((description$ | async) ?? '') | allowUrl"
@@ -34,7 +34,7 @@
                 loading="lazy"
                 frameborder="0"
               ></iframe>
-            </div>           
+            </div>
 
           </mat-tab>
         </mat-tab-group>
