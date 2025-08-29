@@ -66,13 +66,16 @@ export class UserStudyExecutionExternalViewComponent {
     this.usesCode$.pipe(
       take(1)
     ).subscribe(usesCode => {if(usesCode){this.store.dispatch(executionLockNextStep())}});
+
+    // HACK: subscribe to codeValid, otherwise onUnlock might break
+    this.codeValid$.pipe(take(1)).subscribe();
   }
 
   onClickLink(){
     combineLatest([this.stepIndex$, this.step$]).pipe(take(1)).subscribe(([index, step]) =>
       this.store.dispatch(logAction({
         action: {
-          type: ActionType.OPEN_EXTERNAL_LINK, 
+          type: ActionType.OPEN_EXTERNAL_LINK,
           data: {
               stepIndex: index,
               stepName: step?.name ?? 'Step without name'
