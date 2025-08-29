@@ -13,6 +13,7 @@ import { ActionType } from '../../domain/user-action';
 import { executionLockNextStep, executionUnlockNextStep, logAction } from '../../state/user-study-execution.actions';
 import { selectExecutionUserStudyStep, selectExecutionUserStudyStepIndex } from '../../state/user-study-execution.selector';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { NgIf } from "@angular/common";
 
 @Component({
     selector: 'app-user-study-execution-external-view',
@@ -24,6 +25,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
         ReactiveFormsModule,
         MatButtonModule,
         MatFormFieldModule,
+        NgIf
     ],
     templateUrl: './user-study-execution-external-view.component.html',
     styleUrl: './user-study-execution-external-view.component.scss'
@@ -44,6 +46,7 @@ export class UserStudyExecutionExternalViewComponent {
   stepIndex$ = this.store.select(selectExecutionUserStudyStepIndex);
 
   clickedLink = false;
+  unlocked = false;
 
   usesCode$ = this.step$.pipe(
     filterNotNullOrUndefined(),
@@ -91,6 +94,7 @@ export class UserStudyExecutionExternalViewComponent {
       (valid) => {
         if(valid){
           this.store.dispatch(executionUnlockNextStep());
+          this.unlocked = true;
         }
     });
   }

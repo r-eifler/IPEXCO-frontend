@@ -30,10 +30,12 @@
               </mat-form-field>
               <button mat-flat-button (click)="onUnlock()" [disabled]="!clickedLink" type="button">Unlock</button>
             </form>
+            <p *ngIf="unlocked">
+              You can now <b>continue</b>.
+            </p>
           </app-page-section-content>
         </app-page-section>
       }
     </app-page-section-list>
   </app-page-content>
 </app-page>
-
