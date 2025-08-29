@@ -4,6 +4,8 @@ import {BreadcrumbComponent} from '../../../shared/components/breadcrumb/breadcr
 import {BreadcrumbItemComponent} from '../../../shared/components/breadcrumb/breadcrumb-item/breadcrumb-item.component';
 import {DemoCardComponent} from '../../components/demo-card/demo-card.component';
 import {DescriptionCardComponent} from '../../components/description-card/description-card.component';
+import {VideoCardComponent} from '../../components/video-card/video-card.component';
+import {ComprehensionCheckCardComponent} from '../../components/comprehension-check-card/comprehension-check.component';
 import {FormCardComponent} from '../../components/form-card/form-card.component';
 import {FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {MatButton} from '@angular/material/button';
@@ -34,6 +36,8 @@ import { DemoInfoCardComponent } from '../../components/demo-info-card/demo-info
         BreadcrumbItemComponent,
         DemoCardComponent,
         DescriptionCardComponent,
+        VideoCardComponent,
+        ComprehensionCheckCardComponent,
         FormCardComponent,
         FormsModule,
         MatButton,

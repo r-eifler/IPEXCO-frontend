@@ -78,6 +78,28 @@
                     (down)="moveDown(idx)"
                   ></app-description-card>
                 }
+                @case (userStudyStepType.video){
+                  <app-video-card
+                    [step]="control.value"
+                    [first]="first"
+                    [last]="last"
+                    (changes)="updateControl(control,$event)"
+                    (delete)="deleteStep(idx)"
+                    (up)="moveUp(idx)"
+                    (down)="moveDown(idx)"
+                  ></app-video-card>
+                }
+                @case (userStudyStepType.comprehensionCheck){
+                  <app-comprehension-check-card
+                    [step]="control.value"
+                    [first]="first"
+                    [last]="last"
+                    (changes)="updateControl(control,$event)"
+                    (delete)="deleteStep(idx)"
+                    (up)="moveUp(idx)"
+                    (down)="moveDown(idx)"
+                  ></app-comprehension-check-card>
+                }
                 @case (userStudyStepType.userManual){
                   <app-tool-description-card
                     [step]="control.value"
@@ -129,6 +151,8 @@
             }
             <div class="button-container">
               <button mat-stroked-button type="button" (click)="addNewStep(userStudyStepType.description)">New Description Step</button>
+              <button mat-stroked-button type="button" (click)="addNewStep(userStudyStepType.video)">New Video Step</button>
+              <button mat-stroked-button type="button" (click)="addNewStep(userStudyStepType.comprehensionCheck)">New Comprehension Check Step</button>
               <button mat-stroked-button type="button" (click)="addNewStep(userStudyStepType.userManual)">New User Manual Step</button>
               <button mat-stroked-button type="button" (click)="addNewStep(userStudyStepType.demoInfo)">New Demo Information Step</button>
               <button mat-stroked-button type="button" (click)="addNewStep(userStudyStepType.demo)">New Demo Step</button>
@@ -147,5 +171,3 @@
     </form>
   </app-page-content>
 </app-page>
-
-
