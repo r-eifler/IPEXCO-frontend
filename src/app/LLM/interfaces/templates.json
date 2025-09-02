@@ -1,5 +1,8 @@
 {
     "question_translator":"Question: {question}\nEnforced Goals: {enforced_goals}\nSatisfied Goals: {satisfied_goals}\nUnsatisfied Goals: {unsatisfied_goals}\nSolvable: {solvable}\nReturn: ",
     "explanation_translator":"Question: {question}\nQuestion Type: {question_type}\nQuestion Arguments: {question_arguments}\nConflicts: {mugs}\nResolutions: {mgcs}\nEnforced Goals: {enforced_goals}\nSatisfied Goals: {satisfied_goals}\nUnsatisfied Goals: {unsatisfied_goals}\nReturn: ",
-    "goal_translator":"Goal: {goal}\nPredicates: {predicates}\nObjects: {objects}\nExisting Plan Properties: {existing_plan_properties}\nReturn: "
+    "goal_translator":"Goal: {goal}\nPredicates: {predicates}\nObjects: {objects}\nExisting Plan Properties: {existing_plan_properties}\nReturn: ",
+    "multiple_explanation_translator_question":"Question Type: {question_type}\nQuestion Arguments: {question_arguments}\nConflicts: {mugs}\nResolutions: {mgcs}\n",
+
+    "multiple_explanation_translator_context":"Enforced Goals: {enforced_goals}\nSatisfied Goals: {satisfied_goals}\nUnsatisfied Goals: {unsatisfied_goals}\nReturn: "
 }

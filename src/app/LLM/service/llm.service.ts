@@ -113,7 +113,7 @@ export class LLMService {
 
     postMessageQT$(question: string, iterationStep: IterationStep, project: Project, properties: PlanProperty[]): Observable<
         | { directResponse: string, questionType: QuestionType }
-        | { response: { questionType: QuestionType, goal: string[], question: Question, reverseTranslation: string } }
+        | { response: { questionType: QuestionType, goal: string[], question: Question[], reverseTranslation: string } }
     > {
         const questionTranslationRequest: QuestionTranslationRequest = {
             question: question,
@@ -128,7 +128,7 @@ export class LLMService {
 
         return this.http.post<IHTTPData<
             | { directResponse: string, questionType: QuestionType }
-            | { response: { questionType: QuestionType, goal: string[], question: Question, reverseTranslation: string } }
+            | { response: { questionType: QuestionType, goal: string[], question: Question[], reverseTranslation: string } }
         >>(this.BASE_URL + 'qt', {
             qtRequest: requestString,
             projectId: project._id,
@@ -167,6 +167,8 @@ export class LLMService {
             tap(console.log)
         );
     }
+
+    postMessageETmultiple$()
 
 
 
