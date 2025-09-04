@@ -57,3 +57,5 @@ launch-chromium
 #local setup
 setup/local*
 beluga_demonstrator/local*
+_theme-colors.scss
+beluga_demonstrator/full_docker_setup/db_data/
