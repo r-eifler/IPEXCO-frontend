@@ -45,8 +45,7 @@ export class QuestionQueueEffect {
   computeMultipleExplanations$ = createEffect(() => this.actions$.pipe(
     ofType(multipleQuestionsPosedLLM),
     map(action => ({
-      question: action.questions[0].question,
-      naturalLanguageQuestion: action.questions[0].naturalLanguageQuestion
+      question: action.questions[0]
     })),
     concatLatestFrom(({ question: { iterationStepId }}) => this.store.select(selectIterationStepById(iterationStepId))),
     filterListNotNullOrUndefined(),
@@ -152,7 +151,75 @@ export class QuestionQueueEffect {
   ));
 
 
-  
+  postMultipleAnswerLLM$ = createEffect(() => this.actions$.pipe(
+    ofType(multipleQuestionsPosedLLM),
+    concatLatestFrom(({ questions }) => this.store.select(selectIterationStepById(questions[0].iterationStepId))),
+    filterListNotNullOrUndefined(),
+    mergeMap(([{ questions, naturalLanguageQuestion }, iterationStep]) => {
+      const hash = explanationHash(iterationStep);
+      console.log("Submitted questions: " + naturalLanguageQuestion);
+      console.log("Questions: ", questions);
+
+      return this.store.select(selectExplanation(hash)).pipe(
+        // tap(explanation => console.log('Explanation from store:', explanation)),
+        filterNotNullOrUndefined(),
+        filter(explanation =>  
+          (explanation.status === ExplanationRunStatus.FAILED|| 
+           explanation.status === ExplanationRunStatus.FINISHED)),
+        tap(explanation => console.log('After filter - explanation status:', explanation?.status)),
+        take(1),
+        concatLatestFrom(() => [this.store.select(selectIterativePlanningProperties)]),
+        map(([explanation, properties]) => ({
+          questions,
+          explanationsMUGS: questions.map(question => 
+            (explanation.MUGS !== undefined && iterationStep.status === StepStatus.SOLVABLE) ? 
+              mapComputeBase(iterationStep, {...question, questionType: QuestionType.WHY_NOT_PROPERTY}, explanation.MUGS) : 
+              (explanation.MUGS !== undefined &&  iterationStep.status === StepStatus.UNSOLVABLE ? mapComputeBase(iterationStep, {...question, questionType: QuestionType.WHY_PLAN}, explanation.MUGS) : [])
+          ),
+          explanationsMGCS: questions.map(question => 
+            (explanation.MGCS !== undefined && iterationStep.status === StepStatus.SOLVABLE) ? 
+              mapComputeBase(iterationStep, {...question, questionType: QuestionType.HOW_PROPERTY}, explanation.MGCS) : 
+              (explanation.MGCS !== undefined && iterationStep.status === StepStatus.UNSOLVABLE ? mapComputeBase(iterationStep, {...question, questionType: QuestionType.HOW_PLAN}, explanation.MGCS) : [])
+          ),  
+          question_type: questions[0].questionType,
+          questionArguments: questions.map(question => question.propertyId && properties?.[question.propertyId] ? properties[question.propertyId] : null).filter(arg => arg !== null),
+          iterationStepId: iterationStep._id
+        })),
+        concatLatestFrom(({questions, explanationsMUGS, explanationsMGCS, question_type, questionArguments, iterationStepId}) => [
+          this.store.select(selectIterativePlanningProject),
+          this.store.select(selectIterativePlanningProperties),
+          this.store.select(selectIterationStepById(iterationStepId))
+        ]),
+        switchMap(([data, project, properties, iterationStep]) => {
+          if(iterationStep === undefined || iterationStep == null ||properties == null || project == null){
+            return of(sendMessageToLLMExplanationTranslatorFailure({err: "[LLM] translation failed"}))
+          }
+          return this.LLMService.postMessageETmultiple$(
+            naturalLanguageQuestion, 
+            data.explanationsMUGS, 
+            data.explanationsMGCS, 
+            data.question_type, 
+            data.questionArguments, 
+            iterationStep, 
+            project, 
+            Object.values(properties), 
+          ).pipe(
+            switchMap(response => [sendMessageToLLMExplanationTranslatorSuccess({ 
+              response: response?.response || 'No response received', 
+            })]),
+            catchError((error) => {
+              console.error('Error in postMessageET$:', error);
+              return of(sendMessageToLLMExplanationTranslatorFailure({err: "[LLM] translation failed"}));
+            })
+          );
+        })
+      )
+    }),
+    catchError((error) => {
+      console.error('Global error in postAnswerLLM$:', error);
+      return of(sendMessageToLLMExplanationTranslatorFailure({err: "[LLM] translation failed"}));
+    })
+  ));
   
 }
 

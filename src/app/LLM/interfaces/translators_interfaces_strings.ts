@@ -31,11 +31,11 @@ export function explanationTranslationRequestToString(request: ExplanationTransl
 }
 
 export function multipleExplanationTranslationRequestToString(request: ExplanationTranslationRequest[]): string {
+    console.log('request', request);
 
-    let output_str = "Question: " + request[0].question + "\n";
+    let output_str = "Question: " + request[0].question + "\nQuestion Type: " + request[0].question_type + "\n";
     for (let r of request) {
         output_str += templates.multiple_explanation_translator_question
-            .replace('{question_type}', r.question_type)
             .replace('{question_arguments}', `[${r.questionArgument.map(argument => argument.name).join(', ')}]`)
             .replace('{mugs}', `[${r.MUGS.map(mug => `[${mug.map(p => p.name).join(', ')}]`).join(', ')}]`)
             .replace('{mgcs}', `[${r.MGCS.map(mgc => `[${mgc.map(p => p.name).join(', ')}]`).join(', ')}]`)

@@ -11,7 +11,7 @@ import { selectSatisfiedSoftGoals } from "src/app/iterative_planning/view/step-d
 import { selectEnforcedGoals } from "src/app/iterative_planning/view/step-detail-view/step-detail-view.component.selector";
 import { ExplanationInterfaceType } from "src/app/project/domain/general-settings";
 import { PlanRunStatus } from "src/app/iterative_planning/domain/plan";
-import { directMessageET, directResponseQT, loadLLMContext, loadLLMContextFailure, loadLLMContextSuccess, poseAnswer, poseAnswerLLM, questionPosed, questionPosedLLM, sendMessageToLLMExplanationTranslator, sendMessageToLLMExplanationTranslatorFailure, sendMessageToLLMExplanationTranslatorSuccess, sendMessageToLLMGoalTranslator, sendMessageToLLMGoalTranslatorFailure, sendMessageToLLMGoalTranslatorSuccess, sendMessageToLLMQTthenGTTranslators, sendMessageToLLMQTthenGTTranslatorsFailure, sendMessageToLLMQTthenGTTranslatorsSuccess, sendMessageToLLMQuestionTranslator, sendMessageToLLMQuestionTranslatorFailure, sendMessageToLLMQuestionTranslatorSuccess, showReverseTranslationGT, showReverseTranslationQT } from "src/app/iterative_planning/state/iterative-planning.actions";
+import { directMessageET, directResponseQT, loadLLMContext, loadLLMContextFailure, loadLLMContextSuccess, multipleQuestionsPosedLLM, poseAnswer, poseAnswerLLM, questionPosed, questionPosedLLM, sendMessageToLLMExplanationTranslator, sendMessageToLLMExplanationTranslatorFailure, sendMessageToLLMExplanationTranslatorSuccess, sendMessageToLLMGoalTranslator, sendMessageToLLMGoalTranslatorFailure, sendMessageToLLMGoalTranslatorSuccess, sendMessageToLLMQTthenGTTranslators, sendMessageToLLMQTthenGTTranslatorsFailure, sendMessageToLLMQTthenGTTranslatorsSuccess, sendMessageToLLMQuestionTranslator, sendMessageToLLMQuestionTranslatorFailure, sendMessageToLLMQuestionTranslatorSuccess, showReverseTranslationGT, showReverseTranslationQT } from "src/app/iterative_planning/state/iterative-planning.actions";
 import { Question } from "src/app/iterative_planning/domain/interface/question";
 
 import { QuestionType } from "src/app/iterative_planning/domain/explanation/explanations";
@@ -74,51 +74,7 @@ export class SendMessageToLLMEffect {
         })
     ))
 
-    // public sendMessageToQuestionAndGoalTranslator$ = createEffect(() => this.actions$.pipe(
-    //     ofType(sendMessageToLLMQTthenGTTranslators),
-    //     concatLatestFrom(({ question, iterationStepId }) => [
-    //         this.store.select(selectIterativePlanningProject),
-    //         this.store.select(selectIterativePlanningProperties),
-    //         this.store.select(selectIterationStepById(iterationStepId)),
-    //         this.store.select(selectLLMThreadIdGT),
-    //         this.store.select(selectLLMThreadIdQT)
-    //     ]),
-    //     switchMap(([{ question, iterationStepId }, project, properties, iterationStep, threadIdGT, threadIdQT]) => {
-    //         if(project === undefined || iterationStep === undefined || iterationStep == null || properties === undefined){
-    //             return of(sendMessageToLLMExplanationTranslatorFailure());
-    //         }
-    //         const startTime = performance.now();
-    //         return this.service.postMessageQTthenGT$(question, iterationStep, project, Object.values(properties), threadIdQT, threadIdGT).pipe(
-    //             filterNotNullOrUndefined(),
-    //             switchMap(response => {
-    //                 const duration = performance.now() - startTime;
-    //                 if ('directResponse' in response) {
-    //                     if (response.questionType === QuestionType.DIRECT_USER) {
-    //                         return [
-    //                             sendMessageToLLMQTthenGTTranslatorsSuccess({ threadIdQt: response.threadIdQt, threadIdGt: response.threadIdGt, duration }),
-    //                             directResponseQT({ directResponse: response.directResponse })
-    //                         ];
-    //                     } else if (response.questionType === QuestionType.DIRECT_ET) {
-    //                         return [
-    //                             sendMessageToLLMQTthenGTTranslatorsSuccess({ threadIdQt: response.threadIdQt, threadIdGt: response.threadIdGt, duration }),
-    //                             directMessageET({ directResponse: response.directResponse, iterationStepId })
-    //                         ];
-    //                     }
-    //                 }
-    //                 else {
-    //                     return [
-    //                         sendMessageToLLMQTthenGTTranslatorsSuccess({ threadIdQt: response.threadIdQt, threadIdGt: response.threadIdGt, duration }),
-    //                         ...('reverseTranslationQT' in response ? [showReverseTranslationQT({ reverseTranslation: response.reverseTranslationQT })] : []),
-    //                         ...('question' in response ? [questionPosedLLM({ question: response.question, naturalLanguageQuestion: question })] : [])
-    //                     ];
-    //                 }
-    //             }),
-    //             catchError(() => of(sendMessageToLLMQTthenGTTranslatorsFailure()))
-    //         );
-    //     })
-    // ))
-
-
+    
     public sendMessageToQuestionTranslator$ = createEffect(() => this.actions$.pipe(
         ofType(sendMessageToLLMQuestionTranslator),
         filter(({ question, iterationStepId }) => !!question && !!iterationStepId),
@@ -201,14 +157,23 @@ export class SendMessageToLLMEffect {
                                         reverseTranslation: response.reverseTranslationQT 
                                     }));
                                 }
-                                
-                                // Add question action if needed
-                                if ('question' in response) {
-                                    actions.push(questionPosedLLM({ 
-                                        question: response.question as Question, 
+                                console.log('response', response);
+                                // Add multiple questions action if needed
+                                if ('qtResponse' in response && 'questions' in response && response.questions.length > 0) {
+                                    console.log('multiple questions QT');
+                                    actions.push(multipleQuestionsPosedLLM({ 
+                                        questions: response.questions, 
                                         naturalLanguageQuestion: question 
                                     }));
                                 }
+                                // // Add question action if needed
+                                // if ('question' in response && response.question.length == 0) {
+                                //     console.log('single question QT');
+                                //     actions.push(questionPosedLLM({ 
+                                //         question: response.question as Question, 
+                                //         naturalLanguageQuestion: question 
+                                //     }));
+                                // }
                                 
                                 // Use from to emit each action individually
                                 return from(actions as any[]);

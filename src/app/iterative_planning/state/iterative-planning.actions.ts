@@ -103,10 +103,8 @@ export const poseAnswerLLM = createAction('[iterative-planning] pose answer LLM'
 export const multipleQuestionsPosedLLM = createAction(
     '[iterative-planning] multiple questions posed LLM',
     props<{
-        questions: Array<{
-            question: Question,
-            naturalLanguageQuestion: string
-        }>
+        questions: Question[],
+        naturalLanguageQuestion: string
     }>()
 );
 // LLM
