@@ -1,0 +1,29 @@
+<mat-card appearance="outlined">
+    <mat-card-content *transloco="let t">
+      <div class="content">
+        <div class="stats">
+          <mat-icon>rule</mat-icon>
+          <span class="property-label">Policy:</span>
+          <span class="property-value">{{ testSuite()?.policy.name ?? '?'}}</span>
+
+          <mat-icon>check</mat-icon>
+          <span class="property-label">#test states:</span>
+          <span class="property-value">{{ numTestStates() ?? '?' }}</span>
+  
+          <mat-icon>bug_report</mat-icon>
+          <span class="property-label">#bugs:</span>
+          <span class="property-value">{{ numBugs() ?? '?'}}</span>
+        </div>
+  
+        <div class="utility">
+          <mat-icon>bug_report</mat-icon>
+          <!-- <div class="utility-value-container">
+            <span class="value" *isProject>{{ step() | stepValue : planProperties() | default : '-/-'}}</span>
+            <span class="value" *isDemo>{{ (step() | stepValue : planProperties() | default : '-') + '/' + maxOverallUtility() }}</span>
+            <span class="label">Utility</span>
+          </div> -->
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+  

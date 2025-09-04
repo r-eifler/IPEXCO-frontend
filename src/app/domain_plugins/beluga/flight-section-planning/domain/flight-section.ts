@@ -186,13 +186,14 @@ export function getFullStartState(section: FlightSection | undefined | null){
         return undefined;
     }
     const config = section.configurations[section.configurationIndex];
-    return {
+    const state: BelugaState = {
         ...section.siteState,
         flightIndex: section.flightIndex,
         incomingUnloaded: [],
         outgoingLoaded: [],
         productionLines: config.productionLinesTargetSchedule.reduce((acc,c) => ({...acc, [c.name]: []}),{})
     }
+    return state;
 }
 
 export function getTaskFromSection(section: FlightSection){

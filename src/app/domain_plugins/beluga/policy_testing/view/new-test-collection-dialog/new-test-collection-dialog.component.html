@@ -1,0 +1,47 @@
+<app-dialog>
+  <app-dialog-header>
+    <app-dialog-title>New Test Collection</app-dialog-title>
+  </app-dialog-header>
+  <app-dialog-content>
+        <form
+            class="main-form"
+            [formGroup]="form">
+
+				<mat-form-field class="full-width" appearance="outline">
+					<mat-label>Name</mat-label>
+					<input matInput type="text" formControlName="name" />
+				</mat-form-field>
+
+				<mat-form-field class="full-width" appearance="outline">
+					<mat-label>Flight Plan Version</mat-label>
+					<mat-select formControlName="branchIndex">
+						@for (name of branchNames(); track name; let idx = $index) {
+						<mat-option [value]="idx">{{name}}</mat-option>
+						}
+					</mat-select>
+				</mat-form-field>
+
+				<mat-form-field class="full-width" appearance="outline">
+					<mat-label>Flight Plan Section</mat-label>
+					<mat-select formControlName="section">
+						@for (section of (sections$ | async); track section._id;) {
+							<mat-option [value]="section._id">{{'Flight ' + section.flightIndex}}</mat-option>
+						}
+					</mat-select>
+				</mat-form-field>
+
+				<app-template-file-upload 
+					(file)="onPolicySelected($event)"
+					(fileName)="onFileName($event)"
+					[valid]="policyIsValid$ | async">
+					Policy
+				</app-template-file-upload>        
+        </form>
+  </app-dialog-content>
+  <app-dialog-footer>
+    <button mat-button (click)="onCancel()">Cancel</button>
+    <button mat-flat-button color="primary" (click)="onSave()" [disabled]="!((policyIsValid$ | async) && form.valid)">
+        Create
+    </button>
+  </app-dialog-footer>
+</app-dialog>

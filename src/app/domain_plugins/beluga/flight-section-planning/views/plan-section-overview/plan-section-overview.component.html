@@ -1,4 +1,8 @@
 <app-page *transloco="let t">
+    <app-breadcrumb>
+        <a app-breadcrumb-item [routerLink]="['/beluga/projects/' + project()?._id]"><mat-icon>home</mat-icon></a>
+        <app-breadcrumb-item><mat-icon>connecting_airports</mat-icon></app-breadcrumb-item>
+    </app-breadcrumb>
     <app-page-title>
        {{t('f.flight_section_plans')}}
     </app-page-title>

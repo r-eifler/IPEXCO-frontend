@@ -5,6 +5,8 @@ import { DeleteProjectEffect } from "./delete-project.effect";
 import { HomeLoadDomainSpecificationsEffect } from "./load-domain-specs.effect";
 import { LoadProjectEffect } from "./load-project.effect";
 import { LoadProjectsEffect } from "./load-projects.effect";
+import { BelugaProjectLoadServicesEffect } from "./load-services.effect";
+import { UpdateProjectEffect } from "./update-project.effect";
 
 export const homeEffects = [
     CreateProjectEffect,
@@ -14,4 +16,6 @@ export const homeEffects = [
     LoadProjectEffect,
     CreatePlanPropertyEffect,
     CreateDefaultPropertiesEffect,
+    BelugaProjectLoadServicesEffect,
+    UpdateProjectEffect,
 ]

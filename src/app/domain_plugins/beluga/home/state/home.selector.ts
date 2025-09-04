@@ -7,7 +7,10 @@ const selectState = HomeFeature.selectHomeFeatureState
 export const selectProjects = createSelector(selectState, (state) => state.projects.data)
 
 export const selectDomainSpecifications = createSelector(selectState, 
-    (state) => state.domainSpecifications.data)
+    (state) => state.domainSpecifications.data);
 
 export const selectProject = createSelector(selectState, 
-    (state) => (state.project.data))
+    (state) => (state.project.data));
+
+
+export const selectServices = createSelector(selectState, (state) => state.services.data);

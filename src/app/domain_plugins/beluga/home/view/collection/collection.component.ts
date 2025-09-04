@@ -7,16 +7,17 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatMenuModule } from "@angular/material/menu";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { RouterModule } from "@angular/router";
+import { provideTranslocoScope, TranslocoModule } from "@jsverse/transloco";
 import { Store } from "@ngrx/store";
 import { ProjectMetaData } from "src/app/project-meta/domain/project-meta";
 import { ActionCardComponent } from "src/app/shared/components/action-card/action-card/action-card.component";
 import { AskDeleteComponent } from "src/app/shared/components/ask-delete/ask-delete.component";
+import { BreadcrumbModule } from "src/app/shared/components/breadcrumb/breadcrumb.module";
 import { PageModule } from "src/app/shared/components/page/page.module";
 import { ProjectCardComponent } from "../../components/project-card/project-card.component";
-import { selectProjects } from "../../state/home.selector";
-import { provideTranslocoScope, TranslocoModule } from "@jsverse/transloco";
-import { ProjectCreatorComponent } from "../creator/creator.component";
 import { loadProjects } from "../../state/home.actions";
+import { selectProjects } from "../../state/home.selector";
+import { ProjectCreatorComponent } from "../creator/creator.component";
 
 
 @Component({
@@ -32,7 +33,8 @@ import { loadProjects } from "../../state/home.actions";
         AsyncPipe,
         ActionCardComponent,
         ProjectCardComponent,
-        TranslocoModule
+        TranslocoModule,
+        BreadcrumbModule
     ],
     providers: [
       provideTranslocoScope({

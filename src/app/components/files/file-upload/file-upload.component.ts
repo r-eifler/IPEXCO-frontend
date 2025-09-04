@@ -19,7 +19,9 @@ interface Data {
 export class TemplateFileUploadComponent {
 
   valid = input<boolean>(false);
+  file = output<File>();
   fileContent = output<string>();
+  fileName = output<string>();
 
   @ViewChild('fileInput') inputNode: ElementRef<any> | undefined
 
@@ -29,6 +31,9 @@ export class TemplateFileUploadComponent {
 
   onUploadFileSelected() {
     let fileObject = this.inputNode?.nativeElement.files[0];
+
+    console.log(fileObject);
+    this.file.emit(fileObject);
 
     if (typeof FileReader !== "undefined") {
       const reader = new FileReader();
@@ -40,6 +45,10 @@ export class TemplateFileUploadComponent {
       };
 
       this.name = fileObject.name;
+      if(this.name !== undefined){
+        this.fileName.emit(this.name)
+      }
+      
       reader.readAsText(fileObject);
     }
   }

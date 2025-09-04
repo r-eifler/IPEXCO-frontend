@@ -75,11 +75,15 @@ export function getRackSize(rackName: string, siteSetUp: BelugaSiteSetUp): numbe
 }
 
 export function occupiedRackSpace(rack: string[], jigs: Record<string,Jig>, jigTypes: Record<string,JigType>): number {
-    return rack?.map(jigName => getJigSize(jigs[jigName], jigTypes[jigs[jigName].type])).reduce((sum, c) => sum + c, 0);
+    return rack.map(jigName => {
+        const jig = jigs[jigName]
+        const jigType = jigTypes[jig.type]
+        return getJigSize(jig, jigType)
+    }).reduce((sum, c) => sum + c, 0);
 }
 
 export function occupiedSpace(rack: Jig[], jigTypes: Record<string,JigType>): number {
-    return rack?.map(jig => getJigSize(jig, jigTypes[jig.type])).reduce((sum, c) => sum + c, 0);
+    return rack.map(jig => getJigSize(jig, jigTypes[jig.type])).reduce((sum, c) => sum + c, 0);
 }
 
 

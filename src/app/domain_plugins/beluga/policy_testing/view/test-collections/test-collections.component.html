@@ -1,0 +1,24 @@
+<app-page>
+    <app-breadcrumb>
+        <a app-breadcrumb-item [routerLink]="['/beluga/projects/' + project()?._id]"><mat-icon>home</mat-icon></a>
+        <app-breadcrumb-item><mat-icon>bug_report</mat-icon></app-breadcrumb-item>
+    </app-breadcrumb>
+    <app-page-title>
+        Test Suites
+    </app-page-title>
+    <app-page-content>
+         <div class="page-grid">
+            @for(testSuite of testSuites(); track testSuite._id){
+                <app-test-collection-card 
+                    [testSuite]="testSuite"
+                    [flightSection]="flightSections()?.[testSuite.flightSection]"
+                ></app-test-collection-card>
+            }
+            
+            <button app-action-card (click)="open_test_collection_dialog()">
+                <span>Create a new test collection</span>
+                <mat-icon>add</mat-icon>
+            </button>
+         </div>
+    </app-page-content>
+</app-page>

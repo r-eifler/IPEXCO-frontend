@@ -22,10 +22,10 @@ export const routes: Routes = [
       {
         path: '',
         pathMatch: 'full',
-        redirectTo: 'home'
+        redirectTo: 'projects'
       },
       {
-        path: 'home',
+        path: 'projects',
         loadChildren: () => import('./home/home.routes').then(m => m.routes),
       },
       {
@@ -35,6 +35,10 @@ export const routes: Routes = [
       {
         path: 'flight-section-planning',
         loadChildren: () => import('./flight-section-planning/flight-section-planning.routes').then(m => m.routes),
+      },
+      {
+        path: 'policy-testing',
+        loadChildren: () => import('./policy_testing/policy_testing.routes').then(m => m.routes),
       }
     ]
   }

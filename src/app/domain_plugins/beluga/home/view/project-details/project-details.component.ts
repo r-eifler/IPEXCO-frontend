@@ -11,6 +11,7 @@ import { filterNotNullOrUndefined } from 'src/app/shared/common/check_null_undef
 import { MatButtonModule } from '@angular/material/button';
 import { provideTranslocoScope, TranslocoModule } from '@jsverse/transloco';
 import { selectProject } from '../../state/home.selector';
+import { BreadcrumbModule } from 'src/app/shared/components/breadcrumb/breadcrumb.module';
 
 @Component({
   selector: 'app-project-details',
@@ -22,6 +23,7 @@ import { selectProject } from '../../state/home.selector';
     RouterLink,
     MatButtonModule,
     TranslocoModule,
+    BreadcrumbModule,
   ],
   providers: [
     provideTranslocoScope({

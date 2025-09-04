@@ -5,17 +5,20 @@ import { TranslocoModule } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 import { BreadcrumbModule } from 'src/app/shared/components/breadcrumb/breadcrumb.module';
 import { PageModule } from 'src/app/shared/components/page/page.module';
-import { SectionPlanComponent } from '../../../shared/view/section-plan/section-plan.component';
-import { selectSelectedSection } from '../../state/flight-section-planning.selector';
+import { TraceInspectorComponent } from '../../../shared/components/trace-inspector/trace-inspector.component';
+import { selectProject, selectSelectedSection } from '../../state/flight-section-planning.selector';
+import { BelugaActionType } from '../../../shared/domain/beluga_plan';
+import { getFlightSchedule, getFullStartState, getProductionSchedule } from '../../domain/flight-section';
 
 @Component({
   selector: 'app-plan-inspector',
   imports: [
     TranslocoModule,
-    SectionPlanComponent,
+    TraceInspectorComponent,
     PageModule,
     BreadcrumbModule,
     MatIconModule,
+    RouterLink
   ],
   templateUrl: './plan-inspector.component.html',
   styleUrl: './plan-inspector.component.scss'
@@ -25,12 +28,37 @@ export class PlanInspectorComponent {
   store = inject(Store);
 
   section = this.store.selectSignal(selectSelectedSection);
+
+  project = this.store.selectSignal(selectProject);
+
   configuration = computed(() => {
     const index = this.section()?.configurationIndex;
     if(index === undefined){
       return undefined;
     }
     return this.section()?.configurations[index];
+  })
+
+  actions = computed(() => this.section()?.actions.filter(a => a.name !== BelugaActionType.SWITCH_TO_NEXT_BELUGA) ?? [])
+
+  startState = computed(() => getFullStartState(this.section()))
+  
+  siteSetUp = computed(() => this.configuration()?.siteSetUp)
+
+  flightSchedule = computed(() => {
+    const targetSchedule = this.configuration()?.flightTargetSchedule
+    if(targetSchedule !== undefined){
+      return getFlightSchedule(targetSchedule, false)
+    }
+    return []
+  })
+
+  productionSchedule = computed(() => {
+    const targetSchedule = this.configuration()?.productionLinesTargetSchedule
+    if(targetSchedule !== undefined){
+      return getProductionSchedule(targetSchedule, false)
+    }
+    return []
   })
 
   name = computed(() => {

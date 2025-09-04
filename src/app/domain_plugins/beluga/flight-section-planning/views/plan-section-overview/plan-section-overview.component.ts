@@ -1,16 +1,16 @@
 import { Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { provideTranslocoScope, TranslocoModule } from '@jsverse/transloco';
+import { TranslocoModule } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
+import { BreadcrumbModule } from 'src/app/shared/components/breadcrumb/breadcrumb.module';
 import { PageModule } from 'src/app/shared/components/page/page.module';
 import { ControlsComponent } from '../../components/controls/controls.component';
 import { SectionTreeHeroComponent } from '../../components/section-tree-hero/section-tree-hero.component';
 import { SectionTreeComponent } from '../../components/section-tree/section-tree.component';
 import { initFlightPlanTree } from '../../state/flight-section-planning.actions';
-import { selectFlights, selectHasTree, selectInitialState, selectProject, selectTask } from '../../state/flight-section-planning.selector';
-import { getSiteSetUp } from '../../../shared/domain/site_set_up';
-import { selectTaskState } from '../../../builder/state/builder.selector';
+import { selectHasTree, selectProject, selectTask } from '../../state/flight-section-planning.selector';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-section-forest',
@@ -22,6 +22,8 @@ import { selectTaskState } from '../../../builder/state/builder.selector';
     MatIconModule,
     MatButtonModule,
     SectionTreeHeroComponent,
+    BreadcrumbModule,
+    RouterLink,
   ],
   templateUrl: './plan-section-overview.component.html',
   styleUrl: './plan-section-overview.component.scss'

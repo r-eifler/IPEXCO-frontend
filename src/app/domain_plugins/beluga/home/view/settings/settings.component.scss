@@ -1,0 +1,51 @@
+.settings-card {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.settings-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+
+.settings-form > * {
+  margin: 10px 0px;
+}
+
+.size-group > * {
+  margin-left: 20px;
+}
+
+.button-box {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+.save-button {
+  width: 100px;
+}
+
+.part {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+mat-button-toggle-group{
+  width: fit-content;
+}
+
+.sub-card-content {
+  padding-top: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.button-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
