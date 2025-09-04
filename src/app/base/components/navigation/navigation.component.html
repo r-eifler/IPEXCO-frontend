@@ -3,9 +3,9 @@
 <div class="main-container">
   <mat-toolbar color="secondary" class="main-toolbar">
     @if(!(isUserStudy$ | async)){
-    <button mat-icon-button (click)="sideNav.toggle()" [disabled]="!(isLoggedIn$ | async)">
-      <mat-icon>menu</mat-icon>
-    </button>
+      <button mat-icon-button (click)="sideNav.toggle()" [disabled]="!(isLoggedIn$ | async)">
+        <mat-icon>menu</mat-icon>
+      </button>
     }
     <img style="height: 60%; margin: auto 10px" src="assets/iter_logo.svg" />
     <h1 style="font-weight: bold;">IPEXCO</h1>
@@ -19,66 +19,69 @@
 
   <mat-menu #userMenu="matMenu">
     <!-- <p mat-menu-item>
-      Hi {{name$ | async}}
-    </p> -->
+    Hi {{name$ | async}}
+  </p> -->
+  @if (!(isLoggedIn$ | async)) {
     <button mat-menu-item
-      *ngIf="!(isLoggedIn$ | async)"
       (click)="newLoginForm()">
       Login
     </button>
-    <button mat-menu-item *ngIf="isLoggedIn$ | async" (click)="logout()">
+  }
+  @if (isLoggedIn$ | async) {
+    <button mat-menu-item (click)="logout()">
       Logout
     </button>
-  </mat-menu>
+  }
+</mat-menu>
 
-  <mat-sidenav-container class="sidenav-container">
-    <mat-sidenav
-      #sideNav
-      [mode]="'side'"
-      fixedTopGap="56"
-      style="width: 200px">
-      <mat-nav-list>
-        <a
-          mat-list-item
-          routerLink="/user"
-          routerLinkActive="mat-list-single-selected-option"
-          (click)="sideNav.toggle()">
-          <span class="entry">
-            <mat-icon>home</mat-icon>
-            <span>Home</span>
-          </span>
-        </a>
-        <a
-          mat-list-item
-          routerLink="/projects"
-          routerLinkActive="mat-list-single-selected-option"
-          (click)="sideNav.toggle()">
-          <span class="entry">
-            <mat-icon>games</mat-icon>
-            <span>Projects</span>
-          </span>
-        </a>
-        <a
-          mat-list-item
-          routerLink="/demos"
-          routerLinkActive="mat-list-single-selected-option"
-          (click)="sideNav.toggle()">
-          <span class="entry">
-            <mat-icon>send</mat-icon>
-            <span>Demos</span>
-          </span>
-        </a>
-        <a
-          mat-list-item
-          routerLink="/user-study"
-          routerLinkActive="mat-list-single-selected-option"
-          (click)="sideNav.toggle()">
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav
+    #sideNav
+    [mode]="'side'"
+    fixedTopGap="56"
+    style="width: 200px">
+    <mat-nav-list>
+      <a
+        mat-list-item
+        routerLink="/user"
+        routerLinkActive="mat-list-single-selected-option"
+        (click)="sideNav.toggle()">
+        <span class="entry">
+          <mat-icon>home</mat-icon>
+          <span>Home</span>
+        </span>
+      </a>
+      <a
+        mat-list-item
+        routerLink="/projects"
+        routerLinkActive="mat-list-single-selected-option"
+        (click)="sideNav.toggle()">
+        <span class="entry">
+          <mat-icon>games</mat-icon>
+          <span>Projects</span>
+        </span>
+      </a>
+      <a
+        mat-list-item
+        routerLink="/demos"
+        routerLinkActive="mat-list-single-selected-option"
+        (click)="sideNav.toggle()">
+        <span class="entry">
+          <mat-icon>send</mat-icon>
+          <span>Demos</span>
+        </span>
+      </a>
+      <a
+        mat-list-item
+        routerLink="/user-study"
+        routerLinkActive="mat-list-single-selected-option"
+        (click)="sideNav.toggle()">
         <span class="entry">
           <mat-icon>question_answer</mat-icon>
           <span>User Studies</span>
         </span>
-        </a>
-        <a
+      </a>
+      <a
         mat-list-item
         routerLink="/spec"
         routerLinkActive="mat-list-single-selected-option"
@@ -88,31 +91,31 @@
           <span>Specifications</span>
         </div>
       </a>
-        <a
-          mat-list-item
-          routerLink="/manual"
-          routerLinkActive="mat-list-single-selected-option"
-          (click)="sideNav.toggle()">
-          <span class="entry">
-            <mat-icon>help</mat-icon>
-            <span>Help</span>
-          </span>
-        </a>
-        <a
-          mat-list-item
-          routerLink="/beluga"
-          routerLinkActive="mat-list-single-selected-option"
-          (click)="sideNav.toggle()">
-          <span class="entry">
-            <mat-icon>connecting_airports</mat-icon>
-            <span>BelugaSystem</span>
-          </span>
-        </a>
-      </mat-nav-list>
-    </mat-sidenav>
+      <a
+        mat-list-item
+        routerLink="/manual"
+        routerLinkActive="mat-list-single-selected-option"
+        (click)="sideNav.toggle()">
+        <span class="entry">
+          <mat-icon>help</mat-icon>
+          <span>Help</span>
+        </span>
+      </a>
+      <a
+        mat-list-item
+        routerLink="/beluga"
+        routerLinkActive="mat-list-single-selected-option"
+        (click)="sideNav.toggle()">
+        <span class="entry">
+          <mat-icon>connecting_airports</mat-icon>
+          <span>BelugaSystem</span>
+        </span>
+      </a>
+    </mat-nav-list>
+  </mat-sidenav>
 
-    <mat-sidenav-content>
-        <router-outlet></router-outlet>
-    </mat-sidenav-content>
-  </mat-sidenav-container>
+  <mat-sidenav-content>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>
 </div>

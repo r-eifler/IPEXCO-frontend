@@ -7,7 +7,7 @@ import { IterationStep, StepStatus } from "src/app/iterative_planning/domain/ite
 import { PlanRunStatus } from "src/app/iterative_planning/domain/plan";
 import { selectIterativePlanningSelectedStep } from "src/app/iterative_planning/state/iterative-planning.selector";
 import { MatCardModule } from "@angular/material/card";
-import { AsyncPipe, NgFor, NgIf } from "@angular/common";
+import { AsyncPipe } from "@angular/common";
 import { MatButtonModule } from "@angular/material/button";
 import { Action } from "src/app/shared/domain/plan-property/plan-property";
 
@@ -15,12 +15,10 @@ import { Action } from "src/app/shared/domain/plan-property/plan-property";
 @Component({
     selector: "app-plan-view",
     imports: [
-        MatCardModule,
-        AsyncPipe,
-        NgIf,
-        MatButtonModule,
-        NgFor
-    ],
+    MatCardModule,
+    AsyncPipe,
+    MatButtonModule
+],
     templateUrl: "./plan-view.component.html",
     styleUrls: ["./plan-view.component.scss"]
 })

@@ -1,6 +1,6 @@
 
 @if(state() !== null && state() !== undefined){
-<div class="main-container" *transloco="let t">
+  <div class="main-container" *transloco="let t">
     <div class="header">{{t('f.flights')}}</div>
     <div class="header">{{t('f.trailers')}} Beluga</div>
     <div class="header">{{t('f.racks')}}</div>
@@ -9,92 +9,96 @@
     <div class="header">{{t('f.production_lines')}}</div>
 
     <div class="belugas column">
-        <app-beluga-flight
-                [jigs]="incoming()"
-                [jigTypes]="jigTypes()"
-        ></app-beluga-flight>
+      <app-beluga-flight
+        [jigs]="incoming()"
+        [jigTypes]="jigTypes()"
+      ></app-beluga-flight>
 
-        <app-beluga-flight
-            [jigs]="outgoing()"
-            [jigTypes]="jigTypes()"
-            [incoming]="false"
-            [schedule]="outgoingSchedule()"
-        ></app-beluga-flight>
+      <app-beluga-flight
+        [jigs]="outgoing()"
+        [jigTypes]="jigTypes()"
+        [incoming]="false"
+        [schedule]="outgoingSchedule()"
+      ></app-beluga-flight>
     </div>
     <div class="trailers">
-        @for(elem of trailersBeluga(); track elem.trailer.name){
-            <app-trailer [name]="elem.trailer.name" [size]="(maxJigSize() ?? 20) * 15" [maintenance]="elem.maintenance">
-                <app-jig
-                    *ngIf="elem.jig"
-                    [jig]="elem.jig"
-                    [jigType]="jigTypes()?.[elem.jig?.type]"
-                    [animate]="true"
-                    draggable="false"
-                >
-                </app-jig>
-            </app-trailer>
-        }
+      @for(elem of trailersBeluga(); track elem.trailer.name){
+        <app-trailer [name]="elem.trailer.name" [size]="(maxJigSize() ?? 20) * 15" [maintenance]="elem.maintenance">
+          @if (elem.jig) {
+            <app-jig
+              [jig]="elem.jig"
+              [jigType]="jigTypes()?.[elem.jig?.type]"
+              [animate]="true"
+              draggable="false"
+              >
+            </app-jig>
+          }
+        </app-trailer>
+      }
     </div>
     <div class="racks column">
-        @for(rack of racks(); track rack){
-            <app-rack [name]="rack.name" [size]="rack.size" [occupied]="rack.occupied" [maintenance]="rack.maintenance">
-                <app-jig
-                    *ngFor="let jig of rack.jigs"
-                    [jig]="jig"
-                    [jigType]="jigTypes()?.[jig?.type]"
-                    [animate]="true"
-                    draggable="false"
-                >
-                </app-jig>
-            </app-rack>
-        }
+      @for(rack of racks(); track rack){
+        <app-rack [name]="rack.name" [size]="rack.size" [occupied]="rack.occupied" [maintenance]="rack.maintenance">
+          @for (jig of rack.jigs; track jig) {
+            <app-jig
+              [jig]="jig"
+              [jigType]="jigTypes()?.[jig?.type]"
+              [animate]="true"
+              draggable="false"
+              >
+            </app-jig>
+          }
+        </app-rack>
+      }
     </div>
     <div class="trailers column">
-        @for(elem of trailersFactory(); track elem.trailer.name){
-            <app-trailer [name]="elem.trailer.name" [size]="(maxJigSize() ?? 20) * 15" [maintenance]="elem.maintenance">
-                <app-jig
-                    *ngIf="elem.jig"
-                    [jig]="elem.jig"
-                    [jigType]="jigTypes()?.[elem.jig?.type]"
-                    [animate]="true"
-                    draggable="false"
-                >
-                </app-jig>
-            </app-trailer>
-        }
+      @for(elem of trailersFactory(); track elem.trailer.name){
+        <app-trailer [name]="elem.trailer.name" [size]="(maxJigSize() ?? 20) * 15" [maintenance]="elem.maintenance">
+          @if (elem.jig) {
+            <app-jig
+              [jig]="elem.jig"
+              [jigType]="jigTypes()?.[elem.jig?.type]"
+              [animate]="true"
+              draggable="false"
+              >
+            </app-jig>
+          }
+        </app-trailer>
+      }
     </div>
     <div class="hangars column">
-        @for(hangar of hangars(); track hangar){
-            <app-hangar [name]="hangar.name" [maintenance]="hangar.maintenance">
-                <app-jig
-                    *ngIf="hangar.jig"
-                    [jig]="hangar.jig"
-                    [jigType]="jigTypes()?.[hangar.jig?.type]"
-                    [animate]="true"
-                    unitSize="true"
-                >
-                </app-jig>
-            </app-hangar>
-        }
+      @for(hangar of hangars(); track hangar){
+        <app-hangar [name]="hangar.name" [maintenance]="hangar.maintenance">
+          @if (hangar.jig) {
+            <app-jig
+              [jig]="hangar.jig"
+              [jigType]="jigTypes()?.[hangar.jig?.type]"
+              [animate]="true"
+              unitSize="true"
+              >
+            </app-jig>
+          }
+        </app-hangar>
+      }
     </div>
     <div class="hangars column">
-        @for(pl of productionLines(); track pl;){
-            <app-production-line
-                style="width: 100%;"
-                [line]="pl"
-                [delivered]="productionLinesDelivered()?.[pl.name]"
-                [jigTypes]="jigTypes()"
-            >
-            </app-production-line>
-        }
+      @for(pl of productionLines(); track pl;){
+        <app-production-line
+          style="width: 100%;"
+          [line]="pl"
+          [delivered]="productionLinesDelivered()?.[pl.name]"
+          [jigTypes]="jigTypes()"
+          >
+        </app-production-line>
+      }
     </div>
+  </div>
+}
+@else{
+<div class="center">
+  <p>
+    Select a state!
+  </p>
 </div>
-    }
-    @else{
-        <div class="center">
-            <p>
-                Select a state!
-            </p>
-        </div>
-    }
+}
 

@@ -1,4 +1,4 @@
-import { AsyncPipe, NgIf } from "@angular/common";
+import { AsyncPipe } from "@angular/common";
 import { Component, inject } from "@angular/core";
 import { MatButtonModule } from "@angular/material/button";
 import { MatDialog } from "@angular/material/dialog";
@@ -18,18 +18,17 @@ import { selectIsUserStudy, selectLoggedIn, selectUserName } from "src/app/user/
 @Component({
     selector: "app-navigation",
     imports: [
-        RouterModule,
-        MatSidenavModule,
-        MatIconModule,
-        MatListModule,
-        MatMenuModule,
-        MatToolbarModule,
-        NgIf,
-        MatButtonModule,
-        AsyncPipe,
-        MatSidenavModule,
-        TranslocoModule,
-    ],
+    RouterModule,
+    MatSidenavModule,
+    MatIconModule,
+    MatListModule,
+    MatMenuModule,
+    MatToolbarModule,
+    MatButtonModule,
+    AsyncPipe,
+    MatSidenavModule,
+    TranslocoModule
+],
     // providers: [
     //   provideTranslocoScope({
     //     scope: "home",

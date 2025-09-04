@@ -14,9 +14,11 @@
               <mat-panel-title> Types </mat-panel-title>
             </mat-expansion-panel-header>
             <mat-list>
-              <mat-list-item *ngFor="let type of (planning_model$ | async)?.types">
-                {{ type.name }}: {{ type.parent }}
-              </mat-list-item>
+              @for (type of (planning_model$ | async)?.types; track type) {
+                <mat-list-item>
+                  {{ type.name }}: {{ type.parent }}
+                </mat-list-item>
+              }
             </mat-list>
           </mat-expansion-panel>
         </app-page-section-content>
@@ -28,11 +30,12 @@
               <mat-panel-title> Predicates </mat-panel-title>
             </mat-expansion-panel-header>
             <mat-list>
-              <mat-list-item
-                *ngFor="let predicate of (planning_model$ | async)?.predicates"
-              >
-                {{ predicatOut(predicate) }}
-              </mat-list-item>
+              @for (predicate of (planning_model$ | async)?.predicates; track predicate) {
+                <mat-list-item
+                  >
+                  {{ predicatOut(predicate) }}
+                </mat-list-item>
+              }
             </mat-list>
           </mat-expansion-panel>
         </app-page-section-content>
@@ -43,10 +46,11 @@
             <mat-expansion-panel-header>
               <mat-panel-title> Actions </mat-panel-title>
             </mat-expansion-panel-header>
-            <app-complete-action
-              *ngFor="let a of (planning_model$ | async)?.actions"
-              [action]="a"
-            ></app-complete-action>
+            @for (a of (planning_model$ | async)?.actions; track a) {
+              <app-complete-action
+                [action]="a"
+              ></app-complete-action>
+            }
           </mat-expansion-panel>
         </app-page-section-content>
       </app-page-section>
@@ -57,9 +61,11 @@
               <mat-panel-title> Objects </mat-panel-title>
             </mat-expansion-panel-header>
             <mat-list>
-              <mat-list-item *ngFor="let object of (planning_model$ | async)?.objects">
-                {{ object.name }} {{ object.type }}
-              </mat-list-item>
+              @for (object of (planning_model$ | async)?.objects; track object) {
+                <mat-list-item>
+                  {{ object.name }} {{ object.type }}
+                </mat-list-item>
+              }
             </mat-list>
           </mat-expansion-panel>
         </app-page-section-content>
@@ -71,9 +77,11 @@
               <mat-panel-title> Constants </mat-panel-title>
             </mat-expansion-panel-header>
             <mat-list>
-              <mat-list-item *ngFor="let object of (planning_model$ | async)?.constants">
-                {{ object.name }} {{ object.type }}
-              </mat-list-item>
+              @for (object of (planning_model$ | async)?.constants; track object) {
+                <mat-list-item>
+                  {{ object.name }} {{ object.type }}
+                </mat-list-item>
+              }
             </mat-list>
           </mat-expansion-panel>
         </app-page-section-content>
@@ -85,9 +93,11 @@
               <mat-panel-title> Initial </mat-panel-title>
             </mat-expansion-panel-header>
             <mat-list>
-              <mat-list-item *ngFor="let fact of (planning_model$ | async)?.initial">
-                {{ factOut(fact) }}
-              </mat-list-item>
+              @for (fact of (planning_model$ | async)?.initial; track fact) {
+                <mat-list-item>
+                  {{ factOut(fact) }}
+                </mat-list-item>
+              }
             </mat-list>
           </mat-expansion-panel>
         </app-page-section-content>

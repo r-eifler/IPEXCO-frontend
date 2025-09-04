@@ -9,7 +9,7 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from "@angular/material/button";
 import { MatCardContent, MatCardModule } from "@angular/material/card";
 import { MatFormFieldModule, MatLabel } from "@angular/material/form-field";
-import {AsyncPipe, DatePipe, NgForOf, NgIf} from '@angular/common';
+import { AsyncPipe, DatePipe } from '@angular/common';
 import {Store} from '@ngrx/store';
 import {loadParticipantDistributions, loadUserStudies} from '../../state/user-study.actions';
 import {selectUserStudies, selectUserStudyParticipantDistributions, selectUserStudyParticipants} from '../../state/user-study.selector';

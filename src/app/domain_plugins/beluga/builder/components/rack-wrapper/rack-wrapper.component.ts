@@ -6,7 +6,7 @@ import { Store } from '@ngrx/store';
 import { cancelDrag, createNewBelugaAction, startDrag, stopDrag } from '../../state/builder.actions';
 import { DragSource } from '../../state/builder.reducer';
 import { selectDraggedJig, selectDraggedSides, selectDragInProgress, selectDragSource, selectIsDropTargetRack } from '../../state/builder.selector';
-import { AsyncPipe, NgFor, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { filterNotNullOrUndefined } from 'src/app/shared/common/check_null_undefined';
 import { switchMap } from 'rxjs';
@@ -25,10 +25,8 @@ import { DropTargetComponent } from '../drop-target/drop-target.component';
     CdkDropList,
     AsyncPipe,
     RackComponent,
-    NgFor,
-    NgIf,
-    DropTargetComponent,
-  ],
+    DropTargetComponent
+],
   templateUrl: './rack-wrapper.component.html',
   styleUrl: './rack-wrapper.component.scss'
 })

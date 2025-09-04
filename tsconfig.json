@@ -10,7 +10,7 @@
     "noImplicitAny": false,
     "experimentalDecorators": true,
     "module": "es2020",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "importHelpers": true,
     "target": "ES2022",

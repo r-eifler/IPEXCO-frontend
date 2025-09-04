@@ -30,7 +30,7 @@ import { Plan } from "src/app/planning/domain/plan";
 import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
 import { MatSliderDragEvent, MatSliderModule } from "@angular/material/slider";
-import { NgIf } from "@angular/common";
+
 import { Subject, takeUntil, takeWhile, timer } from "rxjs";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { color } from "d3";
@@ -205,7 +205,7 @@ class State {
 
 @Component({
   selector: "app-beluga-plan-animation",
-  imports: [MatButtonModule, MatIconModule, MatSliderModule, NgIf],
+  imports: [MatButtonModule, MatIconModule, MatSliderModule],
   templateUrl: "./beluga-plan-animation.component.html",
   styleUrl: "./beluga-plan-animation.component.scss",
 })

@@ -1,40 +1,43 @@
 <app-trailer
-    [name]="trailer()?.name"
-    [size]="displaySize()"
-    [dragTarget]="(isDragTarget$ | async) && (dragInProgress$ | async)"
-    [noDragTarget]="!(isDragTarget$ | async) && (dragInProgress$ | async)"
->
+  [name]="trailer()?.name"
+  [size]="displaySize()"
+  [dragTarget]="(isDragTarget$ | async) && (dragInProgress$ | async)"
+  [noDragTarget]="!(isDragTarget$ | async) && (dragInProgress$ | async)"
+  >
+  @if (side() =='bside') {
     <button
-        *ngIf="side() =='bside'"
-        id="bside" mat-icon-button (click)="load()" [disabled]="!canLoad()">
-        <mat-icon>arrow_backward</mat-icon>
+      id="bside" mat-icon-button (click)="load()" [disabled]="!canLoad()">
+      <mat-icon>arrow_backward</mat-icon>
     </button>
-    <app-drop-target
-        [centerContent]="true"
-        cdkDropList
-        [cdkDropListData]="[jig()]"
-        (cdkDropListDropped)="drop($event)"
-        [cdkDropListEnterPredicate]="empty"
+  }
+  <app-drop-target
+    [centerContent]="true"
+    cdkDropList
+    [cdkDropListData]="[jig()]"
+    (cdkDropListDropped)="drop($event)"
+    [cdkDropListEnterPredicate]="empty"
     >
-        <app-jig
-            *ngIf="jig() != null"
-            [jig]="jig()"
-            [jigType]="jigType()"
-            [animate]="true"
-            [draggable]="true"
-            cdkDrag
-            [cdkDragData]="jig()"
-            (cdkDragStarted)="onStartDrag()"
-            (cdkDragDropped)="onCancelDrag($event)"
-            cdkDragBoundary=".beluga-boundary"
+    @if (jig() != null) {
+      <app-jig
+        [jig]="jig()"
+        [jigType]="jigType()"
+        [animate]="true"
+        [draggable]="true"
+        cdkDrag
+        [cdkDragData]="jig()"
+        (cdkDragStarted)="onStartDrag()"
+        (cdkDragDropped)="onCancelDrag($event)"
+        cdkDragBoundary=".beluga-boundary"
         >
-        </app-jig>
-    </app-drop-target>
+      </app-jig>
+    }
+  </app-drop-target>
+  @if (side() =='fside') {
     <button
-        *ngIf="side() =='fside'"
-        id="fside" mat-icon-button (click)="toHangar()" [disabled]="!(canDeliver$ | async)">
-        <mat-icon>arrow_forward</mat-icon>
+      id="fside" mat-icon-button (click)="toHangar()" [disabled]="!(canDeliver$ | async)">
+      <mat-icon>arrow_forward</mat-icon>
     </button>
+  }
 
 </app-trailer>
 

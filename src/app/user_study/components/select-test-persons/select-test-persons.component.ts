@@ -1,7 +1,7 @@
 import { Component, computed, effect, inject, output, ViewChild } from "@angular/core";
 import { filter, map, take } from "rxjs/operators";
 import { FormsModule } from '@angular/forms';
-import { CurrencyPipe, DatePipe, NgIf } from '@angular/common';
+import { CurrencyPipe, DatePipe } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { Store } from '@ngrx/store';

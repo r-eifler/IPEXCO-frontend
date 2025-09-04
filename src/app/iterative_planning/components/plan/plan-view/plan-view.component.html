@@ -1,7 +1,7 @@
 <mat-card appearance="outlined" class="card">
 
-  
-  <ng-container *ngIf="notSolvable$ | async">
+
+  @if (notSolvable$ | async) {
     <mat-card-header>
       <mat-card-title>Plan</mat-card-title>
     </mat-card-header>
@@ -10,23 +10,25 @@
         There exists no plan. The selection of soft goals is not solvable.
       </p>
     </mat-card-content>
-  </ng-container>
+  }
 
 
-  <ng-container *ngIf="solved$ | async">
+  @if (solved$ | async) {
     <mat-card-header>
       <mat-card-title>Plan</mat-card-title>
     </mat-card-header>
     <mat-card-content>
       <div >
-        <p *ngFor="let action of actions$ | async" class="actions">
-          <span style="font-weight: 500;">{{ action.name }}</span>(
-          @for (p of action.params; track p) {
-          {{ p }}
-          @if (!$last) {, }
-          })
-        </p>
-      </div>
-    </mat-card-content>
-  </ng-container>
-</mat-card>
+        @for (action of actions$ | async; track action) {
+          <p class="actions">
+            <span style="font-weight: 500;">{{ action.name }}</span>(
+            @for (p of action.params; track p) {
+              {{ p }}
+              @if (!$last) {, }
+                })
+              </p>
+            }
+          </div>
+        </mat-card-content>
+      }
+    </mat-card>

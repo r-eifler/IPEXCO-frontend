@@ -1,4 +1,4 @@
-import { JsonPipe, NgFor } from "@angular/common";
+import { JsonPipe } from "@angular/common";
 import { ChangeDetectionStrategy, Component, input, output } from "@angular/core";
 import { ChatModule } from "src/app/shared/components/chat/chat.module";
 import { QuestionType } from "../../domain/explanation/explanations";

@@ -1,4 +1,4 @@
-import { NgFor, NgIf } from "@angular/common";
+
 import { Component, input, Input, OnInit } from "@angular/core";
 import { MatCardModule } from "@angular/material/card";
 import { MatExpansionModule } from "@angular/material/expansion";
@@ -8,11 +8,10 @@ import { FactToString, PDDLAction, predicateToString } from "src/app/shared/doma
 @Component({
     selector: "app-complete-action",
     imports: [
-        MatListModule,
-        MatExpansionModule,
-        MatCardModule,
-        NgFor,
-    ],
+    MatListModule,
+    MatExpansionModule,
+    MatCardModule
+],
     templateUrl: "./complete-action.component.html",
     styleUrls: ["./complete-action.component.scss"]
 })

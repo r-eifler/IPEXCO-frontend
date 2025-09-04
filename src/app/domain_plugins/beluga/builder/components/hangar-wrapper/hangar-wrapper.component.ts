@@ -1,5 +1,5 @@
 import { CdkDrag, CdkDragDrop, CdkDropList } from '@angular/cdk/drag-drop';
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { ChangeDetectorRef, Component, computed, inject, input } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
@@ -27,9 +27,8 @@ import { DropTargetComponent } from '../drop-target/drop-target.component';
     CdkDrag,
     AsyncPipe,
     HangarComponent,
-    NgIf,
-    DropTargetComponent,
-  ],
+    DropTargetComponent
+],
   templateUrl: './hangar-wrapper.component.html',
   styleUrl: './hangar-wrapper.component.scss'
 })

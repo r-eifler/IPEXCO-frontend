@@ -1,4 +1,4 @@
-import { AsyncPipe, NgFor, NgIf } from "@angular/common";
+import { AsyncPipe } from "@angular/common";
 import { Component, inject } from "@angular/core";
 import { MatButtonModule } from "@angular/material/button";
 import { MatCardModule } from "@angular/material/card";
@@ -21,18 +21,16 @@ import { ProjectCreatorComponent } from "../project-creator/project-creator.comp
 @Component({
     selector: "app-project-selection",
     imports: [
-        MatIconModule,
-        MatCardModule,
-        MatProgressSpinnerModule,
-        MatMenuModule,
-        MatButtonModule,
-        RouterModule,
-        PageModule,
-        AsyncPipe,
-        NgIf,
-        NgFor,
-        ActionCardComponent,
-    ],
+    MatIconModule,
+    MatCardModule,
+    MatProgressSpinnerModule,
+    MatMenuModule,
+    MatButtonModule,
+    RouterModule,
+    PageModule,
+    AsyncPipe,
+    ActionCardComponent
+],
     templateUrl: "./project-collection.component.html",
     styleUrls: ["./project-collection.component.scss"]
 })

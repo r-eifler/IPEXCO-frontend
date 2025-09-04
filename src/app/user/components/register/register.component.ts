@@ -15,23 +15,22 @@ import { selectLoggedIn, selectUserError } from "src/app/user/state/user.selecto
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { filter, tap } from "rxjs";
 import { MatInputModule } from "@angular/material/input";
-import { NgIf } from "@angular/common";
+
 import { MatButtonModule } from "@angular/material/button";
 
 @Component({
     selector: "app-register",
     imports: [
-        MatIconModule,
-        MatError,
-        MatLabel,
-        MatFormFieldModule,
-        ReactiveFormsModule,
-        FormsModule,
-        MatCardModule,
-        MatInputModule,
-        NgIf,
-        MatButtonModule,
-    ],
+    MatIconModule,
+    MatError,
+    MatLabel,
+    MatFormFieldModule,
+    ReactiveFormsModule,
+    FormsModule,
+    MatCardModule,
+    MatInputModule,
+    MatButtonModule
+],
     templateUrl: "./register.component.html",
     styleUrls: ["./register.component.scss"]
 })

@@ -7,7 +7,7 @@ import { MatCardModule } from "@angular/material/card";
 import { MatButtonModule } from "@angular/material/button";
 import { MatButtonToggleModule } from "@angular/material/button-toggle";
 import { MatIconModule } from "@angular/material/icon";
-import { NgIf } from "@angular/common";
+
 import { MatInputModule } from "@angular/material/input";
 import { MatOptionModule } from "@angular/material/core";
 import { MatSelectModule } from "@angular/material/select";
@@ -19,22 +19,21 @@ import { Service, ServiceType } from "src/app/global_specification/domain/servic
 @Component({
     selector: "app-settings",
     imports: [
-        MatLabel,
-        MatFormFieldModule,
-        MatSlideToggleModule,
-        MatCardModule,
-        ReactiveFormsModule,
-        FormsModule,
-        MatButtonModule,
-        MatButtonToggleModule,
-        MatIconModule,
-        NgIf,
-        MatInputModule,
-        MatFormFieldModule,
-        MatOptionModule,
-        MatSelectModule,
-        MatCheckboxModule
-    ],
+    MatLabel,
+    MatFormFieldModule,
+    MatSlideToggleModule,
+    MatCardModule,
+    ReactiveFormsModule,
+    FormsModule,
+    MatButtonModule,
+    MatButtonToggleModule,
+    MatIconModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatOptionModule,
+    MatSelectModule,
+    MatCheckboxModule
+],
     templateUrl: "./settings.component.html",
     styleUrls: ["./settings.component.scss"]
 })

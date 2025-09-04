@@ -2,7 +2,7 @@
   src="./assets/beluga/canvas-beluga.png"
   id="beluga-image"
   (load)="canvasBelugaLoaded()"
-/>
+  />
 <div class="scene-rendering" #sceneRendering>
   <canvas id="renderingCanvas"></canvas>
   <div class="canvas-view-button-row">
@@ -22,16 +22,20 @@
           <mat-icon>zoom_out_map</mat-icon>
         </a>
       </div>
-      <div class="canvas-button-container" *ngIf="!expandedCanvas">
-        <a mat-mini-fab aria-label="expand canvas" (click)="expandCanvas()">
-          <mat-icon>unfold_more</mat-icon>
-        </a>
-      </div>
-      <div class="canvas-button-container" *ngIf="expandedCanvas">
-        <a mat-mini-fab aria-label="expand canvas" (click)="shrinkCanvas()">
-          <mat-icon>unfold_less</mat-icon>
-        </a>
-      </div>
+      @if (!expandedCanvas) {
+        <div class="canvas-button-container">
+          <a mat-mini-fab aria-label="expand canvas" (click)="expandCanvas()">
+            <mat-icon>unfold_more</mat-icon>
+          </a>
+        </div>
+      }
+      @if (expandedCanvas) {
+        <div class="canvas-button-container">
+          <a mat-mini-fab aria-label="expand canvas" (click)="shrinkCanvas()">
+            <mat-icon>unfold_less</mat-icon>
+          </a>
+        </div>
+      }
     </div>
   </div>
   <div class="canvas-simulation-controls">
@@ -43,7 +47,7 @@
             aria-label="play"
             [disabled]="!simulationActivated"
             (click)="onSimulationPlay()"
-          >
+            >
             <mat-icon>play_arrow</mat-icon>
           </button>
         </div>
@@ -53,7 +57,7 @@
             aria-label="pause"
             [disabled]="!simulationActivated"
             (click)="onSimulationPause()"
-          >
+            >
             <mat-icon>pause</mat-icon>
           </button>
         </div>
@@ -63,7 +67,7 @@
             aria-label="skip previous"
             [disabled]="!simulationActivated || !canMoveBackward"
             (click)="onSimulationPreviousAction()"
-          >
+            >
             <mat-icon>skip_previous</mat-icon>
           </button>
         </div>
@@ -73,7 +77,7 @@
             aria-label="skip next"
             [disabled]="!simulationActivated || !canMoveForward"
             (click)="onSimulationNextAction()"
-          >
+            >
             <mat-icon>skip_next</mat-icon>
           </button>
         </div>
@@ -86,12 +90,12 @@
         step="1"
         discrete="true"
         [disabled]="!simulationActivated"
-      >
+        >
         <input
           matSliderThumb
           value="{{ currentAction }}"
           (dragEnd)="onSimulationGotoAction($event)"
-        />
+          />
       </mat-slider>
     </div>
   </div>

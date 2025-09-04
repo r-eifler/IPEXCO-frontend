@@ -1,33 +1,33 @@
 <app-hangar
-    [name]="name()"
-    [dragTarget]="(isDragTarget$ | async) && (dragInProgress$ | async)"
-    [noDragTarget]="!(isDragTarget$ | async) && (dragInProgress$ | async)"
->
-    <button mat-icon-button (click)="fromHangar()" [disabled]="!trailerAvailable()">
-        <mat-icon>arrow_backward</mat-icon>
-    </button>
-    <app-drop-target
-        cdkDropList
-        [cdkDropListData]="[jig()]"
-        (cdkDropListDropped)="drop($event)"
-        [cdkDropListEnterPredicate]="empty"
-        [centerContent]="true"
+  [name]="name()"
+  [dragTarget]="(isDragTarget$ | async) && (dragInProgress$ | async)"
+  [noDragTarget]="!(isDragTarget$ | async) && (dragInProgress$ | async)"
+  >
+  <button mat-icon-button (click)="fromHangar()" [disabled]="!trailerAvailable()">
+    <mat-icon>arrow_backward</mat-icon>
+  </button>
+  <app-drop-target
+    cdkDropList
+    [cdkDropListData]="[jig()]"
+    (cdkDropListDropped)="drop($event)"
+    [cdkDropListEnterPredicate]="empty"
+    [centerContent]="true"
     >
-        <app-jig
-            *ngIf="jig() != null"
-            [jig]="jig()"
-            [jigType]="jigType()"
-            [animate]="true"
-            [unitSize]="true"
-            [draggable]="true"
-
-            cdkDrag
-            [cdkDragData]="jig()"
-            (cdkDragStarted)="onStartDrag()"
-            (cdkDragDropped)="onCancelDrag($event)"
-            cdkDragBoundary=".beluga-boundary"
+    @if (jig() != null) {
+      <app-jig
+        [jig]="jig()"
+        [jigType]="jigType()"
+        [animate]="true"
+        [unitSize]="true"
+        [draggable]="true"
+        cdkDrag
+        [cdkDragData]="jig()"
+        (cdkDragStarted)="onStartDrag()"
+        (cdkDragDropped)="onCancelDrag($event)"
+        cdkDragBoundary=".beluga-boundary"
         >
-        </app-jig>
-    </app-drop-target>
+      </app-jig>
+    }
+  </app-drop-target>
 </app-hangar>
 

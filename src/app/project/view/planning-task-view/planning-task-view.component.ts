@@ -1,5 +1,5 @@
 
-import { AsyncPipe, NgFor } from "@angular/common";
+import { AsyncPipe } from "@angular/common";
 import { Component, inject } from "@angular/core";
 import { MatExpansionModule } from "@angular/material/expansion";
 import { MatIconModule } from "@angular/material/icon";
@@ -16,16 +16,15 @@ import { FactToString, predicateToString } from "src/app/shared/domain/PDDL_task
 @Component({
     selector: "app-planning-task-view",
     imports: [
-        PageModule,
-        BreadcrumbModule,
-        RouterLink,
-        MatListModule,
-        MatExpansionModule,
-        CompleteActionComponent,
-        AsyncPipe,
-        NgFor,
-        MatIconModule,
-    ],
+    PageModule,
+    BreadcrumbModule,
+    RouterLink,
+    MatListModule,
+    MatExpansionModule,
+    CompleteActionComponent,
+    AsyncPipe,
+    MatIconModule
+],
     templateUrl: "./planning-task-view.component.html",
     styleUrls: ["./planning-task-view.component.scss"]
 })

@@ -10,9 +10,11 @@
         <mat-panel-title> Parameter </mat-panel-title>
       </mat-expansion-panel-header>
       <mat-list>
-        <mat-list-item *ngFor="let p of this.action()?.parameters">
-          {{ p.name }} {{ p.type }}
-        </mat-list-item>
+        @for (p of this.action()?.parameters; track p) {
+          <mat-list-item>
+            {{ p.name }} {{ p.type }}
+          </mat-list-item>
+        }
       </mat-list>
     </mat-expansion-panel>
 
@@ -21,9 +23,11 @@
         <mat-panel-title> Precondition </mat-panel-title>
       </mat-expansion-panel-header>
       <mat-list>
-        <mat-list-item *ngFor="let p of this.action()?.precondition">
-          {{ factOut(p) }}
-        </mat-list-item>
+        @for (p of this.action()?.precondition; track p) {
+          <mat-list-item>
+            {{ factOut(p) }}
+          </mat-list-item>
+        }
       </mat-list>
     </mat-expansion-panel>
 
@@ -32,9 +36,11 @@
         <mat-panel-title> Effect </mat-panel-title>
       </mat-expansion-panel-header>
       <mat-list>
-        <mat-list-item *ngFor="let p of this.action()?.effect">
-          {{ factOut(p) }}
-        </mat-list-item>
+        @for (p of this.action()?.effect; track p) {
+          <mat-list-item>
+            {{ factOut(p) }}
+          </mat-list-item>
+        }
       </mat-list>
     </mat-expansion-panel>
   </mat-card-content>

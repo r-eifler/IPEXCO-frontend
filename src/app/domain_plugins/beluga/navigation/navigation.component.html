@@ -3,9 +3,9 @@
 <div class="main-container">
   <mat-toolbar color="secondary" class="main-toolbar">
     @if(!(isUserStudy$ | async)){
-    <button mat-icon-button (click)="sideNav.toggle()" [disabled]="!(isLoggedIn$ | async)">
-      <mat-icon>menu</mat-icon>
-    </button>
+      <button mat-icon-button (click)="sideNav.toggle()" [disabled]="!(isLoggedIn$ | async)">
+        <mat-icon>menu</mat-icon>
+      </button>
     }
     <mat-icon>connecting_airports</mat-icon>
     <!-- <img style="height: 60%; margin: auto 10px" src="assets/iter_logo.svg" /> -->
@@ -19,16 +19,19 @@
   </mat-toolbar>
 
   <mat-menu #userMenu="matMenu">
-    <button mat-menu-item
-      *ngIf="!(isLoggedIn$ | async)"
-      (click)="newLoginForm()">
-      <mat-icon>login</mat-icon>
-      Login
-    </button>
-    <button mat-menu-item *ngIf="isLoggedIn$ | async" (click)="logout()">
-      <mat-icon>logout</mat-icon>
-      Logout
-    </button>
+    @if (!(isLoggedIn$ | async)) {
+      <button mat-menu-item
+        (click)="newLoginForm()">
+        <mat-icon>login</mat-icon>
+        Login
+      </button>
+    }
+    @if (isLoggedIn$ | async) {
+      <button mat-menu-item (click)="logout()">
+        <mat-icon>logout</mat-icon>
+        Logout
+      </button>
+    }
     <button mat-menu-item [matMenuTriggerFor]="languageMenu">
       <mat-icon>language</mat-icon>
       Language
@@ -71,7 +74,7 @@
     </mat-sidenav>
 
     <mat-sidenav-content>
-        <router-outlet></router-outlet>
+      <router-outlet></router-outlet>
     </mat-sidenav-content>
   </mat-sidenav-container>
 </div>

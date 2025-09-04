@@ -11,31 +11,41 @@
       <mat-form-field class="form-inputs ">
         <mat-label>User name</mat-label>
         <input matInput type="text" formControlName="name" />
-        <mat-error *ngIf="minLengthErrorName">
-          User name has to have at least 5 characters.
-        </mat-error>
-        <mat-error *ngIf="maxLengthErrorName">
-          User name has to have at most 32 characters.
-        </mat-error>
+        @if (minLengthErrorName) {
+          <mat-error>
+            User name has to have at least 5 characters.
+          </mat-error>
+        }
+        @if (maxLengthErrorName) {
+          <mat-error>
+            User name has to have at most 32 characters.
+          </mat-error>
+        }
       </mat-form-field>
 
       <mat-form-field class="form-inputs ">
         <mat-label>Password</mat-label>
         <input matInput type="password" formControlName="password" />
-        <mat-error *ngIf="minLengthErrorPassword">
-          User name has to have at least 8 characters.
-        </mat-error>
-        <mat-error *ngIf="maxLengthErrorPassword">
-          User name has to have at most 32 characters.
-        </mat-error>
+        @if (minLengthErrorPassword) {
+          <mat-error>
+            User name has to have at least 8 characters.
+          </mat-error>
+        }
+        @if (maxLengthErrorPassword) {
+          <mat-error>
+            User name has to have at most 32 characters.
+          </mat-error>
+        }
       </mat-form-field>
 
       <mat-form-field class="form-inputs ">
         <mat-label>Confirm password</mat-label>
         <input matInput type="password" formControlName="passwordRepeat" />
-        <mat-error *ngIf="notSameErrorPassword">
-          Password and confirm password have to match.
-        </mat-error>
+        @if (notSameErrorPassword) {
+          <mat-error>
+            Password and confirm password have to match.
+          </mat-error>
+        }
       </mat-form-field>
 
       <div style="display: flex">
@@ -45,14 +55,14 @@
           type="button"
           (click)="onBack()"
           style="flex-grow: 1"
-        >
+          >
           <mat-icon> keyboard_backspace </mat-icon>
         </button>
         <button
           mat-flat-button
           color="primary"
           style="flex-grow: 4; margin-left: 10px"
-        >
+          >
           Register
         </button>
       </div>
