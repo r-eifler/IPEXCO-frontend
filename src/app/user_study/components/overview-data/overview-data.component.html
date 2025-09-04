@@ -6,7 +6,7 @@
         <mat-card-title> Iteration Steps per User</mat-card-title>
       </mat-card-header>
       <mat-card-content class="card-content">
-        @if (showPlots) {
+        @if (showPlots()) {
           <ngx-charts-bar-vertical
             [scheme]="colorScheme"
             [results]="iterationStepsData()"
@@ -27,7 +27,7 @@
         <mat-card-title>Questions per User</mat-card-title>
       </mat-card-header>
       <mat-card-content class="card-content">
-        @if (showPlots) {
+        @if (showPlots()) {
           <ngx-charts-bar-vertical
             [scheme]="colorScheme"
             [results]="questionsData()"
@@ -49,7 +49,7 @@
         <mat-card-title>Max Utility per User</mat-card-title>
       </mat-card-header>
       <mat-card-content class="card-content">
-        @if (showPlots) {
+        @if (showPlots()) {
           <ngx-charts-bar-vertical
             [scheme]="colorScheme"
             [results]="utilityData()"
