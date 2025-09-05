@@ -42,8 +42,4 @@ export class MultiFlightCardComponent {
     this.selectedFlightIndex.set(flightIndex);
   }
 
-  constructor() {
-    effect(() => console.log(this.jigTypes()))
-    effect(() => console.log(this.selectedIncoming()))
-  }
 }

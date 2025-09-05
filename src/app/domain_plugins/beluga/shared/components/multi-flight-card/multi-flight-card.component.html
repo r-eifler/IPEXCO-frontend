@@ -31,7 +31,7 @@
                         <mat-card-title>Outgoing</mat-card-title>
                     </mat-card-header>
                     <mat-card-content class="jig-container">
-                        @for(type of selectedOutgoing(); track type.name){
+                        @for(type of selectedOutgoing(); track type){
                             <app-jig [jigType]="type"></app-jig>
                         }
                     </mat-card-content>

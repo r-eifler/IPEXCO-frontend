@@ -22,7 +22,7 @@
           <app-page-section-title>Flight Schedule</app-page-section-title>
           <app-page-section-content>
             <app-multi-flight-card 
-              [flights]="instance().flights" 
+              [flights]="instance()?.flights" 
               [jigs]="instance()?.jigs" 
               [jigTypes]="instance()?.jig_types"
             ></app-multi-flight-card>
@@ -33,7 +33,7 @@
           <app-page-section-title>Production Schedule</app-page-section-title>
           <app-page-section-content>
             <app-multi-production-line-card 
-              [productionLines]="instance().production_lines" 
+              [productionLines]="instance()?.production_lines" 
               [jigs]="instance()?.jigs" 
               [jigTypes]="instance()?.jig_types"
             ></app-multi-production-line-card>
