@@ -9,17 +9,17 @@
     <div class="header">{{t('f.production_lines')}}</div>
 
     <div class="belugas column">
-      <app-beluga-flight
+      <app-single-flight-card
         [jigs]="incoming()"
         [jigTypes]="jigTypes()"
-      ></app-beluga-flight>
+      ></app-single-flight-card>
 
-      <app-beluga-flight
+      <app-single-flight-card
         [jigs]="outgoing()"
         [jigTypes]="jigTypes()"
         [incoming]="false"
         [schedule]="outgoingSchedule()"
-      ></app-beluga-flight>
+      ></app-single-flight-card>
     </div>
     <div class="trailers">
       @for(elem of trailersBeluga(); track elem.trailer.name){
@@ -83,13 +83,13 @@
     </div>
     <div class="hangars column">
       @for(pl of productionLines(); track pl;){
-        <app-production-line
+        <app-production-line-card
           style="width: 100%;"
           [line]="pl"
           [delivered]="productionLinesDelivered()?.[pl.name]"
           [jigTypes]="jigTypes()"
           >
-        </app-production-line>
+        </app-production-line-card>
       }
     </div>
   </div>

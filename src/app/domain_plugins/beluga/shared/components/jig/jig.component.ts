@@ -23,9 +23,9 @@ import { MatListModule } from '@angular/material/list';
 })
 export class JigComponent {
 
-  jig = input.required<Jig | null>()
-  jigType = input.required<JigType>()
-  incomingFlight = input<string | undefined | null>(undefined)
+  jig = input<Jig | null>(null);
+  jigType = input.required<JigType>();
+  incomingFlight = input<string | undefined | null>(undefined);
 
   isGhost = input(false);
   animate = input(false);

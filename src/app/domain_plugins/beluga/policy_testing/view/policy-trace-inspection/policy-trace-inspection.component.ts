@@ -2,25 +2,19 @@ import { Component, computed, effect, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { MatLabel } from '@angular/material/module.d-vndDeG-q';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { RouterLink } from '@angular/router';
-import { BreadcrumbModule } from 'src/app/shared/components/breadcrumb/breadcrumb.module';
-import { InfoComponent } from 'src/app/shared/components/info/info/info.component';
-import { PageModule } from 'src/app/shared/components/page/page.module';
-import { TestCasePanelComponent } from '../../components/test-case-panel/test-case-panel.component';
-import { TestResultsPlotsComponent } from '../../components/test-results-plots/test-results-plots.component';
-import { TestSuiteHeroComponent } from '../../components/test-suite-hero/test-suite-hero.component';
-import { MatIconModule } from '@angular/material/icon';
-import { Store } from '@ngrx/store';
-import { selectProjectId, selectSection, selectSelectedTestCase, selectSelectedTestSuite } from '../../state/policy-testing.selector';
-import { TraceInspectorComponent } from '../../../shared/components/trace-inspector/trace-inspector.component';
-import { getFullStartState } from '../../../flight-section-planning/domain/flight-section';
-import { BelugaActionType } from '../../../shared/domain/beluga_plan';
 import { TranslocoModule } from '@jsverse/transloco';
-import { getFullStartStateFromTestCase } from '../../domain/utils';
+import { Store } from '@ngrx/store';
+import { BreadcrumbModule } from 'src/app/shared/components/breadcrumb/breadcrumb.module';
+import { PageModule } from 'src/app/shared/components/page/page.module';
+import { TraceInspectorComponent } from '../../../shared/components/trace-inspector/trace-inspector.component';
+import { BelugaActionType } from '../../../shared/domain/beluga_plan';
 import { getSiteSetUp } from '../../../shared/domain/site_set_up';
+import { getFullStartStateFromTestCase } from '../../domain/utils';
+import { selectProjectId, selectSection, selectSelectedTestCase, selectSelectedTestSuite } from '../../state/policy-testing.selector';
 
 
 @Component({

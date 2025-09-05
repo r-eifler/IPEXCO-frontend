@@ -7,7 +7,7 @@ import { Jig, JigType } from '../../domain/beluga_problem';
 import { JigStatusComponent } from '../jig-status/jig-status.component';
 
 @Component({
-  selector: 'app-production-line',
+  selector: 'app-production-line-card',
   imports: [
     TranslocoModule,
     MatIconModule,
@@ -21,10 +21,10 @@ import { JigStatusComponent } from '../jig-status/jig-status.component';
         alias: "s",
       }),
     ],
-  templateUrl: './production-line.component.html',
-  styleUrl: './production-line.component.scss'
+  templateUrl: './production-line-card.component.html',
+  styleUrl: './production-line-card.component.scss'
 })
-export class ProductionLineComponent {
+export class ProductionLineCardComponent {
 
   line = input.required<{name: string, schedule: Jig[]}>();
   delivered = input.required<string[]>();

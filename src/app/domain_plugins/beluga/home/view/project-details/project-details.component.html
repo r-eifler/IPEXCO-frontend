@@ -2,11 +2,11 @@
 
     <app-breadcrumb>
       <a app-breadcrumb-item [routerLink]="['..']"><mat-icon>home</mat-icon></a>
-      <app-breadcrumb-item>{{(project$ | async)?.name}}</app-breadcrumb-item>
+      <app-breadcrumb-item>{{project()?.name}}</app-breadcrumb-item>
     </app-breadcrumb>
 
 
-    <app-page-title>{{t('h.project')}} {{(project$ | async)?.name}}
+    <app-page-title>{{t('h.project')}} {{project()?.name}}
       <app-page-title-action>
         <button  mat-icon-button (click)="deleteProject()">
           <mat-icon>delete</mat-icon>
@@ -15,39 +15,60 @@
     </app-page-title>
   
     <app-page-content>
-      <div class="page-grid">
 
-        <app-project-action-card>
-          <span action-title>{{t('h.flight_section_planning')}}</span>
-          <span action-description>
-            {{t('h.flight_section_planning_description')}}
-          </span>
-          <a mat-flat-button [routerLink]="['/beluga/flight-section-planning', (project$ | async)?._id]" action-button>
-            Start
-          </a>
-        </app-project-action-card>
+      <app-page-section-list>
 
-        <app-project-action-card>
-          <span action-title>Policy Testing</span>
-          <span action-description>
-            Test a policy for sub-optimality.
-          </span>
-          <a mat-flat-button [routerLink]="['/beluga/policy-testing', (project$ | async)?._id]" action-button>
-            Start
-          </a>
-        </app-project-action-card>
+        <app-page-section>
+          <app-page-section-title>Flight Schedule</app-page-section-title>
+          <app-page-section-content>
+            <app-multi-flight-card 
+              [flights]="instance().flights" 
+              [jigs]="instance()?.jigs" 
+              [jigTypes]="instance()?.jig_types"
+            ></app-multi-flight-card>
+          </app-page-section-content>
+        </app-page-section>
 
-        <app-project-action-card>
-          <span action-title>Settings</span>
-          <span action-description>
-            Select the services and features.
-          </span>
-          <a mat-button [routerLink]="['/beluga/projects/', (project$ | async)?._id, 'settings']" action-button>
-            Open
-          </a>
-        </app-project-action-card>
-  
-      </div>
+        <app-page-section>
+          <app-page-section-title>Features</app-page-section-title>
+          <app-page-section-content>
+            <div class="page-grid">
+              <app-project-action-card>
+                <span action-title>{{t('h.flight_section_planning')}}</span>
+                <span action-description>
+                  {{t('h.flight_section_planning_description')}}
+                </span>
+                <a mat-flat-button [routerLink]="['/beluga/flight-section-planning', project()?._id]" action-button>
+                  Start
+                </a>
+              </app-project-action-card>
+
+              <app-project-action-card>
+                <span action-title>Policy Testing</span>
+                <span action-description>
+                  Test a policy for sub-optimality.
+                </span>
+                <a mat-flat-button [routerLink]="['/beluga/policy-testing', project()?._id]" action-button>
+                  Start
+                </a>
+              </app-project-action-card>
+
+              <app-project-action-card>
+                <span action-title>Settings</span>
+                <span action-description>
+                  Select the services and features.
+                </span>
+                <a mat-button [routerLink]="['/beluga/projects/', project()?._id, 'settings']" action-button>
+                  Open
+                </a>
+              </app-project-action-card>
+        
+            </div>
+          </app-page-section-content>
+        </app-page-section>
+        
+      </app-page-section-list>
+
     </app-page-content>
   </app-page>
   

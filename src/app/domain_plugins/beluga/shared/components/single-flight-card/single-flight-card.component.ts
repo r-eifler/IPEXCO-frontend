@@ -8,7 +8,7 @@ import { JigStatusComponent } from '../jig-status/jig-status.component';
 import { InfoComponent } from 'src/app/shared/components/info/info/info.component';
 
 @Component({
-  selector: 'app-beluga-flight',
+  selector: 'app-single-flight-card',
   imports: [
     MatIconModule,
     MatCardModule,
@@ -16,10 +16,10 @@ import { InfoComponent } from 'src/app/shared/components/info/info/info.componen
     JigStatusComponent,
     InfoComponent
   ],
-  templateUrl: './beluga-flight.component.html',
-  styleUrl: './beluga-flight.component.scss'
+  templateUrl: './single-flight-card.component.html',
+  styleUrl: './single-flight-card.component.scss'
 })
-export class BelugaFlightComponent {
+export class SingleFlightCardComponent {
 
   jigs = input.required<Jig[]>()
   jigTypes = input.required<Record<string,JigType>>();

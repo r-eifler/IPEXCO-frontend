@@ -5,9 +5,9 @@ import { JigComponent } from '../jig/jig.component';
 import { BelugaProblem, Flight, occupiedRackSpace, ProductionLine } from '../../domain/beluga_problem';
 import { TrailerComponent } from '../trailer/trailer.component';
 import { HangarComponent } from '../hangar/hangar.component';
-import { BelugaFlightComponent } from '../beluga-flight/beluga-flight.component';
+import { SingleFlightCardComponent } from '../single-flight-card/single-flight-card.component';
 import { RackComponent } from '../rack/rack.component';
-import { ProductionLineComponent } from '../production-line/production-line.component';
+import { ProductionLineCardComponent } from '../production-line-card/production-line-card.component';
 
 import { BelugaSiteSetUp, SiteStatus } from '../../domain/site_set_up';
 import { FlightTargetSchedule, ProductionLineTargetSchedule } from '../../../flight-section-planning/domain/flight-section';
@@ -19,9 +19,9 @@ import { TranslocoDirective } from '@jsverse/transloco';
     MatIconModule,
     TrailerComponent,
     HangarComponent,
-    BelugaFlightComponent,
+    SingleFlightCardComponent,
     RackComponent,
-    ProductionLineComponent,
+    ProductionLineCardComponent,
     JigComponent,
     TranslocoDirective
 ],

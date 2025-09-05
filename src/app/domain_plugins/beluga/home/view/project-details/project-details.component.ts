@@ -1,5 +1,5 @@
 import { AsyncPipe } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { Store } from '@ngrx/store';
 import { ProjectActionCardComponent } from 'src/app/project/components/project-action-card/project-action-card.component';
@@ -12,18 +12,20 @@ import { MatButtonModule } from '@angular/material/button';
 import { provideTranslocoScope, TranslocoModule } from '@jsverse/transloco';
 import { selectProject } from '../../state/home.selector';
 import { BreadcrumbModule } from 'src/app/shared/components/breadcrumb/breadcrumb.module';
+import { MultiFlightCardComponent } from '../../../shared/components/multi-flight-card/multi-flight-card.component';
+import { BelugaProblem } from '../../../shared/domain/beluga_problem';
 
 @Component({
   selector: 'app-project-details',
   imports: [
     PageModule,
     MatIconModule,
-    AsyncPipe,
     ProjectActionCardComponent,
     RouterLink,
     MatButtonModule,
     TranslocoModule,
     BreadcrumbModule,
+    MultiFlightCardComponent,
   ],
   providers: [
     provideTranslocoScope({
@@ -39,14 +41,16 @@ export class ProjectDetailsComponent {
   store = inject(Store);
   router = inject(Router);
   
-  project$ = this.store.select(selectProject);
+  project = this.store.selectSignal(selectProject);
+
+  instance = computed(() => this.project()?.baseTask.model as BelugaProblem)
 
   deleteProject(): void {
-    this.project$.pipe(
-      take(1),
-      filterNotNullOrUndefined(),
-    ).subscribe(p => this.store.dispatch(deleteProject({id: p._id})));
-    this.router.navigate(['/projects']);
+    let project = this.project();
+    if(project !== null && project !== undefined){
+      this.store.dispatch(deleteProject({id: project._id}));
+      this.router.navigate(['/projects']);    
+    }
   }
 
 }

@@ -1,0 +1,42 @@
+<div class="main-container">
+    <mat-card  appearance="outlined">
+        <mat-card-content class="flight-container">
+            @for(flight of flights(); track flight.name; let idx = $index){
+                <div class="flight" (click)="selectFlightIndex(idx)" [class.selected]="idx === selectedFlightIndex()">
+                    <span>{{flight.name}}</span>
+                </div>
+            }
+        </mat-card-content>
+    </mat-card>
+
+    @if(selectedFlight() !== null){
+        <mat-card  appearance="outlined">
+            <mat-card-header>
+                <mat-card-title>{{selectedFlight()?.name}}</mat-card-title>
+            </mat-card-header>
+            <mat-card-content class="flight-info">
+                <mat-card  appearance="outlined">
+                    <mat-card-header>
+                        <mat-card-title>Incoming</mat-card-title>
+                    </mat-card-header>
+                    <mat-card-content class="jig-container">
+                        @for(elem of selectedIncoming(); track elem.jig.name){
+                            <app-jig [jig]="elem.jig" [jigType]="elem.type"></app-jig>
+                        }
+                    </mat-card-content>
+                </mat-card>
+
+                <mat-card  appearance="outlined">
+                    <mat-card-header>
+                        <mat-card-title>Outgoing</mat-card-title>
+                    </mat-card-header>
+                    <mat-card-content class="jig-container">
+                        @for(type of selectedOutgoing(); track type.name){
+                            <app-jig [jigType]="type"></app-jig>
+                        }
+                    </mat-card-content>
+                </mat-card>
+            </mat-card-content>
+        </mat-card>
+    } 
+</div>

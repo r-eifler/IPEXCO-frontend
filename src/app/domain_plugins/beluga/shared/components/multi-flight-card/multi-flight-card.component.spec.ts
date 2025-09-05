@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ProductionLineComponent } from './production-line.component';
+import { MultiFlightCardComponent } from './multi-flight-card.component';
 
-describe('ProductionLineComponent', () => {
-  let component: ProductionLineComponent;
-  let fixture: ComponentFixture<ProductionLineComponent>;
+describe('MultiFlightCardComponent', () => {
+  let component: MultiFlightCardComponent;
+  let fixture: ComponentFixture<MultiFlightCardComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ProductionLineComponent]
+      imports: [MultiFlightCardComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(ProductionLineComponent);
+    fixture = TestBed.createComponent(MultiFlightCardComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
