@@ -79,15 +79,15 @@
             }
             @if(isPending()){
                 @if(isAutomatic()){
-                    <a class="details" mat-button 
+                    <a class="details" mat-flat-button 
                         [routerLink]="['../configuration-explanations/' + section()?._id + '/' + section()?.configurationIndex]">
                         {{t('f.check_configurations')}}
                     </a>
                     @if(selectedConfigSolvable()){
-                    <button class="details" mat-flat-button (click)="onCreatePlan()">{{t('f.generate_plan')}}</button>
+                    <button class="details" mat-flat-button (click)="onCreatePlan()">Call Planner</button>
                     }
                     @else{
-                        <button class="details" mat-button (click)="onCreatePlan()">{{t('f.generate_plan')}}</button>
+                        <button class="details" mat-button (click)="onCreatePlan()">Call Planner</button>
                     }
                 }
                 @if(isManual()){
@@ -98,15 +98,16 @@
                     </a>
                 }
                 @if(isMixed()){
-                    <a class="details" mat-button 
+                    <a class="details" mat-flat-button 
                         [routerLink]="['../configuration-explanations/' + section()?._id + '/' + section()?.configurationIndex]">
                         {{t('f.check_configurations')}}
                     </a>
+                    <button class="details" mat-button (click)="onPlanManually()">Plan Manually</button>
                     @if(selectedConfigSolvable()){
-                    <button class="details" mat-flat-button (click)="onCreatePlan()">{{t('f.generate_plan')}}</button>
+                        <button class="details" mat-flat-button (click)="onCreatePlan()">Call Planner</button>
                     }
                     @else{
-                        <button class="details" mat-button (click)="onCreatePlan()">{{t('f.generate_plan')}}</button>
+                        <button class="details" mat-button (click)="onCreatePlan()">Call Planner</button>
                     }
                 }
             }

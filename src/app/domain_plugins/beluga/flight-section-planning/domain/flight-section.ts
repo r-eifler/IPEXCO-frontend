@@ -1,13 +1,12 @@
-import { PlanRunStatus, PlanRunStatusZ } from "src/app/iterative_planning/domain/plan";
-import { array, boolean, nativeEnum, nullable, number, object, optional, record, string, infer as zinfer } from "zod";
-import { BelugaActionZ } from "../../shared/domain/beluga_plan";
-import { BelugaProblem, Flight, ProductionLine, ProductionLineZ } from "../../shared/domain/beluga_problem";
-import { applyActions, BelugaState } from "../../shared/domain/beluga_state";
-import { BelugaSiteSetUp, BelugaSiteSetUpZ, BelugaSiteState, BelugaSiteStateZ, SiteStatus } from "../../shared/domain/site_set_up";
-import { ExplainMethodZ, PlanMethodZ } from "./plan_method";
-import { SimplePlanPropertyZ } from "./plan_properties";
 import { ExplanationRunStatus, ExplanationRunStatusZ } from "src/app/iterative_planning/domain/explanation/explanations";
+import { PlanRunStatus, PlanRunStatusZ } from "src/app/iterative_planning/domain/plan";
+import { array, boolean, nullable, number, object, optional, record, string, infer as zinfer } from "zod";
+import { BelugaActionZ } from "../../shared/domain/beluga_plan";
+import { BelugaProblem, Flight } from "../../shared/domain/beluga_problem";
+import { applyActions, BelugaState } from "../../shared/domain/beluga_state";
 import { BelugaGoalZ } from "../../shared/domain/properties";
+import { BelugaSiteSetUpZ, BelugaSiteState, BelugaSiteStateZ, SiteStatus } from "../../shared/domain/site_set_up";
+import { PlanMethodZ } from "./plan_method";
 
 
 

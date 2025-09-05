@@ -1,5 +1,5 @@
 import { Component, computed, inject, signal, WritableSignal } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormControl, FormsModule, ReactiveFormsModule, RequiredValidator, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatChipsModule } from '@angular/material/chips';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -9,6 +9,7 @@ import { TranslocoModule } from '@jsverse/transloco';
 import { Service } from 'src/app/global_specification/domain/services';
 import { DialogModule } from 'src/app/shared/components/dialog/dialog.module';
 import { PlanMethodType } from '../../domain/plan_method';
+import { MatStepper, MatStepperModule } from '@angular/material/stepper';
 
 @Component({
   selector: 'app-section-plan-method-dialog',
@@ -19,56 +20,60 @@ import { PlanMethodType } from '../../domain/plan_method';
     MatChipsModule,
     MatInputModule,
     MatFormFieldModule,
-    FormsModule
+    FormsModule,
+    MatStepperModule,
+    FormsModule,
+    ReactiveFormsModule,
   ],
   templateUrl: './section-plan-method-dialog.component.html',
   styleUrl: './section-plan-method-dialog.component.scss'
 })
 export class SectionPlanMethodDialogComponent {
 
-  readonly types = PlanMethodType;
+	fb = inject(FormBuilder)
 
-  readonly dialogRef = inject(MatDialogRef<SectionPlanMethodDialogComponent>);
-  readonly data = inject<{maxNumFlights: number, planners: Service[]}>(MAT_DIALOG_DATA);
+	readonly types = PlanMethodType;
 
-  planners  = this.data.planners;
-  maxNumFlights = this.data.maxNumFlights;
+	readonly dialogRef = inject(MatDialogRef<SectionPlanMethodDialogComponent>);
+	readonly data = inject<{maxNumFlights: number, planners: Service[]}>(MAT_DIALOG_DATA);
 
-  selectedMethodType: WritableSignal<PlanMethodType | null> = signal(null); 
-  selectedPlanner: WritableSignal<Service | null> = signal(null); 
-  numOptimizedFlights = 1;
+	planners  = this.data.planners;
+	maxNumFlights = this.data.maxNumFlights;
 
-  finished = computed(() => this.selectedMethodType() !== null && ( this.selectedMethodType() === PlanMethodType.MANUAL || this.selectedPlanner() !== null))
+	form = this.fb.group({
+		service: this.fb.control<Service | null>(null, [Validators.required]),
+		horizon: this.fb.control<number>(1, [Validators.min(1), Validators.max(this.maxNumFlights)])
+	})
 
-  onAutomatic(){
-    this.selectedMethodType.set(PlanMethodType.AUTOMATIC_SEARCH_PLANNER);
-  }
 
-  onManual(){
-    this.selectedMethodType.set(PlanMethodType.MANUAL);
+	goForward(stepper: MatStepper){
+		stepper.next();
+	}
 
-    this.onStart()
-  }
+	onSelectService(planner: Service){
+		this.form.controls.service.setValue(planner);
+	}
 
-  onSelectPlanner(planner: Service){
-    this.selectedPlanner.set(planner)
+	onAllFlights(){
+		this.form.controls.horizon.setValue(this.maxNumFlights);
+	}
 
-   this.onStart()
-  }
+	onStart(){
+		if(this.form.controls.service.value === null){
+		return 
+		}
+		this.dialogRef.close({
+		method: {
+			name: this.form.controls.service?.value.name,
+			type: PlanMethodType.AUTOMATIC_SEARCH_PLANNER,
+			serviceId: this.form.controls.service?.value._id ,
+			numOptimizedFlights: this.form.controls.horizon?.value
+		}
+		})
+	}
 
-  onStart(){
-    this.dialogRef.close({
-      method: {
-        name: this.selectedMethodType() === PlanMethodType.MANUAL  ? 'Human Planner' : this.selectedPlanner()?.name,
-        type: this.selectedMethodType(),
-        serviceId: this.selectedMethodType() !== PlanMethodType.MANUAL ? this.selectedPlanner()?._id : undefined,
-        numOptimizedFlights: this.numOptimizedFlights
-      }
-    })
-  }
-
-  onCancel(){
-    this.dialogRef.close()
-  }
+	onCancel(){
+		this.dialogRef.close()
+	}
 
 }

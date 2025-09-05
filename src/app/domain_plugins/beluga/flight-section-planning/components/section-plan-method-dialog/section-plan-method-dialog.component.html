@@ -1,55 +1,35 @@
 <app-dialog *transloco="let t">
     <app-dialog-header>
-        <app-dialog-title>Select Panning Process</app-dialog-title>
+        <app-dialog-title>Configure Planning Process</app-dialog-title>
     </app-dialog-header>
     <app-dialog-content>
-        <div class="main">
-            <!-- <mat-chip-set>
-                @if(selectedMethodType() === null){
-                    <mat-chip>{{t('f.method_type')}} ?</mat-chip>
-                }
-                @if(selectedMethodType() === types.AUTOMATIC_SEARCH_PLANNER){
-                    <mat-chip>{{t('f.automatic')}}</mat-chip>
-                    @if(selectedPlanner() === null){
-                        <mat-chip>{{t('f.planning_service')}} ?</mat-chip>
-                    }
-                    @if(selectedPlanner() !== null){
-                        <mat-chip>{{selectedPlanner()?.name}}</mat-chip>
-                    }
-                }
-                @if(selectedMethodType() === types.MANUAL){
-                    <mat-chip>{{t('f.manual')}}</mat-chip>
-                }
-                @if(finished()){
-                    <mat-chip>{{t('f.num_optimized_flights')}}: {{numOptimizedFlights}}</mat-chip>
-                }
-            </mat-chip-set> -->
-            @if(selectedMethodType() === null){
-                <div class="button-container">
-                    <button mat-flat-button class="full-width" (click)="onAutomatic()">{{t('f.automatic')}}</button>
-                    <button mat-stroked-button class="full-width" (click)="onManual()">{{t('f.manual')}}</button>
-                </div>
-            }
-            @if(selectedMethodType() === types.AUTOMATIC_SEARCH_PLANNER && selectedPlanner() == null){
+        <form [formGroup]="form">
+        <mat-stepper linear #stepper >               
+
+            <mat-step>
+                <ng-template matStepLabel>Planning Method</ng-template>
                 <div class="button-container">
                     @for(planner of planners; track planner._id){
-                        <button mat-button class="full-width" (click)="onSelectPlanner(planner)">{{planner.name}}</button>
+                        <button mat-button class="full-width" (click)="onSelectService(planner);goForward(stepper)">{{planner.name}}</button>
                     }
                 </div>
-            }
+            </mat-step>
 
-            <!-- @if(finished()){
-                <form class="button-container">
+            <mat-step>
+                <ng-template matStepLabel>Flight Horizon</ng-template>
+                <div class="horizon-container">
+                    <button mat-flat-button class="full-width" (click)="onAllFlights()">All Flights</button>
                     <mat-form-field class="full-width" appearance="outline">
                         <mat-label>{{t('f.num_optimized_flights')}}</mat-label>
-                        <input matInput type="number" [(ngModel)]="numOptimizedFlights" min="1" [max]="maxNumFlights" name="numOptimizedFlights">
+                        <input matInput type="number" formControlName="horizon" min="1" [max]="maxNumFlights">
                     </mat-form-field>
-                </form>
-            } -->
-        </div>
+                </div>
+            </mat-step> 
+        </mat-stepper>
+        </form>
     </app-dialog-content>
     <app-dialog-footer>
         <button mat-button (click)="onCancel()">{{t('f.cancel')}}</button>
-        <!-- <button mat-flat-button (click)="onStart()" [disabled]="!finished()">{{t('f.start')}}</button> -->
+        <button mat-flat-button (click)="onStart()" [disabled]="!form.valid">Start Planner</button>
     </app-dialog-footer>
 </app-dialog>
