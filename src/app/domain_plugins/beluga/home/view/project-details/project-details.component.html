@@ -30,11 +30,22 @@
         </app-page-section>
 
         <app-page-section>
+          <app-page-section-title>Production Schedule</app-page-section-title>
+          <app-page-section-content>
+            <app-multi-production-line-card 
+              [productionLines]="instance().production_lines" 
+              [jigs]="instance()?.jigs" 
+              [jigTypes]="instance()?.jig_types"
+            ></app-multi-production-line-card>
+          </app-page-section-content>
+        </app-page-section>
+
+        <app-page-section>
           <app-page-section-title>Features</app-page-section-title>
           <app-page-section-content>
             <div class="page-grid">
               <app-project-action-card>
-                <span action-title>{{t('h.flight_section_planning')}}</span>
+                <span action-title>Planning</span>
                 <span action-description>
                   {{t('h.flight_section_planning_description')}}
                 </span>

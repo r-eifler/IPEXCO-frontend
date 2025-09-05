@@ -1,0 +1,13 @@
+.main-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: var(--spacing-200);
+}
+
+.jig-list{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: var(--spacing-100);
+}

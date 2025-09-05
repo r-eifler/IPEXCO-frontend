@@ -14,6 +14,7 @@ import { selectProject } from '../../state/home.selector';
 import { BreadcrumbModule } from 'src/app/shared/components/breadcrumb/breadcrumb.module';
 import { MultiFlightCardComponent } from '../../../shared/components/multi-flight-card/multi-flight-card.component';
 import { BelugaProblem } from '../../../shared/domain/beluga_problem';
+import { MultiProductionLineCardComponent } from '../../../shared/components/multi-production-line-card/multi-production-line-card.component';
 
 @Component({
   selector: 'app-project-details',
@@ -26,6 +27,7 @@ import { BelugaProblem } from '../../../shared/domain/beluga_problem';
     TranslocoModule,
     BreadcrumbModule,
     MultiFlightCardComponent,
+    MultiProductionLineCardComponent,
   ],
   providers: [
     provideTranslocoScope({

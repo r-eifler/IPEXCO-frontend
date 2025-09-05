@@ -1,0 +1,14 @@
+<div class="main-container">
+    @for(line of displayLines(); track line.name){
+        <mat-card appearance="outlined">
+            <mat-card-header>
+                <mat-card-title>{{line.name}}</mat-card-title>
+            </mat-card-header>
+            <mat-card-content class="jig-list">
+                @for(elem of line.schedule; track elem.jig.name){
+                    <app-jig [jig]="elem.jig" [jigType]="elem.jigType" [unitSize]="true"></app-jig>
+                }
+            </mat-card-content>
+        </mat-card>
+    }
+</div>
