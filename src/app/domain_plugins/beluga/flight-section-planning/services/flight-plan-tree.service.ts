@@ -1,20 +1,20 @@
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { map } from "rxjs/operators";
+import { map, tap } from "rxjs/operators";
 import { environment } from "src/environments/environment";
 import { array } from "zod";
 import { BelugaProblem } from "../../shared/domain/beluga_problem";
 import { getInitialState } from "../../shared/domain/beluga_state";
 import { BelugaSiteSetUp, BelugaSiteState, getSiteSetUp } from "../../shared/domain/site_set_up";
-import { BelugaConfiguration, filterUpTo, FlightPlanTree, FlightPlanTreeBase, FlightPlanTreeZ, FlightSection, FlightSectionBase, FlightSectionZ, FlightTargetSchedule, getJigsOnSiteFromState, initialDeliveryStatuses, ProductionLineTargetSchedule } from "../domain/flight-section";
+import { BelugaConfiguration, filterUpTo, FlightPlanTree, FlightPlanTreeBase, FlightPlanTreeZ, FlightsHorizon, FlightsHorizonBase, FlightsHorizonZ, FlightTargetSchedule, getJigsOnSiteFromState, initialDeliveryStatuses, ProductionLineTargetSchedule } from "../domain/flight-section";
 
 
 interface initData {
   projectId: string, 
   siteState: BelugaSiteState,
   siteSetUp: BelugaSiteSetUp,
-  flightTargetSchedule: FlightTargetSchedule,
+  flightTargetSchedule: FlightTargetSchedule[],
   productionLinesTargetSchedule: ProductionLineTargetSchedule[],
 }
 
@@ -41,19 +41,20 @@ export class FlightPlanTreeService{
       )
     }
 
-    getSectionById$(id: string): Observable<FlightSection> {
+    getSectionById$(id: string): Observable<FlightsHorizon> {
       return this.http.get<unknown>(this.BASE_URL + 'section/' + id).pipe(
-          map(data => FlightSectionZ.parse(data)),
+          map(data => FlightsHorizonZ.parse(data)),
       )
     }
 
-    getSections$(treeId: string): Observable<Record<string,FlightSection>> {
+    getSections$(treeId: string): Observable<Record<string,FlightsHorizon>> {
 
       let httpParams = new HttpParams();
       httpParams = httpParams.set('treeId', treeId);
 
       return this.http.get<unknown>(this.BASE_URL + 'section/',  { params: httpParams }).pipe(
-          map(data => array(FlightSectionZ).parse(data)),
+          tap(data => console.log(data)),
+          map(data => array(FlightsHorizonZ).parse(data)),
           map(sections => sections.reduce((acc, c) => ({...acc,[c._id]: c}), {}))
       )
     }
@@ -69,16 +70,17 @@ export class FlightPlanTreeService{
 
       const siteState = getInitialState(task);
       const siteSetUp = getSiteSetUp(task);
-      const flight = task.flights[0];
+      const flights = task.flights;
 
-      const jigsOnSite = getJigsOnSiteFromState(siteState, [task.flights[0]])
+      const jigsOnSite = getJigsOnSiteFromState(siteState, flights)
       const jigTypesOnSite = [...jigsOnSite].map(jn => task.jigs[jn].type)
 
       const data: initData = {
         projectId, 
         siteState, 
         siteSetUp,
-        flightTargetSchedule: {
+        flightTargetSchedule: flights.map((flight,index) => ({
+          originalIndex: index,
           name: flight.name,
           incoming: flight.incoming.map(jn => ({
             jig: jn, 
@@ -95,7 +97,7 @@ export class FlightPlanTreeService{
                 onSite: index !== -1,
             }
           }) 
-        },
+        })),
         productionLinesTargetSchedule: task.production_lines.map(pl => {
           const notBlocked = filterUpTo(pl.schedule, jigsOnSite);
           return {
@@ -109,6 +111,7 @@ export class FlightPlanTreeService{
       }
 
       return this.http.post<unknown>(this.BASE_URL + 'init', data).pipe(
+        tap(data => console.log(data)),
         map(data => FlightPlanTreeZ.parse(data)),
       )
     }
@@ -119,9 +122,9 @@ export class FlightPlanTreeService{
       )
     }
 
-    postSection$(section: FlightSectionBase): Observable<FlightSection> {
+    postSection$(section: FlightsHorizonBase): Observable<FlightsHorizon> {
       return this.http.post<unknown>(this.BASE_URL + 'section', section).pipe(
-        map(data => FlightSectionZ.parse(data)),
+        map(data => FlightsHorizonZ.parse(data)),
       )
     }
 
@@ -131,30 +134,30 @@ export class FlightPlanTreeService{
       )
     }
 
-    putSection$(section: FlightSection): Observable<FlightSection> {
+    putSection$(section: FlightsHorizon): Observable<FlightsHorizon> {
       return this.http.put<unknown>(this.BASE_URL + 'section/' + section._id, section).pipe(
-        map(data => FlightSectionZ.parse(data)),
+        map(data => FlightsHorizonZ.parse(data)),
       )
     }
 
-    addConfiguration$(section: FlightSection, config: BelugaConfiguration): Observable<FlightSection> {
-      let newSection: FlightSection = {
+    addConfiguration$(section: FlightsHorizon, config: BelugaConfiguration): Observable<FlightsHorizon> {
+      let newSection: FlightsHorizon = {
         ...section,
         configurations: [...section.configurations, config],
         configurationIndex: section.configurations.length,
       }
       return this.http.put<unknown>(this.BASE_URL + 'section/' + section._id, newSection).pipe(
-        map(data => FlightSectionZ.parse(data)),
+        map(data => FlightsHorizonZ.parse(data)),
       )
     }
 
-    changeUsedConfiguration$(section: FlightSection, index: number): Observable<FlightSection> {
-      let newSection: FlightSection = {
+    changeUsedConfiguration$(section: FlightsHorizon, index: number): Observable<FlightsHorizon> {
+      let newSection: FlightsHorizon = {
         ...section,
         configurationIndex: index,
       }
       return this.http.put<unknown>(this.BASE_URL + 'section/' + section._id, newSection).pipe(
-        map(data => FlightSectionZ.parse(data)),
+        map(data => FlightsHorizonZ.parse(data)),
       )
     }
     

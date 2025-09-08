@@ -4,7 +4,7 @@ import { Action } from "@ngrx/store";
 import { of } from "rxjs";
 import { catchError, switchMap } from "rxjs/operators";
 import { FlightPlanTreeService } from "../../services/flight-plan-tree.service";
-import { loadFlightPlanTree, loadFlightPlanTreeFailure, loadFlightPlanTreeNotNullSuccess, loadFlightPlanTreeSuccess, loadFlightSections, reloadFlightPlanTree, reloadFlightPlanTreeFailure, reloadFlightPlanTreeSuccess } from "../flight-section-planning.actions";
+import { loadFlightPlanTree, loadFlightPlanTreeFailure, loadFlightPlanTreeNotNullSuccess, loadFlightPlanTreeSuccess, loadFlightsHorizons, reloadFlightPlanTree, reloadFlightPlanTreeFailure, reloadFlightPlanTreeSuccess } from "../flight-section-planning.actions";
 
 @Injectable()
 export class LoadFlightPlanTreeEffect{
@@ -38,7 +38,7 @@ export class LoadFlightPlanTreeEffect{
     public loadSuccess$ = createEffect(() => this.actions$.pipe(
         ofType(loadFlightPlanTreeNotNullSuccess),
         switchMap(({tree}) => [
-            loadFlightSections({treeId: tree?._id})
+            loadFlightsHorizons({treeId: tree?._id})
         ]),
     ));
 }

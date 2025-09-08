@@ -4,7 +4,7 @@ import { BelugaProblem, Side } from "../../shared/domain/beluga_problem";
 import { BelugaAction } from "../../shared/domain/beluga_plan";
 import { DragSource } from "./builder.reducer";
 import { BelugaState } from "../../shared/domain/beluga_state";
-import { BelugaConfiguration, FlightSection, FlightSectionBase } from "../../flight-section-planning/domain/flight-section";
+import { BelugaConfiguration, FlightsHorizon, FlightsHorizonBase } from "../../flight-section-planning/domain/flight-section";
 
 // project
 
@@ -13,19 +13,19 @@ export const loadProjectSuccess = createAction('[beluga-builder] load project su
 export const loadProjectFailure = createAction('[beluga-builder] load project failure', props<{err: any}>());
 
 // sections
-export const loadFlightSection = createAction('[beluga-builder] load flight plan section', props<{id: string}>());
-export const loadFlightSectionSuccess = createAction('[beluga-builder] load flight plan section success', props<{section: FlightSection}>());
-export const loadFlightSectionFailure = createAction('[beluga-builder] load flight plan section failure', props<{err: any}>());
+export const loadFlightsHorizon = createAction('[beluga-builder] load flight plan section', props<{id: string}>());
+export const loadFlightsHorizonSuccess = createAction('[beluga-builder] load flight plan section success', props<{section: FlightsHorizon}>());
+export const loadFlightsHorizonFailure = createAction('[beluga-builder] load flight plan section failure', props<{err: any}>());
 
-export const createSuccessorFlightSection = createAction('[beluga-builder] create successor flight plan section', props<{section: FlightSection}>());
+export const createSuccessorFlightsHorizon = createAction('[beluga-builder] create successor flight plan section', props<{section: FlightsHorizon}>());
 
-export const createFlightSection = createAction('[beluga-builder] new flight plan section', props<{section: FlightSectionBase}>());
-export const createFlightSectionSuccess = createAction('[beluga-builder] new flight plan section success', props<{section: FlightSection}>());
-export const createFlightSectionFailure = createAction('[beluga-builder] new flight plan section failure', props<{err: any}>());
+export const createFlightsHorizon = createAction('[beluga-builder] new flight plan section', props<{section: FlightsHorizonBase}>());
+export const createFlightsHorizonSuccess = createAction('[beluga-builder] new flight plan section success', props<{section: FlightsHorizon}>());
+export const createFlightsHorizonFailure = createAction('[beluga-builder] new flight plan section failure', props<{err: any}>());
 
-export const updateFlightSection = createAction('[beluga-builder] update flight plan section', props<{section: FlightSection}>());
-export const updateFlightSectionSuccess = createAction('[beluga-builder] update flight plan section success', props<{section: FlightSection}>());
-export const updateFlightSectionFailure = createAction('[beluga-builder] update flight plan section failure', props<{err: any}>());
+export const updateFlightsHorizon = createAction('[beluga-builder] update flight plan section', props<{section: FlightsHorizon}>());
+export const updateFlightsHorizonSuccess = createAction('[beluga-builder] update flight plan section success', props<{section: FlightsHorizon}>());
+export const updateFlightsHorizonFailure = createAction('[beluga-builder] update flight plan section failure', props<{err: any}>());
 
 // builder
 
@@ -40,9 +40,9 @@ export const cancelManualPlanningFailure = createAction('[beluga-builder] cancel
 
 // Flight Schedule updates
 
-export const skipIncomingJig = createAction('[beluga-builder] skip incoming jig', props<{jigName: string}>());
-export const skipOutgoingJigType = createAction('[beluga-builder] skip outgoing jig type', props<{jigType: string, index: number}>());
-export const skipProductionJig = createAction('[beluga-builder] skip production jig', props<{jigName: string, productionLine: string}>());
+export const skipIncomingJig = createAction('[beluga-builder] skip incoming jig', props<{jigName: string, flightIndex: number}>());
+export const skipOutgoingJigType = createAction('[beluga-builder] skip outgoing jig type', props<{jigType: string, flightIndex: number, index: number}>());
+export const skipProductionJig = createAction('[beluga-builder] skip production jig', props<{jigName: string, productionLineName: string}>());
 
 // Beluga actions
 

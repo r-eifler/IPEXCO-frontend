@@ -25,7 +25,7 @@
 					<mat-label>Flight Plan Section</mat-label>
 					<mat-select formControlName="section">
 						@for (section of (sections$ | async); track section._id;) {
-							<mat-option [value]="section._id">{{'Flight ' + section.flightIndex}}</mat-option>
+							<mat-option [value]="section._id">{{'Flight ' + section.flightIndices}}</mat-option>
 						}
 					</mat-select>
 				</mat-form-field>

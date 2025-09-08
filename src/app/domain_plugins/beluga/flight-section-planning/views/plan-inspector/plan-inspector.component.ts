@@ -47,8 +47,9 @@ export class PlanInspectorComponent {
 
   flightSchedule = computed(() => {
     const targetSchedule = this.configuration()?.flightTargetSchedule
-    if(targetSchedule !== undefined){
-      return getFlightSchedule(targetSchedule, false)
+    let flightIndices = this.section()?.flightIndices
+    if(targetSchedule !== undefined && flightIndices !== undefined){
+      return getFlightSchedule(targetSchedule, flightIndices, false)
     }
     return []
   })
@@ -56,17 +57,18 @@ export class PlanInspectorComponent {
   productionSchedule = computed(() => {
     const targetSchedule = this.configuration()?.productionLinesTargetSchedule
     if(targetSchedule !== undefined){
-      return getProductionSchedule(targetSchedule, false)
+      return getProductionSchedule(Object.values(targetSchedule), false)
     }
     return []
   })
 
   name = computed(() => {
     let config = this.configuration();
-    if(config == undefined){
+    let flightIndices = this.section()?.flightIndices
+    if(config == undefined || flightIndices == undefined){
       return "Unknown"
     }
-    return config.flightTargetSchedule.name;
+    return flightIndices.map(index => config.flightTargetSchedule[index].name).join(" ");
   });
 
 }

@@ -10,7 +10,7 @@ import { LabelModule } from 'src/app/shared/components/label/label.module';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { getNumberOfBugs } from '../../domain/utils';
-import { FlightSection } from '../../../flight-section-planning/domain/flight-section';
+import { FlightsHorizon } from '../../../flight-section-planning/domain/flight-section';
 
 @Component({
   selector: 'app-test-collection-card',
@@ -31,11 +31,11 @@ import { FlightSection } from '../../../flight-section-planning/domain/flight-se
 export class TestCollectionCardComponent {
 
   testSuite = input.required<TestSuite>();
-  flightSection = input.required<FlightSection>();
+  flightSection = input.required<FlightsHorizon>();
 
   numBugs = computed(() => getNumberOfBugs(this.testSuite()))
   numTestStates = computed(() => this.testSuite()?.testCases.length)
-  flightIndex = computed(() => this.flightSection()?.flightIndex)
+  flightIndex = computed(() => this.flightSection()?.flightIndices)
 
   constructor() {
     effect(() => console.log(this.flightSection()))

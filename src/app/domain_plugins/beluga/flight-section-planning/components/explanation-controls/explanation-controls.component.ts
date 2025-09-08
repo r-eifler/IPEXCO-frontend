@@ -9,8 +9,8 @@ import { Store } from '@ngrx/store';
 import { sum } from 'ramda';
 import { ExplanationRunStatus } from 'src/app/iterative_planning/domain/explanation/explanations';
 import { PlanRunStatus } from 'src/app/iterative_planning/domain/plan';
-import { FlightSection } from '../../domain/flight-section';
-import { newConfiguration, selectConfiguration, startExplanations, useConfiguration } from '../../state/flight-section-planning.actions';
+import { newConfiguration, startExplanations, useConfiguration } from '../../state/flight-section-planning.actions';
+import { FlightsHorizon } from '../../domain/flight-section';
 
 @Component({
   selector: 'app-explanation-controls',
@@ -29,7 +29,7 @@ export class ExplanationControlsComponent {
 
   store = inject(Store);
 
-  section = input.required<FlightSection>();
+  section = input.required<FlightsHorizon>();
   configIndex = input.required<number>();
   config = computed(() => this.section()?.configurations[this.configIndex()])
   disabled = input<boolean>(false);

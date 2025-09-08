@@ -8,8 +8,8 @@ import { SelectSectionResolver } from './resolver/select-section.resolver';
 import { DomainSpecificationService } from './services/domainSpecification.service';
 import { SectionExplanationComputationMonitoringService } from './services/explanation-computataion-monitoring.service';
 import { FlightPlanTreeService } from './services/flight-plan-tree.service';
-import { FlightSectionExplanationService } from './services/flight-section-explanation.service';
-import { FlightSectionPlanService } from './services/flight-section-plan.service';
+import { FlightsHorizonExplanationService } from './services/flight-section-explanation.service';
+import { FlightsHorizonPlanService } from './services/flight-section-plan.service';
 import { SectionPlanComputationMonitoringService } from './services/plan-computataion-monitoring.service';
 import { ProjectService } from './services/project.service';
 import { ServicesService } from './services/services.service';
@@ -36,9 +36,9 @@ export const routes: Routes = [
       FlightPlanTreeService,
       ServicesService,
       DomainSpecificationService,
-      FlightSectionPlanService,
+      FlightsHorizonPlanService,
       SectionPlanComputationMonitoringService,
-      FlightSectionExplanationService,
+      FlightsHorizonExplanationService,
       SectionExplanationComputationMonitoringService,
     ],
     children: [

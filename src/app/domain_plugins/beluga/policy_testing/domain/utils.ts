@@ -1,4 +1,4 @@
-import { FlightSection, getFullStartState } from "../../flight-section-planning/domain/flight-section";
+import { FlightsHorizon } from "../../flight-section-planning/domain/flight-section";
 import { BelugaState, getInitialState } from "../../shared/domain/beluga_state";
 import { TestCase, TestSuite } from "./tests";
 
@@ -6,7 +6,7 @@ export function getNumberOfBugs(testCol: TestSuite){
     return testCol?.testCases?.filter(tc => tc.classifiedAdBug).length
 }
 
-export function getFullStartStateFromTestCase(section: FlightSection | undefined | null, testCase: TestCase | undefined | null){
+export function getFullStartStateFromTestCase(section: FlightsHorizon | undefined | null, testCase: TestCase | undefined | null){
     if(section === undefined || section === null || testCase === undefined || testCase === null || testCase.state == undefined){
         return undefined;
     }
@@ -15,7 +15,7 @@ export function getFullStartStateFromTestCase(section: FlightSection | undefined
     console.log(testState)
     const startState: BelugaState = {
         ...testState,
-        flightIndex: section.flightIndex,
+        flightIndex: 0, // TODO
         incomingUnloaded: [],
         outgoingLoaded: [],
     }

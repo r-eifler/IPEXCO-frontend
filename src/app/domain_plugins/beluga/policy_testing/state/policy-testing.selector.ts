@@ -1,6 +1,5 @@
 import { createSelector } from "@ngrx/store";
 import { PolicyTestingFeature } from "./policy-testing.feature";
-import { LoadingState } from "src/app/shared/common/loadable.interface";
 import { memoizeWith } from "ramda";
 
 
@@ -83,9 +82,11 @@ export const selectBranchSections = memoizeWith(
                 return undefined;
             }   
             let branchSections = [sections[sectionId]];
-            while(branchSections[0].predecessorId !== null){
+            while(branchSections[0].predecessorId !== null && branchSections[0].predecessorId !== undefined){
                 sectionId = branchSections[0].predecessorId;
-                branchSections = [sections[sectionId], ...branchSections]
+                if(sectionId !== undefined){
+                    branchSections = [sections[sectionId], ...branchSections]
+                }             
             }
             return branchSections;
     })

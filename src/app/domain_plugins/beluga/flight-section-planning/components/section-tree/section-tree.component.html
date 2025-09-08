@@ -2,7 +2,6 @@
     @for(section of sections(); track section._id; let last = $last; let idx = $index){
         <app-section-card
             [section]="section"
-            [originalFlight]="flights()?.[idx]"
         >
         </app-section-card>
         @if(last && hasNextFlight()){

@@ -4,7 +4,7 @@ import { Store } from "@ngrx/store";
 import { of } from "rxjs";
 import { catchError, switchMap } from "rxjs/operators";
 import { FlightPlanTreeService } from "../../services/flight-plan-tree.service";
-import { createNewBranch, createNewBranchFailure, createNewBranchSuccess, loadFlightSections, reloadFlightPlanTree } from "../flight-section-planning.actions";
+import { createNewBranch, createNewBranchFailure, createNewBranchSuccess, loadFlightsHorizons, reloadFlightPlanTree } from "../flight-section-planning.actions";
 
 
 @Injectable()
@@ -20,7 +20,7 @@ export class CreateFlightPlanTreeBranchEffect{
             switchMap(tree => [
                 createNewBranchSuccess({tree}),
                 reloadFlightPlanTree({id: tree._id}),
-                loadFlightSections({treeId: tree._id})
+                loadFlightsHorizons({treeId: tree._id})
             ]),
             catchError((e) => of(createNewBranchFailure({err: e})))
         ))

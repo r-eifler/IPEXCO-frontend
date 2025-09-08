@@ -2,7 +2,7 @@
     <mat-card-header>
         <mat-card-title class="title">
             <app-label [color]="section()?.status | stepStatusColor">{{ section()?.status | stepStatusName }}</app-label> 
-            {{ originalFlight()?.name }}
+            {{ name() }}
         </mat-card-title>
     </mat-card-header>
   
@@ -12,12 +12,9 @@
             <div class="stats-container">
                 <span>{{t('f.planned')}}</span>
                 <div class="stats"> 
-                    <mat-icon>flight_land</mat-icon>
-                    <span class="property-label">{{t('f.incoming')}}:</span>
-                    <span class="property-value">{{ numIncomingConsidered() ?? '?' }}/{{ numIncoming() ?? '?' }}</span>
-                    <mat-icon>flight_takeoff</mat-icon>
-                    <span class="property-label">{{t('f.outgoing')}}:</span>
-                    <span class="property-value">{{ numOutgoingConsidered() ?? '?' }}/{{ numOutgoing() ?? '?' }}</span>
+                    <mat-icon>flight</mat-icon>
+                    <span class="property-label">Flights:</span>
+                    <span class="property-value">{{ numFlights() ?? '?'}}</span>
                     <mat-icon>warehouse</mat-icon>
                     <span class="property-label">{{t('f.deliveries')}}:</span>
                     <span class="property-value">{{ numPossibleDeliveries() ?? '?' }}/{{ numOverallDeliveries() ?? '?' }}</span>

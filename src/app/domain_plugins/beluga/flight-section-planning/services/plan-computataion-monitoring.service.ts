@@ -3,7 +3,7 @@ import { interval, Observable } from 'rxjs';
 import { exhaustMap, filter, map, take, tap } from 'rxjs/operators';
 import { PlanRunStatus } from 'src/app/iterative_planning/domain/plan';
 import { FlightPlanTreeService } from './flight-plan-tree.service';
-import { FlightSection } from '../domain/flight-section';
+import { FlightsHorizon } from '../domain/flight-section';
   
 @Injectable()
 export class SectionPlanComputationMonitoringService {
@@ -25,6 +25,6 @@ export class SectionPlanComputationMonitoringService {
 
 }
 
-function planFinished(section: FlightSection): boolean {
+function planFinished(section: FlightsHorizon): boolean {
     return section.status !== PlanRunStatus.PENDING && section.status !== PlanRunStatus.RUNNING;
 }

@@ -2,10 +2,10 @@ import { Component, computed, effect, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { TranslocoModule } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
-import { FlightSection } from '../../domain/flight-section';
-import { createSuccessorFlightSection } from '../../state/flight-section-planning.actions';
+import { createSuccessorFlightsHorizon } from '../../state/flight-section-planning.actions';
 import { selectActiveBranchLastSectionFinished, selectActiveBranchNumberFinishedFlights, selectActiveBranchSections, selectFlights, selectNumFlights } from '../../state/flight-section-planning.selector';
 import { SectionCardComponent } from '../section-card/section-card.component';
+import { FlightsHorizon } from '../../domain/flight-section';
 
 
 
@@ -31,8 +31,10 @@ export class SectionTreeComponent {
   numFlights = this.store.selectSignal(selectNumFlights);
   numFinishedFlights = this.store.selectSignal(selectActiveBranchNumberFinishedFlights);
 
-  onNextFlightPlan(section: FlightSection){
-    this.store.dispatch(createSuccessorFlightSection({section}))
+  onNextFlightPlan(section: FlightsHorizon){
+    // TODO also get flights indices and order
+    console.log("TODO")
+    // this.store.dispatch(createSuccessorFlightsHorizon({section}))
   }
 
   hasNextFlight = computed(() => this.numFlights() > (this.numFinishedFlights() ?? 0))

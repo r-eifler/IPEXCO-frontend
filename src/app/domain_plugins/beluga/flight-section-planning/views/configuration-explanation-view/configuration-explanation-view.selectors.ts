@@ -34,12 +34,17 @@ export const selectOutgoingFlightConflictMembers= createSelector(selectOutgoingF
         if(members === undefined || config === undefined){
             return undefined;
         }
-        const skipIdList = config.flightTargetSchedule.outgoing?.map((e,index) => ({skip: e.skip, index})).filter(e => !e.skip);
-        const indexMap = skipIdList?.reduce((acc,c,index) => ({...acc,[index]: c.index}), {})
-        if(indexMap === undefined){
+        const indexMapFlights = Object.values(config.flightTargetSchedule).reduce((acc, flight) => {
+            let skippedIdList = flight.outgoing?.map((e,index) => ({skip: e.skip, index})).filter(e => !e.skip);
+            let indexMap = skippedIdList?.reduce((acc,c,index) => ({...acc,[index]: c.index}), {});
+            return {
+                ...acc, 
+                [flight.name]: indexMap
+            }}, {});
+        if(indexMapFlights === undefined){
             return undefined;
         }
-        return members.map(m => ({...m, position: indexMap[m.position]}))
+        return members.map(m => ({...m, position: indexMapFlights[m.flightName][m.position]}))
     }
 );
 

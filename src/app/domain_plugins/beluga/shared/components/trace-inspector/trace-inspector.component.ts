@@ -36,7 +36,7 @@ export class TraceInspectorComponent {
 
   siteSetUp = input.required<BelugaSiteSetUp>();
   productionSchedule = input.required<ProductionLine[]>();
-  flightSchedule = input.required<Flight>();
+  flightSchedule = input.required<Flight[]>();
 
   // section = input.required<FlightSection>();
   // configuration = computed(() => this.section()?.configurations[this.section()?.configurationIndex])

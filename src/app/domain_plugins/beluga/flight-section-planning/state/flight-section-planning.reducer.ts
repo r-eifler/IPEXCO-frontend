@@ -6,8 +6,8 @@ import { Loadable, LoadingState } from "src/app/shared/common/loadable.interface
 import { Project } from "src/app/shared/domain/project";
 import { BelugaProblem, BelugaProblemZ } from "../../shared/domain/beluga_problem";
 import { BelugaState, getInitialState } from "../../shared/domain/beluga_state";
-import { BelugaConfiguration, FlightPlanTree, FlightSection } from "../domain/flight-section";
-import { loadDomainSpecification, loadDomainSpecificationSuccess, loadFlightPlanTree, loadFlightPlanTreeSuccess, loadFlightSections, loadFlightSectionsSuccess, loadProject, loadProjectSuccess, loadServices, loadServicesSuccess, newConfiguration, reloadFlightPlanTreeSuccess, selectConfiguration, selectSection, skipIncomingJig, skipOutgoingJigType, skipProductionJig, updateConfigurationOfSectionAndConfigIndex, updateEmptyRacks, updateFlightPlanTreeSuccess, updateHangarStatus, updateMaxSwaps, updateRackStatus, updateTrailerStatus } from "./flight-section-planning.actions";
+import { BelugaConfiguration, FlightPlanTree, FlightsHorizon } from "../domain/flight-section";
+import { loadDomainSpecification, loadDomainSpecificationSuccess, loadFlightPlanTree, loadFlightPlanTreeSuccess, loadFlightsHorizons, loadFlightsHorizonsSuccess, loadProject, loadProjectSuccess, loadServices, loadServicesSuccess, newConfiguration, reloadFlightPlanTreeSuccess, selectConfiguration, selectSection, skipIncomingJig, skipOutgoingJigType, skipProductionJig, updateConfigurationOfSectionAndConfigIndex, updateEmptyRacks, updateFlightPlanTreeSuccess, updateHangarStatus, updateMaxSwaps, updateRackStatus, updateTrailerStatus } from "./flight-section-planning.actions";
 
 export interface FlightSectionPlanningState {
     project: Loadable<Project>;
@@ -16,7 +16,7 @@ export interface FlightSectionPlanningState {
     domainSpecification: Loadable<DomainSpecification>
     services: Loadable<Service[]>;
     tree: Loadable<FlightPlanTree | null>;
-    sections: Loadable<Record<string,FlightSection>>;
+    sections: Loadable<Record<string,FlightsHorizon>>;
     selectedSectionId: null | string;
     selectedConfigIndex: null | number;
     updatedConfiguration: BelugaConfiguration | null;
@@ -93,11 +93,11 @@ export const FlightSectionPlanningReducer = createReducer(
         tree: state.project.data !== undefined && state.project.data._id == tree.project ? 
             {state: LoadingState.Done, data: tree} : state.tree,
     })),
-    on(loadFlightSections, (state): FlightSectionPlanningState => ({
+    on(loadFlightsHorizons, (state): FlightSectionPlanningState => ({
         ...state,
         sections: {state: LoadingState.Loading, data: undefined},
     })),
-    on(loadFlightSectionsSuccess, (state, {sections}): FlightSectionPlanningState => ({
+    on(loadFlightsHorizonsSuccess, (state, {sections}): FlightSectionPlanningState => ({
         ...state,
         sections: {state: LoadingState.Done, data: sections}
     })),
@@ -131,61 +131,64 @@ export const FlightSectionPlanningReducer = createReducer(
                 explanationStatus: ExplanationRunStatus.PENDING
             } : null
     })),
-    on(skipIncomingJig, (state, {index, skip}): FlightSectionPlanningState =>  ({
+    on(skipIncomingJig, (state, {flightIndex, index, skip}): FlightSectionPlanningState =>  ({
         ...state,
         updatedConfiguration: state.updatedConfiguration !== null ? {
             ...state.updatedConfiguration,
             flightTargetSchedule: {
                 ...state.updatedConfiguration.flightTargetSchedule,
-                incoming: [
-                    ...state.updatedConfiguration.flightTargetSchedule.incoming.slice(0,index),
-                    {
-                        ...state.updatedConfiguration.flightTargetSchedule.incoming[index],
-                        skip
-                    },
-                    ...state.updatedConfiguration.flightTargetSchedule.incoming.slice(index + 1),
-                ]
-            }
-        } : null
-        
-    })),
-    on(skipOutgoingJigType, (state, {index, skip}): FlightSectionPlanningState => ({
-        ...state,
-        updatedConfiguration: state.updatedConfiguration !== null ? {
-            ...state.updatedConfiguration,
-            flightTargetSchedule: {
-                ...state.updatedConfiguration.flightTargetSchedule,
-                outgoing: [
-                    ...state.updatedConfiguration.flightTargetSchedule.outgoing.slice(0,index),
-                    {
-                        ...state.updatedConfiguration.flightTargetSchedule.outgoing[index],
-                        skip
-                    },
-                    ...state.updatedConfiguration.flightTargetSchedule.outgoing.slice(index + 1),
-                ]
-            }
-        } : null
-        
-    })),
-    on(skipProductionJig, (state, {productionLineIndex, index, skip}): FlightSectionPlanningState => ({
-        ...state,
-        updatedConfiguration: state.updatedConfiguration !== null ? {
-            ...state.updatedConfiguration,
-            productionLinesTargetSchedule: [
-                ...state.updatedConfiguration.productionLinesTargetSchedule.slice(0,productionLineIndex),
-                {
-                    ...state.updatedConfiguration.productionLinesTargetSchedule[productionLineIndex],
-                    schedule: [
-                        ...state.updatedConfiguration.productionLinesTargetSchedule[productionLineIndex].schedule.slice(0,index),
+                [flightIndex]: {
+                    ...state.updatedConfiguration.flightTargetSchedule[flightIndex],
+                    incoming: [
+                        ...state.updatedConfiguration.flightTargetSchedule[flightIndex].incoming.slice(0,index),
                         {
-                            ...state.updatedConfiguration.productionLinesTargetSchedule[productionLineIndex].schedule[index],
+                            ...state.updatedConfiguration.flightTargetSchedule[flightIndex].incoming[index],
                             skip
                         },
-                        ...state.updatedConfiguration.productionLinesTargetSchedule[productionLineIndex].schedule.slice(index + 1)
+                        ...state.updatedConfiguration.flightTargetSchedule[flightIndex].incoming.slice(index + 1),
+                    ]
+            }}
+        } : null
+        
+    })),
+    on(skipOutgoingJigType, (state, {flightIndex, index, skip}): FlightSectionPlanningState => ({
+        ...state,
+        updatedConfiguration: state.updatedConfiguration !== null ? {
+            ...state.updatedConfiguration,
+            flightTargetSchedule: {
+                ...state.updatedConfiguration.flightTargetSchedule,
+                [flightIndex]: {
+                    ...state.updatedConfiguration.flightTargetSchedule[flightIndex],
+                    outgoing: [
+                        ...state.updatedConfiguration.flightTargetSchedule[flightIndex].outgoing.slice(0,index),
+                        {
+                            ...state.updatedConfiguration.flightTargetSchedule[flightIndex].outgoing[index],
+                            skip
+                        },
+                        ...state.updatedConfiguration.flightTargetSchedule[flightIndex].outgoing.slice(index + 1),
+                    ]
+            }}
+        } : null
+        
+    })),
+    on(skipProductionJig, (state, {productionLineName, index, skip}): FlightSectionPlanningState => ({
+        ...state,
+        updatedConfiguration: state.updatedConfiguration !== null ? {
+            ...state.updatedConfiguration,
+            productionLinesTargetSchedule: {
+                ...state.updatedConfiguration.productionLinesTargetSchedule,
+                [productionLineName]: {
+                    ...state.updatedConfiguration.productionLinesTargetSchedule[productionLineName],
+                    schedule: [
+                        ...state.updatedConfiguration.productionLinesTargetSchedule[productionLineName].schedule.slice(0,index),
+                        {
+                            ...state.updatedConfiguration.productionLinesTargetSchedule[productionLineName].schedule[index],
+                            skip
+                        },
+                        ...state.updatedConfiguration.productionLinesTargetSchedule[productionLineName].schedule.slice(index + 1)
                     ]
                 },
-                ...state.updatedConfiguration.productionLinesTargetSchedule.slice(productionLineIndex + 1),
-            ]
+            }
         } : null
         
     })),

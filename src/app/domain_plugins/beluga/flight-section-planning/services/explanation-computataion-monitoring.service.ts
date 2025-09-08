@@ -1,10 +1,9 @@
 import { inject, Injectable } from '@angular/core';
 import { interval, Observable } from 'rxjs';
-import { exhaustMap, filter, map, take, tap } from 'rxjs/operators';
-import { PlanRunStatus } from 'src/app/iterative_planning/domain/plan';
-import { FlightPlanTreeService } from './flight-plan-tree.service';
-import { FlightSection } from '../domain/flight-section';
+import { exhaustMap, filter, map, take } from 'rxjs/operators';
 import { ExplanationRunStatus } from 'src/app/iterative_planning/domain/explanation/explanations';
+import { FlightPlanTreeService } from './flight-plan-tree.service';
+import { FlightsHorizon } from '../domain/flight-section';
   
 @Injectable()
 export class SectionExplanationComputationMonitoringService {
@@ -26,6 +25,6 @@ export class SectionExplanationComputationMonitoringService {
 
 }
 
-function explanationsFinished(section: FlightSection): boolean[] {
+function explanationsFinished(section: FlightsHorizon): boolean[] {
     return section.configurations.map(c => c.explanationStatus !== ExplanationRunStatus.RUNNING);
 }

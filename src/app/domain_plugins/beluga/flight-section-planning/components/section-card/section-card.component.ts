@@ -1,4 +1,4 @@
-import { Component, computed, inject, input } from '@angular/core';
+import { Component, computed, effect, inject, input } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
@@ -17,7 +17,6 @@ import { StepStatusNamePipe } from 'src/app/iterative_planning/domain/pipe/step-
 import { PlanRunStatus } from 'src/app/iterative_planning/domain/plan';
 import { LabelModule } from 'src/app/shared/components/label/label.module';
 import { Flight } from '../../../shared/domain/beluga_problem';
-import { FlightSection } from '../../domain/flight-section';
 import { computeRackOccupancyRate, computeSwaps } from '../../domain/metrics';
 import { PlanMethod, PlanMethodType } from '../../domain/plan_method';
 import { PlanMethodTypeIconPipe } from '../../pipe/plan-method-type-icon.pipe';
@@ -27,6 +26,7 @@ import { selectActiveBranchRemainingNumberFlights, selectBranchNames, selectIsAu
 import { BranchNameDialogComponent } from '../branch-name-dialog/branch-name-dialog.component';
 import { ConfigurationSelectorComponent } from '../configuration-selector/configuration-selector.component';
 import { SectionPlanMethodDialogComponent } from '../section-plan-method-dialog/section-plan-method-dialog.component';
+import { FlightsHorizon } from '../../domain/flight-section';
 
 @Component({
   selector: 'app-section-card',
@@ -64,24 +64,21 @@ export class SectionCardComponent {
   supportedPlanners= this.store.selectSignal(selectSupportedPlanners);
   remainingNUmberFlights = this.store.selectSignal(selectActiveBranchRemainingNumberFlights);
 
-  section = input.required<FlightSection>();
-  originalFlight = input.required<Flight>();
+  section = input.required<FlightsHorizon>();
 
   config = computed(() => this.section().configurations[this.section().configurationIndex]);
   selectedConfigSolvable = computed(() => this.config().explanationStatus == ExplanationRunStatus.FINISHED && this.config().explanations?.MUGS.length == 0);
   selectedConfigId = computed(() => this.section()?.configurationIndex);
   configurations = computed(() => this.section()?.configurations);
 
-  numOutgoing = computed(() => this.config()?.flightTargetSchedule?.outgoing.length ?? undefined)
-  numOutgoingConsidered = computed(() => this.config()?.flightTargetSchedule?.outgoing.filter(e => !e.skip).length ?? undefined)
+  numFlights = computed(() => this.section().flightIndices.length)
 
-  numIncoming = computed(() => this.config()?.flightTargetSchedule?.incoming.length ?? undefined)
-  numIncomingConsidered = computed(() => this.config()?.flightTargetSchedule?.incoming.filter(e => !e.skip).length ?? undefined)
+  name = computed(() => "Flights: " + this.section()?.flightIndices.join(" - "))
 
-  numPossibleDeliveries = computed(() => sum(this.config()?.productionLinesTargetSchedule?.
+  numPossibleDeliveries = computed(() => sum(Object.values(this.config()?.productionLinesTargetSchedule)?.
     map(pl => ({...pl, schedule: pl.schedule.filter(e => !e.skip)})).
     map(pl => pl.schedule.length) ?? []))
-  numOverallDeliveries = computed(() => sum(this.config()?.productionLinesTargetSchedule?.map(pl => pl.schedule.length) ?? []))
+  numOverallDeliveries = computed(() => sum(Object.values(this.config()?.productionLinesTargetSchedule)?.map(pl => pl.schedule.length) ?? []))
 
   highlighted = input<boolean>(false);
 
@@ -158,5 +155,9 @@ export class SectionCardComponent {
 
   onUpdateConfiguration(){
     this.store.dispatch(updateConfigurationOfSectionAndConfigIndex({section: this.section(), index: this.section().configurationIndex}))
+  }
+
+  constructor(){
+    effect(() => console.log(this.section().configurations[0].flightTargetSchedule[0]))
   }
 }

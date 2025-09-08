@@ -4,7 +4,7 @@ import { of } from "rxjs";
 import { catchError, map, switchMap } from "rxjs/operators";
 import { FlightPlanTreeService } from "../../services/flight-plan-tree.service";
 import { deriveSuccessor } from "../../domain/flight-section";
-import { createFlightSection, createFlightSectionFailure, createFlightSectionSuccess, createSuccessorFlightSection, loadFlightSections, reloadFlightPlanTree } from "../flight-section-planning.actions";
+import { createFlightsHorizon, createFlightsHorizonFailure, createFlightsHorizonSuccess, createSuccessorFlightsHorizon, loadFlightsHorizons, reloadFlightPlanTree } from "../flight-section-planning.actions";
 import { concatLatestFrom } from "@ngrx/operators";
 import { Store } from "@ngrx/store";
 import { selectTask } from "../flight-section-planning.selector";
@@ -19,29 +19,29 @@ export class CreateFlightSectionEffect{
     private service = inject(FlightPlanTreeService)
 
     public create$ = createEffect(() => this.actions$.pipe(
-        ofType(createFlightSection),
+        ofType(createFlightsHorizon),
         switchMap(({section}) => this.service.postSection$(section).pipe(
-            map(section => createFlightSectionSuccess({section})),
-            catchError((e) => of(createFlightSectionFailure({err: e})))
+            map(section => createFlightsHorizonSuccess({section})),
+            catchError((e) => of(createFlightsHorizonFailure({err: e})))
         ))
     ))
 
     public createSuccessor$ = createEffect(() => this.actions$.pipe(
-        ofType(createSuccessorFlightSection),
+        ofType(createSuccessorFlightsHorizon),
         concatLatestFrom(() => this.store.select(selectTask)),
         filterListNotNullOrUndefined(),
-        switchMap(([{section}, task]) => {
-                let sucSection = deriveSuccessor(section, task.flights[section.flightIndex + 1]);
+        switchMap(([{section, flights, indices}, task]) => {
+                let sucSection = deriveSuccessor(section, flights, indices); //TODO
                 if(sucSection === undefined){
-                    return [createFlightSectionFailure({err: {message: "Successor section could not be derived!"}})]
+                    return [createFlightsHorizonFailure({err: {message: "Successor section could not be derived!"}})]
                 }
                 return this.service.postSection$(sucSection).pipe(
                     switchMap(section => [
-                        createFlightSectionSuccess({section}),
-                        loadFlightSections({treeId: section.treeId}),
+                        createFlightsHorizonSuccess({section}),
+                        loadFlightsHorizons({treeId: section.treeId}),
                         reloadFlightPlanTree({id: section.treeId})
                     ]),
-                    catchError((e) => of(createFlightSectionFailure({err: e})))
+                    catchError((e) => of(createFlightsHorizonFailure({err: e})))
                 )
             })
         ))

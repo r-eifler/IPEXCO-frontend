@@ -106,14 +106,16 @@ export class ConfigurationUpdateViewComponent {
   }
 
   onChangeIncomingFlight(change: {index: number, skip:boolean}){
-    this.store.dispatch(skipIncomingJig({index: change.index, skip: change.skip}));
+    this.store.dispatch(skipIncomingJig({flightIndex: 0, index: change.index, skip: change.skip}));
+    // TODO set flightIndex 
   }
 
   onChangeOutgoingFlight(change: {index: number, skip:boolean}){
-    this.store.dispatch(skipOutgoingJigType({index: change.index, skip: change.skip}));
+    this.store.dispatch(skipOutgoingJigType({flightIndex: 0, index: change.index, skip: change.skip}));
+    // TODO set flightIndex 
   }
 
-  onChangeProductionTarget(change: {productionLineIndex: number, index: number, skip:boolean}){
-    this.store.dispatch(skipProductionJig({productionLineIndex: change.productionLineIndex, index: change.index, skip: change.skip}));
+  onChangeProductionTarget(change: {productionLineName: string, index: number, skip:boolean}){
+    this.store.dispatch(skipProductionJig({productionLineName: change.productionLineName, index: change.index, skip: change.skip}));
   }
 }

@@ -11,6 +11,7 @@ import { PlanMethodZ } from "./plan_method";
 
 
 export const FlightTargetScheduleZ = object({
+    originalIndex: number(),
     name: string(),
     incoming: array(object({
         jig: string(),
@@ -25,17 +26,18 @@ export const FlightTargetScheduleZ = object({
 
 export type FlightTargetSchedule = zinfer<typeof FlightTargetScheduleZ>;
 
-export function getConsideredFlightSchedule(flight: FlightTargetSchedule){
-    return getFlightSchedule(flight, false)
+export function getConsideredFlightSchedule(flights: Record<number,FlightTargetSchedule>, indices: number[]){
+    let orderedFlights = indices.map(index => flights[index])
+    return getFlightSchedule(orderedFlights, indices, false)
 }
 
-export function getFlightSchedule(flight: FlightTargetSchedule, skipped: boolean){
-    return {
-        name: flight.name,
-        incoming: flight.incoming.filter(j => j.skip === skipped).map(j => j.jig),
-        outgoing: flight.outgoing.filter(j => j.skip === skipped).map(j => j.jigType),
+export function getFlightSchedule(flights: Record<number,FlightTargetSchedule>, indices: number[], skipped: boolean){
+    return indices.map(index => ({
+        name: flights[index].name,
+        incoming: flights[index].incoming.filter(j => j.skip === skipped).map(j => j.jig),
+        outgoing: flights[index].outgoing.filter(j => j.skip === skipped).map(j => j.jigType),
         stageType: 'flight' as const
-    }
+    }));
 }
 
 export const ProductionLineTargetScheduleZ = object({
@@ -116,8 +118,8 @@ export type Explanations = zinfer<typeof ExplanationsZ>;
 
 export const BelugaConfigurationZ = object({
     siteSetUp: BelugaSiteSetUpZ,
-    flightTargetSchedule: FlightTargetScheduleZ,
-    productionLinesTargetSchedule: array(ProductionLineTargetScheduleZ),
+    flightTargetSchedule: record(string(),FlightTargetScheduleZ),
+    productionLinesTargetSchedule: record(string(),ProductionLineTargetScheduleZ),
     maxSwaps: nullable(number()),
     minEmptyRacks: nullable(number()),
     explanations: nullable(ExplanationsZ),
@@ -126,11 +128,11 @@ export const BelugaConfigurationZ = object({
 
 export type BelugaConfiguration = zinfer<typeof BelugaConfigurationZ>;
 
-export const FlightSectionBaseZ = object({
+export const FlightsHorizonBaseZ = object({
     predecessorId: nullable(string()),
     treeId: string(),
 
-    flightIndex: number(),
+    flightIndices: array(number()),
     siteState: BelugaSiteStateZ,
     configurationIndex: number(),
     configurations: array(BelugaConfigurationZ),
@@ -141,15 +143,15 @@ export const FlightSectionBaseZ = object({
     finished: boolean(),
 })
 
-export type FlightSectionBase = zinfer<typeof FlightSectionBaseZ>;
+export type FlightsHorizonBase = zinfer<typeof FlightsHorizonBaseZ>;
 
-export const FlightSectionZ = FlightSectionBaseZ.merge(object({
+export const FlightsHorizonZ = FlightsHorizonBaseZ.merge(object({
         _id: string(),
         user: string(),
     })
 );
 
-export type FlightSection = zinfer<typeof FlightSectionZ>;
+export type FlightsHorizon = zinfer<typeof FlightsHorizonZ>;
 
 export const FlightPlanBranchZ = object({
     name: string(),
@@ -160,7 +162,6 @@ export type FlightPlanBranch = zinfer<typeof FlightPlanBranchZ>;
 
 
 export const FlightPlanTreeBaseZ = object({
-    // sections: record(string(), FlightSectionZ),
     branches: array(FlightPlanBranchZ),
     selectedBranch: number(),
     selectedSectionId: nullable(string()),
@@ -180,22 +181,22 @@ export const FlightPlanTreeZ = FlightPlanTreeBaseZ.merge(object({
 export type FlightPlanTree = zinfer<typeof FlightPlanTreeZ>;
 
 
-export function getFullStartState(section: FlightSection | undefined | null){
+export function getFullStartState(section: FlightsHorizon | undefined | null){
     if(section === undefined || section === null){
         return undefined;
     }
     const config = section.configurations[section.configurationIndex];
     const state: BelugaState = {
         ...section.siteState,
-        flightIndex: section.flightIndex,
+        flightIndex: section.flightIndices[0],
         incomingUnloaded: [],
         outgoingLoaded: [],
-        productionLines: config.productionLinesTargetSchedule.reduce((acc,c) => ({...acc, [c.name]: []}),{})
+        productionLines: Object.keys(config.productionLinesTargetSchedule).reduce((acc, name) => ({...acc, [name]: []}),{})
     }
     return state;
 }
 
-export function getTaskFromSection(section: FlightSection){
+export function getTaskFromSection(section: FlightsHorizon){
 
     const state = section.siteState;
     const config = section.configurations[section.configurationIndex];
@@ -220,20 +221,20 @@ export function getTaskFromSection(section: FlightSection){
             jig: state.trailers[t.name],
         })),
         jig_types: setUp.jig_types,
-        production_lines: config.productionLinesTargetSchedule.map(pl => ({
+        production_lines: Object.values(config.productionLinesTargetSchedule).map(pl => ({
             ...pl,
             schedule: pl.schedule.filter(j => !j.skip).map(j => j.jig),
         })),
-        flights: [{
-            ...config.flightTargetSchedule,
-            incoming: config.flightTargetSchedule.incoming.filter(j => !j.skip).map(j => j.jig),
-            outgoing: config.flightTargetSchedule.outgoing.filter(j => !j.skip).map(j => j.jigType),
-        }]
+        flights: Object.values(config.flightTargetSchedule).map(flight => ({
+            ...flight,
+            incoming: flight.incoming.filter(j => !j.skip).map(j => j.jig),
+            outgoing: flight.outgoing.filter(j => !j.skip).map(j => j.jigType),
+        }))
     }
     return task;
 }
 
-export function projectTaskToSection(task: BelugaProblem, section: FlightSection, numFlights = 1){
+export function projectTaskToSection(task: BelugaProblem, section: FlightsHorizon, numFlights = 1){
 
     const state = getFullStartState(section);
 
@@ -241,7 +242,7 @@ export function projectTaskToSection(task: BelugaProblem, section: FlightSection
         return undefined;
     }
 
-    projectTaskToState(task, state, section.flightIndex, numFlights = 1);
+    projectTaskToState(task, state, section.flightIndices);
 }
 
 
@@ -258,14 +259,15 @@ export function getJigsOnSiteFromState(state: BelugaSiteState, flights: Flight[]
     return consideredJigs;
 }
 
-export function getJigsOnSiteFromSection(section: FlightSection){
+export function getJigsOnSiteFromSection(section: FlightsHorizon){
 
     const config = section.configurations[section.configurationIndex];
     const consideredJigs = new Set<string>();
 
-    config.flightTargetSchedule.incoming.
+    Object.values(config.flightTargetSchedule).forEach( flight => flight.incoming.
         filter(e => !e.skip).
-        forEach(e => consideredJigs.add(e.jig));
+        forEach(e => consideredJigs.add(e.jig))
+    );
     
     Object.values(section.siteState.racks).forEach(r => r.forEach(j => consideredJigs.add(j)));
     Object.values(section.siteState.trailers).forEach(j => {if(j !== null){consideredJigs.add(j)}});
@@ -274,9 +276,9 @@ export function getJigsOnSiteFromSection(section: FlightSection){
     return consideredJigs;
 }
 
-export function projectTaskToState(task: BelugaProblem, state: BelugaState, flightIndex: number, numFlights = 1){
+export function projectTaskToState(task: BelugaProblem, state: BelugaState, flightIndices: number[]){
 
-    const consideredJigs = getJigsOnSiteFromState(state, task.flights.slice(flightIndex, flightIndex + numFlights));
+    const consideredJigs = getJigsOnSiteFromState(state, task.flights.filter((e,i) => flightIndices.includes(i)));
 
     let productionLineProjections =  task.production_lines.map(
         pl => ({...pl, schedule: filterUpTo(pl.schedule.filter(j => ! state.productionLines[pl.name].includes(j)), consideredJigs)})
@@ -290,7 +292,7 @@ export function projectTaskToState(task: BelugaProblem, state: BelugaState, flig
         trailers_factory: task.trailers_factory.map(t => ({...t, jig: state.trailers[t.name]})),
         jig_types: task.jig_types,
         production_lines: productionLineProjections,
-        flights: task.flights.slice(flightIndex, flightIndex + numFlights)
+        flights: flightIndices.map(i => task.flights[i])
     }
 
     return projection;
@@ -309,29 +311,29 @@ export function filterUpTo(collection: string[], considered: Set<string>){
     return res;
 }
 
-export function deriveSuccessor(section: FlightSection, flight: Flight){
+export function deriveSuccessor(section: FlightsHorizon, flights: Flight[], flightIndices: number[]){
 
     const config = section.configurations[section.configurationIndex];
 
     let newStartState = applyActions(
         getFullStartState(section), 
         section.actions, 
-        getFlightSchedule(config.flightTargetSchedule, false),  
-        getProductionSchedule(config.productionLinesTargetSchedule ?? [],false) , 
+        getFlightSchedule(config.flightTargetSchedule, section.flightIndices, false),  
+        getProductionSchedule(Object.values(config.productionLinesTargetSchedule) ?? [],false) , 
         config.siteSetUp
     );
     if (newStartState == undefined){
         return undefined;
     }
 
-    const jigsOnSite = getJigsOnSiteFromState(newStartState, [flight])
+    const jigsOnSite = getJigsOnSiteFromState(newStartState, flights)
     const jigTypesOnSite = [...jigsOnSite].map(jn => section.siteState.jigs[jn].type)
 
-    let suc: FlightSectionBase = {
+    let suc: FlightsHorizonBase = {
         predecessorId: section._id,
         treeId: section.treeId,
 
-        flightIndex: section.flightIndex + 1,
+        flightIndices,
         siteState: {
             jigs: newStartState.jigs,
             racks: newStartState.racks,
@@ -342,37 +344,43 @@ export function deriveSuccessor(section: FlightSection, flight: Flight){
         configurationIndex: 0,
         configurations: [{
             siteSetUp: config.siteSetUp,
-            flightTargetSchedule: { 
-                name: flight.name, 
-                incoming: flight.incoming.map(jn => ({ 
-                    jig: jn, 
-                    skip: false,
-                })), 
-                outgoing: flight.outgoing.map(jt => {
-                    const index = jigTypesOnSite.findIndex(t => t === jt);
-                    if(index !== -1){
-                        jigTypesOnSite.splice(index,1)
-                    }
-                    return { 
-                        jigType: jt, 
+            flightTargetSchedule: flights.reduce((acc, flight, index) => ({
+                ...acc,
+                [index]: { 
+                    originalIndex: flightIndices[index],
+                    name: flight.name, 
+                    incoming: flight.incoming.map(jn => ({ 
+                        jig: jn, 
                         skip: false,
-                        onSite: index !== -1,
-                    }
-                }) 
-            },
-            productionLinesTargetSchedule: config.productionLinesTargetSchedule.map(tpl => { 
+                    })), 
+                    outgoing: flight.outgoing.map(jt => {
+                        const index = jigTypesOnSite.findIndex(t => t === jt);
+                        if(index !== -1){
+                            jigTypesOnSite.splice(index,1)
+                        }
+                        return { 
+                            jigType: jt, 
+                            skip: false,
+                            onSite: index !== -1,
+                        }
+                    }) 
+                }
+            }), {}),
+            productionLinesTargetSchedule: Object.values(config.productionLinesTargetSchedule).reduce((acc,tpl) => { 
                 const endDelivery = tpl.schedule.findLastIndex(e => newStartState.productionLines[tpl.name].includes(e.jig))
                 const remainingSchedule = tpl.schedule.slice(endDelivery + 1)
                 const toDeliver = remainingSchedule.map(e => e.jig)
                 const notBlocked = filterUpTo(toDeliver, jigsOnSite)
                 return {
-                    name: tpl.name, 
-                    schedule: remainingSchedule.map(e => ({ 
-                        jig: e.jig, 
-                        ...initialDeliveryStatuses(e.jig, jigsOnSite, notBlocked)
-                    }))
-                }
-            }),
+                    ...acc, 
+                    [tpl.name]: {
+                        name: tpl.name, 
+                        schedule: remainingSchedule.map(e => ({ 
+                            jig: e.jig, 
+                            ...initialDeliveryStatuses(e.jig, jigsOnSite, notBlocked)
+                        }))
+                }}
+            }, {}),
             maxSwaps: config.maxSwaps,
             minEmptyRacks: config.minEmptyRacks,
             explanations: null,

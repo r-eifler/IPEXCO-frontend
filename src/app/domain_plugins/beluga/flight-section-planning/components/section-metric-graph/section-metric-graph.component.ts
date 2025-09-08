@@ -1,10 +1,10 @@
 import { Component, computed, effect, inject, input } from '@angular/core';
-import { FlightSection } from '../../domain/flight-section';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { PlanRunStatus } from 'src/app/iterative_planning/domain/plan';
 import { metricsFunctionMap, MetricType } from '../../domain/metrics';
 import { BelugaProblem } from '../../../shared/domain/beluga_problem';
 import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
+import { FlightsHorizon } from '../../domain/flight-section';
 
 @Component({
   selector: 'app-section-metric-graph',
@@ -34,7 +34,7 @@ export class SectionMetricGraphComponent {
 
   branchSections = input.required<{
     name: string, 
-    sections: FlightSection[]
+    sections: FlightsHorizon[]
   }[]>();
 
   metric = input.required<MetricType>();

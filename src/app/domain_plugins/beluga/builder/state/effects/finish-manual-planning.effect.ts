@@ -5,7 +5,7 @@ import { concatLatestFrom } from "@ngrx/operators";
 import { Store } from "@ngrx/store";
 import { switchMap } from "rxjs";
 import { PlanRunStatus } from "src/app/iterative_planning/domain/plan";
-import { finishManualPlanning, finishManualPlanningFailure, updateFlightSection } from "../builder.actions";
+import { finishManualPlanning, finishManualPlanningFailure, updateFlightsHorizon } from "../builder.actions";
 import { selectProject, selectSection, selectTaskState } from "../builder.selector";
 import { selectConfig } from "../builder.feature";
 import { skipNotDelivered } from "../../domain/schedule_utils";
@@ -28,7 +28,7 @@ export class FinishManualPlanningEffect{
                     productionLinesTargetSchedule: skipNotDelivered(config.productionLinesTargetSchedule, taskState.productionLines),
                 }
                 return [
-                    updateFlightSection({section:{
+                    updateFlightsHorizon({section:{
                         ...section,
                         actions: actions,
                         configurations: [

@@ -4,7 +4,7 @@ import { concatLatestFrom } from "@ngrx/operators";
 import { of } from "rxjs";
 import { catchError, switchMap } from "rxjs/operators";
 import { FlightPlanTreeService } from "../../services/flight-plan-tree.service";
-import { initFlightPlanTree, initFlightPlanTreeFailure, initFlightPlanTreeSuccess, loadFlightPlanTreeSuccess, loadFlightSections } from "../flight-section-planning.actions";
+import { initFlightPlanTree, initFlightPlanTreeFailure, initFlightPlanTreeSuccess, loadFlightPlanTreeSuccess, loadFlightsHorizons } from "../flight-section-planning.actions";
 import { selectTask } from "../flight-section-planning.selector";
 import { Store } from "@ngrx/store";
 import { filterListNotNullOrUndefined } from "src/app/shared/common/check_null_undefined";
@@ -25,7 +25,7 @@ export class CreateFlightPlanTreeEffect{
             switchMap(tree => [
                 initFlightPlanTreeSuccess({tree}), 
                 loadFlightPlanTreeSuccess({tree}),
-                loadFlightSections({treeId: tree._id})
+                loadFlightsHorizons({treeId: tree._id})
             ]),
             catchError((e) => of(initFlightPlanTreeFailure({err: e})))
         ))

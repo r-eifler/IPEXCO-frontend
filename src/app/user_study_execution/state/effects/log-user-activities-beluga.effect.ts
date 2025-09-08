@@ -3,7 +3,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { concatLatestFrom } from '@ngrx/operators';
 import { Action, Store } from '@ngrx/store';
 import { switchMap } from 'rxjs/operators';
-import { automaticPlanningFinishedSuccess, cancelConfigurationUpdate, createFlightSectionSuccess, explanationsFinishedSuccess, inspectConfig, inspectPlan, newConfiguration, registerManualPlanning, saveConfiguration, skipIncomingJig, skipOutgoingJigType, skipProductionJig, startAutomaticPlanning, startExplanations, stopInspectPlan, updateConfigurationOfSectionAndConfigIndex, updateEmptyRacks, updateHangarStatus, updateMaxSwaps, updateRackStatus, updateTrailerStatus } from 'src/app/domain_plugins/beluga/flight-section-planning/state/flight-section-planning.actions';
+import { automaticPlanningFinishedSuccess, cancelConfigurationUpdate, createFlightsHorizonSuccess, explanationsFinishedSuccess, inspectConfig, inspectPlan, newConfiguration, registerManualPlanning, saveConfiguration, skipIncomingJig, skipOutgoingJigType, skipProductionJig, startAutomaticPlanning, startExplanations, stopInspectPlan, updateConfigurationOfSectionAndConfigIndex, updateEmptyRacks, updateHangarStatus, updateMaxSwaps, updateRackStatus, updateTrailerStatus } from 'src/app/domain_plugins/beluga/flight-section-planning/state/flight-section-planning.actions';
 import { selectSelectedConfigIndex } from 'src/app/domain_plugins/beluga/flight-section-planning/state/flight-section-planning.feature';
 import { selectSelectedSection, selectUpdatingConfiguration } from 'src/app/domain_plugins/beluga/flight-section-planning/state/flight-section-planning.selector';
 import { ActionType } from '../../domain/user-action';
@@ -21,7 +21,7 @@ export class LogUserActivitiesBelugaEffect{
     private store = inject(Store);
 
     public nextFlightSection$ = createEffect(() => this.actions$.pipe(
-        ofType(createFlightSectionSuccess),
+        ofType(createFlightsHorizonSuccess),
         switchMap(({section}) => [
             logAction({action: {
                 type: ActionType.NEXT_FLIGHT_SECTION, 
@@ -139,12 +139,12 @@ export class LogUserActivitiesBelugaEffect{
 
     public updateConfigProductionAction$ = createEffect(() => this.actions$.pipe(
         ofType(skipProductionJig),
-        switchMap(({productionLineIndex, index, skip}) => [
+        switchMap(({productionLineName, index, skip}) => [
             logAction({action: {
                 type: ActionType.UPDATE_CONFIGURATION, 
                 data: {
                     type: 'production',
-                    productionLineIndex,
+                    productionLineName,
                     index,
                     value: skip,
                 }
@@ -433,7 +433,7 @@ export class LogUserActivitiesBelugaEffect{
 
      public performSkipProductionAction$ = createEffect(() => this.actions$.pipe(
         ofType(builderSkipProductionJig),
-        switchMap(({jigName, productionLine}) => {
+        switchMap(({jigName, productionLineName}) => {
             return [
                 logAction({action: {
                     type: ActionType.UPDATE_CONFIGURATION_MANUAL_PLANNING, 

@@ -4,16 +4,16 @@ import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { environment } from "src/environments/environment";
 import { boolean } from "zod";
-import { FlightSection, FlightSectionZ } from "../domain/flight-section";
+import { FlightsHorizon, FlightsHorizonZ } from "../domain/flight-section";
 
 
 @Injectable()
-export class FlightSectionExplanationService{
+export class FlightsHorizonExplanationService{
 
     private http = inject(HttpClient)
     private BASE_URL = environment.apiURL + "flight-section-explanation/";
 
-    postExplanationRequest$(section: FlightSection, configIndex: number): Observable<FlightSection> {
+    postExplanationRequest$(section: FlightsHorizon, configIndex: number): Observable<FlightsHorizon> {
 
       let data = {
         section,
@@ -21,7 +21,7 @@ export class FlightSectionExplanationService{
       }
 
       return this.http.post<unknown>(this.BASE_URL, data).pipe(
-        map(data => FlightSectionZ.parse(data)),
+        map(data => FlightsHorizonZ.parse(data)),
       )
     }
 

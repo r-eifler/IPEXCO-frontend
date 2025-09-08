@@ -58,15 +58,18 @@ export const selectTaskState = createSelector(BuilderFeature.selectTaskState,
 export const selectJigsState = createSelector(selectTaskState, 
     (taskState) => taskState?.jigs);
 
+export const selectFlightIndexState = createSelector(selectTaskState, 
+    (taskState) => taskState?.flightIndex);
+
 
 //##########################################
 // flight
 
-export const selectFlightSchedule= createSelector(selectConfig, 
-    (config) => config === null ? undefined : config?.flightTargetSchedule);
+export const selectFlightSchedule= createSelector(selectFlightIndexState, selectConfig, 
+    (index, config) => config === null || index === undefined ? undefined : config?.flightTargetSchedule[index]);
 
 export const selectFlightName = createSelector(selectFlightSchedule, 
-    (flight) => flight?.name);
+    (flight) => flight !== undefined ? flight?.name : "Unknown");
     
 
 // Incoming
@@ -282,13 +285,13 @@ export const selectAvailableHangarNames = createSelector(selectHangars, selectHa
 // ProductionLine 
 
 export const selectProductionLineSchedule = createSelector(selectConfig, 
-    (config) => config === null ? undefined : config.productionLinesTargetSchedule
+    (config) => config === null ? undefined : Object.values(config.productionLinesTargetSchedule)
 );
 
 export const selectProductionLineScheduleFor = memoizeWith(
     (name: string) => name,
     (name: string) =>  createSelector(selectProductionLineSchedule,
-        (targetSchedules) => targetSchedules?.find(pl => pl.name == name)
+        (targetSchedules) => targetSchedules?.[name]
     )
 ); 
 
@@ -307,7 +310,7 @@ export const selectDeliverableJigs = createSelector(selectProductionLineSchedule
         if(pls === undefined || pls === null || delivered === undefined){
             return []
         }
-        return pls.reduce((acc, pl) => (
+        return Object.values(pls).reduce((acc, pl) => (
             {
                 ...acc, 
                 [pl.schedule.find(e => !e.skip && !delivered[pl.name].includes(e.jig))?.jig ?? 'none']: pl.name

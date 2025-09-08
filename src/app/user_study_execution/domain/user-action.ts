@@ -1,4 +1,4 @@
-import { BelugaConfiguration, FlightSection } from "src/app/domain_plugins/beluga/flight-section-planning/domain/flight-section"
+import { BelugaConfiguration, FlightsHorizon } from "src/app/domain_plugins/beluga/flight-section-planning/domain/flight-section"
 import { BelugaAction } from "src/app/domain_plugins/beluga/shared/domain/beluga_plan"
 import { BelugaSiteSetUp } from "src/app/domain_plugins/beluga/shared/domain/site_set_up"
 import { QuestionType } from "src/app/iterative_planning/domain/explanation/explanations"
@@ -231,7 +231,7 @@ export interface EndTaskUserAction extends UserAction {
 export interface NextFlightSectionUserAction extends UserAction {
     type: ActionType.NEXT_FLIGHT_SECTION
     data: {
-        section: FlightSection;
+        section: FlightsHorizon;
     }
 }
 

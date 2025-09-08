@@ -61,7 +61,8 @@ export class IncomingFlightStateComponent {
   onSkip(){
     let jigName = this.nextJig()?.name;
     if(jigName !== undefined){
-      this.store.dispatch(skipIncomingJig({jigName}))
+      this.store.dispatch(skipIncomingJig({jigName, flightIndex: 0}))
+      // TODO set flightIndex
     }
   }
 

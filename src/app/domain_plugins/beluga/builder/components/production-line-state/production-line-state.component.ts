@@ -46,7 +46,7 @@ export class ProductionLineStateComponent {
     if(nextJigStatus === undefined ||  nextJigStatus.jig === undefined){
       return
     }
-    this.store.dispatch(skipProductionJig({jigName: nextJigStatus.jig?.name, productionLine: this.productionLineName()}))
+    this.store.dispatch(skipProductionJig({jigName: nextJigStatus.jig?.name, productionLineName: this.productionLineName()}))
   }
 
   constructor(){

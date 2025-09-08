@@ -1,7 +1,7 @@
 import { sum } from "ramda";
 import { BelugaAction, BelugaActionType } from "../../shared/domain/beluga_plan";
 import { applyAction, BelugaState } from "../../shared/domain/beluga_state";
-import { FlightSection, getConsideredFlightSchedule, getConsideredProductionSchedule, getFullStartState } from "./flight-section";
+import { FlightsHorizon, getConsideredFlightSchedule, getConsideredProductionSchedule, getFullStartState } from "./flight-section";
 
 export enum MetricType {
     PLAN_LENGTH = "plan_length",
@@ -28,11 +28,11 @@ export function computeSwaps(actions: BelugaAction[]){
     return num_swaps;
 }
 
-export function computeRackOccupancyRate(section: FlightSection, actions: BelugaAction[]){
+export function computeRackOccupancyRate(section: FlightsHorizon, actions: BelugaAction[]){
     const config = section.configurations[section.configurationIndex];
     let cs: BelugaState | undefined = getFullStartState(section);
-    const flightSchedule = getConsideredFlightSchedule(config.flightTargetSchedule)
-    const productionSchedule = getConsideredProductionSchedule(config.productionLinesTargetSchedule)
+    const flightSchedule = getConsideredFlightSchedule(config.flightTargetSchedule, section.flightIndices)
+    const productionSchedule = getConsideredProductionSchedule(Object.values(config.productionLinesTargetSchedule))
 
     if(cs == undefined){
         return undefined;
@@ -58,7 +58,7 @@ export function computePlanLength(actions: BelugaAction[]){
 }
 
 export const metricsFunctionMap = {
-    [MetricType.PLAN_LENGTH]: (section: FlightSection) => computePlanLength(section.actions),
-    [MetricType.NUM_SWAPS]: (section: FlightSection) => computeSwaps(section.actions),
-    [MetricType.RACK_OCCUPANCY]: (section: FlightSection) => computeRackOccupancyRate(section, section.actions),
+    [MetricType.PLAN_LENGTH]: (section: FlightsHorizon) => computePlanLength(section.actions),
+    [MetricType.NUM_SWAPS]: (section: FlightsHorizon) => computeSwaps(section.actions),
+    [MetricType.RACK_OCCUPANCY]: (section: FlightsHorizon) => computeRackOccupancyRate(section, section.actions),
 }

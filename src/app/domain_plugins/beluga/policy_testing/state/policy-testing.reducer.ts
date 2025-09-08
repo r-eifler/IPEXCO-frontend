@@ -3,7 +3,7 @@ import { Loadable, LoadingState } from "src/app/shared/common/loadable.interface
 import { Project } from "src/app/shared/domain/project";
 import { loadProject, loadProjectSuccess, loadTestCollections, loadTestCollectionsSuccess, selectTestSuite, loadFlightSections, loadFlightSectionsSuccess, loadFlightPlanTreeSuccess, selectTestCase } from "./policy-testing.actions";
 import { TestSuite } from "../domain/tests";
-import { FlightPlanTree, FlightSection } from "../../flight-section-planning/domain/flight-section";
+import { FlightPlanTree, FlightsHorizon } from "../../flight-section-planning/domain/flight-section";
 import { updateFlightPlanTreeSuccess } from "../../flight-section-planning/state/flight-section-planning.actions";
 
 export interface PolicyTestingState {
@@ -12,7 +12,7 @@ export interface PolicyTestingState {
     selectedTestSuiteId: null | string,
     selectedTestCaseIndex: null | number,
     tree: Loadable<FlightPlanTree | null>;
-    sections: Loadable<Record<string,FlightSection>>;
+    sections: Loadable<Record<string,FlightsHorizon>>;
 }
 
 const initialState: PolicyTestingState = {

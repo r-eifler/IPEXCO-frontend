@@ -5,7 +5,7 @@ import { concatLatestFrom } from "@ngrx/operators";
 import { Store } from "@ngrx/store";
 import { switchMap, tap } from "rxjs";
 import { PlanRunStatus } from "src/app/iterative_planning/domain/plan";
-import { cancelManualPlanning, cancelManualPlanningFailure, updateFlightSection } from "../builder.actions";
+import { cancelManualPlanning, cancelManualPlanningFailure, updateFlightsHorizon } from "../builder.actions";
 import { selectProject, selectSection } from "../builder.selector";
 
 
@@ -23,7 +23,7 @@ export class CancelManualPlanningEffect{
         switchMap(([_, section, project]) => {
             if(section !== undefined && project !== undefined){
                 return [
-                    updateFlightSection({section:{
+                    updateFlightsHorizon({section:{
                         ...section,
                         actions: [],
                         status: PlanRunStatus.CANCELED,

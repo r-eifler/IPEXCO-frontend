@@ -5,7 +5,7 @@ import { map } from "rxjs/operators";
 import { environment } from "src/environments/environment";
 import { array } from "zod";
 import { BelugaSiteSetUp, BelugaSiteState } from "../../shared/domain/site_set_up";
-import { FlightPlanTree, FlightPlanTreeZ, FlightSection, FlightSectionZ, FlightTargetSchedule, ProductionLineTargetSchedule } from "../../flight-section-planning/domain/flight-section";
+import { FlightPlanTree, FlightPlanTreeZ, FlightsHorizon, FlightsHorizonZ, FlightTargetSchedule, ProductionLineTargetSchedule } from "../../flight-section-planning/domain/flight-section";
 
 
 
@@ -34,13 +34,13 @@ export class TestingFlightPlanTreeService{
         )
     }
 
-    getSections$(treeId: string): Observable<Record<string,FlightSection>> {
+    getSections$(treeId: string): Observable<Record<string,FlightsHorizon>> {
 
       let httpParams = new HttpParams();
       httpParams = httpParams.set('treeId', treeId);
 
       return this.http.get<unknown>(this.BASE_URL + 'section/',  { params: httpParams }).pipe(
-          map(data => array(FlightSectionZ).parse(data)),
+          map(data => array(FlightsHorizonZ).parse(data)),
           map(sections => sections.reduce((acc, c) => ({...acc,[c._id]: c}), {}))
       )
     }

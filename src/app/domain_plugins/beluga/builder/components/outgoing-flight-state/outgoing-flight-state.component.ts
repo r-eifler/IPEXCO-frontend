@@ -62,7 +62,8 @@ export class OutgoingFlightStateComponent {
     let jigType = this.nextJigType();
     let index = this.nextJigTypeIndex();
     if(jigType !== null && index !== undefined){
-      this.store.dispatch(skipOutgoingJigType({jigType, index}))
+      this.store.dispatch(skipOutgoingJigType({jigType, flightIndex: 0, index}))
+      // TODO set flightIndex
     }
   }
 

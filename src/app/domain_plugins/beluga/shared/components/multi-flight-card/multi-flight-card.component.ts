@@ -22,7 +22,7 @@ export class MultiFlightCardComponent {
 
   selectedFlight = computed(() => {
     let index = this.selectedFlightIndex();
-    if(index == null || index > this.flights().length){
+    if(index == null || index > this.flights()?.length){
       return null;
     }
     return this.flights()?.[index]

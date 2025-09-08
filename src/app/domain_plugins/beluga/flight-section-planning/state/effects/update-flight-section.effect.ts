@@ -5,7 +5,7 @@ import { Store } from "@ngrx/store";
 import { of } from "rxjs";
 import { catchError, switchMap } from "rxjs/operators";
 import { FlightPlanTreeService } from "../../services/flight-plan-tree.service";
-import { loadFlightSections, saveConfiguration, updateFlightSection, updateFlightSectionFailure, updateFlightSectionSuccess, useConfiguration } from "../flight-section-planning.actions";
+import { loadFlightsHorizons, saveConfiguration, updateFlightsHorizon, updateFlightsHorizonFailure, updateFlightsHorizonSuccess, useConfiguration } from "../flight-section-planning.actions";
 import { selectUpdatedConfiguration } from "../flight-section-planning.feature";
 import { selectProject, selectSelectedSection } from "../flight-section-planning.selector";
 import { Router } from "@angular/router";
@@ -20,10 +20,10 @@ export class UpdateFlightSectionEffect{
     private router = inject(Router);
 
     public update$ = createEffect(() => this.actions$.pipe(
-        ofType(updateFlightSection),
+        ofType(updateFlightsHorizon),
         switchMap(({section}) => this.service.putSection$(section).pipe(
-            switchMap(section => [updateFlightSectionSuccess({section}), loadFlightSections({treeId: section.treeId})]),
-            catchError((e) => of(updateFlightSectionFailure({err: e})))
+            switchMap(section => [updateFlightsHorizonSuccess({section}), loadFlightsHorizons({treeId: section.treeId})]),
+            catchError((e) => of(updateFlightsHorizonFailure({err: e})))
         ))
     ));
 
@@ -32,13 +32,13 @@ export class UpdateFlightSectionEffect{
         concatLatestFrom(() => [this.store.select(selectSelectedSection), this.store.select(selectUpdatedConfiguration)]),
         switchMap(([_, section, configuration]) => {
             if(section === undefined || configuration === null){
-                return of(updateFlightSectionFailure({err: "Section or configuration undefined"}))
+                return of(updateFlightsHorizonFailure({err: "Section or configuration undefined"}))
             }
             return this.service.addConfiguration$(section, configuration).pipe(
             switchMap(section => {
-                return [updateFlightSectionSuccess({section}), loadFlightSections({treeId: section.treeId})] 
+                return [updateFlightsHorizonSuccess({section}), loadFlightsHorizons({treeId: section.treeId})] 
             }),
-            catchError((e) => of(updateFlightSectionFailure({err: e})))
+            catchError((e) => of(updateFlightsHorizonFailure({err: e})))
         )})
     ));
 
@@ -48,13 +48,13 @@ export class UpdateFlightSectionEffect{
         concatLatestFrom(() => [this.store.select(selectSelectedSection)]),
         switchMap(([{index}, section,]) => {
             if(section === undefined || section.status !== PlanRunStatus.PENDING){
-                return of(updateFlightSectionFailure({err: "Section or configuration undefined"}))
+                return of(updateFlightsHorizonFailure({err: "Section or configuration undefined"}))
             }
             return this.service.changeUsedConfiguration$(section, index).pipe(
             switchMap(section => {
-                return [updateFlightSectionSuccess({section}), loadFlightSections({treeId: section.treeId})] 
+                return [updateFlightsHorizonSuccess({section}), loadFlightsHorizons({treeId: section.treeId})] 
             }),
-            catchError((e) => of(updateFlightSectionFailure({err: e})))
+            catchError((e) => of(updateFlightsHorizonFailure({err: e})))
         )})
     ));
 }

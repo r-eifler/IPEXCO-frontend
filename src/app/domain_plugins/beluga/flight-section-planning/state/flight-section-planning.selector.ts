@@ -186,8 +186,7 @@ export const selectInitiallyNumEmptyRacks = createSelector(selectSelectedSection
 // Flights
 
 export const selectCurrentFlightSchedule = createSelector(selectSelectedSection, selectFlights, 
-    (section, flights) => (section?.flightIndex !== null && section?.flightIndex  !== undefined ? 
-       flights?.[section?.flightIndex] : null));
+    (section, flights) => (flights?.[0])); //TODO
 
 export const selectJigMapIncomingFlight= createSelector(selectFlights, 
     (flights) => flights?.reduce((acc1,c1) => ({

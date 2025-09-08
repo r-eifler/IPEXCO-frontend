@@ -1,7 +1,7 @@
 import { createAction, props } from "@ngrx/store";
 import { Project } from "src/app/shared/domain/project";
 import { TestSuite, TestSuiteBase } from "../domain/tests";
-import { FlightPlanTree, FlightSection } from "../../flight-section-planning/domain/flight-section";
+import { FlightPlanTree, FlightsHorizon } from "../../flight-section-planning/domain/flight-section";
 
 // project
 
@@ -17,7 +17,7 @@ export const loadFlightPlanTreeSuccess = createAction('[policy-testing]load flig
 export const loadFlightPlanTreeFailure = createAction('[policy-testing]load flight plan tree failure', props<{err: any}>());
 
 export const loadFlightSections = createAction('[policy-testing]load flight plan sections', props<{treeId: string}>());
-export const loadFlightSectionsSuccess = createAction('[policy-testing]load flight plan sections success', props<{sections: Record<string,FlightSection>}>());
+export const loadFlightSectionsSuccess = createAction('[policy-testing]load flight plan sections success', props<{sections: Record<string,FlightsHorizon>}>());
 export const loadFlightSectionsFailure = createAction('[policy-testing]load flight plan sections failure', props<{err: any}>());
 
 
