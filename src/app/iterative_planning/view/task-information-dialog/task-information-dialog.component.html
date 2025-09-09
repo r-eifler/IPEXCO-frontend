@@ -15,8 +15,7 @@
                     Domain
                 </app-page-section-title>
                 <app-page-section-content>
-                    <!-- <div [innerHTML]="demo?.domainInfo | marked"></div> -->
-                     <p>TODO implement based on domain specification</p>
+                    <div [innerHTML]="(domainSpec$ | async)?.description | marked"></div>
                 </app-page-section-content>
             </app-page-section>
             <app-page-section>

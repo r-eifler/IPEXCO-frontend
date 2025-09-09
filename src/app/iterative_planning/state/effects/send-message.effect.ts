@@ -11,7 +11,20 @@ import { selectSatisfiedSoftGoals } from "src/app/iterative_planning/view/step-d
 import { selectEnforcedGoals } from "src/app/iterative_planning/view/step-detail-view/step-detail-view.component.selector";
 import { ExplanationInterfaceType } from "src/app/project/domain/general-settings";
 import { PlanRunStatus } from "src/app/iterative_planning/domain/plan";
-import { directMessageET, directResponseQT, loadLLMContext, loadLLMContextFailure, loadLLMContextSuccess, multipleQuestionsPosedLLM, poseAnswer, poseAnswerLLM, questionPosed, questionPosedLLM, sendMessageToLLMExplanationTranslator, sendMessageToLLMExplanationTranslatorFailure, sendMessageToLLMExplanationTranslatorSuccess, sendMessageToLLMGoalTranslator, sendMessageToLLMGoalTranslatorFailure, sendMessageToLLMGoalTranslatorSuccess, sendMessageToLLMQTthenGTTranslators, sendMessageToLLMQTthenGTTranslatorsFailure, sendMessageToLLMQTthenGTTranslatorsSuccess, sendMessageToLLMQuestionTranslator, sendMessageToLLMQuestionTranslatorFailure, sendMessageToLLMQuestionTranslatorSuccess, showReverseTranslationGT, showReverseTranslationQT } from "src/app/iterative_planning/state/iterative-planning.actions";
+
+import {
+    directMessageET, directResponseQT, questionPosedLLM,
+    sendMessageToLLMExplanationTranslatorFailure,
+    sendMessageToLLMExplanationTranslatorSuccess,
+    sendMessageToLLMGoalTranslator,
+    sendMessageToLLMGoalTranslatorFailure,
+    sendMessageToLLMGoalTranslatorSuccess,
+    sendMessageToLLMQuestionTranslator,
+    sendMessageToLLMQuestionTranslatorFailure,
+    sendMessageToLLMQuestionTranslatorSuccess,
+    showReverseTranslationQT
+} from "src/app/iterative_planning/state/iterative-planning.actions";
+
 import { Question } from "src/app/iterative_planning/domain/interface/question";
 
 import { QuestionType } from "src/app/iterative_planning/domain/explanation/explanations";
@@ -235,11 +248,11 @@ export class SendMessageToLLMEffect {
         })
     ))
 
-    public loadLLMContext$ = createEffect(() => this.actions$.pipe(
-        ofType(loadLLMContext),
-        switchMap(({ projectId }) => this.service.getLLMContext$(projectId).pipe(
-            map(LLMContext => loadLLMContextSuccess({ LLMContext })),
-            catchError((e) => of(loadLLMContextFailure({err: e}))),
-        ))
-    ))
+    // public loadLLMContext$ = createEffect(() => this.actions$.pipe(
+    //     ofType(loadLLMContext),
+    //     switchMap(({ projectId }) => this.service.getLLMContext$(projectId).pipe(
+    //         map(LLMContext => loadLLMContextSuccess({ LLMContext })),
+    //         catchError((e) => of(loadLLMContextFailure({err: e}))),
+    //     ))
+    // ))
 }

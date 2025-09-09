@@ -5,7 +5,7 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { Store } from "@ngrx/store";
-import { Observable, combineLatest, filter, map, switchMap, take } from "rxjs";
+import { Observable, Subject, combineLatest, filter, map, of, startWith, switchMap, take } from "rxjs";
 
 import { BreadcrumbModule } from "src/app/shared/components/breadcrumb/breadcrumb.module";
 import { EmptyStateModule } from "src/app/shared/components/empty-state/empty-state.module";
@@ -57,6 +57,7 @@ import {
   selectSatisfiedSoftGoals,
   selectUnsatisfiedSoftGoals,
 } from "./step-detail-view.component.selector";
+import { ExplanationChatHybridComponent } from "../../components/explanation-chat-hybrid/explanation-chat-hybrid.component";
 
 @Component({
     selector: "app-step-detail-view",
@@ -66,6 +67,7 @@ import {
         EmptyStateModule,
         ExplanationChatComponent,
         ExplanationChatLlmComponent,
+        ExplanationChatHybridComponent,
         IterationStepHeroComponent,
         MatButtonModule,
         MatIconModule,
@@ -191,6 +193,33 @@ export class StepDetailViewComponent {
     );
   }
 
+  combinedPropertyAvailableQuestionTypes$: Observable<AvailableQuestion[]> = this.unsolvedSoftGoals$.pipe(
+    switchMap(properties => {
+      if (properties.length === 0) {
+        return of([]); // If no properties, return an empty array
+      }
+      return combineLatest(
+        properties.map(property => this.propertyAvailableQuestionTypes$(property))
+      ).pipe(
+        map(arrayOfArrays => arrayOfArrays.flat()) // Flatten the array of arrays
+      );
+    })
+  );
+
+  private refreshSuggestedQuestionsSubject = new Subject<void>();
+  refreshSuggestedQuestions$ = this.refreshSuggestedQuestionsSubject.asObservable();
+
+  selectedCombinedPropertyAvailableQuestionTypes$: Observable<AvailableQuestion[]> = combineLatest([
+    this.combinedPropertyAvailableQuestionTypes$,
+    this.refreshSuggestedQuestions$.pipe(startWith(undefined))
+  ]).pipe(
+    map(([questions, _]) => {
+      // Shuffle the array of questions
+      const shuffledQuestions = questions.sort(() => 0.5 - Math.random());
+      // Take the first 3 questions
+      return shuffledQuestions.slice(0, 3);
+    })
+  );
 
   createNewIteration(baseStepId?: string) {
     this.store.dispatch(initNewIterationStep({ baseStepId }));
@@ -226,6 +255,9 @@ export class StepDetailViewComponent {
     });
   }
 
+  onRefreshSuggestedQuestions(): void {
+    this.refreshSuggestedQuestionsSubject.next();
+  }
 
   onHelp(){
     this.dialog.open(UserManualDialogComponent);

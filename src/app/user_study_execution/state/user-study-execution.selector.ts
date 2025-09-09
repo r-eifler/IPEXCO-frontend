@@ -26,6 +26,7 @@ export const selectExecutionUserStudyCanceled = createSelector(selectState, (sta
 // Demo
 export const selectExecutionUserStudyDemo = createSelector(selectState, (state) => state.runningDemo?.data)
 export const selectExecutionUserStudyPlanProperties = createSelector(selectState, (state) => state.runningDemoPlanProperties?.data)
+export const selectExecutionUserStudyDomainSpecification = createSelector(selectState, (state) => state.runningDemoDomainSpecification?.data)
 
 // For logging
 

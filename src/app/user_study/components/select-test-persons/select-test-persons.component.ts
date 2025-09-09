@@ -67,11 +67,12 @@ export class SelectTestPersonsComponent {
 
   constructor() {
     effect(() => {
-      if(this.paginator === undefined){
-        return;
+      let index = 0;
+      let size = 10;
+      if(this.paginator !== undefined){
+        index = this.paginator?.pageIndex;
+        size = this.paginator?.pageSize;
       }
-      const index = this.paginator?.pageIndex;
-      const size = this.paginator?.pageSize;
       const tableData = this.participantsTableData();
       this.displayedParticipants =  tableData ? [...tableData].splice(index * size, size) : [];
     })
@@ -79,11 +80,12 @@ export class SelectTestPersonsComponent {
 
 
   onPage(event: PageEvent){
-    if(this.paginator === undefined){
-      return;
+    let index = 0;
+    let size = 10;
+    if(this.paginator !== undefined){
+      index = this.paginator?.pageIndex;
+      size = this.paginator?.pageSize;
     }
-    const index = event.pageIndex;
-    const size = event.pageSize;
     const tableData = this.participantsTableData();
     this.displayedParticipants =  tableData ? [...tableData].splice(index * size, size) : [];
   }

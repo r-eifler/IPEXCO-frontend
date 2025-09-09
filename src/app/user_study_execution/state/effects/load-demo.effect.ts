@@ -3,7 +3,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
 import { catchError, switchMap } from 'rxjs/operators';
 import { UserStudyExecutionDemoService } from '../../service/user-study-execution-demo.service';
-import { loadUserStudyDemo, loadUserStudyDemoFailure, loadUserStudyDemoSuccess, loadUserStudyPlanProperties } from '../user-study-execution.actions';
+import { loadDomainSpecification, loadUserStudyDemo, loadUserStudyDemoFailure, loadUserStudyDemoSuccess, loadUserStudyPlanProperties } from '../user-study-execution.actions';
 
 
 @Injectable()
@@ -22,6 +22,9 @@ export class LoadUserStudyExecutionDemoEffect{
 
     public loadDemosSuccess$ = createEffect(() => this.actions$.pipe(
         ofType(loadUserStudyDemoSuccess),
-        switchMap(({demo}) => [loadUserStudyPlanProperties({demoId: demo._id})])
+        switchMap(({demo}) => [
+            loadUserStudyPlanProperties({demoId: demo._id}),
+            loadDomainSpecification({id: demo?.domain})
+        ])
     ));
 }

@@ -15,7 +15,7 @@ export class LoadUserStudyDistributionEffect{
         ofType(loadParticipantDistribution),
         switchMap(({id}) => this.service.getParticipantDistribution$(id).pipe(
             switchMap(distribution => [loadParticipantDistributionSuccess({distribution})]),
-            catchError(() => of(loadParticipantDistributionFailure()))
+            catchError((err) => of(loadParticipantDistributionFailure(err)))
         ))
     ))
 }

@@ -22,9 +22,9 @@ services:
 
   PROPERTY_CHECKER:
     container_name: property_checker
-    image: eifler/property_checker_service::latest
+    image: eifler/property_checker_service:latest
     ports:
-      - "33335:33335"
+      - "3335:3335"
     network_mode: "host"
     env_file:
         - property_checker.env

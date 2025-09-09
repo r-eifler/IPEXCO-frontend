@@ -84,7 +84,7 @@
 
 
 
-      @if(!planComputationRunning && !isCanceled && !isFailed && (hasUnsolvedSoftGoals || isUnsolvable) && (interfaceType == expInterfaceType.LLM_CHAT)) {
+      @if(!planComputationRunning && !isCanceled && !isFailed && (hasUnsolvedSoftGoals || isUnsolvable) && (interfaceType == expInterfaceType.LLM_CHAT )) {
       <app-page-section>
         <app-page-section-title>
           <mat-icon>lightbulb_2</mat-icon>
@@ -95,6 +95,33 @@
         </app-page-section-content>
       </app-page-section>
       }
+
+      @if(!planComputationRunning && !isCanceled && !isFailed && (hasUnsolvedSoftGoals || isUnsolvable) && ( interfaceType == expInterfaceType.HYBRID)) {
+        <app-page-section>
+          <app-page-section-title>
+            <mat-icon>lightbulb_2</mat-icon>
+            Insights
+            @if (hasUnsolvedSoftGoals) {
+            <button mat-icon-button matTooltip="Refresh suggested questions." (click)="onRefreshSuggestedQuestions()">
+              <mat-icon>refresh</mat-icon>
+            </button>
+            }
+          </app-page-section-title>
+          <app-page-section-content>
+            @if(hasUnsolvedSoftGoals) {
+              <app-explanation-chat-hybrid
+              [availableQuestions]="selectedCombinedPropertyAvailableQuestionTypes$ | async" (questionSelected)="onQuestionSelected($event)"
+              [properties]="planProperties$ | async">
+              </app-explanation-chat-hybrid>
+            } @else if (isUnsolvable) {
+              <app-explanation-chat-hybrid
+              [availableQuestions]="globalAvailableQuestionTypes$ | async" (questionSelected)="onQuestionSelected($event)"
+              [properties]="planProperties$ | async">
+              </app-explanation-chat-hybrid>
+            }
+          </app-page-section-content>
+        </app-page-section>
+        }
 
       @if(!planComputationRunning && !isCanceled && !isUnsolvable && (interfaceType == expInterfaceType.TEMPLATE_QUESTION_ANSWER )) {
       <app-page-section>
@@ -130,7 +157,7 @@
       </app-page-section>
       }
 
-      @if(!planComputationRunning && !isCanceled && !isFailed && !isUnsolvable && (interfaceType == expInterfaceType.LLM_CHAT )) {
+      @if(!planComputationRunning && !isCanceled && !isFailed && !isUnsolvable && (interfaceType == expInterfaceType.LLM_CHAT || interfaceType == expInterfaceType.HYBRID)) {
       <app-page-section>
         <app-page-section-title>
           <span *isProject>Unsatisfied Softgoals</span>

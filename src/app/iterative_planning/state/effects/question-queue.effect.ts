@@ -25,7 +25,7 @@ export class QuestionQueueEffect {
   
 
 
-  computeExplanation$ = createEffect(() => this.actions$.pipe(
+   $ = createEffect(() => this.actions$.pipe(
     ofType(questionPosed, questionPosedLLM),
     concatLatestFrom(({ question: { iterationStepId }}) => this.store.select(selectIterationStepById(iterationStepId))),
     filterListNotNullOrUndefined(),
