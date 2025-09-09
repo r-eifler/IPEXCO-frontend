@@ -25,16 +25,22 @@
 
 				<mat-card-content class="sub-card-content">
 
-				<mat-form-field appearance="outline" class="full-width">
-					<mat-label>Planners</mat-label>
-					<mat-select [formControl]="form.controls.services.controls.planners" multiple>
-						<option value="" disabled selected></option>
-						@for (planner of planners(); track planner._id) {
-						<mat-option [value]="planner._id">{{planner.name}}</mat-option>
-						}
-					</mat-select>
-				</mat-form-field>
+				@if (planners()?.length > 0){
+					<mat-form-field appearance="outline" class="full-width">
+						<mat-label>Planners</mat-label>
+						<mat-select [formControl]="form.controls.services.controls.planners" multiple>
+							<option value="" disabled selected></option>
+							@for (planner of planners(); track planner._id) {
+							<mat-option [value]="planner._id">{{planner.name}}</mat-option>
+							}
+						</mat-select>
+					</mat-form-field>
+				}
+				@else{
+					<p>No planner services available. Please register a planner service in the specifications.</p>
+				}
 
+				@if (explainer()?.length > 0){
 				<mat-form-field appearance="outline" class="full-width">
 					<mat-label>Explainers</mat-label>
 					<mat-select [formControl]="form.controls.services.controls.explainer" multiple>
@@ -44,7 +50,12 @@
 					}
 					</mat-select>
 				</mat-form-field>
+				}
+				@else{
+					<p>No explainer services available. Please register a explainer service in the specifications.</p>
+				}
 
+				@if (tester()?.length > 0){
 				<mat-form-field appearance="outline" class="full-width">
 				<mat-label>Tester</mat-label>
 				<mat-select [formControl]="form.controls.services.controls.tester" multiple>
@@ -54,6 +65,10 @@
 					}
 				</mat-select>
 				</mat-form-field>
+				}
+				@else{
+					<p>No tester services available. Please register a tester service in the specifications.</p>
+				}
 
 
 				</mat-card-content>

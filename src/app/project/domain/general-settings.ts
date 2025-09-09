@@ -71,7 +71,7 @@ export const defaultGeneralSetting: GeneralSettings = {
       services: [],
   },
   interfaces: {
-      explanationInterfaceType: ExplanationInterfaceType.TEMPLATE_QUESTION_ANSWER,
+      explanationInterfaceType: ExplanationInterfaceType.MIXED,
       propertyCreationInterfaceType: PropertyCreationInterfaceType.TEMPLATE_BASED,
   },
   llmConfig: {

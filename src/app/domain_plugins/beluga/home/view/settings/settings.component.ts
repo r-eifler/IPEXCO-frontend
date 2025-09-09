@@ -72,25 +72,33 @@ export class SettingsComponent {
       }),
       interfaces: this.fb.group({
         propertyCreationInterfaceType: this.fb.control<PropertyCreationInterfaceType>(PropertyCreationInterfaceType.TEMPLATE_BASED, Validators.required),
-        explanationInterfaceType: this.fb.control<ExplanationInterfaceType>(ExplanationInterfaceType.TEMPLATE_QUESTION_ANSWER, Validators.required),
+        explanationInterfaceType: this.fb.control<ExplanationInterfaceType>(ExplanationInterfaceType.MIXED, Validators.required),
       }),
     })
   
     constructor() {
 
+		console.log('load services for settings')
 		this.store.dispatch(loadServices())
+
+		effect(() => console.log(this.services()))
+
+		effect(() => console.log( this.project()?.settings))
   
 		effect(() => {
 			const settings = this.project()?.settings;
 			if (settings == null || settings == undefined){
 				return;
 			}
+			console.log('load settings')
+
 			try{
+				if(settings.interfaces.explanationInterfaceType)
 				this.form.controls.interfaces.controls.explanationInterfaceType.setValue(settings.interfaces.explanationInterfaceType);
-				this.form.controls.interfaces.controls.propertyCreationInterfaceType.setValue(settings.interfaces.propertyCreationInterfaceType);
+				// this.form.controls.interfaces.controls.propertyCreationInterfaceType.setValue(settings.interfaces.propertyCreationInterfaceType);
 			
-				this.form.controls.services.controls.computePlanAutomatically.setValue(settings.services.computePlanAutomatically);
-				this.form.controls.services.controls.computeExplanationsAutomatically.setValue(settings.services.computeExplanationsAutomatically);
+				// this.form.controls.services.controls.computePlanAutomatically.setValue(settings.services.computePlanAutomatically);
+				// this.form.controls.services.controls.computeExplanationsAutomatically.setValue(settings.services.computeExplanationsAutomatically);
 				this.form.controls.services.controls.planners.setValue(
 				(this.planners() ?? []).filter(s => settings.services.services.includes(s._id)).map(s => s._id)
 				);
@@ -110,6 +118,7 @@ export class SettingsComponent {
   
     onSave() {
 
+		console.log("save settings")
 		const settings = this.project()?.settings;
 		if (settings == null || settings == undefined){
 			return;
