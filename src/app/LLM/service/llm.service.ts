@@ -10,6 +10,7 @@ import { Question } from "src/app/iterative_planning/domain/interface/question";
 import {
     explanationTranslationRequestToString,
     goalTranslationRequestToString,
+    multipleExplanationTranslationRequestToString,
     questionTranslationRequestToString
 } from "../interfaces/translators_interfaces_strings";
 import { IterationStep, StepStatus } from "src/app/iterative_planning/domain/iteration_step";
@@ -113,7 +114,7 @@ export class LLMService {
 
     postMessageQT$(question: string, iterationStep: IterationStep, project: Project, properties: PlanProperty[]): Observable<
         | { directResponse: string, questionType: QuestionType }
-        | { response: { questionType: QuestionType, goal: string, question: Question, reverseTranslation: string } }
+        | { qtResponse: string, questionType: QuestionType, goals: string[], questions: Question[], reverseTranslationQT: string }
     > {
         const questionTranslationRequest: QuestionTranslationRequest = {
             question: question,
@@ -128,7 +129,7 @@ export class LLMService {
 
         return this.http.post<IHTTPData<
             | { directResponse: string, questionType: QuestionType }
-            | { response: { questionType: QuestionType, goal: string, question: Question, reverseTranslation: string } }
+            | { response: { questionType: QuestionType, goal: string[], question: Question[], reverseTranslation: string } }
         >>(this.BASE_URL + 'qt', {
             qtRequest: requestString,
             projectId: project._id,
@@ -162,6 +163,34 @@ export class LLMService {
             existingPlanProperties: Object.values(properties)
         };
         const requestString = explanationTranslationRequestToString(request);
+        return this.http.post<IHTTPData<{ response: string }>>(this.BASE_URL + 'et', { data: requestString, iterationStepId: iterationStep._id, projectId: project._id, originalRequest: question }).pipe(
+            map(({ data }) => data),
+            tap(console.log)
+        );
+    }
+
+    postMessageETmultiple$(question: string, explanationsMUGS: string[][][], explanationsMGCS: string[][][], question_type: QuestionType, questionArguments: PlanProperty[], iterationStep: IterationStep, project: Project, properties: PlanProperty[]): Observable<{ response: string }> {
+        console.log("questionArguments", questionArguments);
+        const requests: ExplanationTranslationRequest[] = questionArguments.map((questionArgument, index) => ({
+            question: question,
+            question_type: question_type,
+            MUGS: explanationsMUGS[index].map(e => e.map(pid => properties.find(p => p._id == pid)).filter(pp => pp != undefined)),
+            MGCS: explanationsMGCS[index].map(e => e.map(pid => properties.find(p => p._id == pid)).filter(pp => pp != undefined)),
+            questionArgument: [questionArgument], 
+            predicates: (project.baseTask.model as PDDLPlanningModel).predicates,
+            objects: project.baseTask.objects,
+            enforcedGoals: properties.filter(p => iterationStep.hardGoals.includes(p._id)),
+            satisfiedGoals: properties.filter(p =>
+                iterationStep.plan?.satisfied_properties?.includes(p._id) &&
+                !iterationStep.hardGoals.includes(p._id)
+            ),
+            unsatisfiedGoals: properties.filter(p =>
+                !iterationStep.plan?.satisfied_properties?.includes(p._id) &&
+                !iterationStep.hardGoals.includes(p._id)
+            ),
+            existingPlanProperties: Object.values(properties)
+        }));
+        const requestString = multipleExplanationTranslationRequestToString(requests);
         return this.http.post<IHTTPData<{ response: string }>>(this.BASE_URL + 'et', { data: requestString, iterationStepId: iterationStep._id, projectId: project._id, originalRequest: question }).pipe(
             map(({ data }) => data),
             tap(console.log)

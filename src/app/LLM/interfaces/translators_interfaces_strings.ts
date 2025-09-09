@@ -29,3 +29,21 @@ export function explanationTranslationRequestToString(request: ExplanationTransl
         .replace('{satisfied_goals}', `[${request.satisfiedGoals.map(goal => goal.name).join(', ')}]`)
         .replace('{unsatisfied_goals}', `[${request.unsatisfiedGoals.map(goal => goal.name).join(', ')}]`);
 }
+
+export function multipleExplanationTranslationRequestToString(request: ExplanationTranslationRequest[]): string {
+    console.log('request', request);
+
+    let output_str = "Question: " + request[0].question + "\nQuestion Type: " + request[0].question_type + "\n";
+    for (let r of request) {
+        output_str += templates.multiple_explanation_translator_question
+            .replace('{question_arguments}', `[${r.questionArgument.map(argument => argument.name).join(', ')}]`)
+            .replace('{mugs}', `[${r.MUGS.map(mug => `[${mug.map(p => p.name).join(', ')}]`).join(', ')}]`)
+            .replace('{mgcs}', `[${r.MGCS.map(mgc => `[${mgc.map(p => p.name).join(', ')}]`).join(', ')}]`)
+    }
+    output_str += templates.multiple_explanation_translator_context
+        .replace('{enforced_goals}', `[${request[0].enforcedGoals.map(goal => goal.name).join(', ')}]`)
+        .replace('{satisfied_goals}', `[${request[0].satisfiedGoals.map(goal => goal.name).join(', ')}]`)
+        .replace('{unsatisfied_goals}', `[${request[0].unsatisfiedGoals.map(goal => goal.name).join(', ')}]`);
+
+    return output_str;
+}
