@@ -35,39 +35,16 @@ export class SectionPlanMethodDialogComponent {
 	readonly types = PlanMethodType;
 
 	readonly dialogRef = inject(MatDialogRef<SectionPlanMethodDialogComponent>);
-	readonly data = inject<{maxNumFlights: number, planners: Service[]}>(MAT_DIALOG_DATA);
+	readonly data = inject<{planners: Service[]}>(MAT_DIALOG_DATA);
 
 	planners  = this.data.planners;
-	maxNumFlights = this.data.maxNumFlights;
 
-	form = this.fb.group({
-		service: this.fb.control<Service | null>(null, [Validators.required]),
-		horizon: this.fb.control<number>(1, [Validators.min(1), Validators.max(this.maxNumFlights)])
-	})
-
-
-	goForward(stepper: MatStepper){
-		stepper.next();
-	}
-
-	onSelectService(planner: Service){
-		this.form.controls.service.setValue(planner);
-	}
-
-	onAllFlights(){
-		this.form.controls.horizon.setValue(this.maxNumFlights);
-	}
-
-	onStart(){
-		if(this.form.controls.service.value === null){
-		return 
-		}
+	onStart(service: Service){
 		this.dialogRef.close({
 		method: {
-			name: this.form.controls.service?.value.name,
+			name: service.name,
 			type: PlanMethodType.AUTOMATIC_SEARCH_PLANNER,
-			serviceId: this.form.controls.service?.value._id ,
-			numOptimizedFlights: this.form.controls.horizon?.value
+			serviceId: service._id ,
 		}
 		})
 	}

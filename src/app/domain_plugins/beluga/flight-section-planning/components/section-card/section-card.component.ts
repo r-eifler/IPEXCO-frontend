@@ -27,6 +27,7 @@ import { BranchNameDialogComponent } from '../branch-name-dialog/branch-name-dia
 import { ConfigurationSelectorComponent } from '../configuration-selector/configuration-selector.component';
 import { SectionPlanMethodDialogComponent } from '../section-plan-method-dialog/section-plan-method-dialog.component';
 import { FlightsHorizon } from '../../domain/flight-section';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-section-card',
@@ -56,6 +57,7 @@ export class SectionCardComponent {
   readonly dialog = inject(MatDialog);
   router = inject(Router);
   activatedRoute = inject(ActivatedRoute)
+  private snackBar = inject(MatSnackBar);
 
   existingBranchNames = this.store.selectSignal(selectBranchNames);
   isAutomatic = this.store.selectSignal(selectIsAutomatic);
@@ -117,7 +119,6 @@ export class SectionCardComponent {
     let method: PlanMethod = {
         name: 'Human Planner',
         type: PlanMethodType.MANUAL,
-        numOptimizedFlights: 1
       }
       this.store.dispatch(registerManualPlanning({section: this.section(), method: method}))
   }
@@ -129,18 +130,24 @@ export class SectionCardComponent {
         name: 'AI Planner',
         type: PlanMethodType.AUTOMATIC_SEARCH_PLANNER,
         serviceId: this.supportedPlanners()[0]._id,
-        numOptimizedFlights: 1
       }
       this.store.dispatch(startAutomaticPlanning({section: this.section(), method: method}))
       return;
     }
 
     const dialogRef = this.dialog.open(SectionPlanMethodDialogComponent, {
-      data: {maxNumFlights: this.remainingNUmberFlights(), planners: this.supportedPlanners()},
+      data: {planners: this.supportedPlanners()},
     });
 
     dialogRef.afterClosed().pipe(take(1)).subscribe((result: {method: PlanMethod}) => {
-      this.store.dispatch(startAutomaticPlanning({section: this.section(), method: result.method}))
+		if(result){
+			this.store.dispatch(startAutomaticPlanning({section: this.section(), method: result.method}))
+		}
+		else{
+			this.snackBar.open('No planner selected.', 'Ok', {
+				duration: 3000
+			});
+		}
       }
     );
   }

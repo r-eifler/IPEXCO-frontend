@@ -11,8 +11,7 @@ export const PlanMethodTypeZ = nativeEnum(PlanMethodType);
 export const PlanMethodZ = object({
   type: PlanMethodTypeZ,
   name: string(),
-  serviceId: optional(string()),
-  numOptimizedFlights: number()
+  serviceId: optional(string())
 });
 
 export type PlanMethod = zinfer<typeof PlanMethodZ>

@@ -1,35 +1,22 @@
 <app-dialog *transloco="let t">
     <app-dialog-header>
-        <app-dialog-title>Configure Planning Process</app-dialog-title>
+        <app-dialog-title>Select Planner Service</app-dialog-title>
     </app-dialog-header>
     <app-dialog-content>
-        <form [formGroup]="form">
-        <mat-stepper linear #stepper >               
-
-            <mat-step>
-                <ng-template matStepLabel>Planning Method</ng-template>
-                <div class="button-container">
-                    @for(planner of planners; track planner._id){
-                        <button mat-button class="full-width" (click)="onSelectService(planner);goForward(stepper)">{{planner.name}}</button>
-                    }
-                </div>
-            </mat-step>
-
-            <mat-step>
-                <ng-template matStepLabel>Flight Horizon</ng-template>
-                <div class="horizon-container">
-                    <button mat-flat-button class="full-width" (click)="onAllFlights()">All Flights</button>
-                    <mat-form-field class="full-width" appearance="outline">
-                        <mat-label>{{t('f.num_optimized_flights')}}</mat-label>
-                        <input matInput type="number" formControlName="horizon" min="1" [max]="maxNumFlights">
-                    </mat-form-field>
-                </div>
-            </mat-step> 
-        </mat-stepper>
-        </form>
+        <div class="button-container">
+            @if(planners.length > 0){
+                @for(planner of planners; track planner._id){
+                    <button mat-button class="full-width" (click)="onStart(planner)">
+                        {{planner.name}}
+                    </button>
+                }
+            }
+            @else{
+                <p>No planner service available!</p>
+            }
+        </div>
     </app-dialog-content>
     <app-dialog-footer>
         <button mat-button (click)="onCancel()">{{t('f.cancel')}}</button>
-        <button mat-flat-button (click)="onStart()" [disabled]="!form.valid">Start Planner</button>
     </app-dialog-footer>
 </app-dialog>
