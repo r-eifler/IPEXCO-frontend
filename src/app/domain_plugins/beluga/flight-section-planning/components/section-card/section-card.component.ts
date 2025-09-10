@@ -153,13 +153,13 @@ export class SectionCardComponent {
 	onCreatePlan(){
 
 		if(this.isAutomatic()){
-		let method: PlanMethod = {
-			name: 'AI Planner',
-			type: PlanMethodType.AUTOMATIC_SEARCH_PLANNER,
-			serviceId: this.supportedPlanners()[0]._id,
-		}
-		this.store.dispatch(startAutomaticPlanning({section: this.section(), method: method}))
-		return;
+			let method: PlanMethod = {
+				name: 'AI Planner',
+				type: PlanMethodType.AUTOMATIC_SEARCH_PLANNER,
+				serviceId: this.supportedPlanners()[0]._id,
+			}
+			this.store.dispatch(startAutomaticPlanning({section: this.section(), method: method}))
+			return;
 		}
 
 		const dialogRef = this.dialog.open(SectionPlanMethodDialogComponent, {

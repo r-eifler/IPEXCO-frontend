@@ -93,7 +93,7 @@
                 @if(isManual()){
                     <a class="details" mat-flat-button 
                     [routerLink]="['../planning/manual/section/' +  section()?._id]"
-                    (click)="onCreatePlan()">
+                    (click)="onPlanManually()">
                         {{t('f.generate_plan')}}
                     </a>
                 }
@@ -102,7 +102,11 @@
                         [routerLink]="['../configuration-explanations/' + section()?._id + '/' + section()?.configurationIndex]">
                         {{t('f.check_configurations')}}
                     </a>
-                    <button class="details" mat-button (click)="onPlanManually()">Plan Manually</button>
+                    <a class="details" mat-button 
+                        [routerLink]="['../planning/manual/section/' +  section()?._id]"
+                        (click)="onPlanManually()">
+                        Plan Manually
+                    </a>
                     @if(selectedConfigSolvable()){
                         <button class="details" mat-flat-button (click)="onCreatePlan()">Call Planner</button>
                     }
