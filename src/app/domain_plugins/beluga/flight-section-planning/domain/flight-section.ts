@@ -28,14 +28,14 @@ export type FlightTargetSchedule = zinfer<typeof FlightTargetScheduleZ>;
 
 export function getConsideredFlightSchedule(flights: Record<number,FlightTargetSchedule>, indices: number[]){
     let orderedFlights = indices.map(index => flights[index])
-    return getFlightSchedule(orderedFlights, indices, false)
+    return getFlightSchedule(orderedFlights, false)
 }
 
-export function getFlightSchedule(flights: Record<number,FlightTargetSchedule>, indices: number[], skipped: boolean){
-    return indices.map(index => ({
-        name: flights[index].name,
-        incoming: flights[index].incoming.filter(j => j.skip === skipped).map(j => j.jig),
-        outgoing: flights[index].outgoing.filter(j => j.skip === skipped).map(j => j.jigType),
+export function getFlightSchedule(flights: FlightTargetSchedule[], skipped: boolean){
+    return flights.map(flight => ({
+        name: flight.name,
+        incoming: flight.incoming.filter(j => j.skip === skipped).map(j => j.jig),
+        outgoing: flight.outgoing.filter(j => j.skip === skipped).map(j => j.jigType),
         stageType: 'flight' as const
     }));
 }
@@ -186,7 +186,7 @@ export function getFullStartState(section: FlightsHorizonBase){
     const config = section.configurations[section.configurationIndex];
     const state: BelugaState = {
         ...section.siteState,
-        flightIndex: section.flightIndices[0],
+        flightIndex: 0,
         incomingUnloaded: [],
         outgoingLoaded: [],
         productionLines: Object.keys(config.productionLinesTargetSchedule).reduce((acc, name) => ({...acc, [name]: []}),{})
@@ -346,7 +346,7 @@ export function deriveSuccessorFlightHorizon(
     let newStartState = applyActions(
         state, 
         actions, 
-        getFlightSchedule(config.flightTargetSchedule, oldFlightIndices, false),  
+        getConsideredFlightSchedule(config.flightTargetSchedule, oldFlightIndices),  
         getProductionSchedule(Object.values(config.productionLinesTargetSchedule) ?? [],false) , 
         config.siteSetUp
     );
@@ -452,18 +452,9 @@ export function getPrefixOfFlightHorizon(
         }
     }
 
-    let newStartState = applyActions(
-        fullInitialState, 
-        actions, 
-        getFlightSchedule(config.flightTargetSchedule, prefix, false),  
-        getProductionSchedule(Object.values(config.productionLinesTargetSchedule) ?? [],false) , 
-        config.siteSetUp
-    );
-    if (newStartState == undefined){
-        return undefined;
-    }
+    const startState = getFullStartState(section);
 
-    const jigsOnSite = getJigsOnSiteFromState(newStartState, Object.values(config.flightTargetSchedule).map(f => ({incoming: f.incoming.map(e => e.jig)})))
+    const jigsOnSite = getJigsOnSiteFromState(startState, Object.values(config.flightTargetSchedule).map(f => ({incoming: f.incoming.map(e => e.jig)})))
     const jigTypesOnSite = [...jigsOnSite].map(jn => fullInitialState.jigs[jn].type)
 
     let suc: FlightsHorizonBase = {
@@ -472,10 +463,10 @@ export function getPrefixOfFlightHorizon(
 
         flightIndices: prefix,
         siteState: {
-            jigs: newStartState.jigs,
-            racks: newStartState.racks,
-            trailers: newStartState.trailers,
-            hangars: newStartState.hangars,
+            jigs: startState.jigs,
+            racks: startState.racks,
+            trailers: startState.trailers,
+            hangars: startState.hangars,
         },
         
         configurationIndex: 0,
@@ -506,8 +497,9 @@ export function getPrefixOfFlightHorizon(
             explanationStatus: ExplanationRunStatus.PENDING
         }],
         
-        actions: [],
-        status: PlanRunStatus.PENDING,
+        actions,
+        planMethod: section.planMethod,
+        status: PlanRunStatus.SOLVED,
         finished: false,
 
     }

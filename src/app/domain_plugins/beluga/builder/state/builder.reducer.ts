@@ -1,7 +1,7 @@
 import { createReducer, on } from "@ngrx/store";
 import { Loadable, LoadingState } from "src/app/shared/common/loadable.interface";
 import { Project } from "src/app/shared/domain/project";
-import { BelugaConfiguration, FlightsHorizon, getFlightSchedule, getFullStartState, getProductionSchedule } from "../../flight-section-planning/domain/flight-section";
+import { BelugaConfiguration, FlightsHorizon, getConsideredFlightSchedule, getFlightSchedule, getFullStartState, getProductionSchedule } from "../../flight-section-planning/domain/flight-section";
 import { BelugaProblem, BelugaProblemZ, Flight, Side } from "../../shared/domain/beluga_problem";
 import { applyAction, BelugaState } from "../../shared/domain/beluga_state";
 import { unSkipNotDelivered, updateSkipIncomingJig, updateSkipOutgoingJigType, updateSkipProductionLineJig } from "../domain/schedule_utils";
@@ -90,7 +90,7 @@ export const BuilderReducer = createReducer(
         applyAction(
             state.taskState, 
             action, 
-            getFlightSchedule( state.section.data.configurations[state.section.data.configurationIndex].flightTargetSchedule, state.section.data.flightIndices, false), 
+            getConsideredFlightSchedule( state.section.data.configurations[state.section.data.configurationIndex].flightTargetSchedule, state.section.data.flightIndices), 
             getProductionSchedule(Object.values(state.section.data.configurations[state.section.data.configurationIndex].productionLinesTargetSchedule), false), 
             state.section.data.configurations[state.section.data.configurationIndex].siteSetUp
         ) : null,

@@ -7,7 +7,7 @@ import { array } from "zod";
 import { BelugaProblem, Flight } from "../../shared/domain/beluga_problem";
 import { applyActions, getInitialSiteState, getInitialState } from "../../shared/domain/beluga_state";
 import { BelugaSiteSetUp, BelugaSiteState, getSiteSetUp } from "../../shared/domain/site_set_up";
-import { BelugaConfiguration, getBranchOfFlightHorizon, deriveSuccessorFlightHorizonFromPredecessor, filterUpTo, FlightPlanTree, FlightPlanTreeBase, FlightPlanTreeZ, FlightsHorizon, FlightsHorizonBase, FlightsHorizonZ, FlightTargetSchedule, getFlightSchedule, getFullStartState, getJigsOnSiteFromState, getPrefixOfFlightHorizon, getProductionSchedule, initialDeliveryStatuses, ProductionLineTargetSchedule } from "../domain/flight-section";
+import { BelugaConfiguration, getBranchOfFlightHorizon, deriveSuccessorFlightHorizonFromPredecessor, filterUpTo, FlightPlanTree, FlightPlanTreeBase, FlightPlanTreeZ, FlightsHorizon, FlightsHorizonBase, FlightsHorizonZ, FlightTargetSchedule, getFlightSchedule, getFullStartState, getJigsOnSiteFromState, getPrefixOfFlightHorizon, getProductionSchedule, initialDeliveryStatuses, ProductionLineTargetSchedule, getConsideredFlightSchedule } from "../domain/flight-section";
 import { ExplanationRunStatus } from "src/app/iterative_planning/domain/explanation/explanations";
 import { PlanRunStatus } from "src/app/iterative_planning/domain/plan";
 import { BelugaAction, BelugaActionType } from "../../shared/domain/beluga_plan";
@@ -125,11 +125,8 @@ export class FlightPlanTreeService{
           return of(undefined);
       }
 
-      // assumption that prefix does not contain all flight in branchOfSection
-
       let prefixSection: FlightsHorizonBase | null | undefined = null;
       const baseConfiguration = branchOfSection.configurations[branchOfSection.configurationIndex];
-      const actions: BelugaAction[] = [];
 
       if(prefix.length > 0){
         prefixSection = getPrefixOfFlightHorizon(branchOfSection, prefix);  
@@ -140,14 +137,15 @@ export class FlightPlanTreeService{
 
       // new initial state
       let siteState: BelugaSiteState | undefined = undefined;
-      if(actions.length == 0){
+      if(prefixSection === null){
         siteState = branchOfSection.siteState;
       }
       else{
+        
         const fullInitialState = applyActions(
             getFullStartState(branchOfSection), 
-            actions, 
-            getFlightSchedule(baseConfiguration.flightTargetSchedule, branchOfSection.flightIndices, false),  
+            prefixSection.actions, 
+            getConsideredFlightSchedule(baseConfiguration.flightTargetSchedule, branchOfSection.flightIndices),  
             getProductionSchedule(Object.values(baseConfiguration.productionLinesTargetSchedule) ?? [],false) , 
             baseConfiguration.siteSetUp
         );

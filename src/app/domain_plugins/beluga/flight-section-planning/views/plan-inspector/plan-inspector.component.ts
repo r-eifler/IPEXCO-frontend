@@ -57,7 +57,8 @@ export class PlanInspectorComponent {
     const targetSchedule = this.configuration()?.flightTargetSchedule
     let flightIndices = this.section()?.flightIndices
     if(targetSchedule !== undefined && flightIndices !== undefined){
-      return getFlightSchedule(targetSchedule, flightIndices, false)
+      let orderedFlights = flightIndices.map(index => targetSchedule[index])
+      return getFlightSchedule(orderedFlights, false)
     }
     return []
   })
