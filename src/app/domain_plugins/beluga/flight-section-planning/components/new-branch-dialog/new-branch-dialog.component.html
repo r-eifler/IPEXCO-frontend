@@ -1,0 +1,69 @@
+<app-dialog *transloco="let t">
+    <app-dialog-header>
+        <app-dialog-title>Configure New Flight Horizon</app-dialog-title>
+    </app-dialog-header>
+    <app-dialog-content>
+        <div class="main">
+            <mat-form-field class="full-width" appearance="outline">
+                <mat-label>{{ t('f.name') }}</mat-label>
+                <input matInput [formControl]="control">
+                @if(control.hasError('notUnique')){
+                    <mat-error>{{t('f.plan_version_already_exists')}}</mat-error>
+                }
+            </mat-form-field>
+
+            <div class="flight-selection-grid">
+
+                <h4>Already Solved Flights</h4>
+                <h4>Next Flights</h4>
+                <h4>Not Considered Flights</h4>
+
+                <div class="example-list">
+                    @if(displaySelectedPrefix.length > 0){
+                    <mat-selection-list (selectionChange)="onChangePrefix($event)">
+                    @for(flight of displaySelectedPrefix; track flight){
+                        <mat-list-option [disabled]="!flight.canBeChanged" [value]="flight" [selected]="flight.selected">
+                            {{flight.name}}
+                        </mat-list-option>
+                    }
+                    </mat-selection-list>
+                    }
+                    @else{
+                        <p>No solved flights available.</p>
+                    }
+                </div>
+                <div
+                    cdkDropList
+                    #todoList="cdkDropList"
+                    [cdkDropListData]="displayHorizonFlights"
+                    [cdkDropListConnectedTo]="[notConsideredList]"
+                    class="example-list"
+                    (cdkDropListDropped)="drop($event)">
+                    @for (item of displayHorizonFlights; track item) {
+                    <div class="example-box" cdkDrag>
+                        {{item.originalIndex}} {{item.name}}
+                    </div>
+                    }
+                </div>
+
+                <div
+                    cdkDropList
+                    #notConsideredList="cdkDropList"
+                    [cdkDropListData]="displayNotConsideredFlights"
+                    [cdkDropListConnectedTo]="[todoList]"
+                    class="example-list"
+                    (cdkDropListDropped)="drop($event)">
+                    @for (item of displayNotConsideredFlights; track item) {
+                    <div class="example-box" cdkDrag>
+                        {{item.originalIndex}} {{item.name}}
+                    </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </app-dialog-content>
+    <app-dialog-footer>
+        <button mat-button (click)="onCancel()">{{t('f.cancel')}}</button>
+        <button mat-flat-button (click)="onStart()" [disabled]="!control.valid || !configValid">{{t('f.new')}}</button>
+    </app-dialog-footer>
+</app-dialog>

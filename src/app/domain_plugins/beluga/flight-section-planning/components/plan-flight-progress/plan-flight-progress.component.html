@@ -1,0 +1,22 @@
+<div class="main">
+    @for(section of planSectionsStatuses(); track section){
+        <div class="section">
+            <div class="index">{{section.originalIndex}}</div>
+            <div class="name">{{section.name}}</div>
+            @switch(section.status){
+                @case(Statuses.TODO){
+                    <mat-icon>close</mat-icon>
+                }
+                @case(Statuses.DONE){
+                    <mat-icon>check</mat-icon>
+                }
+                @case(Statuses.IN_PROGRESS){
+                    <mat-icon>progress_activity</mat-icon>
+                }
+                @case(Statuses.UNKNOWN){
+                    <mat-icon>question_mark</mat-icon>
+                }
+            }
+        </div>
+    }
+</div>

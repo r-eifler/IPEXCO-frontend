@@ -29,6 +29,7 @@ import { ConfigurationSelectorComponent } from '../configuration-selector/config
 import { SectionPlanMethodDialogComponent } from '../section-plan-method-dialog/section-plan-method-dialog.component';
 import { PlanFlightProgressComponent } from '../plan-flight-progress/plan-flight-progress.component';
 import { getFlightPlanProgressStatus } from '../../domain/utils';
+import { acceptUserStudyParticipant } from 'src/app/user_study/state/user-study.actions';
 
 @Component({
   selector: 'app-section-card',
@@ -117,11 +118,18 @@ export class SectionCardComponent {
 	});
 
 	onBranch(){
+		const remainingFlights = this.originalTask()?.flights.
+		map((flight, index) => ({originalIndex: index, flight})).
+		filter(e => ! this.coveredFlightsIndicesByPredecessors()?.includes(e.originalIndex)).
+		reduce((acc,e) => ({
+			...acc,
+			[e.originalIndex]: e.flight
+		}), {})
+
 		const dialogRef = this.dialog.open(NewBranchDialogComponent, 
 			{data: {
 				existingBranchNames: this.existingBranchNames(),
-				allFlights: this.originalTask()?.flights.filter((f,index) => !
-					this.coveredFlightsIndicesByPredecessors()?.includes(index)),
+				remainingFlights,
 				flightIndices: this.section()?.flightIndices,
 				planSectionsStatuses: getFlightPlanProgressStatus(this.section()?.actions, this.flights())
 			}});

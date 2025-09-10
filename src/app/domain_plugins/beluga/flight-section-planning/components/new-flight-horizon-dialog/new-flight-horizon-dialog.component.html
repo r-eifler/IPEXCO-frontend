@@ -1,0 +1,49 @@
+<app-dialog>
+    <app-dialog-header>
+        <app-dialog-title>Configure Next Flight Horizon</app-dialog-title>
+    </app-dialog-header>
+    <app-dialog-content>
+
+        <div class="flight-selection-grid">
+
+            <h4>Next Flights</h4>
+            <h4>Not Considered Flights</h4>
+
+            <div
+                cdkDropList
+                #todoList="cdkDropList"
+                [cdkDropListData]="displayHorizonFlights"
+                [cdkDropListConnectedTo]="[notConsideredList]"
+                class="example-list"
+                (cdkDropListDropped)="drop($event)">
+                @for (item of displayHorizonFlights; track item) {
+                <div class="example-box" cdkDrag>
+                    {{item.originalIndex}} {{item.name}}
+                </div>
+                }
+            </div>
+
+            <div
+                cdkDropList
+                #notConsideredList="cdkDropList"
+                [cdkDropListData]="displayNotConsideredFlights"
+                [cdkDropListConnectedTo]="[todoList]"
+                class="example-list"
+                (cdkDropListDropped)="drop($event)">
+                @for (item of displayNotConsideredFlights; track item) {
+                <div class="example-box" cdkDrag>
+                    {{item.originalIndex}} {{item.name}}
+                </div>
+                }
+            </div>
+            <button mat-button (click)="onSelectAllFlights()" class="select-all-button">
+                Select All Flights
+            </button>
+        </div>
+
+    </app-dialog-content>
+    <app-dialog-footer>
+        <button mat-button (click)="onCancel()">Cancel</button>
+        <button mat-flat-button (click)="onStart()" [disabled]="!configValid">Create</button>
+    </app-dialog-footer>
+</app-dialog>
