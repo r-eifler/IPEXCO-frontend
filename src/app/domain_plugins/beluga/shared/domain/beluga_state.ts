@@ -1,7 +1,7 @@
 import { BelugaAction, BelugaActionType, DeliverToHangerZ, GetFromHangerZ, LoadBelugaZ, PickUpRackZ, PutDownRackZ, UnloadBelugaZ } from "./beluga_plan";
 import { BelugaProblem, Flight, getJigSize, getRackSize, Jig, JigZ, occupiedRackSpace, ProductionLine, ProductionLineZ } from "./beluga_problem";
 import { array, boolean, nullable, number, object, optional, record, string, infer as zinfer } from "zod";
-import { BelugaSiteSetUp } from "./site_set_up";
+import { BelugaSiteSetUp, BelugaSiteState } from "./site_set_up";
 
 export const BelugaStateZ = object({
     jigs: record(string(), JigZ),
@@ -28,6 +28,17 @@ export function getInitialState(model: BelugaProblem): BelugaState {
         racks: model.racks.reduce((acc,c) => ({...acc, [c.name]: [...c.jigs]}), {}),
         hangars: model.hangars.reduce((acc,c) => ({...acc, [c.name]: c.jig}), {}),
         productionLines: model.production_lines.reduce((acc,c) => ({...acc,[c.name]: []}), {})
+      }
+}
+
+export function getInitialSiteState(model: BelugaProblem): BelugaSiteState {
+    let trailers = model.trailers_beluga.reduce((acc,c) => ({...acc, [c.name]: c.jig}), {})
+    trailers = model.trailers_factory.reduce((acc,c) => ({...acc, [c.name]: c.jig}), trailers)
+    return {
+        jigs: model.jigs,
+        trailers,
+        racks: model.racks.reduce((acc,c) => ({...acc, [c.name]: [...c.jigs]}), {}),
+        hangars: model.hangars.reduce((acc,c) => ({...acc, [c.name]: c.jig}), {}),
       }
 }
 

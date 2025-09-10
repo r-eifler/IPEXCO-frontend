@@ -7,45 +7,48 @@
     </mat-card-header>
   
     <mat-card-content>
-      <div class="content">
-        <div class="stats-main">
-            <div class="stats-container">
-                <span>{{t('f.planned')}}</span>
-                <div class="stats"> 
-                    <mat-icon>flight</mat-icon>
-                    <span class="property-label">Flights:</span>
-                    <span class="property-value">{{ numFlights() ?? '?'}}</span>
-                    <mat-icon>warehouse</mat-icon>
-                    <span class="property-label">{{t('f.deliveries')}}:</span>
-                    <span class="property-value">{{ numPossibleDeliveries() ?? '?' }}/{{ numOverallDeliveries() ?? '?' }}</span>
+         <div class="content">
+            <div class="content-info">
+                <div class="stats-main">
+                    <div class="stats-container">
+                        <span>{{t('f.planned')}}</span>
+                        <div class="stats"> 
+                            <mat-icon>flight</mat-icon>
+                            <span class="property-label">Flights:</span>
+                            <span class="property-value">{{ numFlights() ?? '?'}}</span>
+                            <mat-icon>warehouse</mat-icon>
+                            <span class="property-label">{{t('f.deliveries')}}:</span>
+                            <span class="property-value">{{ numPossibleDeliveries() ?? '?' }}/{{ numOverallDeliveries() ?? '?' }}</span>
+                        </div>
+                    </div>
+            
+                    <div class="stats-container">
+                        <span>{{t('f.plan_statistics')}}</span>
+                        <div class="stats"> 
+                            <mat-icon>arrow_range</mat-icon>
+                            <span class="property-label">{{t('f.length')}}:</span>
+                            <span class="property-value">{{ length() ?? '?'}}</span>
+                            <mat-icon>swap_vert</mat-icon>
+                            <span class="property-label">{{t('f.swaps')}}:</span>
+                            <span class="property-value">{{ swaps() ?? '?' }}</span>
+                            <mat-icon>shelves</mat-icon>
+                            <span class="property-label">{{t('f.rack_occupancy_rate')}}:</span>
+                            <span class="property-value">{{ rackOccupancyRate() ?? '?' }}</span>
+                        </div>
+                    </div>
                 </div>
-            </div>
-    
-            <div class="stats-container">
-                <span>{{t('f.plan_statistics')}}</span>
-                <div class="stats"> 
-                    <mat-icon>arrow_range</mat-icon>
-                    <span class="property-label">{{t('f.length')}}:</span>
-                    <span class="property-value">{{ length() ?? '?'}}</span>
-                    <mat-icon>swap_vert</mat-icon>
-                    <span class="property-label">{{t('f.swaps')}}:</span>
-                    <span class="property-value">{{ swaps() ?? '?' }}</span>
-                    <mat-icon>shelves</mat-icon>
-                    <span class="property-label">{{t('f.rack_occupancy_rate')}}:</span>
-                    <span class="property-value">{{ rackOccupancyRate() ?? '?' }}</span>
-                </div>
-            </div>
-        </div>
 
-        <div class="utility">
-            <mat-icon>{{ section()?.planMethod?.type | planMethodTypeIcon }}</mat-icon>
-            <div class="utility-value-container">
-              <span>{{ section()?.planMethod?.type | planMethodTypeName }}</span>
-              <span class="value">{{ section()?.planMethod?.name }}</span>
-              <span class="label">{{t('f.planning_method')}}</span>
+                <div class="utility">
+                    <mat-icon>{{ section()?.planMethod?.type | planMethodTypeIcon }}</mat-icon>
+                    <div class="utility-value-container">
+                    <span>{{ section()?.planMethod?.type | planMethodTypeName }}</span>
+                    <span class="value">{{ section()?.planMethod?.name }}</span>
+                    <span class="label">{{t('f.planning_method')}}</span>
+                    </div>
+                </div>
             </div>
-          </div>
-      </div>
+            <app-plan-flight-progress [section]="section()"></app-plan-flight-progress>
+        </div>      
     </mat-card-content>
     <mat-card-actions class="actions-container">
         <div class="configs-main-container">
@@ -121,10 +124,6 @@
                 >
                     {{t('f.inspect_plan')}}
                 </a>
-                <button mat-icon-button
-                    matTooltip="Creates a different plan for this flight."
-                    (click)="onBranch()"
-                ><mat-icon>call_split</mat-icon></button>
             }
             @if(notSolvable() || failed()){
                 @if(isAutomatic() || isMixed()){
@@ -133,11 +132,12 @@
                         {{t('f.check_configurations')}}
                     </a>
                 }
-                <button mat-icon-button
-                    matTooltip="Creates a different plan for this flight."
-                    (click)="onBranch()"
-                ><mat-icon>call_split</mat-icon></button>
+                
             }
+            <button mat-icon-button
+                matTooltip="Create a new plan version."
+                (click)="onBranch()"
+            ><mat-icon>call_split</mat-icon></button>
         </div>
     </mat-card-actions>
 </mat-card>

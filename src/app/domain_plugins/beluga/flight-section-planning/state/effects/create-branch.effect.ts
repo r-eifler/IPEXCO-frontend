@@ -5,6 +5,8 @@ import { of } from "rxjs";
 import { catchError, switchMap } from "rxjs/operators";
 import { FlightPlanTreeService } from "../../services/flight-plan-tree.service";
 import { createNewBranch, createNewBranchFailure, createNewBranchSuccess, loadFlightsHorizons, reloadFlightPlanTree } from "../flight-section-planning.actions";
+import { selectFlights } from "../flight-section-planning.selector";
+import { concatLatestFrom } from "@ngrx/operators";
 
 
 @Injectable()
@@ -16,12 +18,18 @@ export class CreateFlightPlanTreeBranchEffect{
 
     public create$ = createEffect(() => this.actions$.pipe(
         ofType(createNewBranch),
-        switchMap(({sectionId, name}) => this.service.newBranch$(sectionId, name).pipe(
-            switchMap(tree => [
-                createNewBranchSuccess({tree}),
-                reloadFlightPlanTree({id: tree._id}),
-                loadFlightsHorizons({treeId: tree._id})
-            ]),
+        concatLatestFrom(() => [this.store.select(selectFlights)]),
+        switchMap(([{section, name, prefix, horizon}, flights]) => this.service.newBranch$(section, name, flights, prefix, horizon).pipe(
+            switchMap(tree => {
+                if(tree === undefined){
+                    return [createNewBranchFailure({err: "Flight horizon section creation failed"})]
+                }
+                return [
+                    createNewBranchSuccess({tree}),
+                    reloadFlightPlanTree({id: tree._id}),
+                    loadFlightsHorizons({treeId: tree._id})
+                ]
+            }),
             catchError((e) => of(createNewBranchFailure({err: e})))
         ))
     ))

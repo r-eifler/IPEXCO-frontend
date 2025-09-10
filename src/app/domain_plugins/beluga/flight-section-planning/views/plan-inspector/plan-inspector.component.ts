@@ -41,7 +41,15 @@ export class PlanInspectorComponent {
 
   actions = computed(() => this.section()?.actions.filter(a => a.name !== BelugaActionType.SWITCH_TO_NEXT_BELUGA) ?? [])
 
-  startState = computed(() => getFullStartState(this.section()))
+  startState = computed(() => {
+    const section = this.section();
+    if(section === undefined){
+      return undefined;
+    }
+    else{
+      getFullStartState(section)
+    }
+  })
   
   siteSetUp = computed(() => this.configuration()?.siteSetUp)
 

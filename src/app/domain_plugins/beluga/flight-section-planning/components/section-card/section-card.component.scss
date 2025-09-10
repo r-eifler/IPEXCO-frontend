@@ -3,6 +3,15 @@
 .content {
   padding-block: var(--spacing-100);
 
+  display: flex;
+  flex-direction: column;
+
+  gap: var(--spacing-300);
+}
+
+.content-info {
+  padding-block: var(--spacing-100);
+
   display: grid;
   grid-template-columns: auto auto;
   align-items: start;

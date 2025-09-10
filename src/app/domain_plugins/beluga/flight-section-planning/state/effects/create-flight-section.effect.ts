@@ -3,7 +3,7 @@ import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { of } from "rxjs";
 import { catchError, map, switchMap } from "rxjs/operators";
 import { FlightPlanTreeService } from "../../services/flight-plan-tree.service";
-import { deriveSuccessor } from "../../domain/flight-section";
+import { deriveSuccessorFlightHorizonFromPredecessor } from "../../domain/flight-section";
 import { createFlightsHorizon, createFlightsHorizonFailure, createFlightsHorizonSuccess, createSuccessorFlightsHorizon, loadFlightsHorizons, reloadFlightPlanTree } from "../flight-section-planning.actions";
 import { concatLatestFrom } from "@ngrx/operators";
 import { Store } from "@ngrx/store";
@@ -30,8 +30,8 @@ export class CreateFlightSectionEffect{
         ofType(createSuccessorFlightsHorizon),
         concatLatestFrom(() => this.store.select(selectTask)),
         filterListNotNullOrUndefined(),
-        switchMap(([{section, flights, indices}, task]) => {
-                let sucSection = deriveSuccessor(section, flights, indices); //TODO
+        switchMap(([{section, flights, horizon}, task]) => {
+                let sucSection = deriveSuccessorFlightHorizonFromPredecessor(section, flights, horizon);
                 if(sucSection === undefined){
                     return [createFlightsHorizonFailure({err: {message: "Successor section could not be derived!"}})]
                 }

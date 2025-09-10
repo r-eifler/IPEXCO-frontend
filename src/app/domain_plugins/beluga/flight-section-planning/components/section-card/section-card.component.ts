@@ -5,6 +5,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { TranslocoModule } from '@jsverse/transloco';
@@ -16,18 +17,18 @@ import { StepStatusColorPipe } from 'src/app/iterative_planning/domain/pipe/step
 import { StepStatusNamePipe } from 'src/app/iterative_planning/domain/pipe/step-status-name.pipe';
 import { PlanRunStatus } from 'src/app/iterative_planning/domain/plan';
 import { LabelModule } from 'src/app/shared/components/label/label.module';
-import { Flight } from '../../../shared/domain/beluga_problem';
+import { FlightsHorizon } from '../../domain/flight-section';
 import { computeRackOccupancyRate, computeSwaps } from '../../domain/metrics';
 import { PlanMethod, PlanMethodType } from '../../domain/plan_method';
 import { PlanMethodTypeIconPipe } from '../../pipe/plan-method-type-icon.pipe';
 import { PlanMethodTypeNamePipe } from '../../pipe/plan-method-type-name.pipe';
 import { cancelPlanning, createNewBranch, inspectPlan, registerManualPlanning, startAutomaticPlanning, updateConfigurationOfSectionAndConfigIndex } from '../../state/flight-section-planning.actions';
-import { selectActiveBranchRemainingNumberFlights, selectBranchNames, selectIsAutomatic, selectIsManual, selectIsMixed, selectSupportedPlanners } from '../../state/flight-section-planning.selector';
-import { BranchNameDialogComponent } from '../branch-name-dialog/branch-name-dialog.component';
+import { selectActiveBranchRemainingNumberFlights, selectBranchNames, selectIsAutomatic, selectIsManual, selectIsMixed, selectSupportedPlanners, selectTask } from '../../state/flight-section-planning.selector';
+import { NewBranchDialogComponent } from '../new-branch-dialog/new-branch-dialog.component';
 import { ConfigurationSelectorComponent } from '../configuration-selector/configuration-selector.component';
 import { SectionPlanMethodDialogComponent } from '../section-plan-method-dialog/section-plan-method-dialog.component';
-import { FlightsHorizon } from '../../domain/flight-section';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { PlanFlightProgressComponent } from '../plan-flight-progress/plan-flight-progress.component';
+import { getFlightPlanProgressStatus } from '../../domain/utils';
 
 @Component({
   selector: 'app-section-card',
@@ -47,6 +48,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
     PlanMethodTypeNamePipe,
     PlanMethodTypeIconPipe,
     ConfigurationSelectorComponent,
+	PlanFlightProgressComponent,
   ],
   templateUrl: './section-card.component.html',
   styleUrl: './section-card.component.scss'
@@ -66,6 +68,8 @@ export class SectionCardComponent {
   supportedPlanners= this.store.selectSignal(selectSupportedPlanners);
   remainingNUmberFlights = this.store.selectSignal(selectActiveBranchRemainingNumberFlights);
 
+  originalTask = this.store.selectSignal(selectTask);
+
   section = input.required<FlightsHorizon>();
 
   config = computed(() => this.section().configurations[this.section().configurationIndex]);
@@ -74,6 +78,10 @@ export class SectionCardComponent {
   configurations = computed(() => this.section()?.configurations);
 
   numFlights = computed(() => this.section().flightIndices.length)
+  flights = computed(() => {
+	  const flights = this.section()?.configurations[this.section()?.configurationIndex].flightTargetSchedule
+	  return this.section()?.flightIndices.map(index => flights[index])
+	})
 
   name = computed(() => "Flights: " + this.section()?.flightIndices.join(" - "))
 
@@ -105,12 +113,18 @@ export class SectionCardComponent {
   });
 
   onBranch(){
-    const dialogRef = this.dialog.open(BranchNameDialogComponent, {data: {existingBranchNames: this.existingBranchNames()}});
+    const dialogRef = this.dialog.open(NewBranchDialogComponent, 
+		{data: {
+			existingBranchNames: this.existingBranchNames(),
+			allFlights: this.originalTask()?.flights,
+			flightIndices: this.section()?.flightIndices,
+			planSectionsStatuses: getFlightPlanProgressStatus(this.section()?.actions, this.flights())
+		}});
 
-    dialogRef.afterClosed().pipe(take(1)).subscribe((result: {name: string}) => {
+    dialogRef.afterClosed().pipe(take(1)).subscribe((result: {name: string, prefix: number[], horizon: number[]}) => {
       if (result !== undefined) {
         console.log(result);
-        this.store.dispatch(createNewBranch({sectionId: this.section()._id, name: result.name}));
+        this.store.dispatch(createNewBranch({section: this.section(), name: result.name, prefix: result.prefix, horizon: result.horizon}));
       }
     });
   }

@@ -195,7 +195,6 @@ export const selectJigMapIncomingFlight= createSelector(selectFlights,
     }), {})
 );
 
-
 // configuration updater
 
 export const selectUpdatingConfiguration = createSelector(selectUpdatedConfiguration,  

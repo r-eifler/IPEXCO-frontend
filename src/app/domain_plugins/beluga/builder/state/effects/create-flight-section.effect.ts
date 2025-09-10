@@ -5,7 +5,7 @@ import { Store } from "@ngrx/store";
 import { of } from "rxjs";
 import { catchError, switchMap } from "rxjs/operators";
 import { filterListNotNullOrUndefined } from "src/app/shared/common/check_null_undefined";
-import { deriveSuccessor } from "../../../flight-section-planning/domain/flight-section";
+import { deriveSuccessorFlightHorizonFromPredecessor } from "../../../flight-section-planning/domain/flight-section";
 import { FlightPlanTreeService } from "../../services/flight-plan-tree.service";
 import { selectSiteSetUp } from "../builder.selector";
 import { createFlightSectionFailure, createFlightSectionSuccess, createSuccessorFlightSection } from "../builder.actions";
@@ -23,7 +23,7 @@ export class CreateFlightSectionEffect{
         concatLatestFrom(() => this.store.select(selectSiteSetUp)),
         filterListNotNullOrUndefined(),
         switchMap(([{section}, task]) => {
-                let sucSection = deriveSuccessor(section, task);
+                let sucSection = deriveSuccessorFlightHorizonFromPredecessor(section, task);
                 if(sucSection === undefined){
                     return [createFlightSectionFailure({err: {message: "Successor section could not be derived!"}})]
                 }
