@@ -14,6 +14,17 @@
         </app-page-section>
 
         <app-page-section>
+          <app-page-section-content>
+            <app-multi-flight-card
+              [jigs]="jigs()"
+              [jigTypes]="jigTypes()"
+              [flights]="orderedFlights()"
+              [highlighted]="currentRelativeFlightIndex()"
+            ></app-multi-flight-card>
+          </app-page-section-content>
+        </app-page-section>
+
+        <app-page-section>
           <app-page-section-title>
            {{t('b.plan')}}
           </app-page-section-title>

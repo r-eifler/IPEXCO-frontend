@@ -12,6 +12,7 @@
     --production-line: #{mat.get-theme-color(ipexco-theme.$light-theme, surface-container-high)};
     --hangar: #{mat.get-theme-color(ipexco-theme.$light-theme, surface-container-high)};
     --flight: rgb(232, 240, 255);
+    --selected-flight: rgb(246, 158, 158);
 
 
     --action: rgb(226, 234, 255);

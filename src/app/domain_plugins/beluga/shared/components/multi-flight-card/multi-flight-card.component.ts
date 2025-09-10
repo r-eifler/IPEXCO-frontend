@@ -17,6 +17,7 @@ export class MultiFlightCardComponent {
   flights = input.required<Flight[]>();
   jigs = input.required<Record<string,Jig>>();
   jigTypes = input.required<Record<string,JigType>>();
+  highlighted = input<number | null>(null);
 
   selectedFlightIndex = signal<number | null>(0);
 

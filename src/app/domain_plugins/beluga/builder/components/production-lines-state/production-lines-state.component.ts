@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { selectJigsState, selectJigTypes, selectProductionLineSchedule } from '../../state/builder.selector';
+import { selectJigsState, selectJigTypes, selectProductionLineScheduleList } from '../../state/builder.selector';
 import { ProductionLineStateComponent } from '../production-line-state/production-line-state.component';
 
 @Component({
@@ -15,7 +15,7 @@ export class ProductionLinesStateComponent {
 
   store = inject(Store);
 
-  productionLinesTargetSchedules = this.store.selectSignal(selectProductionLineSchedule);
+  productionLinesTargetSchedules = this.store.selectSignal(selectProductionLineScheduleList);
   jigTypes = this.store.selectSignal(selectJigTypes);
   jigs = this.store.selectSignal(selectJigsState);
 }

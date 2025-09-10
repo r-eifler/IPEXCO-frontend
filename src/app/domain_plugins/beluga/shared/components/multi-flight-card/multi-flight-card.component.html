@@ -2,7 +2,10 @@
     <mat-card  appearance="outlined">
         <mat-card-content class="flight-container">
             @for(flight of flights(); track flight.name; let idx = $index){
-                <div class="flight" (click)="selectFlightIndex(idx)" [class.selected]="idx === selectedFlightIndex()">
+                <div class="flight" 
+                    (click)="selectFlightIndex(idx)" 
+                    [class.selected]="idx === selectedFlightIndex()"
+                    [class.highlighted]="idx === highlighted()">
                     <span>{{flight.name}}</span>
                 </div>
             }

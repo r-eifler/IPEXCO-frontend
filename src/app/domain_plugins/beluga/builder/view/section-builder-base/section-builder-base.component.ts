@@ -1,5 +1,5 @@
 import { CdkDropListGroup } from '@angular/cdk/drag-drop';
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { provideTranslocoScope, TranslocoModule } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
@@ -12,6 +12,8 @@ import { RacksStateComponent } from '../../components/racks-state/racks-state.co
 import { SectionActionListComponent } from '../../components/section-action-list/section-action-list.component';
 import { SectionControlsComponent } from '../../components/section-controls/section-controls.component';
 import { TrailersStateComponent } from '../../components/trailers-state/trailers-state.component';
+import { MultiFlightCardComponent } from '../../../shared/components/multi-flight-card/multi-flight-card.component';
+import { selectCurrentRelativeFlightIndex, selectFlightScheduleOrdered, selectJigsState, selectJigTypes } from '../../state/builder.selector';
 
 @Component({
   selector: 'app-section-builder-base',
@@ -28,6 +30,7 @@ import { TrailersStateComponent } from '../../components/trailers-state/trailers
       SectionActionListComponent,
       CdkDropListGroup,
       SectionControlsComponent,
+      MultiFlightCardComponent
     ],
   providers: [
       provideTranslocoScope({
@@ -42,4 +45,16 @@ export class SectionBuilderBaseComponent {
 
     store = inject(Store);
 
+    orderedFlightSchedules = this.store.selectSignal(selectFlightScheduleOrdered);
+    jigTypes = this.store.selectSignal(selectJigTypes);
+    jigs= this.store.selectSignal(selectJigsState);
+
+    currentRelativeFlightIndex = this.store.selectSignal(selectCurrentRelativeFlightIndex);
+
+    orderedFlights = computed(() => this.orderedFlightSchedules()?.map(flight => ({
+        ...flight,
+        incoming: flight?.incoming.map( e => e.jig),
+        outgoing: flight?.outgoing.map(e => e.jigType) 
+      })
+    ))
 }

@@ -54,6 +54,11 @@
   scale: 1.1;
 }
 
+.highlighted {
+  background-color: var(--selected-flight);
+  font-weight: 400;
+}
+
 .flight-info {
     display: grid;
     grid-template-columns: 1fr 1fr;

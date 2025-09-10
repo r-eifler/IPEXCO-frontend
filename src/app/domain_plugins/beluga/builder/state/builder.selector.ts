@@ -58,15 +58,24 @@ export const selectTaskState = createSelector(BuilderFeature.selectTaskState,
 export const selectJigsState = createSelector(selectTaskState, 
     (taskState) => taskState?.jigs);
 
-export const selectFlightIndexState = createSelector(selectTaskState, 
+export const selectCurrentRelativeFlightIndex = createSelector(selectTaskState, 
     (taskState) => taskState?.flightIndex);
 
 
 //##########################################
 // flight
 
-export const selectFlightSchedule= createSelector(selectFlightIndexState, selectConfig, 
-    (index, config) => config === null || index === undefined ? undefined : config?.flightTargetSchedule[index]);
+export const selectFlightIndices = createSelector(selectSection, 
+    (section) => section?.flightIndices);
+
+export const selectFlightSchedules = createSelector(selectConfig, 
+    (config) => config?.flightTargetSchedule);
+
+export const selectFlightScheduleOrdered = createSelector(selectFlightSchedules, selectFlightIndices, 
+    (flights, indices) => indices?.map( index => flights?.[index]));
+
+export const selectFlightSchedule= createSelector(selectCurrentRelativeFlightIndex, selectFlightScheduleOrdered, 
+    (index, schedules) => schedules === undefined || index === undefined ? undefined : schedules[index]);
 
 export const selectFlightName = createSelector(selectFlightSchedule, 
     (flight) => flight !== undefined ? flight?.name : "Unknown");
@@ -285,8 +294,10 @@ export const selectAvailableHangarNames = createSelector(selectHangars, selectHa
 // ProductionLine 
 
 export const selectProductionLineSchedule = createSelector(selectConfig, 
-    (config) => config === null ? undefined : Object.values(config.productionLinesTargetSchedule)
-);
+    (config) => config === null ? undefined : config.productionLinesTargetSchedule);
+
+export const selectProductionLineScheduleList = createSelector(selectConfig, 
+    (config) => config === null ? undefined : Object.values(config.productionLinesTargetSchedule));
 
 export const selectProductionLineScheduleFor = memoizeWith(
     (name: string) => name,
