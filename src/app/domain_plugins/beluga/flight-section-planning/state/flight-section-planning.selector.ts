@@ -127,6 +127,18 @@ export const selectActiveBranchActions= createSelector(selectActiveBranchSection
 export const selectActiveBranchNumberFinishedFlights= createSelector(selectActiveBranchSections, 
     (sections) => sections?.filter(s => s.status == PlanRunStatus.SOLVED).length);
 
+export const selectActiveBranchNumberCoveredFlights= createSelector(selectActiveBranchSections, 
+    (sections) => sections?.map(s => s.flightIndices).flat().length);
+
+export const selectActiveBranchCoveredFlightsIndicesByPredecessors = memoizeWith(
+    (index: number) => index.toString(),
+    (index: number) => createSelector(selectActiveBranchSections,
+        (sections) => {
+            const predecessorSections = sections?.filter((s, i) => i < index)
+            return predecessorSections?.map(s => s.flightIndices).flat()
+    })
+);
+
 export const selectActiveBranchLastSectionFinished= createSelector(selectActiveBranchSections, 
     (sections) => sections?.[sections?.length - 1].status == PlanRunStatus.SOLVED);
 

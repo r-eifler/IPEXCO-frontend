@@ -1,14 +1,14 @@
 import { inject, Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { of } from "rxjs";
-import { catchError, map, switchMap } from "rxjs/operators";
-import { FlightPlanTreeService } from "../../services/flight-plan-tree.service";
-import { deriveSuccessorFlightHorizonFromPredecessor } from "../../domain/flight-section";
-import { createFlightsHorizon, createFlightsHorizonFailure, createFlightsHorizonSuccess, createSuccessorFlightsHorizon, loadFlightsHorizons, reloadFlightPlanTree } from "../flight-section-planning.actions";
 import { concatLatestFrom } from "@ngrx/operators";
 import { Store } from "@ngrx/store";
-import { selectTask } from "../flight-section-planning.selector";
-import { filterListNotNullOrUndefined } from "src/app/shared/common/check_null_undefined";
+import { of } from "rxjs";
+import { catchError, map, switchMap } from "rxjs/operators";
+import { filterListNotNullOrUndefined } from "src/app/shared/common/check_null_undefined";;
+import { deriveSuccessorFlightHorizonFromPredecessor } from "../../domain/flight-section";
+import { FlightPlanTreeService } from "../../services/flight-plan-tree.service";
+import { createFlightsHorizon, createFlightsHorizonFailure, createFlightsHorizonSuccess, createSuccessorFlightsHorizon, loadFlightsHorizons, reloadFlightPlanTree } from "../flight-section-planning.actions";
+import { selectFlights } from "../flight-section-planning.selector";
 
 
 @Injectable()
@@ -28,9 +28,9 @@ export class CreateFlightSectionEffect{
 
     public createSuccessor$ = createEffect(() => this.actions$.pipe(
         ofType(createSuccessorFlightsHorizon),
-        concatLatestFrom(() => this.store.select(selectTask)),
+        concatLatestFrom(() => this.store.select(selectFlights)),
         filterListNotNullOrUndefined(),
-        switchMap(([{section, flights, horizon}, task]) => {
+        switchMap(([{section, horizon}, flights]) => {
                 let sucSection = deriveSuccessorFlightHorizonFromPredecessor(section, flights, horizon);
                 if(sucSection === undefined){
                     return [createFlightsHorizonFailure({err: {message: "Successor section could not be derived!"}})]

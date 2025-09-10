@@ -68,7 +68,7 @@ export const loadFlightsHorizons = createAction('[beluga-flights-horizon-plannin
 export const loadFlightsHorizonsSuccess = createAction('[beluga-flights-horizon-planning] load flights horizons success', props<{sections: Record<string,FlightsHorizon>}>());
 export const loadFlightsHorizonsFailure = createAction('[beluga-flights-horizon-planning] load flights horizons failure', props<{err: any}>());
 
-export const createSuccessorFlightsHorizon = createAction('[beluga-flights-horizon-planning] create successor flights horizon', props<{section: FlightsHorizon, flights: Flight[], horizon: number[]}>());
+export const createSuccessorFlightsHorizon = createAction('[beluga-flights-horizon-planning] create successor flights horizon', props<{section: FlightsHorizon, horizon: number[]}>());
 
 export const createFlightsHorizon = createAction('[beluga-flights-horizon-planning] new flights horizon', props<{section: FlightsHorizonBase}>());
 export const createFlightsHorizonSuccess = createAction('[beluga-flights-horizon-planning] new flights horizon success', props<{section: FlightsHorizon}>());

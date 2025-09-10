@@ -23,7 +23,7 @@ import { PlanMethod, PlanMethodType } from '../../domain/plan_method';
 import { PlanMethodTypeIconPipe } from '../../pipe/plan-method-type-icon.pipe';
 import { PlanMethodTypeNamePipe } from '../../pipe/plan-method-type-name.pipe';
 import { cancelPlanning, createNewBranch, inspectPlan, registerManualPlanning, startAutomaticPlanning, updateConfigurationOfSectionAndConfigIndex } from '../../state/flight-section-planning.actions';
-import { selectActiveBranchRemainingNumberFlights, selectBranchNames, selectIsAutomatic, selectIsManual, selectIsMixed, selectSupportedPlanners, selectTask } from '../../state/flight-section-planning.selector';
+import { selectActiveBranchCoveredFlightsIndicesByPredecessors, selectActiveBranchRemainingNumberFlights, selectBranchNames, selectIsAutomatic, selectIsManual, selectIsMixed, selectSupportedPlanners, selectTask } from '../../state/flight-section-planning.selector';
 import { NewBranchDialogComponent } from '../new-branch-dialog/new-branch-dialog.component';
 import { ConfigurationSelectorComponent } from '../configuration-selector/configuration-selector.component';
 import { SectionPlanMethodDialogComponent } from '../section-plan-method-dialog/section-plan-method-dialog.component';
@@ -55,130 +55,135 @@ import { getFlightPlanProgressStatus } from '../../domain/utils';
 })
 export class SectionCardComponent {
 
-  store = inject(Store);
-  readonly dialog = inject(MatDialog);
-  router = inject(Router);
-  activatedRoute = inject(ActivatedRoute)
-  private snackBar = inject(MatSnackBar);
+	store = inject(Store);
+	readonly dialog = inject(MatDialog);
+	router = inject(Router);
+	activatedRoute = inject(ActivatedRoute)
+	private snackBar = inject(MatSnackBar);
 
-  existingBranchNames = this.store.selectSignal(selectBranchNames);
-  isAutomatic = this.store.selectSignal(selectIsAutomatic);
-  isManual = this.store.selectSignal(selectIsManual);
-  isMixed = this.store.selectSignal(selectIsMixed);
-  supportedPlanners= this.store.selectSignal(selectSupportedPlanners);
-  remainingNUmberFlights = this.store.selectSignal(selectActiveBranchRemainingNumberFlights);
+	existingBranchNames = this.store.selectSignal(selectBranchNames);
+	isAutomatic = this.store.selectSignal(selectIsAutomatic);
+	isManual = this.store.selectSignal(selectIsManual);
+	isMixed = this.store.selectSignal(selectIsMixed);
+	supportedPlanners= this.store.selectSignal(selectSupportedPlanners);
+	remainingNUmberFlights = this.store.selectSignal(selectActiveBranchRemainingNumberFlights);
+	coveredFlightsIndicesByPredecessors = computed(() => 
+		this.store.selectSignal(selectActiveBranchCoveredFlightsIndicesByPredecessors(this.sectionIndex()))()
+	);
 
-  originalTask = this.store.selectSignal(selectTask);
+	originalTask = this.store.selectSignal(selectTask);
 
-  section = input.required<FlightsHorizon>();
+	section = input.required<FlightsHorizon>();
+	sectionIndex = input.required<number>();
 
-  config = computed(() => this.section().configurations[this.section().configurationIndex]);
-  selectedConfigSolvable = computed(() => this.config().explanationStatus == ExplanationRunStatus.FINISHED && this.config().explanations?.MUGS.length == 0);
-  selectedConfigId = computed(() => this.section()?.configurationIndex);
-  configurations = computed(() => this.section()?.configurations);
+	config = computed(() => this.section().configurations[this.section().configurationIndex]);
+	selectedConfigSolvable = computed(() => this.config().explanationStatus == ExplanationRunStatus.FINISHED && this.config().explanations?.MUGS.length == 0);
+	selectedConfigId = computed(() => this.section()?.configurationIndex);
+	configurations = computed(() => this.section()?.configurations);
 
-  numFlights = computed(() => this.section().flightIndices.length)
-  flights = computed(() => {
-	  const flights = this.section()?.configurations[this.section()?.configurationIndex].flightTargetSchedule
-	  return this.section()?.flightIndices.map(index => flights[index])
-	})
+	numFlights = computed(() => this.section().flightIndices.length)
+	flights = computed(() => {
+		const flights = this.section()?.configurations[this.section()?.configurationIndex].flightTargetSchedule
+		return this.section()?.flightIndices.map(index => flights[index])
+		})
 
-  name = computed(() => "Flights: " + this.section()?.flightIndices.join(" - "))
+	name = computed(() => "Flights: " + this.section()?.flightIndices.join(" - "))
 
-  numPossibleDeliveries = computed(() => sum(Object.values(this.config()?.productionLinesTargetSchedule)?.
-    map(pl => ({...pl, schedule: pl.schedule.filter(e => !e.skip)})).
-    map(pl => pl.schedule.length) ?? []))
-  numOverallDeliveries = computed(() => sum(Object.values(this.config()?.productionLinesTargetSchedule)?.map(pl => pl.schedule.length) ?? []))
+	numPossibleDeliveries = computed(() => sum(Object.values(this.config()?.productionLinesTargetSchedule)?.
+		map(pl => ({...pl, schedule: pl.schedule.filter(e => !e.skip)})).
+		map(pl => pl.schedule.length) ?? []))
+	numOverallDeliveries = computed(() => sum(Object.values(this.config()?.productionLinesTargetSchedule)?.map(pl => pl.schedule.length) ?? []))
 
-  highlighted = input<boolean>(false);
+	highlighted = input<boolean>(false);
 
 
-  isRunning = computed(() => this.section()?.status == PlanRunStatus.RUNNING);
-  isPending = computed(() => this.section()?.status == PlanRunStatus.PENDING);
+	isRunning = computed(() => this.section()?.status == PlanRunStatus.RUNNING);
+	isPending = computed(() => this.section()?.status == PlanRunStatus.PENDING);
 
-  hasManualPlan = computed(() => this.section()?.planMethod?.type == PlanMethodType.MANUAL);
+	hasManualPlan = computed(() => this.section()?.planMethod?.type == PlanMethodType.MANUAL);
 
-  solved = computed(() => this.section()?.status == PlanRunStatus.SOLVED)
-  notSolvable = computed(() => this.section()?.status === PlanRunStatus.NO_PLAN_FOUND || this.section()?.status === PlanRunStatus.UNSOLVABLE)
-  failed = computed(() => this.section()?.status === PlanRunStatus.FAILED || this.section()?.status === PlanRunStatus.CANCELED)
+	solved = computed(() => this.section()?.status == PlanRunStatus.SOLVED)
+	notSolvable = computed(() => this.section()?.status === PlanRunStatus.NO_PLAN_FOUND || this.section()?.status === PlanRunStatus.UNSOLVABLE)
+	failed = computed(() => this.section()?.status === PlanRunStatus.FAILED || this.section()?.status === PlanRunStatus.CANCELED)
 
-  length = computed(() => ! this.solved() ? undefined : this.section()?.actions.length);
-  swaps = computed(() => ! this.solved() ? undefined : computeSwaps(this.section()?.actions));
-  rackOccupancyRate = computed(() => {
-    if(!this.solved()){
-      return undefined;
-    }
-    const v = computeRackOccupancyRate(this.section(), this.section()?.actions ?? []);
-    return v !== undefined ? v.toFixed(2) : undefined;
-  });
-
-  onBranch(){
-    const dialogRef = this.dialog.open(NewBranchDialogComponent, 
-		{data: {
-			existingBranchNames: this.existingBranchNames(),
-			allFlights: this.originalTask()?.flights,
-			flightIndices: this.section()?.flightIndices,
-			planSectionsStatuses: getFlightPlanProgressStatus(this.section()?.actions, this.flights())
-		}});
-
-    dialogRef.afterClosed().pipe(take(1)).subscribe((result: {name: string, prefix: number[], horizon: number[]}) => {
-      if (result !== undefined) {
-        console.log(result);
-        this.store.dispatch(createNewBranch({section: this.section(), name: result.name, prefix: result.prefix, horizon: result.horizon}));
-      }
-    });
-  }
-
-  onPlanManually(){
-    let method: PlanMethod = {
-        name: 'Human Planner',
-        type: PlanMethodType.MANUAL,
-      }
-      this.store.dispatch(registerManualPlanning({section: this.section(), method: method}))
-  }
-
-  onCreatePlan(){
-
-    if(this.isAutomatic()){
-      let method: PlanMethod = {
-        name: 'AI Planner',
-        type: PlanMethodType.AUTOMATIC_SEARCH_PLANNER,
-        serviceId: this.supportedPlanners()[0]._id,
-      }
-      this.store.dispatch(startAutomaticPlanning({section: this.section(), method: method}))
-      return;
-    }
-
-    const dialogRef = this.dialog.open(SectionPlanMethodDialogComponent, {
-      data: {planners: this.supportedPlanners()},
-    });
-
-    dialogRef.afterClosed().pipe(take(1)).subscribe((result: {method: PlanMethod}) => {
-		if(result){
-			this.store.dispatch(startAutomaticPlanning({section: this.section(), method: result.method}))
+	length = computed(() => ! this.solved() ? undefined : this.section()?.actions.length);
+	swaps = computed(() => ! this.solved() ? undefined : computeSwaps(this.section()?.actions));
+	rackOccupancyRate = computed(() => {
+		if(!this.solved()){
+		return undefined;
 		}
-		else{
-			this.snackBar.open('No planner selected.', 'Ok', {
-				duration: 3000
-			});
+		const v = computeRackOccupancyRate(this.section(), this.section()?.actions ?? []);
+		return v !== undefined ? v.toFixed(2) : undefined;
+	});
+
+	onBranch(){
+		const dialogRef = this.dialog.open(NewBranchDialogComponent, 
+			{data: {
+				existingBranchNames: this.existingBranchNames(),
+				allFlights: this.originalTask()?.flights.filter((f,index) => !
+					this.coveredFlightsIndicesByPredecessors()?.includes(index)),
+				flightIndices: this.section()?.flightIndices,
+				planSectionsStatuses: getFlightPlanProgressStatus(this.section()?.actions, this.flights())
+			}});
+
+		dialogRef.afterClosed().pipe(take(1)).subscribe((result: {name: string, prefix: number[], horizon: number[]}) => {
+		if (result !== undefined) {
+			console.log(result);
+			this.store.dispatch(createNewBranch({section: this.section(), name: result.name, prefix: result.prefix, horizon: result.horizon}));
 		}
-      }
-    );
-  }
+		});
+	}
 
-  onInspectPlan(){
-    this.store.dispatch(inspectPlan({sectionId: this.section()?._id}));
-  }
+	onPlanManually(){
+		let method: PlanMethod = {
+			name: 'Human Planner',
+			type: PlanMethodType.MANUAL,
+		}
+		this.store.dispatch(registerManualPlanning({section: this.section(), method: method}))
+	}
 
-  onCancel(){
-    this.store.dispatch(cancelPlanning({section: this.section()}));
-  }
+	onCreatePlan(){
 
-  onUpdateConfiguration(){
-    this.store.dispatch(updateConfigurationOfSectionAndConfigIndex({section: this.section(), index: this.section().configurationIndex}))
-  }
+		if(this.isAutomatic()){
+		let method: PlanMethod = {
+			name: 'AI Planner',
+			type: PlanMethodType.AUTOMATIC_SEARCH_PLANNER,
+			serviceId: this.supportedPlanners()[0]._id,
+		}
+		this.store.dispatch(startAutomaticPlanning({section: this.section(), method: method}))
+		return;
+		}
 
-  constructor(){
-    effect(() => console.log(this.section().configurations[0].flightTargetSchedule[0]))
-  }
-}
+		const dialogRef = this.dialog.open(SectionPlanMethodDialogComponent, {
+		data: {planners: this.supportedPlanners()},
+		});
+
+		dialogRef.afterClosed().pipe(take(1)).subscribe((result: {method: PlanMethod}) => {
+			if(result){
+				this.store.dispatch(startAutomaticPlanning({section: this.section(), method: result.method}))
+			}
+			else{
+				this.snackBar.open('No planner selected.', 'Ok', {
+					duration: 3000
+				});
+			}
+		}
+		);
+	}
+
+	onInspectPlan(){
+		this.store.dispatch(inspectPlan({sectionId: this.section()?._id}));
+	}
+
+	onCancel(){
+		this.store.dispatch(cancelPlanning({section: this.section()}));
+	}
+
+	onUpdateConfiguration(){
+		this.store.dispatch(updateConfigurationOfSectionAndConfigIndex({section: this.section(), index: this.section().configurationIndex}))
+	}
+
+	constructor(){
+		effect(() => console.log(this.section().configurations[0].flightTargetSchedule[0]))
+	}
+	}

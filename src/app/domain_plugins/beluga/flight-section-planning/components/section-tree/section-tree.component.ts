@@ -3,9 +3,11 @@ import { MatButtonModule } from '@angular/material/button';
 import { TranslocoModule } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 import { createSuccessorFlightsHorizon } from '../../state/flight-section-planning.actions';
-import { selectActiveBranchLastSectionFinished, selectActiveBranchNumberFinishedFlights, selectActiveBranchSections, selectFlights, selectNumFlights } from '../../state/flight-section-planning.selector';
+import { selectActiveBranchLastSectionFinished, selectActiveBranchNumberCoveredFlights, selectActiveBranchNumberFinishedFlights, selectActiveBranchSections, selectFlights, selectNumFlights } from '../../state/flight-section-planning.selector';
 import { SectionCardComponent } from '../section-card/section-card.component';
-import { FlightsHorizon } from '../../domain/flight-section';
+import { take } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
+import { NewFlightHorizonDialogComponent } from '../new-flight-horizon-dialog/new-flight-horizon-dialog.component';
 
 
 
@@ -23,20 +25,39 @@ import { FlightsHorizon } from '../../domain/flight-section';
 export class SectionTreeComponent {
 
   store = inject(Store);
+  readonly dialog = inject(MatDialog);
 
   sections = this.store.selectSignal(selectActiveBranchSections);
   flights = this.store.selectSignal(selectFlights);
   lastSectionFinished = this.store.selectSignal(selectActiveBranchLastSectionFinished);
 
   numFlights = this.store.selectSignal(selectNumFlights);
-  numFinishedFlights = this.store.selectSignal(selectActiveBranchNumberFinishedFlights);
+  numCoveredFlights = this.store.selectSignal(selectActiveBranchNumberCoveredFlights);
 
-  onNextFlightPlan(section: FlightsHorizon){
-    // TODO also get flights indices and order
-    console.log("TODO")
-    // this.store.dispatch(createSuccessorFlightsHorizon({section}))
+  onNextFlightPlan(){
+    const sections  = this.sections();
+    if(sections == undefined){
+      return;
+    }
+    const lastSection  = sections[sections.length - 1]
+    const completedFlightsIndices = sections.map(s => s.flightIndices).flat();
+    const neededFlights = this.flights()?.
+      map((f,index) => ({originalIndex: index, ...f})).
+      filter((f, index) => ! completedFlightsIndices.includes(index))
+
+    const dialogRef = this.dialog.open(NewFlightHorizonDialogComponent, 
+    {data: {
+      neededFlights
+    }});
+
+    dialogRef.afterClosed().pipe(take(1)).subscribe((result: {horizon: number[]}) => {
+      if (result !== undefined) {
+        console.log(result);
+        this.store.dispatch(createSuccessorFlightsHorizon({section: lastSection, horizon: result.horizon}));
+      }
+    });
   }
 
-  hasNextFlight = computed(() => this.numFlights() > (this.numFinishedFlights() ?? 0))
+  hasNextFlight = computed(() => this.numFlights() > (this.numCoveredFlights() ?? 0))
 
 }

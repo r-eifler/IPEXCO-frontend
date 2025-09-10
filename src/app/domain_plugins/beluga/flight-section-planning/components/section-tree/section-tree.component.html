@@ -2,15 +2,16 @@
     @for(section of sections(); track section._id; let last = $last; let idx = $index){
         <app-section-card
             [section]="section"
+            [sectionIndex]="idx"
         >
         </app-section-card>
-        @if(last && hasNextFlight()){
-            <button mat-flat-button 
-            (click)="onNextFlightPlan(section)"
-            [disabled]="!lastSectionFinished()"
-            >
-                {{t('f.plan_next_flight')}}
-            </button>
-        }
+    }
+    @if(hasNextFlight()){
+        <button mat-flat-button 
+        (click)="onNextFlightPlan()"
+        [disabled]="!lastSectionFinished()"
+        >
+            Configure Next Flights
+        </button>
     }
 </div>
