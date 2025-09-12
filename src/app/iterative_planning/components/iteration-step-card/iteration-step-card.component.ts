@@ -21,7 +21,7 @@ import { Store } from '@ngrx/store';
 import { selectIterativePlanningLoadingFinished } from '../../state/iterative-planning.selector';
 
 import { CommonModule } from '@angular/common';
-import { MonetaryRewardEvaluatorService } from '../../service/monetary-reward-evaluator';
+import { MonetaryRewardEvaluator } from '../../service/monetary-reward-evaluator';
 
 @Component({
     selector: 'app-iteration-step-card',
@@ -48,7 +48,6 @@ import { MonetaryRewardEvaluatorService } from '../../service/monetary-reward-ev
 export class IterationStepCardComponent {
 
   store = inject(Store);
-  rewardEvaluator = inject(MonetaryRewardEvaluatorService);
   stepValuePipe = inject(StepValuePipe);
 
   step = input.required<IterationStep | null>();
@@ -82,14 +81,14 @@ export class IterationStepCardComponent {
   }
 
   computeCurrentUtilityProportion(): number {
-    return this.rewardEvaluator.computeUtilityProportion(
+    return MonetaryRewardEvaluator.computeUtilityProportion(
       this.currentUtility(),
       this.maxOverallUtility()
     );
   }
 
   computeCurrentPayment(): number {
-    return this.rewardEvaluator.computePayment(
+    return MonetaryRewardEvaluator.computePayment(
       this.computeCurrentUtilityProportion(),
       (this.minPayment() ?? 0),
       (this.maxPayment() ?? 0)

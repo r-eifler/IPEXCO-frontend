@@ -10,7 +10,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { TaskInformationDialogComponent } from '../../view/task-information-dialog/task-information-dialog.component';
 
 import { CommonModule } from '@angular/common';
-import { MonetaryRewardEvaluatorService } from '../../service/monetary-reward-evaluator';
+import { MonetaryRewardEvaluator } from '../../service/monetary-reward-evaluator';
 
 @Component({
   selector: 'app-steps-utility-hero',
@@ -27,7 +27,6 @@ import { MonetaryRewardEvaluatorService } from '../../service/monetary-reward-ev
 export class StepsUtilityHeroComponent {
 
   dialog = inject(MatDialog);
-  rewardEvaluator = inject(MonetaryRewardEvaluatorService);
 
   planPropertiesMap = input.required<Record<string,PlanProperty>>();
   steps = input.required<IterationStep[]>();
@@ -50,7 +49,7 @@ export class StepsUtilityHeroComponent {
   }
 
   computePayment(utility_proportion: number){
-    return this.rewardEvaluator.computePayment(
+    return MonetaryRewardEvaluator.computePayment(
       utility_proportion,
       this.minPayment(),
       this.maxPayment()
@@ -58,24 +57,24 @@ export class StepsUtilityHeroComponent {
   }
 
   computeCurrentUtilityProportion(): number {
-    return this.rewardEvaluator.computeUtilityProportion(
+    return MonetaryRewardEvaluator.computeUtilityProportion(
       this.currentMaxUtility(),
       this.maxOverallUtility()
     );
   }
 
   computeCurrentPayment(): number {
-    return this.rewardEvaluator.computePayment(
+    return MonetaryRewardEvaluator.computePayment(
       this.computeCurrentUtilityProportion(),
       this.minPayment(),
       this.maxPayment()
     );
   }
-  
+
   computeUtilityFromProportion(utilityProportion: number): number {
-    return this.rewardEvaluator.computeUtilityFromProportion(
+    return MonetaryRewardEvaluator.computeUtilityFromProportion(
       utilityProportion,
-      this.maxOverallUtility() 
+      this.maxOverallUtility()
     );
   }
 

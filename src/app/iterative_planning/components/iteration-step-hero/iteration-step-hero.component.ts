@@ -20,7 +20,7 @@ import { TaskInformationDialogComponent } from '../../view/task-information-dial
 import { PlanRunStatus } from '../../domain/plan';
 
 import { CommonModule } from '@angular/common';
-import { MonetaryRewardEvaluatorService } from '../../service/monetary-reward-evaluator';
+import { MonetaryRewardEvaluator } from '../../service/monetary-reward-evaluator';
 
 @Component({
     selector: 'app-iteration-step-hero',
@@ -46,7 +46,6 @@ import { MonetaryRewardEvaluatorService } from '../../service/monetary-reward-ev
 export class IterationStepHeroComponent {
 
   dialog = inject(MatDialog);
-  rewardEvaluator = inject(MonetaryRewardEvaluatorService);
   stepValuePipe = inject(StepValuePipe);
 
   step = input.required<IterationStep | null>();
@@ -67,14 +66,14 @@ export class IterationStepHeroComponent {
   }
 
   computeCurrentUtilityProportion(): number {
-    return this.rewardEvaluator.computeUtilityProportion(
+    return MonetaryRewardEvaluator.computeUtilityProportion(
       this.currentUtility(),
       this.maxOverallUtility()
     );
   }
 
   computeCurrentPayment(): number {
-    return this.rewardEvaluator.computePayment(
+    return MonetaryRewardEvaluator.computePayment(
       this.computeCurrentUtilityProportion(),
       this.minPayment(),
       this.maxPayment()

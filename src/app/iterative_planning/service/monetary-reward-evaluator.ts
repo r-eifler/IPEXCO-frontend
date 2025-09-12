@@ -1,10 +1,4 @@
-import { Injectable } from "@angular/core";
-
-
-@Injectable({
-  providedIn: 'root'
-})
-export class MonetaryRewardEvaluatorService{
+export class MonetaryRewardEvaluator{
 
   //
   // Input:
@@ -21,7 +15,7 @@ export class MonetaryRewardEvaluatorService{
   //
   // HACK: the way that utility proportion maps onto monetary-reward proportion is hard coded
   //
-  computePayment(
+  static computePayment(
     utilityProportion: number,
     minMoney: number | undefined,
     maxMoney: number | undefined
@@ -69,7 +63,7 @@ export class MonetaryRewardEvaluatorService{
   // Output:
   // - a **utility** proportion, e.g., 6/12 has proportion 0.5
   //
-  computeUtilityProportion(
+  static computeUtilityProportion(
     currentUtility: number | undefined,
     maxUtility: number | undefined
   ): number {
@@ -79,8 +73,12 @@ export class MonetaryRewardEvaluatorService{
     //
     // NOTE: the fall-back value is 0.0, i.e., "you have attained 0 utility"
     //
-    if (currentUtility === undefined || maxUtility === undefined) {
-      console.error("currentUtility and/or maxUtility is undefined");
+    if (currentUtility === undefined) {
+      // undefined currentUtility is interpreted as zero
+      return 0.0;
+    }
+    if (maxUtility === undefined) {
+      // if maxUtility is undefined, treat is zero
       return 0.0;
     }
     if (maxUtility == 0) {
@@ -93,7 +91,7 @@ export class MonetaryRewardEvaluatorService{
 
     return currentUtility / maxUtility;
   }
-  
+
   //
   // Input:
   // - utility proportion
@@ -102,11 +100,11 @@ export class MonetaryRewardEvaluatorService{
   // Output:
   // - the utility corresponding to the proportion, e.g. 0.5 with maxUtility = 12 returns 6
   //
-  computeUtilityFromProportion(
+  static computeUtilityFromProportion(
     utilityProportion: number | undefined,
     maxUtility: number | undefined
   ): number {
-    
+
     //
     // Handle possible issues with input parameters
     //
@@ -117,7 +115,7 @@ export class MonetaryRewardEvaluatorService{
       return 0.0;
     }
     if (maxUtility === undefined) {
-      console.error("maxUtility undefined");
+      // if maxUtility is undefined, treat is zero
       return 0.0;
     }
     if (maxUtility == 0) {
