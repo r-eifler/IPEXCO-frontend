@@ -1,4 +1,10 @@
 <div class="main">
+    <app-multi-flight-card
+              [jigs]="jigs()"
+              [jigTypes]="jigTypes()"
+              [flights]="flightSchedule()"
+              [highlighted]="currentRelativeFlightIndex()"
+    ></app-multi-flight-card>
     <div class="controls">
         <app-step-control
             (back)="onBack()"
@@ -19,9 +25,9 @@
     <div class="state">
         <app-state-card
             [state]="selectedState()"
-            [siteSetUp]="configuration()?.siteSetUp"
-            [targetFlightSchedule]="configuration()?.flightTargetSchedule"
-            [targetProductionSchedule]="configuration()?.productionLinesTargetSchedule"
+            [siteSetUp]="siteSetUp()"
+            [targetFlightSchedule]="currentFlight()"
+            [targetProductionSchedule]="productionSchedule()"
         >
         </app-state-card>
     </div>

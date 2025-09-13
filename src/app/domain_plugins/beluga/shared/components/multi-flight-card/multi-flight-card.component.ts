@@ -43,7 +43,7 @@ export class MultiFlightCardComponent {
     originalIndex: index
   })))
 
-  isProbabilistic = computed(() => this.flights()?.[0].scheduled_arrival !== undefined)
+  isProbabilistic = computed(() => this.flights()?.[0]?.scheduled_arrival !== undefined)
 
   days = computed(() => {
     const days: DisplayFlight[][] = [[]]
@@ -109,9 +109,13 @@ export class MultiFlightCardComponent {
   selectedIncoming = computed(() => this.selectedFlight()?.incoming.map(
     jigName => {
       let jig = this.jigs()?.[jigName];
+      if(jig === undefined){
+        console.error(jigName + " not known")
+        return null
+      }
       let type = this.jigTypes()?.[jig.type]
       return {jig, type}
-    }))
+    }).filter(e => e !== null))
 
   selectedOutgoing = computed(() => this.selectedFlight()?.outgoing.map(
     typeName => this.jigTypes()?.[typeName]))

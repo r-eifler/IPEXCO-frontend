@@ -56,7 +56,6 @@ export class FlightPlanTreeService{
       httpParams = httpParams.set('treeId', treeId);
 
       return this.http.get<unknown>(this.BASE_URL + 'section/',  { params: httpParams }).pipe(
-          tap(data => console.log(data)),
           map(data => array(FlightsHorizonZ).parse(data)),
           map(sections => sections.reduce((acc, c) => ({...acc,[c._id]: c}), {}))
       )
@@ -114,7 +113,6 @@ export class FlightPlanTreeService{
       }
 
       return this.http.post<unknown>(this.BASE_URL + 'init', data).pipe(
-        tap(data => console.log(data)),
         map(data => FlightPlanTreeZ.parse(data)),
       )
     }

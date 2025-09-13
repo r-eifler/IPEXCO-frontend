@@ -32,13 +32,13 @@ export class StateCardComponent {
 
   state = input.required<BelugaState>();
   siteSetUp = input.required<BelugaSiteSetUp>();
-  targetFlightSchedule = input.required<FlightTargetSchedule>();
-  targetProductionSchedule = input.required<ProductionLineTargetSchedule[]>();
+  targetFlightSchedule = input.required<Flight>();
+  targetProductionSchedule = input.required<ProductionLine[]>();
 
   constructor(){
-    effect(() => console.log(this.state()))
-    effect(() => console.log(this.siteSetUp()))
-    //  effect(() => console.log(this.jigs()))
+
+    effect(() => console.log(this.state()?.jigs))
+    effect(() => console.log(this.incomingSchedule()))
   }
 
   jigTypes = computed(() => this.siteSetUp()?.jig_types)
@@ -49,9 +49,8 @@ export class StateCardComponent {
     }
     return Math.max(...Object.values(jigTypes).map(jt => jt.size_loaded))
   })
-  // jigs = computed(() => this.state()?.jigs)
 
-  incomingSchedule = computed(() => this.targetFlightSchedule()?.incoming.filter(e => !e.skip))
+  incomingSchedule = computed(() => this.targetFlightSchedule()?.incoming)
 
   incoming = computed(() => {
     const state = this.state();
@@ -59,7 +58,7 @@ export class StateCardComponent {
       return []
     }
     const numUnloaded = state.incomingUnloaded.length
-    const fullSchedule = this.incomingSchedule()?.map(j => state.jigs[j.jig])
+    const fullSchedule = this.incomingSchedule()?.map(j => state.jigs[j])
     return fullSchedule?.slice(numUnloaded);
   })
 
@@ -71,7 +70,7 @@ export class StateCardComponent {
     return state.outgoingLoaded.map(j => state.jigs[j]);
   })
 
-  outgoingSchedule = computed(() => this.targetFlightSchedule()?.outgoing.filter(e => !e.skip))
+  outgoingSchedule = computed(() => this.targetFlightSchedule()?.outgoing)
 
 
   racks = computed(() => {
@@ -149,7 +148,7 @@ export class StateCardComponent {
     }
     return this.targetProductionSchedule()?.map(pl => ({
       name: pl.name,
-      schedule: pl.schedule.filter(e => !e.skip).map(e => state.jigs[e.jig])
+      schedule: pl.schedule.map(e => state.jigs[e])
     }))
   })
 
@@ -160,4 +159,5 @@ export class StateCardComponent {
     }
     return state.productionLines;
   })
+
 }

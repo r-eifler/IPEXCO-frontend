@@ -47,7 +47,7 @@ export class PlanInspectorComponent {
       return undefined;
     }
     else{
-      getFullStartState(section)
+      return getFullStartState(section)
     }
   })
   

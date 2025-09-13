@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, computed, inject, input, signal, WritableSignal } from '@angular/core';
+import { ChangeDetectorRef, Component, computed, effect, inject, input, signal, WritableSignal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
@@ -11,6 +11,7 @@ import { StateCardComponent } from '../state-card/state-card.component';
 import { StepControlComponent } from '../step-control/step-control.component';
 import { BelugaSiteSetUp } from '../../domain/site_set_up';
 import { Flight, ProductionLine } from '../../domain/beluga_problem';
+import { MultiFlightCardComponent } from '../multi-flight-card/multi-flight-card.component';
 
 @Component({
   selector: 'app-trace-inspector',
@@ -21,6 +22,7 @@ import { Flight, ProductionLine } from '../../domain/beluga_problem';
     MatIconModule,
     RouterLink,
     MatButtonModule,
+    MultiFlightCardComponent,
   ],
   templateUrl: './trace-inspector.component.html',
   styleUrl: './trace-inspector.component.scss'
@@ -30,7 +32,6 @@ export class TraceInspectorComponent {
   cd = inject(ChangeDetectorRef);
   store = inject(Store);
 
-  configuration = input.required<BelugaConfiguration>();
   actions = input.required<BelugaAction[]>();
   startState = input.required<BelugaState>();
 
@@ -38,11 +39,12 @@ export class TraceInspectorComponent {
   productionSchedule = input.required<ProductionLine[]>();
   flightSchedule = input.required<Flight[]>();
 
-  // section = input.required<FlightSection>();
-  // configuration = computed(() => this.section()?.configurations[this.section()?.configurationIndex])
+  currentRelativeFlightIndex = computed(() => this.selectedState()?.flightIndex)
+
+  jigs = computed(() => this.startState()?.jigs)
+  jigTypes = computed(() => this.siteSetUp()?.jig_types)
 
   selectedActionIndex: WritableSignal<number | null> = signal(-1);
-  // actions = computed(() => this.section()?.actions.filter(a => a.name !== BelugaActionType.SWITCH_TO_NEXT_BELUGA) ?? [])
 
   selectedState = computed(() => {
     // const startState = getFullStartState(this.section());
@@ -72,6 +74,14 @@ export class TraceInspectorComponent {
     return resState;
   })
 
+  currentFlight = computed(() => {
+    const flightIndex = this.selectedState()?.flightIndex;
+    if(flightIndex === undefined){
+      return null;
+    }
+    return this.flightSchedule()?.[flightIndex];
+  })
+
   onCancel(){
     // this.store.dispatch(stopInspectPlan({sectionId: this.section()?._id}))
   }
@@ -96,5 +106,10 @@ export class TraceInspectorComponent {
       this.cd.detectChanges();
     });
   }
+
+  // constructor(){
+  //   effect(() => console.log(this.productionSchedule()));
+  //   effect(() => console.log(this.startState()));
+  // }
 
 }

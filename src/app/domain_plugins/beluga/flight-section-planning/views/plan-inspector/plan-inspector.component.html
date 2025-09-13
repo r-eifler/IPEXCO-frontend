@@ -7,15 +7,11 @@
     <app-page-title>
       Plan Inspector: {{ name() }}
     </app-page-title>
-    <!-- <app-page-hero>
-        <app-section-tree-hero></app-section-tree-hero>
-    </app-page-hero>     -->
     <app-page-content>
         <app-page-section-list>
             <app-page-section>
                 <app-page-section-content>
                    <app-trace-inspector
-                        [configuration]="configuration()"
                         [startState]="startState()"
                         [actions]="actions()"
                         [siteSetUp]="siteSetUp()"

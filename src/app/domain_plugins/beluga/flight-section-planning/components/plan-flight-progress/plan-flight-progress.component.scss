@@ -5,7 +5,8 @@
 .main {
     display: flex;
     flex-direction: row;
-    gap: var(--spacing-200)
+    gap: var(--spacing-200);
+    overflow-x: scroll;
 }
 
 .section {

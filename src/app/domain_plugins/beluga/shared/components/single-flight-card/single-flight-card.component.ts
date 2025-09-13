@@ -45,4 +45,8 @@ export class SingleFlightCardComponent {
 
 
   icon = computed(() => this.incoming() ? 'flight_land' : 'flight_takeoff')
+
+  constructor(){
+    effect(() => console.log(this.jigs()))
+  }
 }
