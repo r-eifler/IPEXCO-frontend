@@ -1,44 +1,99 @@
 <div class="main-container">
     <mat-card  appearance="outlined">
-        <mat-card-content class="flight-container">
-            @for(flight of flights(); track flight.name; let idx = $index){
-                <div class="flight" 
-                    (click)="selectFlightIndex(idx)" 
-                    [class.selected]="idx === selectedFlightIndex()"
-                    [class.highlighted]="idx === highlighted()">
-                    <span>{{flight.name}}</span>
+        <mat-card-content >
+            @if(isProbabilistic()){
+                <div class="day-container">
+                    @for(day of days(); track day; let idxDay = $index){
+                    <div class="day" 
+                        [class.selected-day]="idxDay === selectedDayIndex()"
+                        >
+                        <span class="day-name">Day: {{idxDay}}</span>
+                        <div class="flight-container-absolute">
+                            @for(flight of day; track flight.name; let idxFlight = $index){
+                                <div class="flight" 
+                                    (click)="selectFlightIndex(flight.originalIndex, idxDay)" 
+                                    [class.selected]="flight.originalIndex === selectedFlightIndex()"
+                                    [class.highlighted]="flight.originalIndex === highlighted()">
+                                    <span>{{flight.scheduled_arrival | flightArrivalTime}}</span>
+                                    <span>{{flight.name}}</span>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    }
+                </div>
+            }
+            @else{
+                <div class="flight-container">
+                @for(flight of flights(); track flight.name; let idx = $index){
+                    <div class="flight" 
+                        (click)="selectFlightIndex(idx, null)" 
+                        [class.selected]="idx === selectedFlightIndex()"
+                        [class.highlighted]="idx === highlighted()">
+                        <span>{{flight.name}}</span>
+                    </div>
+                }
                 </div>
             }
         </mat-card-content>
     </mat-card>
+
+    @if(isProbabilistic()){
+    <mat-card  appearance="outlined">
+            <mat-card-header>
+                <mat-card-title>Arrival Time</mat-card-title>
+            </mat-card-header>
+            <mat-card-content class="arrival-content">
+                <div>
+                    <ngx-charts-area-chart
+                        [scheme]="colorScheme"
+                        [results]="delayDistributionData()"
+                        xAxis="true"
+                        yAxis="true"
+                        showXAxisLabel="true"
+                        showYAxisLabel="true"
+                        xAxisLabel="arrival time"
+                        yAxisLabel="probability">
+                    </ngx-charts-area-chart>
+                </div>
+            </mat-card-content>
+    </mat-card>
+    }
 
     @if(selectedFlight() !== null){
         <mat-card  appearance="outlined">
             <mat-card-header>
                 <mat-card-title>{{selectedFlight()?.name}}</mat-card-title>
             </mat-card-header>
-            <mat-card-content class="flight-info">
-                <mat-card  appearance="outlined">
-                    <mat-card-header>
-                        <mat-card-title>Incoming</mat-card-title>
-                    </mat-card-header>
-                    <mat-card-content class="jig-container">
-                        @for(elem of selectedIncoming(); track elem.jig.name){
-                            <app-jig [jig]="elem.jig" [jigType]="elem.type"></app-jig>
-                        }
-                    </mat-card-content>
-                </mat-card>
+            <mat-card-content class="content">
+                <div class="arrival-time">
+                    <mat-icon>schedule</mat-icon>
+                    <span>Scheduled Time: </span>
+                    <span>{{selectedFlight()?.scheduled_arrival | flightArrivalTime}}</span>
+                </div>
+                <div class="flight-info">
+                    <mat-card  appearance="outlined">
+                        <mat-card-header>
+                            <mat-card-title>Incoming</mat-card-title>
+                        </mat-card-header>
+                        <mat-card-content class="jig-container">
+                            @for(elem of selectedIncoming(); track elem.jig.name){
+                                <app-jig [jig]="elem.jig" [jigType]="elem.type"></app-jig>
+                            }
+                        </mat-card-content>
+                    </mat-card>
 
-                <mat-card  appearance="outlined">
-                    <mat-card-header>
-                        <mat-card-title>Outgoing</mat-card-title>
-                    </mat-card-header>
-                    <mat-card-content class="jig-container">
-                        @for(type of selectedOutgoing(); track type){
-                            <app-jig [jigType]="type"></app-jig>
-                        }
-                    </mat-card-content>
-                </mat-card>
+                    <mat-card  appearance="outlined">
+                        <mat-card-header>
+                            <mat-card-title>Outgoing</mat-card-title>
+                        </mat-card-header>
+                        <mat-card-content class="jig-container">
+                            @for(type of selectedOutgoing(); track type){
+                                <app-jig [jigType]="type"></app-jig>
+                            }
+                        </mat-card-content>
+                    </mat-card>
+                </div>
             </mat-card-content>
         </mat-card>
     } 

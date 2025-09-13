@@ -1,6 +1,7 @@
 import { array, boolean, nullable, number, object, optional, record, string, infer as zinfer } from "zod";
 import { BelugaSiteSetUp } from "./site_set_up";
 
+export const startFlight = 'start'
 
 export type Side = 'bside' | 'fside'
 
@@ -52,10 +53,13 @@ export type ProductionLine = zinfer<typeof ProductionLineZ>;
 export const FlightZ = object({
     name: string(),
     incoming: array(string()),
-    outgoing: array(string())
+    outgoing: array(string()),
+    scheduled_arrival: optional(number())
 });
 
 export type Flight = zinfer<typeof FlightZ>;
+
+
 
 export const BelugaProblemZ = object({
     trailers_beluga: array(TrailerZ),
@@ -65,7 +69,8 @@ export const BelugaProblemZ = object({
     racks: array(RackZ),
     jigs: record(string(),JigZ),
     production_lines: array(ProductionLineZ),
-    flights: array(FlightZ)
+    flights: array(FlightZ),
+    transitionTable: optional(record(string(), record(string(), number())))
 })
 
 export type BelugaProblem = zinfer<typeof BelugaProblemZ>;

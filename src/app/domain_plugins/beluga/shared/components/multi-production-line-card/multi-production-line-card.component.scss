@@ -10,4 +10,5 @@
     flex-direction: row;
     justify-content: flex-start;
     gap: var(--spacing-100);
+    overflow-x: scroll;
 }

@@ -24,8 +24,8 @@ import { selectDomainSpecifications } from "../../state/home.selector";
 import { find } from "ramda";
 import { filterNotNullOrUndefined } from "src/app/shared/common/check_null_undefined";
 import { loadDomainSpecification } from "src/app/iterative_planning/state/iterative-planning.actions";
-import { BelugaProblemZ } from "../../../shared/domain/beluga_problem";
-import { mode } from "d3";
+import { BelugaProblemZ, startFlight } from "../../../shared/domain/beluga_problem";
+import { json, mode } from "d3";
 
 
 @Component({
@@ -88,7 +88,31 @@ export class ProjectCreatorComponent {
 
   model$ = this.domainDependentModel$.pipe(
     map((domainDependentModel) => {
-      return domainDependentModel ? JSON.parse(domainDependentModel) as unknown : null;
+      const jsonModel = domainDependentModel ? JSON.parse(domainDependentModel) as any : null;
+      if(jsonModel == null){
+        return null
+      }
+      let belugaModel = BelugaProblemZ.parse(jsonModel);
+      if(belugaModel.flights[0].scheduled_arrival === undefined){
+        return belugaModel
+      }
+
+      //extract transition table
+      const transitionTable: Record<string, Record<string, number>> = {};
+      jsonModel.tt_last.forEach((source: string | null, index: number) => {
+        if(source === null){
+          source = startFlight;
+        }
+        if(transitionTable[source] == undefined){
+          transitionTable[source] = {}
+        }
+        const target: string = jsonModel.tt_next[index];
+        const prob: number = jsonModel.tt_prob[index];
+        transitionTable[source][target] = prob
+      })
+      belugaModel.transitionTable = transitionTable;
+
+      return belugaModel;
     }),
     shareReplay(1),
   )
