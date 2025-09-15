@@ -160,7 +160,7 @@ export class ActionCardComponent {
     [BelugaActionType.PICK_UP_RACK, "oklch(88.2% 0.059 254.128)"],
     [BelugaActionType.DELIVER_TO_HANGAR, "oklch(92.5% 0.084 155.995)"],
     [BelugaActionType.GET_FROM_HANGAR, "oklch(92.5% 0.084 155.995)"],
-    [BelugaActionType.SWITCH_TO_NEXT_BELUGA, "#ff3333"],
+    [BelugaActionType.SWITCH_TO_NEXT_BELUGA, "oklch(0.8 0.1135 22.24)"],
   ]);
 
   onEnter(){

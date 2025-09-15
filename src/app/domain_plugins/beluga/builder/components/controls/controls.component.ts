@@ -5,7 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { TranslocoModule } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 import { nextFlight } from '../../state/builder.actions';
-import { selectFlightFinished } from '../../state/builder.selector';
+import { selectCurrentFlightFinished } from '../../state/builder.selector';
 import { OverlayModule } from '@angular/cdk/overlay';
 
 @Component({
@@ -23,7 +23,7 @@ export class ControlsComponent {
 
   store = inject(Store);
 
-  nextFlightAvailable$ = this.store.select(selectFlightFinished);
+  nextFlightAvailable$ = this.store.select(selectCurrentFlightFinished);
 
   nextFlight(){  
       this.store.dispatch(nextFlight());

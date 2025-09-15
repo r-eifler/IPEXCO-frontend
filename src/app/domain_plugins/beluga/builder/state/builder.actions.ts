@@ -31,7 +31,7 @@ export const updateFlightsHorizonFailure = createAction('[beluga-builder] update
 
 export const initBuilder = createAction('[beluga-builder] init task', props<{task: BelugaProblem, initState: BelugaState}>());
 
-export const finishManualPlanning = createAction('[beluga-builder] finish manual planning', props<{actions: BelugaAction[]}>());
+export const finishManualPlanning = createAction('[beluga-builder] finish manual planning', props<{actions: BelugaAction[], solved: boolean}>());
 export const finishManualPlanningFailure = createAction('[beluga-builder] finish manual planning failure', props<{err: any}>());
 
 export const cancelManualPlanning = createAction('[beluga-builder] cancel manual planning', props<{sectionId: string, planAttempt: BelugaAction[], config: BelugaConfiguration}>());

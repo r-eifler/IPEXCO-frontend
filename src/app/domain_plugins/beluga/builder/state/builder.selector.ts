@@ -2,6 +2,7 @@ import { createSelector } from "@ngrx/store";
 import { memoizeWith } from "ramda";
 import { getJigSize, occupiedRackSpace, Side } from "../../shared/domain/beluga_problem";
 import { BuilderFeature, selectActions, selectConfig, selectFlights } from "./builder.feature";
+import { getFlightPlanProgressStatus, ProgressStatus } from "../../flight-section-planning/domain/utils";
 
 
 const selectState = BuilderFeature.selectBuilderFeatureState
@@ -137,10 +138,29 @@ export const selectCurrentFlightNextOutgoingJigType = createSelector(selectFligh
     });
 
 
-// general
+// flight schedule general
 
-export const selectFlightFinished = createSelector(selectIncomingUnloadFinished, selectOutgoingLoadFinished,
+export const selectCurrentFlightFinished = createSelector(selectIncomingUnloadFinished, selectOutgoingLoadFinished,
     (incomingFinished, outgoingFinished) => incomingFinished && outgoingFinished
+)
+
+export const selectProgressStatusFlights = createSelector(selectFlightScheduleOrdered, selectCurrentFlightFinished, selectCurrentRelativeFlightIndex,
+    (flightSchedules, currentFlightFinished, relativeFlightIndex) => flightSchedules?.map((flight, index) => {
+        if(index < (relativeFlightIndex ?? 0)){
+            return ProgressStatus.DONE
+        }
+        if(index > (relativeFlightIndex ?? 0)){
+            return ProgressStatus.TODO
+        } 
+        if(currentFlightFinished){
+            return ProgressStatus.DONE
+        }
+        return ProgressStatus.IN_PROGRESS
+    })
+)
+
+export const selectAllFlightsInHorizonFinished = createSelector(selectFlightScheduleOrdered, selectCurrentFlightFinished, selectCurrentRelativeFlightIndex,
+    (flightSchedules, currentFlightFinished, relativeFlightIndex) => currentFlightFinished && (flightSchedules?.length ?? 0) - 1 == relativeFlightIndex
 )
 
 export const selectJigMapIncomingFlight= createSelector(selectAllFlights, 

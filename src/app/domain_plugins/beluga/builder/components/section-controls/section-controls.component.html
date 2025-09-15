@@ -2,7 +2,6 @@
   <div class="group">
     <a mat-flat-button 
         [routerLink]="['../../../../flight-sections']"  
-        [disabled]="!(nextFlightAvailable$ | async)" 
         (click)="onSave()">
         <mat-icon>save</mat-icon>
         {{t('b.save')}}
@@ -20,6 +19,13 @@
         <mat-icon>undo</mat-icon>
         {{t('b.undo')}}
     </button>
+
+    @if(!allFlightsInHorizonFinished()){
+    <button mat-button (click)="onNextFlight()" [disabled]="! currentFlightFinished()">
+        <mat-icon>keyboard_arrow_right</mat-icon>
+        Next Flights
+    </button>
+    }
   </div>
 </div>
 

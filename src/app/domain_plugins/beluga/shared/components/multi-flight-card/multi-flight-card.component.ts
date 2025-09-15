@@ -6,9 +6,11 @@ import { MatIconModule } from '@angular/material/icon';
 import { FlightArrivalTimePipe } from '../../pipe/flight_arrival_time.pipe';
 import { convertArrivalTime, delayDistribution } from '../../domain/flight_distribution';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { ProgressStatus } from '../../../flight-section-planning/domain/utils';
 
 type DisplayFlight = Flight & {
   originalIndex: number;
+  status: ProgressStatus
 }
 
 @Component({
@@ -30,33 +32,37 @@ export class MultiFlightCardComponent {
     domain: ['#070588ff', '#00aec7', '#a51890', '#da1884', '#e4002b', '#fe5000', '#e1e000', '#84bd00']
   };
 
+  Statuses = ProgressStatus;
+
   flights = input.required<Flight[]>();
   jigs = input.required<Record<string,Jig>>();
   jigTypes = input.required<Record<string,JigType>>();
   highlighted = input<number | null>(null);
+  progressStatus = input<ProgressStatus[] | null>(null);
 
   selectedFlightIndex = signal<number | null>(0);
   selectedDayIndex = signal<number | null>(0);
 
   displayFlights = computed(() => this.flights()?.map((flight, index) => ({
     ...flight,
-    originalIndex: index
+    originalIndex: index,
+    status: this.progressStatus()?.[index] ?? ProgressStatus.UNKNOWN
   })))
 
   isProbabilistic = computed(() => this.flights()?.[0]?.scheduled_arrival !== undefined)
 
   days = computed(() => {
     const days: DisplayFlight[][] = [[]]
-    this.displayFlights()?.forEach(flight => {
+    this.displayFlights()?.forEach((flight, index) => {
       if(flight.scheduled_arrival === undefined){
-        days[0].push(flight);
+        days[0].push({...flight, status: this.progressStatus()?.[index] ?? ProgressStatus.UNKNOWN});
         return
       }
       const scheduled = convertArrivalTime(flight.scheduled_arrival);
       while(days.length - 1 < scheduled.days){
         days.push([])
       }
-      days[scheduled.days].push(flight)  
+      days[scheduled.days].push({...flight, status: this.progressStatus()?.[index] ?? ProgressStatus.UNKNOWN})  
     })
     return days;
   })

@@ -2,8 +2,8 @@ import { createReducer, on } from "@ngrx/store";
 import { Loadable, LoadingState } from "src/app/shared/common/loadable.interface";
 import { Project } from "src/app/shared/domain/project";
 import { BelugaConfiguration, FlightsHorizon, getConsideredFlightSchedule, getFlightSchedule, getFullStartState, getProductionSchedule } from "../../flight-section-planning/domain/flight-section";
-import { BelugaProblem, BelugaProblemZ, Flight, Side } from "../../shared/domain/beluga_problem";
-import { applyAction, BelugaState } from "../../shared/domain/beluga_state";
+import { BelugaProblem, BelugaProblemZ, Flight, ProductionLine, Side } from "../../shared/domain/beluga_problem";
+import { applyAction, applyActions, BelugaState } from "../../shared/domain/beluga_state";
 import { unSkipNotDelivered, updateSkipIncomingJig, updateSkipOutgoingJigType, updateSkipProductionLineJig } from "../domain/schedule_utils";
 import { cancelDrag, createNewBelugaAction, loadFlightsHorizon, loadFlightsHorizonSuccess, loadProject, loadProjectSuccess, skipIncomingJig, skipOutgoingJigType, skipProductionJig, startDrag, stopDrag, updateFlightsHorizonSuccess } from "./builder.actions";
 import { BelugaAction } from "../../shared/domain/beluga_plan";
@@ -63,18 +63,30 @@ export const BuilderReducer = createReducer(
     })),
     on(loadFlightsHorizonSuccess, (state, {section}): BuilderState => {
         const taskState = getFullStartState(section);
+        const configuration = section.configurations[section.configurationIndex]
+        const flights: Flight[] = section.flightIndices.map(index => configuration.flightTargetSchedule[index])
+            .map(flight => ({
+                ...flight, 
+                incoming: flight.incoming.filter(e => ! e.skip).map(e => e.jig),
+                outgoing: flight.outgoing.filter(e => ! e.skip).map(e => e.jigType)
+        }));
+        const productionTargetSchedule = unSkipNotDelivered(Object.values(section.configurations[section.configurationIndex].productionLinesTargetSchedule), taskState?.productionLines);
+        const productionSchedule = Object.values(productionTargetSchedule).map(pl => ({
+            ...pl,
+            schedule: pl.schedule.filter(e => !e.skip).map(e => e.jig)
+        }))
         if(taskState == undefined){
             return {...state};
         }
         return {
             ...state,
             section: {state: LoadingState.Done, data: section},
-            taskState,
+            taskState: applyActions(taskState, section.actions, flights, productionSchedule, configuration.siteSetUp),
             config: {
-                ...section.configurations[section.configurationIndex],
-                productionLinesTargetSchedule: unSkipNotDelivered(Object.values(section.configurations[section.configurationIndex].productionLinesTargetSchedule), taskState?.productionLines)
+                ...configuration,
+                productionLinesTargetSchedule: productionTargetSchedule,
             },
-            actions: [],
+            actions: section.actions,
             dragSource: null,
             draggedJig: null,
             draggedSides: null,

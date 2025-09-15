@@ -21,7 +21,7 @@ export class FinishManualPlanningEffect{
     public start$ = createEffect(() => this.actions$.pipe(
         ofType(finishManualPlanning),
         concatLatestFrom(() => [this.store.select(selectSection), this.store.select(selectConfig), this.store.select(selectTaskState)]),
-        switchMap(([{actions}, section, config, taskState]) => {
+        switchMap(([{actions, solved}, section, config, taskState]) => {
             if(actions !== undefined &&  section !== undefined && config !== null && taskState !== undefined && taskState !== null){
                 const finalConfig = {
                     ...config,
@@ -36,7 +36,7 @@ export class FinishManualPlanningEffect{
                             finalConfig,
                         ],
                         configurationIndex: section.configurationIndex + 1,
-                        status: PlanRunStatus.SOLVED,
+                        status: solved ? PlanRunStatus.SOLVED : PlanRunStatus.PENDING,
                     }}),
                 ]
             }

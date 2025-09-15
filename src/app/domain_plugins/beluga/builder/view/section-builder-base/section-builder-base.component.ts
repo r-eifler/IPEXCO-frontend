@@ -13,7 +13,7 @@ import { SectionActionListComponent } from '../../components/section-action-list
 import { SectionControlsComponent } from '../../components/section-controls/section-controls.component';
 import { TrailersStateComponent } from '../../components/trailers-state/trailers-state.component';
 import { MultiFlightCardComponent } from '../../../shared/components/multi-flight-card/multi-flight-card.component';
-import { selectCurrentRelativeFlightIndex, selectFlightScheduleOrdered, selectJigsState, selectJigTypes } from '../../state/builder.selector';
+import { selectCurrentRelativeFlightIndex, selectFlightScheduleOrdered, selectJigsState, selectJigTypes, selectProgressStatusFlights } from '../../state/builder.selector';
 
 @Component({
   selector: 'app-section-builder-base',
@@ -50,6 +50,7 @@ export class SectionBuilderBaseComponent {
     jigs= this.store.selectSignal(selectJigsState);
 
     currentRelativeFlightIndex = this.store.selectSignal(selectCurrentRelativeFlightIndex);
+    progressStatusFlights = this.store.selectSignal(selectProgressStatusFlights);
 
     orderedFlights = computed(() => this.orderedFlightSchedules()?.map(flight => ({
         ...flight,
