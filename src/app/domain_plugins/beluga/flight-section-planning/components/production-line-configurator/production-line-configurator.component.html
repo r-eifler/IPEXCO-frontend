@@ -1,7 +1,14 @@
-<mat-card appearance="outlined" *transloco="let t">
+<mat-card appearance="outlined" *transloco="let t" class="card">
     <mat-card-header>
         <mat-icon mat-card-avatar>factory</mat-icon>
-        <mat-card-title>{{name()}}</mat-card-title>
+        <mat-card-title>
+            {{name()}}
+            @if(inConflict()){
+                <div class="status error">
+                    <mat-icon [inline]="true">warning</mat-icon>
+                </div>
+            }
+        </mat-card-title>
     </mat-card-header>
     <mat-card-content class="container">
         @for(elem of schedule(); track elem.jig?.name; let idx = $index){

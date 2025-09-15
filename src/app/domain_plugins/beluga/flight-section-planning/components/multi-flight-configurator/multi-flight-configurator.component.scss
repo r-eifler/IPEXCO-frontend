@@ -10,6 +10,7 @@
     grid-template-rows: auto 1fr;
     flex-direction: column;
     gap: var(--spacing-200);
+    height: fit-content;
 }
 
 .content {
@@ -134,6 +135,7 @@
 }
 
 .flight-info {
+    height: 100%;
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: var(--spacing-300);
@@ -144,4 +146,29 @@
     flex-direction: row;
     justify-content: flex-start;
     align-items: center;
+    gap: var(--spacing-100);
+    overflow-x: scroll;
+    flex-wrap: wrap;
+}
+
+.inConflict {
+    outline: solid;
+    outline-width: 3px;
+    outline-offset: -3px;
+    @include vars.color(on-error-container);
+    @include vars.background-color(error-container);
+}
+
+.status {
+  display: inline-grid;
+  aspect-ratio: 1/1;
+  align-items: center;
+
+  border-radius: var(--radius-full);
+  padding: var(--spacing-050);
+}
+
+.error{
+    @include vars.background-color(error);
+    @include vars.color(on-error);
 }

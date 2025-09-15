@@ -1,0 +1,28 @@
+<div class="constraints">             
+    <div class="constraint">
+        <mat-icon>swap_vert</mat-icon>
+        <span class="label">Maximal Allowed Swaps:</span>
+        <span class="value">{{ maxSwaps() }}</span>
+        @if(swapConflictMembers()?.length > 0){
+            <div class="status error">
+                <mat-icon [inline]="true">warning</mat-icon>
+            </div>
+        }
+    </div>
+
+    <div class="constraint">
+        <mat-icon>shelves</mat-icon>
+        <span class="label">Keep one Rack Empty:</span>
+        @if(keepRackEmpty()){
+            <span class="value">Yes</span>
+        }
+        @else{
+            <span class="value">No</span>
+        }      
+        @if(rackEmptyConflict()){
+            <div class="status error">
+                <mat-icon [inline]="true">warning</mat-icon>
+            </div>
+        }
+    </div>     
+</div>

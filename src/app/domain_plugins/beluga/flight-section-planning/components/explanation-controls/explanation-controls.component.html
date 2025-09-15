@@ -2,34 +2,6 @@
     [class.container]="!explanationRunning()"
     [class.container-running]="explanationRunning()"
     *transloco="let t">
-    <div class="goals">             
-        <div class="goal">
-            <mat-icon>swap_vert</mat-icon>
-            <span class="label">{{t('f.max_allowed_swaps')}}:</span>
-            <span class="value">{{ maxSwaps() }}</span>
-            @if(swapConflictMembers()?.length > 0){
-                <div class="status error">
-                    <mat-icon [inline]="true">warning</mat-icon>
-                </div>
-            }
-        </div>
-
-        <div class="goal">
-            <mat-icon>shelves</mat-icon>
-            <span class="label">{{t('f.keep_rack_empty')}}:</span>
-            @if(keepRackEmpty()){
-                <span class="value">{{t('f.yes')}}</span>
-            }
-            @else{
-                <span class="value">{{t('f.no')}}</span>
-            }      
-            @if(rackEmptyConflict()){
-                <div class="status error">
-                    <mat-icon [inline]="true">warning</mat-icon>
-                </div>
-            }
-        </div>     
-    </div>
 
     @if(explanationRunning()){
         <mat-progress-bar mode="indeterminate" class="progress"></mat-progress-bar>

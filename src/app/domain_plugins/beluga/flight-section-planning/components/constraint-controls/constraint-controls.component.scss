@@ -1,29 +1,6 @@
 @use "../../../../../../variables.scss" as vars;
 
-.container-running {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--spacing-300);
-    align-items: center;
-}
-
-.container {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--spacing-300);
-    align-items: center;
-}
-
-.buttons {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    gap: var(--spacing-300);
-    align-items: center;
-    justify-content: end;
-}
-
-.goals {
+.constraints {
     width: 100%;
     display: flex;
     flex-direction: row;
@@ -36,17 +13,9 @@
     @include vars.color(on-error-container);
 }
 
-.progress{
-    max-width: 100%;
-}
-
-.goal{
+.constraint{
     display: flex;
     gap: var(--spacing-100);
-}
-
-.label{
-    font-size: larger;
 }
 
 .value{

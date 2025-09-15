@@ -31,26 +31,14 @@ export class ExplanationControlsComponent {
 
   section = input.required<FlightsHorizon>();
   configIndex = input.required<number>();
+  
   config = computed(() => this.section()?.configurations[this.configIndex()])
   disabled = input<boolean>(false);
 
-  rackEmptyConflict = input<boolean>(false);
-  swapConflictMembers = input<{
-    numSwaps: number,
-  }[]>([]);
-  
-  numEmptyRacks = computed(() => sum(this.config()?.siteSetUp.racks.map(r => this.section()?.siteState.racks[r.name].length == 0 ? 1 : 0)))
-
-  changeSwaps= output<number>();
-  changeEmptyRacks= output<number>();
-
   hasExplanation = computed(() => this.config()?.explanationStatus == ExplanationRunStatus.FINISHED)
   explanationRunning = computed(() => this.config()?.explanationStatus == ExplanationRunStatus.RUNNING)
-  maxSwaps = computed(() => this.config()?.maxSwaps)
 
   sectionPending = computed(() => this.section()?.status == PlanRunStatus.PENDING)
-
-  keepRackEmpty = computed(() => (this.config()?.minEmptyRacks ?? 0) >= 1)
 
   isSolvable = computed(() => this.config()?.explanationStatus == ExplanationRunStatus.FINISHED && this.config()?.explanations?.MUGS.length == 0)
 

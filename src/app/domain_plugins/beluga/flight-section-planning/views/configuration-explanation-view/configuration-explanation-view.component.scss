@@ -19,8 +19,10 @@
 }
 
 .schedule-configurators {
+    width: 100%;
     display: grid;
     grid-template-columns: 1fr 1fr;
+    grid-template-rows: min-content;
     gap: var(--spacing-300);
 }
 

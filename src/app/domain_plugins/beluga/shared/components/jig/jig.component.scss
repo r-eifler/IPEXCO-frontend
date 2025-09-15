@@ -102,3 +102,8 @@
 
   @include mat.elevation(2);
 }
+
+
+.disabled {
+  opacity: 50%;
+}

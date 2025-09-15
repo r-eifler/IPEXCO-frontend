@@ -29,6 +29,7 @@ export class JigComponent {
 
   isGhost = input(false);
   animate = input(false);
+  disabled = input(false);
 
   jigViewTransitionName = computed(() => {
     if (!this.animate() || this.isGhost()) {

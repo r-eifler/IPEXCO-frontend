@@ -17,8 +17,10 @@ import { TrailerConfiguratorComponent } from '../../components/trailer-configura
 import { inspectConfig } from '../../state/flight-section-planning.actions';
 import { selectSelectedConfigIndex } from '../../state/flight-section-planning.feature';
 import { selectJigsOnSite, selectProductionLines, selectSelectedConfiguration, selectSelectedSection } from '../../state/flight-section-planning.selector';
-import { selectHasEmptyRackConflictMember, selectIncomingFlightConflictMembers, selectOutgoingFlightConflictMembers, selectProductionConflictMembers, selectRackMaintenanceConflictMembers, selectSwapsConflictMembers, selectTrailerMaintenanceConflictMembers } from './configuration-explanation-view.selectors';
+import { selectConflicts, selectHasEmptyRackConflictMember, selectIncomingFlightConflictMembers, selectOutgoingFlightConflictMembers, selectProductionConflictMembers, selectRackMaintenanceConflictMembers, selectSwapsConflictMembers, selectTrailerMaintenanceConflictMembers } from './configuration-explanation-view.selectors';
 import { MatCardModule } from '@angular/material/card';
+import { ConstraintControlsComponent } from '../../components/constraint-controls/constraint-controls.component';
+import { ConflictsListComponent } from '../../components/conflicts-list/conflicts-list.component';
 
 
 @Component({
@@ -37,7 +39,9 @@ import { MatCardModule } from '@angular/material/card';
         MatProgressBarModule,
         MatLabel,
         MultiFlightConfiguratorComponent,
-        MatCardModule
+        MatCardModule,
+        ConstraintControlsComponent,
+        ConflictsListComponent,
   ],
   templateUrl: './configuration-explanation-view.component.html',
   styleUrl: './configuration-explanation-view.component.scss'
@@ -50,6 +54,7 @@ export class ConfigurationExplanationViewComponent {
     configuration = this.store.selectSignal(selectSelectedConfiguration);
     selectedConfigId = this.store.selectSignal(selectSelectedConfigIndex);
     configurations = computed(() => this.section()?.configurations);
+    conflicts = this.store.selectSignal(selectConflicts);
   
     jigsOnSite = this.store.selectSignal(selectJigsOnSite);
 
@@ -82,7 +87,7 @@ export class ConfigurationExplanationViewComponent {
 
     explanationsComputationRunning = computed(() => this.configuration()?.explanationStatus === ExplanationRunStatus.RUNNING)
     hasExplanations = computed(() => this.configuration()?.explanationStatus === ExplanationRunStatus.FINISHED)
-    conflicts = computed(() => this.configuration()?.explanations?.MUGS)
+    
 
     // conflict members
 

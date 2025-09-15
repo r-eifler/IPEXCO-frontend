@@ -1,10 +1,15 @@
 @use "../../../../../../variables.scss" as vars;
 
+.card {
+    justify-self: stretch;
+    align-self: stretch;
+    max-height: 500px;
+}
+
 .container{
-     display: flex;
+    display: flex;
     flex-direction: column;
     gap: var(--spacing-100);
-    max-height: 250px;
     overflow-y: scroll;
 }
 
@@ -32,4 +37,18 @@ cdk-drag-animating {
     display: flex;
     flex-direction: row;
     gap: var(--spacing-100)
+}
+
+.status {
+  display: inline-grid;
+  aspect-ratio: 1/1;
+  align-items: center;
+
+  border-radius: var(--radius-full);
+  padding: var(--spacing-050);
+}
+
+.error{
+    @include vars.background-color(error);
+    @include vars.color(on-error);
 }

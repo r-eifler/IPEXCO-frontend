@@ -1,0 +1,12 @@
+<div class="list">
+    @for(c of conflicts(); track c; let idx=$index){
+        <div
+            class="conflict"
+            [class.selected]="idx === selectedConflict()"
+            (click)="onSelectConflict(idx)"
+        >
+            <mat-icon>warning</mat-icon>
+            <span>Conflict {{idx + 1}} ({{c.length}})</span>
+        </div>
+    }
+</div>

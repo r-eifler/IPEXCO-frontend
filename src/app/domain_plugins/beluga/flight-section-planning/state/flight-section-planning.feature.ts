@@ -12,4 +12,5 @@ export const {
     reducer,
     selectUpdatedConfiguration,
     selectSelectedConfigIndex,
+    selectSelectedConflictIndex,
   } = FlightSectionPlanningFeature;

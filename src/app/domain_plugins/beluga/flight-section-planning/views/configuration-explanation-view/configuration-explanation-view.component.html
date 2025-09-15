@@ -24,11 +24,33 @@
                         [section]="section()"
                         [configIndex]="selectedConfigId()"
                         [disabled]="true"
-                        [rackEmptyConflict]="hasEmptyRackConflictMember()"
-                        [swapConflictMembers]="swapConflictMembers()"
                     ></app-explanation-controls>
                 </app-page-section-content>
             </app-page-section>     
+            <app-page-section>
+                <app-page-section-title>
+                    Conflicts
+                </app-page-section-title>
+                <app-page-section-content>
+                    <app-conflicts-list
+                        [conflicts]="conflicts()"
+                    >
+                    </app-conflicts-list>
+                </app-page-section-content>
+            </app-page-section> 
+            <app-page-section>
+                <app-page-section-title>
+                    Constraints
+                </app-page-section-title>
+                <app-page-section-content>
+                    <app-constraint-controls
+                        [section]="section()"
+                        [configIndex]="selectedConfigId()"
+                        [rackEmptyConflict]="hasEmptyRackConflictMember()"
+                        [swapConflictMembers]="swapConflictMembers()" 
+                    ></app-constraint-controls>
+                </app-page-section-content>
+            </app-page-section> 
             <app-page-section>
                 <app-page-section-title>
                     Schedules
@@ -39,6 +61,8 @@
                             [jigTypes]="jigTypes()"
                             [jigs]="jigs()"
                             [flights]="orderedFlights()"
+                            [conflictMembersLoad]="loadConflictMembers()"
+                            [conflictMembersUnload]="unloadConflictMembers()"
                             [disabled]="true"
                         >
 

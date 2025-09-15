@@ -7,7 +7,7 @@ import { Project } from "src/app/shared/domain/project";
 import { BelugaProblem, BelugaProblemZ } from "../../shared/domain/beluga_problem";
 import { BelugaState, getInitialState } from "../../shared/domain/beluga_state";
 import { BelugaConfiguration, FlightPlanTree, FlightsHorizon } from "../domain/flight-section";
-import { loadDomainSpecification, loadDomainSpecificationSuccess, loadFlightPlanTree, loadFlightPlanTreeSuccess, loadFlightsHorizons, loadFlightsHorizonsSuccess, loadProject, loadProjectSuccess, loadServices, loadServicesSuccess, newConfiguration, reloadFlightPlanTreeSuccess, selectConfiguration, selectSection, skipIncomingJig, skipOutgoingJigType, skipProductionJig, updateConfigurationOfSectionAndConfigIndex, updateEmptyRacks, updateFlightPlanTreeSuccess, updateHangarStatus, updateMaxSwaps, updateRackStatus, updateTrailerStatus } from "./flight-section-planning.actions";
+import { loadDomainSpecification, loadDomainSpecificationSuccess, loadFlightPlanTree, loadFlightPlanTreeSuccess, loadFlightsHorizons, loadFlightsHorizonsSuccess, loadProject, loadProjectSuccess, loadServices, loadServicesSuccess, newConfiguration, reloadFlightPlanTreeSuccess, selectConfiguration, selectConflictIndex, selectSection, skipIncomingJig, skipOutgoingJigType, skipProductionJig, updateConfigurationOfSectionAndConfigIndex, updateEmptyRacks, updateFlightPlanTreeSuccess, updateHangarStatus, updateMaxSwaps, updateRackStatus, updateTrailerStatus } from "./flight-section-planning.actions";
 
 export interface FlightSectionPlanningState {
     project: Loadable<Project>;
@@ -20,6 +20,7 @@ export interface FlightSectionPlanningState {
     selectedSectionId: null | string;
     selectedConfigIndex: null | number;
     updatedConfiguration: BelugaConfiguration | null;
+    selectedConflictIndex: null | number;
 }
 
 
@@ -33,7 +34,8 @@ const initialState: FlightSectionPlanningState = {
     sections: {state: LoadingState.Initial, data: undefined},
     selectedSectionId: null,
     selectedConfigIndex: null,
-    updatedConfiguration: null
+    updatedConfiguration: null,
+    selectedConflictIndex: null,
 }
 
 
@@ -49,7 +51,8 @@ export const FlightSectionPlanningReducer = createReducer(
         sections: {state: LoadingState.Initial, data: undefined},
         selectedSectionId: null,
         selectedConfigIndex: null,
-        updatedConfiguration: null
+        updatedConfiguration: null,
+        selectedConflictIndex: null,
     })),
     on(loadProjectSuccess, (state, {project}): FlightSectionPlanningState => {
         const task = BelugaProblemZ.parse(project?.baseTask?.model);
@@ -107,9 +110,12 @@ export const FlightSectionPlanningReducer = createReducer(
     })),
     on(selectConfiguration, (state, {index}): FlightSectionPlanningState => ({
         ...state,
-        selectedConfigIndex: index
+        selectedConfigIndex: index,
+        selectedConflictIndex:  state.selectedSectionId !== null && state.selectedConfigIndex !== null && 
+                state.sections.data !== undefined ? 
+            (state.sections.data[state.selectedSectionId]?.configurations[state.selectedConfigIndex]?.explanations?.MUGS?.length ?? 0) > 0 ? 0 : null
+            : null
     })),
-
 
     on(newConfiguration, (state): FlightSectionPlanningState => ({
         ...state,
@@ -299,4 +305,8 @@ export const FlightSectionPlanningReducer = createReducer(
             }
         }
     }),
+     on(selectConflictIndex, (state, {index}): FlightSectionPlanningState => ({
+        ...state,
+        selectedConflictIndex: index
+     })),
 );

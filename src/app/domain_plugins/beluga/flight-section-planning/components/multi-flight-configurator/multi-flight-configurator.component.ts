@@ -38,7 +38,13 @@ export class MultiFlightConfiguratorComponent {
     jigs = input.required<Record<string,Jig>>();
     jigTypes = input.required<Record<string,JigType>>();
 
-    conflictMembers = input<{
+    conflictMembersLoad = input<{
+        jigName: string,
+        flightName: string,
+        position: number
+      }[]>([]);
+    
+    conflictMembersUnload = input<{
         jigName: string,
         flightName: string,
         position: number
@@ -53,13 +59,15 @@ export class MultiFlightConfiguratorComponent {
 
     flightsWithStatus = computed(() => this.flights()?.map((flight) => ({
       ...flight,
+      inConflict: this.conflictMembersUnload()?.filter(g => g.flightName === flight.name).length > 0 ||
+        this.conflictMembersLoad()?.filter(g => g.flightName === flight.name).length > 0,
       incoming: flight.incoming.map(e => ({
         jig: this.jigs()?.[e.jig],
         jigType: this.jigTypes()?.[this.jigs()?.[e.jig].type],
         status: {
           skip: e.skip,
           onSite: true,
-          inConflict: this.conflictMembers()?.find(g => g.jigName == e.jig && g.flightName === flight.name)
+          inConflict: this.conflictMembersUnload()?.find(g => g.jigName == e.jig && g.flightName === flight.name)
         }
       })),
       outgoing: flight.outgoing.map((e, index) => ({
@@ -72,7 +80,7 @@ export class MultiFlightConfiguratorComponent {
         status: {
           skip: e.skip,
           onSite: true,
-          inConflict: this.conflictMembers()?.find(g => g.position == index && g.flightName === flight.name)
+          inConflict: this.conflictMembersLoad()?.find(g => g.position == index && g.flightName === flight.name)
         }
       }))
     })))
@@ -80,8 +88,8 @@ export class MultiFlightConfiguratorComponent {
     isProbabilistic = computed(() => this.flights()?.[0]?.scheduled_arrival !== undefined)
   
     days = computed(() => {
-      const days: FlightTargetSchedule[][] = [[]]
-      this.flights()?.forEach((flight, index) => {
+      const days: (FlightTargetSchedule & any) [][] = [[]] // TODO fix type
+      this.flightsWithStatus()?.forEach((flight, index) => {
         if(flight.scheduled_arrival === undefined){
           days[0].push(flight);
           return

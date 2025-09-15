@@ -145,6 +145,8 @@ export const cancelExplanations= createAction('[beluga-flights-horizon-planning]
 export const cancelExplanationsSuccess = createAction('[beluga-flights-horizon-planning] cancel explanations success');
 export const cancelExplanationsFailure = createAction('[beluga-flights-horizon-planning] cancel explanations failure', props<{err: any}>());
 
+export const selectConflictIndex= createAction('[beluga-flights-horizon-planning] select conflict index', props<{index: number}>());
+
 
 // Actions to log user interactions
 

@@ -17,6 +17,10 @@
     border-radius: var(--spacing-200);
 }
 
+.hideIcons {
+    grid-template-columns: 30px auto;
+}
+
 .index {
     font-weight: 500;
     font-size: x-large;

@@ -1,4 +1,5 @@
 <div  class="container"
+    [class.hideIcons]="hideIcons()"
     [class.inConflict]="inConflict()"
 >
     @if(index() !== null){
@@ -12,19 +13,22 @@
         [unitSize]="true"
         [draggable]="true"
         [showOnlyPart]="showOnlyPart()"
+        [disabled]="status()?.skip"
     >
     </app-jig>
-    @if(!status()?.onSite){
-        <mat-icon class="error">wrong_location</mat-icon>
-    }
-    @if(!status()?.skip){
-        <button mat-icon-button (click)="onStatusChanged(true)" [disabled]="disabled()">
-            <mat-icon>step_over</mat-icon>
-        </button>
-    }
-    @else{
-        <button mat-icon-button (click)="onStatusChanged(false)" [disabled]="mustBeSkipped() || disabled()">
-            <mat-icon>check</mat-icon>
-        </button>
+    @if(! hideIcons()){
+        @if(!status()?.onSite){
+            <mat-icon class="error">wrong_location</mat-icon>
+        }
+        @if(!status()?.skip){
+            <button mat-icon-button (click)="onStatusChanged(true)" [disabled]="disabled()">
+                <mat-icon>step_over</mat-icon>
+            </button>
+        }
+        @else{
+            <button mat-icon-button (click)="onStatusChanged(false)" [disabled]="mustBeSkipped() || disabled()">
+                <mat-icon>check</mat-icon>
+            </button>
+        }
     }
 </div> 

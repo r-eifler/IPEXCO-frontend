@@ -31,6 +31,7 @@ export class JigConfiguratorComponent {
     inConflict: boolean
   }>();
   disabled = input<boolean>(false);
+  hideIcons = input<boolean>(false);
 
   showOnlyPart = input<boolean>(false);
 

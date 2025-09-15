@@ -37,6 +37,8 @@ export class ProductionLineConfiguratorComponent {
 
   change = output<{index: number, skip: boolean}>();
 
+  inConflict = computed(() => this.conflictMembers()?.find(c =>  c.productionLineName == this.productionLineTargetSchedule().name))
+
   schedule = computed(() => {
     const schedule = this.productionLineTargetSchedule().schedule;
     if(schedule !== undefined && this.jigs() !== undefined){
