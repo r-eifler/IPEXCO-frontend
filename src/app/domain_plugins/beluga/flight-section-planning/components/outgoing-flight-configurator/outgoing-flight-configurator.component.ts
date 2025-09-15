@@ -21,7 +21,6 @@ import { TranslocoModule } from '@jsverse/transloco';
 })
 export class OutgoingFlightConfiguratorComponent {
   
-    originalFlight = input.required<Flight>();
     flightTargetSchedule = input.required<FlightTargetSchedule>();
     jigs = input.required<Record<string,Jig>>();
     jigTypes = input.required<Record<string,JigType>>();
@@ -49,15 +48,6 @@ export class OutgoingFlightConfiguratorComponent {
         }
       }))
     )
-  
-    //   const newFlightSchedule = {
-    //     name: this.originalFlight().name,
-    //     incoming: this.flightTargetSchedule()?.incoming ?? [],
-    //     outgoing: schedule
-    //   }
-  
-    //   this.targetSchedule.emit(newFlightSchedule);
-    // }
     
     setStatus(index: number, skip: boolean){
       this.change.emit({index, skip})

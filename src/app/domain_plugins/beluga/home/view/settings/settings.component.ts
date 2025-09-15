@@ -151,10 +151,12 @@ export class SettingsComponent {
 
 		const new_project = {
 			...project,
-			settings,
+			settings: newSettings,
 		}
 
 		this.store.dispatch(updateProject({project: new_project}))
+
+		console.log(new_project)
   
     }
 

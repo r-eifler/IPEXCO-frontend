@@ -43,12 +43,6 @@ export class ConfigurationUpdateViewComponent {
 
   jigsOnSite = this.store.selectSignal(selectJigsOnSite);
 
-  name = computed(() => {
-      let name = this.originalFlight()?.name;
-      return name ?? "Unknown"
-    });
-
-  
   jigTypes = computed(() => this.configuration()?.siteSetUp.jig_types);
   jigs = computed(() => this.section()?.siteState.jigs);
 
@@ -82,9 +76,7 @@ export class ConfigurationUpdateViewComponent {
     }
   }));
 
-
-  originalFlight = this.store.selectSignal(selectCurrentFlightSchedule);
-  flightTargetSchedule = computed(() => this.configuration()?.flightTargetSchedule);
+  currentFlightTargetSchedule = computed(() => this.configuration()?.flightTargetSchedule);
 
   originalProductionLines = this.store.selectSignal(selectProductionLines);
   productionLineTargetSchedules = computed(() => this.configuration()?.productionLinesTargetSchedule);

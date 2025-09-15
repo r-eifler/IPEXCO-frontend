@@ -21,7 +21,6 @@ import { TranslocoModule } from '@jsverse/transloco';
 })
 export class IncomingFlightConfiguratorComponent {
 
-  originalFlight = input.required<Flight>();
   flightTargetSchedule = input.required<FlightTargetSchedule>();
   jigs = input.required<Record<string,Jig>>();
   jigTypes = input.required<Record<string,JigType>>();
@@ -33,7 +32,6 @@ export class IncomingFlightConfiguratorComponent {
     position: number
   }[]>([]);
 
-  // targetSchedule = output<FlightTargetSchedule>();
   change = output<{index: number, skip: boolean}>();
 
   schedule = computed(() => this.flightTargetSchedule()?.incoming.map(e => ({
@@ -45,21 +43,6 @@ export class IncomingFlightConfiguratorComponent {
         }
       }))
   )
-    
-
-  // drop(event: CdkDragDrop<string[]>) {
-  //   const schedule = this.schedule();
-  //   moveItemInArray(schedule, event.previousIndex, event.currentIndex);
-  //   console.log(schedule)
-
-  //   const newFlightSchedule = {
-  //     name: this.originalFlight().name,
-  //     incoming: schedule.map(e => ({jig: e.jig.name, status: e.status})),
-  //     outgoing: this.flightTargetSchedule()?.outgoing ?? []
-  //   }
-
-  //   this.targetSchedule.emit(newFlightSchedule);
-  // }
   
   setStatus(index: number, skip: boolean){
     this.change.emit({index, skip})

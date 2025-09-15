@@ -138,7 +138,8 @@ export class NewBranchDialogComponent {
       map((index) => ({
         originalIndex: index,
         name: this.data.remainingFlights[index].name
-      }));
+      })).
+      filter((f) => !solvedPrefixFlightIndices.includes(f.originalIndex));
 
     this.displayNotConsideredFlights = Object.keys(this.data.remainingFlights).
       map((index) => ({

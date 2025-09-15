@@ -7,6 +7,7 @@ import { applyActions, BelugaState } from "../../shared/domain/beluga_state";
 import { BelugaGoalZ } from "../../shared/domain/properties";
 import { BelugaSiteSetUpZ, BelugaSiteState, BelugaSiteStateZ, SiteStatus } from "../../shared/domain/site_set_up";
 import { PlanMethodZ } from "./plan_method";
+import { scheduled } from "rxjs";
 
 
 
@@ -22,6 +23,7 @@ export const FlightTargetScheduleZ = object({
         skip: boolean(),
         onSite: boolean(),
     })),
+    scheduled_arrival: optional(number())
 })
 
 export type FlightTargetSchedule = zinfer<typeof FlightTargetScheduleZ>;

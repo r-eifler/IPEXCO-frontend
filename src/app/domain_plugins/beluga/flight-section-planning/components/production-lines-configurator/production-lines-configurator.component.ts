@@ -2,11 +2,13 @@ import { Component, input, output } from '@angular/core';
 import { Jig, JigType } from '../../../shared/domain/beluga_problem';
 import { ProductionLineTargetSchedule } from '../../domain/flight-section';
 import { ProductionLineConfiguratorComponent } from '../production-line-configurator/production-line-configurator.component';
+import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'app-production-lines-configurator',
   imports: [
-    ProductionLineConfiguratorComponent
+    ProductionLineConfiguratorComponent,
+    MatCardModule
   ],
   templateUrl: './production-lines-configurator.component.html',
   styleUrl: './production-lines-configurator.component.scss'

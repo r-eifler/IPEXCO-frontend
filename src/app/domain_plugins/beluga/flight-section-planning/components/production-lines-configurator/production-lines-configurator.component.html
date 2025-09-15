@@ -1,14 +1,19 @@
-<div class="container">
-    @for(schedule of productionLineTargetSchedules(); track schedule.name; let idx = $index){
-        <app-production-line-configurator
-            [productionLineTargetSchedule]="schedule"
-            [jigsOnSite]="jigsOnSite()"
-            [jigTypes]="jigTypes()"
-            [jigs]="jigs()"
-            [conflictMembers]="conflictMembers()"
-            [disabled]="disabled()"
-            (change)="onChangeProductionTarget($event, idx)"
-        >
-        </app-production-line-configurator>
-    }
-</div>
+<mat-card appearance="outlined">
+    <mat-card-header>
+        <mat-card-title>Production Schedule</mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="container">
+        @for(schedule of productionLineTargetSchedules(); track schedule.name; let idx = $index){
+            <app-production-line-configurator
+                [productionLineTargetSchedule]="schedule"
+                [jigsOnSite]="jigsOnSite()"
+                [jigTypes]="jigTypes()"
+                [jigs]="jigs()"
+                [conflictMembers]="conflictMembers()"
+                [disabled]="disabled()"
+                (change)="onChangeProductionTarget($event, idx)"
+            >
+            </app-production-line-configurator>
+        }
+    </mat-card-content>
+</mat-card>

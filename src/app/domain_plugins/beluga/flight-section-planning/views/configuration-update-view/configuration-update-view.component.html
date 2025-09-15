@@ -19,10 +19,9 @@
             <app-page-section>
                 <app-page-section-content>
                     <div class="main-container">
-                        <div class="belugas">
+                        <!-- <div class="belugas">
                            <app-incoming-flight-configurator
-                            [originalFlight]="originalFlight()"
-                            [flightTargetSchedule]="flightTargetSchedule()"
+                            [flightTargetSchedule]="currentFlightTargetSchedule()"
                             [jigTypes]="jigTypes()"
                             [jigs]="jigs()"
                             (change)="onChangeIncomingFlight($event)"
@@ -30,14 +29,13 @@
                            </app-incoming-flight-configurator>
 
                            <app-outgoing-flight-configurator
-                            [originalFlight]="originalFlight()"
-                            [flightTargetSchedule]="flightTargetSchedule()"
+                            [flightTargetSchedule]="currentFlightTargetSchedule()"
                             [jigTypes]="jigTypes()"
                             [jigs]="jigs()"
                             (change)="onChangeOutgoingFlight($event)"
                            >
                            </app-outgoing-flight-configurator>
-                        </div>
+                        </div> -->
                         <div class="trailers">
                             @for(trailer of belugaTrailers(); track trailer.name; let idx = $index){
                                 <app-trailer-configurator
@@ -78,7 +76,7 @@
                                 </app-hangar-configurator>
                              }
                         </div>
-                        <div class="production">
+                        <!-- <div class="production">
                             <app-production-lines-configurator
                                 [productionLineTargetSchedules]="productionLineTargetSchedules()"
                                 [jigsOnSite]="jigsOnSite()"
@@ -87,7 +85,7 @@
                                 (change)="onChangeProductionTarget($event)"
                             >
                             </app-production-lines-configurator>
-                        </div> 
+                        </div>  -->
                     </div>                   
                 </app-page-section-content>
             </app-page-section>

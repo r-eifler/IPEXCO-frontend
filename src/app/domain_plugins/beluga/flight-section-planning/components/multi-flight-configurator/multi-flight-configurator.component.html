@@ -1,0 +1,104 @@
+<div class="main-container">
+    <mat-card  appearance="outlined">
+        <mat-card-content >
+            @if(isProbabilistic()){
+                <div class="day-container">
+                    @for(day of days(); track day; let idxDay = $index){
+                    <div class="day" 
+                        [class.selected-day]="idxDay === selectedDayIndex()"
+                        >
+                        <span class="day-name">Day: {{idxDay}}</span>
+                        <div class="flight-container-absolute">
+                            @for(flight of day; track flight.name; let idxFlight = $index){
+                                <div class="flight" 
+                                    (click)="selectFlightIndex(flight.originalIndex, idxDay)" 
+                                    [class.selected]="flight.originalIndex === selectedFlightIndex()">
+                                    <span>{{flight.scheduled_arrival | flightArrivalTime}}</span>
+                                    <span>{{flight.name}}</span>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    }
+                </div>
+            }
+            @else{
+                <div class="flight-container">
+                @for(flight of flights(); track flight.name; let idx = $index){
+                    <div class="flight" 
+                        (click)="selectFlightIndex(idx, null)" 
+                        [class.selected]="idx === selectedFlightIndex()">
+                        <span>{{flight.name}}</span>
+                    </div>
+                }
+                </div>
+            }
+        </mat-card-content>
+    </mat-card>
+
+    @if(selectedFlight() !== null){
+        <mat-card  appearance="outlined">
+            <mat-card-header>
+                <mat-card-title>{{selectedFlight()?.name}}</mat-card-title>
+            </mat-card-header>
+            <mat-card-content class="content">
+                <div class="arrival-time">
+                    <mat-icon>schedule</mat-icon>
+                    <span>Scheduled Time: </span>
+                    <span>{{selectedFlight()?.scheduled_arrival | flightArrivalTime}}</span>
+                </div>
+                <div class="flight-info">
+                    <mat-card  appearance="outlined">
+                        <mat-card-header>
+                            <mat-card-title>Incoming</mat-card-title>
+                        </mat-card-header>
+                        <mat-card-content class="jig-container">
+                            @for(elem of selectedFlight()?.incoming; track elem.jig.name; let idx = $index){
+                                <app-jig-configurator 
+                                    [index]="idx"
+                                    [jig]="elem.jig"  
+                                    [jigType]="elem.type"
+                                    [status]="elem.status"
+                                    [disabled]="disabled()"
+                                    (statusChange)="setStatusIncoming(idx, $event)"
+                                >
+                                </app-jig-configurator>
+                            }
+                            @if(selectedFlight()?.incoming.length === 0){
+                                <app-info>
+                                    <mat-icon>assignment</mat-icon>
+                                    No jig scheduled.
+                                </app-info>
+                            }
+                        </mat-card-content>
+                    </mat-card>
+
+                    <mat-card  appearance="outlined">
+                        <mat-card-header>
+                            <mat-card-title>Outgoing</mat-card-title>
+                        </mat-card-header>
+                        <mat-card-content class="jig-container">
+                            @for(elem of selectedFlight()?.outgoing; track elem; let idx = $index){
+                                <app-jig-configurator 
+                                    [index]="idx"
+                                    [jig]="elem.jig"  
+                                    [jigType]="elem.jigType"
+                                    [status]="elem.status"
+                                    [disabled]="disabled()"
+                                    (statusChange)="setStatusIncoming(idx, $event)"
+                                >
+                                </app-jig-configurator>
+                            }
+                            @if(selectedFlight()?.outgoing.length === 0){
+                                <app-info>
+                                    <mat-icon>assignment</mat-icon>
+                                    No jig scheduled.
+                                </app-info>
+                            }
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    } 
+</div>

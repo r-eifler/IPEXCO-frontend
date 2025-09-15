@@ -1,5 +1,7 @@
 import { Component, computed, effect, inject } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
+import { MatLabel } from '@angular/material/input';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { TranslocoModule } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 import { ExplanationRunStatus } from 'src/app/iterative_planning/domain/explanation/explanations';
@@ -8,17 +10,15 @@ import { PageModule } from 'src/app/shared/components/page/page.module';
 import { ConfigurationSelectorComponent } from '../../components/configuration-selector/configuration-selector.component';
 import { ExplanationControlsComponent } from '../../components/explanation-controls/explanation-controls.component';
 import { HangarConfiguratorComponent } from '../../components/hangar-configurator/hangar-configurator.component';
-import { IncomingFlightConfiguratorComponent } from '../../components/incoming-flight-configurator/incoming-flight-configurator.component';
-import { OutgoingFlightConfiguratorComponent } from '../../components/outgoing-flight-configurator/outgoing-flight-configurator.component';
+import { MultiFlightConfiguratorComponent } from '../../components/multi-flight-configurator/multi-flight-configurator.component';
 import { ProductionLinesConfiguratorComponent } from '../../components/production-lines-configurator/production-lines-configurator.component';
 import { RackConfiguratorComponent } from '../../components/rack-configurator/rack-configurator.component';
 import { TrailerConfiguratorComponent } from '../../components/trailer-configurator/trailer-configurator.component';
-import { selectSelectedConfigIndex } from '../../state/flight-section-planning.feature';
-import { selectCurrentFlightSchedule, selectJigsOnSite, selectProductionLines, selectSelectedConfiguration, selectSelectedSection } from '../../state/flight-section-planning.selector';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { selectHasEmptyRackConflictMember, selectIncomingFlightConflictMembers, selectOutgoingFlightConflictMembers, selectProductionConflictMembers, selectRackMaintenanceConflictMembers, selectSwapsConflictMembers, selectTrailerMaintenanceConflictMembers } from './configuration-explanation-view.selectors';
-import { MatLabel } from '@angular/material/input';
 import { inspectConfig } from '../../state/flight-section-planning.actions';
+import { selectSelectedConfigIndex } from '../../state/flight-section-planning.feature';
+import { selectJigsOnSite, selectProductionLines, selectSelectedConfiguration, selectSelectedSection } from '../../state/flight-section-planning.selector';
+import { selectHasEmptyRackConflictMember, selectIncomingFlightConflictMembers, selectOutgoingFlightConflictMembers, selectProductionConflictMembers, selectRackMaintenanceConflictMembers, selectSwapsConflictMembers, selectTrailerMaintenanceConflictMembers } from './configuration-explanation-view.selectors';
+import { MatCardModule } from '@angular/material/card';
 
 
 @Component({
@@ -30,14 +30,14 @@ import { inspectConfig } from '../../state/flight-section-planning.actions';
         MatIconModule,
         RackConfiguratorComponent,
         TrailerConfiguratorComponent,
-        IncomingFlightConfiguratorComponent,
-        OutgoingFlightConfiguratorComponent,
         HangarConfiguratorComponent,
         ProductionLinesConfiguratorComponent,
         ExplanationControlsComponent,
         ConfigurationSelectorComponent,
         MatProgressBarModule,
         MatLabel,
+        MultiFlightConfiguratorComponent,
+        MatCardModule
   ],
   templateUrl: './configuration-explanation-view.component.html',
   styleUrl: './configuration-explanation-view.component.scss'
@@ -53,11 +53,32 @@ export class ConfigurationExplanationViewComponent {
   
     jigsOnSite = this.store.selectSignal(selectJigsOnSite);
 
-    originalFlight = this.store.selectSignal(selectCurrentFlightSchedule);
+    sectionName = computed(() => {
+      const flightSchedule = this.flightTargetSchedule();
+      if(flightSchedule === undefined){
+        return 'UNKNOWN'
+      }
+      return Object.values(flightSchedule).map(f => f.name).join(" - ")
+    })
+
     flightTargetSchedule = computed(() => this.configuration()?.flightTargetSchedule);
+
+    orderedFlights = computed(() => {
+      const flightSchedule = this.flightTargetSchedule();
+      if(flightSchedule === undefined){
+        return []
+      }
+      return this.section()?.flightIndices.map(index => flightSchedule[index])
+    })
   
     originalProductionLines = this.store.selectSignal(selectProductionLines);
-    productionLineTargetSchedules = computed(() => this.configuration()?.productionLinesTargetSchedule);
+    productionLineTargetSchedules = computed(() => {
+      const schedule = this.configuration()?.productionLinesTargetSchedule;
+      if(schedule === undefined){
+        return []
+      }
+      return Object.values(schedule);
+    });
 
     explanationsComputationRunning = computed(() => this.configuration()?.explanationStatus === ExplanationRunStatus.RUNNING)
     hasExplanations = computed(() => this.configuration()?.explanationStatus === ExplanationRunStatus.FINISHED)
@@ -83,13 +104,7 @@ export class ConfigurationExplanationViewComponent {
       });
     }
 
-    // site elements
-  
-    name = computed(() => {
-        let name = this.originalFlight()?.name;
-        return name ?? "Unknown"
-      });
-  
+    // site elements  
     
     jigTypes = computed(() => this.configuration()?.siteSetUp.jig_types);
     jigs = computed(() => this.section()?.siteState.jigs);

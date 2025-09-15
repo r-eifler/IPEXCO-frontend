@@ -1,13 +1,27 @@
 .main-container {
+    padding: var(--spacing-300);
     display: grid;
-    grid-template-columns: auto 2fr 2fr 2fr auto auto;
+    grid-template-columns: 2fr 2fr 2fr auto;
     gap: var(--spacing-300);
+    justify-items: start;
+}
+
+.column-header {
+    font-size: larger;
+    font-weight: 500;
+    justify-self: left;
 }
 
 .center {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.schedule-configurators {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-300);
 }
 
 .belugas {
