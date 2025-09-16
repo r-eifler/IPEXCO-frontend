@@ -6,26 +6,24 @@ import { RouterLink } from '@angular/router';
 import { TranslocoModule } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 import { sum } from 'ramda';
+import { FlightsHorizon } from '../../domain/flight-section';
 import { cancelConfigurationUpdate, saveConfiguration, updateEmptyRacks, updateMaxSwaps } from '../../state/flight-section-planning.actions';
 import { selectAllowObjectiveModification } from '../../state/flight-section-planning.selector';
-import { SwapConfiguratorComponent } from '../swap-configurator/swap-configurator.component';
-import { FlightsHorizon } from '../../domain/flight-section';
 
 
 @Component({
-  selector: 'app-confiuguration-update-controls',
+  selector: 'app-configuration-update-controls',
   imports: [
-    SwapConfiguratorComponent,
     MatSlideToggleModule,
     MatButtonModule,
     MatIcon,
     RouterLink,
     TranslocoModule,
   ],
-  templateUrl: './confiuguration-update-controls.component.html',
-  styleUrl: './confiuguration-update-controls.component.scss'
+  templateUrl: './configuration-update-controls.component.html',
+  styleUrl: './configuration-update-controls.component.scss'
 })
-export class ConfiugurationUpdateControlsComponent {
+export class ConfigurationUpdateControlsComponent {
 
   store = inject(Store);
   allowModifications = this.store.selectSignal(selectAllowObjectiveModification);

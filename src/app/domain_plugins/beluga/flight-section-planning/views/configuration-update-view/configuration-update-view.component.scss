@@ -1,7 +1,15 @@
 .main-container {
+    padding: var(--spacing-300);
     display: grid;
-    grid-template-columns: auto 2fr 2fr 2fr auto auto;
+    grid-template-columns: 2fr 2fr 2fr auto;
     gap: var(--spacing-300);
+    justify-items: start;
+}
+
+.column-header {
+    font-size: larger;
+    font-weight: 500;
+    justify-self: left;
 }
 
 .center {
@@ -49,3 +57,10 @@
 }
 
 
+.schedule-configurators {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: min-content;
+    gap: var(--spacing-300);
+}

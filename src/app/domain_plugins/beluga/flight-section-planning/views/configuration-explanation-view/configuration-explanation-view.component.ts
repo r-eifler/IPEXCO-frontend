@@ -19,7 +19,7 @@ import { selectSelectedConfigIndex } from '../../state/flight-section-planning.f
 import { selectJigsOnSite, selectProductionLines, selectSelectedConfiguration, selectSelectedSection } from '../../state/flight-section-planning.selector';
 import { selectConflicts, selectHasEmptyRackConflictMember, selectIncomingFlightConflictMembers, selectOutgoingFlightConflictMembers, selectProductionConflictMembers, selectRackMaintenanceConflictMembers, selectSwapsConflictMembers, selectTrailerMaintenanceConflictMembers } from './configuration-explanation-view.selectors';
 import { MatCardModule } from '@angular/material/card';
-import { ConstraintControlsComponent } from '../../components/constraint-controls/constraint-controls.component';
+import { ConstraintsConflictIndicatorComponent } from '../../components/constraints-conflict-indicator/constraints-conflict-indicator.component';
 import { ConflictsListComponent } from '../../components/conflicts-list/conflicts-list.component';
 
 
@@ -40,7 +40,7 @@ import { ConflictsListComponent } from '../../components/conflicts-list/conflict
         MatLabel,
         MultiFlightConfiguratorComponent,
         MatCardModule,
-        ConstraintControlsComponent,
+        ConstraintsConflictIndicatorComponent,
         ConflictsListComponent,
   ],
   templateUrl: './configuration-explanation-view.component.html',

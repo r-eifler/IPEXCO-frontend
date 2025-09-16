@@ -22,7 +22,6 @@ interface Status {
   selector: 'app-multi-flight-configurator',
   imports: [
     MatCardModule,
-    JigComponent,
     MatIconModule,
     FlightArrivalTimePipe,
     NgxChartsModule,

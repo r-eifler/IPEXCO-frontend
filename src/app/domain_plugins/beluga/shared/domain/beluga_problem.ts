@@ -88,7 +88,7 @@ export function occupiedRackSpace(rack: string[], jigs: Record<string,Jig>, jigT
 }
 
 export function occupiedSpace(rack: Jig[], jigTypes: Record<string,JigType>): number {
-    return rack.map(jig => getJigSize(jig, jigTypes[jig.type])).reduce((sum, c) => sum + c, 0);
+    return rack?.map(jig => getJigSize(jig, jigTypes[jig.type])).reduce((sum, c) => sum + c, 0);
 }
 
 

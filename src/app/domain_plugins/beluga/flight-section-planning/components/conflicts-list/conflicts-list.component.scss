@@ -45,3 +45,7 @@
   outline-color: #{mat.get-theme-color(ipexco-theme.$light-theme, outline-variant)};
   scale: 1.1;
 }
+
+.inConflict {
+    @include vars.color(on-error-container);
+}

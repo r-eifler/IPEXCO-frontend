@@ -10,32 +10,61 @@
         <app-page-section-list>
             <app-page-section>
                 <app-page-section-content>
-                    <app-confiuguration-update-controls
+                    <app-configuration-update-controls
                         [section]="section()"
                     >
-                    </app-confiuguration-update-controls>
+                    </app-configuration-update-controls>
                 </app-page-section-content>
-            </app-page-section>               
+            </app-page-section>   
             <app-page-section>
+                <app-page-section-title>
+                    Constraints
+                </app-page-section-title>
                 <app-page-section-content>
-                    <div class="main-container">
-                        <!-- <div class="belugas">
-                           <app-incoming-flight-configurator
-                            [flightTargetSchedule]="currentFlightTargetSchedule()"
+                    <app-constraint-controls
+                        [section]="section()"
+                    ></app-constraint-controls>
+                </app-page-section-content>
+            </app-page-section>  
+            <app-page-section>
+                <app-page-section-title>
+                    Schedules
+                </app-page-section-title>
+                <app-page-section-content>
+                    <div class="schedule-configurators">
+                        <app-multi-flight-configurator
                             [jigTypes]="jigTypes()"
                             [jigs]="jigs()"
-                            (change)="onChangeIncomingFlight($event)"
-                           >
-                           </app-incoming-flight-configurator>
+                            [flights]="orderedFlights()"
+                            [disabled]="false"
+                            (change)="onChangeFlight($event)"
+                        >
 
-                           <app-outgoing-flight-configurator
-                            [flightTargetSchedule]="currentFlightTargetSchedule()"
+                        </app-multi-flight-configurator>
+
+                        <app-production-lines-configurator
+                            [productionLineTargetSchedules]="productionLineTargetSchedules()"
+                            [jigsOnSite]="jigsOnSite()"
                             [jigTypes]="jigTypes()"
                             [jigs]="jigs()"
-                            (change)="onChangeOutgoingFlight($event)"
-                           >
-                           </app-outgoing-flight-configurator>
-                        </div> -->
+                            [disabled]="false"
+                            (change)="onChangeProductionTarget($event)"
+                        >
+                        </app-production-lines-configurator>
+                    </div>
+                </app-page-section-content>
+            </app-page-section>                  
+            <app-page-section>
+                <app-page-section-title>
+                    Site Setup
+                </app-page-section-title>
+                <app-page-section-content>
+                    <mat-card appearance="outlined" class="main-container">
+                        <p class="column-header">Trailers Beluga Hangar</p>
+                        <p class="column-header">Racks</p>
+                        <p class="column-header">Trailers Production</p>
+                        <p class="column-header">Production Hangars</p>
+                        
                         <div class="trailers">
                             @for(trailer of belugaTrailers(); track trailer.name; let idx = $index){
                                 <app-trailer-configurator
@@ -76,17 +105,7 @@
                                 </app-hangar-configurator>
                              }
                         </div>
-                        <!-- <div class="production">
-                            <app-production-lines-configurator
-                                [productionLineTargetSchedules]="productionLineTargetSchedules()"
-                                [jigsOnSite]="jigsOnSite()"
-                                [jigTypes]="jigTypes()"
-                                [jigs]="jigs()"
-                                (change)="onChangeProductionTarget($event)"
-                            >
-                            </app-production-lines-configurator>
-                        </div>  -->
-                    </div>                   
+                    </mat-card>                   
                 </app-page-section-content>
             </app-page-section>
         </app-page-section-list>
