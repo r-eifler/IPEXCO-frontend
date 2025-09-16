@@ -92,7 +92,7 @@ export class NewBranchDialogComponent {
         selected: option.selected
       }
     })
-    this.configValid = this.displaySelectedPrefix.filter(f => !f.selected).length == 0
+    this.configValid = this.displaySelectedPrefix.filter(f => !f.selected).length > 0 || this.displayHorizonFlights.length > 0
 
 
     const solvedPrefixFlightIndices = this.displaySelectedPrefix.filter(s => s.selected).map(s => s.originalIndex);
@@ -148,7 +148,7 @@ export class NewBranchDialogComponent {
       })).
       filter((f) => ! doneFlightIndices.includes(f.originalIndex) && ! this.data.flightIndices.includes(f.originalIndex));
 
-    this.configValid = this.displaySelectedPrefix.filter(f => !f.selected).length == 0
+    this.configValid = this.displaySelectedPrefix.filter(f => !f.selected).length > 0 || this.displayHorizonFlights.length > 0
 
   }
 

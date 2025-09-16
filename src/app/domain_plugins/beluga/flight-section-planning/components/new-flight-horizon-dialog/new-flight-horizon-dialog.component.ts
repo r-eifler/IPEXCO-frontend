@@ -62,7 +62,7 @@ export class NewFlightHorizonDialogComponent {
         event.currentIndex,
       );
     }
-    this.configValid = this.displayHorizonFlights.length > 0
+    this.configValid = this.displayHorizonFlights.length > 0 
   }
 
   constructor(){

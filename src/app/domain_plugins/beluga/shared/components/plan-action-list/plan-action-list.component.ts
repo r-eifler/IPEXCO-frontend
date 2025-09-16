@@ -36,9 +36,10 @@ export class PlanActionListComponent {
 
   displayActions = computed(() => {
     const actions = this.actions();
+    console.log(actions)
 
-    if(actions === null){
-      return actions;
+    if(actions === null || actions === undefined){
+      return null;
     }
 
     const displayActions: DisplayAction[] =  actions.map((action, index) => {

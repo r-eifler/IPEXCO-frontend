@@ -39,7 +39,7 @@ export class PlanInspectorComponent {
     return this.section()?.configurations[index];
   })
 
-  actions = computed(() => this.section()?.actions.filter(a => a.name !== BelugaActionType.SWITCH_TO_NEXT_BELUGA) ?? [])
+  actions = computed(() => this.section()?.actions)
 
   startState = computed(() => {
     const section = this.section();

@@ -39,9 +39,21 @@ export class MultiFlightCardComponent {
   jigTypes = input.required<Record<string,JigType>>();
   highlighted = input<number | null>(null);
   progressStatus = input<ProgressStatus[] | null>(null);
+  propagateHighlightedToSelected = input<boolean>(false);
 
   selectedFlightIndex = signal<number | null>(0);
   selectedDayIndex = signal<number | null>(0);
+
+  constructor(){
+    effect(() => {
+      if(this.propagateHighlightedToSelected()){
+        const index = this.highlighted();
+        if(index != null){
+          this.selectFlightIndex(index, null)
+        }
+      }
+    })
+  }
 
   displayFlights = computed(() => this.flights()?.map((flight, index) => ({
     ...flight,

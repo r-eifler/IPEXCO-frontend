@@ -30,18 +30,20 @@
                         (click)="selectFlightIndex(idx, null)" 
                         [class.selected]="idx === selectedFlightIndex()"
                         [class.highlighted]="idx === highlighted()">
-                        @switch(flight.status){
-                            @case(Statuses.TODO){
-                                <mat-icon>close</mat-icon>
-                            }
-                            @case(Statuses.DONE){
-                                <mat-icon>check</mat-icon>
-                            }
-                            @case(Statuses.IN_PROGRESS){
-                                <mat-icon>progress_activity</mat-icon>
-                            }
-                            @case(Statuses.UNKNOWN){
-                                <mat-icon>question_mark</mat-icon>
+                        @if(progressStatus() !== null){
+                            @switch(flight.status){
+                                @case(Statuses.TODO){
+                                    <mat-icon>close</mat-icon>
+                                }
+                                @case(Statuses.DONE){
+                                    <mat-icon>check</mat-icon>
+                                }
+                                @case(Statuses.IN_PROGRESS){
+                                    <mat-icon>progress_activity</mat-icon>
+                                }
+                                @case(Statuses.UNKNOWN){
+                                    <mat-icon>question_mark</mat-icon>
+                                }
                             }
                         }
                         <span>{{flight.name}}</span>
