@@ -59,7 +59,6 @@ export class MetricsControlsComponent {
 
   constructor(){
     effect(() => {
-      console.log(this.selectedBranch());
       let branchIndex = this.selectedBranch()
       if (branchIndex !== undefined){
         this.form.controls.branches.setValue([branchIndex])
@@ -69,7 +68,6 @@ export class MetricsControlsComponent {
     this.form.controls.branches.valueChanges.pipe(takeUntilDestroyed()).subscribe(
       newIndices => {
         if(newIndices !== null){
-          console.log(newIndices);
           this.selectedBranches.emit(newIndices);
         }
       }
@@ -78,7 +76,6 @@ export class MetricsControlsComponent {
     this.form.controls.metric.valueChanges.pipe(takeUntilDestroyed()).subscribe(
       metric => {
         if(metric !== null){
-          console.log(metric);
           this.selectedMetric.emit(metric);
         }
       }

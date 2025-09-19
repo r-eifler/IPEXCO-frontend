@@ -50,4 +50,9 @@ export class SectionMetricGraphComponent {
     }))
   )
 
+  constructor(){
+    effect(() => console.log(this.branchSections()))
+    effect(() => console.log(this.data()))
+  }
+
 }

@@ -18,7 +18,6 @@
             <app-page-section>
                 <app-page-section-content class="main-controls">
                     <div class="button-controls">
-                        <a  mat-button [routerLink]="['./new-test-case']" [disabled]="!isIdle()"><mat-icon>add</mat-icon>New Test Case</a>
                         <button  mat-button (click)="startFuzzing()" [disabled]="!isIdle() || hasRun()"><mat-icon>alt_route</mat-icon>Start Test State Fuzzing</button>
                         <mat-form-field appearance="outline" class="state-input">
                         <mat-label>#states</mat-label>

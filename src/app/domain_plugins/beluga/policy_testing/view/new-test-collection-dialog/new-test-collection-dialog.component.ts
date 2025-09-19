@@ -7,7 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatStepperModule } from '@angular/material/stepper';
 import { Store } from '@ngrx/store';
-import { BehaviorSubject, combineLatest, filter, map, switchMap, take } from 'rxjs';
+import { BehaviorSubject, combineLatest, filter, map, startWith, switchMap, take } from 'rxjs';
 import { TemplateFileUploadComponent } from 'src/app/components/files/file-upload/file-upload.component';
 import { DialogModule } from 'src/app/shared/components/dialog/dialog.module';
 import { FileUpload, TestSuiteBase, TestRunStatus } from '../../domain/tests';
@@ -59,7 +59,9 @@ export class NewTestCollectionDialogComponent {
 	tree = this.store.selectSignal(selectTree);
 	branchNames = this.store.selectSignal(selectBranchNames);
 
-	branchIndex$  =this.form.controls.branchIndex.valueChanges
+	branchIndex$ = this.form.controls.branchIndex.valueChanges.pipe(
+		startWith(0)
+	)
 
 	sections$ = this.branchIndex$.pipe(
 		switchMap((index) => this.store.select(selectBranchSections(index)))
