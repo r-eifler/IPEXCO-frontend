@@ -1,24 +1,20 @@
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
 import { Observable, of } from "rxjs";
-import { map, tap } from "rxjs/operators";
+import { map } from "rxjs/operators";
+import { ExplanationRunStatus } from "src/app/iterative_planning/domain/explanation/explanations";
+import { PlanRunStatus } from "src/app/iterative_planning/domain/plan";
 import { environment } from "src/environments/environment";
 import { array } from "zod";
 import { BelugaProblem, Flight } from "../../shared/domain/beluga_problem";
-import { applyActions, getInitialSiteState, getInitialState } from "../../shared/domain/beluga_state";
-import { BelugaSiteSetUp, BelugaSiteState, getSiteSetUp } from "../../shared/domain/site_set_up";
-import { BelugaConfiguration, getBranchOfFlightHorizon, deriveSuccessorFlightHorizonFromPredecessor, filterUpTo, FlightPlanTree, FlightPlanTreeBase, FlightPlanTreeZ, FlightsHorizon, FlightsHorizonBase, FlightsHorizonZ, FlightTargetSchedule, getFlightSchedule, getFullStartState, getJigsOnSiteFromState, getPrefixOfFlightHorizon, getProductionSchedule, initialDeliveryStatuses, ProductionLineTargetSchedule, getConsideredFlightSchedule } from "../domain/flight-section";
-import { ExplanationRunStatus } from "src/app/iterative_planning/domain/explanation/explanations";
-import { PlanRunStatus } from "src/app/iterative_planning/domain/plan";
-import { BelugaAction, BelugaActionType } from "../../shared/domain/beluga_plan";
+import { applyActions, getInitialSiteState } from "../../shared/domain/beluga_state";
+import { BelugaSiteState, getSiteSetUp } from "../../shared/domain/site_set_up";
+import { BelugaConfiguration, deriveSuccessorFlightHorizonFromPredecessor, filterUpTo, FlightPlanTree, FlightPlanTreeBase, FlightPlanTreeZ, FlightsHorizon, FlightsHorizonBase, FlightsHorizonData, FlightsHorizonZ, getBranchOfFlightHorizon, getConsideredFlightSchedule, getFullStartState, getJigsOnSiteFromState, getPrefixOfFlightHorizon, getProductionSchedule, initialDeliveryStatuses } from "../domain/flight-section";
 
 
 interface initData {
   projectId: string, 
-  siteState: BelugaSiteState,
-  siteSetUp: BelugaSiteSetUp,
-  flightTargetSchedule: FlightTargetSchedule[],
-  productionLinesTargetSchedule: ProductionLineTargetSchedule[],
+  section: FlightsHorizonData
 }
 
 @Injectable()
@@ -77,39 +73,67 @@ export class FlightPlanTreeService{
       const jigsOnSite = getJigsOnSiteFromState(siteState, flights)
       const jigTypesOnSite = [...jigsOnSite].map(jn => task.jigs[jn].type)
 
-      const data: initData = {
-        projectId, 
-        siteState, 
-        siteSetUp,
-        flightTargetSchedule: flights.map((flight,index) => ({
-          originalIndex: index,
-          name: flight.name,
-          incoming: flight.incoming.map(jn => ({
-            jig: jn, 
-            skip: false,
-          })),
-          outgoing: flight.outgoing.map(jt => {
-            const index = jigTypesOnSite.findIndex(t => t === jt);
-            if(index !== -1){
-                jigTypesOnSite.splice(index,1)
-            }
-            return { 
-                jigType: jt, 
-                skip: false,
-                onSite: index !== -1,
-            }
-          }) 
-        })),
-        productionLinesTargetSchedule: task.production_lines.map(pl => {
+
+      const flightTargetSchedule = flights.reduce((acc, flight,index) => ({
+          ...acc,
+          [index]: {
+            originalIndex: index,
+            name: flight.name,
+            incoming: flight.incoming.map(jn => ({
+              jig: jn, 
+              skip: false,
+            })),
+            outgoing: flight.outgoing.map(jt => {
+              const index = jigTypesOnSite.findIndex(t => t === jt);
+              if(index !== -1){
+                  jigTypesOnSite.splice(index,1)
+              }
+              return { 
+                  jigType: jt, 
+                  skip: false,
+                  onSite: index !== -1,
+              }
+            }) 
+          }
+        }
+      ), {})
+
+      const productionLinesTargetSchedule = task.production_lines.reduce((acc,pl) => {
           const notBlocked = filterUpTo(pl.schedule, jigsOnSite);
           return {
-            name: pl.name,
-            schedule: pl.schedule.map(jn => ({
-              jig: jn, 
-              ...initialDeliveryStatuses(jn, jigsOnSite, notBlocked),
-            }))
+            ...acc,
+            [pl.name]: {
+              name: pl.name,
+              schedule: pl.schedule.map(jn => ({
+                jig: jn, 
+                ...initialDeliveryStatuses(jn, jigsOnSite, notBlocked),
+              }))
+            }
           }
-        }),
+        }, {})
+
+      const section: FlightsHorizonData = {
+        predecessorId: null,
+        status: PlanRunStatus.PENDING,
+        flightIndices: flights.map((f,i) => i),
+        siteState,
+        configurationIndex: 0,
+        configurations: [{
+                siteSetUp,
+                flightTargetSchedule,
+                productionLinesTargetSchedule,
+                maxSwaps: null,
+                minEmptyRacks: 0,
+                explanations: null,
+                explanationStatus: ExplanationRunStatus.PENDING,
+            }] as BelugaConfiguration[],
+        actions: [],
+        finished: false
+      }
+
+      const data: initData = {
+        projectId, 
+        section
       }
 
       return this.http.post<unknown>(this.BASE_URL + 'init', data).pipe(

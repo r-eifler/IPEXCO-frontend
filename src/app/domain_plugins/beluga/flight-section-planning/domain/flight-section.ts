@@ -130,9 +130,9 @@ export const BelugaConfigurationZ = object({
 
 export type BelugaConfiguration = zinfer<typeof BelugaConfigurationZ>;
 
-export const FlightsHorizonBaseZ = object({
+
+export const FlightsHorizonDataZ = object({
     predecessorId: nullable(string()),
-    treeId: string(),
 
     flightIndices: array(number()),
     siteState: BelugaSiteStateZ,
@@ -144,6 +144,13 @@ export const FlightsHorizonBaseZ = object({
     status: PlanRunStatusZ,
     finished: boolean(),
 })
+
+export type FlightsHorizonData = zinfer<typeof FlightsHorizonDataZ>;
+
+export const FlightsHorizonBaseZ = FlightsHorizonDataZ.merge(object({
+        treeId: string(),
+    })
+);
 
 export type FlightsHorizonBase = zinfer<typeof FlightsHorizonBaseZ>;
 

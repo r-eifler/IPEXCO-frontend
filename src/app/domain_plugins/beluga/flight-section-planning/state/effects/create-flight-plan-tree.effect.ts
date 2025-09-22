@@ -17,7 +17,7 @@ export class CreateFlightPlanTreeEffect{
     private service = inject(FlightPlanTreeService)
     private store = inject(Store);
 
-    public loadProject$ = createEffect(() => this.actions$.pipe(
+    public create$ = createEffect(() => this.actions$.pipe(
         ofType(initFlightPlanTree),
         concatLatestFrom(() => [this.store.select(selectTask)]),
         filterListNotNullOrUndefined(),
