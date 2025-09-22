@@ -1,13 +1,13 @@
 <div class="container" >
     <div class="buttons">
         <app-swap-configurator 
-        [value]="maxSwaps()" 
-        (valueChange)="onSwapChange($event)"
-        [disabled]="!allowModifications()"
+            [value]="constraintMaxSwaps()" 
+            (valueChange)="onSwapChange($event)"
+            [disabled]="!allowModifications()"
         ></app-swap-configurator>
         <mat-slide-toggle 
-            [checked]="keepRackEmpty()" 
-            (change)="onToggleRack()"
+            [checked]="keepOneRackEmpty()" 
+            (change)="onToggleRack($event)"
             [disabled]="numEmptyRacks() == 0 || !allowModifications()">
                 Keep One Rack Empty
         </mat-slide-toggle>

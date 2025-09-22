@@ -1,13 +1,20 @@
 <div class="constraints">             
     <div class="constraint">
         <mat-icon>swap_vert</mat-icon>
-        <span class="label">Maximal Allowed Swaps:</span>
-        <span class="value">{{ maxSwaps() }}</span>
-        @if(swapConflictMembers()?.length > 0){
+
+        @if(hasMaxSwapsLimit()){
+            <span class="label">Maximal Allowed Swaps:</span>
+            <span class="value">{{ maxSwaps() }}</span>
+            @if(swapConflictMembers()?.length > 0){
             <div class="status error">
                 <mat-icon [inline]="true">warning</mat-icon>
             </div>
+            }
         }
+        @else{
+            <span class="label">No swaps limit</span>
+        }
+        
     </div>
 
     <div class="constraint">

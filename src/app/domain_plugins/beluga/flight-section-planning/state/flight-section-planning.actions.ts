@@ -128,7 +128,7 @@ export const skipProductionJig = createAction('[beluga-flights-horizon-planning]
 export const updateRackStatus = createAction('[beluga-flights-horizon-planning] update rack status', props<{index: number, status: SiteStatus}>());
 export const updateTrailerStatus = createAction('[beluga-flights-horizon-planning] update trailer status', props<{index: number, side: Side, status: SiteStatus}>());
 export const updateHangarStatus = createAction('[beluga-flights-horizon-planning] update hangar status', props<{index: number, status: SiteStatus}>());
-export const updateMaxSwaps = createAction('[beluga-flights-horizon-planning] update max swaps', props<{value: number}>());
+export const updateMaxSwaps = createAction('[beluga-flights-horizon-planning] update max swaps', props<{value: number | null}>());
 export const updateEmptyRacks = createAction('[beluga-flights-horizon-planning] update empty racks', props<{value: number}>());
 export const saveConfiguration = createAction('[beluga-flights-horizon-planning] save configuration');
 

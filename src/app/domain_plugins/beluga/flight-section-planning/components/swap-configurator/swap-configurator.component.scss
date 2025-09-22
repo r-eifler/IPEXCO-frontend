@@ -1,3 +1,10 @@
+.main {
+    display: flex;
+    flex-direction: row;
+    gap: var(--spacing-300);
+    align-items: center;
+}
+
 .slider {
     width: 200px;
 }

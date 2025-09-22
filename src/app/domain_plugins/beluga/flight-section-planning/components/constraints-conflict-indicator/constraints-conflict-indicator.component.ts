@@ -1,9 +1,7 @@
-import { Component, computed, inject, input, output } from '@angular/core';
+import { Component, computed, effect, inject, input, output } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { Store } from '@ngrx/store';
 import { sum } from 'ramda';
-import { ExplanationRunStatus } from 'src/app/iterative_planning/domain/explanation/explanations';
-import { PlanRunStatus } from 'src/app/iterative_planning/domain/plan';
 import { FlightsHorizon } from '../../domain/flight-section';
 
 @Component({
@@ -31,6 +29,8 @@ export class ConstraintsConflictIndicatorComponent {
   
     changeSwaps= output<number>();
     changeEmptyRacks= output<number>();
+
+    hasMaxSwapsLimit = computed(() => this.config()?.maxSwaps !== null);
   
     maxSwaps = computed(() => this.config()?.maxSwaps)
    

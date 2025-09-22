@@ -207,7 +207,24 @@ export const selectJigMapIncomingFlight= createSelector(selectFlights,
     }), {})
 );
 
+
+
 // configuration updater
+
+export const selectNumEmptyRacks = createSelector(selectSelectedSection,  
+    (section) => {
+        const racks = section?.siteState.racks;
+        if(racks === undefined){
+            return 0
+        }
+       return sum(Object.values(racks).map(r => (r.length) > 0 ? 1 : 0))
+    })
 
 export const selectUpdatingConfiguration = createSelector(selectUpdatedConfiguration,  
     (config) => config);
+
+export const selectUpdatingMaxNumSwaps = createSelector(selectUpdatingConfiguration,  
+    (config) => config?.maxSwaps);
+
+export const selectUpdatingEmptyRacks = createSelector(selectUpdatingConfiguration,  
+    (config) => config?.minEmptyRacks);

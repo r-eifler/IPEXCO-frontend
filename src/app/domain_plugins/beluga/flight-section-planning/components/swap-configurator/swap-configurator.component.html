@@ -1,9 +1,18 @@
-<div>
+<div class="main">
+    <mat-slide-toggle
+        [checked]="hasValue()"
+        [disabled]="disabled()"
+        (change)="onLimitChange($event)">
+        Set Swaps Limit
+    </mat-slide-toggle>
+
     <span class="label">Swaps: </span>
-    <mat-slider min="0" max="10" step="1" showTickMarks discrete [displayWith]="formatLabel" class="slider" [disabled]="disabled()">
+    <mat-slider min="0" max="20" step="1" showTickMarks discrete [displayWith]="formatLabel" class="slider" [disabled]="disabled() || ! hasValue()">
         <input matSliderThumb [value]="value()" (valueChange)="onValueChanged($event)">
     </mat-slider>
-    <span class="label">{{ currentValue() }}</span>
+    @if(hasValue()){
+        <span class="label">{{ currentValue() }}</span>
+    }
 </div>
 
   

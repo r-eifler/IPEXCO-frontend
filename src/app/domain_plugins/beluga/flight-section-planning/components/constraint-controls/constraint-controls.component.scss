@@ -1,13 +1,13 @@
 .container {
     display: flex;
     flex-direction: row;
-    gap: var(--spacing-300);
+    gap: var(--spacing-600);
     justify-content: space-between;
 }
 
 .buttons {
     display: flex;
     flex-direction: row;
-    gap: var(--spacing-300);
+    gap: var(--spacing-600);
     align-items: center;
 }
