@@ -1,0 +1,25 @@
+.trace-actions {
+  display: flex;
+  flex-direction: row;
+  gap: var(--spacing-200);
+  overflow-x: scroll;
+  align-items: center;
+}
+
+.actions-prefix {
+  display: flex;
+  flex-direction: row;
+  gap: var(--spacing-100);
+  background-color: rgb(183, 254, 215);
+  padding:var(--spacing-100);
+  border-radius: var(--spacing-100);
+}
+
+.actions-loop {
+  display: flex;
+  flex-direction: row;
+  gap: var(--spacing-100);
+  background-color: rgb(254, 183, 183);
+  padding:var(--spacing-100);
+  border-radius: var(--spacing-100);
+}

@@ -40,7 +40,7 @@ export const TestStateGenerationMethodZ = nativeEnum(TestStateGenerationMethod);
 export const TestCaseZ = object({
     stateID: number(),
     testID: number().optional(),
-    state: BelugaProblemZ.optional(),
+    problem: BelugaProblemZ.optional(),
     policyTrace: array(BelugaActionZ).optional(),
     policyCost: number().nullable().optional(),
     classifiedAdBug: boolean(),

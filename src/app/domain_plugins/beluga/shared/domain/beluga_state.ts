@@ -188,3 +188,9 @@ export function applyActions(state: BelugaState | undefined, actions: BelugaActi
     }
     return cs
 }
+
+export interface SiteAndScheduleStateInfo {
+    siteSetUp: BelugaSiteSetUp
+    flights: Flight[], 
+    productionSchedule: ProductionLine[], 
+}

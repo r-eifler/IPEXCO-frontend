@@ -7,7 +7,7 @@ import { BreadcrumbModule } from 'src/app/shared/components/breadcrumb/breadcrum
 import { InfoComponent } from 'src/app/shared/components/info/info/info.component';
 import { PageModule } from 'src/app/shared/components/page/page.module';
 import { TestCasePanelComponent } from '../../components/test-case-panel/test-case-panel.component';
-import { selectProjectId, selectSelectedTestSuite } from '../../state/policy-testing.selector';
+import { selectProjectId, selectSection, selectSelectedTestSuite } from '../../state/policy-testing.selector';
 import { MatButtonModule } from '@angular/material/button';
 import { resetTestCollection, startTestStateFuzzing } from '../../state/policy-testing.actions';
 import { TestSuiteHeroComponent } from '../../components/test-suite-hero/test-suite-hero.component';
@@ -18,6 +18,8 @@ import { FormsModule } from '@angular/forms';
 import { TestResultsPlotsComponent } from '../../components/test-results-plots/test-results-plots.component';
 import { number } from 'zod';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { SiteAndScheduleStateInfo } from '../../../shared/domain/beluga_state';
+import { getConsideredFlightSchedule, getConsideredProductionSchedule, getFlightSchedule } from '../../../flight-section-planning/domain/flight-section';
 
 @Component({
   selector: 'app-test-collection-details',
@@ -49,8 +51,28 @@ export class TestCollectionDetailsComponent {
   projectId = this.store.selectSignal(selectProjectId);
 
   testSuite = this.store.selectSignal(selectSelectedTestSuite)
+  flightHorizonSection = computed(() => {
+    const sectionId = this.testSuite()?.flightSection
+    if(sectionId === undefined){
+      return undefined
+    }
+    return this.store.selectSignal(selectSection(sectionId))()
+  })
 
   allTestCases = computed(() => this.testSuite()?.testCases)
+
+  siteAndScheduleStateInfo = computed(() => {
+    const section = this.flightHorizonSection();
+    if(section === undefined){
+      return undefined
+    }
+    const config = section.configurations[section.configurationIndex]
+    return { 
+      siteSetUp: config.siteSetUp,
+      flights: getConsideredFlightSchedule(config.flightTargetSchedule, section.flightIndices), 
+      productionSchedule: getConsideredProductionSchedule(Object.values(config.productionLinesTargetSchedule)), 
+    } as SiteAndScheduleStateInfo
+  })
 
   bugs = computed(() => this.allTestCases()?.filter(tc => tc.classifiedAdBug))
   nonBugs = computed(() => this.allTestCases()?.filter(tc => ! tc.classifiedAdBug))

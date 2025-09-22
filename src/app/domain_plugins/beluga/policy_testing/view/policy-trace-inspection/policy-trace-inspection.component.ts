@@ -39,7 +39,7 @@ export class PolicyTraceInspectionComponent {
 
 	store = inject(Store)
 
-	 projectId = this.store.selectSignal(selectProjectId);
+	projectId = this.store.selectSignal(selectProjectId);
 	testSuite = this.store.selectSignal(selectSelectedTestSuite);
 	testCase = this.store.selectSignal(selectSelectedTestCase)
 
@@ -64,21 +64,21 @@ export class PolicyTraceInspectionComponent {
 	startState = computed(() => getFullStartStateFromTestCase(this.section(), this.testCase()))
 
 	siteSetUp = computed(() => {
-		const problem = this.testCase()?.state
+		const problem = this.testCase()?.problem
 		if(problem !== undefined)
 			return getSiteSetUp(problem);
 		return undefined;
 	})
 
 	flightSchedule = computed(() => {
-		const problem = this.testCase()?.state
+		const problem = this.testCase()?.problem
 		if(problem !== undefined)
 			return problem.flights[0];
 		return undefined;
 	})
 
 	productionSchedule = computed(() => {
-		const problem = this.testCase()?.state
+		const problem = this.testCase()?.problem
 		if(problem !== undefined)
 			return problem.production_lines;
 		return undefined;

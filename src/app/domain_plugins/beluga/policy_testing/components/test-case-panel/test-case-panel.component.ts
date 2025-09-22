@@ -1,10 +1,12 @@
 import { Component, computed, input } from '@angular/core';
-import { TestCase, TestRunStatus } from '../../domain/tests';
+import { MatButtonModule } from '@angular/material/button';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
-import { ActionCardComponent } from '../../../shared/components/action-card/action-card.component';
 import { RouterLink } from '@angular/router';
-import { MatButtonModule } from '@angular/material/button';
+import { TestCase, TestRunStatus } from '../../domain/tests';
+import { ErrorPolicyTraceComponent } from '../error-policy-trace/error-policy-trace.component';
+import { getInitialState, SiteAndScheduleStateInfo } from '../../../shared/domain/beluga_state';
+import { ActionCardComponent } from '../../../shared/components/action-card/action-card.component';
 
 
 @Component({
@@ -12,9 +14,10 @@ import { MatButtonModule } from '@angular/material/button';
   imports: [
     MatExpansionModule,
     MatIconModule,
-    ActionCardComponent,
     RouterLink,
-    MatButtonModule
+    MatButtonModule,
+    ErrorPolicyTraceComponent,
+    ActionCardComponent,
   ],
   templateUrl: './test-case-panel.component.html',
   styleUrl: './test-case-panel.component.scss'
@@ -23,6 +26,7 @@ export class TestCasePanelComponent {
 
   testCase = input.required<TestCase>();
 
+  isBug = computed(() => this.testCase()?.classifiedAdBug)
   method = computed(() => this.testCase()?.method)
 
   icon = computed(() => {
@@ -38,5 +42,6 @@ export class TestCasePanelComponent {
   })
 
   actions = computed(() => this.testCase()?.policyTrace)
+  problem = computed(() => this.testCase()?.problem)
 
 }

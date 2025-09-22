@@ -7,11 +7,11 @@ export function getNumberOfBugs(testCol: TestSuite){
 }
 
 export function getFullStartStateFromTestCase(section: FlightsHorizon | undefined | null, testCase: TestCase | undefined | null){
-    if(section === undefined || section === null || testCase === undefined || testCase === null || testCase.state == undefined){
+    if(section === undefined || section === null || testCase === undefined || testCase === null || testCase.problem == undefined){
         return undefined;
     }
     console.log("TestCase State: ")
-    const testState = getInitialState(testCase.state)
+    const testState = getInitialState(testCase.problem)
     console.log(testState)
     const startState: BelugaState = {
         ...testState,

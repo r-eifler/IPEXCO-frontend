@@ -58,7 +58,9 @@
                 <app-page-section-content>
                     <mat-accordion class="accordion">
                         @for(case of bugs(); track case){
-                            <app-test-case-panel [testCase]="case"></app-test-case-panel>
+                            <app-test-case-panel 
+                                [testCase]="case"
+                            ></app-test-case-panel>
                         }
                         @if(bugs()?.length === 0){
                             <app-info>
@@ -77,7 +79,9 @@
                 <app-page-section-content>
                     <mat-accordion class="accordion">
                         @for(case of nonBugs(); track case){
-                            <app-test-case-panel [testCase]="case"></app-test-case-panel>
+                            <app-test-case-panel 
+                                [testCase]="case"
+                            ></app-test-case-panel>
                         }
                         @if(nonBugs()?.length === 0){
                             <app-info>

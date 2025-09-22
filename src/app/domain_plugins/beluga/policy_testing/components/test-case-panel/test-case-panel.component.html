@@ -7,6 +7,13 @@
     </mat-panel-description>
     </mat-expansion-panel-header>
     <div class="main">
+        @if(isBug()){
+            <app-error-policy-trace
+                [problem]="problem()"
+                [actions]="actions()">
+            </app-error-policy-trace>
+        }
+        @else{
         <div class="actions">
             @for(action of actions(); track action;){
             <app-action-card
@@ -16,6 +23,7 @@
             ></app-action-card> 
             }
         </div>
+        }
         <div class="buttons">
             <a mat-flat-button [routerLink]="'./trace-inspection/' + testCase().stateID">Inspect Trace</a>
         </div>
