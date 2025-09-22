@@ -11,7 +11,7 @@ export const SelectTestCaseResolver: ResolveFn<void> = (route: ActivatedRouteSna
     const id = node.paramMap.get('testCaseIndex');
     if(id != null){
       const index =  Number(id)
-      inject(Store).dispatch(selectTestCase({ testCaseIndex: index }))
+      inject(Store).dispatch(selectTestCase({ testCaseID: index }))
       return;
     }
     node = node.children[0];

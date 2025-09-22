@@ -27,12 +27,12 @@ export const selectSelectedTestSuite = createSelector(selectSelectedTestSuiteId,
     (id, testCollections) => id !== null && testCollections !== undefined ? testCollections.find(e => e._id === id) : undefined
 );
 
-export const selectSelectedTestCaseIndex = createSelector(selectState, 
-    (state) => state.selectedTestCaseIndex
+export const selectSelectedTestCaseID = createSelector(selectState, 
+    (state) => state.selectedTestCaseID
 );
 
-export const selectSelectedTestCase = createSelector(selectSelectedTestCaseIndex, selectSelectedTestSuite, 
-    (index, suite) => index !== null && suite !== undefined ? suite.testCases[index] : undefined
+export const selectSelectedTestCase = createSelector(selectSelectedTestCaseID, selectSelectedTestSuite, 
+    (testID, suite) => testID !== null && suite !== undefined ? suite.testCases.find(t => t.testID == testID): undefined
 );
 
 

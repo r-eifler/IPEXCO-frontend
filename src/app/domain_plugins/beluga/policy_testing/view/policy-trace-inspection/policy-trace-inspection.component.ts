@@ -11,9 +11,8 @@ import { Store } from '@ngrx/store';
 import { BreadcrumbModule } from 'src/app/shared/components/breadcrumb/breadcrumb.module';
 import { PageModule } from 'src/app/shared/components/page/page.module';
 import { TraceInspectorComponent } from '../../../shared/components/trace-inspector/trace-inspector.component';
-import { BelugaActionType } from '../../../shared/domain/beluga_plan';
+import { getInitialState } from '../../../shared/domain/beluga_state';
 import { getSiteSetUp } from '../../../shared/domain/site_set_up';
-import { getFullStartStateFromTestCase } from '../../domain/utils';
 import { selectProjectId, selectSection, selectSelectedTestCase, selectSelectedTestSuite } from '../../state/policy-testing.selector';
 
 
@@ -59,9 +58,15 @@ export class PolicyTraceInspectionComponent {
 		return this.section()?.configurations[index];
 		})
 
-	actions = computed(() => this.testCase()?.policyTrace?.filter(a => a.name !== BelugaActionType.SWITCH_TO_NEXT_BELUGA) ?? [])
+	actions = computed(() => this.testCase()?.policyTrace ?? [])
 
-	startState = computed(() => getFullStartStateFromTestCase(this.section(), this.testCase()))
+	startState = computed(() => {
+		const problem = this.testCase()?.problem;
+		if(problem === undefined){
+			return undefined
+		}
+		return getInitialState(problem);
+	})
 
 	siteSetUp = computed(() => {
 		const problem = this.testCase()?.problem
@@ -73,7 +78,7 @@ export class PolicyTraceInspectionComponent {
 	flightSchedule = computed(() => {
 		const problem = this.testCase()?.problem
 		if(problem !== undefined)
-			return problem.flights[0];
+			return problem.flights;
 		return undefined;
 	})
 

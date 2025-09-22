@@ -1,6 +1,6 @@
 <mat-expansion-panel>
     <mat-expansion-panel-header>
-    <mat-panel-title> Test State {{testCase().stateID}} </mat-panel-title>
+    <mat-panel-title> Test State {{testCase().testID}} </mat-panel-title>
     <mat-panel-description>
         {{method()}}
         <mat-icon>{{icon()}}</mat-icon>
@@ -25,7 +25,7 @@
         </div>
         }
         <div class="buttons">
-            <a mat-flat-button [routerLink]="'./trace-inspection/' + testCase().stateID">Inspect Trace</a>
+            <a mat-flat-button [routerLink]="'./trace-inspection/' + testCase().testID">Inspect Trace</a>
         </div>
     </div>
 </mat-expansion-panel>

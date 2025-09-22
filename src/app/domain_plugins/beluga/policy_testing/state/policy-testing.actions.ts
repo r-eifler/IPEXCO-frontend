@@ -36,7 +36,7 @@ export const resetTestCollectionSuccess = createAction('[policy-testing] reset t
 export const resetTestCollectionFailure = createAction('[policy-testing] reset test collection failure', props<{err: any}>());
 
 export const selectTestSuite = createAction('[policy-testing] select test suite', props<{testSuiteId: string}>());
-export const selectTestCase = createAction('[policy-testing] select test case', props<{testCaseIndex: number}>());
+export const selectTestCase = createAction('[policy-testing] select test case', props<{testCaseID: number}>());
 
 
 export const startTestStateFuzzing = createAction('[policy-testing] start test state fuzzing', props<{testSuiteId: string, numberOfFuzzedStates: number}>());
