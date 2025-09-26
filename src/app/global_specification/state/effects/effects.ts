@@ -11,6 +11,7 @@ import { LoadPromptsEffect } from "./load-prompts.effect";
 import { LoadServicesEffect } from "./load-services.effect";
 import { UpdateDomainSpecificationEffect } from "./update-domain-spec.effect";
 import { UpdatePromptsEffect } from "./update-prompt.effect";
+import { UpdateServiceEffect } from "./update-service.effect";
 
 export const globalSpecFeatureEffects = [
     CreateDomainSpecificationEffect,
@@ -26,4 +27,5 @@ export const globalSpecFeatureEffects = [
     LoadServicesEffect,
     UpdateDomainSpecificationEffect,
     UpdatePromptsEffect,
+    UpdateServiceEffect,
 ]

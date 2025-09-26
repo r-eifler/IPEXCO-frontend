@@ -90,7 +90,7 @@ export const deleteService = createAction('[global specification] delete  servic
 export const deleteServiceSuccess = createAction('[global specification] delete  services success');
 export const deleteServiceFailure = createAction('[global specification] delete  services failure', props<{err: any}>());
 
-export const updateService = createAction('[global specification] update service', props<{services: Service}>());
+export const updateService = createAction('[global specification] update service', props<{service: Service}>());
 export const updateServiceSuccess = createAction('[global specification] update service success', props<{service: Service}>());
 export const updateServiceFailure = createAction('[global specification] update service failure', props<{err: any}>());
 

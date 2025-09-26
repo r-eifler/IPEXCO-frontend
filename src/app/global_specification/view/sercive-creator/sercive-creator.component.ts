@@ -25,7 +25,7 @@ import { domainOnlyForDomainDependentEncoding } from '../../validators/domain_dp
 export class ServiceCreatorComponent {
 
   dialogRef = inject(MatDialogRef);
-  data: {serviceType: string, domains: {_id: string, name: string}[]} = inject(MAT_DIALOG_DATA);
+  data: {new: boolean, serviceType: string, domains: {_id: string, name: string}[], service: Service | undefined} = inject(MAT_DIALOG_DATA);
 
   types = [
     ServiceType.PLANNER,
@@ -45,6 +45,7 @@ export class ServiceCreatorComponent {
 
   fb = inject(FormBuilder);
   private urlRegex = /^http?:\/\/.+(:[0-9]{4,5})?.*$/;
+  
 
   form = this.fb.group({
       name: this.fb.control<string | null>(null, Validators.required),
@@ -55,20 +56,47 @@ export class ServiceCreatorComponent {
       domainId: this.fb.control<string | null>(null),
   }, { validators: domainOnlyForDomainDependentEncoding });
 
+  constructor(){
+    if(this.data.service !== undefined){
+      this.form.controls.name.setValue(this.data.service.name);
+      this.form.controls.type.setValue(this.data.service.type);
+      this.form.controls.apiKey.setValue(this.data.service.apiKey);
+      this.form.controls.url.setValue(this.data.service.url);
+      this.form.controls.encoding.setValue(this.data.service.encoding);
+      this.form.controls.domainId.setValue(this.data.service.domainId);
+    }
+  }
+
   onCancel(){
     this.dialogRef.close();
   }
 
   onCreate(){
-    let service: ServiceBase = {
-      name: this.form.controls.name.value ?? 'TODO',
-      type: this.form.controls.type.value ?? ServiceType.NONE,
-      url: this.form.controls.url.value ?? 'TODO',
-      apiKey: this.form.controls.apiKey.value ?? '',
-      encoding: this.form.controls.encoding.value ?? Encoding.NONE,
-      domainId: this.form.controls.encoding.value == this.encoding.DOMAIN_DEPENDENT ? this.form.controls.domainId.value : null
+    if(this.data.new){
+      let service: ServiceBase = {
+        name: this.form.controls.name.value ?? 'TODO',
+        type: this.form.controls.type.value ?? ServiceType.NONE,
+        url: this.form.controls.url.value ?? 'TODO',
+        apiKey: this.form.controls.apiKey.value ?? '',
+        encoding: this.form.controls.encoding.value ?? Encoding.NONE,
+        domainId: this.form.controls.encoding.value == this.encoding.DOMAIN_DEPENDENT ? this.form.controls.domainId.value : null
+      }
+      this.dialogRef.close(service)
     }
-    this.dialogRef.close(service)
+    else{
+      if(this.data.service !== undefined){
+        let service: Service = {
+          ...this.data.service,
+          name: this.form.controls.name.value ?? 'TODO',
+          type: this.form.controls.type.value ?? ServiceType.NONE,
+          url: this.form.controls.url.value ?? 'TODO',
+          apiKey: this.form.controls.apiKey.value ?? '',
+          encoding: this.form.controls.encoding.value ?? Encoding.NONE,
+          domainId: this.form.controls.encoding.value == this.encoding.DOMAIN_DEPENDENT ? this.form.controls.domainId.value : null
+        }
+        this.dialogRef.close(service)
+      }
+    }
   }
 
 }

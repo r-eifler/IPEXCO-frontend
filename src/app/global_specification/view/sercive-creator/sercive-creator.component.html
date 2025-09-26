@@ -1,6 +1,11 @@
 <app-dialog>
     <app-dialog-header>
-        <app-dialog-title>New {{data.serviceType}}</app-dialog-title>
+        @if(data.new){
+            <app-dialog-title>New {{data.serviceType}}</app-dialog-title>
+        }
+        @else{
+            <app-dialog-title>Update {{data.serviceType}}</app-dialog-title>
+        }
     </app-dialog-header>
     <app-dialog-content>
         <form>
@@ -75,6 +80,11 @@
     </app-dialog-content>
     <app-dialog-footer>
         <button mat-button (click)="onCancel()">Cancel</button>
-        <button mat-flat-button (click)="onCreate()" [disabled]="!form.valid">Create</button>
+         @if(data.new){
+            <button mat-flat-button (click)="onCreate()" [disabled]="!form.valid">Create</button>
+         }
+         @else{
+            <button mat-flat-button (click)="onCreate()" [disabled]="!form.valid">Update</button>
+         }
     </app-dialog-footer>
 </app-dialog>

@@ -24,7 +24,8 @@ import {
   loadDomainSpecifications,
   loadOutputSchemas,
   loadPrompts,
-  loadServices
+  loadServices,
+  updateService
 } from '../../state/globalSpec.actions';
 import { selectDomainSpecifications, selectExplainers, selectOutputSchemas, selectPlanners, selectPrompts, selectServices } from '../../state/globalSpec.selector';
 import { DomainSpecCreatorComponent } from '../domain-spec-creator/domain-spec-creator.component';
@@ -86,10 +87,25 @@ export class SpecificationOverviewComponent {
 
   onNewService() {
     this.domains$.pipe(take(1)).subscribe(domains => {
-      let dialogRef = this.dialog.open(ServiceCreatorComponent, {data: {serviceType: 'Service', domains}});
+      let dialogRef = this.dialog.open(ServiceCreatorComponent, {data: {new: true, serviceType: 'Service', domains}});
       dialogRef.afterClosed().pipe(take(1)).subscribe(service =>{
         if(service){
           this.store.dispatch(createService({service: service}))
+        }
+      });
+    })
+  }
+
+  onEditService(id: string) {
+    combineLatest([this.domains$, this.services$]).pipe(take(1)).subscribe(([domains, services]) => {
+      const service = services?.find(s => s._id == id);
+      if(service === undefined){
+        return 
+      }
+      let dialogRef = this.dialog.open(ServiceCreatorComponent, {data: {new: false, serviceType: 'Service', domains, service}});
+      dialogRef.afterClosed().pipe(take(1)).subscribe(service =>{
+        if(service){
+          this.store.dispatch(updateService({service: service}))
         }
       });
     })

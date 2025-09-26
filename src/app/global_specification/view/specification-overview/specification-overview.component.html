@@ -57,6 +57,7 @@
                                 <app-editable-list-entry>
                                     <app-service-card [service]="service" [domains]="domains" ></app-service-card>
                                     <app-editable-list-entry-suffix>
+                                        <button mat-icon-button (click)="onEditService(service._id)" type="button"><mat-icon>edit</mat-icon></button>
                                         <button mat-icon-button (click)="removeService(service._id)" type="button"><mat-icon>delete</mat-icon></button>
                                     </app-editable-list-entry-suffix>
                                 </app-editable-list-entry>
