@@ -1,7 +1,7 @@
 import { Component, computed, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { Store } from '@ngrx/store';
 import { StepStatus } from 'src/app/iterative_planning/domain/iteration_step';
@@ -10,6 +10,7 @@ import { selectIterativePlanningIterationSteps, selectIterativePlanningProject, 
 import { DialogModule } from 'src/app/shared/components/dialog/dialog.module';
 import { DialogComponent } from 'src/app/shared/components/dialog/dialog/dialog.component';
 import { computeMaxPossibleUtility, Demo } from 'src/app/shared/domain/demo';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-finish-demo-info-dialog',
@@ -25,6 +26,9 @@ export class FinishDemoInfoDialogComponent {
 
   store = inject(Store);
   dialogRef = inject(MatDialogRef<DialogComponent>);
+  data = inject(MAT_DIALOG_DATA) as { remainingMinSeconds$: Observable<number> };
+
+  remainingMinSeconds = toSignal(this.data.remainingMinSeconds$, { initialValue: 1 });
 
   demo = toSignal(this.store.select(selectIterativePlanningProject));
   planPropertiesMap = toSignal(this.store.select(selectIterativePlanningProperties)) ;

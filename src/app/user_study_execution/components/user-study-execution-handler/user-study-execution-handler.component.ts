@@ -16,6 +16,7 @@ import { selectExecutionUserStudyContinueLocked, selectExecutionUserStudyFinishe
 import { FinishDemoInfoDialogComponent } from '../finish-demo-info-dialog/finish-demo-info-dialog.component';
 import { TimeOverDialogComponent } from '../time-over-dialog/time-over-dialog.component';
 import { TimerStartsDialogComponent } from '../timer-starts-dialog/timer-starts-dialog.component';
+import { shareReplay } from 'rxjs/operators';
 
 @Component({
     selector: 'app-user-study-execution-handler',
@@ -53,6 +54,23 @@ export class UserStudyExecutionHandlerComponent {
       map(time => startTime - time)))
   )
 
+  // HACK: HARD CODING minTimeProportion
+  //
+  // To get minTime properly, you could split UserStudyStep.time into minTime and maxTime, and pass
+  // the appropriate one here. Beware: this requires modifying a bunch of the frontend and also a
+  // few line changes in the backend.
+  minTimeProportion = 0.5;
+  maxTime$ = this.currentStep$.pipe(map(step => step?.type === 'demo' ? step?.time : null));
+  remainingMinTime$ = this.maxTime$.pipe(
+    switchMap(maxTime => {
+      const minTime = maxTime !== null ? maxTime * this.minTimeProportion : 0;
+      return interval(1000).pipe(
+        map(t => Math.max(minTime - t, 0))
+      );
+    })
+  );
+  remainingMinSeconds$ = this.remainingMinTime$.pipe(map(sec => Math.max(0,sec)), shareReplay(1));
+
   remainingSeconds$ = this.remainingTime$.pipe(map(sec => Math.max(0,sec)))
   remainingMinutes$ = this.remainingSeconds$.pipe(map(sec => Math.floor(sec/60)))
   remainingTimeFraction$ = combineLatest([this.remainingSeconds$, this.startTime$]).pipe(
@@ -65,7 +83,6 @@ export class UserStudyExecutionHandlerComponent {
   allowContinue$ = combineLatest([this.remainingTime$, this.isDemoStep$, this.continueLocked$]).pipe(
     map(([rsec, isDemoStep, locked]) => (rsec <= 0 || isDemoStep) && ! locked)
   )
-  
 
   constructor(){
 
@@ -167,7 +184,11 @@ export class UserStudyExecutionHandlerComponent {
     ).subscribe(
       (step) => {
         if(step.type === UserStudyStepType.demo){
-          const dialogRef = this.dialog.open(FinishDemoInfoDialogComponent)
+
+          const dialogRef = this.dialog.open(FinishDemoInfoDialogComponent, {
+            data: { remainingMinSeconds$: this.remainingMinSeconds$ }
+          });
+
           dialogRef.afterClosed().pipe(take(1)).subscribe((nextUserStudyStep) => {
             if(nextUserStudyStep){
               this.store.dispatch((executionNextUserStudyStep()));
