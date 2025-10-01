@@ -65,7 +65,7 @@ export class UserStudyExecutionComprehensionCheckViewComponent {
     { id: "q2", text: "Some of the rover's goals are more valuable than others, i.e., they have higher utility.", correctAnswer: "true" },
     { id: "q3", text: "Once goals are enforced you must manually make plans that achieve the chosen goals.", correctAnswer: "false" },
     { id: "q4", text: "The utility of a step is only available if the enforced goals can all be achieved.", correctAnswer: "true" },
-    { id: "q5", text: "If it is impossible to achieve all selected goals then you receive information that helps you select goals for the next step.", correctAnswer: "true" }
+    { id: "q5", text: "Suppose you enforced 4 goals and the planner failed to find a solution. The explanation is a single set of conflicts between the 4 goals. In such situations, is it always the case that you only need to remove 1 of the 4 goals and the planner will be able to find a solution for the remaining 3 goals?", correctAnswer: "true" }
   ];
 
   buildForm(): FormGroup {
