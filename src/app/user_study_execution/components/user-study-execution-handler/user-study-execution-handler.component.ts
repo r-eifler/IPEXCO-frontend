@@ -54,16 +54,23 @@ export class UserStudyExecutionHandlerComponent {
       map(time => startTime - time)))
   )
 
-  // HACK: HARD CODING minTimeProportion
+  // HACK: HARD CODING minTime BASED ON maxTime
+  //
+  // - If maxTime <= 15 mins (900 secs) then minTime = 0 --- this should be for the intro task
+  // - If maxTime > 15 mins then minTime = 10 mins (600 secs) --- this should be for the main task
   //
   // To get minTime properly, you could split UserStudyStep.time into minTime and maxTime, and pass
   // the appropriate one here. Beware: this requires modifying a bunch of the frontend and also a
   // few line changes in the backend.
-  minTimeProportion = 0.5;
   maxTime$ = this.currentStep$.pipe(map(step => step?.type === 'demo' ? step?.time : null));
-  remainingMinTime$ = this.maxTime$.pipe(
-    switchMap(maxTime => {
-      const minTime = maxTime !== null ? maxTime * this.minTimeProportion : 0;
+  minTime$ = this.maxTime$.pipe(
+    map(maxTime => {
+      if (maxTime === null) return 0;
+      return maxTime <= 900 ? 0 : 600;
+    })
+  );
+  remainingMinTime$ = this.minTime$.pipe(
+    switchMap(minTime => {
       return interval(1000).pipe(
         map(t => Math.max(minTime - t, 0))
       );
