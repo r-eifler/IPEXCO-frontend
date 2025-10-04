@@ -48,7 +48,7 @@
                   class="marker"
                   [style.left.%]="marker * 100"
                 >
-                  {{ computeUtilityFromProportion(marker) }}
+                  {{ computeUtilityFromProportion(marker) | number:'1.0-1' }}
                 </div>
               </div>
               <!-- The number values indicating REWARD at each transition -->

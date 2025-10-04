@@ -43,10 +43,12 @@ export class MonetaryRewardEvaluator{
 
     if (utilityProportion < 0.5) {
       return minMoney;
-    } else if (utilityProportion < 0.75) {
-      return minMoney + ((1/3) * maxBonus);
+    } else if (utilityProportion < 0.665) {
+      return minMoney + ((1/4) * maxBonus);
+    } else if (utilityProportion < 0.832) {
+      return minMoney + ((2/4) * maxBonus);
     } else if (utilityProportion < 1.0) {
-      return minMoney + ((2/3) * maxBonus);
+      return minMoney + ((3/4) * maxBonus);
     } else if (utilityProportion == 1.0) {
       return minMoney + maxBonus;
     }

@@ -39,7 +39,7 @@ export class StepsListHeroComponent {
   // Put payment markers at these utility proportions
   //
   // HACK: hard-coded for now
-  markerPayments = [0.0, 0.5, 0.75, 1.0];
+  markerPayments = [0.0, 0.5, 0.666, 0.8333, 1.0];
 
   numSolvedSteps = computed(() => this.steps()?.filter(s => s.status === StepStatus.SOLVABLE).length)
   umUnSolvedSteps = computed(() => this.steps()?.filter(s => s.status === StepStatus.UNSOLVABLE).length)
