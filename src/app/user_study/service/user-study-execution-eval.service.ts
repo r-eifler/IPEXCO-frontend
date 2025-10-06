@@ -27,7 +27,7 @@ export class UserStudyExecutionEvalService {
           createdAt: new Date(exec.createdAt),
           updatedAt: new Date(exec.updatedAt),
           finishedAt: new Date(exec.finishedAt),
-          timeLog: exec.timeLog.map(a => JSON.parse(a as any as string))
+          timeLog: exec.timeLog.map(a => typeof a === 'object' ? a : JSON.parse(a as string))
         })
       ))
     )

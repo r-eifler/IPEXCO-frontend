@@ -151,7 +151,6 @@ export class SendMessageToLLMEffect {
                         }
                     }
                     else {
-                        console.log('reverse translation QT');
                         return this.showReverseTranslation$.pipe(
                             switchMap(showReverseTranslation => {
                                 // Base action stream
