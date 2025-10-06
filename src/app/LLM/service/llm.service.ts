@@ -190,7 +190,31 @@ export class LLMService {
             ),
             existingPlanProperties: Object.values(properties)
         }));
-        const requestString = multipleExplanationTranslationRequestToString(requests);
+        let requestString = "";
+        if(requests.length === 0){
+            requestString =  explanationTranslationRequestToString({
+                question: question,
+                question_type: question_type,
+                questionArgument: questionArguments,
+                MUGS: explanationsMUGS[0].map(e => e.map(pid => properties.find(p => p._id == pid)).filter(pp => pp != undefined)),
+                MGCS: explanationsMGCS[0].map(e => e.map(pid => properties.find(p => p._id == pid)).filter(pp => pp != undefined)),
+                predicates: (project.baseTask.model as PDDLPlanningModel).predicates,
+                objects: project.baseTask.objects,
+                enforcedGoals: properties.filter(p => iterationStep.hardGoals.includes(p._id)),
+                satisfiedGoals: properties.filter(p =>
+                    iterationStep.plan?.satisfied_properties?.includes(p._id) &&
+                    !iterationStep.hardGoals.includes(p._id)
+                ),
+                unsatisfiedGoals: properties.filter(p =>
+                    !iterationStep.plan?.satisfied_properties?.includes(p._id) &&
+                    !iterationStep.hardGoals.includes(p._id)
+                ),
+                existingPlanProperties: Object.values(properties)
+            } as ExplanationTranslationRequest);
+        }
+        else {
+            requestString = multipleExplanationTranslationRequestToString(requests);
+        }
         return this.http.post<IHTTPData<{ response: string }>>(this.BASE_URL + 'et', { data: requestString, iterationStepId: iterationStep._id, projectId: project._id, originalRequest: question }).pipe(
             map(({ data }) => data),
             tap(console.log)
