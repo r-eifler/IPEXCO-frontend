@@ -38,11 +38,33 @@
         </button>
       </div>
 
-      <div class="utility">
+
+      <div class="utility-group" *isDemo>
+        <div class="utility">
+          <mat-icon>workspace_premium</mat-icon>
+          <div class="utility-value-container">
+            <span class="value" *isDemo>{{ (currentUtility() | default : '-') + '/' + maxOverallUtility() }}</span>
+            <span class="label">Utility</span>
+          </div>
+        </div>
+
+        @if(showPaymentInfo()){
+        <div class="utility">
+          <mat-icon>diamond</mat-icon>
+          <div class="utility-value-container">
+            <span class="value">{{ (computeCurrentPayment() | currency:'GBP':'symbol':'1.0-0') + '/' + (maxPayment() | currency:'GBP':'symbol':'1.0-0') }}</span>
+            <span class="label">Bonus Reward</span>
+          </div>
+        </div>
+        }
+      </div>
+      
+
+
+      <div class="utility" *isProject>
         <mat-icon>workspace_premium</mat-icon>
         <div class="utility-value-container">
-          <span class="value" *isProject>{{ step() | stepValue : planProperties() | default : '-/-'}}</span>
-          <span class="value" *isDemo>{{ (step() | stepValue : planProperties() | default : '-') + '/' + maxOverallUtility() }}</span>
+          <span class="value">{{ step() | stepValue : planProperties() | default : '-/-'}}</span>
           <span class="label">Utility</span>
         </div>
       </div>

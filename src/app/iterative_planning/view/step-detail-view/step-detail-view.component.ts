@@ -28,6 +28,7 @@ import { PlanProperty } from "../../../shared/domain/plan-property/plan-property
 import { ExplanationChatLlmComponent } from "../../components/explanation-chat-llm/explanation-chat-llm.component";
 import { AvailableQuestion, ExplanationChatComponent } from "../../components/explanation-chat/explanation-chat.component";
 import { IterationStepHeroComponent } from "../../components/iteration-step-hero/iteration-step-hero.component";
+import { StepsListHeroComponent } from '../../components/steps-list-hero/steps-list-hero.component';
 import { UserManualDialogComponent } from "../../components/user-manual-dialog/user-manual-dialog.component";
 import { DemoDirective } from "../../directives/isDemo.directive";
 import { ProjectDirective } from "../../directives/isProject.directive";
@@ -42,7 +43,10 @@ import {
   selectIsExplanationLoading,
   selectIterativePlanningIsIntroTask,
   selectIterativePlanningLoadingFinished,
+  selectIterativePlanningCurrentMaxUtility,
+  selectIterativePlanningMaxPayment,
   selectIterativePlanningMaxPossibleUtility,
+  selectIterativePlanningMinPayment,
   selectIterativePlanningProject,
   selectIterativePlanningProjectExplanationInterfaceType,
   selectIterativePlanningProperties,
@@ -51,6 +55,8 @@ import {
   selectMessages,
   selectPropertyAvailableQuestions,
   selectStepAvailableQuestions,
+  selectIterativePlanningIterationSteps,
+  selectIterativePlanningShowPaymentInfo,
 } from "../../state/iterative-planning.selector";
 import {
   selectEnforcedGoals,
@@ -61,25 +67,26 @@ import { ExplanationChatHybridComponent } from "../../components/explanation-cha
 
 @Component({
     selector: "app-step-detail-view",
-    imports: [
-        AsyncPipe,
-        BreadcrumbModule,
-        EmptyStateModule,
-        ExplanationChatComponent,
-        ExplanationChatLlmComponent,
-        ExplanationChatHybridComponent,
-        IterationStepHeroComponent,
-        MatButtonModule,
-        MatIconModule,
-        MatTooltipModule,
-        PageModule,
-        PlanPropertyPanelComponent,
-        RouterLink,
-        MatExpansionModule,
-        ProjectDirective,
-        DemoDirective,
-        MatProgressBarModule
-    ],
+  imports: [
+    AsyncPipe,
+    BreadcrumbModule,
+    EmptyStateModule,
+    ExplanationChatComponent,
+    ExplanationChatLlmComponent,
+    IterationStepHeroComponent,
+    StepsListHeroComponent,
+    MatButtonModule,
+    MatIconModule,
+    MatTooltipModule,
+    PageModule,
+    PlanPropertyPanelComponent,
+    RouterLink,
+    MatExpansionModule,
+    MatProgressBarModule,
+    ProjectDirective,
+    DemoDirective,
+    ExplanationChatHybridComponent
+  ],
     templateUrl: "./step-detail-view.component.html",
     styleUrl: "./step-detail-view.component.scss"
 })
@@ -101,8 +108,14 @@ export class StepDetailViewComponent {
 
   project$ = this.store.select(selectIterativePlanningProject);
   maxOverAllUtility$ = this.store.select(selectIterativePlanningMaxPossibleUtility);
+  currentMaxUtility$ = this.store.select(selectIterativePlanningCurrentMaxUtility);
+  showPaymentInfo$ = this.store.select(selectIterativePlanningShowPaymentInfo);
+  minPayment$ = this.store.select(selectIterativePlanningMinPayment);
+  maxPayment$ = this.store.select(selectIterativePlanningMaxPayment);
   image$ = this.project$.pipe(map(p => p?.summaryImage));
   instanceInfo$ = this.project$.pipe(map(p => p?.instanceInfo));
+
+  steps$ = this.store.select(selectIterativePlanningIterationSteps);
 
   step$ = this.store.select(selectIterativePlanningSelectedStep);
   stepId$ = this.step$.pipe(map(step => step?._id));

@@ -5,7 +5,7 @@
             <mat-icon>check</mat-icon>
             <span class="property-label">Solvable:</span>
             <span class="property-value">{{ numSolvedSteps() }}</span>
-    
+
             <mat-icon>report</mat-icon>
             <span class="property-label">Unsolvable:</span>
             <span class="property-value">{{ umUnSolvedSteps() }}</span>
@@ -17,15 +17,62 @@
             Show Task Information
           </button>
         </div>
-  
-        <div class="utility">
-          <mat-icon>workspace_premium</mat-icon>
-          <div class="utility-value-container">
-            <span class="value">{{ (currentMaxUtility() ? currentMaxUtility() : '-') + '/' + maxOverallUtility() }}</span>
-            <span class="label">Utility</span>
+
+
+        <div class="utility-group">
+
+          <!-- Utility X / Y -->
+          <div class="utility">
+            <mat-icon>workspace_premium</mat-icon>
+            <div class="utility-value-container">
+              <span class="value">{{ (currentMaxUtility() ? currentMaxUtility() : '-') + '/' + maxOverallUtility() }}</span>
+              <span class="label">Utility</span>
+            </div>
           </div>
+
+          @if(showPaymentInfo()){
+          <!-- Progress bar for utility & reward -->
+          <div class="progress-wrapper">
+            <div class="progress-bar-background">
+              <!-- The progress bar itself -->
+              <div
+                class="progress-bar-fill"
+                [style.width.%]="computeCurrentUtilityProportion() * 100"
+              ></div>
+              <!-- Ticks that indicate where payment transitions are -->
+              <div
+                *ngFor="let marker of markerPayments"
+                class="tick"
+                [style.left.%]="marker * 100"
+              ></div>
+            </div>
+
+            
+              <!-- The number values indicating reward at each transition -->
+              <div class="payment-markers">
+                <div
+                  *ngFor="let marker of markerPayments"
+                  class="marker"
+                  [style.left.%]="marker * 100"
+                >
+                  {{ computePayment(marker) | currency: 'GBP':'symbol':'1.0-0' }}
+                </div>
+              </div>
+          </div>
+          }
+
+          @if(showPaymentInfo()){
+          <!-- Monetary reward X / Y -->
+          <div class="utility">
+            <mat-icon>diamond</mat-icon>
+            <div class="utility-value-container">
+              <span class="value">{{ (computeCurrentPayment() | currency:'GBP':'symbol':'1.0-0') + '/' + (maxPayment() | currency:'GBP':'symbol':'1.0-0') }}</span>
+              <span class="label">Bonus Reward</span>
+            </div>
+          </div>
+          }
+
         </div>
       </div>
     </mat-card-content>
 </mat-card>
-  
