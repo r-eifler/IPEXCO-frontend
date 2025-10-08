@@ -128,7 +128,6 @@ export const selectIterativePlanningMaxPossibleUtility = createSelector(selectSt
   return maxOverallUtility;
 });
 
-
 // Messages
 
 const selectAllMessages = createSelector(selectState, ({messages}) => messages);
