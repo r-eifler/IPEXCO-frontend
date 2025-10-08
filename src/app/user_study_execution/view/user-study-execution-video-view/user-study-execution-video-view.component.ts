@@ -46,8 +46,8 @@ export class UserStudyExecutionVideoViewComponent implements OnInit{
           this.reframed = false;
           this.player = new window['YT'].Player('player', {
             videoId: video,
-            height: '390',
-            width: '640',
+            height: '100%',
+            width: '100%',
             // events: {
             //   'onStateChange': this.onPlayerStateChange.bind(this),
             //   'onError': this.onPlayerError.bind(this),
