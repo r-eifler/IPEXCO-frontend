@@ -29,9 +29,9 @@ export class IterationStepService{
         )
     }
 
-    postCancelIterationStep$(iterationStepId: string): Observable<string> {
-        return this.http.post<unknown>(this.BASE_URL + 'cancel', iterationStepId).pipe(
-            map((data) => string().parse(data))
+    postCancelIterationStep$(iterationStepId: string): Observable<boolean> {
+        return this.http.post<unknown>(this.BASE_URL + 'cancel', {id: iterationStepId}).pipe(
+            map((data) => boolean().parse(data))
         )
     }
 
