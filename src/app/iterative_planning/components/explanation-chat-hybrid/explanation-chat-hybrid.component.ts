@@ -20,7 +20,7 @@ export type AvailableQuestion = {
 
 @Component({
     selector: 'app-explanation-chat-hybrid',
-    imports: [AsyncPipe, ChatModule, StructuredTextComponent],
+    imports: [AsyncPipe, ChatModule],
     templateUrl: './explanation-chat-hybrid.component.html',
     styleUrl: './explanation-chat-hybrid.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush
