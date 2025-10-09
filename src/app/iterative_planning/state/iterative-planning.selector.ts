@@ -34,19 +34,31 @@ export const selectIterativePlanningPropertyTemplates = createSelector(selectSta
 
 // Settings
 
-export const selectIterativePlanningProjectCreationInterfaceType = createSelector(selectState,
-    (state) => state.project?.data?.settings?.interfaces.propertyCreationInterfaceType)
+export const selectSettings = createSelector(selectState,
+    (state) => state.project?.data?.settings)
 
-export const selectIterativePlanningProjectExplanationInterfaceType = createSelector(selectState,
-  (state) => state.project?.data?.settings?.interfaces.explanationInterfaceType)
+export const selectIterativePlanningProjectCreationInterfaceType = createSelector(selectSettings,
+    (settings) => settings?.interfaces.propertyCreationInterfaceType)
+
+export const selectIterativePlanningProjectExplanationInterfaceType = createSelector(selectSettings,
+  (settings) => settings?.interfaces.explanationInterfaceType)
+
+export const selectIterativePlanningShowPaymentInfo = createSelector(selectSettings,
+  (settings) => settings?.userStudy.showPaymentInfo)
+
+export const selectIterativePlanningMinPayment = createSelector(selectSettings,
+  (settings) => settings?.userStudy.paymentInfo.min)
+
+export const selectIterativePlanningMaxPayment = createSelector(selectSettings,
+  (settings) => settings?.userStudy.paymentInfo.max)
 
 // Plan Properties
 
 export const selectIterativePlanningProperties = createSelector(selectState,
     (state) => state.planProperties?.data)
 export const selectIterativePlanningPropertiesList = createSelector(selectState,
-    (state) => state.planProperties.state === LoadingState.Done && state.planProperties?.data !== undefined? 
-    Object.values(state.planProperties?.data) 
+    (state) => state.planProperties.state === LoadingState.Done && state.planProperties?.data !== undefined?
+    Object.values(state.planProperties?.data)
     : null
   )
 
@@ -74,7 +86,7 @@ export const selectIterationStepIds = createSelector(selectIterativePlanningIter
 
 export const selectIterationStepById = memoizeWith(
   (stepId: string) => stepId,
-  (stepId: string) => createSelector(selectIterativePlanningIterationSteps, 
+  (stepId: string) => createSelector(selectIterativePlanningIterationSteps,
     (steps) => steps ? steps.find(({_id}) => _id === stepId) : null
 ));
 export const selectIterativePlanningIterationStepsLoadingState = createSelector(selectState,
@@ -102,7 +114,7 @@ export const selectIterativePlanningCurrentMaxUtility = createSelector(selectSta
     let cmu = undefined;
     if(!state.iterationSteps.data || state.iterationSteps.data.length === 0 || state.planProperties.data == undefined){
       return 0;
-    } 
+    }
     cmu = computeCurrentMaxUtility(state.iterationSteps.data, state.planProperties.data);
     return cmu;
 });
@@ -116,8 +128,7 @@ export const selectIterativePlanningMaxPossibleUtility = createSelector(selectSt
   return maxOverallUtility;
 });
 
-
-// Messages    
+// Messages
 
 const selectAllMessages = createSelector(selectState, ({messages}) => messages);
 export const selectMessages = memoizeWith(

@@ -5,7 +5,11 @@ import { map } from "rxjs/operators";
 import { Demo, DemoBase, DemoZ } from "src/app/shared/domain/demo";
 import { PlanPropertyBase } from "src/app/shared/domain/plan-property/plan-property";
 import { environment } from "src/environments/environment";
-import { array, boolean, string } from "zod";
+import { array, boolean, object, string } from "zod";
+
+export const ImageDataZ = object({
+  imagePath: string()
+});
 
 @Injectable({
     providedIn: "root"
@@ -53,7 +57,7 @@ export class ProjectDemoService{
         formData.append('summaryImage', image);
 
         return this.http.post<unknown>(this.BASE_URL + 'image', formData).pipe(
-            map((data) => string().parse(data)),
+            map((data) => ImageDataZ.parse(data).imagePath),
         )
     }
 

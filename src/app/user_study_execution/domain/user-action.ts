@@ -21,6 +21,7 @@ export enum ActionType {
     CANCEL_PLAN_FOR_ITERATION_STEP = 'PLAN_FOR_ITERATION_STEP',
     INSPECT_ITERATION_STEP = 'INSPECT_ITERATION_STEP',
     ASK_QUESTION = 'ASK_QUESTION',
+    ASK_QUESTION_MULTIPLE = 'ASK_QUESTION_MULTIPLE',
     EXPLANATION = 'EXPLANATION',
     FAILED = 'FAILED',
     ASK_QT = 'ASK_QT',
@@ -34,6 +35,7 @@ export enum ActionType {
     FAILED_GT = 'FAILED_GT',
     LLM_CONTEXT = 'LLM_CONTEXT',
     ASK_QUESTION_LLM = 'ASK_QUESTION_LLM',
+    ASK_QUESTION_LLM_MULTIPLE = 'ASK_QUESTION_LLM_MULTIPLE',
     DIRECT_RESPONSE_QT = 'DIRECT_RESPONSE_QT',
     DIRECT_QUESTION_ET = 'DIRECT_QUESTION_ET',
 }
@@ -162,6 +164,15 @@ export interface AskQuestionUserAction extends UserAction {
         questionType: QuestionType;
     }
 } 
+export interface AskQuestionMultipleUserAction extends UserAction {
+    type: ActionType.ASK_QUESTION_MULTIPLE
+    data: {
+        demoId: string,
+        stepId: string,
+        propertyId?: string[];
+        questionType: QuestionType;
+    }
+}
 
 export interface ExplanationUserAction extends UserAction {
     type: ActionType.EXPLANATION

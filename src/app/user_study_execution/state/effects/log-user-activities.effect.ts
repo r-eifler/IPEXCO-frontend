@@ -7,7 +7,7 @@ import { Store } from '@ngrx/store';
 import { selectExecutionUserStudyPendingIterationSteps, selectExecutionUserStudyStep, selectExecutionUserStudyStepIndex } from '../user-study-execution.selector';
 import { concatLatestFrom } from '@ngrx/operators';
 import { ActionType, CancelPlanForIterationStepUserAction } from '../../domain/user-action';
-import { cancelPlanComputationAndIterationStep, createIterationStepSuccess, directMessageET, directResponseQT, loadIterationStepsSuccess, poseAnswer, poseAnswerLLM, questionPosed, questionPosedLLM, selectIterationStep, sendMessageToLLMExplanationTranslator, sendMessageToLLMExplanationTranslatorFailure, sendMessageToLLMExplanationTranslatorSuccess, sendMessageToLLMQuestionTranslator, sendMessageToLLMQuestionTranslatorFailure, sendMessageToLLMQuestionTranslatorSuccess } from 'src/app/iterative_planning/state/iterative-planning.actions';
+import { cancelPlanComputationAndIterationStep, createIterationStepSuccess, directMessageET, directResponseQT, loadIterationStepsSuccess, multipleQuestionsPosedLLM, poseAnswer, poseAnswerLLM, questionPosed, questionPosedLLM, selectIterationStep, sendMessageToLLMExplanationTranslator, sendMessageToLLMExplanationTranslatorFailure, sendMessageToLLMExplanationTranslatorSuccess, sendMessageToLLMQuestionTranslator, sendMessageToLLMQuestionTranslatorFailure, sendMessageToLLMQuestionTranslatorSuccess } from 'src/app/iterative_planning/state/iterative-planning.actions';
 import { StepStatus } from 'src/app/iterative_planning/domain/iteration_step';
 import { computeUtility, PlanRunStatus } from 'src/app/iterative_planning/domain/plan';
 import { selectIterationStepById, selectIterativePlanningProject, selectIterativePlanningProperties, selectIterativePlanningSelectedStepId } from 'src/app/iterative_planning/state/iterative-planning.selector';
@@ -277,6 +277,42 @@ export class LogUserActivitiesEffect{
                         (question.propertyId && planProperties && planProperties[question.propertyId]?.name 
                             ? " " + planProperties[question.propertyId].name 
                             : ""),
+                    originalQuestion: naturalLanguageQuestion,
+                }
+            }})
+        })
+    ));
+
+    public multipleQuestionAskedLLMTranslation$ = createEffect(() => this.actions$.pipe(
+        ofType(multipleQuestionsPosedLLM),
+        concatLatestFrom(() => [
+            this.store.select(selectIterativePlanningProject),
+            this.store.select(selectIterativePlanningSelectedStepId),
+            this.store.select(selectIterativePlanningProperties)
+        ]),
+        map(([{questions, naturalLanguageQuestion}, project, iterationStepId, planProperties]) => {
+            console.log('Logging LLM question translation:', {
+                originalQuestion: naturalLanguageQuestion,
+                translatedQuestion: questions[0].questionType + 
+                    questions.map(question => 
+                        question.propertyId && planProperties && planProperties[question.propertyId]?.name
+                            ? " " + planProperties[question.propertyId].name
+                            : ""
+                    ).join(" ; ")
+            });
+            
+            return logAction({action: {
+                type: ActionType.ASK_QUESTION_LLM_MULTIPLE, 
+                data: {
+                    demoId: project?._id ?? 'Missing ID',
+                    stepId: iterationStepId,
+                    translatedQuestion: questions[0].questionType + 
+                        questions.map(question => 
+                            question.propertyId && planProperties && planProperties[question.propertyId]?.name
+                                ? " " + planProperties[question.propertyId].name
+                                : ""
+                        ).join(" ; ")
+                    ,
                     originalQuestion: naturalLanguageQuestion,
                 }
             }})

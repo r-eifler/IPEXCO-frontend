@@ -144,19 +144,19 @@ export class SettingsComponent {
 			this.form.controls.services.controls.computePlanAutomatically.setValue(settings.services.computePlanAutomatically);
 			this.form.controls.services.controls.computeExplanationsAutomatically.setValue(settings.services.computeExplanationsAutomatically);
 			this.form.controls.services.controls.planners.setValue(
-				this.planners().filter(s => settings.services.services.includes(s._id)).map(s => s._id)
+				this.planners()?.filter(s => settings.services.services.includes(s._id)).map(s => s._id) || []
 			);
 			this.form.controls.services.controls.explainer.setValue(
-				this.explainer().filter(s => settings.services.services.includes(s._id)).map(s => s._id)
+				this.explainer()?.filter(s => settings.services.services.includes(s._id)).map(s => s._id) || []
 			);
 			this.form.controls.services.controls.propertyChecker.setValue(
-				this.propertyChecker().filter(s => settings.services.services.includes(s._id)).map(s => s._id)
+				this.propertyChecker()?.filter(s => settings.services.services.includes(s._id)).map(s => s._id) || []
 			);
 			this.form.controls.services.controls.tester.setValue(
-				this.tester().filter(s => settings.services.services.includes(s._id)).map(s => s._id)
+				this.tester()?.filter(s => settings.services.services.includes(s._id)).map(s => s._id) || []
 			);
 			this.form.controls.services.controls.verifier.setValue(
-				this.verifier().filter(s => settings.services.services.includes(s._id)).map(s => s._id)
+				this.verifier()?.filter(s => settings.services.services.includes(s._id)).map(s => s._id) || []
 			);
 
 		

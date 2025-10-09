@@ -1,20 +1,28 @@
-import {Component, inject, input, OnInit, output} from '@angular/core';
+import {Component, effect, inject, input, OnInit, output, Signal} from '@angular/core';
 import {MatCardModule} from '@angular/material/card';
 import {MatFormField} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
-import {UserStudyDescriptionStep, UserStudyStep} from '../../domain/user-study';
+import {UserStudyVideoStep, UserStudyStep} from '../../domain/user-study';
 import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
 import { MatTabsModule} from '@angular/material/tabs';
 import {AsyncPipe} from '@angular/common';
 import {MarkedPipe} from '../../../pipes/marked.pipe';
-import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import {takeUntilDestroyed, toSignal} from '@angular/core/rxjs-interop';
 import {MatSliderModule} from '@angular/material/slider';
 import { Observable, startWith } from 'rxjs';
+import {AllowUrlPipe} from 'src/app/project/service/allow-url.service';
+
+declare global {
+  interface Window {
+    YT?: any;
+    onYouTubeIframeAPIReady?: (e?: any) => void;
+  }
+}
 
 @Component({
-    selector: 'app-description-card',
+    selector: 'app-video-card',
     imports: [
         MatCardModule,
         MatFormField,
@@ -25,12 +33,13 @@ import { Observable, startWith } from 'rxjs';
         MatTabsModule,
         AsyncPipe,
         MarkedPipe,
-        MatSliderModule
+        MatSliderModule,
+        AllowUrlPipe,
     ],
-    templateUrl: './description-card.component.html',
-    styleUrl: './description-card.component.scss'
+    templateUrl: './video-card.component.html',
+    styleUrl: './video-card.component.scss'
 })
-export class DescriptionCardComponent implements OnInit{
+export class VideoCardComponent implements OnInit{
 
   fb = inject(FormBuilder);
 
@@ -40,11 +49,11 @@ export class DescriptionCardComponent implements OnInit{
     description: this.fb.control<string | null>(null, [Validators.required, Validators.minLength(1)])
   })
 
-  step = input.required<UserStudyDescriptionStep>();
+  step = input.required<UserStudyVideoStep>();
   first = input<boolean>(false);
   last = input<boolean>(false);
 
-  description$: Observable<string | null>;
+  description: Signal<string | null | undefined>;
 
   changes = output<UserStudyStep>();
   up = output<void>();
@@ -61,8 +70,20 @@ export class DescriptionCardComponent implements OnInit{
       })
     );
 
-    this.description$ = this.form.controls.description.valueChanges;
+    this.description = toSignal(this.form.controls.description.valueChanges);
   }
+
+
+  ngOnInit() {
+
+    this.form.controls.name.setValue(this.step().name, {emitEvent: false});
+    this.form.controls.time.setValue(this.step().time, {emitEvent: false});
+    const content = this.step().content;
+    if(content !== undefined)
+      this.form.controls.description.setValue(content, {emitEvent: false});
+
+  }
+
 
   formatLabel(value: number): string {
     if (value >= 60) {
@@ -70,14 +91,6 @@ export class DescriptionCardComponent implements OnInit{
     }
 
     return value + 's';
-  }
-
-  ngOnInit(): void {
-    this.form.controls.name.setValue(this.step().name, {emitEvent: false});
-    this.form.controls.time.setValue(this.step().time, {emitEvent: false});
-    const content = this.step().content;
-    if(content !== undefined)
-      this.form.controls.description.setValue(content, {emitEvent: false});
   }
 
   moveUp() {

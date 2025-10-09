@@ -26,9 +26,16 @@
   justify-content: center;
 }
 
+.utility-group {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}
+
 .utility {
   display: grid;
   justify-content: center;
+  justify-items: center;
   align-items: end;
 
   mat-icon {

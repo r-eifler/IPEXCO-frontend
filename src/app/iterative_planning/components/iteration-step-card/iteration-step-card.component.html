@@ -20,11 +20,34 @@
         <span class="property-value" *isProject>{{ step()?.softGoals?.length }}</span>
       </div>
 
-      <div class="utility">
+      <div class="utility-group" *isDemo>
+
+        <div class="utility">
+          <mat-icon>workspace_premium</mat-icon>
+          <div class="utility-value-container">
+            <span class="value">{{ (currentUtility() | default : '-') + '/' + maxOverallUtility() }}</span>
+            <span class="label">Utility</span>
+          </div>
+        </div>
+
+        <!-- The following block SHOWS THE REWARD ASSOCIATED WITH EACH STEP. It has been DISABLED
+        because it might confuse users into thinking that the cost is cumulative rather than a
+        maximum.  -->
+        <div class="utility" *false>
+          <mat-icon>diamond</mat-icon>
+          <div class="utility-value-container">
+            <span class="value">{{ (computeCurrentPayment() | currency:'GBP':'symbol') }}</span>
+            <span class="label">Bonus Reward</span>
+          </div>
+        </div>
+
+      </div>
+
+
+      <div class="utility" *isProject>
         <mat-icon>workspace_premium</mat-icon>
         <div class="utility-value-container">
-          <span class="value" *isProject>{{ step() | stepValue : planProperties() | default : '-/-'}}</span>
-          <span class="value" *isDemo>{{ (step() | stepValue : planProperties() | default : '-') + '/' + maxOverallUtility() }}</span>
+          <span class="value">{{ step() | stepValue : planProperties() | default : '-/-'}}</span>
           <span class="label">Utility</span>
         </div>
       </div>

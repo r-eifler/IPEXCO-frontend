@@ -22,6 +22,7 @@ import {selectUserStudyDemos} from '../../state/user-study.selector';
 import {createUserStudy, loadUserStudyDemos} from '../../state/user-study.actions';
 import {AsyncPipe} from '@angular/common';
 import {DescriptionCardComponent} from '../../components/description-card/description-card.component';
+import {VideoCardComponent} from '../../components/video-card/video-card.component';
 import {DemoCardComponent} from '../../components/demo-card/demo-card.component';
 import {FormCardComponent} from '../../components/form-card/form-card.component';
 import {selectedAtLeastOne} from '../../../validators/selected-at-least-one.validator';
@@ -49,6 +50,7 @@ import { DemoInfoCardComponent } from '../../components/demo-info-card/demo-info
         MatDatepickerModule,
         AsyncPipe,
         DescriptionCardComponent,
+        VideoCardComponent,
         DemoCardComponent,
         FormCardComponent,
         UserManualCardComponent,

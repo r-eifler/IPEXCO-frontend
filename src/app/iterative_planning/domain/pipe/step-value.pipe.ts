@@ -1,9 +1,10 @@
-import { Pipe, PipeTransform } from '@angular/core';
+import { Pipe, PipeTransform, Injectable } from '@angular/core';
 
 import { IterationStep, StepStatus } from '../iteration_step';
 import { PlanProperty } from '../../../shared/domain/plan-property/plan-property';
 import { computeUtility } from '../plan';
 
+@Injectable({ providedIn: 'root' })
 @Pipe({
   name: 'stepValue',
   standalone: true

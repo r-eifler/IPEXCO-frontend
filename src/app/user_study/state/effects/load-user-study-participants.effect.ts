@@ -25,7 +25,7 @@ export class LoadUserStudyParticipantsEffect{
         ofType(loadUserStudyParticipants),
         mergeMap(({id}) => this.service.getParticipants(id).pipe(
             map(participants => loadUserStudyParticipantsSuccess({userStudyId: id, participants})),
-            catchError(() => of(loadUserStudyParticipantsFailure()))
+            catchError((err) => of(loadUserStudyParticipantsFailure(err)))
         ))
     ));
 

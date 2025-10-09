@@ -4,6 +4,7 @@ import {User} from '../../user/domain/user';
 import { UserAction } from '../domain/user-action';
 import { PlanProperty } from 'src/app/shared/domain/plan-property/plan-property';
 import { Demo } from 'src/app/shared/domain/demo';
+import { DomainSpecification } from 'src/app/global_specification/domain/domain_specification';
 
 // User Studies
 export const executionLoadUserStudy = createAction('[UserStudyExecution] load user study', props<{id: string}>());
@@ -39,6 +40,11 @@ export const executionUserStudyCancelFailure = createAction('[UserStudyExecution
 export const loadUserStudyDemo = createAction('[UserStudyExecution] load user study demo', props<{demoId: string}>());
 export const loadUserStudyDemoSuccess = createAction('[UserStudyExecution] load user study demo success', props<{demo: Demo}>());
 export const loadUserStudyDemoFailure = createAction('[UserStudyExecution] load user study demo failure');
+
+// domain spec
+export const loadDomainSpecification = createAction('[UserStudyExecution] load  domain specification', props<{id: string}>());
+export const loadDomainSpecificationSuccess = createAction('[UserStudyExecution] load  domain specification success', props<{domainSpecification: DomainSpecification}>());
+export const loadDomainSpecificationFailure = createAction('[UserStudyExecution] load  domain specification failure',  props<{err: any}>());
 
 
 // planProperties 

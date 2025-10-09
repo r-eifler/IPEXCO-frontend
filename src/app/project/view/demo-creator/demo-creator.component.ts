@@ -7,7 +7,7 @@ import { MatIcon } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
 import { MatStepperModule } from "@angular/material/stepper";
 import { Store } from '@ngrx/store';
-import { BehaviorSubject, combineLatest, filter, map, startWith, switchMap, take } from 'rxjs';
+import { BehaviorSubject, combineLatest, filter, map, shareReplay, startWith, switchMap, take } from 'rxjs';
 import { DialogModule } from "src/app/shared/components/dialog/dialog.module";
 import { EditableListModule } from "src/app/shared/components/editable-list/editable-list.module";
 import { PlanPropertyPanelComponent } from "src/app/shared/components/plan-property-panel/plan-property-panel.component";
@@ -60,7 +60,6 @@ export class DemoCreatorComponent implements OnInit {
       description: this.fb.control<string>(""),
     }),
     taskInfo: this.fb.group({
-      domainInfo: this.fb.control<string>(""),
       instanceInfo: this.fb.control<string>(""),
     }),
     image: this.fb.control<File | null>(null),
@@ -88,7 +87,8 @@ export class DemoCreatorComponent implements OnInit {
   imagePath$ = this.imageFile$.pipe(
     filter(f => !!f),
     switchMap(f => this.uploadService.postDemoImage$(f)),
-    startWith(null)
+    startWith(null),
+    shareReplay(1),
   );
   imageUploaded$ = this.imagePath$.pipe(map(path => path !== null))
 
