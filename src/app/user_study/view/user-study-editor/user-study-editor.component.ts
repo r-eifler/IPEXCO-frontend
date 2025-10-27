@@ -24,6 +24,7 @@ import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {filter, take} from 'rxjs/operators';
 import { UserManualCardComponent } from '../../components/user-manual-card/user-manual-card.component';
 import { DemoInfoCardComponent } from '../../components/demo-info-card/demo-info-card.component';
+import { VideoCardComponent } from '../../components/video-card/video-card.component';
 
 @Component({
     selector: 'app-user-study-editor',
@@ -53,6 +54,7 @@ import { DemoInfoCardComponent } from '../../components/demo-info-card/demo-info
         RouterLink,
         UserManualCardComponent,
         DemoInfoCardComponent,
+        VideoCardComponent,
     ],
     templateUrl: './user-study-editor.component.html',
     styleUrl: './user-study-editor.component.scss'
