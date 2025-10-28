@@ -1,3 +1,34 @@
 app-chat {
   max-height: 600px;
 }
+
+.questions-with-refresh {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  
+  .questions-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .control-buttons {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    flex-shrink: 0;
+  }
+  
+  .control-button {
+    opacity: 0.7;
+    
+    &:hover {
+      opacity: 0.9;
+    }
+  }
+}

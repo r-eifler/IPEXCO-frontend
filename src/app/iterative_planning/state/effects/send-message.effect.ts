@@ -153,11 +153,9 @@ export class SendMessageToLLMEffect {
                     else {
                         return this.showReverseTranslation$.pipe(
                             switchMap(showReverseTranslation => {
-                                // Base action stream
-                                const successAction = of(sendMessageToLLMQuestionTranslatorSuccess({ duration }));
-                                
+                    
                                 // Create an array of actions
-                                const actions = [];
+                                const actions: any[] = [];
                                 
                                 // Success action is always included
                                 actions.push(sendMessageToLLMQuestionTranslatorSuccess({ duration }));
@@ -189,7 +187,7 @@ export class SendMessageToLLMEffect {
                                 // }
                                 
                                 // Use from to emit each action individually
-                                return from(actions as any[]);
+                                return from(actions);
                             })
                         );
                     }

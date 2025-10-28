@@ -119,22 +119,22 @@
           <app-page-section-title>
             <mat-icon>lightbulb_2</mat-icon>
             Insights
-            @if (hasUnsolvedSoftGoals) {
-            <button mat-icon-button matTooltip="Refresh suggested questions." (click)="onRefreshSuggestedQuestions()">
-              <mat-icon>refresh</mat-icon>
-            </button>
-            }
           </app-page-section-title>
           <app-page-section-content>
-            @if(hasUnsolvedSoftGoals) {
+            @if(hasUnsolvedSoftGoals && !isUnsolvable) {
               <app-explanation-chat-hybrid
-              [availableQuestions]="selectedCombinedPropertyAvailableQuestionTypes$ | async" (questionSelected)="onQuestionSelected($event)"
-              [properties]="planProperties$ | async">
+              [availableQuestions]="selectedCombinedPropertyAvailableQuestionTypes$ | async" 
+              (questionSelected)="onQuestionSelected($event)"
+              [properties]="planProperties$ | async"
+              [showRefreshButton]="true"
+              (refreshClicked)="onRefreshSuggestedQuestions()">
               </app-explanation-chat-hybrid>
             } @else if (isUnsolvable) {
               <app-explanation-chat-hybrid
-              [availableQuestions]="globalAvailableQuestionTypes$ | async" (questionSelected)="onQuestionSelected($event)"
-              [properties]="planProperties$ | async">
+              [availableQuestions]="globalAvailableQuestionTypes$ | async" 
+              (questionSelected)="onQuestionSelected($event)"
+              [properties]="planProperties$ | async"
+              [showRefreshButton]="false">
               </app-explanation-chat-hybrid>
             }
           </app-page-section-content>

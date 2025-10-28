@@ -5,8 +5,33 @@
     <app-chat-markdown-message [role]="message.role" [rawMessage]="message.content"></app-chat-markdown-message>
     }
 
-  @for(question of availableQuestions(); track question) {
-    <button app-chat-action (click)="onQuestionSelected(question)">{{ question.message.mainText }}</button>
+  @if((filteredAvailableQuestions().length > 0 && shouldShowQuestions()) || (showRefreshButton() && availableQuestions().length > 0)) {
+    <ng-container app-chat-action>
+      <div class="questions-with-refresh">
+        <div class="questions-group">
+          @if(shouldShowQuestions()) {
+            @for(question of filteredAvailableQuestions(); track question) {
+              <button app-chat-action (click)="onQuestionSelected(question)">{{ question.message.mainText }}</button>
+            }
+          }
+        </div>
+        @if(availableQuestions().length > 0) {
+          <div class="control-buttons">
+            @if(showRefreshButton()) {
+              <button mat-icon-button matTooltip="Refresh suggested questions." (click)="onRefreshSuggestedQuestions()" class="control-button">
+                <mat-icon>refresh</mat-icon>
+              </button>
+            }
+            <button mat-icon-button 
+              [matTooltip]="shouldShowQuestions() ? 'Hide suggested questions' : 'Show suggested questions'" 
+              (click)="onToggleQuestionsVisibility()" 
+              class="control-button">
+              <mat-icon>{{ shouldShowQuestions() ? 'visibility_off' : 'visibility' }}</mat-icon>
+            </button>
+          </div>
+        }
+      </div>
+    </ng-container>
   }
 
   
