@@ -1,5 +1,8 @@
 import { AsyncPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit, output } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { Store } from '@ngrx/store';
 import { combineLatest, Subscription } from 'rxjs';
 import { map, switchMap, take } from 'rxjs/operators';
@@ -20,7 +23,7 @@ export type AvailableQuestion = {
 
 @Component({
     selector: 'app-explanation-chat-hybrid',
-    imports: [AsyncPipe, ChatModule],
+    imports: [AsyncPipe, ChatModule, MatButtonModule, MatIconModule, MatTooltipModule],
     templateUrl: './explanation-chat-hybrid.component.html',
     styleUrl: './explanation-chat-hybrid.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -47,6 +50,10 @@ export class ExplanationChatHybridComponent implements OnInit, OnDestroy {
   // Structured text functionality
   availableQuestions = input.required<AvailableQuestion[]>();
   properties = input.required<Record<string, PlanProperty>>();
+  showRefreshButton = input<boolean>(false);
+  
+  // Output events
+  refreshClicked = output<void>();
 
   // Add subscription management
   private subscriptions: Subscription[] = [];
@@ -73,6 +80,10 @@ export class ExplanationChatHybridComponent implements OnInit, OnDestroy {
   onQuestionSelected(question: AvailableQuestion): void {
     console.log('Question selected:', question);
     this.onUserMessage(question.message.mainText);
+  }
+
+  onRefreshSuggestedQuestions(): void {
+    this.refreshClicked.emit();
   }
 
   ngOnInit() {

@@ -5,8 +5,21 @@
     <app-chat-markdown-message [role]="message.role" [rawMessage]="message.content"></app-chat-markdown-message>
     }
 
-  @for(question of availableQuestions(); track question) {
-    <button app-chat-action (click)="onQuestionSelected(question)">{{ question.message.mainText }}</button>
+  @if(availableQuestions().length > 0) {
+    <ng-container app-chat-action>
+      <div class="questions-with-refresh">
+        <div class="questions-group">
+          @for(question of availableQuestions(); track question) {
+            <button app-chat-action (click)="onQuestionSelected(question)">{{ question.message.mainText }}</button>
+          }
+        </div>
+        @if(showRefreshButton()) {
+          <button mat-icon-button matTooltip="Refresh suggested questions." (click)="onRefreshSuggestedQuestions()" class="refresh-button">
+            <mat-icon>refresh</mat-icon>
+          </button>
+        }
+      </div>
+    </ng-container>
   }
 
   
