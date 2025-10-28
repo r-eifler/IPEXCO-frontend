@@ -23,11 +23,12 @@ export class CreateLLMContextEffect{
     filter(([_, project]) => !!project),
     filter(([_, project]) => 
         project!.settings.interfaces.propertyCreationInterfaceType === PropertyCreationInterfaceType.LLM_CHAT || 
-        project!.settings.interfaces.explanationInterfaceType === ExplanationInterfaceType.LLM_CHAT
+        project!.settings.interfaces.explanationInterfaceType === ExplanationInterfaceType.LLM_CHAT ||
+        project!.settings.interfaces.explanationInterfaceType === ExplanationInterfaceType.HYBRID
         ),
     filter(([_, project]) => project!.settings.llmConfig.llmContextSetup === LLMContextSetup.ITERATION_STEP), // Only create LLM context for iteration step
     switchMap(([{iterationStepId}, project]) => this.llmService.createLLMContext$(project!._id, iterationStepId).pipe(
-        tap(LLMContext => console.log("LLMContext: ", LLMContext)),
+        // tap(LLMContext => console.log("LLMContext: ", LLMContext)),
         switchMap(LLMContext => [
             createLLMContextSuccess({LLMContext})
         ]),
@@ -38,8 +39,13 @@ export class CreateLLMContextEffect{
     public createLLMContextProject$ = createEffect(() => this.actions$.pipe(
         ofType(loadProjectSuccess),
         filter(action => action.project!.settings.llmConfig.llmContextSetup === LLMContextSetup.PROJECT), // Only create LLM context for iteration step
+        filter(({project}) => 
+            project!.settings.interfaces.propertyCreationInterfaceType === PropertyCreationInterfaceType.LLM_CHAT ||
+            project.settings.interfaces.explanationInterfaceType === ExplanationInterfaceType.LLM_CHAT ||
+            project.settings.interfaces.explanationInterfaceType === ExplanationInterfaceType.HYBRID
+        ),
         switchMap(({project}) => this.llmService.createLLMContext$(project!._id).pipe(
-            tap(LLMContext => console.log("LLMContext: ", LLMContext)),
+            // tap(LLMContext => console.log("LLMContext: ", LLMContext)), 
             switchMap(LLMContext => [
                 createLLMContextSuccess({LLMContext})
             ]),
