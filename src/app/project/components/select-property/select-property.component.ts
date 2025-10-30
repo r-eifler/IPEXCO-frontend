@@ -68,6 +68,8 @@ export class SelectPropertyComponent {
     propertyIds: this.fb.array<FormControl<boolean>>([], [selectedAtLeastOne]),
   });
 
+  selectAllControl = this.fb.control(false);
+
   constructor(
   ) {
 
@@ -78,6 +80,7 @@ export class SelectPropertyComponent {
         this.form.controls.propertyIds.push(this.fb.control(false, {nonNullable: true}));
       });
 
+      this.updateSelectAllState();
       this.cd.markForCheck();
     });
   }
@@ -109,5 +112,32 @@ export class SelectPropertyComponent {
         this.newProperties.update(props => props.concat([newP]))
       }
     );
+  }
+
+  onSelectAll() {
+    const selectAll = this.selectAllControl.value;
+    // Convert null to false to handle indeterminate state
+    const booleanValue = selectAll === true;
+    this.form.controls.propertyIds.controls.forEach(control => {
+      control.setValue(booleanValue);
+    });
+  }
+
+  onPropertySelectionChange() {
+    this.updateSelectAllState();
+  }
+
+  private updateSelectAllState() {
+    const controls = this.form.controls.propertyIds.controls;
+    const selectedCount = controls.filter(control => control.value).length;
+    const totalCount = controls.length;
+    
+    if (selectedCount === 0) {
+      this.selectAllControl.setValue(false, { emitEvent: false });
+    } else if (selectedCount === totalCount) {
+      this.selectAllControl.setValue(true, { emitEvent: false });
+    } else {
+      this.selectAllControl.setValue(null, { emitEvent: false });
+    }
   }
 }
