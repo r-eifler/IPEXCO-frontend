@@ -13,12 +13,23 @@
           There are no (more) plan properties to choose from. Create a new one that you are interested in.
           <mat-icon>travel_explore</mat-icon>
         </app-editable-list-empty-state>
+        } @else {
+        <app-editable-list-entry>
+          <app-editable-list-entry-prefix>
+            <mat-checkbox 
+              [formControl]="selectAllControl" 
+              [indeterminate]="selectAllControl.value === null"
+              (change)="onSelectAll()">
+            </mat-checkbox>
+          </app-editable-list-entry-prefix>
+          Select All
+        </app-editable-list-entry>
         }
 
         @for(propertyIdControl of form.controls.propertyIds.controls; track propertyIdControl; let idx = $index) {
         <app-editable-list-entry>
           <app-editable-list-entry-prefix>
-            <mat-checkbox [formControl]="propertyIdControl"></mat-checkbox>
+            <mat-checkbox [formControl]="propertyIdControl" (change)="onPropertySelectionChange()"></mat-checkbox>
           </app-editable-list-entry-prefix>
 
           <app-plan-property-panel [property]="availableProperties()?.[idx]"></app-plan-property-panel>
