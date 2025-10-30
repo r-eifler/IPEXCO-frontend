@@ -3,7 +3,7 @@ import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { concatLatestFrom } from "@ngrx/operators";
 import { Store } from "@ngrx/store";
 import { filter, map, mergeMap, of, switchMap, take, tap } from "rxjs";
-import { catchError, debounceTime } from "rxjs/operators";
+import { catchError, delay } from "rxjs/operators";
 import { LLMService } from "src/app/LLM/service/llm.service";
 import { filterListNotNullOrUndefined, filterNotNullOrUndefined } from "src/app/shared/common/check_null_undefined";
 import { getAnswer, getComputedBase, mapComputeBase } from "../../domain/explanation/answer-factory";
@@ -63,7 +63,7 @@ export class QuestionQueueEffect {
 
   postAnswer$ = createEffect(() => this.actions$.pipe(
     ofType(questionPosed),
-    debounceTime(500),
+    delay(500),
     concatLatestFrom(({ question: { iterationStepId }}) => this.store.select(selectIterationStepById(iterationStepId))),
     filterListNotNullOrUndefined(),
     mergeMap(([{ question }, iterationStep]) => {
