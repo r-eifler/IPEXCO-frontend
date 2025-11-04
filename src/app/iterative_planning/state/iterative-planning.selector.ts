@@ -189,3 +189,17 @@ export const selectIsExplanationChatLoading = createSelector(selectExplanationLo
 export const selectVisibleMessagesbyId = (id: string) => createSelector(selectLLMChatMessages, (messages) => messages?.filter(m => m.iterationStepId == id));
 
 export const selectVisiblePPCreationMessages = createSelector(selectState, (state) => state.LLMContext.visiblePPCreationMessages);
+
+export const selectSuggestedQuestions = memoizeWith(
+  (stepId: string) => stepId,
+  (stepId: string) => createSelector(selectState,
+    (state) => state.suggestedQuestions[stepId] ?? undefined
+  )
+);
+
+export const selectIsQuestionSuggestionLoading = memoizeWith(
+  (stepId: string) => stepId,
+  (stepId: string) => createSelector(selectState,
+    (state) => state.questionSuggestionLoading[stepId] ?? false
+  )
+);
