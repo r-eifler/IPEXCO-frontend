@@ -10,7 +10,14 @@
       <div class="questions-with-refresh">
         <div class="questions-group">
           @if(isQuestionSuggestionLoading()) {
-            <div class="loading-message">Suggesting questions...</div>
+            <div class="loading-container">
+              <div class="loading-text">Suggesting questions</div>
+              <div class="loading-dots">
+                <div class="dot dot-1"></div>
+                <div class="dot dot-2"></div>
+                <div class="dot dot-3"></div>
+              </div>
+            </div>
           } @else if(shouldShowQuestions()) {
             @for(question of filteredAvailableQuestions(); track question) {
               <button app-chat-action (click)="onQuestionSelected(question)">{{ question.message.mainText }}</button>
