@@ -44,6 +44,7 @@ export const GeneralSettingsZ = object({
   interfaces: object({
       propertyCreationInterfaceType: PropertyCreationInterfaceTypeZ,
       explanationInterfaceType: ExplanationInterfaceTypeZ,
+      questionAnswerDelay: number().optional().nullable(),
   }),
   llmConfig: object({
     model: string(),
@@ -79,6 +80,7 @@ export const defaultGeneralSetting: GeneralSettings = {
   interfaces: {
       explanationInterfaceType: ExplanationInterfaceType.TEMPLATE_QUESTION_ANSWER,
       propertyCreationInterfaceType: PropertyCreationInterfaceType.TEMPLATE_BASED,
+      questionAnswerDelay: null,
   },
   llmConfig: {
     model: 'gpt-4o-mini',

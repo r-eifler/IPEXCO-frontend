@@ -94,6 +94,7 @@ export class SettingsComponent {
     interfaces: this.fb.group({
       propertyCreationInterfaceType: this.fb.control<PropertyCreationInterfaceType>(PropertyCreationInterfaceType.TEMPLATE_BASED, Validators.required),
       explanationInterfaceType: this.fb.control<ExplanationInterfaceType>(ExplanationInterfaceType.TEMPLATE_QUESTION_ANSWER, Validators.required),
+      questionAnswerDelay: this.fb.control<number | null>(0, [Validators.min(0)]),
     }),
     llmConfig: this.fb.group({
       model:  this.fb.control<string>('gpt-4o-mini', Validators.required),
@@ -144,6 +145,7 @@ export class SettingsComponent {
 		
 			this.form.controls.interfaces.controls.explanationInterfaceType.setValue(settings.interfaces.explanationInterfaceType);
 			this.form.controls.interfaces.controls.propertyCreationInterfaceType.setValue(settings.interfaces.propertyCreationInterfaceType);
+			this.form.controls.interfaces.controls.questionAnswerDelay.setValue(settings.interfaces.questionAnswerDelay ?? 0);
 		
 			this.form.controls.services.controls.computePlanAutomatically.setValue(settings.services.computePlanAutomatically);
 			this.form.controls.services.controls.computeExplanationsAutomatically.setValue(settings.services.computeExplanationsAutomatically);
@@ -261,6 +263,7 @@ export class SettingsComponent {
       interfaces: {
           explanationInterfaceType: this.form.controls.interfaces.controls.explanationInterfaceType.value ?? ExplanationInterfaceType.TEMPLATE_QUESTION_ANSWER,
           propertyCreationInterfaceType: this.form.controls.interfaces.controls.propertyCreationInterfaceType.value ?? PropertyCreationInterfaceType.TEMPLATE_BASED,
+          questionAnswerDelay: this.form.controls.interfaces.controls.questionAnswerDelay.value ?? null,
       },
       llmConfig: {
         model: this.form.controls.llmConfig.controls.model.value ?? '',

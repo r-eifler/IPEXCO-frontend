@@ -3,7 +3,7 @@ import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { concatLatestFrom } from "@ngrx/operators";
 import { Store } from "@ngrx/store";
 import { filter, map, mergeMap, of, switchMap, take, tap } from "rxjs";
-import { catchError } from "rxjs/operators";
+import { catchError, delay } from "rxjs/operators";
 import { LLMService } from "src/app/LLM/service/llm.service";
 import { filterListNotNullOrUndefined, filterNotNullOrUndefined } from "src/app/shared/common/check_null_undefined";
 import { getAnswer, getComputedBase, mapComputeBase } from "../../domain/explanation/answer-factory";
@@ -13,7 +13,7 @@ import { ExplanationMessage } from "../../domain/interface/explanation-message";
 import { Question } from "../../domain/interface/question";
 import { IterationStep, StepStatus } from "../../domain/iteration_step";
 import { poseAnswer, questionPosed, questionPosedLLM, multipleQuestionsPosedLLM, registerGlobalExplanationComputation, sendMessageToLLMExplanationTranslatorFailure, sendMessageToLLMExplanationTranslatorSuccess } from "../iterative-planning.actions";
-import { selectExplanation, selectIterationStepById, selectIterativePlanningProject, selectIterativePlanningProjectExplanationInterfaceType, selectIterativePlanningProperties } from "../iterative-planning.selector";
+import { selectExplanation, selectIterationStepById, selectIterativePlanningProject, selectIterativePlanningProjectExplanationInterfaceType, selectIterativePlanningProperties, selectSettings } from "../iterative-planning.selector";
 
 @Injectable()
 export class QuestionQueueEffect {
@@ -63,9 +63,17 @@ export class QuestionQueueEffect {
 
   postAnswer$ = createEffect(() => this.actions$.pipe(
     ofType(questionPosed),
-    concatLatestFrom(({ question: { iterationStepId }}) => this.store.select(selectIterationStepById(iterationStepId))),
+    concatLatestFrom(() => this.store.select(selectSettings)),
+    switchMap(([action, settings]) => {
+      const delayMs = settings?.interfaces?.questionAnswerDelay ?? 0;
+      return of(action).pipe(
+        delay(delayMs),
+        concatLatestFrom(() => this.store.select(selectIterationStepById(action.question.iterationStepId)))
+      );
+    }),
     filterListNotNullOrUndefined(),
-    mergeMap(([{ question }, iterationStep]) => {
+    mergeMap(([action, iterationStep]) => {
+      const question = action.question;
       const hash = explanationHash(iterationStep);
 
       return this.store.select(selectExplanation(hash)).pipe(

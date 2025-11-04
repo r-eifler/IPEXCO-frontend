@@ -122,7 +122,16 @@
           <mat-button-toggle [value]="ExplanationTypes.LLM_CHAT">LLM Chat</mat-button-toggle>
           <mat-button-toggle [value]="ExplanationTypes.HYBRID">Hybrid</mat-button-toggle>
         </mat-button-toggle-group>
-       
+
+        @if(form.controls.interfaces.controls.explanationInterfaceType.value == ExplanationTypes.TEMPLATE_QUESTION_ANSWER) {
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Question Answer Delay (ms)</mat-label>
+            <input matInput type="number" placeholder="0" [formControl]="form.controls.interfaces.controls.questionAnswerDelay">
+            @if (form.controls.interfaces.controls.questionAnswerDelay.hasError('min')) {
+              <mat-error>Delay must be 0 or greater.</mat-error>
+            }
+          </mat-form-field>
+        }
 
         </mat-card-content>
       </mat-card>
