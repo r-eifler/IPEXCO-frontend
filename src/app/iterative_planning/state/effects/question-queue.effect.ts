@@ -13,7 +13,7 @@ import { ExplanationMessage } from "../../domain/interface/explanation-message";
 import { Question } from "../../domain/interface/question";
 import { IterationStep, StepStatus } from "../../domain/iteration_step";
 import { poseAnswer, questionPosed, questionPosedLLM, multipleQuestionsPosedLLM, registerGlobalExplanationComputation, sendMessageToLLMExplanationTranslatorFailure, sendMessageToLLMExplanationTranslatorSuccess } from "../iterative-planning.actions";
-import { selectExplanation, selectIterationStepById, selectIterativePlanningProject, selectIterativePlanningProjectExplanationInterfaceType, selectIterativePlanningProperties } from "../iterative-planning.selector";
+import { selectExplanation, selectIterationStepById, selectIterativePlanningProject, selectIterativePlanningProjectExplanationInterfaceType, selectIterativePlanningProperties, selectSettings } from "../iterative-planning.selector";
 
 @Injectable()
 export class QuestionQueueEffect {
@@ -63,10 +63,17 @@ export class QuestionQueueEffect {
 
   postAnswer$ = createEffect(() => this.actions$.pipe(
     ofType(questionPosed),
-    delay(500),
-    concatLatestFrom(({ question: { iterationStepId }}) => this.store.select(selectIterationStepById(iterationStepId))),
+    concatLatestFrom(() => this.store.select(selectSettings)),
+    switchMap(([action, settings]) => {
+      const delayMs = settings?.interfaces?.questionAnswerDelay ?? 0;
+      return of(action).pipe(
+        delay(delayMs),
+        concatLatestFrom(() => this.store.select(selectIterationStepById(action.question.iterationStepId)))
+      );
+    }),
     filterListNotNullOrUndefined(),
-    mergeMap(([{ question }, iterationStep]) => {
+    mergeMap(([action, iterationStep]) => {
+      const question = action.question;
       const hash = explanationHash(iterationStep);
 
       return this.store.select(selectExplanation(hash)).pipe(
