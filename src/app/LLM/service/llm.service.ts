@@ -241,6 +241,20 @@ export class LLMService {
         );
     }
 
+    questionSuggestion$(projectId: string, iterationStepId: string): Observable<string[]> {
+        return this.http.post<IHTTPData<any>>(this.BASE_URL + 'question-suggestion', {
+            projectId,
+            iterationStepId
+        }).pipe(
+            map(({ data }) => data.questionSuggestion as string[]),
+            tap(response => console.log('Successfully received question suggestion:', response)),
+            catchError(error => {
+                console.error('Error getting question suggestion:', error);
+                throw error;
+            })
+        );
+    }
+
 
     // ------------------------------ WITH MONITORING SERVICE (POST request, then monitoring) ------------------------------
     // BACKEND NOT IMPLEMENTED YET

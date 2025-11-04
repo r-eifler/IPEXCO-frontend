@@ -9,7 +9,7 @@ import { map, switchMap, take } from 'rxjs/operators';
 import { filterNotNullOrUndefined } from 'src/app/shared/common/check_null_undefined';
 import { ChatModule } from 'src/app/shared/components/chat/chat.module';
 import { eraseLLMHistory, sendMessageToLLMQuestionTranslator } from '../../state/iterative-planning.actions';
-import { selectIsExplanationChatLoading, selectIsLLMChatLoading, selectIterativePlanningProject, selectIterativePlanningSelectedStep, selectVisibleMessagesbyId } from '../../state/iterative-planning.selector';
+import { selectIsExplanationChatLoading, selectIsLLMChatLoading, selectIsQuestionSuggestionLoading, selectIterativePlanningProject, selectIterativePlanningSelectedStep, selectSuggestedQuestions, selectVisibleMessagesbyId } from '../../state/iterative-planning.selector';
 import { QuestionType } from "../../domain/explanation/explanations";
 import { ExplanationMessage, StructuredText } from "../../domain/interface/explanation-message";
 import { PlanProperty } from "../../../shared/domain/plan-property/plan-property";
@@ -47,10 +47,29 @@ export class ExplanationChatHybridComponent implements OnInit, OnDestroy {
     switchMap(id => this.store.select(selectVisibleMessagesbyId(id)))
   );
 
+  // Suggested questions from store
+  suggestedQuestions$ = this.stepId$.pipe(
+    filterNotNullOrUndefined(),
+    switchMap(id => this.store.select(selectSuggestedQuestions(id))),
+    map(questions => questions ?? [])
+  );
+
+  // Question suggestion loading state
+  isQuestionSuggestionLoading$ = this.stepId$.pipe(
+    filterNotNullOrUndefined(),
+    switchMap(id => this.store.select(selectIsQuestionSuggestionLoading(id)))
+  );
+
   // Structured text functionality
   availableQuestions = input.required<AvailableQuestion[]>();
   properties = input.required<Record<string, PlanProperty>>();
   showRefreshButton = input<boolean>(false);
+  
+  // Track suggested questions from store
+  private suggestedQuestionsFromStore = signal<string[]>([]);
+  
+  // Track question suggestion loading state
+  isQuestionSuggestionLoading = signal<boolean>(false);
   
   // Track asked questions
   private askedQuestions = signal<Set<string>>(new Set());
@@ -58,10 +77,44 @@ export class ExplanationChatHybridComponent implements OnInit, OnDestroy {
   // Track whether questions are hidden
   private questionsHidden = signal<boolean>(false);
   
+  // Convert suggested questions (strings) to AvailableQuestion format
+  private suggestedQuestionsAsAvailable = computed(() => {
+    const questions = this.suggestedQuestionsFromStore();
+    if (questions.length === 0) {
+      return [];
+    }
+    return questions.map(question => ({
+      message: { mainText: question } as StructuredText,
+      questionType: QuestionType.DIRECT_USER
+    } as AvailableQuestion));
+  });
+  
+  // Check if we're currently showing suggested questions
+  isShowingSuggestedQuestions = computed(() => {
+    if (this.isQuestionSuggestionLoading()) {
+      return false;
+    }
+    const suggested = this.suggestedQuestionsAsAvailable();
+    return suggested.length > 0 && suggested.length < 4;
+  });
+  
+  // Use suggested questions if available and non-empty, otherwise use input
+  effectiveAvailableQuestions = computed(() => {
+    // If loading, return empty array so we can show loading message
+    if (this.isQuestionSuggestionLoading()) {
+      return [];
+    }
+    const suggested = this.suggestedQuestionsAsAvailable();
+    if (suggested.length > 0 && suggested.length < 4) {
+      return suggested;
+    }
+    return this.availableQuestions();
+  });
+  
   // Computed property to filter out asked questions
   filteredAvailableQuestions = computed(() => {
     const asked = this.askedQuestions();
-    return this.availableQuestions().filter(question => 
+    return this.effectiveAvailableQuestions().filter(question => 
       !asked.has(question.message.mainText)
     );
   });
@@ -125,6 +178,12 @@ export class ExplanationChatHybridComponent implements OnInit, OnDestroy {
       }),
       this.isLoading$.subscribe(loading => {
         console.log('Loading state:', loading);
+      }),
+      this.suggestedQuestions$.subscribe(questions => {
+        this.suggestedQuestionsFromStore.set(questions);
+      }),
+      this.isQuestionSuggestionLoading$.subscribe(loading => {
+        this.isQuestionSuggestionLoading.set(loading);
       })
     );
   }
