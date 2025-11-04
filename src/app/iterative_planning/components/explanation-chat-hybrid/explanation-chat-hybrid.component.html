@@ -26,7 +26,7 @@
         </div>
         @if(effectiveAvailableQuestions().length > 0) {
           <div class="control-buttons">
-            @if(showRefreshButton()) {
+            @if(showRefreshButton() && !isShowingSuggestedQuestions()) {
               <button mat-icon-button matTooltip="Refresh suggested questions." (click)="onRefreshSuggestedQuestions()" class="control-button">
                 <mat-icon>refresh</mat-icon>
               </button>

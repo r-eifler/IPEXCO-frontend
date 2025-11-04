@@ -89,6 +89,15 @@ export class ExplanationChatHybridComponent implements OnInit, OnDestroy {
     } as AvailableQuestion));
   });
   
+  // Check if we're currently showing suggested questions
+  isShowingSuggestedQuestions = computed(() => {
+    if (this.isQuestionSuggestionLoading()) {
+      return false;
+    }
+    const suggested = this.suggestedQuestionsAsAvailable();
+    return suggested.length > 0 && suggested.length < 4;
+  });
+  
   // Use suggested questions if available and non-empty, otherwise use input
   effectiveAvailableQuestions = computed(() => {
     // If loading, return empty array so we can show loading message
