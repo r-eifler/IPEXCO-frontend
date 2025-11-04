@@ -113,6 +113,7 @@ const initialState: IterativePlanningState = {
     seenByGTMessages: [],
     seenByETMessages: [],
     seenByQTMessages: [],
+    seenByQuestionSuggestionMessages: [],
     outputFormatQT: { structured: false, schema: null },
     outputFormatET: { structured: false, schema: null },
     outputFormatGT: { structured: false, schema: null },
