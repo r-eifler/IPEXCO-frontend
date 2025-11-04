@@ -25,6 +25,7 @@ export interface LLMContext {
     seenByGTMessages: LLMMessage[];
     seenByETMessages: LLMMessage[];
     seenByQTMessages: LLMMessage[];
+    seenByQuestionSuggestionMessages: LLMMessage[];
     outputFormatQT: OutputFormat;
     outputFormatET: OutputFormat;
     outputFormatGT: OutputFormat;

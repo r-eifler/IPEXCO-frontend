@@ -1,3 +1,7 @@
+@use '../../../../variables' as variables;
+@use '@angular/material' as mat;
+@use '../../../../ipexco-theme' as ipexco-theme;
+
 app-chat {
   max-height: 600px;
 }
@@ -30,5 +34,64 @@ app-chat {
     &:hover {
       opacity: 0.9;
     }
+  }
+}
+
+.questions-group .loading-container {
+  @include variables.typography(body-medium);
+  @include variables.background-color(surface-container);
+  
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-block: var(--spacing-100);
+  padding-inline: var(--spacing-200);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  
+  .loading-text {
+    @include variables.color(on-surface);
+    font-style: italic;
+  }
+  
+  .loading-dots {
+    display: flex;
+    flex-direction: row;
+    gap: 4px;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: var(--radius-full);
+    @include variables.background-color(on-surface);
+    opacity: 0.4;
+    scale: 0.8;
+  }
+  
+  .dot-1 {
+    animation: 1.2s ease-in-out infinite alternate fade;
+  }
+  
+  .dot-2 {
+    animation: 1.2s ease-in-out 200ms infinite alternate fade;
+  }
+  
+  .dot-3 {
+    animation: 1.2s ease-in-out 400ms infinite alternate fade;
+  }
+}
+
+@keyframes fade {
+  from {
+    opacity: 0.4;
+    scale: 0.8;
+  }
+  
+  to {
+    opacity: 0.8;
+    scale: 1;
   }
 }

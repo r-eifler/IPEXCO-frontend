@@ -61,10 +61,13 @@ export class SettingsComponent {
   questionClassDataPrompts = computed(() => this.prompts()?.filter(p => p.type == PromptType.INPUT_DATA && p.agent == AgentType.QUESTION_CLASSIFIER));
   explanationTransInstructionPrompts = computed(() => this.prompts()?.filter(p => p.type == PromptType.INSTRUCTION_AND_EXAMPLES && p.agent == AgentType.EXPLANATION_TRANSLATOR));
   explanationTransDataPrompts = computed(() => this.prompts()?.filter(p => p.type == PromptType.INPUT_DATA && p.agent == AgentType.EXPLANATION_TRANSLATOR));
+  questionSuggesterInstructionPrompts = computed(() => this.prompts()?.filter(p => p.type == PromptType.INSTRUCTION_AND_EXAMPLES && p.agent == AgentType.QUESTION_SUGGESTER));
+  questionSuggesterDataPrompts = computed(() => this.prompts()?.filter(p => p.type == PromptType.INPUT_DATA && p.agent == AgentType.QUESTION_SUGGESTER));
 
   explanationTransOutputSchemas = computed(() => this.outputSchemas()?.filter(p => p.agent == AgentType.EXPLANATION_TRANSLATOR));
   goalTransOutputSchemas = computed(() => this.outputSchemas()?.filter(p => p.agent == AgentType.GOAL_TRANSLATOR));
   questionClassOutputSchemas = computed(() => this.outputSchemas()?.filter(p => p.agent == AgentType.QUESTION_CLASSIFIER));
+  
 
   update = output<GeneralSettings>();
 
@@ -107,6 +110,7 @@ export class SettingsComponent {
         questionClassData: this.fb.control<string | null>(null),
         explanationTransInstruction: this.fb.control<string | null>(null),
         explanationTransData: this.fb.control<string | null>(null),
+        questionSuggesterInstructions: this.fb.control<string | null>(null),
       }),
       outputSchemas:  this.fb.group({
         goalTrans: this.fb.control<string | null>(null),
@@ -179,6 +183,7 @@ export class SettingsComponent {
 
 				const explanationTransDataPrompt = this.explanationTransDataPrompts()?.find(p => settings.llmConfig.prompts.includes(p._id))
 				const explanationTransInstructionPrompt = this.explanationTransInstructionPrompts()?.find(p => settings.llmConfig.prompts.includes(p._id))
+				const questionSuggesterInstructionPrompt = this.questionSuggesterInstructionPrompts()?.find(p => settings.llmConfig.prompts.includes(p._id))
 
 
 
@@ -192,6 +197,7 @@ export class SettingsComponent {
 
 				this.form.controls.llmConfig.controls.prompts.controls.explanationTransData.setValue(explanationTransDataPrompt?._id ?? null);
 				this.form.controls.llmConfig.controls.prompts.controls.explanationTransInstruction.setValue(explanationTransInstructionPrompt?._id ?? null);
+				this.form.controls.llmConfig.controls.prompts.controls.questionSuggesterInstructions.setValue(questionSuggesterInstructionPrompt?._id ?? null);
 			}
 
 			if(settings.llmConfig.outputSchema && settings.llmConfig.outputSchema.length > 0){
@@ -268,6 +274,7 @@ export class SettingsComponent {
           this.form.controls.llmConfig.controls.prompts.controls.questionClassData.value,
           this.form.controls.llmConfig.controls.prompts.controls.explanationTransInstruction.value,
           this.form.controls.llmConfig.controls.prompts.controls.explanationTransData.value,
+          this.form.controls.llmConfig.controls.prompts.controls.questionSuggesterInstructions.value,
         ].filter(e => e !== null),
         outputSchema: [
           this.form.controls.llmConfig.controls.outputSchemas.controls.goalTrans.value,

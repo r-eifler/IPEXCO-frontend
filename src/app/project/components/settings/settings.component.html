@@ -244,6 +244,16 @@
             </mat-select>
           </mat-form-field> -->
 
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Question Suggester Instructions Prompt</mat-label>
+            <mat-select [formControl]="form.controls.llmConfig.controls.prompts.controls.questionSuggesterInstructions">
+              <option value="" disabled selected></option>
+              @for (prompt of questionSuggesterInstructionPrompts(); track prompt._id) {
+                <mat-option [value]="prompt._id">{{prompt.name}}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
 
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>Goal Translator Output Schema</mat-label>

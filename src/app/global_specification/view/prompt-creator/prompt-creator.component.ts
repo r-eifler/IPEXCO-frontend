@@ -33,6 +33,7 @@ export class PromptCreatorComponent {
       AgentType.GOAL_TRANSLATOR,
       AgentType.QUESTION_CLASSIFIER,
       AgentType.EXPLANATION_TRANSLATOR,
+      AgentType.QUESTION_SUGGESTER,
     ]
 
     promptType = PromptType;

@@ -141,3 +141,7 @@ export const directMessageET = createAction('[llm] direct message ET', props<{ d
 export const showReverseTranslationGT = createAction('[iterative-planning] show reverse translation GT', props<{ reverseTranslation: string}>());
 export const showReverseTranslationQT = createAction('[iterative-planning] show reverse translation QT', props<{ reverseTranslation: string}>());
 
+export const questionSuggestionLoading = createAction('[llm] question suggestion loading', props<{ iterationStepId: string }>());
+export const questionSuggestionSuccess = createAction('[llm] question suggestion success', props<{ iterationStepId: string, questions: string[] }>());
+export const questionSuggestionFailure = createAction('[llm] question suggestion failure', props<{ err: any, iterationStepId: string }>());
+

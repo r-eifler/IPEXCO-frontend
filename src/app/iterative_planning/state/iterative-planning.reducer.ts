@@ -34,6 +34,9 @@ import {
     loadProjectSuccess,
     poseAnswer,
     questionPosed,
+    questionSuggestionFailure,
+    questionSuggestionLoading,
+    questionSuggestionSuccess,
     selectIterationStep,
     sendMessageToLLMExplanationTranslator,
     showReverseTranslationGT,
@@ -80,6 +83,8 @@ export interface IterativePlanningState {
   LLMChatLoadingState: LoadingState;
   ExplanationLoadingState: LoadingState;
   LLMContext: LLMContext;
+  suggestedQuestions: Record<string, string[]>;
+  questionSuggestionLoading: Record<string, boolean>;
 
 }
 
@@ -108,11 +113,14 @@ const initialState: IterativePlanningState = {
     seenByGTMessages: [],
     seenByETMessages: [],
     seenByQTMessages: [],
+    seenByQuestionSuggestionMessages: [],
     outputFormatQT: { structured: false, schema: null },
     outputFormatET: { structured: false, schema: null },
     outputFormatGT: { structured: false, schema: null },
     settings: {}
   },
+  suggestedQuestions: {},
+  questionSuggestionLoading: {},
 
 };
 
@@ -236,6 +244,31 @@ export const iterativePlanningReducer = createReducer(
       ...state.messages,
       answer,
     ],
+  })),
+  on(questionSuggestionLoading, (state, { iterationStepId }): IterativePlanningState => ({
+    ...state,
+    questionSuggestionLoading: {
+      ...state.questionSuggestionLoading,
+      [iterationStepId]: true,
+    },
+  })),
+  on(questionSuggestionSuccess, (state, { iterationStepId, questions }): IterativePlanningState => ({
+    ...state,
+    suggestedQuestions: {
+      ...state.suggestedQuestions,
+      [iterationStepId]: questions,
+    },
+    questionSuggestionLoading: {
+      ...state.questionSuggestionLoading,
+      [iterationStepId]: false,
+    },
+  })),
+  on(questionSuggestionFailure, (state, { iterationStepId }): IterativePlanningState => ({
+    ...state,
+    questionSuggestionLoading: {
+      ...state.questionSuggestionLoading,
+      [iterationStepId]: false,
+    },
   })),
   ...llmStateChangeFunctions,
 );

@@ -5,19 +5,28 @@
     <app-chat-markdown-message [role]="message.role" [rawMessage]="message.content"></app-chat-markdown-message>
     }
 
-  @if((filteredAvailableQuestions().length > 0 && shouldShowQuestions()) || (showRefreshButton() && availableQuestions().length > 0)) {
+  @if((filteredAvailableQuestions().length > 0 && shouldShowQuestions()) || (showRefreshButton() && effectiveAvailableQuestions().length > 0) || isQuestionSuggestionLoading()) {
     <ng-container app-chat-action>
       <div class="questions-with-refresh">
         <div class="questions-group">
-          @if(shouldShowQuestions()) {
+          @if(isQuestionSuggestionLoading()) {
+            <div class="loading-container">
+              <div class="loading-text">Suggesting questions</div>
+              <div class="loading-dots">
+                <div class="dot dot-1"></div>
+                <div class="dot dot-2"></div>
+                <div class="dot dot-3"></div>
+              </div>
+            </div>
+          } @else if(shouldShowQuestions()) {
             @for(question of filteredAvailableQuestions(); track question) {
               <button app-chat-action (click)="onQuestionSelected(question)">{{ question.message.mainText }}</button>
             }
           }
         </div>
-        @if(availableQuestions().length > 0) {
+        @if(effectiveAvailableQuestions().length > 0) {
           <div class="control-buttons">
-            @if(showRefreshButton()) {
+            @if(showRefreshButton() && !isShowingSuggestedQuestions()) {
               <button mat-icon-button matTooltip="Refresh suggested questions." (click)="onRefreshSuggestedQuestions()" class="control-button">
                 <mat-icon>refresh</mat-icon>
               </button>
