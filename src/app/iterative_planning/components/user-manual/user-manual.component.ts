@@ -57,6 +57,9 @@ export class UserManualComponent {
   LLMManual = computed(
     () => this.settings() ? this.settings()?.interfaces.explanationInterfaceType === ExplanationInterfaceType.LLM_CHAT : true
   );
+  HybridManual = computed(
+    () => this.settings() ? this.settings()?.interfaces.explanationInterfaceType === ExplanationInterfaceType.HYBRID : true
+  );
 
   sampleDemo: Demo = {
     _id: '1',
