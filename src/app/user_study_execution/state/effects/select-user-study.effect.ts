@@ -17,7 +17,9 @@ export class RedirectToNextUserStudyEffect{
     public redirect$ = createEffect(() => this.actions$.pipe(
         ofType(distributeParticipant),
         switchMap(({distributionId}) => this.service.getNextStudy$(distributionId).pipe(
-            tap((userStudyId) => this.router.navigate(['user-study-execution', userStudyId])),
+            tap((userStudyId) => this.router.navigate(['user-study-execution', userStudyId], {
+                queryParamsHandling: 'preserve'
+            })),
             map(() => distributeParticipantSuccess()),
             catchError(() => of(distributeParticipantFailure()))
         ))
