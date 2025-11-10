@@ -2,7 +2,7 @@ import { Injectable, inject } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { concatLatestFrom } from "@ngrx/operators";
 import { Store } from "@ngrx/store";
-import { filter, map, mergeMap, of, switchMap, take, tap } from "rxjs";
+import { concat, filter, map, mergeMap, of, switchMap, take, tap } from "rxjs";
 import { catchError, delay } from "rxjs/operators";
 import { LLMService } from "src/app/LLM/service/llm.service";
 import { filterListNotNullOrUndefined, filterNotNullOrUndefined } from "src/app/shared/common/check_null_undefined";
@@ -12,7 +12,7 @@ import { DefinedGlobalExplanation, ExplanationRunStatus, QuestionType } from "..
 import { ExplanationMessage } from "../../domain/interface/explanation-message";
 import { Question } from "../../domain/interface/question";
 import { IterationStep, StepStatus } from "../../domain/iteration_step";
-import { poseAnswer, questionPosed, questionPosedLLM, multipleQuestionsPosedLLM, registerGlobalExplanationComputation, sendMessageToLLMExplanationTranslatorFailure, sendMessageToLLMExplanationTranslatorSuccess } from "../iterative-planning.actions";
+import { poseAnswer, questionPosed, questionPosedLLM, multipleQuestionsPosedLLM, registerGlobalExplanationComputation, logSendMessageToET, sendMessageToLLMExplanationTranslatorFailure, sendMessageToLLMExplanationTranslatorSuccess } from "../iterative-planning.actions";
 import { selectExplanation, selectIterationStepById, selectIterativePlanningProject, selectIterativePlanningProjectExplanationInterfaceType, selectIterativePlanningProperties, selectSettings } from "../iterative-planning.selector";
 
 @Injectable()
@@ -131,23 +131,31 @@ export class QuestionQueueEffect {
           if(iterationStep === undefined || iterationStep == null ||properties == null || project == null){
             return of(sendMessageToLLMExplanationTranslatorFailure({err: "[LLM] translation failed"}))
           }
-          return this.LLMService.postMessageET$(
-            naturalLanguageQuestion, 
-            data.explanationMUGS, 
-            data.explanationMGCS, 
-            data.question_type, 
-            data.questionArgument, 
-            iterationStep, 
-            project, 
-            Object.values(properties), 
-          ).pipe(
-            switchMap(response => [sendMessageToLLMExplanationTranslatorSuccess({ 
-              response: response?.response || 'No response received', 
-            })]),
-            catchError((error) => {
-              console.error('Error in postMessageET$:', error);
-              return of(sendMessageToLLMExplanationTranslatorFailure({err: "[LLM] translation failed"}));
-            })
+          const loggingAction = logSendMessageToET({
+            question: naturalLanguageQuestion,
+            explanationMUGS: data.explanationMUGS,
+            explanationMGCS: data.explanationMGCS
+          });
+          return concat(
+            of(loggingAction),
+            this.LLMService.postMessageET$(
+              naturalLanguageQuestion, 
+              data.explanationMUGS, 
+              data.explanationMGCS, 
+              data.question_type, 
+              data.questionArgument, 
+              iterationStep, 
+              project, 
+              Object.values(properties), 
+            ).pipe(
+              switchMap(response => [sendMessageToLLMExplanationTranslatorSuccess({ 
+                response: response?.response || 'No response received', 
+              })]),
+              catchError((error) => {
+                console.error('Error in postMessageET$:', error);
+                return of(sendMessageToLLMExplanationTranslatorFailure({err: "[LLM] translation failed"}));
+              })
+            )
           );
         })
       )

@@ -5,10 +5,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Store } from '@ngrx/store';
 import { combineLatest, Subscription } from 'rxjs';
-import { map, switchMap, take } from 'rxjs/operators';
+import { map, switchMap, take, filter } from 'rxjs/operators';
 import { filterNotNullOrUndefined } from 'src/app/shared/common/check_null_undefined';
 import { ChatModule } from 'src/app/shared/components/chat/chat.module';
-import { eraseLLMHistory, sendMessageToLLMQuestionTranslator } from '../../state/iterative-planning.actions';
+import { eraseLLMHistory, sendMessageToLLMQuestionTranslator, logSuggestedQuestions, logAskedQuestionButtonClicked } from '../../state/iterative-planning.actions';
 import { selectIsExplanationChatLoading, selectIsLLMChatLoading, selectIsQuestionSuggestionLoading, selectIterativePlanningProject, selectIterativePlanningSelectedStep, selectSuggestedQuestions, selectVisibleMessagesbyId } from '../../state/iterative-planning.selector';
 import { QuestionType } from "../../domain/explanation/explanations";
 import { ExplanationMessage, StructuredText } from "../../domain/interface/explanation-message";
@@ -156,6 +156,20 @@ export class ExplanationChatHybridComponent implements OnInit, OnDestroy {
     newAsked.add(question.message.mainText);
     this.askedQuestions.set(newAsked);
     
+    // Log asked questions from button click
+    this.stepId$.pipe(
+      take(1),
+      filterNotNullOrUndefined(),
+    ).subscribe({
+      next: (iterationStepId) => {
+        this.store.dispatch(logAskedQuestionButtonClicked({
+          iterationStepId: iterationStepId,
+          question: question.message.mainText
+        }));
+      },
+      error: (error) => console.error('Error logging asked questions:', error)
+    });
+    
     this.onUserMessage(question.message.mainText);
   }
 
@@ -179,8 +193,17 @@ export class ExplanationChatHybridComponent implements OnInit, OnDestroy {
       this.isLoading$.subscribe(loading => {
         console.log('Loading state:', loading);
       }),
-      this.suggestedQuestions$.subscribe(questions => {
+      combineLatest([this.suggestedQuestions$, this.stepId$]).pipe(
+        filter(([_, stepId]) => !!stepId)
+      ).subscribe(([questions, stepId]) => {
         this.suggestedQuestionsFromStore.set(questions);
+        // Log suggested questions when they change
+        if (questions.length > 0) {
+          this.store.dispatch(logSuggestedQuestions({
+            iterationStepId: stepId!,
+            questions: questions
+          }));
+        }
       }),
       this.isQuestionSuggestionLoading$.subscribe(loading => {
         this.isQuestionSuggestionLoading.set(loading);

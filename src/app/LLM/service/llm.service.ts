@@ -22,11 +22,13 @@ import { PlanProperty } from "src/app/shared/domain/plan-property/plan-property"
 import { Project } from "src/app/shared/domain/project";
 import { PDDLPlanningModel } from "src/app/shared/domain/PDDL_task";
 import { LLMMonitoringService } from "./llm-monitoring.service";
+import { logSendMessageToET } from "src/app/iterative_planning/state/iterative-planning.actions";
 
 @Injectable()
 export class LLMService {
 
     private http = inject(HttpClient)
+    private store = inject(Store)
     private monitoringService = inject(LLMMonitoringService)
     private BASE_URL = environment.apiURL + "llm/";
 
@@ -163,6 +165,14 @@ export class LLMService {
             existingPlanProperties: Object.values(properties)
         };
         const requestString = explanationTranslationRequestToString(request);
+        
+        // Log the message being sent to ET
+        this.store.dispatch(logSendMessageToET({
+            question: question,
+            explanationMUGS: explanationMUGS,
+            explanationMGCS: explanationMGCS
+        }));
+        
         return this.http.post<IHTTPData<{ response: string }>>(this.BASE_URL + 'et', { data: requestString, iterationStepId: iterationStep._id, projectId: project._id, originalRequest: question }).pipe(
             map(({ data }) => data),
             tap(console.log)
@@ -215,6 +225,14 @@ export class LLMService {
         else {
             requestString = multipleExplanationTranslationRequestToString(requests);
         }
+        
+        // Log the message being sent to ET
+        this.store.dispatch(logSendMessageToET({
+            question: question,
+            explanationMUGS: explanationsMUGS,
+            explanationMGCS: explanationsMGCS
+        }));
+        
         return this.http.post<IHTTPData<{ response: string }>>(this.BASE_URL + 'et', { data: requestString, iterationStepId: iterationStep._id, projectId: project._id, originalRequest: question }).pipe(
             map(({ data }) => data),
             tap(console.log)

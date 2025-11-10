@@ -123,6 +123,8 @@ export const sendMessageToLLMQuestionTranslator = createAction('[llm] send messa
 export const sendMessageToLLMQuestionTranslatorSuccess = createAction('[llm] send message to question translator success', props<{response?: string, duration?: number}>());
 export const sendMessageToLLMQuestionTranslatorFailure = createAction('[llm] send message to question translator failure', props<{ err: any}>());
 
+export const logSendMessageToET = createAction('[logging] log send message to ET', props<{question: string, explanationMUGS: string[][] | string[][][], explanationMGCS: string[][] | string[][][]}>());
+
 export const sendMessageToLLMQTthenGTTranslators = createAction('[llm] send message to QTthenGT translators', props<{question: string, iterationStepId: string}>());
 export const sendMessageToLLMQTthenGTTranslatorsSuccess = createAction('[llm] send message to QTthenGT translators success', props<{duration?: number}>());
 export const sendMessageToLLMQTthenGTTranslatorsFailure = createAction('[llm] send message to QTthenGT translators failure', props<{ err: any}>());
@@ -144,4 +146,8 @@ export const showReverseTranslationQT = createAction('[iterative-planning] show 
 export const questionSuggestionLoading = createAction('[llm] question suggestion loading', props<{ iterationStepId: string }>());
 export const questionSuggestionSuccess = createAction('[llm] question suggestion success', props<{ iterationStepId: string, questions: string[] }>());
 export const questionSuggestionFailure = createAction('[llm] question suggestion failure', props<{ err: any, iterationStepId: string }>());
+
+// Logging actions for hybrid interface
+export const logSuggestedQuestions = createAction('[iterative-planning] log suggested questions', props<{ iterationStepId: string, questions: string[] }>());
+export const logAskedQuestionButtonClicked = createAction('[iterative-planning] log asked question button clicked', props<{ iterationStepId: string, question: string }>());
 
