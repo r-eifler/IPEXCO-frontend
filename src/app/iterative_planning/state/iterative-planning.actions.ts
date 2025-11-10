@@ -145,3 +145,7 @@ export const questionSuggestionLoading = createAction('[llm] question suggestion
 export const questionSuggestionSuccess = createAction('[llm] question suggestion success', props<{ iterationStepId: string, questions: string[] }>());
 export const questionSuggestionFailure = createAction('[llm] question suggestion failure', props<{ err: any, iterationStepId: string }>());
 
+// Logging actions for hybrid interface
+export const logSuggestedQuestions = createAction('[iterative-planning] log suggested questions', props<{ iterationStepId: string, questions: string[] }>());
+export const logAskedQuestionButtonClicked = createAction('[iterative-planning] log asked question button clicked', props<{ iterationStepId: string, question: string }>());
+

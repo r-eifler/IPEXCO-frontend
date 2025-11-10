@@ -7,7 +7,7 @@ import { Store } from '@ngrx/store';
 import { selectExecutionUserStudyPendingIterationSteps, selectExecutionUserStudyStep, selectExecutionUserStudyStepIndex } from '../user-study-execution.selector';
 import { concatLatestFrom } from '@ngrx/operators';
 import { ActionType, CancelPlanForIterationStepUserAction } from '../../domain/user-action';
-import { cancelPlanComputationAndIterationStep, createIterationStepSuccess, directMessageET, directResponseQT, loadIterationStepsSuccess, multipleQuestionsPosedLLM, poseAnswer, poseAnswerLLM, questionPosed, questionPosedLLM, selectIterationStep, sendMessageToLLMExplanationTranslator, sendMessageToLLMExplanationTranslatorFailure, sendMessageToLLMExplanationTranslatorSuccess, sendMessageToLLMQuestionTranslator, sendMessageToLLMQuestionTranslatorFailure, sendMessageToLLMQuestionTranslatorSuccess } from 'src/app/iterative_planning/state/iterative-planning.actions';
+import { cancelPlanComputationAndIterationStep, createIterationStepSuccess, directMessageET, directResponseQT, loadIterationStepsSuccess, logAskedQuestionButtonClicked, logSuggestedQuestions, multipleQuestionsPosedLLM, poseAnswer, poseAnswerLLM, questionPosed, questionPosedLLM, selectIterationStep, sendMessageToLLMExplanationTranslator, sendMessageToLLMExplanationTranslatorFailure, sendMessageToLLMExplanationTranslatorSuccess, sendMessageToLLMQuestionTranslator, sendMessageToLLMQuestionTranslatorFailure, sendMessageToLLMQuestionTranslatorSuccess } from 'src/app/iterative_planning/state/iterative-planning.actions';
 import { StepStatus } from 'src/app/iterative_planning/domain/iteration_step';
 import { computeUtility, PlanRunStatus } from 'src/app/iterative_planning/domain/plan';
 import { selectIterationStepById, selectIterativePlanningProject, selectIterativePlanningProperties, selectIterativePlanningSelectedStepId } from 'src/app/iterative_planning/state/iterative-planning.selector';
@@ -393,5 +393,41 @@ export class LogUserActivitiesEffect{
             map(() => logActionSuccess()),
             catchError(() => of(logActionFailure()))
         ))
+    ));
+
+    // Hybrid interface logging
+
+    public logSuggestedQuestions$ = createEffect(() => this.actions$.pipe(
+        ofType(logSuggestedQuestions),
+        concatLatestFrom(() => [
+            this.store.select(selectIterativePlanningProject),
+        ]),
+        switchMap(([{iterationStepId, questions}, project]) => [
+            logAction({action: {
+                type: ActionType.SUGGESTED_QUESTIONS, 
+                data: {
+                    demoId: project?._id ?? 'Missing ID',
+                    stepId: iterationStepId,
+                    questions: questions
+                }
+            }})
+        ])
+    ));
+
+    public logAskedQuestions$ = createEffect(() => this.actions$.pipe(
+        ofType(logAskedQuestionButtonClicked),
+        concatLatestFrom(() => [
+            this.store.select(selectIterativePlanningProject),
+        ]),
+        switchMap(([{iterationStepId, question}, project]) => [
+            logAction({action: {
+                type: ActionType.ASKED_QUESTION_BUTTON_CLICKED, 
+                data: {
+                    demoId: project?._id ?? 'Missing ID',
+                    stepId: iterationStepId,
+                    question: question
+                }
+            }})
+        ])
     ));
 }
