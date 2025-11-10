@@ -375,8 +375,7 @@
                         </app-chat>
 
                         <p>
-                            The explainer can infer missing parts in partially implicit question and tells you how it
-                            understood your question.
+                            The explainer can infer missing parts in partially implicit question.
                             For example:
                         </p>
                         <app-chat [isSenderTyping]="false">
@@ -385,8 +384,8 @@
 
                             <app-chat-markdown-message [role]="'receiver'"
                                 [rawMessage]="'Why no yoga'"></app-chat-markdown-message>
-                            <app-chat-markdown-message [role]="'sender'"
-                                [rawMessage]="'I understood your question as : &quot;Why is the goal &quot;go to yoga&quot; not satisfied?&quot;.'"></app-chat-markdown-message>
+                            <!-- <app-chat-markdown-message [role]="'sender'"
+                                [rawMessage]="'I understood your question as : &quot;Why is the goal &quot;go to yoga&quot; not satisfied?&quot;.'"></app-chat-markdown-message> -->
                             <app-chat-markdown-message [role]="'sender'"
                                 [rawMessage]="'Because you enforced &quot;go to gym&quot;, &quot;go to yoga&quot; which are in conflict with &quot;go to the supermarket&quot;.'"></app-chat-markdown-message>
                             @if(sentMessage()){
