@@ -7,7 +7,7 @@ import { Store } from '@ngrx/store';
 import { selectExecutionUserStudyPendingIterationSteps, selectExecutionUserStudyStep, selectExecutionUserStudyStepIndex } from '../user-study-execution.selector';
 import { concatLatestFrom } from '@ngrx/operators';
 import { ActionType, CancelPlanForIterationStepUserAction } from '../../domain/user-action';
-import { cancelPlanComputationAndIterationStep, createIterationStepSuccess, directMessageET, directResponseQT, loadIterationStepsSuccess, logAskedQuestionButtonClicked, logSuggestedQuestions, multipleQuestionsPosedLLM, poseAnswer, poseAnswerLLM, questionPosed, questionPosedLLM, selectIterationStep, sendMessageToLLMExplanationTranslator, sendMessageToLLMExplanationTranslatorFailure, sendMessageToLLMExplanationTranslatorSuccess, sendMessageToLLMQuestionTranslator, sendMessageToLLMQuestionTranslatorFailure, sendMessageToLLMQuestionTranslatorSuccess } from 'src/app/iterative_planning/state/iterative-planning.actions';
+import { cancelPlanComputationAndIterationStep, createIterationStepSuccess, directMessageET, directResponseQT, loadIterationStepsSuccess, logAskedQuestionButtonClicked, logSendMessageToET, logSuggestedQuestions, multipleQuestionsPosedLLM, poseAnswer, poseAnswerLLM, questionPosed, questionPosedLLM, selectIterationStep, sendMessageToLLMExplanationTranslatorFailure, sendMessageToLLMExplanationTranslatorSuccess, sendMessageToLLMQuestionTranslator, sendMessageToLLMQuestionTranslatorFailure, sendMessageToLLMQuestionTranslatorSuccess } from 'src/app/iterative_planning/state/iterative-planning.actions';
 import { StepStatus } from 'src/app/iterative_planning/domain/iteration_step';
 import { computeUtility, PlanRunStatus } from 'src/app/iterative_planning/domain/plan';
 import { selectIterationStepById, selectIterativePlanningProject, selectIterativePlanningProperties, selectIterativePlanningSelectedStepId } from 'src/app/iterative_planning/state/iterative-planning.selector';
@@ -335,7 +335,7 @@ export class LogUserActivitiesEffect{
     ));
 
     public sentMessageToET$ = createEffect(() => this.actions$.pipe(
-        ofType(sendMessageToLLMExplanationTranslator),
+        ofType(logSendMessageToET),
         switchMap(({question, explanationMUGS, explanationMGCS}) => [logAction({action: {type: ActionType.ASK_ET, data: {question, explanationMUGS, explanationMGCS}}})])
     ));
 

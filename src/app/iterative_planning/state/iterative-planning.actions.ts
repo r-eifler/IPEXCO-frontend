@@ -123,6 +123,8 @@ export const sendMessageToLLMQuestionTranslator = createAction('[llm] send messa
 export const sendMessageToLLMQuestionTranslatorSuccess = createAction('[llm] send message to question translator success', props<{response?: string, duration?: number}>());
 export const sendMessageToLLMQuestionTranslatorFailure = createAction('[llm] send message to question translator failure', props<{ err: any}>());
 
+export const logSendMessageToET = createAction('[logging] log send message to ET', props<{question: string, explanationMUGS: string[][], explanationMGCS: string[][]}>());
+
 export const sendMessageToLLMQTthenGTTranslators = createAction('[llm] send message to QTthenGT translators', props<{question: string, iterationStepId: string}>());
 export const sendMessageToLLMQTthenGTTranslatorsSuccess = createAction('[llm] send message to QTthenGT translators success', props<{duration?: number}>());
 export const sendMessageToLLMQTthenGTTranslatorsFailure = createAction('[llm] send message to QTthenGT translators failure', props<{ err: any}>());
