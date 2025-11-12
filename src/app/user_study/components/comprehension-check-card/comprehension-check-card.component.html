@@ -1,0 +1,77 @@
+<mat-card appearance="outlined">
+  <mat-card-header>
+    <mat-card-title>
+      Comprehension Check
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content class="content">
+    <form [formGroup]="form">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Name</mat-label>
+        <input matInput formControlName="name">
+      </mat-form-field>
+      
+      <mat-label>Minimal time before user is able to continue with the next step:</mat-label>
+      <mat-slider min="1" max="1800" step="1" discrete [displayWith]="formatLabel" class="full-width">
+        <input matSliderThumb [formControl]="form.controls.time">
+      </mat-slider>
+
+      <div formArrayName="questions">
+        @for (question of questions.controls; track question; let qIdx = $index) {
+          <mat-card appearance="outlined" class="question-card">
+            <mat-card-content [formGroupName]="qIdx">
+              <div class="question-header">
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>Question {{ qIdx + 1 }}</mat-label>
+                  <input matInput formControlName="question">
+                </mat-form-field>
+                <button mat-icon-button (click)="removeQuestion(qIdx)" type="button">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+
+              <div formArrayName="options">
+                <div class="options-label">Options:</div>
+                @for (option of getOptions(qIdx).controls; track option; let oIdx = $index) {
+                  <div class="option-row" [formGroupName]="oIdx">
+                    <mat-checkbox formControlName="isCorrect">
+                      Correct
+                    </mat-checkbox>
+                    <mat-form-field appearance="outline" class="option-input">
+                      <mat-label>Option {{ oIdx + 1 }}</mat-label>
+                      <input matInput formControlName="text">
+                    </mat-form-field>
+                    <button mat-icon-button (click)="removeOption(qIdx, oIdx)" type="button">
+                      <mat-icon>remove_circle</mat-icon>
+                    </button>
+                  </div>
+                }
+                <button mat-button (click)="addOption(qIdx)" type="button">
+                  <mat-icon>add</mat-icon>
+                  Add Option
+                </button>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        }
+      </div>
+
+      <button mat-button (click)="addQuestion()" type="button" class="add-question-btn">
+        <mat-icon>add</mat-icon>
+        Add Question
+      </button>
+    </form>
+  </mat-card-content>
+  <mat-card-actions align="end">
+    <button mat-icon-button (click)="deletePart()">
+      <mat-icon>delete</mat-icon>
+    </button>
+    <button mat-icon-button (click)="moveUp()" [disabled]="first()">
+      <mat-icon>keyboard_arrow_up</mat-icon>
+    </button>
+    <button mat-icon-button (click)="moveDown()" [disabled]="last()">
+      <mat-icon>keyboard_arrow_down</mat-icon>
+    </button>
+  </mat-card-actions>
+</mat-card>
+

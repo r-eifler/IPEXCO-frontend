@@ -10,6 +10,7 @@ import { UserStudyExecutionDemoViewComponent } from '../user-study-execution-dem
 import { UserStudyExecutionDescriptionViewComponent } from '../user-study-execution-description-view/user-study-execution-description-view.component';
 import { UserStudyExecutionVideoViewComponent } from '../user-study-execution-video-view/user-study-execution-video-view.component';
 import { UserStudyExecutionExternalViewComponent } from '../user-study-execution-external-view/user-study-execution-external-view.component';
+import { ComprehensionCheckViewComponent } from '../comprehension-check-view/comprehension-check-view.component';
 import {AllowUrlPipe} from 'src/app/project/service/allow-url.service';
 
 @Component({
@@ -22,6 +23,7 @@ import {AllowUrlPipe} from 'src/app/project/service/allow-url.service';
         UserStudyExecutionDemoViewComponent,
         UserManualViewComponent,
         DemoInformationViewComponent,
+        ComprehensionCheckViewComponent,
     ],
     templateUrl: './user-study-execution-step-shell.component.html',
     styleUrl: './user-study-execution-step-shell.component.scss'
