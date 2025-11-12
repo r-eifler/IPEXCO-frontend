@@ -4,7 +4,8 @@ export enum UserStudyStepType {
   form = 'form',
   demo = 'demo',
   demoInfo = 'demoInfo',
-  userManual = 'userManual'
+  userManual = 'userManual',
+  comprehensionCheck = 'comprehensionCheck'
 }
 
 export interface UserStudyStep {
@@ -46,6 +47,21 @@ export interface UserStudyDemoInfoStep extends UserStudyStep{
 export interface UserStudyUserManuelStep extends UserStudyStep{
   type: UserStudyStepType.userManual;
   content: string;
+}
+
+export interface ComprehensionCheckQuestion {
+  question: string;
+  options: ComprehensionCheckOption[];
+}
+
+export interface ComprehensionCheckOption {
+  text: string;
+  isCorrect: boolean;
+}
+
+export interface UserStudyComprehensionCheckStep extends UserStudyStep{
+  type: UserStudyStepType.comprehensionCheck;
+  content: ComprehensionCheckQuestion[];
 }
 
 export interface UserStudyBase{

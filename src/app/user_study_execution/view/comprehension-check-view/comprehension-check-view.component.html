@@ -1,0 +1,71 @@
+@let step = step$ | async;
+
+<app-page>
+  <app-page-title>
+    {{ step?.name }}
+  </app-page-title>
+  <app-page-content>
+    <app-page-section-list>
+      <app-page-section>
+        <app-page-section-content>
+          <app-info>
+            <mat-icon>quiz</mat-icon>
+            <span>Please answer the following questions to verify your understanding. All correct answers must be selected to proceed.</span>
+          </app-info>
+        </app-page-section-content>
+      </app-page-section>
+
+      @if (step?.content) {
+        <app-page-section>
+          <app-page-section-content>
+            <form [formGroup]="form">
+              <div formArrayName="questions">
+                @for (question of step!.content; track question; let qIdx = $index) {
+                  <mat-card appearance="outlined" class="question-card">
+                    <mat-card-content>
+                      <h3 class="question-text">{{ qIdx + 1 }}. {{ question.question }}</h3>
+                      
+                      <div [formGroupName]="qIdx">
+                        <div formArrayName="options" class="options-container">
+                          @for (option of question.options; track option; let oIdx = $index) {
+                            <div class="option-item">
+                              <mat-checkbox [formControlName]="oIdx">
+                                {{ option.text }}
+                              </mat-checkbox>
+                            </div>
+                          }
+                        </div>
+                      </div>
+                    </mat-card-content>
+                  </mat-card>
+                }
+              </div>
+            </form>
+
+            @if (!allCorrect && form.dirty) {
+              <app-info class="error-info">
+                <mat-icon>error</mat-icon>
+                <span>
+                  Not all answers are correct. Please review your selections
+                  @if (incorrectQuestions.length > 0) {
+                    <span> for question{{ incorrectQuestions.length > 1 ? 's' : '' }} 
+                      <strong>{{ incorrectQuestions.join(', ') }}</strong>
+                    </span>
+                  }.
+                </span>
+              </app-info>
+            }
+
+            @if (allCorrect) {
+              <app-info class="success-info">
+                <mat-icon>check_circle</mat-icon>
+                <span>All answers are correct! You can proceed to the next step.</span>
+              </app-info>
+            }
+          </app-page-section-content>
+        </app-page-section>
+      }
+    </app-page-section-list>
+  </app-page-content>
+</app-page>
+

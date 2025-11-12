@@ -29,6 +29,7 @@ import {selectedAtLeastOne} from '../../../validators/selected-at-least-one.vali
 import {isNoPropertyNull} from '../../../validators/no-property-null.validator';
 import { UserManualCardComponent } from '../../components/user-manual-card/user-manual-card.component';
 import { DemoInfoCardComponent } from '../../components/demo-info-card/demo-info-card.component';
+import { ComprehensionCheckCardComponent } from '../../components/comprehension-check-card/comprehension-check-card.component';
 
 
 @Component({
@@ -55,6 +56,7 @@ import { DemoInfoCardComponent } from '../../components/demo-info-card/demo-info
         FormCardComponent,
         UserManualCardComponent,
         DemoInfoCardComponent,
+        ComprehensionCheckCardComponent,
     ],
     templateUrl: './user-study-creator.component.html',
     styleUrls: ['./user-study-creator.component.scss']
