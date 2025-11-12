@@ -63,7 +63,7 @@ export class FinishDemoInfoDialogComponent {
   })
 
   missingUtility = computed(() => {
-    const maxOverallUtility = this.currentMaxUtility();
+    const maxOverallUtility = this.maxOverallUtility();
     const currentMaxUtility = this.currentMaxUtility();
 
     if(maxOverallUtility === undefined){
