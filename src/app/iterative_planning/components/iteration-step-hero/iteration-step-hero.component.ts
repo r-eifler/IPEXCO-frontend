@@ -56,6 +56,7 @@ export class IterationStepHeroComponent {
   showPaymentInfo = input<boolean>(false);
   minPayment = input<number>();
   maxPayment = input<number>();
+  step_payments = input<number[]>();
 
   solved = computed(() => this.step()?.plan?.status === PlanRunStatus.SOLVED)
 

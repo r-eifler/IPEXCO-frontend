@@ -41,7 +41,7 @@
               ></div>
               <!-- Ticks that indicate where payment transitions are -->
               <div
-                *ngFor="let marker of markerPayments"
+                *ngFor="let marker of steps_proportions"
                 class="tick"
                 [style.left.%]="marker * 100"
               ></div>
@@ -51,7 +51,7 @@
               <!-- The number values indicating reward at each transition -->
               <div class="payment-markers">
                 <div
-                  *ngFor="let marker of markerPayments"
+                  *ngFor="let marker of steps_proportions"
                   class="marker"
                   [style.left.%]="marker * 100"
                 >

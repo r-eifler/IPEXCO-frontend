@@ -41,7 +41,8 @@ export class StepsListHeroComponent {
   // Put payment markers at these utility proportions
   //
   // HACK: hard-coded for now
-  markerPayments = [0.0, 0.5, 0.75, 1.0];
+  steps_proportions = [0.0, 10/18, 14/18, 16/18, 18/18];
+  steps_payments = [0, 1, 2, 3, 5];
 
   numSolvedSteps = computed(() => this.steps()?.filter(s => s.status === StepStatus.SOLVABLE).length)
   umUnSolvedSteps = computed(() => this.steps()?.filter(s => s.status === StepStatus.UNSOLVABLE).length)
@@ -54,7 +55,9 @@ export class StepsListHeroComponent {
     return this.rewardEvaluator.computePayment(
       utility_proportion,
       this.minPayment(),
-      this.maxPayment()
+      this.maxPayment(),
+      this.steps_proportions,
+      this.steps_payments
     );
   }
 
@@ -69,7 +72,9 @@ export class StepsListHeroComponent {
     return this.rewardEvaluator.computePayment(
       this.computeCurrentUtilityProportion(),
       this.minPayment(),
-      this.maxPayment()
+      this.maxPayment(),
+      this.steps_proportions,
+      this.steps_payments
     );
   }
 

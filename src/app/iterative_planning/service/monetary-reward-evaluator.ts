@@ -24,7 +24,9 @@ export class MonetaryRewardEvaluatorService{
   computePayment(
     utilityProportion: number,
     minMoney: number | undefined,
-    maxMoney: number | undefined
+    maxMoney: number | undefined,
+    steps_proportions: number[] = [0.0, 0.5, 0.75, 1.0], //of utility to attain each payment step
+    steps_payments: number[] | undefined = undefined   // absolute payments, not proportions
   ): number {
 
     //
@@ -45,20 +47,30 @@ export class MonetaryRewardEvaluatorService{
         return 0.0;
     }
 
-    const maxBonus = maxMoney - minMoney;
+    if (steps_payments === undefined || steps_payments.length !== steps_proportions.length) {
+      steps_payments = steps_proportions.map((proportion, index) => minMoney + (proportion * (maxMoney - minMoney)));
+    }
 
-    if (utilityProportion < 0.5) {
-      return minMoney;
-    } else if (utilityProportion < 0.75) {
-      return minMoney + ((1/3) * maxBonus);
-    } else if (utilityProportion < 1.0) {
-      return minMoney + ((2/3) * maxBonus);
-    } else if (utilityProportion == 1.0) {
-      return minMoney + maxBonus;
+    // const maxBonus = maxMoney - minMoney;
+
+    // if (utilityProportion < 0.5) {
+    //   return minMoney;
+    // } else if (utilityProportion < 0.75) {
+    //   return minMoney + ((1/3) * maxBonus);
+    // } else if (utilityProportion < 1.0) {
+    //   return minMoney + ((2/3) * maxBonus);
+    // } else if (utilityProportion == 1.0) {
+    //   return minMoney + maxBonus;
+    // }
+
+    for (let i = 0; i < steps_proportions.length; i++) {
+      if (utilityProportion < steps_proportions[i]) {
+        return i > 0 ? steps_payments[i-1] : steps_payments[0];
+      }
     }
 
     // Catch-all
-    return 0.0;
+    return steps_payments[steps_payments.length - 1];
   }
 
   //
