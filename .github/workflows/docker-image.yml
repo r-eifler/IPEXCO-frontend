@@ -50,4 +50,4 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: user-study-llm
+          tags: ${{ vars.DOCKER_USERNAME }}/${{ vars.DOCKER_HUB_REPOSITORY }}:user-study-llm
