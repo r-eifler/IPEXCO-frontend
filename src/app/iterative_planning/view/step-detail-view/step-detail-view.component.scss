@@ -17,3 +17,14 @@
     display: grid;
   }
 }
+
+.large-icon-button {
+  transform: scale(1.5);
+  margin: 0 8px;
+
+  ::ng-deep .mat-icon {
+    font-size: 28px;
+    width: 28px;
+    height: 28px;
+  }
+}
