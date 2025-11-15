@@ -10,7 +10,7 @@
             </app-page-section-content>
         </app-page-section>
         <app-page-section>
-            <!-- <app-page-section-title>
+            <app-page-section-title>
                 Video Tutorial
             </app-page-section-title>
             <app-page-section-content>
@@ -18,19 +18,32 @@
                     Watch this video tutorial for a comprehensive introduction to the tool:
                 </p>
                 <div class="video-container">
+                    @if(HybridManual()){
                     <iframe 
                         width="560" 
                         height="315" 
-                        src="https://www.youtube.com/embed/a9RmhRUab7g" 
+                        src="https://www.youtube.com/embed/uCIlF0oyp4c" 
                         title="YouTube video tutorial" 
                         frameborder="0" 
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
                         allowfullscreen>
                     </iframe>
+                    }
+                    @else {
+                    <iframe 
+                        width="560" 
+                        height="315" 
+                        src="https://www.youtube.com/embed/kC1_5A7PJeQ" 
+                        title="YouTube video tutorial" 
+                        frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                        allowfullscreen>
+                    </iframe>
+                    }
                 </div>
             </app-page-section-content>
         </app-page-section>
-        <app-page-section> -->
+        <app-page-section>
             <app-page-section-title>
 
                 Iterative Planning
