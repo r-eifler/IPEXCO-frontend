@@ -34,7 +34,10 @@ export class UserStudyExecutionExternalViewComponent {
   form = this.fb.group({
     code: this.fb.control<string | null>(null)
   })
-  enteredCode$ = this.form.controls.code.valueChanges;
+  enteredCode$ = this.form.controls.code.valueChanges.pipe(
+    startWith(''),
+    shareReplay(1)
+  );
 
   store = inject(Store);
   dialog = inject(MatDialog);
@@ -56,8 +59,10 @@ export class UserStudyExecutionExternalViewComponent {
   )
 
   codeValid$ = combineLatest([this.code$, this.enteredCode$]).pipe(
-    filterListNotNullOrUndefined(),
-    map(([code, enteredCode]) => code === enteredCode),
+    map(([expectedCode, enteredCode]) => {
+      if (!expectedCode || !enteredCode) return false;
+      return expectedCode.trim().toLowerCase() === enteredCode.trim().toLowerCase();
+    }),
     startWith(false),
     shareReplay(1)
   );
