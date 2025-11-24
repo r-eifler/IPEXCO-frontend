@@ -5,7 +5,7 @@ import { MatAnchor, MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
 import { Store } from '@ngrx/store';
-import { combineLatest, map, shareReplay, startWith, take } from 'rxjs';
+import { map, take } from 'rxjs';
 import { PageModule } from 'src/app/shared/components/page/page.module';
 import { UserStudyFormStep, UserStudyStepType } from 'src/app/user_study/domain/user-study';
 import { ActionType } from '../../domain/user-action';
@@ -33,10 +33,6 @@ export class UserStudyExecutionExternalViewComponent {
   form = this.fb.group({
     code: this.fb.control<string | null>(null)
   })
-  enteredCode$ = this.form.controls.code.valueChanges.pipe(
-    startWith(''),
-    shareReplay(1)
-  );
 
   store = inject(Store);
   dialog = inject(MatDialog);
@@ -55,15 +51,6 @@ export class UserStudyExecutionExternalViewComponent {
     map(s => s?.content.code ?? null)
   )
 
-  codeValid$ = combineLatest([this.code$, this.enteredCode$]).pipe(
-    map(([expectedCode, enteredCode]) => {
-      if (!expectedCode || !enteredCode) return false;
-      return expectedCode.trim().toLowerCase() === enteredCode.trim().toLowerCase();
-    }),
-    startWith(false),
-    shareReplay(1)
-  );
-
   constructor(){
     this.usesCode$.pipe(
       take(1)
@@ -71,26 +58,35 @@ export class UserStudyExecutionExternalViewComponent {
   }
 
   onClickLink(){
-    combineLatest([this.stepIndex$, this.step$]).pipe(take(1)).subscribe(([index, step]) =>
-      this.store.dispatch(logAction({
-        action: {
-          type: ActionType.OPEN_EXTERNAL_LINK, 
-          data: {
-              stepIndex: index,
-              stepName: step?.name ?? 'Step without name'
+    this.store.select(selectExecutionUserStudyStepIndex).pipe(
+      take(1)
+    ).subscribe(index => {
+      this.step$.pipe(take(1)).subscribe(step => {
+        this.store.dispatch(logAction({
+          action: {
+            type: ActionType.OPEN_EXTERNAL_LINK, 
+            data: {
+                stepIndex: index,
+                stepName: step?.name ?? 'Step without name'
+            }
           }
-        }
-      }))
-    );
+        }));
+      });
+    });
     this.clickedLink = true;
   }
 
   onUnlock(){
-    this.codeValid$.pipe(take(1)).subscribe(
-      (valid) => {
-        if(valid){
-          this.store.dispatch(executionUnlockNextStep());
-        }
+    this.code$.pipe(take(1)).subscribe(expectedCode => {
+      const enteredCode = this.form.controls.code.value;
+
+      if (!expectedCode || !enteredCode || typeof expectedCode !== 'string' || typeof enteredCode !== 'string') return;
+      
+      const isValid = expectedCode.trim().toLowerCase() === enteredCode.trim().toLowerCase();
+      
+      if(isValid){
+        this.store.dispatch(executionUnlockNextStep());
+      }
     });
   }
 }
