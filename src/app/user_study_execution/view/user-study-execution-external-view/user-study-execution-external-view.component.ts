@@ -6,7 +6,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
 import { Store } from '@ngrx/store';
 import { combineLatest, map, shareReplay, startWith, take } from 'rxjs';
-import { filterListNotNullOrUndefined, filterNotNullOrUndefined } from 'src/app/shared/common/check_null_undefined';
 import { PageModule } from 'src/app/shared/components/page/page.module';
 import { UserStudyFormStep, UserStudyStepType } from 'src/app/user_study/domain/user-study';
 import { ActionType } from '../../domain/user-action';
@@ -49,13 +48,11 @@ export class UserStudyExecutionExternalViewComponent {
   clickedLink = false;
 
   usesCode$ = this.step$.pipe(
-    filterNotNullOrUndefined(),
-    map(s => s.content.code !== null)
+    map(s => s !== null && s.content.code !== null)
   )
 
   code$ = this.step$.pipe(
-    filterNotNullOrUndefined(),
-    map(s => s.content.code)
+    map(s => s?.content.code ?? null)
   )
 
   codeValid$ = combineLatest([this.code$, this.enteredCode$]).pipe(
