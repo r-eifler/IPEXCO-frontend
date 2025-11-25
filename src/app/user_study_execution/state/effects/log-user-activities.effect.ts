@@ -252,6 +252,32 @@ export class LogUserActivitiesEffect{
         })
     ));
 
+    public questionAskedLLMmultiple$ = createEffect(() => this.actions$.pipe(
+        ofType(multipleQuestionsPosedLLM),
+        concatLatestFrom(() => [
+            this.store.select(selectIterativePlanningProject),
+            this.store.select(selectIterativePlanningSelectedStepId),
+        ]),
+        mergeMap(([{questions, naturalLanguageQuestion}, project, iterationStepId]) => {
+            console.log('LLM Multiple Questions Asked:', {
+                questions: questions.map(question => question.propertyId),
+                questionTypes: questions.map(question => question.questionType),
+                demoId: project?._id ?? 'Missing ID',
+                stepId: iterationStepId
+            });
+            
+            return questions.map(question => logAction({action: {
+                type: ActionType.ASK_QUESTION, 
+                data: {
+                    demoId: project?._id ?? 'Missing ID',
+                    stepId: iterationStepId,
+                    propertyId: question.propertyId ?? null,
+                    questionType: question.questionType,
+                }
+            }}))
+        })
+    ));
+
     public questionAskedLLMTranslation$ = createEffect(() => this.actions$.pipe(
         ofType(questionPosedLLM),
         concatLatestFrom(() => [
