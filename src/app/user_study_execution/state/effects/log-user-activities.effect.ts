@@ -117,7 +117,7 @@ export class LogUserActivitiesEffect{
 
     public iterStepCreated$ = createEffect(() => this.actions$.pipe(
         ofType(createIterationStepSuccess),
-        switchMap(({iterationStep}) => [logAction({action: {
+        mergeMap(({iterationStep}) => [logAction({action: {
                 type: ActionType.CREATE_ITERATION_STEP, 
                 data: {
                     stepId: iterationStep._id,
@@ -133,7 +133,7 @@ export class LogUserActivitiesEffect{
             this.store.select(selectExecutionUserStudyPendingIterationSteps),
             this.store.select(selectIterativePlanningProperties)
         ]),
-        switchMap(([{iterationSteps}, pendingStepIdes, planProperties]) => 
+        mergeMap(([{iterationSteps}, pendingStepIdes, planProperties]) => 
             iterationSteps.filter(step => step?._id && pendingStepIdes.includes(step._id) && step.status != StepStatus.UNKNOWN).
             flatMap(step => [
                 logPlanComputationFinished({iterationStepId: step._id ?? 'Missing ID'}),
@@ -154,7 +154,7 @@ export class LogUserActivitiesEffect{
     public cancelPlanForIterStep$ = createEffect(() => this.actions$.pipe(
         ofType(cancelPlanComputationAndIterationStep),
         concatLatestFrom(({iterationStepId}) => [this.store.select(selectIterationStepById(iterationStepId))]),
-        switchMap(([{iterationStepId}, step]) => [
+        mergeMap(([{iterationStepId}, step]) => [
             logAction({action: {
                 type: ActionType.CANCEL_PLAN_FOR_ITERATION_STEP, 
                 data: {
@@ -168,7 +168,7 @@ export class LogUserActivitiesEffect{
     public inspectIterStep$ = createEffect(() => this.actions$.pipe(
         ofType(selectIterationStep),
         concatLatestFrom(({iterationStepId}) => [this.store.select(selectIterationStepById(iterationStepId))]),
-        switchMap(([{iterationStepId}, step]) => [
+        mergeMap(([{iterationStepId}, step]) => [
             logAction({action: {
                 type: ActionType.INSPECT_ITERATION_STEP, 
                 data: {
@@ -189,7 +189,7 @@ export class LogUserActivitiesEffect{
             this.store.select(selectIterativePlanningSelectedStepId),
             this.store.select(selectIterativePlanningProject)
         ]),
-        switchMap(([{question}, iterationStepId, project]) => [
+        mergeMap(([{question}, iterationStepId, project]) => [
             logAction({action: {
                 type: ActionType.ASK_QUESTION, 
                 data: {
@@ -209,7 +209,7 @@ export class LogUserActivitiesEffect{
             this.store.select(selectIterativePlanningProperties),
             this.store.select(selectIterativePlanningProject)
         ]),
-        switchMap(([{answer}, planProperties, project]) => [
+        mergeMap(([{answer}, planProperties, project]) => [
             logAction({action: {
                 type: ActionType.EXPLANATION, 
                 data: {
@@ -321,32 +321,32 @@ export class LogUserActivitiesEffect{
 
     public sentMessageToQT$ = createEffect(() => this.actions$.pipe(
         ofType(sendMessageToLLMQuestionTranslator),
-        switchMap(({question}) => [logAction({action: {type: ActionType.ASK_QT, data: {question}}})])
+        mergeMap(({question}) => [logAction({action: {type: ActionType.ASK_QT, data: {question}}})])
     ));
     
     public sentMessageToQTSuccess$ = createEffect(() => this.actions$.pipe(
         ofType(sendMessageToLLMQuestionTranslatorSuccess),
-        switchMap(({duration}) => [logAction({action: {type: ActionType.ANSWER_QT, data: {duration}}})])
+        mergeMap(({duration}) => [logAction({action: {type: ActionType.ANSWER_QT, data: {duration}}})])
     ));
 
     public sentMessageToQTFailure$ = createEffect(() => this.actions$.pipe(
         ofType(sendMessageToLLMQuestionTranslatorFailure),
-        switchMap(({}) => [logAction({action: {type: ActionType.FAILED_QT, data: {}}})])
+        mergeMap(({}) => [logAction({action: {type: ActionType.FAILED_QT, data: {}}})])
     ));
 
     public sentMessageToET$ = createEffect(() => this.actions$.pipe(
         ofType(logSendMessageToET),
-        switchMap(({question, explanationMUGS, explanationMGCS}) => [logAction({action: {type: ActionType.ASK_ET, data: {question, explanationMUGS, explanationMGCS}}})])
+        mergeMap(({question, explanationMUGS, explanationMGCS}) => [logAction({action: {type: ActionType.ASK_ET, data: {question, explanationMUGS, explanationMGCS}}})])
     ));
 
     public sentMessageToETSuccess$ = createEffect(() => this.actions$.pipe(
         ofType(sendMessageToLLMExplanationTranslatorSuccess),
-        switchMap(({response, duration}) => [logAction({action: {type: ActionType.ANSWER_ET, data: {response, duration}}})])
+        mergeMap(({response, duration}) => [logAction({action: {type: ActionType.ANSWER_ET, data: {response, duration}}})])
     ));
 
     public sentMessageToETFailure$ = createEffect(() => this.actions$.pipe(
         ofType(sendMessageToLLMExplanationTranslatorFailure),
-        switchMap(({}) => [logAction({action: {type: ActionType.FAILED_ET, data: {}}})])
+        mergeMap(({}) => [logAction({action: {type: ActionType.FAILED_ET, data: {}}})])
     ));
 
     public sentDirectResponseQT$ = createEffect(() => this.actions$.pipe(
@@ -389,7 +389,7 @@ export class LogUserActivitiesEffect{
         ofType(executionUserStudySubmit),
         concatLatestFrom(() => [this.store.select(selectIterativePlanningProject)]),
         filter(([_, project]) => project?.settings.interfaces.explanationInterfaceType === 'LLM_CHAT'),
-        switchMap(([_, project]) => this.service.logLLMContext$().pipe(
+        mergeMap(([_, project]) => this.service.logLLMContext$().pipe(
             map(() => logActionSuccess()),
             catchError(() => of(logActionFailure()))
         ))
@@ -402,7 +402,7 @@ export class LogUserActivitiesEffect{
         concatLatestFrom(() => [
             this.store.select(selectIterativePlanningProject),
         ]),
-        switchMap(([{iterationStepId, questions}, project]) => [
+        mergeMap(([{iterationStepId, questions}, project]) => [
             logAction({action: {
                 type: ActionType.SUGGESTED_QUESTIONS, 
                 data: {
@@ -419,7 +419,7 @@ export class LogUserActivitiesEffect{
         concatLatestFrom(() => [
             this.store.select(selectIterativePlanningProject),
         ]),
-        switchMap(([{iterationStepId, question}, project]) => [
+        mergeMap(([{iterationStepId, question}, project]) => [
             logAction({action: {
                 type: ActionType.ASKED_QUESTION_BUTTON_CLICKED, 
                 data: {
