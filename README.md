@@ -38,6 +38,26 @@ To run the back-end server natively we refer to the
 To set up the back-end server and the pre-build docker images see 
 [Docker](setup/README.md).
 
+## Setup for MacOS (ARM)
+On MacOS network mode host is not supported. Therefore, you need a few changes to make the docker-compose work.
+
+1. Remove all the `network_mode: "host"` lines in the `docker-compose.yml` file.
+2. Define a new network to use for the communication between the services
+   ```yaml 
+    networks:
+      app-net:
+        driver: bridge
+   ```
+3. In every `.env` file change the `MONGO_DB` value to `MONGO_DB=mongodb://mongo:27017/<whatever_you_want>`.
+4. In the `docker-compose.yml` file, add
+   ```yaml 
+    networks:
+      - app-net:
+   ```    
+   to all services.
+
+#### Note 
+To register à service, you need to directly refer to its name instead of localhost. e.g If you named your planner **planner**, register using the url `http://planner:<port>`
 
 ## Platform Usage
 
