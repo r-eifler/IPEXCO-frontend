@@ -4,6 +4,7 @@ export enum ServiceType {
     PLANNER = 'PLANNER',
     EXPLAINER = 'EXPLAINER',
     PROPERTY_CHECKER = 'PROPERTY_CHECKER',
+    PLANPILOT = 'PLANPILOT',
     TESTER = 'TESTER',
     VERIFIER = 'VERIFIER',
     NONE = 'NONE'
@@ -37,5 +38,3 @@ export const ServiceZ = ServiceBaseZ.merge(
 )
 
 export type Service = zinfer<typeof ServiceZ>;
-
-

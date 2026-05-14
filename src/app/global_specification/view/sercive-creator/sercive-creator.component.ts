@@ -31,6 +31,7 @@ export class ServiceCreatorComponent {
     ServiceType.PLANNER,
     ServiceType.EXPLAINER,
     ServiceType.PROPERTY_CHECKER,
+    ServiceType.PLANPILOT,
     ServiceType.VERIFIER,
     ServiceType.TESTER
   ]

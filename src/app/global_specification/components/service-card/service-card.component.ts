@@ -23,6 +23,7 @@ export class ServiceCardComponent {
     [ServiceType.TESTER]: 'bug_report',
     [ServiceType.VERIFIER]: 'verified',
     [ServiceType.PROPERTY_CHECKER]: 'check',
+    [ServiceType.PLANPILOT]: 'account_tree',
     [ServiceType.NONE]: ''
   }
 

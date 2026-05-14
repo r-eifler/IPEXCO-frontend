@@ -51,6 +51,7 @@ export class SettingsComponent {
   planners = computed(() => this.services()?.filter(s => s.type == ServiceType.PLANNER));
   explainer = computed(() => this.services()?.filter(s => s.type == ServiceType.EXPLAINER));
   propertyChecker = computed(() => this.services()?.filter(s => s.type == ServiceType.PROPERTY_CHECKER));
+  planpilot = computed(() => this.services()?.filter(s => s.type == ServiceType.PLANPILOT));
   tester = computed(() => this.services()?.filter(s => s.type == ServiceType.TESTER));
   verifier = computed(() => this.services()?.filter(s => s.type == ServiceType.VERIFIER));
 
@@ -88,6 +89,7 @@ export class SettingsComponent {
       planners: this.fb.control<string[]>([], {validators: [Validators.required], nonNullable: true}),
       explainer: this.fb.control<string[]>([], {validators: [Validators.required], nonNullable: true}),
       propertyChecker: this.fb.control<string[]>([], {validators: [Validators.required], nonNullable: true}),
+      planpilot: this.fb.control<string[]>([]),
       tester: this.fb.control<string[]>([]),
       verifier: this.fb.control<string[]>([]),
     }),
@@ -157,6 +159,9 @@ export class SettingsComponent {
 			);
 			this.form.controls.services.controls.propertyChecker.setValue(
 				this.propertyChecker()?.filter(s => settings.services.services.includes(s._id)).map(s => s._id) || []
+			);
+			this.form.controls.services.controls.planpilot.setValue(
+				this.planpilot()?.filter(s => settings.services.services.includes(s._id)).map(s => s._id) || []
 			);
 			this.form.controls.services.controls.tester.setValue(
 				this.tester()?.filter(s => settings.services.services.includes(s._id)).map(s => s._id) || []
@@ -256,6 +261,7 @@ export class SettingsComponent {
         		  ...this.form.controls.services.controls.planners.value ,
             	...this.form.controls.services.controls.explainer.value,
               ...this.form.controls.services.controls.propertyChecker.value,
+              ...(this.form.controls.services.controls.planpilot.value ?? []),
               ...(this.form.controls.services.controls.tester.value ?? []),
               ...(this.form.controls.services.controls.verifier.value ?? []),
           	].filter(e => e !== null)
