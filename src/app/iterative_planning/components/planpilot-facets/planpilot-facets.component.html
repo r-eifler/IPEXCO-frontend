@@ -1,0 +1,74 @@
+<section class="planpilot">
+  <h3>PlanPilot – Facet Navigation</h3>
+
+  <!-- Start form -->
+  <form [formGroup]="startForm" (ngSubmit)="startSession()" class="start-form">
+    <mat-form-field>
+      <mat-label>Horizon</mat-label>
+      <input matInput type="number" formControlName="horizon" min="1" />
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Encoding</mat-label>
+      <mat-select formControlName="encoding">
+        @for (enc of encodings; track enc) {
+          <mat-option [value]="enc">{{ enc }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-checkbox formControlName="abstractTimeSteps">Abstract time steps</mat-checkbox>
+
+    <button
+      mat-raised-button
+      color="primary"
+      type="submit"
+      [disabled]="(loading$ | async) || startForm.invalid"
+    >
+      Start session
+    </button>
+  </form>
+
+  <!-- Status -->
+  @if (loading$ | async) {
+    <p class="status">Loading …</p>
+  }
+  @if (error$ | async; as error) {
+    <p class="status status--error">Error: {{ error }}</p>
+  }
+
+  <!-- Facet list -->
+  @if (facets$ | async; as facets) {
+    @if (facets.length > 0) {
+      <ul class="facet-list">
+        @for (facet of sortByTimestep(facets); track facet.id) {
+          <li class="facet">
+            <div class="facet__head">
+              <span class="facet__label">{{ facet.label }}</span>
+              <span class="facet__timestep">t = {{ facet.timestep ?? '–' }}</span>
+            </div>
+
+            <mat-button-toggle-group
+              [value]="facet.selectionState"
+              (change)="onSelectionChange(facet, $event.value)"
+              [disabled]="(loading$ | async) ?? false"
+            >
+              <mat-button-toggle [value]="SelectionState.NEGATIVE">Forbid</mat-button-toggle>
+              <mat-button-toggle [value]="SelectionState.NEUTRAL">Neutral</mat-button-toggle>
+              <mat-button-toggle [value]="SelectionState.POSITIVE">Keep</mat-button-toggle>
+            </mat-button-toggle-group>
+
+            @if (facet.remaining; as remaining) {
+              <span class="facet__remaining">
+                remaining: +{{ remaining.solution.positive ?? '–' }} /
+                −{{ remaining.solution.negative ?? '–' }} plans
+              </span>
+            }
+          </li>
+        }
+      </ul>
+    } @else {
+      <p class="status">No facets yet – start a session.</p>
+    }
+  }
+</section>
