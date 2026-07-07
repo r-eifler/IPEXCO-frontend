@@ -5,6 +5,8 @@
 @let interfaceType = explanationInterfaceType$ | async;
 @let hasUnsolvedSoftGoals = hasUnsolvedSoftGoals$ | async;
 @let isFailed = isFailed$ | async;
+@let isSolved = isSolved$ | async;
+@let stepId = stepId$ | async;
 
 <app-page>
   <app-breadcrumb>
@@ -244,6 +246,20 @@
           }
         </app-page-section-content>
       </app-page-section>
+
+      @if (isSolved && stepId) {
+      <app-page-section>
+        <app-page-section-title>PlanPilot Navigation</app-page-section-title>
+        <app-page-section-content>
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>Confirm facets</mat-panel-title>
+            </mat-expansion-panel-header>
+            <app-planpilot-facets [iterationStepId]="stepId"></app-planpilot-facets>
+          </mat-expansion-panel>
+        </app-page-section-content>
+      </app-page-section>
+      }
     </app-page-section-list>
   </app-page-content>
 </app-page>

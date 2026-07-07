@@ -12,7 +12,10 @@ import { PlannerMonitoringService } from './iterative_planning/service/planner-m
 import { PlannerService } from './iterative_planning/service/planner.service';
 import { IterativePlanningProjectService } from './iterative_planning/service/project.service';
 import { iterativePlanningFeatureEffects } from './iterative_planning/state/effects/effects';
+import { PlanPilotEffect } from './iterative_planning/state/effects/planpilot.effect';
 import { iterativePlanningFeature } from './iterative_planning/state/iterative-planning.feature';
+import { planPilotFeature } from './iterative_planning/state/planpilot.feature';
+import { PlanPilotService } from './iterative_planning/service/planpilot.service';
 import { LLMService } from './LLM/service/llm.service';
 import { AuthGuard } from './route-guards/auth-guard.guard';
 import { FailureEffect } from './shared/effects/failure.effect';
@@ -81,6 +84,9 @@ export const routes: Routes = [
         providers: [
           provideState(iterativePlanningFeature),
           provideEffects(iterativePlanningFeatureEffects),
+          provideState(planPilotFeature),
+          provideEffects([PlanPilotEffect]),
+          PlanPilotService,
           IterativePlanningDomainSpecificationService,
           ExplainerMonitoringService,
           ExplainerService,
