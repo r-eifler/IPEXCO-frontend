@@ -25,10 +25,12 @@ import {
   startPlanPilotSession,
 } from "../../state/planpilot.actions";
 import {
+  selectDecisions,
   selectError,
   selectFacets,
   selectLoading,
   selectRunId,
+  selectSolutionCount,
 } from "../../state/planpilot.feature";
 
 @Component({
@@ -57,6 +59,8 @@ export class PlanPilotFacetsComponent {
   // Read from the store.
   runId$ = this.store.select(selectRunId);
   facets$ = this.store.select(selectFacets);
+  decisions$ = this.store.select(selectDecisions);
+  solutionCount$ = this.store.select(selectSolutionCount);
   loading$ = this.store.select(selectLoading);
   error$ = this.store.select(selectError).pipe(map((err) => this.toMessage(err)));
 
@@ -94,6 +98,13 @@ export class PlanPilotFacetsComponent {
         },
       }),
     );
+  }
+
+  // Undo a committed decision: set it back to neutral.
+  // Both lists update: the reducer removes it from decisions and the backend
+  // returns it as an open facet again.
+  deselect(decision: PlanPilotFacet): void {
+    this.onSelectionChange(decision, PlanPilotSelectionState.NEUTRAL);
   }
 
   sortByTimestep(facets: PlanPilotFacet[]): PlanPilotFacet[] {

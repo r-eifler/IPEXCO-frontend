@@ -37,38 +37,89 @@
     <p class="status status--error">Error: {{ error }}</p>
   }
 
-  <!-- Facet list -->
-  @if (facets$ | async; as facets) {
-    @if (facets.length > 0) {
-      <ul class="facet-list">
-        @for (facet of sortByTimestep(facets); track facet.id) {
-          <li class="facet">
-            <div class="facet__head">
-              <span class="facet__label">{{ facet.label }}</span>
-              <span class="facet__timestep">t = {{ facet.timestep ?? '–' }}</span>
-            </div>
-
-            <mat-button-toggle-group
-              [value]="facet.selectionState"
-              (change)="onSelectionChange(facet, $event.value)"
-              [disabled]="(loading$ | async) ?? false"
-            >
-              <mat-button-toggle [value]="SelectionState.NEGATIVE">Forbid</mat-button-toggle>
-              <mat-button-toggle [value]="SelectionState.NEUTRAL">Neutral</mat-button-toggle>
-              <mat-button-toggle [value]="SelectionState.POSITIVE">Keep</mat-button-toggle>
-            </mat-button-toggle-group>
-
-            @if (facet.remaining; as remaining) {
-              <span class="facet__remaining">
-                remaining: +{{ remaining.solution.positive ?? '–' }} /
-                −{{ remaining.solution.negative ?? '–' }} plans
-              </span>
-            }
-          </li>
-        }
-      </ul>
-    } @else {
-      <p class="status">No facets yet – start a session.</p>
-    }
+  <!-- Remaining plans counter -->
+  @let solutionCount = solutionCount$ | async;
+  @if (solutionCount !== null && solutionCount !== undefined) {
+    <p class="remaining-plans">Remaining plans: {{ solutionCount }}</p>
   }
+
+  <!-- Two columns: open choices (left) and made decisions (right) -->
+  <div class="columns">
+    <!-- Left column: all open decisions -->
+    <div class="column">
+      <h4 class="column__title">Open decisions</h4>
+      @if (facets$ | async; as facets) {
+        @if (facets.length > 0) {
+          <ul class="facet-list">
+            @for (facet of sortByTimestep(facets); track facet.id) {
+              <li class="facet">
+                <div class="facet__head">
+                  <span class="facet__label">{{ facet.label }}</span>
+                  <span class="facet__timestep">t = {{ facet.timestep ?? '–' }}</span>
+                </div>
+
+                <mat-button-toggle-group
+                  [value]="facet.selectionState"
+                  (change)="onSelectionChange(facet, $event.value)"
+                  [disabled]="(loading$ | async) ?? false"
+                >
+                  <mat-button-toggle [value]="SelectionState.NEGATIVE">Forbid</mat-button-toggle>
+                  <mat-button-toggle [value]="SelectionState.NEUTRAL">Neutral</mat-button-toggle>
+                  <mat-button-toggle [value]="SelectionState.POSITIVE">Keep</mat-button-toggle>
+                </mat-button-toggle-group>
+
+                @if (facet.remaining; as remaining) {
+                  <span class="facet__remaining">
+                    remaining: +{{ remaining.solution.positive ?? '–' }} /
+                    −{{ remaining.solution.negative ?? '–' }} plans
+                  </span>
+                }
+              </li>
+            }
+          </ul>
+        } @else {
+          <p class="status">No facets yet – start a session.</p>
+        }
+      }
+    </div>
+
+    <!-- Right column: made decisions -->
+    <div class="column">
+      <h4 class="column__title">Made decisions</h4>
+      @if (decisions$ | async; as decisions) {
+        @if (decisions.length > 0) {
+          <ul class="facet-list">
+            @for (decision of sortByTimestep(decisions); track decision.id) {
+              <li class="facet facet--decision">
+                <div class="facet__head">
+                  <span class="facet__label">{{ decision.label }}</span>
+                  <span class="facet__timestep">t = {{ decision.timestep ?? '–' }}</span>
+                </div>
+
+                <div class="facet__decision-row">
+                  <span
+                    class="facet__badge"
+                    [class.facet__badge--keep]="decision.selectionState === SelectionState.POSITIVE"
+                    [class.facet__badge--forbid]="decision.selectionState === SelectionState.NEGATIVE"
+                  >
+                    {{ decision.selectionState === SelectionState.POSITIVE ? 'Keep' : 'Forbid' }}
+                  </span>
+                  <button
+                    mat-stroked-button
+                    type="button"
+                    (click)="deselect(decision)"
+                    [disabled]="(loading$ | async) ?? false"
+                  >
+                    Undo
+                  </button>
+                </div>
+              </li>
+            }
+          </ul>
+        } @else {
+          <p class="status">No decisions made yet.</p>
+        }
+      }
+    </div>
+  </div>
 </section>

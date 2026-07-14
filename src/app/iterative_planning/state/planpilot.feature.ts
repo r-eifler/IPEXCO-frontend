@@ -11,6 +11,8 @@ export const {
   reducer,
   selectRunId,
   selectFacets,
+  selectDecisions,
+  selectSolutionCount,
   selectLoading,
   selectError,
 } = planPilotFeature;

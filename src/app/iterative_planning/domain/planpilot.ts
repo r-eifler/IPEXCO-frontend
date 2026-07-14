@@ -81,6 +81,38 @@ export const StartPlanPilotSessionResponseZ = object({
 
 export type StartPlanPilotSessionResponse = zinfer<typeof StartPlanPilotSessionResponseZ>;
 
+export enum PlanPilotQueryType {
+  FACETS = 'facets',
+  FACET_COUNT = 'facetCount',
+  FACET_REDUCTION = 'facetReduction',
+  SOLUTION = 'solution',
+  SOLUTION_COUNT = 'solutionCount',
+  SOLUTION_REDUCTION = 'solutionReduction',
+}
+
+export const PlanPilotQueryTypeZ = nativeEnum(PlanPilotQueryType);
+
+export const PlanPilotQueryResultZ = object({
+  type: PlanPilotQueryTypeZ,
+  value: number().optional(),
+  facets: array(PlanPilotFacetZ).optional(),
+  solutions: array(PlanPilotSolutionZ).optional(),
+});
+
+export type PlanPilotQueryResult = zinfer<typeof PlanPilotQueryResultZ>;
+
+export const QueryPlanPilotSessionResponseZ = object({
+  runId: string(),
+  result: PlanPilotQueryResultZ,
+});
+
+export type QueryPlanPilotSessionResponse = zinfer<typeof QueryPlanPilotSessionResponseZ>;
+
+export interface QueryPlanPilotSessionRequest {
+  type: PlanPilotQueryType;
+  solutionNumber?: number;
+}
+
 export interface StartPlanPilotSessionRequest {
   iterationStepId: string;
   horizon: number;

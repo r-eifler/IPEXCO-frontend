@@ -6,6 +6,9 @@ import { environment } from "src/environments/environment";
 import {
   PlanPilotFacetsResponse,
   PlanPilotFacetsResponseZ,
+  QueryPlanPilotSessionRequest,
+  QueryPlanPilotSessionResponse,
+  QueryPlanPilotSessionResponseZ,
   SelectPlanPilotFacetRequest,
   StartPlanPilotSessionRequest,
   StartPlanPilotSessionResponse,
@@ -33,6 +36,12 @@ export class PlanPilotService {
   selectFacet$(sessionId: string, request: SelectPlanPilotFacetRequest): Observable<PlanPilotFacetsResponse> {
     return this.http.post<unknown>(this.BASE_URL + "sessions/" + sessionId + "/facets/select", request).pipe(
       map((data) => PlanPilotFacetsResponseZ.parse(data)),
+    );
+  }
+
+  query$(sessionId: string, request: QueryPlanPilotSessionRequest): Observable<QueryPlanPilotSessionResponse> {
+    return this.http.post<unknown>(this.BASE_URL + "sessions/" + sessionId + "/query", request).pipe(
+      map((data) => QueryPlanPilotSessionResponseZ.parse(data)),
     );
   }
 

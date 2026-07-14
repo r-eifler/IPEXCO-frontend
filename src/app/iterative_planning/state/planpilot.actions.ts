@@ -33,3 +33,16 @@ export const selectPlanPilotFacetFailure = createAction(
   "[planpilot] select facet failure",
   props<{ err: unknown }>(),
 );
+
+// Query how many solutions (plans) are still consistent with the decisions.
+export const queryPlanPilotSolutionCount = createAction(
+  "[planpilot] query solution count",
+);
+export const queryPlanPilotSolutionCountSuccess = createAction(
+  "[planpilot] query solution count success",
+  props<{ count: number | undefined }>(),
+);
+export const queryPlanPilotSolutionCountFailure = createAction(
+  "[planpilot] query solution count failure",
+  props<{ err: unknown }>(),
+);
