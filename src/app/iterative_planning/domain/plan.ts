@@ -26,6 +26,12 @@ export const PlanZ = object({
 
 export type Plan = zinfer<typeof PlanZ>;
 
+export function hasPlanResult(plan: Plan | null | undefined): boolean {
+  return plan?.status === PlanRunStatus.SOLVED
+    && Array.isArray(plan.actions)
+    && plan.actions.length > 0;
+}
+
 export interface State {
   values: PDDLFact[]
 }

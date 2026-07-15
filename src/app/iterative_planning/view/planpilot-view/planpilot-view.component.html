@@ -1,0 +1,291 @@
+@let project = project$ | async;
+@let step = step$ | async;
+@let solved = solved$ | async;
+
+<app-page>
+  <app-breadcrumb>
+    <a app-breadcrumb-item [routerLink]="['/project/' + project?._id]"><mat-icon>home</mat-icon></a>
+    <a app-breadcrumb-item [routerLink]="['..']">{{ step?.name }}</a>
+    <app-breadcrumb-item>PlanPilot</app-breadcrumb-item>
+  </app-breadcrumb>
+
+  <app-page-title>
+    Plan timeline and alternatives
+    <app-page-title-action>
+      <button mat-icon-button type="button" aria-label="Toggle fullscreen" matTooltip="Toggle fullscreen" (click)="toggleCanvasExpanded()">
+        <mat-icon>{{ canvasExpanded ? 'fullscreen_exit' : 'fullscreen' }}</mat-icon>
+      </button>
+      <a mat-icon-button aria-label="Back to iteration step" matTooltip="Back to iteration step" [routerLink]="['..']">
+        <mat-icon>close</mat-icon>
+      </a>
+    </app-page-title-action>
+  </app-page-title>
+
+  <app-page-content>
+    @if (!solved) {
+      <app-empty-state-section>
+        <span>Solve this iteration step and produce a plan with actions before exploring its plan space.</span>
+        <mat-icon>account_tree</mat-icon>
+      </app-empty-state-section>
+    } @else {
+      <section class="planpilot-workbench" [class.canvas-expanded]="canvasExpanded">
+        <div class="canvas-stage">
+          @if (isBusy) {
+            <mat-progress-bar class="workbench-progress" mode="indeterminate"></mat-progress-bar>
+          }
+
+          <app-planpilot-graph
+            [facets]="graphFacets"
+            [connections]="graphConnections"
+            [selectedFacetId]="inspectedFacetId"
+            [horizon]="displayedSessionHorizon"
+            (facetSelected)="selectFacetFromGraph($event)"
+          ></app-planpilot-graph>
+
+          <div class="canvas-toolbar" aria-label="Timeline controls">
+            @if (canvasExpanded) {
+              <button mat-icon-button type="button" aria-label="Exit fullscreen" matTooltip="Exit fullscreen (Esc)" (click)="toggleCanvasExpanded()"><mat-icon>fullscreen_exit</mat-icon></button>
+              <span class="toolbar-divider" aria-hidden="true"></span>
+            }
+            <button mat-icon-button type="button" aria-label="Zoom in" matTooltip="Zoom in" (click)="zoomIn()"><mat-icon>add</mat-icon></button>
+            <button mat-icon-button type="button" aria-label="Zoom out" matTooltip="Zoom out" (click)="zoomOut()"><mat-icon>remove</mat-icon></button>
+            <button mat-icon-button type="button" aria-label="Focus displayed plan" matTooltip="Focus displayed plan" (click)="graph?.fitGraph()"><mat-icon>route</mat-icon></button>
+            <button mat-icon-button type="button" aria-label="Fit all facets" matTooltip="Fit all facets" (click)="graph?.fitAllGraph()"><mat-icon>fit_screen</mat-icon></button>
+          </div>
+
+          <div class="graph-legend" aria-label="Displayed plan legend">
+            <strong>Legend</strong>
+            <span class="connection-note">Only the green plan has arrows. An empty timestep has no action.</span>
+            <span><i class="node-key solution-key"></i>Displayed plan</span>
+            <span><i class="node-key required-key"></i>Required by you</span>
+            <span><i class="node-key available-key"></i>Alternative</span>
+            <span><i class="node-key forbidden-key"></i>Forbidden by you</span>
+            <span>✓ shows where a goal first becomes true.</span>
+            @if (hiddenGraphFacetCount) {
+              <div class="graph-limit">
+                <span>{{ displayedGraphDomainFacetCount }} of {{ totalGraphDomainFacetCount }} shown</span>
+                <button mat-button type="button" (click)="showMoreGraphFacets()">Show {{ hiddenGraphFacetCount > 50 ? 50 : hiddenGraphFacetCount }} more</button>
+                <button mat-button type="button" (click)="showAllGraphFacets()">Show all</button>
+                @if (graphLimitExpanded) {
+                  <button mat-button type="button" (click)="collapseGraphFacets()">Show fewer</button>
+                }
+              </div>
+            } @else if (graphLimitExpanded) {
+              <div class="graph-limit">
+                <span>All {{ totalGraphDomainFacetCount }} shown</span>
+                <button mat-button type="button" (click)="collapseGraphFacets()">Show fewer</button>
+              </div>
+            }
+          </div>
+
+          @if (sessionStatus === 'starting') {
+            <div class="canvas-state"><mat-icon>sync</mat-icon><strong>Preparing plan space…</strong></div>
+          } @else if (sessionStatus === 'failed') {
+            <div class="canvas-state error-state">
+              <mat-icon>error_outline</mat-icon>
+              <strong>Plan space could not be prepared</strong>
+              <span>{{ backendError }}</span>
+              <button mat-flat-button type="button" [disabled]="isBusy" (click)="startNewSession()">Retry</button>
+            </div>
+          } @else if (sessionStatus === 'ready' && graphFacets.length <= 1) {
+            <div class="canvas-state"><mat-icon>account_tree</mat-icon><strong>No replan alternatives found</strong></div>
+          }
+
+          @if (pendingSelectionCount) {
+            <div class="apply-bar" [class.loading]="selectionPending">
+              <div>
+                <strong>{{ pendingSelectionCount }} change{{ pendingSelectionCount === 1 ? '' : 's' }} ready</strong>
+                <span>Click Apply to update the plan.</span>
+              </div>
+              <button mat-button type="button" [disabled]="isBusy" (click)="discardStagedSelections()">Cancel</button>
+              <button mat-flat-button type="button" [disabled]="isBusy" (click)="computeStagedSelections()">
+                @if (selectionPending) { <mat-icon>sync</mat-icon> }
+                Apply
+              </button>
+            </div>
+          }
+        </div>
+
+        <aside class="facet-inspector" aria-label="Facet inspector">
+          <header class="inspector-header">
+            <div class="inspector-brand">
+              <span class="section-label">PlanPilot</span>
+              <strong>{{ dataSourceLabel }}</strong>
+            </div>
+          </header>
+
+          <div class="inspector-scroll">
+            @if (backendError) {
+              <div class="inline-message error-message"><mat-icon>error_outline</mat-icon><span>{{ backendError }}</span></div>
+            } @else if (lastSelectionMessage) {
+              <div class="inline-message"><mat-icon>info</mat-icon><span>{{ lastSelectionMessage }}</span></div>
+            }
+
+            <section class="session-overview" aria-label="Plan space summary">
+              <span><small>Solutions</small><strong>{{ solutionCountKnown ? solutionCount : '—' }}</strong></span>
+              <span><small>Alternatives</small><strong>{{ remainingFacetCount }}</strong></span>
+              <span><small>Required</small><strong>{{ selectedConstraintCount }}</strong></span>
+              <span><small>Forbidden</small><strong>{{ excludedConstraintCount }}</strong></span>
+            </section>
+
+            <details class="session-settings inspector-card">
+              <summary><span><small>Plan-space settings</small><strong>{{ activeSessionEncoding }} · horizon {{ activeSessionHorizon }}</strong></span><mat-icon>tune</mat-icon></summary>
+              <p>Bounded plans may end before the horizon. Exact plans use every timestep.</p>
+              <div class="session-setting-fields">
+                <label>
+                  <span>Horizon</span>
+                  <input type="number" min="1" max="100" step="1" [value]="sessionHorizon" (change)="updateSessionHorizon($event)" />
+                </label>
+                <label>
+                  <span>Encoding</span>
+                  <select [value]="sessionEncoding" (change)="updateSessionEncoding($event)">
+                    <option value="bounded">Bounded</option>
+                    <option value="exact">Exact</option>
+                  </select>
+                </label>
+              </div>
+              <label class="abstract-setting">
+                <input type="checkbox" [checked]="sessionAbstractTimeSteps" (change)="updateAbstractTimeSteps($event)" />
+                <span><strong>Actions without a fixed timestep</strong><small>These actions may occur anywhere in the plan. They are not actions at t0.</small></span>
+              </label>
+              <button mat-stroked-button type="button" [disabled]="isBusy || !sessionConfigurationChanged" (click)="applySessionConfiguration()">Rebuild plan space</button>
+            </details>
+
+            @if (forcedSuffixMessage) {
+              <p class="space-explanation"><mat-icon>lock</mat-icon><span>{{ forcedSuffixMessage }}</span></p>
+            }
+            @if (representativeSolution.length) {
+              <details class="solution-preview inspector-card" open>
+                <summary>
+                  <span>
+                    <small>{{ solutionCountKnown ? 'Valid plan ' + currentSolutionNumber + ' of ' + solutionCount : 'Valid PlanPilot plan' }}</small>
+                    <strong>{{ representativeSolutionLabel || 'Plan' }}</strong>
+                  </span>
+                  <span>{{ representativeActionCount }} actions</span>
+                </summary>
+                @if (solutionCountKnown && solutionCount > 1) {
+                  <div class="solution-navigation" aria-label="Browse valid plans">
+                    <button mat-stroked-button type="button" [disabled]="isBusy || currentSolutionNumber <= 1" (click)="showSolution(currentSolutionNumber - 1)">
+                      <mat-icon>chevron_left</mat-icon>Previous
+                    </button>
+                    <span>{{ currentSolutionNumber }} / {{ solutionCount }}</span>
+                    <button mat-stroked-button type="button" [disabled]="isBusy || currentSolutionNumber >= solutionCount" (click)="showSolution(currentSolutionNumber + 1)">
+                      Next<mat-icon>chevron_right</mat-icon>
+                    </button>
+                  </div>
+                }
+                <ol>
+                  @for (action of representativeSolution; track action.id) {
+                    <li><small>{{ timestepLabel(action) }}</small><span>{{ action.label }}</span></li>
+                  }
+                </ol>
+              </details>
+            } @else if (!queryPending && solutionCountKnown && solutionCount === 0 && !backendError) {
+              <section class="no-solution-message inspector-card">
+                <mat-icon>warning_amber</mat-icon>
+                <div>
+                  <strong>No valid plan for this combination</strong>
+                  <span>The required and forbidden actions conflict within horizon {{ displayedSessionHorizon }}. Remove one constraint or restore the initial plan space.</span>
+                  <button mat-stroked-button type="button" [disabled]="isBusy" (click)="resetSessionView()">Clear all constraints</button>
+                </div>
+              </section>
+            }
+
+            @if (propertyEvaluations.length) {
+              <section class="property-summary inspector-card" aria-label="Selected property status">
+                <div class="section-heading">
+                  <strong>{{ propertyEvaluations.length === 1 ? 'Plan goal' : 'Plan goals' }}</strong>
+                  @if (propertyEvaluations.length > 1) {
+                    <span class="result-count">{{ propertyEvaluations.length }}</span>
+                  }
+                </div>
+                @for (property of propertyEvaluations; track property.id) {
+                  <article class="property-result" [class.satisfied]="property.status === 'satisfied'" [class.unsatisfied]="property.status === 'unsatisfied'" [class.unsupported]="property.status === 'unsupported'">
+                    <mat-icon>{{ property.status === 'satisfied' ? 'verified' : property.status === 'unsatisfied' ? 'warning_amber' : 'help_outline' }}</mat-icon>
+                    <span>
+                      @if (property.kind !== 'required') { <small>Optional check</small> }
+                      <strong>{{ property.label }}</strong>
+                      <em>{{ propertyStatusLabel(property) }}</em>
+                    </span>
+                  </article>
+                }
+              </section>
+            }
+
+            @if (inspectedFacet; as facet) {
+              <section class="selected-facet inspector-card">
+                <div class="section-heading">
+                  <span class="section-label">Action</span>
+                  <span class="facet-state">{{ timestepLabel(facet) }} · {{ facetStateLabel(facet) }}</span>
+                </div>
+                <strong class="facet-name">{{ facet.label }}</strong>
+                <p>{{ facet.detail }}</p>
+                <div class="facet-actions">
+                  <button mat-stroked-button type="button" class="require-action" [class.active]="facet.selection === 'positive'" [disabled]="!canRequireFacet(facet) || isBusy" matTooltip="Keep this action in every remaining plan" (click)="applyFacetSelection(facet.id, 'positive')">
+                    <mat-icon>check</mat-icon><span>Require</span>
+                  </button>
+                  <button mat-stroked-button type="button" class="forbid-action" [class.active]="facet.selection === 'negative'" [disabled]="!canForbidFacet(facet) || isBusy" matTooltip="Remove plans that use this action" (click)="applyFacetSelection(facet.id, 'negative')">
+                    <mat-icon>block</mat-icon><span>Forbid</span>
+                  </button>
+                  <button mat-button type="button" class="clear-action" [disabled]="!canClearFacet(facet) || isBusy" [matTooltip]="clearFacetHint(facet)" (click)="applyFacetSelection(facet.id, 'neutral')">
+                    <mat-icon>restart_alt</mat-icon><span>Remove constraint</span>
+                  </button>
+                </div>
+              </section>
+            } @else {
+              <section class="inspector-placeholder inspector-card"><mat-icon>touch_app</mat-icon><span>Select an action to inspect it.</span></section>
+            }
+
+            <section class="facet-browser inspector-card">
+              <div class="section-heading">
+                <div>
+                  <span class="section-label">Plan space</span>
+                  <strong>Actions</strong>
+                </div>
+                <span class="result-count">{{ matchingFacets.length }}</span>
+              </div>
+              <p class="facet-browser-help">Select one or more actions, then click Apply.</p>
+              <label class="search-control" for="planpilot-facet-search">
+                <mat-icon>search</mat-icon>
+                <input id="planpilot-facet-search" type="search" [value]="query" (input)="updateQuery($event)" placeholder="Search action or timestep" />
+              </label>
+              <div class="filter-row" aria-label="Facet filters">
+                @for (filter of filters.slice(0, 4); track filter.value) {
+                  <button mat-button type="button" [class.active]="activeFilter === filter.value" (click)="setFilter(filter.value)">{{ filter.label }}</button>
+                }
+              </div>
+              <div class="facet-results">
+                @for (facet of visibleFacets; track facet.id) {
+                  <button type="button" class="facet-result" [class.selected]="inspectedFacetId === facet.id" [class.displayed-plan]="isDisplayedPlanFacet(facet)" [class.user-required]="isRequiredFacet(facet)" [class.user-forbidden]="isForbiddenFacet(facet)" [class.context-only]="!facet.available" (click)="selectFacet(facet.id)">
+                    <mat-icon>{{ selectionIcon(facet.selection) }}</mat-icon>
+                    <span><strong>{{ facet.label }}</strong><small>{{ timestepLabel(facet) }} · {{ facetStateLabel(facet) }}</small></span>
+                  </button>
+                } @empty {
+                  <div class="inspector-placeholder"><mat-icon>search_off</mat-icon><span>No matching facets.</span></div>
+                }
+                @if (hiddenListFacetCount) {
+                  <button mat-stroked-button type="button" class="show-more-facets" (click)="showMoreFacets()">
+                    Show {{ hiddenListFacetCount > 40 ? 40 : hiddenListFacetCount }} more
+                  </button>
+                  <button mat-button type="button" class="show-more-facets" (click)="showAllFacets()">Show all {{ matchingFacets.length }}</button>
+                } @else if (matchingFacets.length > 40) {
+                  <button mat-button type="button" class="show-more-facets" (click)="collapseFacetList()">Show fewer</button>
+                }
+              </div>
+            </section>
+
+            @if (lastSpaceChangeSummary) {
+              <p class="space-change-summary"><mat-icon>account_tree</mat-icon><span>{{ lastSpaceChangeSummary }}</span></p>
+            }
+          </div>
+
+          <footer class="session-actions">
+            <button mat-button type="button" [disabled]="!canUseSession || isBusy" (click)="exportGraphDiagnostic()"><mat-icon>download</mat-icon>Export graph data</button>
+            <button mat-button type="button" [disabled]="!canUseSession || isBusy" matTooltip="Clear every user constraint and restore the initial plan space" (click)="resetSessionView()"><mat-icon>restart_alt</mat-icon>Clear all</button>
+            <button mat-button type="button" [disabled]="!canUseSession || isBusy" (click)="stopSession()"><mat-icon>stop_circle</mat-icon>Stop session</button>
+          </footer>
+        </aside>
+      </section>
+    }
+  </app-page-content>
+</app-page>

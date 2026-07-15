@@ -4,6 +4,7 @@ import { setCurrentStepResolver } from './resolver/set-current-step.resolver';
 import { PlanDetailViewComponent } from './view/plan-detail-view/plan-detail-view.component';
 import { ShellComponent } from './view/shell/shell.component';
 import { StepDetailViewComponent } from './view/step-detail-view/step-detail-view.component';
+import { PlanPilotViewComponent } from './view/planpilot-view/planpilot-view.component';
 import { StepsListViewComponent } from './view/steps-list-view/steps-list-view.component';
 
 
@@ -27,6 +28,11 @@ export const routes: Routes = [
       {
         path: 'steps/:stepId/plan',
         component: PlanDetailViewComponent,
+        resolve: { setCurrentStepResolver },
+      },
+      {
+        path: 'steps/:stepId/planpilot',
+        component: PlanPilotViewComponent,
         resolve: { setCurrentStepResolver },
       }
     ]

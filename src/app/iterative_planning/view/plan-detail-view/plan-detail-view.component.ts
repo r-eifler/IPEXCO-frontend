@@ -13,7 +13,7 @@ import { PageModule } from "src/app/shared/components/page/page.module";
 
 import { ExplanationInterfaceType } from "src/app/project/domain/general-settings";
 import { PlanViewComponent } from "../../components/plan/plan-view/plan-view.component";
-import { PlanRunStatus } from "../../domain/plan";
+import { hasPlanResult } from "../../domain/plan";
 import { initNewIterationStep } from "../../state/iterative-planning.actions";
 import {
   selectIterativePlanningProjectExplanationInterfaceType,
@@ -43,6 +43,7 @@ export class PlanDetailViewComponent {
 
   step$ = this.store.select(selectIterativePlanningSelectedStep);
   stepId$ = this.step$.pipe(map(step => step?._id));
+  solved$ = this.step$.pipe(map((step) => hasPlanResult(step?.plan)));
 
   createNewIteration(baseStepId?: string) {
     this.store.dispatch(initNewIterationStep({ baseStepId }));
