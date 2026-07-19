@@ -76,18 +76,12 @@
   @if (runId$ | async) {
     <mat-form-field class="facet-search" subscriptSizing="dynamic">
       <mat-label>Filter facets</mat-label>
-      <input matInput type="text" [formControl]="searchControl" placeholder="e.g. pick-up a" />
-      @if (searchControl.value) {
-        <button
-          matSuffix
-          mat-icon-button
-          type="button"
-          aria-label="Clear filter"
-          (click)="searchControl.setValue('')"
-        >
-          ✕
-        </button>
-      }
+      <mat-select [formControl]="filterControl">
+        <mat-option value="">All facets</mat-option>
+        @for (label of filterOptions$ | async; track label) {
+          <mat-option [value]="label">{{ label }}</mat-option>
+        }
+      </mat-select>
     </mat-form-field>
   }
 
@@ -113,7 +107,7 @@
                 >
                   <mat-button-toggle [value]="SelectionState.NEGATIVE">Forbid</mat-button-toggle>
                   <mat-button-toggle [value]="SelectionState.NEUTRAL">Neutral</mat-button-toggle>
-                  <mat-button-toggle [value]="SelectionState.POSITIVE">Keep</mat-button-toggle>
+                  <mat-button-toggle [value]="SelectionState.POSITIVE">Enforce</mat-button-toggle>
                 </mat-button-toggle-group>
 
                 @if (facet.remaining; as remaining) {
@@ -125,7 +119,7 @@
               </li>
             }
           </ul>
-        } @else if (searchControl.value) {
+        } @else if (filterControl.value) {
           <p class="status">No open decisions match the filter.</p>
         } @else {
           <p class="status">No facets yet – start a session.</p>
@@ -152,7 +146,7 @@
                     [class.facet__badge--keep]="decision.selectionState === SelectionState.POSITIVE"
                     [class.facet__badge--forbid]="decision.selectionState === SelectionState.NEGATIVE"
                   >
-                    {{ decision.selectionState === SelectionState.POSITIVE ? 'Keep' : 'Forbid' }}
+                    {{ decision.selectionState === SelectionState.POSITIVE ? 'Enforce' : 'Forbid' }}
                   </span>
                   <button
                     mat-stroked-button
@@ -166,7 +160,7 @@
               </li>
             }
           </ul>
-        } @else if (searchControl.value) {
+        } @else if (filterControl.value) {
           <p class="status">No made decisions match the filter.</p>
         } @else {
           <p class="status">No decisions made yet.</p>

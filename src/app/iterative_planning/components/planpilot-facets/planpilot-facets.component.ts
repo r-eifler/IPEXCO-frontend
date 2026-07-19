@@ -61,20 +61,24 @@ export class PlanPilotFacetsComponent {
   // The iteration step whose plan is SOLVED (provided from outside).
   iterationStepId = input.required<string>();
 
-  // Free-text filter applied to both facet lists (matches on the label).
-  searchControl = this.fb.nonNullable.control("");
-  private searchTerm$ = this.searchControl.valueChanges.pipe(startWith(""));
+  // Label filter applied to both facet lists ("" = show all).
+  filterControl = this.fb.nonNullable.control("");
+  private filterLabel$ = this.filterControl.valueChanges.pipe(startWith(""));
 
   // Read from the store.
   runId$ = this.store.select(selectRunId);
   facets$ = this.store.select(selectFacets);
   decisions$ = this.store.select(selectDecisions);
-  // Filtered views used by the template.
-  filteredFacets$ = combineLatest([this.facets$, this.searchTerm$]).pipe(
-    map(([facets, term]) => this.filterByLabel(facets, term)),
+  // Distinct facet labels (open + decided), used to populate the filter dropdown.
+  filterOptions$ = combineLatest([this.facets$, this.decisions$]).pipe(
+    map(([facets, decisions]) => this.distinctLabels([...facets, ...decisions])),
   );
-  filteredDecisions$ = combineLatest([this.decisions$, this.searchTerm$]).pipe(
-    map(([decisions, term]) => this.filterByLabel(decisions, term)),
+  // Filtered views used by the template.
+  filteredFacets$ = combineLatest([this.facets$, this.filterLabel$]).pipe(
+    map(([facets, label]) => this.filterByLabel(facets, label)),
+  );
+  filteredDecisions$ = combineLatest([this.decisions$, this.filterLabel$]).pipe(
+    map(([decisions, label]) => this.filterByLabel(decisions, label)),
   );
   solutionCount$ = this.store.select(selectSolutionCount);
   solutions$ = this.store.select(selectSolutions);
@@ -129,13 +133,19 @@ export class PlanPilotFacetsComponent {
     return [...facets].sort((a, b) => (a.timestep ?? 0) - (b.timestep ?? 0));
   }
 
-  // Case-insensitive substring match on the facet label.
-  private filterByLabel(facets: PlanPilotFacet[], term: string): PlanPilotFacet[] {
-    const query = term.trim().toLowerCase();
-    if (!query) {
+  // Keep only facets with the selected label ("" = no filter).
+  private filterByLabel(facets: PlanPilotFacet[], label: string): PlanPilotFacet[] {
+    if (!label) {
       return facets;
     }
-    return facets.filter((facet) => facet.label.toLowerCase().includes(query));
+    return facets.filter((facet) => facet.label === label);
+  }
+
+  // Sorted, de-duplicated list of facet labels for the filter dropdown.
+  private distinctLabels(facets: PlanPilotFacet[]): string[] {
+    return [...new Set(facets.map((facet) => facet.label))].sort((a, b) =>
+      a.localeCompare(b),
+    );
   }
 
   // The concrete, ordered steps of a plan. PlanPilot solutions also carry
