@@ -1,5 +1,6 @@
 import { createAction, props } from "@ngrx/store";
 import {
+  PlanPilotFacet,
   PlanPilotFacetsResponse,
   PlanPilotSolution,
   SelectPlanPilotFacetRequest,
@@ -59,4 +60,22 @@ export const queryPlanPilotSolutionsSuccess = createAction(
 export const queryPlanPilotSolutionsFailure = createAction(
   "[planpilot] query solutions failure",
   props<{ err: unknown }>(),
+);
+
+// Query the implied facets ('|= %'): the landmarks forced by the committed
+// decisions (true in every remaining plan).
+export const queryPlanPilotImpliedFacets = createAction(
+  "[planpilot] query implied facets",
+);
+export const queryPlanPilotImpliedFacetsSuccess = createAction(
+  "[planpilot] query implied facets success",
+  props<{ facets: PlanPilotFacet[] }>(),
+);
+export const queryPlanPilotImpliedFacetsFailure = createAction(
+  "[planpilot] query implied facets failure",
+  props<{ err: unknown }>(),
+);
+// Hide the implied-facets panel without touching the backend.
+export const clearPlanPilotImpliedFacets = createAction(
+  "[planpilot] clear implied facets",
 );

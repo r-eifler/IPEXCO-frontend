@@ -88,6 +88,7 @@ export enum PlanPilotQueryType {
   SOLUTION = 'solution',
   SOLUTION_COUNT = 'solutionCount',
   SOLUTION_REDUCTION = 'solutionReduction',
+  IMPLIED_FACETS = 'impliedFacets',
 }
 
 export const PlanPilotQueryTypeZ = nativeEnum(PlanPilotQueryType);

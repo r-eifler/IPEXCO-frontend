@@ -1,6 +1,10 @@
 import { createReducer, on } from "@ngrx/store";
 import { PlanPilotFacet, PlanPilotSelectionState, PlanPilotSolution } from "../domain/planpilot";
 import {
+  clearPlanPilotImpliedFacets,
+  queryPlanPilotImpliedFacets,
+  queryPlanPilotImpliedFacetsFailure,
+  queryPlanPilotImpliedFacetsSuccess,
   queryPlanPilotSolutionCount,
   queryPlanPilotSolutionCountFailure,
   queryPlanPilotSolutionCountSuccess,
@@ -27,6 +31,12 @@ export interface PlanPilotState {
   solutions: PlanPilotSolution[];
   // True while the count/enumeration queries are (re)calculating.
   solutionsLoading: boolean;
+  // The implied facets ('|= %'): landmarks forced by the committed decisions.
+  impliedFacets: PlanPilotFacet[];
+  // Whether the implied-facets panel has been requested/shown.
+  impliedFacetsShown: boolean;
+  // True while the implied-facets query is running.
+  impliedFacetsLoading: boolean;
   loading: boolean;
   error: unknown;
 }
@@ -38,6 +48,9 @@ export const initialPlanPilotState: PlanPilotState = {
   solutionCount: undefined,
   solutions: [],
   solutionsLoading: false,
+  impliedFacets: [],
+  impliedFacetsShown: false,
+  impliedFacetsLoading: false,
   loading: false,
   error: undefined,
 };
@@ -61,6 +74,8 @@ export const planPilotReducer = createReducer(
     decisions: [],
     solutionCount: undefined,
     solutions: [],
+    impliedFacets: [],
+    impliedFacetsShown: false,
   })),
 
   // Failure: loading off, remember the error
@@ -99,6 +114,9 @@ export const planPilotReducer = createReducer(
     loading: false,
     runId: response.runId,
     facets: response.facets,
+    // Committed decisions changed, so any shown implied facets are now stale.
+    impliedFacets: [],
+    impliedFacetsShown: false,
   })),
 
   on(submitPlanPilotSelectionsFailure, (state, { err }) => ({
@@ -131,5 +149,31 @@ export const planPilotReducer = createReducer(
   on(queryPlanPilotSolutionCountFailure, queryPlanPilotSolutionsFailure, (state) => ({
     ...state,
     solutionsLoading: false,
+  })),
+
+  // Implied facets ('|= %') requested: mark shown + loading.
+  on(queryPlanPilotImpliedFacets, (state) => ({
+    ...state,
+    impliedFacetsShown: true,
+    impliedFacetsLoading: true,
+    error: undefined,
+  })),
+
+  on(queryPlanPilotImpliedFacetsSuccess, (state, { facets }) => ({
+    ...state,
+    impliedFacets: facets,
+    impliedFacetsLoading: false,
+  })),
+
+  on(queryPlanPilotImpliedFacetsFailure, (state, { err }) => ({
+    ...state,
+    impliedFacetsLoading: false,
+    error: err,
+  })),
+
+  on(clearPlanPilotImpliedFacets, (state) => ({
+    ...state,
+    impliedFacets: [],
+    impliedFacetsShown: false,
   })),
 );

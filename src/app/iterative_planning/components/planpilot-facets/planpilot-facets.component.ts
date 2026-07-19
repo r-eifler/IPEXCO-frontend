@@ -27,6 +27,8 @@ import {
   SelectPlanPilotFacetRequest,
 } from "../../domain/planpilot";
 import {
+  clearPlanPilotImpliedFacets,
+  queryPlanPilotImpliedFacets,
   startPlanPilotSession,
   submitPlanPilotSelections,
 } from "../../state/planpilot.actions";
@@ -34,6 +36,9 @@ import {
   selectDecisions,
   selectError,
   selectFacets,
+  selectImpliedFacets,
+  selectImpliedFacetsLoading,
+  selectImpliedFacetsShown,
   selectLoading,
   selectRunId,
   selectSolutionCount,
@@ -49,6 +54,19 @@ interface DecisionRow {
   displayState: PlanPilotSelectionState;
   pending: boolean;
   pendingLabel: string;
+}
+
+// PlanPilot facets come in two flavours, distinguished by the raw ASP atom in
+// their id: action atoms (occurs / occurs_sometime) and state atoms (holds).
+type FacetKind = "occurs" | "holds";
+
+// A titled group of open facets, shown as its own sub-section in the
+// "Open decisions" column (one for actions, one for state).
+interface OpenFacetGroup {
+  kind: FacetKind;
+  title: string;
+  emptyText: string;
+  facets: PlanPilotFacet[];
 }
 
 @Component({
@@ -109,6 +127,11 @@ export class PlanPilotFacetsComponent {
       ),
     ),
   );
+  // The open facets split into two titled groups: state (holds) and actions
+  // (occurs / occurs_sometime). Rendered as separate sub-sections.
+  openFacetGroups$ = this.filteredFacets$.pipe(
+    map((facets) => this.groupOpenFacets(facets)),
+  );
   // The right column: committed decisions plus staged (pending) picks/undos.
   madeDecisions$ = combineLatest([
     this.decisions$,
@@ -123,6 +146,22 @@ export class PlanPilotFacetsComponent {
   solutionCount$ = this.store.select(selectSolutionCount);
   solutions$ = this.store.select(selectSolutions);
   solutionsLoading$ = this.store.select(selectSolutionsLoading);
+  // Implied facets ('|= %'): landmarks forced by the committed decisions.
+  // We drop the facets the user committed themselves, so the panel shows only
+  // what those decisions *additionally* forced (true in every remaining plan).
+  impliedFacets$ = combineLatest([
+    this.store.select(selectImpliedFacets),
+    this.decisions$,
+  ]).pipe(
+    map(([implied, decisions]) => {
+      const decisionIds = new Set(decisions.map((decision) => decision.id));
+      return this.sortFacets(
+        implied.filter((facet) => !decisionIds.has(facet.id)),
+      );
+    }),
+  );
+  impliedFacetsShown$ = this.store.select(selectImpliedFacetsShown);
+  impliedFacetsLoading$ = this.store.select(selectImpliedFacetsLoading);
   loading$ = this.store.select(selectLoading);
   error$ = this.store.select(selectError).pipe(map((err) => this.toMessage(err)));
 
@@ -250,8 +289,8 @@ export class PlanPilotFacetsComponent {
     const filtered = label
       ? rows.filter((row) => row.facet.label === label)
       : rows;
-    return filtered.sort(
-      (a, b) => (a.facet.timestep ?? 0) - (b.facet.timestep ?? 0),
+    return filtered.sort((a, b) =>
+      this.byTimestep(a.facet.timestep, b.facet.timestep),
     );
   }
 
@@ -270,8 +309,74 @@ export class PlanPilotFacetsComponent {
     this.pending.set(new Map());
   }
 
-  sortByTimestep(facets: PlanPilotFacet[]): PlanPilotFacet[] {
-    return [...facets].sort((a, b) => (a.timestep ?? 0) - (b.timestep ?? 0));
+  // Request the implied facets ('|= %') forced by the committed decisions.
+  showImpliedFacets(): void {
+    this.store.dispatch(queryPlanPilotImpliedFacets());
+  }
+
+  // Hide the implied-facets panel.
+  hideImpliedFacets(): void {
+    this.store.dispatch(clearPlanPilotImpliedFacets());
+  }
+
+  // Classify a facet by its raw ASP atom: state atoms are `holds(...)`,
+  // everything else (occurs / occurs_sometime) is an action.
+  private facetKind(facet: PlanPilotFacet): FacetKind {
+    return facet.id.startsWith("holds(") ? "holds" : "occurs";
+  }
+
+  // Split the open facets into the state (holds) and action (occurs) groups,
+  // each sorted by timestep with the timeless "any time" facets last.
+  private groupOpenFacets(facets: PlanPilotFacet[]): OpenFacetGroup[] {
+    const actions = this.sortFacets(
+      facets.filter((facet) => this.facetKind(facet) === "occurs"),
+    );
+    const state = this.sortFacets(
+      facets.filter((facet) => this.facetKind(facet) === "holds"),
+    );
+    return [
+      {
+        kind: "occurs",
+        title: "Actions",
+        emptyText: "No open action decisions.",
+        facets: actions,
+      },
+      {
+        kind: "holds",
+        title: "State",
+        emptyText: "No open state decisions.",
+        facets: state,
+      },
+    ];
+  }
+
+  // Total number of open facets across both groups (0 = nothing to decide).
+  facetGroupsTotal(groups: OpenFacetGroup[]): number {
+    return groups.reduce((sum, group) => sum + group.facets.length, 0);
+  }
+
+  // Human-readable timestep: a concrete step, or "any time" for the timeless
+  // occurs_sometime landmarks (timestep === null).
+  timestepLabel(facet: PlanPilotFacet): string {
+    return facet.timestep === null ? "any time" : `t = ${facet.timestep}`;
+  }
+
+  private sortFacets(facets: PlanPilotFacet[]): PlanPilotFacet[] {
+    return [...facets].sort((a, b) => this.byTimestep(a.timestep, b.timestep));
+  }
+
+  // Order by timestep, pushing timeless (null) facets to the end.
+  private byTimestep(a: number | null, b: number | null): number {
+    if (a === null && b === null) {
+      return 0;
+    }
+    if (a === null) {
+      return 1;
+    }
+    if (b === null) {
+      return -1;
+    }
+    return a - b;
   }
 
   // Keep only facets with the selected label ("" = no filter).

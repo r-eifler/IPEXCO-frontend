@@ -7,6 +7,9 @@ import { catchError, concatMap, last, map, switchMap } from "rxjs/operators";
 import { PlanPilotQueryType } from "../../domain/planpilot";
 import { PlanPilotService } from "../../service/planpilot.service";
 import {
+  queryPlanPilotImpliedFacets,
+  queryPlanPilotImpliedFacetsFailure,
+  queryPlanPilotImpliedFacetsSuccess,
   queryPlanPilotSolutionCount,
   queryPlanPilotSolutionCountFailure,
   queryPlanPilotSolutionCountSuccess,
@@ -102,6 +105,21 @@ export class PlanPilotEffect {
       return this.service.query$(runId, { type: PlanPilotQueryType.SOLUTION }).pipe(
         map((response) => queryPlanPilotSolutionsSuccess({ solutions: response.result.solutions ?? [] })),
         catchError((err) => of(queryPlanPilotSolutionsFailure({ err }))),
+      );
+    }),
+  ));
+
+  // Query the implied facets ('|= %') forced by the committed decisions.
+  public queryImpliedFacets$ = createEffect(() => this.actions$.pipe(
+    ofType(queryPlanPilotImpliedFacets),
+    concatLatestFrom(() => this.store.select(selectRunId)),
+    switchMap(([, runId]) => {
+      if (!runId) {
+        return of(queryPlanPilotImpliedFacetsFailure({ err: "No active PlanPilot session." }));
+      }
+      return this.service.query$(runId, { type: PlanPilotQueryType.IMPLIED_FACETS }).pipe(
+        map((response) => queryPlanPilotImpliedFacetsSuccess({ facets: response.result.facets ?? [] })),
+        catchError((err) => of(queryPlanPilotImpliedFacetsFailure({ err }))),
       );
     }),
   ));
