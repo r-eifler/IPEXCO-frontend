@@ -37,10 +37,58 @@
     <p class="status status--error">Error: {{ error }}</p>
   }
 
-  <!-- Remaining plans counter -->
+  <!-- Remaining plans (count + enumeration), with recalculation feedback -->
+  @let solutionsLoading = solutionsLoading$ | async;
   @let solutionCount = solutionCount$ | async;
-  @if (solutionCount !== null && solutionCount !== undefined) {
-    <p class="remaining-plans">Remaining plans: {{ solutionCount }}</p>
+
+  <div class="remaining" [class.remaining--recalculating]="solutionsLoading">
+    @if (solutionCount !== null && solutionCount !== undefined) {
+      <p class="remaining-plans">Remaining plans: {{ solutionCount }}</p>
+    }
+
+    @if (solutionsLoading) {
+      <div class="recalculating">
+        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+        <span class="recalculating__label">Recalculating remaining plans …</span>
+      </div>
+    }
+
+    <!-- Remaining plans: shown once the set is small enough to enumerate -->
+    @if (solutions$ | async; as solutions) {
+      @if (solutions.length > 0) {
+        <div class="solutions">
+          @for (solution of solutions; track solution.label; let i = $index) {
+            <div class="solution">
+              <h5 class="solution__title">{{ solution.label || 'Plan ' + (i + 1) }}</h5>
+              <ol class="solution__steps">
+                @for (step of planSteps(solution.facets); track step.id) {
+                  <li class="solution__step">t{{ step.timestep }}: {{ step.label }}</li>
+                }
+              </ol>
+            </div>
+          }
+        </div>
+      }
+    }
+  </div>
+
+  <!-- Filter facets by label -->
+  @if (runId$ | async) {
+    <mat-form-field class="facet-search" subscriptSizing="dynamic">
+      <mat-label>Filter facets</mat-label>
+      <input matInput type="text" [formControl]="searchControl" placeholder="e.g. pick-up a" />
+      @if (searchControl.value) {
+        <button
+          matSuffix
+          mat-icon-button
+          type="button"
+          aria-label="Clear filter"
+          (click)="searchControl.setValue('')"
+        >
+          ✕
+        </button>
+      }
+    </mat-form-field>
   }
 
   <!-- Two columns: open choices (left) and made decisions (right) -->
@@ -48,7 +96,7 @@
     <!-- Left column: all open decisions -->
     <div class="column">
       <h4 class="column__title">Open decisions</h4>
-      @if (facets$ | async; as facets) {
+      @if (filteredFacets$ | async; as facets) {
         @if (facets.length > 0) {
           <ul class="facet-list">
             @for (facet of sortByTimestep(facets); track facet.id) {
@@ -77,6 +125,8 @@
               </li>
             }
           </ul>
+        } @else if (searchControl.value) {
+          <p class="status">No open decisions match the filter.</p>
         } @else {
           <p class="status">No facets yet – start a session.</p>
         }
@@ -86,7 +136,7 @@
     <!-- Right column: made decisions -->
     <div class="column">
       <h4 class="column__title">Made decisions</h4>
-      @if (decisions$ | async; as decisions) {
+      @if (filteredDecisions$ | async; as decisions) {
         @if (decisions.length > 0) {
           <ul class="facet-list">
             @for (decision of sortByTimestep(decisions); track decision.id) {
@@ -116,6 +166,8 @@
               </li>
             }
           </ul>
+        } @else if (searchControl.value) {
+          <p class="status">No made decisions match the filter.</p>
         } @else {
           <p class="status">No decisions made yet.</p>
         }

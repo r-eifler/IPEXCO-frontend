@@ -1,7 +1,11 @@
 import { createReducer, on } from "@ngrx/store";
-import { PlanPilotFacet, PlanPilotSelectionState } from "../domain/planpilot";
+import { PlanPilotFacet, PlanPilotSelectionState, PlanPilotSolution } from "../domain/planpilot";
 import {
+  queryPlanPilotSolutionCount,
+  queryPlanPilotSolutionCountFailure,
   queryPlanPilotSolutionCountSuccess,
+  queryPlanPilotSolutionsFailure,
+  queryPlanPilotSolutionsSuccess,
   selectPlanPilotFacet,
   selectPlanPilotFacetFailure,
   selectPlanPilotFacetSuccess,
@@ -19,6 +23,10 @@ export interface PlanPilotState {
   decisions: PlanPilotFacet[];
   // Number of solutions (plans) still consistent with the committed decisions.
   solutionCount: number | undefined;
+  // The remaining plans themselves, enumerated once the set is small enough.
+  solutions: PlanPilotSolution[];
+  // True while the count/enumeration queries are (re)calculating.
+  solutionsLoading: boolean;
   loading: boolean;
   error: unknown;
 }
@@ -28,6 +36,8 @@ export const initialPlanPilotState: PlanPilotState = {
   facets: [],
   decisions: [],
   solutionCount: undefined,
+  solutions: [],
+  solutionsLoading: false,
   loading: false,
   error: undefined,
 };
@@ -50,6 +60,7 @@ export const planPilotReducer = createReducer(
     facets: response.facets,
     decisions: [],
     solutionCount: undefined,
+    solutions: [],
   })),
 
   // Failure: loading off, remember the error
@@ -91,9 +102,29 @@ export const planPilotReducer = createReducer(
     error: err,
   })),
 
+  // Recalculation starts: the count/enumeration chain is triggered.
+  on(queryPlanPilotSolutionCount, (state) => ({
+    ...state,
+    solutionsLoading: true,
+  })),
+
   // Counter refresh: store the number of remaining solutions.
   on(queryPlanPilotSolutionCountSuccess, (state, { count }) => ({
     ...state,
     solutionCount: count,
+  })),
+
+  // Store the enumerated remaining plans (empty when the set is too large).
+  // This is the end of the chain, so the recalculation is done.
+  on(queryPlanPilotSolutionsSuccess, (state, { solutions }) => ({
+    ...state,
+    solutions,
+    solutionsLoading: false,
+  })),
+
+  // Any query failure also ends the recalculation.
+  on(queryPlanPilotSolutionCountFailure, queryPlanPilotSolutionsFailure, (state) => ({
+    ...state,
+    solutionsLoading: false,
   })),
 );

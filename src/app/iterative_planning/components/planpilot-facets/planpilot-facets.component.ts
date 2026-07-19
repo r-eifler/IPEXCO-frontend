@@ -7,12 +7,14 @@ import {
   input,
 } from "@angular/core";
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
-import { map } from "rxjs/operators";
+import { combineLatest } from "rxjs";
+import { map, startWith } from "rxjs/operators";
 import { MatButtonModule } from "@angular/material/button";
 import { MatButtonToggleModule } from "@angular/material/button-toggle";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
+import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { MatSelectModule } from "@angular/material/select";
 import { Store } from "@ngrx/store";
 import {
@@ -31,6 +33,8 @@ import {
   selectLoading,
   selectRunId,
   selectSolutionCount,
+  selectSolutions,
+  selectSolutionsLoading,
 } from "../../state/planpilot.feature";
 
 @Component({
@@ -43,6 +47,7 @@ import {
     MatCheckboxModule,
     MatFormFieldModule,
     MatInputModule,
+    MatProgressBarModule,
     MatSelectModule,
   ],
   templateUrl: "./planpilot-facets.component.html",
@@ -56,11 +61,24 @@ export class PlanPilotFacetsComponent {
   // The iteration step whose plan is SOLVED (provided from outside).
   iterationStepId = input.required<string>();
 
+  // Free-text filter applied to both facet lists (matches on the label).
+  searchControl = this.fb.nonNullable.control("");
+  private searchTerm$ = this.searchControl.valueChanges.pipe(startWith(""));
+
   // Read from the store.
   runId$ = this.store.select(selectRunId);
   facets$ = this.store.select(selectFacets);
   decisions$ = this.store.select(selectDecisions);
+  // Filtered views used by the template.
+  filteredFacets$ = combineLatest([this.facets$, this.searchTerm$]).pipe(
+    map(([facets, term]) => this.filterByLabel(facets, term)),
+  );
+  filteredDecisions$ = combineLatest([this.decisions$, this.searchTerm$]).pipe(
+    map(([decisions, term]) => this.filterByLabel(decisions, term)),
+  );
   solutionCount$ = this.store.select(selectSolutionCount);
+  solutions$ = this.store.select(selectSolutions);
+  solutionsLoading$ = this.store.select(selectSolutionsLoading);
   loading$ = this.store.select(selectLoading);
   error$ = this.store.select(selectError).pipe(map((err) => this.toMessage(err)));
 
@@ -109,6 +127,24 @@ export class PlanPilotFacetsComponent {
 
   sortByTimestep(facets: PlanPilotFacet[]): PlanPilotFacet[] {
     return [...facets].sort((a, b) => (a.timestep ?? 0) - (b.timestep ?? 0));
+  }
+
+  // Case-insensitive substring match on the facet label.
+  private filterByLabel(facets: PlanPilotFacet[], term: string): PlanPilotFacet[] {
+    const query = term.trim().toLowerCase();
+    if (!query) {
+      return facets;
+    }
+    return facets.filter((facet) => facet.label.toLowerCase().includes(query));
+  }
+
+  // The concrete, ordered steps of a plan. PlanPilot solutions also carry
+  // timeless "occurs-sometime" landmark entries (timestep === null); those are
+  // not actual sequential steps, so we drop them and order by timestep.
+  planSteps(facets: PlanPilotFacet[]): PlanPilotFacet[] {
+    return facets
+      .filter((f) => f.timestep !== null)
+      .sort((a, b) => (a.timestep ?? 0) - (b.timestep ?? 0));
   }
 
   // Turns an arbitrary error into a readable message.

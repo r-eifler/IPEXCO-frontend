@@ -1,6 +1,7 @@
 import { createAction, props } from "@ngrx/store";
 import {
   PlanPilotFacetsResponse,
+  PlanPilotSolution,
   SelectPlanPilotFacetRequest,
   StartPlanPilotSessionRequest,
   StartPlanPilotSessionResponse,
@@ -44,5 +45,18 @@ export const queryPlanPilotSolutionCountSuccess = createAction(
 );
 export const queryPlanPilotSolutionCountFailure = createAction(
   "[planpilot] query solution count failure",
+  props<{ err: unknown }>(),
+);
+
+// Enumerate the solutions (plans) still consistent with the decisions.
+export const queryPlanPilotSolutions = createAction(
+  "[planpilot] query solutions",
+);
+export const queryPlanPilotSolutionsSuccess = createAction(
+  "[planpilot] query solutions success",
+  props<{ solutions: PlanPilotSolution[] }>(),
+);
+export const queryPlanPilotSolutionsFailure = createAction(
+  "[planpilot] query solutions failure",
   props<{ err: unknown }>(),
 );

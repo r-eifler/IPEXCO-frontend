@@ -10,6 +10,9 @@ import {
   queryPlanPilotSolutionCount,
   queryPlanPilotSolutionCountFailure,
   queryPlanPilotSolutionCountSuccess,
+  queryPlanPilotSolutions,
+  queryPlanPilotSolutionsFailure,
+  queryPlanPilotSolutionsSuccess,
   selectPlanPilotFacet,
   selectPlanPilotFacetFailure,
   selectPlanPilotFacetSuccess,
@@ -18,6 +21,10 @@ import {
   startPlanPilotSessionSuccess,
 } from "../planpilot.actions";
 import { selectRunId } from "../planpilot.feature";
+
+// Only enumerate the concrete plans once the remaining set is small enough
+// to render meaningfully. Above this, we just show the counter.
+const SOLUTION_LIST_THRESHOLD = 10;
 
 @Injectable()
 export class PlanPilotEffect {
@@ -65,6 +72,32 @@ export class PlanPilotEffect {
       return this.service.query$(runId, { type: PlanPilotQueryType.SOLUTION_COUNT }).pipe(
         map((response) => queryPlanPilotSolutionCountSuccess({ count: response.result.value })),
         catchError((err) => of(queryPlanPilotSolutionCountFailure({ err }))),
+      );
+    }),
+  ));
+
+  // Once the remaining set is small, enumerate the concrete plans;
+  // otherwise clear the list and keep showing only the counter.
+  public refreshSolutions$ = createEffect(() => this.actions$.pipe(
+    ofType(queryPlanPilotSolutionCountSuccess),
+    map(({ count }) =>
+      count !== undefined && count > 0 && count <= SOLUTION_LIST_THRESHOLD
+        ? queryPlanPilotSolutions()
+        : queryPlanPilotSolutionsSuccess({ solutions: [] }),
+    ),
+  ));
+
+  // Enumerate the solutions (plans) still consistent with the decisions.
+  public querySolutions$ = createEffect(() => this.actions$.pipe(
+    ofType(queryPlanPilotSolutions),
+    concatLatestFrom(() => this.store.select(selectRunId)),
+    switchMap(([, runId]) => {
+      if (!runId) {
+        return of(queryPlanPilotSolutionsFailure({ err: "No active PlanPilot session." }));
+      }
+      return this.service.query$(runId, { type: PlanPilotQueryType.SOLUTION }).pipe(
+        map((response) => queryPlanPilotSolutionsSuccess({ solutions: response.result.solutions ?? [] })),
+        catchError((err) => of(queryPlanPilotSolutionsFailure({ err }))),
       );
     }),
   ));

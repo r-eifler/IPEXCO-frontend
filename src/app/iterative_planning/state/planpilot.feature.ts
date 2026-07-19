@@ -13,6 +13,8 @@ export const {
   selectFacets,
   selectDecisions,
   selectSolutionCount,
+  selectSolutions,
+  selectSolutionsLoading,
   selectLoading,
   selectError,
 } = planPilotFeature;
