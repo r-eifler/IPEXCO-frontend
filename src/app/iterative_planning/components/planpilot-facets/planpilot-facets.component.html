@@ -85,6 +85,37 @@
     </mat-form-field>
   }
 
+  <!-- Submit bar: staged selections are applied only on submit -->
+  @if (runId$ | async) {
+    <div class="submit-bar">
+      <span class="submit-bar__info">
+        @if (pendingCount() > 0) {
+          {{ pendingCount() }} pending change{{ pendingCount() === 1 ? '' : 's' }}
+        } @else {
+          No pending changes
+        }
+      </span>
+      <button
+        mat-raised-button
+        type="button"
+        class="submit-bar__discard"
+        (click)="discard()"
+        [disabled]="pendingCount() === 0 || ((loading$ | async) ?? false)"
+      >
+        Discard
+      </button>
+      <button
+        mat-raised-button
+        type="button"
+        class="submit-bar__submit"
+        (click)="submit()"
+        [disabled]="pendingCount() === 0 || ((loading$ | async) ?? false)"
+      >
+        Submit
+      </button>
+    </div>
+  }
+
   <!-- Two columns: open choices (left) and made decisions (right) -->
   <div class="columns">
     <!-- Left column: all open decisions -->
@@ -94,14 +125,17 @@
         @if (facets.length > 0) {
           <ul class="facet-list">
             @for (facet of sortByTimestep(facets); track facet.id) {
-              <li class="facet">
+              <li class="facet" [class.facet--pending]="isPending(facet)">
                 <div class="facet__head">
                   <span class="facet__label">{{ facet.label }}</span>
+                  @if (isPending(facet)) {
+                    <span class="facet__pending">pending</span>
+                  }
                   <span class="facet__timestep">t = {{ facet.timestep ?? '–' }}</span>
                 </div>
 
                 <mat-button-toggle-group
-                  [value]="facet.selectionState"
+                  [value]="selectionFor(facet)"
                   (change)="onSelectionChange(facet, $event.value)"
                   [disabled]="(loading$ | async) ?? false"
                 >
@@ -127,34 +161,40 @@
       }
     </div>
 
-    <!-- Right column: made decisions -->
+    <!-- Right column: made decisions (committed + staged picks) -->
     <div class="column">
       <h4 class="column__title">Made decisions</h4>
-      @if (filteredDecisions$ | async; as decisions) {
-        @if (decisions.length > 0) {
+      @if (madeDecisions$ | async; as rows) {
+        @if (rows.length > 0) {
           <ul class="facet-list">
-            @for (decision of sortByTimestep(decisions); track decision.id) {
-              <li class="facet facet--decision">
+            @for (row of rows; track row.facet.id) {
+              <li
+                class="facet facet--decision"
+                [class.facet--pending]="row.pending"
+              >
                 <div class="facet__head">
-                  <span class="facet__label">{{ decision.label }}</span>
-                  <span class="facet__timestep">t = {{ decision.timestep ?? '–' }}</span>
+                  <span class="facet__label">{{ row.facet.label }}</span>
+                  @if (row.pending) {
+                    <span class="facet__pending">{{ row.pendingLabel }}</span>
+                  }
+                  <span class="facet__timestep">t = {{ row.facet.timestep ?? '–' }}</span>
                 </div>
 
                 <div class="facet__decision-row">
                   <span
                     class="facet__badge"
-                    [class.facet__badge--keep]="decision.selectionState === SelectionState.POSITIVE"
-                    [class.facet__badge--forbid]="decision.selectionState === SelectionState.NEGATIVE"
+                    [class.facet__badge--keep]="row.displayState === SelectionState.POSITIVE"
+                    [class.facet__badge--forbid]="row.displayState === SelectionState.NEGATIVE"
                   >
-                    {{ decision.selectionState === SelectionState.POSITIVE ? 'Enforce' : 'Forbid' }}
+                    {{ row.displayState === SelectionState.POSITIVE ? 'Enforce' : 'Forbid' }}
                   </span>
                   <button
                     mat-stroked-button
                     type="button"
-                    (click)="deselect(decision)"
+                    (click)="toggleDecision(row)"
                     [disabled]="(loading$ | async) ?? false"
                   >
-                    Undo
+                    {{ row.pending ? 'Cancel' : 'Undo' }}
                   </button>
                 </div>
               </li>

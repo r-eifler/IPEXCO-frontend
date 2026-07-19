@@ -90,6 +90,31 @@
   max-width: 360px;
 }
 
+.submit-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+
+  &__info {
+    font-size: 0.9rem;
+    color: rgba(0, 0, 0, 0.6);
+  }
+
+  // Material 3 drives the button background via CSS custom properties, so the
+  // colour overrides need !important to win. Disabled buttons keep the default
+  // Material greyed-out look.
+  &__submit:not(:disabled) {
+    background-color: #2e7d32 !important;
+    color: #fff !important;
+  }
+
+  &__discard:not(:disabled) {
+    background-color: #b3261e !important;
+    color: #fff !important;
+  }
+}
+
 .columns {
   display: flex;
   flex-wrap: wrap;
@@ -151,6 +176,22 @@
 
   &--decision {
     background: rgba(0, 0, 0, 0.02);
+  }
+
+  &--pending {
+    border-color: #1565c0;
+    box-shadow: inset 3px 0 0 #1565c0;
+  }
+
+  &__pending {
+    padding: 0.1rem 0.5rem;
+    border-radius: 999px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    background: rgba(21, 101, 192, 0.12);
+    color: #1565c0;
   }
 
   &__decision-row {

@@ -6,12 +6,12 @@ import {
   queryPlanPilotSolutionCountSuccess,
   queryPlanPilotSolutionsFailure,
   queryPlanPilotSolutionsSuccess,
-  selectPlanPilotFacet,
-  selectPlanPilotFacetFailure,
-  selectPlanPilotFacetSuccess,
   startPlanPilotSession,
   startPlanPilotSessionFailure,
   startPlanPilotSessionSuccess,
+  submitPlanPilotSelections,
+  submitPlanPilotSelectionsFailure,
+  submitPlanPilotSelectionsSuccess,
 } from "./planpilot.actions";
 
 export interface PlanPilotState {
@@ -70,33 +70,38 @@ export const planPilotReducer = createReducer(
     error: err,
   })),
 
-  // Select facet: same loading pattern, plus track the decision.
-  // Drop any previous decision for this facet, then re-add it if the new
-  // state is a real decision (positive/negative). Neutral = deselect = remove.
-  on(selectPlanPilotFacet, (state, { request }) => {
-    const others = state.decisions.filter((d) => d.id !== request.facetId);
+  // Submit the staged selections: loading on, plus fold each request into the
+  // decisions list. For every request, drop any previous decision for that
+  // facet, then re-add it if the new state is a real decision
+  // (positive/negative). Neutral = deselect = remove.
+  on(submitPlanPilotSelections, (state, { requests }) => {
+    let decisions = state.decisions;
 
-    let decisions = others;
-    if (request.selectionState !== PlanPilotSelectionState.NEUTRAL) {
-      const facet =
-        state.facets.find((f) => f.id === request.facetId) ??
-        state.decisions.find((d) => d.id === request.facetId);
-      if (facet) {
-        decisions = [...others, { ...facet, selectionState: request.selectionState }];
+    for (const request of requests) {
+      const others = decisions.filter((d) => d.id !== request.facetId);
+      if (request.selectionState !== PlanPilotSelectionState.NEUTRAL) {
+        const facet =
+          state.facets.find((f) => f.id === request.facetId) ??
+          decisions.find((d) => d.id === request.facetId);
+        decisions = facet
+          ? [...others, { ...facet, selectionState: request.selectionState }]
+          : others;
+      } else {
+        decisions = others;
       }
     }
 
     return { ...state, loading: true, error: undefined, decisions };
   }),
 
-  on(selectPlanPilotFacetSuccess, (state, { response }) => ({
+  on(submitPlanPilotSelectionsSuccess, (state, { response }) => ({
     ...state,
     loading: false,
     runId: response.runId,
     facets: response.facets,
   })),
 
-  on(selectPlanPilotFacetFailure, (state, { err }) => ({
+  on(submitPlanPilotSelectionsFailure, (state, { err }) => ({
     ...state,
     loading: false,
     error: err,

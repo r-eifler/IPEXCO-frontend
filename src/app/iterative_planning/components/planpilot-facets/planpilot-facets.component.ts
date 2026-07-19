@@ -3,9 +3,12 @@ import { HttpErrorResponse } from "@angular/common/http";
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   inject,
   input,
+  signal,
 } from "@angular/core";
+import { toObservable } from "@angular/core/rxjs-interop";
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { combineLatest } from "rxjs";
 import { map, startWith } from "rxjs/operators";
@@ -21,10 +24,11 @@ import {
   PlanPilotEncoding,
   PlanPilotFacet,
   PlanPilotSelectionState,
+  SelectPlanPilotFacetRequest,
 } from "../../domain/planpilot";
 import {
-  selectPlanPilotFacet,
   startPlanPilotSession,
+  submitPlanPilotSelections,
 } from "../../state/planpilot.actions";
 import {
   selectDecisions,
@@ -36,6 +40,16 @@ import {
   selectSolutions,
   selectSolutionsLoading,
 } from "../../state/planpilot.feature";
+
+// A row rendered in the "Made decisions" column: either a committed decision
+// or a staged (pending) pick that has not been submitted yet.
+interface DecisionRow {
+  facet: PlanPilotFacet;
+  // The state to display (staged state for pending picks, committed otherwise).
+  displayState: PlanPilotSelectionState;
+  pending: boolean;
+  pendingLabel: string;
+}
 
 @Component({
   selector: "app-planpilot-facets",
@@ -65,6 +79,13 @@ export class PlanPilotFacetsComponent {
   filterControl = this.fb.nonNullable.control("");
   private filterLabel$ = this.filterControl.valueChanges.pipe(startWith(""));
 
+  // Staged selections, keyed by facet id. Nothing is sent to the backend until
+  // the user hits Submit; a facet whose choice equals its committed state is
+  // not staged (no-op).
+  pending = signal<Map<string, SelectPlanPilotFacetRequest>>(new Map());
+  pendingCount = computed(() => this.pending().size);
+  private pending$ = toObservable(this.pending);
+
   // Read from the store.
   runId$ = this.store.select(selectRunId);
   facets$ = this.store.select(selectFacets);
@@ -73,12 +94,31 @@ export class PlanPilotFacetsComponent {
   filterOptions$ = combineLatest([this.facets$, this.decisions$]).pipe(
     map(([facets, decisions]) => this.distinctLabels([...facets, ...decisions])),
   );
-  // Filtered views used by the template.
-  filteredFacets$ = combineLatest([this.facets$, this.filterLabel$]).pipe(
-    map(([facets, label]) => this.filterByLabel(facets, label)),
+  // Open decisions still awaiting a pick: exclude any facet that has been staged
+  // to a real choice (positive/negative) — those move to the "Made decisions"
+  // column as pending rows until submitted.
+  filteredFacets$ = combineLatest([
+    this.facets$,
+    this.pending$,
+    this.filterLabel$,
+  ]).pipe(
+    map(([facets, pending, label]) =>
+      this.filterByLabel(
+        facets.filter((facet) => !this.isStagedChoice(pending, facet.id)),
+        label,
+      ),
+    ),
   );
-  filteredDecisions$ = combineLatest([this.decisions$, this.filterLabel$]).pipe(
-    map(([decisions, label]) => this.filterByLabel(decisions, label)),
+  // The right column: committed decisions plus staged (pending) picks/undos.
+  madeDecisions$ = combineLatest([
+    this.decisions$,
+    this.facets$,
+    this.pending$,
+    this.filterLabel$,
+  ]).pipe(
+    map(([decisions, facets, pending, label]) =>
+      this.buildDecisionRows(decisions, facets, pending, label),
+    ),
   );
   solutionCount$ = this.store.select(selectSolutionCount);
   solutions$ = this.store.select(selectSolutions);
@@ -110,23 +150,124 @@ export class PlanPilotFacetsComponent {
     );
   }
 
+  // Stage a selection locally (no backend call yet). If the choice matches the
+  // facet's committed state, the staged change is dropped instead.
   onSelectionChange(facet: PlanPilotFacet, next: PlanPilotSelectionState): void {
-    this.store.dispatch(
-      selectPlanPilotFacet({
-        request: {
-          facetId: facet.id,
-          selectionState: next,
-          previousSelectionState: facet.selectionState,
-        },
-      }),
+    const staged = new Map(this.pending());
+    if (next === facet.selectionState) {
+      staged.delete(facet.id);
+    } else {
+      staged.set(facet.id, {
+        facetId: facet.id,
+        selectionState: next,
+        previousSelectionState: facet.selectionState,
+      });
+    }
+    this.pending.set(staged);
+  }
+
+  // The choice shown for a facet: the staged one if present, else committed.
+  selectionFor(facet: PlanPilotFacet): PlanPilotSelectionState {
+    return this.pending().get(facet.id)?.selectionState ?? facet.selectionState;
+  }
+
+  // Whether the facet currently has a staged (not-yet-submitted) change.
+  isPending(facet: PlanPilotFacet): boolean {
+    return this.pending().has(facet.id);
+  }
+
+  // Undo a committed decision by staging it back to neutral.
+  deselect(decision: PlanPilotFacet): void {
+    this.onSelectionChange(decision, PlanPilotSelectionState.NEUTRAL);
+  }
+
+  // Right-column button: a pending row is un-staged (restored to its committed
+  // state), a committed decision is staged for undo.
+  toggleDecision(row: DecisionRow): void {
+    if (row.pending) {
+      this.onSelectionChange(row.facet, row.facet.selectionState);
+    } else {
+      this.deselect(row.facet);
+    }
+  }
+
+  // Whether a facet has been staged to a real choice (positive/negative).
+  private isStagedChoice(
+    pending: Map<string, SelectPlanPilotFacetRequest>,
+    facetId: string,
+  ): boolean {
+    const staged = pending.get(facetId);
+    return (
+      staged !== undefined &&
+      staged.selectionState !== PlanPilotSelectionState.NEUTRAL
     );
   }
 
-  // Undo a committed decision: set it back to neutral.
-  // Both lists update: the reducer removes it from decisions and the backend
-  // returns it as an open facet again.
-  deselect(decision: PlanPilotFacet): void {
-    this.onSelectionChange(decision, PlanPilotSelectionState.NEUTRAL);
+  // Build the "Made decisions" rows: committed decisions (marked "pending undo"
+  // when staged back to neutral) plus new staged picks from the open column.
+  private buildDecisionRows(
+    decisions: PlanPilotFacet[],
+    facets: PlanPilotFacet[],
+    pending: Map<string, SelectPlanPilotFacetRequest>,
+    label: string,
+  ): DecisionRow[] {
+    const rows: DecisionRow[] = [];
+    const decisionIds = new Set(decisions.map((d) => d.id));
+
+    // Committed decisions, possibly staged for undo.
+    for (const decision of decisions) {
+      const staged = pending.get(decision.id);
+      const pendingUndo =
+        staged?.selectionState === PlanPilotSelectionState.NEUTRAL;
+      rows.push({
+        facet: decision,
+        displayState: decision.selectionState,
+        pending: pendingUndo,
+        pendingLabel: pendingUndo ? "pending undo" : "",
+      });
+    }
+
+    // New staged picks originating from the open column.
+    for (const [id, request] of pending) {
+      if (decisionIds.has(id)) {
+        continue;
+      }
+      if (request.selectionState === PlanPilotSelectionState.NEUTRAL) {
+        continue;
+      }
+      const facet = facets.find((f) => f.id === id);
+      if (!facet) {
+        continue;
+      }
+      rows.push({
+        facet,
+        displayState: request.selectionState,
+        pending: true,
+        pendingLabel: "pending",
+      });
+    }
+
+    const filtered = label
+      ? rows.filter((row) => row.facet.label === label)
+      : rows;
+    return filtered.sort(
+      (a, b) => (a.facet.timestep ?? 0) - (b.facet.timestep ?? 0),
+    );
+  }
+
+  // Send all staged selections to the backend; the recalculation runs once.
+  submit(): void {
+    const requests = [...this.pending().values()];
+    if (requests.length === 0) {
+      return;
+    }
+    this.store.dispatch(submitPlanPilotSelections({ requests }));
+    this.pending.set(new Map());
+  }
+
+  // Drop all staged selections without touching the backend.
+  discard(): void {
+    this.pending.set(new Map());
   }
 
   sortByTimestep(facets: PlanPilotFacet[]): PlanPilotFacet[] {

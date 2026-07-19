@@ -2,8 +2,8 @@ import { inject, Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { concatLatestFrom } from "@ngrx/operators";
 import { Store } from "@ngrx/store";
-import { of } from "rxjs";
-import { catchError, map, switchMap } from "rxjs/operators";
+import { from, of } from "rxjs";
+import { catchError, concatMap, last, map, switchMap } from "rxjs/operators";
 import { PlanPilotQueryType } from "../../domain/planpilot";
 import { PlanPilotService } from "../../service/planpilot.service";
 import {
@@ -13,12 +13,12 @@ import {
   queryPlanPilotSolutions,
   queryPlanPilotSolutionsFailure,
   queryPlanPilotSolutionsSuccess,
-  selectPlanPilotFacet,
-  selectPlanPilotFacetFailure,
-  selectPlanPilotFacetSuccess,
   startPlanPilotSession,
   startPlanPilotSessionFailure,
   startPlanPilotSessionSuccess,
+  submitPlanPilotSelections,
+  submitPlanPilotSelectionsFailure,
+  submitPlanPilotSelectionsSuccess,
 } from "../planpilot.actions";
 import { selectRunId } from "../planpilot.feature";
 
@@ -41,23 +41,27 @@ export class PlanPilotEffect {
     )),
   ));
 
-  public selectFacet$ = createEffect(() => this.actions$.pipe(
-    ofType(selectPlanPilotFacet),
+  // Apply all staged selections one after another (the service takes one facet
+  // at a time), then emit success once carrying the final facet list.
+  public submitSelections$ = createEffect(() => this.actions$.pipe(
+    ofType(submitPlanPilotSelections),
     concatLatestFrom(() => this.store.select(selectRunId)),
-    switchMap(([{ request }, runId]) => {
+    switchMap(([{ requests }, runId]) => {
       if (!runId) {
-        return of(selectPlanPilotFacetFailure({ err: "No active PlanPilot session." }));
+        return of(submitPlanPilotSelectionsFailure({ err: "No active PlanPilot session." }));
       }
-      return this.service.selectFacet$(runId, request).pipe(
-        map((response) => selectPlanPilotFacetSuccess({ response })),
-        catchError((err) => of(selectPlanPilotFacetFailure({ err }))),
+      return from(requests).pipe(
+        concatMap((request) => this.service.selectFacet$(runId, request)),
+        last(),
+        map((response) => submitPlanPilotSelectionsSuccess({ response })),
+        catchError((err) => of(submitPlanPilotSelectionsFailure({ err }))),
       );
     }),
   ));
 
-  // After a session starts or a decision is committed, refresh the counter.
+  // After a session starts or the staged selections are submitted, recalculate.
   public refreshSolutionCount$ = createEffect(() => this.actions$.pipe(
-    ofType(startPlanPilotSessionSuccess, selectPlanPilotFacetSuccess),
+    ofType(startPlanPilotSessionSuccess, submitPlanPilotSelectionsSuccess),
     map(() => queryPlanPilotSolutionCount()),
   ));
 

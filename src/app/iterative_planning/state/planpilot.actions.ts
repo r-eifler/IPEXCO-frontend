@@ -21,17 +21,17 @@ export const startPlanPilotSessionFailure = createAction(
   props<{ err: unknown }>(),
 );
 
-// Select facet (positive / negative / neutral)
-export const selectPlanPilotFacet = createAction(
-  "[planpilot] select facet",
-  props<{ request: SelectPlanPilotFacetRequest }>(),
+// Submit the staged selections (positive / negative / neutral) as one batch.
+export const submitPlanPilotSelections = createAction(
+  "[planpilot] submit selections",
+  props<{ requests: SelectPlanPilotFacetRequest[] }>(),
 );
-export const selectPlanPilotFacetSuccess = createAction(
-  "[planpilot] select facet success",
+export const submitPlanPilotSelectionsSuccess = createAction(
+  "[planpilot] submit selections success",
   props<{ response: PlanPilotFacetsResponse }>(),
 );
-export const selectPlanPilotFacetFailure = createAction(
-  "[planpilot] select facet failure",
+export const submitPlanPilotSelectionsFailure = createAction(
+  "[planpilot] submit selections failure",
   props<{ err: unknown }>(),
 );
 
