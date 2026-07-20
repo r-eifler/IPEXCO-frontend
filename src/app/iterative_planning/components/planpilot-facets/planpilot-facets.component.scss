@@ -173,18 +173,30 @@
   }
 }
 
-.facet-group {
+.facet-groups {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+}
 
+.facet-group {
   &__title {
-    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
     font-size: 0.8rem;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.04em;
     color: rgba(0, 0, 0, 0.55);
+  }
+
+  &__count {
+    padding: 0.1rem 0.5rem;
+    border-radius: 999px;
+    font-size: 0.7rem;
+    background: rgba(0, 0, 0, 0.08);
+    color: rgba(0, 0, 0, 0.7);
   }
 
   &__empty {

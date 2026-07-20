@@ -13,6 +13,9 @@ import {
   queryPlanPilotSolutionCount,
   queryPlanPilotSolutionCountFailure,
   queryPlanPilotSolutionCountSuccess,
+  queryPlanPilotSolutionReduction,
+  queryPlanPilotSolutionReductionFailure,
+  queryPlanPilotSolutionReductionSuccess,
   queryPlanPilotSolutions,
   queryPlanPilotSolutionsFailure,
   queryPlanPilotSolutionsSuccess,
@@ -66,6 +69,27 @@ export class PlanPilotEffect {
   public refreshSolutionCount$ = createEffect(() => this.actions$.pipe(
     ofType(startPlanPilotSessionSuccess, submitPlanPilotSelectionsSuccess),
     map(() => queryPlanPilotSolutionCount()),
+  ));
+
+  // ... and refresh the per-facet what-if plan counts as well.
+  public refreshSolutionReduction$ = createEffect(() => this.actions$.pipe(
+    ofType(startPlanPilotSessionSuccess, submitPlanPilotSelectionsSuccess),
+    map(() => queryPlanPilotSolutionReduction()),
+  ));
+
+  // Query, for every open facet, how many plans enforcing/forbidding it leaves.
+  public querySolutionReduction$ = createEffect(() => this.actions$.pipe(
+    ofType(queryPlanPilotSolutionReduction),
+    concatLatestFrom(() => this.store.select(selectRunId)),
+    switchMap(([, runId]) => {
+      if (!runId) {
+        return of(queryPlanPilotSolutionReductionFailure({ err: "No active PlanPilot session." }));
+      }
+      return this.service.query$(runId, { type: PlanPilotQueryType.SOLUTION_REDUCTION }).pipe(
+        map((response) => queryPlanPilotSolutionReductionSuccess({ facets: response.result.facets ?? [] })),
+        catchError((err) => of(queryPlanPilotSolutionReductionFailure({ err }))),
+      );
+    }),
   ));
 
   // Query the number of solutions still consistent with the decisions.

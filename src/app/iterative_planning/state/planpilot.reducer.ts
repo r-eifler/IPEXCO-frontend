@@ -8,6 +8,7 @@ import {
   queryPlanPilotSolutionCount,
   queryPlanPilotSolutionCountFailure,
   queryPlanPilotSolutionCountSuccess,
+  queryPlanPilotSolutionReductionSuccess,
   queryPlanPilotSolutionsFailure,
   queryPlanPilotSolutionsSuccess,
   startPlanPilotSession,
@@ -136,6 +137,21 @@ export const planPilotReducer = createReducer(
     ...state,
     solutionCount: count,
   })),
+
+  // Merge the per-facet what-if plan counts ('#!!') into the stored facets:
+  // remaining.solution.positive/negative = plans left when enforcing/forbidding.
+  on(queryPlanPilotSolutionReductionSuccess, (state, { facets }) => {
+    const countsById = new Map(facets.map((facet) => [facet.id, facet]));
+    return {
+      ...state,
+      facets: state.facets.map((facet) => {
+        const counts = countsById.get(facet.id);
+        return counts
+          ? { ...facet, reduction: counts.reduction, remaining: counts.remaining }
+          : facet;
+      }),
+    };
+  }),
 
   // Store the enumerated remaining plans (empty when the set is too large).
   // This is the end of the chain, so the recalculation is done.

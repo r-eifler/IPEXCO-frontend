@@ -15,6 +15,7 @@ import { map, startWith } from "rxjs/operators";
 import { MatButtonModule } from "@angular/material/button";
 import { MatButtonToggleModule } from "@angular/material/button-toggle";
 import { MatCheckboxModule } from "@angular/material/checkbox";
+import { MatExpansionModule } from "@angular/material/expansion";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { MatProgressBarModule } from "@angular/material/progress-bar";
@@ -77,6 +78,7 @@ interface OpenFacetGroup {
     MatButtonModule,
     MatButtonToggleModule,
     MatCheckboxModule,
+    MatExpansionModule,
     MatFormFieldModule,
     MatInputModule,
     MatProgressBarModule,
@@ -359,6 +361,16 @@ export class PlanPilotFacetsComponent {
   // occurs_sometime landmarks (timestep === null).
   timestepLabel(facet: PlanPilotFacet): string {
     return facet.timestep === null ? "any time" : `t = ${facet.timestep}`;
+  }
+
+  // The what-if plan counts ('#!!'): how many plans enforcing/forbidding this
+  // facet would leave. Null until the solution-reduction query has answered.
+  whatIfCounts(facet: PlanPilotFacet): { enforce: number; forbid: number } | null {
+    const solution = facet.remaining?.solution;
+    if (solution?.positive == null || solution?.negative == null) {
+      return null;
+    }
+    return { enforce: solution.positive, forbid: solution.negative };
   }
 
   private sortFacets(facets: PlanPilotFacet[]): PlanPilotFacet[] {

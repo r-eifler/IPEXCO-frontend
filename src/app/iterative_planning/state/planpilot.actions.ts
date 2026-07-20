@@ -62,6 +62,20 @@ export const queryPlanPilotSolutionsFailure = createAction(
   props<{ err: unknown }>(),
 );
 
+// Query, for every open facet, how many plans enforcing/forbidding it would
+// leave ('#!!'); the counts are merged into the stored facets.
+export const queryPlanPilotSolutionReduction = createAction(
+  "[planpilot] query solution reduction",
+);
+export const queryPlanPilotSolutionReductionSuccess = createAction(
+  "[planpilot] query solution reduction success",
+  props<{ facets: PlanPilotFacet[] }>(),
+);
+export const queryPlanPilotSolutionReductionFailure = createAction(
+  "[planpilot] query solution reduction failure",
+  props<{ err: unknown }>(),
+);
+
 // Query the implied facets ('|= %'): the landmarks forced by the committed
 // decisions (true in every remaining plan).
 export const queryPlanPilotImpliedFacets = createAction(

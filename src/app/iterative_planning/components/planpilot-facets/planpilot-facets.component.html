@@ -167,45 +167,52 @@
       <h4 class="column__title">Open decisions</h4>
       @if (openFacetGroups$ | async; as groups) {
         @if (facetGroupsTotal(groups) > 0) {
-          @for (group of groups; track group.kind) {
-            <div class="facet-group">
-              <h5 class="facet-group__title">{{ group.title }}</h5>
-              @if (group.facets.length > 0) {
-                <ul class="facet-list">
-                  @for (facet of group.facets; track facet.id) {
-                    <li class="facet" [class.facet--pending]="isPending(facet)">
-                      <div class="facet__head">
-                        <span class="facet__label">{{ facet.label }}</span>
-                        @if (isPending(facet)) {
-                          <span class="facet__pending">pending</span>
+          <mat-accordion multi class="facet-groups">
+            @for (group of groups; track group.kind) {
+              <mat-expansion-panel class="facet-group">
+                <mat-expansion-panel-header>
+                  <mat-panel-title class="facet-group__title">
+                    {{ group.title }}
+                    <span class="facet-group__count">{{ group.facets.length }}</span>
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+
+                @if (group.facets.length > 0) {
+                  <ul class="facet-list">
+                    @for (facet of group.facets; track facet.id) {
+                      <li class="facet" [class.facet--pending]="isPending(facet)">
+                        <div class="facet__head">
+                          <span class="facet__label">{{ facet.label }}</span>
+                          @if (isPending(facet)) {
+                            <span class="facet__pending">pending</span>
+                          }
+                          <span class="facet__timestep">{{ timestepLabel(facet) }}</span>
+                        </div>
+
+                        <mat-button-toggle-group
+                          [value]="selectionFor(facet)"
+                          (change)="onSelectionChange(facet, $event.value)"
+                          [disabled]="(loading$ | async) ?? false"
+                        >
+                          <mat-button-toggle [value]="SelectionState.NEGATIVE">Forbid</mat-button-toggle>
+                          <mat-button-toggle [value]="SelectionState.NEUTRAL">Neutral</mat-button-toggle>
+                          <mat-button-toggle [value]="SelectionState.POSITIVE">Enforce</mat-button-toggle>
+                        </mat-button-toggle-group>
+
+                        @if (whatIfCounts(facet); as counts) {
+                          <span class="facet__remaining">
+                            Enforce → {{ counts.enforce }} · Forbid → {{ counts.forbid }} plans
+                          </span>
                         }
-                        <span class="facet__timestep">{{ timestepLabel(facet) }}</span>
-                      </div>
-
-                      <mat-button-toggle-group
-                        [value]="selectionFor(facet)"
-                        (change)="onSelectionChange(facet, $event.value)"
-                        [disabled]="(loading$ | async) ?? false"
-                      >
-                        <mat-button-toggle [value]="SelectionState.NEGATIVE">Forbid</mat-button-toggle>
-                        <mat-button-toggle [value]="SelectionState.NEUTRAL">Neutral</mat-button-toggle>
-                        <mat-button-toggle [value]="SelectionState.POSITIVE">Enforce</mat-button-toggle>
-                      </mat-button-toggle-group>
-
-                      @if (facet.remaining; as remaining) {
-                        <span class="facet__remaining">
-                          remaining: +{{ remaining.solution.positive ?? '–' }} /
-                          −{{ remaining.solution.negative ?? '–' }} plans
-                        </span>
-                      }
-                    </li>
-                  }
-                </ul>
-              } @else {
-                <p class="status facet-group__empty">{{ group.emptyText }}</p>
-              }
-            </div>
-          }
+                      </li>
+                    }
+                  </ul>
+                } @else {
+                  <p class="status facet-group__empty">{{ group.emptyText }}</p>
+                }
+              </mat-expansion-panel>
+            }
+          </mat-accordion>
         } @else if (filterControl.value) {
           <p class="status">No open decisions match the filter.</p>
         } @else {
