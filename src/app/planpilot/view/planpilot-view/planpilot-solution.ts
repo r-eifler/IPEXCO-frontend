@@ -6,7 +6,7 @@ export function mapBackendFacet(
   index: number,
 ): PlanPilotUiFacet {
   const backendSelection = facet.selectionState as FacetSelection;
-  const selection = facet.facetType === 'implied' ? 'neutral' : backendSelection;
+  const selection = backendSelection;
   const solutionReduction = metricValue(facet.reduction?.solution, backendSelection) ?? null;
   const facetReduction = metricValue(facet.reduction?.facets, backendSelection) ?? null;
   const remainingSolutions = metricValue(facet.remaining?.solution, backendSelection) ?? null;
@@ -60,7 +60,7 @@ export function withFacetSelectionState(
 
 export function mapRepresentativeSolution(
   facets: PlanPilotFacet[],
-  solutionCount: number,
+  solutionCount: number | null,
 ): PlanPilotUiFacet[] {
   return [...facets]
     .sort((left, right) => (left.timestep ?? 0) - (right.timestep ?? 0))
@@ -121,36 +121,45 @@ function facetDetail(
   remainingFacets: number | null,
 ): string {
   const timestep = facet.abstractTimeStep || facet.timestep === null
-    ? 'at any step in the plan'
-    : `at t${facet.timestep}`;
+    ? 'Any step'
+    : `t${facet.timestep}`;
   const remainingCounts = [
-    remainingSolutions === null ? null : `${remainingSolutions} plans`,
-    remainingFacets === null ? null : `${remainingFacets} alternatives`,
+    remainingSolutions === null ? null : countLabel(remainingSolutions, 'plan'),
+    remainingFacets === null ? null : countLabel(remainingFacets, 'alternative'),
   ].filter((value): value is string => value !== null);
   const removedCounts = [
-    solutionReduction === null ? null : `${solutionReduction} plans`,
-    facetReduction === null ? null : `${facetReduction} alternatives`,
+    solutionReduction === null ? null : reductionLabel(solutionReduction, 'plans'),
+    facetReduction === null ? null : reductionLabel(facetReduction, 'atomic facets'),
   ].filter((value): value is string => value !== null);
-  const remaining = remainingCounts.length ? `${remainingCounts.join(' and ')} remain.` : '';
-  const removed = removedCounts.length ? `${removedCounts.join(' and ')} removed.` : '';
+  const remaining = remainingCounts.length ? `${remainingCounts.join(' and ')} remain` : '';
+  const removed = removedCounts.length ? removedCounts.join(' and ') : '';
 
   return [
-    `Occurs ${timestep}.`,
+    timestep,
     facet.facetType ? facetTypeText(facet.facetType) : '',
     remaining,
     removed,
-  ].filter(Boolean).join(' ');
+  ].filter(Boolean).join(' · ');
 }
 
 function facetTypeText(facetType: PlanPilotFacet['facetType']): string {
   switch (facetType) {
-    case 'plan': return 'No constraint is set for this action.';
-    case 'selected': return 'User constraint.';
-    case 'implied': return 'PlanPilot finds this action in every remaining plan. It cannot be edited.';
-    case 'optional': return 'No constraint is set for this action.';
-    case 'empty': return 'This is an unused step in a bounded plan.';
+    case 'plan': return 'No constraint';
+    case 'selected': return 'Required by you';
+    case 'implied': return 'In every remaining plan (read-only)';
+    case 'optional': return 'No constraint';
+    case 'empty': return 'Unused bounded step';
     default: return '';
   }
+}
+
+function countLabel(count: number, label: string): string {
+  return `${count} ${label}${count === 1 ? '' : 's'}`;
+}
+
+function reductionLabel(reduction: number, label: string): string {
+  const percentage = Math.round(reduction * 10_000) / 100;
+  return `${percentage}% fewer ${label}`;
 }
 
 function metricValue(

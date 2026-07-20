@@ -1,0 +1,35 @@
+import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { MatButtonModule } from "@angular/material/button";
+import { PlanPilotTimelineRow } from "../../view/planpilot-view/planpilot-analysis";
+
+export type PlanPilotTimelineKey = number | "any";
+
+@Component({
+  selector: "app-planpilot-sidebar-plan",
+  imports: [MatButtonModule],
+  templateUrl: "./planpilot-sidebar-plan.component.html",
+  styleUrl: "./planpilot-sidebar-plan.component.scss",
+})
+export class PlanPilotSidebarPlanComponent {
+  @Input() sessionHorizon = 1;
+  @Input() sessionEncoding: "exact" | "bounded" = "bounded";
+  @Input() sessionAbstractTimeSteps = false;
+  @Input() activeSessionHorizon = 1;
+  @Input() activeSessionEncoding: "exact" | "bounded" = "bounded";
+  @Input() activeSessionAbstractTimeSteps = false;
+  @Input() displayedSessionHorizon = 1;
+  @Input() displayedSessionEncoding: "exact" | "bounded" = "bounded";
+  @Input() configurationChanged = false;
+  @Input() pendingSelectionCount = 0;
+  @Input() isBusy = false;
+  @Input() timelineRows: PlanPilotTimelineRow[] = [];
+  @Input() focusedTimestep: PlanPilotTimelineKey | null = null;
+  @Input() timestepActionCounts: Record<string, number> = {};
+
+  @Output() horizonChange = new EventEmitter<Event>();
+  @Output() encodingChange = new EventEmitter<Event>();
+  @Output() abstractTimeStepsChange = new EventEmitter<Event>();
+  @Output() rebuild = new EventEmitter<void>();
+  @Output() timestepFocus = new EventEmitter<PlanPilotTimelineKey>();
+  @Output() timestepActions = new EventEmitter<PlanPilotTimelineKey>();
+}

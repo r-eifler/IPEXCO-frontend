@@ -5,7 +5,6 @@
 @let interfaceType = explanationInterfaceType$ | async;
 @let hasUnsolvedSoftGoals = hasUnsolvedSoftGoals$ | async;
 @let isFailed = isFailed$ | async;
-@let solved = solved$ | async;
 
 <app-page>
   <app-breadcrumb>
@@ -22,15 +21,6 @@
         (click)="onHelp()">
         <mat-icon>help</mat-icon>
       </button>
-      @if (solved) {
-        <a mat-icon-button matTooltip="Open PlanPilot." [routerLink]="['planpilot']">
-          <mat-icon>account_tree</mat-icon>
-        </a>
-      } @else {
-        <button mat-icon-button matTooltip="Solve this step before opening PlanPilot." disabled>
-          <mat-icon>account_tree</mat-icon>
-        </button>
-      }
       <button mat-icon-button matTooltip="Creates a new iteration based on the properties selected in this iteration."
         [disabled]="!anabelCreationInterface"
         (click)="createNewIteration(step?._id)"><mat-icon>call_split</mat-icon></button>

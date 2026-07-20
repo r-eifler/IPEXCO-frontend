@@ -36,7 +36,7 @@ import { explanationHash } from "../../domain/explanation/explanation-hash";
 import { QuestionType } from "../../domain/explanation/explanations";
 import { questionFactory } from "../../domain/explanation/question-factory";
 import { StructuredText } from "../../domain/interface/explanation-message";
-import { hasPlanResult, PlanRunStatus } from "../../domain/plan";
+import { PlanRunStatus } from "../../domain/plan";
 import { cancelPlanComputationAndIterationStep, deleteIterationStep, initNewIterationStep, questionPosed } from "../../state/iterative-planning.actions";
 import { Message } from "../../state/iterative-planning.reducer";
 import {
@@ -134,10 +134,6 @@ export class StepDetailViewComponent {
   isFailed$ = this.step$.pipe(
     filter((step) => !!step),
     map((step) => step.plan?.status == PlanRunStatus.FAILED)
-  );
-  solved$ = this.step$.pipe(
-    filter((step) => !!step),
-    map((step) => hasPlanResult(step.plan))
   );
 
   planProperties$ = this.store.select(selectIterativePlanningProperties);

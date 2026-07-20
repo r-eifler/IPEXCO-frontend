@@ -28,19 +28,6 @@ export interface PlanPilotUiFacet {
   solutionContext?: boolean;
   userConstraint?: boolean;
   meta?: string;
-  propertyLabels?: string[];
-}
-
-export interface PlanPilotPropertyEvaluation {
-  id: string;
-  label: string;
-  description: string;
-  color: string;
-  icon: string;
-  kind: 'required' | 'soft';
-  status: 'satisfied' | 'unsatisfied' | 'unsupported';
-  stableSinceTimestep: number | null;
-  establishedByFacetId?: string;
 }
 
 export interface PendingFacetSelection {
@@ -49,6 +36,19 @@ export interface PendingFacetSelection {
   timestep: number;
   selection: FacetSelection;
   previousSelection: FacetSelection;
+}
+
+export interface PlanPilotConstraintChange {
+  facetId: string;
+  label: string;
+  timestep: number;
+  from: FacetSelection;
+  to: FacetSelection;
+}
+
+export interface PlanPilotConstraintTransaction {
+  label: string;
+  changes: PlanPilotConstraintChange[];
 }
 
 export function isStructuralPlanPilotFacet(facet: PlanPilotUiFacet): boolean {

@@ -19,7 +19,6 @@ export function buildPlanPilotGraphConnections(
   const connections: PlanPilotGraphConnection[] = [];
 
   facets.forEach((facet) => {
-    // Only the representative solution has an ordered path.
     if (!facet.solutionContext) {
       return;
     }

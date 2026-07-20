@@ -6,6 +6,18 @@ import cytoscape, { Core, EdgeSingular, ElementDefinition, EventObject, NodeSing
 import { PLANPILOT_GRAPH_STYLES } from './planpilot-graph.styles';
 
 export type PlanPilotGraphFacetSelection = 'positive' | 'negative' | 'neutral';
+export type PlanPilotGraphVisualState =
+  | 'root'
+  | 'goal'
+  | 'time'
+  | 'displayed-plan'
+  | 'required'
+  | 'forbidden'
+  | 'alternative'
+  | 'implied'
+  | 'empty'
+  | 'unavailable'
+  | 'query';
 
 export interface PlanPilotGraphFacet {
   id: string;
@@ -20,8 +32,8 @@ export interface PlanPilotGraphFacet {
   meta?: string;
   solutionContext?: boolean;
   userConstraint?: boolean;
-  propertyLabels?: string[];
   abstractTimeStep?: boolean;
+  visualState: PlanPilotGraphVisualState;
 }
 
 export interface PlanPilotGraphConnection {
@@ -55,6 +67,14 @@ export interface PlanPilotGraphSnapshot {
     renderedPosition: { x: number; y: number };
     renderedSize: { width: number; height: number };
     insideViewport: boolean;
+    computedStyle: {
+      backgroundColor: string;
+      borderColor: string;
+      borderStyle: string;
+      borderWidth: number;
+      shape: string;
+      opacity: number;
+    };
   }[];
   edges: {
     id: string;
@@ -65,6 +85,7 @@ export interface PlanPilotGraphSnapshot {
     classes: string[];
     width: number;
     renderedWidth: number;
+    sourceArrowShape: string;
     targetArrowShape: string;
     renderedSourceEndpoint: { x: number; y: number };
     renderedTargetEndpoint: { x: number; y: number };
@@ -89,6 +110,8 @@ export class PlanPilotGraphComponent implements AfterViewInit, OnChanges, OnDest
   private graph?: Core;
   private resizeObserver?: ResizeObserver;
   private lastStructureSignature = '';
+  private readonly basePlanEdgeWidth = 8;
+  private readonly minimumRenderedPlanEdgeWidth = 2;
 
   ngAfterViewInit(): void {
     this.graph = cytoscape({
@@ -105,13 +128,14 @@ export class PlanPilotGraphComponent implements AfterViewInit, OnChanges, OnDest
       layout: this.treeLayout(),
     });
 
-
     this.graph.on('tap', 'node.facet', (event: EventObject) => {
       const facetId = event.target.id();
       this.facetSelected.emit({ ...this.tapPosition(event), facetId });
     });
+    this.graph.on('zoom', () => this.updatePlanEdgeWidth());
 
     this.applySelection();
+    this.updatePlanEdgeWidth();
     this.lastStructureSignature = this.structureSignature();
     this.resizeObserver = new ResizeObserver(() => this.resizeGraph());
     this.resizeObserver.observe(this.graphContainer.nativeElement);
@@ -147,19 +171,18 @@ export class PlanPilotGraphComponent implements AfterViewInit, OnChanges, OnDest
       return;
     }
 
-    const planNodes = this.graph.nodes('.solution-path');
+    const planNodes = this.graph.nodes('.displayed-plan');
     const root = this.graph.nodes('.root');
-    const displayedPlan = root.union(planNodes);
+    const goal = this.graph.nodes('.goal');
+    const displayedPlan = root.union(planNodes).union(goal);
     this.graph.fit(displayedPlan.nonempty() ? displayedPlan : this.graph.elements(), 56);
-    this.graph.panBy({
-      x: Math.min(280, this.graphContainer.nativeElement.clientWidth * 0.24),
-      y: 0,
-    });
+    this.updatePlanEdgeWidth();
   }
 
   fitAllGraph(): void {
     this.resizeGraph();
     this.graph?.fit(undefined, 48);
+    this.updatePlanEdgeWidth();
   }
 
   zoomIn(): void {
@@ -176,6 +199,7 @@ export class PlanPilotGraphComponent implements AfterViewInit, OnChanges, OnDest
     }
 
     this.resizeGraph();
+    this.updatePlanEdgeWidth();
     const viewportWidth = this.graphContainer.nativeElement.clientWidth;
     const viewportHeight = this.graphContainer.nativeElement.clientHeight;
     const insideViewport = (node: NodeSingular): boolean => {
@@ -209,6 +233,14 @@ export class PlanPilotGraphComponent implements AfterViewInit, OnChanges, OnDest
           height: node.renderedHeight(),
         },
         insideViewport: insideViewport(node),
+        computedStyle: {
+          backgroundColor: String(node.style('background-color')),
+          borderColor: String(node.style('border-color')),
+          borderStyle: String(node.style('border-style')),
+          borderWidth: Number.parseFloat(String(node.style('border-width'))) || 0,
+          shape: String(node.style('shape')),
+          opacity: Number.parseFloat(String(node.style('opacity'))) || 0,
+        },
       })),
       edges: this.graph.edges().filter((edge) => !edge.hasClass('level-edge')).map((edge) => {
         const renderedEdge = edge as EdgeSingular;
@@ -222,6 +254,7 @@ export class PlanPilotGraphComponent implements AfterViewInit, OnChanges, OnDest
           classes: edge.classes(),
           width,
           renderedWidth: width * this.graph!.zoom(),
+          sourceArrowShape: String(edge.style('source-arrow-shape')),
           targetArrowShape: String(edge.style('target-arrow-shape')),
           renderedSourceEndpoint: renderedEdge.renderedSourceEndpoint(),
           renderedTargetEndpoint: renderedEdge.renderedTargetEndpoint(),
@@ -250,6 +283,40 @@ export class PlanPilotGraphComponent implements AfterViewInit, OnChanges, OnDest
     });
   }
 
+  focusTimestep(timestep: number | 'any'): void {
+    setTimeout(() => {
+      if (!this.graph) {
+        return;
+      }
+
+      this.resizeGraph();
+      const matchingIds = this.facets
+        .filter((facet) => timestep === 'any'
+          ? Boolean(facet.abstractTimeStep)
+          : !facet.abstractTimeStep && facet.timestep === timestep && facet.nodeType !== 'root')
+        .map((facet) => facet.id);
+      const matchingNodes = this.graph.nodes().filter((node) => matchingIds.includes(node.id()));
+      if (matchingNodes.nonempty()) {
+        const positions = matchingNodes.map((node) => (node as NodeSingular).position());
+        this.centerModelPosition({
+          x: positions.reduce((sum, position) => sum + position.x, 0) / positions.length,
+          y: positions.reduce((sum, position) => sum + position.y, 0) / positions.length,
+        });
+        return;
+      }
+
+      const levelSuffix = timestep === 'any' ? 'any' : String(timestep);
+      const left = this.graph.getElementById(`__level_${levelSuffix}_left`);
+      const right = this.graph.getElementById(`__level_${levelSuffix}_right`);
+      if (left.nonempty() && right.nonempty()) {
+        this.centerModelPosition({
+          x: (left.position('x') + right.position('x')) / 2,
+          y: (left.position('y') + right.position('y')) / 2 + 96,
+        });
+      }
+    });
+  }
+
   private applySelection(): void {
     this.graph?.nodes().removeClass('selected');
     if (this.selectedFacetId) {
@@ -271,6 +338,7 @@ export class PlanPilotGraphComponent implements AfterViewInit, OnChanges, OnDest
     this.graph.layout(this.treeLayout(false)).run();
     this.graph.zoom(viewport.zoom);
     this.graph.pan(viewport.pan);
+    this.updatePlanEdgeWidth();
   }
 
   private applyNodeClasses(): void {
@@ -284,7 +352,7 @@ export class PlanPilotGraphComponent implements AfterViewInit, OnChanges, OnDest
         return;
       }
 
-      node.removeClass('positive negative neutral plan branch root time path candidate excluded-node query-node implied-node empty-node unavailable solution-path user-constraint property-milestone');
+      node.removeClass('positive negative neutral root goal time displayed-plan required forbidden alternative implied empty unavailable query solution-path user-constraint');
       node.addClass(`facet ${facet.selection} ${this.groupClass(facet)}`);
       node.data('label', this.nodeLabel(facet));
     });
@@ -304,6 +372,7 @@ export class PlanPilotGraphComponent implements AfterViewInit, OnChanges, OnDest
       edge.removeClass('plan-edge');
       edge.addClass(`${connection.kind}-edge`);
     });
+    this.updatePlanEdgeWidth();
   }
 
   private toElements(): ElementDefinition[] {
@@ -345,53 +414,12 @@ export class PlanPilotGraphComponent implements AfterViewInit, OnChanges, OnDest
   }
 
   private groupClass(facet: PlanPilotGraphFacet): string {
-    const availabilityClass = facet.available === false ? ' unavailable' : '';
-    const solutionClass = facet.solutionContext ? ' solution-path' : '';
-    const userConstraintClass = facet.userConstraint ? ' user-constraint' : '';
-    const propertyClass = facet.propertyLabels?.length ? ' property-milestone' : '';
-    if (facet.nodeType) {
-      if (facet.nodeType === 'time') {
-        return `time${availabilityClass}${solutionClass}${userConstraintClass}${propertyClass}`;
-      }
-      const nodeTypeClass = facet.nodeType === 'excluded'
-        ? 'excluded-node'
-        : `${facet.nodeType}${facet.nodeType === 'query' ? '-node' : ''}`;
-      return `${nodeTypeClass}${availabilityClass}${solutionClass}${userConstraintClass}${propertyClass}`;
-    }
-
-    if (facet.group === 'In every plan' || facet.group === 'Implied by plan') {
-      return `implied-node${availabilityClass}${solutionClass}${userConstraintClass}${propertyClass}`;
-    }
-
-    if (facet.selection === 'positive') {
-      return `path${availabilityClass}${solutionClass}${userConstraintClass}${propertyClass}`;
-    }
-
-    if (facet.selection === 'negative') {
-      return `excluded-node${availabilityClass}${solutionClass}${userConstraintClass}${propertyClass}`;
-    }
-
-    if (facet.available === false) {
-      return `query-node unavailable${solutionClass}${userConstraintClass}${propertyClass}`;
-    }
-
-    if (facet.group === 'Plan' || facet.group === 'Selected plan') {
-      return `path${availabilityClass}${solutionClass}${userConstraintClass}${propertyClass}`;
-    }
-
-    if (facet.group === 'Excluded branch') {
-      return `excluded-node${availabilityClass}${solutionClass}${userConstraintClass}${propertyClass}`;
-    }
-
-    if (facet.group === 'Empty timestep') {
-      return `empty-node${availabilityClass}${solutionClass}${userConstraintClass}${propertyClass}`;
-    }
-
-    if (facet.group === 'Open candidate') {
-      return `${facet.action === 'query' ? 'query-node' : 'candidate'}${availabilityClass}${solutionClass}${userConstraintClass}${propertyClass}`;
-    }
-
-    return `${availabilityClass}${solutionClass}${userConstraintClass}${propertyClass}`.trim();
+    const visualState = facet.visualState;
+    return [
+      visualState,
+      visualState === 'displayed-plan' ? 'solution-path' : '',
+      facet.userConstraint ? 'user-constraint' : '',
+    ].filter(Boolean).join(' ');
   }
 
   private nodeLabel(facet: PlanPilotGraphFacet): string {
@@ -588,45 +616,29 @@ export class PlanPilotGraphComponent implements AfterViewInit, OnChanges, OnDest
   }
 
   private nodeLane(facet: PlanPilotGraphFacet): number {
-    if (
-      facet.solutionContext
-      || facet.selection === 'positive'
-      || facet.group === 'Plan'
-      || facet.group === 'Selected plan'
-    ) {
-      return 0;
+    switch (facet.visualState) {
+      case 'displayed-plan':
+      case 'required':
+        return 0;
+      case 'implied':
+        return 1;
+      case 'forbidden':
+        return 3;
+      case 'unavailable':
+      case 'query':
+        return 4;
+      default:
+        return 2;
     }
-    if (facet.group === 'In every plan' || facet.group === 'Implied by plan') {
-      return 1;
-    }
-    if (facet.selection === 'negative' || facet.group === 'Excluded branch') {
-      return 3;
-    }
-    if (facet.available === false || facet.group === 'Outside current space') {
-      return 4;
-    }
-    return 2;
   }
 
   private nodeOrderWeight(facet: PlanPilotGraphFacet): number {
-    if (facet.solutionContext || facet.selection === 'positive') {
-      return 0;
-    }
-    if (facet.group === 'In every plan' || facet.group === 'Implied by plan') {
-      return 1;
-    }
-    if (facet.available === false) {
-      return 4;
-    }
-    if (facet.selection === 'negative') {
-      return 3;
-    }
-    return 2;
+    return this.nodeLane(facet);
   }
 
   private structureSignature(): string {
     const facetIds = this.facets
-      .map((facet) => `${facet.id}:${facet.selection}:${facet.nodeType ?? ''}:${facet.group}:${facet.timestep}:${facet.abstractTimeStep ?? false}:${facet.available ?? true}:${facet.solutionContext ?? false}:${facet.userConstraint ?? false}:${facet.propertyLabels?.join(',') ?? ''}:${facet.meta ?? ''}`)
+      .map((facet) => `${facet.id}:${facet.selection}:${facet.nodeType ?? ''}:${facet.group}:${facet.timestep}:${facet.abstractTimeStep ?? false}:${facet.available ?? true}:${facet.solutionContext ?? false}:${facet.userConstraint ?? false}:${facet.meta ?? ''}`)
       .sort()
       .join('|');
     const connections = this.connections
@@ -639,6 +651,18 @@ export class PlanPilotGraphComponent implements AfterViewInit, OnChanges, OnDest
 
   private resizeGraph(): void {
     this.graph?.resize();
+  }
+
+  private updatePlanEdgeWidth(): void {
+    if (!this.graph) {
+      return;
+    }
+    const zoom = Math.max(this.graph.zoom(), this.graph.minZoom());
+    const width = Math.max(
+      this.basePlanEdgeWidth,
+      this.minimumRenderedPlanEdgeWidth / zoom,
+    );
+    this.graph.edges('.plan-edge').style('width', width);
   }
 
   private centerModelPosition(position: { x: number; y: number }): void {

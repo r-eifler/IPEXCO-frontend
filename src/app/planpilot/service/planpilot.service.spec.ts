@@ -19,6 +19,7 @@ describe('PlanPilotService', () => {
 
   it('sends require and forbid as one request and exposes only the confirmed result', () => {
     let confirmedState: string | undefined;
+    let confirmedSolutionCount: number | null | undefined;
 
     service.applyFacets$('run-1', {
       selections: [
@@ -27,6 +28,7 @@ describe('PlanPilotService', () => {
       ],
     }).subscribe((response) => {
       confirmedState = response.facets[0].selectionState;
+      confirmedSolutionCount = response.solutionCount;
     });
 
     const request = http.expectOne((candidate) => candidate.url.endsWith('/planpilot/sessions/run-1/facets/apply'));
@@ -36,6 +38,12 @@ describe('PlanPilotService', () => {
 
     request.flush({
       runId: 'run-1',
+      selectionRevision: 1,
+      solutionCount: 15,
+      solution: {
+        label: 'solution 1',
+        facets: [{ id: 'include-me', label: 'Include me', timestep: 1, selectionState: 'neutral' }],
+      },
       facets: [{
         id: 'include-me',
         label: 'Include me',
@@ -45,11 +53,12 @@ describe('PlanPilotService', () => {
     });
 
     expect(confirmedState).toBe('positive');
+    expect(confirmedSolutionCount).toBe(15);
   });
 
   it('forwards horizon and encoding when creating a session', () => {
     service.startSession$({
-      iterationStepId: 'step-1',
+      projectId: 'project-1',
       horizon: 12,
       encoding: 'exact',
       abstractTimeSteps: false,
@@ -58,7 +67,7 @@ describe('PlanPilotService', () => {
     const exact = http.expectOne((request) => request.url.endsWith('/planpilot/sessions'));
     expect(exact.request.method).toBe('POST');
     expect(exact.request.body).toEqual({
-      iterationStepId: 'step-1',
+      projectId: 'project-1',
       horizon: 12,
       encoding: 'exact',
       abstractTimeSteps: false,
@@ -71,7 +80,7 @@ describe('PlanPilotService', () => {
     });
 
     service.startSession$({
-      iterationStepId: 'step-1',
+      projectId: 'project-1',
       horizon: 20,
       encoding: 'bounded',
       abstractTimeSteps: false,
@@ -102,5 +111,65 @@ describe('PlanPilotService', () => {
     expect(stop.request.method).toBe('DELETE');
     expect(stop.request.body).toBeNull();
     stop.flush({ runId: 'run-1', status: 'STOPPED' });
+  });
+
+  it('revalidates a restored browser session through the facet endpoint', () => {
+    service.revalidateSession$('run-1').subscribe();
+
+    const request = http.expectOne((candidate) => candidate.url.endsWith('/planpilot/sessions/run-1/facets/list'));
+    expect(request.request.method).toBe('POST');
+    expect(request.request.body).toEqual({});
+    request.flush({ runId: 'run-1', selectionRevision: 3, facets: [] });
+  });
+
+  it('keeps the stop request alive while the page unloads', () => {
+    localStorage.setItem('jwt-token', 'test-token');
+    const request = spyOn(window, 'fetch').and.returnValue(Promise.resolve({} as Response));
+
+    service.stopSessionOnUnload('run/1');
+
+    expect(request).toHaveBeenCalledOnceWith(
+      jasmine.stringMatching(/planpilot\/sessions\/run%2F1$/),
+      jasmine.objectContaining({
+        method: 'DELETE',
+        headers: { Authorization: 'Bearer test-token' },
+        keepalive: true,
+      }),
+    );
+    localStorage.removeItem('jwt-token');
+  });
+
+  it('requests required actions without a solution number', () => {
+    service.query$('run-1', 'impliedFacets').subscribe();
+
+    const query = http.expectOne((request) => request.url.endsWith('/planpilot/sessions/run-1/query'));
+    expect(query.request.method).toBe('POST');
+    expect(query.request.body).toEqual({ type: 'impliedFacets' });
+    query.flush({ runId: 'run-1', result: { type: 'impliedFacets', facets: [] } });
+  });
+
+  it('requests impact for only the selected facet', () => {
+    service.selectionImpact$('run-1', 'facet-7').subscribe();
+
+    const query = http.expectOne((request) => request.url.endsWith('/planpilot/sessions/run-1/query'));
+    expect(query.request.method).toBe('POST');
+    expect(query.request.body).toEqual({
+      type: 'selectionImpact',
+      facetId: 'facet-7',
+    });
+    query.flush({
+      runId: 'run-1',
+      selectionRevision: 0,
+      solutionCount: null,
+      result: {
+        type: 'selectionImpact',
+        facetId: 'facet-7',
+        exact: false,
+        comparableToCurrent: true,
+        totalPlans: null,
+        require: { available: true, plansRemaining: null, planReduction: null },
+        forbid: { available: true, plansRemaining: null, planReduction: null },
+      },
+    });
   });
 });

@@ -1,5 +1,4 @@
 @let step = step$ | async;
-@let solved = solved$ | async;
 
 <app-page>
   <app-breadcrumb>
@@ -11,15 +10,6 @@
   <app-page-title>
     {{ step?.name }}
     <app-page-title-action>
-      @if (solved) {
-        <a mat-icon-button matTooltip="Open PlanPilot." [routerLink]="['../planpilot']">
-          <mat-icon>account_tree</mat-icon>
-        </a>
-      } @else {
-        <button mat-icon-button matTooltip="Solve this step before opening PlanPilot." disabled>
-          <mat-icon>account_tree</mat-icon>
-        </button>
-      }
       <button mat-icon-button
         matTooltip="Creates a new iteration based on the properties selected in this iteration."
         (click)="createNewIteration(step?._id)"

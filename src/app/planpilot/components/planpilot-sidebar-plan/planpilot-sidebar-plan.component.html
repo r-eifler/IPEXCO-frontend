@@ -1,0 +1,127 @@
+<section
+  id="planpilot-settings"
+  class="session-settings inspector-card"
+  aria-labelledby="planpilot-settings-heading"
+>
+  <div class="settings-heading">
+    <span
+      ><small>Plan space</small
+      ><strong id="planpilot-settings-heading">Settings</strong></span
+    >
+    <span class="active-settings"
+      >Active: {{ activeSessionEncoding }} · horizon {{ activeSessionHorizon
+      }}{{ activeSessionAbstractTimeSteps ? " · flexible" : "" }}</span
+    >
+  </div>
+  <div class="session-setting-fields">
+    <label>
+      <span>Horizon</span>
+      <input
+        type="number"
+        min="1"
+        max="100"
+        step="1"
+        [value]="sessionHorizon"
+        (change)="horizonChange.emit($event)"
+      />
+    </label>
+    <label>
+      <span>Encoding</span>
+      <select [value]="sessionEncoding" (change)="encodingChange.emit($event)">
+        <option value="bounded">Bounded</option>
+        <option value="exact">Exact</option>
+      </select>
+    </label>
+  </div>
+  <label class="abstract-setting">
+    <input
+      type="checkbox"
+      [checked]="sessionAbstractTimeSteps"
+      (change)="abstractTimeStepsChange.emit($event)"
+    />
+    <span
+      ><strong>Flexible steps</strong
+      ><small>Allow actions without a fixed timestep.</small></span
+    >
+  </label>
+  <div class="settings-footer">
+    <small>{{
+      sessionEncoding === "bounded"
+        ? "Plans may finish before the horizon."
+        : "Plans use every timestep."
+    }}</small>
+    <button
+      mat-stroked-button
+      type="button"
+      [disabled]="isBusy || pendingSelectionCount > 0 || !configurationChanged"
+      (click)="rebuild.emit()"
+    >
+      Rebuild
+    </button>
+  </div>
+  @if (pendingSelectionCount > 0 && configurationChanged) {
+    <small class="analysis-note"
+      >Apply or cancel the pending action changes before rebuilding.</small
+    >
+  }
+</section>
+
+<details
+  id="planpilot-plan-steps"
+  class="timeline-summary inspector-card"
+  open
+  data-testid="planpilot-timeline-summary"
+>
+  <summary>
+    <span><small>Displayed plan</small><strong>Plan steps</strong></span>
+    <span
+      >{{ displayedSessionEncoding }} ·
+      {{ displayedSessionHorizon }} steps</span
+    >
+  </summary>
+  <div class="timeline-rows">
+    @for (row of timelineRows; track row.key) {
+      <div
+        class="timeline-row"
+        [class.active]="focusedTimestep === row.key"
+        [attr.data-timestep]="row.key"
+      >
+        <button
+          type="button"
+          class="timeline-focus"
+          [attr.aria-label]="'Focus ' + row.label + ' in graph'"
+          (click)="timestepFocus.emit(row.key)"
+        >
+          <strong>{{ row.label }}</strong>
+          <span>{{
+            row.displayedActions.length
+              ? row.displayedActions.join(", ")
+              : "No action in this plan"
+          }}</span>
+          <small>
+            {{ timestepActionCounts[row.key] || 0 }} action{{
+              timestepActionCounts[row.key] === 1 ? "" : "s"
+            }}
+            available
+            @if (row.requiredCount) {
+              · {{ row.requiredCount }} required
+            }
+            @if (row.forbiddenCount) {
+              · {{ row.forbiddenCount }} forbidden
+            }
+          </small>
+        </button>
+        @if (timestepActionCounts[row.key]) {
+          <button
+            type="button"
+            class="timeline-show-actions"
+            [attr.aria-label]="'Show actions at ' + row.label"
+            (click)="timestepActions.emit(row.key)"
+          >
+            Show actions
+          </button>
+        }
+      </div>
+    }
+  </div>
+</details>

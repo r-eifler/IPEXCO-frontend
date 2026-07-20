@@ -1,5 +1,4 @@
 import { PlanPilotGraphConnection, PlanPilotGraphSnapshot } from '../../components/planpilot-graph/planpilot-graph.component';
-import { PlanRunStatus } from '../../domain/plan';
 import { isStructuralPlanPilotFacet, PlanPilotUiFacet } from './planpilot-view.models';
 
 export interface PlanPilotGraphDiagnostic {
@@ -11,7 +10,7 @@ export interface PlanPilotGraphDiagnostic {
     viewport: { width: number; height: number; devicePixelRatio: number };
     userAgent: string;
   };
-  iterationStep: { id?: string; name?: string; planStatus?: PlanRunStatus; planActionCount: number };
+  project: { id?: string; name?: string };
   session: Record<string, unknown>;
   ui: Record<string, unknown>;
   integrity: {
@@ -35,12 +34,12 @@ interface DiagnosticInput extends Omit<PlanPilotGraphDiagnostic, 'schemaVersion'
 export function buildPlanPilotGraphDiagnostic(input: DiagnosticInput): PlanPilotGraphDiagnostic {
   const facets = input.allFacets.filter((facet) => !isStructuralPlanPilotFacet(facet));
   return {
-    schemaVersion: 'ipexco-planpilot-graph-diagnostic-v3',
+    schemaVersion: 'ipexco-planpilot-graph-diagnostic-v4',
     generatedAt: input.generatedAt,
     location: input.location,
     applicationAssets: input.applicationAssets,
     browser: input.browser,
-    iterationStep: input.iterationStep,
+    project: input.project,
     session: input.session,
     ui: input.ui,
     integrity: {
