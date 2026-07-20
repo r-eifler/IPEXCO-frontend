@@ -115,7 +115,7 @@ export interface QueryPlanPilotSessionRequest {
 }
 
 export interface StartPlanPilotSessionRequest {
-  iterationStepId: string;
+  projectId: string;
   horizon: number;
   encoding: PlanPilotEncoding;
   abstractTimeSteps: boolean;

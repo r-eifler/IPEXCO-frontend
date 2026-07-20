@@ -8,7 +8,7 @@ import {
   input,
   signal,
 } from "@angular/core";
-import { toObservable } from "@angular/core/rxjs-interop";
+import { toObservable, toSignal } from "@angular/core/rxjs-interop";
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { combineLatest } from "rxjs";
 import { map, startWith } from "rxjs/operators";
@@ -46,6 +46,7 @@ import {
   selectSolutions,
   selectSolutionsLoading,
 } from "../../state/planpilot.feature";
+import { selectProject } from "../../state/iterative-planning.feature";
 
 // A row rendered in the "Made decisions" column: either a committed decision
 // or a staged (pending) pick that has not been submitted yet.
@@ -94,6 +95,11 @@ export class PlanPilotFacetsComponent {
 
   // The iteration step whose plan is SOLVED (provided from outside).
   iterationStepId = input.required<string>();
+
+  // Sessions are created from the project's PDDL task (backend contract).
+  private projectId = toSignal(
+    this.store.select(selectProject).pipe(map((project) => project.data?._id)),
+  );
 
   // Label filter applied to both facet lists ("" = show all).
   filterControl = this.fb.nonNullable.control("");
@@ -178,11 +184,15 @@ export class PlanPilotFacetsComponent {
   });
 
   startSession(): void {
+    const projectId = this.projectId();
+    if (!projectId) {
+      return;
+    }
     const { horizon, encoding, abstractTimeSteps } = this.startForm.getRawValue();
     this.store.dispatch(
       startPlanPilotSession({
         request: {
-          iterationStepId: this.iterationStepId(),
+          projectId,
           horizon,
           encoding,
           abstractTimeSteps,
