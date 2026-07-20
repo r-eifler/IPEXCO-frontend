@@ -5,11 +5,11 @@ import {
   Component,
   computed,
   inject,
-  input,
   signal,
 } from "@angular/core";
 import { toObservable, toSignal } from "@angular/core/rxjs-interop";
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
+import { ActivatedRoute } from "@angular/router";
 import { combineLatest } from "rxjs";
 import { map, startWith } from "rxjs/operators";
 import { MatButtonModule } from "@angular/material/button";
@@ -46,7 +46,6 @@ import {
   selectSolutions,
   selectSolutionsLoading,
 } from "../../state/planpilot.feature";
-import { selectProject } from "../../state/iterative-planning.feature";
 
 // A row rendered in the "Made decisions" column: either a committed decision
 // or a staged (pending) pick that has not been submitted yet.
@@ -92,13 +91,12 @@ interface OpenFacetGroup {
 export class PlanPilotFacetsComponent {
   private store = inject(Store);
   private fb = inject(FormBuilder);
+  private route = inject(ActivatedRoute);
 
-  // The iteration step whose plan is SOLVED (provided from outside).
-  iterationStepId = input.required<string>();
-
-  // Sessions are created from the project's PDDL task (backend contract).
+  // Sessions are created from the project's PDDL task; the id comes from the
+  // /planpilot/:projectId route (inherited from the component-less parent).
   private projectId = toSignal(
-    this.store.select(selectProject).pipe(map((project) => project.data?._id)),
+    this.route.paramMap.pipe(map((params) => params.get("projectId"))),
   );
 
   // Label filter applied to both facet lists ("" = show all).
