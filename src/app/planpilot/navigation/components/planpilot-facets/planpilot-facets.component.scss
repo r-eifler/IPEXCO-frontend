@@ -56,6 +56,17 @@
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
+
+  &__summary {
+    margin: 0;
+    font-size: 0.85rem;
+    color: rgba(0, 0, 0, 0.6);
+  }
+
+  &__more {
+    display: flex;
+    justify-content: center;
+  }
 }
 
 .solution {

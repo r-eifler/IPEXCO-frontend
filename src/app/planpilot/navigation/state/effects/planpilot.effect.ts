@@ -28,9 +28,8 @@ import {
 } from "../planpilot.actions";
 import { selectRunId } from "../planpilot.feature";
 
-// Only enumerate the concrete plans once the remaining set is small enough
-// to render meaningfully. Above this, we just show the counter.
-const SOLUTION_LIST_THRESHOLD = 10;
+// How many plans are listed at once; the user can request further pages.
+export const SOLUTION_PAGE_SIZE = 25;
 
 @Injectable()
 export class PlanPilotEffect {
@@ -107,13 +106,12 @@ export class PlanPilotEffect {
     }),
   ));
 
-  // Once the remaining set is small, enumerate the concrete plans;
-  // otherwise clear the list and keep showing only the counter.
+  // Whenever the counter changes, list the first page of concrete plans.
   public refreshSolutions$ = createEffect(() => this.actions$.pipe(
     ofType(queryPlanPilotSolutionCountSuccess),
     map(({ count }) =>
-      count !== undefined && count > 0 && count <= SOLUTION_LIST_THRESHOLD
-        ? queryPlanPilotSolutions()
+      count !== undefined && count > 0
+        ? queryPlanPilotSolutions({ limit: SOLUTION_PAGE_SIZE })
         : queryPlanPilotSolutionsSuccess({ solutions: [] }),
     ),
   ));
@@ -122,11 +120,14 @@ export class PlanPilotEffect {
   public querySolutions$ = createEffect(() => this.actions$.pipe(
     ofType(queryPlanPilotSolutions),
     concatLatestFrom(() => this.store.select(selectRunId)),
-    switchMap(([, runId]) => {
+    switchMap(([{ limit }, runId]) => {
       if (!runId) {
         return of(queryPlanPilotSolutionsFailure({ err: "No active PlanPilot session." }));
       }
-      return this.service.query$(runId, { type: PlanPilotQueryType.SOLUTION }).pipe(
+      return this.service.query$(runId, {
+        type: PlanPilotQueryType.SOLUTION,
+        solutionNumber: limit,
+      }).pipe(
         map((response) => queryPlanPilotSolutionsSuccess({ solutions: response.result.solutions ?? [] })),
         catchError((err) => of(queryPlanPilotSolutionsFailure({ err }))),
       );

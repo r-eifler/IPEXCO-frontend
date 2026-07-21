@@ -14,6 +14,7 @@ export const {
   selectDecisions,
   selectSolutionCount,
   selectSolutions,
+  selectSolutionLimit,
   selectSolutionsLoading,
   selectImpliedFacets,
   selectImpliedFacetsShown,

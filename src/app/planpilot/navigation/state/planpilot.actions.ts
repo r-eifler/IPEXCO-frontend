@@ -49,9 +49,11 @@ export const queryPlanPilotSolutionCountFailure = createAction(
   props<{ err: unknown }>(),
 );
 
-// Enumerate the solutions (plans) still consistent with the decisions.
+// Enumerate the solutions (plans) still consistent with the decisions,
+// capped at 'limit' so large plan spaces stay renderable.
 export const queryPlanPilotSolutions = createAction(
   "[planpilot] query solutions",
+  props<{ limit: number }>(),
 );
 export const queryPlanPilotSolutionsSuccess = createAction(
   "[planpilot] query solutions success",

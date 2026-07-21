@@ -9,6 +9,7 @@ import {
   queryPlanPilotSolutionCountFailure,
   queryPlanPilotSolutionCountSuccess,
   queryPlanPilotSolutionReductionSuccess,
+  queryPlanPilotSolutions,
   queryPlanPilotSolutionsFailure,
   queryPlanPilotSolutionsSuccess,
   startPlanPilotSession,
@@ -28,8 +29,10 @@ export interface PlanPilotState {
   decisions: PlanPilotFacet[];
   // Number of solutions (plans) still consistent with the committed decisions.
   solutionCount: number | undefined;
-  // The remaining plans themselves, enumerated once the set is small enough.
+  // The remaining plans themselves, enumerated one page at a time.
   solutions: PlanPilotSolution[];
+  // How many plans the last enumeration asked for.
+  solutionLimit: number;
   // True while the count/enumeration queries are (re)calculating.
   solutionsLoading: boolean;
   // The implied facets ('|= %'): landmarks forced by the committed decisions.
@@ -48,6 +51,7 @@ export const initialPlanPilotState: PlanPilotState = {
   decisions: [],
   solutionCount: undefined,
   solutions: [],
+  solutionLimit: 0,
   solutionsLoading: false,
   impliedFacets: [],
   impliedFacetsShown: false,
@@ -153,7 +157,14 @@ export const planPilotReducer = createReducer(
     };
   }),
 
-  // Store the enumerated remaining plans (empty when the set is too large).
+  // A page of plans was requested (first page or "show more").
+  on(queryPlanPilotSolutions, (state, { limit }) => ({
+    ...state,
+    solutionLimit: limit,
+    solutionsLoading: true,
+  })),
+
+  // Store the enumerated remaining plans.
   // This is the end of the chain, so the recalculation is done.
   on(queryPlanPilotSolutionsSuccess, (state, { solutions }) => ({
     ...state,

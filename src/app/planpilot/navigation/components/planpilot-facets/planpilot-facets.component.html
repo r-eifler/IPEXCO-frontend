@@ -53,9 +53,12 @@
       </div>
     }
 
-    <!-- Remaining plans: shown once the set is small enough to enumerate -->
+    <!-- Remaining plans, listed one page at a time -->
     @if (solutions$ | async; as solutions) {
       @if (solutions.length > 0) {
+        <p class="solutions__summary">
+          Showing {{ solutions.length }} of {{ solutionCount }} plans
+        </p>
         <div class="solutions">
           @for (solution of solutions; track solution.label; let i = $index) {
             <div class="solution">
@@ -68,6 +71,18 @@
             </div>
           }
         </div>
+        @if (hasMoreSolutions$ | async) {
+          <div class="solutions__more">
+            <button
+              mat-stroked-button
+              type="button"
+              (click)="showMorePlans()"
+              [disabled]="solutionsLoading ?? false"
+            >
+              Show more plans
+            </button>
+          </div>
+        }
       }
     }
   </div>

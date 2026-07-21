@@ -11,7 +11,7 @@ import { toObservable, toSignal } from "@angular/core/rxjs-interop";
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
 import { combineLatest } from "rxjs";
-import { map, startWith } from "rxjs/operators";
+import { map, startWith, take } from "rxjs/operators";
 import { MatButtonModule } from "@angular/material/button";
 import { MatButtonToggleModule } from "@angular/material/button-toggle";
 import { MatCheckboxModule } from "@angular/material/checkbox";
@@ -30,6 +30,7 @@ import {
 import {
   clearPlanPilotImpliedFacets,
   queryPlanPilotImpliedFacets,
+  queryPlanPilotSolutions,
   startPlanPilotSession,
   submitPlanPilotSelections,
 } from "../../state/planpilot.actions";
@@ -43,9 +44,11 @@ import {
   selectLoading,
   selectRunId,
   selectSolutionCount,
+  selectSolutionLimit,
   selectSolutions,
   selectSolutionsLoading,
 } from "../../state/planpilot.feature";
+import { SOLUTION_PAGE_SIZE } from "../../state/effects/planpilot.effect";
 
 // A row rendered in the "Made decisions" column: either a committed decision
 // or a staged (pending) pick that has not been submitted yet.
@@ -152,6 +155,18 @@ export class PlanPilotFacetsComponent {
   solutionCount$ = this.store.select(selectSolutionCount);
   solutions$ = this.store.select(selectSolutions);
   solutionsLoading$ = this.store.select(selectSolutionsLoading);
+  private solutionLimit$ = this.store.select(selectSolutionLimit);
+
+  // More plans are available when the listing was capped by the page limit.
+  hasMoreSolutions$ = combineLatest([
+    this.solutions$,
+    this.solutionCount$,
+    this.solutionLimit$,
+  ]).pipe(
+    map(([solutions, count, limit]) =>
+      solutions.length > 0 && solutions.length >= limit && solutions.length < (count ?? 0),
+    ),
+  );
   // Implied facets ('|= %'): landmarks forced by the committed decisions.
   // We drop the facets the user committed themselves, so the panel shows only
   // what those decisions *additionally* forced (true in every remaining plan).
@@ -414,6 +429,18 @@ export class PlanPilotFacetsComponent {
     return [...new Set(facets.map((facet) => facet.label))].sort((a, b) =>
       a.localeCompare(b),
     );
+  }
+
+  // Extend the plan listing by one more page.
+  showMorePlans(): void {
+    this.store
+      .select(selectSolutionLimit)
+      .pipe(take(1))
+      .subscribe((limit) =>
+        this.store.dispatch(
+          queryPlanPilotSolutions({ limit: limit + SOLUTION_PAGE_SIZE }),
+        ),
+      );
   }
 
   // The concrete, ordered steps of a plan. PlanPilot solutions also carry
