@@ -215,6 +215,11 @@
           </mat-accordion>
         } @else if (filterControl.value) {
           <p class="status">No open decisions match the filter.</p>
+        } @else if (runId$ | async) {
+          <p class="status">
+            This plan space is empty – no plan matches the chosen horizon and encoding.
+            Try a larger horizon, or the "bounded" encoding to allow shorter plans.
+          </p>
         } @else {
           <p class="status">No facets yet – start a session.</p>
         }

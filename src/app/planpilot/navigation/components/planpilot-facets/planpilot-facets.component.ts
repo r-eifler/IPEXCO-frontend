@@ -175,9 +175,11 @@ export class PlanPilotFacetsComponent {
   readonly SelectionState = PlanPilotSelectionState;
   readonly encodings = Object.values(PlanPilotEncoding);
 
+  // 'bounded' allows plans up to the horizon; 'exact' demands exactly that
+  // many steps, which is empty whenever no plan has precisely that length.
   startForm = this.fb.nonNullable.group({
-    horizon: [5, [Validators.required, Validators.min(1)]],
-    encoding: [PlanPilotEncoding.EXACT, Validators.required],
+    horizon: [6, [Validators.required, Validators.min(1)]],
+    encoding: [PlanPilotEncoding.BOUNDED, Validators.required],
     abstractTimeSteps: [false],
   });
 
