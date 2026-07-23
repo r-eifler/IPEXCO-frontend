@@ -3,11 +3,18 @@
 <app-page>
   <app-breadcrumb>
     <a app-breadcrumb-item [routerLink]="['/project', project?._id]"><mat-icon>home</mat-icon></a>
-    <a app-breadcrumb-item [routerLink]="['/planpilot', project?._id]">PlanPilot</a>
-    <app-breadcrumb-item>Navigation</app-breadcrumb-item>
+    <app-breadcrumb-item>PlanPilot</app-breadcrumb-item>
   </app-breadcrumb>
 
-  <app-page-title>PlanPilot – Navigation</app-page-title>
+  <app-page-title>
+    PlanPilot
+    <app-page-title-action>
+      <a mat-flat-button routerLink="graph">
+        <mat-icon>account_tree</mat-icon>
+        Open graph
+      </a>
+    </app-page-title-action>
+  </app-page-title>
 
   <app-page-content>
     <app-planpilot-facets></app-planpilot-facets>

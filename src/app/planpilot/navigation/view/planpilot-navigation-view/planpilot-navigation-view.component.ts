@@ -1,5 +1,6 @@
 import { AsyncPipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { map } from 'rxjs';
@@ -10,7 +11,15 @@ import { PlanPilotFacetsComponent } from '../../components/planpilot-facets/plan
 
 @Component({
   selector: 'app-planpilot-navigation-view',
-  imports: [AsyncPipe, BreadcrumbModule, MatIconModule, PageModule, PlanPilotFacetsComponent, RouterLink],
+  imports: [
+    AsyncPipe,
+    BreadcrumbModule,
+    MatButtonModule,
+    MatIconModule,
+    PageModule,
+    PlanPilotFacetsComponent,
+    RouterLink,
+  ],
   templateUrl: './planpilot-navigation-view.component.html',
 })
 export class PlanPilotNavigationViewComponent {
