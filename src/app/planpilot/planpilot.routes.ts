@@ -7,7 +7,6 @@ import { planPilotFeature } from './navigation/state/planpilot.feature';
 import { PlanPilotService } from './navigation/service/planpilot.service';
 import { PlanPilotNavigationViewComponent } from './navigation/view/planpilot-navigation-view/planpilot-navigation-view.component';
 import { loadPlanPilotProjectResolver } from './resolver/load-planpilot-project.resolver';
-import { PlanPilotStartComponent } from './view/planpilot-start/planpilot-start.component';
 import { PlanPilotViewComponent } from './view/planpilot-view/planpilot-view.component';
 
 export const routes: Routes = [
@@ -22,9 +21,9 @@ export const routes: Routes = [
     ],
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
     children: [
-      { path: '', component: PlanPilotStartComponent },
+      { path: '', component: PlanPilotNavigationViewComponent },
       { path: 'graph', component: PlanPilotViewComponent },
-      { path: 'navigation', component: PlanPilotNavigationViewComponent },
+      { path: 'navigation', redirectTo: '', pathMatch: 'full' },
     ],
   },
 ];
