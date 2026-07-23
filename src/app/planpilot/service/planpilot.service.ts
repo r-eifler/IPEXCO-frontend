@@ -32,6 +32,7 @@ export interface PlanPilotFacet {
   selectionState: PlanPilotFacetSelectionState;
   action?: { name: string; arguments: string[] };
   abstractTimeStep?: boolean;
+  facetKind?: "action" | "state";
   selectable?: boolean;
   facetType?: "plan" | "selected" | "implied" | "optional" | "empty";
   parentId?: string;

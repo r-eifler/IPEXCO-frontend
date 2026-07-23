@@ -1796,6 +1796,105 @@ describe("PlanPilotViewComponent selection workflow", () => {
     expect(component.inspectedFacetImpact).toBeDefined();
   });
 
+  it("previews a fixed displayed action without sending an invalid solver query", () => {
+    component.solutionCount = 12;
+    component.solutionCountKnown = true;
+    component.facets = [
+      {
+        ...facet("fixed-action"),
+        facetType: "plan",
+        selectable: false,
+      },
+    ];
+    component.representativeSolution = [
+      {
+        ...facet("fixed-action"),
+        facetType: "plan",
+        solutionContext: true,
+      },
+    ];
+    component.inspectedFacetId = "fixed-action";
+    service.selectionImpact$.calls.reset();
+
+    component.calculateImpact();
+
+    expect(service.selectionImpact$).not.toHaveBeenCalled();
+    expect(component.selectedActionView?.canPreviewImpact).toBeTrue();
+    expect(component.selectedActionView?.canRequire).toBeFalse();
+    expect(component.selectedActionView?.canForbid).toBeFalse();
+    expect(component.selectedActionView?.requireImpact).toEqual({
+      available: true,
+      totalPlans: 12,
+      plansRemaining: 12,
+      plansRemoved: 0,
+      reductionPercent: 0,
+    });
+    expect(component.selectedActionView?.forbidImpact).toEqual({
+      available: false,
+      totalPlans: 12,
+      plansRemaining: 0,
+      plansRemoved: 12,
+      reductionPercent: 100,
+    });
+  });
+
+  it("previews fixed-action availability when the exact count is unknown", () => {
+    component.facets = [
+      {
+        ...facet("fixed-action"),
+        facetType: "plan",
+        selectable: false,
+      },
+    ];
+    component.representativeSolution = [
+      { ...facet("fixed-action"), solutionContext: true },
+    ];
+    component.inspectedFacetId = "fixed-action";
+
+    component.calculateImpact();
+
+    expect(component.selectedActionView?.requireImpact?.available).toBeTrue();
+    expect(
+      component.selectedActionView?.requireImpact?.plansRemaining,
+    ).toBeNull();
+    expect(component.selectedActionView?.forbidImpact?.available).toBeFalse();
+    expect(component.impactNotice).toContain("exact plan count");
+  });
+
+  it("updates a cached fixed-action preview when the exact count arrives", () => {
+    component.facets = [
+      {
+        ...facet("fixed-action"),
+        facetType: "plan",
+        selectable: false,
+      },
+    ];
+    component.representativeSolution = [
+      { ...facet("fixed-action"), solutionContext: true },
+    ];
+    component.inspectedFacetId = "fixed-action";
+    component.calculateImpact();
+    service.query$.and.returnValue(
+      of({
+        runId: "run-1",
+        selectionRevision: 0,
+        solutionCount: 12,
+        result: { type: "solutionCount", value: 12 },
+      }),
+    );
+
+    component.loadSolutionCount();
+
+    expect(component.facetImpacts["fixed-action"].exact).toBeTrue();
+    expect(component.facetImpacts["fixed-action"].require.plansRemaining).toBe(
+      12,
+    );
+    expect(component.facetImpacts["fixed-action"].forbid.plansRemaining).toBe(
+      0,
+    );
+    expect(component.impactNotice).toBe("");
+  });
+
   it("shows availability when targeted exact impact exceeds its deadline", () => {
     const response = new Subject<PlanPilotQueryResponse>();
     service.selectionImpact$.and.returnValue(response);
@@ -2165,6 +2264,28 @@ describe("PlanPilotViewComponent selection workflow", () => {
     expect(service.query$).not.toHaveBeenCalled();
   });
 
+  it("stops a page load when its highest plan cannot prepare the prefix", () => {
+    component.solutionCount = 12;
+    component.solutionCountKnown = true;
+    service.query$.calls.reset();
+    service.query$.and.callFake((_runId, _type, number) =>
+      number === 10
+        ? throwError(() => new Error("preparation timed out"))
+        : of({
+            runId: "run-1",
+            selectionRevision: 0,
+            solutionCount: 12,
+            result: { type: "solution", solutions: [] },
+          }),
+    );
+
+    component.loadPlanPage(6);
+
+    expect(service.query$.calls.allArgs().map((args) => args[2])).toEqual([10]);
+    expect(component.planPageError).toContain("Plan 10");
+    expect(component.planPageLoading).toBeFalse();
+  });
+
   it("jumps to the containing page and displays the requested plan", () => {
     component.solutionCount = 60;
     component.solutionCountKnown = true;
@@ -2209,6 +2330,172 @@ describe("PlanPilotViewComponent selection workflow", () => {
     service.query$.calls.reset();
     component.jumpToSolution(61);
     expect(service.query$).not.toHaveBeenCalled();
+  });
+
+  it("opens a numbered plan without counting the whole plan space first", () => {
+    component.solutionCount = 0;
+    component.solutionCountKnown = false;
+    service.query$.calls.reset();
+    service.query$.and.callFake((_runId, type, number) =>
+      of({
+        runId: "run-1",
+        selectionRevision: 0,
+        solutionCount: null,
+        result: {
+          type,
+          solutions: [
+            {
+              label: `solution ${number}`,
+              facets: [
+                {
+                  id: `action-${number}`,
+                  label: `action ${number}`,
+                  timestep: number ?? 1,
+                  selectionState: "neutral",
+                },
+              ],
+            },
+          ],
+        },
+      }),
+    );
+
+    component.jumpToSolution(23);
+
+    expect(service.query$.calls.allArgs().map((args) => args[2])).toEqual([
+      25, 24, 23, 22, 21,
+    ]);
+    expect(component.currentSolutionNumber).toBe(23);
+    expect(component.planPageStart).toBe(21);
+    expect(component.knownPlanLowerBound).toBe(25);
+  });
+
+  it("fills the final partial page when its highest unknown plan is unavailable", () => {
+    component.solutionCount = 0;
+    component.solutionCountKnown = false;
+    service.query$.calls.reset();
+    service.query$.and.callFake((_runId, type, number) =>
+      of({
+        runId: "run-1",
+        selectionRevision: 0,
+        solutionCount: number === 25 ? 24 : null,
+        result: {
+          type,
+          solutions:
+            number === 25
+              ? []
+              : [
+                  {
+                    label: `solution ${number}`,
+                    facets: [
+                      {
+                        id: `action-${number}`,
+                        label: `action ${number}`,
+                        timestep: number ?? 1,
+                        selectionState: "neutral",
+                      },
+                    ],
+                  },
+                ],
+        },
+      }),
+    );
+
+    component.jumpToSolution(23);
+
+    expect(service.query$.calls.allArgs().map((args) => args[2])).toEqual([
+      25, 24, 23, 22, 21,
+    ]);
+    expect(component.solutionCount).toBe(24);
+    expect(component.loadedPlanNumbers).toEqual([21, 22, 23, 24]);
+    expect(component.currentSolutionNumber).toBe(23);
+  });
+
+  it("defaults to two different comparison plans while the count is unknown", () => {
+    component.solutionCount = 0;
+    component.solutionCountKnown = false;
+    const analysisState = component as unknown as {
+      invalidateAnalysisState: () => void;
+    };
+
+    analysisState.invalidateAnalysisState();
+
+    expect(component.comparisonPlanA).toBe(1);
+    expect(component.comparisonPlanB).toBe(2);
+  });
+
+  it("loads the higher comparison plan first so the lower plan is cached", () => {
+    component.solutionCount = 10;
+    component.solutionCountKnown = true;
+    component.comparisonPlanA = 2;
+    component.comparisonPlanB = 7;
+    service.query$.calls.reset();
+    service.query$.and.callFake((_runId, type, number) =>
+      of({
+        runId: "run-1",
+        selectionRevision: 0,
+        solutionCount: 10,
+        result: {
+          type,
+          solutions: [
+            {
+              label: `solution ${number}`,
+              facets: [
+                {
+                  id: `action-${number}`,
+                  label: `action ${number}`,
+                  timestep: number ?? 1,
+                  selectionState: "neutral",
+                },
+              ],
+            },
+          ],
+        },
+      }),
+    );
+
+    component.compareSelectedPlans();
+
+    expect(service.query$.calls.allArgs().map((args) => args[2])).toEqual([
+      7, 2,
+    ]);
+    expect(component.comparison).toBeDefined();
+  });
+
+  it("prepares a requested solution prefix without replacing the displayed plan", () => {
+    component.representativeSolution = [facet("initial")];
+    component.currentSolutionNumber = 0;
+    service.query$.calls.reset();
+
+    component.preparePlansThrough(30);
+
+    expect(service.query$).toHaveBeenCalledOnceWith("run-1", "solution", 30);
+    expect(component.solutionCache[30].label).toBe("solution 1");
+    expect(component.knownPlanLowerBound).toBe(30);
+    expect(component.currentSolutionNumber).toBe(0);
+    expect(component.representativeSolution[0].id).toBe("initial");
+    expect(component.lastSelectionMessage).toContain("Plans 1–30");
+    expect(component.planPreparationLoading).toBeFalse();
+  });
+
+  it("clears preparation loading when the plan space changed remotely", () => {
+    service.query$.and.returnValue(
+      of({
+        runId: "run-1",
+        selectionRevision: 1,
+        solutionCount: null,
+        result: { type: "solution", solutions: [] },
+      }),
+    );
+    service.listFacets$.and.returnValue(
+      throwError(() => new Error("refresh failed")),
+    );
+
+    component.preparePlansThrough(20);
+
+    expect(component.planPreparationLoading).toBeFalse();
+    expect(component.isBusy).toBeFalse();
+    expect(component.lastSelectionMessage).toContain("another window");
   });
 
   it("learns the total and returns to the final page after browsing past the end", () => {

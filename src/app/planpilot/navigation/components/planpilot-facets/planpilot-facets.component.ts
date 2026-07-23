@@ -3,6 +3,7 @@ import { HttpErrorResponse } from "@angular/common/http";
 import {
   ChangeDetectionStrategy,
   Component,
+  DestroyRef,
   computed,
   inject,
   signal,
@@ -49,6 +50,7 @@ import {
   selectSolutionsLoading,
 } from "../../state/planpilot.feature";
 import { SOLUTION_PAGE_SIZE } from "../../state/effects/planpilot.effect";
+import { PlanPilotService } from "../../service/planpilot.service";
 
 // A row rendered in the "Made decisions" column: either a committed decision
 // or a staged (pending) pick that has not been submitted yet.
@@ -95,6 +97,8 @@ export class PlanPilotFacetsComponent {
   private store = inject(Store);
   private fb = inject(FormBuilder);
   private route = inject(ActivatedRoute);
+  private service = inject(PlanPilotService);
+  private destroyRef = inject(DestroyRef);
 
   // Sessions are created from the project's PDDL task; the id comes from the
   // /planpilot/:projectId route (inherited from the component-less parent).
@@ -115,6 +119,7 @@ export class PlanPilotFacetsComponent {
 
   // Read from the store.
   runId$ = this.store.select(selectRunId);
+  private runId = toSignal(this.runId$);
   facets$ = this.store.select(selectFacets);
   decisions$ = this.store.select(selectDecisions);
   // Distinct facet labels (open + decided), used to populate the filter dropdown.
@@ -164,7 +169,9 @@ export class PlanPilotFacetsComponent {
     this.solutionLimit$,
   ]).pipe(
     map(([solutions, count, limit]) =>
-      solutions.length > 0 && solutions.length >= limit && solutions.length < (count ?? 0),
+      solutions.length > 0
+      && solutions.length >= limit
+      && (count === undefined || solutions.length < count),
     ),
   );
   // Implied facets ('|= %'): landmarks forced by the committed decisions.
@@ -198,6 +205,15 @@ export class PlanPilotFacetsComponent {
     abstractTimeSteps: [false],
   });
 
+  constructor() {
+    this.destroyRef.onDestroy(() => {
+      const runId = this.runId();
+      if (runId) {
+        this.service.stopSession$(runId).subscribe();
+      }
+    });
+  }
+
   startSession(): void {
     const projectId = this.projectId();
     if (!projectId) {
@@ -211,6 +227,7 @@ export class PlanPilotFacetsComponent {
           horizon,
           encoding,
           abstractTimeSteps,
+          stateFacets: true,
         },
       }),
     );

@@ -15,7 +15,6 @@ import { ActivatedRoute, RouterLink } from "@angular/router";
 import {
   catchError,
   concatMap,
-  forkJoin,
   from,
   map,
   Observable,
@@ -151,6 +150,8 @@ export class PlanPilotViewComponent implements OnInit, OnDestroy {
   solutionCountKnown = false;
   solutionCountLoading = false;
   solutionCountError = "";
+  planPreparationLoading = false;
+  planPreparationError = "";
   sessionHorizon = 0;
   canvasExpanded = false;
   activePinnedFacets: Record<string, PlanPilotUiFacet> = {};
@@ -454,6 +455,7 @@ export class PlanPilotViewComponent implements OnInit, OnDestroy {
       this.selectionPending ||
       this.queryPending ||
       this.solutionCountLoading ||
+      this.planPreparationLoading ||
       this.impactLoading ||
       this.requiredActionsLoading ||
       this.planPageLoading ||
@@ -501,10 +503,7 @@ export class PlanPilotViewComponent implements OnInit, OnDestroy {
 
   get planPageEnd(): number {
     return this.solutionCountKnown
-      ? Math.min(
-          this.solutionCount,
-          this.planPageStart + this.planPageSize - 1,
-        )
+      ? Math.min(this.solutionCount, this.planPageStart + this.planPageSize - 1)
       : this.planPageStart + this.planPageSize - 1;
   }
 
@@ -827,6 +826,7 @@ export class PlanPilotViewComponent implements OnInit, OnDestroy {
       canRequire: this.canRequireFacet(facet),
       canForbid: this.canForbidFacet(facet),
       canClear: this.canClearFacet(facet),
+      canPreviewImpact: this.canPreviewFacetImpact(facet),
       clearHint: this.clearFacetHint(facet),
       requireImpact: impact
         ? this.actionImpactView(
@@ -903,6 +903,21 @@ export class PlanPilotViewComponent implements OnInit, OnDestroy {
     if (this.facetImpacts[facet.id]) {
       this.lastSelectionMessage =
         "Impact is already available for the current plan space.";
+      return;
+    }
+
+    if (this.isFixedDisplayedPlanFacet(facet)) {
+      const count = this.solutionCountKnown ? this.solutionCount : null;
+      this.facetImpacts = {
+        [facet.id]: this.fixedDisplayedPlanImpact(count),
+      };
+      this.impactError = "";
+      this.impactNotice =
+        count === null
+          ? "This action is fixed. An exact plan count is not available."
+          : "";
+      this.lastSelectionMessage =
+        "This action occurs in every plan in the current space.";
       return;
     }
 
@@ -998,6 +1013,7 @@ export class PlanPilotViewComponent implements OnInit, OnDestroy {
           return;
         }
         this.requiredActions = (response.result.facets ?? [])
+          .filter((facet) => !this.isStateFacet(facet))
           .map((facet, index) => this.toPlanPilotUiFacet(facet, index))
           .filter((facet) => facet.facetType === "implied")
           .sort((left, right) => this.compareFacets(left, right));
@@ -1016,10 +1032,7 @@ export class PlanPilotViewComponent implements OnInit, OnDestroy {
     });
   }
 
-  loadPlanPage(
-    start = this.planPageStart,
-    solutionToShow?: number,
-  ): void {
+  loadPlanPage(start = this.planPageStart, solutionToShow?: number): void {
     if (!this.runId || this.isBusy) {
       return;
     }
@@ -1050,66 +1063,61 @@ export class PlanPilotViewComponent implements OnInit, OnDestroy {
     this.planPageLoading = true;
     this.planPageError = "";
     this.activeOperationLabel = `Loading plans ${numbers[0]}–${numbers[numbers.length - 1]}`;
-    from(queryOrder)
-      .pipe(
-        concatMap((number) => this.loadPlanResult$(runId, number)),
-        toArray(),
-      )
-      .subscribe({
-        next: (results) => {
-          if (this.runId !== runId || this.analysisGeneration !== generation) {
-            return;
+    this.loadPlanResultsHighestFirst$(runId, queryOrder).subscribe({
+      next: (results) => {
+        if (this.runId !== runId || this.analysisGeneration !== generation) {
+          return;
+        }
+        if (results.some((result) => result.stale)) {
+          this.refreshAfterStaleQuery(runId);
+          return;
+        }
+        const errors: string[] = [];
+        results.forEach((result) => {
+          if (result.plan) {
+            this.solutionCache[result.number] = {
+              label: result.plan.label,
+              facets: result.plan.facets.map((facet) => ({ ...facet })),
+            };
+          } else if (result.error && !result.unavailable) {
+            errors.push(
+              `Plan ${result.number}: ${this.errorMessage(result.error)}`,
+            );
           }
-          if (results.some((result) => result.stale)) {
-            this.refreshAfterStaleQuery(runId);
-            return;
+        });
+        this.planPageStart = normalizedStart;
+        this.loadedPlanNumbers = numbers.filter((number) =>
+          Boolean(this.solutionCache[number]),
+        );
+        this.planPageError = errors.join(" ");
+        this.planPageLoading = false;
+        this.activeOperationLabel = "";
+        if (
+          this.solutionCountKnown &&
+          (normalizedStart > this.solutionCount ||
+            (solutionToShow !== undefined &&
+              solutionToShow > this.solutionCount))
+        ) {
+          this.lastSelectionMessage = `This plan space contains ${this.solutionCount} plan${this.solutionCount === 1 ? "" : "s"}. Showing the last page.`;
+          const finalPageStart = this.planPageStartFor(this.solutionCount);
+          if (normalizedStart !== finalPageStart) {
+            this.loadPlanPage(finalPageStart);
           }
-          const errors: string[] = [];
-          results.forEach((result) => {
-            if (result.plan) {
-              this.solutionCache[result.number] = {
-                label: result.plan.label,
-                facets: result.plan.facets.map((facet) => ({ ...facet })),
-              };
-            } else if (result.error && !result.unavailable) {
-              errors.push(
-                `Plan ${result.number}: ${this.errorMessage(result.error)}`,
-              );
-            }
-          });
-          this.planPageStart = normalizedStart;
-          this.loadedPlanNumbers = numbers.filter((number) =>
-            Boolean(this.solutionCache[number]),
-          );
-          this.planPageError = errors.join(" ");
-          this.planPageLoading = false;
-          this.activeOperationLabel = "";
-          if (
-            this.solutionCountKnown &&
-            (normalizedStart > this.solutionCount ||
-              (solutionToShow !== undefined &&
-                solutionToShow > this.solutionCount))
-          ) {
-            this.lastSelectionMessage = `This plan space contains ${this.solutionCount} plan${this.solutionCount === 1 ? "" : "s"}. Showing the last page.`;
-            const finalPageStart = this.planPageStartFor(this.solutionCount);
-            if (normalizedStart !== finalPageStart) {
-              this.loadPlanPage(finalPageStart);
-            }
-            return;
-          }
-          if (solutionToShow !== undefined) {
-            this.showSolution(solutionToShow);
-          }
-        },
-        error: (error) => {
-          if (this.runId !== runId || this.analysisGeneration !== generation) {
-            return;
-          }
-          this.planPageError = this.errorMessage(error);
-          this.planPageLoading = false;
-          this.activeOperationLabel = "";
-        },
-      });
+          return;
+        }
+        if (solutionToShow !== undefined) {
+          this.showSolution(solutionToShow);
+        }
+      },
+      error: (error) => {
+        if (this.runId !== runId || this.analysisGeneration !== generation) {
+          return;
+        }
+        this.planPageError = this.errorMessage(error);
+        this.planPageLoading = false;
+        this.activeOperationLabel = "";
+      },
+    });
   }
 
   previousPlanPage(): void {
@@ -1122,14 +1130,69 @@ export class PlanPilotViewComponent implements OnInit, OnDestroy {
 
   jumpToSolution(solutionNumber: number): void {
     if (
-      !this.solutionCountKnown ||
       !Number.isSafeInteger(solutionNumber) ||
       solutionNumber < 1 ||
-      solutionNumber > this.solutionCount
+      (this.solutionCountKnown && solutionNumber > this.solutionCount)
     ) {
       return;
     }
     this.loadPlanPage(this.planPageStartFor(solutionNumber), solutionNumber);
+  }
+
+  preparePlansThrough(solutionNumber: number): void {
+    if (
+      !this.runId ||
+      this.isBusy ||
+      this.sessionConfigurationChanged ||
+      this.pendingSelectionCount > 0 ||
+      !Number.isSafeInteger(solutionNumber) ||
+      solutionNumber < 1 ||
+      (this.solutionCountKnown && solutionNumber > this.solutionCount)
+    ) {
+      return;
+    }
+
+    const runId = this.runId;
+    const generation = this.analysisGeneration;
+    this.planPreparationLoading = true;
+    this.planPreparationError = "";
+    this.activeOperationLabel = `Preparing plans 1–${solutionNumber}`;
+    this.loadPlanResult$(runId, solutionNumber)
+      .pipe(take(1))
+      .subscribe({
+        next: (result) => {
+          if (this.runId !== runId || this.analysisGeneration !== generation) {
+            return;
+          }
+          if (result.stale) {
+            this.refreshAfterStaleQuery(runId);
+            return;
+          }
+          if (result.error) {
+            this.planPreparationError = this.errorMessage(result.error);
+          } else if (result.plan) {
+            this.solutionCache[result.number] = {
+              label: result.plan.label,
+              facets: result.plan.facets.map((facet) => ({ ...facet })),
+            };
+            this.lastSelectionMessage = `Plans 1–${solutionNumber} are ready to browse.`;
+          } else if (this.solutionCountKnown) {
+            this.lastSelectionMessage = `This plan space contains ${this.solutionCount} plan${this.solutionCount === 1 ? "" : "s"}.`;
+          } else {
+            this.planPreparationError = `Plan ${solutionNumber} is not available.`;
+          }
+          this.planPreparationLoading = false;
+          this.activeOperationLabel = "";
+        },
+        error: (error) => {
+          if (this.runId !== runId || this.analysisGeneration !== generation) {
+            return;
+          }
+          this.planPreparationError = this.errorMessage(error);
+          this.planPreparationLoading = false;
+          this.activeOperationLabel = "";
+        },
+      });
   }
 
   private planPageStartFor(solutionNumber: number): number {
@@ -1161,6 +1224,7 @@ export class PlanPilotViewComponent implements OnInit, OnDestroy {
     if (
       !this.runId ||
       (this.solutionCountKnown && this.solutionCount < 2) ||
+      this.comparisonPlanA === this.comparisonPlanB ||
       this.isBusy
     ) {
       return;
@@ -1172,14 +1236,17 @@ export class PlanPilotViewComponent implements OnInit, OnDestroy {
     this.comparisonLoading = true;
     this.comparisonError = "";
     this.activeOperationLabel = `Comparing plans ${planA} and ${planB}`;
-    forkJoin([
-      this.loadPlanResult$(runId, planA),
-      this.loadPlanResult$(runId, planB),
-    ]).subscribe({
-      next: ([resultA, resultB]) => {
+    this.loadPlanResultsHighestFirst$(runId, [planA, planB]).subscribe({
+      next: (results) => {
         if (this.runId !== runId || this.analysisGeneration !== generation) {
           return;
         }
+        const resultA = results.find((result) => result.number === planA) ?? {
+          number: planA,
+        };
+        const resultB = results.find((result) => result.number === planB) ?? {
+          number: planB,
+        };
         if (resultA.stale || resultB.stale) {
           this.refreshAfterStaleQuery(runId);
           return;
@@ -2015,6 +2082,32 @@ export class PlanPilotViewComponent implements OnInit, OnDestroy {
     );
   }
 
+  private loadPlanResultsHighestFirst$(
+    runId: string,
+    numbers: number[],
+  ): Observable<PlanLoadResult[]> {
+    const orderedNumbers = [...new Set(numbers)].sort(
+      (left, right) => right - left,
+    );
+    const [highest, ...remaining] = orderedNumbers;
+    if (highest === undefined) {
+      return of([]);
+    }
+
+    return this.loadPlanResult$(runId, highest).pipe(
+      concatMap((firstResult) => {
+        if (firstResult.error || firstResult.stale) {
+          return of([firstResult]);
+        }
+        return from(remaining).pipe(
+          concatMap((number) => this.loadPlanResult$(runId, number)),
+          toArray(),
+          map((results) => [firstResult, ...results]),
+        );
+      }),
+    );
+  }
+
   private applyHistoryTransaction(
     transaction: PlanPilotConstraintTransaction,
     direction: "undo" | "redo",
@@ -2135,8 +2228,12 @@ export class PlanPilotViewComponent implements OnInit, OnDestroy {
     this.loadedPlanNumbers = [];
     this.planPageLoading = false;
     this.planPageError = "";
+    this.planPreparationLoading = false;
+    this.planPreparationError = "";
     this.comparisonPlanA = 1;
-    this.comparisonPlanB = Math.min(2, Math.max(1, this.solutionCount));
+    this.comparisonPlanB = this.solutionCountKnown
+      ? Math.min(2, Math.max(1, this.solutionCount))
+      : 2;
     this.comparison = undefined;
     this.comparisonLoading = false;
     this.comparisonError = "";
@@ -2263,7 +2360,13 @@ export class PlanPilotViewComponent implements OnInit, OnDestroy {
   }
 
   loadSolutionCount(): void {
-    if (!this.runId || this.solutionCountLoading || this.solutionCountKnown) {
+    if (
+      !this.runId ||
+      this.solutionCountLoading ||
+      this.solutionCountKnown ||
+      this.sessionConfigurationChanged ||
+      this.pendingSelectionCount > 0
+    ) {
       return;
     }
 
@@ -2311,6 +2414,8 @@ export class PlanPilotViewComponent implements OnInit, OnDestroy {
     >,
   ): void {
     this.solutionCountLoading = false;
+    this.planPreparationLoading = false;
+    this.planPreparationError = "";
     this.applyOptionalSolutionCount(response.solutionCount);
 
     this.applyBackendFacets(response.facets);
@@ -2357,6 +2462,25 @@ export class PlanPilotViewComponent implements OnInit, OnDestroy {
         },
       ]),
     );
+    this.facetImpacts = Object.fromEntries(
+      Object.entries(this.facetImpacts).map(([id, impact]) => {
+        const displayedFacet = this.representativeSolution.find(
+          (facet) => facet.id === id,
+        );
+        return [
+          id,
+          displayedFacet && this.isFixedDisplayedPlanFacet(displayedFacet)
+            ? this.fixedDisplayedPlanImpact(count)
+            : impact,
+        ];
+      }),
+    );
+    if (
+      this.inspectedFacetId &&
+      this.facetImpacts[this.inspectedFacetId]?.exact
+    ) {
+      this.impactNotice = "";
+    }
   }
 
   private applyOptionalSolutionCount(count: number | null): void {
@@ -2390,6 +2514,8 @@ export class PlanPilotViewComponent implements OnInit, OnDestroy {
     this.impactLoading = false;
     this.requiredActionsLoading = false;
     this.planPageLoading = false;
+    this.planPreparationLoading = false;
+    this.planPreparationError = "";
     this.comparisonLoading = false;
     this.solutionCountLoading = false;
     this.queryPending = false;
@@ -2413,6 +2539,7 @@ export class PlanPilotViewComponent implements OnInit, OnDestroy {
         .map((facet) => facet.id),
     );
     const mapped = facets
+      .filter((facet) => !this.isStateFacet(facet))
       .map((facet, index) => this.toPlanPilotUiFacet(facet, index))
       .sort(
         (left, right) =>
@@ -2500,7 +2627,7 @@ export class PlanPilotViewComponent implements OnInit, OnDestroy {
     this.comparisonPlanA = 1;
     this.comparisonPlanB = this.solutionCountKnown
       ? Math.min(2, Math.max(1, this.solutionCount))
-      : 1;
+      : 2;
   }
 
   private updatePinnedFacet(
@@ -2534,6 +2661,10 @@ export class PlanPilotViewComponent implements OnInit, OnDestroy {
     index: number,
   ): PlanPilotUiFacet {
     return mapBackendFacet(facet, index);
+  }
+
+  private isStateFacet(facet: PlanPilotFacet): boolean {
+    return facet.id.startsWith("holds(");
   }
 
   private isStructuralFacet(facet: PlanPilotUiFacet): boolean {
@@ -2685,6 +2816,45 @@ export class PlanPilotViewComponent implements OnInit, OnDestroy {
 
   private isBackendFacet(facet: PlanPilotUiFacet): boolean {
     return this.facets.some((candidate) => candidate.id === facet.id);
+  }
+
+  private isFixedDisplayedPlanFacet(facet: PlanPilotUiFacet): boolean {
+    const backendFacet = this.facets.find(
+      (candidate) => candidate.id === facet.id,
+    );
+    return (
+      this.isDisplayedPlanFacet(facet) &&
+      (!backendFacet || backendFacet.selectable === false)
+    );
+  }
+
+  private fixedDisplayedPlanImpact(count: number | null): PlanPilotFacetImpact {
+    return {
+      exact: count !== null,
+      comparableToCurrent: true,
+      require: {
+        available: true,
+        planReduction: count === null ? null : 0,
+        plansRemaining: count,
+        facetReduction: null,
+        facetsRemaining: null,
+      },
+      forbid: {
+        available: false,
+        planReduction: count === null ? null : 1,
+        plansRemaining: count === null ? null : 0,
+        facetReduction: null,
+        facetsRemaining: null,
+      },
+    };
+  }
+
+  private canPreviewFacetImpact(facet: PlanPilotUiFacet): boolean {
+    return (
+      this.isFixedDisplayedPlanFacet(facet) ||
+      this.canRequireFacet(facet) ||
+      this.canForbidFacet(facet)
+    );
   }
 
   private restoreDocumentScroll(): void {

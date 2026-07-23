@@ -90,11 +90,13 @@ export const planPilotReducer = createReducer(
     error: err,
   })),
 
-  // Submit the staged selections: loading on, plus fold each request into the
-  // decisions list. For every request, drop any previous decision for that
-  // facet, then re-add it if the new state is a real decision
-  // (positive/negative). Neutral = deselect = remove.
-  on(submitPlanPilotSelections, (state, { requests }) => {
+  on(submitPlanPilotSelections, (state) => ({
+    ...state,
+    loading: true,
+    error: undefined,
+  })),
+
+  on(submitPlanPilotSelectionsSuccess, (state, { response, requests }) => {
     let decisions = state.decisions;
 
     for (const request of requests) {
@@ -111,18 +113,16 @@ export const planPilotReducer = createReducer(
       }
     }
 
-    return { ...state, loading: true, error: undefined, decisions };
+    return {
+      ...state,
+      loading: false,
+      runId: response.runId,
+      facets: response.facets,
+      decisions,
+      impliedFacets: [],
+      impliedFacetsShown: false,
+    };
   }),
-
-  on(submitPlanPilotSelectionsSuccess, (state, { response }) => ({
-    ...state,
-    loading: false,
-    runId: response.runId,
-    facets: response.facets,
-    // Committed decisions changed, so any shown implied facets are now stale.
-    impliedFacets: [],
-    impliedFacetsShown: false,
-  })),
 
   on(submitPlanPilotSelectionsFailure, (state, { err }) => ({
     ...state,

@@ -39,10 +39,22 @@ export class PlanPilotService {
     );
   }
 
+  applyFacets$(sessionId: string, requests: SelectPlanPilotFacetRequest[]): Observable<PlanPilotFacetsResponse> {
+    return this.http.post<unknown>(this.BASE_URL + "sessions/" + sessionId + "/facets/apply", {
+      selections: requests,
+    }).pipe(
+      map((data) => PlanPilotFacetsResponseZ.parse(data)),
+    );
+  }
+
   query$(sessionId: string, request: QueryPlanPilotSessionRequest): Observable<QueryPlanPilotSessionResponse> {
     return this.http.post<unknown>(this.BASE_URL + "sessions/" + sessionId + "/query", request).pipe(
       map((data) => QueryPlanPilotSessionResponseZ.parse(data)),
     );
+  }
+
+  stopSession$(sessionId: string): Observable<void> {
+    return this.http.delete<void>(this.BASE_URL + "sessions/" + sessionId);
   }
 
 }

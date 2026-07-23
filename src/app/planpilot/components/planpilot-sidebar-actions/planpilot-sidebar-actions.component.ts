@@ -22,6 +22,7 @@ export interface PlanPilotSelectedActionView extends PlanPilotActionRowView {
   canRequire: boolean;
   canForbid: boolean;
   canClear: boolean;
+  canPreviewImpact: boolean;
   clearHint: string;
   requireImpact?: PlanPilotActionImpactView;
   forbidImpact?: PlanPilotActionImpactView;

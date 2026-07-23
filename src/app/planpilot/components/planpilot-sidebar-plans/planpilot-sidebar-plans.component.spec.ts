@@ -76,38 +76,41 @@ describe("PlanPilotSidebarPlansComponent", () => {
     expect(browser.querySelector("#planpilot-plan-number").max).toBe("60");
   });
 
-  it("offers an inline count action while the graph is already usable", () => {
+  it("keeps direct plan opening available before an exact count", () => {
     component.displayedPlanActions = [
       { id: "move-1", label: "move a", timestepLabel: "t1" },
     ];
     component.currentSolutionNumber = 1;
     component.knownPlanLowerBound = 1;
-    let loadCount = 0;
-    component.solutionCountLoad.subscribe(() => {
-      loadCount += 1;
+    let requested = 0;
+    component.solutionJump.subscribe((number) => {
+      requested = number;
     });
     fixture.detectChanges();
 
     const browser = fixture.nativeElement.querySelector(".plan-explorer");
-    expect(browser.textContent).toContain("At least 1 found");
-    expect(browser.textContent).toContain("You can browse without it");
-    const button = browser.querySelector(".solution-count-row button");
-    expect(button.textContent).toContain("Count total");
-    expect(browser.querySelector("#planpilot-plan-number").disabled).toBeTrue();
-    button.click();
-    expect(loadCount).toBe(1);
+    expect(browser.textContent).not.toContain("Count total");
+    const input = browser.querySelector(
+      "#planpilot-plan-number",
+    ) as HTMLInputElement;
+    expect(input.disabled).toBeFalse();
+    expect(input.max).toBe("");
+    input.value = "23";
+    input
+      .closest("form")
+      ?.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+    expect(requested).toBe(23);
   });
 
-  it("keeps a count failure local to the displayed-plan section", () => {
+  it("does not render plan-count errors in the plan browser", () => {
     component.displayedPlanActions = [
       { id: "move-1", label: "move a", timestepLabel: "t1" },
     ];
     component.currentSolutionNumber = 1;
-    component.solutionCountError = "Counting timed out.";
     fixture.detectChanges();
 
     const browser = fixture.nativeElement.querySelector(".plan-explorer");
-    expect(browser.textContent).toContain("Counting timed out.");
+    expect(browser.textContent).not.toContain("Counting timed out.");
     expect(
       fixture.nativeElement.querySelector(".no-solution-message"),
     ).toBeNull();
@@ -127,9 +130,7 @@ describe("PlanPilotSidebarPlansComponent", () => {
     const browser = fixture.nativeElement.querySelector(".plan-explorer");
     expect(browser.querySelector(".plan-summary-list")).not.toBeNull();
     expect(browser.querySelector(".plan-comparison")).not.toBeNull();
-    expect(browser.querySelector(".plan-summary-row").ariaCurrent).toBe(
-      "true",
-    );
+    expect(browser.querySelector(".plan-summary-row").ariaCurrent).toBe("true");
     expect(browser.querySelector(".plan-comparison").closest("details")).toBe(
       null,
     );

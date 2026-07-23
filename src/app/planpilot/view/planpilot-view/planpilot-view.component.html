@@ -261,9 +261,7 @@
         <div class="inspector-summary">
           <section class="session-overview" aria-label="Plan space summary">
             <span
-              ><small>{{
-                solutionCountKnown ? "Plans" : "Plans found"
-              }}</small
+              ><small>{{ solutionCountKnown ? "Plans" : "Plans found" }}</small
               ><strong
                 [matTooltip]="
                   solutionCountKnown
@@ -385,6 +383,13 @@
               [configurationChanged]="sessionConfigurationChanged"
               [pendingSelectionCount]="pendingSelectionCount"
               [isBusy]="isBusy"
+              [solutionCountKnown]="solutionCountKnown"
+              [solutionCount]="solutionCount"
+              [knownPlanLowerBound]="knownPlanLowerBound"
+              [solutionCountLoading]="solutionCountLoading"
+              [solutionCountError]="solutionCountError"
+              [planPreparationLoading]="planPreparationLoading"
+              [planPreparationError]="planPreparationError"
               [timelineRows]="timelineRows"
               [focusedTimestep]="focusedTimestep"
               [timestepActionCounts]="timestepActionCounts"
@@ -392,6 +397,8 @@
               (encodingChange)="updateSessionEncoding($event)"
               (abstractTimeStepsChange)="updateAbstractTimeSteps($event)"
               (rebuild)="applySessionConfiguration()"
+              (solutionCountLoad)="loadSolutionCount()"
+              (plansPrepare)="preparePlansThrough($event)"
               (timestepFocus)="focusTimelineTimestep($event)"
               (timestepActions)="showActionsAtTimestep($event)"
             ></app-planpilot-sidebar-plan>
@@ -409,8 +416,6 @@
               [displayedPlanActions]="displayedPlanActionViews"
               [solutionCountKnown]="solutionCountKnown"
               [solutionCount]="solutionCount"
-              [solutionCountLoading]="solutionCountLoading"
-              [solutionCountError]="solutionCountError"
               [currentSolutionNumber]="currentSolutionNumber"
               [knownPlanLowerBound]="knownPlanLowerBound"
               [isBusy]="isBusy"
@@ -434,7 +439,6 @@
               [comparisonHasChanges]="comparisonHasChanges"
               (solutionShow)="showSolution($event)"
               (solutionJump)="jumpToSolution($event)"
-              (solutionCountLoad)="loadSolutionCount()"
               (constraintsClear)="resetSessionView()"
               (commonActionsLoad)="loadRequiredActions()"
               (planPageLoad)="loadPlanPage($event)"

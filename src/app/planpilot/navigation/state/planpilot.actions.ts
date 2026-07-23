@@ -29,7 +29,10 @@ export const submitPlanPilotSelections = createAction(
 );
 export const submitPlanPilotSelectionsSuccess = createAction(
   "[planpilot] submit selections success",
-  props<{ response: PlanPilotFacetsResponse }>(),
+  props<{
+    response: PlanPilotFacetsResponse;
+    requests: SelectPlanPilotFacetRequest[];
+  }>(),
 );
 export const submitPlanPilotSelectionsFailure = createAction(
   "[planpilot] submit selections failure",

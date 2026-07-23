@@ -27,8 +27,6 @@ export class PlanPilotSidebarPlansComponent {
   @Input() displayedPlanActions: PlanPilotPlanActionView[] = [];
   @Input() solutionCountKnown = false;
   @Input() solutionCount = 0;
-  @Input() solutionCountLoading = false;
-  @Input() solutionCountError = "";
   @Input() currentSolutionNumber = 0;
   @Input() knownPlanLowerBound = 0;
   @Input() isBusy = false;
@@ -53,7 +51,6 @@ export class PlanPilotSidebarPlansComponent {
 
   @Output() solutionShow = new EventEmitter<number>();
   @Output() solutionJump = new EventEmitter<number>();
-  @Output() solutionCountLoad = new EventEmitter<void>();
   @Output() constraintsClear = new EventEmitter<void>();
   @Output() commonActionsLoad = new EventEmitter<void>();
   @Output() planPageLoad = new EventEmitter<number>();

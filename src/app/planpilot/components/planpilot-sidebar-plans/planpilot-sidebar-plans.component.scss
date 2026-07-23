@@ -136,31 +136,6 @@ summary small,
   min-width: 0;
 }
 
-.solution-count-row {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: var(--spacing-100);
-  align-items: center;
-  padding: var(--spacing-050) 0;
-  border-top: 1px solid var(--mat-sys-outline-variant);
-}
-
-.solution-count-row > span {
-  display: grid;
-  gap: 2px;
-}
-
-.solution-count-row small {
-  color: var(--mat-sys-on-surface-variant);
-  font-size: 0.72rem;
-  line-height: 1.35;
-}
-
-.solution-count-row button {
-  min-width: 0;
-  padding-inline: var(--spacing-050);
-}
-
 .spinning-icon {
   animation: planpilot-plans-spin 0.9s linear infinite;
 }

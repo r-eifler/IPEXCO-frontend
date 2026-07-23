@@ -2,8 +2,8 @@ import { inject, Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { concatLatestFrom } from "@ngrx/operators";
 import { Store } from "@ngrx/store";
-import { from, of } from "rxjs";
-import { catchError, concatMap, last, map, switchMap } from "rxjs/operators";
+import { of } from "rxjs";
+import { catchError, map, switchMap } from "rxjs/operators";
 import { PlanPilotQueryType } from "../../domain/planpilot";
 import { PlanPilotService } from "../../service/planpilot.service";
 import {
@@ -40,14 +40,20 @@ export class PlanPilotEffect {
 
   public startSession$ = createEffect(() => this.actions$.pipe(
     ofType(startPlanPilotSession),
-    switchMap(({ request }) => this.service.startSession$(request).pipe(
-      map((response) => startPlanPilotSessionSuccess({ response })),
-      catchError((err) => of(startPlanPilotSessionFailure({ err }))),
-    )),
+    concatLatestFrom(() => this.store.select(selectRunId)),
+    switchMap(([{ request }, runId]) => {
+      const stopCurrent$ = runId
+        ? this.service.stopSession$(runId).pipe(catchError(() => of(undefined)))
+        : of(undefined);
+      return stopCurrent$.pipe(
+        switchMap(() => this.service.startSession$(request)),
+        map((response) => startPlanPilotSessionSuccess({ response })),
+        catchError((err) => of(startPlanPilotSessionFailure({ err }))),
+      );
+    }),
   ));
 
-  // Apply all staged selections one after another (the service takes one facet
-  // at a time), then emit success once carrying the final facet list.
+  // Apply staged selections as one transaction.
   public submitSelections$ = createEffect(() => this.actions$.pipe(
     ofType(submitPlanPilotSelections),
     concatLatestFrom(() => this.store.select(selectRunId)),
@@ -55,10 +61,8 @@ export class PlanPilotEffect {
       if (!runId) {
         return of(submitPlanPilotSelectionsFailure({ err: "No active PlanPilot session." }));
       }
-      return from(requests).pipe(
-        concatMap((request) => this.service.selectFacet$(runId, request)),
-        last(),
-        map((response) => submitPlanPilotSelectionsSuccess({ response })),
+      return this.service.applyFacets$(runId, requests).pipe(
+        map((response) => submitPlanPilotSelectionsSuccess({ response, requests })),
         catchError((err) => of(submitPlanPilotSelectionsFailure({ err }))),
       );
     }),
@@ -106,11 +110,11 @@ export class PlanPilotEffect {
     }),
   ));
 
-  // Whenever the counter changes, list the first page of concrete plans.
+  // List the first page even when counting the complete space times out.
   public refreshSolutions$ = createEffect(() => this.actions$.pipe(
-    ofType(queryPlanPilotSolutionCountSuccess),
-    map(({ count }) =>
-      count !== undefined && count > 0
+    ofType(queryPlanPilotSolutionCountSuccess, queryPlanPilotSolutionCountFailure),
+    map((action) =>
+      action.type === queryPlanPilotSolutionCountFailure.type || action.count === undefined || action.count > 0
         ? queryPlanPilotSolutions({ limit: SOLUTION_PAGE_SIZE })
         : queryPlanPilotSolutionsSuccess({ solutions: [] }),
     ),
@@ -127,6 +131,7 @@ export class PlanPilotEffect {
       return this.service.query$(runId, {
         type: PlanPilotQueryType.SOLUTION,
         solutionNumber: limit,
+        solutionMode: 'prefix',
       }).pipe(
         map((response) => queryPlanPilotSolutionsSuccess({ solutions: response.result.solutions ?? [] })),
         catchError((err) => of(queryPlanPilotSolutionsFailure({ err }))),

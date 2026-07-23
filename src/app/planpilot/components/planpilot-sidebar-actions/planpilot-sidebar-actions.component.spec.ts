@@ -85,6 +85,7 @@ describe("PlanPilotSidebarActionsComponent", () => {
       canRequire: false,
       canForbid: true,
       canClear: true,
+      canPreviewImpact: true,
       clearHint: "Remove this user constraint",
     };
     fixture.detectChanges();
@@ -105,7 +106,11 @@ describe("PlanPilotSidebarActionsComponent", () => {
     );
   });
 
-  it("uses concise copy when an action is fixed", () => {
+  it("keeps fixed-action controls read-only but allows an impact preview", () => {
+    let previewCount = 0;
+    component.impactCalculate.subscribe(() => {
+      previewCount += 1;
+    });
     component.selectedAction = {
       facet: {
         id: "fixed",
@@ -133,6 +138,7 @@ describe("PlanPilotSidebarActionsComponent", () => {
       canRequire: false,
       canForbid: false,
       canClear: false,
+      canPreviewImpact: true,
       clearHint: "Fixed",
     };
     fixture.detectChanges();
@@ -141,6 +147,12 @@ describe("PlanPilotSidebarActionsComponent", () => {
       "This action is fixed in the current plan space.",
     );
     expect(fixture.nativeElement.querySelector(".selected-facet p")).toBeNull();
+    const preview = fixture.nativeElement.querySelector(
+      '[data-testid="planpilot-facet-impact"] button',
+    ) as HTMLButtonElement;
+    expect(preview.disabled).toBeFalse();
+    preview.click();
+    expect(previewCount).toBe(1);
   });
 
   it("shows typed Require and Forbid plan counts as a hypothetical preview", () => {
@@ -170,6 +182,7 @@ describe("PlanPilotSidebarActionsComponent", () => {
       canRequire: true,
       canForbid: true,
       canClear: false,
+      canPreviewImpact: true,
       clearHint: "",
       requireImpact: {
         available: true,
@@ -230,6 +243,7 @@ describe("PlanPilotSidebarActionsComponent", () => {
       canRequire: true,
       canForbid: true,
       canClear: false,
+      canPreviewImpact: true,
       clearHint: "",
       requireImpact: {
         available: true,

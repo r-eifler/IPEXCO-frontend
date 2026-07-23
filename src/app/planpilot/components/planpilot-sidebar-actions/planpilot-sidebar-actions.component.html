@@ -92,11 +92,7 @@
         <button
           type="button"
           class="compact-text-action"
-          [disabled]="
-            isBusy ||
-            action.facet.facetType === 'implied' ||
-            (!action.canRequire && !action.canForbid)
-          "
+          [disabled]="isBusy || !action.canPreviewImpact"
           (click)="impactCalculate.emit()"
         >
           @if (impactLoading) {

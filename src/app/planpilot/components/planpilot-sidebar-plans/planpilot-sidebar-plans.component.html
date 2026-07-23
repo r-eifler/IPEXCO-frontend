@@ -23,36 +23,9 @@
         >{{
           solutionCountKnown ? solutionCount : knownPlanLowerBound + "+"
         }}
-        plan{{
-          solutionCountKnown && solutionCount === 1
-            ? ""
-            : "s"
-        }}</span
+        plan{{ solutionCountKnown && solutionCount === 1 ? "" : "s" }}</span
       >
     </div>
-
-    @if (!solutionCountKnown) {
-      <div class="solution-count-row">
-        <span>
-          <strong>At least {{ knownPlanLowerBound }} found</strong>
-          <small>The exact total is optional. You can browse without it.</small>
-        </span>
-        <button
-          mat-button
-          type="button"
-          [disabled]="isBusy || solutionCountLoading"
-          (click)="solutionCountLoad.emit()"
-        >
-          @if (solutionCountLoading) {
-            <mat-icon class="spinning-icon">sync</mat-icon>
-          }
-          {{ solutionCountLoading ? "Counting…" : "Count total" }}
-        </button>
-      </div>
-      @if (solutionCountError) {
-        <span class="analysis-note">{{ solutionCountError }}</span>
-      }
-    }
 
     <div class="plan-list-heading">
       <strong>Plan list</strong>
@@ -145,18 +118,14 @@
         required
         [attr.max]="solutionCountKnown ? solutionCount : null"
         [value]="currentSolutionNumber || 1"
-        [disabled]="isBusy || !solutionCountKnown"
+        [disabled]="isBusy"
         [attr.title]="
-          solutionCountKnown ? null : 'Count the total before jumping to a plan.'
+          solutionCountKnown
+            ? null
+            : 'PlanPilot will enumerate plans up to this number.'
         "
       />
-      <button
-        mat-stroked-button
-        type="submit"
-        [disabled]="isBusy || !solutionCountKnown"
-      >
-        Open
-      </button>
+      <button mat-stroked-button type="submit" [disabled]="isBusy">Open</button>
     </form>
 
     <details class="solution-action-list">
@@ -205,7 +174,11 @@
         <button
           mat-stroked-button
           type="button"
-          [disabled]="isBusy || (solutionCountKnown && solutionCount < 2)"
+          [disabled]="
+            isBusy ||
+            comparisonPlanA === comparisonPlanB ||
+            (solutionCountKnown && solutionCount < 2)
+          "
           (click)="plansCompare.emit()"
         >
           @if (comparisonLoading) {

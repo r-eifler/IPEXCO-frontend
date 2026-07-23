@@ -32,10 +32,17 @@
 .active-settings,
 .settings-footer small,
 .analysis-note,
+.analysis-error,
+.calculation-heading small,
+.count-row small,
 .timeline-summary summary small {
   color: var(--mat-sys-on-surface-variant);
   font-size: 0.72rem;
   line-height: 1.35;
+}
+
+.analysis-error {
+  color: var(--mat-sys-error);
 }
 
 .active-settings {
@@ -92,6 +99,74 @@
 .settings-footer button {
   min-width: 0;
   height: 32px;
+}
+
+.plan-calculation {
+  display: grid;
+  gap: var(--spacing-100);
+  padding-top: var(--spacing-100);
+  border-top: 1px solid var(--mat-sys-outline-variant);
+}
+
+.calculation-heading,
+.count-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-100);
+}
+
+.calculation-heading > span:first-child {
+  display: grid;
+  gap: 2px;
+}
+
+.calculation-count {
+  color: var(--mat-sys-on-surface-variant);
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.prepare-form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 76px auto;
+  gap: var(--spacing-100);
+  align-items: center;
+}
+
+.prepare-form label {
+  color: var(--mat-sys-on-surface-variant);
+  font-size: 0.75rem;
+}
+
+.prepare-form input {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 34px;
+  padding: 0 var(--spacing-100);
+  border: 1px solid var(--mat-sys-outline-variant);
+  border-radius: 6px;
+  color: var(--mat-sys-on-surface);
+  background: var(--mat-sys-surface);
+  font: inherit;
+  font-variant-numeric: tabular-nums;
+}
+
+.prepare-form button,
+.count-row button {
+  min-width: 0;
+  white-space: nowrap;
+}
+
+.spinning-icon {
+  animation: planpilot-plan-spin 0.9s linear infinite;
+}
+
+@keyframes planpilot-plan-spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .timeline-summary summary {

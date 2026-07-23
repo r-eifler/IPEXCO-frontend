@@ -2,9 +2,13 @@ import { routes as iterativePlanningRoutes } from '../iterative_planning/iterati
 import { routes as planPilotRoutes } from './planpilot.routes';
 
 describe('PlanPilot routes', () => {
-  it('is a project feature with a separate graph page', () => {
+  it('keeps both PlanPilot views under the project route', () => {
     expect(planPilotRoutes[0].path).toBe(':projectId');
-    expect(planPilotRoutes[0].children?.map((route) => route.path)).toEqual(['', 'graph']);
+    expect(planPilotRoutes[0].children?.map((route) => route.path)).toEqual([
+      '',
+      'graph',
+      'navigation',
+    ]);
     expect(planPilotRoutes[0].resolve?.['project']).toBeDefined();
   });
 

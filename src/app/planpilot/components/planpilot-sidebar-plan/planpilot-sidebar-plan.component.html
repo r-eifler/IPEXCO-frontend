@@ -41,7 +41,7 @@
     />
     <span
       ><strong>Flexible steps</strong
-      ><small>Allow actions without a fixed timestep.</small></span
+      ><small>Add action facets that apply to any timestep.</small></span
     >
   </label>
   <div class="settings-footer">
@@ -64,6 +64,105 @@
       >Apply or cancel the pending action changes before rebuilding.</small
     >
   }
+
+  <div class="plan-calculation" data-testid="planpilot-plan-calculation">
+    <div class="calculation-heading">
+      <span
+        ><strong>Plan calculation</strong
+        ><small>Prepare plans for browsing.</small></span
+      >
+      <span class="calculation-count">
+        {{ solutionCountKnown ? solutionCount : knownPlanLowerBound + "+" }}
+        found
+      </span>
+    </div>
+    <form
+      class="prepare-form"
+      (submit)="
+        $event.preventDefault(); plansPrepare.emit(planCount.valueAsNumber)
+      "
+    >
+      <label for="planpilot-prepare-count">Prepare through plan</label>
+      <input
+        #planCount
+        id="planpilot-prepare-count"
+        name="planCount"
+        type="number"
+        min="1"
+        step="1"
+        [value]="suggestedPlanPreparationCount"
+        required
+        [attr.max]="solutionCountKnown ? solutionCount : null"
+        [disabled]="
+          isBusy ||
+          configurationChanged ||
+          pendingSelectionCount > 0 ||
+          (solutionCountKnown && solutionCount < 1)
+        "
+      />
+      <button
+        mat-stroked-button
+        type="submit"
+        [disabled]="
+          isBusy ||
+          configurationChanged ||
+          pendingSelectionCount > 0 ||
+          (solutionCountKnown && solutionCount < 1)
+        "
+      >
+        @if (planPreparationLoading) {
+          <mat-icon class="spinning-icon">sync</mat-icon>
+        }
+        {{ planPreparationLoading ? "Preparing…" : "Prepare" }}
+      </button>
+    </form>
+    <div class="count-row">
+      @if (solutionCountKnown) {
+        <small>{{ solutionCount }} plans in this space.</small>
+        <button
+          mat-button
+          type="button"
+          [disabled]="
+            isBusy ||
+            configurationChanged ||
+            pendingSelectionCount > 0 ||
+            solutionCount < 1
+          "
+          (click)="plansPrepare.emit(solutionCount)"
+        >
+          Prepare all
+        </button>
+      } @else {
+        <small
+          >Count all gets the exact total without loading every plan.</small
+        >
+        <button
+          mat-button
+          type="button"
+          [disabled]="
+            isBusy || configurationChanged || pendingSelectionCount > 0
+          "
+          (click)="solutionCountLoad.emit()"
+        >
+          @if (solutionCountLoading) {
+            <mat-icon class="spinning-icon">sync</mat-icon>
+          }
+          {{ solutionCountLoading ? "Counting…" : "Count all" }}
+        </button>
+      }
+    </div>
+    @if (configurationChanged) {
+      <small class="analysis-note"
+        >Rebuild before calculating this plan space.</small
+      >
+    }
+    @if (planPreparationError) {
+      <small class="analysis-error">{{ planPreparationError }}</small>
+    }
+    @if (solutionCountError) {
+      <small class="analysis-error">{{ solutionCountError }}</small>
+    }
+  </div>
 </section>
 
 <details
@@ -96,13 +195,14 @@
           <span>{{
             row.displayedActions.length
               ? row.displayedActions.join(", ")
-              : "No action in this plan"
+              : row.key === "any"
+                ? "Action facets that apply to any timestep"
+                : "No action in this plan"
           }}</span>
           <small>
             {{ timestepActionCounts[row.key] || 0 }} action{{
               timestepActionCounts[row.key] === 1 ? "" : "s"
             }}
-            available
             @if (row.requiredCount) {
               · {{ row.requiredCount }} required
             }

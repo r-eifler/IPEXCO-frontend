@@ -8,6 +8,13 @@ export enum PlanPilotSelectionState {
 
 export const PlanPilotSelectionStateZ = nativeEnum(PlanPilotSelectionState);
 
+export enum PlanPilotFacetKind {
+  ACTION = 'action',
+  STATE = 'state',
+}
+
+export const PlanPilotFacetKindZ = nativeEnum(PlanPilotFacetKind);
+
 export type PlanPilotFacet = zinfer<typeof PlanPilotFacetZ>;
 
 export const PlanPilotFacetMetricPairZ = object({
@@ -26,6 +33,7 @@ export const PlanPilotFacetZ = object({
   label: string(),
   timestep: number().int().nullable(),
   selectionState: PlanPilotSelectionStateZ,
+  facetKind: PlanPilotFacetKindZ.optional(),
   reduction: PlanPilotFacetMetricsZ.optional(),
   remaining: PlanPilotFacetMetricsZ.optional(),
 });
@@ -48,6 +56,7 @@ export const PlanPilotSessionConfigurationZ = object({
   horizon: number().int().positive(),
   encoding: PlanPilotEncodingZ,
   abstractTimeSteps: boolean(),
+  stateFacets: boolean().default(false),
 });
 
 export type PlanPilotSessionConfiguration = zinfer<typeof PlanPilotSessionConfigurationZ>;
@@ -112,6 +121,7 @@ export type QueryPlanPilotSessionResponse = zinfer<typeof QueryPlanPilotSessionR
 export interface QueryPlanPilotSessionRequest {
   type: PlanPilotQueryType;
   solutionNumber?: number;
+  solutionMode?: 'single' | 'prefix';
 }
 
 export interface StartPlanPilotSessionRequest {
@@ -119,6 +129,7 @@ export interface StartPlanPilotSessionRequest {
   horizon: number;
   encoding: PlanPilotEncoding;
   abstractTimeSteps: boolean;
+  stateFacets?: boolean;
 }
 
 export interface SelectPlanPilotFacetRequest {

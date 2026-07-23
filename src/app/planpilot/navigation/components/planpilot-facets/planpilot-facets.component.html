@@ -57,7 +57,11 @@
     @if (solutions$ | async; as solutions) {
       @if (solutions.length > 0) {
         <p class="solutions__summary">
-          Showing {{ solutions.length }} of {{ solutionCount }} plans
+          @if (solutionCount !== null && solutionCount !== undefined) {
+            Showing {{ solutions.length }} of {{ solutionCount }} plans
+          } @else {
+            Showing {{ solutions.length }} plans
+          }
         </p>
         <div class="solutions">
           @for (solution of solutions; track solution.label; let i = $index) {
